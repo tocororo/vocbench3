@@ -4,7 +4,7 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ART
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
 import { ProjectTableColumnStruct } from '../models/Project';
-import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, Properties, ResourceViewMode, SearchSettings, StringMatchMode } from '../models/Properties';
+import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, LexEntryVisualizationMode, LexicalEntryListPreference, Properties, ResourceViewMode, SearchSettings, StringMatchMode } from '../models/Properties';
 import { OWL, RDFS, SKOS } from '../models/Vocabulary';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { Cookie } from '../utils/Cookie';
@@ -29,6 +29,7 @@ export class VBProperties {
 
     private classTreePreferences: ClassTreePreference;
     private conceptTreePreferences: ConceptTreePreference;
+    private lexEntryListPreferences: LexicalEntryListPreference;
 
     private searchSettings: SearchSettings = {
         stringMatchMode: StringMatchMode.contains,
@@ -72,6 +73,7 @@ export class VBProperties {
             Properties.pref_class_tree_filter_enabled, Properties.pref_class_tree_filter_map, Properties.pref_class_tree_root,
             Properties.pref_concept_tree_base_broader_prop, Properties.pref_concept_tree_broader_props, Properties.pref_concept_tree_narrower_props,
             Properties.pref_concept_tree_include_subprops, Properties.pref_concept_tree_sync_inverse,
+            Properties.pref_lex_entry_list_visualization_prop, Properties.pref_lex_entry_list_index_lenght_prop,
             Properties.pref_editing_language
         ];
         this.prefService.getPUSettings(properties).subscribe(
@@ -101,7 +103,6 @@ export class VBProperties {
                 this.editingLanguage = prefs[Properties.pref_editing_language];
 
                 //cls tree preferences
-
                 this.classTreePreferences = { 
                     rootClassUri: (VBContext.getWorkingProject().getModelType() == RDFS.uri) ? RDFS.resource.getURI() : OWL.thing.getURI(),
                     filterMap: {}, 
@@ -118,7 +119,6 @@ export class VBProperties {
                 }
 
                 //concept tree preferences
-
                 this.conceptTreePreferences = {
                     baseBroaderUri: SKOS.broader.getURI(),
                     broaderProps: [],
@@ -140,6 +140,21 @@ export class VBProperties {
                 }
                 this.conceptTreePreferences.includeSubProps = prefs[Properties.pref_concept_tree_include_subprops] != "false";
                 this.conceptTreePreferences.syncInverse = prefs[Properties.pref_concept_tree_sync_inverse] != "false";
+
+                //lexical entry list preferences
+                this.lexEntryListPreferences = {
+                    visualization: LexEntryVisualizationMode.indexBased,
+                    indexLength: 1
+                }
+                let lexEntryListVisualizationPref: string = prefs[Properties.pref_lex_entry_list_visualization_prop];
+                if (lexEntryListVisualizationPref != null && (lexEntryListVisualizationPref == LexEntryVisualizationMode.indexBased ||
+                    lexEntryListVisualizationPref == LexEntryVisualizationMode.searchBased)) {
+                    this.lexEntryListPreferences.visualization = lexEntryListVisualizationPref;
+                }
+                let lexEntryListIndexLenghtPref: string = prefs[Properties.pref_lex_entry_list_index_lenght_prop];
+                if (lexEntryListIndexLenghtPref == "2") {
+                    this.lexEntryListPreferences.indexLength = 2;
+                }
 
                 //search settings
                 let searchLangsPref = prefs[Properties.pref_search_languages];
@@ -293,6 +308,18 @@ export class VBProperties {
         this.conceptTreePreferences.syncInverse = sync;
     }
 
+    //lex entry list settings
+    getLexicalEntryListPreferences(): LexicalEntryListPreference {
+        return this.lexEntryListPreferences;
+    }
+    setLexicalEntryListVisualization(mode: LexEntryVisualizationMode) {
+        this.prefService.setPUSetting(Properties.pref_lex_entry_list_visualization_prop, mode).subscribe();
+        this.lexEntryListPreferences.visualization = mode;
+    }
+    setLexicalEntryListIndexLenght(lenght: number) {
+        this.prefService.setPUSetting(Properties.pref_lex_entry_list_index_lenght_prop, lenght+"").subscribe();
+        this.lexEntryListPreferences.indexLength = lenght;
+    }
 
     /* =============================
     =========== SETTINGS ===========

@@ -1,0 +1,51 @@
+<div class="modal-header">
+    <h3 class="modal-title">Lexical Entry list settings</h3>
+</div>
+<div class="modal-body vbox">
+
+    <table class="table table-condensed table-borderless">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td nowrap>
+                    <label>Visualization mode</label>
+                </td>
+                <td>
+                    <span class="hbox form-control input-sm" style="align-items: center; justify-content: center;">
+                        <label *ngFor="let vm of visualizationModes" class="radio-inline">
+                            <input type="radio" name="radio_visualization" [(ngModel)]="visualization" [value]="vm.value">{{vm.label}}
+                        </label>
+                    </span>
+                </td>
+            </tr>
+            <tr *ngIf="visualization == 'indexBased'">
+                <td nowrap>
+                    <label>Index length</label>
+                </td>
+                <td>
+                    <select class="form-control input-sm" [(ngModel)]="indexLenght">
+                        <option *ngFor="let l of lenghtChoices">{{l}}</option>
+                    </select>
+                </td>
+        </tbody>
+    </table>
+
+    <!-- <div class="hbox" style="margin-bottom: 6px; align-items: center; flex: initial;">
+        <label style="white-space: nowrap; margin-right: 4px;">
+            Visualization mode:
+        </label>
+        <span class="hbox form-control input-sm" style="align-items: center; justify-content: center;">
+            <label *ngFor="let vm of visualizationModes" class="radio-inline">
+                <input type="radio" name="radio_visualization" [(ngModel)]="visualization" [value]="vm.value">{{vm.label}}
+            </label>
+        </span>
+    </div> -->
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

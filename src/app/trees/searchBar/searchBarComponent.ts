@@ -1,16 +1,16 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import { Subscription } from "rxjs/Subscription";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
-import { OverlayConfig } from 'ngx-modialog';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { CompleterService } from 'ng2-completer';
+import { OverlayConfig } from 'ngx-modialog';
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { Subscription } from "rxjs/Subscription";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { SearchSettings, StringMatchMode } from "../../models/Properties";
+import { SearchServices } from "../../services/searchServices";
+import { VBEventHandler } from "../../utils/VBEventHandler";
+import { VBProperties } from "../../utils/VBProperties";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { CustomCompleterData } from "./customCompleterData";
 import { SearchSettingsModal, SearchSettingsModalData } from './searchSettingsModal';
-import { SearchServices } from "../../services/searchServices";
-import { VBProperties } from "../../utils/VBProperties";
-import { VBEventHandler } from "../../utils/VBEventHandler";
-import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { StringMatchMode, SearchSettings } from "../../models/Properties";
 
 @Component({
     selector: "search-bar",
@@ -40,7 +40,7 @@ export class SearchBarComponent {
     private eventSubscriptions: Subscription[] = [];
 
     constructor(private searchService: SearchServices, private modal: Modal, private vbProperties: VBProperties,
-        private eventHandler: VBEventHandler, private completerService: CompleterService) {
+        private eventHandler: VBEventHandler, private completerService: CompleterService, private basicModals: BasicModalServices) {
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
             (schemes: ARTURIResource[]) => this.setSchemeInCompleter()));
@@ -79,6 +79,8 @@ export class SearchBarComponent {
     private doSearch() {
         if (this.searchStr != undefined && this.searchStr.trim() != "") {
             this.search.emit(this.searchStr);
+        } else {
+            this.basicModals.alert("Search", "Please enter a valid string to search", "warning");
         }
     }
 

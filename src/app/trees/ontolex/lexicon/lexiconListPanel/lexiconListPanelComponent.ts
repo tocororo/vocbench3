@@ -51,37 +51,33 @@ export class LexiconListPanelComponent extends AbstractPanel {
     }
 
     doSearch(searchedText: string) {
-        if (searchedText.trim() == "") {
-            this.basicModals.alert("Search", "Please enter a valid string to search", "error");
-        } else {
-            let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
-            let searchLangs: string[];
-            let includeLocales: boolean;
-            if (searchSettings.restrictLang) {
-                searchLangs = searchSettings.languages;
-                includeLocales = searchSettings.includeLocales;
-            }
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.limeLexicon], searchSettings.useLocalName, 
-                searchSettings.useURI, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
-                searchResult => {
-                    if (searchResult.length == 0) {
-                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
-                    } else { //1 or more results
-                        if (searchResult.length == 1) {
-                            this.openAt(searchResult[0]);
-                        } else { //multiple results, ask the user which one select
-                            ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
-                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
-                                (selectedResource: any) => {
-                                    this.openAt(selectedResource);
-                                },
-                                () => { }
-                            );
-                        }
+        let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+        let searchLangs: string[];
+        let includeLocales: boolean;
+        if (searchSettings.restrictLang) {
+            searchLangs = searchSettings.languages;
+            includeLocales = searchSettings.includeLocales;
+        }
+        this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.limeLexicon], searchSettings.useLocalName, 
+            searchSettings.useURI, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
+            searchResult => {
+                if (searchResult.length == 0) {
+                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                } else { //1 or more results
+                    if (searchResult.length == 1) {
+                        this.openAt(searchResult[0]);
+                    } else { //multiple results, ask the user which one select
+                        ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
+                        this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
+                            (selectedResource: any) => {
+                                this.openAt(selectedResource);
+                            },
+                            () => { }
+                        );
                     }
                 }
-            );
-        }
+            }
+        );
     }
 
     public openAt(node: ARTURIResource) {

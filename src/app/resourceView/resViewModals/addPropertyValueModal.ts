@@ -150,7 +150,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                     this.viewType = "classAndIndividual";
                 } else if (ranges.type == RangeType.resource) {
                     //class, concept, conceptScheme, collection, resourcelist, instance, class individual
-                    var rangeCollection: ARTURIResource[] = ranges.rangeCollection.resources;
+                    var rangeCollection: ARTURIResource[] = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
                     if (rangeCollection != null) {
                         if (rangeCollection.length == 1) {
                             var rangeClass: ARTURIResource = rangeCollection[0];
@@ -189,6 +189,8 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                             this.viewType = "classAndIndividual";
                             this.rootsForClsIndList = rangeCollection;
                         }
+                    } else { //no range classes
+                        this.viewType = "classAndIndividual";
                     }
                 }
             }

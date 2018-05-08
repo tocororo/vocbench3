@@ -22,6 +22,9 @@ export class Properties {
     static pref_concept_tree_include_subprops: string = "concept_tree_include_subprops";
     static pref_concept_tree_sync_inverse: string = "concept_tree_sync_inverse";
 
+    static pref_lex_entry_list_visualization_prop: string = "lex_entry_list_visualization_prop";
+    static pref_lex_entry_list_index_lenght_prop: string = "lex_entry_list_index_lenght_prop";
+
     static setting_languages: string = "languages";
     static setting_remote_configs = "remote_configs";
     static setting_experimental_features_enabled = "experimental_features_enabled";
@@ -71,4 +74,14 @@ export class ConceptTreePreference {
     narrowerProps: string[];
     includeSubProps: boolean; //tells if the hierarchy should consider
     syncInverse: boolean; //tells if the narrower/broader properties should be synced with their inverse
+}
+
+export class LexicalEntryListPreference {
+    visualization: LexEntryVisualizationMode;
+    indexLength: number;
+}
+
+export enum LexEntryVisualizationMode {
+    searchBased = "searchBased",
+    indexBased = "indexBased"
 }

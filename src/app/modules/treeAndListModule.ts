@@ -38,6 +38,7 @@ import { LexiconListNodeComponent } from '../trees/ontolex/lexicon/lexiconList/l
 import { LexicalEntryListPanelComponent } from '../trees/ontolex/lexicalEntry/lexicalEntryListPanel/lexicalEntryListPanelComponent';
 import { LexicalEntryListComponent } from '../trees/ontolex/lexicalEntry/lexicalEntryList/lexicalEntryListComponent';
 import { LexicalEntryListNodeComponent } from '../trees/ontolex/lexicalEntry/lexicalEntryList/lexicalEntryListNodeComponent';
+import { LexicalEntryListSettingsModal } from '../trees/ontolex/lexicalEntry/lexicalEntryListPanel/lexicalEntryListSettingsModal';
 
 import { ClassIndividualTreeComponent } from '../trees/owl/classIndividualTree/classIndividualTreeComponent';
 import { InstanceListPanelComponent } from '../trees/owl/instanceListPanel/instanceListPanelComponent';
@@ -60,8 +61,8 @@ import { Ng2CompleterModule } from "ng2-completer";
         ClassIndividualTreePanelComponent, ClassTreePanelComponent, ClassTreeComponent, ClassTreeNodeComponent,
         ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent, InstanceListNodeComponent,
         PropertyTreePanelComponent, PropertyTreeComponent, PropertyTreeNodeComponent,
-        LexiconListPanelComponent, LexiconListComponent, LexiconListNodeComponent,
-        LexicalEntryListPanelComponent, LexicalEntryListComponent, LexicalEntryListNodeComponent,
+        LexiconListPanelComponent, LexiconListComponent, LexiconListNodeComponent, LexicalEntryListPanelComponent, 
+        LexicalEntryListComponent, LexicalEntryListNodeComponent, LexicalEntryListSettingsModal,
         SearchBarComponent, SearchSettingsModal, ClassTreeSettingsModal
     ],
     exports: [
@@ -75,6 +76,6 @@ import { Ng2CompleterModule } from "ng2-completer";
         LexiconListPanelComponent, LexiconListComponent, LexiconListNodeComponent,
         LexicalEntryListPanelComponent, LexicalEntryListComponent, LexicalEntryListNodeComponent
     ],
-    entryComponents: [SearchSettingsModal, ClassTreeSettingsModal, ConceptTreeSettingsModal, TreeListSettingsModal]
+    entryComponents: [SearchSettingsModal, ClassTreeSettingsModal, ConceptTreeSettingsModal, LexicalEntryListSettingsModal, TreeListSettingsModal]
 })
 export class TreeAndListModule { }

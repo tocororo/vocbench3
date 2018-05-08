@@ -1,14 +1,13 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
+import { ClassIndividualPanelSearchMode, SearchSettings } from "../../../models/Properties";
+import { IndividualsServices } from "../../../services/individualsServices";
+import { SearchServices } from "../../../services/searchServices";
+import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
+import { VBProperties } from "../../../utils/VBProperties";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { ClassTreePanelComponent } from "../classTreePanel/classTreePanelComponent";
 import { InstanceListPanelComponent } from "../instanceListPanel/instanceListPanelComponent";
-import { SearchServices } from "../../../services/searchServices";
-import { IndividualsServices } from "../../../services/individualsServices";
-import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
-import { RDF, OWL } from "../../../models/Vocabulary";
-import { SearchSettings, ClassIndividualPanelSearchMode } from "../../../models/Properties";
-import { VBProperties } from "../../../utils/VBProperties";
-import { UIUtils, TreeListContext } from "../../../utils/UIUtils";
 
 /**
  * While classTreeComponent has as @Input rootClasses this componente cannot
@@ -53,45 +52,41 @@ export class ClassIndividualTreePanelComponent {
         private basicModals: BasicModalServices, private vbProp: VBProperties) { }
 
     private doSearch(searchedText: string) {
-        if (searchedText.trim() == "") {
-            this.basicModals.alert("Search", "Please enter a valid string to search", "error");
-        } else {
-            let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
-            let searchRoles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual];
-            if (searchSettings.classIndividualSearchMode == ClassIndividualPanelSearchMode.onlyInstances) {
-                searchRoles = [RDFResourceRolesEnum.individual];
-            } else if (searchSettings.classIndividualSearchMode == ClassIndividualPanelSearchMode.onlyClasses) {
-                searchRoles = [RDFResourceRolesEnum.cls];
-            }
-            let searchLangs: string[];
-            let includeLocales: boolean;
-            if (searchSettings.restrictLang) {
-                searchLangs = searchSettings.languages;
-                includeLocales = searchSettings.includeLocales;
-            }
-            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-            this.searchService.searchResource(searchedText, searchRoles, searchSettings.useLocalName, searchSettings.useURI, 
-                searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
-                searchResult => {
-                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                    if (searchResult.length == 0) {
-                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
-                    } else { //1 or more results
-                        if (searchResult.length == 1) {
-                            this.selectSearchedResource(searchResult[0]);
-                        } else { //multiple results, ask the user which one select
-                            ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
-                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
-                                (selectedResource: any) => {
-                                    this.selectSearchedResource(selectedResource);
-                                },
-                                () => { }
-                            );
-                        }
+        let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+        let searchRoles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual];
+        if (searchSettings.classIndividualSearchMode == ClassIndividualPanelSearchMode.onlyInstances) {
+            searchRoles = [RDFResourceRolesEnum.individual];
+        } else if (searchSettings.classIndividualSearchMode == ClassIndividualPanelSearchMode.onlyClasses) {
+            searchRoles = [RDFResourceRolesEnum.cls];
+        }
+        let searchLangs: string[];
+        let includeLocales: boolean;
+        if (searchSettings.restrictLang) {
+            searchLangs = searchSettings.languages;
+            includeLocales = searchSettings.includeLocales;
+        }
+        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+        this.searchService.searchResource(searchedText, searchRoles, searchSettings.useLocalName, searchSettings.useURI, 
+            searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
+            searchResult => {
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                if (searchResult.length == 0) {
+                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                } else { //1 or more results
+                    if (searchResult.length == 1) {
+                        this.selectSearchedResource(searchResult[0]);
+                    } else { //multiple results, ask the user which one select
+                        ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
+                        this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
+                            (selectedResource: any) => {
+                                this.selectSearchedResource(selectedResource);
+                            },
+                            () => { }
+                        );
                     }
                 }
-            );
-        }
+            }
+        );
     }
 
     /**

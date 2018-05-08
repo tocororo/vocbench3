@@ -3,7 +3,7 @@ import { AbstractList } from "../../../abstractList";
 import { LexicalEntryListNodeComponent } from "./lexicalEntryListNodeComponent";
 import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
-import { SearchSettings } from "../../../../models/Properties";
+import { SearchSettings, LexEntryVisualizationMode } from "../../../../models/Properties";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { UIUtils } from "../../../../utils/UIUtils";
@@ -52,26 +52,38 @@ export class LexicalEntryListComponent extends AbstractList {
     }
 
     initList() {
-        if (this.lexicon != undefined && this.index != undefined) {
-            this.list = [];
+        if (this.lexicon != undefined) {
             this.selectedNode = null;
             this.nodeLimit = this.initialNodes;
-            
-            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-            this.ontolexService.getLexicalEntriesByAlphabeticIndex(this.index, this.lexicon).subscribe(
-                entries => {
-                    //sort by show if rendering is active, uri otherwise
-                    ResourceUtils.sortResources(entries, this.rendering ? SortAttribute.show : SortAttribute.value);
-                    this.list = entries;
-                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                }
-            );
+
+            if (this.vbProp.getLexicalEntryListPreferences().visualization == LexEntryVisualizationMode.indexBased && this.index != undefined) {
+                this.list = [];
+                UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+                this.ontolexService.getLexicalEntriesByAlphabeticIndex(this.index, this.lexicon).subscribe(
+                    entries => {
+                        //sort by show if rendering is active, uri otherwise
+                        ResourceUtils.sortResources(entries, this.rendering ? SortAttribute.show : SortAttribute.value);
+                        this.list = entries;
+                        UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                    }
+                );
+            } else if (this.vbProp.getLexicalEntryListPreferences().visualization == LexEntryVisualizationMode.searchBased) {
+                //don't do nothing, the list is forced from the parent panel after the search
+            }
         }
     }
 
+    public forceList(list: ARTURIResource[]) {
+        this.selectedNode = null;
+        this.nodeLimit = this.initialNodes;
+        this.list = list;
+    }
+
     onListNodeCreated(node: ARTURIResource) {
-        if (node.getShow().toLocaleLowerCase().startsWith(this.index.toLocaleLowerCase())) {
-            this.list.unshift(node);
+        if (this.vbProp.getLexicalEntryListPreferences().visualization = LexEntryVisualizationMode.indexBased) {
+            if (node.getShow().toLocaleLowerCase().startsWith(this.index.toLocaleLowerCase())) {
+                this.list.unshift(node);
+            }
         }
     }
 

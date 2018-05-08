@@ -64,6 +64,8 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
                         this.enrichWithPlainLiteral(predicate);
                     } else if (ranges.type == RangeType.typedLiteral) {
                         //in case range type is typedLiteral, the rangeColl (if available) represents the admitted datatypes
+                        let datatypes = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
+                        let dataRanges = ranges.rangeCollection ? ranges.rangeCollection.dataRanges : null;
                         this.enrichWithTypedLiteral(predicate, ranges.rangeCollection.resources, ranges.rangeCollection.dataRanges);
                     } else if (ranges.type == RangeType.literal) {
                         var options = [RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];

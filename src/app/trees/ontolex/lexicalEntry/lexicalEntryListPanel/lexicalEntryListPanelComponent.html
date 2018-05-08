@@ -22,16 +22,25 @@
             <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
                 <span class="glyphicon glyphicon-refresh"></span>
             </button>
+            <button *ngIf="isContextDataPanel()" class="btn btn-default btn-xs" title="Settings" (click)="settings()">
+                <span class="glyphicon glyphicon-cog"></span>
+            </button>
         </div>
     </div>
 
     <!-- List -->
     <div class="panel-body vbox">
-
-        <div style="padding-bottom: 3px; display: flex; align-items: center">
-            <select class="form-control input-xs" [(ngModel)]="index">
-                <option *ngFor="let i of indexes">{{i}}</option>
+        <div *ngIf="visualizationMode == 'indexBased'" style="padding-bottom: 3px; display: flex; align-items: center">
+            <select class="form-control input-xs" [(ngModel)]="firstDigitIndex" (ngModelChange)="onDigitChange()" style="width: initial">
+                <option *ngFor="let i of alphabet">{{i}}</option>
             </select>
+            <ng-template [ngIf]="indexLenght>1">
+                <span style="font-weight: bold; margin: 0 5px">&gt;</span>
+                <select class="form-control input-xs" [(ngModel)]="secondDigitIndex" (ngModelChange)="onDigitChange()" style="width: initial">
+                    <option value=" ">{{firstDigitIndex}}⎵</option>
+                    <option *ngFor="let i of alphabet" [value]="i">{{firstDigitIndex}}{{i}}</option>
+                </select>
+            </ng-template>
         </div>
 
         <lexical-entry-list [lexicon]="lexicon" [index]="index" [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)">

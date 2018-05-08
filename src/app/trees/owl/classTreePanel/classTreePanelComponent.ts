@@ -1,23 +1,22 @@
-import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
-import { ClassTreeSettingsModal } from "./classTreeSettingsModal";
-import { AbstractTreePanel } from "../../abstractTreePanel"
-import { ClassTreeComponent } from "../classTree/classTreeComponent";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
+import { SearchSettings } from "../../../models/Properties";
+import { OWL, RDFS } from "../../../models/Vocabulary";
 import { ClassesServices } from "../../../services/classesServices";
-import { SearchServices } from "../../../services/searchServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
+import { SearchServices } from "../../../services/searchServices";
+import { UIUtils } from "../../../utils/UIUtils";
+import { VBContext } from "../../../utils/VBContext";
+import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
-import { RDFS, OWL } from "../../../models/Vocabulary";
-import { SearchSettings, ClassTreePreference } from "../../../models/Properties";
-import { VBProperties } from "../../../utils/VBProperties";
-import { VBContext } from "../../../utils/VBContext";
-import { UIUtils, TreeListContext } from "../../../utils/UIUtils";
-import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { AbstractTreePanel } from "../../abstractTreePanel";
+import { ClassTreeComponent } from "../classTree/classTreeComponent";
+import { ClassTreeSettingsModal } from "./classTreeSettingsModal";
 
 @Component({
     selector: "class-tree-panel",
@@ -92,39 +91,35 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     //search handlers
 
     doSearch(searchedText: string) {
-        if (searchedText.trim() == "") {
-            this.basicModals.alert("Search", "Please enter a valid string to search", "error");
-        } else {
-            let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
-            let searchLangs: string[];
-            let includeLocales: boolean;
-            if (searchSettings.restrictLang) {
-                searchLangs = searchSettings.languages;
-                includeLocales = searchSettings.includeLocales;
-            }
-            UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-            this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.cls], searchSettings.useLocalName, searchSettings.useURI,
-                searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
-                searchResult => {
-                    UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                    if (searchResult.length == 0) {
-                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
-                    } else { //1 or more results
-                        if (searchResult.length == 1) {
-                            this.openTreeAt(searchResult[0]);
-                        } else { //multiple results, ask the user which one select
-                            ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
-                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
-                                (selectedResource: any) => {
-                                    this.openTreeAt(selectedResource);
-                                },
-                                () => { }
-                            );
-                        }
+        let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+        let searchLangs: string[];
+        let includeLocales: boolean;
+        if (searchSettings.restrictLang) {
+            searchLangs = searchSettings.languages;
+            includeLocales = searchSettings.includeLocales;
+        }
+        UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
+        this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.cls], searchSettings.useLocalName, searchSettings.useURI,
+            searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
+            searchResult => {
+                UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
+                if (searchResult.length == 0) {
+                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                } else { //1 or more results
+                    if (searchResult.length == 1) {
+                        this.openTreeAt(searchResult[0]);
+                    } else { //multiple results, ask the user which one select
+                        ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
+                        this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
+                            (selectedResource: any) => {
+                                this.openTreeAt(selectedResource);
+                            },
+                            () => { }
+                        );
                     }
                 }
-            );
-        }
+            }
+        );
     }
 
     //this is public so it can be invoked from classIndividualTreePanelComponent

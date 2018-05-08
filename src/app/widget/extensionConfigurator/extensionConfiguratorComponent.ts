@@ -14,6 +14,7 @@ export class ExtensionConfiguratorComponent {
 
     @Input('extensions') extensions: ConfigurableExtensionFactory[];
     @Input() storeable: boolean = true; //tells if the component should allow to store and load configuration
+    @Input() disabled: boolean = false;
     @Output() extensionUpdated = new EventEmitter<ConfigurableExtensionFactory>();
     @Output() configurationUpdated = new EventEmitter<Settings>();
     @Output() configStatusUpdated = new EventEmitter<{ status: ExtensionConfigurationStatus, relativeReference?: string }>();
