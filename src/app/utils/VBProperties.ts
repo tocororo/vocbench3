@@ -4,7 +4,7 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ART
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
 import { ProjectTableColumnStruct } from '../models/Project';
-import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, LexEntryVisualizationMode, LexicalEntryListPreference, Properties, ResourceViewMode, SearchSettings, StringMatchMode } from '../models/Properties';
+import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, Properties, ResourceViewMode, SearchSettings, StringMatchMode } from '../models/Properties';
 import { OWL, RDFS, SKOS } from '../models/Vocabulary';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { Cookie } from '../utils/Cookie';
@@ -72,8 +72,8 @@ export class VBProperties {
             Properties.pref_search_include_locales, Properties.pref_search_use_autocomplete, 
             Properties.pref_class_tree_filter_enabled, Properties.pref_class_tree_filter_map, Properties.pref_class_tree_root,
             Properties.pref_concept_tree_base_broader_prop, Properties.pref_concept_tree_broader_props, Properties.pref_concept_tree_narrower_props,
-            Properties.pref_concept_tree_include_subprops, Properties.pref_concept_tree_sync_inverse,
-            Properties.pref_lex_entry_list_visualization_prop, Properties.pref_lex_entry_list_index_lenght_prop,
+            Properties.pref_concept_tree_include_subprops, Properties.pref_concept_tree_sync_inverse, Properties.pref_concept_tree_visualization,
+            Properties.pref_lex_entry_list_visualization, Properties.pref_lex_entry_list_index_lenght,
             Properties.pref_editing_language
         ];
         this.prefService.getPUSettings(properties).subscribe(
@@ -124,7 +124,8 @@ export class VBProperties {
                     broaderProps: [],
                     narrowerProps: [],
                     includeSubProps: true,
-                    syncInverse: true
+                    syncInverse: true,
+                    visualization: ConceptTreeVisualizationMode.hierarchyBased
                 }
                 let conceptTreeBaseBroaderPropPref: string = prefs[Properties.pref_concept_tree_base_broader_prop];
                 if (conceptTreeBaseBroaderPropPref != null) {
@@ -138,6 +139,10 @@ export class VBProperties {
                 if (conceptTreeNarrowerPropsPref != null) {
                     this.conceptTreePreferences.narrowerProps = conceptTreeNarrowerPropsPref.split(",");
                 }
+                let conceptTreeVisualizationPref: string = prefs[Properties.pref_concept_tree_visualization];
+                if (conceptTreeVisualizationPref != null && conceptTreeVisualizationPref == ConceptTreeVisualizationMode.searchBased) {
+                    this.conceptTreePreferences.visualization = conceptTreeVisualizationPref;
+                }
                 this.conceptTreePreferences.includeSubProps = prefs[Properties.pref_concept_tree_include_subprops] != "false";
                 this.conceptTreePreferences.syncInverse = prefs[Properties.pref_concept_tree_sync_inverse] != "false";
 
@@ -146,12 +151,11 @@ export class VBProperties {
                     visualization: LexEntryVisualizationMode.indexBased,
                     indexLength: 1
                 }
-                let lexEntryListVisualizationPref: string = prefs[Properties.pref_lex_entry_list_visualization_prop];
-                if (lexEntryListVisualizationPref != null && (lexEntryListVisualizationPref == LexEntryVisualizationMode.indexBased ||
-                    lexEntryListVisualizationPref == LexEntryVisualizationMode.searchBased)) {
+                let lexEntryListVisualizationPref: string = prefs[Properties.pref_lex_entry_list_visualization];
+                if (lexEntryListVisualizationPref != null && lexEntryListVisualizationPref == LexEntryVisualizationMode.searchBased) {
                     this.lexEntryListPreferences.visualization = lexEntryListVisualizationPref;
                 }
-                let lexEntryListIndexLenghtPref: string = prefs[Properties.pref_lex_entry_list_index_lenght_prop];
+                let lexEntryListIndexLenghtPref: string = prefs[Properties.pref_lex_entry_list_index_lenght];
                 if (lexEntryListIndexLenghtPref == "2") {
                     this.lexEntryListPreferences.indexLength = 2;
                 }
@@ -307,17 +311,21 @@ export class VBProperties {
         this.prefService.setPUSetting(Properties.pref_concept_tree_sync_inverse, sync+"").subscribe();
         this.conceptTreePreferences.syncInverse = sync;
     }
+    setConceptTreeVisualization(mode: ConceptTreeVisualizationMode) {
+        this.prefService.setPUSetting(Properties.pref_concept_tree_visualization, mode).subscribe();
+        this.conceptTreePreferences.visualization = mode;
+    }
 
     //lex entry list settings
     getLexicalEntryListPreferences(): LexicalEntryListPreference {
         return this.lexEntryListPreferences;
     }
     setLexicalEntryListVisualization(mode: LexEntryVisualizationMode) {
-        this.prefService.setPUSetting(Properties.pref_lex_entry_list_visualization_prop, mode).subscribe();
+        this.prefService.setPUSetting(Properties.pref_lex_entry_list_visualization, mode).subscribe();
         this.lexEntryListPreferences.visualization = mode;
     }
     setLexicalEntryListIndexLenght(lenght: number) {
-        this.prefService.setPUSetting(Properties.pref_lex_entry_list_index_lenght_prop, lenght+"").subscribe();
+        this.prefService.setPUSetting(Properties.pref_lex_entry_list_index_lenght, lenght+"").subscribe();
         this.lexEntryListPreferences.indexLength = lenght;
     }
 

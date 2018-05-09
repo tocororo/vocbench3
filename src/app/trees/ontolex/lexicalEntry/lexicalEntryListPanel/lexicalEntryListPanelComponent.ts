@@ -2,13 +2,14 @@ import { Component, Input, ViewChild } from "@angular/core";
 import { OverlayConfig } from "ngx-modialog";
 import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
-import { SearchSettings, LexEntryVisualizationMode } from "../../../../models/Properties";
+import { LexEntryVisualizationMode, SearchSettings } from "../../../../models/Properties";
 import { OntoLex } from "../../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from '../../../../utils/VBProperties';
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
@@ -90,13 +91,16 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
             searchLangs = searchSettings.languages;
             includeLocales = searchSettings.includeLocales;
         }
+
+        UIUtils.startLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
         this.searchService.searchLexicalEntry(searchedText, searchSettings.useLocalName, searchSettings.useURI,
             searchSettings.stringMatchMode, [this.lexicon], searchLangs, includeLocales).subscribe(
             searchResult => {
-                if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
-                } else { //1 or more results
-                    if (this.visualizationMode == LexEntryVisualizationMode.indexBased) {
+                UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
+                if (this.visualizationMode == LexEntryVisualizationMode.indexBased) {
+                    if (searchResult.length == 0) {
+                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    } else { //1 or more results
                         if (searchResult.length == 1) {
                             this.openAt(searchResult[0]);
                         } else { //multiple results, ask the user which one select
@@ -108,9 +112,12 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
                                 () => { }
                             );
                         }
-                    } else { //searchBased
-                        this.viewChildList.forceList(searchResult);
                     }
+                } else { //searchBased
+                    if (searchResult.length == 0) {
+                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    }
+                    this.viewChildList.forceList(searchResult);
                 }
             }
         );
@@ -124,18 +131,16 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
     }
 
     refresh() {
+        this.selectedNode = null;
         if (this.visualizationMode == LexEntryVisualizationMode.indexBased) {
             //in index based visualization reinit the list
             this.viewChildList.initList();
         } else if (this.visualizationMode == LexEntryVisualizationMode.searchBased) {
             //in search based visualization repeat the search
-            if (this.lastSearch != undefined && this.lastSearch.trim() != "") {
+            if (this.lastSearch != undefined) {
                 this.doSearch(this.lastSearch);
-            } else {
-                this.basicModals.alert("Search", "Please enter a valid string to search", "warning");
             }
         }
-        
     }
 
     //@Override
@@ -151,6 +156,7 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
                 this.visualizationMode = this.vbProp.getLexicalEntryListPreferences().visualization;
                 if (this.visualizationMode == LexEntryVisualizationMode.searchBased) {
                     this.viewChildList.forceList([]);
+                    this.lastSearch = null;
                 } else {
                     this.indexLenght = this.vbProp.getLexicalEntryListPreferences().indexLength;
                     this.onDigitChange();
@@ -167,6 +173,11 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
 
     private onLexiconChanged(lexicon: ARTURIResource) {
         this.lexicon = lexicon;
+        //in case of visualization search based reset the list
+        if (this.visualizationMode == LexEntryVisualizationMode.searchBased && this.lastSearch != null) {
+            this.viewChildList.forceList([]);
+            this.lastSearch = null;
+        }
     }
 
 }

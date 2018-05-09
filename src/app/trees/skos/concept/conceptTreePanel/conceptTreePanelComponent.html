@@ -46,6 +46,10 @@
             </select>
         </div>
 
+        <div *ngIf="visualizationMode == 'searchBased' && !lastSearch" class="alert alert-warning" style="margin-bottom: 4px;">
+            Please use the search field to retrieve concepts
+        </div>
+
         <concept-tree [schemes]="workingSchemes" [rendering]="rendering" [showDeprecated]="showDeprecated"
             (nodeSelected)="onNodeSelected($event)" (conceptRemovedFromScheme)="onConceptRemovedFromScheme($event)">
         </concept-tree>

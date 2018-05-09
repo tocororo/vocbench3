@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
-import { SearchSettings } from "../../../../models/Properties";
+import { ConceptTreeVisualizationMode, SearchSettings } from "../../../../models/Properties";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
@@ -37,6 +37,11 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     private workingSchemes: ARTURIResource[];//keep track of the selected scheme: could be assigned throught @Input scheme or scheme selection
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
+    private visualizationMode: ConceptTreeVisualizationMode;
+    
+    //for visualization searchBased
+    private lastSearch: string;
+
     constructor(private skosService: SkosServices, private searchService: SearchServices,
         private creationModals: CreationModalServices, private modal: Modal,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, 
@@ -49,6 +54,9 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     ngOnInit() {
         super.ngOnInit();
+
+        this.visualizationMode = this.vbProp.getConceptTreePreferences().visualization;
+            
         if (this.schemes === undefined) { //if @Input is not provided at all, get the scheme from the preferences
             this.workingSchemes = this.vbProp.getActiveSchemes();
         } else { //if @Input schemes is provided (it could be null => no scheme-mode), initialize the tree with this scheme
@@ -149,7 +157,15 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     refresh() {
         this.selectedNode = null;
-        this.viewChildTree.initTree();
+        if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {
+            //in index based visualization reinit the list
+            this.viewChildTree.initTree();
+        } else if (this.visualizationMode == ConceptTreeVisualizationMode.searchBased) {
+            //in search based visualization repeat the search
+            if (this.lastSearch != undefined) {
+                this.doSearch(this.lastSearch);
+            }
+        }
     }
 
     private isNoSchemeMode() {
@@ -193,6 +209,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     //search handlers
 
     doSearch(searchedText: string) {
+        this.lastSearch = searchedText;
+
         let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
         let searchLangs: string[];
         let includeLocales: boolean;
@@ -214,20 +232,27 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             searchSettings.useURI, searchSettings.stringMatchMode, searchLangs, includeLocales, searchingScheme).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
-                } else { //1 or more results
-                    if (searchResult.length == 1) {
-                        this.selectSearchResult(searchResult[0]);
-                    } else { //multiple results, ask the user which one select
-                        ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
-                        this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
-                            (selectedResource: any) => {
-                                this.selectSearchResult(selectedResource);
-                            },
-                            () => { }
-                        );
+                if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {
+                    if (searchResult.length == 0) {
+                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    } else { //1 or more results
+                        if (searchResult.length == 1) {
+                            this.selectSearchResult(searchResult[0]);
+                        } else { //multiple results, ask the user which one select
+                            ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
+                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
+                                (selectedResource: any) => {
+                                    this.selectSearchResult(selectedResource);
+                                },
+                                () => { }
+                            );
+                        }
                     }
+                } else { //searchBased
+                    if (searchResult.length == 0) {
+                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    }
+                    this.viewChildTree.forceList(searchResult);
                 }
             }
         );
@@ -279,8 +304,13 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(ConceptTreeSettingsModal, overlayConfig).result.then(
             changesDone => {
-                //Refresh the tree since there have been changes in the properties used for building the hierarchy
-                this.refresh();
+                this.visualizationMode = this.vbProp.getConceptTreePreferences().visualization;
+                if (this.visualizationMode == ConceptTreeVisualizationMode.searchBased) {
+                    this.viewChildTree.forceList([]);
+                    this.lastSearch = null;
+                } else {
+                    this.refresh();
+                }
             },
             () => {}
         );
@@ -296,6 +326,11 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     private onSchemeChanged(schemes: ARTURIResource[]) {
         this.workingSchemes = schemes;
+        //in case of visualization search based reset the list
+        if (this.visualizationMode == ConceptTreeVisualizationMode.searchBased && this.lastSearch != null) {
+            this.viewChildTree.forceList([]);
+            this.lastSearch = null;
+        }
     }
 
 }

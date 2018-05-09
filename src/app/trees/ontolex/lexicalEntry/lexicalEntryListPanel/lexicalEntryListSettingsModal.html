@@ -10,15 +10,11 @@
         </colgroup>
         <tbody>
             <tr>
-                <td nowrap>
-                    <label>Visualization mode</label>
-                </td>
+                <td nowrap><label>Visualization mode</label></td>
                 <td>
-                    <span class="hbox form-control input-sm" style="align-items: center; justify-content: center;">
-                        <label *ngFor="let vm of visualizationModes" class="radio-inline">
-                            <input type="radio" name="radio_visualization" [(ngModel)]="visualization" [value]="vm.value">{{vm.label}}
-                        </label>
-                    </span>
+                    <select class="form-control input-sm" [(ngModel)]="visualization">
+                        <option *ngFor="let vm of visualizationModes" [value]="vm.value">{{vm.label}}</option>
+                    </select>
                 </td>
             </tr>
             <tr *ngIf="visualization == 'indexBased'">
@@ -32,17 +28,6 @@
                 </td>
         </tbody>
     </table>
-
-    <!-- <div class="hbox" style="margin-bottom: 6px; align-items: center; flex: initial;">
-        <label style="white-space: nowrap; margin-right: 4px;">
-            Visualization mode:
-        </label>
-        <span class="hbox form-control input-sm" style="align-items: center; justify-content: center;">
-            <label *ngFor="let vm of visualizationModes" class="radio-inline">
-                <input type="radio" name="radio_visualization" [(ngModel)]="visualization" [value]="vm.value">{{vm.label}}
-            </label>
-        </span>
-    </div> -->
 
 </div>
 <div class="modal-footer">

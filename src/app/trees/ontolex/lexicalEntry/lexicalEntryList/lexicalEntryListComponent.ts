@@ -1,17 +1,17 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ViewChildren, QueryList, SimpleChanges } from "@angular/core";
-import { AbstractList } from "../../../abstractList";
-import { LexicalEntryListNodeComponent } from "./lexicalEntryListNodeComponent";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
+import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
+import { LexEntryVisualizationMode } from "../../../../models/Properties";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
-import { SearchSettings, LexEntryVisualizationMode } from "../../../../models/Properties";
-import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
-import { VBProperties } from "../../../../utils/VBProperties";
-import { UIUtils } from "../../../../utils/UIUtils";
-import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { VBContext } from "../../../../utils/VBContext";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { SearchServices } from "../../../../services/searchServices";
+import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { UIUtils } from "../../../../utils/UIUtils";
+import { VBContext } from "../../../../utils/VBContext";
+import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
+import { AbstractList } from "../../../abstractList";
+import { LexicalEntryListNodeComponent } from "./lexicalEntryListNodeComponent";
 
 @Component({
     selector: "lexical-entry-list",
@@ -68,7 +68,7 @@ export class LexicalEntryListComponent extends AbstractList {
                     }
                 );
             } else if (this.vbProp.getLexicalEntryListPreferences().visualization == LexEntryVisualizationMode.searchBased) {
-                //don't do nothing, the list is forced from the parent panel after the search
+                //don't do nothing
             }
         }
     }

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
-import { ConceptTreePreference } from "../../../../models/Properties";
+import { ConceptTreePreference, ConceptTreeVisualizationMode } from "../../../../models/Properties";
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
@@ -59,26 +59,36 @@ export class ConceptTreeComponent extends AbstractTree {
         }
 
         this.roots = [];
+        if (this.vbProp.getConceptTreePreferences().visualization == ConceptTreeVisualizationMode.hierarchyBased) {
+            this.selectedNode = null;
+            this.rootLimit = this.initialRoots;
+
+            let prefs: ConceptTreePreference = this.vbProp.getConceptTreePreferences();
+            let broaderProps: ARTURIResource[] = [];
+            prefs.broaderProps.forEach((prop: string) => broaderProps.push(new ARTURIResource(prop)));
+            let narrowerProps: ARTURIResource[] = [];
+            prefs.narrowerProps.forEach((prop: string) => narrowerProps.push(new ARTURIResource(prop)));
+            let includeSubProps: boolean = prefs.includeSubProps;
+
+            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+            this.skosService.getTopConcepts(this.schemes, broaderProps, narrowerProps, includeSubProps).subscribe( //new service (whithout lang param)
+                topConcepts => {
+                    //sort by show if rendering is active, uri otherwise
+                    ResourceUtils.sortResources(topConcepts, this.rendering ? SortAttribute.show : SortAttribute.value);
+                    this.roots = topConcepts;
+                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                },
+                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
+            );
+        } else if (this.vbProp.getConceptTreePreferences().visualization == ConceptTreeVisualizationMode.searchBased) {
+            //don't do nothing
+        }
+    }
+
+    public forceList(list: ARTURIResource[]) {
+        this.roots = list;
         this.selectedNode = null;
         this.rootLimit = this.initialRoots;
-
-        let prefs: ConceptTreePreference = this.vbProp.getConceptTreePreferences();
-        let broaderProps: ARTURIResource[] = [];
-        prefs.broaderProps.forEach((prop: string) => broaderProps.push(new ARTURIResource(prop)));
-        let narrowerProps: ARTURIResource[] = [];
-        prefs.narrowerProps.forEach((prop: string) => narrowerProps.push(new ARTURIResource(prop)));
-        let includeSubProps: boolean = prefs.includeSubProps;
-
-        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.skosService.getTopConcepts(this.schemes, broaderProps, narrowerProps, includeSubProps).subscribe( //new service (whithout lang param)
-            topConcepts => {
-                //sort by show if rendering is active, uri otherwise
-                ResourceUtils.sortResources(topConcepts, this.rendering ? SortAttribute.show : SortAttribute.value);
-                this.roots = topConcepts;
-                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-            },
-            err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
-        );
     }
 
     openTreeAt(node: ARTURIResource) {
