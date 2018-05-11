@@ -2,23 +2,22 @@
     
     <div class="panel panel-default vbox">
         <div class="panel-heading">
-            <label>Export data:</label>
+            <label style="flex: 1;">Export data:</label>
+            <div class="btn-toolbar" role="toolbar">
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-default" title="Save export configuration" (click)="saveChain()">
+                        <span class="glyphicon glyphicon-floppy-save"></span>
+                    </button>
+                    <button class="btn btn-default" title="Load export configuration" (click)="loadChain()">
+                        <span class="glyphicon glyphicon-floppy-open"></span>
+                    </button>
+                </div>
+            </div>
         </div>
        
         <div class="panel-body vbox">
 
-            <form class="form-horizontal">
-                <div class="form-group">
-                    <label class="control-label col-sm-1">Export Format:</label>
-                    <div class="col-sm-11">
-                        <select class="form-control input-sm" [(ngModel)]="selectedExportFormat" name="format">
-                            <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
-                        </select>
-                    </div>
-                </div>
-            </form>
-
-            <div class="subPanel vbox">
+            <div class="subPanel vbox" style="min-height: 150px;">
                 <div class="subPanel-heading">
                     <label style="flex: 1">
                         Graphs to export
@@ -58,14 +57,6 @@
                                 <span class="glyphicon glyphicon-chevron-up"></span>
                             </button>
                         </div>
-                        <div class="btn-group btn-group-xs">
-                            <button class="btn btn-default" title="Save export chain" (click)="saveChain()" [disabled]="filtersChain.length == 0">
-                                <span class="glyphicon glyphicon-floppy-save"></span>
-                            </button>
-                            <button class="btn btn-default" title="Load export chain" (click)="loadChain()">
-                                <span class="glyphicon glyphicon-floppy-open"></span>
-                            </button>
-                        </div>
                     </div>
                 </div>
                 <div class="subPanel-body scrollableContainer">
@@ -103,7 +94,68 @@
                 </div>
             </div>
 
+            <div *ngIf="selectedDeployerSource != REPO_SOURCE" class="subPanel">
+                <div class="subPanel-heading">
+                    <label>Reformatter</label>
+                </div>
+                <div class="subPanel-body">
+                    <div class="hbox">
+                        <extension-configurator *ngIf="reformatters" [extensions]="reformatters"
+                            (extensionUpdated)="onReformatterExtensionUpdated($event)"
+                            (configurationUpdated)="selectedReformatterConfig = $event"
+                            style="flex: 1;">
+                        </extension-configurator>
+
+                        <div class="hbox" style="align-items: center; flex: initial; margin-left: 8px;">
+                            <label style="white-space: nowrap; margin-right: 4px;">Export Format:</label>
+                            <select class="form-control input-sm" [(ngModel)]="selectedExportFormat">
+                                <option *ngFor="let f of exportFormats" [value]="f">{{f}}</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="subPanel">
+                <div class="subPanel-heading">
+                    <label>Deployer</label>
+                    <input type="checkbox" [(ngModel)]="useDeployer" title="Use deployer" style="margin-left: 6px;">
+                </div>
+                <div class="subPanel-body">
+                    <div *ngIf="useDeployer" class="hbox" style="align-items: center;">
+                        <div class="hbox" style="align-items: center; flex: initial; margin-right: 8px;">
+                            <label style="white-space: nowrap; margin-right: 4px;">Deploy from:</label>
+                            <select class="form-control input-sm" [(ngModel)]="selectedDeployerSource">
+                                <option *ngFor="let s of deployerSources">{{s}}</option>
+                            </select>
+                        </div>
+
+                        <ng-template [ngIf]="selectedDeployerSource == REPO_SOURCE">
+                            <extension-configurator #deployerConfigurator *ngIf="repoSourcedDeployer" [extensions]="repoSourcedDeployer"
+                                (extensionUpdated)="selectedDeployerExtension = $event"
+                                (configurationUpdated)="selectedDeployerConfig = $event"
+                                (configStatusUpdated)="onDeployerConfigStatusUpdated($event)"
+                                style="flex: 1;">
+                            </extension-configurator>
+                        </ng-template>
+                        <ng-template [ngIf]="selectedDeployerSource == STREAM_SOURCE">
+                            <extension-configurator #deployerConfigurator *ngIf="streamSourcedDeployer" [extensions]="streamSourcedDeployer"
+                                (extensionUpdated)="selectedDeployerExtension = $event"
+                                (configurationUpdated)="selectedDeployerConfig = $event"
+                                (configStatusUpdated)="onDeployerConfigStatusUpdated($event)"
+                                style="flex: 1;">
+                            </extension-configurator>
+                        </ng-template>
+
+                        <span *ngIf="requireConfigurationDeployer()" class="glyphicon glyphicon-warning-sign" style="margin: 0 8px;"
+                            title="This deployer needs to be configured"></span>
+                    </div>
+                </div>
+            </div>
+
         </div>
+
         
         <div class="panel-footer">
             <div class="pull-right">

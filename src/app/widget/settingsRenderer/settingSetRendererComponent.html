@@ -9,7 +9,8 @@
         <tr *ngFor="let v of value; let index = index; let last = last; trackBy: trackByIndex;">
             <td style="padding: 2px 0px;">
                 <div [ngSwitch]="types[0].name">
-                    <resource-picker *ngSwitchCase="'IRI'" [resource]="value[index]" [roles]="getIRIRoleConstraints()" (resourceChanged)="updateIRI(index, $event)"></resource-picker>
+                    <resource-picker *ngSwitchCase="'IRI'" [resource]="value[index]" [roles]="getIRIRoleConstraints()" [editable]="true"
+                        (resourceChanged)="updateIRI(index, $event)"></resource-picker>
                     <textarea *ngSwitchDefault type="text" rows="1" class="form-control input-sm" style="resize: vertical" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()">
                     </textarea>
                 </div>

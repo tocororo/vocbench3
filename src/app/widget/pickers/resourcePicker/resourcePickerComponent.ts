@@ -34,12 +34,8 @@ export class ResourcePickerComponent {
     private init() {
         if (this.resource) {
             if (typeof this.resource == 'string') {
-                this.resourceService.getResourceDescription(this.resource).subscribe(
-                    res => {
-                        this.resource = <ARTURIResource>res;
-                        this.resourceIRI = this.resource.getNominalValue();
-                    }
-                )
+                this.resource = new ARTURIResource(this.resource);
+                this.resourceIRI = this.resource.getNominalValue();
             } else {
                 this.resourceIRI = this.resource.getNominalValue();
             }
@@ -53,8 +49,11 @@ export class ResourcePickerComponent {
     }
 
     private onModelChanged() {
-        let returnedRes: ARTURIResource
+        let returnedRes: ARTURIResource;
         if (this.resource != null) {
+            if (typeof this.resource == 'string') {
+                this.resource = new ARTURIResource(this.resource);
+            }
             returnedRes = this.resource.clone();
             returnedRes.setURI(this.resourceIRI); //if IRI has been manually changed
         } else {

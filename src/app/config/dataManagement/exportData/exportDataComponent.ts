@@ -1,9 +1,9 @@
-import { Component, QueryList, ViewChildren } from "@angular/core";
+import { Component, QueryList, ViewChildren, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from "../../../models/ARTResources";
 import { ConfigurationComponents } from "../../../models/Configuration";
-import { ConfigurableExtensionFactory, ExtensionConfigurationStatus, ExtensionPointID, FilteringStep, Settings, SettingsProp } from "../../../models/Plugins";
+import { ConfigurableExtensionFactory, ExtensionConfigurationStatus, ExtensionPointID, FilteringStep, Settings, SettingsProp, ExtensionFactory, PluginSpecification } from "../../../models/Plugins";
 import { RDFFormat } from "../../../models/RDFFormat";
 import { ExportServices } from "../../../services/exportServices";
 import { ExtensionsServices } from "../../../services/extensionsServices";
@@ -24,10 +24,7 @@ export class ExportDataComponent {
 
     //ExtensionConfiguratorComponent children of this Component (useful to load single configurations of a chain)
     @ViewChildren(ExtensionConfiguratorComponent) viewChildrenExtConfig: QueryList<ExtensionConfiguratorComponent>;
-
-    //export format selection
-    private exportFormats: RDFFormat[];
-    private selectedExportFormat: RDFFormat;
+    @ViewChild("deployerConfigurator") deployerConfigurator: ExtensionConfiguratorComponent;
 
     private includeInferred: boolean = false;
 
@@ -39,22 +36,34 @@ export class ExportDataComponent {
     private filtersChain: FilterChainElement[] = [];
     private selectedFilterChainElement: FilterChainElement;
 
+    //reformatter
+    private reformatters: ExtensionFactory[];
+    private selectedReformatterExtension: ExtensionFactory;
+    private selectedReformatterConfig: Settings;
+
+    private exportFormats: string[];
+    private selectedExportFormat: string;
+
+    //deployer
+    private repoSourcedDeployer: ExtensionFactory[];
+    private streamSourcedDeployer: ExtensionFactory[];
+    private selectedDeployerExtension: ExtensionFactory;
+    private selectedDeployerConfig: Settings;
+
+    private deployerStatus: ExtensionConfigurationStatus;
+    private deployerRelativeRef: string;
+
+    private useDeployer: boolean = false;
+    private readonly STREAM_SOURCE: string = "Stream";
+    private readonly REPO_SOURCE: string = "Repository";
+    private deployerSources: string[] = [this.STREAM_SOURCE, this.REPO_SOURCE];
+    private selectedDeployerSource: string = this.deployerSources[0];
+    
+
     constructor(private extensionService: ExtensionsServices, private exportService: ExportServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
-        this.exportService.getOutputFormats().subscribe(
-            formats => {
-                this.exportFormats = formats;
-                //select RDF/XML as default
-                for (var i = 0; i < this.exportFormats.length; i++) {
-                    if (this.exportFormats[i].name == "RDF/XML") {
-                        this.selectedExportFormat = this.exportFormats[i];
-                        return;
-                    }
-                }
-            }
-        );
 
         let baseURI: string = VBContext.getWorkingProject().getBaseURI();
         this.exportService.getNamedGraphs().subscribe(
@@ -75,6 +84,25 @@ export class ExportDataComponent {
                 this.filters = <ConfigurableExtensionFactory[]>extensions;
             }
         );
+
+        this.extensionService.getExtensions(ExtensionPointID.REFORMATTING_EXPORTER_ID).subscribe(
+            extensions => {
+                this.reformatters = extensions;
+            }
+        );
+
+        this.extensionService.getExtensions(ExtensionPointID.REPOSITORY_SOURCED_DEPLOYER_ID).subscribe(
+            extensions => {
+                this.repoSourcedDeployer = extensions;
+            }
+        );
+
+        this.extensionService.getExtensions(ExtensionPointID.STREAM_SOURCED_DEPLOYER_ID).subscribe(
+            extensions => {
+                this.streamSourcedDeployer = extensions;
+            }
+        );
+
     }
 
     /** =====================================
@@ -203,10 +231,47 @@ export class ExportDataComponent {
     }
 
     /** =====================================
+     * Reformatter
+     * =====================================*/
+
+    private onReformatterExtensionUpdated(ext: ExtensionFactory) {
+        this.selectedReformatterExtension = ext;
+        this.exportService.getExportFormats(this.selectedReformatterExtension.id).subscribe(
+            formats => {
+                this.exportFormats = formats;
+                //set rdf/xml format as default
+                let rdfIdx: number = this.exportFormats.indexOf("RDF/XML");
+                if (rdfIdx != -1) {
+                    this.selectedExportFormat = this.exportFormats[rdfIdx];
+                } else {
+                    this.selectedExportFormat = this.exportFormats[0];
+                }
+            }
+        )
+    }
+
+    /** =====================================
+     * Deployer
+     * =====================================*/
+    
+    private onDeployerConfigStatusUpdated(statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
+        this.deployerStatus = statusEvent.status;
+        this.deployerRelativeRef = statusEvent.relativeReference;
+    }
+
+    private requireConfigurationDeployer() {
+        if (this.selectedDeployerConfig != null) {
+            return this.selectedDeployerConfig.requireConfiguration();
+        }
+        return false;
+    }
+
+    /** =====================================
      * Save/Load chain
      * =====================================*/
 
     private saveChain() {
+        //graphs
         let graphs: string[] = [];
         for (var i = 0; i < this.exportGraphs.length; i++) {
             if (this.exportGraphs[i].checked) {
@@ -214,20 +279,19 @@ export class ExportDataComponent {
             }
         }
 
+        //transformationPipeline
         let transformationPipeline: any[] = [];
 
         for (var i = 0; i < this.filtersChain.length; i++) {
-
             if (this.filtersChain[i].status == ExtensionConfigurationStatus.unsaved) {
                 this.basicModals.alert("Unsaved configuration", "Filter at position " + (i+1) + " is not saved. " +
-                    "In order to save a filter chain all its filters needs to be saved.", "warning");
+                    "In order to save a filter chain all its filters need to be saved.", "warning");
                 return;
             }
 
             //first element in pair: configRef
-            let transfStepConfig: any = {
+            let transfStepConfig: { extensionID: string, configRef: string } = {
                 extensionID: this.filtersChain[i].selectedFactory.id,
-                // configuration: this.filtersChain[i].selectedConfiguration.getPropertiesAsMap()
                 configRef: this.filtersChain[i].relativeReference
             };
             //second element in pair: graphs
@@ -243,11 +307,25 @@ export class ExportDataComponent {
             transformationPipeline.push(transfPipelineStepPair);
         }
 
+        //deployerSpec
+        let deployerSpec: { extensionID: string, configRef: string };
+        if (this.useDeployer) {
+            if (this.deployerStatus == ExtensionConfigurationStatus.unsaved) {
+                this.basicModals.alert("Unsaved configuration", "Deployer configuration is not saved. " +
+                    "In order to save the exporter configuration all its sub-configurations need to be saved.", "warning");
+                return;
+            }
+            deployerSpec = {
+                extensionID: this.selectedDeployerExtension.id,
+                configRef: this.deployerRelativeRef
+            }
+        }
+
         let config: { [key: string]: any } = {
             graphs: graphs,
             transformationPipeline: transformationPipeline,
             includeInferred: this.includeInferred,
-            deployerSpec: null
+            deployerSpec: deployerSpec
         }
 
         this.sharedModals.storeConfiguration("Save exporter chain configuration", ConfigurationComponents.EXPORTER, config).then(
@@ -262,6 +340,7 @@ export class ExportDataComponent {
         this.sharedModals.loadConfiguration("Load exporter chain configuration", ConfigurationComponents.EXPORTER).then(
             (conf: LoadConfigurationModalReturnData) => {
                 this.filtersChain = []; //reset the chain
+                this.useDeployer = false;
                 let configurations: SettingsProp[] = conf.configuration.properties;
                 for (var i = 0; i < configurations.length; i++) {
                     if (configurations[i].name == "transformationPipeline") {
@@ -294,11 +373,31 @@ export class ExportDataComponent {
                         })
                     } else if (configurations[i].name == "includeInferred") {
                         this.includeInferred = configurations[i].value;
+                    } else if (configurations[i].name == "deployerSpec") {
+                        this.useDeployer = true;
+                        let deployerSpec: {extensionID: string, configRef: string} = configurations[i].value;
+                        //check if it is necessary to switch the deployer source
+                        let found: boolean = false;
+                        this.streamSourcedDeployer.forEach((deployer: ExtensionFactory) => {
+                            if (deployer.id == deployerSpec.extensionID) {
+                                this.selectedDeployerSource = "Stream";
+                                found = true;
+                            }
+                        });
+                        if (!found) {
+                            this.selectedDeployerSource = "Repository";
+                        }
+                        
+                        setTimeout(() => {
+                            this.deployerConfigurator.forceConfiguration(deployerSpec.extensionID, deployerSpec.configRef);
+                        });
                     }
                 }
+
             }
         );
     }
+
 
     /*
      * Currently the export function allows only to export in the available formats. It doesn't provide the same
@@ -310,12 +409,12 @@ export class ExportDataComponent {
         for (var i = 0; i < this.filtersChain.length; i++) {
             if (this.requireConfiguration(this.filtersChain[i])) {
                 this.basicModals.alert("Missing filter configuration", "An export filter ("
-                    + this.filtersChain[i].selectedFactory.id + ") needs to be configured", "warning");
+                    + this.filtersChain[i].selectedFactory.name + ") needs to be configured", "warning");
                 return;
             }
         }
 
-        //collect all the graphs checked (to export)
+        //graphsToExport
         var graphsToExport: ARTURIResource[] = [];
         for (var i = 0; i < this.exportGraphs.length; i++) {
             if (this.exportGraphs[i].checked) {
@@ -323,29 +422,67 @@ export class ExportDataComponent {
             }
         }
 
+        //filteringPipeline
         var filteringPipeline: FilteringStep[] = [];
         for (var i = 0; i < this.filtersChain.length; i++) {
             filteringPipeline.push(this.filtersChain[i].convertToFilteringPipelineStep());
         }
 
+        //reformattingExporterSpec && outputFormat
+        let reformattingExporterSpec: PluginSpecification
+        let outputFormat: string;
+        //if doesn't use a deployer or use a deployer with stream source
+        if (!this.useDeployer || this.selectedDeployerSource == this.STREAM_SOURCE) {
+            reformattingExporterSpec = {
+                factoryId: this.selectedReformatterExtension.id
+            };
+            if (this.selectedReformatterConfig != null) {
+                if (this.selectedReformatterConfig.requireConfiguration()) {
+                    this.basicModals.alert("Missing configuration", "The reformatting exporter ("
+                        + this.selectedReformatterConfig.shortName + ") needs to be configured", "warning");
+                    return;
+                }
+                reformattingExporterSpec.configType = this.selectedReformatterConfig.type;
+                reformattingExporterSpec.configuration = this.selectedReformatterConfig.getPropertiesAsMap();
+            }
+
+            outputFormat = this.selectedExportFormat;
+        }
+        
+        //deployerSpec
+        let deployerSpec: PluginSpecification;
+        if (this.useDeployer) {
+            deployerSpec = {
+                factoryId: this.selectedDeployerExtension.id
+            }
+            if (this.selectedDeployerConfig != null) {
+                if (this.selectedDeployerConfig.requireConfiguration()) {
+                    this.basicModals.alert("Missing configuration", "The deployer needs to be configured", "warning");
+                    return;
+                }
+                deployerSpec.configType = this.selectedDeployerConfig.type;
+                deployerSpec.configuration = this.selectedDeployerConfig.getPropertiesAsMap();
+            }
+        }
+
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), this.includeInferred, this.selectedExportFormat).subscribe(
-            blob => {
+        this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), reformattingExporterSpec, deployerSpec, 
+            this.includeInferred, outputFormat).subscribe(
+            (data: any | Blob) => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
+                this.exportSuccessHandler(data, deployerSpec == null);
             },
             (err: Error) => {
                 if (err.name.endsWith('ExportPreconditionViolationException')) {
                     this.basicModals.confirm("Warning", err.message + " Do you want to force the export?", "warning").then(
                         yes => {
                             UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                            this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline), this.includeInferred, this.selectedExportFormat, true).subscribe(
-                                blob => {
+                            this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline),  reformattingExporterSpec, deployerSpec, 
+                                this.includeInferred, outputFormat, true).subscribe(
+                                (data: any | Blob) => {
                                     UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                    var exportLink = window.URL.createObjectURL(blob);
-                                    this.basicModals.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
-                                }
+                                    this.exportSuccessHandler(data, deployerSpec == null);
+                                },
                             );
                         },
                         no => {}
@@ -353,7 +490,22 @@ export class ExportDataComponent {
                 }
             }
         );
+    }
 
+    /**
+     * Handler of the export service. The export service returns a blob (file to download) or a json response 
+     * depending on the usage of a deployer. Allows to download a file or show an alert after the deploy.
+     * 
+     * @param data 
+     * @param downloadExpected 
+     */
+    private exportSuccessHandler(data: any | Blob, downloadExpected: boolean) {
+        if (downloadExpected) {
+            var exportLink = window.URL.createObjectURL(data);
+            this.basicModals.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat);
+        } else {
+            this.basicModals.alert("Export data", "The export result has been deployed succesfully");
+        }
     }
 
     /** =====================================

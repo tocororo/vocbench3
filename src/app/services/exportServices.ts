@@ -4,6 +4,7 @@ import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { ARTURIResource } from "../models/ARTResources";
 import { RDFFormat } from "../models/RDFFormat";
+import { PluginSpecification } from '../models/Plugins';
 
 @Injectable()
 export class ExportServices {
@@ -58,27 +59,48 @@ export class ExportServices {
     }
 
     /**
+     * Returns formats accepted by a ReformattingExporter
+     * @param reformattingExporterID 
+     */
+    getExportFormats(reformattingExporterID: string) {
+        console.log("[ExportServices] getExportFormats");
+        var params = {
+            reformattingExporterID: reformattingExporterID
+        };
+        return this.httpMgr.doGet(this.serviceName, "getExportFormats", params);
+    }
+
+    /**
+     * 
      * @param graphs array of named graphs to export. If the array is empty all the graphs are 
      *  copied to the target dataset to be exported
      * @param filteringPipeline a JSON string representing an array of FilteringStep.
      *  Each filter is applied to a subset of the exported graphs. No graph means every exported graph.
      *  An example is [{"filter": {"factoryId": string, "properties": { <key>: <value>, ...}}}]
+     * @param reformattingExporterSpec an optional ReformattingExporter that reformats the data to a (usually non-RDF) format
+     * @param deployerSpec an optional Deployer to export the data somewhere instead of simply downloading it
      * @param includeInferred
-     * 
      * @param outputFormat the output format. If it does not support graphs, the exported graph are
      *  merged into a single graph
      * @param force if true tells the service to proceed despite the presence of triples in the null
 	 *  context or in graphs named by blank nodes. Otherwise, under this conditions the service
 	 *  would fail, so that available information is not silently ignored
      */
-    export(graphs: ARTURIResource[], filteringPipeline: string, includeInferred?: boolean, outputFormat?: RDFFormat, force?: boolean) {
+    export(graphs: ARTURIResource[], filteringPipeline: string, reformattingExporterSpec?: PluginSpecification, 
+        deployerSpec?: PluginSpecification, includeInferred?: boolean, outputFormat?: string, force?: boolean): Observable<Blob | any> {
         console.log("[ExportServices] export");
         var params: any = {
             graphs: graphs,
             filteringPipeline: filteringPipeline,
         };
+        if (reformattingExporterSpec != null) {
+            params.reformattingExporterSpec = JSON.stringify(reformattingExporterSpec);
+        }
+        if (deployerSpec != null) {
+            params.deployerSpec = JSON.stringify(deployerSpec);
+        }
         if (outputFormat != null) {
-            params.outputFormat = outputFormat.name;
+            params.outputFormat = outputFormat;
         }
         if (includeInferred != null) {
             params.includeInferred = includeInferred;
@@ -92,7 +114,14 @@ export class ExportServices {
                 exceptionsToSkip: ['it.uniroma2.art.semanticturkey.services.core.ExportPreconditionViolationException'] 
             } 
         });
-        return this.httpMgr.downloadFile(this.serviceName, "export", params, true, options);
+        if (deployerSpec == null) {
+            //no deployer used => the result of the export will be downloaded
+            return this.httpMgr.downloadFile(this.serviceName, "export", params, true, options);
+        } else {
+            //deployer used => the result of the export is deployed, so no file returned
+            return this.httpMgr.doPost(this.serviceName, "export", params, options);
+        }
+        
     }   
 
 }

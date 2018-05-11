@@ -20,14 +20,16 @@
                     <div [ngSwitch]="p.type.name">
                         <div *ngSwitchCase="'boolean'" class="input-sm form-control text-center">
                             <label class="radio-inline">
-                                <input type="radio" (click)="updateBoolean(p, true)" [name]="'radio_'+p.name" [checked]="p.value">true
+                                <input type="radio" (click)="updateBoolean(p, true)" [name]="'radio_'+p.name" [checked]="p.value==true">true
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" (click)="updateBoolean(p, false)" [name]="'radio_'+p.name" [checked]="!p.value">false
+                                <input type="radio" (click)="updateBoolean(p, false)" [name]="'radio_'+p.name" [checked]="p.value==false">false
                             </label>
                         </div>
 
-                        <resource-picker *ngSwitchCase="'IRI'" [resource]="p.value" [roles]="getIRIRoleConstraints(p)" (resourceChanged)="updateIRI(p, $event)"></resource-picker>
+                        <resource-picker *ngSwitchCase="'IRI'" [resource]="p.value" [roles]="getIRIRoleConstraints(p)" [editable]="true"
+                            (resourceChanged)="updateIRI(p, $event)">
+                        </resource-picker>
 
                         <setting-set *ngSwitchCase="'Set'" [value]="p.value" [types]="p.type.typeArguments" (valueChanged)="updateSetValue(p, $event)"></setting-set>
 
