@@ -3,7 +3,7 @@ import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { VBProperties } from "../../utils/VBProperties";
-import { StringMatchMode, SearchSettings, ClassIndividualPanelSearchMode } from "../../models/Properties";
+import { SearchMode, SearchSettings, ClassIndividualPanelSearchMode } from "../../models/Properties";
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
 
 export class SearchSettingsModalData extends BSModalContext {
@@ -29,14 +29,14 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
     private settingsForConceptPanel: boolean = false;
 
     //search mode startsWith/contains/endsWith
-    private stringMatchModes: { show: string, value: StringMatchMode }[] = [
-        { show: "Starts with", value: StringMatchMode.startsWith },
-        { show: "Contains", value: StringMatchMode.contains },
-        { show: "Ends with", value: StringMatchMode.endsWith },
-        { show: "Exact", value: StringMatchMode.exact },
-        { show: "Fuzzy", value: StringMatchMode.fuzzy }
+    private stringMatchModes: { show: string, value: SearchMode }[] = [
+        { show: "Starts with", value: SearchMode.startsWith },
+        { show: "Contains", value: SearchMode.contains },
+        { show: "Ends with", value: SearchMode.endsWith },
+        { show: "Exact", value: SearchMode.exact },
+        { show: "Fuzzy", value: SearchMode.fuzzy }
     ];
-    private activeStringMatchMode: StringMatchMode;
+    private activeStringMatchMode: SearchMode;
 
     //search mode use URI/LocalName
     private useURI: boolean = true;

@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { ARTURIResource, ARTResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
-import { Properties, ClassIndividualPanelSearchMode, ClassTreePreference, ResourceViewMode, SearchSettings, StringMatchMode } from '../models/Properties';
+import { Properties, ClassIndividualPanelSearchMode, ClassTreePreference, ResourceViewMode, SearchSettings, SearchMode } from '../models/Properties';
 import { ProjectTableColumnStruct } from '../models/Project';
 import { ExtensionPointID } from '../models/Plugins';
 import { Cookie } from '../utils/Cookie';

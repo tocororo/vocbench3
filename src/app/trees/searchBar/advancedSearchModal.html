@@ -1,0 +1,256 @@
+<div class="blockingDivHost">
+
+    <div class="modal-header">
+        <h3 class="modal-title">Andvanced search</h3>
+    </div>
+    <div class="modal-body scrollableContainer" style="max-height: 75vh; padding: 8px;">
+
+        <table class="table table-condensed table-borderless">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td nowrap><label class="control-label">Search string:</label></td>
+                    <td><input class="form-control input-sm" [(ngModel)]="searchString"></td>
+                </tr>
+                <tr>
+                    <td><label class="control-label">Status:</label></td>
+                    <td>
+                        <select class="form-control input-sm" [(ngModel)]="selectedStatus">
+                            <option *ngFor="let s of statuses" [value]="s.value">{{s.show}}</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="panel panel-default" style="margin-top: 5px;">
+            <div class="panel-heading">
+                <label>Search mode</label>
+            </div>
+            <div class="panel-body">
+                <div class="hbox" style="align-items: center;">
+                    <label class="control-label" style="white-space: nowrap; margin-right: 4px;">String match mode:</label>
+                    <select class="form-control input-xs" [(ngModel)]="activeSearchMode">
+                        <option *ngFor="let sm of searchModes" [value]="sm.value">{{sm.show}}</option>
+                    </select>
+                </div>
+                <div style="margin-top: 6px">
+                    <div class="checkbox-inline">
+                        <label>
+                            <input type="checkbox" [(ngModel)]="useURI">Search in URI
+                        </label>
+                    </div>
+                    <div class="checkbox-inline">
+                        <label>
+                            <input type="checkbox" [(ngModel)]="useLocalName">Search in local name
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default" style="margin-top: 5px;">
+            <div class="panel-heading">
+                <label>Lexicalization</label>
+            </div>
+            <div class="panel-body">
+                <div class="hbox">
+                    <div class="checkbox" style="margin: 5px 0px 0px">
+                        <label>
+                            <input type="checkbox" [(ngModel)]="restrictLang">Restrict search to languages
+                        </label>
+                    </div>
+                    <div class="hbox" style="align-items: center; margin-left: 8px;">
+                        <div class="input-group input-group-xs">
+                            <input type="text" class="form-control" [ngModel]="languages" [disabled]="!restrictLang" readonly>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" (click)="selectRestrictionLanguages()" placeholder="Select languages" [disabled]="!restrictLang">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="checkbox" style="margin: 5px 0px 0px">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="includeLocales" [disabled]="!restrictLang">Include locales in search (e.g. en-GB, en-US)
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Types -->
+        <div class="panel panel-default" style="margin-top: 5px;">
+            <div class="panel-heading">
+                <label style="flex: 1;">
+                    Types
+                    <span class="glyphicon glyphicon-info-sign" title="Types of the same group are evaluated in AND, different groups are evaluated in OR"></span>
+                </label>
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-default" (click)="addTypesGroup()" title="Add group">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div *ngFor="let group of typesGroups; let lastGroup = last; let indexGroup = index" class="hbox" style="align-items: center; margin: 3px 0;">
+                    <div class="hbox tile-group">
+                        <div *ngFor="let t of group; let indexType=index; let last=last" class="hbox" style="align-items: center; flex: initial">
+                            <span class="tile">
+                                <rdf-resource [resource]="t"></rdf-resource>
+                                <span class="glyphicon glyphicon-remove-circle" (click)="deleteType(group, indexType)"
+                                    onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
+                                    onmouseout="this.className='glyphicon glyphicon-remove-circle';">
+                                </span>
+                                <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle"
+                                    onmouseover="this.style.cursor='not-allowed'">
+                                </span>
+                            </span>
+                            <span *ngIf="!last">OR</span>
+                        </div>
+                        <div class="hbox" style="align-items: center; flex: initial">
+                            <button class="btn btn-default btn-xs" style="margin-left: 4px;" (click)="addType(group)">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="btn btn-sm btn-default" (click)="deleteTypesGroup(indexGroup)" style="margin-left: 4px;">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schemes -->
+        <div *ngIf="showSchemeSelector" class="panel panel-default" style="margin-top: 5px;">
+            <div class="panel-heading">
+                <label style="flex: 1;">
+                    Schemes
+                    <span class="glyphicon glyphicon-info-sign" title="Schemes of the same group are evaluated in AND, different groups are evaluated in OR"></span>
+                </label>
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-default" (click)="addSchemesGroup()" title="Add group">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div *ngFor="let group of schemesGroups; let lastGroup = last; let indexGroup = index" class="hbox" style="align-items: center; margin: 3px 0;">
+                    <div class="hbox tile-group">
+                        <div *ngFor="let s of group; let indexScheme=index; let last=last" class="hbox" style="align-items: center; flex: initial">
+                            <span class="tile">
+                                <rdf-resource [resource]="s"></rdf-resource>
+                                <span class="glyphicon glyphicon-remove-circle" (click)="deleteScheme(group, indexScheme)"
+                                    onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
+                                    onmouseout="this.className='glyphicon glyphicon-remove-circle';">
+                                </span>
+                                <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle"
+                                    onmouseover="this.style.cursor='not-allowed'">
+                                </span>
+                            </span>
+                            <span *ngIf="!last">OR</span>
+                        </div>
+                        <div class="hbox" style="align-items: center; flex: initial">
+                            <button class="btn btn-default btn-xs" style="margin-left: 4px;" (click)="addScheme(group)">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="btn btn-sm btn-default" (click)="deleteSchemesGroup(indexGroup)" style="margin-left: 4px;">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ingoing links -->
+        <!-- <div class="panel panel-default" style="margin-top: 5px;">
+            <div class="panel-heading">
+                <label style="flex: 1;">Ingoing links</label>
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-default" (click)="addIngoingGroup()" title="Add group">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-condensed table-borderless">
+                    <colgroup>
+                        <col>
+                        <col style="width: 1%">
+                        <col style="width: 1%">
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let group of ingoingLinks; let lastGroup = last; let indexGroup = index">
+                            <td>
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="hbox" style="align-items: center; margin-bottom: 4px;">
+                                            <label style="margin-right: 4px;">Predicate:</label>
+                                            <resource-picker style="flex: 1;" [resource]="group.first" [roles]="['property']" (resourceChanged)="updatePropIngoing(group, $event)"></resource-picker>
+                                        </div>
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                <table class="table table-condensed table-borderless">
+                                                    <colgroup>
+                                                        <col>
+                                                        <col style="width: 1%">
+                                                        <col style="width: 1%">
+                                                    </colgroup>
+                                                    <tbody>
+                                                        <tr *ngFor="let v of group.second; let lastValue = last; let indexValue = index;">
+                                                            <td style="padding: 2px 0px;">
+                                                                <value-picker (valueChanged)="updateIngoingValue(group, indexValue, $event)"></value-picker>
+                                                            </td>
+                                                            <td style="padding: 0px;">
+                                                                <button *ngIf="group.second.length > 1" class="btn btn-sm btn-default" (click)="deleteIngoingValue(group, indexValue)" style="margin-left: 3px;">
+                                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                                </button>
+                                                            </td>
+                                                            <td style="padding: 0px;">
+                                                                <button *ngIf="lastValue" class="btn btn-sm btn-default" (click)="addIngoingValue(group)" style="margin-left: 3px;" [disabled]="!v">
+                                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-default" (click)="deleteIngoingGroup(indexGroup)">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </td>
+                            <td>
+                                <button *ngIf="lastGroup" class="btn btn-sm btn-default" (click)="addIngoingGroup()">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div> -->
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok($event)">Search</button>
+        <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    </div>
+
+    <div #blockingDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+
+</div>

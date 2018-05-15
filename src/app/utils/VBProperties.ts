@@ -4,7 +4,7 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ART
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
 import { ProjectTableColumnStruct } from '../models/Project';
-import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, Properties, ResourceViewMode, SearchSettings, StringMatchMode } from '../models/Properties';
+import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, Properties, ResourceViewMode, SearchSettings, SearchMode } from '../models/Properties';
 import { OWL, RDFS, SKOS } from '../models/Vocabulary';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { Cookie } from '../utils/Cookie';
@@ -32,7 +32,7 @@ export class VBProperties {
     private lexEntryListPreferences: LexicalEntryListPreference;
 
     private searchSettings: SearchSettings = {
-        stringMatchMode: StringMatchMode.contains,
+        stringMatchMode: SearchMode.contains,
         useURI: true,
         useLocalName: true,
         restrictLang: false,
@@ -472,7 +472,7 @@ export class VBProperties {
     initSearchSettingsCookie() {
         let searchModeCookie: string = Cookie.getCookie(Cookie.SEARCH_STRING_MATCH_MODE);
         if (searchModeCookie != null) {
-            this.searchSettings.stringMatchMode = <StringMatchMode>searchModeCookie;
+            this.searchSettings.stringMatchMode = <SearchMode>searchModeCookie;
         }
         let useUriCookie: string = Cookie.getCookie(Cookie.SEARCH_USE_URI);
         if (useUriCookie != null) {

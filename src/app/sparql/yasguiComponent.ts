@@ -1,6 +1,6 @@
 import { Component, ViewChild, Input, Output, EventEmitter, ElementRef, SimpleChanges } from '@angular/core';
 import { VBContext } from '../utils/VBContext';
-import { StringMatchMode } from '../models/Properties';
+import { SearchMode } from '../models/Properties';
 import { ARTURIResource } from '../models/ARTResources';
 import { PrefixMapping } from '../models/Metadata';
 import { MetadataServices } from '../services/metadataServices';
@@ -204,7 +204,7 @@ export class YasguiComponent {
                 if (token.type == "ws" || token.type == "error") {
                     return;
                 }
-                searchService.searchResource(token.autocompletionString, ["property"], false, true, StringMatchMode.startsWith).subscribe(
+                searchService.searchResource(token.autocompletionString, ["property"], false, true, SearchMode.startsWith).subscribe(
                     (results: ARTURIResource[]) => {
                         var resArray: string[] = [];
                         for (var i = 0; i < results.length; i++) {
@@ -245,7 +245,7 @@ export class YasguiComponent {
             },
             get: function (token: any, callback: any) {
                 if (token.autocompletionString.trim() != "") {
-                    searchService.searchResource(token.autocompletionString, ["cls"], false, true, StringMatchMode.startsWith).subscribe(
+                    searchService.searchResource(token.autocompletionString, ["cls"], false, true, SearchMode.startsWith).subscribe(
                         (results: ARTURIResource[]) => {
                             var resArray: string[] = [];
                             for (var i = 0; i < results.length; i++) {

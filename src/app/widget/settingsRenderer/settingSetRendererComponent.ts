@@ -26,8 +26,8 @@ export class SettingSetRendererComponent {
         this.value.push(null);
     }
 
-    private delete(value: any) {
-        this.value.splice(this.value.indexOf(value), 1);
+    private delete(index: number) {
+        this.value.splice(index, 1);
         this.onModelChange();
     }
 

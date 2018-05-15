@@ -38,7 +38,7 @@ export enum ResourceViewMode {
 }
 
 export class SearchSettings {
-    public stringMatchMode: StringMatchMode;
+    public stringMatchMode: SearchMode;
     public useURI: boolean;
     public useLocalName: boolean;
     public restrictLang: boolean;
@@ -49,13 +49,21 @@ export class SearchSettings {
     public classIndividualSearchMode: ClassIndividualPanelSearchMode;
 }
 
-export enum StringMatchMode {
+export enum SearchMode {
     startsWith = "startsWith",
     contains = "contains",
     endsWith = "endsWith",
     exact = "exact",
     fuzzy = "fuzzy"
 }
+
+export enum StatusFilter {
+    NOT_DEPRECATED = "NOT_DEPRECATED",
+    ONLY_DEPRECATED = "ONLY_DEPRECATED",
+    UNDER_VALIDATION = "UNDER_VALIDATION",
+    UNDER_VALIDATION_FOR_DEPRECATION = "UNDER_VALIDATION_FOR_DEPRECATION",
+    ANYTHING = "ANYTHING",
+} 
 
 export enum ClassIndividualPanelSearchMode {
     onlyClasses = "onlyClasses",

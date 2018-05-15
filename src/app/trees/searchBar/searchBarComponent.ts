@@ -4,13 +4,15 @@ import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Subscription } from "rxjs/Subscription";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { SearchSettings, StringMatchMode } from "../../models/Properties";
+import { SearchSettings, SearchMode } from "../../models/Properties";
 import { SearchServices } from "../../services/searchServices";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { CustomCompleterData } from "./customCompleterData";
 import { SearchSettingsModal, SearchSettingsModalData } from './searchSettingsModal';
+import { AdvancedSearchModal } from "./advancedSearchModal";
+import { TreeListContext } from "../../utils/UIUtils";
 
 @Component({
     selector: "search-bar",
@@ -21,15 +23,16 @@ export class SearchBarComponent {
     @Input() roles: RDFResourceRolesEnum[]; //tells the roles of the panel where the search bar is placed (usefull for customizing the settings)
     @Input() disabled: boolean = false;
     @Input() cls: ARTURIResource; //useful where search-bar is in the instance list panel
+    @Input() context: TreeListContext;
     @Output() search: EventEmitter<string> = new EventEmitter();
 
     //search mode startsWith/contains/endsWith
-    private stringMatchModes: { show: string, value: StringMatchMode, symbol: string }[] = [
-        { show: "Starts with", value: StringMatchMode.startsWith, symbol: "α.." },
-        { show: "Contains", value: StringMatchMode.contains, symbol: ".α." },
-        { show: "Ends with", value: StringMatchMode.endsWith, symbol: "..α" },
-        { show: "Exact", value: StringMatchMode.exact, symbol: "α" },
-        { show: "Fuzzy", value: StringMatchMode.fuzzy, symbol: "~α" }
+    private stringMatchModes: { show: string, value: SearchMode, symbol: string }[] = [
+        { show: "Starts with", value: SearchMode.startsWith, symbol: "α.." },
+        { show: "Contains", value: SearchMode.contains, symbol: ".α." },
+        { show: "Ends with", value: SearchMode.endsWith, symbol: "..α" },
+        { show: "Exact", value: SearchMode.exact, symbol: "α" },
+        { show: "Fuzzy", value: SearchMode.fuzzy, symbol: "~α" }
     ];
 
     private searchSettings: SearchSettings;
@@ -93,7 +96,19 @@ export class SearchBarComponent {
         return this.modal.open(SearchSettingsModal, overlayConfig);
     }
 
-    private updateSearchMode(mode: StringMatchMode, event: Event) {
+    private advancedSearch() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
+        // let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        this.modal.open(AdvancedSearchModal, overlayConfig).result.then(
+            (data: any) => {
+
+            },
+            () => {}
+        )
+    }
+
+    private updateSearchMode(mode: SearchMode, event: Event) {
         event.stopPropagation();
         this.searchSettings.stringMatchMode = mode;
         this.vbProperties.setSearchSettings(this.searchSettings);

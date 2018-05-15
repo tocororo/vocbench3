@@ -82,10 +82,9 @@
                 </td>
                 <td>
                     <div class="hbox">
-                        <div class="hbox" style="min-height: 28px; border: 1px solid #ccc; border-radius: 3px; background-color: #eee; flex-wrap: wrap;">
-                            <span *ngFor="let prop of showPropertyChain" (click)="selectPropInChain(prop)"
-                                [ngClass]="{selectedResource : selectedPropInChain == prop}"
-                                style="border: 1px solid #ccc; border-radius: 3px; padding: 3px; background: #fff; margin: 2px 1px;">
+                        <div class="hbox tile-group">
+                            <span *ngFor="let prop of showPropertyChain" (click)="selectPropInChain(prop)" 
+                                class="tile" [ngClass]="{selectedResource : selectedPropInChain == prop}">
                                 {{prop.getURI()}}
                                 <span *ngIf="!context.readOnly" class="glyphicon glyphicon-remove-circle" (click)="removePropFromChain(prop)"
                                     onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"

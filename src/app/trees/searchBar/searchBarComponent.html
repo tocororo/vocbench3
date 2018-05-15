@@ -7,11 +7,23 @@
     <input *ngIf="!searchSettings.useAutocompletion" type="text" class="form-control input-xs" style="flex: 1;" 
         [(ngModel)]="searchStr" (keydown)="searchKeyHandler($event)" placeholder="Search..." [disabled]="disabled">
 
+
+
     <div class="btn-group btn-group-xs dropup" style="margin-left: 4px;">
         <button class="btn btn-default" type="button" (click)="doSearch()" [disabled]="disabled">
             <span class="glyphicon glyphicon-search"></span>
         </button>
+        <ng-template [ngIf]="context == 'dataPanel'">
+            <button class="btn btn-xs btn-default dropdown-toggle" style="padding-left: 2px; padding-right: 3px;" data-toggle="dropdown">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu pull-right">
+                <li (click)="advancedSearch()"><a>Advanced search</a></li>
+            </ul>
+        </ng-template>
+    </div>
 
+    <div class="btn-group btn-group-xs dropup" style="margin-left: 4px;">
         <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown"
             style="border-radius: 0px; padding-left: 3px; padding-right: 3px; border-right: 1px; width: 24px;">
             <span *ngIf="searchSettings.stringMatchMode == 'startsWith'" 

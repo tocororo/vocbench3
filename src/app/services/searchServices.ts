@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
-import { StringMatchMode } from "../models/Properties";
-import { ARTURIResource } from "../models/ARTResources";
+import { SearchMode, StatusFilter } from "../models/Properties";
+import { ARTURIResource, ARTResource, ARTNode } from "../models/ARTResources";
 
 @Injectable()
 export class SearchServices {
@@ -24,7 +24,7 @@ export class SearchServices {
      * @return an array of resources
      */
     searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, useURI: boolean,
-        searchMode: StringMatchMode, langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[]): Observable<ARTURIResource[]> {
+        searchMode: SearchMode, langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[]): Observable<ARTURIResource[]> {
         console.log("[SearchServices] searchResource");
         var params: any = {
             searchString: searchString,
@@ -60,7 +60,7 @@ export class SearchServices {
      * @return an array of resources
      */
     searchInstancesOfClass(cls: ARTURIResource, searchString: string, useLocalName: boolean, useURI: boolean,
-        searchMode: StringMatchMode, langs?: string[], includeLocales?: boolean): Observable<ARTURIResource[]> {
+        searchMode: SearchMode, langs?: string[], includeLocales?: boolean): Observable<ARTURIResource[]> {
         console.log("[SearchServices] searchInstancesOfClass");
         var params: any = {
             cls: cls,
@@ -93,7 +93,7 @@ export class SearchServices {
      * @param langs 
      * @param includeLocales 
      */
-    searchLexicalEntry(searchString: string, useLocalName: boolean, useURI: boolean, searchMode: StringMatchMode, 
+    searchLexicalEntry(searchString: string, useLocalName: boolean, useURI: boolean, searchMode: SearchMode, 
         lexicons?: ARTURIResource[], langs?: string[], includeLocales?: boolean): Observable<ARTURIResource[]> {
 
         console.log("[SearchServices] searchLexicalEntry");
@@ -163,7 +163,7 @@ export class SearchServices {
      * @param langs 
      * @param schemes 
      */
-    searchStringList(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: StringMatchMode, 
+    searchStringList(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: SearchMode, 
             langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[], cls?: ARTURIResource): Observable<string[]> {
         console.log("[SearchServices] searchStringList");
         var params: any = {
@@ -185,6 +185,77 @@ export class SearchServices {
             params.cls = cls;
         }
         return this.httpMgr.doGet(this.serviceName, "searchStringList", params);
+    }
+
+    /**
+     * 
+     * @param searchString 
+     * @param useLocalName 
+     * @param useURI 
+     * @param searchMode 
+     * @param statusFilter 
+     * @param langs 
+     * @param includeLocales 
+     * @param types 
+     * @param schemes 
+     * @param outgoingLinks 
+     * @param ingoingLinks 
+     */
+    advancedSearch(searchString: string, useLocalName: boolean, useURI: boolean, searchMode: SearchMode, statusFilter: StatusFilter,
+        langs?: string[], includeLocales?: boolean, types?: ARTURIResource[][], schemes?: ARTURIResource[][],
+        ingoingLinks?: { first: ARTURIResource, second: ARTNode[] }[], outgoingLinks?: { first: ARTURIResource, second: ARTNode[] }[]): Observable<ARTResource[]> {
+
+        console.log("[SearchServices] advancedSearch");
+        var params: any = {
+            searchString: searchString,
+            useLocalName: useLocalName,
+            useURI: useURI,
+            searchMode: searchMode,
+            statusFilter: statusFilter
+        };
+        if (langs != null) {
+            params.langs = langs;
+        }
+        if (includeLocales != null) {
+            params.includeLocales = includeLocales;
+        }
+        if (types != null) {
+            params.types = this.serializeListOfList(types);
+        }
+        if (schemes != null) {
+            params.schemes = this.serializeListOfList(schemes);
+        }
+        if (ingoingLinks != null) {
+            params.ingoingLinks = this.serializeLinks(ingoingLinks);
+        }
+        if (outgoingLinks != null) {
+            params.outgoingLinks = this.serializeLinks(outgoingLinks);
+        }
+        return this.httpMgr.doGet(this.serviceName, "advancedSearch", params);
+    }
+
+    private serializeListOfList(lists: ARTURIResource[][]): string {
+        let listSerialization: string[][] = [];
+        lists.forEach((list: ARTURIResource[]) => {
+            let l: string[] = []
+            list.forEach((res: ARTURIResource) => {
+                l.push(res.toNT());
+            })
+            listSerialization.push(l);
+        });
+        return JSON.stringify(listSerialization);
+    }
+
+    private serializeLinks(links: { first: ARTURIResource, second: ARTNode[] }[]): string {
+        let linksSerialization: (string|string[])[][] = [];
+        links.forEach((link: { first: ARTURIResource, second: ARTNode[] }) => {
+            let secondSerialization: string[] = [];
+            link.second.forEach((res: ARTNode) => {
+                secondSerialization.push(res.toNT());
+            })
+            linksSerialization.push([ link.first.toNT(), secondSerialization ]);
+        });
+        return JSON.stringify(linksSerialization);
     }
 
 }

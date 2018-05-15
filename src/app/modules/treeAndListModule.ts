@@ -47,7 +47,7 @@ import { InstanceListNodeComponent } from '../trees/owl/instanceList/instanceLis
 
 import { SearchBarComponent } from '../trees/searchBar/searchBarComponent'; //not exported, used just in this module
 import { SearchSettingsModal } from '../trees/searchBar/searchSettingsModal';
-
+import { AdvancedSearchModal } from '../trees/searchBar/advancedSearchModal';
 
 import { Ng2CompleterModule } from "ng2-completer";
 
@@ -63,7 +63,7 @@ import { Ng2CompleterModule } from "ng2-completer";
         PropertyTreePanelComponent, PropertyTreeComponent, PropertyTreeNodeComponent,
         LexiconListPanelComponent, LexiconListComponent, LexiconListNodeComponent, LexicalEntryListPanelComponent, 
         LexicalEntryListComponent, LexicalEntryListNodeComponent, LexicalEntryListSettingsModal,
-        SearchBarComponent, SearchSettingsModal, ClassTreeSettingsModal
+        SearchBarComponent, SearchSettingsModal, ClassTreeSettingsModal, AdvancedSearchModal
     ],
     exports: [
         TreePanelComponent,
@@ -76,6 +76,9 @@ import { Ng2CompleterModule } from "ng2-completer";
         LexiconListPanelComponent, LexiconListComponent, LexiconListNodeComponent,
         LexicalEntryListPanelComponent, LexicalEntryListComponent, LexicalEntryListNodeComponent
     ],
-    entryComponents: [SearchSettingsModal, ClassTreeSettingsModal, ConceptTreeSettingsModal, LexicalEntryListSettingsModal, TreeListSettingsModal]
+    entryComponents: [
+        SearchSettingsModal, AdvancedSearchModal, ClassTreeSettingsModal, ConceptTreeSettingsModal, 
+        LexicalEntryListSettingsModal, TreeListSettingsModal
+    ]
 })
 export class TreeAndListModule { }

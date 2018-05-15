@@ -572,6 +572,22 @@ textarea {
     border-radius: 4px;
 }
 
+.tile-group { 
+    min-height: 28px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    background-color: #eee;
+    flex-wrap: wrap;
+}
+
+.tile { 
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 3px;
+    background: #fff;
+    margin: 2px; 
+}
+
 /* ####################################
 ########## BOOTSTRAP OVERRIDE #########
 #####################################*/
