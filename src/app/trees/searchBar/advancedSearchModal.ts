@@ -1,16 +1,17 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTLiteral, ARTNode, ARTURIResource, RDFTypesEnum, ResourceUtils, SortAttribute } from "../../models/ARTResources";
 import { SearchMode, SearchSettings, StatusFilter } from "../../models/Properties";
+import { OntoLex, SKOS } from "../../models/Vocabulary";
 import { SearchServices } from "../../services/searchServices";
 import { UIUtils } from "../../utils/UIUtils";
-import { VBProperties } from "../../utils/VBProperties";
-import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { SortAttribute, ResourceUtils, ARTURIResource, ARTNode, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { VBContext } from "../../utils/VBContext";
-import { SKOS, OntoLex, OWL } from "../../models/Vocabulary";
+import { VBProperties } from "../../utils/VBProperties";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
+import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
     selector: "advanced-search-modal",
@@ -26,9 +27,8 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
     private statuses: { show: string, value: StatusFilter }[] = [
         { show: "Anything", value: StatusFilter.ANYTHING },
         { show: "Not deprecated", value: StatusFilter.NOT_DEPRECATED },
-        { show: "Only deprecated", value: StatusFilter.ONLY_DEPRECATED },
-        { show: "Under validation", value: StatusFilter.UNDER_VALIDATION },
-        { show: "Under validation for deprecation", value: StatusFilter.UNDER_VALIDATION_FOR_DEPRECATION },
+        { show: "Only deprecated", value: StatusFilter.ONLY_DEPRECATED }
+        //UNDER_VALIDATION and UNDER_VALIDATION_FOR_DEPRECATION only if project has validation active
     ]
     private selectedStatus: StatusFilter = this.statuses[0].value;
 
@@ -61,7 +61,8 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
     private outgoingLinks: { first: ARTURIResource, second: ARTNode[] }[] = [];
 
     constructor(public dialog: DialogRef<BSModalContext>, private searchService: SearchServices, private vbProp: VBProperties,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private browsingModals: BrowsingModalServices) {
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private browsingModals: BrowsingModalServices,
+        private creationModals: CreationModalServices) {
         this.context = dialog.context;
     }
 
@@ -78,6 +79,13 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
 
         let modelType: string = VBContext.getWorkingProject().getModelType();
         this.showSchemeSelector = modelType == SKOS.uri || modelType == OntoLex.uri;
+
+        if (VBContext.getWorkingProject().isValidationEnabled()) {
+            this.statuses.push(
+                { show: "Under validation", value: StatusFilter.UNDER_VALIDATION },
+                { show: "Under validation for deprecation", value: StatusFilter.UNDER_VALIDATION_FOR_DEPRECATION }
+            );
+        }
 
     }
 
@@ -151,29 +159,79 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
      * Ingoing links management
      * ===================== */
 
-    // private addIngoingGroup() {
-    //     this.ingoingLinks.push({ first: null, second: [null] });
-    // }
+    private addIngoingGroup() {
+        this.ingoingLinks.push({ first: null, second: [] });
+    }
 
-    // private deleteIngoingGroup(index: number) {
-    //     this.ingoingLinks.splice(index, 1);
-    // }
+    private deleteIngoingGroup(index: number) {
+        this.ingoingLinks.splice(index, 1);
+    }
 
-    // private updatePropIngoing(group: { first: ARTURIResource, second: ARTNode[] }, property: ARTURIResource) {
-    //     group.first = property;
-    // }
+    private updatePropIngoing(group: { first: ARTURIResource, second: ARTNode[] }, property: ARTURIResource) {
+        group.first = property;
+    }
 
-    // private addIngoingValue(group: { first: ARTURIResource, second: ARTNode[] }) {
-    //     group.second.push(null);
-    // }
+    private addIngoingValue(group: { first: ARTURIResource, second: ARTNode[] }) {
+        this.sharedModals.pickResource("Select a resource").then(
+            (value: ARTNode) => {
+                group.second.push(value);
+            }
+        );
+    }
 
-    // private deleteIngoingValue(group: { first: ARTURIResource, second: ARTNode[] }, index: number) {
-    //     group.second.splice(index, 1);
-    // }
+    private deleteIngoingValue(group: { first: ARTURIResource, second: ARTNode[] }, index: number) {
+        group.second.splice(index, 1);
+    }
 
-    // private updateIngoingValue(group: { first: ARTURIResource, second: ARTNode[] }, index: number, value: ARTNode) {
-    //     group.second[index] = value;
-    // }
+    private updateIngoingValue(group: { first: ARTURIResource, second: ARTNode[] }, index: number, value: ARTNode) {
+        group.second[index] = value;
+    }
+
+    /** ===================== 
+     * Outgoing links management
+     * ===================== */
+
+    private addOutgoingGroup() {
+        this.outgoingLinks.push({ first: null, second: [] });
+    }
+
+    private deleteOutgoingGroup(index: number) {
+        this.outgoingLinks.splice(index, 1);
+    }
+
+    private updatePropOutgoing(group: { first: ARTURIResource, second: ARTNode[] }, property: ARTURIResource) {
+        group.first = property;
+    }
+
+    private addOutgoingValue(group: { first: ARTURIResource, second: ARTNode[] }, type: RDFTypesEnum) {
+        if (type == RDFTypesEnum.resource) {
+            this.sharedModals.pickResource("Select a resource").then(
+                (value: ARTNode) => {
+                    group.second.push(value);
+                }
+            );
+        } else if (type == RDFTypesEnum.typedLiteral) {
+            this.creationModals.newTypedLiteral("Create typed literal").then(
+                (value: ARTLiteral) => {
+                    group.second.push(value);
+                }
+            );
+        } else if (type == RDFTypesEnum.plainLiteral) {
+            this.creationModals.newPlainLiteral("Create literal").then(
+                (value: ARTLiteral) => {
+                    group.second.push(value);
+                }
+            );
+        }
+    }
+
+    private deleteOutgoingValue(group: { first: ARTURIResource, second: ARTNode[] }, index: number) {
+        group.second.splice(index, 1);
+    }
+
+    private updateOutgoingValue(group: { first: ARTURIResource, second: ARTNode[] }, index: number, value: ARTNode) {
+        group.second[index] = value;
+    }
 
 
 
@@ -233,6 +291,27 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
                 }
             }
         });
+        if (ingoingParam.length == 0) {
+            ingoingParam = null;
+        }
+
+        let outgoingParam: { first: ARTURIResource, second: ARTNode[] }[] = [];
+        this.outgoingLinks.forEach((pair: { first: ARTURIResource, second: ARTNode[] }) => {
+            if (pair.first != null) {
+                let values: ARTNode[] = [];
+                pair.second.forEach((v: ARTNode) => {
+                    if (v != null) {
+                        values.push(v);
+                    }
+                });
+                if (values.length > 0) {
+                    outgoingParam.push({ first: pair.first, second: values });
+                }
+            }
+        });
+        if (outgoingParam.length == 0) {
+            outgoingParam = null;
+        }
 
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.searchService.advancedSearch(this.searchString, this.useLocalName, this.useURI, this.activeSearchMode, this.selectedStatus,

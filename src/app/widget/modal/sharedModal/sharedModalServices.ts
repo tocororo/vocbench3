@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
-import { ARTResource } from "../../../models/ARTResources";
-import { Settings } from "../../../models/Plugins";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ARTResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDFCapabilityType } from "../../../models/Coda";
+import { Settings } from "../../../models/Plugins";
 import { RemoteRepositoryAccessConfig } from "../../../models/Project";
+import { ResourceViewModal, ResourceViewModalData } from "../../../resourceView/resourceViewModal";
+import { LoadConfigurationModal, LoadConfigurationModalData } from "./configurationStoreModal/loadConfigurationModal";
+import { StoreConfigurationModal, StoreConfigurationModalData } from "./configurationStoreModal/storeConfigurationModal";
+import { ConverterPickerModal, ConverterPickerModalData } from "./converterPickerModal/converterPickerModal";
+import { LanguageSelectorModal, LanguageSelectorModalData } from "./languagesSelectorModal/languageSelectorModal";
 import { PluginConfigModal, PluginConfigModalData } from "./pluginConfigModal/pluginConfigModal";
 import { RemoteAccessConfigModal, RemoteAccessConfigModalData } from "./remoteAccessConfigModal/remoteAccessConfigModal";
 import { RemoteRepoSelectionModal, RemoteRepoSelectionModalData } from "./remoteRepoSelectionModal/remoteRepoSelectionModal";
-import { LanguageSelectorModal, LanguageSelectorModalData } from "./languagesSelectorModal/languageSelectorModal";
-import { ResourceViewModal, ResourceViewModalData } from "../../../resourceView/resourceViewModal";
-import { ConverterPickerModal, ConverterPickerModalData } from "./converterPickerModal/converterPickerModal";
-import { StoreConfigurationModal, StoreConfigurationModalData } from "./configurationStoreModal/storeConfigurationModal";
-import { LoadConfigurationModal, LoadConfigurationModalData } from "./configurationStoreModal/loadConfigurationModal";
+import { ResourcePickerModal, ResourcePickerModalData } from './resourcePickerModal/resourcePickerModal';
 
 @Injectable()
 export class SharedModalServices {
@@ -135,6 +136,15 @@ export class SharedModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(LoadConfigurationModal, overlayConfig).result;
+    }
+
+    pickResource(title: string, roles?: RDFResourceRolesEnum[], editable?: boolean) {
+        var modalData = new ResourcePickerModalData(title, roles, editable);
+        const builder = new BSModalContextBuilder<ResourcePickerModalData>(
+            modalData, undefined, ResourcePickerModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(ResourcePickerModal, overlayConfig).result;
     }
 
 }

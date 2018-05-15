@@ -85,10 +85,7 @@
         <!-- Types -->
         <div class="panel panel-default" style="margin-top: 5px;">
             <div class="panel-heading">
-                <label style="flex: 1;">
-                    Types
-                    <span class="glyphicon glyphicon-info-sign" title="Types of the same group are evaluated in AND, different groups are evaluated in OR"></span>
-                </label>
+                <label style="flex: 1;">Types</label>
                 <div class="btn-group btn-group-xs">
                     <button class="btn btn-default" (click)="addTypesGroup()" title="Add group">
                         <span class="glyphicon glyphicon-plus"></span>
@@ -96,30 +93,33 @@
                 </div>
             </div>
             <div class="panel-body">
-                <div *ngFor="let group of typesGroups; let lastGroup = last; let indexGroup = index" class="hbox" style="align-items: center; margin: 3px 0;">
-                    <div class="hbox tile-group">
-                        <div *ngFor="let t of group; let indexType=index; let last=last" class="hbox" style="align-items: center; flex: initial">
-                            <span class="tile">
-                                <rdf-resource [resource]="t"></rdf-resource>
-                                <span class="glyphicon glyphicon-remove-circle" (click)="deleteType(group, indexType)"
-                                    onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
-                                    onmouseout="this.className='glyphicon glyphicon-remove-circle';">
+                <div *ngFor="let group of typesGroups; let lastGroup = last; let indexGroup = index">
+                    <div class="hbox" style="align-items: center; margin: 2px 0;">
+                        <div class="hbox tile-group">
+                            <div *ngFor="let t of group; let indexType=index; let lastType = last" class="hbox" style="align-items: center; flex: initial">
+                                <span class="tile">
+                                    <rdf-resource [resource]="t"></rdf-resource>
+                                    <span class="glyphicon glyphicon-remove-circle" (click)="deleteType(group, indexType)"
+                                        onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
+                                        onmouseout="this.className='glyphicon glyphicon-remove-circle';">
+                                    </span>
+                                    <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle"
+                                        onmouseover="this.style.cursor='not-allowed'">
+                                    </span>
                                 </span>
-                                <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle"
-                                    onmouseover="this.style.cursor='not-allowed'">
-                                </span>
-                            </span>
-                            <span *ngIf="!last">OR</span>
+                                <span *ngIf="!lastType">AND</span>
+                            </div>
+                            <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
+                                <button class="btn btn-default btn-xs" (click)="addType(group)">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
                         </div>
-                        <div class="hbox" style="align-items: center; flex: initial">
-                            <button class="btn btn-default btn-xs" style="margin-left: 4px;" (click)="addType(group)">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </button>
-                        </div>
+                        <button class="btn btn-sm btn-default" (click)="deleteTypesGroup(indexGroup)" style="margin-left: 4px;">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
                     </div>
-                    <button class="btn btn-sm btn-default" (click)="deleteTypesGroup(indexGroup)" style="margin-left: 4px;">
-                        <span class="glyphicon glyphicon-trash"></span>
-                    </button>
+                    <span *ngIf="!lastGroup">OR</span>
                 </div>
             </div>
         </div>
@@ -127,10 +127,7 @@
         <!-- Schemes -->
         <div *ngIf="showSchemeSelector" class="panel panel-default" style="margin-top: 5px;">
             <div class="panel-heading">
-                <label style="flex: 1;">
-                    Schemes
-                    <span class="glyphicon glyphicon-info-sign" title="Schemes of the same group are evaluated in AND, different groups are evaluated in OR"></span>
-                </label>
+                <label style="flex: 1;">Schemes</label>
                 <div class="btn-group btn-group-xs">
                     <button class="btn btn-default" (click)="addSchemesGroup()" title="Add group">
                         <span class="glyphicon glyphicon-plus"></span>
@@ -138,36 +135,39 @@
                 </div>
             </div>
             <div class="panel-body">
-                <div *ngFor="let group of schemesGroups; let lastGroup = last; let indexGroup = index" class="hbox" style="align-items: center; margin: 3px 0;">
-                    <div class="hbox tile-group">
-                        <div *ngFor="let s of group; let indexScheme=index; let last=last" class="hbox" style="align-items: center; flex: initial">
-                            <span class="tile">
-                                <rdf-resource [resource]="s"></rdf-resource>
-                                <span class="glyphicon glyphicon-remove-circle" (click)="deleteScheme(group, indexScheme)"
-                                    onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
-                                    onmouseout="this.className='glyphicon glyphicon-remove-circle';">
+                <div *ngFor="let group of schemesGroups; let lastGroup = last; let indexGroup = index">
+                    <div class="hbox" style="align-items: center; margin: 2px 0;">
+                        <div class="hbox tile-group">
+                            <div *ngFor="let s of group; let indexScheme=index; let lastScheme = last" class="hbox" style="align-items: center; flex: initial">
+                                <span class="tile">
+                                    <rdf-resource [resource]="s"></rdf-resource>
+                                    <span class="glyphicon glyphicon-remove-circle" (click)="deleteScheme(group, indexScheme)"
+                                        onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
+                                        onmouseout="this.className='glyphicon glyphicon-remove-circle';">
+                                    </span>
+                                    <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle"
+                                        onmouseover="this.style.cursor='not-allowed'">
+                                    </span>
                                 </span>
-                                <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle"
-                                    onmouseover="this.style.cursor='not-allowed'">
-                                </span>
-                            </span>
-                            <span *ngIf="!last">OR</span>
+                                <span *ngIf="!lastScheme">AND</span>
+                            </div>
+                            <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
+                                <button class="btn btn-default btn-xs" (click)="addScheme(group)">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
                         </div>
-                        <div class="hbox" style="align-items: center; flex: initial">
-                            <button class="btn btn-default btn-xs" style="margin-left: 4px;" (click)="addScheme(group)">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </button>
-                        </div>
+                        <button class="btn btn-sm btn-default" (click)="deleteSchemesGroup(indexGroup)" style="margin-left: 4px;">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
                     </div>
-                    <button class="btn btn-sm btn-default" (click)="deleteSchemesGroup(indexGroup)" style="margin-left: 4px;">
-                        <span class="glyphicon glyphicon-trash"></span>
-                    </button>
+                    <span *ngIf="!lastGroup">OR</span>
                 </div>
             </div>
         </div>
 
         <!-- Ingoing links -->
-        <!-- <div class="panel panel-default" style="margin-top: 5px;">
+        <div class="panel panel-default" style="margin-top: 5px;">
             <div class="panel-heading">
                 <label style="flex: 1;">Ingoing links</label>
                 <div class="btn-group btn-group-xs">
@@ -177,67 +177,96 @@
                 </div>
             </div>
             <div class="panel-body">
-                <table class="table table-condensed table-borderless">
-                    <colgroup>
-                        <col>
-                        <col style="width: 1%">
-                        <col style="width: 1%">
-                    </colgroup>
-                    <tbody>
-                        <tr *ngFor="let group of ingoingLinks; let lastGroup = last; let indexGroup = index">
-                            <td>
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                                            <label style="margin-right: 4px;">Predicate:</label>
-                                            <resource-picker style="flex: 1;" [resource]="group.first" [roles]="['property']" (resourceChanged)="updatePropIngoing(group, $event)"></resource-picker>
-                                        </div>
-                                        <div class="panel panel-default">
-                                            <div class="panel-body">
-                                                <table class="table table-condensed table-borderless">
-                                                    <colgroup>
-                                                        <col>
-                                                        <col style="width: 1%">
-                                                        <col style="width: 1%">
-                                                    </colgroup>
-                                                    <tbody>
-                                                        <tr *ngFor="let v of group.second; let lastValue = last; let indexValue = index;">
-                                                            <td style="padding: 2px 0px;">
-                                                                <value-picker (valueChanged)="updateIngoingValue(group, indexValue, $event)"></value-picker>
-                                                            </td>
-                                                            <td style="padding: 0px;">
-                                                                <button *ngIf="group.second.length > 1" class="btn btn-sm btn-default" (click)="deleteIngoingValue(group, indexValue)" style="margin-left: 3px;">
-                                                                    <span class="glyphicon glyphicon-trash"></span>
-                                                                </button>
-                                                            </td>
-                                                            <td style="padding: 0px;">
-                                                                <button *ngIf="lastValue" class="btn btn-sm btn-default" (click)="addIngoingValue(group)" style="margin-left: 3px;" [disabled]="!v">
-                                                                    <span class="glyphicon glyphicon-plus"></span>
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                <div *ngFor="let group of ingoingLinks; let lastGroup = last; let indexGroup = index">
+                    <div class="hbox" style="align-items: center; margin: 3px 0;">
+                        <div class="panel panel-default" style="flex: 1;">
+                            <div class="panel-body">
+                                <div class="hbox" style="align-items: center; margin-bottom: 4px;">
+                                    <label style="margin-right: 4px;">Predicate:</label>
+                                    <resource-picker style="flex: 1;" [resource]="group.first" [roles]="['property']" (resourceChanged)="updatePropIngoing(group, $event)"></resource-picker>
+                                </div>
+                                <div class="hbox tile-group">
+                                    <div *ngFor="let v of group.second; let indexValue = index; let lastValue = last" class="hbox" style="align-items: center; flex: initial">
+                                        <span class="tile">
+                                            <rdf-resource [resource]="v"></rdf-resource>
+                                            <span class="glyphicon glyphicon-remove-circle" (click)="deleteIngoingValue(group, indexValue)"
+                                                onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
+                                                onmouseout="this.className='glyphicon glyphicon-remove-circle';">
+                                            </span>
+                                        </span>
+                                        <span *ngIf="!lastValue">OR</span>
+                                    </div>
+                                    <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
+                                        <button class="btn btn-default btn-xs" (click)="addIngoingValue(group)">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-default" (click)="deleteIngoingGroup(indexGroup)" style="margin-left: 4px;">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </div>
+                    <span *ngIf="!lastGroup">AND</span>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Ingoing links -->
+        <div class="panel panel-default" style="margin-top: 5px;">
+            <div class="panel-heading">
+                <label style="flex: 1;">Outgoing links</label>
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-default" (click)="addOutgoingGroup()" title="Add group">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div *ngFor="let group of outgoingLinks; let lastGroup = last; let indexGroup = index">
+                    <div class="hbox" style="align-items: center; margin: 3px 0;">
+                        <div class="panel panel-default" style="flex: 1;">
+                            <div class="panel-body">
+                                <div class="hbox" style="align-items: center; margin-bottom: 4px;">
+                                    <label style="margin-right: 4px;">Predicate:</label>
+                                    <resource-picker style="flex: 1;" [resource]="group.first" [roles]="['property']" (resourceChanged)="updatePropOutgoing(group, $event)"></resource-picker>
+                                </div>
+                                <div class="hbox tile-group">
+                                    <div *ngFor="let v of group.second; let indexValue = index; let lastValue = last" class="hbox" style="align-items: center; flex: initial">
+                                        <span class="tile">
+                                            <rdf-resource [resource]="v"></rdf-resource>
+                                            <span class="glyphicon glyphicon-remove-circle" (click)="deleteOutgoingValue(group, indexValue)"
+                                                onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
+                                                onmouseout="this.className='glyphicon glyphicon-remove-circle';">
+                                            </span>
+                                        </span>
+                                        <span *ngIf="!lastValue">OR</span>
+                                    </div>
+                                    <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
+                                        <div class="btn-group btn-group-xs dropup">
+                                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a (click)="addOutgoingValue(group, 'resource')">Add resource</a></li>
+                                                <li><a (click)="addOutgoingValue(group, 'typedLiteral')">Add typed literal</a></li>
+                                                <li><a (click)="addOutgoingValue(group, 'plainLiteral')">Add plain literal</a></li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
-                            </td>
-                            <td>
-                                <button class="btn btn-sm btn-default" (click)="deleteIngoingGroup(indexGroup)">
-                                    <span class="glyphicon glyphicon-trash"></span>
-                                </button>
-                            </td>
-                            <td>
-                                <button *ngIf="lastGroup" class="btn btn-sm btn-default" (click)="addIngoingGroup()">
-                                    <span class="glyphicon glyphicon-plus"></span>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-default" (click)="deleteOutgoingGroup(indexGroup)" style="margin-left: 4px;">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </div>
+                    <span *ngIf="!lastGroup">AND</span>
+                </div>
             </div>
-        </div> -->
+        </div>
 
     </div>
     <div class="modal-footer">

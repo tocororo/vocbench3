@@ -1,0 +1,12 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body">
+
+    <resource-picker [roles]="context.roles" (resourceChanged)="updateResource($event)" [editable]="context.editable"></resource-picker>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!resource">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

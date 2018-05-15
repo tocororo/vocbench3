@@ -1,8 +1,11 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { ARTResource, RDFResourceRolesEnum, ARTURIResource } from '../../../models/ARTResources';
-import { BrowsingModalServices } from '../../modal/browsingModal/browsingModalServices';
-import { UIUtils } from '../../../utils/UIUtils';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { ARTURIResource, RDFResourceRolesEnum } from '../../../models/ARTResources';
+import { OntoLex, SKOS } from '../../../models/Vocabulary';
 import { ResourcesServices } from '../../../services/resourcesServices';
+import { UIUtils } from '../../../utils/UIUtils';
+import { VBContext } from '../../../utils/VBContext';
+import { VBProperties } from '../../../utils/VBProperties';
+import { BrowsingModalServices } from '../../modal/browsingModal/browsingModalServices';
 
 @Component({
     selector: 'resource-picker',
@@ -21,7 +24,7 @@ export class ResourcePickerComponent {
     private menuAsButton: boolean = false; //if there is just a role => do not show a dropdown menu, just a button
     private btnImageSrc: string;
     
-    constructor(private resourceService: ResourcesServices, private browsingModals: BrowsingModalServices) { }
+    constructor(private resourceService: ResourcesServices, private browsingModals: BrowsingModalServices, private vbProp: VBProperties) { }
 
     ngOnInit() {
         this.init();
@@ -81,7 +84,7 @@ export class ResourcePickerComponent {
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.concept) {
-            this.browsingModals.browseConceptTree("Select a Concept").then(
+            this.browsingModals.browseConceptTree("Select a Concept", this.vbProp.getActiveSchemes(), true).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
@@ -109,7 +112,7 @@ export class ResourcePickerComponent {
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.ontolexLexicalEntry) {
-            this.browsingModals.browseLexicalEntryList("Select a LexicalEntry", null, true, true).then(
+            this.browsingModals.browseLexicalEntryList("Select a LexicalEntry", this.vbProp.getActiveLexicon(), true, true).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
@@ -130,10 +133,19 @@ export class ResourcePickerComponent {
      * @param role 
      */
     private pickableRole(role: RDFResourceRolesEnum) {
+        let modelType: string = VBContext.getWorkingProject().getModelType();
+        
+
         if (this.roles != null && this.roles.length != 0) {
             return this.roles.indexOf(role) != -1;
         } else {
-            return true; // if roles array is not provided, allow selection of all roles
+            // if roles array is not provided, allow selection of all roles compliant with the model type
+            if (role == RDFResourceRolesEnum.ontolexLexicalEntry) {
+                return modelType == OntoLex.uri;
+            } else if (role == RDFResourceRolesEnum.concept || role == RDFResourceRolesEnum.conceptScheme || role == RDFResourceRolesEnum.skosCollection) {
+                return modelType == SKOS.uri;
+            }
+            return true; 
         }
     }
 

@@ -37,6 +37,7 @@ import { ConverterPickerModal } from '../widget/modal/sharedModal/converterPicke
 import { SignaturePickerModal } from '../widget/modal/sharedModal/converterPickerModal/signaturePickerModal';
 import { StoreConfigurationModal } from '../widget/modal/sharedModal/configurationStoreModal/storeConfigurationModal';
 import { LoadConfigurationModal } from '../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal';
+import { ResourcePickerModal } from '../widget/modal/sharedModal/resourcePickerModal/resourcePickerModal';
 
 //browsing modals
 import { ClassTreeModal } from '../widget/modal/browsingModal/classTreeModal/classTreeModal';
@@ -97,7 +98,7 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
         PropertyTreeModal, SchemeListModal, CollectionTreeModal, LexicalEntryListModal, LexiconListModal,
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
-        ConverterPickerModal, SignaturePickerModal, StoreConfigurationModal, LoadConfigurationModal,
+        ConverterPickerModal, SignaturePickerModal, StoreConfigurationModal, LoadConfigurationModal, ResourcePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
         EditableNsInput, SchemeSelectionComponent,
         ExportResultAsRdfModal,
@@ -122,7 +123,7 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
         PropertyTreeModal, SchemeListModal, CollectionTreeModal, LexicalEntryListModal, LexiconListModal,
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, BrowseExternalResourceModal,
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
-        ConverterPickerModal, SignaturePickerModal, StoreConfigurationModal, LoadConfigurationModal,
+        ConverterPickerModal, SignaturePickerModal, StoreConfigurationModal, LoadConfigurationModal, ResourcePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
         ExportResultAsRdfModal,
         CollaborationProjSettingsModal, CollaborationUserSettingsModal, CollaborationProjectModal, CreateIssueModal, IssueListModal
