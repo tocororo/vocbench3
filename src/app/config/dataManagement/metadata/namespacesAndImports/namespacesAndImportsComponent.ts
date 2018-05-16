@@ -435,6 +435,11 @@ export class NamespacesAndImportsComponent {
         this.viewChildResView.buildResourceView(this.baseUriRes);
     }
 
+    private onOntologyUpdated() {
+        this.refreshImports();
+        this.refreshNSPrefixMappings();
+    }
+
     //Authorizations
 
     private isAddNsPrefixMappingAuthorized(): boolean {

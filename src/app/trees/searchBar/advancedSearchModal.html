@@ -183,7 +183,9 @@
                             <div class="panel-body">
                                 <div class="hbox" style="align-items: center; margin-bottom: 4px;">
                                     <label style="margin-right: 4px;">Predicate:</label>
-                                    <resource-picker style="flex: 1;" [resource]="group.first" [roles]="['property']" (resourceChanged)="updatePropIngoing(group, $event)"></resource-picker>
+                                    <resource-picker style="flex: 1;" [resource]="group.first" [roles]="['property']" [editable]="true"
+                                        (resourceChanged)="updatePropIngoing(group, $event)">
+                                    </resource-picker>
                                 </div>
                                 <div class="hbox tile-group">
                                     <div *ngFor="let v of group.second; let indexValue = index; let lastValue = last" class="hbox" style="align-items: center; flex: initial">
@@ -231,7 +233,9 @@
                             <div class="panel-body">
                                 <div class="hbox" style="align-items: center; margin-bottom: 4px;">
                                     <label style="margin-right: 4px;">Predicate:</label>
-                                    <resource-picker style="flex: 1;" [resource]="group.first" [roles]="['property']" (resourceChanged)="updatePropOutgoing(group, $event)"></resource-picker>
+                                    <resource-picker style="flex: 1;" [resource]="group.first" [roles]="['property']" [editable]="true" 
+                                        (resourceChanged)="updatePropOutgoing(group, $event)">
+                                    </resource-picker>
                                 </div>
                                 <div class="hbox tile-group">
                                     <div *ngFor="let v of group.second; let indexValue = index; let lastValue = last" class="hbox" style="align-items: center; flex: initial">

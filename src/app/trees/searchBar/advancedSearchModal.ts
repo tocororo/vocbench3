@@ -175,7 +175,8 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
         this.sharedModals.pickResource("Select a resource").then(
             (value: ARTNode) => {
                 group.second.push(value);
-            }
+            },
+            () => {}
         );
     }
 
@@ -208,19 +209,22 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
             this.sharedModals.pickResource("Select a resource").then(
                 (value: ARTNode) => {
                     group.second.push(value);
-                }
+                },
+                () => {}
             );
         } else if (type == RDFTypesEnum.typedLiteral) {
             this.creationModals.newTypedLiteral("Create typed literal").then(
                 (value: ARTLiteral) => {
                     group.second.push(value);
-                }
+                },
+                () => {}
             );
         } else if (type == RDFTypesEnum.plainLiteral) {
             this.creationModals.newPlainLiteral("Create literal").then(
                 (value: ARTLiteral) => {
                     group.second.push(value);
-                }
+                },
+                () => {}
             );
         }
     }
@@ -317,7 +321,6 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
         this.searchService.advancedSearch(this.searchString, this.useLocalName, this.useURI, this.activeSearchMode, this.selectedStatus,
             langsPar, includeLocalesPar, typesParam, schemesParam, ingoingParam, outgoingParam).subscribe(
             searchResult => {
-                console.log(searchResult);
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 if (searchResult.length == 0) {
                     this.basicModals.alert("Search", "No results found for '" + this.searchString + "'", "warning");

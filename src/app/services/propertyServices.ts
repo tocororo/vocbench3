@@ -343,10 +343,6 @@ export class PropertyServices {
             stResp => {
                 //create subProperty by duplicating property param
                 var subProperty = property.clone();
-                // var subProperty = new ARTURIResource(property.getURI(), property.getShow(), property.getRole());
-                // subProperty.setAdditionalProperty(ResAttribute.CHILDREN, property.getAdditionalProperty(ResAttribute.CHILDREN));
-                // subProperty.setAdditionalProperty(ResAttribute.EXPLICIT, property.getAdditionalProperty(ResAttribute.EXPLICIT));
-                // subProperty.setAdditionalProperty(ResAttribute.MORE, property.getAdditionalProperty(ResAttribute.MORE));
                 this.eventHandler.superPropertyAddedEvent.emit({ subProperty: subProperty, superProperty: superProperty });
                 return stResp;
             }
@@ -371,6 +367,42 @@ export class PropertyServices {
                 return stResp;
             }
         );
+    }
+
+    /**
+     * 
+     * @param property 
+     * @param equivalentProperty 
+     * @param linkingPredicate 
+     */
+    addEquivalentProperty(property: ARTURIResource, equivalentProperty: ARTURIResource, linkingPredicate?: ARTURIResource) {
+        console.log("[PropertyServices] addEquivalentProperty");
+        var params: any = {
+            property: property,
+            equivalentProperty: equivalentProperty,
+        };
+        if (linkingPredicate != null) {
+            params.linkingPredicate = linkingPredicate;
+        }
+        return this.httpMgr.doPost(this.serviceName, "addEquivalentProperty", params);
+    }
+
+    /**
+     * 
+     * @param property 
+     * @param equivalentProperty 
+     * @param linkingPredicate 
+     */
+    removeEquivalentProperty(property: ARTURIResource, equivalentProperty: ARTURIResource, linkingPredicate?: ARTURIResource) {
+        console.log("[PropertyServices] removeEquivalentProperty");
+        var params: any = {
+            property: property,
+            equivalentProperty: equivalentProperty,
+        };
+        if (linkingPredicate != null) {
+            params.linkingPredicate = linkingPredicate;
+        }
+        return this.httpMgr.doPost(this.serviceName, "removeEquivalentProperty", params);
     }
 
     /**

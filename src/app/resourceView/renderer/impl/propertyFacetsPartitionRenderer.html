@@ -8,8 +8,10 @@
         <span style="flex: 1">
             <label class="groupPanel-heading-content">{{label}}:</label>
         </span>
-        <span class="groupPanel-heading-content">
-            <input type="image" [title]="addBtnImgTitle" [src]="addBtnImgSrc" (click)="add()" [disabled]="isAddDisabled()">
+        <span class="groupPanel-heading-content groupPanel-add-btn">
+            <button class="resViewPartitionAddBtn" (click)="add()" [title]="addBtnImgTitle" [disabled]="isAddDisabled()">
+                <img [src]="addBtnImgSrc"/>
+            </button>
             <div *ngIf="addManuallyAllowed" class="btn-group" style="vertical-align: initial;">
                 <button class="transparentBtn" style="width: 12px; padding-right: 2px;" data-toggle="dropdown">
                     <span class="caret" style="margin: 0px;"></span>

@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { CollaborationModalServices } from "../collaboration/collaborationModalService";
-import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../models/ARTResources";
+import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute, ResourceUtils, SortAttribute, RDFResourceRolesEnum } from "../models/ARTResources";
 import { Issue } from "../models/Collaboration";
 import { VersionInfo } from "../models/History";
 import { ResViewPartition } from "../models/ResourceView";
@@ -55,6 +55,7 @@ export class ResourceViewComponent {
     private classAxiomColl: ARTPredicateObjects[] = null;
     private denotationsColl: ARTPredicateObjects[] = null;
     private domainsColl: ARTPredicateObjects[] = null;
+    private equivalentPropertiesColl: ARTPredicateObjects[] = null;
     private evokedLexicalConceptsColl: ARTPredicateObjects[] = null;
     private formBasedPreviewColl: ARTPredicateObjects[] = null;
     private formRepresentationsColl: ARTPredicateObjects[] = null;
@@ -179,6 +180,7 @@ export class ResourceViewComponent {
         this.classAxiomColl = null;
         this.denotationsColl = null;
         this.domainsColl = null;
+        this.equivalentPropertiesColl = null;
         this.evokedLexicalConceptsColl = null;
         this.formBasedPreviewColl = null;
         this.formRepresentationsColl = null;
@@ -202,6 +204,9 @@ export class ResourceViewComponent {
 
         var resourcePartition: any = this.resViewResponse.resource;
         this.resource = Deserializer.createRDFResource(resourcePartition);
+        if (this.resource.getRole() == RDFResourceRolesEnum.mention) {
+            this.readonly = true;
+        }
 
         var broadersPartition: any = this.resViewResponse[ResViewPartition.broaders];
         if (broadersPartition != null) {
@@ -229,6 +234,13 @@ export class ResourceViewComponent {
             this.domainsColl = Deserializer.createPredicateObjectsList(domainsPartition);
             this.filterInferredFromPredObjList(this.domainsColl);
             this.sortObjects(this.domainsColl);
+        }
+
+        var equivalentPropertiesPartition: any = this.resViewResponse[ResViewPartition.equivalentProperties];
+        if (equivalentPropertiesPartition != null) {
+            this.equivalentPropertiesColl = Deserializer.createPredicateObjectsList(equivalentPropertiesPartition);
+            this.filterInferredFromPredObjList(this.equivalentPropertiesColl);
+            this.sortObjects(this.equivalentPropertiesColl);
         }
 
         var evokedLexicalConceptsPartition: any = this.resViewResponse[ResViewPartition.evokedLexicalConcepts];
