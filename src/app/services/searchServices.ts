@@ -238,7 +238,7 @@ export class SearchServices {
         if (outgoingSearch != null) {
             params.outgoingSearch = this.serializeSearchLinks(outgoingSearch);
         }
-        return this.httpMgr.doGet(this.serviceName, "advancedSearch", params).map(
+        return this.httpMgr.doPost(this.serviceName, "advancedSearch", params).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
