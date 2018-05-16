@@ -19,7 +19,7 @@
         </ul>
     </div>
 
-    <button *ngIf="import.root" class="btn btn-default btn-xs" (click)="removeImport()">
+    <button *ngIf="import.root" class="btn btn-default btn-xs" (click)="removeImport()" [disabled]="!isDeleteImportAuthorized()">
         <span class="glyphicon glyphicon-trash" title="Remove import"></span>
     </button>
 </div>

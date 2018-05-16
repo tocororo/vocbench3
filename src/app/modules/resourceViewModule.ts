@@ -22,6 +22,7 @@ import { DomainsPartitionRenderer } from '../resourceView/renderer/impl/domainsP
 import { EvokedLexicalConceptsPartitionRenderer } from '../resourceView/renderer/impl/evokedLexicalConceptsPartitionRenderer';
 import { FormBasedPreviewRenderer } from '../resourceView/renderer/impl/formBasedPreviewRenderer';
 import { FormRepresentationsPartitionRenderer } from '../resourceView/renderer/impl/formRepresentationsPartitionRenderer';
+import { ImportsPartitionRenderer } from '../resourceView/renderer/impl/importsPartitionRenderer';
 import { LabelRelationsPartitionRenderer } from '../resourceView/renderer/impl/labelRelationsPartitionRenderer';
 import { LexicalizationsPartitionRenderer } from '../resourceView/renderer/impl/lexicalizationsPartitionRenderer';
 import { LexicalFormsPartitionRenderer } from '../resourceView/renderer/impl/lexicalFormsPartitionRenderer';
@@ -66,7 +67,7 @@ import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
         MembersOrderedPartitionRenderer, MembersPartitionRenderer, FormBasedPreviewRenderer, FormRepresentationsPartitionRenderer,
         SubtermsPartitionRenderer, PropertiesPartitionRenderer, PropertyFacetsPartitionRenderer, RangesPartitionRenderer,
         SchemesPartitionRenderer, SuperPropertiesPartitionRenderer, TopConceptsPartitionRenderer,
-        TypesPartitionRenderer, LabelRelationsPartitionRenderer, NotesPartitionRenderer,
+        TypesPartitionRenderer, LabelRelationsPartitionRenderer, NotesPartitionRenderer, ImportsPartitionRenderer,
         PredicateObjectsRenderer,
         //modals
         ClassListCreatorModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal,

@@ -58,6 +58,7 @@ export class ResourceViewComponent {
     private evokedLexicalConceptsColl: ARTPredicateObjects[] = null;
     private formBasedPreviewColl: ARTPredicateObjects[] = null;
     private formRepresentationsColl: ARTPredicateObjects[] = null;
+    private importsColl: ARTPredicateObjects[] = null;
     private inverseofColl: ARTPredicateObjects[] = null;
     private labelRelationsColl: ARTPredicateObjects[] = null;
     private lexicalFormsColl: ARTPredicateObjects[] = null;
@@ -181,6 +182,7 @@ export class ResourceViewComponent {
         this.evokedLexicalConceptsColl = null;
         this.formBasedPreviewColl = null;
         this.formRepresentationsColl = null;
+        this.importsColl = null;
         this.inverseofColl = null;
         this.labelRelationsColl = null;
         this.lexicalFormsColl = null;
@@ -255,6 +257,13 @@ export class ResourceViewComponent {
             this.formRepresentationsColl = Deserializer.createPredicateObjectsList(formRepresentationsPartition);
             this.filterInferredFromPredObjList(this.formRepresentationsColl);
             this.sortObjects(this.formRepresentationsColl);
+        }
+
+        var importsPartition: any = this.resViewResponse[ResViewPartition.imports];
+        if (importsPartition != null) {
+            this.importsColl = Deserializer.createPredicateObjectsList(importsPartition);
+            this.filterInferredFromPredObjList(this.importsColl);
+            this.sortObjects(this.importsColl);
         }
 
         var labelRelationsPartition: any = this.resViewResponse[ResViewPartition.labelRelations];
@@ -376,6 +385,7 @@ export class ResourceViewComponent {
             this.domainsColl == null &&
             this.formBasedPreviewColl == null &&
             this.formRepresentationsColl == null && 
+            this.importsColl == null &&
             this.inverseofColl == null &&
             this.labelRelationsColl == null &&
             this.lexicalFormsColl == null &&

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ImportOntologyModal, ImportOntologyModalData } from '../../../config/dataManagement/metadata/namespacesAndImports/importOntologyModal';
 import { ARTResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDFCapabilityType } from "../../../models/Coda";
+import { ImportType } from '../../../models/Metadata';
 import { Settings } from "../../../models/Plugins";
 import { RemoteRepositoryAccessConfig } from "../../../models/Project";
 import { ResourceViewModal, ResourceViewModalData } from "../../../resourceView/resourceViewModal";
@@ -138,6 +140,12 @@ export class SharedModalServices {
         return this.modal.open(LoadConfigurationModal, overlayConfig).result;
     }
 
+    /**
+     * 
+     * @param title 
+     * @param roles 
+     * @param editable 
+     */
     pickResource(title: string, roles?: RDFResourceRolesEnum[], editable?: boolean) {
         var modalData = new ResourcePickerModalData(title, roles, editable);
         const builder = new BSModalContextBuilder<ResourcePickerModalData>(
@@ -145,6 +153,20 @@ export class SharedModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(ResourcePickerModal, overlayConfig).result;
+    }
+
+    /**
+     * 
+     * @param title 
+     * @param importType 
+     */
+    importOntology(title: string, importType: ImportType) {
+        var modalData = new ImportOntologyModalData(title, importType);
+        const builder = new BSModalContextBuilder<ImportOntologyModalData>(
+            modalData, undefined, ImportOntologyModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(ImportOntologyModal, overlayConfig).result;
     }
 
 }

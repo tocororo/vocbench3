@@ -1,7 +1,7 @@
 <ng-template [ngIf]="!editInProgress">
     <rdf-resource [resource]="resource" [rendering]="rendering" style="flex:1" (dblclick)="resourceDblClick()"></rdf-resource>
     <div class="dropdown pull-right" title="Edit">
-        <button class="dropdown-toggle resViewPartitionBtn" data-toggle="dropdown" [disabled]="editMenuDisabled">
+        <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" [disabled]="editMenuDisabled">
             <span>&#9662;</span>
         </button>
         <ul class="dropdown-menu">

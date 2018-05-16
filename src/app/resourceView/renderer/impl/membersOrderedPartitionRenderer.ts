@@ -1,21 +1,18 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
-import { SkosServices } from "../../../services/skosServices";
-import {
-    ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects,
-    RDFResourceRolesEnum, RDFTypesEnum, ResAttribute, ResourceUtils
-} from "../../../models/ARTResources";
-import { SKOS } from "../../../models/Vocabulary";
+import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResAttribute, ResourceUtils } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { PropertyServices } from "../../../services/propertyServices";
+import { SKOS } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
+import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
-import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { SkosServices } from "../../../services/skosServices";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
     selector: "members-ordered-renderer",
@@ -53,8 +50,10 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
         }
     }
 
-    //needed to be implemented since this Component extends PartitionRenderSingleRoot, but not used.
-    //Use addFirst addLast addBefore and addAfter instead
+    /**
+     * Needed to be implemented since this Component extends PartitionRenderSingleRoot, but not used.
+     * Use addFirst addLast addBefore and addAfter instead
+     */
     add() { }
 
     //not used since this partition doesn't allow manual add operation

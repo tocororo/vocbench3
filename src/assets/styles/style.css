@@ -431,14 +431,14 @@ sparql-component .CodeMirror { height: 35vh !important }
 }
 
 /* Button to add/remove elements in ResourceView partitions */
-.resViewPartitionBtn:hover, .resViewPartitionBtn:focus {
+.transparentBtn:hover, .transparentBtn:focus {
 	color: #000000;
 	text-decoration: none;
 	cursor: pointer;
 	opacity: 0.9;
 	filter: alpha(opacity=90);
 }
-button.resViewPartitionBtn {
+button.transparentBtn {
     width: 18px;
     height: 18px;
     float: right;
@@ -453,31 +453,46 @@ button.resViewPartitionBtn {
 	cursor: pointer;
 	background: transparent;
 	border: 0;
-	-webkit-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
 }
-button.resViewPartitionBtn:disabled  {
+button.transparentBtn:disabled  {
 	opacity: 0.2;
     filter: alpha(opacity=20);
     cursor: default;
-    /*cursor: not-allowed;*/
 }
 
-button.rvParitionPanelBtn {
+button.predObjRenderPanelBtn {
     color: #000000;
 	opacity: 0.5;
     filter: alpha(opacity=50);
     line-height: 1;
 }
-button.rvParitionPanelBtn:disabled {
+button.predObjRenderPanelBtn:disabled {
     opacity: 0.2;
     filter: alpha(opacity=20);
     cursor: default;
 }
-button.rvParitionPanelBtn:hover:enabled, button.rvParitionPanelBtn:focus:enabled {
+button.predObjRenderPanelBtn:hover:enabled, button.predObjRenderPanelBtn:focus:enabled {
     color: #000000;
 	opacity: 0.9;
     filter: alpha(opacity=90);
     cursor: pointer;
+}
+
+button.resViewPartitionAddBtn {
+    filter: alpha(opacity=40);
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    -webkit-appearance: none;
+    appearance: none;
+}
+button.resViewPartitionAddBtn:disabled  {
+	opacity: 0.2;
+    filter: alpha(opacity=20);
+    cursor: default;
 }
 
 .greyText {

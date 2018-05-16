@@ -11,7 +11,7 @@ import { UIUtils } from "../../../../utils/UIUtils";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
-import { ImportOntologyModal, ImportOntologyModalData } from "./importOntologyModal";
+import { SharedModalServices } from "../../../../widget/modal/sharedModal/sharedModalServices";
 import { OntologyMirrorModal } from "./ontologyMirrorModal";
 import { PrefixNamespaceModal, PrefixNamespaceModalData } from "./prefixNamespaceModal";
 
@@ -44,7 +44,7 @@ export class NamespacesAndImportsComponent {
     private baseUriResPosition: string;
 
     constructor(private metadataService: MetadataServices, private refactorService: RefactorServices, private preferences: VBProperties,
-        private basicModals: BasicModalServices, private modal: Modal) { }
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.refreshBaseURI();
@@ -312,7 +312,7 @@ export class NamespacesAndImportsComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     private importFromWeb() {
-        this.openImportModal("Import from web", ImportType.fromWeb).then(
+        this.sharedModals.importOntology("Import from web", ImportType.fromWeb).then(
             (data: any) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
@@ -334,7 +334,7 @@ export class NamespacesAndImportsComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     private importFromWebToMirror() {
-        this.openImportModal("Import from web to mirror", ImportType.fromWebToMirror).then(
+        this.sharedModals.importOntology("Import from web to mirror", ImportType.fromWebToMirror).then(
             (data: any) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWebToMirror(data.baseURI, data.mirrorFile, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
@@ -356,7 +356,7 @@ export class NamespacesAndImportsComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     private importFromLocalFile() {
-        this.openImportModal("Import from local file", ImportType.fromLocalFile).then(
+        this.sharedModals.importOntology("Import from local file", ImportType.fromLocalFile).then(
             (data: any) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromLocalFile(data.baseURI, data.localFile, data.mirrorFile, data.transitiveImportAllowance).subscribe(
@@ -378,7 +378,7 @@ export class NamespacesAndImportsComponent {
      * once done refreshes the imports list and the namespace prefix mapping
      */
     private importFromOntologyMirror() {
-        this.openImportModal("Import from ontology mirror", ImportType.fromOntologyMirror).then(
+        this.sharedModals.importOntology("Import from ontology mirror", ImportType.fromOntologyMirror).then(
             (data: any) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromMirror(data.mirror.baseURI, data.mirror.file, data.transitiveImportAllowance).subscribe(
@@ -409,26 +409,6 @@ export class NamespacesAndImportsComponent {
                 this.refreshBaseUriResView();
             }
         );
-    }
-
-    /**
-     * Opens a modal to import an ontology
-     * @param title the title of the modal
-     * @param importType tells the type of the import. On this parameter depends the input fields of the modal.
-     * Available values: fromWeb, fromWebToMirror, fromLocalFile, fromOntologyMirror
-     * @return returned object depends on importType. If importType is:
-     * fromWeb) object contains "baseURI", "altURL" and "rdfFormat";
-     * fromWebToMirror) object contains "baseURI", "mirrorFile", "altURL" and "rdfFormat";
-     * fromLocalFile) object contains "baseURI", "localFile" and "mirrorFile";
-     * fromOntologyMirror) mirror object contains "namespace" and "file".
-     */
-    private openImportModal(title: string, importType: ImportType) {
-        var modalData = new ImportOntologyModalData(title, importType);
-        const builder = new BSModalContextBuilder<ImportOntologyModalData>(
-            modalData, undefined, ImportOntologyModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        return this.modal.open(ImportOntologyModal, overlayConfig).result;
     }
 
     private onInportTreeUpdate() {

@@ -131,6 +131,9 @@
             <form-based-preview-renderer *ngIf="formBasedPreviewColl" [pred-obj-list]="formBasedPreviewColl" [resource]="resource" 
                 [rendering]="rendering" [readonly]="true" (dblclickObj)="objectDblClick($event)">
             </form-based-preview-renderer>
+            <imports-renderer *ngIf="importsColl" [pred-obj-list]="importsColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </imports-renderer>
             <properties-renderer *ngIf="propertiesColl" [pred-obj-list]="propertiesColl" [resource]="resource" [rendering]="rendering"
                 [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </properties-renderer>

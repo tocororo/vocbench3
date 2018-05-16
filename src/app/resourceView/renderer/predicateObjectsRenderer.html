@@ -3,11 +3,11 @@
     <div class="subPanel-heading">
         <label style="flex: 1">{{predicateObjects.getPredicate().getShow()}}</label>
         <div class="btn-group">
-            <button class="btn btn-xs btn-default rvParitionPanelBtn" style="padding: 3px 6px;" (click)="addValue()"
+            <button class="btn btn-xs btn-default predObjRenderPanelBtn" style="padding: 3px 6px;" (click)="addValue()"
                 [title]="getAddPropImgTitle(predicateObjects.getPredicate())" [disabled]="isAddDisabled()">
                 <span class="glyphicon glyphicon-plus" style="font-size: 9px;"></span>
             </button>
-            <button class="btn btn-xs btn-default dropdown-toggle rvParitionPanelBtn" style="padding: 3px;" data-toggle="dropdown"
+            <button class="btn btn-xs btn-default dropdown-toggle predObjRenderPanelBtn" style="padding: 3px;" data-toggle="dropdown"
                 [disabled]="isActionMenuDisabled()">
                 <span class="caret"></span>
             </button>
@@ -35,7 +35,7 @@
                         <reified-resource [resource]="obj" [predicate]="predicateObjects.getPredicate()"
                             [ngClass]="{ clickable: obj.isResource() }" style="flex:1"
                             (dblClick)="objectDblClick($event)"></reified-resource>
-                        <button class="resViewPartitionBtn" [title]="getRemovePropImgTitle(predicateObjects.getPredicate())"
+                        <button class="transparentBtn" [title]="getRemovePropImgTitle(predicateObjects.getPredicate())"
                             (click)="removeValue(obj)" [disabled]="isDeleteDisabled()">
                             <span>-</span>
                         </button>

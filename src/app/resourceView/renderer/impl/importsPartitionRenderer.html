@@ -1,0 +1,63 @@
+<div class="groupPanel">
+    <div class="groupPanel-heading">
+        <div class="expandCollapseBtnContainer groupPanel-heading-content" style="margin: 0px">
+            <img src="../../../../assets/images/icons/arrow.png" (click)="partitionCollapsed = !partitionCollapsed"
+                [ngClass]="{'arrow-right': partitionCollapsed}">
+        </div>
+        <span style="flex: 1">
+            <label class="groupPanel-heading-content">{{label}}:</label>
+        </span>
+        <span class="groupPanel-heading-content groupPanel-add-btn dropdown pull-right">
+            <button class="dropdown-toggle resViewPartitionAddBtn" data-toggle="dropdown" [title]="addBtnImgTitle" [disabled]="isAddDisabled()">
+                <img [src]="addBtnImgSrc"/>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a (click)="importFromWeb()">Add import from Web</a></li>
+                <li><a (click)="importFromWebToMirror()">Add import from Web to mirror</a></li>
+                <li><a (click)="importFromLocalFile()">Add import from Local file</a></li>
+                <li><a (click)="importFromOntologyMirror()">Add import from Ontology mirror</a></li>
+            </ul>
+        </span>
+    </div>
+
+    <div class="groupPanel-body">
+        <ng-template [ngIf]="!partitionCollapsed">
+            <div class="subPanel" *ngFor="let po of predicateObjectList">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-xs btn-default dropdown-toggle predObjRenderPanelBtn" style="padding: 3px 6px;"
+                            data-toggle="dropdown" title="Add member" [disabled]="isAddDisabled()">
+                            <span class="glyphicon glyphicon-plus" style="font-size: 9px;"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a (click)="importFromWeb()">Add import from Web</a></li>
+                            <li><a (click)="importFromWebToMirror()">Add import from Web to mirror</a></li>
+                            <li><a (click)="importFromLocalFile()">Add import from Local file</a></li>
+                            <li><a (click)="importFromOntologyMirror()">Add import from Ontology mirror</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="subPanel-body">
+                    <ng-template ngFor let-obj [ngForOf]="po.getObjects()">
+                        <div class="listItem">
+                            <editable-resource *ngIf="!renderAsReified(po.getPredicate(), obj)" style="flex: 1" [resource]="obj"
+                                [rendering]="rendering" [subject]="resource" [predicate]="po.getPredicate()" [readonly]="readonly"
+                                [partition]="partition" (dblClick)="objectDblClick($event)" (update)="onObjectUpdate()"
+                                (delete)="removePredicateObject(po.getPredicate(), obj)">
+                            </editable-resource>
+                            <ng-template [ngIf]="renderAsReified(po.getPredicate(), obj)">
+                                <reified-resource [resource]="obj" [predicate]="po.getPredicate()"
+                                    (dblClick)="objectDblClick($event)" style="flex:1"></reified-resource>
+                                <button class="transparentBtn" [title]="getRemovePropImgTitle(po.getPredicate())" 
+                                    (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="isDeleteDisabled(obj)">
+                                    <span>-</span>
+                                </button>
+                            </ng-template>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</div>

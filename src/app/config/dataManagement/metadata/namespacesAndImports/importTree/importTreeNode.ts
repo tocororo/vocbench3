@@ -1,10 +1,11 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
-import { ImportOntologyModal, ImportOntologyModalData } from "../importOntologyModal";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ImportType, OntologyImport } from "../../../../../models/Metadata";
 import { MetadataServices } from "../../../../../services/metadataServices";
-import { OntologyImport, ImportType } from "../../../../../models/Metadata";
+import { AuthorizationEvaluator } from "../../../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../../../utils/UIUtils";
+import { ImportOntologyModal, ImportOntologyModalData } from "../importOntologyModal";
 
 @Component({
     selector: "import-tree-node",
@@ -95,6 +96,10 @@ export class ImportTreeNodeComponent {
 
     private onUpdate() {
         this.update.emit();
+    }
+
+    private isDeleteImportAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_REMOVE_IMPORT);
     }
 
 }
