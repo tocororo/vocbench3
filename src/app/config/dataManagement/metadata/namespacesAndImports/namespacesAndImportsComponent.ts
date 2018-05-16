@@ -1,17 +1,19 @@
-import { Component } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource } from "../../../../models/ARTResources";
+import { ImportType, OntologyImport, PrefixMapping } from "../../../../models/Metadata";
+import { ResourceViewComponent } from "../../../../resourceView/resourceViewComponent";
 import { MetadataServices } from "../../../../services/metadataServices";
 import { RefactorServices } from "../../../../services/refactorServices";
-import { OntoManagerServices } from '../../../../services/ontoManagerServices';
+import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { UIUtils } from "../../../../utils/UIUtils";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBProperties } from "../../../../utils/VBProperties";
-import { UIUtils } from "../../../../utils/UIUtils";
-import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
-import { PrefixMapping, OntologyImport, ImportStatus, ImportType } from "../../../../models/Metadata";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
-import { PrefixNamespaceModal, PrefixNamespaceModalData } from "./prefixNamespaceModal";
 import { ImportOntologyModal, ImportOntologyModalData } from "./importOntologyModal";
+import { OntologyMirrorModal } from "./ontologyMirrorModal";
+import { PrefixNamespaceModal, PrefixNamespaceModalData } from "./prefixNamespaceModal";
 
 @Component({
     selector: "namespaces-imports-component",
@@ -19,6 +21,8 @@ import { ImportOntologyModal, ImportOntologyModalData } from "./importOntologyMo
     host: { class: "pageComponent" },
 })
 export class NamespacesAndImportsComponent {
+
+    @ViewChild(ResourceViewComponent) viewChildResView: ResourceViewComponent;
 
     // baseURI namespace section
     private pristineBaseURI: string;
@@ -35,19 +39,20 @@ export class NamespacesAndImportsComponent {
     // Imports params section
     private importTree: OntologyImport[];
 
-    // Ontology mirror management section
-    private mirrorList: { file: string, baseURI: string }[]; //array of {file: string, namespace: string}
+    //Ontology res view
+    private baseUriRes: ARTURIResource;
+    private baseUriResPosition: string;
 
-    constructor(private metadataService: MetadataServices, private ontoMgrService: OntoManagerServices,
-        private refactorService: RefactorServices, private basicModals: BasicModalServices, private preferences: VBProperties,
-        private modal: Modal) { }
+    constructor(private metadataService: MetadataServices, private refactorService: RefactorServices, private preferences: VBProperties,
+        private basicModals: BasicModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.refreshBaseURI();
         this.refreshDefaultNamespace();
         this.refreshImports();
         this.refreshNSPrefixMappings();
-        this.refreshOntoMirror();
+
+        this.baseUriResPosition = "local:" + VBContext.getWorkingProject().getName();
     }
 
     //inits or refreshes baseURI
@@ -56,6 +61,7 @@ export class NamespacesAndImportsComponent {
             baseURI => {
                 this.pristineBaseURI = baseURI;
                 this.baseURI = baseURI;
+                this.baseUriRes = new ARTURIResource(this.baseURI);
             }
         );
     }
@@ -85,15 +91,6 @@ export class NamespacesAndImportsComponent {
             mappings => {
                 this.nsPrefMappingList = mappings;
                 this.selectedMapping = null;
-            }
-        );
-    }
-
-    //inits or refreshes ontology mirror list
-    private refreshOntoMirror() {
-        this.ontoMgrService.getOntologyMirror().subscribe(
-            mirrors => {
-                this.mirrorList = mirrors;
             }
         );
     }
@@ -129,8 +126,10 @@ export class NamespacesAndImportsComponent {
         if (this.bind) {
             if (this.namespace.endsWith("#")) {
                 this.baseURI = this.namespace.slice(0, -1);
+                this.baseUriRes = new ARTURIResource(this.baseURI);
             } else {
                 this.baseURI = this.namespace;
+                this.baseUriRes = new ARTURIResource(this.baseURI);
             }
         }
     }
@@ -322,6 +321,7 @@ export class NamespacesAndImportsComponent {
                         //Refreshes the imports and the namespace prefix mapping
                         this.refreshImports();
                         this.refreshNSPrefixMappings();
+                        this.refreshBaseUriResView();
                     }
                 )
             },
@@ -343,7 +343,7 @@ export class NamespacesAndImportsComponent {
                         //Refreshes the imports and the namespace prefix mapping
                         this.refreshImports();
                         this.refreshNSPrefixMappings();
-                        this.refreshOntoMirror();
+                        this.refreshBaseUriResView();
                     }
                 )
             },
@@ -365,7 +365,7 @@ export class NamespacesAndImportsComponent {
                         //Refreshes the imports and the namespace prefix mapping
                         this.refreshImports();
                         this.refreshNSPrefixMappings();
-                        this.refreshOntoMirror();
+                        this.refreshBaseUriResView();
                     }
                 )
             },
@@ -387,6 +387,7 @@ export class NamespacesAndImportsComponent {
                         //Refreshes the imports and the namespace prefix mapping
                         this.refreshImports();
                         this.refreshNSPrefixMappings();
+                        this.refreshBaseUriResView();
                     }
                 )
             },
@@ -405,6 +406,7 @@ export class NamespacesAndImportsComponent {
                 //Refreshes the imports and the namespace prefix mapping
                 this.refreshImports();
                 this.refreshNSPrefixMappings();
+                this.refreshBaseUriResView();
             }
         );
     }
@@ -431,79 +433,26 @@ export class NamespacesAndImportsComponent {
 
     private onInportTreeUpdate() {
         this.refreshImports();
-        this.refreshOntoMirror();
     }
 
 
-    //======= ONTOLOGY MIRROR MANAGEMENT =======
-
-    /**
-     * Opens a modal in order to update the mirror by providing a new baseURI
-     * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
-     */
-    private updateMirrorFromWebWithUri(mirror: { file: string, baseURI: string }) {
-        this.basicModals.prompt("Update ontology mirror from web", "BaseURI").then(
-            (newBaseURI: any) => {
-                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.ontoMgrService.updateOntologyMirrorEntry("updateFromBaseURI", newBaseURI, mirror.file).subscribe(
-                    stResp => {
-                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.refreshOntoMirror();
-                    }
-                );
+    private openOntologyMirror() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        this.modal.open(OntologyMirrorModal, overlayConfig).result.then(
+            (changed: boolean) => {
+                if (changed) {
+                    this.refreshImports();
+                }
             },
-            () => { }
+            () => {}
         );
     }
 
-    /**
-     * Opens a modal in order to update the mirror by providing an URL
-     * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
-     */
-    private updateMirrorFromWebFromAltUrl(mirror: { file: string, baseURI: string }) {
-        this.basicModals.prompt("Update ontology mirror from web", "URL").then(
-            (url: any) => {
-                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.ontoMgrService.updateOntologyMirrorEntry("updateFromAlternativeURL", mirror.baseURI, mirror.file, url).subscribe(
-                    stResp => {
-                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.refreshOntoMirror();
-                    }
-                );
-            },
-            () => { }
-        );
-    }
+    //======= BASE URI RES VIEW =======
 
-    /**
-     * Opens a modal in order to update the mirror by providing a local file
-     * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
-     */
-    private updateMirrorFromLocalFile(mirror: { file: string, baseURI: string }) {
-        this.basicModals.selectFile("Update mirror", null, null, null, ".rdf, .owl, .xml, .ttl, .nt, .n3").then(
-            (file: any) => {
-                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.ontoMgrService.updateOntologyMirrorEntry("updateFromFile", mirror.baseURI, mirror.file, null, file).subscribe(
-                    stResp => {
-                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                    }
-                )
-            },
-            () => { }
-        );
-    }
-
-    /**
-     * Deletes an ontology mirror stored on server
-     * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
-     */
-    private deleteOntoMirror(mirror: { file: string, baseURI: string }) {
-        this.ontoMgrService.deleteOntologyMirrorEntry(mirror.baseURI, mirror.file).subscribe(
-            stReps => {
-                this.refreshImports();
-                this.refreshOntoMirror();
-            }
-        );
+    private refreshBaseUriResView() {
+        this.viewChildResView.buildResourceView(this.baseUriRes);
     }
 
     //Authorizations
@@ -524,12 +473,6 @@ export class NamespacesAndImportsComponent {
     }
     private isAddImportAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_ADD_IMPORT);
-    }
-    private isUpdateMirrorAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONT_MANAGER_UPDATE_ONTOLOGY_MIRROR);
-    }
-    private isDeleteMirrorAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONT_MANAGER_DELETE_ONTOLOGY_MIRROR);
     }
 
 }

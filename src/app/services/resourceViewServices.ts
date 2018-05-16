@@ -15,13 +15,16 @@ export class ResourceViewServices {
      * Returns the resource view of the given resource
      * @param resource
      */
-    getResourceView(resource: ARTResource, includeInferred: boolean) {
+    getResourceView(resource: ARTResource, includeInferred?: boolean, resourcePosition?: string) {
         console.log("[resourceViewServices] getResourceView");
         var params: any = {
             resource: resource,
         };
         if (includeInferred != null) {
             params.includeInferred = includeInferred;
+        }
+        if (resourcePosition != null) {
+            params.resourcePosition = resourcePosition;
         }
         var options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 

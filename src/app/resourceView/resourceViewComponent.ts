@@ -31,6 +31,7 @@ export class ResourceViewComponent {
 
     @Input() resource: ARTResource;
     @Input() readonly: boolean = false;
+    @Input() resourcePosition: string; //use to force the resource poisiton in getResourceView service
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)
 
@@ -137,13 +138,13 @@ export class ResourceViewComponent {
      * - the resource is renamed, so it needs to refresh
      * - some partition has performed a change and emits an update event (which invokes this method, see template)
      */
-    private buildResourceView(res: ARTResource) {
+    public buildResourceView(res: ARTResource) {
         this.showInferredPristine = this.showInferred;
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         if (this.activeVersion != null) {
             HttpServiceContext.setContextVersion(this.activeVersion); //set temprorarly version
         }
-        this.resViewService.getResourceView(res, this.showInferred).subscribe(
+        this.resViewService.getResourceView(res, this.showInferred, this.resourcePosition).subscribe(
             stResp => {
                 HttpServiceContext.removeContextVersion();
                 this.resViewResponse = stResp;

@@ -73,7 +73,7 @@ import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
         DataRangeEditor, ResViewSettingsModal, AddManuallyValueModal
     ],
     exports: [
-        ResourceViewPanelComponent, ResourceViewModal
+        ResourceViewPanelComponent, ResourceViewModal, ResourceViewComponent
     ],
     providers: [ResViewModalServices],
     entryComponents: [
