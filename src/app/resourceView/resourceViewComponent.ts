@@ -1,9 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { CollaborationModalServices } from "../collaboration/collaborationModalService";
-import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute, ResourceUtils, SortAttribute, RDFResourceRolesEnum } from "../models/ARTResources";
+import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../models/ARTResources";
 import { Issue } from "../models/Collaboration";
 import { VersionInfo } from "../models/History";
-import { ResViewPartition } from "../models/ResourceView";
+import { PropertyFacet, ResViewPartition } from "../models/ResourceView";
 import { SemanticTurkey } from "../models/Vocabulary";
 import { CollaborationServices } from "../services/collaborationServices";
 import { ResourceViewServices } from "../services/resourceViewServices";
@@ -69,7 +69,7 @@ export class ResourceViewComponent {
     private membersOrderedColl: ARTPredicateObjects[] = null;
     private notesColl: ARTPredicateObjects[] = null;
     private propertiesColl: ARTPredicateObjects[] = null;
-    private propertyFacets: { name: string, value: boolean }[] = null;
+    private propertyFacets: PropertyFacet[] = null;
     private rangesColl: ARTPredicateObjects[] = null;
     private schemesColl: ARTPredicateObjects[] = null;
     private subtermsColl: ARTPredicateObjects[] = null;
@@ -452,25 +452,14 @@ export class ResourceViewComponent {
      * so it requires a parser ad hoc (doesn't use the parsers in Deserializer)
      */
     private parseFacetsPartition(facetsPartition: any) {
-        var facetsName = ["functional", "inverseFunctional", "reflexive", "irreflexive", "symmetric", "asymmetric", "transitive"];
-        //init default facets
         this.propertyFacets = [];
-        for (var i = 0; i < facetsName.length; i++) {
-            this.propertyFacets.push({ name: facetsName[i], value: false });
-        }
-        //look for facets in resource view
-        for (var i = 0; i < facetsName.length; i++) {
-            var specificFacetPartition = facetsPartition[facetsName[i]];
-            if (specificFacetPartition != undefined) {
-                var facet = { name: facetsName[i], explicit: specificFacetPartition.explicit, value: specificFacetPartition.value };
-                //replace the default facets
-                for (var j = 0; j < this.propertyFacets.length; j++) {
-                    if (this.propertyFacets[j].name == facetsName[i]) {
-                        this.propertyFacets[j] = facet;
-                        break;
-                    }
-                }
-            }
+        for (var facetName in facetsPartition) {
+            if (facetName == "inverseOf") continue;
+            this.propertyFacets.push({
+                name: facetName,
+                value: facetsPartition[facetName].value,
+                explicit: facetsPartition[facetName].explicit
+            })
         }
         //parse inverseOf partition in facets
         this.inverseofColl = Deserializer.createPredicateObjectsList(facetsPartition.inverseOf);

@@ -52,3 +52,19 @@ export class ResViewUtils {
     ]
 
 }
+
+export class PropertyFacet {
+    name: string;
+    value: boolean;
+    explicit: boolean;
+}
+
+export enum PropertyFacetsEnum {
+    symmetric = "symmetric",
+    asymmetric = "asymmetric",
+    functional = "functional",
+    inverseFunctional = "inverseFunctional",
+    reflexive = "reflexive",
+    irreflexive = "irreflexive",
+    transitive = "transitive"
+}

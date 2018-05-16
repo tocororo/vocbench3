@@ -1,17 +1,17 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
-import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum, ResourceUtils } from "../../../models/ARTResources";
-import { RDF, OWL } from "../../../models/Vocabulary";
-import { ResViewPartition } from "../../../models/ResourceView";
-import { PropertyServices } from "../../../services/propertyServices";
+import { ARTNode, ARTURIResource, ResAttribute, ResourceUtils } from "../../../models/ARTResources";
+import { PropertyFacet, PropertyFacetsEnum, ResViewPartition } from "../../../models/ResourceView";
+import { OWL, RDF } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
+import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
-import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
     selector: "property-facets-renderer",
@@ -19,7 +19,7 @@ import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 })
 export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
 
-    @Input('facets') facets: Facet[];
+    @Input('facets') facets: PropertyFacet[];
     //inherited from PartitionRenderSingleRoot
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     // @Input() resource:ARTURIResource;
@@ -65,21 +65,21 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
         return this.resourcesService.removeValue(this.resource, predicate, object);
     }
 
-    private changeFacet(facetName: string, checked: boolean) {
-        if (facetName == "symmetric") {
-            this.setPropertyFacet(OWL.symmetricProperty, checked);
-        } else if (facetName == "asymmetric") {
-            this.setPropertyFacet(OWL.asymmetricProperty, checked);
-        } else if (facetName == "functional") {
-            this.setPropertyFacet(OWL.functionalProperty, checked);
-        } else if (facetName == "inverseFunctional") {
-            this.setPropertyFacet(OWL.inverseFunctionalProperty, checked);
-        } else if (facetName == "reflexive") {
-            this.setPropertyFacet(OWL.reflexiveProperty, checked);
-        } else if (facetName == "irreflexive") {
-            this.setPropertyFacet(OWL.irreflexiveProperty, checked);
-        } else if (facetName == "transitive") {
-            this.setPropertyFacet(OWL.transitiveProperty, checked);
+    private changeFacet(facet: PropertyFacet) {
+        if (facet.name == PropertyFacetsEnum.symmetric) {
+            this.setPropertyFacet(OWL.symmetricProperty, facet.value);
+        } else if (facet.name == PropertyFacetsEnum.asymmetric) {
+            this.setPropertyFacet(OWL.asymmetricProperty, facet.value);
+        } else if (facet.name == PropertyFacetsEnum.functional) {
+            this.setPropertyFacet(OWL.functionalProperty, facet.value);
+        } else if (facet.name == PropertyFacetsEnum.inverseFunctional) {
+            this.setPropertyFacet(OWL.inverseFunctionalProperty, facet.value);
+        } else if (facet.name == PropertyFacetsEnum.reflexive) {
+            this.setPropertyFacet(OWL.reflexiveProperty, facet.value);
+        } else if (facet.name == PropertyFacetsEnum.irreflexive) {
+            this.setPropertyFacet(OWL.irreflexiveProperty, facet.value);
+        } else if (facet.name == PropertyFacetsEnum.transitive) {
+            this.setPropertyFacet(OWL.transitiveProperty, facet.value);
         }
     }
 
@@ -95,16 +95,12 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
         }
     }
 
-    private isChangeFacetDisabled(facet: Facet) {
+    private isChangeFacetDisabled(facet: PropertyFacet) {
         return (
+            !facet.explicit ||
             (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) ||
             this.readonly || !AuthorizationEvaluator.ResourceView.isEditAuthorized(this.partition, this.resource)
         );
     }
 
-}
-
-class Facet {
-    name: string;
-    value: boolean;
 }

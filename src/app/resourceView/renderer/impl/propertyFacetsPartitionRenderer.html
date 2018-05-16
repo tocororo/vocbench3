@@ -25,11 +25,13 @@
 
     <div class="groupPanel-body">
         <ng-template [ngIf]="!partitionCollapsed">
-            <div style="display: flex; padding: 8px;">
-                <span *ngFor="let f of facets" style="flex:1; display: inline-flex; align-items: center;">
-                    <input #cb type="checkbox" style="margin: 0px 3px 0px 0px;" value="transitive" [ngModel]="f.value"
-                        [disabled]="isChangeFacetDisabled(f)" (change)="changeFacet(f.name, cb.checked)">{{f.name}}
-                </span>
+            <div class="hbox" style="padding: 0px 6px;">
+                <div *ngFor="let f of facets" class="checkbox-inline" style="flex: 1; margin: 6px 0px;">
+                    <label style="font-weight: initial;">
+                        <input type="checkbox" [(ngModel)]="f.value" [disabled]="isChangeFacetDisabled(f)" (change)="changeFacet(f)">
+                        {{f.name}}
+                    </label>
+                </div>
             </div>
             <ng-template ngFor let-po [ngForOf]="predicateObjectList">
                 <pred-obj-renderer *ngIf="po.getObjects().length > 0" [pred-obj]="po" [resource]="resource" [rendering]="rendering"
