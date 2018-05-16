@@ -41,6 +41,7 @@ export class SearchSettings {
     public stringMatchMode: SearchMode;
     public useURI: boolean;
     public useLocalName: boolean;
+    public useNotes: boolean;
     public restrictLang: boolean;
     public languages: string[];
     public includeLocales: boolean;

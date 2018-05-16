@@ -201,9 +201,10 @@ export class SearchServices {
      * @param outgoingLinks 
      * @param ingoingLinks 
      */
-    advancedSearch(searchString: string, useLocalName: boolean, useURI: boolean, searchMode: SearchMode, statusFilter: StatusFilter,
+    advancedSearch(searchString: string, useLocalName: boolean, useURI: boolean, useNotes: boolean, searchMode: SearchMode, statusFilter: StatusFilter,
         langs?: string[], includeLocales?: boolean, types?: ARTURIResource[][], schemes?: ARTURIResource[][],
-        ingoingLinks?: { first: ARTURIResource, second: ARTNode[] }[], outgoingLinks?: { first: ARTURIResource, second: ARTNode[] }[]): Observable<ARTResource[]> {
+        ingoingLinks?: { first: ARTURIResource, second: ARTNode[] }[], outgoingLinks?: { first: ARTURIResource, second: ARTNode[] }[],
+        outgoingSearch?: { predicate: ARTURIResource, searchString: string, mode: SearchMode }[]): Observable<ARTResource[]> {
 
         console.log("[SearchServices] advancedSearch");
         var params: any = {
@@ -211,9 +212,10 @@ export class SearchServices {
         };
         if (searchString != null) {
             params.searchString = searchString;
-            useLocalName = useLocalName;
-            useURI = useURI;
-            searchMode = searchMode;
+            params.useLocalName = useLocalName;
+            params.useURI = useURI;
+            params.useNotes = useNotes;
+            params.searchMode = searchMode;
         }
         if (langs != null) {
             params.langs = langs;
@@ -232,6 +234,9 @@ export class SearchServices {
         }
         if (outgoingLinks != null) {
             params.outgoingLinks = this.serializeLinks(outgoingLinks);
+        }
+        if (outgoingSearch != null) {
+            params.outgoingSearch = this.serializeSearchLinks(outgoingSearch);
         }
         return this.httpMgr.doGet(this.serviceName, "advancedSearch", params).map(
             stResp => {
@@ -253,6 +258,11 @@ export class SearchServices {
     }
 
     private serializeLinks(links: { first: ARTURIResource, second: ARTNode[] }[]): string {
+        /**
+         * list of list, the 2nd list has length 2:
+         * 1- first element is a string (serialization of predicate),
+         * 2- second element is a list of string (list of serialization of the values)
+         */
         let linksSerialization: (string|string[])[][] = [];
         links.forEach((link: { first: ARTURIResource, second: ARTNode[] }) => {
             let secondSerialization: string[] = [];
@@ -262,6 +272,20 @@ export class SearchServices {
             linksSerialization.push([ link.first.toNT(), secondSerialization ]);
         });
         return JSON.stringify(linksSerialization);
+    }
+
+    private serializeSearchLinks(outgoingSearch: { predicate: ARTURIResource, searchString: string, mode: SearchMode }[]) {
+        /**
+         * list of list, the 2nd list has length 3:
+         * 1- first element is a string (serialization of predicate)
+         * 2- second element is a string (searchString)
+         * 3- third element is a SearchMode
+         */
+        let serialization: (string|SearchMode)[][] = [];
+        outgoingSearch.forEach((link: { predicate: ARTURIResource, searchString: string, mode: SearchMode }) => {
+            serialization.push([ link.predicate.toNT(), link.searchString, link.mode ]);
+        });
+        return JSON.stringify(serialization);
     }
 
 }

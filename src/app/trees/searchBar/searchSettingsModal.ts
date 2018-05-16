@@ -41,6 +41,7 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
     //search mode use URI/LocalName
     private useURI: boolean = true;
     private useLocalName: boolean = true;
+    private useNotes: boolean = true;
 
     private restrictLang: boolean = false;
     private includeLocales: boolean = false;
@@ -73,6 +74,7 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
         this.activeStringMatchMode = this.settings.stringMatchMode;
         this.useURI = this.settings.useURI;
         this.useLocalName = this.settings.useLocalName;
+        this.useNotes = this.settings.useNotes;
         this.restrictLang = this.settings.restrictLang;
         this.includeLocales = this.settings.includeLocales;
         this.languages = this.settings.languages;
@@ -96,6 +98,7 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
             stringMatchMode: this.activeStringMatchMode,
             useURI: this.useURI,
             useLocalName: this.useLocalName,
+            useNotes: this.useNotes,
             restrictLang: this.restrictLang,
             includeLocales: this.includeLocales,
             languages: this.languages,

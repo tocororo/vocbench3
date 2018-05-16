@@ -48,6 +48,11 @@
                             <input type="checkbox" [(ngModel)]="useLocalName">Search in local name
                         </label>
                     </div>
+                    <div class="checkbox-inline">
+                        <label>
+                            <input type="checkbox" [(ngModel)]="useNotes">Search in notes
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -216,25 +221,30 @@
         </div>
 
 
-        <!-- Ingoing links -->
+        <!-- Outgoing links -->
         <div class="panel panel-default" style="margin-top: 5px;">
             <div class="panel-heading">
                 <label style="flex: 1;">Outgoing links</label>
-                <div class="btn-group btn-group-xs">
-                    <button class="btn btn-default" (click)="addOutgoingGroup()" title="Add group">
+                <div class="btn-group btn-group-xs dropup">
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         <span class="glyphicon glyphicon-plus"></span>
                     </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a (click)="addOutgoingGroupValue()">Add set of values</a></li>
+                        <li><a (click)="addOutgoingGroupFreeText()">Add free text search</a></li>
+                    </ul>
                 </div>
             </div>
             <div class="panel-body">
-                <div *ngFor="let group of outgoingLinks; let lastGroup = last; let indexGroup = index">
+
+                <div *ngFor="let group of outgoingLinksValue; let lastGroup = last; let indexGroup = index">
                     <div class="hbox" style="align-items: center; margin: 3px 0;">
                         <div class="panel panel-default" style="flex: 1;">
                             <div class="panel-body">
                                 <div class="hbox" style="align-items: center; margin-bottom: 4px;">
                                     <label style="margin-right: 4px;">Predicate:</label>
                                     <resource-picker style="flex: 1;" [resource]="group.first" [roles]="['property']" [editable]="true" 
-                                        (resourceChanged)="updatePropOutgoing(group, $event)">
+                                        (resourceChanged)="updatePropOutgoingValue(group, $event)">
                                     </resource-picker>
                                 </div>
                                 <div class="hbox tile-group">
@@ -263,15 +273,42 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-sm btn-default" (click)="deleteOutgoingGroup(indexGroup)" style="margin-left: 4px;">
+                        <button class="btn btn-sm btn-default" (click)="deleteOutgoingGroupValue(indexGroup)" style="margin-left: 4px;">
                             <span class="glyphicon glyphicon-trash"></span>
                         </button>
                     </div>
                     <span *ngIf="!lastGroup">AND</span>
                 </div>
+
+                <span *ngIf="outgoingLinksValue.length > 0 && outgoingLinksFreeText.length > 0">AND</span>
+
+                <div *ngFor="let group of outgoingLinksFreeText; let lastGroup = last; let indexGroup = index">
+                    <div class="hbox" style="align-items: center; margin: 3px 0;">
+                        <div class="panel panel-default" style="flex: 1;">
+                            <div class="panel-body">
+                                <div class="hbox" style="align-items: center; margin-bottom: 4px;">
+                                    <label style="margin-right: 4px;">Predicate:</label>
+                                    <resource-picker style="flex: 1;" [resource]="group.predicate" [roles]="['property']" [editable]="true" 
+                                        (resourceChanged)="updatePropOutgoingFreeText(group, $event)">
+                                    </resource-picker>
+                                </div>
+                                <div class="hbox">
+                                    <select class="form-control input-sm" style="width: initial; margin-right: 4px;" [(ngModel)]="group.mode">
+                                        <option *ngFor="let sm of searchModes" [value]="sm.value">{{sm.show}}</option>
+                                    </select>
+                                    <input class="form-control input-sm" [(ngModel)]="group.searchString">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-sm btn-default" (click)="deleteOutgoingGroupFreeText(indexGroup)" style="margin-left: 4px;">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </div>
+                    <span *ngIf="!lastGroup">AND</span>
+                </div>
+
             </div>
         </div>
-
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary btn-sm" (click)="ok($event)">Search</button>

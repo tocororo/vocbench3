@@ -35,6 +35,7 @@ export class VBProperties {
         stringMatchMode: SearchMode.contains,
         useURI: true,
         useLocalName: true,
+        useNotes: true,
         restrictLang: false,
         includeLocales: false,
         languages: [],
@@ -482,6 +483,10 @@ export class VBProperties {
         if (useLocalNameCookie != null) {
             this.searchSettings.useLocalName = useLocalNameCookie == "true";
         }
+        let useNotesCookie: string = Cookie.getCookie(Cookie.SEARCH_USE_NOTES);
+        if (useNotesCookie != null) {
+            this.searchSettings.useNotes = useNotesCookie == "true";
+        }
         let restrictSchemesCookie: string = Cookie.getCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION);
         if (restrictSchemesCookie != null) {
             this.searchSettings.restrictActiveScheme = restrictSchemesCookie == "true";
@@ -499,6 +504,7 @@ export class VBProperties {
         Cookie.setCookie(Cookie.SEARCH_STRING_MATCH_MODE, settings.stringMatchMode, 365*10);
         Cookie.setCookie(Cookie.SEARCH_USE_URI, settings.useURI+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_USE_LOCAL_NAME, settings.useLocalName+"", 365*10);
+        Cookie.setCookie(Cookie.SEARCH_USE_NOTES, settings.useNotes+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION, settings.restrictActiveScheme+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_CLS_IND_PANEL, settings.classIndividualSearchMode, 365*10);
         if (this.searchSettings.languages != settings.languages) {

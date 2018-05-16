@@ -18,6 +18,7 @@ export class Cookie {
 	public static SEARCH_STRING_MATCH_MODE = "search.string_match_mode";
 	public static SEARCH_USE_URI = "search.use_uri";
 	public static SEARCH_USE_LOCAL_NAME = "search.use_local_name";
+	public static SEARCH_USE_NOTES = "search.use_notes";
 	public static SEARCH_CONCEPT_SCHEME_RESTRICTION = "search.restrict_active_schemes";
 	public static SEARCH_CLS_IND_PANEL = "search.cls_ind_panel"; //tells if search classes, individuals or both
 

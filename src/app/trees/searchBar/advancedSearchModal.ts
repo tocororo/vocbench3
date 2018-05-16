@@ -35,6 +35,7 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
     //search mode use URI/LocalName
     private useURI: boolean = true;
     private useLocalName: boolean = true;
+    private useNotes: boolean = true;
 
     private searchModes: { show: string, value: SearchMode }[] = [
         { show: "Starts with", value: SearchMode.startsWith },
@@ -58,7 +59,8 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
 
     //ingoing/outgoing links
     private ingoingLinks: { first: ARTURIResource, second: ARTNode[] }[] = []; //first is the property, second is a list of values
-    private outgoingLinks: { first: ARTURIResource, second: ARTNode[] }[] = [];
+    private outgoingLinksValue: { first: ARTURIResource, second: ARTNode[] }[] = [];
+    private outgoingLinksFreeText: { predicate: ARTURIResource, searchString: string, mode: SearchMode }[] = [];
 
     constructor(public dialog: DialogRef<BSModalContext>, private searchService: SearchServices, private vbProp: VBProperties,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private browsingModals: BrowsingModalServices,
@@ -70,6 +72,7 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
         let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
         this.useLocalName = searchSettings.useLocalName;
         this.useURI = searchSettings.useURI;
+        this.useNotes = searchSettings.useNotes;
 
         this.activeSearchMode = searchSettings.stringMatchMode;
 
@@ -189,18 +192,18 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
     }
 
     /** ===================== 
-     * Outgoing links management
+     * Outgoing links management value
      * ===================== */
 
-    private addOutgoingGroup() {
-        this.outgoingLinks.push({ first: null, second: [] });
+    private addOutgoingGroupValue() {
+        this.outgoingLinksValue.push({ first: null, second: [] });
     }
 
-    private deleteOutgoingGroup(index: number) {
-        this.outgoingLinks.splice(index, 1);
+    private deleteOutgoingGroupValue(index: number) {
+        this.outgoingLinksValue.splice(index, 1);
     }
 
-    private updatePropOutgoing(group: { first: ARTURIResource, second: ARTNode[] }, property: ARTURIResource) {
+    private updatePropOutgoingValue(group: { first: ARTURIResource, second: ARTNode[] }, property: ARTURIResource) {
         group.first = property;
     }
 
@@ -237,6 +240,23 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
         group.second[index] = value;
     }
 
+    /** ===================== 
+     * Outgoing links management free text
+     * ===================== */
+
+    private addOutgoingGroupFreeText() {
+        this.outgoingLinksFreeText.push({ predicate: null, searchString: null, mode: this.vbProp.getSearchSettings().stringMatchMode });
+    }
+
+    private deleteOutgoingGroupFreeText(index: number) {
+        this.outgoingLinksFreeText.splice(index, 1);
+    }
+
+    private updatePropOutgoingFreeText(group: { predicate: ARTURIResource, searcString: string, mode: SearchMode }, property: ARTURIResource) {
+        group.predicate = property;
+    }
+
+    //---------------------
 
 
     ok(event: Event) {
@@ -299,8 +319,8 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
             ingoingParam = null;
         }
 
-        let outgoingParam: { first: ARTURIResource, second: ARTNode[] }[] = [];
-        this.outgoingLinks.forEach((pair: { first: ARTURIResource, second: ARTNode[] }) => {
+        let outgoingLinksParam: { first: ARTURIResource, second: ARTNode[] }[] = [];
+        this.outgoingLinksValue.forEach((pair: { first: ARTURIResource, second: ARTNode[] }) => {
             if (pair.first != null) {
                 let values: ARTNode[] = [];
                 pair.second.forEach((v: ARTNode) => {
@@ -309,17 +329,27 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
                     }
                 });
                 if (values.length > 0) {
-                    outgoingParam.push({ first: pair.first, second: values });
+                    outgoingLinksParam.push({ first: pair.first, second: values });
                 }
             }
         });
-        if (outgoingParam.length == 0) {
-            outgoingParam = null;
+        if (outgoingLinksParam.length == 0) {
+            outgoingLinksParam = null;
+        }
+
+        let outgoingSearchParam: { predicate: ARTURIResource, searchString: string, mode: SearchMode }[] = [];
+        this.outgoingLinksFreeText.forEach((triple: { predicate: ARTURIResource, searchString: string, mode: SearchMode }) => {
+            if (triple.predicate != null && triple.searchString != null && triple.searchString.trim() != "") {
+                outgoingSearchParam.push(triple);
+            }
+        });
+        if (outgoingSearchParam.length == 0) {
+            outgoingSearchParam = null;
         }
 
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-        this.searchService.advancedSearch(this.searchString, this.useLocalName, this.useURI, this.activeSearchMode, this.selectedStatus,
-            langsPar, includeLocalesPar, typesParam, schemesParam, ingoingParam, outgoingParam).subscribe(
+        this.searchService.advancedSearch(this.searchString, this.useLocalName, this.useURI, this.useNotes, this.activeSearchMode, 
+            this.selectedStatus, langsPar, includeLocalesPar, typesParam, schemesParam, ingoingParam, outgoingLinksParam, outgoingSearchParam).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 if (searchResult.length == 0) {
@@ -330,17 +360,24 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
                      * keep in mind that a resource returned by this search could be not reachable in any tree/list,
                      * moreover it could be not easy to determine which tree/list open
                      */
-                    if (searchResult.length == 1) {
-                        // this.openTreeAt(searchResult[0]);
-                    } else { //multiple results, ask the user which one select
-                        ResourceUtils.sortResources(searchResult, SortAttribute.show);
-                        this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, true).then(
-                            (selectedResource: any) => {
-                                // this.openTreeAt(selectedResource);
-                            },
-                            () => { }
-                        );
-                    }
+                    // if (searchResult.length == 1) {
+                    //     this.openTreeAt(searchResult[0]);
+                    // } else { //multiple results, ask the user which one select
+                    //     ResourceUtils.sortResources(searchResult, SortAttribute.show);
+                    //     this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, true).then(
+                    //         (selectedResource: any) => {
+                    //             this.openTreeAt(selectedResource);
+                    //         },
+                    //         () => { }
+                    //     );
+                    // }
+                    ResourceUtils.sortResources(searchResult, SortAttribute.show);
+                    this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, true).then(
+                        (selectedResource: any) => {
+                            //TODO
+                        },
+                        () => { }
+                    );
                 }
             }
         );

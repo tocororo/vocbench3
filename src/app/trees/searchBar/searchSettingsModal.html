@@ -35,6 +35,12 @@
                     Search in local name
                 </label>
             </div>
+            <div class="checkbox" style="margin: 5px 0px 0px">
+                <label>
+                    <input type="checkbox" [(ngModel)]="useNotes" (ngModelChange)="updateSettings()">
+                    Search in notes
+                </label>
+            </div>
         </div>
     </div>
 
