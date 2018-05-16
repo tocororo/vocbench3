@@ -315,7 +315,7 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
 
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.searchService.advancedSearch(this.searchString, this.useLocalName, this.useURI, this.activeSearchMode, this.selectedStatus,
-            langsPar, includeLocalesPar, typesParam, schemesParam, ingoingParam).subscribe(
+            langsPar, includeLocalesPar, typesParam, schemesParam, ingoingParam, outgoingParam).subscribe(
             searchResult => {
                 console.log(searchResult);
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);

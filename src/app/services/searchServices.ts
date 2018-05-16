@@ -207,12 +207,14 @@ export class SearchServices {
 
         console.log("[SearchServices] advancedSearch");
         var params: any = {
-            searchString: searchString,
-            useLocalName: useLocalName,
-            useURI: useURI,
-            searchMode: searchMode,
             statusFilter: statusFilter
         };
+        if (searchString != null) {
+            params.searchString = searchString;
+            useLocalName = useLocalName;
+            useURI = useURI;
+            searchMode = searchMode;
+        }
         if (langs != null) {
             params.langs = langs;
         }
@@ -231,7 +233,11 @@ export class SearchServices {
         if (outgoingLinks != null) {
             params.outgoingLinks = this.serializeLinks(outgoingLinks);
         }
-        return this.httpMgr.doGet(this.serviceName, "advancedSearch", params);
+        return this.httpMgr.doGet(this.serviceName, "advancedSearch", params).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
     }
 
     private serializeListOfList(lists: ARTURIResource[][]): string {
