@@ -229,7 +229,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
         this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], searchSettings.useLocalName, 
-            searchSettings.useURI, searchSettings.stringMatchMode, searchLangs, includeLocales, searchingScheme).subscribe(
+            searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, searchingScheme).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {

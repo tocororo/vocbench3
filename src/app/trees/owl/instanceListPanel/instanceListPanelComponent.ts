@@ -82,7 +82,7 @@ export class InstanceListPanelComponent extends AbstractPanel {
             includeLocales = searchSettings.includeLocales;
         }
         this.searchService.searchInstancesOfClass(this.cls, searchedText, searchSettings.useLocalName, searchSettings.useURI,
-            searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
+            searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
             searchResult => {
                 if (searchResult.length == 0) {
                     this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");

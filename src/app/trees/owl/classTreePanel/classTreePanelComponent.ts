@@ -100,7 +100,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
         }
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
         this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.cls], searchSettings.useLocalName, searchSettings.useURI,
-            searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
+            searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (searchResult.length == 0) {

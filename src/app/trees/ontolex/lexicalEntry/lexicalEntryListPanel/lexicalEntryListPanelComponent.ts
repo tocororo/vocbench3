@@ -93,7 +93,7 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
         }
 
         UIUtils.startLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
-        this.searchService.searchLexicalEntry(searchedText, searchSettings.useLocalName, searchSettings.useURI,
+        this.searchService.searchLexicalEntry(searchedText, searchSettings.useLocalName, searchSettings.useURI, searchSettings.useNotes,
             searchSettings.stringMatchMode, [this.lexicon], searchLangs, includeLocales).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);

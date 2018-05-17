@@ -18,12 +18,13 @@ export class SearchServices {
      * @param rolesArray available roles: "concept", "cls", "property", "individual"
      * @param useLocalName tells if the searched string should be searched in the local name (as well as in labels)
      * @param useURI tells if the searched string should be searched in the entire URI (as well as in labels)
+     * @param useNotes tells if the searched string should be searched in the notes
      * @param searchMode available searchMode values: "contain", "start", "end", "exact"
      * @param langs List of langTags, restricts the lexicalization search to only a set of languages
      * @param schemes scheme to which the concept should belong (optional and used only if rolesArray contains "concept")
      * @return an array of resources
      */
-    searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, useURI: boolean,
+    searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, useURI: boolean, useNotes: boolean,
         searchMode: SearchMode, langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[]): Observable<ARTURIResource[]> {
         console.log("[SearchServices] searchResource");
         var params: any = {
@@ -31,6 +32,7 @@ export class SearchServices {
             rolesArray: rolesArray,
             useLocalName: useLocalName,
             useURI: useURI,
+            useNotes: useNotes,
             searchMode: searchMode,
         };
         if (langs != null) {
@@ -55,11 +57,12 @@ export class SearchServices {
      * @param searchString the string to search
      * @param useLocalName tells if the searched string should be searched in the local name (as well as in labels)
      * @param useURI tells if the searched string should be searched in the entire URI (as well as in labels)
+     * @param useNotes tells if the searched string should be searched in the notes
      * @param searchMode available searchMode values: "contain", "start", "end", "exact"
      * @param langs List of langTags, restricts the lexicalization search to only a set of languages
      * @return an array of resources
      */
-    searchInstancesOfClass(cls: ARTURIResource, searchString: string, useLocalName: boolean, useURI: boolean,
+    searchInstancesOfClass(cls: ARTURIResource, searchString: string, useLocalName: boolean, useURI: boolean, useNotes: boolean,
         searchMode: SearchMode, langs?: string[], includeLocales?: boolean): Observable<ARTURIResource[]> {
         console.log("[SearchServices] searchInstancesOfClass");
         var params: any = {
@@ -67,6 +70,7 @@ export class SearchServices {
             searchString: searchString,
             useLocalName: useLocalName,
             useURI: useURI,
+            useNotes: useNotes,
             searchMode: searchMode,
         };
         if (langs != null) {
@@ -88,12 +92,13 @@ export class SearchServices {
      * @param searchString 
      * @param useLocalName 
      * @param useURI 
+     * @param useNotes tells if the searched string should be searched in the notes
      * @param searchMode 
      * @param lexicons 
      * @param langs 
      * @param includeLocales 
      */
-    searchLexicalEntry(searchString: string, useLocalName: boolean, useURI: boolean, searchMode: SearchMode, 
+    searchLexicalEntry(searchString: string, useLocalName: boolean, useURI: boolean, useNotes: boolean, searchMode: SearchMode, 
         lexicons?: ARTURIResource[], langs?: string[], includeLocales?: boolean): Observable<ARTURIResource[]> {
 
         console.log("[SearchServices] searchLexicalEntry");
@@ -101,6 +106,7 @@ export class SearchServices {
             searchString: searchString,
             useLocalName: useLocalName,
             useURI: useURI,
+            useNotes: useNotes,
             searchMode: searchMode,
         };
         if (lexicons != null) {

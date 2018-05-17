@@ -67,7 +67,7 @@ export class ClassIndividualTreePanelComponent {
         }
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.searchService.searchResource(searchedText, searchRoles, searchSettings.useLocalName, searchSettings.useURI, 
-            searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
+            searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 if (searchResult.length == 0) {

@@ -204,7 +204,7 @@ export class YasguiComponent {
                 if (token.type == "ws" || token.type == "error") {
                     return;
                 }
-                searchService.searchResource(token.autocompletionString, ["property"], false, true, SearchMode.startsWith).subscribe(
+                searchService.searchResource(token.autocompletionString, ["property"], false, true, false, SearchMode.startsWith).subscribe(
                     (results: ARTURIResource[]) => {
                         var resArray: string[] = [];
                         for (var i = 0; i < results.length; i++) {
@@ -245,7 +245,7 @@ export class YasguiComponent {
             },
             get: function (token: any, callback: any) {
                 if (token.autocompletionString.trim() != "") {
-                    searchService.searchResource(token.autocompletionString, ["cls"], false, true, SearchMode.startsWith).subscribe(
+                    searchService.searchResource(token.autocompletionString, ["cls"], false, true, false, SearchMode.startsWith).subscribe(
                         (results: ARTURIResource[]) => {
                             var resArray: string[] = [];
                             for (var i = 0; i < results.length; i++) {
