@@ -124,7 +124,10 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
     }
 
     public openAt(node: ARTURIResource) {
-        this.index = node.getAdditionalProperty("index").toLocaleUpperCase();//update the index to the first character of the searched node
+        let idx: string = node.getAdditionalProperty("index").toLocaleUpperCase();//update the index to the first character of the searched node
+        this.firstDigitIndex = idx.charAt(0);
+        this.secondDigitIndex = idx.charAt(1);
+        this.onDigitChange();
         setTimeout(() => {
             this.viewChildList.openListAt(node);
         });
