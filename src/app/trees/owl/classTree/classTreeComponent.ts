@@ -82,7 +82,7 @@ export class ClassTreeComponent extends AbstractTree {
                 //open tree from root to node
 
                 //first ensure that the first element of the path is not excluded by the paging mechanism
-                this.ensureRootVisibility(path[0]);
+                this.ensureRootVisibility(path[0], path);
 
                 setTimeout( //apply timeout in order to wait that the children node is rendered (in case the visibile roots have been increased)
                     () => {

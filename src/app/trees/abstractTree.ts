@@ -23,6 +23,15 @@ export abstract class AbstractTree extends AbstractStruct {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
     /**
+     * Searched resource that is waiting to be expanded/selected once the root list is initialized.
+     * This is expecially useful in case a search returns concept not in the current active scheme,
+     * if the user activates the scheme which the concept belongs, it could be necessary to wait that the tree is initialized again 
+     * (with the new scheme) and so once the roots are initialized it attempts again to expand the path to the searched concept 
+     */
+    protected pendingSearchRoot: ARTURIResource;
+    protected pendingSearchPath: ARTURIResource[];
+
+    /**
      * ATTRIBUTES
      */
     roots: ARTURIResource[];
@@ -103,7 +112,7 @@ export abstract class AbstractTree extends AbstractStruct {
             }
         } 
     }
-    ensureRootVisibility(resource: ARTURIResource) {
+    ensureRootVisibility(resource: ARTURIResource, path: ARTURIResource[]) {
         for (var i = 0; i < this.roots.length; i++) {
             if (this.roots[i].getURI() == resource.getURI()) {
                 if (i >= this.rootLimit) {
@@ -111,9 +120,17 @@ export abstract class AbstractTree extends AbstractStruct {
                     let scrollStep: number = ((i - this.rootLimit)/this.increaseRate)+1;
                     this.rootLimit = this.rootLimit + this.increaseRate*scrollStep;
                 }
-                break;
+                //if there was any pending search, reset it
+                if (this.pendingSearchPath || this.pendingSearchRoot) {
+                    this.pendingSearchPath = null;
+                    this.pendingSearchRoot = null;
+                }
+                return;
             }
         }
+        //if this code is reached, the root is not found (so probably it is waiting that the roots are initialized)
+        this.pendingSearchRoot = resource;
+        this.pendingSearchPath = path;
     }
 
 }

@@ -26,11 +26,6 @@ export class ConceptTreeComponent extends AbstractTree {
     //ConceptTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
 
-    //in case of search that returns concept not in the current active scheme, if the user activates the scheme which the concept belongs
-    //it could be necessary wait that the tree is initialized again (with the new scheme) and so it performs multiple attempts to expand the 
-    //path to the searched concept
-    private searchRetryAttempt: number;
-
     constructor(private skosService: SkosServices, private searchService: SearchServices, private basicModals: BasicModalServices,
         private vbProp: VBProperties, eventHandler: VBEventHandler) {
         super(eventHandler);
@@ -77,8 +72,11 @@ export class ConceptTreeComponent extends AbstractTree {
                     ResourceUtils.sortResources(topConcepts, this.rendering ? SortAttribute.show : SortAttribute.value);
                     this.roots = topConcepts;
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                },
-                err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
+
+                    if (this.pendingSearchRoot) {
+                        this.openRoot(this.pendingSearchPath, this.pendingSearchRoot);
+                    }
+                }
             );
         } else if (this.vbProp.getConceptTreePreferences().visualization == ConceptTreeVisualizationMode.searchBased) {
             //don't do nothing
@@ -103,13 +101,7 @@ export class ConceptTreeComponent extends AbstractTree {
                     return;
                 };
                 //open tree from root to node
-                //first ensure that the first element of the path is not excluded by the paging mechanism
-                this.ensureRootVisibility(path[0]);
-                //apply timeout in order to wait that the children node is rendered (in case the visibile roots have been increased)
-                setTimeout(() => { 
-                    this.searchRetryAttempt = 0;
-                    this.openRoot(path, node); 
-                });
+                this.openRoot(path, node); 
             }
         );
     }
@@ -120,29 +112,22 @@ export class ConceptTreeComponent extends AbstractTree {
      * @param node 
      */
     private openRoot(path: ARTURIResource[], node: ARTURIResource) {
-        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        var childrenNodeComponent = this.viewChildrenNode.toArray();
-        for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand
-            if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) {
-                //let the found node expand itself and the remaining path
-                path.splice(0, 1);
-                childrenNodeComponent[i].expandPath(path);
-                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                return;
+        this.ensureRootVisibility(path[0], path);
+
+        setTimeout(()=> {
+            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+            var childrenNodeComponent = this.viewChildrenNode.toArray();
+            for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand
+                if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) {
+                    //let the found node expand itself and the remaining path
+                    path.splice(0, 1);
+                    childrenNodeComponent[i].expandPath(path);
+                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                    return;
+                }
             }
-        }
-        //if this line is reached, the searched node is not in childrenNodeComponent,
-        //it could be not reachable or not yet ready (after a scheme change)
-        setTimeout(() => { 
-            this.searchRetryAttempt++;
-            if (this.searchRetryAttempt > 20) { //after 20 attempts (20*300ms) stop searching
-                this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree", "warning");
-                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-            } else {
-                this.ensureRootVisibility(path[0]);
-                this.openRoot(path, node); 
-            }
-        }, 300); //try again after 300ms
+
+        });
     }
 
     //EVENT LISTENERS
