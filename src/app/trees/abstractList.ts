@@ -13,6 +13,8 @@ export abstract class AbstractList extends AbstractStruct {
     @ViewChild('blockDivList') public blockDivElement: ElementRef; //the element in the view referenced with #blockDivList
     @ViewChild('scrollableContainer') scrollableElement: ElementRef;
     abstract viewChildrenNode: QueryList<AbstractListNode>;
+
+    protected pendingSearchRes: ARTURIResource; //searched resource that is waiting to be selected once the list is initialized
     
     /**
      * ATTRIBUTES
@@ -67,9 +69,12 @@ export abstract class AbstractList extends AbstractStruct {
                     let scrollStep: number = ((i - this.nodeLimit)/this.increaseRate)+1;
                     this.nodeLimit = this.nodeLimit + this.increaseRate*scrollStep;
                 }
-                break;
+                this.pendingSearchRes = null; //if there was any pending search, reset it
+                return; //node found and visible
             }
         }
+        //if this code is reached, the node is not found (so probably it is waiting that the list is initialized)
+        this.pendingSearchRes = resource;
     }
 
 }

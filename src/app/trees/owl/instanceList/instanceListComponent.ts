@@ -22,11 +22,7 @@ export class InstanceListComponent extends AbstractList {
     //InstanceListNodeComponent children of this Component (useful to select the instance during the search)
     @ViewChildren(InstanceListNodeComponent) viewChildrenNode: QueryList<InstanceListNodeComponent>;
 
-    private pendingSearch: { pending: boolean, instance: ARTURIResource, cls: ARTURIResource } = {
-        pending: false, //tells if there is a pending search waiting that children view are initialized 
-        instance: null, //searched instance
-        cls: null //class of the searched instance
-    }
+    private pendingSearchCls: ARTURIResource; //class of a searched instance that is waiting to be selected once the list is initialized
 
     private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initList when the view is not initialized
 
@@ -58,22 +54,18 @@ export class InstanceListComponent extends AbstractList {
         //viewInitialized needed to prevent the initialization of the list before view is initialized
         if (this.viewInitialized) {
             if (changes['cls']) {
-                if (this.cls != undefined) {
-                    let numInst: number = this.cls.getAdditionalProperty(ResAttribute.NUM_INST);
-                    if (this.cls.getAdditionalProperty(ResAttribute.NUM_INST) > this.instanceLimit) {
-                        this.basicModals.confirm("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
-                            + ") has too many instances (" + numInst + "). Retrieving them all could be a very long process "
-                            + "and it may slow down the server. Do you want to continue anyway?", "warning").then(
-                            (confirm: any) => {
-                                this.initList();
-                            },
-                            (cancel: any) =>  {
-                                this.list = [];
-                            }
-                        );
-                    } else {
-                        this.initList();
-                    }
+                let numInst: number = this.cls.getAdditionalProperty(ResAttribute.NUM_INST);
+                if (this.cls.getAdditionalProperty(ResAttribute.NUM_INST) > this.instanceLimit) {
+                    this.basicModals.confirm("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
+                        + ") has too many instances (" + numInst + "). Retrieving them all could be a very long process "
+                        + "and it may slow down the server. Do you want to continue anyway?", "warning").then(
+                        (confirm: any) => {
+                            this.initList();
+                        },
+                        (cancel: any) =>  {
+                            this.list = [];
+                        }
+                    );
                 } else {
                     this.initList();
                 }
@@ -85,15 +77,6 @@ export class InstanceListComponent extends AbstractList {
     ngAfterViewInit() {
         this.viewInitialized = true;
         this.initList();
-
-        //when InstanceListNodeComponent children changes, looks for a pending search to resume
-        this.viewChildrenNode.changes.subscribe(
-            c => {
-                if (this.pendingSearch.pending) {//there is a pending search
-                    this.selectSearchedInstance(this.pendingSearch.cls, this.pendingSearch.instance);
-                }
-            }
-        );
     }
 
     initList() {
@@ -112,9 +95,15 @@ export class InstanceListComponent extends AbstractList {
                     //sort by show if rendering is active, uri otherwise
                     ResourceUtils.sortResources(instances, this.rendering ? SortAttribute.show : SortAttribute.value);
                     this.list = instances;
-                    //if there is some pending instance search and the searched instance is of the same type of the current class
-                    if (this.pendingSearch.pending && this.cls.getURI() == this.pendingSearch.cls.getURI()) {
-                        this.selectSearchedInstance(this.cls, this.pendingSearch.instance);
+                    // if there is some pending search where the class is same class which instance are currently described
+                    if (
+                        this.pendingSearchRes && 
+                        (
+                            (this.pendingSearchCls && this.pendingSearchCls.getURI() == this.cls.getURI()) || 
+                            !this.pendingSearchCls //null if already checked that the pendingSearchCls is the current (see selectSearchedInstance)
+                        )
+                    ) {
+                        this.selectSearchedInstance(this.cls, this.pendingSearchRes);
                     }
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 }
@@ -138,10 +127,10 @@ export class InstanceListComponent extends AbstractList {
     public selectSearchedInstance(cls: ARTURIResource, instance: ARTURIResource) {
         //In the tree, input cls has still not been bound or not changed (cls has been bound previously with a different type) 
         if (this.cls == undefined || cls.getURI() != this.cls.getURI()) {//save the pending search
-            this.pendingSearch.pending = true;
-            this.pendingSearch.instance = instance;
-            this.pendingSearch.cls = cls;
+            this.pendingSearchCls = cls;
+            this.pendingSearchRes = instance;
         } else if (this.cls.getURI() == cls.getURI()) { //Input cls has already bound and it is the type of the searched instance
+            this.pendingSearchCls = null;
             this.openListAt(instance);
         }
     }

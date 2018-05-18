@@ -65,6 +65,11 @@ export class LexicalEntryListComponent extends AbstractList {
                         ResourceUtils.sortResources(entries, this.rendering ? SortAttribute.show : SortAttribute.value);
                         this.list = entries;
                         UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+
+                        if (this.pendingSearchRes) {
+                            this.openListAt(this.pendingSearchRes);
+                        }
+
                     }
                 );
             } else if (this.vbProp.getLexicalEntryListPreferences().visualization == LexEntryVisualizationMode.searchBased) {
