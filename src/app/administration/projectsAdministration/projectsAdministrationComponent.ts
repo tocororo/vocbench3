@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { Project } from "../../models/Project";
 import { ProjectServices } from "../../services/projectServices";
-import { VBContext } from "../../utils/VBContext";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { VBContext } from "../../utils/VBContext";
 
 @Component({
     selector: "projects-admin-component",
@@ -11,18 +11,23 @@ import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 })
 export class ProjectsAdministrationComponent {
 
+    private isAdminLogged: boolean;
+
     private projectList: Project[];
     private selectedProject: Project;
 
     private projUsersAspect: string = "Project-Users management";
+    private projGroupsAspect: string = "Project-Groups management";
     private projSettingsAspect: string = "Project settings";
-    private aspectSelectors: string[] = [this.projUsersAspect, this.projSettingsAspect];
+    private aspectSelectors: string[] = [this.projUsersAspect, this.projGroupsAspect, this.projSettingsAspect];
     private selectedAspect = this.aspectSelectors[0];
 
     constructor(private projectService: ProjectServices) { }
 
     ngOnInit() {
-        if (this.isAdmin()) { //admin can manage all the project
+        this.isAdminLogged = VBContext.getLoggedUser() && VBContext.getLoggedUser().isAdmin();
+
+        if (this.isAdminLogged) { //admin can manage all the project
             this.projectService.listProjects().subscribe(
                 projects => {
                     this.projectList = projects;
@@ -34,10 +39,6 @@ export class ProjectsAdministrationComponent {
             AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_ROLE_MANAGEMENT)) { 
             this.selectedProject = VBContext.getWorkingProject();
         }
-    }
-
-    private isAdmin(): boolean {
-        return VBContext.getLoggedUser().isAdmin();
     }
 
     private changeAspect(aspect: string) {

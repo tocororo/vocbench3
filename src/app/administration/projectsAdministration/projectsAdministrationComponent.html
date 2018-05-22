@@ -4,7 +4,7 @@
 
         <div class="panel-body hbox">
 
-            <div *ngIf="isAdmin()" class="panel panel-default vbox">
+            <div *ngIf="isAdminLogged" class="panel panel-default vbox">
                 <div class="panel-heading">
                     <label>Projects:</label>
                 </div>
@@ -29,6 +29,9 @@
                 <div class="panel-body vbox">
                     <project-users-manager *ngIf="selectedAspect == projUsersAspect" [project]="selectedProject" class="vbox">
                     </project-users-manager>
+
+                    <project-groups-manager *ngIf="selectedAspect == projGroupsAspect" [project]="selectedProject" class="vbox">
+                    </project-groups-manager>
 
                     <project-settings *ngIf="selectedAspect == projSettingsAspect" [project]="selectedProject" class="vbox">
                     </project-settings>

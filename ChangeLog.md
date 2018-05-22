@@ -12,6 +12,7 @@
     * Enabled the customization of the properties on which base the tree hierarchy.
   * Enabled the possibility to change the credentials of remote repositories.
   * Implemented UI for the management of MetadataRegistry.
+  * Implemented UI for the management of UsersGroup.
   * Adopted new Extensions in place of old Plugins.
   * Enabled possibility to change the password.
   * minor bug-fixes.

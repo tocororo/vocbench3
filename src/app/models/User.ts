@@ -18,8 +18,6 @@ export class User {
     private status: UserStatusEnum;
     private admin: boolean = false;
 
-
-
     constructor(email: string, givenName: string, familyName: string, iri: string) {
         this.email = email;
         this.givenName = givenName;
@@ -146,14 +144,16 @@ export class ProjectUserBinding {
     private projectName: string;
     private userEmail: string;
     private roles: string[] = [];
+    private group: UsersGroup;
     private languages: string[] = [];
 
-    constructor(projectName: string, userEmail: string, roles?: string[], languages?: string[]) {
+    constructor(projectName: string, userEmail: string, roles?: string[], group?: UsersGroup, languages?: string[]) {
         this.projectName = projectName;
         this.userEmail = userEmail;
         if (roles != undefined) {
             this.roles = roles;
         }
+        this.group = group;
         if (languages != undefined) {
             this.languages = languages
         }
@@ -189,6 +189,18 @@ export class ProjectUserBinding {
 
     removeRole(role: string) {
         this.roles.splice(this.roles.indexOf(role), 1);
+    }
+
+    setGroup(group: UsersGroup) {
+        this.group = group;
+    }
+
+    getGroup(): UsersGroup {
+        return this.group;
+    }
+
+    removeGroup() {
+        this.group = null;
     }
 
     setLanguages(languages: string[]) {
@@ -234,6 +246,35 @@ export class Role {
         return this.level;
     }
 
+}
+
+export class UsersGroup {
+    public shortName: string;
+    public fullName: string;
+    public description: string;
+    public webPage: string;
+    public logoUrl: string;
+    public iri: ARTURIResource;
+
+    private static iriRegexp = new RegExp("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+
+    constructor(iri: ARTURIResource, shortName: string, fullName?: string, description?: string, webPage?: string, logoUrl?: string) {
+        this.iri = iri;
+        this.shortName = shortName;
+        this.fullName = fullName;
+        this.description = description;
+        this.webPage = webPage;
+        this.logoUrl = logoUrl;
+    }
+
+    public static deserialize(usersGroupJson: any): UsersGroup {
+        return new UsersGroup(new ARTURIResource(usersGroupJson.iri), usersGroupJson.shortName, usersGroupJson.fullName, 
+            usersGroupJson.description, usersGroupJson.webPage, usersGroupJson.logoUrl);
+    }
+
+    public static isIriValid(iri: string) {
+        return UsersGroup.iriRegexp.test(iri);
+    }
 }
 
 export enum UserStatusEnum {

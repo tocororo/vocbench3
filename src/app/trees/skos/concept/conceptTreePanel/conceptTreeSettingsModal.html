@@ -97,6 +97,13 @@
                 </div>
             </div>
         </div>
+
+        <div *ngIf="userGroup" class="panel-footer">
+            <button class="btn btn-xs btn-default pull-right" (click)="applyGroupSettings()">
+                Apply group settings
+                <span class="glyphicon glyphicon-info-sign" [title]="'Group: ' + userGroup.shortName"></span>
+            </button>
+        </div>
     </div>
 
 </div>

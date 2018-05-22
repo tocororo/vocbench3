@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
-
 import { HttpModule } from '@angular/http';
-
 import { AdministrationServices } from "../services/administrationServices";
 import { AlignmentServices } from "../services/alignmentServices";
 import { AuthServices } from "../services/authServices";
@@ -18,8 +16,8 @@ import { IcvServices } from "../services/icvServices";
 import { IndividualsServices } from "../services/individualsServices";
 import { InputOutputServices } from "../services/inputOutputServices";
 import { ManchesterServices } from "../services/manchesterServices";
-import { MetadataServices } from "../services/metadataServices";
 import { MetadataRegistryServices } from "../services/metadataRegistryServices";
+import { MetadataServices } from "../services/metadataServices";
 import { OntoLexLemonServices } from "../services/ontoLexLemonServices";
 import { OntoManagerServices } from "../services/ontoManagerServices";
 import { PluginsServices } from "../services/pluginsServices";
@@ -28,8 +26,8 @@ import { ProjectServices } from "../services/projectServices";
 import { PropertyServices } from "../services/propertyServices";
 import { RefactorServices } from "../services/refactorServices";
 import { RepositoriesServices } from "../services/repositoriesServices";
-import { ResourcesServices } from "../services/resourcesServices";
 import { ResourceViewServices } from "../services/resourceViewServices";
+import { ResourcesServices } from "../services/resourcesServices";
 import { SearchServices } from "../services/searchServices";
 import { ServicesServices } from "../services/servicesServices";
 import { SettingsServices } from "../services/settingsServices";
@@ -38,6 +36,7 @@ import { SkosServices } from "../services/skosServices";
 import { SkosxlServices } from "../services/skosxlServices";
 import { SparqlServices } from "../services/sparqlServices";
 import { UserServices } from "../services/userServices";
+import { UsersGroupsServices } from "../services/usersGroupsServices";
 import { ValidationServices } from "../services/validationServices";
 import { VersionsServices } from "../services/versionsServices";
 
@@ -82,6 +81,7 @@ import { VersionsServices } from "../services/versionsServices";
         SkosxlServices,
         SparqlServices,
         UserServices,
+        UsersGroupsServices,
         ValidationServices,
         VersionsServices
     ]

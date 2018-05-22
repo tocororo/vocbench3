@@ -12,13 +12,11 @@
                 </button>
             </div>
         </div>
-        <div class="subPanel-body vbox" style="padding: 0px;">
-            <div class="scrollableContainer">
-                 <div *ngFor="let u of usersBound" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
-                    <span style="flex: 1">{{u.getGivenName()}} {{u.getFamilyName()}}</span>
-                    <span *ngIf="u.isAdmin()" class="badge">Admin</span>
-                </div> 
-            </div>
+        <div class="subPanel-body vbox scrollableContainer">
+            <div *ngFor="let u of usersBound" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
+                <span style="flex: 1">{{u.getGivenName()}} {{u.getFamilyName()}}</span>
+                <span *ngIf="u.isAdmin()" class="badge">Admin</span>
+            </div> 
         </div>
     </div>
     <div *ngIf="selectedUser" class="subPanel vbox" style="margin-left: 5px; flex: 3;">
@@ -35,15 +33,13 @@
                             <div class="subPanel-heading">
                                 <label>Assigned Roles:</label>
                             </div>
-                            <div class="subPanel-body vbox" style="padding: 0px;">
-                                <div class="scrollableContainer">
-                                    <ng-template [ngIf]="puBinding">
-                                        <div *ngFor="let r of puBinding.getRoles()" (click)="selectUserRole(r)"
-                                            class="listItem" [ngClass]="{active: r == selectedUserRole}" >
-                                            {{r}}
-                                        </div>
-                                    </ng-template>
-                                </div>
+                            <div class="subPanel-body vbox scrollableContainer">
+                                <ng-template [ngIf]="puBinding">
+                                    <div *ngFor="let r of puBinding.getRoles()" (click)="selectUserRole(r)"
+                                        class="listItem" [ngClass]="{active: r == selectedUserRole}">
+                                        {{r}}
+                                    </div>
+                                </ng-template>
                             </div>
                         </div>
                         <div style="align-self: center; margin: 5px;">
@@ -58,12 +54,50 @@
                             <div class="subPanel-heading">
                                 <label>Available Roles:</label>
                             </div>
-                            <div class="subPanel-body vbox" style="padding: 0px;">
-                                <div class="scrollableContainer">
-                                    <div *ngFor="let r of roleList" class="listItem" (click)="selectRole(r)"
-                                        [ngClass]="{active: r == selectedRole, disabled: isRoleAlreadyAssigned(r)}" >
-                                        {{r.getName()}}
+                            <div class="subPanel-body vbox scrollableContainer">
+                                <div *ngFor="let r of roleList" class="listItem" (click)="selectRole(r)"
+                                    [ngClass]="{active: r == selectedRole, disabled: isRoleAlreadyAssigned(r)}" >
+                                    {{r.getName()}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Groups -->
+            <div class="panel panel-default vbox" style="margin-bottom: 4px">
+                <div class="panel-body vbox">
+                    <div class="hbox">
+                        <div class="subPanel vbox" style="margin: 0px">
+                            <div class="subPanel-heading">
+                                <label>Assigned Group:</label>
+                            </div>
+                            <div class="subPanel-body vbox scrollableContainer">
+                                <ng-template [ngIf]="puBinding">
+                                    <div *ngIf="puBinding.getGroup()" class="listItem" [ngClass]="{active: selectedUserGroup}"
+                                        (click)="selectUserGroup(puBinding.getGroup())">
+                                        {{puBinding.getGroup().shortName}}
                                     </div>
+                                </ng-template>
+                            </div>
+                        </div>
+                        <div style="align-self: center; margin: 5px;">
+                            <button class="btn btn-default btn-sm btn-block" (click)="assignGroup()" [disabled]="!selectedGroup || !puBinding">
+                                <span class="glyphicon glyphicon-chevron-left"></span> Assign
+                            </button>
+                            <button class="btn btn-default btn-sm btn-block"  (click)="removeGroup()" [disabled]="!selectedUserGroup">
+                                Remove <span class="glyphicon glyphicon-chevron-right"></span>
+                            </button>
+                        </div>
+                        <div class="subPanel vbox" style="margin: 0px">
+                            <div class="subPanel-heading">
+                                <label>Available Groups:</label>
+                            </div>
+                            <div class="subPanel-body vbox scrollableContainer">
+                                <div *ngFor="let g of groupList" class="listItem" (click)="selectGroup(g)"
+                                    [ngClass]="{active: g == selectedGroup, disabled: isGroupAlreadyAssigned(g)}" >
+                                    {{g.shortName}}
                                 </div>
                             </div>
                         </div>
@@ -79,15 +113,13 @@
                             <div class="subPanel-heading">
                                 <label>Assigned Languages:</label>
                             </div>
-                            <div class="subPanel-body vbox" style="padding: 0px;">
-                                <div class="scrollableContainer">
-                                    <ng-template [ngIf]="puBinding">
-                                        <div *ngFor="let l of getPULanguages()" class="listItem" [ngClass]="{active: l == selectedUserLang}" 
-                                            (click)="selectUserLang(l)">
-                                            <lang-item [language]="l" showTag="true"></lang-item>
-                                        </div>
-                                    </ng-template>
-                                </div>
+                            <div class="subPanel-body vbox scrollableContainer">
+                                <ng-template [ngIf]="puBinding">
+                                    <div *ngFor="let l of getPULanguages()" class="listItem" [ngClass]="{active: l == selectedUserLang}" 
+                                        (click)="selectUserLang(l)">
+                                        <lang-item [language]="l" showTag="true"></lang-item>
+                                    </div>
+                                </ng-template>
                             </div>
                         </div>
                         <div style="align-self: center; margin: 5px;">
@@ -102,15 +134,13 @@
                             <div class="subPanel-heading">
                                 <label>Available Languages:</label>
                             </div>
-                            <div class="subPanel-body vbox" style="padding: 0px;">
-                                <div class="scrollableContainer">
-                                    <div *ngFor="let l of projectLanguages" class="listItem" [ngClass]="{active: l == selectedLang}"
-                                        (click)="selectLang(l)">
-                                        <lang-item [language]="l" showTag="true" style="flex: 1" [disabled]="isLangAlreadyAssigned(l)"></lang-item>
-                                        <span *ngIf="isInUserLangProficiencies(l)" class="glyphicon glyphicon-star" 
-                                            title="This language is in the language proficiencies of the selected user">
-                                        </span>
-                                    </div>
+                            <div class="subPanel-body vbox scrollableContainer">
+                                <div *ngFor="let l of projectLanguages" class="listItem" [ngClass]="{active: l == selectedLang}"
+                                    (click)="selectLang(l)">
+                                    <lang-item [language]="l" showTag="true" style="flex: 1" [disabled]="isLangAlreadyAssigned(l)"></lang-item>
+                                    <span *ngIf="isInUserLangProficiencies(l)" class="glyphicon glyphicon-star" 
+                                        title="This language is in the language proficiencies of the selected user">
+                                    </span>
                                 </div>
                             </div>
                         </div>

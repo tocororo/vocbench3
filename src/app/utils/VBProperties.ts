@@ -4,7 +4,7 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ART
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
 import { ProjectTableColumnStruct } from '../models/Project';
-import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, Properties, ResourceViewMode, SearchSettings, SearchMode } from '../models/Properties';
+import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, Properties, ResourceViewMode, SearchMode, SearchSettings } from '../models/Properties';
 import { OWL, RDFS, SKOS } from '../models/Vocabulary';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { Cookie } from '../utils/Cookie';
@@ -33,7 +33,7 @@ export class VBProperties {
 
     private searchSettings: SearchSettings = {
         stringMatchMode: SearchMode.contains,
-        useURI: true,
+        useURI: false,
         useLocalName: true,
         useNotes: true,
         restrictLang: false,
@@ -329,6 +329,7 @@ export class VBProperties {
         this.prefService.setPUSetting(Properties.pref_lex_entry_list_index_lenght, lenght+"").subscribe();
         this.lexEntryListPreferences.indexLength = lenght;
     }
+
 
     /* =============================
     =========== SETTINGS ===========

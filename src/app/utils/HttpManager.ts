@@ -323,7 +323,12 @@ export class HttpManager {
         //give priority to ctx_project in HttpServiceContext over project in ctx
         if (HttpServiceContext.getContextProject() != undefined) {
             params += "ctx_project=" + encodeURIComponent(HttpServiceContext.getContextProject().getName()) + "&";
-            params += "ctx_consumer=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
+            //consumer (if not specified is the currently open project)
+            if (HttpServiceContext.getConsumerProject() != undefined) {
+                params += "ctx_consumer=SYSTEM&";
+            } else {
+                params += "ctx_consumer=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
+            }
         } else if (VBContext.getWorkingProject() != undefined) { //use the working project otherwise
             params += "ctx_project=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
         }
@@ -465,6 +470,7 @@ export class HttpManager {
 
 export class HttpServiceContext {
     private static ctxProject: Project; //project temporarly used in some scenarios (e.g. exploring other projects)
+    private static ctxConsumer: Project; //consumer project temporarly used in some scenarios (e.g. service invoked in group management)
     private static ctxVersion: VersionInfo; //version temporarly used in some scenarios (e.g. versioning res view)
     private static sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
 
@@ -479,6 +485,19 @@ export class HttpServiceContext {
     }
     static removeContextProject() {
         this.ctxProject = null;
+    }
+
+    /**
+     * Methods for managing a contextual consumer project (project temporarly used in some scenarios)
+     */
+    static setConsumerProject(project: Project) {
+        this.ctxConsumer = project;
+    }
+    static getConsumerProject(): Project {
+        return this.ctxConsumer;
+    }
+    static removeConsumerProject() {
+        this.ctxConsumer = null;
     }
 
     /**
@@ -524,6 +543,7 @@ export class HttpServiceContext {
 
     static resetContext() {
         this.ctxProject = null;
+        this.ctxConsumer = null;
         this.ctxVersion = null;
         this.sessionToken = null;
     }

@@ -18,15 +18,13 @@ export class InputOutputServices {
      * @param transitiveImportAllowance available values 'web' | 'webFallbackToMirror' | 'mirrorFallbackToWeb' | 'mirror'
      * @param format the serialization format of the file
      */
-    loadRDF(file: File, baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, format?: RDFFormat, validateImplicitly?: boolean) {
+    loadRDF(file: File, baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, format: RDFFormat, validateImplicitly?: boolean) {
         console.log("[InputOutputServices] loadRDF");
         var data: any = {
             inputFile: file,
             baseURI: baseURI,
-            transitiveImportAllowance: transitiveImportAllowance
-        }
-        if (format != null) {
-            data.rdfFormat = format.name;
+            transitiveImportAllowance: transitiveImportAllowance,
+            rdfFormat: format.name
         }
         if (validateImplicitly != null) {
             data.validateImplicitly = validateImplicitly;

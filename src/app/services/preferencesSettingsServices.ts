@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTURIResource } from "../models/ARTResources";
 import { Project } from "../models/Project";
-import { HttpManager } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
+import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
 export class PreferencesSettingsServices {
@@ -113,7 +113,7 @@ export class PreferencesSettingsServices {
      * @param property 
      * @param value 
      */
-    setPUSetting(property: string, value?: string) {
+    setPUSetting(property: string, value?: string, pluginID?: string) {
         console.log("[PreferencesServices] setPUSetting");
         var params: any = {
             property: property,
@@ -121,7 +121,51 @@ export class PreferencesSettingsServices {
         if (value != null) {
             params.value = value;
         }
+        if (pluginID != null) {
+            params.pluginID = pluginID
+        }
         return this.httpMgr.doPost(this.serviceName, "setPUSetting", params);
+    }
+
+    /**
+     * Gets the preferences of the currently logged user for the currently open project
+     */
+    getPGSettings(properties: string[], groupIri: ARTURIResource, project?: Project, pluginID?: string) {
+        console.log("[PreferencesServices] getPGSettings");
+        var params: any = {
+            properties: properties,
+            groupIri: groupIri
+        };
+        if (project != null) {
+            params.projectName = project.getName();
+        }
+        if (pluginID != null) {
+            params.pluginID = pluginID
+        }
+        return this.httpMgr.doGet(this.serviceName, "getPGSettings", params);
+    }
+
+    /**
+     * 
+     * @param property 
+     * @param value 
+     */
+    setPGSetting(property: string, groupIri: ARTURIResource, value?: string, project?: Project, pluginID?: string) {
+        console.log("[PreferencesServices] setPGSetting");
+        var params: any = {
+            property: property,
+            groupIri: groupIri
+        };
+        if (value != null) {
+            params.value = value;
+        }
+        if (project != null) {
+            params.projectName = project.getName();
+        }
+        if (pluginID != null) {
+            params.pluginID = pluginID
+        }
+        return this.httpMgr.doPost(this.serviceName, "setPGSetting", params);
     }
 
     /**

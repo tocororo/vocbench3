@@ -2,10 +2,13 @@ import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
-import { ConceptTreePreference, ConceptTreeVisualizationMode } from "../../../../models/Properties";
+import { ConceptTreePreference, ConceptTreeVisualizationMode, Properties } from "../../../../models/Properties";
+import { UsersGroup } from "../../../../models/User";
 import { SKOS } from "../../../../models/Vocabulary";
+import { PreferencesSettingsServices } from "../../../../services/preferencesSettingsServices";
 import { PropertyServices } from "../../../../services/propertyServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
+import { VBContext } from "../../../../utils/VBContext";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../../widget/modal/browsingModal/browsingModalServices";
@@ -35,8 +38,11 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
         { label: "Search based", value: ConceptTreeVisualizationMode.searchBased }
     ]
 
+    private userGroup: UsersGroup;
+
     constructor(public dialog: DialogRef<BSModalContext>, private resourceService: ResourcesServices, private propService: PropertyServices,
-        private vbProp: VBProperties, private basicModals: BasicModalServices , private browsingModals: BrowsingModalServices) {
+        private prefService: PreferencesSettingsServices, private vbProp: VBProperties, 
+        private basicModals: BasicModalServices , private browsingModals: BrowsingModalServices) {
         this.context = dialog.context;
     }
 
@@ -47,56 +53,45 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
         this.baseBroaderProp = conceptTreePref.baseBroaderUri;
 
         //init broader properties
-        if (conceptTreePref.broaderProps.length > 0) {
-            conceptTreePref.broaderProps.forEach(
-                (propUri: string) => {
-                    this.broaderProps.push(new ARTURIResource(propUri));
-                }
-            );
-            this.resourceService.getResourcesInfo(this.broaderProps).subscribe(
-                resources => {
-                    resources.forEach(
-                        (res: ARTURIResource) => {
-                            for (var i = 0; i < this.broaderProps.length; i++) {
-                                if (res.getURI() == this.broaderProps[i].getURI()) {
-                                    this.broaderProps[i] = res;
-                                    break;
-                                }
-                            }
-                        }
-                    );
-                }
-            );
-        }
+        this.initBroaderProps(conceptTreePref.broaderProps);
 
         //init narrower properties
-        if (conceptTreePref.narrowerProps.length > 0) {
-            conceptTreePref.narrowerProps.forEach(
-                (propUri: string) => {
-                    this.narrowerProps.push(new ARTURIResource(propUri));
-                }
-            );
-            this.resourceService.getResourcesInfo(this.narrowerProps).subscribe(
-                resources => {
-                    resources.forEach(
-                        (res: ARTURIResource) => {
-                            for (var i = 0; i < this.narrowerProps.length; i++) {
-                                if (res.getURI() == this.narrowerProps[i].getURI()) {
-                                    this.narrowerProps[i] = res;
-                                    break;
-                                }
-                            }
-                        }
-                    );
-                }
-            );
-        }
+        this.initNarrowerProps(conceptTreePref.narrowerProps);
 
         this.includeSubProps = conceptTreePref.includeSubProps;
         this.syncInverse = conceptTreePref.syncInverse;
 
         this.visualization = conceptTreePref.visualization;
 
+        this.userGroup = VBContext.getProjectUserBinding().getGroup();
+    }
+
+    private initBroaderProps(broadersPropsPref: string[]) {
+        if (broadersPropsPref.length > 0) {
+            let broadersTemp: ARTURIResource[] = [];
+            broadersPropsPref.forEach((propUri: string) => {
+                broadersTemp.push(new ARTURIResource(propUri));
+            });
+            this.resourceService.getResourcesInfo(broadersTemp).subscribe(
+                resources => {
+                    this.broaderProps = resources;
+                }
+            );
+        }
+    }
+
+    private initNarrowerProps(narrowersPropsPref: string[]) {
+        if (narrowersPropsPref.length > 0) {
+            let narrowersTemp: ARTURIResource[] = [];
+            narrowersPropsPref.forEach((propUri: string) => {
+                narrowersTemp.push(new ARTURIResource(propUri));
+            });
+            this.resourceService.getResourcesInfo(narrowersTemp).subscribe(
+                resources => {
+                    this.narrowerProps = resources;
+                }
+            );
+        }
     }
 
     /**
@@ -171,12 +166,12 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
         if (this.syncInverse) {
             this.propService.getInverseProperties([this.selectedBroader]).subscribe(
                 (inverseProps: ARTURIResource[]) => {
-                    if (inverseProps.length > 0) {
-                        let idx = ResourceUtils.indexOfNode(this.narrowerProps, inverseProps[0]);
+                    inverseProps.forEach((prop: ARTURIResource) => {
+                        let idx = ResourceUtils.indexOfNode(this.narrowerProps, prop);
                         if (idx != -1) {
                             this.narrowerProps.splice(idx, 1);
                         }
-                    }
+                    });
                 }
             );
         }
@@ -189,12 +184,12 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
         if (this.syncInverse) {
             this.propService.getInverseProperties([this.selectedNarrower]).subscribe(
                 (inverseProps: ARTURIResource[]) => {
-                    if (inverseProps.length > 0) {
-                        let idx = ResourceUtils.indexOfNode(this.broaderProps, inverseProps[0]);
+                    inverseProps.forEach((prop: ARTURIResource) => {
+                        let idx = ResourceUtils.indexOfNode(this.broaderProps, prop);
                         if (idx != -1) {
                             this.broaderProps.splice(idx, 1);
                         }
-                    }
+                    });
                 }
             );
         }
@@ -240,6 +235,37 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
     }
 
     //=======================
+
+    private applyGroupSettings() {
+        var properties: string[] = [
+            Properties.pref_concept_tree_base_broader_prop, Properties.pref_concept_tree_broader_props, Properties.pref_concept_tree_narrower_props,
+            Properties.pref_concept_tree_include_subprops, Properties.pref_concept_tree_sync_inverse
+        ];
+        this.prefService.getPGSettings(properties, this.userGroup.iri, VBContext.getWorkingProject()).subscribe(
+            prefs => {
+                let conceptTreeBaseBroaderPropPref: string = prefs[Properties.pref_concept_tree_base_broader_prop];
+                if (conceptTreeBaseBroaderPropPref != null) {
+                    this.baseBroaderProp = conceptTreeBaseBroaderPropPref;
+                } else {
+                    this.baseBroaderProp = SKOS.broader.getURI();
+                }
+                let conceptTreeBroaderPropsPref: string = prefs[Properties.pref_concept_tree_broader_props];
+                if (conceptTreeBroaderPropsPref != null) {
+                    this.initBroaderProps(conceptTreeBroaderPropsPref.split(","));
+                } else {
+                    this.broaderProps = [];
+                }
+                let conceptTreeNarrowerPropsPref: string = prefs[Properties.pref_concept_tree_narrower_props];
+                if (conceptTreeNarrowerPropsPref != null) {
+                    this.initNarrowerProps(conceptTreeNarrowerPropsPref.split(","));
+                } else {
+                    this.narrowerProps = [];
+                }
+                this.includeSubProps = prefs[Properties.pref_concept_tree_include_subprops] != "false";
+                this.syncInverse = prefs[Properties.pref_concept_tree_sync_inverse] != "false";
+            }
+        );
+    }
 
 
     ok(event: Event) {

@@ -117,7 +117,7 @@ export class Deserializer {
              * explicit is true if the resource is defined in the main graph (but not in the remove-staging)
              */
             if (node.getAdditionalProperty(ResAttribute.EXPLICIT) == null) {
-                var baseURI = VBContext.getWorkingProject().getBaseURI();
+                var baseURI = VBContext.getWorkingProject() ? VBContext.getWorkingProject().getBaseURI() : null;
                 let resGraphs: ARTURIResource[] = node.getGraphs();
                 let inMainGraph: boolean = false;
                 let inRemoveStagingGraph: boolean = false;

@@ -1,15 +1,16 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
-import { UserProjBindingModal, UserProjBindingModalData } from "./userProjBindingModal";
-import { User, Role, ProjectUserBinding } from "../../models/User";
-import { Project } from "../../models/Project";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Language, Languages } from "../../models/LanguagesCountries";
-import { VBContext } from "../../utils/VBContext";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { UserServices } from "../../services/userServices";
+import { Project } from "../../models/Project";
+import { ProjectUserBinding, Role, User, UsersGroup } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
+import { UserServices } from "../../services/userServices";
+import { UsersGroupsServices } from "../../services/usersGroupsServices";
+import { VBContext } from "../../utils/VBContext";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { UserProjBindingModal, UserProjBindingModalData } from "./userProjBindingModal";
 
 @Component({
     selector: "project-users-manager",
@@ -32,8 +33,13 @@ export class ProjectUsersManagerComponent {
     private selectedLang: Language; //role selected in langList (available langs)
     private selectedUserLang: Language; //selected lang in the list of the language assigned to the selectedUser in the selectedProject
 
-    constructor(private userService: UserServices, private adminService: AdministrationServices, 
+    private groupList: UsersGroup[];
+    private selectedGroup: UsersGroup;
+    private selectedUserGroup: UsersGroup;
+
+    constructor(private userService: UserServices, private adminService: AdministrationServices, private groupsService: UsersGroupsServices,
         private prefSettingsServices: PreferencesSettingsServices, private basicModals: BasicModalServices, private modal: Modal) { }
+
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['project'] && changes['project'].currentValue) {
@@ -42,6 +48,7 @@ export class ProjectUsersManagerComponent {
                     this.usersBound = users;
                     this.puBinding = null;
                     this.selectedUserRole = null;
+                    this.selectedUserGroup = null;
                     /* look among the users bound to the project whether there is the currently selected user (if any).
                     In case, select it, otherwise reset the selected user */
                     if (this.selectedUser != null) {
@@ -63,6 +70,11 @@ export class ProjectUsersManagerComponent {
             this.adminService.listRoles(this.project).subscribe(
                 roles => {
                     this.roleList = roles;
+                }
+            );
+            this.groupsService.listGroups().subscribe(
+                groups => {
+                    this.groupList = groups;
                 }
             );
             this.prefSettingsServices.getProjectSettings(["languages"], this.project).subscribe(
@@ -191,6 +203,54 @@ export class ProjectUsersManagerComponent {
         } else {
             return this.selectedUser.isAdmin();
         }
+    }
+
+    //GROUPS
+
+    private selectUserGroup(group: UsersGroup) {
+        if (this.selectedUserGroup == group) {
+            this.selectedUserGroup = null;    
+        } else {
+            this.selectedUserGroup = group;
+        }
+    }
+
+    private selectGroup(group: UsersGroup) {
+        if (!this.isGroupAlreadyAssigned(group)) {
+            if (this.selectedGroup == group) {
+                this.selectedGroup = null;
+            } else {
+                this.selectedGroup = group;
+            }
+        }
+    }
+
+    private assignGroup() {
+        this.groupsService.assignGroupToUser(this.project.getName(), this.selectedUser.getEmail(), this.selectedGroup.iri).subscribe(
+            stResp => {
+                this.puBinding.setGroup(this.selectedGroup);
+                this.selectedGroup = null;
+            }
+        )
+    }
+
+    private removeGroup() {
+        this.groupsService.removeGroupFromUser(this.project.getName(), this.selectedUser.getEmail()).subscribe(
+            stResp => {
+                this.puBinding.removeGroup();
+                this.selectedUserGroup = null;
+            }
+        );
+    }
+
+    private isGroupAlreadyAssigned(group: UsersGroup): boolean {
+        if (this.puBinding != undefined) {
+            let assignedGroup = this.puBinding.getGroup();
+            if (assignedGroup != null) {
+                return assignedGroup.iri.getURI() == group.iri.getURI();
+            }
+        }
+        return false;
     }
     
    

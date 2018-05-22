@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Project } from "../models/Project";
-import { ProjectUserBinding, Role } from "../models/User";
+import { ProjectUserBinding, Role, UsersGroup } from "../models/User";
 import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
@@ -74,7 +74,11 @@ export class AdministrationServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getProjectUserBinding", params).map(
             stResp => {
-                return new ProjectUserBinding(stResp.projectName, stResp.userEmail, stResp.roles, stResp.languages);
+                let group: UsersGroup;
+                if (stResp.group != null) {
+                    group = UsersGroup.deserialize(stResp.group);
+                }
+                return new ProjectUserBinding(stResp.projectName, stResp.userEmail, stResp.roles, group, stResp.languages);
             }
         );
     }
