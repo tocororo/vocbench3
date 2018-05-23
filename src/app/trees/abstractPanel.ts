@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Observable } from 'rxjs/Observable';
 import { CustomFormsServices } from "../services/customFormsServices";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum } from "../models/ARTResources";
+import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ARTResource } from "../models/ARTResources";
 import { CustomForm } from "../models/CustomForms";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { VBEventHandler } from "../utils/VBEventHandler";
@@ -26,6 +26,7 @@ export abstract class AbstractPanel {
     @Input() context: TreeListContext; //useful in some scenarios (ex. scheme list to show/hide the checkboxes, concept and class panel to show/hide configuration button)
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Output() nodeDeleted = new EventEmitter<ARTURIResource>();
+    @Output('advancedSearch') advancedSearchEvent: EventEmitter<ARTResource> = new EventEmitter();
 
     /**
      * ATTRIBUTES
@@ -97,6 +98,14 @@ export abstract class AbstractPanel {
     }
 
     abstract doSearch(searchedText: string): void;
+
+    /**
+     * Handler of advancedSearch event, simply propagates the event
+     * @param resource 
+     */
+    private advancedSearch(resource: ARTResource) {
+        this.advancedSearchEvent.emit(resource);
+    }
 
     onNodeSelected(node: ARTURIResource) {
         this.selectedNode = node;

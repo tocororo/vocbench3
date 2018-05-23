@@ -85,8 +85,6 @@ export class LexiconListPanelComponent extends AbstractPanel {
     }
 
     refresh() {
-        this.selectedNode = null; //lexical entry list refresh automatically after this since it listen for changes on lexicon
-        this.nodeSelected.emit(this.selectedNode); //emit nodeSelected with node null, so ontolexPanel reset the lexicon entry list
         this.viewChildList.initList();
     }
 

@@ -86,7 +86,7 @@ export class CommitDeltaModal implements ModalComponent<CommitDeltaModalData> {
 
     private openResource(resource: ARTNode) {
         if (resource.isResource()) {
-            this.sharedModals.openResourceView(<ARTResource>resource);
+            this.sharedModals.openResourceView(<ARTResource>resource, true);
         }
     }
 

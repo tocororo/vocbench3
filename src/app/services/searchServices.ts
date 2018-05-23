@@ -246,7 +246,7 @@ export class SearchServices {
         }
         return this.httpMgr.doPost(this.serviceName, "advancedSearch", params).map(
             stResp => {
-                return Deserializer.createURIArray(stResp);
+                return Deserializer.createResourceArray(stResp);
             }
         );
     }

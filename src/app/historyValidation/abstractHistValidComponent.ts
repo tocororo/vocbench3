@@ -140,7 +140,7 @@ export abstract class AbstractHistValidComponent {
                 res = ResourceUtils.parseBNode(value);
             }
             if (res != null) {
-                this.sharedModals.openResourceView(res);
+                this.sharedModals.openResourceView(res, true);
             }
         } catch (err) {
             //not parseable => not a resource

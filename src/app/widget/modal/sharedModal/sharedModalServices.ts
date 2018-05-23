@@ -69,7 +69,7 @@ export class SharedModalServices {
      * Opens a resource view in a modal
      * @param resource 
      */
-    openResourceView(resource: ARTResource, readonly?: boolean) {
+    openResourceView(resource: ARTResource, readonly: boolean) {
         var modalData = new ResourceViewModalData(resource, readonly);
         const builder = new BSModalContextBuilder<ResourceViewModalData>(
             modalData, undefined, ResourceViewModalData

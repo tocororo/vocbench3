@@ -51,13 +51,9 @@ export class SchemeSelectionComponent {
             );
         } else {
             //init schemeList with the schemes of the given concept (broader of the new creating)
-            this.skosService.getSchemesMatrixPerConcept(this.concept).subscribe(
+            this.skosService.getSchemesOfConcept(this.concept).subscribe(
                 schemes => {
-                    for (var i = 0; i < schemes.length; i++) {
-                        if (schemes[i].getAdditionalProperty(ResAttribute.IN_SCHEME)) {
-                            this.schemeList.push(schemes[i]);
-                        }
-                    }
+                    this.schemeList = schemes;
                     this.update.emit(this.schemeList);
                 }
             )
@@ -78,7 +74,8 @@ export class SchemeSelectionComponent {
                     this.schemeList.push(scheme);
                     this.update.emit(this.schemeList);
                 }
-            }
+            },
+            () => {}
         );
     }
 

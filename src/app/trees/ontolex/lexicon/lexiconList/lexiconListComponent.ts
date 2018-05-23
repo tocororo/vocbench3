@@ -32,6 +32,9 @@ export class LexiconListComponent extends AbstractList {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.lexiconCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
         this.eventSubscriptions.push(eventHandler.lexiconDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
+        //handler when active lexicon is changed programmatically when a searched entry belong to a non active lexicon
+        this.eventSubscriptions.push(eventHandler.lexiconChangedEvent.subscribe(
+            (node: ARTURIResource) => this.activeLexicon = this.list[ResourceUtils.indexOfNode(this.list, node)]));
     }
 
     ngOnInit() {

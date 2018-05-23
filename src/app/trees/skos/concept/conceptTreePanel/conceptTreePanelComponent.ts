@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { Observable } from "rxjs/Observable";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { ConceptTreeVisualizationMode, SearchSettings } from "../../../../models/Properties";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -237,12 +238,12 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results
                         if (searchResult.length == 1) {
-                            this.selectSearchResult(searchResult[0]);
+                            this.selectSearchedResource(searchResult[0]);
                         } else { //multiple results, ask the user which one select
                             ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
                             this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
                                 (selectedResource: any) => {
-                                    this.selectSearchResult(selectedResource);
+                                    this.selectSearchedResource(selectedResource);
                                 },
                                 () => { }
                             );
@@ -258,40 +259,56 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         );
     }
 
-    private selectSearchResult(resource: ARTURIResource) {
-        let schemes: ARTURIResource[] = resource.getAdditionalProperty(ResAttribute.SCHEMES);
-        let isInActiveSchemes: boolean = false;
-        if (this.workingSchemes.length == 0) { //no scheme mode -> searched concept should be visible
-            isInActiveSchemes = true;
-        } else {
-            for (var i = 0; i < schemes.length; i++) {
-                if (ResourceUtils.containsNode(this.workingSchemes, schemes[i])) {
+    public selectSearchedResource(resource: ARTURIResource) {
+        this.getSearchedConceptSchemes(resource).subscribe(
+            schemes => {
+                let isInActiveSchemes: boolean = false;
+                if (this.workingSchemes.length == 0) { //no scheme mode -> searched concept should be visible
                     isInActiveSchemes = true;
-                    break;
+                } else {
+                    for (var i = 0; i < schemes.length; i++) {
+                        if (ResourceUtils.containsNode(this.workingSchemes, schemes[i])) {
+                            isInActiveSchemes = true;
+                            break;
+                        }
+                    }
                 }
-            }
-        }
-        if (isInActiveSchemes) {
-            this.openTreeAt(resource);
-        } else {
-            let message = "Searched concept '" + resource.getShow() + "' is not reachable in the tree since it belongs to the following";
-            if (schemes.length > 1) {
-                message += " schemes. If you want to activate one of these schemes and continue the search, "
-                    + "please select the scheme you want to activate and press OK.";
-            } else {
-                message += " scheme. If you want to activate the scheme and continue the search, please select it and press OK.";
-            }
-            this.resourceService.getResourcesInfo(schemes).subscribe(
-                schemes => {
-                    this.basicModals.selectResource("Search", message, schemes, this.rendering).then(
-                        (scheme: ARTURIResource) => {
-                            this.vbProp.setActiveSchemes(this.workingSchemes.concat(scheme)); //update the active schemes
-                            this.openTreeAt(resource); //then open the tree on the searched resource
-                        },
-                        () => {}
+                if (isInActiveSchemes) {
+                    this.openTreeAt(resource);
+                } else {
+                    let message = "Searched concept '" + resource.getShow() + "' is not reachable in the tree since it belongs to the following";
+                    if (schemes.length > 1) {
+                        message += " schemes. If you want to activate one of these schemes and continue the search, "
+                            + "please select the scheme you want to activate and press OK.";
+                    } else {
+                        message += " scheme. If you want to activate the scheme and continue the search, please select it and press OK.";
+                    }
+                    this.resourceService.getResourcesInfo(schemes).subscribe(
+                        schemes => {
+                            this.basicModals.selectResource("Search", message, schemes, this.rendering).then(
+                                (scheme: ARTURIResource) => {
+                                    this.vbProp.setActiveSchemes(this.workingSchemes.concat(scheme)); //update the active schemes
+                                    this.openTreeAt(resource); //then open the tree on the searched resource
+                                },
+                                () => {}
+                            );
+                        }
                     );
                 }
-            );
+            }
+        );
+    }
+
+    /**
+     * Schemes of a searched concept could be retrieved from a "schemes" attribute (if searched by a "ordinary" search), or from
+     * invoking a specific service (if the "schemes" attr is not present when searched by advanced search)
+     */
+    private getSearchedConceptSchemes(concept: ARTURIResource): Observable<ARTURIResource[]> {
+        let schemes: ARTURIResource[] = concept.getAdditionalProperty(ResAttribute.SCHEMES);
+        if (schemes == null) {
+            return this.skosService.getSchemesOfConcept(concept);
+        } else {
+            return Observable.of(schemes);
         }
     }
 

@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import { OverlayConfig } from "ngx-modialog";
 import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
+import { Observable } from "rxjs/Observable";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { LexEntryVisualizationMode, SearchSettings } from "../../../../models/Properties";
 import { OntoLex } from "../../../../models/Vocabulary";
@@ -102,12 +103,12 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                     } else { //1 or more results
                         if (searchResult.length == 1) {
-                            this.openAt(searchResult[0]);
+                            this.selectSearchedResource(searchResult[0]);
                         } else { //multiple results, ask the user which one select
                             ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
                             this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
                                 (selectedResource: any) => {
-                                    this.openAt(selectedResource);
+                                    this.selectSearchedResource(selectedResource);
                                 },
                                 () => { }
                             );
@@ -123,14 +124,68 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
         );
     }
 
+    /**
+     * Unlike the "ordinary" search, that looks for entry only in the current lexicon,
+     * the advanced search looks for entry in any lexicon, so in order to select the entry in the panel, 
+     * it needs to retrieve the lexicon of the entry, select it, eventually change the index, then select the entry
+     */
+    public selectAdvancedSearchedResource(resource: ARTURIResource) {
+        this.ontolexService.getLexicalEntryLexicons(resource).subscribe(
+            lexicons => {
+                let isInActiveLexicon: boolean = ResourceUtils.containsNode(lexicons, this.lexicon);
+                if (isInActiveLexicon) {
+                    this.selectSearchedResource(resource);
+                } else {
+                    let message = "Searched LexicalEntry '" + resource.getShow() + "' is not reachable in the list since it belongs to the following";
+                    if (lexicons.length > 1) {
+                        message += " lexicon. If you want to activate one of these lexicons and continue the search, "
+                            + "please select the lexicon you want to activate and press OK.";
+                    } else {
+                        message += " lexicon. If you want to activate the lexicon and continue the search, please select it and press OK.";
+                    }
+                    this.basicModals.selectResource("Search", message, lexicons, this.rendering).then(
+                        (lexicon: ARTURIResource) => {
+                            this.vbProp.setActiveLexicon(lexicon); //update the active lexicon
+                            this.selectSearchedResource(resource); //then open the list on the searched resource
+                        },
+                        () => {}
+                    );
+                }
+            }
+        )
+    }
+
+    public selectSearchedResource(resource: ARTURIResource) {
+        this.getSearchedEntryIndex(resource).subscribe(
+            index => {
+                this.firstDigitIndex = index.charAt(0);
+                this.secondDigitIndex = index.charAt(1);
+                this.onDigitChange();
+                setTimeout(() => {
+                    this.openAt(resource);
+                });
+            }
+        );
+    }
+
     public openAt(node: ARTURIResource) {
-        let idx: string = node.getAdditionalProperty("index").toLocaleUpperCase();//update the index to the first character of the searched node
-        this.firstDigitIndex = idx.charAt(0);
-        this.secondDigitIndex = idx.charAt(1);
-        this.onDigitChange();
-        setTimeout(() => {
-            this.viewChildList.openListAt(node);
-        });
+        this.viewChildList.openListAt(node);
+    }
+
+    /**
+     * Index of a searched entry could be retrieved from a "index" attribute (if searched by a "ordinary" search), or from
+     * invoking a specific service (if the "index" attr is not present when searched by advanced search)
+     */
+    private getSearchedEntryIndex(entry: ARTURIResource): Observable<string> {
+        if (entry.getAdditionalProperty("index") != null) {
+            return Observable.of(entry.getAdditionalProperty("index").toLocaleUpperCase());
+        } else {
+            return this.ontolexService.getLexicalEntryIndex(entry).map(
+                index => {
+                    return index.toLocaleUpperCase();
+                }
+            );
+        }
     }
 
     refresh() {

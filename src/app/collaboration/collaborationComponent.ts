@@ -129,7 +129,7 @@ export class CollaborationComponent {
     }
 
     private onResourceClick(resource: ARTURIResource) {
-        this.sharedModals.openResourceView(resource);
+        this.sharedModals.openResourceView(resource, true);
     }
 
 }

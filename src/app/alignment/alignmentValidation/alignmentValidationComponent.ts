@@ -481,6 +481,6 @@ export class AlignmentValidationComponent {
     }
 
     private openResView(resource: ARTURIResource) {
-        this.sharedModals.openResourceView(resource);
+        this.sharedModals.openResourceView(resource, true);
     }
 }

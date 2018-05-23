@@ -1,19 +1,20 @@
-import { Component, Output, EventEmitter, ViewChild } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
-import { TreeListSettingsModal } from "./treeListSettingsModal";
-import { ConceptTreePanelComponent } from "../trees/skos/concept/conceptTreePanel/conceptTreePanelComponent";
-import { CollectionTreePanelComponent } from "../trees/skos/collection/collectionTreePanel/collectionTreePanelComponent";
-import { SchemeListPanelComponent } from "../trees/skos/scheme/schemeListPanel/schemeListPanelComponent";
-import { PropertyTreePanelComponent } from "../trees/property/propertyTreePanel/propertyTreePanelComponent";
-import { ClassIndividualTreePanelComponent } from "../trees/owl/classIndividualTreePanel/classIndividualTreePanelComponent";
-import { LexiconListPanelComponent } from "./ontolex/lexicon/lexiconListPanel/lexiconListPanelComponent";
-import { LexicalEntryListPanelComponent } from "./ontolex/lexicalEntry/lexicalEntryListPanel/lexicalEntryListPanelComponent";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
-import { SKOS, OntoLex } from "../models/Vocabulary";
-import { VBContext } from "../utils/VBContext";
+import { OntoLex, SKOS } from "../models/Vocabulary";
+import { ClassIndividualTreePanelComponent } from "../trees/owl/classIndividualTreePanel/classIndividualTreePanelComponent";
+import { PropertyTreePanelComponent } from "../trees/property/propertyTreePanel/propertyTreePanelComponent";
+import { CollectionTreePanelComponent } from "../trees/skos/collection/collectionTreePanel/collectionTreePanelComponent";
+import { ConceptTreePanelComponent } from "../trees/skos/concept/conceptTreePanel/conceptTreePanelComponent";
+import { SchemeListPanelComponent } from "../trees/skos/scheme/schemeListPanel/schemeListPanelComponent";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { TreeListContext } from "../utils/UIUtils";
+import { VBContext } from "../utils/VBContext";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { LexicalEntryListPanelComponent } from "./ontolex/lexicalEntry/lexicalEntryListPanel/lexicalEntryListPanelComponent";
+import { LexiconListPanelComponent } from "./ontolex/lexicon/lexiconListPanel/lexiconListPanelComponent";
+import { TreeListSettingsModal } from "./treeListSettingsModal";
 
 @Component({
     selector: "tree-panel",
@@ -38,16 +39,9 @@ export class TreePanelComponent {
     private ONTO_TYPE: string;
     private readonly: boolean;    
 
-    // private tabs: string[] = [
-    //     RDFResourceRolesEnum.cls,
-    //     RDFResourceRolesEnum.concept,
-    //     RDFResourceRolesEnum.conceptScheme,
-    //     RDFResourceRolesEnum.skosCollection,
-    //     RDFResourceRolesEnum.property,
-    // ];
-    private activeTab: string;
+    private activeTab: RDFResourceRolesEnum;
 
-    constructor(private modal: Modal) { }
+    constructor(private modal: Modal, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
         this.ONTO_TYPE = VBContext.getWorkingProject().getModelType();
@@ -106,7 +100,7 @@ export class TreePanelComponent {
             } else if (resRole == RDFResourceRolesEnum.limeLexicon) {
                 this.viewChildLexiconPanel.openAt(<ARTURIResource>resource);
             } else if (resRole == RDFResourceRolesEnum.ontolexLexicalEntry) {
-                this.viewChildLexiconPanel.openAt(<ARTURIResource>resource);
+                this.viewChildLexialEntryPanel.openAt(<ARTURIResource>resource);
             }
         }
     }
@@ -151,6 +145,56 @@ export class TreePanelComponent {
     }
     private isLexicalEntryuthorized() {
         return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_GET_LEXICAL_ENTRY);
+    }
+
+    //Advanced search
+    private advancedSearch(resource: ARTResource) {
+        let tabToActivate: RDFResourceRolesEnum;
+        if (resource.isURIResource()) {
+            let role = resource.getRole();
+            if (role == RDFResourceRolesEnum.property || role == RDFResourceRolesEnum.annotationProperty || 
+                role == RDFResourceRolesEnum.datatypeProperty || role == RDFResourceRolesEnum.objectProperty ||
+                role == RDFResourceRolesEnum.ontologyProperty) {
+                tabToActivate = RDFResourceRolesEnum.property;
+            } else if (role == RDFResourceRolesEnum.cls || role == RDFResourceRolesEnum.individual) {
+                tabToActivate = RDFResourceRolesEnum.cls;
+            } else if (role == RDFResourceRolesEnum.concept) {
+                tabToActivate = RDFResourceRolesEnum.concept;
+            } else if (role == RDFResourceRolesEnum.conceptScheme) {
+                tabToActivate = RDFResourceRolesEnum.conceptScheme;
+            } else if (role == RDFResourceRolesEnum.limeLexicon) {
+                tabToActivate = RDFResourceRolesEnum.limeLexicon;
+            } else if (role == RDFResourceRolesEnum.ontolexLexicalEntry) {
+                tabToActivate = RDFResourceRolesEnum.ontolexLexicalEntry;
+            } else if (role == RDFResourceRolesEnum.skosCollection || role == RDFResourceRolesEnum.skosOrderedCollection) {
+                tabToActivate = RDFResourceRolesEnum.skosCollection;
+            } else {
+                this.sharedModals.openResourceView(resource, false);    
+            }
+        } else {
+            this.sharedModals.openResourceView(resource, false);
+        }
+        if (tabToActivate != null) {
+            this.activeTab = tabToActivate;
+            setTimeout(() => {
+                //wait the update of the UI after the change of the tab
+                if (tabToActivate == RDFResourceRolesEnum.property) {
+                    this.viewChildPropertyPanel.openTreeAt(<ARTURIResource>resource);
+                } else if (tabToActivate == RDFResourceRolesEnum.cls) {
+                    this.viewChildClsIndPanel.selectSearchedResource(<ARTURIResource>resource);
+                } else if (tabToActivate == RDFResourceRolesEnum.concept) {
+                    this.viewChildConceptPanel.selectSearchedResource(<ARTURIResource>resource);
+                } else if (tabToActivate == RDFResourceRolesEnum.conceptScheme) {
+                    this.viewChildSchemePanel.openAt(<ARTURIResource>resource)
+                } else if (tabToActivate == RDFResourceRolesEnum.limeLexicon) {
+                    this.viewChildLexiconPanel.openAt(<ARTURIResource>resource);
+                } else if (tabToActivate == RDFResourceRolesEnum.ontolexLexicalEntry) {
+                    this.viewChildLexialEntryPanel.selectAdvancedSearchedResource(<ARTURIResource>resource);
+                } else if (tabToActivate == RDFResourceRolesEnum.skosCollection) {
+                    this.viewChildCollectionPanel.openTreeAt(<ARTURIResource>resource);
+                }
+            });
+        }
     }
 
 }

@@ -3,7 +3,7 @@ import { CompleterService } from 'ng2-completer';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Subscription } from "rxjs/Subscription";
-import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ARTResource } from "../../models/ARTResources";
 import { SearchSettings, SearchMode } from "../../models/Properties";
 import { SearchServices } from "../../services/searchServices";
 import { VBEventHandler } from "../../utils/VBEventHandler";
@@ -25,6 +25,7 @@ export class SearchBarComponent {
     @Input() cls: ARTURIResource; //useful where search-bar is in the instance list panel
     @Input() context: TreeListContext;
     @Output() search: EventEmitter<string> = new EventEmitter();
+    @Output('advancedSearch') advancedSearchEvent: EventEmitter<ARTResource> = new EventEmitter();
 
     //search mode startsWith/contains/endsWith
     private stringMatchModes: { show: string, value: SearchMode, symbol: string }[] = [
@@ -99,10 +100,9 @@ export class SearchBarComponent {
     private advancedSearch() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
-        // let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         this.modal.open(AdvancedSearchModal, overlayConfig).result.then(
-            (data: any) => {
-
+            (resource: ARTResource) => {
+                this.advancedSearchEvent.emit(resource);
             },
             () => {}
         )

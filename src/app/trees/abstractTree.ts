@@ -112,7 +112,13 @@ export abstract class AbstractTree extends AbstractStruct {
             }
         } 
     }
-    ensureRootVisibility(resource: ARTURIResource, path: ARTURIResource[]) {
+    /**
+     * Ensures that the root of the searched path is visible.
+     * If visible returns true, otherwise store the pending search and returns false.
+     * @param resource 
+     * @param path 
+     */
+    ensureRootVisibility(resource: ARTURIResource, path: ARTURIResource[]): boolean {
         for (var i = 0; i < this.roots.length; i++) {
             if (this.roots[i].getURI() == resource.getURI()) {
                 if (i >= this.rootLimit) {
@@ -125,12 +131,13 @@ export abstract class AbstractTree extends AbstractStruct {
                     this.pendingSearchPath = null;
                     this.pendingSearchRoot = null;
                 }
-                return;
+                return true;
             }
         }
         //if this code is reached, the root is not found (so probably it is waiting that the roots are initialized)
         this.pendingSearchRoot = resource;
         this.pendingSearchPath = path;
+        return false;
     }
 
 }

@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
-import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute, ARTResource } from "../../../models/ARTResources";
 import { ClassIndividualPanelSearchMode, SearchSettings } from "../../../models/Properties";
 import { IndividualsServices } from "../../../services/individualsServices";
 import { SearchServices } from "../../../services/searchServices";
@@ -32,6 +32,7 @@ export class ClassIndividualTreePanelComponent {
     @Output() instanceSelected = new EventEmitter<ARTURIResource>();
     @Output() classDeleted = new EventEmitter<ARTURIResource>();
     @Output() instanceDeleted = new EventEmitter<ARTURIResource>();
+    @Output('advancedSearch') advancedSearchEvent: EventEmitter<ARTResource> = new EventEmitter();
 
     @ViewChild('blockDivClsIndList') public blockDivElement: ElementRef;
     //{ read: ElementRef } to specify to get the element instead of the component (see https://stackoverflow.com/q/45921819/5805661)
@@ -94,7 +95,7 @@ export class ClassIndividualTreePanelComponent {
      * otherwise (resource is an instance) expands the class tree to the class of the instance and
      * select the instance in the instance list
      */
-    private selectSearchedResource(resource: ARTURIResource) {
+    public selectSearchedResource(resource: ARTURIResource) {
         if (resource.getRole() == RDFResourceRolesEnum.cls) {
             this.viewChildTree.openTreeAt(resource);
         } else { // resource is an instance
@@ -145,6 +146,13 @@ export class ClassIndividualTreePanelComponent {
         this.selectedInstance = null;
     }
 
+    /**
+     * Handler of advancedSearch event, simply propagates the event
+     * @param resource 
+     */
+    private advancedSearch(resource: ARTResource) {
+        this.advancedSearchEvent.emit(resource);
+    }
 
     //Draggable slider handler
 

@@ -353,28 +353,14 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
             searchResult => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found for '" + this.searchString + "'", "warning");
+                    this.basicModals.alert("Search", "No results found", "warning");
                 } else { //1 or more results
-                    /**
-                     * what to do? open the tree/list or show the res view?
-                     * keep in mind that a resource returned by this search could be not reachable in any tree/list,
-                     * moreover it could be not easy to determine which tree/list open
-                     */
-                    // if (searchResult.length == 1) {
-                    //     this.openTreeAt(searchResult[0]);
-                    // } else { //multiple results, ask the user which one select
-                    //     ResourceUtils.sortResources(searchResult, SortAttribute.show);
-                    //     this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, true).then(
-                    //         (selectedResource: any) => {
-                    //             this.openTreeAt(selectedResource);
-                    //         },
-                    //         () => { }
-                    //     );
-                    // }
                     ResourceUtils.sortResources(searchResult, SortAttribute.show);
                     this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, true).then(
                         (selectedResource: any) => {
-                            //TODO
+                            event.stopPropagation();
+                            event.preventDefault();
+                            this.dialog.close(selectedResource);
                         },
                         () => { }
                     );
@@ -382,10 +368,6 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
             }
         );
 
-
-        // event.stopPropagation();
-        // event.preventDefault();
-        // this.dialog.close();
     }
 
     cancel() {

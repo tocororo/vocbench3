@@ -112,22 +112,21 @@ export class ConceptTreeComponent extends AbstractTree {
      * @param node 
      */
     private openRoot(path: ARTURIResource[], node: ARTURIResource) {
-        this.ensureRootVisibility(path[0], path);
-
-        setTimeout(()=> {
-            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-            var childrenNodeComponent = this.viewChildrenNode.toArray();
-            for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand
-                if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) {
-                    //let the found node expand itself and the remaining path
-                    path.splice(0, 1);
-                    childrenNodeComponent[i].expandPath(path);
-                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                    return;
+        if (this.ensureRootVisibility(path[0], path)) { //if root is visible
+            setTimeout(() => { //wait the the UI is updated after the (possible) update of rootLimit
+                UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+                var childrenNodeComponent = this.viewChildrenNode.toArray();
+                for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand
+                    if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) {
+                        //let the found node expand itself and the remaining path
+                        path.splice(0, 1);
+                        childrenNodeComponent[i].expandPath(path);
+                        UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                        return;
+                    }
                 }
-            }
-
-        });
+            });
+        }
     }
 
     //EVENT LISTENERS

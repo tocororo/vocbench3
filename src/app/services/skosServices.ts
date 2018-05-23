@@ -527,6 +527,30 @@ export class SkosServices {
         );
     }
 
+    /**
+     * Returns an array of schemes of the given concept. This invokes the same getSchemesMatrixPerConcept service,
+     * but it filters out the schemes with attribute "inScheme" false
+     * @param concept
+     */
+    getSchemesOfConcept(concept: ARTURIResource): Observable<ARTURIResource[]> {
+        console.log("[SkosServices] getSchemesMatrixPerConcept");
+        var params: any = {
+            concept: concept
+        };
+        return this.httpMgr.doGet(this.serviceName, "getSchemesMatrixPerConcept", params).map(
+            stResp => {
+                let allSchemes: ARTURIResource[] = Deserializer.createURIArray(stResp);
+                let schemes: ARTURIResource[] = [];
+                allSchemes.forEach((s: ARTURIResource) => {
+                    if (s.getAdditionalProperty(ResAttribute.IN_SCHEME)) {
+                        schemes.push(s);
+                    }
+                });
+                return schemes;
+            }
+        );
+    }
+
     //====== Collection services ======
 
     /**

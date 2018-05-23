@@ -139,10 +139,37 @@ export class OntoLexLemonServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getLexicalEntriesByAlphabeticIndex", params).map(
             stResp => {
-                var lexicons = Deserializer.createURIArray(stResp);
-                return lexicons;
+                return Deserializer.createURIArray(stResp);
             }
         );
+    }
+
+    /**
+     * Returns the lexicon which the lexicalEntry belongs to
+     * @param lexicalEntry 
+     */
+    getLexicalEntryLexicons(lexicalEntry: ARTURIResource): Observable<ARTURIResource[]> {
+        console.log("[OntoLexLemonServices] getLexicalEntryLexicons");
+        var params: any = {
+            lexicalEntry: lexicalEntry
+        };
+        return this.httpMgr.doGet(this.serviceName, "getLexicalEntryLexicons", params).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
+    }
+
+    /**
+     * Returns the 2-digits index of the given lexicalEntry 
+     * @param lexicalEntry 
+     */
+    getLexicalEntryIndex(lexicalEntry: ARTURIResource): Observable<string> {
+        console.log("[OntoLexLemonServices] getLexicalEntryLexicons");
+        var params: any = {
+            lexicalEntry: lexicalEntry
+        };
+        return this.httpMgr.doGet(this.serviceName, "getLexicalEntryIndex", params);
     }
 
     /**

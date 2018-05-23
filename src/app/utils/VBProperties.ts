@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
 import { ProjectTableColumnStruct } from '../models/Project';
@@ -200,12 +200,7 @@ export class VBProperties {
         );
     }
     isActiveScheme(scheme: ARTURIResource): boolean {
-        for (var i = 0; i < this.activeSchemes.length; i++) {
-            if (scheme.getURI() == this.activeSchemes[i].getURI()) {
-                return true;
-            }
-        }
-        return false;
+        return ResourceUtils.containsNode(this.activeSchemes, scheme);
     }
 
     getActiveLexicon(): ARTURIResource {

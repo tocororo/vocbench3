@@ -1,17 +1,16 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ViewChildren, QueryList } from "@angular/core";
+import { Component, Input, QueryList, ViewChildren } from "@angular/core";
+import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
+import { SemanticTurkey } from "../../../../models/Vocabulary";
+import { SearchServices } from "../../../../services/searchServices";
+import { SkosServices } from "../../../../services/skosServices";
+import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { TreeListContext, UIUtils } from "../../../../utils/UIUtils";
+import { VBContext } from "../../../../utils/VBContext";
+import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { VBProperties } from "../../../../utils/VBProperties";
+import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { AbstractList } from "../../../abstractList";
 import { SchemeListNodeComponent } from "./schemeListNodeComponent";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
-import { SemanticTurkey } from "../../../../models/Vocabulary";
-import { SearchSettings } from "../../../../models/Properties";
-import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
-import { VBProperties } from "../../../../utils/VBProperties";
-import { UIUtils, TreeListContext } from "../../../../utils/UIUtils";
-import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { VBContext } from "../../../../utils/VBContext";
-import { SkosServices } from "../../../../services/skosServices";
-import { SearchServices } from "../../../../services/searchServices";
-import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "scheme-list",
@@ -30,6 +29,12 @@ export class SchemeListComponent extends AbstractList {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.schemeCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
         this.eventSubscriptions.push(eventHandler.schemeDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
+        //handler when active schemes is changed programmatically when a searched concept belong to a non active scheme
+        this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
+            (schemes: ARTURIResource[]) => {
+                this.list.forEach((s: SchemeListItem) => s.checked = ResourceUtils.containsNode(schemes, s.scheme));
+            }
+        ));
     }
 
     ngOnInit() {
