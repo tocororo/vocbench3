@@ -1,19 +1,19 @@
 import { Component, HostListener } from '@angular/core';
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
-import { HttpServiceContext } from "../../utils/HttpManager";
-import { Cookie } from "../../utils/Cookie";
-import { UIUtils } from "../../utils/UIUtils";
-import { ARTURIResource } from "../../models/ARTResources";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource, LocalResourcePosition } from "../../models/ARTResources";
 import { Project } from "../../models/Project";
+import { AlignmentServices } from "../../services/alignmentServices";
+import { ResourcesServices } from "../../services/resourcesServices";
+import { Cookie } from "../../utils/Cookie";
+import { HttpServiceContext } from "../../utils/HttpManager";
+import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { AlignmentCell } from "./AlignmentCell";
-import { ValidationSettingsModal } from "./alignmentValidationModals/validationSettingsModal"
-import { ValidationReportModal, ValidationReportModalData } from "./alignmentValidationModals/validationReportModal"
-import { MappingPropertySelectionModal, MappingPropertySelectionModalData } from "./alignmentValidationModals/mappingPropertySelectionModal"
-import { AlignmentServices } from "../../services/alignmentServices";
-import { ResourcesServices } from "../../services/resourcesServices";
+import { MappingPropertySelectionModal, MappingPropertySelectionModalData } from "./alignmentValidationModals/mappingPropertySelectionModal";
+import { ValidationReportModal, ValidationReportModalData } from "./alignmentValidationModals/validationReportModal";
+import { ValidationSettingsModal } from "./alignmentValidationModals/validationSettingsModal";
 
 @Component({
     selector: 'alignment-validation-component',
@@ -161,8 +161,8 @@ export class AlignmentValidationComponent {
                 this.resourceService.getResourcePosition(this.alignmentCellList[0].getEntity2()).subscribe(
                     position => {
                         //if target entities are from a local project, get the information of them
-                        if (position.startsWith("local:")) {
-                            let targetProject: string = position.substring(position.indexOf(":")+1);
+                        if (position.isLocal()) {
+                            let targetProject: string = (<LocalResourcePosition>position).project;
 
                             let targetEntities: ARTURIResource[] = [];
                             for (var i = 0; i < this.alignmentCellList.length; i++) {

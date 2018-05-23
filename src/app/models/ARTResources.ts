@@ -600,3 +600,57 @@ export class ResourceUtils {
     }
 
 }
+
+
+export abstract class ResourcePosition {
+    position: ResourcePositionEnum;
+    
+    isLocal(): boolean {
+        return false;
+    }
+    isRemote(): boolean {
+        return false;
+    }
+    isUnknown(): boolean {
+        return false;
+    }
+    static deserialize(resPositionJson: string): ResourcePosition {
+        if (resPositionJson.startsWith(ResourcePositionEnum.local)) {
+            return new LocalResourcePosition(resPositionJson.substring(resPositionJson.indexOf(":")+1));
+        } else if (resPositionJson.startsWith(ResourcePositionEnum.remote)) {
+            return new RemoteResourcePosition(resPositionJson.substring(resPositionJson.indexOf(":")+1));
+        } else { //if (resPositionJson.startsWith(ResourcePositionEnum.unknown)) {
+            return new UnknownResourcePosition();
+        }
+    }
+}
+export class LocalResourcePosition extends ResourcePosition {
+    project: string;
+    constructor(project: string) {
+        super();
+        this.project = project;
+    }
+    isLocal(): boolean {
+        return true;
+    }
+}
+export class RemoteResourcePosition extends ResourcePosition {
+    datasetMetadata: string;
+    constructor(datasetMetadata: string) {
+        super();
+        this.datasetMetadata = datasetMetadata;
+    }
+    isRemote(): boolean {
+        return true;
+    }
+}
+export class UnknownResourcePosition extends ResourcePosition {
+    isUnknown(): boolean {
+        return true;
+    }
+}
+export enum ResourcePositionEnum {
+    local = "local",
+    remote = "remote",
+    unknown = "unknown"
+}

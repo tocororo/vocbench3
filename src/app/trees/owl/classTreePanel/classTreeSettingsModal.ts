@@ -1,16 +1,16 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
+import { ClassTreePreference } from "../../../models/Properties";
 import { OWL, RDFS } from "../../../models/Vocabulary";
-import { Properties, ClassTreePreference } from "../../../models/Properties";
-import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
-import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { ClassesServices } from "../../../services/classesServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
-import { VBProperties } from "../../../utils/VBProperties";
-import { VBContext } from "../../../utils/VBContext";
 import { Cookie } from "../../../utils/Cookie";
+import { VBContext } from "../../../utils/VBContext";
+import { VBProperties } from "../../../utils/VBProperties";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 
 @Component({
     selector: "class-tree-settings-modal",
@@ -89,7 +89,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
         //check if clsURI exist
         this.resourceService.getResourcePosition(cls).subscribe(
             position => {
-                if (position.startsWith("local:")) {
+                if (position.isLocal()) {
                     this.rootClass = cls;
                 } else {
                     this.basicModals.alert("Error", "Wrong URI: no resource with URI " + cls.getNominalValue() + " exists in the current project", "error");

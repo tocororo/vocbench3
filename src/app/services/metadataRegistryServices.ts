@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
+import { ARTURIResource, ResourcePosition } from '../models/ARTResources';
 import { CatalogRecord } from "../models/Metadata";
-import { ARTURIResource } from '../models/ARTResources';
+import { Deserializer } from '../utils/Deserializer';
+import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
 export class MetadataRegistryServices {
@@ -136,6 +137,38 @@ export class MetadataRegistryServices {
             dataset: dataset,
         }
         return this.httpMgr.doPost(this.serviceName, "assessLexicalizationModel", params);
+    }
+
+    /**
+     * Find a dataset matching the given IRI.
+     * @param iri 
+     */
+    findDataset(iri: ARTURIResource): Observable<ResourcePosition> {
+        console.log("[MetadataRegistryServices] findDataset");
+        var params: any = {
+            iri: iri,
+        }
+        return this.httpMgr.doGet(this.serviceName, "findDataset", params).map(
+            resp => {
+                return ResourcePosition.deserialize(resp);
+            }
+        );
+    }
+
+    /**
+     * Discover the metadata for a dataset given an IRI. If discovery is unsuccessful, an exception is thrown.
+     * @param iri 
+     */
+    discoverDataset(iri: ARTURIResource): Observable<ARTURIResource> {
+        console.log("[MetadataRegistryServices] discoverDataset");
+        var params: any = {
+            iri: iri,
+        }
+        return this.httpMgr.doPost(this.serviceName, "discoverDataset", params).map(
+            stResp => {
+                return Deserializer.createURI(stResp);
+            }
+        );
     }
 
 }

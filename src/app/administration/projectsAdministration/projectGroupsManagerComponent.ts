@@ -157,7 +157,7 @@ export class ProjectGroupsManagerComponent {
         this.resourceService.getResourcePosition(prop).subscribe(
             position => {
                 this.revokeProjectAccess();
-                if (position.startsWith("local:")) {
+                if (position.isLocal()) {
                     this.baseBroaderProp = prop.getURI();
                     this.updateGroupSetting(Properties.pref_concept_tree_base_broader_prop, this.baseBroaderProp);
                 } else {

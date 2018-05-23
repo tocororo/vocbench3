@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
-import { Deserializer } from "../utils/Deserializer";
-import { VBEventHandler } from '../utils/VBEventHandler';
-import { ARTResource, ARTURIResource, ARTNode } from "../models/ARTResources";
+import { ARTNode, ARTResource, ARTURIResource, ResourcePosition } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
 import { RDFS, SKOS } from '../models/Vocabulary';
+import { Deserializer } from "../utils/Deserializer";
+import { HttpManager } from "../utils/HttpManager";
+import { VBEventHandler } from '../utils/VBEventHandler';
 
 @Injectable()
 export class ResourcesServices {
@@ -127,12 +127,16 @@ export class ResourcesServices {
      * Returns the position (local/remote/unknown) of the given resource
      * @param resource
      */
-    getResourcePosition(resource: ARTURIResource): Observable<string> {
+    getResourcePosition(resource: ARTURIResource): Observable<ResourcePosition> {
         console.log("[ResourcesServices] getResourcePosition");
         var params: any = {
             resource: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "getResourcePosition", params);
+        return this.httpMgr.doGet(this.serviceName, "getResourcePosition", params).map(
+            stResp => {
+                return ResourcePosition.deserialize(stResp);
+            }
+        );
     }
 
 }

@@ -112,7 +112,7 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
         //check if clsURI exist
         this.resourceService.getResourcePosition(prop).subscribe(
             position => {
-                if (position.startsWith("local:")) {
+                if (position.isLocal()) {
                     this.baseBroaderProp = prop.getURI();
                     // this.broaderProperty = prop;
                 } else {
