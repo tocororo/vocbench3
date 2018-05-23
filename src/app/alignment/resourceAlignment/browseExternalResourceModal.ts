@@ -9,6 +9,7 @@ import { Project } from "../../models/Project";
 import { SKOS } from "../../models/Vocabulary";
 import { ProjectServices } from "../../services/projectServices";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
+import { Cookie } from "../../utils/Cookie";
 
 @Component({
     selector: "browse-external-resource-modal",
@@ -39,26 +40,52 @@ export class BrowseExternalResourceModal implements ModalComponent<BSModalContex
                         this.projectList.push(projects[i])
                     }
                 }
+                this.restoreLastProject();
             }
         );
+    }
+
+    private restoreLastProject() {
+        let lastExploredProject: string = Cookie.getCookie(Cookie.ALIGNMENT_LAST_EXPLORED_PROJECT);
+        if (lastExploredProject != null) {
+            this.projectList.forEach((p: Project) => {
+                if (p.getName() == lastExploredProject) {
+                    this.project = p;
+                }
+            });
+        }
+        this.onProjectChange();
+    }
+
+    private restoreLastType() {
+        let lastChosenType: string = Cookie.getCookie(Cookie.ALIGNMENT_LAST_CHOSEN_TYPE);
+        if (lastChosenType != null) {
+            this.activeView = <RDFResourceRolesEnum>lastChosenType;
+        }
     }
 
     private onProjectChange() {
         HttpServiceContext.removeContextProject();
         HttpServiceContext.setContextProject(this.project);
+        Cookie.setCookie(Cookie.ALIGNMENT_LAST_EXPLORED_PROJECT, this.project.getName());
+
         this.activeView = null;
         this.alignedObject = null;
-        
+
         if (this.isProjectSKOS()) {
             this.preferenceService.getActiveSchemes(this.project.getName()).subscribe(
                 schemes => {
                     this.schemes = schemes;
+                    this.restoreLastType();
                 }
             );
+        } else {
+            this.restoreLastType();
         }
     }
 
     private onAlignTypeChanged() {
+        Cookie.setCookie(Cookie.ALIGNMENT_LAST_CHOSEN_TYPE, this.activeView);
         this.alignedObject = null;
     }
 

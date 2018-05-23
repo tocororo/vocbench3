@@ -15,6 +15,9 @@ export class Cookie {
 	public static ALIGNMENT_VALIDATION_SHOW_CONFIDENCE = "alignment_validation.show_confidence";
 	public static ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION = "alignment_validation.rejected_alignment_action";
 
+	public static ALIGNMENT_LAST_EXPLORED_PROJECT = "alignment.last_project";
+	public static ALIGNMENT_LAST_CHOSEN_TYPE = "alignment.last_type";
+
 	public static SEARCH_STRING_MATCH_MODE = "search.string_match_mode";
 	public static SEARCH_USE_URI = "search.use_uri";
 	public static SEARCH_USE_LOCAL_NAME = "search.use_local_name";

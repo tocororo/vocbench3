@@ -1,12 +1,10 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
-import {Modal, BSModalContextBuilder} from 'ngx-modialog/plugins/bootstrap';
-import {OverlayConfig} from 'ngx-modialog';
-import {DialogRef, ModalComponent} from "ngx-modialog";
-import {ARTResource, ARTURIResource, RDFResourceRolesEnum} from "../../models/ARTResources";
-import {BasicModalServices} from "../../widget/modal/basicModal/basicModalServices";
-import {AlignmentServices} from "../../services/alignmentServices";
-import {BrowseExternalResourceModal} from "./browseExternalResourceModal"
+import { Component } from "@angular/core";
+import { DialogRef, ModalComponent, OverlayConfig } from 'ngx-modialog';
+import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { AlignmentServices } from "../../services/alignmentServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { BrowseExternalResourceModal } from "./browseExternalResourceModal";
 
 export class ResourceAlignmentModalData extends BSModalContext {
     /**
