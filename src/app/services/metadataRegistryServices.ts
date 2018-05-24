@@ -157,6 +157,7 @@ export class MetadataRegistryServices {
 
     /**
      * Discover the metadata for a dataset given an IRI. If discovery is unsuccessful, an exception is thrown.
+     * Returns the id of the metadataDataset found.
      * @param iri 
      */
     discoverDataset(iri: ARTURIResource): Observable<ARTURIResource> {
