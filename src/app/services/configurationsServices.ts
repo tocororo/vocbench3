@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Configuration, ConfigurationManager, Reference } from '../models/Configuration';
 import { HttpManager } from "../utils/HttpManager";
-import { Reference, Configuration, ConfigurationManager } from '../models/Configuration';
 
 @Injectable()
 export class ConfigurationsServices {
@@ -42,7 +42,15 @@ export class ConfigurationsServices {
         var params = {
             componentID: componentID,
         };
-        return this.httpMgr.doGet(this.serviceName, "getConfigurationReferences", params);
+        return this.httpMgr.doGet(this.serviceName, "getConfigurationReferences", params).map(
+            stResp => {
+                let references: Reference[] = [];
+                for (var i = 0; i < stResp.length; i++) {
+                    references.push(Reference.deserialize(stResp[i]));
+                }
+                return references;
+            }
+        );
     }
 
     storeConfiguration(componentID: string, relativeReference: string, configuration: { [key: string]: any }) {

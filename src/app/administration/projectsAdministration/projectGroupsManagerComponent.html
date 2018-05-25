@@ -96,7 +96,7 @@
                                 </div>
                                 <div class="checkbox-inline">
                                     <label>
-                                        <input type="checkbox" [(ngModel)]="includeSubProps">Include subProperties
+                                        <input type="checkbox" [(ngModel)]="includeSubProps" (ngModelChange)="onIncludeSubPropsChange()">Include subProperties
                                     </label>
                                     <span class="glyphicon glyphicon-info-sign"
                                         title="Includes the subProperties of the selected broader/narrower properties">

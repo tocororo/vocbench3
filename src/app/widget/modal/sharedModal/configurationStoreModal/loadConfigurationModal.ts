@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Configuration, Reference } from "../../../../models/Configuration";
 import { ConfigurationsServices } from "../../../../services/configurationsServices";
-import { Reference, Configuration } from "../../../../models/Configuration";
 
 export class LoadConfigurationModalData extends BSModalContext {
     constructor(
@@ -44,18 +44,6 @@ export class LoadConfigurationModal implements ModalComponent<LoadConfigurationM
             this.selectedRef = null;
         } else {
             this.selectedRef = reference;
-        }
-    }
-
-    private getRefScope(reference: Reference) {
-        if (reference.relativeReference.startsWith("sys:")) {
-            return "SYSTEM";
-        } else if (reference.relativeReference.startsWith("proj:")) {
-            return "PROJECT";
-        } else if (reference.relativeReference.startsWith("usr:")) {
-            return "USER";
-        } else if (reference.relativeReference.startsWith("pu:")) {
-            return "PROJECT_USER";
         }
     }
 

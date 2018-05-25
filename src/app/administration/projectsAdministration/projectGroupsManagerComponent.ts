@@ -272,7 +272,14 @@ export class ProjectGroupsManagerComponent {
         //if sync inverse properties change from false to true perform a sync
         if (this.syncInverse) {
             this.syncInverseOfBroader().subscribe(
-                () => { this.syncInverseOfNarrower(); }
+                () => {
+                    this.updateNarrowersSetting();
+                    this.syncInverseOfNarrower().subscribe(
+                        () => {
+                            this.updateBroadersSetting();
+                        }
+                    ); 
+                }
             );
         }
     }
@@ -319,18 +326,28 @@ export class ProjectGroupsManagerComponent {
         }
     }
 
+    private onIncludeSubPropsChange() {
+        this.updateGroupSetting(Properties.pref_concept_tree_include_subprops, this.includeSubProps+"");
+    }
+
 
     private updateBroadersSetting() {
         let broaderPropsPref: string[] = [];
         this.broaderProps.forEach((prop: ARTURIResource) => broaderPropsPref.push(prop.getURI()));
-        let prefValue = broaderPropsPref.join(",");
+        let prefValue: string;
+        if (broaderPropsPref.length > 0) {
+            prefValue = broaderPropsPref.join(",");
+        }
         this.updateGroupSetting(Properties.pref_concept_tree_broader_props, prefValue);
     }
 
     private updateNarrowersSetting() {
         let narrowerPropsPref: string[] = [];
         this.narrowerProps.forEach((prop: ARTURIResource) => narrowerPropsPref.push(prop.getURI()));
-        let prefValue = narrowerPropsPref.join(",");
+        let prefValue: string;
+        if (narrowerPropsPref.length > 0) {
+            prefValue = narrowerPropsPref.join(",");
+        }
         this.updateGroupSetting(Properties.pref_concept_tree_narrower_props, prefValue);
     }
 

@@ -1,8 +1,9 @@
-import { Settings, SettingsProp } from "./Plugins";
+import { Settings, SettingsProp, Scope } from "./Plugins";
 
 export class ConfigurationComponents {
-    static SPARQL_STORE: string = "it.uniroma2.art.semanticturkey.config.sparql.SPARQLStore";
     static EXPORTER: string = "it.uniroma2.art.semanticturkey.config.exporter.Exporter";
+    static SPARQL_PARAMETRIZATION_STORE: string = "it.uniroma2.art.semanticturkey.config.sparql.SPARQLParameterizationStore";
+    static SPARQL_STORE: string = "it.uniroma2.art.semanticturkey.config.sparql.SPARQLStore";
 }
 
 export class Reference {
@@ -10,12 +11,35 @@ export class Reference {
     public project: string;
     public identifier: string;
     public relativeReference: string;
+
+    constructor(user: string, project: string, identifier: string, relativeReference: string) {
+        this.user = user;
+        this.project = project;
+        this.identifier = identifier;
+        this.relativeReference = relativeReference;
+    }
+
+    public getReferenceScope(): Scope {
+        if (this.relativeReference.startsWith("sys:")) {
+            return Scope.SYSTEM;
+        } else if (this.relativeReference.startsWith("proj:")) {
+            return Scope.PROJECT;
+        } else if (this.relativeReference.startsWith("usr:")) {
+            return Scope.USER;
+        } else if (this.relativeReference.startsWith("pu:")) {
+            return Scope.PROJECT_USER;
+        }
+    }
+
+    public static deserialize(refJson: any): Reference {
+        return new Reference(refJson.user, refJson.project, refJson.identifier, refJson.relativeReference);
+    }
 }
 
 export class ConfigurationManager {
     public id: string;
-    public scope: string;
-    public configurationScopes: string[];
+    public scope: Scope;
+    public configurationScopes: Scope[];
     public systemConfigurationIdentifiers: any[]; //????
 }
 

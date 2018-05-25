@@ -22,8 +22,8 @@ export class StoreConfigurationModalData extends BSModalContext {
 export class StoreConfigurationModal implements ModalComponent<StoreConfigurationModalData> {
     context: StoreConfigurationModalData;
 
-    private scopes: string[];
-    private selectedScope: string;
+    private scopes: Scope[];
+    private selectedScope: Scope;
 
     private identifier: string;
 

@@ -16,7 +16,7 @@
                 <tbody>
                     <tr *ngFor="let ref of references" (click)="selectReference(ref)" [ngClass]="{active: selectedRef == ref}">
                         <td>{{ref.identifier}}</td>
-                        <td>{{getRefScope(ref)}}</td>
+                        <td>{{ref.getReferenceScope()}}</td>
                         <td>
                             <button class="btn btn-xs btn-default" (click)="deleteReference(ref)" title="Delete">
                                 <span class="glyphicon glyphicon-trash"></span>
