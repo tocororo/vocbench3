@@ -13,16 +13,16 @@
 
     <div *ngIf="project && selectedGroup" class="subPanel vbox" style="margin-left: 5px; flex: 3;">
         <div class="subPanel-heading">
-            <label>Group settings:</label>
+            <label>Project-Group settings:</label>
         </div>
         <div class="subPanel-body vbox">
 
             <div *ngIf="projectClosed; else elseBlock" class="alert alert-warning">
-                Project {{project.getName()}} is closed. It is possible to edit group settings only for open project.
+                Project {{project.getName()}} is closed. It is possible to edit group settings only for open projects.
             </div>
 
             <ng-template #elseBlock>
-                <ng-template [ngIf]="isProjectSkosCompliant()">
+                <div class="vbox" *ngIf="isProjectSkosCompliant(); else owlBlock">
                     <div class="hbox" style="margin-bottom: 6px; align-items: center; flex: initial;">
                         <span class="glyphicon glyphicon-info-sign" title="Base broader property to be selected when creating narrower concepts"></span>
                         <label style="white-space: nowrap; margin: 0px 4px;">
@@ -106,7 +106,14 @@
         
                         </div>
                     </div>
+                </div>
+
+                <ng-template #owlBlock>
+                    <div class="alert alert-warning">
+                        Project {{project.getName()}} adopts OWL model. Currently it is possible to edit group settings only for SKOS projects.
+                    </div>
                 </ng-template>
+
             </ng-template>
 
         </div>
