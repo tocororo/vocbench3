@@ -109,7 +109,7 @@
                         <div class="hbox" style="align-items: center; flex: initial; margin-left: 8px;">
                             <label style="white-space: nowrap; margin-right: 4px;">Export Format:</label>
                             <select class="form-control input-sm" [(ngModel)]="selectedExportFormat">
-                                <option *ngFor="let f of exportFormats" [value]="f">{{f}}</option>
+                                <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
                             </select>
                         </div>
 

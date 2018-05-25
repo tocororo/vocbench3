@@ -4,7 +4,7 @@ import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from "../../../models/ARTResources";
 import { ConfigurationComponents } from "../../../models/Configuration";
 import { ConfigurableExtensionFactory, ExtensionConfigurationStatus, ExtensionPointID, FilteringStep, Settings, SettingsProp, ExtensionFactory, PluginSpecification } from "../../../models/Plugins";
-import { RDFFormat } from "../../../models/RDFFormat";
+import { RDFFormat, ExportFormat } from "../../../models/RDFFormat";
 import { ExportServices } from "../../../services/exportServices";
 import { ExtensionsServices } from "../../../services/extensionsServices";
 import { UIUtils } from "../../../utils/UIUtils";
@@ -41,8 +41,8 @@ export class ExportDataComponent {
     private selectedReformatterExtension: ExtensionFactory;
     private selectedReformatterConfig: Settings;
 
-    private exportFormats: string[];
-    private selectedExportFormat: string;
+    private exportFormats: ExportFormat[];
+    private selectedExportFormat: ExportFormat;
 
     //deployer
     private repoSourcedDeployer: ExtensionFactory[];
@@ -240,12 +240,14 @@ export class ExportDataComponent {
             formats => {
                 this.exportFormats = formats;
                 //set rdf/xml format as default
-                let rdfIdx: number = this.exportFormats.indexOf("RDF/XML");
-                if (rdfIdx != -1) {
-                    this.selectedExportFormat = this.exportFormats[rdfIdx];
-                } else {
-                    this.selectedExportFormat = this.exportFormats[0];
+                let rdfIdx: number = 0;
+                for (var i = 0; i < this.exportFormats.length; i++) {
+                    if (this.exportFormats[i].name == "RDF/XML") {
+                        rdfIdx = i;
+                        break;
+                    }
                 }
+                this.selectedExportFormat = this.exportFormats[rdfIdx];
             }
         )
     }
@@ -446,7 +448,7 @@ export class ExportDataComponent {
                 reformattingExporterSpec.configuration = this.selectedReformatterConfig.getPropertiesAsMap();
             }
 
-            outputFormat = this.selectedExportFormat;
+            outputFormat = this.selectedExportFormat.name;
         }
         
         //deployerSpec
@@ -502,7 +504,7 @@ export class ExportDataComponent {
     private exportSuccessHandler(data: any | Blob, downloadExpected: boolean) {
         if (downloadExpected) {
             var exportLink = window.URL.createObjectURL(data);
-            this.basicModals.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat);
+            this.basicModals.downloadLink("Export data", null, exportLink, "export." + this.selectedExportFormat.defaultFileExtension);
         } else {
             this.basicModals.alert("Export data", "The export result has been deployed succesfully");
         }

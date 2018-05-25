@@ -20,3 +20,15 @@ export class RDFFormat {
     }
 
 }
+
+export class ExportFormat {
+    public name: string;
+    public defaultMimeType: string;
+    public defaultFileExtension: string;
+
+    constructor(name: string, defaultMimeType: string, defaultFileExtension: string) {
+        this.name = name;
+        this.defaultMimeType = defaultMimeType;
+        this.defaultFileExtension = defaultFileExtension;
+    }
+}

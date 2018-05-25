@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { ARTURIResource } from "../models/ARTResources";
-import { RDFFormat } from "../models/RDFFormat";
+import { RDFFormat, ExportFormat } from "../models/RDFFormat";
 import { PluginSpecification } from '../models/Plugins';
 
 @Injectable()
@@ -62,12 +62,28 @@ export class ExportServices {
      * Returns formats accepted by a ReformattingExporter
      * @param reformattingExporterID 
      */
-    getExportFormats(reformattingExporterID: string) {
+    getExportFormats(reformattingExporterID: string): Observable<ExportFormat[]> {
         console.log("[ExportServices] getExportFormats");
         var params = {
             reformattingExporterID: reformattingExporterID
         };
-        return this.httpMgr.doGet(this.serviceName, "getExportFormats", params);
+        return this.httpMgr.doGet(this.serviceName, "getExportFormats", params).map(
+            stResp => {
+                let formats: ExportFormat[] = [];
+                for (var i = 0; i < stResp.length; i++) {
+                    formats.push(new ExportFormat(stResp[i].name, stResp[i].defaultMimeType, stResp[i].defaultFileExtension));
+                }
+                //sort by name
+                formats.sort(
+                    function(a: ExportFormat, b: ExportFormat) {
+                        if (a.name < b.name) return -1;
+                        if (a.name > b.name) return 1;
+                        return 0;
+                    }
+                );
+                return formats;
+            }
+        );
     }
 
     /**
