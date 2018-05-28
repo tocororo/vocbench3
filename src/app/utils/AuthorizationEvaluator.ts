@@ -71,6 +71,7 @@ enum Actions {
     ONTOLEX_GET_LEXICAL_ENTRY,
     ONTOLEX_GET_LEXICON,
     PLUGINS_GET_PLUGINS, //valid for getAvailablePlugins and getPluginConfiguration
+    PROPERTIES_ADD_DISJOINT_PROPERTY,
     PROPERTIES_ADD_EQUIVALENT_PROPERTY,
     PROPERTIES_ADD_PROPERTY_DOMAIN,
     PROPERTIES_ADD_PROPERTY_RANGE,
@@ -78,6 +79,7 @@ enum Actions {
     PROPERTIES_CREATE_PROPERTY,
     PROPERTIES_DELETE_PROPERTY,
     PROPERTIES_GET_PROPERTY_TAXONOMY, //valid for getTopProperties and getSubProperties
+    PROPERTIES_REMOVE_DISJOINT_PROPERTY,
     PROPERTIES_REMOVE_EQUIVALENT_PROPERTY,
     PROPERTIES_REMOVE_PROPERTY_DOMAIN,
     PROPERTIES_REMOVE_PROPERTY_RANGE,
@@ -197,6 +199,7 @@ export class AuthorizationEvaluator {
         [Actions.PROPERTIES_ADD_PROPERTY_DOMAIN] : 'auth(rdf(property), "C").',
         [Actions.PROPERTIES_ADD_PROPERTY_RANGE] : 'auth(rdf(property), "C").',
         [Actions.PROPERTIES_ADD_SUPERPROPERTY] : 'auth(rdf(property, taxonomy), "C").',
+        [Actions.PROPERTIES_ADD_DISJOINT_PROPERTY] : 'auth(rdf(property, taxonomy), "C").',
         [Actions.PROPERTIES_ADD_EQUIVALENT_PROPERTY] : 'auth(rdf(property, taxonomy), "C").',
         [Actions.PROPERTIES_CREATE_PROPERTY] : 'auth(rdf(property), "C").', 
         [Actions.PROPERTIES_DELETE_PROPERTY] : 'auth(rdf(property), "D").',
@@ -204,6 +207,7 @@ export class AuthorizationEvaluator {
         [Actions.PROPERTIES_REMOVE_PROPERTY_DOMAIN] : 'auth(rdf(property), "D").',
         [Actions.PROPERTIES_REMOVE_PROPERTY_RANGE] : 'auth(rdf(property), "D").',
         [Actions.PROPERTIES_REMOVE_SUPERPROPERTY] : 'auth(rdf(property, taxonomy), "D").',
+        [Actions.PROPERTIES_REMOVE_DISJOINT_PROPERTY] : 'auth(rdf(property, taxonomy), "D").',
         [Actions.PROPERTIES_REMOVE_EQUIVALENT_PROPERTY] : 'auth(rdf(property, taxonomy), "D").',
         [Actions.REFACTOR_CHANGE_RESOURCE_URI] : 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "U").',
         [Actions.REFACTOR_MIGRATE_TO_BASEURI_GRAPH] : 'auth(rdf, "CRUD").',
@@ -313,6 +317,7 @@ export class AuthorizationEvaluator {
                 (partition == ResViewPartition.broaders && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_BROADER_CONCEPT)) ||
                 (partition == ResViewPartition.classaxioms && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_CREATE_CLASS_AXIOM)) ||
                 (partition == ResViewPartition.denotations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_ADD_LEXICALIZATION, resource)) ||
+                (partition == ResViewPartition.disjointProperties && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_ADD_DISJOINT_PROPERTY)) ||
                 (partition == ResViewPartition.domains && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_ADD_PROPERTY_DOMAIN)) ||
                 (partition == ResViewPartition.equivalentProperties && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_ADD_EQUIVALENT_PROPERTY)) ||
                 (partition == ResViewPartition.evokedLexicalConcepts && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, resource)) ||
@@ -343,6 +348,7 @@ export class AuthorizationEvaluator {
                 (partition == ResViewPartition.broaders && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_REMOVE_BROADER_CONCEPT)) ||
                 (partition == ResViewPartition.classaxioms && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_REMOVE_CLASS_AXIOM)) ||
                 (partition == ResViewPartition.denotations && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_REMOVE_PLAIN_LEXICALIZATION)) ||
+                (partition == ResViewPartition.disjointProperties && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_REMOVE_DISJOINT_PROPERTY)) ||
                 (partition == ResViewPartition.domains && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_REMOVE_PROPERTY_DOMAIN)) ||
                 (partition == ResViewPartition.equivalentProperties && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_REMOVE_EQUIVALENT_PROPERTY)) ||
                 (partition == ResViewPartition.evokedLexicalConcepts && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_REMOVE_VALUE)) ||

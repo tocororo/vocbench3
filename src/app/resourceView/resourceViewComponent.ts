@@ -54,6 +54,7 @@ export class ResourceViewComponent {
     private broadersColl: ARTPredicateObjects[] = null;
     private classAxiomColl: ARTPredicateObjects[] = null;
     private denotationsColl: ARTPredicateObjects[] = null;
+    private disjointPropertiesColl: ARTPredicateObjects[] = null;
     private domainsColl: ARTPredicateObjects[] = null;
     private equivalentPropertiesColl: ARTPredicateObjects[] = null;
     private evokedLexicalConceptsColl: ARTPredicateObjects[] = null;
@@ -179,6 +180,7 @@ export class ResourceViewComponent {
         this.broadersColl = null;
         this.classAxiomColl = null;
         this.denotationsColl = null;
+        this.disjointPropertiesColl = null;
         this.domainsColl = null;
         this.equivalentPropertiesColl = null;
         this.evokedLexicalConceptsColl = null;
@@ -227,6 +229,13 @@ export class ResourceViewComponent {
             this.denotationsColl = Deserializer.createPredicateObjectsList(denotationsPartition);
             this.filterInferredFromPredObjList(this.denotationsColl);
             this.sortObjects(this.denotationsColl);
+        }
+
+        var disjointPropertiesPartition: any = this.resViewResponse[ResViewPartition.disjointProperties];
+        if (disjointPropertiesPartition != null) {
+            this.disjointPropertiesColl = Deserializer.createPredicateObjectsList(disjointPropertiesPartition);
+            this.filterInferredFromPredObjList(this.disjointPropertiesColl);
+            this.sortObjects(this.disjointPropertiesColl);
         }
 
         var domainsPartition: any = this.resViewResponse[ResViewPartition.domains];
@@ -394,14 +403,21 @@ export class ResourceViewComponent {
             //partitions optional
             this.broadersColl == null &&
             this.classAxiomColl == null &&
+            this.denotationsColl == null &&
+            this.disjointPropertiesColl == null &&
             this.domainsColl == null &&
+            this.equivalentPropertiesColl == null &&
+            this.evokedLexicalConceptsColl == null &&
             this.formBasedPreviewColl == null &&
             this.formRepresentationsColl == null && 
             this.importsColl == null &&
             this.inverseofColl == null &&
             this.labelRelationsColl == null &&
             this.lexicalFormsColl == null &&
+            this.lexicalSensesColl == null &&
             this.membersColl == null &&
+            this.membersOrderedColl == null &&
+            this.notesColl == null &&
             this.propertyFacets == null &&
             this.rangesColl == null &&
             this.schemesColl == null &&

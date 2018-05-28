@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BroadersPartitionRenderer } from '../resourceView/renderer/impl/broadersPartitionRenderer';
 import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/renderer/impl/classAxiomPartitionRenderer';
 import { DenotationsPartitionRenderer } from '../resourceView/renderer/impl/denotationsPartitionRenderer';
+import { DisjointPropertiesPartitionRenderer } from '../resourceView/renderer/impl/disjointPropertiesRenderer';
 import { DomainsPartitionRenderer } from '../resourceView/renderer/impl/domainsPartitionRenderer';
 import { EquivalentPropertiesPartitionRenderer } from '../resourceView/renderer/impl/equivalentPropertiesPartitionRenderer';
 import { EvokedLexicalConceptsPartitionRenderer } from '../resourceView/renderer/impl/evokedLexicalConceptsPartitionRenderer';
@@ -57,14 +58,32 @@ import { TreeAndListModule } from "./treeAndListModule";
         ResourceRenameComponent, ResourceViewContextMenu,
         ReifiedResourceComponent, EditableResourceComponent,
         //renderers
-        BroadersPartitionRenderer, ClassAxiomPartitionPartitionRenderer, DomainsPartitionRenderer, DenotationsPartitionRenderer,
-        LexicalizationsPartitionRenderer, LexicalFormsPartitionRenderer, LexicalSensesPartitionRenderer, EvokedLexicalConceptsPartitionRenderer,
-        MembersOrderedPartitionRenderer, MembersPartitionRenderer, FormBasedPreviewRenderer, FormRepresentationsPartitionRenderer,
-        SubtermsPartitionRenderer, PropertiesPartitionRenderer, PropertyFacetsPartitionRenderer, RangesPartitionRenderer,
-        SchemesPartitionRenderer, SuperPropertiesPartitionRenderer, TopConceptsPartitionRenderer,
-        TypesPartitionRenderer, LabelRelationsPartitionRenderer, NotesPartitionRenderer, ImportsPartitionRenderer,
+        BroadersPartitionRenderer,
+        ClassAxiomPartitionPartitionRenderer, 
+        DenotationsPartitionRenderer,
+        DisjointPropertiesPartitionRenderer,
+        DomainsPartitionRenderer,
         EquivalentPropertiesPartitionRenderer, 
+        EvokedLexicalConceptsPartitionRenderer,
+        FormBasedPreviewRenderer,
+        FormRepresentationsPartitionRenderer,
+        ImportsPartitionRenderer,
+        LabelRelationsPartitionRenderer,
+        LexicalizationsPartitionRenderer, 
+        LexicalFormsPartitionRenderer, 
+        LexicalSensesPartitionRenderer,
+        MembersOrderedPartitionRenderer,
+        MembersPartitionRenderer,
+        NotesPartitionRenderer,
         PredicateObjectsRenderer,
+        PropertiesPartitionRenderer,
+        PropertyFacetsPartitionRenderer,
+        RangesPartitionRenderer,
+        SchemesPartitionRenderer,
+        SubtermsPartitionRenderer,
+        SuperPropertiesPartitionRenderer,
+        TopConceptsPartitionRenderer,
+        TypesPartitionRenderer,
         //modals
         ClassListCreatorModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal,
         DataRangeEditor, ResViewSettingsModal, AddManuallyValueModal

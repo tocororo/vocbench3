@@ -13,10 +13,10 @@ import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
-    selector: "equivalent-properties-renderer",
+    selector: "disjoint-properties-renderer",
     templateUrl: "../partitionRenderer.html",
 })
-export class EquivalentPropertiesPartitionRenderer extends PartitionRenderSingleRoot {
+export class DisjointPropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
     //inherited from PartitionRenderSingleRoot
     // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
@@ -24,10 +24,10 @@ export class EquivalentPropertiesPartitionRenderer extends PartitionRenderSingle
     // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
     // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
-    partition = ResViewPartition.equivalentProperties;
-    rootProperty: ARTURIResource = OWL.equivalentProperty;
-    label = "Equivalent properties";
-    addBtnImgTitle = "Add an equivalent property";
+    partition = ResViewPartition.disjointProperties;
+    rootProperty: ARTURIResource = OWL.propertyDisjointWith;
+    label = "Disjoint properties";
+    addBtnImgTitle = "Add a disjoint property";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/prop_create.png");
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
@@ -37,11 +37,11 @@ export class EquivalentPropertiesPartitionRenderer extends PartitionRenderSingle
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue("Add an equivalent property", this.resource, this.rootProperty, propChangeable).then(
+        this.resViewModals.addPropertyValue("Add a disjoint property", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var equivProp: ARTURIResource = data.value;
-                this.propService.addEquivalentProperty(<ARTURIResource>this.resource, equivProp, prop).subscribe(
+                this.propService.addPropertyDisjointWith(<ARTURIResource>this.resource, equivProp, prop).subscribe(
                     stResp => this.update.emit(null)
                 );
             },
@@ -62,7 +62,7 @@ export class EquivalentPropertiesPartitionRenderer extends PartitionRenderSingle
     }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        return this.propService.removeEquivalentProperty(<ARTURIResource>this.resource, <ARTURIResource>object, predicate);
+        return this.propService.removePropertyDisjointWith(<ARTURIResource>this.resource, <ARTURIResource>object, predicate);
     }
 
 }

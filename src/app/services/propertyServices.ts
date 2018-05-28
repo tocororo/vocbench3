@@ -406,6 +406,42 @@ export class PropertyServices {
     }
 
     /**
+     * 
+     * @param property 
+     * @param disjointProperty 
+     * @param linkingPredicate 
+     */
+    addPropertyDisjointWith(property: ARTURIResource, disjointProperty: ARTURIResource, linkingPredicate?: ARTURIResource) {
+        console.log("[PropertyServices] addPropertyDisjointWith");
+        var params: any = {
+            property: property,
+            disjointProperty: disjointProperty,
+        };
+        if (linkingPredicate != null) {
+            params.linkingPredicate = linkingPredicate;
+        }
+        return this.httpMgr.doPost(this.serviceName, "addPropertyDisjointWith", params);
+    }
+
+    /**
+     * 
+     * @param property 
+     * @param disjointProperty 
+     * @param linkingPredicate 
+     */
+    removePropertyDisjointWith(property: ARTURIResource, disjointProperty: ARTURIResource, linkingPredicate?: ARTURIResource) {
+        console.log("[PropertyServices] removePropertyDisjointWith");
+        var params: any = {
+            property: property,
+            disjointProperty: disjointProperty,
+        };
+        if (linkingPredicate != null) {
+            params.linkingPredicate = linkingPredicate;
+        }
+        return this.httpMgr.doPost(this.serviceName, "removePropertyDisjointWith", params);
+    }
+
+    /**
      * Adds a class as domain of a property
      * @param property property to which add the domain
      * @param domain the domain class of the property
