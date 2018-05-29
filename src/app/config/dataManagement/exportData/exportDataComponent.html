@@ -94,7 +94,7 @@
                 </div>
             </div>
 
-            <div *ngIf="selectedDeployerSource != REPO_SOURCE" class="subPanel">
+            <div *ngIf="!useDeployer || selectedDeployerSource != REPO_SOURCE" class="subPanel">
                 <div class="subPanel-heading">
                     <label>Reformatter</label>
                 </div>
