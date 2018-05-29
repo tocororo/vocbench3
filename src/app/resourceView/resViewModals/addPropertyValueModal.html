@@ -23,9 +23,16 @@
             (nodeSelected)="onResourceSelected($event)">
         </concept-tree-panel>
         
-        <property-tree-panel *ngIf="viewType == 'propertyTree'" [deletable]="false" [type]="propertyType"
-            (nodeSelected)="onResourceSelected($event)">
-        </property-tree-panel>
+        <ng-template [ngIf]="viewType == 'propertyTree'">
+            <property-tree-panel *ngIf="viewType == 'propertyTree'" [deletable]="false" [type]="propertyType"
+                (nodeSelected)="onResourceSelected($event)">
+            </property-tree-panel>
+            <div *ngIf="showInversePropertyCheckbox" class="checkbox" style="margin: 8px 0 0 0;">
+                <label>
+                    <input type="checkbox" [(ngModel)]="inverseProp">Inverse Property
+                </label>
+            </div>
+        </ng-template>
         
         <scheme-list-panel *ngIf="viewType == 'schemeList'" [deletable]="false" (nodeSelected)="onResourceSelected($event)"></scheme-list-panel>
         

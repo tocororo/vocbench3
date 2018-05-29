@@ -1,17 +1,18 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
-import { VBEventHandler } from "../../../utils/VBEventHandler"
-import { ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
-import { RDFS } from "../../../models/Vocabulary";
+import { ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { PropertyServices } from "../../../services/propertyServices";
+import { RDFS } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
+import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
-import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
+import { AddPropertyValueModalReturnData } from "../../resViewModals/addPropertyValueModal";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
     selector: "superproperties-renderer",
@@ -39,22 +40,13 @@ export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot 
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.addPropertyValue("Add a superproperty", this.resource, this.rootProperty, propChangeable).then(
-            (data: any) => {
-                var prop: ARTURIResource = data.property;
-                var superProp: ARTURIResource = data.value;
-                if (prop.getURI() == this.rootProperty.getURI()) { //it's using rdfs:subPropertyOf
-                    this.propService.addSuperProperty(<ARTURIResource>this.resource, superProp).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                } else { //it's enriching a subProperty of rdfs:subPropertyOf
-                    this.resourcesService.addValue(this.resource, prop, superProp).subscribe(
-                        stResp => {
-                            //Here I should emit superPropertyAddedEvent but I can't since I don't know if this.resource has child
-                            //(to show in tree when attached). In this rare case I suppose that the user should refresh the tree
-                            this.update.emit(null);
-                        }
-                    );
-                }
+            (data: AddPropertyValueModalReturnData) => {
+                let prop: ARTURIResource = data.property;
+                let superProp: ARTURIResource = data.value;
+                let inverse: boolean = data.inverseProperty;
+                this.propService.addSuperProperty(<ARTURIResource>this.resource, superProp, prop, inverse).subscribe(
+                    stResp => this.update.emit(null)
+                );
             },
             () => { }
         )
@@ -67,21 +59,13 @@ export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         this.getRemoveFunction(predicate, object).subscribe(
             stResp => {
-                if (this.rootProperty.getURI() != predicate.getURI()) { //predicate is some subProperty of rdfs:subPropertyOf
-                    //=> emits superPropertyRemovedEvent cause it has not been fired by the generic service (removeValue)
-                    this.eventHandler.superPropertyRemovedEvent.emit({ property: <ARTURIResource>this.resource, superProperty: <ARTURIResource>object });
-                }
                 this.update.emit(null);
             }
         );
     }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        if (this.rootProperty.getURI() == predicate.getURI()) {// removing a rdfs:subPropertyOf relation
-            return this.propService.removeSuperProperty(<ARTURIResource>this.resource, <ARTURIResource>object);
-        } else {//predicate is some subProperty of rdfs:subPropertyOf
-            return this.resourcesService.removeValue(this.resource, predicate, object);
-        }
+        return this.propService.removeSuperProperty(<ARTURIResource>this.resource, <ARTURIResource>object, predicate);
     }
 
 }

@@ -80,9 +80,12 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private aspectSelectors: string[];
     private selectedAspectSelector: string = this.treeListAspectSelector;
 
+    private showInversePropertyCheckbox: boolean = false;
+
     //available returned data
     private selectedResource: ARTURIResource; //the trees and lists shows only ARTURIResource at the moment
     private manchExpr: string;
+    private inverseProp: boolean = false;
     private datarange: ARTLiteral[];
 
     //datatype to show in a list in case the modal allow to add range to a datatype property
@@ -207,8 +210,14 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
      * - if it accept as value a manchester expression.
      * - if it accept a datarange as range (and the resource is a datatype property)
      * Considers only the root property of the resource view partitions
+     * 
+     * Updates also showInversePropertyCheckbox that is useful to show a checkbox under the property-tree
+     * used to tell that the inverse of the selected property should be used.
      */
     private updateShowAspectSelector() {
+        this.showAspectSelector = false;
+        this.showInversePropertyCheckbox = false;
+
         //machester expression selector
         if (//partition domains
             this.rootProperty.getURI() == RDFS.domain.getURI() ||
@@ -224,7 +233,6 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
             this.showAspectSelector = true;
             this.aspectSelectors = [this.treeListAspectSelector, this.manchExprAspectSelector];
             this.selectedAspectSelector = this.aspectSelectors[0]; //select as default tree and list selector
-            return;
         }
         //datarange expression selector
         if (this.rootProperty.getURI() == RDFS.range.getURI() && 
@@ -233,10 +241,16 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
             this.showAspectSelector = true;
             this.aspectSelectors = [this.treeListAspectSelector, this.dataRangeAspectSelector];
             this.selectedAspectSelector = this.aspectSelectors[0]; //select as default tree and list selector
-            return;
         }
-
-        this.showAspectSelector = false;
+        //predicated for property relations that allows "inverse..."
+        if (
+            this.rootProperty.getURI() == OWL.propertyDisjointWith.getURI() ||
+            this.rootProperty.getURI() == OWL.equivalentProperty.getURI() ||
+            this.rootProperty.getURI() == RDFS.subPropertyOf.getURI() ||
+            this.rootProperty.getURI() == OWL.inverseOf.getURI()
+        ) {
+            this.showInversePropertyCheckbox = true;
+        }
     }
 
     private onResourceSelected(resource: ARTURIResource) {
@@ -268,17 +282,32 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
             this.manchService.checkExpression(this.manchExpr).subscribe(
                 valid => {
                     if (valid) {
-                        this.dialog.close({ property: this.selectedProperty, value: this.manchExpr });
+                        let returnedData: AddPropertyValueModalReturnData = {
+                            property: this.selectedProperty,
+                            value: this.manchExpr,
+                        }
+                        this.dialog.close(returnedData);
                     } else {
                         this.basicModals.alert("Invalid Expression", "'" + this.manchExpr + "' is not a valid Manchester Expression", "error");
                     }
                 }
             );
         } else if (this.selectedAspectSelector == this.dataRangeAspectSelector) {
-            this.dialog.close({ property: this.selectedProperty, value: this.datarange });
-        } else {
+            let returnedData: AddPropertyValueModalReturnData = {
+                property: this.selectedProperty,
+                value: this.datarange,
+            }
+            this.dialog.close(returnedData);
+        } else { //treeListAspectSelector
             this.selectedResource.deleteAdditionalProperty(ResAttribute.SELECTED);
-            this.dialog.close({ property: this.selectedProperty, value: this.selectedResource });
+            let returnedData: AddPropertyValueModalReturnData = {
+                property: this.selectedProperty,
+                value: this.selectedResource,
+            }
+            if (this.showInversePropertyCheckbox) {
+                returnedData.inverseProperty = this.inverseProp;
+            }
+            this.dialog.close(returnedData);
         }
     }
 
@@ -286,6 +315,12 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         this.dialog.dismiss();
     }
 
+}
+
+export class AddPropertyValueModalReturnData {
+    property: ARTURIResource;
+    value: any;
+    inverseProperty?: boolean;
 }
 
 type ViewType = "classTree" | 

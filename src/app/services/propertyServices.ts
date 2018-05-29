@@ -333,17 +333,25 @@ export class PropertyServices {
      * @param property property to which add a super property
      * @param superProperty the superProperty to add
      */
-    addSuperProperty(property: ARTURIResource, superProperty: ARTURIResource) {
+    addSuperProperty(property: ARTURIResource, superProperty: ARTURIResource, linkingPredicate?: ARTURIResource, inverse?: boolean) {
         console.log("[PropertyServices] addSuperProperty");
         var params: any = {
             property: property,
             superProperty: superProperty,
         };
+        if (linkingPredicate != null) {
+            params.linkingPredicate = linkingPredicate;
+        }
+        if (inverse != null) {
+            params.inverse = inverse;
+        }
         return this.httpMgr.doPost(this.serviceName, "addSuperProperty", params).map(
             stResp => {
-                //create subProperty by duplicating property param
-                var subProperty = property.clone();
-                this.eventHandler.superPropertyAddedEvent.emit({ subProperty: subProperty, superProperty: superProperty });
+                //in case superProperty is an IRI (not an expression "inverse...")
+                if (!inverse) {
+                    var subProperty = property.clone(); //create subProperty by duplicating property param
+                    this.eventHandler.superPropertyAddedEvent.emit({ subProperty: subProperty, superProperty: superProperty });
+                }
                 return stResp;
             }
         );
@@ -355,7 +363,7 @@ export class PropertyServices {
      * @param property property to which remove a super property
      * @param superProperty the superProperty to remove
      */
-    removeSuperProperty(property: ARTURIResource, superProperty: ARTURIResource) {
+    removeSuperProperty(property: ARTURIResource, superProperty: ARTURIResource, linkingPredicate?: ARTURIResource) {
         console.log("[PropertyServices] removeSuperProperty");
         var params: any = {
             property: property,
@@ -372,10 +380,10 @@ export class PropertyServices {
     /**
      * 
      * @param property 
-     * @param equivalentProperty 
+     * @param equivalentProperty
      * @param linkingPredicate 
      */
-    addEquivalentProperty(property: ARTURIResource, equivalentProperty: ARTURIResource, linkingPredicate?: ARTURIResource) {
+    addEquivalentProperty(property: ARTURIResource, equivalentProperty: ARTURIResource, linkingPredicate?: ARTURIResource, inverse?: boolean) {
         console.log("[PropertyServices] addEquivalentProperty");
         var params: any = {
             property: property,
@@ -383,6 +391,9 @@ export class PropertyServices {
         };
         if (linkingPredicate != null) {
             params.linkingPredicate = linkingPredicate;
+        }
+        if (inverse != null) {
+            params.inverse = inverse;
         }
         return this.httpMgr.doPost(this.serviceName, "addEquivalentProperty", params);
     }
@@ -408,10 +419,10 @@ export class PropertyServices {
     /**
      * 
      * @param property 
-     * @param disjointProperty 
+     * @param disjointProperty
      * @param linkingPredicate 
      */
-    addPropertyDisjointWith(property: ARTURIResource, disjointProperty: ARTURIResource, linkingPredicate?: ARTURIResource) {
+    addPropertyDisjointWith(property: ARTURIResource, disjointProperty: ARTURIResource, linkingPredicate?: ARTURIResource, inverse?: boolean) {
         console.log("[PropertyServices] addPropertyDisjointWith");
         var params: any = {
             property: property,
@@ -419,6 +430,9 @@ export class PropertyServices {
         };
         if (linkingPredicate != null) {
             params.linkingPredicate = linkingPredicate;
+        }
+        if (inverse != null) {
+            params.inverse = inverse;
         }
         return this.httpMgr.doPost(this.serviceName, "addPropertyDisjointWith", params);
     }
@@ -439,6 +453,45 @@ export class PropertyServices {
             params.linkingPredicate = linkingPredicate;
         }
         return this.httpMgr.doPost(this.serviceName, "removePropertyDisjointWith", params);
+    }
+
+    /**
+     * 
+     * @param property 
+     * @param disjointProperty
+     * @param linkingPredicate 
+     */
+    addInverseProperty(property: ARTURIResource, inverseProperty: ARTURIResource, linkingPredicate?: ARTURIResource, inverse?: boolean) {
+        console.log("[PropertyServices] addInverseProperty");
+        var params: any = {
+            property: property,
+            inverseProperty: inverseProperty,
+        };
+        if (linkingPredicate != null) {
+            params.linkingPredicate = linkingPredicate;
+        }
+        if (inverse != null) {
+            params.inverse = inverse;
+        }
+        return this.httpMgr.doPost(this.serviceName, "addInverseProperty", params);
+    }
+
+    /**
+     * 
+     * @param property 
+     * @param disjointProperty 
+     * @param linkingPredicate 
+     */
+    removeInverseProperty(property: ARTURIResource, inverseProperty: ARTURIResource, linkingPredicate?: ARTURIResource) {
+        console.log("[PropertyServices] removeInverseProperty");
+        var params: any = {
+            property: property,
+            inverseProperty: inverseProperty,
+        };
+        if (linkingPredicate != null) {
+            params.linkingPredicate = linkingPredicate;
+        }
+        return this.httpMgr.doPost(this.serviceName, "removeInverseProperty", params);
     }
 
     /**

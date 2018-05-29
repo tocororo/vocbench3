@@ -10,6 +10,7 @@ import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
+import { AddPropertyValueModalReturnData } from "../../resViewModals/addPropertyValueModal";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
@@ -40,10 +41,11 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.addPropertyValue("Add an inverse property", this.resource, this.rootProperty, propChangeable).then(
-            (data: any) => {
-                var prop: ARTURIResource = data.property;
-                var inverseProp: ARTURIResource = data.value;
-                this.resourcesService.addValue(this.resource, prop, inverseProp).subscribe(
+            (data: AddPropertyValueModalReturnData) => {
+                let prop: ARTURIResource = data.property;
+                let inverseProp: ARTURIResource = data.value;
+                let inverse: boolean = data.inverseProperty;
+                this.propService.addInverseProperty(<ARTURIResource>this.resource, inverseProp, prop, inverse).subscribe(
                     stResp => this.update.emit(null)
                 );
             },
@@ -62,7 +64,7 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        return this.resourcesService.removeValue(this.resource, predicate, object);
+        return this.propService.removeInverseProperty(<ARTURIResource>this.resource, <ARTURIResource>object, predicate);
     }
 
     private changeFacet(facet: PropertyFacet) {

@@ -1,10 +1,10 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { ARTURIResource, ResourceUtils, ARTNode } from "../../models/ARTResources";
-import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTNode, ARTURIResource, ResourceUtils } from "../../models/ARTResources";
 import { VBContext } from "../../utils/VBContext";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 
 export class AddManuallyValueData extends BSModalContext {
     /**
