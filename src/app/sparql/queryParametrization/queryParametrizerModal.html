@@ -1,0 +1,93 @@
+<div class="modal-header">
+    <h3 class="modal-title text-info">Query parametrization</h3>
+</div>
+<div class="modal-body vbox" style="height: 75vh;">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span style="flex: 1;">
+                <label>Stored query</label>
+                <span *ngIf="storedQueryReference">({{storedQueryReference}})</span>
+            </span>
+            <button class="btn btn-xs btn-default" (click)="selectStoredQuery()" title="Select stored query">
+                <span class="glyphicon glyphicon-pencil"></span>
+            </button>
+        </div>
+        <div class="panel-body">
+            <yasgui [query]="query" [readonly]="true"></yasgui>
+        </div>
+    </div>
+
+    <div class="panel panel-default vbox" style="margin-top: 4px;">
+        <div class="panel-heading">
+            <label style="flex: 1">Query parameters</label>
+            <button class="btn btn-xs btn-default" (click)="addBinding()" title="Add binding">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+        </div>
+        <div class="panel-body table-responsive" style="flex: 1;">
+            <table class="table table-condensed table-borderless">
+                <colgroup>
+                    <col>
+                    <col>
+                    <col>
+                    <col style="width: 1%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Binding name</th>
+                        <th>Binding type</th>
+                        <th>Value</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let b of bindings">
+                        <td><input class="form-control input-sm" [(ngModel)]="b.varName"></td>
+                        <td>
+                            <select class="form-control input-sm" [(ngModel)]="b.bindingType">
+                                <option *ngFor="let t of bindingTypes" [ngValue]="t">{{t.show}}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <div *ngIf="b.bindingType?.value=='assignment'; else constraintBlock" class="input-group input-group-sm">
+                                <input type="text" class="form-control" [(ngModel)]="b.value" disabled>
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a (click)="setAssignemntValue(b, 'resource')">Resource</a></li>
+                                        <li><a (click)="setAssignemntValue(b, 'typedLiteral')">Typed literal</a></li>
+                                        <li><a (click)="setAssignemntValue(b, 'plainLiteral')">Plain literal</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <ng-template #constraintBlock>
+                                <select *ngIf="b.bindingType?.specialization=='datatype'; else roleBlock" class="form-control input-sm" [(ngModel)]="b.datatype">
+                                    <option *ngFor="let d of datatypes" [ngValue]="d">{{d.getShow()}}</option>
+                                </select>
+                                <ng-template #roleBlock>
+                                    <select class="form-control input-sm" [(ngModel)]="b.resourceRole">
+                                        <option *ngFor="let r of roles" [value]="r.value">{{r.show}}</option>
+                                    </select>
+                                </ng-template>
+                            </ng-template>
+                        </td>
+                        <td>
+                            <button class="btn btn-default btn-sm" (click)="removeBinding(b)">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!storedQueryReference || bindings.length == 0">Save</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

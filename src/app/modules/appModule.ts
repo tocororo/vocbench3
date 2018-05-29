@@ -1,49 +1,42 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, RouteReuseStrategy } from "@angular/router";
-
-import { CustomReuseStrategy } from "../a2Customization/CustomReuseStrategy";
-
-import { STServicesModule } from "./stServicesModule";
-import { SharedModule } from "./sharedModule";
-import { VBModalModule } from "./vbModalModule";
-import { ProjectModule } from "./projectModule";
-import { CustomFormModule } from "./customFormModule";
-import { TreeAndListModule } from "./treeAndListModule";
-import { ResourceViewModule } from "./resourceViewModule";
-import { ICVModule } from "./icvModule";
-import { AdministrationModule } from "./administrationModule";
-import { UserModule } from "./userModule";
-import { MetadataModule } from "./metadataModule";
-import { HistoryValidationModule } from "./historyValidationModule";
-import { PreferencesModule } from "./preferencesModule";
-import { Sheet2RdfModule } from "./sheet2rdfModule";
-
+import { BrowserModule } from '@angular/platform-browser';
+import { RouteReuseStrategy, RouterModule } from "@angular/router";
 import { ModalModule } from 'ngx-modialog';
 import { BootstrapModalModule } from 'ngx-modialog/plugins/bootstrap';
-
+import { CustomReuseStrategy } from "../a2Customization/CustomReuseStrategy";
+import { AlignmentValidationComponent } from "../alignment/alignmentValidation/alignmentValidationComponent";
 import { AppComponent } from "../appComponent";
 import { appRouting } from '../appRoutes';
-
-import { HttpManager } from "../utils/HttpManager";
-import { VBProperties } from "../utils/VBProperties";
-import { VBEventHandler } from "../utils/VBEventHandler";
-import { VBCollaboration } from '../utils/VBCollaboration';
-import { GUARD_PROVIDERS } from "../utils/CanActivateGuards";
-import { UserResolver } from "../utils/UserResolver";
-
-//Components
-import { HomeComponent } from "../homeComponent";
-import { DataComponent } from "../data/dataComponent";
-import { SparqlComponent } from "../sparql/sparqlComponent";
-import { AlignmentValidationComponent } from "../alignment/alignmentValidation/alignmentValidationComponent";
 import { CollaborationComponent } from "../collaboration/collaborationComponent";
-import { LoadDataComponent } from "../config/dataManagement/loadData/loadDataComponent";
+import { ConfigBarComponent } from "../config/configBar/configBarComponent";
 import { ExportDataComponent } from "../config/dataManagement/exportData/exportDataComponent";
+import { LoadDataComponent } from "../config/dataManagement/loadData/loadDataComponent";
 import { RefactorComponent } from "../config/dataManagement/refactor/refactorComponent";
 import { VersioningComponent } from "../config/dataManagement/versioning/versioningComponent";
-import { ConfigBarComponent } from "../config/configBar/configBarComponent";
+import { DataComponent } from "../data/dataComponent";
+import { HomeComponent } from "../homeComponent";
+import { GUARD_PROVIDERS } from "../utils/CanActivateGuards";
+import { HttpManager } from "../utils/HttpManager";
+import { UserResolver } from "../utils/UserResolver";
+import { VBCollaboration } from '../utils/VBCollaboration';
+import { VBEventHandler } from "../utils/VBEventHandler";
+import { VBProperties } from "../utils/VBProperties";
+import { AdministrationModule } from "./administrationModule";
+import { CustomFormModule } from "./customFormModule";
+import { HistoryValidationModule } from "./historyValidationModule";
+import { ICVModule } from "./icvModule";
+import { MetadataModule } from "./metadataModule";
+import { PreferencesModule } from "./preferencesModule";
+import { ProjectModule } from "./projectModule";
+import { ResourceViewModule } from "./resourceViewModule";
+import { SharedModule } from "./sharedModule";
+import { Sheet2RdfModule } from "./sheet2rdfModule";
+import { SparqlModule } from './sparqlModule';
+import { STServicesModule } from "./stServicesModule";
+import { TreeAndListModule } from "./treeAndListModule";
+import { UserModule } from "./userModule";
+import { VBModalModule } from "./vbModalModule";
 
 @NgModule({
       imports: [
@@ -53,7 +46,7 @@ import { ConfigBarComponent } from "../config/configBar/configBarComponent";
 
             SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule,
             ProjectModule, UserModule, ICVModule, AdministrationModule, CustomFormModule, MetadataModule,
-            HistoryValidationModule, PreferencesModule, Sheet2RdfModule,
+            HistoryValidationModule, PreferencesModule, Sheet2RdfModule, SparqlModule,
 
             STServicesModule,
             appRouting,
@@ -69,7 +62,6 @@ import { ConfigBarComponent } from "../config/configBar/configBarComponent";
             ConfigBarComponent,
             HomeComponent,
             DataComponent,
-            SparqlComponent,
             AlignmentValidationComponent,
             CollaborationComponent,
             LoadDataComponent,

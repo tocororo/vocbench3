@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
-import { Deserializer } from "../utils/Deserializer";
+import { ARTNode, ARTResource, ARTURIResource } from "../models/ARTResources";
+import { Settings } from '../models/Plugins';
 import { SearchMode, StatusFilter } from "../models/Properties";
-import { ARTURIResource, ARTResource, ARTNode } from "../models/ARTResources";
+import { Deserializer } from "../utils/Deserializer";
+import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
 export class SearchServices {
@@ -292,6 +293,23 @@ export class SearchServices {
             serialization.push([ link.predicate.toNT(), link.searchString, link.mode ]);
         });
         return JSON.stringify(serialization);
+    }
+
+
+    /**
+     * 
+     * @param searchParameterizationReference 
+     */
+    getCustomSearchForm(searchParameterizationReference: string): Observable<Settings> {
+        console.log("[SearchServices] getCustomSearchForm");
+        var params: any = {
+            searchParameterizationReference: searchParameterizationReference
+        };
+        return this.httpMgr.doGet(this.serviceName, "getCustomSearchForm", params).map(
+            stResp => {
+                return Settings.parse(stResp);
+            }
+        );
     }
 
 }

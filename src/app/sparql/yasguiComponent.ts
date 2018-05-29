@@ -17,6 +17,7 @@ var $: JQueryStatic = require('jquery');
 })
 export class YasguiComponent {
     @Input() query: string;
+    @Input() readonly: boolean = false;
     //emit event containing {query: string, valid: boolean, mode: string} when it changes
     @Output() querychange = new EventEmitter<Object>();
 
@@ -67,7 +68,8 @@ export class YasguiComponent {
                 createShareLink: null, //disable share button
                 // autocompleters: ["variables", this.CLASS_COMPLETER_NAME, this.PREFIX_COMPLETER_NAME, this.PROPERTY_COMPLETER_NAME],
                 // autocompleters: ["prefixes", "properties", "classes", "variables"],
-                extraKeys: { "Ctrl-7": YASQE.commentLines }
+                extraKeys: { "Ctrl-7": YASQE.commentLines },
+                readOnly: this.readonly
             }
         );
 

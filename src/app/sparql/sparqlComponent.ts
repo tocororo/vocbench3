@@ -1,8 +1,8 @@
 import { Component, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { ARTBNode, ARTResource, ARTURIResource } from "../models/ARTResources";
-import { ConfigurationComponents, ConfigurationProperty } from "../models/Configuration";
+import { ARTBNode, ARTResource, ARTURIResource, ARTNode } from "../models/ARTResources";
+import { ConfigurationComponents, ConfigurationProperty, Configuration } from "../models/Configuration";
 import { PrefixMapping } from "../models/Metadata";
 import { ConfigurationsServices } from "../services/configurationsServices";
 import { ExportServices } from "../services/exportServices";
@@ -14,7 +14,11 @@ import { BasicModalServices } from '../widget/modal/basicModal/basicModalService
 import { LoadConfigurationModalReturnData } from "../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from '../widget/modal/sharedModal/sharedModalServices';
 import { ExportResultAsRdfModal, ExportResultAsRdfModalData } from "./exportResultAsRdfModal";
+import { QueryParametrizationMgrModal, QueryParametrizationMgrModalReturnData } from "./queryParametrization/queryParametrizationMgrModal";
 import { YasguiComponent } from "./yasguiComponent";
+import { SettingsProp, Settings } from "../models/Plugins";
+import { ResultType, QueryMode, VariableBindings } from "../models/Sparql";
+import { SearchServices } from "../services/searchServices";
 
 @Component({
     selector: "sparql-component",
@@ -31,6 +35,7 @@ export class SparqlComponent {
     private resultsLimit: number = 100;
 
     constructor(private sparqlService: SparqlServices, private exportService: ExportServices, private configurationsService: ConfigurationsServices,
+        private searchService: SearchServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
@@ -51,13 +56,19 @@ export class SparqlComponent {
         tab.resultsPage = 0;
         tab.resultsTotPage = 0;
         tab.queryCache = tab.query; //stored the submitted query
-        if (tab.queryMode == "query") {
+
+        let bindingsParam: Map<string, ARTNode>;
+        if (tab.useBindings) {
+            bindingsParam = tab.bindings;
+        }
+
+        if (tab.queryMode == QueryMode.query) {
             if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SPARQL_EVALUATE_QUERY)) {
                 this.basicModals.alert("Operation denied", "You are not authorized to perform SPARQL query");
                 return;
             }
             UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-            this.sparqlService.evaluateQuery(tab.query, tab.inferred).subscribe(
+            this.sparqlService.evaluateQuery(tab.query, tab.inferred, null, bindingsParam).subscribe(
                 stResp => {
                     this.sparqlResponseHandler(tab, stResp, initTime);
                 }
@@ -68,7 +79,7 @@ export class SparqlComponent {
                 return;
             }
             UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-            this.sparqlService.executeUpdate(tab.query).subscribe(
+            this.sparqlService.executeUpdate(tab.query, tab.inferred, null, bindingsParam).subscribe(
                 stResp => {
                     this.sparqlResponseHandler(tab, stResp, initTime);
                 }
@@ -84,7 +95,7 @@ export class SparqlComponent {
         tab.queryTime = this.getPrettyPrintTime(diffTime);
         //process result
         tab.resultType = stResp.resultType;
-        if (stResp.resultType == "tuple" || stResp.resultType == "graph") {
+        if (stResp.resultType == ResultType.tuple || stResp.resultType == ResultType.graph) {
             tab.headers = stResp.sparql.head.vars;
             tab.queryResult = stResp.sparql.results.bindings;
             //paging handler
@@ -92,7 +103,7 @@ export class SparqlComponent {
             if (tab.queryResult.length % this.resultsLimit > 0) {
                 tab.resultsTotPage++;
             }
-        } else if (stResp.resultType == "boolean") {
+        } else if (stResp.resultType == ResultType.boolean) {
             tab.headers = ["boolean"];
             tab.queryResult = Boolean(stResp.sparql.boolean);
         }
@@ -130,7 +141,7 @@ export class SparqlComponent {
         var serialization = "";
         var separator = ",";
 
-        if (tab.resultType == "tuple" || tab.resultType == "graph") {
+        if (tab.resultType == ResultType.tuple || tab.resultType == ResultType.graph) {
             //headers
             var headers = tab.headers;
             for (var i = 0; i < headers.length; i++) {
@@ -151,7 +162,7 @@ export class SparqlComponent {
                 serialization = serialization.slice(0, -1); //remove last separator
                 serialization += "\n"; //and add new line
             }
-        } else if (tab.resultType == "boolean") {
+        } else if (tab.resultType == ResultType.boolean) {
             serialization += "result\n" + tab.queryResult;
         }
 
@@ -185,7 +196,7 @@ export class SparqlComponent {
         var serialization = "";
         var separator = "\t";
 
-        if (tab.resultType == "tuple" || tab.resultType == "graph") {
+        if (tab.resultType == ResultType.tuple || tab.resultType == ResultType.graph) {
             //headers
             //Variables are serialized in SPARQL syntax, using question mark ? character followed by the variable name
             var headers = tab.headers;
@@ -207,7 +218,7 @@ export class SparqlComponent {
                 serialization = serialization.slice(0, -1); //remove last separator
                 serialization += "\n"; //and add new line
             }
-        } else if (tab.resultType == "boolean") {
+        } else if (tab.resultType == ResultType.boolean) {
             serialization += "?result\n" + tab.queryResult;
         }
 
@@ -308,29 +319,13 @@ export class SparqlComponent {
         }
     }
 
-    //LOAD/SAVE QUERY
+    //LOAD/SAVE/PARAMETRIZE QUERY
 
     private loadQuery(tab: Tab) {
         this.sharedModals.loadConfiguration("Load SPARQL query", ConfigurationComponents.SPARQL_STORE).then(
-            (conf: LoadConfigurationModalReturnData) => {
-                let query: string;
-                let includeInferred: boolean = false;
-                let confProps: ConfigurationProperty[] = conf.configuration.properties;
-                for (var i = 0; i < confProps.length; i++) {
-                    if (confProps[i].name == "sparql") {
-                        query = confProps[i].value;
-                    } else if (confProps[i].name == "includeInferred") {
-                        includeInferred = confProps[i].value;
-                    }
-                }
-                tab.query = query;
-                tab.inferred = includeInferred;
-                setTimeout(() => {
-                    //in order to detect the change of @Input query in the child YasguiComponent
-                    this.viewChildYasgui.forceContentUpdate();
-                })
-            },
-            () => {}
+            (data: LoadConfigurationModalReturnData) => {
+                this.setLoadedQueryConf(tab, data.configuration);
+            }
         );
     }
 
@@ -341,12 +336,78 @@ export class SparqlComponent {
             includeInferred: tab.inferred
         }
         this.sharedModals.storeConfiguration("Store SPARQL query", ConfigurationComponents.SPARQL_STORE, queryConfig).then(
-            () => {
+            (relativeRef: string) => {
                 this.basicModals.alert("Save query", "Query saved succesfully");
             },
             () => {}
         )
     }
+
+    private parametrizeQuery(tab: Tab) {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        this.modal.open(QueryParametrizationMgrModal, overlayConfig).result.then(
+            (data: QueryParametrizationMgrModalReturnData) => {
+                /**
+                 * configuration contains 2 props:
+                 * "relativeReference": the reference of the query
+                 * "variableBindings": the map of the bindings
+                 */
+                let relativeRef: string;
+                let variableBindings: VariableBindings[];
+
+                let properties: SettingsProp[] = data.configuration.properties;
+                for (var i = 0; i < properties.length; i++) {
+                    if (properties[i].name == "relativeReference") {
+                        relativeRef = properties[i].value;
+                    } else if (properties[i].name == "variableBindings") {
+                        variableBindings = properties[i].value;
+                    }
+                }
+
+                //load query
+                this.configurationsService.getConfiguration(ConfigurationComponents.SPARQL_STORE, relativeRef).subscribe(
+                    (conf: Configuration) => {
+                        this.setLoadedQueryConf(tab, conf);
+                    }
+                );
+
+                //set variable bindings
+                tab.variableBindings = variableBindings;
+                tab.useBindings = true;
+            },
+            () => {}
+        );
+    }
+
+    private onBindingsUpdate(tab: Tab, bindings: Map<string, ARTNode>) {
+        tab.bindings = bindings;
+    }
+
+    /**
+     * Set the query after the load of a stored query
+     * @param tab 
+     * @param conf 
+     */
+    private setLoadedQueryConf(tab: Tab, conf: Configuration) {
+        let query: string;
+        let includeInferred: boolean = false;
+        let confProps: ConfigurationProperty[] = conf.properties;
+        for (var i = 0; i < confProps.length; i++) {
+            if (confProps[i].name == "sparql") {
+                query = confProps[i].value;
+            } else if (confProps[i].name == "includeInferred") {
+                includeInferred = confProps[i].value;
+            }
+        }
+        tab.query = query;
+        tab.inferred = includeInferred;
+        setTimeout(() => {
+            //in order to detect the change of @Input query in the child YasguiComponent
+            this.viewChildYasgui.forceContentUpdate();
+        });
+    }
+
 
     //TAB HANDLER
 
@@ -357,7 +418,7 @@ export class SparqlComponent {
         }
         this.tabs.push({
             query: this.sampleQuery,
-            queryMode: "query",
+            queryMode: QueryMode.query,
             queryCache: null,
             respSparqlJSON: null,
             resultType: null,
@@ -420,10 +481,10 @@ export class SparqlComponent {
 
 class Tab {
     query: string;
-    queryMode: "query" | "update";
+    queryMode: QueryMode;
     queryCache: string; //contains the last query submitted (useful to invoke the export excel)
     respSparqlJSON: any; //keep the "sparql" JSON object contained in the response
-    resultType: "graph" | "tuple" | "boolean"; //graph / tuple / boolean
+    resultType: ResultType;
     headers: string[];
     queryResult: any;
     queryInProgress: boolean;
@@ -432,6 +493,10 @@ class Tab {
     inferred: boolean;
     removable: boolean;
     active: boolean;
+
+    variableBindings?: VariableBindings[];
+    bindings?: Map<string, ARTNode>;
+    useBindings?: boolean = true;
 
     //result paging
     resultsPage: number;

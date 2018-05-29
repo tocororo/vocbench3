@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
-import { ARTURIResource } from "../models/ARTResources";
+import { ARTURIResource, ARTNode } from "../models/ARTResources";
 import { RDFFormat } from '../models/RDFFormat';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class SparqlServices {
      * @param defaultGraphs the graphs that constitute the default graph. The default value is the empty set.
      * @param namedGraphs the graphs that constitute the set of named graphs.
      */
-    evaluateQuery(query: string, includeInferred?: boolean, ql?: "SPARQL" | "SERQL", bindings?: any, maxExecTime?: number,
+    evaluateQuery(query: string, includeInferred?: boolean, ql?: "SPARQL" | "SERQL", bindings?: Map<string, ARTNode>, maxExecTime?: number,
             defaultGraphs?: ARTURIResource[], namedGraphs?: ARTURIResource[]) {
         console.log("[SparqlServices] evaluateQuery");
         var params: any = {
@@ -58,7 +58,7 @@ export class SparqlServices {
      * @param defaultInsertGraph the default insert graph to be used.
      * @param defaultRemoveGraphs the default remove graphs.
      */
-    executeUpdate(query: string, includeInferred?: boolean, ql?: "SPARQL" | "SERQL", bindings?: any, maxExecTime?: number,
+    executeUpdate(query: string, includeInferred?: boolean, ql?: "SPARQL" | "SERQL", bindings?: Map<string, ARTNode>, maxExecTime?: number,
             defaultGraphs?: ARTURIResource[], namedGraphs?: ARTURIResource[], 
             defaultInsertGraph?: ARTURIResource, defaultRemoveGraphs?: ARTURIResource[]) {
         console.log("[SparqlServices] executeUpdate");

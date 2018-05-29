@@ -282,40 +282,6 @@ export class HttpManager {
     }
 
     /**
-     * Returns the url parameters to append to the request 
-     * @param params the parameters to send in the GET request (as url parameter). This parameter must be an object like:
-     * {    
-     *  "urlParName1" : ParValue1,
-     *  "urlParName2" : ParValue2,
-     *  "urlParName3" : ParValue3,
-     * }
-     * The value of the parameter can be a simple string or any of the ARTResource implementations
-     */
-    private getParametersForUrl(params: any): string {
-        var urlParams: string = "";
-        for (var paramName in params) {
-            var paramValue = params[paramName];
-            if (Array.isArray(paramValue)) {
-                let arrayAsString: string = "";
-                for (var i = 0; i < paramValue.length; i++) {
-                    if (paramValue[i] instanceof ARTURIResource || paramValue[i] instanceof ARTBNode || paramValue[i] instanceof ARTLiteral) {
-                        arrayAsString += (<ARTNode>paramValue[i]).toNT() + ",";
-                    } else {
-                        arrayAsString += paramValue[i] + ",";
-                    }
-                }
-                arrayAsString = arrayAsString.slice(0, -1); //remove last comma (,)
-                urlParams += paramName + "=" + encodeURIComponent(arrayAsString) + "&";
-            } else if (paramValue instanceof ARTURIResource || paramValue instanceof ARTBNode || paramValue instanceof ARTLiteral) {
-                urlParams += paramName + "=" + encodeURIComponent((<ARTNode>paramValue).toNT()) + "&";
-            } else {
-                urlParams += paramName + "=" + encodeURIComponent(paramValue) + "&";
-            }
-        }
-        return urlParams;
-    }
-
-    /**
      * Returns the request context parameters.
      */
     private getContextParametersForUrl(options: VBRequestOptions): string {
@@ -346,22 +312,45 @@ export class HttpManager {
         return params;
     }
 
+    /**
+     * Returns the url parameters to append to the request 
+     * @param params the parameters to send in the GET request (as url parameter). This parameter must be an object like:
+     * {    
+     *  "urlParName1" : ParValue1,
+     *  "urlParName2" : ParValue2,
+     *  "urlParName3" : ParValue3,
+     * }
+     * The value of the parameter can be a simple string or any of the ARTResource implementations
+     */
+    private getParametersForUrl(params: any): string {
+        return this.getPostData(params) + "&"; //differs from getPostData simply for the ending & in order to append ctx parameters
+    }
+
     private getPostData(params: any): string {
         var postData: any;
         var strBuilder: string[] = [];
         for (var paramName in params) {
             var paramValue = params[paramName];
             if (Array.isArray(paramValue)) {
-                let arrayAsString: string = "";
+                let stringArray: string[] = [];
                 for (var i = 0; i < paramValue.length; i++) {
                     if (paramValue[i] instanceof ARTURIResource || paramValue[i] instanceof ARTBNode || paramValue[i] instanceof ARTLiteral) {
-                        arrayAsString += (<ARTNode>paramValue[i]).toNT() + ",";
+                        stringArray.push((<ARTNode>paramValue[i]).toNT());
                     } else {
-                        arrayAsString += paramValue[i] + ",";
+                        stringArray.push(paramValue[i]);
                     }
                 }
-                arrayAsString = arrayAsString.slice(0, -1); //remove last comma (,)
-                strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent(arrayAsString));
+                strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent(stringArray.join(",")));
+            } else if (paramValue instanceof Map) {
+                let stringMap: {[key: string]: string} = {};
+                paramValue.forEach((value: any, key: string) => {
+                    if (value instanceof ARTURIResource || value instanceof ARTBNode || value instanceof ARTLiteral) {
+                        stringMap[key] = value.toNT();
+                    } else {
+                        stringMap[key] = value;
+                    }
+                })
+                strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent(JSON.stringify(stringMap)));
             } else if (paramValue instanceof ARTURIResource || paramValue instanceof ARTBNode || paramValue instanceof ARTLiteral) {
                 strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent((<ARTNode>paramValue).toNT()));
             } else if (paramValue instanceof CustomFormValue) {

@@ -422,6 +422,31 @@ export class ResourceUtils {
     }
 
     /**
+     * 
+     * @param nTripleNode 
+     */
+    static parseNode(nTripleNode: string): ARTNode {
+        let node: ARTNode;
+        try {
+            node = ResourceUtils.parseURI(nTripleNode);
+        } catch (err) {}
+        if (node == null) {
+            try {
+                node = ResourceUtils.parseLiteral(nTripleNode);
+            } catch (err) {}
+        }
+        if (node == null) {
+            try {
+                node = ResourceUtils.parseBNode(nTripleNode);
+            } catch (err) {}
+        }
+        if (node == null) {
+            throw new Error("Not a legal N-Triples representation: " + nTripleNode);
+        }
+        return node;
+    }
+
+    /**
      * Given an NT serialization of a URI, creates and returns an ARTURIResource object.
      * Code inspired by org.eclipse.rdf4j.rio.ntriples.NTripleUtils#parseURI()
      * @param nTriplesURI 

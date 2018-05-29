@@ -25,11 +25,11 @@
         
         <ng-template [ngIf]="viewType == 'propertyTree'">
             <property-tree-panel *ngIf="viewType == 'propertyTree'" [deletable]="false" [type]="propertyType"
-                (nodeSelected)="onResourceSelected($event)">
+                (nodeSelected)="onPropertySelected($event)">
             </property-tree-panel>
             <div *ngIf="showInversePropertyCheckbox" class="checkbox" style="margin: 8px 0 0 0;">
                 <label>
-                    <input type="checkbox" [(ngModel)]="inverseProp">Inverse Property
+                    <input type="checkbox" [(ngModel)]="inverseProp" [disabled]="selectedResource?.getRole() != 'objectProperty'">Inverse Property
                 </label>
             </div>
         </ng-template>

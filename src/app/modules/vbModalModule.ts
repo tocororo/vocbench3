@@ -1,91 +1,69 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-import { SharedModule } from "./sharedModule";
-import { TreeAndListModule } from "./treeAndListModule";
-import { CustomFormModule } from "./customFormModule";
-import { UserModule } from "./userModule";
-
-//services to open modals
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingModalServices";
-import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
-import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
-
-//basic modals
-import { AlertModal } from '../widget/modal/basicModal/alertModal/alertModal';
+import { MappingPropertySelectionModal } from '../alignment/alignmentValidation/alignmentValidationModals/mappingPropertySelectionModal';
+import { ValidationReportModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationReportModal';
+import { ValidationSettingsModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationSettingsModal';
+import { BrowseExternalResourceModal } from '../alignment/resourceAlignment/browseExternalResourceModal';
+import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceAlignmentModal';
+import { CollaborationModalServices } from "../collaboration/collaborationModalService";
+import { IssueListModal } from "../collaboration/issueListModal";
+import { CollaborationProjSettingsModal } from "../collaboration/modals/collaborationProjSettingsModal";
+import { CollaborationProjectModal } from "../collaboration/modals/collaborationProjectModal";
+import { CollaborationUserSettingsModal } from "../collaboration/modals/collaborationUserSettingsModal";
+import { CreateIssueModal } from "../collaboration/modals/createIssueModal";
+import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
+import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreationModal";
 import { AlertCheckModal } from '../widget/modal/basicModal/alertModal/alertCheckModal';
-import { ConfirmModal } from '../widget/modal/basicModal/confirmModal/confirmModal';
+import { AlertModal } from '../widget/modal/basicModal/alertModal/alertModal';
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { ConfirmCheckModal } from '../widget/modal/basicModal/confirmModal/confirmCheckModal';
+import { ConfirmModal } from '../widget/modal/basicModal/confirmModal/confirmModal';
 import { DownloadModal } from '../widget/modal/basicModal/downloadModal/downloadModal';
 import { FilePickerModal } from '../widget/modal/basicModal/filePickerModal/filePickerModal';
 import { PromptModal } from '../widget/modal/basicModal/promptModal/promptModal';
 import { PromptPrefixedModal } from '../widget/modal/basicModal/promptModal/promptPrefixedModal';
 import { PromptPropertiesModal } from '../widget/modal/basicModal/promptModal/promptPropertiesModal';
-import { SelectionModal } from '../widget/modal/basicModal/selectionModal/selectionModal';
-import { ResourceSelectionModal } from '../widget/modal/basicModal/selectionModal/resourceSelectionModal';
 import { CustomFormSelectionModal } from '../widget/modal/basicModal/selectionModal/customFormSelectionModal';
-
-//shared modals
-import { PluginConfigModal } from "../widget/modal/sharedModal/pluginConfigModal/pluginConfigModal";
-import { RemoteAccessConfigModal } from "../widget/modal/sharedModal/remoteAccessConfigModal/remoteAccessConfigModal";
-import { RemoteAccessConfigEditorModal } from "../widget/modal/sharedModal/remoteAccessConfigModal/remoteAccessConfigEditorModal";
-import { RemoteRepoSelectionModal } from "../widget/modal/sharedModal/remoteRepoSelectionModal/remoteRepoSelectionModal";
-import { LanguageSelectorModal } from "../widget/modal/sharedModal/languagesSelectorModal/languageSelectorModal";
-import { ConverterPickerModal } from '../widget/modal/sharedModal/converterPickerModal/converterPickerModal';
-import { SignaturePickerModal } from '../widget/modal/sharedModal/converterPickerModal/signaturePickerModal';
-import { StoreConfigurationModal } from '../widget/modal/sharedModal/configurationStoreModal/storeConfigurationModal';
-import { LoadConfigurationModal } from '../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal';
-import { ResourcePickerModal } from '../widget/modal/sharedModal/resourcePickerModal/resourcePickerModal';
-
-//browsing modals
-import { ClassTreeModal } from '../widget/modal/browsingModal/classTreeModal/classTreeModal';
+import { ResourceSelectionModal } from '../widget/modal/basicModal/selectionModal/resourceSelectionModal';
+import { SelectionModal } from '../widget/modal/basicModal/selectionModal/selectionModal';
+import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingModalServices";
 import { ClassIndividualTreeModal } from "../widget/modal/browsingModal/classIndividualTreeModal/classIndividualTreeModal";
+import { ClassTreeModal } from '../widget/modal/browsingModal/classTreeModal/classTreeModal';
+import { CollectionTreeModal } from '../widget/modal/browsingModal/collectionTreeModal/collectionTreeModal';
 import { ConceptTreeModal } from '../widget/modal/browsingModal/conceptTreeModal/conceptTreeModal';
 import { InstanceListModal } from '../widget/modal/browsingModal/instanceListModal/instanceListModal';
-import { PropertyTreeModal } from '../widget/modal/browsingModal/propertyTreeModal/propertyTreeModal';
-import { SchemeListModal } from '../widget/modal/browsingModal/schemeListModal/schemeListModal';
-import { CollectionTreeModal } from '../widget/modal/browsingModal/collectionTreeModal/collectionTreeModal';
 import { LexicalEntryListModal } from '../widget/modal/browsingModal/lexicalEntryListModal/lexicalEntryListModal';
 import { LexiconListModal } from '../widget/modal/browsingModal/lexiconListModal/lexiconListModal';
-
-//creation modals
+import { PropertyTreeModal } from '../widget/modal/browsingModal/propertyTreeModal/propertyTreeModal';
+import { SchemeListModal } from '../widget/modal/browsingModal/schemeListModal/schemeListModal';
+import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
 import { NewPlainLiteralModal } from '../widget/modal/creationModal/newPlainLiteralModal/newPlainLiteralModal';
-import { NewXLabelModal } from '../widget/modal/creationModal/newResourceModal/skos/newXLabelModal';
-import { NewResourceCfModal } from '../widget/modal/creationModal/newResourceModal/shared/newResourceCfModal';
-import { NewResourceWithLiteralCfModal } from '../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal';
-import { NewTypedLiteralModal } from '../widget/modal/creationModal/newTypedLiteralModal/newTypedLiteralModal';
-import { NewConceptCfModal } from '../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal';
-import { NewConceptFromLabelModal } from '../widget/modal/creationModal/newResourceModal/skos/newConceptFromLabelModal';
+import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/editableNsInput';
 import { NewLexiconCfModal } from '../widget/modal/creationModal/newResourceModal/ontolex/newLexiconCfModal';
 import { NewOntoLexicalizationCfModal } from '../widget/modal/creationModal/newResourceModal/ontolex/newOntoLexicalizationCfModal';
-
-//these are used only in creation modals, if they will be useful elsewhere, they can be moved in sharedModule
-import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/editableNsInput';
+import { NewResourceCfModal } from '../widget/modal/creationModal/newResourceModal/shared/newResourceCfModal';
+import { NewResourceWithLiteralCfModal } from '../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal';
+import { NewConceptCfModal } from '../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal';
+import { NewConceptFromLabelModal } from '../widget/modal/creationModal/newResourceModal/skos/newConceptFromLabelModal';
+import { NewXLabelModal } from '../widget/modal/creationModal/newResourceModal/skos/newXLabelModal';
 import { SchemeSelectionComponent } from '../widget/modal/creationModal/newResourceModal/skos/schemeSelectionComponent';
-
-//alignment modals
-import { ValidationSettingsModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationSettingsModal';
-import { ValidationReportModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationReportModal';
-import { MappingPropertySelectionModal } from '../alignment/alignmentValidation/alignmentValidationModals/mappingPropertySelectionModal';
-import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceAlignmentModal';
-import { BrowseExternalResourceModal } from '../alignment/resourceAlignment/browseExternalResourceModal';
-
-//config modals
-import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
-import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreationModal";
-
-//query
-import { ExportResultAsRdfModal } from "../sparql/exportResultAsRdfModal";
-
-//collaboration
-import { CollaborationProjSettingsModal } from "../collaboration/modals/collaborationProjSettingsModal";
-import { CollaborationUserSettingsModal } from "../collaboration/modals/collaborationUserSettingsModal";
-import { CollaborationProjectModal } from "../collaboration/modals/collaborationProjectModal";
-import { CreateIssueModal } from "../collaboration/modals/createIssueModal";
-import { IssueListModal } from "../collaboration/issueListModal";
-import { CollaborationModalServices } from "../collaboration/collaborationModalService";
+import { NewTypedLiteralModal } from '../widget/modal/creationModal/newTypedLiteralModal/newTypedLiteralModal';
+import { LoadConfigurationModal } from '../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal';
+import { StoreConfigurationModal } from '../widget/modal/sharedModal/configurationStoreModal/storeConfigurationModal';
+import { ConverterPickerModal } from '../widget/modal/sharedModal/converterPickerModal/converterPickerModal';
+import { SignaturePickerModal } from '../widget/modal/sharedModal/converterPickerModal/signaturePickerModal';
+import { LanguageSelectorModal } from "../widget/modal/sharedModal/languagesSelectorModal/languageSelectorModal";
+import { PluginConfigModal } from "../widget/modal/sharedModal/pluginConfigModal/pluginConfigModal";
+import { RemoteAccessConfigEditorModal } from "../widget/modal/sharedModal/remoteAccessConfigModal/remoteAccessConfigEditorModal";
+import { RemoteAccessConfigModal } from "../widget/modal/sharedModal/remoteAccessConfigModal/remoteAccessConfigModal";
+import { RemoteRepoSelectionModal } from "../widget/modal/sharedModal/remoteRepoSelectionModal/remoteRepoSelectionModal";
+import { ResourcePickerModal } from '../widget/modal/sharedModal/resourcePickerModal/resourcePickerModal';
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { CustomFormModule } from "./customFormModule";
+import { SharedModule } from "./sharedModule";
+import { TreeAndListModule } from "./treeAndListModule";
+import { UserModule } from "./userModule";
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
@@ -101,7 +79,6 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
         ConverterPickerModal, SignaturePickerModal, StoreConfigurationModal, LoadConfigurationModal, ResourcePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
         EditableNsInput, SchemeSelectionComponent,
-        ExportResultAsRdfModal,
         CollaborationProjSettingsModal, CollaborationUserSettingsModal, CollaborationProjectModal, CreateIssueModal, IssueListModal
     ],
     exports: [],
@@ -125,7 +102,6 @@ import { CollaborationModalServices } from "../collaboration/collaborationModalS
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
         ConverterPickerModal, SignaturePickerModal, StoreConfigurationModal, LoadConfigurationModal, ResourcePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
-        ExportResultAsRdfModal,
         CollaborationProjSettingsModal, CollaborationUserSettingsModal, CollaborationProjectModal, CreateIssueModal, IssueListModal
     ]
 })

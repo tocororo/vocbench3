@@ -13,8 +13,7 @@
             </a>
         </li>
         <li [ngClass]="{disabled : tabs.length==10}">
-            <a href (click)="addTab()" style="font-weight: bold" 
-                onmouseover="this.style.color='#555'" onmouseout="this.style.color='#337ab7'">
+            <a href (click)="addTab()" style="font-weight: bold" onmouseover="this.style.color='#555'" onmouseout="this.style.color='#337ab7'">
                 +
             </a>
         </li>
@@ -24,7 +23,18 @@
         <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}">
             <ng-template [ngIf]="t.active">
 
-                <yasgui [query]="t.query" (querychange)="onQueryChange(t, $event)"></yasgui>
+                <div class="hbox" style="flex: initial">
+                    <yasgui style="flex: 3; margin-right: 4px;" [query]="t.query" (querychange)="onQueryChange(t, $event)"></yasgui>
+
+                    <div *ngIf="t.variableBindings" class="vbox">
+                        <div class="checkbox" style="margin: 0px;">
+                            <label>
+                                <input type="checkbox" [(ngModel)]="t.useBindings">Use variable bindings
+                            </label>
+                        </div>
+                        <query-param-renderer class="vbox" [bindings]="t.variableBindings" (update)="onBindingsUpdate(t, $event)"></query-param-renderer>
+                    </div>
+                </div>
                 
                 <!--Commands (submit, clear, inferred)-->
                 <div style="margin: 5px 0;">
@@ -68,6 +78,9 @@
                                     <span class="glyphicon glyphicon-floppy-open"></span>
                                 </button>
                             </div>
+                            <button class="btn btn-default btn-xs" title="Query parametrization" (click)="parametrizeQuery(t)">
+                                Parametrizations
+                            </button>
                         </div>
                     </div>
                 </div>
