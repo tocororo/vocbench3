@@ -5,8 +5,7 @@
         <li *ngFor="let t of tabs" [ngClass]="{active : t.active}">
             <a href (click)="selectTab(t)">
                 Query
-                <span *ngIf=(t.removable) class="glyphicon glyphicon-remove-circle"
-                    (click)="closeTab(t)"
+                <span *ngIf="tabs.length > 1" class="glyphicon glyphicon-remove-circle" (click)="closeTab(t)"
                     onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
                     onmouseout="this.className='glyphicon glyphicon-remove-circle'; this.style.cursor='default'">
                 </span>
@@ -20,126 +19,9 @@
     </ul>
     <!--Tabs content-->
     <div class="tab-content">
-        <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}">
-            <ng-template [ngIf]="t.active">
-
-                <div class="hbox" style="flex: initial">
-                    <yasgui style="flex: 3; margin-right: 4px;" [query]="t.query" (querychange)="onQueryChange(t, $event)"></yasgui>
-
-                    <div *ngIf="t.variableBindings" class="vbox">
-                        <div class="checkbox" style="margin: 0px;">
-                            <label>
-                                <input type="checkbox" [(ngModel)]="t.useBindings">Use variable bindings
-                            </label>
-                        </div>
-                        <query-param-renderer class="vbox" [bindings]="t.variableBindings" (update)="onBindingsUpdate(t, $event)"></query-param-renderer>
-                    </div>
-                </div>
-                
-                <!--Commands (submit, clear, inferred)-->
-                <div style="margin: 5px 0;">
-                    <button class="btn btn-xs btn-primary" type="button" (click)="doQuery(t)" [disabled]="t.queryInProgress || !t.queryValid">
-                        Submit
-                    </button>
-                    <button class="btn btn-xs btn-info" type="button" (click)="clear(t)" [disabled]="t.queryResult == null">Clear</button>
-                    <div class="hbox" style="align-items: center; display: inline-flex; margin-left: 6px;">
-                        <div class="hbox" style="align-items: center; display: inline-flex; margin-left: 5px;">
-                            <label style="margin-right: 2px;">Include inferred:</label>
-                            <input type="checkbox" [(ngModel)]="t.inferred">
-                        </div>
-                        <div class="dropdown" style="margin-left: 6px;">
-                            <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown"
-                                [disabled]="t.queryResult == null && t.resultType != 'boolean'">
-                                Save results as... <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a (click)="exportAsJSON(t)">Json</a></li>
-                                <li><a (click)="exportAsCSV(t)">CSV</a></li>
-                                <li><a (click)="exportAsTSV(t)">TSV</a></li>
-                                <li><a (click)="exportAsSpradsheet(t, 'xlsx')">XLSX (Microsoft spreadsheet)</a></li>
-                                <li><a (click)="exportAsSpradsheet(t, 'ods')">ODS (OpenDocument spreadsheet)</a></li>
-                                <li *ngIf="t.resultType=='graph'"><a (click)="exportAsRdf(t)">RDF format...</a></li>
-                            </ul>
-                        </div>
-                        <span style="display: inline; margin-left: 6px;">
-                            <span *ngIf="t.queryResult != null && t.resultType != 'boolean'">
-                                Results count: {{t.queryResult.length}}
-                            </span>
-                            <span *ngIf="t.queryTime">(Done in {{t.queryTime}})</span>
-                        </span>
-                    </div>
-                    <div class="hbox pull-right" style="align-items: center">
-                        <div class="btn-toolbar" role="toolbar">
-                            <div class="btn-group btn-group-xs">
-                                <button class="btn btn-default btn-xs" title="Save query" (click)="saveQuery(t)">
-                                    <span class="glyphicon glyphicon-floppy-save"></span>
-                                </button>
-                                <button class="btn btn-default btn-xs" title="Load query" (click)="loadQuery(t)">
-                                    <span class="glyphicon glyphicon-floppy-open"></span>
-                                </button>
-                            </div>
-                            <button class="btn btn-default btn-xs" title="Query parametrization" (click)="parametrizeQuery(t)">
-                                Parametrizations
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                
-                
-                <!--Query result-->
-                <div *ngIf="t.queryResult != null" class="vbox">
-                    <div class="table-responsive" style="border: 1px solid #ddd">
-                        <table class="table table-striped table-condensed table-hoverable" style="flex: 1">
-                            <thead>
-                                <tr>
-                                    <th *ngFor="let h of t.headers">{{h}}</th>
-                                </tr>
-                            </thead>
-                            <tbody style="overflow: auto;">
-                                <ng-template [ngIf]="t.resultType != 'boolean'">
-                                    <ng-template ngFor let-bindings [ngForOf]="t.queryResult" let-i="index">
-                                        <ng-template [ngIf]="i >= t.resultsPage*resultsLimit && i < t.resultsPage*resultsLimit + resultsLimit"> <!-- paging filter -->
-                                            <tr>
-                                                <td *ngFor="let h of t.headers">
-                                                    <span *ngIf="bindings[h]" [ngClass]="{ clickable: isBindingResource(bindings[h]) }" (click)="onBindingClick(bindings[h])">
-                                                        {{getBindingShow(bindings[h])}}
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </ng-template>
-                                    </ng-template>
-                                </ng-template>
-                                <ng-template [ngIf]="t.resultType == 'boolean'">
-                                    <tr>
-                                        <td>
-                                            {{t.queryResult}}
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div *ngIf="t.queryResult.length > resultsLimit">
-                        <div class="btn-group btn-group-xs pull-right" style="margin-top: 4px;" role="group">
-                            <button class="btn btn-default" title="Previous page" (click)="t.resultsPage=t.resultsPage-1" [disabled]="t.resultsPage==0">
-                                <span class="glyphicon glyphicon-triangle-left"></span>
-                            </button>
-                            <button class="btn btn-default" style="cursor: auto" disabled>
-                                <span>{{t.resultsPage+1}} of {{t.resultsTotPage}}</span>
-                            </button>
-                            <button class="btn btn-default" title="Next page" (click)="t.resultsPage=t.resultsPage+1" [disabled]="t.resultsPage==t.resultsTotPage-1">
-                                <span class="glyphicon glyphicon-triangle-right"></span>
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
-            </ng-template>
+        <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}" [hidden]="!t.active">
+            <sparql-tab class="vbox"></sparql-tab>
         </div>
-        
     </div>
     
-
 </div>

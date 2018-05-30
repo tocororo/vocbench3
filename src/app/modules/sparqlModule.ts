@@ -6,13 +6,14 @@ import { QueryParameterRenderer } from '../sparql/queryParametrization/queryPara
 import { QueryParametrizationMgrModal } from '../sparql/queryParametrization/queryParametrizationMgrModal';
 import { QueryParametrizerModal } from '../sparql/queryParametrization/queryParametrizerModal';
 import { SparqlComponent } from '../sparql/sparqlComponent';
+import { SparqlTabComponent } from '../sparql/sparqlTabComponent';
 import { YasguiComponent } from '../sparql/yasguiComponent';
 import { SharedModule } from './sharedModule';
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule],
     declarations: [
-        SparqlComponent, YasguiComponent, QueryParameterRenderer,
+        SparqlComponent, SparqlTabComponent, YasguiComponent, QueryParameterRenderer,
         //modals
         ExportResultAsRdfModal, QueryParametrizerModal, QueryParametrizationMgrModal
     ],
