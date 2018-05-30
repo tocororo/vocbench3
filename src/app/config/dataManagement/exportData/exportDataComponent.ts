@@ -53,18 +53,18 @@ export class ExportDataComponent {
     private deployerStatus: ExtensionConfigurationStatus;
     private deployerRelativeRef: string;
 
-    private useDeployer: boolean = false;
-    private readonly STREAM_SOURCE: string = "Stream";
-    private readonly REPO_SOURCE: string = "Repository";
-    private deployerSources: string[] = [this.STREAM_SOURCE, this.REPO_SOURCE];
-    private selectedDeployerSource: string = this.deployerSources[0];
+    private deploymentOptions: { label: string, source: DeploySource }[] = [
+        { label: "Save to file", source: null },
+        { label: "Deploy to a triple store", source: DeploySource.repository },
+        { label: "Use custom deployer", source: DeploySource.stream }
+    ]
+    private selectedDeployment = this.deploymentOptions[0];
     
 
     constructor(private extensionService: ExtensionsServices, private exportService: ExportServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
-
         let baseURI: string = VBContext.getWorkingProject().getBaseURI();
         this.exportService.getNamedGraphs().subscribe(
             graphs => {
@@ -102,7 +102,6 @@ export class ExportDataComponent {
                 this.streamSourcedDeployer = extensions;
             }
         );
-
     }
 
     /** =====================================
@@ -311,7 +310,7 @@ export class ExportDataComponent {
 
         //deployerSpec
         let deployerSpec: { extensionID: string, configRef: string };
-        if (this.useDeployer) {
+        if (this.selectedDeployment.source != null) {
             if (this.deployerStatus == ExtensionConfigurationStatus.unsaved) {
                 this.basicModals.alert("Unsaved configuration", "Deployer configuration is not saved. " +
                     "In order to save the exporter configuration all its sub-configurations need to be saved.", "warning");
@@ -342,7 +341,6 @@ export class ExportDataComponent {
         this.sharedModals.loadConfiguration("Load exporter chain configuration", ConfigurationComponents.EXPORTER).then(
             (conf: LoadConfigurationModalReturnData) => {
                 this.filtersChain = []; //reset the chain
-                this.useDeployer = false;
                 let configurations: SettingsProp[] = conf.configuration.properties;
                 for (var i = 0; i < configurations.length; i++) {
                     if (configurations[i].name == "transformationPipeline") {
@@ -376,23 +374,42 @@ export class ExportDataComponent {
                     } else if (configurations[i].name == "includeInferred") {
                         this.includeInferred = configurations[i].value;
                     } else if (configurations[i].name == "deployerSpec") {
-                        this.useDeployer = true;
                         let deployerSpec: {extensionID: string, configRef: string} = configurations[i].value;
-                        //check if it is necessary to switch the deployer source
-                        let found: boolean = false;
-                        this.streamSourcedDeployer.forEach((deployer: ExtensionFactory) => {
-                            if (deployer.id == deployerSpec.extensionID) {
-                                this.selectedDeployerSource = "Stream";
-                                found = true;
+                        if (deployerSpec != null) { //deployer specified, select the sourced deployer in the menu
+                            let found: boolean = false;
+                            //look among stream-sourced deployer
+                            this.streamSourcedDeployer.forEach((deployer: ExtensionFactory) => {
+                                if (deployer.id == deployerSpec.extensionID) {
+                                    //select the stream-sourced option in the menu
+                                    this.deploymentOptions.forEach(opt => {
+                                        if (opt.source == DeploySource.stream) {
+                                            this.selectedDeployment = opt;
+                                        }
+                                    })
+                                    found = true;
+                                }
+                            });
+                            //deployer not found among the stream-sourced deployer, so the deployer is repository sourced
+                            if (!found) { 
+                                //select the repository-sourced option in the menu
+                                this.deploymentOptions.forEach(opt => {
+                                    if (opt.source == DeploySource.repository) {
+                                        this.selectedDeployment = opt;
+                                    }
+                                })
                             }
-                        });
-                        if (!found) {
-                            this.selectedDeployerSource = "Repository";
+                            
+                            setTimeout(() => {
+                                this.deployerConfigurator.forceConfiguration(deployerSpec.extensionID, deployerSpec.configRef);
+                            });
+                        } else { //deployer not specified
+                            //select the no-deployer option in the menu
+                            this.deploymentOptions.forEach(opt => {
+                                if (opt.source == null) {
+                                    this.selectedDeployment = opt;
+                                }
+                            });
                         }
-                        
-                        setTimeout(() => {
-                            this.deployerConfigurator.forceConfiguration(deployerSpec.extensionID, deployerSpec.configRef);
-                        });
                     }
                 }
 
@@ -434,7 +451,7 @@ export class ExportDataComponent {
         let reformattingExporterSpec: PluginSpecification
         let outputFormat: string;
         //if doesn't use a deployer or use a deployer with stream source
-        if (!this.useDeployer || this.selectedDeployerSource == this.STREAM_SOURCE) {
+        if (this.selectedDeployment.source == null || this.selectedDeployment.source == DeploySource.stream) {
             reformattingExporterSpec = {
                 factoryId: this.selectedReformatterExtension.id
             };
@@ -453,7 +470,7 @@ export class ExportDataComponent {
         
         //deployerSpec
         let deployerSpec: PluginSpecification;
-        if (this.useDeployer) {
+        if (this.selectedDeployment.source != null) {
             deployerSpec = {
                 factoryId: this.selectedDeployerExtension.id
             }
@@ -586,4 +603,9 @@ class FilterChainElement {
         }
         return filterStep;
     }
+}
+
+enum DeploySource {
+    stream = "stream",
+    repository = "repository"
 }

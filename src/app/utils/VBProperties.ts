@@ -33,9 +33,9 @@ export class VBProperties {
 
     private searchSettings: SearchSettings = {
         stringMatchMode: SearchMode.contains,
-        useURI: false,
         useLocalName: true,
-        useNotes: true,
+        useURI: false,
+        useNotes: false,
         restrictLang: false,
         includeLocales: false,
         languages: [],

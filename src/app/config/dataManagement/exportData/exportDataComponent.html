@@ -94,63 +94,62 @@
                 </div>
             </div>
 
-            <div *ngIf="!useDeployer || selectedDeployerSource != REPO_SOURCE" class="subPanel">
-                <div class="subPanel-heading">
-                    <label>Reformatter</label>
-                </div>
-                <div class="subPanel-body">
-                    <div class="hbox">
-                        <extension-configurator *ngIf="reformatters" [extensions]="reformatters"
-                            (extensionUpdated)="onReformatterExtensionUpdated($event)"
-                            (configurationUpdated)="selectedReformatterConfig = $event"
-                            style="flex: 1;">
-                        </extension-configurator>
-
-                        <div class="hbox" style="align-items: center; flex: initial; margin-left: 8px;">
-                            <label style="white-space: nowrap; margin-right: 4px;">Export Format:</label>
-                            <select class="form-control input-sm" [(ngModel)]="selectedExportFormat">
-                                <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
-                            </select>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
             <div class="subPanel">
                 <div class="subPanel-heading">
-                    <label>Deployer</label>
-                    <input type="checkbox" [(ngModel)]="useDeployer" title="Use deployer" style="margin-left: 6px;">
+                    <label style="margin-right: 8px">Deployment:</label>
+                    <select class="form-control input-xs" style="width: initial" [(ngModel)]="selectedDeployment">
+                        <option *ngFor="let depOpt of deploymentOptions" [ngValue]="depOpt">{{depOpt.label}}</option>
+                    </select>
                 </div>
                 <div class="subPanel-body">
-                    <div *ngIf="useDeployer" class="hbox" style="align-items: center;">
-                        <div class="hbox" style="align-items: center; flex: initial; margin-right: 8px;">
-                            <label style="white-space: nowrap; margin-right: 4px;">Deploy from:</label>
-                            <select class="form-control input-sm" [(ngModel)]="selectedDeployerSource">
-                                <option *ngFor="let s of deployerSources">{{s}}</option>
-                            </select>
-                        </div>
-
-                        <ng-template [ngIf]="selectedDeployerSource == REPO_SOURCE">
-                            <extension-configurator #deployerConfigurator *ngIf="repoSourcedDeployer" [extensions]="repoSourcedDeployer"
-                                (extensionUpdated)="selectedDeployerExtension = $event"
-                                (configurationUpdated)="selectedDeployerConfig = $event"
-                                (configStatusUpdated)="onDeployerConfigStatusUpdated($event)"
-                                style="flex: 1;">
-                            </extension-configurator>
-                        </ng-template>
-                        <ng-template [ngIf]="selectedDeployerSource == STREAM_SOURCE">
-                            <extension-configurator #deployerConfigurator *ngIf="streamSourcedDeployer" [extensions]="streamSourcedDeployer"
-                                (extensionUpdated)="selectedDeployerExtension = $event"
-                                (configurationUpdated)="selectedDeployerConfig = $event"
-                                (configStatusUpdated)="onDeployerConfigStatusUpdated($event)"
-                                style="flex: 1;">
-                            </extension-configurator>
-                        </ng-template>
-
-                        <span *ngIf="requireConfigurationDeployer()" class="glyphicon glyphicon-warning-sign" style="margin: 0 8px;"
-                            title="This deployer needs to be configured"></span>
-                    </div>
+                    <table class="table table-condensed table-borderless">
+                        <colgroup>
+                            <col style="width: 80px">
+                            <col>
+                        </colgroup>
+                        <!-- When a deployer source is specified (so a deployer is used) -->
+                        <tr *ngIf="selectedDeployment.source">
+                            <td><label>Deployer:</label></td>
+                            <td>
+                                <ng-template [ngIf]="selectedDeployment.source == 'repository'">
+                                    <extension-configurator #deployerConfigurator *ngIf="repoSourcedDeployer" [extensions]="repoSourcedDeployer"
+                                        (extensionUpdated)="selectedDeployerExtension = $event"
+                                        (configurationUpdated)="selectedDeployerConfig = $event"
+                                        (configStatusUpdated)="onDeployerConfigStatusUpdated($event)"
+                                        style="flex: 1;">
+                                    </extension-configurator>
+                                </ng-template>
+                                <ng-template [ngIf]="selectedDeployment.source == 'stream'">
+                                    <extension-configurator #deployerConfigurator *ngIf="streamSourcedDeployer" [extensions]="streamSourcedDeployer"
+                                        (extensionUpdated)="selectedDeployerExtension = $event"
+                                        (configurationUpdated)="selectedDeployerConfig = $event"
+                                        (configStatusUpdated)="onDeployerConfigStatusUpdated($event)"
+                                        style="flex: 1;">
+                                    </extension-configurator>
+                                </ng-template>
+                            </td>
+                        </tr>
+                        <!-- Reformatter available only when not using a deployer, or when using a stream-source deployer -->
+                        <tr *ngIf="!selectedDeployment.source || selectedDeployment.source == 'stream'">
+                            <td><label>Reformatter:</label></td>
+                            <td>
+                                <div class="hbox">
+                                    <extension-configurator *ngIf="reformatters" [extensions]="reformatters"
+                                        (extensionUpdated)="onReformatterExtensionUpdated($event)"
+                                        (configurationUpdated)="selectedReformatterConfig = $event"
+                                        style="flex: 1;">
+                                    </extension-configurator>
+            
+                                    <div class="hbox" style="align-items: center; flex: initial; margin-left: 8px;">
+                                        <label style="white-space: nowrap; margin-right: 4px;">Export Format:</label>
+                                        <select class="form-control input-sm" [(ngModel)]="selectedExportFormat">
+                                            <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
 
