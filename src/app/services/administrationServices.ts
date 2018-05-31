@@ -24,12 +24,12 @@ export class AdministrationServices {
 
     /**
      * 
-     * @param emailAdminAddress 
+     * @param adminEmailAddress 
      */
-    updateAdministrator(emailAdminAddress: string) {
+    updateAdministrator(adminEmailAddress: string) {
         console.log("[AdministrationServices] updateAdministrator");
         var params: any = {
-            emailAdminAddress: emailAdminAddress,
+            adminEmailAddress: adminEmailAddress,
         }
         return this.httpMgr.doPost(this.serviceName, "updateAdministrator", params);
     }
@@ -44,15 +44,17 @@ export class AdministrationServices {
      * @param mailFromAlias 
      */
     updateEmailConfig(mailSmtpHost: string, mailSmtpPort: string, mailSmtpAuth: string,
-        mailFromAddress: string, mailFromPassword: string, mailFromAlias: string) {
+        mailFromAddress: string, mailFromAlias: string, mailFromPassword?: string) {
         console.log("[AdministrationServices] updateEmailConfig");
         var params: any = {
             mailSmtpHost: mailSmtpHost,
             mailSmtpPort: mailSmtpPort,
             mailSmtpAuth: mailSmtpAuth,
             mailFromAddress: mailFromAddress,
-            mailFromPassword: mailFromPassword,
             mailFromAlias: mailFromAlias
+        }
+        if (mailFromPassword != null) {
+            params.mailFromAddress = mailFromPassword
         }
         return this.httpMgr.doPost(this.serviceName, "updateEmailConfig", params);
     }

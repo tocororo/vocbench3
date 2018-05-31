@@ -90,7 +90,7 @@ export class ConfigAdministrationComponent {
             mailFromPwd = this.emailConfig.mailFromPassword;
         }
         this.adminService.updateEmailConfig(this.emailConfig.mailSmtpHost, this.emailConfig.mailSmtpPort, this.emailConfig.mailSmtpAuth, 
-            this.emailConfig.mailFromAddress, mailFromPwd, this.emailConfig.mailFromAlias).subscribe(
+            this.emailConfig.mailFromAddress, this.emailConfig.mailFromAlias, mailFromPwd).subscribe(
             stResp => {
                 this.init();
             }
