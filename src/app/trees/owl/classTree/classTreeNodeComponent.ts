@@ -1,13 +1,13 @@
-import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef } from "@angular/core";
+import { Component, Input, QueryList, ViewChildren } from "@angular/core";
+import { Observable } from "rxjs/Observable";
 import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
 import { OWL, RDFS } from "../../../models/Vocabulary";
-import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { ClassesServices } from "../../../services/classesServices";
+import { TreeListContext } from "../../../utils/UIUtils";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
-import { TreeListContext } from "../../../utils/UIUtils";
-import { ClassesServices } from "../../../services/classesServices";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { AbstractTreeNode } from "../../abstractTreeNode";
-import { Observable } from "rxjs/Observable";
 
 @Component({
     selector: "class-tree-node",

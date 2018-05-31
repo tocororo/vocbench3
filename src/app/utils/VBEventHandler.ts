@@ -1,6 +1,6 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { ARTURIResource, ARTResource, ARTLiteral } from '../models/ARTResources';
+import { ARTResource, ARTURIResource } from '../models/ARTResources';
 import { ResourceViewMode } from '../models/Properties';
 import { VBContext } from '../utils/VBContext';
 
@@ -66,6 +66,10 @@ export class VBEventHandler {
     public lexiconChangedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("lexiconChangedEvent");
     public lexicalEntryCreatedEvent: EventEmitter<{ entry: ARTURIResource, lexicon: ARTURIResource }> = new VBEventEmitter("lexicalEntryCreatedEvent");
     public lexicalEntryDeletedEvent: EventEmitter<{ entry: ARTURIResource, lexicon: ARTURIResource }> = new VBEventEmitter("lexicalEntryDeletedEvent");
+
+    //DATATYPE EVENTS
+    public datatypeCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("datatypeCreatedEvent");
+    public datatypeDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("datatypeDeletedEvent");
 
     //MISC EVENTS 
     //data loaded/imported/removed/refactored => trees/lists need to be resfreshed

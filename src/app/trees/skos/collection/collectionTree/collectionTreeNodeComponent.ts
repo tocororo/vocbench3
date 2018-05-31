@@ -1,8 +1,8 @@
-import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef } from "@angular/core";
-import { ARTURIResource, ARTResource, ARTLiteral, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
+import { Component, QueryList, ViewChildren } from "@angular/core";
+import { ARTResource, ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
+import { SkosServices } from "../../../../services/skosServices";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
-import { SkosServices } from "../../../../services/skosServices";
 import { AbstractTreeNode } from "../../../abstractTreeNode";
 
 @Component({

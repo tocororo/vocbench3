@@ -1,17 +1,18 @@
 import { Component, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ConfigurationsServices } from "../../services/configurationsServices";
-import { ConfigurationComponents, Configuration } from "../../models/Configuration";
-import { YasguiComponent } from "../yasguiComponent";
-import { ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ARTNode, ARTLiteral, ResourceUtils } from "../../models/ARTResources";
-import { XmlSchema } from "../../models/Vocabulary";
-import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { BindingTypeEnum, VariableBindings } from "../../models/Sparql";
+import { Observable } from "rxjs/Observable";
+import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResourceUtils } from "../../models/ARTResources";
+import { Configuration, ConfigurationComponents } from "../../models/Configuration";
 import { SettingsProp } from "../../models/Plugins";
+import { BindingTypeEnum, VariableBindings } from "../../models/Sparql";
+import { ConfigurationsServices } from "../../services/configurationsServices";
+import { DatatypesServices } from "../../services/datatypesServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { LoadConfigurationModalReturnData } from "../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
+import { YasguiComponent } from "../yasguiComponent";
 
 export class QueryParametrizerModalData extends BSModalContext {
     constructor(public relativeRef?: string) {
@@ -56,11 +57,12 @@ export class QueryParametrizerModal implements ModalComponent<QueryParametrizerM
         { show: "Property", value: RDFResourceRolesEnum.property },
     ];
 
-    private datatypes: ARTURIResource[] = XmlSchema.DATATYPES;
+    private datatypes: ARTURIResource[];
     //----------------------------
 
     constructor(public dialog: DialogRef<QueryParametrizerModalData>, private configurationService: ConfigurationsServices, 
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private creationModals: CreationModalServices) {
+        private datatypeService: DatatypesServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
+        private creationModals: CreationModalServices) {
         this.context = dialog.context;
     }
 
@@ -105,7 +107,6 @@ export class QueryParametrizerModal implements ModalComponent<QueryParametrizerM
                                         bindingType = bt;
                                     }
                                 })
-                                datatype = this.datatypes[ResourceUtils.indexOfNode(this.datatypes, ResourceUtils.parseURI(variableBindings[varName].datatype))]
                             } else if (variableBindings[varName].resourceRole != null) {
                                 this.bindingTypes.forEach(bt => {
                                     if (bt.value == BindingTypeEnum.constraint && bt.specialization == 'role') {
@@ -131,12 +132,42 @@ export class QueryParametrizerModal implements ModalComponent<QueryParametrizerM
                             value: value
                         }
 
-                        this.bindings.push(bs);
+                        /**
+                         * If the specialization is datatype, then I need to retrieve (asynchronously) the datatypes,
+                         * then to set the datatype attribute in the BindingStruct, finally to push the bindingStruct.
+                         */
+                        if (bs.bindingType.specialization == 'datatype') {
+                            //init datatypes
+                            this.initDatatypes().subscribe(
+                                () => {
+                                    datatype = this.datatypes[ResourceUtils.indexOfNode(this.datatypes, ResourceUtils.parseURI(variableBindings[varName].datatype))]
+                                    bs.datatype = datatype
+                                    this.bindings.push(bs);
+                                }
+                            )
+                        } else { //specialization not datatype => simply push the bs
+                            this.bindings.push(bs);
+                        }
                     }
                 }
             );
         } else { //create mode
 
+        }
+    }
+
+    private initDatatypes(): Observable<any> {
+        if (this.datatypes == null) {
+            return this.datatypeService.getDatatypes().map(
+                datatypes => {
+                    datatypes.sort((dt1: ARTURIResource, dt2: ARTURIResource) => {
+                        return dt1.getShow().localeCompare(dt2.getShow());
+                    });
+                    this.datatypes = datatypes;
+                }
+            );
+        } else {
+            return Observable.of();
         }
     }
 

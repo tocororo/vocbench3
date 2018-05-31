@@ -17,6 +17,7 @@ import { InstanceListComponent } from "../instanceList/instanceListComponent";
 @Component({
     selector: "instance-list-panel",
     templateUrl: "./instanceListPanelComponent.html",
+    host: { class: "vbox" }
 })
 export class InstanceListPanelComponent extends AbstractPanel {
     @Input() hideSearch: boolean = false; //if true hide the search bar

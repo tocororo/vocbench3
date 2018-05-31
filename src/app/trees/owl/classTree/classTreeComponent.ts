@@ -1,20 +1,19 @@
-import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, SimpleChanges } from "@angular/core";
+import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
-import { OWL } from "../../../models/Vocabulary";
-import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { VBProperties } from "../../../utils/VBProperties";
-import { UIUtils, TreeListContext } from "../../../utils/UIUtils";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ClassesServices } from "../../../services/classesServices";
 import { SearchServices } from "../../../services/searchServices";
-import { ClassTreeNodeComponent } from "./classTreeNodeComponent";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
+import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { AbstractTree } from "../../abstractTree";
+import { ClassTreeNodeComponent } from "./classTreeNodeComponent";
 
 @Component({
     selector: "class-tree",
     templateUrl: "./classTreeComponent.html",
-    host: { class: "blockingDivHost" }
+    host: { class: "treeListComponent" }
 })
 export class ClassTreeComponent extends AbstractTree {
     @Input('roots') rootClasses: ARTURIResource[];

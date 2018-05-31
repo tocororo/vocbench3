@@ -1,23 +1,22 @@
-import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
-import { LexiconListComponent } from "../lexiconList/lexiconListComponent";
-import { AbstractPanel } from "../../../abstractPanel";
-import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
-import { SearchServices } from "../../../../services/searchServices";
+import { Component, Input, ViewChild } from "@angular/core";
+import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
+import { SearchSettings } from "../../../../models/Properties";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
+import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
+import { SearchServices } from "../../../../services/searchServices";
+import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { VBProperties } from '../../../../utils/VBProperties';
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { NewLexiconCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/ontolex/newLexiconCfModal";
-import { VBProperties } from '../../../../utils/VBProperties';
-import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { VBContext } from "../../../../utils/VBContext";
-import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
-import { SearchSettings } from "../../../../models/Properties";
+import { AbstractPanel } from "../../../abstractPanel";
+import { LexiconListComponent } from "../lexiconList/lexiconListComponent";
 
 @Component({
     selector: "lexicon-list-panel",
     templateUrl: "./lexiconListPanelComponent.html",
+    host: { class: "vbox" }
 })
 export class LexiconListPanelComponent extends AbstractPanel {
     @Input() hideSearch: boolean = false; //if true hide the search bar

@@ -392,7 +392,12 @@ export class SkosServices {
         var params: any = {
             scheme: scheme
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteConceptScheme", params);
+        return this.httpMgr.doPost(this.serviceName, "deleteConceptScheme", params).map(
+            stResp => {
+                this.eventHandler.schemeDeletedEvent.emit(scheme);
+                return stResp;
+            }
+        );
     }
 
 

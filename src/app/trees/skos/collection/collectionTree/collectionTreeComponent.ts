@@ -1,18 +1,18 @@
-import { Component, Input, Output, EventEmitter, ViewChildren, QueryList } from "@angular/core";
+import { Component, QueryList, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
-import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { UIUtils } from "../../../../utils/UIUtils";
-import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
-import { SkosServices } from "../../../../services/skosServices";
 import { SearchServices } from "../../../../services/searchServices";
-import { CollectionTreeNodeComponent } from "./collectionTreeNodeComponent";
+import { SkosServices } from "../../../../services/skosServices";
+import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { UIUtils } from "../../../../utils/UIUtils";
+import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { AbstractTree } from "../../../abstractTree";
+import { CollectionTreeNodeComponent } from "./collectionTreeNodeComponent";
 
 @Component({
     selector: "collection-tree",
     templateUrl: "./collectionTreeComponent.html",
-    host: { class: "blockingDivHost" }
+    host: { class: "treeListComponent" }
 })
 export class CollectionTreeComponent extends AbstractTree {
 

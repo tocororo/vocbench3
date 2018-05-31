@@ -1,0 +1,39 @@
+<div class="panel panel-default vbox">
+    <!-- Commands -->
+    <div class="panel-heading">
+        <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
+            <button class="btn btn-default" title="Create Datatype" (click)="create()" [disabled]="isCreateDisabled()">
+                <img src="../../../../assets/images/icons/actions/individual_create.png" class="panelButtonImg"/>
+            </button>
+            <ng-template [ngIf]="deletable">
+                <button class="btn btn-default" title="Delete Datatype" (click)="delete()" [disabled]="isDeleteDisabled()">
+                    <img src="../../../../assets/images/icons/actions/individual_delete.png" class="panelButtonImg"/>
+                </button>
+                <button class="btn btn-default" title="Deprecate Datatype" (click)="deprecate()" [disabled]="isDeprecateDisabled()">
+                    <img src="../../../../assets/images/icons/actions/individual_deprecate.png" class="panelButtonImg"/>
+                </button>
+            </ng-template>
+        </div>
+        <div style="flex: 1"></div>
+        <div class="btn-toolbar" role="toolbar">
+            <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering = !rendering" [ngClass]="{active: rendering}">
+                <span class="glyphicon glyphicon-font"></span>
+            </button>
+            <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
+                <span class="glyphicon glyphicon-refresh"></span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Tree -->
+    <div class="panel-body vbox">
+        <datatype-list [full]="full" [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)">
+        </datatype-list>
+    </div>
+
+    <!-- Search -->
+    <div class="panel-footer">
+        <search-bar (search)="doSearch($event)" (advancedSearch)="advancedSearch($event)" [roles]="[panelRole]" [context]="context"></search-bar>
+    </div>
+    
+</div>

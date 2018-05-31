@@ -40,6 +40,11 @@
                 </a>
             </li>
         </ng-template>
+        <li [ngClass]="{active : activeTab == 'dataRange', disabled: !isDataRangeAuthorized() }">
+            <a href (click)="selectTab('dataRange')">
+                Datatype
+            </a>
+        </li>
 
         <li class="active" style="float: right;">
             <a (click)="openSettings()" style="margin: 0px 2px;">
@@ -91,6 +96,11 @@
                 </lexical-entry-list-panel>
             </div>
         </ng-template>
+        <div [ngClass]="{vbox : activeTab == 'dataRange'}" [hidden]="activeTab != 'dataRange'">
+            <datatype-list-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)" 
+                (advancedSearch)="advancedSearch($event)" [context]="context" [readonly]="readonly">
+            </datatype-list-panel>
+        </div>
     </div>
     
 </div>

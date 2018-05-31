@@ -18,6 +18,7 @@ import { CollectionTreeComponent } from "../collectionTree/collectionTreeCompone
 @Component({
     selector: "collection-tree-panel",
     templateUrl: "./collectionTreePanelComponent.html",
+    host: { class: "vbox" }
 })
 export class CollectionTreePanelComponent extends AbstractTreePanel {
     @ViewChild(CollectionTreeComponent) viewChildTree: CollectionTreeComponent

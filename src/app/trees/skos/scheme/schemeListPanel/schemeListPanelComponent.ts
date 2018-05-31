@@ -17,6 +17,7 @@ import { SchemeListComponent } from "../schemeList/schemeListComponent";
 @Component({
     selector: "scheme-list-panel",
     templateUrl: "./schemeListPanelComponent.html",
+    host: { class: "vbox" }
 })
 export class SchemeListPanelComponent extends AbstractPanel {
 
@@ -74,7 +75,6 @@ export class SchemeListPanelComponent extends AbstractPanel {
     private deleteSelectedScheme() {
         this.skosService.deleteConceptScheme(this.selectedNode).subscribe(
             stResp => {
-                this.eventHandler.schemeDeletedEvent.emit(this.selectedNode);
                 this.nodeDeleted.emit(this.selectedNode);
                 this.selectedNode = null;
             }
@@ -124,6 +124,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
     }
 
     refresh() {
+        this.selectedNode = null;
         this.viewChildList.initList();
     }
 

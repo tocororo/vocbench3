@@ -1,18 +1,18 @@
-import { Component, Input, Output, EventEmitter, ViewChildren, QueryList, SimpleChanges } from "@angular/core";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
-import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { UIUtils } from "../../../utils/UIUtils";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
 import { PropertyServices } from "../../../services/propertyServices";
 import { SearchServices } from "../../../services/searchServices";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { UIUtils } from "../../../utils/UIUtils";
+import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
-import { PropertyTreeNodeComponent } from "./propertyTreeNodeComponent";
 import { AbstractTree } from "../../abstractTree";
+import { PropertyTreeNodeComponent } from "./propertyTreeNodeComponent";
 
 @Component({
     selector: "property-tree",
     templateUrl: "./propertyTreeComponent.html",
-    host: { class: "blockingDivHost" }
+    host: { class: "treeListComponent" }
 })
 export class PropertyTreeComponent extends AbstractTree {
     @Input() resource: ARTURIResource;//provided to show just the properties with domain the type of the resource

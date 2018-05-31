@@ -106,20 +106,11 @@ resource-view-splitted, resource-view-tabbed {
     flex: 1;
 }
 
-tree-panel, concept-tree-panel, scheme-list-panel, class-individual-tree-panel, class-tree-panel, 
-instance-list-panel, property-tree-panel, collection-tree-panel, lexicon-list-panel, lexical-entry-list-panel,
-concept-tree, class-tree, property-tree, collection-tree, instance-list, scheme-list, resource-list, 
-lexicon-list, lexical-entry-list, class-individual-tree,
-resource-view, scheme-selection, data-range-editor, import-tree {
+tree-panel, resource-list, class-individual-tree, resource-view, scheme-selection, data-range-editor, import-tree {
     display: flex;
     flex: 1;
     min-height: 0;
     flex-flow: column;
-}
-
-concept-tree .panel-body, class-tree .panel-body, property-tree .panel-body, collection-tree .panel-body, 
-instance-list .panel-body, scheme-list .panel-body, lexicon-list .panel-body, lexical-entry-list .panel-body {
-    padding: 0px;
 }
 
 /* Note: in order to work, the div with this class needs to be placed into a display:flex container */
@@ -172,9 +163,21 @@ rdf-resource > .rdfResourceIcon {
     text-align: center;
 }
 
-class-tree rdf-resource:hover, instance-list rdf-resource:hover, concept-tree rdf-resource:hover,
-collection-tree rdf-resource:hover, scheme-list rdf-resource:hover, property-tree rdf-resource:hover,
-scheme-list-panel rdf-resource:hover {
+.treeListComponent {
+    /* vbox + blockingDivHost */
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+    position: relative;
+}
+
+.treeListComponent .panel-body {
+    padding: 0px;
+}
+
+.treeListComponent rdf-resource:hover {
     background-color: #e5f3ff;
 }
 

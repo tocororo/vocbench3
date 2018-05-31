@@ -23,6 +23,7 @@ import { LexicalEntryListSettingsModal } from "./lexicalEntryListSettingsModal";
 @Component({
     selector: "lexical-entry-list-panel",
     templateUrl: "./lexicalEntryListPanelComponent.html",
+    host: { class: "vbox" }
 })
 export class LexicalEntryListPanelComponent extends AbstractPanel {
     @Input() hideSearch: boolean = false; //if true hide the search bar

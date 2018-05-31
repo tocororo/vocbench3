@@ -9,6 +9,7 @@ import { CollaborationServices } from "../services/collaborationServices";
 import { ConfigurationsServices } from "../services/configurationsServices";
 import { CustomFormsServices } from "../services/customFormsServices";
 import { DatasetMetadataServices } from "../services/datasetMetadataServices";
+import { DatatypesServices } from '../services/datatypesServices';
 import { ExportServices } from "../services/exportServices";
 import { ExtensionsServices } from "../services/extensionsServices";
 import { HistoryServices } from "../services/historyServices";
@@ -53,6 +54,7 @@ import { VersionsServices } from "../services/versionsServices";
         CollaborationServices,
         ConfigurationsServices,
         CustomFormsServices,
+        DatatypesServices,
         DatasetMetadataServices,
         ExportServices,
         ExtensionsServices,

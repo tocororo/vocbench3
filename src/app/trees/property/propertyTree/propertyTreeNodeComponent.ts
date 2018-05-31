@@ -1,8 +1,8 @@
-import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList, ElementRef } from "@angular/core";
-import { PropertyServices } from "../../../services/propertyServices";
+import { Component, QueryList, ViewChildren } from "@angular/core";
 import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
-import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { PropertyServices } from "../../../services/propertyServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { AbstractTreeNode } from "../../abstractTreeNode";
 
 @Component({

@@ -21,6 +21,7 @@ import { ClassTreeSettingsModal } from "./classTreeSettingsModal";
 @Component({
     selector: "class-tree-panel",
     templateUrl: "./classTreePanelComponent.html",
+    host: { class: "vbox" }
 })
 export class ClassTreePanelComponent extends AbstractTreePanel {
     @Input() hideSearch: boolean = false; //if true hide the search bar

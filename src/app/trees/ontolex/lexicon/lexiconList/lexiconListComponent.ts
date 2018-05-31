@@ -1,21 +1,21 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ViewChildren, QueryList } from "@angular/core";
-import { AbstractList } from "../../../abstractList";
-import { LexiconListNodeComponent } from "./lexiconListNodeComponent";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
+import { Component, Input, QueryList, ViewChildren } from "@angular/core";
+import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
-import { SearchSettings } from "../../../../models/Properties";
-import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
-import { VBProperties } from "../../../../utils/VBProperties";
-import { UIUtils, TreeListContext } from "../../../../utils/UIUtils";
-import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { VBContext } from "../../../../utils/VBContext";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { SearchServices } from "../../../../services/searchServices";
+import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { TreeListContext, UIUtils } from "../../../../utils/UIUtils";
+import { VBContext } from "../../../../utils/VBContext";
+import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
+import { AbstractList } from "../../../abstractList";
+import { LexiconListNodeComponent } from "./lexiconListNodeComponent";
 
 @Component({
     selector: "lexicon-list",
     templateUrl: "./lexiconListComponent.html",
+    host: { class: "treeListComponent" }
 })
 export class LexiconListComponent extends AbstractList {
 

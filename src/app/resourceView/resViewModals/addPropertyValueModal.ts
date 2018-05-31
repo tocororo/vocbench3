@@ -1,13 +1,13 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { ARTURIResource, ARTResource, ARTLiteral, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute } from '../../models/ARTResources';
-import { RDF, RDFS, OWL, SKOS, SKOSXL, XmlSchema } from '../../models/Vocabulary';
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTLiteral, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from '../../models/ARTResources';
+import { OWL, RDF, RDFS, SKOS, SKOSXL } from '../../models/Vocabulary';
+import { ManchesterServices } from "../../services/manchesterServices";
+import { PropertyServices, RangeType } from "../../services/propertyServices";
 import { VBProperties } from '../../utils/VBProperties';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { BrowsingModalServices } from '../../widget/modal/browsingModal/browsingModalServices';
-import { ManchesterServices } from "../../services/manchesterServices";
-import { PropertyServices, RangeType } from "../../services/propertyServices";
 
 /**
  * This modal allow the user to create a property-value relation and can be open throght a ResView partition.
@@ -88,12 +88,8 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private inverseProp: boolean = false;
     private datarange: ARTLiteral[];
 
-    //datatype to show in a list in case the modal allow to add range to a datatype property
-    private datatypes: ARTURIResource[] = XmlSchema.DATATYPES;
-
-    constructor(public dialog: DialogRef<AddPropertyValueModalData>, public manchService: ManchesterServices,
-        private propService: PropertyServices, private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices,
-        private preferences: VBProperties) {
+    constructor(public dialog: DialogRef<AddPropertyValueModalData>, public manchService: ManchesterServices, private propService: PropertyServices, 
+        private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private preferences: VBProperties) {
         this.context = dialog.context;
     }
 
@@ -124,7 +120,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
              * getRange of skos:member returns range "resource" without rangeCollection classes.
              * Here I allow to select only instances of Concept or Collection
              */
-            this.viewType = "classAndIndividual";
+            this.viewType = ViewType.classAndIndividual;
             this.rootsForClsIndList = [SKOS.concept, SKOS.collection];
             return;
         } else if (this.rootProperty.getURI() == RDFS.range.getURI() && 
@@ -134,7 +130,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
              * going to enrich is a datatype property, the allowed range should be limited to a datatype.
              * Here I allow to select only a datatype.
              */
-            this.viewType = "resourceList";
+            this.viewType = ViewType.datatypeList;
             return;
         }
 
@@ -148,9 +144,9 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                  * => default view classAndIndividual (same as ranges.type undetermined)
                  */
                 if (range == undefined) {
-                    this.viewType = "classAndIndividual";
+                    this.viewType = ViewType.classAndIndividual;
                 } else if (ranges.type == RangeType.undetermined) {
-                    this.viewType = "classAndIndividual";
+                    this.viewType = ViewType.classAndIndividual;
                 } else if (ranges.type == RangeType.resource) {
                     //class, concept, conceptScheme, collection, resourcelist, instance, class individual
                     var rangeCollection: ARTURIResource[] = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
@@ -158,7 +154,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                         if (rangeCollection.length == 1) {
                             var rangeClass: ARTURIResource = rangeCollection[0];
                             if (rangeClass.getURI() == RDFS.class.getURI() || rangeClass.getURI() == OWL.class.getURI()) {
-                                this.viewType = "classTree";
+                                this.viewType = ViewType.classTree;
                                 let role: RDFResourceRolesEnum = this.context.resource.getRole();
                                 if (role == RDFResourceRolesEnum.property || role == RDFResourceRolesEnum.annotationProperty ||
                                     role == RDFResourceRolesEnum.datatypeProperty || role == RDFResourceRolesEnum.objectProperty ||
@@ -169,31 +165,31 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                                 }
                             } else if (rangeClass.getURI() == SKOS.concept.getURI()) {
                                 this.schemes = this.preferences.getActiveSchemes();
-                                this.viewType = "conceptTree";
+                                this.viewType = ViewType.conceptTree;
                             } else if (rangeClass.getURI() == SKOS.conceptScheme.getURI()) {
-                                this.viewType = "schemeList";
+                                this.viewType = ViewType.schemeList;
                             } else if (rangeClass.getURI() == OWL.objectProperty.getURI()) {
-                                this.viewType = "propertyTree";
+                                this.viewType = ViewType.propertyTree;
                                 this.propertyType = RDFResourceRolesEnum.objectProperty;
                             } else if (rangeClass.getURI() == RDF.property.getURI()) {
-                                this.viewType = "propertyTree";
+                                this.viewType = ViewType.propertyTree;
                                 this.propertyType = RDFResourceRolesEnum.property;
                             } else if (rangeClass.getURI() == SKOSXL.label.getURI()) {
-                                this.viewType = "classAndIndividual";
+                                this.viewType = ViewType.classAndIndividual;
                                 this.rootsForClsIndList = rangeCollection;
                             } else if (rangeClass.getURI() == RDF.list.getURI()) {
-                                this.viewType = "classAndIndividual";
+                                this.viewType = ViewType.classAndIndividual;
                                 this.rootsForClsIndList = rangeCollection;
                             } else { //default
-                                this.viewType = "classAndIndividual";    
+                                this.viewType = ViewType.classAndIndividual;
                                 this.rootsForClsIndList = rangeCollection;
                             }
                         } else { //length > 1
-                            this.viewType = "classAndIndividual";
+                            this.viewType = ViewType.classAndIndividual;
                             this.rootsForClsIndList = rangeCollection;
                         }
                     } else { //no range classes
-                        this.viewType = "classAndIndividual";
+                        this.viewType = ViewType.classAndIndividual;
                     }
                 }
             }
@@ -331,9 +327,11 @@ export class AddPropertyValueModalReturnData {
     inverseProperty?: boolean;
 }
 
-type ViewType = "classTree" | 
-    "conceptTree" | 
-    "propertyTree" | 
-    "schemeList" | 
-    "resourceList" | 
-    "classAndIndividual";
+enum ViewType {
+    classTree = "classTree",
+    conceptTree = "conceptTree",
+    propertyTree = "propertyTree", 
+    schemeList = "schemeList", 
+    datatypeList = "datatypeList",
+    classAndIndividual = "classAndIndividual"
+}

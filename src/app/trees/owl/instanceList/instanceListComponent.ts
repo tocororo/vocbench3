@@ -1,20 +1,20 @@
-import { Component, ViewChild, ViewChildren, Input, Output, EventEmitter, ElementRef, QueryList, SimpleChanges } from "@angular/core";
-import { InstanceListNodeComponent } from "./instanceListNodeComponent";
-import { AbstractList } from "../../abstractList";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
+import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
 import { SemanticTurkey } from "../../../models/Vocabulary";
-import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { VBContext } from "../../../utils/VBContext";
-import { UIUtils } from "../../../utils/UIUtils";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ClassesServices } from "../../../services/classesServices";
-import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SearchServices } from "../../../services/searchServices";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { UIUtils } from "../../../utils/UIUtils";
+import { VBContext } from "../../../utils/VBContext";
+import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { AbstractList } from "../../abstractList";
+import { InstanceListNodeComponent } from "./instanceListNodeComponent";
 
 @Component({
     selector: "instance-list",
     templateUrl: "./instanceListComponent.html",
-    host: { class: "blockingDivHost" }
+    host: { class: "treeListComponent" }
 })
 export class InstanceListComponent extends AbstractList {
     @Input() cls: ARTURIResource;

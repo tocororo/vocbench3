@@ -14,6 +14,7 @@ import { VBContext } from "../utils/VBContext";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { LexicalEntryListPanelComponent } from "./ontolex/lexicalEntry/lexicalEntryListPanel/lexicalEntryListPanelComponent";
 import { LexiconListPanelComponent } from "./ontolex/lexicon/lexiconListPanel/lexiconListPanelComponent";
+import { DatatypeListPanelComponent } from "./owl/datatypeListPanel/datatypeListPanelComponent";
 import { TreeListSettingsModal } from "./treeListSettingsModal";
 
 @Component({
@@ -31,6 +32,7 @@ export class TreePanelComponent {
     @ViewChild(ClassIndividualTreePanelComponent) viewChildClsIndPanel: ClassIndividualTreePanelComponent;
     @ViewChild(LexiconListPanelComponent) viewChildLexiconPanel: LexiconListPanelComponent;
     @ViewChild(LexicalEntryListPanelComponent) viewChildLexialEntryPanel: LexicalEntryListPanelComponent;
+    @ViewChild(DatatypeListPanelComponent) viewChildDatatypePanel: DatatypeListPanelComponent;
 
     private context: TreeListContext = TreeListContext.dataPanel;
 
@@ -56,18 +58,34 @@ export class TreePanelComponent {
                 this.activeTab = RDFResourceRolesEnum.cls;
             } else if (this.isPropertyAuthorized()) {
                 this.activeTab = RDFResourceRolesEnum.property;
+            } else if (this.isDataRangeAuthorized()) {
+                this.activeTab = RDFResourceRolesEnum.dataRange;
             }
         } else if (this.ONTO_TYPE == OntoLex.uri) {
             if (this.isLexiconAuthorized()) {
                 this.activeTab = RDFResourceRolesEnum.limeLexicon;
-            } else if (this.isLexicalEntryuthorized()) {
+            } else if (this.isLexicalEntryAuthorized()) {
                 this.activeTab = RDFResourceRolesEnum.ontolexLexicalEntry;
+            } else if (this.isConceptAuthorized()) {
+                this.activeTab = RDFResourceRolesEnum.concept;
+            } else if (this.isCollectionAuthorized()) {
+                this.activeTab = RDFResourceRolesEnum.skosCollection;
+            } else if (this.isSchemeAuthorized()) {
+                this.activeTab = RDFResourceRolesEnum.conceptScheme;
+            } else if (this.isClassAuthorized()) {
+                this.activeTab = RDFResourceRolesEnum.cls;
+            } else if (this.isPropertyAuthorized()) {
+                this.activeTab = RDFResourceRolesEnum.property;
+            } else if (this.isDataRangeAuthorized()) {
+                this.activeTab = RDFResourceRolesEnum.dataRange;
             }
         } else { //OWL
             if (this.isClassAuthorized()) {
                 this.activeTab = RDFResourceRolesEnum.cls;
             } else if (this.isPropertyAuthorized()) {
                 this.activeTab = RDFResourceRolesEnum.property;
+            } else if (this.isDataRangeAuthorized()) {
+                this.activeTab = RDFResourceRolesEnum.dataRange;
             }
         }
         this.readonly = VBContext.getContextVersion() != null; //if the RV is working on an old dump version, disable the updates
@@ -101,6 +119,8 @@ export class TreePanelComponent {
                 this.viewChildLexiconPanel.openAt(<ARTURIResource>resource);
             } else if (resRole == RDFResourceRolesEnum.ontolexLexicalEntry) {
                 this.viewChildLexialEntryPanel.openAt(<ARTURIResource>resource);
+            } else if (resRole == RDFResourceRolesEnum.dataRange) {
+                this.viewChildDatatypePanel.openAt(<ARTURIResource>resource);
             }
         }
     }
@@ -143,11 +163,14 @@ export class TreePanelComponent {
     private isLexiconAuthorized() {
         return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_GET_LEXICON);
     }
-    private isLexicalEntryuthorized() {
+    private isLexicalEntryAuthorized() {
         return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_GET_LEXICAL_ENTRY);
     }
+    private isDataRangeAuthorized() {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.DATATYPES_GET_DATATYPES);
+    }
 
-    //Advanced search
+    //Focus the panel and select the searched resource after an advanced search
     private advancedSearch(resource: ARTResource) {
         let tabToActivate: RDFResourceRolesEnum;
         if (resource.isURIResource()) {
@@ -168,6 +191,8 @@ export class TreePanelComponent {
                 tabToActivate = RDFResourceRolesEnum.ontolexLexicalEntry;
             } else if (role == RDFResourceRolesEnum.skosCollection || role == RDFResourceRolesEnum.skosOrderedCollection) {
                 tabToActivate = RDFResourceRolesEnum.skosCollection;
+            } else if (role == RDFResourceRolesEnum.dataRange) {
+                tabToActivate = RDFResourceRolesEnum.dataRange;
             } else {
                 this.sharedModals.openResourceView(resource, false);    
             }
@@ -192,6 +217,8 @@ export class TreePanelComponent {
                     this.viewChildLexialEntryPanel.selectAdvancedSearchedResource(<ARTURIResource>resource);
                 } else if (tabToActivate == RDFResourceRolesEnum.skosCollection) {
                     this.viewChildCollectionPanel.openTreeAt(<ARTURIResource>resource);
+                } else if (tabToActivate == RDFResourceRolesEnum.dataRange) {
+                    this.viewChildDatatypePanel.openAt(<ARTURIResource>resource);
                 }
             });
         }

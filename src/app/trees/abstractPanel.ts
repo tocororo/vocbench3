@@ -1,18 +1,16 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { Observable } from 'rxjs/Observable';
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
 import { CustomFormsServices } from "../services/customFormsServices";
-import { ARTURIResource, ResAttribute, RDFResourceRolesEnum, ARTResource } from "../models/ARTResources";
-import { CustomForm } from "../models/CustomForms";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { VBEventHandler } from "../utils/VBEventHandler";
-import { VBProperties } from "../utils/VBProperties";
+import { ResourcesServices } from "../services/resourcesServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { TreeListContext } from "../utils/UIUtils";
-import { ResourcesServices } from "../services/resourcesServices";
+import { VBEventHandler } from "../utils/VBEventHandler";
+import { VBProperties } from "../utils/VBProperties";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "panel",
-    templateUrl: "./owl/classTreePanel/classTreePanelComponent.html", //placeholder template
+    template: ""
 })
 export abstract class AbstractPanel {
 

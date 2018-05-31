@@ -1,11 +1,12 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
-import { VBProperties } from '../../../utils/VBProperties';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { SKOS } from '../../../models/Vocabulary';
+import { VBProperties } from '../../../utils/VBProperties';
 
 @Component({
     selector: "class-individual-tree",
     templateUrl: "./classIndividualTreeComponent.html",
+    host: { class: "treeListComponent" }
 })
 export class ClassIndividualTreeComponent {
 

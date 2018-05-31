@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { AbstractListNode } from "../../../abstractListNode";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { AbstractListNode } from "../../../abstractListNode";
 
 @Component({
     selector: "lexical-entry-list-node",

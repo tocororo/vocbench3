@@ -15,6 +15,7 @@ import { SchemeListNodeComponent } from "./schemeListNodeComponent";
 @Component({
     selector: "scheme-list",
     templateUrl: "./schemeListComponent.html",
+    host: { class: "treeListComponent" }
 })
 export class SchemeListComponent extends AbstractList {
 

@@ -88,6 +88,9 @@ export class OWL {
     public static sameAs = new ARTURIResource(OWL.namespace + "sameAs", "owl:sameAs", RDFResourceRolesEnum.property);
     public static someValuesFrom = new ARTURIResource(OWL.namespace + "someValuesFrom", "owl:someValuesFrom", RDFResourceRolesEnum.property);
     public static versionInfo = new ARTURIResource(OWL.namespace + "versionInfo", "owl:versionInfo", RDFResourceRolesEnum.annotationProperty);
+    //DATATYPES
+    public static rational = new ARTURIResource(OWL.namespace + "rational", "owl:rational", RDFResourceRolesEnum.dataRange);
+    public static real = new ARTURIResource(OWL.namespace + "real", "owl:real", RDFResourceRolesEnum.dataRange);
 
     // OWL DL and OWL Full
     //CLASSES
@@ -163,6 +166,7 @@ export class XmlSchema { //all resources here have role "individual" (don't know
     public static boolean = new ARTURIResource(XmlSchema.namespace + "boolean", "xsd:boolean", RDFResourceRolesEnum.individual);
     public static date = new ARTURIResource(XmlSchema.namespace + "date", "xsd:date", RDFResourceRolesEnum.individual);
     public static dateTime = new ARTURIResource(XmlSchema.namespace + "dateTime", "xsd:dateTime", RDFResourceRolesEnum.individual);
+    public static dateTimeStamp = new ARTURIResource(XmlSchema.namespace + "dateTimeStamp", "xsd:dateTimeStamp", RDFResourceRolesEnum.individual);
     public static decimal = new ARTURIResource(XmlSchema.namespace + "decimal", "xsd:decimal", RDFResourceRolesEnum.individual);
 	public static double = new ARTURIResource(XmlSchema.namespace + "double", "xsd:double", RDFResourceRolesEnum.individual);
 	public static duration = new ARTURIResource(XmlSchema.namespace + "duration", "xsd:duration", RDFResourceRolesEnum.individual);
@@ -203,11 +207,6 @@ export class XmlSchema { //all resources here have role "individual" (don't know
 	public static unsignedInt = new ARTURIResource(XmlSchema.namespace + "unsignedInt", "xsd:unsignedInt", RDFResourceRolesEnum.individual);
     public static unsignedLong = new ARTURIResource(XmlSchema.namespace + "unsignedLong", "xsd:unsignedLong", RDFResourceRolesEnum.individual);
 	public static unsignedShort = new ARTURIResource(XmlSchema.namespace + "unsignedShort", "xsd:unsignedShort", RDFResourceRolesEnum.individual);
-
-    public static DATATYPES: ARTURIResource[] = [
-        XmlSchema.boolean, XmlSchema.date, XmlSchema.dateTime, XmlSchema.float,
-        XmlSchema.integer, XmlSchema.language, XmlSchema.string, XmlSchema.time
-    ];
 }
 
 

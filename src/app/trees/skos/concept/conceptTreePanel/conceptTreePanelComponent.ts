@@ -22,6 +22,7 @@ import { ConceptTreeSettingsModal } from "./conceptTreeSettingsModal";
 @Component({
     selector: "concept-tree-panel",
     templateUrl: "./conceptTreePanelComponent.html",
+    host: { class: "vbox" }
 })
 export class ConceptTreePanelComponent extends AbstractTreePanel {
     @Input() schemes: ARTURIResource[]; //if set the concept tree is initialized with this scheme, otherwise with the scheme from VB context

@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
-import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute, ARTResource } from "../../../models/ARTResources";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
 import { ClassIndividualPanelSearchMode, SearchSettings } from "../../../models/Properties";
 import { IndividualsServices } from "../../../services/individualsServices";
 import { SearchServices } from "../../../services/searchServices";
@@ -19,7 +19,7 @@ import { InstanceListPanelComponent } from "../instanceListPanel/instanceListPan
     selector: "class-individual-tree-panel",
     templateUrl: "./classIndividualTreePanelComponent.html",
     host: { 
-        class: "blockingDivHost",
+        class: "blockingDivHost vbox",
         '(mousemove)': 'onMousemove($event)',
         '(mouseup)': 'onMouseup()',
         '(mouseleave)': 'onMouseup()'

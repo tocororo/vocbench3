@@ -36,7 +36,7 @@
         
         <scheme-list-panel *ngIf="viewType == 'schemeList'" [deletable]="false" (nodeSelected)="onResourceSelected($event)"></scheme-list-panel>
         
-        <resource-list *ngIf="viewType == 'resourceList'" [resources]="datatypes" (nodeSelected)="onResourceSelected($event)"></resource-list>
+        <datatype-list-panel *ngIf="viewType == 'datatypeList'" [full]="true" [deletable]="false" (nodeSelected)="onResourceSelected($event)"></datatype-list-panel>
         
         <class-individual-tree *ngIf="viewType == 'classAndIndividual'" [roots]="rootsForClsIndList" [deletable]="false"
             (nodeSelected)="onResourceSelected($event)">

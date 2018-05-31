@@ -45,6 +45,10 @@ import { InstanceListPanelComponent } from '../trees/owl/instanceListPanel/insta
 import { InstanceListComponent } from '../trees/owl/instanceList/instanceListComponent';
 import { InstanceListNodeComponent } from '../trees/owl/instanceList/instanceListNodeComponent';
 
+import { DatatypeListPanelComponent } from '../trees/owl/datatypeListPanel/datatypeListPanelComponent';
+import { DatatypeListComponent } from '../trees/owl/datatypeList/datatypeListComponent';
+import { DatatypeListNodeComponent } from '../trees/owl/datatypeList/datatypeListNodeComponent';
+
 import { SearchBarComponent } from '../trees/searchBar/searchBarComponent'; //not exported, used just in this module
 import { SearchSettingsModal } from '../trees/searchBar/searchSettingsModal';
 import { AdvancedSearchModal } from '../trees/searchBar/advancedSearchModal';
@@ -63,6 +67,7 @@ import { Ng2CompleterModule } from "ng2-completer";
         PropertyTreePanelComponent, PropertyTreeComponent, PropertyTreeNodeComponent,
         LexiconListPanelComponent, LexiconListComponent, LexiconListNodeComponent, LexicalEntryListPanelComponent, 
         LexicalEntryListComponent, LexicalEntryListNodeComponent, LexicalEntryListSettingsModal,
+        DatatypeListPanelComponent, DatatypeListComponent, DatatypeListNodeComponent,
         SearchBarComponent, SearchSettingsModal, ClassTreeSettingsModal, AdvancedSearchModal
     ],
     exports: [
@@ -74,7 +79,8 @@ import { Ng2CompleterModule } from "ng2-completer";
         ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent, InstanceListNodeComponent,
         PropertyTreePanelComponent, PropertyTreeComponent,
         LexiconListPanelComponent, LexiconListComponent, LexiconListNodeComponent,
-        LexicalEntryListPanelComponent, LexicalEntryListComponent, LexicalEntryListNodeComponent
+        LexicalEntryListPanelComponent, LexicalEntryListComponent, LexicalEntryListNodeComponent,
+        DatatypeListPanelComponent, DatatypeListComponent, DatatypeListNodeComponent
     ],
     entryComponents: [
         SearchSettingsModal, AdvancedSearchModal, ClassTreeSettingsModal, ConceptTreeSettingsModal, 

@@ -17,6 +17,7 @@ import { PropertyTreeComponent } from "../propertyTree/propertyTreeComponent";
 @Component({
     selector: "property-tree-panel",
     templateUrl: "./propertyTreePanelComponent.html",
+    host: { class: "vbox" }
 })
 export class PropertyTreePanelComponent extends AbstractTreePanel {
     @Input() resource: ARTURIResource;//provide to show just the properties with domain the type of the resource

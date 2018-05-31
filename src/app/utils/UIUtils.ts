@@ -1,9 +1,6 @@
-import {
-    ARTNode, ARTResource, ARTURIResource, ARTBNode, ARTLiteral,
-    ARTPredicateObjects, ResAttribute, RDFResourceRolesEnum
-} from "../models/ARTResources";
-import { XmlSchema } from "../models/Vocabulary"
-import { VBContext } from "../utils/VBContext"
+import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
+import { OWL, RDF, XmlSchema } from "../models/Vocabulary";
+import { VBContext } from "../utils/VBContext";
 
 
 export class UIUtils {
@@ -93,7 +90,7 @@ export class UIUtils {
     // private static lexiconDeprecatedImgSrc = require("../../assets/images/icons/res/collection_deprecated.png");
     // private static lexiconImportedDeprecatedImgSrc = require("../../assets/images/icons/res/collection_imported_deprecated.png");
 
-    private static lexicEntryImgSrc = require("../../assets/images/icons/res/individual.png");
+    private static lexicEntryImgSrc = require("../../assets/images/icons/res/lexEntry.png");
     // private static lexicEntryImportedImgSrc = require("../../assets/images/icons/res/collection_imported.png");
     // private static lexicEntryDeprecatedImgSrc = require("../../assets/images/icons/res/collection_deprecated.png");
     // private static lexicEntryImportedDeprecatedImgSrc = require("../../assets/images/icons/res/collection_imported_deprecated.png");
@@ -395,18 +392,25 @@ export class UIUtils {
 
     static getDatatypeImgSrc(datatype: string): string {
         var imgSrc: string;
-        if (datatype == XmlSchema.dateTime.getURI()) {
+        if (datatype == XmlSchema.dateTime.getURI() || datatype == XmlSchema.dateTimeStamp.getURI()) {
             imgSrc = require("../../assets/images/icons/res/datetime.png");
         } else if (datatype == XmlSchema.date.getURI()) {
             imgSrc = require("../../assets/images/icons/res/date.png");
         } else if (datatype == XmlSchema.time.getURI()) {
             imgSrc = require("../../assets/images/icons/res/time.png");
-        } else if (datatype == XmlSchema.string.getURI()) {
+        } else if (datatype == RDF.xmlLiteral.getURI() || datatype == XmlSchema.string.getURI() || 
+            datatype == XmlSchema.normalizedString.getURI()) {
             imgSrc = require("../../assets/images/icons/res/string.png");
         } else if (datatype == XmlSchema.boolean.getURI()) {
             imgSrc = require("../../assets/images/icons/res/boolean.png");
-        } else if (datatype == XmlSchema.decimal.getURI() || datatype == XmlSchema.float.getURI() || 
-            datatype == XmlSchema.double.getURI() || datatype == XmlSchema.integer.getURI()) {
+        } else if (datatype == OWL.rational.getURI() || datatype == OWL.real.getURI() ||
+            datatype == XmlSchema.decimal.getURI() || datatype == XmlSchema.double.getURI() || 
+            datatype == XmlSchema.float.getURI() || datatype == XmlSchema.int.getURI() || 
+            datatype == XmlSchema.integer.getURI() || datatype == XmlSchema.long.getURI() || 
+            datatype == XmlSchema.negativeInteger.getURI() || datatype == XmlSchema.nonNegativeInteger.getURI() || 
+            datatype == XmlSchema.nonPositiveInteger.getURI() || datatype == XmlSchema.positiveInteger.getURI() || 
+            datatype == XmlSchema.short.getURI() || datatype == XmlSchema.unsignedInt.getURI() || 
+            datatype == XmlSchema.unsignedLong.getURI() || datatype == XmlSchema.unsignedShort.getURI()) {
             imgSrc = require("../../assets/images/icons/res/number.png");
         }
         return imgSrc;

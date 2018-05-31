@@ -16,6 +16,7 @@ import { LexicalEntryListNodeComponent } from "./lexicalEntryListNodeComponent";
 @Component({
     selector: "lexical-entry-list",
     templateUrl: "./lexicalEntryListComponent.html",
+    host: { class: "treeListComponent" }
 })
 export class LexicalEntryListComponent extends AbstractList {
 

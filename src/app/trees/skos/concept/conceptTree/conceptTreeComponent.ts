@@ -14,7 +14,7 @@ import { ConceptTreeNodeComponent } from "./conceptTreeNodeComponent";
 @Component({
     selector: "concept-tree",
     templateUrl: "./conceptTreeComponent.html",
-    host: { class: "blockingDivHost" }
+    host: { class: "treeListComponent" }
 })
 export class ConceptTreeComponent extends AbstractTree {
 

@@ -3,10 +3,10 @@ import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { AbstractListNode } from "../../abstractListNode";
 
 @Component({
-    selector: "instance-list-node",
-    templateUrl: "./instanceListNodeComponent.html",
+    selector: "datatype-list-node",
+    templateUrl: "./datatypeListNodeComponent.html",
 })
-export class InstanceListNodeComponent extends AbstractListNode {
+export class DatatypeListNodeComponent extends AbstractListNode {
 
     constructor(eventHandler: VBEventHandler) {
         super(eventHandler);

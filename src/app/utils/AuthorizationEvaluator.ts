@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
-import { VBContext } from "./VBContext";
-import { User } from "../models/User";
+import Prolog from 'jsprolog';
 import { ARTResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { ResViewPartition } from "../models/ResourceView";
-import Prolog from 'jsprolog';
+import { User } from "../models/User";
+import { VBContext } from "./VBContext";
 
 enum Actions {
     ADMINISTRATION_PROJECT_MANAGEMENT, //generic for management of project
@@ -33,6 +32,9 @@ enum Actions {
     CUSTOM_FORMS_UPDATE_FORM,
     DATASET_METADATA_EXPORT,
     DATASET_METADATA_GET_METADATA,
+    DATATYPES_CREATE_DATATYPE,
+    DATATYPES_DELETE_DATATYPE,
+    DATATYPES_GET_DATATYPES,
     EXPORT_EXPORT,
     HISTORY,
     ICV_GENERIC_CONCEPT,
@@ -156,6 +158,9 @@ export class AuthorizationEvaluator {
         [Actions.CUSTOM_FORMS_UPDATE_FORM_MAPPING] :  'auth(cform(form, mapping), "U").', 
         [Actions.CUSTOM_FORMS_UPDATE_COLLECTION] :  'auth(cform(formCollection), "U").', 
         [Actions.CUSTOM_FORMS_UPDATE_FORM] :  'auth(cform(form), "U").',
+        [Actions.DATATYPES_CREATE_DATATYPE] : 'auth(rdf(datatype), "C").',
+        [Actions.DATATYPES_DELETE_DATATYPE] : 'auth(rdf(datatype), "D").',
+        [Actions.DATATYPES_GET_DATATYPES] : 'auth(rdf(datatype), "R").',
         [Actions.DATASET_METADATA_EXPORT] : 'auth(rdf(dataset, metadata), "CU").', //export require to set the metadata, so requires CU
         [Actions.DATASET_METADATA_GET_METADATA] : 'auth(rdf(dataset, metadata), "R").',
         [Actions.EXPORT_EXPORT] : 'auth(rdf, "R").',
@@ -377,26 +382,28 @@ export class AuthorizationEvaluator {
     public static Tree = {
         isCreateAuthorized(role: RDFResourceRolesEnum) {
             return (
+                (role == RDFResourceRolesEnum.cls && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_CREATE_CLASS)) ||
                 (role == RDFResourceRolesEnum.concept && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_CREATE_CONCEPT)) ||
                 (role == RDFResourceRolesEnum.conceptScheme && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_CREATE_SCHEME)) ||
-                (role == RDFResourceRolesEnum.skosCollection && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_CREATE_COLLECTION)) ||
-                (role == RDFResourceRolesEnum.cls && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_CREATE_CLASS)) ||
+                (role == RDFResourceRolesEnum.dataRange && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.DATATYPES_CREATE_DATATYPE)) ||
                 (role == RDFResourceRolesEnum.individual && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_CREATE_INDIVIDUAL)) ||
-                (role == RDFResourceRolesEnum.property && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_CREATE_PROPERTY)) ||
                 (role == RDFResourceRolesEnum.limeLexicon && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_CREATE_LEXICON)) ||
-                (role == RDFResourceRolesEnum.ontolexLexicalEntry && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_CREATE_LEXICAL_ENTRY))
+                (role == RDFResourceRolesEnum.ontolexLexicalEntry && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_CREATE_LEXICAL_ENTRY)) ||
+                (role == RDFResourceRolesEnum.property && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_CREATE_PROPERTY)) ||
+                (role == RDFResourceRolesEnum.skosCollection && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_CREATE_COLLECTION))
             );
         },
         isDeleteAuthorized(role: RDFResourceRolesEnum) {
             return (
+                (role == RDFResourceRolesEnum.cls && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_DELETE_CLASS)) ||
                 (role == RDFResourceRolesEnum.concept && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_DELETE_CONCEPT)) ||
                 (role == RDFResourceRolesEnum.conceptScheme && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_DELETE_SCHEME)) ||
-                (role == RDFResourceRolesEnum.skosCollection && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_DELETE_COLLECTION)) ||
-                (role == RDFResourceRolesEnum.cls && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_DELETE_CLASS)) ||
+                (role == RDFResourceRolesEnum.dataRange && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.DATATYPES_DELETE_DATATYPE)) ||
                 (role == RDFResourceRolesEnum.individual && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_DELETE_INDIVIDUAL)) ||
-                (role == RDFResourceRolesEnum.property && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_DELETE_PROPERTY)) ||
                 (role == RDFResourceRolesEnum.limeLexicon && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_DELETE_LEXICON)) ||
-                (role == RDFResourceRolesEnum.ontolexLexicalEntry && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_DELETE_LEXICAL_ENTRY))
+                (role == RDFResourceRolesEnum.ontolexLexicalEntry && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_DELETE_LEXICAL_ENTRY)) ||
+                (role == RDFResourceRolesEnum.property && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_DELETE_PROPERTY)) ||
+                (role == RDFResourceRolesEnum.skosCollection && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_DELETE_COLLECTION))
             );
         },
         isDeprecateAuthorized(resource: ARTResource) {

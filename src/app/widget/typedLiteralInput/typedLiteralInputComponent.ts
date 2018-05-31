@@ -1,7 +1,8 @@
-import { Component, Input, Output, EventEmitter, forwardRef } from "@angular/core";
+import { Component, EventEmitter, Input, Output, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { XmlSchema, RDFS } from "../../models/Vocabulary";
 import { ARTURIResource, ResourceUtils } from "../../models/ARTResources";
+import { RDFS, XmlSchema } from "../../models/Vocabulary";
+import { DatatypesServices } from "../../services/datatypesServices";
 
 @Component({
     selector: "typed-literal-input",
@@ -15,36 +16,49 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
     @Input() allowedDatatypes: ARTURIResource[]; //the datatypes allowed by the component
     @Output() datatypeChange: EventEmitter<ARTURIResource> = new EventEmitter();
 
-    private datatypeList: ARTURIResource[] = XmlSchema.DATATYPES;
+    private datatypeList: ARTURIResource[];
     private datatype: ARTURIResource;
 
     private value: string;
 
+    constructor(private datatypeService: DatatypesServices) {}
+
     ngOnInit() {
-        //re-initialize allowedDatatypes in case its sole element is rdfs:Literal
-        if (this.allowedDatatypes != undefined && this.allowedDatatypes[0].getURI() == RDFS.literal.getURI()) {
-            this.allowedDatatypes = undefined; //so it allows all the datatypes
-        }
-        //initialize default datatype...
-        if (this.allowedDatatypes == undefined) {
-            this.datatype = XmlSchema.string; //...to xsd:string if no allowedDatatypes is specified
-        } else {
-            //check if in allowedDatatypes there is some datatype not foreseen by datatypeList. In case, add it to datatypeList
-            this.allowedDatatypes.forEach(dt => { 
-                if (ResourceUtils.indexOfNode(this.datatypeList, dt) == -1) {
-                    this.datatypeList.push(dt);
+
+        this.datatypeService.getDatatypes().subscribe(
+            datatypes => {
+                datatypes.sort((dt1: ARTURIResource, dt2: ARTURIResource) => {
+                    return dt1.getShow().localeCompare(dt2.getShow());
+                });
+                this.datatypeList = datatypes;
+
+                //re-initialize allowedDatatypes in case its sole element is rdfs:Literal
+                if (this.allowedDatatypes != undefined && this.allowedDatatypes[0].getURI() == RDFS.literal.getURI()) {
+                    this.allowedDatatypes = undefined; //so it allows all the datatypes
                 }
-            });
-            //...to xsd:string if it is among the allowedDatatype
-            if (this.allowedDatatypes.findIndex(dt => dt.getURI() == XmlSchema.string.getURI()) != -1) {
-                this.datatype = XmlSchema.string;
-            } else {//...to the first datatype in datatypeList that is in allowedDatatypes
-                this.datatype = this.datatypeList[this.datatypeList.findIndex(dt => dt.getURI() == this.allowedDatatypes[0].getURI())];
+                //initialize default datatype...
+                if (this.allowedDatatypes == undefined) {//...to xsd:string if no allowedDatatypes is specified
+                    this.datatype = this.datatypeList[ResourceUtils.indexOfNode(this.datatypeList, XmlSchema.string)];
+                } else {
+                    //check if in allowedDatatypes there is some datatype not foreseen by datatypeList. In case, add it to datatypeList
+                    this.allowedDatatypes.forEach(dt => { 
+                        if (ResourceUtils.indexOfNode(this.datatypeList, dt) == -1) {
+                            this.datatypeList.push(dt);
+                        }
+                    });
+                    //...to xsd:string if it is among the allowedDatatype
+                    if (this.allowedDatatypes.findIndex(dt => dt.getURI() == XmlSchema.string.getURI()) != -1) {
+                        this.datatype = this.datatypeList[ResourceUtils.indexOfNode(this.datatypeList, XmlSchema.string)];
+                    } else {//...to the first datatype in datatypeList that is in allowedDatatypes
+                        this.datatype = this.datatypeList[this.datatypeList.findIndex(dt => dt.getURI() == this.allowedDatatypes[0].getURI())];
+                    }
+                }
+                this.datatypeChange.emit(this.datatype);
+                this.propagateChange(this.value);
             }
-        }
-        this.datatypeChange.emit(this.datatype);
-        this.propagateChange(this.value);
+        );
     }
+
 
     /**
      * Returns true if the current datatype doesn't admit all values.
@@ -52,8 +66,8 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
      */
     private isDatatypeBound(): boolean {
         return (
-            this.datatype == XmlSchema.boolean || this.datatype == XmlSchema.date ||
-            this.datatype == XmlSchema.dateTime || this.datatype == XmlSchema.time
+            this.datatype.getURI() == XmlSchema.boolean.getURI() || this.datatype.getURI() == XmlSchema.date.getURI() ||
+            this.datatype.getURI() == XmlSchema.dateTime.getURI() || this.datatype.getURI() == XmlSchema.time.getURI()
         );
     }
 
@@ -84,9 +98,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
      * Write a new value to the element.
      */
     writeValue(obj: string) {
-        // if (obj) {
-            this.value = obj;
-        // }
+        this.value = obj;
     }
     /**
      * Set the function to be called when the control receives a change event.

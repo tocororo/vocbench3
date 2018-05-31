@@ -5,7 +5,7 @@
         </ng-template>
     </select>
 
-    <div [ngSwitch]="datatype.getURI()">
+    <div [ngSwitch]="datatype?.getURI()">
         <input *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#float'" type="number" step="any"
             class="form-control input-sm" style="margin-top: 6px;" [(ngModel)]="value" (ngModelChange)="onValueChanged()">
         <input *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#integer'" type="number" step="1"
