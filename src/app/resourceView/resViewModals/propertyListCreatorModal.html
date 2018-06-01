@@ -1,0 +1,47 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body vbox" style="height:70vh;">
+
+    <div style="margin-bottom: 4px;">
+        <label>Property:</label>
+        <rdf-resource [resource]="selectedProperty"></rdf-resource>
+        <button *ngIf="context.propChangeable" class="btn btn-default btn-xs" title="Change property" (click)="changeProperty()">Change</button>
+    </div>
+
+    <div class="hbox">
+        <div class="panel panel-default vbox">
+            <div class="panel-heading">
+                <label>Property chain</label>
+            </div>
+            <div class="panel-body">
+                <div *ngFor="let p of propChain" class="listItem" (click)="onChainPropertySelected(p)" [ngClass]="{active: selectedChainProperty == p}">
+                    <rdf-resource [resource]="p.property"></rdf-resource>
+                </div>
+            </div>
+        </div>
+
+        <div style="align-self: center; margin: 5px;">
+            <button class="btn btn-default btn-sm btn-block" (click)="addPropertyToChain()" [disabled]="!selectedProperty">
+                <span class="glyphicon glyphicon-chevron-left"></span> Add
+            </button>
+            <button class="btn btn-default btn-sm btn-block"  (click)="removePropertyFromChain()" [disabled]="!selectedChainProperty">
+                Remove <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+        </div>
+
+        <div class="vbox">
+            <property-tree-panel [deletable]="false" (nodeSelected)="onPropertySelected($event)"></property-tree-panel>
+            <div class="checkbox" style="margin: 8px 0 0 0;">
+                <label>
+                    <input type="checkbox" [(ngModel)]="inverseProp" [disabled]="selectedProperty?.getRole() != 'objectProperty'">Inverse Property
+                </label>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkEnabled()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

@@ -628,6 +628,42 @@ export class PropertyServices {
         );
     }
 
+    /**
+     * 
+     * @param property 
+     * @param chainedProperties 
+     * @param linkingPredicate 
+     */
+    addPropertyChainAxiom(property: ARTURIResource, chainedProperties: string, linkingPredicate?: ARTURIResource) {
+        console.log("[PropertyServices] addPropertyChainAxiom");
+        var params: any = {
+            property: property,
+            chainedProperties: chainedProperties,
+        };
+        if (linkingPredicate != null) {
+            params.linkingPredicate = linkingPredicate;
+        }
+        return this.httpMgr.doPost(this.serviceName, "addPropertyChainAxiom", params);
+    }
+
+    /**
+     * 
+     * @param property 
+     * @param chain 
+     * @param linkingPredicate 
+     */
+    removePropertyChainAxiom(property: ARTURIResource, chain: ARTResource, linkingPredicate?: ARTURIResource) {
+        console.log("[PropertyServices] removePropertyChainAxiom");
+        var params: any = {
+            property: property,
+            chain: chain,
+        };
+        if (linkingPredicate != null) {
+            params.linkingPredicate = linkingPredicate;
+        }
+        return this.httpMgr.doPost(this.serviceName, "removePropertyChainAxiom", params);
+    }
+
 }
 
 export enum RangeType {

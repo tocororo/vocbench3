@@ -73,6 +73,7 @@ export class ResourceViewComponent {
     private propertyFacets: PropertyFacet[] = null;
     private rangesColl: ARTPredicateObjects[] = null;
     private schemesColl: ARTPredicateObjects[] = null;
+    private subPropertyChainsColl: ARTPredicateObjects[] = null;
     private subtermsColl: ARTPredicateObjects[] = null;
     private superpropertiesColl: ARTPredicateObjects[] = null;
     private topconceptofColl: ARTPredicateObjects[] = null;
@@ -199,6 +200,7 @@ export class ResourceViewComponent {
         this.propertyFacets = null;
         this.rangesColl = null;
         this.schemesColl = null;
+        this.subPropertyChainsColl = null;
         this.subtermsColl = null;
         this.superpropertiesColl = null;
         this.topconceptofColl = null;
@@ -367,6 +369,13 @@ export class ResourceViewComponent {
             this.sortObjects(this.schemesColl);
         }
 
+        var subPropertyChainsPartition: any = this.resViewResponse[ResViewPartition.subPropertyChains];
+        if (subPropertyChainsPartition != null) {
+            this.subPropertyChainsColl = Deserializer.createPredicateObjectsList(subPropertyChainsPartition);
+            this.filterInferredFromPredObjList(this.subPropertyChainsColl);
+            this.sortObjects(this.subPropertyChainsColl);
+        }
+
         var subtermsPartition: any = this.resViewResponse[ResViewPartition.subterms];
         if (subtermsPartition != null) {
             this.subtermsColl = Deserializer.createPredicateObjectsList(subtermsPartition);
@@ -420,6 +429,7 @@ export class ResourceViewComponent {
             this.notesColl == null &&
             this.propertyFacets == null &&
             this.rangesColl == null &&
+            this.subPropertyChainsColl == null &&
             this.schemesColl == null &&
             this.subtermsColl == null &&
             this.superpropertiesColl == null &&

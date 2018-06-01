@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
-import { ClassListCreatorModal, ClassListCreatorModalData } from "./classListCreatorModal";
-import { InstanceListCreatorModal, InstanceListCreatorModalData } from "./instanceListCreatorModal";
-import { AddPropertyValueModal, AddPropertyValueModalData } from "./addPropertyValueModal";
-import { DataRangeEditorModal, DataRangeEditorModalData } from "./dataRangeEditorModal";
-import { AddManuallyValueModal, AddManuallyValueData } from "./addManuallyValueModal";
-import { ResViewSettingsModal } from "./resViewSettingsModal";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { CustomFormModal, CustomFormModalData } from "../../customForms/customForm/customFormModal";
-import { ARTResource, ARTBNode, ARTURIResource, ARTLiteral } from '../../models/ARTResources';
+import { ARTBNode, ARTResource, ARTURIResource } from '../../models/ARTResources';
+import { AddManuallyValueData, AddManuallyValueModal } from "./addManuallyValueModal";
+import { AddPropertyValueModal, AddPropertyValueModalData } from "./addPropertyValueModal";
+import { ClassListCreatorModal, ClassListCreatorModalData } from "./classListCreatorModal";
+import { DataRangeEditorModal, DataRangeEditorModalData } from "./dataRangeEditorModal";
+import { InstanceListCreatorModal, InstanceListCreatorModalData } from "./instanceListCreatorModal";
+import { PropertyListCreatorModal, PropertyListCreatorModalData } from './propertyListCreatorModal';
+import { ResViewSettingsModal } from "./resViewSettingsModal";
 
 /**
  * Service to open modals that allow to create a classes list or instances list
@@ -47,6 +48,16 @@ export class ResViewModalServices {
         builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(InstanceListCreatorModal, overlayConfig).result;
+    }
+
+    createPropertyChain(title: string, property: ARTURIResource, propChangeable?: boolean) {
+        var modalData = new PropertyListCreatorModalData(title, property, propChangeable);
+        const builder = new BSModalContextBuilder<InstanceListCreatorModalData>(
+            modalData, undefined, InstanceListCreatorModalData
+        );
+        builder.size("lg").keyboard(null);
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(PropertyListCreatorModal, overlayConfig).result;
     }
 
     /**

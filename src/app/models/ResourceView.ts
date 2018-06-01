@@ -20,6 +20,7 @@ export enum ResViewPartition {
     properties = "properties",
     ranges = "ranges",
     schemes = "schemes",
+    subPropertyChains = "subPropertyChains",
     subterms = "subterms",
     superproperties = "superproperties",
     topconceptof = "topconceptof",

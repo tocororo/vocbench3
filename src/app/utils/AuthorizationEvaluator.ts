@@ -75,6 +75,7 @@ enum Actions {
     PLUGINS_GET_PLUGINS, //valid for getAvailablePlugins and getPluginConfiguration
     PROPERTIES_ADD_DISJOINT_PROPERTY,
     PROPERTIES_ADD_EQUIVALENT_PROPERTY,
+    PROPERTIES_ADD_PROPERTY_CHAIN_AXIOM,
     PROPERTIES_ADD_PROPERTY_DOMAIN,
     PROPERTIES_ADD_PROPERTY_RANGE,
     PROPERTIES_ADD_SUPERPROPERTY,
@@ -83,6 +84,7 @@ enum Actions {
     PROPERTIES_GET_PROPERTY_TAXONOMY, //valid for getTopProperties and getSubProperties
     PROPERTIES_REMOVE_DISJOINT_PROPERTY,
     PROPERTIES_REMOVE_EQUIVALENT_PROPERTY,
+    PROPERTIES_REMOVE_PROPERTY_CHAIN_AXIOM,
     PROPERTIES_REMOVE_PROPERTY_DOMAIN,
     PROPERTIES_REMOVE_PROPERTY_RANGE,
     PROPERTIES_REMOVE_SUPERPROPERTY,
@@ -201,6 +203,7 @@ export class AuthorizationEvaluator {
         [Actions.ONTOLEX_REMOVE_REIFIED_LEXICALIZATION] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "D").',
         [Actions.ONTOLEX_REMOVE_SUBTERM] : 'auth(rdf(ontolexLexicalEntry, subterms), "D").',
         [Actions.PLUGINS_GET_PLUGINS] : 'auth(sys(plugins), "R").',
+        [Actions.PROPERTIES_ADD_PROPERTY_CHAIN_AXIOM] : 'auth(rdf(property, taxonomy), "C").',
         [Actions.PROPERTIES_ADD_PROPERTY_DOMAIN] : 'auth(rdf(property), "C").',
         [Actions.PROPERTIES_ADD_PROPERTY_RANGE] : 'auth(rdf(property), "C").',
         [Actions.PROPERTIES_ADD_SUPERPROPERTY] : 'auth(rdf(property, taxonomy), "C").',
@@ -209,6 +212,7 @@ export class AuthorizationEvaluator {
         [Actions.PROPERTIES_CREATE_PROPERTY] : 'auth(rdf(property), "C").', 
         [Actions.PROPERTIES_DELETE_PROPERTY] : 'auth(rdf(property), "D").',
         [Actions.PROPERTIES_GET_PROPERTY_TAXONOMY] : 'auth(rdf(property, taxonomy), "R").',
+        [Actions.PROPERTIES_REMOVE_PROPERTY_CHAIN_AXIOM] : 'auth(rdf(property, taxonomy), "D").',
         [Actions.PROPERTIES_REMOVE_PROPERTY_DOMAIN] : 'auth(rdf(property), "D").',
         [Actions.PROPERTIES_REMOVE_PROPERTY_RANGE] : 'auth(rdf(property), "D").',
         [Actions.PROPERTIES_REMOVE_SUPERPROPERTY] : 'auth(rdf(property, taxonomy), "D").',
@@ -339,6 +343,7 @@ export class AuthorizationEvaluator {
                 (partition == ResViewPartition.properties && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, resource)) ||
                 (partition == ResViewPartition.ranges && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_ADD_PROPERTY_RANGE)) ||
                 (partition == ResViewPartition.schemes && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_CONCEPT_TO_SCHEME)) ||
+                (partition == ResViewPartition.subPropertyChains && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_ADD_PROPERTY_CHAIN_AXIOM)) ||
                 (partition == ResViewPartition.subterms && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_ADD_SUBTERM)) ||
                 (partition == ResViewPartition.superproperties && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_ADD_SUPERPROPERTY)) ||
                 (partition == ResViewPartition.topconceptof && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_TOP_CONCEPT)) ||
@@ -370,6 +375,7 @@ export class AuthorizationEvaluator {
                 (partition == ResViewPartition.properties && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_REMOVE_VALUE, resource)) ||
                 (partition == ResViewPartition.ranges && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_REMOVE_PROPERTY_RANGE)) ||
                 (partition == ResViewPartition.schemes && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_REMOVE_CONCEPT_FROM_SCHEME)) ||
+                (partition == ResViewPartition.subPropertyChains && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_REMOVE_PROPERTY_CHAIN_AXIOM)) ||
                 (partition == ResViewPartition.subterms && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_REMOVE_SUBTERM)) ||
                 (partition == ResViewPartition.superproperties && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_REMOVE_SUPERPROPERTY)) ||
                 (partition == ResViewPartition.topconceptof && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_REMOVE_TOP_CONCEPT)) ||

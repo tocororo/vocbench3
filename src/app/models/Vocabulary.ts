@@ -84,6 +84,7 @@ export class OWL {
     public static minCardinality = new ARTURIResource(OWL.namespace + "minCardinality", "owl:minCardinality", RDFResourceRolesEnum.property);
     public static onProperty = new ARTURIResource(OWL.namespace + "onProperty", "owl:onProperty", RDFResourceRolesEnum.property);
     public static priorVersion = new ARTURIResource(OWL.namespace + "priorVersion", "owl:priorVersion", RDFResourceRolesEnum.ontologyProperty);
+    public static propertyChainAxiom = new ARTURIResource(OWL.namespace + "propertyChainAxiom", "owl:propertyChainAxiom", RDFResourceRolesEnum.property);
     public static propertyDisjointWith = new ARTURIResource(OWL.namespace + "propertyDisjointWith", "owl:propertyDisjointWith", RDFResourceRolesEnum.property);
     public static sameAs = new ARTURIResource(OWL.namespace + "sameAs", "owl:sameAs", RDFResourceRolesEnum.property);
     public static someValuesFrom = new ARTURIResource(OWL.namespace + "someValuesFrom", "owl:someValuesFrom", RDFResourceRolesEnum.property);

@@ -92,6 +92,9 @@
             <disjoint-properties-renderer *ngIf="disjointPropertiesColl" [pred-obj-list]="disjointPropertiesColl" [resource]="resource" 
                 [rendering]="rendering" [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </disjoint-properties-renderer>
+            <property-chain-renderer *ngIf="subPropertyChainsColl" [pred-obj-list]="subPropertyChainsColl" [resource]="resource" 
+                [rendering]="rendering" [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </property-chain-renderer>
             <subterms-renderer *ngIf="subtermsColl" [pred-obj-list]="subtermsColl" [resource]="resource" [rendering]="rendering"
                 [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </subterms-renderer>
