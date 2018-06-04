@@ -8,7 +8,7 @@ import { AddPropertyValueModal, AddPropertyValueModalData } from "./addPropertyV
 import { ClassListCreatorModal, ClassListCreatorModalData } from "./classListCreatorModal";
 import { DataRangeEditorModal, DataRangeEditorModalData } from "./dataRangeEditorModal";
 import { InstanceListCreatorModal, InstanceListCreatorModalData } from "./instanceListCreatorModal";
-import { PropertyListCreatorModal, PropertyListCreatorModalData } from './propertyListCreatorModal';
+import { PropertyChainCreatorModal, PropertyChainCreatorModalData } from './propertyChainCreatorModal';
 import { ResViewSettingsModal } from "./resViewSettingsModal";
 
 /**
@@ -51,13 +51,13 @@ export class ResViewModalServices {
     }
 
     createPropertyChain(title: string, property: ARTURIResource, propChangeable?: boolean) {
-        var modalData = new PropertyListCreatorModalData(title, property, propChangeable);
+        var modalData = new PropertyChainCreatorModalData(title, property, propChangeable);
         const builder = new BSModalContextBuilder<InstanceListCreatorModalData>(
             modalData, undefined, InstanceListCreatorModalData
         );
         builder.size("lg").keyboard(null);
         let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(PropertyListCreatorModal, overlayConfig).result;
+        return this.modal.open(PropertyChainCreatorModal, overlayConfig).result;
     }
 
     /**

@@ -7,7 +7,7 @@ import { VBProperties } from '../../utils/VBProperties';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { BrowsingModalServices } from '../../widget/modal/browsingModal/browsingModalServices';
 
-export class PropertyListCreatorModalData extends BSModalContext {
+export class PropertyChainCreatorModalData extends BSModalContext {
     /**
      * @param title title of the dialog
      * @param property root property that the modal should allow to enrich
@@ -23,11 +23,11 @@ export class PropertyListCreatorModalData extends BSModalContext {
 }
 
 @Component({
-    selector: "property-list-creator-modal",
-    templateUrl: "./propertyListCreatorModal.html",
+    selector: "property-chain-creator-modal",
+    templateUrl: "./propertyChainCreatorModal.html",
 })
-export class PropertyListCreatorModal implements ModalComponent<PropertyListCreatorModalData> {
-    context: PropertyListCreatorModalData;
+export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCreatorModalData> {
+    context: PropertyChainCreatorModalData;
 
     private rootProperty: ARTURIResource; //root property of the partition that invoked this modal
     private selectedProperty: ARTURIResource;
@@ -37,7 +37,7 @@ export class PropertyListCreatorModal implements ModalComponent<PropertyListCrea
     private propChain: PropertyChainItem[] = []
     private selectedChainProperty: PropertyChainItem;
 
-    constructor(public dialog: DialogRef<PropertyListCreatorModalData>, private propService: PropertyServices, 
+    constructor(public dialog: DialogRef<PropertyChainCreatorModalData>, private propService: PropertyServices, 
         private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private preferences: VBProperties) {
         this.context = dialog.context;
     }
@@ -93,6 +93,23 @@ export class PropertyListCreatorModal implements ModalComponent<PropertyListCrea
     private removePropertyFromChain() {
         this.propChain.splice(this.propChain.indexOf(this.selectedChainProperty), 1);
         this.selectedChainProperty = null;
+    }
+
+    private moveDown() {
+        var prevIndex = this.propChain.indexOf(this.selectedChainProperty);
+        this.propChain.splice(prevIndex, 1); //remove from current position
+        this.propChain.splice(prevIndex + 1, 0, this.selectedChainProperty);
+    }
+    private moveUp() {
+        var prevIndex = this.propChain.indexOf(this.selectedChainProperty);
+        this.propChain.splice(prevIndex, 1); //remove from current position
+        this.propChain.splice(prevIndex - 1, 0, this.selectedChainProperty);
+    }
+    private isSelectedPropFirst(): boolean {
+        return (this.selectedChainProperty == this.propChain[0]);
+    }
+    private isSelectedPropLast(): boolean {
+        return (this.selectedChainProperty == this.propChain[this.propChain.length - 1]);
     }
 
     /**

@@ -34,7 +34,7 @@ import { ClassListCreatorModal } from '../resourceView/resViewModals/classListCr
 import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
 import { DataRangeEditorModal } from '../resourceView/resViewModals/dataRangeEditorModal';
 import { InstanceListCreatorModal } from '../resourceView/resViewModals/instanceListCreatorModal';
-import { PropertyListCreatorModal } from '../resourceView/resViewModals/propertyListCreatorModal';
+import { PropertyChainCreatorModal } from '../resourceView/resViewModals/propertyChainCreatorModal';
 import { ResViewModalServices } from '../resourceView/resViewModals/resViewModalServices';
 import { ResViewSettingsModal } from '../resourceView/resViewModals/resViewSettingsModal';
 import { EditableResourceComponent } from '../resourceView/resViewResources/editableResourceComponent';
@@ -89,7 +89,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         TypesPartitionRenderer,
         //modals
         ClassListCreatorModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal,
-        DataRangeEditor, ResViewSettingsModal, AddManuallyValueModal, PropertyListCreatorModal
+        DataRangeEditor, ResViewSettingsModal, AddManuallyValueModal, PropertyChainCreatorModal
     ],
     exports: [
         ResourceViewPanelComponent, ResourceViewModal, ResourceViewComponent
@@ -97,7 +97,7 @@ import { TreeAndListModule } from "./treeAndListModule";
     providers: [ResViewModalServices],
     entryComponents: [
         ClassListCreatorModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal, 
-        ResourceViewModal, ResViewSettingsModal, AddManuallyValueModal, PropertyListCreatorModal
+        ResourceViewModal, ResViewSettingsModal, AddManuallyValueModal, PropertyChainCreatorModal
     ]
 })
 export class ResourceViewModule { }

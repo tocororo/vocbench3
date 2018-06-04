@@ -9,7 +9,7 @@ import { ResourcesServices } from "../../../services/resourcesServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
-import { PropertyListCreatorModalReturnData } from "../../resViewModals/propertyListCreatorModal";
+import { PropertyListCreatorModalReturnData } from "../../resViewModals/propertyChainCreatorModal";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 

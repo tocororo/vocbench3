@@ -12,7 +12,17 @@
     <div class="hbox">
         <div class="panel panel-default vbox">
             <div class="panel-heading">
-                <label>Property chain</label>
+                <label style="flex: 1">Property chain</label>
+                <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default" (click)="moveDown()" [disabled]="!selectedChainProperty || isSelectedPropLast()">
+                            <span class="glyphicon glyphicon-chevron-down"></span>
+                        </button>
+                        <button class="btn btn-default" (click)="moveUp()" [disabled]="!selectedChainProperty || isSelectedPropFirst()">
+                            <span class="glyphicon glyphicon-chevron-up"></span>
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="panel-body">
                 <div *ngFor="let p of propChain" class="listItem" (click)="onChainPropertySelected(p)" [ngClass]="{active: selectedChainProperty == p}">
@@ -31,7 +41,7 @@
         </div>
 
         <div class="vbox">
-            <property-tree-panel [deletable]="false" (nodeSelected)="onPropertySelected($event)"></property-tree-panel>
+            <property-tree-panel [deletable]="false" [type]="'objectProperty'" (nodeSelected)="onPropertySelected($event)"></property-tree-panel>
             <div class="checkbox" style="margin: 8px 0 0 0;">
                 <label>
                     <input type="checkbox" [(ngModel)]="inverseProp" [disabled]="selectedProperty?.getRole() != 'objectProperty'">Inverse Property
