@@ -3,9 +3,9 @@
 
         <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
             <ng-template ngFor let-n [ngForOf]="list" let-idx="index">
-                <instance-list-node *ngIf="idx < nodeLimit && (!n.isDeprecated() || showDeprecated && n.isDeprecated())"
+                <datatype-list-node *ngIf="idx < nodeLimit && (!n.isDeprecated() || showDeprecated && n.isDeprecated())"
                     [node]="n" [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)">
-                </instance-list-node>
+                </datatype-list-node>
             </ng-template>
         </div>
 
