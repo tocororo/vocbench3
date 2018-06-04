@@ -1,13 +1,14 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <div class="hbox" style="align-items: center">
+        <h3 class="modal-title" style="flex: 1">{{context.title}}</h3>
+        <span>
+            <button class="btn btn-default btn-xs" title="Change property" (click)="changeProperty()" [disabled]="!context.propChangeable">
+                <rdf-resource [resource]="enrichingProperty"></rdf-resource>
+            </button>
+        </span>
+    </div>
 </div>
 <div class="modal-body vbox" style="height:70vh;">
-
-    <div style="margin-bottom: 4px;">
-        <label>Property:</label>
-        <rdf-resource [resource]="selectedProperty"></rdf-resource>
-        <button *ngIf="context.propChangeable" class="btn btn-default btn-xs" title="Change property" (click)="changeProperty()">Change</button>
-    </div>
 
     <div class="hbox">
         <div class="panel panel-default vbox">
@@ -32,7 +33,7 @@
         </div>
 
         <div style="align-self: center; margin: 5px;">
-            <button class="btn btn-default btn-sm btn-block" (click)="addPropertyToChain()" [disabled]="!selectedProperty">
+            <button class="btn btn-default btn-sm btn-block" (click)="addPropertyToChain()" [disabled]="!selectedTreeProperty">
                 <span class="glyphicon glyphicon-chevron-left"></span> Add
             </button>
             <button class="btn btn-default btn-sm btn-block"  (click)="removePropertyFromChain()" [disabled]="!selectedChainProperty">
@@ -44,7 +45,7 @@
             <property-tree-panel [deletable]="false" [type]="'objectProperty'" (nodeSelected)="onPropertySelected($event)"></property-tree-panel>
             <div class="checkbox" style="margin: 8px 0 0 0;">
                 <label>
-                    <input type="checkbox" [(ngModel)]="inverseProp" [disabled]="selectedProperty?.getRole() != 'objectProperty'">Inverse Property
+                    <input type="checkbox" [(ngModel)]="inverseProp" [disabled]="selectedTreeProperty?.getRole() != 'objectProperty'">Inverse Property
                 </label>
             </div>
         </div>

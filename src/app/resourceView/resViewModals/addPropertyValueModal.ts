@@ -59,7 +59,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     context: AddPropertyValueModalData;
 
     private rootProperty: ARTURIResource; //root property of the partition that invoked this modal
-    private selectedProperty: ARTURIResource;
+    private enrichingProperty: ARTURIResource;
 
     private viewType: ViewType;
 
@@ -95,7 +95,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
 
     ngOnInit() {
         this.rootProperty = this.context.property;
-        this.selectedProperty = this.rootProperty;
+        this.enrichingProperty = this.rootProperty;
 
         this.updateRange(this.rootProperty);
     }
@@ -103,9 +103,9 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private changeProperty() {
         this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
             (selectedProp: any) => {
-                if (this.selectedProperty.getURI() != selectedProp.getURI()) {
-                    this.selectedProperty = selectedProp;
-                    this.updateRange(this.selectedProperty);
+                if (this.enrichingProperty.getURI() != selectedProp.getURI()) {
+                    this.enrichingProperty = selectedProp;
+                    this.updateRange(this.enrichingProperty);
                 }
             },
             () => { }
@@ -287,7 +287,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                 valid => {
                     if (valid) {
                         let returnedData: AddPropertyValueModalReturnData = {
-                            property: this.selectedProperty,
+                            property: this.enrichingProperty,
                             value: this.manchExpr,
                         }
                         this.dialog.close(returnedData);
@@ -298,14 +298,14 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
             );
         } else if (this.selectedAspectSelector == this.dataRangeAspectSelector) {
             let returnedData: AddPropertyValueModalReturnData = {
-                property: this.selectedProperty,
+                property: this.enrichingProperty,
                 value: this.datarange,
             }
             this.dialog.close(returnedData);
         } else { //treeListAspectSelector
             this.selectedResource.deleteAdditionalProperty(ResAttribute.SELECTED);
             let returnedData: AddPropertyValueModalReturnData = {
-                property: this.selectedProperty,
+                property: this.enrichingProperty,
                 value: this.selectedResource,
             }
             if (this.showInversePropertyCheckbox) {

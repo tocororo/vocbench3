@@ -20,6 +20,7 @@ export class PredicateObjectsRenderer {
     @Input() partition: ResViewPartition;
     @Output() add: EventEmitter<boolean> = new EventEmitter<boolean>();//boolean parameter: true if add canually, true or null add existing
     @Output() remove: EventEmitter<ARTNode> = new EventEmitter<ARTResource>(); //if the event doesn't contain the node, it means "delete all"
+    @Output() edit: EventEmitter<ARTNode> = new EventEmitter<ARTResource>(); //require the parent partition renderer to edit the value
     @Output() update = new EventEmitter();
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
@@ -58,6 +59,12 @@ export class PredicateObjectsRenderer {
     }
     private removeAllValues() {
         this.remove.emit();
+    }
+    /**
+     * Fired when the edit menu item is clicked (only for some partitions)
+     */
+    private editValue(object: ARTNode) {
+        this.edit.emit(object);
     }
     /**
      * Returns the title of the "+" button placed in a subPanel heading.

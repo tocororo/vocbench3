@@ -351,7 +351,11 @@ export class AuthorizationEvaluator {
             );
         },
         isEditAuthorized(partition: ResViewPartition, resource?: ARTResource): boolean {
-            return (AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_UPDATE_TRIPLE, resource));
+            return (
+                //subPropertyChains is at the moment the only partition that in edit use its services instead of Resources.updateTriple()
+                (partition == ResViewPartition.subPropertyChains && this.isRemoveAuthorized(partition, resource) && this.isAddAuthorized(partition, resource)) ||
+                (partition != ResViewPartition.subPropertyChains && AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_UPDATE_TRIPLE, resource))
+            );
         },
         isRemoveAuthorized(partition: ResViewPartition, resource?: ARTResource): boolean {
             return (

@@ -239,6 +239,17 @@ export abstract class PartitionRenderer {
     }
 
     /**
+     * @param predicate 
+     * @param object 
+     */
+    editHandler(predicate: ARTURIResource, object: ARTNode): void {
+        /**
+         * normally don't do nothing, only the partitions that require an ad hoc edit of the value (like subPropertyChain) need to
+         * override the method
+         */
+    }
+
+    /**
      * When the object is edited or replaced requires update of res view
      */
     private onObjectUpdate() {

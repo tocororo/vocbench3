@@ -26,7 +26,7 @@ export class AddManuallyValueModal implements ModalComponent<AddManuallyValueDat
     context: AddManuallyValueData;
 
     private rootProperty: ARTURIResource; //root property of the partition that invoked this modal
-    private selectedProperty: ARTURIResource;
+    private enrichingProperty: ARTURIResource;
 
     private inputTxt: string;
     
@@ -38,13 +38,13 @@ export class AddManuallyValueModal implements ModalComponent<AddManuallyValueDat
     ngOnInit() {
         document.getElementById("toFocus").focus();
         this.rootProperty = this.context.property;
-        this.selectedProperty = this.rootProperty;
+        this.enrichingProperty = this.rootProperty;
     }
 
     private changeProperty() {
         this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
             (selectedProp: any) => {
-                this.selectedProperty = selectedProp;
+                this.enrichingProperty = selectedProp;
             },
             () => { }
         );
@@ -70,7 +70,7 @@ export class AddManuallyValueModal implements ModalComponent<AddManuallyValueDat
         }
         event.stopPropagation();
         event.preventDefault();
-        this.dialog.close({ value: value, property: this.selectedProperty });
+        this.dialog.close({ value: value, property: this.enrichingProperty });
     }
 
     cancel() {

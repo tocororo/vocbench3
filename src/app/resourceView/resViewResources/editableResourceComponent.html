@@ -6,13 +6,12 @@
         </button>
         <ul class="dropdown-menu">
             <!-- Edit menu item -->
-            <li [ngClass]="{ disabled: !isEditAuthorized() || isInferred }">
-                <a *ngIf="isXLabel" (click)="editLiteral()">Edit literal content</a>
-                <a *ngIf="isPlainLiteral" (click)="editLiteral()">Edit</a>
-                <a *ngIf="!isPlainLiteral && !isXLabel" (click)="edit()">Edit</a>
+            <li [ngSwitch]="editActionScenario" [ngClass]="{ disabled: !isEditAuthorized() || isInferred }">
+                <a *ngSwitchCase="'xLabel'" (click)="edit()">Edit literal content</a>
+                <a *ngSwitchDefault (click)="edit()">Edit</a>
             </li>
 
-            <li *ngIf="resource.isResource()" [ngClass]="{ disabled: !isEditAuthorized() || isInferred }">
+            <li *ngIf="isReplaceMenuItemAvailable" [ngClass]="{ disabled: !isEditAuthorized() || isInferred }">
                 <a (click)="replace()">Replace with existing resource</a>
             </li>
             <ng-template [ngIf]="isXLabelMenuItemAvailable">

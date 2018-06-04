@@ -1,11 +1,12 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource, RDFResourceRolesEnum } from '../../models/ARTResources';
+import { ARTURIResource, RDFResourceRolesEnum, ARTBNode, ResAttribute, ARTResource, ResourceUtils } from '../../models/ARTResources';
 import { PropertyServices } from "../../services/propertyServices";
 import { VBProperties } from '../../utils/VBProperties';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { BrowsingModalServices } from '../../widget/modal/browsingModal/browsingModalServices';
+import { VBContext } from "../../utils/VBContext";
 
 export class PropertyChainCreatorModalData extends BSModalContext {
     /**
@@ -16,7 +17,8 @@ export class PropertyChainCreatorModalData extends BSModalContext {
     constructor(
         public title: string = 'Create a property chain',
         public property: ARTURIResource,
-        public propChangeable: boolean = true
+        public propChangeable: boolean = true,
+        public chain?: ARTBNode //if provided, the dialog works in edit mode
     ) {
         super();
     }
@@ -30,12 +32,15 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
     context: PropertyChainCreatorModalData;
 
     private rootProperty: ARTURIResource; //root property of the partition that invoked this modal
-    private selectedProperty: ARTURIResource;
+    private enrichingProperty: ARTURIResource;
 
+    private selectedTreeProperty: ARTURIResource;
     private inverseProp: boolean = false;
 
     private propChain: PropertyChainItem[] = []
     private selectedChainProperty: PropertyChainItem;
+
+    private readonly inversePrefix: string = "INVERSE ";
 
     constructor(public dialog: DialogRef<PropertyChainCreatorModalData>, private propService: PropertyServices, 
         private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private preferences: VBProperties) {
@@ -44,14 +49,36 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
 
     ngOnInit() {
         this.rootProperty = this.context.property;
-        this.selectedProperty = this.rootProperty;
+        this.enrichingProperty = this.rootProperty;
+
+        if (this.context.chain != null) { //edit mode
+            let chainMembers: ARTResource[] = this.context.chain.getAdditionalProperty(ResAttribute.MEMBERS);
+            chainMembers.forEach(chainMember => {
+                let property: ARTResource;
+                let inverse: boolean = false;
+                if (chainMember.getShow().startsWith(this.inversePrefix)) {
+                    inverse = true;
+                    let propShow = chainMember.getShow().substring(this.inversePrefix.length);
+                    if (ResourceUtils.isQName(propShow, VBContext.getPrefixMappings())) {
+                        property = ResourceUtils.parseQName(propShow, VBContext.getPrefixMappings());
+                    } else {
+                        property = ResourceUtils.parseURI(propShow);
+                    }
+                    property.setShow(this.inversePrefix + propShow);
+                    property.setRole(RDFResourceRolesEnum.objectProperty);
+                } else {
+                    property = chainMember;
+                }
+                this.propChain.push({ property: property, inverse: inverse });
+            });
+        }
     }
 
     private changeProperty() {
         this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
             (selectedProp: any) => {
-                if (this.selectedProperty.getURI() != selectedProp.getURI()) {
-                    this.selectedProperty = selectedProp;
+                if (this.enrichingProperty.getURI() != selectedProp.getURI()) {
+                    this.enrichingProperty = selectedProp;
                 }
             },
             () => { }
@@ -59,7 +86,7 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
     }
 
     private onPropertySelected(property: ARTURIResource) {
-        this.selectedProperty = property;
+        this.selectedTreeProperty = property;
         if (property.getRole() != RDFResourceRolesEnum.objectProperty) {
             this.inverseProp = false;
         }
@@ -77,14 +104,14 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
         //add only if not already in
         let alreadyIn: boolean = false;
         this.propChain.forEach(propChainItem => {
-            if (propChainItem.property.getURI() == this.selectedProperty.getURI()) {
+            if (propChainItem.property.getNominalValue() == this.selectedTreeProperty.getURI()) {
                 alreadyIn = true;
             }
         });
         if (!alreadyIn) {
-            let propToAdd: ARTURIResource = this.selectedProperty.clone();
+            let propToAdd: ARTURIResource = this.selectedTreeProperty.clone();
             if (this.inverseProp) {
-                propToAdd.setShow("INVERSE " + propToAdd.getShow());
+                propToAdd.setShow(this.inversePrefix + propToAdd.getShow());
             }
             this.propChain.push({ property: propToAdd, inverse: this.inverseProp });
         }
@@ -127,14 +154,14 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
         let chain: string[] = [];
         this.propChain.forEach(item => {
             if (item.inverse) {
-                chain.push("INVERSE " + item.property.toNT());
+                chain.push(this.inversePrefix + item.property.toNT());
             } else {
                 chain.push(item.property.toNT());
             }
-        })
+        });
 
         let returnData: PropertyListCreatorModalReturnData = {
-            property: this.selectedProperty,
+            property: this.enrichingProperty,
             chain: chain
         }
         this.dialog.close(returnData);
@@ -152,6 +179,6 @@ export class PropertyListCreatorModalReturnData {
 }
 
 class PropertyChainItem {
-    property: ARTURIResource;
+    property: ARTResource;
     inverse: boolean;
 }

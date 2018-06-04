@@ -50,8 +50,8 @@ export class ResViewModalServices {
         return this.modal.open(InstanceListCreatorModal, overlayConfig).result;
     }
 
-    createPropertyChain(title: string, property: ARTURIResource, propChangeable?: boolean) {
-        var modalData = new PropertyChainCreatorModalData(title, property, propChangeable);
+    createPropertyChain(title: string, property: ARTURIResource, propChangeable?: boolean, chain?: ARTBNode) {
+        var modalData = new PropertyChainCreatorModalData(title, property, propChangeable, chain);
         const builder = new BSModalContextBuilder<InstanceListCreatorModalData>(
             modalData, undefined, InstanceListCreatorModalData
         );

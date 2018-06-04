@@ -31,6 +31,7 @@ export class EditableResourceComponent {
 	@Input() partition: ResViewPartition;
 	@Output('delete') deleteOutput = new EventEmitter();
 	@Output() update = new EventEmitter();
+	@Output('edit') editOutput = new EventEmitter(); //fire a request for the renderer to edit the value
 	@Output() dblClick = new EventEmitter();
 
 	//useful to perform a check on the type of the edited value.
@@ -45,12 +46,13 @@ export class EditableResourceComponent {
 	}; //stores response.ranges of getRange service
 
 	private isClassAxiom: boolean = false;
-	private isPlainLiteral: boolean = false;
-	private isXLabel: boolean = false;
+
+	private editActionScenario: EditActionScenarioEnum = EditActionScenarioEnum.default;
 
 	private editMenuDisabled: boolean = false;
 	private isInferred: boolean = false;
 	private isXLabelMenuItemAvailable: boolean = false;
+	private isReplaceMenuItemAvailable: boolean = true;
 	private editInProgress: boolean = false;
 	private resourceStringValuePristine: string;
 	private resourceStringValue: string; //editable representation of the resource
@@ -62,9 +64,13 @@ export class EditableResourceComponent {
 		private vbProp: VBProperties) { }
 
 	ngOnInit() {
-		this.isPlainLiteral = this.resource instanceof ARTLiteral && this.resource.getDatatype() == null;
-
-		this.isXLabel = this.resource.getRole() == RDFResourceRolesEnum.xLabel;
+		if (this.resource instanceof ARTLiteral && this.resource.getDatatype() == null) {
+			this.editActionScenario = EditActionScenarioEnum.plainLiteral;
+		} else if (this.resource.getRole() == RDFResourceRolesEnum.xLabel) {
+			this.editActionScenario = EditActionScenarioEnum.xLabel;
+		} else if (this.partition == ResViewPartition.subPropertyChains) {
+			this.editActionScenario = EditActionScenarioEnum.partition;
+		}
 
 		/**
 		 * Determines if the menu items about xlabels should be visible.
@@ -76,6 +82,17 @@ export class EditableResourceComponent {
 			this.partition == ResViewPartition.lexicalizations &&
 			this.subject.getRole() == RDFResourceRolesEnum.concept &&
 			this.resource.isResource() && (<ARTResource>this.resource).getRole() == RDFResourceRolesEnum.xLabel
+		);
+
+		/**
+		 * Determines if the menu item "Replace with existing resource" should be visible.
+		 * Visible:
+		 * in classaxioms partition if object is an IRI
+		 * in any partitions (different from classaxioms and subPropertyChains) if the object is a resource
+		 */
+		this.isReplaceMenuItemAvailable = (
+			(this.partition == ResViewPartition.classaxioms && this.resource.isURIResource()) ||
+			(this.partition != ResViewPartition.subPropertyChains && this.partition != ResViewPartition.classaxioms && this.resource.isResource())
 		);
 
 		this.isInferred = ResourceUtils.containsNode(this.resource.getGraphs(), new ARTURIResource(SemanticTurkey.inferenceGraph));
@@ -93,56 +110,55 @@ export class EditableResourceComponent {
 	//======== "edit" HANDLER ========
 
 	private edit() {
-		//special case: resource is a data range => don't edit inline dataranges, but open the editor instead
-		if (this.resource instanceof ARTBNode && this.resource.getRole() == RDFResourceRolesEnum.dataRange) {
-			this.rvModalService.editDataRange(this.resource).then(
-				ok => { this.update.emit(); },
-				() => {}
-			);
-		}
-		else {
-			if (this.rangeType == null) { //check to avoid repeating of getRange in case it's not the first time that user edits the value
-				this.propService.getRange(this.predicate).subscribe(
-					range => {
-						this.ranges = range.ranges;
-						/**
-						 * special case:
-						 * if range is typed literal and range ha restriction (datarange or datatype), allow to edit only with enumeration of datarange
-						 */
-						if (this.ranges != null && this.ranges.type == RDFTypesEnum.typedLiteral) {
-							if (this.ranges.rangeCollection.dataRanges != null || this.ranges.rangeCollection.resources != null) {
-								this.creationModals.newTypedLiteral("Edit " + this.predicate.getShow(),
-									this.ranges.rangeCollection.resources, this.ranges.rangeCollection.dataRanges).then(
-									newValue => {
-										this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
-									},
-									() => { }
-								);
-							}
-						} else {
-							this.computeResourceStringValue();
-							this.editInProgress = true;
-						}
-					}
+		if (this.editActionScenario == EditActionScenarioEnum.partition) {
+			this.editOutput.emit();
+		} else if (this.editActionScenario == EditActionScenarioEnum.xLabel) {
+			this.resourceStringValue = this.resource.getShow()
+			this.resourceStringValuePristine = this.resourceStringValue;
+			this.editInProgress = true;
+		} else if (this.editActionScenario == EditActionScenarioEnum.plainLiteral) {
+			this.resourceStringValue = (<ARTLiteral>this.resource).getValue();
+			this.resourceStringValuePristine = this.resourceStringValue;
+			this.editInProgress = true;
+		} else { //default
+			//special case: resource is a data range => don't edit inline dataranges, but open the editor instead
+			if (this.resource instanceof ARTBNode && this.resource.getRole() == RDFResourceRolesEnum.dataRange) {
+				this.rvModalService.editDataRange(this.resource).then(
+					ok => { this.update.emit(); },
+					() => {}
 				);
-			} else {
-				this.computeResourceStringValue();
-				this.editInProgress = true;
+			}
+			else {
+				if (this.rangeType == null) { //check to avoid repeating of getRange in case it's not the first time that user edits the value
+					this.propService.getRange(this.predicate).subscribe(
+						range => {
+							this.ranges = range.ranges;
+							/**
+							 * special case:
+							 * if range is typed literal and range ha restriction (datarange or datatype), allow to edit only with enumeration of datarange
+							 */
+							if (this.ranges != null && this.ranges.type == RDFTypesEnum.typedLiteral) {
+								if (this.ranges.rangeCollection.dataRanges != null || this.ranges.rangeCollection.resources != null) {
+									this.creationModals.newTypedLiteral("Edit " + this.predicate.getShow(),
+										this.ranges.rangeCollection.resources, this.ranges.rangeCollection.dataRanges).then(
+										newValue => {
+											this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
+										},
+										() => { }
+									);
+								}
+							} else {
+								this.computeResourceStringValue();
+								this.editInProgress = true;
+							}
+						}
+					);
+				} else {
+					this.computeResourceStringValue();
+					this.editInProgress = true;
+				}
 			}
 		}
-	}
-
-	/**
-	 * Edits both plain literal and literal form of xlabel
-	 */
-	private editLiteral() {
-		if (this.resource instanceof ARTLiteral) {
-			this.resourceStringValue = this.resource.getValue();
-		} else if (this.isXLabel) {
-			this.resourceStringValue = this.resource.getShow()
-		}
-		this.resourceStringValuePristine = this.resourceStringValue;
-		this.editInProgress = true;
 	}
 
 	private computeResourceStringValue() {
@@ -179,10 +195,10 @@ export class EditableResourceComponent {
 
 	private confirmEdit() {
 		if (this.resourceStringValue != this.resourceStringValuePristine) { //apply edit only if the representation is changed
-			if (this.isPlainLiteral) {
+			if (this.editActionScenario == EditActionScenarioEnum.plainLiteral) {
 				let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, (<ARTLiteral>this.resource).getLang());
 				this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
-			} else if (this.isXLabel) {
+			} else if (this.editActionScenario == EditActionScenarioEnum.xLabel) {
 				let oldLitForm: ARTLiteral = new ARTLiteral(this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
 				let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, this.resource.getAdditionalProperty(ResAttribute.LANG));
 				this.applyUpdate(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
@@ -328,7 +344,6 @@ export class EditableResourceComponent {
 		)
 	}
 
-
 	//====== "Spawn new concept from this xLabel" HANDLER
 
 	private spawnNewConceptWithLabel() {
@@ -420,4 +435,12 @@ export class EditableResourceComponent {
 		return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, this.subject);
 	}
 
+}
+
+
+enum EditActionScenarioEnum {
+	xLabel = "xLabel", //edit should allow to change the literal form
+	plainLiteral = "isPlainLiteral", //edit should allow to change the literal
+	partition = "partition", //edit should be handled ad hoc by the partition (an event is emitted)
+	default = "default" //edit should allow to edit the NT form (iri/bnode/...)
 }

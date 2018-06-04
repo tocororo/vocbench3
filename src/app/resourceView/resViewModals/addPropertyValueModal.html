@@ -1,13 +1,16 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <div class="hbox" style="align-items: center">
+        <h3 class="modal-title" style="flex: 1">{{context.title}}</h3>
+        <span>
+            <button class="btn btn-default btn-xs" title="Change property" (click)="changeProperty()" [disabled]="!context.propChangeable">
+                <rdf-resource [resource]="enrichingProperty"></rdf-resource>
+            </button>
+        </span>
+    </div>
 </div>
 <div class="modal-body vbox" style="height:70vh;">
 
     <div style="margin-bottom: 4px;">
-        <label>Property:</label>
-        <rdf-resource [resource]="selectedProperty"></rdf-resource>
-        <button *ngIf="context.propChangeable" class="btn btn-default btn-xs" title="Change property" (click)="changeProperty()">Change</button>
-
         <div *ngIf="showAspectSelector" class="btn-group btn-group-xs pull-right">
             <button *ngFor="let selector of aspectSelectors" class="btn btn-default" [ngClass]="{active: selectedAspectSelector == selector}"
                 (click)="selectedAspectSelector = selector">{{selector}}</button>

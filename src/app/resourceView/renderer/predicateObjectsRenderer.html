@@ -27,9 +27,9 @@
             <ng-template [ngIf]="showObject(i)"> <!-- paging filter -->
 
                 <div class="listItem">
-                    <editable-resource *ngIf="!renderAsReified(predicateObjects.getPredicate(), obj)" style="flex: 1" [resource]="obj"
-                        [rendering]="rendering" [subject]="resource" [predicate]="predicateObjects.getPredicate()" [readonly]="readonly" 
-                        [partition]="partition" (dblClick)="objectDblClick($event)" (delete)="removeValue(obj)" (update)="onObjectUpdate()"
+                    <editable-resource *ngIf="!renderAsReified(predicateObjects.getPredicate(), obj)" style="flex: 1" [resource]="obj" [rendering]="rendering" 
+                        [subject]="resource" [predicate]="predicateObjects.getPredicate()" [readonly]="readonly" [partition]="partition"
+                        (dblClick)="objectDblClick($event)" (delete)="removeValue(obj)" (edit)="editValue(obj)" (update)="onObjectUpdate()"
                         [ngClass]="{ clickable: obj.isResource() }"></editable-resource>
                     <ng-template [ngIf]="renderAsReified(predicateObjects.getPredicate(), obj)">
                         <reified-resource [resource]="obj" [predicate]="predicateObjects.getPredicate()"
