@@ -33,6 +33,8 @@
 
                         <setting-set *ngSwitchCase="'Set'" [value]="p.value" [types]="p.type.typeArguments" (valueChanged)="updateSetValue(p, $event)"></setting-set>
 
+                        <setting-map *ngSwitchCase="'Map'" [value]="p.value" [types]="p.type.typeArguments" (valueChanged)="updateMapValue(p, $event)"></setting-map>
+
                         <textarea *ngSwitchDefault type="text" rows="1" class="form-control input-sm" style="resize: vertical" [(ngModel)]="p.value">
                         </textarea>
                     </div>

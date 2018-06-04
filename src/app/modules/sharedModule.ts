@@ -12,6 +12,7 @@ import { LiteralPickerComponent } from '../widget/pickers/literalPicker/literalP
 import { ResourcePickerComponent } from '../widget/pickers/resourcePicker/resourcePickerComponent';
 import { RdfResourceComponent } from '../widget/rdfResource/rdfResourceComponent';
 import { ResourceListComponent } from '../widget/rdfResource/resourceListComponent';
+import { SettingMapRendererComponent } from '../widget/settingsRenderer/settingMapRendererComponent';
 import { SettingSetRendererComponent } from '../widget/settingsRenderer/settingSetRendererComponent';
 import { SettingsRendererComponent } from '../widget/settingsRenderer/settingsRendererComponent';
 import { SettingsRendererPanelComponent } from '../widget/settingsRenderer/settingsRendererPanelComponent';
@@ -25,14 +26,14 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         FilePickerComponent, RdfResourceComponent, LangPickerComponent, SanitizerDirective,
         CodemirrorComponent, InputEditableComponent, ResourceListComponent,
         TypedLiteralInputComponent, LanguageItemComponent,
-        SettingsRendererComponent, SettingsRendererPanelComponent, SettingSetRendererComponent,
+        SettingsRendererComponent, SettingsRendererPanelComponent, SettingSetRendererComponent, SettingMapRendererComponent,
         ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent
     ],
     exports: [
         FilePickerComponent, RdfResourceComponent, SanitizerDirective, LangPickerComponent,
         CodemirrorComponent, InputEditableComponent, ResourceListComponent,
         TypedLiteralInputComponent, LanguageItemComponent, 
-        SettingsRendererComponent, SettingsRendererPanelComponent, SettingSetRendererComponent,
+        SettingsRendererComponent, SettingsRendererPanelComponent, SettingSetRendererComponent, SettingMapRendererComponent,
         ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent
     ],
     providers: []

@@ -59,13 +59,12 @@ export class Settings {
         let map: { [key: string]: string } = {};
         for (var i = 0; i < this.properties.length; i++) {
             let value = this.properties[i].value;
+
             if (value != null && typeof value === "string" && value == "") { //if user write then delete a value, the value is "", in this case "clear" the value
                 value = undefined;
-            }
-            if (value instanceof ARTURIResource) {
+            } else if (value instanceof ARTURIResource) {
                 value = value.toNT();
-            }
-            if (value instanceof Array) {
+            } else if (value instanceof Array) {
                 let serializedValues: string[] = [];
                 for (var j = 0; j < value.length; j++) {
                     let v: any = value[j];
@@ -76,7 +75,10 @@ export class Settings {
                     }
                 }
                 value = serializedValues;
+            } else if (typeof value == "object") { //object => probably a map (associative array object)
+                //don't do nothing
             }
+
             map[this.properties[i].name] = value;
         }
         return map;

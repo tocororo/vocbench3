@@ -1,6 +1,6 @@
 <div class="input-group input-group-sm">
     <input type="text" class="form-control" [(ngModel)]="resourceIRI" (ngModelChange)="onModelChanged()"
-        placeholder="&lt;http://example.org/...&gt;" [readonly]="!editable" [disabled]="disabled">
+        placeholder="http://example.org" [readonly]="!editable" [disabled]="disabled">
     <div class="input-group-btn">
         <button *ngIf="menuAsButton; else menuBlock" class="btn btn-default" (click)="pickResource()"
             title="Pick an existing resource" [disabled]="disabled">

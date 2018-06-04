@@ -36,6 +36,11 @@ export class SettingsRendererComponent {
         this.propagateChange(this.settings);
     }
 
+    private updateMapValue(prop: SettingsProp, value: any[]) {
+        prop.value = value;
+        this.propagateChange(this.settings);
+    }
+
     private getIRIRoleConstraints(prop: SettingsProp): RDFResourceRolesEnum[] {
         /**
          * use a cache mechanism to avoid to recreate a roles array each time getIRIRoleConstraints is called
