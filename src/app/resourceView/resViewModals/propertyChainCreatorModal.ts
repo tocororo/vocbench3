@@ -101,20 +101,11 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
     }
 
     private addPropertyToChain() {
-        //add only if not already in
-        let alreadyIn: boolean = false;
-        this.propChain.forEach(propChainItem => {
-            if (propChainItem.property.getNominalValue() == this.selectedTreeProperty.getURI()) {
-                alreadyIn = true;
-            }
-        });
-        if (!alreadyIn) {
-            let propToAdd: ARTURIResource = this.selectedTreeProperty.clone();
-            if (this.inverseProp) {
-                propToAdd.setShow(this.inversePrefix + propToAdd.getShow());
-            }
-            this.propChain.push({ property: propToAdd, inverse: this.inverseProp });
+        let propToAdd: ARTURIResource = this.selectedTreeProperty.clone();
+        if (this.inverseProp) {
+            propToAdd.setShow(this.inversePrefix + propToAdd.getShow());
         }
+        this.propChain.push({ property: propToAdd, inverse: this.inverseProp });
     }
 
     private removePropertyFromChain() {
