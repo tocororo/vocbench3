@@ -3,16 +3,16 @@ import { DialogRef, ModalComponent, OverlayConfig, Modal } from "ngx-modialog";
 import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { ConfigurationComponents, Reference, Configuration } from "../../models/Configuration";
 import { ConfigurationsServices } from "../../services/configurationsServices";
-import { QueryParametrizerModalData, QueryParametrizerModal } from "./queryParametrizerModal";
+import { QueryParameterizerModalData, QueryParameterizerModal } from "./queryParameterizerModal";
 
 @Component({
     selector: "query-param-mgr-modal",
-    templateUrl: "./queryParametrizationMgrModal.html",
+    templateUrl: "./queryParameterizationMgrModal.html",
 })
-export class QueryParametrizationMgrModal implements ModalComponent<BSModalContext> {
+export class QueryParameterizationMgrModal implements ModalComponent<BSModalContext> {
     context: BSModalContext;
 
-    private confComponentId: string = ConfigurationComponents.SPARQL_PARAMETRIZATION_STORE;
+    private confComponentId: string = ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE;
 
     private references: Reference[];
     private selectedRef: Reference;
@@ -41,16 +41,17 @@ export class QueryParametrizationMgrModal implements ModalComponent<BSModalConte
         }
     }
 
-    private createParametrization() {
-        this.openQueryParametrizationModal().then(
+    private createParameterization() {
+        this.openQueryParameterizationModal().then(
             () => {
                 this.initReferences();
-            }
+            },
+            () => {}
         );
     }
 
     private editReference(reference: Reference) {
-        this.openQueryParametrizationModal(reference);
+        this.openQueryParameterizationModal(reference);
     }
 
     private deleteReference(reference: Reference) {
@@ -62,21 +63,21 @@ export class QueryParametrizationMgrModal implements ModalComponent<BSModalConte
         );
     }
 
-    private openQueryParametrizationModal(reference?: Reference) {
+    private openQueryParameterizationModal(reference?: Reference) {
         let relativeReference: string = (reference != null) ? reference.relativeReference : null;
-        var modalData = new QueryParametrizerModalData(relativeReference);
-        const builder = new BSModalContextBuilder<QueryParametrizerModalData>(
-            modalData, undefined, QueryParametrizerModalData
+        var modalData = new QueryParameterizerModalData(relativeReference);
+        const builder = new BSModalContextBuilder<QueryParameterizerModalData>(
+            modalData, undefined, QueryParameterizerModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
-        return this.modal.open(QueryParametrizerModal, overlayConfig).result;
+        return this.modal.open(QueryParameterizerModal, overlayConfig).result;
     }
 
 
     ok(event: Event) {
         this.configurationService.getConfiguration(this.confComponentId, this.selectedRef.relativeReference).subscribe(
             conf => {
-                let returnData: QueryParametrizationMgrModalReturnData = {
+                let returnData: QueryParameterizationMgrModalReturnData = {
                     configuration: conf,
                     relativeReference: this.selectedRef.relativeReference
                 }
@@ -93,7 +94,7 @@ export class QueryParametrizationMgrModal implements ModalComponent<BSModalConte
 
 }
 
-export class QueryParametrizationMgrModalReturnData {
+export class QueryParameterizationMgrModalReturnData {
     configuration: Configuration;
     relativeReference: string;
 }

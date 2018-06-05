@@ -2,7 +2,7 @@ import { Settings, SettingsProp, Scope } from "./Plugins";
 
 export class ConfigurationComponents {
     static EXPORTER: string = "it.uniroma2.art.semanticturkey.config.exporter.Exporter";
-    static SPARQL_PARAMETRIZATION_STORE: string = "it.uniroma2.art.semanticturkey.config.sparql.SPARQLParameterizationStore";
+    static SPARQL_PARAMETERIZATION_STORE: string = "it.uniroma2.art.semanticturkey.config.sparql.SPARQLParameterizationStore";
     static SPARQL_STORE: string = "it.uniroma2.art.semanticturkey.config.sparql.SPARQLStore";
 }
 

@@ -17,7 +17,7 @@ import { BasicModalServices } from '../widget/modal/basicModal/basicModalService
 import { LoadConfigurationModalReturnData } from "../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from '../widget/modal/sharedModal/sharedModalServices';
 import { ExportResultAsRdfModal, ExportResultAsRdfModalData } from "./exportResultAsRdfModal";
-import { QueryParametrizationMgrModal, QueryParametrizationMgrModalReturnData } from "./queryParametrization/queryParametrizationMgrModal";
+import { QueryParameterizationMgrModal, QueryParameterizationMgrModalReturnData } from "./queryParameterization/queryParameterizationMgrModal";
 import { YasguiComponent } from "./yasguiComponent";
 
 @Component({
@@ -42,7 +42,7 @@ export class SparqlTabComponent {
     private queryTime: string;
     private inferred: boolean = false;
 
-    //parametrization
+    //parameterization
     private variableBindings: VariableBindings[];
     private bindings: Map<string, ARTNode>;
     private useBindings: boolean = true;
@@ -339,13 +339,14 @@ export class SparqlTabComponent {
         }
     }
 
-    //LOAD/SAVE/PARAMETRIZE QUERY
+    //LOAD/SAVE/PARAMETERIZE QUERY
 
     private loadQuery() {
         this.sharedModals.loadConfiguration("Load SPARQL query", ConfigurationComponents.SPARQL_STORE).then(
             (data: LoadConfigurationModalReturnData) => {
                 this.setLoadedQueryConf(data.configuration);
-            }
+            },
+            () => {}
         );
     }
 
@@ -363,11 +364,11 @@ export class SparqlTabComponent {
         )
     }
 
-    private parametrizeQuery() {
+    private parameterizeQuery() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        this.modal.open(QueryParametrizationMgrModal, overlayConfig).result.then(
-            (data: QueryParametrizationMgrModalReturnData) => {
+        this.modal.open(QueryParameterizationMgrModal, overlayConfig).result.then(
+            (data: QueryParameterizationMgrModalReturnData) => {
                 /**
                  * configuration contains 2 props:
                  * "relativeReference": the reference of the query

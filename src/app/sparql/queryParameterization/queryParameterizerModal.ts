@@ -14,18 +14,18 @@ import { LoadConfigurationModalReturnData } from "../../widget/modal/sharedModal
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { YasguiComponent } from "../yasguiComponent";
 
-export class QueryParametrizerModalData extends BSModalContext {
+export class QueryParameterizerModalData extends BSModalContext {
     constructor(public relativeRef?: string) {
         super();
     }
 }
 
 @Component({
-    selector: "query-parametrizer-modal",
-    templateUrl: "./queryParametrizerModal.html"
+    selector: "query-parameterizer-modal",
+    templateUrl: "./queryParameterizerModal.html"
 })
-export class QueryParametrizerModal implements ModalComponent<QueryParametrizerModalData> {
-    context: QueryParametrizerModalData;
+export class QueryParameterizerModal implements ModalComponent<QueryParameterizerModalData> {
+    context: QueryParameterizerModalData;
 
     //QUERY PREVIEW
     @ViewChild(YasguiComponent) viewChildYasgui: YasguiComponent;
@@ -33,7 +33,7 @@ export class QueryParametrizerModal implements ModalComponent<QueryParametrizerM
     private storedQueryReference: string;
     private query: string;
 
-    //QUERY PARAMETRIZER
+    //QUERY PARAMETERIZER
     private bindings: BindingStruct[] = [];
 
     private bindingTypes: BindingTypeStruct[] = [
@@ -60,7 +60,7 @@ export class QueryParametrizerModal implements ModalComponent<QueryParametrizerM
     private datatypes: ARTURIResource[];
     //----------------------------
 
-    constructor(public dialog: DialogRef<QueryParametrizerModalData>, private configurationService: ConfigurationsServices, 
+    constructor(public dialog: DialogRef<QueryParameterizerModalData>, private configurationService: ConfigurationsServices, 
         private datatypeService: DatatypesServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
         private creationModals: CreationModalServices) {
         this.context = dialog.context;
@@ -68,11 +68,11 @@ export class QueryParametrizerModal implements ModalComponent<QueryParametrizerM
 
     ngOnInit() {
         if (this.context.relativeRef) { //edit mode
-            this.configurationService.getConfiguration(ConfigurationComponents.SPARQL_PARAMETRIZATION_STORE, this.context.relativeRef).subscribe(
+            this.configurationService.getConfiguration(ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, this.context.relativeRef).subscribe(
                 (conf: Configuration) => {
 
-                    let relativeRef: string; //ref of the parametrized stored query
-                    let variableBindings: VariableBindings; //binding of the parametrization
+                    let relativeRef: string; //ref of the parameterized stored query
+                    let variableBindings: VariableBindings; //binding of the parameterization
 
                     let properties: SettingsProp[] = conf.properties;
                     for (var i = 0; i < properties.length; i++) {
@@ -152,7 +152,7 @@ export class QueryParametrizerModal implements ModalComponent<QueryParametrizerM
                 }
             );
         } else { //create mode
-
+            this.initDatatypes().subscribe()
         }
     }
 
@@ -248,7 +248,7 @@ export class QueryParametrizerModal implements ModalComponent<QueryParametrizerM
             }
             if (b.bindingType.value == BindingTypeEnum.assignment) {
                 if (b.value == null) {//check if type is assignment and the resource is not set
-                    this.basicModals.alert("Incomplete binding", "Incomplete parametrization for binding '" + b.varName 
+                    this.basicModals.alert("Incomplete binding", "Incomplete parameterization for binding '" + b.varName 
                         + "', please set a value or delete the binding", "warning");
                     return;
                 }
@@ -256,14 +256,14 @@ export class QueryParametrizerModal implements ModalComponent<QueryParametrizerM
             } else if (b.bindingType.value == BindingTypeEnum.constraint) {
                 if (b.bindingType.specialization == "role") {
                     if (b.resourceRole == null) { //check if type is constraint and the role is not set
-                        this.basicModals.alert("Incomplete binding", "Incomplete parametrization for binding '" + b.varName 
+                        this.basicModals.alert("Incomplete binding", "Incomplete parameterization for binding '" + b.varName 
                             + "', please set a role or delete the binding", "warning");
                         return;
                     } 
                     varBindings[b.varName].resourceRole = b.resourceRole;
                 } else if (b.bindingType.specialization == "datatype") {
                     if (b.datatype == null) { //check if type is constraint and the datatype is not set
-                        this.basicModals.alert("Incomplete binding", "Incomplete parametrization for binding '" + b.varName 
+                        this.basicModals.alert("Incomplete binding", "Incomplete parameterization for binding '" + b.varName 
                             + "', please set a datatype or delete the binding", "warning");
                         return;
                     } 
@@ -277,7 +277,7 @@ export class QueryParametrizerModal implements ModalComponent<QueryParametrizerM
             variableBindings: varBindings
         }
 
-        this.sharedModals.storeConfiguration("Save SPAQRL query parametrization", ConfigurationComponents.SPARQL_PARAMETRIZATION_STORE, config).then(
+        this.sharedModals.storeConfiguration("Save SPARQL query parameterization", ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, config).then(
             () => {
                 event.preventDefault();
                 event.stopPropagation();
