@@ -12,6 +12,11 @@
         <typed-literal-input [allowedDatatypes]="context.allowedDatatypes" [(ngModel)]="value" (datatypeChange)="onDatatypeChange($event)">
         </typed-literal-input>
 
+        <div *ngIf="notValidatableType" class="alert alert-warning" style="margin-top: 6px;">
+            <span class="glyphicon glyphicon-warning-sign" style="margin-right: 6px;"></span>
+            Creation of a literal for datatype {{datatype.getShow()}} does not undergo any validation.
+        </div>
+
         <div *ngIf="submitted && !isInputValid()" class="alert alert-danger" style="margin-top: 6px;">
             The inserted value is not valid for the selected datatype
         </div>

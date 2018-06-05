@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { ARTURIResource, ARTLiteral, ResourceUtils } from "../../../../models/ARTResources";
-import { XmlSchema, SKOS } from "../../../../models/Vocabulary";
+import { XmlSchema, SKOS, OWL } from "../../../../models/Vocabulary";
 import { VBContext } from "../../../../utils/VBContext";
 
 export class NewTypedLiteralModalData extends BSModalContext {
@@ -35,6 +35,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
 
     private datatype: ARTURIResource;
     private value: any;
+    private notValidatableType: boolean = false;
 
     private selectedDataRange: ARTLiteral[]; //selected list of dataranges among which chose one
     private selectedDrValue: ARTLiteral; //Value selected among those available in the selectedDataRange
@@ -80,14 +81,38 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
         var valid: boolean = false;
         if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
             if (this.value != undefined) {
-                if (this.datatype.getURI() == XmlSchema.string.getURI()) {
-                    valid = this.value.trim() != "";// if value is string, it's valid only if is not an empty string
+                if (this.datatype.getURI() == XmlSchema.byte.getURI()) {
+                    valid = new RegExp("[\-+]?[0-9]+").test(this.value) && this.value <= 127 && this.value >= -128;
                 } else if (this.datatype.getURI() == XmlSchema.float.getURI()) {
                     valid = new RegExp("^[\-\+]?[0-9]+(\.[0-9]+)?$").test(this.value);
+                } else if (this.datatype.getURI() == XmlSchema.int.getURI()) {
+                    valid = new RegExp("[\-+]?[0-9]+").test(this.value) && this.value >= -2147483648 && this.value <= 2147483647;
                 } else if (this.datatype.getURI() == XmlSchema.integer.getURI()) {
                     valid = new RegExp("^[\-\+]?[0-9]+$").test(this.value);
                 } else if (this.datatype.getURI() == XmlSchema.language.getURI()) {
                     valid = new RegExp("^([a-zA-Z]{1,8})(-[a-zA-Z0-9]{1,8})*$").test(this.value);
+                } else if (this.datatype.getURI() == XmlSchema.long.getURI()) {
+                    valid = new RegExp("[\-+]?[0-9]+").test(this.value) && this.value >= -9223372036854775808 && this.value <= 9223372036854775807;
+                } else if (this.datatype.getURI() == XmlSchema.nonNegativeInteger.getURI()) {
+                    valid = new RegExp("[\-+]?[0-9]+").test(this.value) && this.value >= 0;
+                } else if (this.datatype.getURI() == XmlSchema.nonPositiveInteger.getURI()) {
+                    valid = new RegExp("[\-+]?[0-9]+").test(this.value) && this.value <= 0;
+                } else if (this.datatype.getURI() == XmlSchema.negativeInteger.getURI()) {
+                    valid = new RegExp("[\-+]?[0-9]+").test(this.value) && this.value <= -1;
+                } else if (this.datatype.getURI() == XmlSchema.positiveInteger.getURI()) {
+                    valid = new RegExp("[\-+]?[0-9]+").test(this.value) && this.value >= 1;
+                } else if (this.datatype.getURI() == XmlSchema.short.getURI()) {
+                    valid = new RegExp("[\-+]?[0-9]+").test(this.value) && this.value >= -32768 && this.value <= 32767;
+                } else if (this.datatype.getURI() == XmlSchema.string.getURI()) {
+                    valid = this.value.trim() != "";// if value is string, it's valid only if is not an empty string
+                } else if (this.datatype.getURI() == XmlSchema.unsignedByte.getURI()) {
+                    valid = new RegExp("[\-+]?[0-9]+").test(this.value) && this.value >= 0 && this.value <= 255;
+                } else if (this.datatype.getURI() == XmlSchema.unsignedInt.getURI()) {
+                    valid = new RegExp("[\-+]?[0-9]+").test(this.value) && this.value >= 0 && this.value <= 4294967295;
+                } else if (this.datatype.getURI() == XmlSchema.unsignedLong.getURI()) {
+                    valid = new RegExp("[\-+]?[0-9]+").test(this.value) && this.value >= 0 && this.value <= 18446744073709551615;
+                } else if (this.datatype.getURI() == XmlSchema.unsignedShort.getURI()) {
+                    valid = new RegExp("[\-+]?[0-9]+").test(this.value) && this.value >= 0 && this.value <= 65535;
                 } else { //every other datatype doesn't require validation
                     valid = true;
                 }
@@ -102,6 +127,29 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
 
     private onDatatypeChange(datatype: ARTURIResource) {
         this.datatype = datatype;
+        this.notValidatableType = !(
+            this.datatype.getURI() == XmlSchema.byte.getURI() ||
+            this.datatype.getURI() == XmlSchema.decimal.getURI() ||
+            this.datatype.getURI() == XmlSchema.double.getURI() ||
+            this.datatype.getURI() == XmlSchema.float.getURI() ||
+            this.datatype.getURI() == XmlSchema.int.getURI() ||
+            this.datatype.getURI() == XmlSchema.integer.getURI() ||
+            this.datatype.getURI() == XmlSchema.long.getURI() ||
+            this.datatype.getURI() == XmlSchema.negativeInteger.getURI() ||
+            this.datatype.getURI() == XmlSchema.nonNegativeInteger.getURI() ||
+            this.datatype.getURI() == XmlSchema.nonPositiveInteger.getURI() ||
+            this.datatype.getURI() == XmlSchema.positiveInteger.getURI() ||
+            this.datatype.getURI() == XmlSchema.short.getURI() ||
+            this.datatype.getURI() == XmlSchema.unsignedByte.getURI() ||
+            this.datatype.getURI() == XmlSchema.unsignedInt.getURI() ||
+            this.datatype.getURI() == XmlSchema.unsignedLong.getURI() ||
+            this.datatype.getURI() == XmlSchema.unsignedShort.getURI() ||
+            this.datatype.getURI() == XmlSchema.boolean.getURI() ||
+            this.datatype.getURI() == XmlSchema.date.getURI() ||
+            this.datatype.getURI() == XmlSchema.dateTime.getURI() ||
+            this.datatype.getURI() == XmlSchema.string.getURI() ||
+            this.datatype.getURI() == XmlSchema.time.getURI()
+        );
     }
 
     ok(event: Event) {

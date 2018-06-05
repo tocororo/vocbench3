@@ -1,46 +1,45 @@
 <div>
-    <select class="form-control input-sm" [(ngModel)]="datatype" (ngModelChange)="onDatatypeChange()">
+    <select class="form-control input-sm" [(ngModel)]="datatype" (ngModelChange)="onDatatypeChange()" style="margin-bottom: 6px;">
         <ng-template ngFor let-dt [ngForOf]="datatypeList">
             <option *ngIf="isDatatypeAllowed(dt)" [ngValue]="dt" [title]="dt.getURI()">{{dt.getShow()}}</option>
         </ng-template>
     </select>
-
-    <div [ngSwitch]="datatype?.getURI()">
-        <input *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#float'" type="number" step="any"
-            class="form-control input-sm" style="margin-top: 6px;" [(ngModel)]="value" (ngModelChange)="onValueChanged()">
-        <input *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#integer'" type="number" step="1"
-            class="form-control input-sm" style="margin-top: 6px;" [(ngModel)]="value" (ngModelChange)="onValueChanged()">
-        <div *ngSwitchDefault>
-            <div *ngIf="isDatatypeBound(); else elseBlock">
-                <div class="panel panel-default" style="margin-top: 6px;">
-                    <div class="panel-body">
-                        <div *ngIf="datatype.getURI()=='http://www.w3.org/2001/XMLSchema#boolean'" class="text-center">
-                            <label class="radio-inline">
-                                <input type="radio" (click)="value='true'; onValueChanged()" [checked]="value=='true'">true
-                            </label>
-                            <label class="radio-inline" style="margin-left: 20px;">
-                                <input type="radio" (click)="value='false'; onValueChanged()" [checked]="value=='false'">false
-                            </label>
-                        </div>
-                        <div *ngIf="datatype.getURI()=='http://www.w3.org/2001/XMLSchema#date'">
-                            <input class="form-control input-sm" type="date" [(ngModel)]="value" (ngModelChange)="onValueChanged()">
-                        </div>
-                        <div *ngIf="datatype.getURI()=='http://www.w3.org/2001/XMLSchema#dateTime'">
-                            <input class="form-control input-sm" type="datetime-local" [(ngModel)]="value" (ngModelChange)="onValueChanged()">
-                        </div>
-                        <div *ngIf="datatype.getURI()=='http://www.w3.org/2001/XMLSchema#time'">
-                            <input class="form-control input-sm" type="time" [(ngModel)]="value" (ngModelChange)="onValueChanged()">
-                        </div>
+    <div *ngIf="numericInput; else nonNumericBlock">
+        <input *ngIf="inputNumberSign=='positive'" type="number" min="0"
+            class="form-control input-sm" [(ngModel)]="value" (ngModelChange)="onValueChanged()">
+        <input *ngIf="inputNumberSign=='negative'" type="number" max="0"
+            class="form-control input-sm" [(ngModel)]="value" (ngModelChange)="onValueChanged()">
+        <input *ngIf="inputNumberSign=='any'" type="number"
+            class="form-control input-sm" [(ngModel)]="value" (ngModelChange)="onValueChanged()">
+    </div> 
+    <ng-template #nonNumericBlock>
+        <div *ngIf="isDatatypeBound(); else nonBoundBlock">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div *ngIf="datatype.getURI()=='http://www.w3.org/2001/XMLSchema#boolean'" class="text-center">
+                        <label class="radio-inline">
+                            <input type="radio" (click)="value='true'; onValueChanged()" [checked]="value=='true'">true
+                        </label>
+                        <label class="radio-inline" style="margin-left: 20px;">
+                            <input type="radio" (click)="value='false'; onValueChanged()" [checked]="value=='false'">false
+                        </label>
+                    </div>
+                    <div *ngIf="datatype.getURI()=='http://www.w3.org/2001/XMLSchema#date'">
+                        <input class="form-control input-sm" type="date" [(ngModel)]="value" (ngModelChange)="onValueChanged()">
+                    </div>
+                    <div *ngIf="datatype.getURI()=='http://www.w3.org/2001/XMLSchema#dateTime'">
+                        <input class="form-control input-sm" type="datetime-local" [(ngModel)]="value" (ngModelChange)="onValueChanged()">
+                    </div>
+                    <div *ngIf="datatype.getURI()=='http://www.w3.org/2001/XMLSchema#time'">
+                        <input class="form-control input-sm" type="time" [(ngModel)]="value" (ngModelChange)="onValueChanged()">
                     </div>
                 </div>
-                <input type="text" class="form-control input-sm" style="margin-top: 6px;" 
-                    [(ngModel)]="value" (ngModelChange)="onValueChanged()" disabled>
             </div>
-            <ng-template #elseBlock>
-                <!-- xsd:string, xsd:language or any other unknown datatype -->
-                <input type="text" class="form-control input-sm" style="margin-top: 6px;" [(ngModel)]="value" (ngModelChange)="onValueChanged()">
-            </ng-template>
+            <input type="text" class="form-control input-sm" style="margin-top: 6px;" [(ngModel)]="value" (ngModelChange)="onValueChanged()" disabled>
         </div>
-    </div>
-        
+        <ng-template #nonBoundBlock>
+            <!-- xsd:string, xsd:language or any other unknown datatype -->
+            <input type="text" class="form-control input-sm" [(ngModel)]="value" (ngModelChange)="onValueChanged()">
+        </ng-template>
+    </ng-template>
 </div>

@@ -404,12 +404,12 @@ export class UIUtils {
         } else if (datatype == XmlSchema.boolean.getURI()) {
             imgSrc = require("../../assets/images/icons/res/boolean.png");
         } else if (datatype == OWL.rational.getURI() || datatype == OWL.real.getURI() ||
-            datatype == XmlSchema.decimal.getURI() || datatype == XmlSchema.double.getURI() || 
-            datatype == XmlSchema.float.getURI() || datatype == XmlSchema.int.getURI() || 
-            datatype == XmlSchema.integer.getURI() || datatype == XmlSchema.long.getURI() || 
-            datatype == XmlSchema.negativeInteger.getURI() || datatype == XmlSchema.nonNegativeInteger.getURI() || 
-            datatype == XmlSchema.nonPositiveInteger.getURI() || datatype == XmlSchema.positiveInteger.getURI() || 
-            datatype == XmlSchema.short.getURI() || datatype == XmlSchema.unsignedInt.getURI() || 
+            datatype == XmlSchema.byte.getURI() || datatype == XmlSchema.decimal.getURI() || datatype == XmlSchema.double.getURI() || 
+            datatype == XmlSchema.float.getURI() || datatype == XmlSchema.int.getURI() || datatype == XmlSchema.integer.getURI() || 
+            datatype == XmlSchema.long.getURI() || datatype == XmlSchema.negativeInteger.getURI() || 
+            datatype == XmlSchema.nonNegativeInteger.getURI() || datatype == XmlSchema.nonPositiveInteger.getURI() || 
+            datatype == XmlSchema.positiveInteger.getURI() ||  datatype == XmlSchema.short.getURI() || 
+            datatype == XmlSchema.unsignedByte.getURI() || datatype == XmlSchema.unsignedInt.getURI() || 
             datatype == XmlSchema.unsignedLong.getURI() || datatype == XmlSchema.unsignedShort.getURI()) {
             imgSrc = require("../../assets/images/icons/res/number.png");
         }

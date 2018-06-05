@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTURIResource, ResourceUtils } from "../../models/ARTResources";
-import { RDFS, XmlSchema } from "../../models/Vocabulary";
+import { RDFS, XmlSchema, OWL } from "../../models/Vocabulary";
 import { DatatypesServices } from "../../services/datatypesServices";
 
 @Component({
@@ -19,12 +19,14 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
     private datatypeList: ARTURIResource[];
     private datatype: ARTURIResource;
 
+    private numericInput: boolean = false;
+    private inputNumberSign: "positive" | "negative" | "any" = "any";
+
     private value: string;
 
     constructor(private datatypeService: DatatypesServices) {}
 
     ngOnInit() {
-
         this.datatypeService.getDatatypes().subscribe(
             datatypes => {
                 datatypes.sort((dt1: ARTURIResource, dt2: ARTURIResource) => {
@@ -53,8 +55,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
                         this.datatype = this.datatypeList[this.datatypeList.findIndex(dt => dt.getURI() == this.allowedDatatypes[0].getURI())];
                     }
                 }
-                this.datatypeChange.emit(this.datatype);
-                this.propagateChange(this.value);
+                this.onDatatypeChange();
             }
         );
     }
@@ -65,10 +66,15 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
      * (e.g. boolean admits only true and false, time admits values like hh:mm:ss, ...)
      */
     private isDatatypeBound(): boolean {
-        return (
-            this.datatype.getURI() == XmlSchema.boolean.getURI() || this.datatype.getURI() == XmlSchema.date.getURI() ||
-            this.datatype.getURI() == XmlSchema.dateTime.getURI() || this.datatype.getURI() == XmlSchema.time.getURI()
-        );
+        if (this.datatype) {
+            return (
+                this.datatype.getURI() == XmlSchema.boolean.getURI() || this.datatype.getURI() == XmlSchema.date.getURI() ||
+                this.datatype.getURI() == XmlSchema.dateTime.getURI() || this.datatype.getURI() == XmlSchema.time.getURI()
+            );
+        } else {
+            return false;
+        }
+        
     }
 
     /**
@@ -84,13 +90,54 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
     }
 
     private onDatatypeChange() {
+        this.updateInputConfiguration();
         this.value = null;
         this.propagateChange(this.value);
         this.datatypeChange.emit(this.datatype);
     }
 
+    private updateInputConfiguration() {
+        this.numericInput = (
+            this.datatype.getURI() == XmlSchema.byte.getURI() ||
+            this.datatype.getURI() == XmlSchema.decimal.getURI() ||
+            this.datatype.getURI() == XmlSchema.double.getURI() ||
+            this.datatype.getURI() == XmlSchema.float.getURI() ||
+            this.datatype.getURI() == XmlSchema.int.getURI() ||
+            this.datatype.getURI() == XmlSchema.integer.getURI() ||
+            this.datatype.getURI() == XmlSchema.long.getURI() ||
+            this.datatype.getURI() == XmlSchema.negativeInteger.getURI() ||
+            this.datatype.getURI() == XmlSchema.nonNegativeInteger.getURI() ||
+            this.datatype.getURI() == XmlSchema.nonPositiveInteger.getURI() ||
+            this.datatype.getURI() == XmlSchema.positiveInteger.getURI() ||
+            this.datatype.getURI() == XmlSchema.short.getURI() ||
+            this.datatype.getURI() == XmlSchema.unsignedByte.getURI() ||
+            this.datatype.getURI() == XmlSchema.unsignedInt.getURI() ||
+            this.datatype.getURI() == XmlSchema.unsignedLong.getURI() ||
+            this.datatype.getURI() == XmlSchema.unsignedShort.getURI()
+        );
+        //sign
+        if (
+            this.datatype.getURI() == XmlSchema.nonNegativeInteger.getURI() ||
+            this.datatype.getURI() == XmlSchema.positiveInteger.getURI() ||
+            this.datatype.getURI() == XmlSchema.unsignedByte.getURI() ||
+            this.datatype.getURI() == XmlSchema.unsignedInt.getURI() ||
+            this.datatype.getURI() == XmlSchema.unsignedLong.getURI() ||
+            this.datatype.getURI() == XmlSchema.unsignedShort.getURI()
+        ) {
+            this.inputNumberSign = "positive";
+        } else if (
+            this.datatype.getURI() == XmlSchema.negativeInteger.getURI() ||
+            this.datatype.getURI() == XmlSchema.nonPositiveInteger.getURI()
+        ) {
+            this.inputNumberSign = "negative";
+        } else {
+            this.inputNumberSign = "any";
+        }
+    }
+
     private onValueChanged() {
-        this.propagateChange(this.value);
+        //in case of number value, convert it to string in order to generate a valid NTriple representation
+        this.propagateChange(this.value+"");
     }
 
     //---- method of ControlValueAccessor and Validator interfaces ----
