@@ -1,67 +1,172 @@
-<div class="vbox">
-    
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <label>Load Data:</label>
-        </div>
-       
-        <div class="panel-body">
-
-            <form class="form-horizontal">
-
-                <div class="form-group">
-                    <label class="control-label col-sm-1">RDF file:</label>
-                    <div class="col-sm-5">
-                        <file-picker (fileChanged)="fileChangeEvent($event)"
-                            [accept]="'.rdf, .rdfs, .xml, .owl, .nt, .n3, .ttl, .trig, .trix, .trix-ext, .nq'"></file-picker>    
-                    </div>
-
-                    <label class="control-label col-sm-1">Format:</label>
-                    <div class="col-sm-5">
-                        <select class="form-control input-sm" [(ngModel)]="selectedFormat" name="format">
-                            <option *ngFor="let f of formats" [ngValue]="f">{{f.name}}</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label col-sm-1">Base URI:</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" name="baseURI"
-                            placeholder="http://example.baseuri.com/" [disabled]="useProjectBaseURI">
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" [(ngModel)]="useProjectBaseURI" (ngModelChange)="onBaseUriChecboxChange()"
-                                    name="uriCheckbox">Use project baseURI
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label col-sm-1">Resolve transitive imports from:</label>
-                    <div class="col-sm-11">
-                        <select class="form-control input-sm" [(ngModel)]="selectedImportAllowance" name="allowance">
-                            <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.show}}</option>
-                        </select>
-                    </div>
-                </div>
-
-            </form>
-
-        </div>
-        
-        <div class="panel-footer hbox" style="align-items: center">
-            <div *ngIf="isValidationEnabled()" class="checkbox" style="flex: 1; margin: 0px;">
-                <label>
-                    <input type="checkbox" [(ngModel)]="validateImplicitly" [disabled]="!isValidationAuthorized()">
-                    Implicitly validate loaded data
-                </label>
+<div class="panel panel-default vbox">
+    <div class="panel-heading">
+        <label style="flex: 1;">Load Data:</label>
+        <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" title="Save import configuration" (click)="saveChain()">
+                    <span class="glyphicon glyphicon-floppy-save"></span>
+                </button>
+                <button class="btn btn-default" title="Load import configuration" (click)="loadChain()">
+                    <span class="glyphicon glyphicon-floppy-open"></span>
+                </button>
             </div>
-            <button type="submit" class="btn btn-default btn-sm pull-right" (click)="load()" [disabled]="isDataValid()">Submit</button>
         </div>
     </div>
     
+    <div class="panel-body vbox">
+        <div class="subPanel">
+            <div class="subPanel-heading">
+                <label style="margin-right: 8px">Load from:</label>
+                <select class="form-control input-xs" style="width: initial" [(ngModel)]="selectedLoader">
+                    <option *ngFor="let loaderOpt of loaderOptions" [ngValue]="loaderOpt">{{loaderOpt.label}}</option>
+                </select>
+            </div>
+            <div class="subPanel-body">
+
+                <form class="form-horizontal">
+                    <!-- File selection available only when there is no target loader -->
+                    <div class="form-group" *ngIf="!selectedLoader.target">
+                        <label class="control-label col-sm-1">File:</label>
+                        <div class="col-sm-11">
+                            <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="filePickerAccept"></file-picker>    
+                        </div>
+                    </div>
+
+                    <!-- Loader available only When a target (repo or stream) is specified -->
+                    <div class="form-group" *ngIf="selectedLoader.target">
+                        <label class="control-label col-sm-1">Loader:</label>
+                        <div class="col-sm-11">
+                            <ng-template [ngIf]="selectedLoader.target == 'repository'">
+                                <extension-configurator #loaderConfigurator *ngIf="repoTargetLoaders" [extensions]="repoTargetLoaders"
+                                    (extensionUpdated)="selectedLoaderExtension = $event"
+                                    (configurationUpdated)="selectedLoaderConfig = $event"
+                                    (configStatusUpdated)="onLoaderConfigStatusUpdated($event)"
+                                    style="flex: 1;">
+                                </extension-configurator>
+                            </ng-template>
+                            <ng-template [ngIf]="selectedLoader.target == 'stream'">
+                                <extension-configurator #loaderConfigurator *ngIf="streamTargetLoaders" [extensions]="streamTargetLoaders"
+                                    (extensionUpdated)="selectedLoaderExtension = $event"
+                                    (configurationUpdated)="selectedLoaderConfig = $event"
+                                    (configStatusUpdated)="onLoaderConfigStatusUpdated($event)"
+                                    style="flex: 1;">
+                                </extension-configurator>
+                            </ng-template>
+                        </div>
+                    </div>
+
+                    <!-- Lifter available only when there is no target (load from file) or a stream-target loader -->
+                    <div class="form-group" *ngIf="!selectedLoader.target || selectedLoader.target == 'stream'">
+                        <label class="control-label col-sm-1">RDF Lifter:</label>
+                        <div class="col-sm-5">
+                            <extension-configurator *ngIf="lifters" [extensions]="lifters"
+                                (extensionUpdated)="onLifterExtensionUpdated($event)"
+                                (configurationUpdated)="selectedLifterConfig = $event">
+                            </extension-configurator>
+                        </div>
+                        <label class="control-label col-sm-1">Format:</label>
+                        <div class="col-sm-5">
+                            <select class="form-control input-sm" [(ngModel)]="selectedInputFormat" name="inputFormat">
+                                <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-1">Base URI:</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" name="baseURI"
+                                placeholder="http://example.baseuri.com/" [disabled]="useProjectBaseURI">
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" [(ngModel)]="useProjectBaseURI" (ngModelChange)="onBaseUriChecboxChange()"
+                                        name="uriCheckbox">Use project baseURI
+                                </label>
+                            </div>
+                        </div>
+                        <label class="control-label col-sm-1">
+                            Resolve imports:
+                            <span class="glyphicon glyphicon-info-sign" title="Specify the resolution source in case of transitive imports"></span>
+                        </label>
+                        <div class="col-sm-5">
+                            <select class="form-control input-sm" [(ngModel)]="selectedImportAllowance" name="allowance">
+                                <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.show}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <div class="subPanel vbox" style="flex: 2">
+            <div class="subPanel-heading">
+                <label style="flex: 1">Transformators:</label>
+                <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default" title="Add transformer" (click)="appendTransformer()">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-default" title="Remove transformer" (click)="removeTransformer()"
+                            [disabled]="transformersChain.length == 0 || !selectedTransformerChainElement">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                        <button class="btn btn-default" title="Move down"  (click)="moveTransformerDown()"
+                            [disabled]="isSelectedTransformerLast() || !selectedTransformerChainElement">
+                            <span class="glyphicon glyphicon-chevron-down"></span>
+                        </button>
+                        <button class="btn btn-default" title="Move up" (click)="moveTransformerUp()"
+                            [disabled]="isSelectedTransformerFirst() || !selectedTransformerChainElement">
+                            <span class="glyphicon glyphicon-chevron-up"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="subPanel-body scrollableContainer">
+                <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 5px;">
+                    Here it is possible to create and configure a sequence of transformers to be applied during the import process.
+                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                </div>
+                <table class="table table-condensed table-hoverable">
+                    <colgroup>
+                        <col style="width: 2%">
+                        <col>
+                        <col style="width: 2%">
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let transformerChainEl of transformersChain; let l = last; let f = first; let idx = index" 
+                            [ngClass]="{active: transformerChainEl == selectedTransformerChainElement}" (click)="selectTransformerChainElement(transformerChainEl)">
+                            <td class="text-center" style="font-size: 11px; font-weight: 700;">{{idx+1}}</td>
+                            <td>
+                                <extension-configurator [extensions]="transformerChainEl.availableFactories"
+                                    (extensionUpdated)="onExtensionUpdated(transformerChainEl, $event)"
+                                    (configurationUpdated)="onConfigurationUpdated(transformerChainEl, $event)" 
+                                    (configStatusUpdated)="onConfigStatusUpdated(transformerChainEl, $event)">
+                                </extension-configurator>
+                            </td>
+                            <td class="text-center" style="font-size: 14px; font-weight: 700;">
+                                <span *ngIf="requireConfiguration(transformerChainEl)" class="glyphicon glyphicon-warning-sign"
+                                    title="This transformer needs to be configured"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="panel-footer">
+        <div *ngIf="isValidationEnabled()" class="checkbox-inline">
+            <label>
+                <input type="checkbox" [(ngModel)]="validateImplicitly" [disabled]="!isValidationAuthorized()">
+                Implicitly validate loaded data
+            </label>
+        </div>
+        <div class="pull-right">
+            <button type="submit" class="btn btn-default btn-sm" (click)="load()" [disabled]="isDataValid()">Submit</button>
+        </div>
+        <span class="clearfix"></span> <!--To fix UI bug-->
+    </div>
 </div>

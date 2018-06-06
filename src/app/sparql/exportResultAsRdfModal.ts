@@ -5,7 +5,7 @@ import { ExportServices } from "../services/exportServices";
 import { ExtensionsServices } from "../services/extensionsServices";
 import { SparqlServices } from "../services/sparqlServices";
 import { RDFFormat } from "../models/RDFFormat";
-import { Settings, ExtensionPointID, ExtensionFactory, FilteringStep, ConfigurableExtensionFactory } from "../models/Plugins";
+import { Settings, ExtensionPointID, ExtensionFactory, TransformationStep, ConfigurableExtensionFactory } from "../models/Plugins";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { UIUtils } from "../utils/UIUtils";
@@ -200,8 +200,8 @@ class FilterChainElement {
         this.availableFactories = availableFactClone;
     }
 
-    convertToFilteringPipelineStep(): FilteringStep {
-        let filterStep: FilteringStep = {filter: null};
+    convertToFilteringPipelineStep(): TransformationStep {
+        let filterStep: TransformationStep = {filter: null};
         //filter: factoryId and properties
         var filter: {factoryId: string, configuration: any} = {
             factoryId: this.selectedFactory.id,

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { ARTURIResource } from "../models/ARTResources";
-import { RDFFormat, ExportFormat } from "../models/RDFFormat";
+import { RDFFormat, DataFormat } from "../models/RDFFormat";
 import { PluginSpecification } from '../models/Plugins';
 
 @Injectable()
@@ -62,20 +62,20 @@ export class ExportServices {
      * Returns formats accepted by a ReformattingExporter
      * @param reformattingExporterID 
      */
-    getExportFormats(reformattingExporterID: string): Observable<ExportFormat[]> {
+    getExportFormats(reformattingExporterID: string): Observable<DataFormat[]> {
         console.log("[ExportServices] getExportFormats");
         var params = {
             reformattingExporterID: reformattingExporterID
         };
         return this.httpMgr.doGet(this.serviceName, "getExportFormats", params).map(
             stResp => {
-                let formats: ExportFormat[] = [];
+                let formats: DataFormat[] = [];
                 for (var i = 0; i < stResp.length; i++) {
-                    formats.push(new ExportFormat(stResp[i].name, stResp[i].defaultMimeType, stResp[i].defaultFileExtension));
+                    formats.push(new DataFormat(stResp[i].name, stResp[i].defaultMimeType, stResp[i].defaultFileExtension));
                 }
                 //sort by name
                 formats.sort(
-                    function(a: ExportFormat, b: ExportFormat) {
+                    function(a: DataFormat, b: DataFormat) {
                         if (a.name < b.name) return -1;
                         if (a.name > b.name) return 1;
                         return 0;
@@ -90,7 +90,7 @@ export class ExportServices {
      * 
      * @param graphs array of named graphs to export. If the array is empty all the graphs are 
      *  copied to the target dataset to be exported
-     * @param filteringPipeline a JSON string representing an array of FilteringStep.
+     * @param filteringPipeline a JSON string representing an array of TransformationStep.
      *  Each filter is applied to a subset of the exported graphs. No graph means every exported graph.
      *  An example is [{"filter": {"factoryId": string, "properties": { <key>: <value>, ...}}}]
      * @param reformattingExporterSpec an optional ReformattingExporter that reformats the data to a (usually non-RDF) format

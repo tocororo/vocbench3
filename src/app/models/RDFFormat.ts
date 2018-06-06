@@ -21,7 +21,7 @@ export class RDFFormat {
 
 }
 
-export class ExportFormat {
+export class DataFormat {
     public name: string;
     public defaultMimeType: string;
     public defaultFileExtension: string;

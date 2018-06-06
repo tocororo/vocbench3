@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
     selector: 'file-picker',
@@ -7,36 +7,32 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
         ':host { flex: 1; }'
     ]
 })
-export class FilePickerComponent implements OnInit {
+export class FilePickerComponent {
     
-    @Input() label: string;
+    @Input() label: string = "Browse";
     @Input() size: string;
     @Input() accept: string;
-    @Input() placeholder: string;
+    @Input() placeholder: string = "Select a file...";
     
     @Output() fileChanged = new EventEmitter<File>();
     
     private file: File;
     private fileName: string;
     
-    private btnClass: string = "btn btn-default btn-file btn-";
-    private txtClass: string = "form-control input-";
+    private btnClassPrefix: string = "btn btn-default btn-file btn-";
+    private btnClass: string;
+    private txtClassPrefix: string = "form-control input-";
+    private txtClass: string;
     
     constructor() { }
 
-    ngOnInit() {
+    ngOnChanges() {
         if (this.size == "xs" || this.size == "sm" || this.size == "md" || this.size == "lg") {
-            this.btnClass += this.size;
-            this.txtClass += this.size;
+            this.btnClass = this.btnClassPrefix + this.size;
+            this.txtClass = this.txtClassPrefix + this.size;
         } else {
-            this.btnClass += "sm";
-            this.txtClass += "sm";
-        }
-        if (this.label == null) {
-            this.label = "Browse";
-        }
-        if (this.placeholder == null) {
-            this.placeholder = "Select a file...";
+            this.btnClass = this.btnClassPrefix + "sm";
+            this.txtClass = this.txtClassPrefix + "sm";
         }
     }
     

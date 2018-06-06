@@ -3,8 +3,8 @@ import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from "../../../models/ARTResources";
 import { ConfigurationComponents } from "../../../models/Configuration";
-import { ConfigurableExtensionFactory, ExtensionConfigurationStatus, ExtensionPointID, FilteringStep, Settings, SettingsProp, ExtensionFactory, PluginSpecification } from "../../../models/Plugins";
-import { RDFFormat, ExportFormat } from "../../../models/RDFFormat";
+import { ConfigurableExtensionFactory, ExtensionConfigurationStatus, ExtensionPointID, TransformationStep, Settings, SettingsProp, ExtensionFactory, PluginSpecification } from "../../../models/Plugins";
+import { RDFFormat, DataFormat } from "../../../models/RDFFormat";
 import { ExportServices } from "../../../services/exportServices";
 import { ExtensionsServices } from "../../../services/extensionsServices";
 import { UIUtils } from "../../../utils/UIUtils";
@@ -33,21 +33,21 @@ export class ExportDataComponent {
 
     //export filter management
     private filters: ConfigurableExtensionFactory[];
-    private filtersChain: FilterChainElement[] = [];
-    private selectedFilterChainElement: FilterChainElement;
+    private filtersChain: TransformerChainElement[] = [];
+    private selectedFilterChainElement: TransformerChainElement;
 
     //reformatter
     private reformatters: ExtensionFactory[];
     private selectedReformatterExtension: ExtensionFactory;
     private selectedReformatterConfig: Settings;
 
-    private exportFormats: ExportFormat[];
-    private selectedExportFormat: ExportFormat;
+    private exportFormats: DataFormat[];
+    private selectedExportFormat: DataFormat;
 
     //deployer
-    private repoSourcedDeployer: ExtensionFactory[];
-    private streamSourcedDeployer: ExtensionFactory[];
-    private selectedDeployerExtension: ExtensionFactory;
+    private repoSourcedDeployer: ConfigurableExtensionFactory[];
+    private streamSourcedDeployer: ConfigurableExtensionFactory[];
+    private selectedDeployerExtension: ConfigurableExtensionFactory;
     private selectedDeployerConfig: Settings;
 
     private deployerStatus: ExtensionConfigurationStatus;
@@ -93,13 +93,13 @@ export class ExportDataComponent {
 
         this.extensionService.getExtensions(ExtensionPointID.REPOSITORY_SOURCED_DEPLOYER_ID).subscribe(
             extensions => {
-                this.repoSourcedDeployer = extensions;
+                this.repoSourcedDeployer = <ConfigurableExtensionFactory[]>extensions;
             }
         );
 
         this.extensionService.getExtensions(ExtensionPointID.STREAM_SOURCED_DEPLOYER_ID).subscribe(
             extensions => {
-                this.streamSourcedDeployer = extensions;
+                this.streamSourcedDeployer = <ConfigurableExtensionFactory[]>extensions;
             }
         );
     }
@@ -158,7 +158,7 @@ export class ExportDataComponent {
     /** =====================================
      * =========== FILTER CHAIN =============
      * =====================================*/
-    private selectFilterChainElement(filterChainEl: FilterChainElement) {
+    private selectFilterChainElement(filterChainEl: TransformerChainElement) {
         if (this.selectedFilterChainElement == filterChainEl) {
             this.selectedFilterChainElement = null;
         } else {
@@ -173,7 +173,7 @@ export class ExportDataComponent {
     }
 
     private appendFilter() {
-        this.filtersChain.push(new FilterChainElement(this.filters, this.collectCheckedGraphStructures()));
+        this.filtersChain.push(new TransformerChainElement(this.filters, this.collectCheckedGraphStructures()));
     }
     private removeFilter() {
         this.filtersChain.splice(this.filtersChain.indexOf(this.selectedFilterChainElement), 1);
@@ -190,19 +190,19 @@ export class ExportDataComponent {
         this.filtersChain.splice(prevIndex - 1, 0, this.selectedFilterChainElement);
     }
 
-    private onExtensionUpdated(filterChainEl: FilterChainElement, ext: ConfigurableExtensionFactory) {
+    private onExtensionUpdated(filterChainEl: TransformerChainElement, ext: ConfigurableExtensionFactory) {
         filterChainEl.selectedFactory = ext;
     }
-    private onConfigurationUpdated(filterChainEl: FilterChainElement, config: Settings) {
+    private onConfigurationUpdated(filterChainEl: TransformerChainElement, config: Settings) {
         filterChainEl.selectedConfiguration = config;
     }
 
-    private onConfigStatusUpdated(filterChainEl: FilterChainElement, statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
+    private onConfigStatusUpdated(filterChainEl: TransformerChainElement, statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
         filterChainEl.status = statusEvent.status;
         filterChainEl.relativeReference = statusEvent.relativeReference;
     }
 
-    private configureGraphs(filterChainEl: FilterChainElement) {
+    private configureGraphs(filterChainEl: TransformerChainElement) {
         this.openGraphSelectionModal(filterChainEl.filterGraphs).then(
             res => {},
             () => {}
@@ -221,7 +221,7 @@ export class ExportDataComponent {
     /**
      * Returns true if a plugin of the filter chain require edit of the configuration and it is not configured
      */
-    private requireConfiguration(filterChainEl: FilterChainElement): boolean {
+    private requireConfiguration(filterChainEl: TransformerChainElement): boolean {
         var conf: Settings = filterChainEl.selectedConfiguration;
         if (conf != null && conf.requireConfiguration()) { //!= null required because selectedConfiguration could be not yet initialized
             return true;
@@ -353,11 +353,27 @@ export class ExportDataComponent {
                         });
 
                         //...and force a configuration
-                        setTimeout(() => {  //wait that the ExtensionConfiguratorComponent for the new appended filters are initialized
+                        setTimeout(() => {  //wait that the ExtensionConfiguratorComponent for the new appended transformers are initialized
+                            /**
+                             * collect the ExtensionConfiguratorComponent for the transformators. This is necessary since
+                             * there are also the ExtensionConfiguratorComponent for dployer and serializer, so I need to ensure
+                             * that the configuration is forced to the ExtensionConfiguratorComponent of the transformators
+                             */
+                            let tranformerConfigurators: ExtensionConfiguratorComponent[] = [];
+                            //consider just the first step of the stored pipeline and iterate over all the ExtensionConfiguratorComponent
+                            let firstTransformerExtId = chain[0][0].extensionID;
+                            let extConfigurators: ExtensionConfiguratorComponent[] = this.viewChildrenExtConfig.toArray();
+                            extConfigurators.forEach(extConfComp => {
+                                extConfComp.extensions.forEach(ext => {
+                                    if (ext.id == firstTransformerExtId) {
+                                        tranformerConfigurators.push(extConfComp);
+                                    }
+                                });
+                            });
+                            //now iterate over the step of the stored pipeline and force the config of the tranformerConfigurators
                             chain.forEach((c : [{extensionID: string, configRef: string}, string[]], index: number) => {
                                 let extConfPair = c[0];
-                                let extConfigurators: ExtensionConfiguratorComponent[] = this.viewChildrenExtConfig.toArray();
-                                extConfigurators[index].forceConfiguration(extConfPair.extensionID, extConfPair.configRef);
+                                tranformerConfigurators[index].forceConfiguration(extConfPair.extensionID, extConfPair.configRef);
 
                                 let graphs = c[1];
                                 //check all the graphs in the graphs parameter
@@ -442,7 +458,7 @@ export class ExportDataComponent {
         }
 
         //filteringPipeline
-        var filteringPipeline: FilteringStep[] = [];
+        var filteringPipeline: TransformationStep[] = [];
         for (var i = 0; i < this.filtersChain.length; i++) {
             filteringPipeline.push(this.filtersChain[i].convertToFilteringPipelineStep());
         }
@@ -561,7 +577,7 @@ class GraphStruct {
     }
 }
 
-class FilterChainElement {
+class TransformerChainElement {
     public availableFactories: ConfigurableExtensionFactory[];
     public selectedFactory: ConfigurableExtensionFactory;
     public selectedConfiguration: Settings;
@@ -579,8 +595,8 @@ class FilterChainElement {
         this.filterGraphs = filterGraphs;
     }
 
-    convertToFilteringPipelineStep(): FilteringStep {
-        let filterStep: FilteringStep = {filter: null};
+    convertToFilteringPipelineStep(): TransformationStep {
+        let filterStep: TransformationStep = {filter: null};
         //filter: factoryId and properties
         var filter: {factoryId: string, configuration: any} = {
             factoryId: this.selectedFactory.id,

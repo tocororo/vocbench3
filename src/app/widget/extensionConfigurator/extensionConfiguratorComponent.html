@@ -8,17 +8,17 @@
     -->
     <select *ngIf="extensions.length > 1 || !selectedExtension.configurations || selectedExtension.configurations.length == 1"
         class="form-control input-sm" [(ngModel)]="selectedExtension" (ngModelChange)="onChangeExtension()"
-        [title]="selectedExtension.description" style="margin-right: 5px;" [disabled]="disabled">
+        [title]="selectedExtension.description" style="margin-right: 2px;" [disabled]="disabled">
         <option *ngFor="let ext of extensions" [ngValue]="ext" [title]="ext.description">
             {{ext.name}} 
         </option>
     </select>
-    <select *ngIf="selectedExtension.configurations?.length > 1" class="form-control input-sm" [(ngModel)]="selectedConfiguration"
-        (ngModelChange)="onChangeConfig()" style="margin-right: 5px;" [disabled]="disabled">
+    <select *ngIf="selectedExtension.configurations?.length > 1" class="form-control input-sm" style="margin-left: 2px;"
+        [(ngModel)]="selectedConfiguration" (ngModelChange)="onChangeConfig()" [disabled]="disabled">
         <option *ngFor="let cfg of selectedExtension.configurations" [ngValue]="cfg">{{cfg.shortName}}</option>
     </select>
 
-    <span *ngIf="selectedExtension.configurations" class="btn-group btn-group-sm" style="display: flex;">
+    <span *ngIf="selectedExtension.configurations" class="btn-group btn-group-sm" style="display: flex; margin-left: 5px;">
         <button class="btn btn-default" (click)="configure()" [disabled]="disabled">Configure</button>
         <ng-template [ngIf]="storeable">
             <button class="btn btn-default" title="Save configuration" (click)="saveConfig()" [disabled]="disabled">

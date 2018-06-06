@@ -54,6 +54,9 @@ export class ExtensionsServices {
                     
                     exts.push(extFact);
                 }
+                exts.sort((e1: ExtensionFactory, e2: ExtensionFactory) => {
+                    return e1.name.localeCompare(e2.name);
+                });
                 return exts;
             }
         );

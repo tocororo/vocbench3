@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { TransitiveImportMethodAllowance } from "../models/Metadata";
+import { DataFormat, RDFFormat } from "../models/RDFFormat";
 import { HttpManager } from "../utils/HttpManager";
 import { VBEventHandler } from "../utils/VBEventHandler";
-import { RDFFormat } from "../models/RDFFormat";
-import { TransitiveImportMethodAllowance } from "../models/Metadata";
+import { PluginSpecification } from '../models/Plugins';
 
 @Injectable()
 export class InputOutputServices {
@@ -11,20 +13,39 @@ export class InputOutputServices {
 
     constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
+
     /**
-     * Loads an RDF-format file in the current project model
-     * @param file the file to import
-     * @param baseURI the baseURI of the imported data
-     * @param transitiveImportAllowance available values 'web' | 'webFallbackToMirror' | 'mirrorFallbackToWeb' | 'mirror'
-     * @param format the serialization format of the file
+     * 
+     * @param baseURI 
+     * @param transitiveImportAllowance 
+     * @param inputFile 
+     * @param format 
+     * @param loaderSpec 
+     * @param rdfLifterSpec 
+     * @param transformationPipeline a JSON string representing an array of TransformationStep.
+     * @param validateImplicitly 
      */
-    loadRDF(file: File, baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, format: RDFFormat, validateImplicitly?: boolean) {
+    loadRDF(baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, inputFile?: File, format?: string, 
+        loaderSpec?: PluginSpecification, rdfLifterSpec?: PluginSpecification, transformationPipeline?: string, validateImplicitly?: boolean) {
         console.log("[InputOutputServices] loadRDF");
         var data: any = {
-            inputFile: file,
             baseURI: baseURI,
             transitiveImportAllowance: transitiveImportAllowance,
-            rdfFormat: format.name
+        }
+        if (inputFile != null) {
+            data.inputFile = inputFile;
+        }
+        if (format != null) {
+            data.format = format;
+        }
+        if (loaderSpec != null) {
+            data.loaderSpec = JSON.stringify(loaderSpec);
+        }
+        if (rdfLifterSpec != null) {
+            data.rdfLifterSpec = JSON.stringify(rdfLifterSpec);
+        }
+        if (transformationPipeline != null) {
+            data.transformationPipeline = transformationPipeline;
         }
         if (validateImplicitly != null) {
             data.validateImplicitly = validateImplicitly;
@@ -68,6 +89,34 @@ export class InputOutputServices {
         console.log("[InputOutputServices] clearData");
         var params: any = {};
         return this.httpMgr.doPost(this.serviceName, "clearData", params);
+    }
+
+    /**
+     * 
+     * @param extensionID 
+     */
+    getSupportedFormats(extensionID: string): Observable<DataFormat[]> {
+        console.log("[ExportServices] getSupportedFormats");
+        var params = {
+            extensionID: extensionID
+        };
+        return this.httpMgr.doGet(this.serviceName, "getSupportedFormats", params).map(
+            stResp => {
+                let formats: DataFormat[] = [];
+                for (var i = 0; i < stResp.length; i++) {
+                    formats.push(new DataFormat(stResp[i].name, stResp[i].defaultMimeType, stResp[i].defaultFileExtension));
+                }
+                //sort by name
+                formats.sort(
+                    function(a: DataFormat, b: DataFormat) {
+                        if (a.name < b.name) return -1;
+                        if (a.name > b.name) return 1;
+                        return 0;
+                    }
+                );
+                return formats;
+            }
+        );
     }
 
 }
