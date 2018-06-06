@@ -438,20 +438,14 @@ export class LoadDataComponent {
             tranformationPipeline.push(this.transformersChain[i].convertToTransformerPipelineStep());
         }
 
-        if (this.fileToUpload == null) {
-            this.basicModals.alert("Load Data", "A file is required", "warning");
-        } else if (this.baseURI == null || this.baseURI.trim() == "") {
-            this.basicModals.alert("Load Data", "BaseURI required", "warning");
-        } else {
-            UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-            this.inOutService.loadRDF(this.baseURI, this.selectedImportAllowance, inputFilePar, formatPar, loaderSpec, rdfLifterSpec, 
-                JSON.stringify(tranformationPipeline), this.validateImplicitly).subscribe(
-                stResp => {
-                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                    this.basicModals.alert("Import data", "Data imported successfully");
-                }
-            );
-        }
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        this.inOutService.loadRDF(this.baseURI, this.selectedImportAllowance, inputFilePar, formatPar, loaderSpec, rdfLifterSpec, 
+            JSON.stringify(tranformationPipeline), this.validateImplicitly).subscribe(
+            stResp => {
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                this.basicModals.alert("Import data", "Data imported successfully");
+            }
+        );
     }
 
 }
