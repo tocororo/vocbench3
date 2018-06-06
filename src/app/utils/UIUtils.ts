@@ -137,91 +137,11 @@ export class UIUtils {
     static getImageSrc(rdfResource: ARTNode): string {
         var imgSrc: string;
         if (rdfResource.isResource()) {
-            var role = rdfResource.getRole().toLowerCase();
+            var role: RDFResourceRolesEnum = rdfResource.getRole();
             var deprecated: boolean = rdfResource.getAdditionalProperty(ResAttribute.DEPRECATED);
             var explicit: boolean = rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
                 rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
-            if (role == RDFResourceRolesEnum.cls.toLowerCase()) {
-                imgSrc = this.classImgSrc;
-                if (!explicit) {
-                    imgSrc = this.classImportedImgSrc;
-                    if (deprecated) {
-                        imgSrc = this.classImportedDeprecatedImgSrc;
-                    }
-                } else if (deprecated) {
-                    imgSrc = this.classDeprecatedImgSrc;
-                }
-            } else if (role == RDFResourceRolesEnum.concept.toLowerCase()) {
-                imgSrc = this.conceptImgSrc;
-                if (!explicit) {
-                    imgSrc = this.conceptImportedImgSrc;
-                    if (deprecated) {
-                        imgSrc = this.conceptImportedDeprecatedImgSrc;
-                    }
-                } else if (deprecated) {
-                    imgSrc = this.conceptDeprecatedImgSrc;
-                }
-            } else if (role == RDFResourceRolesEnum.individual.toLowerCase()) {
-                imgSrc = this.individualImgSrc;
-                if (!explicit) {
-                    imgSrc = this.individualImportedImgSrc;
-                    if (deprecated) {
-                        imgSrc = this.individualImportedDeprecatedImgSrc;
-                    }
-                } else if (deprecated) {
-                    imgSrc = this.individualDeprecatedImgSrc;
-                }
-            } else if (role == RDFResourceRolesEnum.conceptScheme.toLowerCase()) {
-                imgSrc = this.conceptSchemeImgSrc;
-                if (!explicit) {
-                    imgSrc = this.conceptSchemeImportedImgSrc;
-                    if (deprecated) {
-                        imgSrc = this.conceptSchemeImportedDeprecatedImgSrc;
-                    }
-                } else if (deprecated) {
-                    imgSrc = this.conceptSchemeDeprecatedImgSrc;
-                }
-            } else if (role == RDFResourceRolesEnum.objectProperty.toLowerCase()) {
-                imgSrc = this.propObjectImgSrc;
-                if (!explicit) {
-                    imgSrc = this.propObjectImportedImgSrc;
-                    if (deprecated) {
-                        imgSrc = this.propObjectImportedDeprecatedImgSrc;
-                    }
-                } else if (deprecated) {
-                    imgSrc = this.propObjectDeprecatedImgSrc;
-                }
-            } else if (role == RDFResourceRolesEnum.skosCollection.toLowerCase()) {
-                imgSrc = this.collectionImgSrc;
-                if (!explicit) {
-                    imgSrc = this.collectionImportedImgSrc;
-                    if (deprecated) {
-                        imgSrc = this.collectionImportedDeprecatedImgSrc;
-                    }
-                } else if (deprecated) {
-                    imgSrc = this.collectionDeprecatedImgSrc;
-                }
-            } else if (role == RDFResourceRolesEnum.skosOrderedCollection.toLowerCase()) {
-                imgSrc = this.orderedCollectionImgSrc;
-                if (!explicit) {
-                    imgSrc = this.orderedCollectionImportedImgSrc;
-                    if (deprecated) {
-                        imgSrc = this.orderedCollectionImportedDeprecatedImgSrc;
-                    }
-                } else if (deprecated) {
-                    imgSrc = this.orderedCollectionDeprecatedImgSrc;
-                }
-            } else if (role == RDFResourceRolesEnum.datatypeProperty.toLowerCase()) {
-                imgSrc = this.propDatatypeImgSrc;
-                if (!explicit) {
-                    imgSrc = this.propDatatypeImportedImgSrc;
-                    if (deprecated) {
-                        imgSrc = this.propDatatypeImportedDeprecatedImgSrc;
-                    }
-                } else if (deprecated) {
-                    imgSrc = this.propDatatypeDeprecatedImgSrc;
-                }
-            } else if (role == RDFResourceRolesEnum.annotationProperty.toLowerCase()) {
+            if (role == RDFResourceRolesEnum.annotationProperty) {
                 imgSrc = this.propAnnotationImgSrc;
                 if (!explicit) {
                     imgSrc = this.propAnnotationImportedImgSrc;
@@ -231,7 +151,112 @@ export class UIUtils {
                 } else if (deprecated) {
                     imgSrc = this.propAnnotationDeprecatedImgSrc;
                 }
-            } else if (role == RDFResourceRolesEnum.ontologyProperty.toLowerCase()) {
+            } else if (role == RDFResourceRolesEnum.cls) {
+                imgSrc = this.classImgSrc;
+                if (!explicit) {
+                    imgSrc = this.classImportedImgSrc;
+                    if (deprecated) {
+                        imgSrc = this.classImportedDeprecatedImgSrc;
+                    }
+                } else if (deprecated) {
+                    imgSrc = this.classDeprecatedImgSrc;
+                }
+            } else if (role == RDFResourceRolesEnum.concept) {
+                imgSrc = this.conceptImgSrc;
+                if (!explicit) {
+                    imgSrc = this.conceptImportedImgSrc;
+                    if (deprecated) {
+                        imgSrc = this.conceptImportedDeprecatedImgSrc;
+                    }
+                } else if (deprecated) {
+                    imgSrc = this.conceptDeprecatedImgSrc;
+                }
+            } else if (role == RDFResourceRolesEnum.conceptScheme) {
+                imgSrc = this.conceptSchemeImgSrc;
+                if (!explicit) {
+                    imgSrc = this.conceptSchemeImportedImgSrc;
+                    if (deprecated) {
+                        imgSrc = this.conceptSchemeImportedDeprecatedImgSrc;
+                    }
+                } else if (deprecated) {
+                    imgSrc = this.conceptSchemeDeprecatedImgSrc;
+                }
+            } else if (role == RDFResourceRolesEnum.dataRange) {
+                imgSrc = this.classImgSrc;
+                if (!explicit) {
+                    imgSrc = this.classImportedImgSrc;
+                    if (deprecated) {
+                        imgSrc = this.classImportedDeprecatedImgSrc;
+                    }
+                } else if (deprecated) {
+                    imgSrc = this.classDeprecatedImgSrc;
+                }
+            } else if (role == RDFResourceRolesEnum.datatypeProperty) {
+                imgSrc = this.propDatatypeImgSrc;
+                if (!explicit) {
+                    imgSrc = this.propDatatypeImportedImgSrc;
+                    if (deprecated) {
+                        imgSrc = this.propDatatypeImportedDeprecatedImgSrc;
+                    }
+                } else if (deprecated) {
+                    imgSrc = this.propDatatypeDeprecatedImgSrc;
+                }
+            } else if (role == RDFResourceRolesEnum.individual) {
+                imgSrc = this.individualImgSrc;
+                if (!explicit) {
+                    imgSrc = this.individualImportedImgSrc;
+                    if (deprecated) {
+                        imgSrc = this.individualImportedDeprecatedImgSrc;
+                    }
+                } else if (deprecated) {
+                    imgSrc = this.individualDeprecatedImgSrc;
+                }
+            } else if (role == RDFResourceRolesEnum.limeLexicon) {
+                imgSrc = this.lexiconImgSrc;
+                // if (!explicit) {
+                //     imgSrc = this.lexiconImportedImgSrc;
+                //     if (deprecated) {
+                //         imgSrc = this.lexiconImportedDeprecatedImgSrc;
+                //     }
+                // } else if (deprecated) {
+                //     imgSrc = this.lexiconDeprecatedImgSrc;
+                // }
+            } else if (role == RDFResourceRolesEnum.mention) {
+                imgSrc = this.mentionImgSrc;
+                // if role is not defined and rdfResource is a URIRes which baseURI is not the project baseURI
+                if (rdfResource instanceof ARTURIResource && !rdfResource.getURI().startsWith(VBContext.getWorkingProject().getBaseURI())) {
+                    imgSrc = this.mentionImgSrc; //it is a mention
+                } else { 
+                    //else it could be a custom form preview. If it has a langTag, it's preferrable to render it with flag
+                    if (rdfResource.getAdditionalProperty(ResAttribute.LANG) != null) {
+                        imgSrc = this.getFlagImgSrc(rdfResource.getAdditionalProperty(ResAttribute.LANG));
+                    } else { //else set individual image as default
+                        imgSrc = this.individualImgSrc;
+                    }
+                }
+            } else if (role == RDFResourceRolesEnum.objectProperty) {
+                imgSrc = this.propObjectImgSrc;
+                if (!explicit) {
+                    imgSrc = this.propObjectImportedImgSrc;
+                    if (deprecated) {
+                        imgSrc = this.propObjectImportedDeprecatedImgSrc;
+                    }
+                } else if (deprecated) {
+                    imgSrc = this.propObjectDeprecatedImgSrc;
+                }
+            } else if (role == RDFResourceRolesEnum.ontolexLexicalEntry) {
+                imgSrc = this.lexicEntryImgSrc;
+                // if (!explicit) {
+                //     imgSrc = this.lexicEntryImportedImgSrc;
+                //     if (deprecated) {
+                //         imgSrc = this.lexicEntryImportedDeprecatedImgSrc;
+                //     }
+                // } else if (deprecated) {
+                //     imgSrc = this.lexicEntryDeprecatedImgSrc;
+                // }
+            } else if (role == RDFResourceRolesEnum.ontology) {
+                imgSrc = this.ontologyImgSrc;
+            } else if (role == RDFResourceRolesEnum.ontologyProperty) {
                 imgSrc = this.propOntologyImgSrc;
                 if (!explicit) {
                     imgSrc = this.propOntologyImportedImgSrc;
@@ -241,7 +266,7 @@ export class UIUtils {
                 } else if (deprecated) {
                     imgSrc = this.propOntologyDeprecatedImgSrc;
                 }
-            } else if (role == RDFResourceRolesEnum.property.toLowerCase()) {
+            } else if (role == RDFResourceRolesEnum.property) {
                 imgSrc = this.propImgSrc;
                 if (!explicit) {
                     imgSrc = this.propImportedImgSrc;
@@ -251,9 +276,27 @@ export class UIUtils {
                 } else if (deprecated) {
                     imgSrc = this.propDeprecatedImgSrc;
                 }
-            } else if (role == RDFResourceRolesEnum.ontology.toLowerCase()) {
-                imgSrc = this.ontologyImgSrc;
-            } else if (role == RDFResourceRolesEnum.xLabel.toLowerCase()) {
+            } else if (role == RDFResourceRolesEnum.skosCollection) {
+                imgSrc = this.collectionImgSrc;
+                if (!explicit) {
+                    imgSrc = this.collectionImportedImgSrc;
+                    if (deprecated) {
+                        imgSrc = this.collectionImportedDeprecatedImgSrc;
+                    }
+                } else if (deprecated) {
+                    imgSrc = this.collectionDeprecatedImgSrc;
+                }
+            } else if (role == RDFResourceRolesEnum.skosOrderedCollection) {
+                imgSrc = this.orderedCollectionImgSrc;
+                if (!explicit) {
+                    imgSrc = this.orderedCollectionImportedImgSrc;
+                    if (deprecated) {
+                        imgSrc = this.orderedCollectionImportedDeprecatedImgSrc;
+                    }
+                } else if (deprecated) {
+                    imgSrc = this.orderedCollectionDeprecatedImgSrc;
+                }
+            } else if (role == RDFResourceRolesEnum.xLabel) {
                 let lang: string = rdfResource.getAdditionalProperty(ResAttribute.LANG);
                 if (lang != null) {
                     imgSrc = this.getFlagImgSrc(lang);
@@ -268,44 +311,6 @@ export class UIUtils {
                         imgSrc = this.xLabelDeprecatedImgSrc;
                     }
                 }
-            } else if (role == RDFResourceRolesEnum.mention.toLocaleLowerCase()) {
-                imgSrc = this.mentionImgSrc;
-                // if role is not defined and rdfResource is a URIRes which baseURI is not the project baseURI
-                if (rdfResource instanceof ARTURIResource && !rdfResource.getURI().startsWith(VBContext.getWorkingProject().getBaseURI())) {
-                    imgSrc = this.mentionImgSrc; //it is a mentrion
-                } else { //else set individual image as default
-                    imgSrc = this.individualImgSrc;
-                }
-            } else if (role == RDFResourceRolesEnum.dataRange.toLocaleLowerCase()) {
-                imgSrc = this.classImgSrc;
-                if (!explicit) {
-                    imgSrc = this.classImportedImgSrc;
-                    if (deprecated) {
-                        imgSrc = this.classImportedDeprecatedImgSrc;
-                    }
-                } else if (deprecated) {
-                    imgSrc = this.classDeprecatedImgSrc;
-                }
-            } else if (role == RDFResourceRolesEnum.limeLexicon.toLocaleLowerCase()) {
-                imgSrc = this.lexiconImgSrc;
-                // if (!explicit) {
-                //     imgSrc = this.lexiconImportedImgSrc;
-                //     if (deprecated) {
-                //         imgSrc = this.lexiconImportedDeprecatedImgSrc;
-                //     }
-                // } else if (deprecated) {
-                //     imgSrc = this.lexiconDeprecatedImgSrc;
-                // }
-            } else if (role == RDFResourceRolesEnum.ontolexLexicalEntry.toLocaleLowerCase()) {
-                imgSrc = this.lexicEntryImgSrc;
-                // if (!explicit) {
-                //     imgSrc = this.lexicEntryImportedImgSrc;
-                //     if (deprecated) {
-                //         imgSrc = this.lexicEntryImportedDeprecatedImgSrc;
-                //     }
-                // } else if (deprecated) {
-                //     imgSrc = this.lexicEntryDeprecatedImgSrc;
-                // }
             } else { //unknown role (none of the previous roles)
                 imgSrc = this.individualImgSrc;
             }
@@ -349,7 +354,6 @@ export class UIUtils {
         } else { //default
             return this.individualImgSrc;
         }
-        
     }
 
     /**
@@ -357,24 +361,24 @@ export class UIUtils {
      */
     static getActionPropImageSrc(rdfResource: ARTURIResource, action: string): string {
         var imgSrc: string;
-        var role = rdfResource.getRole().toLowerCase();
-        if (role == RDFResourceRolesEnum.cls.toLowerCase()) {
+        var role: RDFResourceRolesEnum = rdfResource.getRole();
+        if (role == RDFResourceRolesEnum.cls) {
             imgSrc = require("../../assets/images/icons/actions/class_" + action + ".png");
-        } else if (role == RDFResourceRolesEnum.concept.toLowerCase()) {
+        } else if (role == RDFResourceRolesEnum.concept) {
             imgSrc = require("../../assets/images/icons/actions/concept_" + action + ".png");
-        } else if (role == RDFResourceRolesEnum.individual.toLowerCase()) {
+        } else if (role == RDFResourceRolesEnum.individual) {
             imgSrc = require("../../assets/images/icons/actions/individual_" + action + ".png");
-        } else if (role == RDFResourceRolesEnum.conceptScheme.toLowerCase()) {
+        } else if (role == RDFResourceRolesEnum.conceptScheme) {
             imgSrc = require("../../assets/images/icons/actions/conceptScheme_" + action + ".png");
-        } else if (role.indexOf(RDFResourceRolesEnum.objectProperty.toLowerCase()) != -1) {
+        } else if (role.indexOf(RDFResourceRolesEnum.objectProperty) != -1) {
             imgSrc = require("../../assets/images/icons/actions/propObject_" + action + ".png");
-        } else if (role.indexOf(RDFResourceRolesEnum.datatypeProperty.toLowerCase()) != -1) {
+        } else if (role.indexOf(RDFResourceRolesEnum.datatypeProperty) != -1) {
             imgSrc = require("../../assets/images/icons/actions/propDatatype_" + action + ".png");
-        } else if (role.indexOf(RDFResourceRolesEnum.annotationProperty.toLowerCase()) != -1) {
+        } else if (role.indexOf(RDFResourceRolesEnum.annotationProperty) != -1) {
             imgSrc = require("../../assets/images/icons/actions/propAnnotation_" + action + ".png");
-        } else if (role.indexOf(RDFResourceRolesEnum.ontologyProperty.toLowerCase()) != -1) {
+        } else if (role.indexOf(RDFResourceRolesEnum.ontologyProperty) != -1) {
             imgSrc = require("../../assets/images/icons/actions/propOntology_" + action + ".png");
-        } else if (role.indexOf(RDFResourceRolesEnum.property.toLowerCase()) != -1) {
+        } else if (role.indexOf(RDFResourceRolesEnum.property) != -1) {
             imgSrc = require("../../assets/images/icons/actions/prop_" + action + ".png");
         }
         return imgSrc;

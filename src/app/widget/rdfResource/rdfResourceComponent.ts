@@ -1,5 +1,5 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { ARTNode, ARTResource, ARTURIResource, ARTLiteral, RDFResourceRolesEnum, ResAttribute, ResourceUtils } from "../../models/ARTResources";
+import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils } from "../../models/ARTResources";
 import { SemanticTurkey } from "../../models/Vocabulary";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBProperties } from "../../utils/VBProperties";
@@ -71,7 +71,8 @@ export class RdfResourceComponent {
 		var lang: string;
 		if (this.resource.isResource()) {
 			var role = (<ARTResource>this.resource).getRole();
-			if (role == RDFResourceRolesEnum.xLabel) {
+			if (role == RDFResourceRolesEnum.xLabel || role == RDFResourceRolesEnum.mention) {
+				//in case of CustomForm preview, the resource is a mention (doesn't have a role) but it could be have a language
 				lang = this.resource.getAdditionalProperty(ResAttribute.LANG);
 			}
 		} else if (this.resource.isLiteral()) {
@@ -87,8 +88,9 @@ export class RdfResourceComponent {
 	private getLang(): string {
 		let lang: string = null;
 		if (this.resource.isResource()) {
-			var role = (<ARTResource>this.resource).getRole().toLowerCase();
-			if (role == RDFResourceRolesEnum.xLabel.toLowerCase()) {
+			var role = (<ARTResource>this.resource).getRole();
+			//in case of CustomForm preview, the resource is a mention (doesn't have a role) but it could be have a language
+			if (role == RDFResourceRolesEnum.xLabel || role == RDFResourceRolesEnum.mention) {
 				lang = this.resource.getAdditionalProperty(ResAttribute.LANG);
 			}
 		} else if (this.resource.isLiteral()) {

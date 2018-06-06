@@ -1,12 +1,10 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource, RDFResourceRolesEnum, ARTBNode, ResAttribute, ARTResource, ResourceUtils } from '../../models/ARTResources';
-import { PropertyServices } from "../../services/propertyServices";
-import { VBProperties } from '../../utils/VBProperties';
+import { ARTBNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils } from '../../models/ARTResources';
+import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { BrowsingModalServices } from '../../widget/modal/browsingModal/browsingModalServices';
-import { VBContext } from "../../utils/VBContext";
 
 export class PropertyChainCreatorModalData extends BSModalContext {
     /**
@@ -42,8 +40,8 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
 
     private readonly inversePrefix: string = "INVERSE ";
 
-    constructor(public dialog: DialogRef<PropertyChainCreatorModalData>, private propService: PropertyServices, 
-        private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private preferences: VBProperties) {
+    constructor(public dialog: DialogRef<PropertyChainCreatorModalData>, private browsingModals: BrowsingModalServices, 
+        private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
@@ -139,6 +137,11 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
     }
 
     ok(event: Event) {
+        if (this.propChain.length < 2) {
+            this.basicModals.alert("Invalid property chain", "The property chain must contain at least of two properties", "warning");
+            return;
+        }
+
         event.stopPropagation();
         event.preventDefault();
 

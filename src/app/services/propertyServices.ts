@@ -664,6 +664,26 @@ export class PropertyServices {
         return this.httpMgr.doPost(this.serviceName, "removePropertyChainAxiom", params);
     }
 
+    /**
+     * 
+     * @param property 
+     * @param replacedChain 
+     * @param chainedProperties 
+     * @param linkingPredicate 
+     */
+    updatePropertyChainAxiom(property: ARTURIResource, replacedChain: ARTResource, chainedProperties: string, linkingPredicate?: ARTURIResource) {
+        console.log("[PropertyServices] updatePropertyChainAxiom");
+        var params: any = {
+            property: property,
+            replacedChain: replacedChain,
+            chainedProperties: chainedProperties,
+        };
+        if (linkingPredicate != null) {
+            params.linkingPredicate = linkingPredicate;
+        }
+        return this.httpMgr.doPost(this.serviceName, "updatePropertyChainAxiom", params);
+    }
+
 }
 
 export enum RangeType {

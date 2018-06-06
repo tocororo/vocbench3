@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { ARTNode, ARTResource, ARTURIResource, ARTBNode } from "../../../models/ARTResources";
+import { ARTBNode, ARTNode, ARTResource, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
 import { OWL } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
@@ -54,15 +54,9 @@ export class PropertyChainRenderer extends PartitionRenderSingleRoot {
         //here I can force the cast to ARTBNode since I am sure that all the object handled in this partition are Bnode
         this.resViewModals.createPropertyChain("Create a property chain", predicate, false, <ARTBNode>object).then(
             (data: PropertyListCreatorModalReturnData) => {
-                //remove the old chain
-                this.propService.removePropertyChainAxiom(<ARTURIResource>this.resource, <ARTResource>object, predicate).subscribe(
-                    stResp => {
-                        //then add the new one
-                        let chain: string[] = data.chain;
-                        this.propService.addPropertyChainAxiom(<ARTURIResource>this.resource, chain.join(","), predicate).subscribe(
-                            stResp => this.update.emit(null)
-                        );
-                    }
+                let chain: string[] = data.chain;
+                this.propService.updatePropertyChainAxiom(<ARTURIResource>this.resource, <ARTResource>object, chain.join(","), predicate).subscribe(
+                    stResp => this.update.emit(null)
                 );
             },
             () => {}
