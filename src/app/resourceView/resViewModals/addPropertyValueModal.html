@@ -19,8 +19,15 @@
 
     <!--Alternative views-->
     <div *ngIf="selectedAspectSelector == treeListAspectSelector" class="vbox">
-        <class-tree-panel *ngIf="viewType == 'classTree'" (nodeSelected)="onResourceSelected($event)" [roots]="rootsForClsTree"
-            [deletable]="false"></class-tree-panel>
+        <div  *ngIf="viewType == 'classTree'" class="vbox">
+            <div *ngIf="rootsForClsTree" class="checkbox-inline" style="margin-bottom: 5px;">
+                <label>
+                    <input type="checkbox" [(ngModel)]="showAllClass">Show all classes
+                </label>
+            </div>
+            <class-tree-panel (nodeSelected)="onResourceSelected($event)" [roots]="showAllClass? defaultRootClass : rootsForClsIndList"
+                [deletable]="false"></class-tree-panel>
+        </div>
 
         <concept-tree-panel *ngIf="viewType == 'conceptTree'" [deletable]="false" [schemeChangeable]="true" [schemes]="schemes"
             (nodeSelected)="onResourceSelected($event)">
@@ -41,9 +48,20 @@
         
         <datatype-list-panel *ngIf="viewType == 'datatypeList'" [full]="true" [deletable]="false" (nodeSelected)="onResourceSelected($event)"></datatype-list-panel>
         
-        <class-individual-tree *ngIf="viewType == 'classAndIndividual'" [roots]="rootsForClsIndList" [deletable]="false"
+        <!-- <class-individual-tree *ngIf="viewType == 'classAndIndividual'" [roots]="rootsForClsIndList" [deletable]="false"
             (nodeSelected)="onResourceSelected($event)">
-        </class-individual-tree>
+        </class-individual-tree> -->
+
+        <div  *ngIf="viewType == 'classAndIndividual'" class="vbox">
+            <div *ngIf="rootsForClsIndList" class="checkbox-inline" style="margin-bottom: 5px;">
+                <label>
+                    <input type="checkbox" [(ngModel)]="showAllClass">Show all classes
+                </label>
+            </div>
+            <class-individual-tree [deletable]="false" [roots]="showAllClass? defaultRootClass : rootsForClsIndList"
+                (nodeSelected)="onResourceSelected($event)">
+            </class-individual-tree>
+        </div>
     </div>
 
     <input *ngIf="selectedAspectSelector == manchExprAspectSelector" type="text" class="form-control input-sm" style="margin-top: 5px;"

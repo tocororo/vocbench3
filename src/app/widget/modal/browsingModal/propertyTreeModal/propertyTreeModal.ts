@@ -27,6 +27,8 @@ export class PropertyTreeModal implements ModalComponent<PropertyTreeModalData> 
     
     private selectedProperty: ARTURIResource;
     private domainRes: ARTURIResource;
+
+    private showAll: boolean = false;
     
     constructor(public dialog: DialogRef<PropertyTreeModalData>) {
         this.context = dialog.context;
@@ -45,9 +47,9 @@ export class PropertyTreeModal implements ModalComponent<PropertyTreeModalData> 
      * Resets the selectedProperty and update the domainRes that represents 
      * the resource which its type should be the domain of the properties in the tree
      */
-    private onCheckboxChange(checked: boolean) {
+    private onShowAllChanged() {
         this.selectedProperty = null;
-        if (checked) {
+        if (this.showAll) {
             this.domainRes = null;
         } else {
             this.domainRes = this.context.resource;

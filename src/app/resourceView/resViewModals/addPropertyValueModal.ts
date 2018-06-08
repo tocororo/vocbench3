@@ -67,11 +67,12 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     //attribute useful for different Tree/list components
     private schemes: ARTURIResource[]; //useful if the property that is it going to enrich should allow to select a skos:Concept
     //so the modal should show a concept tree focused on the current scheme
-    // private classForInstanceList: ARTURIResource;
-    private rootsForClsIndList: ARTURIResource[];
-    private propertyType: RDFResourceRolesEnum;
 
+    private propertyType: RDFResourceRolesEnum;
+    private rootsForClsIndList: ARTURIResource[];
     private rootsForClsTree: ARTURIResource[];
+    private showAllClass: boolean = false;
+    private defaultRootClass: ARTURIResource = RDFS.resource;
 
     private showAspectSelector: boolean = false;
     private treeListAspectSelector: string = "Existing Resource";

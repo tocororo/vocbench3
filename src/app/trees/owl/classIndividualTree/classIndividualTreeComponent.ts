@@ -5,8 +5,7 @@ import { VBProperties } from '../../../utils/VBProperties';
 
 @Component({
     selector: "class-individual-tree",
-    templateUrl: "./classIndividualTreeComponent.html",
-    host: { class: "treeListComponent" }
+    templateUrl: "./classIndividualTreeComponent.html"
 })
 export class ClassIndividualTreeComponent {
 
