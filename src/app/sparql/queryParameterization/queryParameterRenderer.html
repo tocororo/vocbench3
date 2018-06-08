@@ -1,14 +1,15 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading"><label>Variable bindings</label></div>
-    <div class="panel-body vbox table-responsive">
+<div class="subPanel vbox">
+    <div class="subPanel-heading">
+        <label style="flex: 1">Variable bindings</label>
+        <button class="btn btn-xs btn-default" (click)="editParameterization()" title="Edit parameterization">
+            <span class="glyphicon glyphicon-pencil"></span>
+        </button>
+    </div>
+    <div class="subPanel-body vbox table-responsive">
         <table class="table table-condensed table-borderless">
-            <colgroup>
-                <col style="width: 1%">
-                <col>
-            </colgroup>
             <tbody>
                 <tr *ngFor="let b of bindingStructs">
-                    <td class="text-right"><label>{{b.varName}}:</label></td>
+                    <td class="text-right" style="margin-right: 2px;"><label>{{b.varName}}:</label></td>
                     <td>
                         <ng-template [ngIf]="b.bindingType == 'assignment' && b.value">
                             <input class="form-control input-sm" [ngModel]="b.value.toNT()" readonly>
@@ -27,5 +28,12 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+    <div class="subPanel-footer">
+        <div class="checkbox" style="margin: 0px;">
+            <label>
+                <input type="checkbox" [(ngModel)]="useBindings" (ngModelChange)="emitUpdate()">Use variable bindings
+            </label>
+        </div>
     </div>
 </div>

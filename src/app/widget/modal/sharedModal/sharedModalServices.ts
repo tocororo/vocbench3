@@ -114,10 +114,11 @@ export class SharedModalServices {
      * @param title 
      * @param configurationComponent 
      * @param configurationObject 
+     * @param relativeRef if provided suggest to override a previously saved configuration
      * @return the relativeReference of the stored configuration
      */
-    storeConfiguration(title: string, configurationComponent: string, configurationObject: { [key: string]: any }) {
-        var modalData = new StoreConfigurationModalData(title, configurationComponent, configurationObject);
+    storeConfiguration(title: string, configurationComponent: string, configurationObject: { [key: string]: any }, relativeRef?: string) {
+        var modalData = new StoreConfigurationModalData(title, configurationComponent, configurationObject, relativeRef);
         const builder = new BSModalContextBuilder<StoreConfigurationModalData>(
             modalData, undefined, StoreConfigurationModalData
         );

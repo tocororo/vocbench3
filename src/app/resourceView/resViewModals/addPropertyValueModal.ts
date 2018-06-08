@@ -155,14 +155,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                             var rangeClass: ARTURIResource = rangeCollection[0];
                             if (rangeClass.getURI() == RDFS.class.getURI() || rangeClass.getURI() == OWL.class.getURI()) {
                                 this.viewType = ViewType.classTree;
-                                let role: RDFResourceRolesEnum = this.context.resource.getRole();
-                                if (role == RDFResourceRolesEnum.property || role == RDFResourceRolesEnum.annotationProperty ||
-                                    role == RDFResourceRolesEnum.datatypeProperty || role == RDFResourceRolesEnum.objectProperty ||
-                                    role == RDFResourceRolesEnum.ontologyProperty) {
-                                    this.rootsForClsTree = [OWL.thing, RDF.property];
-                                } else {
-                                    this.rootsForClsTree = null;
-                                }
+                                this.rootsForClsTree = null;
                             } else if (rangeClass.getURI() == SKOS.concept.getURI()) {
                                 this.schemes = this.preferences.getActiveSchemes();
                                 this.viewType = ViewType.conceptTree;

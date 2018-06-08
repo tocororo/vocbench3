@@ -1,38 +1,60 @@
 import { Component } from "@angular/core";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { ConfigurationComponents } from "../models/Configuration";
+import { LoadConfigurationModalReturnData } from "../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
+import { ConfigurationsServices } from "../services/configurationsServices";
 
 @Component({
     selector: "sparql-component",
     templateUrl: "./sparqlComponent.html",
     host: { class: "pageComponent" },
+    styles: [`
+        .addQueryBtn {
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px 4px 0px 0px;
+            font-weight: bold;
+            color: rgb(51, 122, 183);
+            line-height: 1.42857143;
+            background-color: #eee;
+            cursor: default;
+        }
+    `]
 })
 export class SparqlComponent {
 
     private tabs: Array<Tab> = [];
 
-    constructor() { }
+    constructor(private sharedModals: SharedModalServices, private configurationService: ConfigurationsServices) { }
 
     ngOnInit() {
-        this.addTab();
+        this.addQueryTab();
     }
 
     //TAB HANDLER
 
-    addTab() {
+    addQueryTab() {
         let currentActiveTab = this.getActiveTab();
         if (currentActiveTab != null) {
             currentActiveTab.active = false;
         }
-        this.tabs.push({
-            active: true
-        });
+        this.tabs.push({ active: true, name: "Unnamed Query", type: TabType.query, saved: false });
     }
 
-    selectTab(t: Tab) {
+    addParameterizationTab() {
+        let currentActiveTab = this.getActiveTab();
+        if (currentActiveTab != null) {
+            currentActiveTab.active = false;
+        }
+        this.tabs.push({ active: true, name: "Unnamed Parameterized Query", type: TabType.parameterization, saved: false });
+    }
+
+    private selectTab(t: Tab) {
         this.getActiveTab().active = false;
         t.active = true;
     }
 
-    closeTab(t: Tab) {
+    private closeTab(t: Tab) {
         var tabIdx = this.tabs.indexOf(t);
         //if the closed tab is active, change the active tab (only if it wasn't the only open tab)
         if (t.active && this.tabs.length > 1) {
@@ -57,4 +79,12 @@ export class SparqlComponent {
 
 class Tab {
     active: boolean;
+    name: string;
+    type: TabType;
+    saved: boolean;
+}
+
+enum TabType {
+    query = "query",
+    parameterization = "parameterization",
 }

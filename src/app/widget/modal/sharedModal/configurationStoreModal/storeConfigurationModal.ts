@@ -1,15 +1,16 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Reference } from "../../../../models/Configuration";
+import { Scope, ScopeUtils } from "../../../../models/Plugins";
 import { ConfigurationsServices } from "../../../../services/configurationsServices";
-import { ConfigurationComponents, Reference } from "../../../../models/Configuration";
-import { ScopeUtils, Scope } from "../../../../models/Plugins";
 
 export class StoreConfigurationModalData extends BSModalContext {
     constructor(
         public title: string, 
         public configurationComponent: string,
-        public configurationObject: { [key: string]: any }
+        public configurationObject: { [key: string]: any },
+        public relativeRef: string
     ) {
         super();
     }
@@ -36,6 +37,11 @@ export class StoreConfigurationModal implements ModalComponent<StoreConfiguratio
             confMgr => {
                 this.scopes = confMgr.configurationScopes;
                 this.selectedScope = this.scopes[0];
+
+                if (this.context.relativeRef) {
+                    this.identifier = this.context.relativeRef.substring(this.context.relativeRef.indexOf(":")+1);
+                    this.selectedScope = Reference.getRelativeReferenceScope(this.context.relativeRef);
+                }
             }
         )
     }

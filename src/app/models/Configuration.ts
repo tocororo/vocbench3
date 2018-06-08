@@ -21,20 +21,34 @@ export class Reference {
     }
 
     public getReferenceScope(): Scope {
-        if (this.relativeReference.startsWith("sys:")) {
-            return Scope.SYSTEM;
-        } else if (this.relativeReference.startsWith("proj:")) {
-            return Scope.PROJECT;
-        } else if (this.relativeReference.startsWith("usr:")) {
-            return Scope.USER;
-        } else if (this.relativeReference.startsWith("pu:")) {
-            return Scope.PROJECT_USER;
-        }
+        // if (this.relativeReference.startsWith("sys:")) {
+        //     return Scope.SYSTEM;
+        // } else if (this.relativeReference.startsWith("proj:")) {
+        //     return Scope.PROJECT;
+        // } else if (this.relativeReference.startsWith("usr:")) {
+        //     return Scope.USER;
+        // } else if (this.relativeReference.startsWith("pu:")) {
+        //     return Scope.PROJECT_USER;
+        // }
+        return Reference.getRelativeReferenceScope(this.relativeReference);
     }
 
     public static deserialize(refJson: any): Reference {
         return new Reference(refJson.user, refJson.project, refJson.identifier, refJson.relativeReference);
     }
+
+    public static getRelativeReferenceScope(relativeRef: string): Scope {
+        if (relativeRef.startsWith("sys:")) {
+            return Scope.SYSTEM;
+        } else if (relativeRef.startsWith("proj:")) {
+            return Scope.PROJECT;
+        } else if (relativeRef.startsWith("usr:")) {
+            return Scope.USER;
+        } else if (relativeRef.startsWith("pu:")) {
+            return Scope.PROJECT_USER;
+        }
+    }
+
 }
 
 export class ConfigurationManager {

@@ -1,7 +1,9 @@
-import { Component, Input, SimpleChange, SimpleChanges, Output, EventEmitter } from "@angular/core";
-import { VariableBindings, BindingTypeEnum } from "../../models/Sparql";
-import { RDFResourceRolesEnum, ARTURIResource, ARTNode, ResourceUtils, ARTLiteral } from "../../models/ARTResources";
-import { SearchServices } from "../../services/searchServices";
+import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { OverlayConfig } from "ngx-modialog";
+import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
+import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../models/ARTResources";
+import { BindingTypeEnum, VariableBindings } from "../../models/Sparql";
+import { QueryParameterizerModal, QueryParameterizerModalData } from "./queryParameterizerModal";
 
 @Component({
     selector: "query-param-renderer",
@@ -11,14 +13,25 @@ export class QueryParameterRenderer {
 
     @Input() bindings: VariableBindings;
     @Output() update = new EventEmitter<Map<string, ARTNode>>();
+    @Output() paramsChange = new EventEmitter<VariableBindings>(); //when parametrization changes, useful to the parent in order to detect unsaved parametrizations
 
     private bindingStructs: BindingStruct[];
+    private useBindings: boolean = true;
 
-    constructor(private searchService: SearchServices) { }
+    constructor(private modal: Modal) { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['bindings'] && changes['bindings'].currentValue) {
-            this.bindingStructs = [];
+            this.initBindingStruct();
+        }
+    }
+
+    /**
+     * Adapt VariableBindings in a model (BindingStruct[]) more suitable for the UI
+     */
+    private initBindingStruct() {
+        this.bindingStructs = [];
+        setTimeout(() => { //let destroy the view, so that in case it is changed just the var names, the table is rebuilt with no UI problem
             for (var varName in this.bindings) {
                 let bs: BindingStruct = {
                     varName: varName,
@@ -36,7 +49,7 @@ export class QueryParameterRenderer {
                 this.bindingStructs.push(bs);
             }
             this.emitUpdate();
-        }
+        });
     }
 
     private onResourceChanged(binding: BindingStruct, value: ARTURIResource) {
@@ -49,11 +62,32 @@ export class QueryParameterRenderer {
         this.emitUpdate();
     }
 
+    private editParameterization() {
+        var modalData = new QueryParameterizerModalData(this.bindings);
+        const builder = new BSModalContextBuilder<QueryParameterizerModalData>(
+            modalData, undefined, QueryParameterizerModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
+        this.modal.open(QueryParameterizerModal, overlayConfig).result.then(
+            (updatedVarBindings: VariableBindings) => {
+                this.bindings = updatedVarBindings;
+                // this.initBindingStruct();
+                this.paramsChange.emit(this.bindings);
+            },
+            () => {}
+        );
+    }
+
+    /**
+     * When variable bnindings changed
+     */
     private emitUpdate() {
         let bindingsMap: Map<string, ARTNode> = new Map();
-        this.bindingStructs.forEach(bs => {
-            bindingsMap.set(bs.varName, bs.value);
-        });
+        if (this.useBindings) {
+            this.bindingStructs.forEach(bs => {
+                bindingsMap.set(bs.varName, bs.value);
+            });
+        }
         this.update.emit(bindingsMap);
     }
 

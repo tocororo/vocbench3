@@ -4,23 +4,38 @@
     <ul class="nav nav-tabs" (click)="$event.preventDefault()">
         <li *ngFor="let t of tabs" [ngClass]="{active : t.active}">
             <a href (click)="selectTab(t)">
-                Query
+                <span *ngIf="t.type=='query'" class="label label-primary" title="Query">Q</span>
+                <span *ngIf="t.type=='parameterization'" class="label label-info" title="Parameterized query">P</span>
+                <span>
+                    {{t.name}}
+                    <span *ngIf="!t.saved">*</span>
+                </span>
                 <span *ngIf="tabs.length > 1" class="glyphicon glyphicon-remove-circle" (click)="closeTab(t)"
                     onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
                     onmouseout="this.className='glyphicon glyphicon-remove-circle'; this.style.cursor='default'">
                 </span>
             </a>
         </li>
-        <li [ngClass]="{disabled : tabs.length==10}">
-            <a href (click)="addTab()" style="font-weight: bold" onmouseover="this.style.color='#555'" onmouseout="this.style.color='#337ab7'">
-                +
-            </a>
+
+        <li [ngClass]="{disabled : tabs.length==6}">
+            <div class="btn-group btn-group-xs">
+                <button #addBtn class="btn btn-default addQueryBtn" (click)="addQueryTab()" (mouseup)="addBtn.blur()">+</button>
+                <button type="button" class="btn btn-default addQueryBtn dropdown-toggle" style="padding: 4px;" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href (click)="addQueryTab()">Add query tab</a></li>
+                    <li><a href (click)="addParameterizationTab()">Add parameterized query tab</a></li>
+                </ul>
+              </div>
         </li>
+
     </ul>
     <!--Tabs content-->
     <div class="tab-content">
         <div *ngFor="let t of tabs" [ngClass]="{vbox : t.active}" [hidden]="!t.active">
-            <sparql-tab class="vbox"></sparql-tab>
+            <sparql-tab *ngIf="t.type=='query'" class="vbox" (updateName)="t.name=$event" (savedStatus)="t.saved=$event"></sparql-tab>
+            <sparql-tab-param *ngIf="t.type=='parameterization'" class="vbox" (updateName)="t.name=$event"  (savedStatus)="t.saved=$event"></sparql-tab-param>
         </div>
     </div>
     

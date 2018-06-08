@@ -1,4 +1,23 @@
-<yasgui [query]="query" (querychange)="onQueryChange($event)"></yasgui>
+<div class="hbox" style="flex: initial">
+
+    <div class="subPanel" style="flex: 2; margin-right: 4px;" >
+        <div class="subPanel-heading">
+            <span style="flex: 1">
+                <label>Stored query: </label> {{storedQueryName}}
+            </span>
+            <button class="btn btn-xs btn-default" (click)="changeStoredQuery()" title="Change stored query">
+                <span class="glyphicon glyphicon-pencil"></span>
+            </button>
+        </div>
+        <div class="subPanel-body">
+            <yasgui [query]="query" (querychange)="onQueryChange($event)" [readonly]="true"></yasgui>
+        </div>
+    </div>
+
+    <query-param-renderer class="vbox" [bindings]="parameterization" (update)="onVarBindingsUpdate($event)"
+        (paramsChange)="onParametrizationsChange($event)"></query-param-renderer>
+
+</div>
 
 <!--Commands (submit, clear, inferred, ...)-->
 <div style="margin: 5px 0;">
@@ -35,10 +54,10 @@
     <div class="hbox pull-right" style="align-items: center">
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default btn-xs" title="Save query" (click)="saveConfiguration()">
+                <button class="btn btn-default btn-xs" title="Save parameterized query" (click)="saveConfiguration()">
                     <span class="glyphicon glyphicon-floppy-save"></span>
                 </button>
-                <button class="btn btn-default btn-xs" title="Load query" (click)="loadConfiguration()">
+                <button class="btn btn-default btn-xs" title="Load parameterized query" (click)="loadConfiguration()">
                     <span class="glyphicon glyphicon-floppy-open"></span>
                 </button>
             </div>
