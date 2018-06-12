@@ -1,29 +1,34 @@
 <div class="modal-header">
-    <h3 class="modal-title text-info">{{context.title}}</h3>
+    <h3 class="modal-title text-info">Load Stored Custom Search</h3>
 </div>
 <div class="modal-body vbox" style="max-height: 70vh;">
-    
+
+    <div class="hbox" style="flex: initial; align-items: center; margin-bottom: 4px;">
+        <label>Level:</label>
+        <select class="form-control input-sm" style="display: inline-block; margin-left: 4px;" [(ngModel)]="selectedScope" (ngModelChange)="initReferences()">
+            <option *ngFor="let s of scopes">{{s}}</option>
+        </select>
+    </div>
+
     <div class="panel panel-default vbox">
+        <div class="panel-heading">
+            <label style="flex: 1;">Stored Custom Search</label>
+            <button class="btn btn-xs btn-default" (click)="add()" title="Delete">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+        </div>
+
         <div class="panel-body table-responsive" style="min-height: 80px;">
             <table class="table table-condensed table-hoverable">
                 <colgroup>
                     <col>
-                    <col>
-                    <col style="width: 1%">
+                    <col style="width: 1%;">
                 </colgroup>
-                <thead>
-                    <tr>
-                        <th>Identifier</th>
-                        <th>Scope</th>
-                        <th></th>
-                    </tr>
-                </thead>
                 <tbody>
                     <tr *ngFor="let ref of references" (click)="selectReference(ref)" [ngClass]="{active: selectedRef == ref}">
                         <td>{{ref.identifier}}</td>
-                        <td>{{ref.getReferenceScope()}}</td>
                         <td>
-                            <button *ngIf="!context.selectionMode" class="btn btn-xs btn-default" (click)="deleteReference(ref)" title="Delete">
+                            <button class="btn btn-xs btn-default" (click)="deleteReference(ref)" title="Delete">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </button>
                         </td>

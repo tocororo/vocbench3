@@ -5,9 +5,16 @@ import { Configuration, Reference } from "../../../../models/Configuration";
 import { ConfigurationsServices } from "../../../../services/configurationsServices";
 
 export class LoadConfigurationModalData extends BSModalContext {
+    /**
+     * @param title 
+     * @param configurationComponent 
+     * @param selectionMode if true, the dialog allows just to select a configuration, 
+     * it doesn't load the config and doesn't allow to delete them
+     */
     constructor(
         public title: string, 
-        public configurationComponent: string
+        public configurationComponent: string,
+        public selectionMode: boolean = false 
     ) {
         super();
     }
@@ -57,16 +64,23 @@ export class LoadConfigurationModal implements ModalComponent<LoadConfigurationM
     }
 
     ok(event: Event) {
-        this.configurationService.getConfiguration(this.context.configurationComponent, this.selectedRef.relativeReference).subscribe(
-            conf => {
-                event.stopPropagation();
-                let returnData: LoadConfigurationModalReturnData = {
-                    configuration: conf,
-                    relativeReference: this.selectedRef.relativeReference
-                }
-                this.dialog.close(returnData);
+        if (this.context.selectionMode) {
+            let returnData: LoadConfigurationModalReturnData = {
+                configuration: null,
+                relativeReference: this.selectedRef.relativeReference
             }
-        )
+            this.dialog.close(returnData);
+        } else {
+            this.configurationService.getConfiguration(this.context.configurationComponent, this.selectedRef.relativeReference).subscribe(
+                conf => {
+                    let returnData: LoadConfigurationModalReturnData = {
+                        configuration: conf,
+                        relativeReference: this.selectedRef.relativeReference
+                    }
+                    this.dialog.close(returnData);
+                }
+            );
+        }
     }
 
     cancel() {

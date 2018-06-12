@@ -12,6 +12,7 @@ import { QueryParameterizerModal, QueryParameterizerModalData } from "./queryPar
 export class QueryParameterRenderer {
 
     @Input() bindings: VariableBindings;
+    @Input() configurable: boolean = true; //if true allows to change the parametrization, if false the edit button is hidden as well as the "use bindings" checkbox
     @Output() update = new EventEmitter<Map<string, ARTNode>>();
     @Output() paramsChange = new EventEmitter<VariableBindings>(); //when parametrization changes, useful to the parent in order to detect unsaved parametrizations
 

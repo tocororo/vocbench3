@@ -3,16 +3,19 @@ import { CompleterService } from 'ng2-completer';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Subscription } from "rxjs/Subscription";
-import { ARTURIResource, RDFResourceRolesEnum, ARTResource } from "../../models/ARTResources";
-import { SearchSettings, SearchMode } from "../../models/Properties";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { SearchMode, SearchSettings } from "../../models/Properties";
 import { SearchServices } from "../../services/searchServices";
+import { LoadCustomSearchModal } from "../../trees/searchBar/loadCustomSearchModal";
+import { TreeListContext } from "../../utils/UIUtils";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { CustomCompleterData } from "./customCompleterData";
-import { SearchSettingsModal, SearchSettingsModalData } from './searchSettingsModal';
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { AdvancedSearchModal } from "./advancedSearchModal";
-import { TreeListContext } from "../../utils/UIUtils";
+import { CustomCompleterData } from "./customCompleterData";
+import { CustomSearchModal, CustomSearchModalData } from "./customSearchModal";
+import { SearchSettingsModal, SearchSettingsModalData } from './searchSettingsModal';
 
 @Component({
     selector: "search-bar",
@@ -44,7 +47,8 @@ export class SearchBarComponent {
     private eventSubscriptions: Subscription[] = [];
 
     constructor(private searchService: SearchServices, private modal: Modal, private vbProperties: VBProperties,
-        private eventHandler: VBEventHandler, private completerService: CompleterService, private basicModals: BasicModalServices) {
+        private eventHandler: VBEventHandler, private completerService: CompleterService, 
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
             (schemes: ARTURIResource[]) => this.setSchemeInCompleter()));
@@ -105,7 +109,29 @@ export class SearchBarComponent {
                 this.advancedSearchEvent.emit(resource);
             },
             () => {}
-        )
+        );
+    }
+
+    private customSearch() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        this.modal.open(LoadCustomSearchModal, overlayConfig).result.then(
+            customSearchRef => {
+                var modalData = new CustomSearchModalData(customSearchRef);
+                const builder = new BSModalContextBuilder<CustomSearchModalData>(
+                    modalData, undefined, SearchSettingsModalData
+                );
+                let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+                this.modal.open(CustomSearchModal, overlayConfig).result.then(
+                    (resource: ARTResource) => {
+                        //exploit the same event (and related handler) of advanced search
+                        this.advancedSearchEvent.emit(resource);
+                    },
+                    () => {}
+                );
+            },
+            () => {}
+        );
     }
 
     private updateSearchMode(mode: SearchMode, event: Event) {

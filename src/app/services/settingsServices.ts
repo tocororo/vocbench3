@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { ARTURIResource } from "../models/ARTResources";
-import { Project } from "../models/Project";
-import { HttpManager } from "../utils/HttpManager";
-import { Deserializer } from "../utils/Deserializer";
 import { Scope, Settings } from '../models/Plugins';
+import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
 export class SettingsServices {

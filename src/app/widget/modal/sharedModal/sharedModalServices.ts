@@ -130,10 +130,12 @@ export class SharedModalServices {
      * 
      * @param title 
      * @param configurationComponent
+     * @param selectionMode if true, the dialog allows just to select a configuration, 
+     * it doesn't load the config and doesn't allow to delete them
      * @return returns a LoadConfigurationModalReturnData object with configuration and relativeReference
      */
-    loadConfiguration(title: string, configurationComponent: string) {
-        var modalData = new LoadConfigurationModalData(title, configurationComponent);
+    loadConfiguration(title: string, configurationComponent: string, selectionMode?: boolean) {
+        var modalData = new LoadConfigurationModalData(title, configurationComponent, selectionMode);
         const builder = new BSModalContextBuilder<LoadConfigurationModalData>(
             modalData, undefined, LoadConfigurationModalData
         );

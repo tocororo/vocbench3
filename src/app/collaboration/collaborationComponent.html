@@ -34,7 +34,7 @@
             <!-- Mandatory settings configured, Mandatory preferences not configured (missing credentials) -->
             <div *ngIf="!userSettingsConfigured; else elseBlock2" class="alert alert-warning" style="margin: 3px;">
                 You need to be logged to the CS in order to see the issues list. Please, 
-                <a style="cursor: pointer" (click)="openUserConfig()">provide</a> your credentials pushing.
+                <a style="cursor: pointer" (click)="openUserConfig()">provide</a> your credentials.
             </div>
 
             <ng-template #elseBlock2>

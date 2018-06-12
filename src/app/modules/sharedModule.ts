@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { QueryParameterRenderer } from '../sparql/queryParameterization/queryParameterRenderer';
+import { YasguiComponent } from '../sparql/yasguiComponent';
 import { CodemirrorComponent } from "../widget/codemirror/codemirrorComponent";
 import { SanitizerDirective } from "../widget/directives/sanitizerDirective";
 import { ExtensionConfiguratorComponent } from '../widget/extensionConfigurator/extensionConfiguratorComponent';
@@ -18,23 +20,21 @@ import { SettingsRendererComponent } from '../widget/settingsRenderer/settingsRe
 import { SettingsRendererPanelComponent } from '../widget/settingsRenderer/settingsRendererPanelComponent';
 import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLiteralInputComponent';
 
-
-
 @NgModule({
     imports: [CommonModule, FormsModule],
     declarations: [
         FilePickerComponent, RdfResourceComponent, LangPickerComponent, SanitizerDirective,
-        CodemirrorComponent, InputEditableComponent, ResourceListComponent,
+        CodemirrorComponent, YasguiComponent, InputEditableComponent, ResourceListComponent,
         TypedLiteralInputComponent, LanguageItemComponent,
         SettingsRendererComponent, SettingsRendererPanelComponent, SettingSetRendererComponent, SettingMapRendererComponent,
-        ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent
+        QueryParameterRenderer, ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent
     ],
     exports: [
         FilePickerComponent, RdfResourceComponent, SanitizerDirective, LangPickerComponent,
-        CodemirrorComponent, InputEditableComponent, ResourceListComponent,
+        CodemirrorComponent, YasguiComponent, InputEditableComponent, ResourceListComponent,
         TypedLiteralInputComponent, LanguageItemComponent, 
         SettingsRendererComponent, SettingsRendererPanelComponent, SettingSetRendererComponent, SettingMapRendererComponent,
-        ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent
+        QueryParameterRenderer, ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent
     ],
     providers: []
 })

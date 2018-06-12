@@ -8,8 +8,8 @@ import { BrowseExternalResourceModal } from '../alignment/resourceAlignment/brow
 import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceAlignmentModal';
 import { CollaborationModalServices } from "../collaboration/collaborationModalService";
 import { IssueListModal } from "../collaboration/issueListModal";
-import { CollaborationProjSettingsModal } from "../collaboration/modals/collaborationProjSettingsModal";
 import { CollaborationProjectModal } from "../collaboration/modals/collaborationProjectModal";
+import { CollaborationProjSettingsModal } from "../collaboration/modals/collaborationProjSettingsModal";
 import { CollaborationUserSettingsModal } from "../collaboration/modals/collaborationUserSettingsModal";
 import { CreateIssueModal } from "../collaboration/modals/createIssueModal";
 import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";

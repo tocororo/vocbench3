@@ -5,6 +5,7 @@ export class ConfigurationComponents {
     static IMPORTER: string = "it.uniroma2.art.semanticturkey.config.importer.Importer";
     static SPARQL_PARAMETERIZATION_STORE: string = "it.uniroma2.art.semanticturkey.config.sparql.SPARQLParameterizationStore";
     static SPARQL_STORE: string = "it.uniroma2.art.semanticturkey.config.sparql.SPARQLStore";
+    static CUSTOM_SEARCH_STORE = "it.uniroma2.art.semanticturkey.settings.search.CustomSearchStore";
 }
 
 export class Reference {

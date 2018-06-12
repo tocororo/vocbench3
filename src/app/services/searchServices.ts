@@ -312,4 +312,17 @@ export class SearchServices {
         );
     }
 
+    customSearch(searchParameterizationReference: string, boundValues: Map<string, ARTNode>): Observable<ARTResource[]> {
+        console.log("[SearchServices] customSearch");
+        var params: any = {
+            searchParameterizationReference: searchParameterizationReference,
+            boundValues: boundValues
+        };
+        return this.httpMgr.doGet(this.serviceName, "customSearch", params).map(
+            stResp => {
+                return Deserializer.createResourceArray(stResp);
+            }
+        );
+    }
+
 }

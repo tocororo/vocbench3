@@ -1,7 +1,7 @@
 <div class="subPanel vbox">
     <div class="subPanel-heading">
         <label style="flex: 1">Variable bindings</label>
-        <button class="btn btn-xs btn-default" (click)="editParameterization()" title="Edit parameterization">
+        <button *ngIf="configurable" class="btn btn-xs btn-default" (click)="editParameterization()" title="Edit parameterization">
             <span class="glyphicon glyphicon-pencil"></span>
         </button>
     </div>
@@ -29,7 +29,7 @@
             </tbody>
         </table>
     </div>
-    <div class="subPanel-footer">
+    <div *ngIf="configurable" class="subPanel-footer">
         <div class="checkbox" style="margin: 0px;">
             <label>
                 <input type="checkbox" [(ngModel)]="useBindings" (ngModelChange)="emitUpdate()">Use variable bindings

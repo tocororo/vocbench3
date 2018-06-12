@@ -96,32 +96,32 @@
         </tbody>
     </table>
 
-        <div class="groupPanel">
-            <div class="groupPanel-heading">
-                <label class="groupPanel-heading-content">
-                    Converter
-                    <span class="glyphicon glyphicon-exclamation-sign" style="margin-left: 4px;" 
-                        title="If left empty, the system will try to automatically detect the most suitable converter">
-                    </span>
-                </label>
-                
-            </div>
-            <div class="groupPanel-body">
-                <div class="hbox" style="align-items: center;">
-                    <div class="hbox" style="align-items: center; margin-right: 4px;">
-                        <label style="margin-right: 4px;">URI:</label>
-                        <input type="text" class="form-control input-sm" [ngModel]="converterQName" readonly>
-                    </div>
-                    <div class="hbox" style="align-items: center; margin-right: 4px;">
-                        <label style="white-space: nowrap; margin-right: 4px;">Capability type:</label>
-                        <input type="text" class="form-control input-sm" [ngModel]="converterType" readonly>
-                    </div>
-                    <button class="btn btn-sm btn-default" (click)="chooseConverter()" title="Change converter">
-                        <span class="glyphicon glyphicon-pencil"></span>
-                    </button>
+    <div class="groupPanel">
+        <div class="groupPanel-heading">
+            <label class="groupPanel-heading-content">
+                Converter
+                <span class="glyphicon glyphicon-exclamation-sign" style="margin-left: 4px;" 
+                    title="If left empty, the system will try to automatically detect the most suitable converter">
+                </span>
+            </label>
+            
+        </div>
+        <div class="groupPanel-body">
+            <div class="hbox" style="align-items: center;">
+                <div class="hbox" style="align-items: center; margin-right: 4px;">
+                    <label style="margin-right: 4px;">URI:</label>
+                    <input type="text" class="form-control input-sm" [ngModel]="converterQName" readonly>
                 </div>
+                <div class="hbox" style="align-items: center; margin-right: 4px;">
+                    <label style="white-space: nowrap; margin-right: 4px;">Capability type:</label>
+                    <input type="text" class="form-control input-sm" [ngModel]="converterType" readonly>
+                </div>
+                <button class="btn btn-sm btn-default" (click)="chooseConverter()" title="Change converter">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
             </div>
         </div>
+    </div>
         
     
 </div>
