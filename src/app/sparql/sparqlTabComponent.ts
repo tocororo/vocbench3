@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/observable";
+import { Observable } from "rxjs/Observable";
 import { Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ConfigurationsServices } from "../services/configurationsServices";
 import { ExportServices } from "../services/exportServices";

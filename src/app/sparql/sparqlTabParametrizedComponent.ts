@@ -1,6 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { Modal } from 'ngx-modialog/plugins/bootstrap';
-import { Observable } from "rxjs/observable";
+import { Observable } from "rxjs/Observable";
 import { ARTNode } from "../models/ARTResources";
 import { Configuration, ConfigurationComponents, ConfigurationProperty } from "../models/Configuration";
 import { SettingsProp } from "../models/Plugins";

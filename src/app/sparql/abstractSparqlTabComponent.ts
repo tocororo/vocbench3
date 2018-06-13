@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { Observable } from "rxjs/observable";
+import { Observable } from "rxjs/Observable";
 import { ARTBNode, ARTResource, ARTURIResource } from "../models/ARTResources";
 import { Configuration, ConfigurationProperty } from "../models/Configuration";
 import { PrefixMapping } from "../models/Metadata";

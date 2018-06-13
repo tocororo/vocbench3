@@ -11,6 +11,7 @@ import { SchemeListPanelComponent } from "../trees/skos/scheme/schemeListPanel/s
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { TreeListContext } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { LexicalEntryListPanelComponent } from "./ontolex/lexicalEntry/lexicalEntryListPanel/lexicalEntryListPanelComponent";
 import { LexiconListPanelComponent } from "./ontolex/lexicon/lexiconListPanel/lexiconListPanelComponent";
@@ -43,7 +44,7 @@ export class TreePanelComponent {
 
     private activeTab: RDFResourceRolesEnum;
 
-    constructor(private modal: Modal, private sharedModals: SharedModalServices) { }
+    constructor(private modal: Modal, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
         this.ONTO_TYPE = VBContext.getWorkingProject().getModelType();
@@ -197,7 +198,11 @@ export class TreePanelComponent {
                 this.sharedModals.openResourceView(resource, false);    
             }
         } else {
-            this.sharedModals.openResourceView(resource, false);
+            this.basicModals.alert("Search", "The resoruce " + resource.getShow() + " cannot be focused in a tree/list view, so its ResourceView will be shown in a modal dialog", "warning").then(
+                () => {
+                    this.sharedModals.openResourceView(resource, false);
+                }
+            );
         }
         if (tabToActivate != null) {
             this.activeTab = tabToActivate;
