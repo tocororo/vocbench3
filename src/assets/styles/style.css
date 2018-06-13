@@ -427,6 +427,10 @@ sparql-component .CodeMirror { height: 35vh !important }
 .CodeMirror.CodeMirror-fullscreen { height: auto !important }
 /*To put codemirror in fullscreen in front of the menubar (default z-index 7 made the textarea behind the navbar)*/
 .yasqe .CodeMirror-fullscreen { z-index: 999 !important; }
+/* Reposition the fullscreen button */
+.yasqe .yasqe_buttons { top: 5px; right: 7px !important; } 
+/* To hide fullscreen button when yasqe is in readonly mode */
+.yasqe-hide-btns .yasqe_buttons { display: none; }
 
 /* Btn groups in panel heading (usually button for tree/list managment) */
 .panel-heading .btn-group-xs>.btn {

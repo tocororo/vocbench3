@@ -3,9 +3,9 @@
         <input type="checkbox" [(ngModel)]="fetchFromPrefixCheck" (change)="onCheckboxChange($event.target.checked)">Fetch prefix from prefix.cc
     </label>
 </div>
-<div  style="position: relative">
+<div style="position: relative" [ngClass]="{ 'yasqe-hide-btns' : hideButtons }">
     <textarea #txtarea [ngClass]="{disabled: readonly}">{{query}}</textarea>
-    <div style="position: absolute; top: 10px; right: 50px; z-index: 5; opacity: 0.7">
+    <div *ngIf="!hideButtons" style="position: absolute; top: 9px; right: 34px; z-index: 5; opacity: 0.7">        
         <a href="http://about.yasgui.org/" target="_blank" class="btn btn-info btn-xs">YASGUI</a>
     </div>
 </div>

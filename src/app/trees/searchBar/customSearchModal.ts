@@ -27,11 +27,12 @@ export class CustomSearchModal implements ModalComponent<CustomSearchModalData> 
     @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
     @ViewChild(YasguiComponent) viewChildYasgui: YasguiComponent;
 
-    private query: string;
-    private inferred: boolean = false;
-
     private parameterization: VariableBindings;
     private bindingsMap: Map<string, ARTNode>;
+
+    private query: string;
+    private inferred: boolean = false;
+    private showQuery: boolean = false;
 
     constructor(public dialog: DialogRef<CustomSearchModalData>, private basicModals: BasicModalServices,
         private configurationService: ConfigurationsServices, private searchService: SearchServices) {
@@ -61,10 +62,6 @@ export class CustomSearchModal implements ModalComponent<CustomSearchModalData> 
                                         this.inferred = confProps[i].value;
                                     }
                                 }
-                                setTimeout(() => {
-                                    //in order to detect the change of @Input query in the child YasguiComponent
-                                    this.viewChildYasgui.forceContentUpdate();
-                                });
                             }
                         );
                     } else if (properties[i].name == "variableBindings") {

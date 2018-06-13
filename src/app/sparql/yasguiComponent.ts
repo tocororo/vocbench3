@@ -18,6 +18,7 @@ var $: JQueryStatic = require('jquery');
 export class YasguiComponent {
     @Input() query: string;
     @Input() readonly: boolean = false;
+    @Input() hideButtons: boolean = false;
     //emit event containing {query: string, valid: boolean, mode: string} when it changes
     @Output() querychange = new EventEmitter<Object>();
 

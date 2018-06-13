@@ -92,7 +92,8 @@ export class LoadCustomSearchModal implements ModalComponent<BSModalContext> {
                         this.initReferences(); //refresh the references
                     }
                 );
-            }
+            },
+            () => {}
         )
     }
 

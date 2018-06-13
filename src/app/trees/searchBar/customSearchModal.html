@@ -5,8 +5,24 @@
         </h3>
     </div>
     <div class="modal-body vbox" style="max-height: 75vh;">
-        <yasgui style="margin-bottom: 6px;" [query]="query" [readonly]="true"></yasgui>
         <query-param-renderer [bindings]="parameterization" (update)="onVarBindingsUpdate($event)"[configurable]="false"></query-param-renderer>
+
+        <div class="groupPanel">
+            <div class="groupPanel-heading">
+                <div class="expandCollapseBtnContainer groupPanel-heading-content" style="margin: 0px">
+                    <img src="../../../assets/images/icons/arrow.png" (click)="showQuery = !showQuery" [ngClass]="{'arrow-right': !showQuery}">
+                </div>
+                <span>
+                    <label class="groupPanel-heading-content">Details:</label>
+                </span>
+            </div>
+            <div class="groupPanel-body">
+                <ng-template [ngIf]="showQuery">
+                    <yasgui style="margin-bottom: 6px;" [query]="query" [readonly]="true" [hideButtons]="true"></yasgui>
+                </ng-template>
+            </div>
+        </div>
+
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
