@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { QueryParameterRenderer } from '../sparql/queryParameterization/queryParameterRenderer';
+import { QueryParameterForm } from '../sparql/queryParameterization/queryParameterForm';
 import { YasguiComponent } from '../sparql/yasguiComponent';
 import { CodemirrorComponent } from "../widget/codemirror/codemirrorComponent";
 import { SanitizerDirective } from "../widget/directives/sanitizerDirective";
@@ -27,14 +27,14 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         CodemirrorComponent, YasguiComponent, InputEditableComponent, ResourceListComponent,
         TypedLiteralInputComponent, LanguageItemComponent,
         SettingsRendererComponent, SettingsRendererPanelComponent, SettingSetRendererComponent, SettingMapRendererComponent,
-        QueryParameterRenderer, ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent
+        QueryParameterForm, ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent
     ],
     exports: [
         FilePickerComponent, RdfResourceComponent, SanitizerDirective, LangPickerComponent,
         CodemirrorComponent, YasguiComponent, InputEditableComponent, ResourceListComponent,
         TypedLiteralInputComponent, LanguageItemComponent, 
         SettingsRendererComponent, SettingsRendererPanelComponent, SettingSetRendererComponent, SettingMapRendererComponent,
-        QueryParameterRenderer, ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent
+        QueryParameterForm, ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent
     ],
     providers: []
 })

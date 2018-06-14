@@ -6,13 +6,14 @@ import { BindingTypeEnum, VariableBindings } from "../../models/Sparql";
 import { QueryParameterizerModal, QueryParameterizerModalData } from "./queryParameterizerModal";
 
 @Component({
-    selector: "query-param-renderer",
-    templateUrl: "./queryParameterRenderer.html"
+    selector: "query-param-form",
+    templateUrl: "./queryParameterForm.html"
 })
-export class QueryParameterRenderer {
+export class QueryParameterForm {
 
     @Input() bindings: VariableBindings;
     @Input() configurable: boolean = true; //if true allows to change the parametrization, if false the edit button is hidden as well as the "use bindings" checkbox
+    @Input() mode: "search" | "sparql" = "sparql"; //search mode shows displayName, sparql mode shows variable names
     @Output() update = new EventEmitter<Map<string, ARTNode>>();
     @Output() paramsChange = new EventEmitter<VariableBindings>(); //when parametrization changes, useful to the parent in order to detect unsaved parametrizations
 
@@ -36,6 +37,8 @@ export class QueryParameterRenderer {
             for (var varName in this.bindings) {
                 let bs: BindingStruct = {
                     varName: varName,
+                    displayName: this.bindings[varName].displayName,
+                    description: this.bindings[varName].description,
                     bindingType: this.bindings[varName].bindingType
                 }
                 if (this.bindings[varName].bindingType == BindingTypeEnum.assignment) {
@@ -72,7 +75,6 @@ export class QueryParameterRenderer {
         this.modal.open(QueryParameterizerModal, overlayConfig).result.then(
             (updatedVarBindings: VariableBindings) => {
                 this.bindings = updatedVarBindings;
-                // this.initBindingStruct();
                 this.paramsChange.emit(this.bindings);
             },
             () => {}
@@ -96,6 +98,8 @@ export class QueryParameterRenderer {
 
 class BindingStruct {
     varName: string;
+    displayName?: string;
+    description?: string;
     bindingType: BindingTypeEnum;
     resourceRole?: RDFResourceRolesEnum; //if type is constraint
     datatype?: ARTURIResource; //if type is constraint

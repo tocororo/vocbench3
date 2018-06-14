@@ -32,7 +32,10 @@ export class CustomSearchModal implements ModalComponent<CustomSearchModalData> 
 
     private query: string;
     private inferred: boolean = false;
-    private showQuery: boolean = false;
+
+    private description: string;
+
+    private detailsOn: boolean = false;
 
     constructor(public dialog: DialogRef<CustomSearchModalData>, private basicModals: BasicModalServices,
         private configurationService: ConfigurationsServices, private searchService: SearchServices) {
@@ -43,9 +46,10 @@ export class CustomSearchModal implements ModalComponent<CustomSearchModalData> 
         this.configurationService.getConfiguration(ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, this.context.searchParameterizationReference).subscribe(
             (configuration: Configuration) => {
                 /**
-                 * configuration contains 2 props:
+                 * configuration contains 3 props:
                  * "relativeReference": the reference of the query
                  * "variableBindings": the map of the bindings parameterization
+                 * "description": description of the parameterized query
                  */
                 let properties: SettingsProp[] = configuration.properties;
                 for (var i = 0; i < properties.length; i++) {
@@ -66,6 +70,8 @@ export class CustomSearchModal implements ModalComponent<CustomSearchModalData> 
                         );
                     } else if (properties[i].name == "variableBindings") {
                         this.parameterization = properties[i].value;
+                    } else if (properties[i].name == "description") {
+                        this.description = properties[i].value;
                     }
                 }
             }

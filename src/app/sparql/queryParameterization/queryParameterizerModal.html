@@ -16,12 +16,16 @@
                     <col>
                     <col>
                     <col>
+                    <col>
+                    <col>
                     <col style="width: 1%">
                 </colgroup>
                 <thead>
                     <tr>
-                        <th>Binding Variable</th>
-                        <th>Binding type</th>
+                        <th nowrap>Binding Variable</th>
+                        <th nowrap>Display Name</th>
+                        <th>Description</th>
+                        <th nowrap>Binding Type</th>
                         <th>Value</th>
                         <th></th>
                     </tr>
@@ -29,6 +33,8 @@
                 <tbody>
                     <tr *ngFor="let b of bindings">
                         <td><input class="form-control input-sm" [(ngModel)]="b.varName"></td>
+                        <td><input class="form-control input-sm" [(ngModel)]="b.displayName"></td>
+                        <td><textarea class="form-control input-sm" style="resize: vertical" rows="1" [(ngModel)]="b.description"></textarea></td>
                         <td>
                             <select class="form-control input-sm" [(ngModel)]="b.bindingType">
                                 <option *ngFor="let t of bindingTypes" [ngValue]="t">{{t.show}}</option>

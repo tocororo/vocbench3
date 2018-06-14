@@ -1,0 +1,54 @@
+<div class="subPanel vbox">
+    <div *ngIf="mode=='sparql'" class="subPanel-heading">
+        <label style="flex: 1">Variable bindings</label>
+        <button *ngIf="configurable" class="btn btn-xs btn-default" (click)="editParameterization()" title="Edit parameterization">
+            <span class="glyphicon glyphicon-pencil"></span>
+        </button>
+    </div>
+    <div class="subPanel-body vbox table-responsive">
+        <table class="table table-condensed table-borderless">
+            <colgroup>
+                <col>
+                <col>
+                <col style="width: 1%">
+            </colgroup>
+            <tbody>
+                <tr *ngFor="let b of bindingStructs">
+                    <!-- In search mode the assignment should not be shown -->
+                    <ng-template [ngIf]="mode=='sparql' || mode=='search' && b.bindingType != 'assignment'">
+                        <td class="text-right" style="margin-right: 2px;">
+                            <label *ngIf="mode == 'sparql'; else searchModeBlock">{{b.varName}}:</label>
+                            <ng-template #searchModeBlock>
+                                <label *ngIf="b.displayName">{{b.displayName}}:</label>
+                                <label *ngIf="!b.displayName">{{b.varName}}:</label>
+                            </ng-template>
+                        </td>
+                        <td>
+                            <ng-template [ngIf]="b.bindingType == 'assignment' && b.value">
+                                <input class="form-control input-sm" [ngModel]="b.value.toNT()" readonly>
+                            </ng-template>
+        
+                            <ng-template [ngIf]="b.bindingType == 'constraint' && b.datatype">
+                                <literal-picker [plain]="false" [typed]="true" [datatypes]="[b.datatype]" (literalChanged)="onLiteralChanged(b, $event)">
+                                </literal-picker>
+                            </ng-template>
+        
+                            <ng-template [ngIf]="b.bindingType == 'constraint' && b.resourceRole">
+                                <resource-picker [resource]="b.value" [roles]="[b.resourceRole]" [editable]="true" (resourceChanged)="onResourceChanged(b, $event)">
+                                </resource-picker>
+                            </ng-template>
+                        </td>
+                        <td *ngIf="b.description"><span class="glyphicon glyphicon-info-sign" [title]="b.description"></span></td>
+                    </ng-template>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="configurable" class="subPanel-footer">
+        <div class="checkbox" style="margin: 0px;">
+            <label>
+                <input type="checkbox" [(ngModel)]="useBindings" (ngModelChange)="emitUpdate()">Use variable bindings
+            </label>
+        </div>
+    </div>
+</div>

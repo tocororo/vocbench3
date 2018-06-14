@@ -6,6 +6,8 @@ export class VariableBindings {
         datatype?: string,
         resourceRole?: RDFResourceRolesEnum,
         value?: string //NT representation 
+        description?: string,
+        displayName?: string,
     }
 }
 

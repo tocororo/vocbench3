@@ -1,27 +1,24 @@
 <div class="blockingDivHost">
     <div class="modal-header">
-        <h3 class="modal-title">
-            Custom search
-        </h3>
+        <div class="hbox" style="align-items: center">
+            <h3 class="modal-title" style="flex: 1">Custom search</h3>
+            <button class="btn btn-default btn-xs" [ngClass]="{active: detailsOn}" title="Show/hide SPARQL details about the custom search" (click)="detailsOn = !detailsOn">
+                Details
+                <span *ngIf="detailsOn" class="glyphicon glyphicon-eye-open"></span>
+                <span *ngIf="!detailsOn" class="glyphicon glyphicon-eye-close"></span>
+            </button>
+        </div>
     </div>
     <div class="modal-body vbox" style="max-height: 75vh;">
-        <query-param-renderer [bindings]="parameterization" (update)="onVarBindingsUpdate($event)"[configurable]="false"></query-param-renderer>
 
-        <div class="groupPanel">
-            <div class="groupPanel-heading">
-                <div class="expandCollapseBtnContainer groupPanel-heading-content" style="margin: 0px">
-                    <img src="../../../assets/images/icons/arrow.png" (click)="showQuery = !showQuery" [ngClass]="{'arrow-right': !showQuery}">
-                </div>
-                <span>
-                    <label class="groupPanel-heading-content">Details:</label>
-                </span>
-            </div>
-            <div class="groupPanel-body">
-                <ng-template [ngIf]="showQuery">
-                    <yasgui style="margin-bottom: 6px;" [query]="query" [readonly]="true" [hideButtons]="true"></yasgui>
-                </ng-template>
-            </div>
+        <div *ngIf="description" class="alert alert-info" style="margin-bottom: 4px;">
+            {{description}}
         </div>
+
+        <query-param-form [bindings]="parameterization" (update)="onVarBindingsUpdate($event)" [configurable]="false" 
+            [mode]="detailsOn ? 'sparql' : 'search'"></query-param-form>
+
+        <yasgui *ngIf="detailsOn" [query]="query" [readonly]="true" [hideButtons]="true"></yasgui>
 
     </div>
     <div class="modal-footer">

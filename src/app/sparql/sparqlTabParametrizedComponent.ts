@@ -28,6 +28,8 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
     private parametrizationRef: string;
     private bindingsMap: Map<string, ARTNode>;
 
+    private description: string;
+
     constructor(sparqlService: SparqlServices, exportService: ExportServices, configurationsService: ConfigurationsServices,
         searchService: SearchServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, modal: Modal) {
         super(sparqlService, exportService, configurationsService, searchService, basicModals, sharedModals, modal);
@@ -73,6 +75,7 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
          * configuration contains 2 props:
          * "relativeReference": the reference of the query
          * "variableBindings": the map of the bindings parameterization
+         * "description": description of the parameterized query
          */
         let properties: SettingsProp[] = configuration.properties;
         for (var i = 0; i < properties.length; i++) {
@@ -91,6 +94,8 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
                 );
             } else if (properties[i].name == "variableBindings") {
                 this.parameterization = properties[i].value;
+            } else if (properties[i].name == "description") {
+                this.description = properties[i].value;
             }
         }
     }
@@ -123,7 +128,8 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
     saveConfiguration() {
         let config: { [key: string]: any } = {
             relativeReference: this.storedQueryReference,
-            variableBindings: this.parameterization
+            variableBindings: this.parameterization,
+            description: this.description
         }
         this.sharedModals.storeConfiguration("Save SPARQL query parameterization", ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, config, this.parametrizationRef).then(
             (relativeRef: string) => {

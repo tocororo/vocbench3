@@ -90,6 +90,8 @@ export class QueryParameterizerModal implements ModalComponent<QueryParameterize
 
                 bs = {
                     varName: varName,
+                    displayName: varBinds[varName].displayName,
+                    description: varBinds[varName].description,
                     bindingType: bindingType,
                     datatype: datatype,
                     resourceRole: resourceRole,
@@ -183,7 +185,9 @@ export class QueryParameterizerModal implements ModalComponent<QueryParameterize
             }
 
             varBindings[b.varName] = {
-                bindingType: b.bindingType.value
+                bindingType: b.bindingType.value,
+                displayName: b.displayName,
+                description: b.description
             }
             if (b.bindingType.value == BindingTypeEnum.assignment) {
                 if (b.value == null) {//check if type is assignment and the resource is not set
@@ -221,6 +225,8 @@ export class QueryParameterizerModal implements ModalComponent<QueryParameterize
 
 class BindingStruct {
     varName: string;
+    displayName?: string;
+    description?: string;
     bindingType: BindingTypeStruct;
     resourceRole?: RDFResourceRolesEnum; //if type is constraint
     datatype?: ARTURIResource; //if type is constraint

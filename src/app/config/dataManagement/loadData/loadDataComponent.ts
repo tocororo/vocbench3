@@ -76,6 +76,7 @@ export class LoadDataComponent {
 
     private ngOnInit() {
         this.baseURI = VBContext.getWorkingProject().getBaseURI();
+        this.validateImplicitly = this.isValidationAuthorized();
 
         this.extensionService.getExtensions(ExtensionPointID.RDF_TRANSFORMERS_ID).subscribe(
             extensions => {

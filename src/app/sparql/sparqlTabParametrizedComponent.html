@@ -14,9 +14,14 @@
         </div>
     </div>
 
-    <query-param-renderer class="vbox" [bindings]="parameterization" (update)="onVarBindingsUpdate($event)"
-        (paramsChange)="onParametrizationsChange($event)"></query-param-renderer>
+    <query-param-form class="vbox" [bindings]="parameterization" (update)="onVarBindingsUpdate($event)"
+        (paramsChange)="onParametrizationsChange($event)"></query-param-form>
 
+</div>
+
+<div class="hbox" style="margin-top: 4px; align-items: center; flex: initial;">
+    <label style="margin-right: 4px;">Description:</label>
+    <input class="form-control input-sm" [(ngModel)]="description">
 </div>
 
 <!--Commands (submit, clear, inferred, ...)-->
