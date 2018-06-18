@@ -34,6 +34,9 @@ export class ProjectGroupsManagerComponent {
     private selectedBroader: ARTURIResource;
     private selectedNarrower: ARTURIResource;
 
+    private ownedSchemes: ARTURIResource[] = [];
+    private selectedScheme: ARTURIResource;
+
     constructor(private groupsService: UsersGroupsServices, private prefService: PreferencesSettingsServices,
         private resourceService: ResourcesServices, private propService: PropertyServices,
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) { }
@@ -67,12 +70,21 @@ export class ProjectGroupsManagerComponent {
             return;
         }
 
+        this.prepareProjectAccess(); //so that all the getResourcesInfo functions will have the current selected project as ctx_project
+
+        /**
+         * array of getResourcesInfo functions collected in the handlers of getPGSettings (for pref_concept_tree_broader_props 
+         * and pref_concept_tree_narrower_props) and getProjectGroupBinding (for ownedSchemes) responses.
+         */
+        let describeFunctions: any[] = [];
+
         var properties: string[] = [
             Properties.pref_concept_tree_base_broader_prop, Properties.pref_concept_tree_broader_props,
             Properties.pref_concept_tree_narrower_props, Properties.pref_concept_tree_include_subprops, 
             Properties.pref_concept_tree_sync_inverse, Properties.pref_concept_tree_visualization
         ];
-        this.prefService.getPGSettings(properties, this.selectedGroup.iri, this.project).subscribe(
+
+        let getPGSettingsFn = this.prefService.getPGSettings(properties, this.selectedGroup.iri, this.project).map(
             prefs => {
                 let conceptTreeBaseBroaderPropPref: string = prefs[Properties.pref_concept_tree_base_broader_prop];
                 if (conceptTreeBaseBroaderPropPref != null) {
@@ -83,47 +95,74 @@ export class ProjectGroupsManagerComponent {
                 let conceptTreeBroaderPropsPref: string = prefs[Properties.pref_concept_tree_broader_props];
                 if (conceptTreeBroaderPropsPref != null) {
                     let broaderPropsIri: string[] = conceptTreeBroaderPropsPref.split(",");
-                    broaderPropsIri.forEach(
-                        (propUri: string) => {
-                            broaderPropsTemp.push(new ARTURIResource(propUri));
+                    broaderPropsIri.forEach((propUri: string) => {
+                        broaderPropsTemp.push(new ARTURIResource(propUri));
+                    });
+                }
+                this.broaderProps = [];
+                if (broaderPropsTemp.length > 0) {
+                    let describeBroadersFn = this.resourceService.getResourcesInfo(broaderPropsTemp).map(
+                        resources => {
+                            this.broaderProps = resources;
                         }
                     );
+                    describeFunctions.push(describeBroadersFn);
                 }
 
                 let narrowerPropsTemp: ARTURIResource[] = [];
                 let conceptTreeNarrowerPropsPref: string = prefs[Properties.pref_concept_tree_narrower_props];
                 if (conceptTreeNarrowerPropsPref != null) {
                     let narrowerPropsIri: string[] = conceptTreeNarrowerPropsPref.split(",");
-                    narrowerPropsIri.forEach(
-                        (propUri: string) => {
-                            narrowerPropsTemp.push(new ARTURIResource(propUri));
+                    narrowerPropsIri.forEach((propUri: string) => {
+                        narrowerPropsTemp.push(new ARTURIResource(propUri));
+                    });
+                }
+                this.narrowerProps = [];
+                if (narrowerPropsTemp.length > 0) {
+                    let describeNarrowersFn = this.resourceService.getResourcesInfo(narrowerPropsTemp).map(
+                        resources => {
+                            this.narrowerProps = resources;
                         }
                     );
+                    describeFunctions.push(describeNarrowersFn);
                 }
-
-                this.prepareProjectAccess();
-                let describeBroadersFn = this.resourceService.getResourcesInfo(broaderPropsTemp).map(
-                    resources => {
-                        this.broaderProps = resources;
-                    }
-                );
-                let describeNarrowersFn = this.resourceService.getResourcesInfo(narrowerPropsTemp).map(
-                    resources => {
-                        this.narrowerProps = resources;
-                    }
-                );
-                Observable.forkJoin([describeBroadersFn, describeNarrowersFn]).subscribe(
-                    resp => {
-                        this.revokeProjectAccess();
-                    }
-                )
 
                 this.includeSubProps = prefs[Properties.pref_concept_tree_include_subprops] != "false";
                 this.syncInverse = prefs[Properties.pref_concept_tree_sync_inverse] != "false";
-
                 
             }
         );
+
+        let getPGBindingFn = this.groupsService.getProjectGroupBinding(this.project.getName(), this.selectedGroup.iri).map(
+            binding => {
+                let ownedSchemesTemp: ARTURIResource[] = [];
+                if (binding.ownedSchemes != null) {
+                    binding.ownedSchemes.forEach((schemeUri: string) => {
+                        ownedSchemesTemp.push(new ARTURIResource(schemeUri));
+                    });
+                }
+                this.ownedSchemes = [];
+                if (ownedSchemesTemp.length > 0) {
+                    let describeOwnedSchemesFn = this.resourceService.getResourcesInfo(ownedSchemesTemp).map(
+                        resources => {
+                            this.ownedSchemes = resources;
+                        }
+                    );
+                    describeFunctions.push(describeOwnedSchemesFn);
+                }
+            }
+        );
+
+        Observable.forkJoin([getPGSettingsFn, getPGBindingFn]).subscribe(
+            resp => {
+                Observable.forkJoin(describeFunctions).subscribe(
+                    resp => {
+                        this.revokeProjectAccess(); //remove the ctx_project
+                    }
+                );
+            }
+        );
+        
     }
 
     private selectGroup(group: UsersGroup) {
@@ -187,8 +226,13 @@ export class ProjectGroupsManagerComponent {
                     //if synchronization is active sync the lists
                     if (this.syncInverse) {
                         this.syncInverseOfBroader().subscribe(
-                            () => { this.updateNarrowersSetting(); }
+                            () => {
+                                this.updateBroadersSetting();
+                                this.updateNarrowersSetting();
+                            }
                         )
+                    } else {
+                        this.updateBroadersSetting();
                     }
                 }
             },
@@ -203,12 +247,16 @@ export class ProjectGroupsManagerComponent {
                 this.revokeProjectAccess();
                 if (!ResourceUtils.containsNode(this.narrowerProps, prop)) {
                     this.narrowerProps.push(prop);
-                    this.updateNarrowersSetting();
                     //if synchronization is active sync the lists
                     if (this.syncInverse) {
                         this.syncInverseOfNarrower().subscribe(
-                            () => { this.updateBroadersSetting() }
+                            () => { 
+                                this.updateNarrowersSetting();
+                                this.updateBroadersSetting();
+                            }
                         )
+                    } else {
+                        this.updateNarrowersSetting();
                     }
                 }
             },
@@ -350,6 +398,33 @@ export class ProjectGroupsManagerComponent {
         }
         this.updateGroupSetting(Properties.pref_concept_tree_narrower_props, prefValue);
     }
+
+    /**
+     * OWNED SCHEMES PROPRETIES
+     */
+
+    private addScheme() {
+        this.prepareProjectAccess();
+        this.browsingModals.browseSchemeList("Select a scheme").then(
+            (scheme: ARTURIResource) => {
+                this.revokeProjectAccess();
+                if (!ResourceUtils.containsNode(this.ownedSchemes, scheme)) {
+                    this.ownedSchemes.push(scheme);
+                    this.groupsService.addOwnedSchemeToGroup(this.project.getName(), this.selectedGroup.iri, scheme).subscribe();
+                }
+            },
+            () => {}
+        );
+    }
+
+    private removeScheme() {
+        this.ownedSchemes.splice(this.ownedSchemes.indexOf(this.selectedScheme), 1);
+        this.groupsService.removeOwnedSchemeFromGroup(this.project.getName(), this.selectedGroup.iri, this.selectedScheme).subscribe();
+        this.selectedScheme = null;
+    }
+
+
+    //--------------------------------------
 
     private updateGroupSetting(property: string, value: string, pluginID?: string) {
         this.prefService.setPGSetting(property, this.selectedGroup.iri, value, this.project, pluginID).subscribe();

@@ -277,6 +277,12 @@ export class UsersGroup {
     }
 }
 
+export class ProjectGroupBinding {
+    public projectName: string;
+    public groupIri: string;
+    public ownedSchemes: string[];
+}
+
 export enum UserStatusEnum {
     NEW = "NEW",
     INACTIVE = "INACTIVE",

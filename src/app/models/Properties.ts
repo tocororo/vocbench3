@@ -21,7 +21,7 @@ export class Properties {
     static pref_concept_tree_narrower_props: string = "concept_tree_narrower_props";
     static pref_concept_tree_include_subprops: string = "concept_tree_include_subprops";
     static pref_concept_tree_sync_inverse: string = "concept_tree_sync_inverse";
-    static pref_concept_tree_visualization: string = "concept_tree_visualization"
+    static pref_concept_tree_visualization: string = "concept_tree_visualization";
 
     static pref_lex_entry_list_visualization: string = "lex_entry_list_visualization";
     static pref_lex_entry_list_index_lenght: string = "lex_entry_list_index_lenght";

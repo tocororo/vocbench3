@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Project } from "../models/Project";
-import { ProjectUserBinding, Role, UsersGroup } from "../models/User";
-import { HttpManager } from "../utils/HttpManager";
 import { ARTURIResource } from '../models/ARTResources';
+import { ProjectGroupBinding, UsersGroup } from "../models/User";
+import { HttpManager } from "../utils/HttpManager";
+import { ResourcesServices } from './resourcesServices';
 
 @Injectable()
 export class UsersGroupsServices {
 
     private serviceName = "UsersGroups";
 
-    constructor(private httpMgr: HttpManager) { }
+    constructor(private httpMgr: HttpManager, private resourcesService: ResourcesServices) { }
 
     /**
      * 
@@ -214,5 +214,50 @@ export class UsersGroupsServices {
         return this.httpMgr.doPost(this.serviceName, "removeGroupFromUser", params);
     }
 
+    /**
+     * 
+     * @param projectName 
+     * @param groupIri 
+     * @param scheme 
+     */
+    addOwnedSchemeToGroup(projectName: string, groupIri: ARTURIResource, scheme: ARTURIResource) {
+        console.log("[UsersGroupServices] addOwnedSchemeToGroup");
+        var params: any = {
+            projectName: projectName,
+            groupIri: groupIri,
+            scheme: scheme
+        };
+        return this.httpMgr.doPost(this.serviceName, "addOwnedSchemeToGroup", params);
+    }
+
+    /**
+     * 
+     * @param projectName 
+     * @param groupIri 
+     * @param scheme 
+     */
+    removeOwnedSchemeFromGroup(projectName: string, groupIri: ARTURIResource, scheme: ARTURIResource) {
+        console.log("[UsersGroupServices] removeOwnedSchemeFromGroup");
+        var params: any = {
+            projectName: projectName,
+            groupIri: groupIri,
+            scheme: scheme
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeOwnedSchemeFromGroup", params);
+    }
+
+    /**
+     * 
+     * @param projectName 
+     * @param groupIri 
+     */
+    getProjectGroupBinding(projectName: string, groupIri: ARTURIResource): Observable<ProjectGroupBinding> {
+        console.log("[UsersGroupServices] getProjectGroupBinding");
+        var params: any = {
+            projectName: projectName,
+            groupIri: groupIri
+        };
+        return this.httpMgr.doGet(this.serviceName, "getProjectGroupBinding", params);
+    }
 
 }

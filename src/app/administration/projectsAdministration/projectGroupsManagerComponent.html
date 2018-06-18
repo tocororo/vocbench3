@@ -33,18 +33,18 @@
                             <img src="../../../assets/images/icons/res/propObject.png"/>
                         </button>
                     </div>
-        
+
                     <div class="panel panel-default vbox">
                         <div class="panel-heading">
-                            <label>Management of broader/narrower</label>
+                            <label>
+                                Management of broader/narrower
+                                <span class="glyphicon glyphicon-info-sign" title="Customizes the properties on which the concept tree hierarchy is based on.
+If none of broader/narrower properties is selected, then skos:broader^ and skos:narrower will be used (in OR) to check narrower concepts.
+If any of the two is selected (with one or more properties), then only the selected properties will be used.">
+                                </span>
+                            </label>
                         </div>
                         <div class="panel-body vbox">
-        
-                            <div class="alert alert-info" style="margin-bottom: 4px;">
-                                Here it is possible to customize the properties on which the concept tree hierarchy is based on.<br>
-                                If none of broader/narrower properties is selected, then skos:broader^ and skos:narrower will be used (in OR) to check narrower concepts.
-                                If any of the two is selected (with one or more properties), then only the selected properties will be used.
-                            </div>
         
                             <div class="hbox">
                                 <div class="subPanel vbox">
@@ -106,6 +106,29 @@
         
                         </div>
                     </div>
+
+                    <div class="panel panel-default vbox" style="margin-top: 4px;">
+                        <div class="panel-heading">
+                            <label style="flex:1">
+                                ConceptScheme authorizations
+                                <span class="glyphicon glyphicon-info-sign" title="Determines which ConceptScheme the group is authorized to work with."></span>
+                            </label>
+                            <div class="btn-toolbar" role="toolbar">
+                                <div class="btn-group btn-group-xs">
+                                    <button class="btn btn-default" (click)="addScheme()">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                    </button>
+                                    <button class="btn btn-default" (click)="removeScheme()" [disabled]="!selectedScheme">
+                                        <span class="glyphicon glyphicon-minus"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body vbox">
+                            <resource-list [resources]="ownedSchemes" (nodeSelected)="selectedScheme = $event"></resource-list>
+                        </div>
+                    </div>
+
                 </div>
 
                 <ng-template #owlBlock>
