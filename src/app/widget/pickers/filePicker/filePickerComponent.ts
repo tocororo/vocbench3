@@ -20,9 +20,9 @@ export class FilePickerComponent {
     private fileName: string;
     
     private btnClassPrefix: string = "btn btn-default btn-file btn-";
-    private btnClass: string;
+    private btnClass: string = this.btnClassPrefix + "sm";
     private txtClassPrefix: string = "form-control input-";
-    private txtClass: string;
+    private txtClass: string = this.txtClassPrefix + "sm";
     
     constructor() { }
 
