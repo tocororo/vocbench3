@@ -354,17 +354,17 @@ export class ProjectGroupsManagerComponent {
     }
 
     private syncInverseOfNarrower(): Observable<any> {
-        if (this.broaderProps.length > 0) {
+        if (this.narrowerProps.length > 0) {
             this.prepareProjectAccess();
-            return this.propService.getInverseProperties(this.broaderProps).map(
+            return this.propService.getInverseProperties(this.narrowerProps).map(
                 (inverseProps: ARTURIResource[]) => {
                     this.revokeProjectAccess();
-                    inverseProps.forEach((narrowerProp: ARTURIResource) => {
-                        if (!ResourceUtils.containsNode(this.narrowerProps, narrowerProp)) { //invers is not already among the narrowerProps
-                            let broaderPropUri: string = narrowerProp.getAdditionalProperty("inverseOf");
+                    inverseProps.forEach((broaderProp: ARTURIResource) => {
+                        if (!ResourceUtils.containsNode(this.broaderProps, broaderProp)) { //invers is not already among the broaderProps
+                            let narrowerPropUri: string = broaderProp.getAdditionalProperty("inverseOf");
                             //add it at the same index of its inverse prop
-                            let idx: number = ResourceUtils.indexOfNode(this.broaderProps, new ARTURIResource(broaderPropUri));
-                            this.narrowerProps.splice(idx, 0, narrowerProp);
+                            let idx: number = ResourceUtils.indexOfNode(this.narrowerProps, new ARTURIResource(narrowerPropUri));
+                            this.broaderProps.splice(idx, 0, broaderProp);
                         }
                     });
                 }
