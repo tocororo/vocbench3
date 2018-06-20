@@ -41,11 +41,13 @@ export class ExtensionConfiguratorComponent {
 
     private onChangeExtension() {
         this.extensionUpdated.emit(this.selectedExtension);
-        this.selectedConfiguration = this.selectedExtension.configurations[0];
-        this.configurationUpdated.emit(this.selectedConfiguration);
+        if (this.selectedExtension.configurations != null) { //if extension has configurations
+            this.selectedConfiguration = this.selectedExtension.configurations[0];
+            this.configurationUpdated.emit(this.selectedConfiguration);
 
-        this.status = ExtensionConfigurationStatus.unsaved;
-        this.configStatusUpdated.emit({ status: this.status });
+            this.status = ExtensionConfigurationStatus.unsaved;
+            this.configStatusUpdated.emit({ status: this.status });
+        }
     }
 
     private onChangeConfig() {

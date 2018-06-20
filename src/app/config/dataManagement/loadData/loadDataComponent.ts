@@ -387,6 +387,7 @@ export class LoadDataComponent {
         let loaderSpec: PluginSpecification;
         let rdfLifterSpec: PluginSpecification;
         let tranformationPipeline: TransformationStep[] = [];
+        let validateImplicitlyPar: boolean = this.isValidationEnabled() ? this.validateImplicitly : null;
         
         if (this.baseURI == null || this.baseURI.trim() == "") {
             this.basicModals.alert("Load Data", "BaseURI required", "warning");
@@ -441,7 +442,7 @@ export class LoadDataComponent {
 
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.inOutService.loadRDF(this.baseURI, this.selectedImportAllowance, inputFilePar, formatPar, loaderSpec, rdfLifterSpec, 
-            JSON.stringify(tranformationPipeline), this.validateImplicitly).subscribe(
+            JSON.stringify(tranformationPipeline), validateImplicitlyPar).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.basicModals.alert("Import data", "Data imported successfully");

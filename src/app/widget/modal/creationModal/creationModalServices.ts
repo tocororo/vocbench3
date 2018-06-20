@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
-import { ARTURIResource, ARTResource, ARTLiteral } from "../../../models/ARTResources";
-import { ResViewPartition } from '../../../models/ResourceView';
-import { NewResourceCfModal, NewResourceCfModalData } from "./newResourceModal/shared/newResourceCfModal";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ARTLiteral, ARTResource, ARTURIResource } from "../../../models/ARTResources";
 import { NewPlainLiteralModal, NewPlainLiteralModalData } from "./newPlainLiteralModal/newPlainLiteralModal";
-import { NewTypedLiteralModal, NewTypedLiteralModalData } from "./newTypedLiteralModal/newTypedLiteralModal";
-import { NewConceptFromLabelModal, NewConceptFromLabelModalData } from "./newResourceModal/skos/newConceptFromLabelModal";
-import { NewConceptCfModal, NewConceptCfModalData } from "./newResourceModal/skos/newConceptCfModal";
-import { NewXLabelModalData, NewXLabelModal } from './newResourceModal/skos/newXLabelModal';
-import { NewLexiconCfModalData, NewLexiconCfModal } from './newResourceModal/ontolex/newLexiconCfModal';
+import { NewLexiconCfModal, NewLexiconCfModalData } from './newResourceModal/ontolex/newLexiconCfModal';
 import { NewOntoLexicalizationCfModal, NewOntoLexicalizationCfModalData } from './newResourceModal/ontolex/newOntoLexicalizationCfModal';
+import { NewResourceCfModal, NewResourceCfModalData } from "./newResourceModal/shared/newResourceCfModal";
 import { NewResourceWithLiteralCfModal, NewResourceWithLiteralCfModalData } from './newResourceModal/shared/newResourceWithLiteralCfModal';
+import { NewConceptCfModal, NewConceptCfModalData } from "./newResourceModal/skos/newConceptCfModal";
+import { NewConceptFromLabelModal, NewConceptFromLabelModalData } from "./newResourceModal/skos/newConceptFromLabelModal";
+import { NewXLabelModal, NewXLabelModalData } from './newResourceModal/skos/newXLabelModal';
+import { NewTypedLiteralModal, NewTypedLiteralModalData } from "./newTypedLiteralModal/newTypedLiteralModal";
 
 @Injectable()
 export class CreationModalServices {
