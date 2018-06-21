@@ -1,0 +1,86 @@
+<div class="modal-header">
+    <h3 class="modal-title">New Catalog Record</h3>
+</div>
+<div class="modal-body">
+    
+    <table class="table table-condensed table-borderless">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+            <col style="width: 1%;">
+        </colgroup>
+        <tbody>
+            <tr>
+                <td nowrap><label>Lexicalization Set:</label></td>
+                <td>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="lexicalizationSet">
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td nowrap><label>Lexicon Dataset:</label></td>
+                <td>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="lexiconDataset">
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td nowrap><label>Lexicalization Model:</label></td>
+                <td>
+                    <select class="form-control input-sm" [(ngModel)]="lexicalizationModel">
+                        <option *ngFor="let lm of lexicalModelList" [ngValue]="lm.value">{{lm.label}}</option>
+                    </select>
+                </td>
+                <td>*</td>
+            </tr>
+            <tr>
+                <td nowrap><label>Language:</label></td>
+                <td>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="language">
+                </td>
+                <td>*</td>
+            </tr>
+            <tr>
+                <td nowrap><label>References:</label></td>
+                <td>
+                    <input type="number" class="form-control input-sm" [(ngModel)]="references" min="0" step="1">
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td nowrap><label>Lexical Entries:</label></td>
+                <td>
+                    <input type="number" class="form-control input-sm" [(ngModel)]="lexicalEntries" min="0" step="1">
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td nowrap><label>Lexicalizations:</label></td>
+                <td>
+                    <input type="number" class="form-control input-sm" [(ngModel)]="lexicalizations" min="0" step="1">
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td nowrap><label>Percentage:</label></td>
+                <td>
+                    <input type="number" class="form-control input-sm" [(ngModel)]="percentage" min="0" max="1" step="0.01">
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td nowrap><label>Average number of Lexicalizations:</label></td>
+                <td>
+                    <input type="number" class="form-control input-sm" [(ngModel)]="avgNumOfLexicalizations" min="0">
+                </td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    
+</div>
+<div class="modal-footer">
+    <span class="pull-left">(*) Mandatory field</span>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

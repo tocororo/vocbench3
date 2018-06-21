@@ -7,19 +7,22 @@ import { UserForm } from "../../models/User";
     templateUrl: './inputEditableComponent.html'
 })
 export class InputEditableComponent implements OnInit {
-    @Input() value: string;
-    @Input() options: string[]; //options of select element. Used only if type = "select"
+    @Input() value: any;
     @Input() size: string = "sm"; //xs, sm (default), md, lg
-    @Input() type: string; //text (default), email, date, select
+    @Input() type: string; //text (default), email, date, number, select
+    @Input() options: string[]; //options of select element. Used only if type = "select"
+    @Input() min: number; //Useful only if type = "number"
+    @Input() max: number; //Useful only if type = "number"
+    @Input() step: number; //Useful only if type = "number"
     @Input() allowEmpty: boolean = false; //if true allow the value to be replaced with empty string
     @Input() disabled: boolean = false;
 
-    @Output() valueEdited = new EventEmitter<string>();
+    @Output() valueEdited = new EventEmitter<any>();
 
     private inputClass = "input-group input-group-";
     private inputType = "text";
     private editInProgress: boolean = false;
-    private pristineValue: string; //original input value, as backup
+    private pristineValue: any; //original input value, as backup
 
     constructor(private basicModals: BasicModalServices) { }
 
@@ -31,7 +34,7 @@ export class InputEditableComponent implements OnInit {
             this.inputClass += "sm";
         }
         //init type of input field
-        if (this.type == "email" || this.type == "date") {
+        if (this.type == "email" || this.type == "date" || this.type == "number") {
             this.inputType = this.type;
         }
 

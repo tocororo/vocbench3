@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTURIResource, ResourcePosition } from '../models/ARTResources';
-import { CatalogRecord } from "../models/Metadata";
+import { CatalogRecord, DatasetMetadata, LexicalizationSetMetadata } from "../models/Metadata";
 import { Deserializer } from '../utils/Deserializer';
 import { HttpManager } from "../utils/HttpManager";
 
@@ -57,6 +57,76 @@ export class MetadataRegistryServices {
             params.dataset = dataset;
         }
         return this.httpMgr.doPost(this.serviceName, "addDatasetVersion", params);
+    }
+
+    /**
+     * 
+     * @param dataset 
+     * @param lexicalizationModel 
+     * @param language 
+     * @param lexicalizationSet 
+     * @param lexiconDataset 
+     * @param references 
+     * @param lexicalEntries 
+     * @param lexicalizations 
+     * @param percentage 
+     * @param avgNumOfLexicalizations 
+     */
+    addEmbeddedLexicalizationSets(dataset: ARTURIResource, lexicalizationModel: ARTURIResource, language: string, 
+        lexicalizationSet?: ARTURIResource, lexiconDataset?: ARTURIResource, references?: number, lexicalEntries?: number, 
+        lexicalizations?: number, percentage?: number, avgNumOfLexicalizations?: number) {
+        console.log("[MetadataRegistryServices] addEmbeddedLexicalizationSets");
+        var params: any = {
+            dataset: dataset,
+            lexicalizationModel: lexicalizationModel,
+            language: language
+        }
+        if (lexicalizationSet != null) {
+            params.lexicalizationSet = lexicalizationSet;
+        }
+        if (lexiconDataset != null) {
+            params.lexiconDataset = lexiconDataset;
+        }
+        if (references != null) {
+            params.references = references;
+        }
+        if (lexicalEntries != null) {
+            params.lexicalEntries = lexicalEntries;
+        }
+        if (lexicalizations != null) {
+            params.lexicalizations = lexicalizations;
+        }
+        if (percentage != null) {
+            params.percentage = percentage;
+        }
+        if (avgNumOfLexicalizations != null) {
+            params.avgNumOfLexicalizations = avgNumOfLexicalizations;
+        }
+        return this.httpMgr.doPost(this.serviceName, "addEmbeddedLexicalizationSets", params);
+    }
+
+    /**
+     * 
+     * @param lexicalizationSet 
+     */
+    deleteEmbeddedLexicalizationSet(lexicalizationSet: ARTURIResource) {
+        console.log("[MetadataRegistryServices] deleteEmbeddedLexicalizationSet");
+        var params: any = {
+            lexicalizationSet: lexicalizationSet
+        }
+        return this.httpMgr.doPost(this.serviceName, "deleteEmbeddedLexicalizationSet", params);
+    }
+
+    /**
+     * 
+     * @param dataset 
+     */
+    getEmbeddedLexicalizationSets(dataset: ARTURIResource): Observable<LexicalizationSetMetadata[]> {
+        console.log("[MetadataRegistryServices] getEmbeddedLexicalizationSets");
+        var params: any = {
+            dataset: dataset
+        }
+        return this.httpMgr.doGet(this.serviceName, "getEmbeddedLexicalizationSets", params);
     }
 
     /**
@@ -124,6 +194,18 @@ export class MetadataRegistryServices {
         console.log("[MetadataRegistryServices] getCatalogRecords");
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getCatalogRecords", params);
+    }
+
+    /**
+     * 
+     * @param dataset 
+     */
+    getDatasetMetadata(dataset: ARTURIResource): Observable<DatasetMetadata> {
+        console.log("[MetadataRegistryServices] getDatasetMetadata");
+        var params: any = {
+            dataset: dataset
+        }
+        return this.httpMgr.doGet(this.serviceName, "getDatasetMetadata", params);
     }
 
     /**

@@ -3,9 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MetadataManagementComponent } from "../config/dataManagement/metadata/metadataManagementComponent";
 import { DatasetMetadataComponent } from "../config/dataManagement/metadata/metadataRegistry/datasetMetadataComponent";
+import { LexicalizationSetMetadataComponent } from '../config/dataManagement/metadata/metadataRegistry/lexicalizationSetMetadataComponent';
 import { MetadataRegistryComponent } from "../config/dataManagement/metadata/metadataRegistry/metadataRegistryComponent";
 import { NewCatalogRecordModal } from '../config/dataManagement/metadata/metadataRegistry/newCatalogRecordModal';
 import { NewDatasetVersionModal } from '../config/dataManagement/metadata/metadataRegistry/newDatasetVersionModal';
+import { NewEmbeddedLexicalizationModal } from '../config/dataManagement/metadata/metadataRegistry/newEmbeddedLexicalizationModal';
 import { metadataRouting } from "../config/dataManagement/metadata/metadataRoutes";
 import { MetadataVocabulariesComponent } from "../config/dataManagement/metadata/metadataVocabularies/metadataVocabulariesComponent";
 import { ImportOntologyModal } from '../config/dataManagement/metadata/namespacesAndImports/importOntologyModal';
@@ -23,13 +25,17 @@ import { SharedModule } from './sharedModule';
         MetadataManagementComponent,
         MetadataVocabulariesComponent,
         NamespacesAndImportsComponent,
-        MetadataRegistryComponent, DatasetMetadataComponent,
+        MetadataRegistryComponent, DatasetMetadataComponent, LexicalizationSetMetadataComponent,
         ImportTreeComponent, ImportTreeNodeComponent,
         //modals
-        ImportOntologyModal, PrefixNamespaceModal, OntologyMirrorModal, NewCatalogRecordModal, NewDatasetVersionModal
+        ImportOntologyModal, PrefixNamespaceModal, OntologyMirrorModal, NewCatalogRecordModal,
+        NewDatasetVersionModal, NewEmbeddedLexicalizationModal
     ],
     exports: [],
     providers: [],
-    entryComponents: [ImportOntologyModal, PrefixNamespaceModal, OntologyMirrorModal, NewCatalogRecordModal, NewDatasetVersionModal]
+    entryComponents: [
+        ImportOntologyModal, PrefixNamespaceModal, OntologyMirrorModal, NewCatalogRecordModal, 
+        NewDatasetVersionModal, NewEmbeddedLexicalizationModal
+    ]
 })
 export class MetadataModule { }

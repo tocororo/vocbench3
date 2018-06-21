@@ -21,13 +21,16 @@
                 <tr>
                     <td><label>Dereferenciation System:</label></td>
                     <td>
-                        <input-editable type="select" [options]="dereferenciationValues" [value]="dereferenciationNormalized" (valueEdited)="updateDerefSystem($event)"></input-editable>
+                        <input-editable type="select" [options]="dereferenciationValues" [value]="dereferenciationNormalized"
+                            (valueEdited)="updateDerefSystem($event)" [disabled]="!dataset">
+                        </input-editable>
                     </td>
                 </tr>
                 <tr>
                     <td><label>SPARQL Endpoint:</label></td>
                     <td>
-                        <input-editable [value]="dataset?.sparqlEndpoint" (valueEdited)="updateSparqlEndpoint($event)" [disabled]="!dataset" allowEmpty="true">
+                        <input-editable [value]="dataset?.sparqlEndpoint" (valueEdited)="updateSparqlEndpoint($event)" 
+                            [disabled]="!dataset" allowEmpty="true">
                         </input-editable>
                     </td>
                 </tr>
