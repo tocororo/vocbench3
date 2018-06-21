@@ -53,12 +53,6 @@ export class LexicalizationSetMetadataComponent {
         }
     }
 
-    //TODO update when services will be available
-
-    // private updateLexicalizationSet(newValue: string) {
-        
-    // }
-
     private updateLexiconDataset(newValue: string) {
         if (newValue != this.lexiconDataset) {
             if (!ResourceUtils.testIRI(newValue)) {

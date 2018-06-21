@@ -179,12 +179,12 @@ export class MetadataRegistryServices {
      * Deletes a dataset version
      * @param dataset 
      */
-    deleteDatasetVersions(dataset: ARTURIResource) {
-        console.log("[MetadataRegistryServices] deleteDatasetVersions");
+    deleteDatasetVersion(dataset: ARTURIResource) {
+        console.log("[MetadataRegistryServices] deleteDatasetVersion");
         var params: any = {
             dataset: dataset,
         }
-        return this.httpMgr.doPost(this.serviceName, "deleteDatasetVersions", params);
+        return this.httpMgr.doPost(this.serviceName, "deleteDatasetVersion", params);
     }
 
     /**

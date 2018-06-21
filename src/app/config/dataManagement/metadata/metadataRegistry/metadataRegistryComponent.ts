@@ -93,7 +93,7 @@ export class MetadataRegistryComponent {
         );
     }
 
-    private deletCatalogRecord() {
+    private deleteCatalogRecord() {
         this.metadataRegistryService.deleteCatalogRecord(new ARTURIResource(this.selectedCatalog.identity)).subscribe(
             stResp => {
                 this.initCatalogRecords();
@@ -120,7 +120,7 @@ export class MetadataRegistryComponent {
     }
 
     private deleteDatasetVersion() {
-        this.metadataRegistryService.deleteDatasetVersions(new ARTURIResource(this.selectedVersion.identity)).subscribe(
+        this.metadataRegistryService.deleteDatasetVersion(new ARTURIResource(this.selectedVersion.identity)).subscribe(
             stResp => {
                 this.initCatalogRecords();
             }
