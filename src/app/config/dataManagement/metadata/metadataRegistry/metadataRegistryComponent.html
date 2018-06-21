@@ -69,7 +69,7 @@
                     </div>
                 </div>
                 <!-- Embedded lex sets -->
-                <div class="subPanel vbox" style="margin-left: 4px;">
+                <div class="subPanel vbox blockingDivHost" style="margin-left: 4px;">
                     <div class="subPanel-heading">
                         <label style="flex: 1;">Embedded Lexicalization Set:</label>
                         <div class="btn-group btn-group-xs" role="group">
@@ -93,6 +93,14 @@
                             [lexicalizationSetMetadata]="ls" [dataset]="selectedCatalog?.abstractDataset"
                             (click)="selectedLexicalizationSet = ls" [ngClass]="{ activePanel : ls == selectedLexicalizationSet }">
                         </lexicalization-set-metadata>
+                    </div>
+
+                    <div #blockDiv class="blockingDiv" style="display:none">
+                        <div class="loadingDiv">
+                            <div>
+                                <p>Loading...</p><img src="../../../../../assets/images/loading.gif" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

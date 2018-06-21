@@ -1,14 +1,15 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource, ResourceUtils } from "../../../../models/ARTResources";
 import { CatalogRecord, DatasetMetadata, LexicalizationSetMetadata } from "../../../../models/Metadata";
 import { MetadataRegistryServices } from "../../../../services/metadataRegistryServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { UIUtils } from "../../../../utils/UIUtils";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { NewCatalogRecordModal } from "./newCatalogRecordModal";
 import { NewDatasetVersionModal, NewDatasetVersionModalData } from "./newDatasetVersionModal";
-import { NewEmbeddedLexicalizationModalData, NewEmbeddedLexicalizationModal } from "./newEmbeddedLexicalizationModal";
+import { NewEmbeddedLexicalizationModal, NewEmbeddedLexicalizationModalData } from "./newEmbeddedLexicalizationModal";
 
 @Component({
     selector: "metadata-registry-component",
@@ -17,6 +18,8 @@ import { NewEmbeddedLexicalizationModalData, NewEmbeddedLexicalizationModal } fr
     styles: [`.activePanel { border: 2px solid #cde8ff; border-radius: 6px; }`]
 })
 export class MetadataRegistryComponent {
+
+    @ViewChild('blockDiv') lexSetBlockDivElement: ElementRef;
 
     private catalogs: CatalogRecord[];
     private selectedCatalog: CatalogRecord;
@@ -138,11 +141,13 @@ export class MetadataRegistryComponent {
     }
 
     private assessLexicalizationModel() {
+        UIUtils.startLoadingDiv(this.lexSetBlockDivElement.nativeElement);
         this.metadataRegistryService.assessLexicalizationModel(new ARTURIResource(this.selectedCatalog.abstractDataset.identity)).subscribe(
             stResp => {
+                UIUtils.stopLoadingDiv(this.lexSetBlockDivElement.nativeElement);
                 this.initEmbeddedLexicalizationSets();
             }
-        )
+        );
     }
 
     private addEmbeddedLexicalizationSet() {
@@ -164,7 +169,7 @@ export class MetadataRegistryComponent {
             stResp => {
                 this.initEmbeddedLexicalizationSets();
             }
-        )
+        );
     }
 
 

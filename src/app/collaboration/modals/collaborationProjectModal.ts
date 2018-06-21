@@ -1,11 +1,10 @@
-import { Component, ViewChild, ElementRef } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { CollaborationServices } from "../../services/collaborationServices";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { UIUtils } from "../../utils/UIUtils";
-import { VBContext } from "../../utils/VBContext";
 import { VBCollaboration } from "../../utils/VBCollaboration";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "collaboration-proj-modal",

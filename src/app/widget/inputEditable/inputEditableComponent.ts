@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { BasicModalServices } from "../modal/basicModal/basicModalServices";
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { UserForm } from "../../models/User";
+import { BasicModalServices } from "../modal/basicModal/basicModalServices";
 
 @Component({
     selector: 'input-editable',
