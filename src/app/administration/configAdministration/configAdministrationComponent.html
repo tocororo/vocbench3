@@ -101,8 +101,22 @@
                                     <label>Mail from password:</label>
                                 </td>
                                 <td>
-                                    <input *ngIf="emailConfig.mailSmtpAuth=='false'" class="form-control input-sm" disabled>
-                                    <input *ngIf="emailConfig.mailSmtpAuth=='true'" class="form-control input-sm" [(ngModel)]="emailConfig.mailFromPassword">
+                                    <input *ngIf="emailConfig.mailSmtpAuth=='false'; else authBlock" class="form-control input-sm" disabled>
+                                    <ng-template #authBlock>
+                                        <div class="input-group input-group-sm">
+                                            <input *ngIf="!showPwd" type="password" class="form-control" [(ngModel)]="emailConfig.mailFromPassword">
+                                            <input *ngIf="showPwd" class="form-control" [(ngModel)]="emailConfig.mailFromPassword">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" [ngClass]="{ active : showPwd }" (click)="showPwd = !showPwd">
+                                                    <span *ngIf="!showPwd" class="glyphicon glyphicon-eye-close"></span>
+                                                    <span *ngIf="showPwd" class="glyphicon glyphicon-eye-open"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+
+
+                                        <!-- <input class="form-control input-sm" [(ngModel)]="emailConfig.mailFromPassword"> -->
+                                    </ng-template>
                                 </td>
                             </tr>
                             <tr>

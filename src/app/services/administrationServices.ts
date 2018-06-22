@@ -40,8 +40,8 @@ export class AdministrationServices {
      * @param mailSmtpPort 
      * @param mailSmtpAuth 
      * @param mailFromAddress 
-     * @param mailFromPassword 
      * @param mailFromAlias 
+     * @param mailFromPassword 
      */
     updateEmailConfig(mailSmtpHost: string, mailSmtpPort: string, mailSmtpAuth: string,
         mailFromAddress: string, mailFromAlias: string, mailFromPassword?: string) {
@@ -54,7 +54,7 @@ export class AdministrationServices {
             mailFromAlias: mailFromAlias
         }
         if (mailFromPassword != null) {
-            params.mailFromAddress = mailFromPassword
+            params.mailFromPassword = mailFromPassword
         }
         return this.httpMgr.doPost(this.serviceName, "updateEmailConfig", params);
     }
