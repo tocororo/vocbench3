@@ -44,6 +44,7 @@ export class MetadataRegistryComponent {
                 this.catalogs = catalogs;
                 this.selectedCatalog = null;
                 this.selectedVersion = null;
+                this.lexicalizationSets = [];
                 //if catalogToSelect has been provided, select it
                 if (catalogToSelect != null) {
                     this.catalogs.forEach(c => {
@@ -132,8 +133,10 @@ export class MetadataRegistryComponent {
      */
 
     private initEmbeddedLexicalizationSets() {
+        UIUtils.startLoadingDiv(this.lexSetBlockDivElement.nativeElement);
         this.metadataRegistryService.getEmbeddedLexicalizationSets(new ARTURIResource(this.selectedCatalog.abstractDataset.identity)).subscribe(
             sets => {
+                UIUtils.stopLoadingDiv(this.lexSetBlockDivElement.nativeElement);
                 this.lexicalizationSets = sets;
                 this.selectedLexicalizationSet = null;
             }
