@@ -101,6 +101,13 @@
     
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="submitted && !isDataValid() || context.readOnly">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <div class="hbox">
+        <div class="hbox" style="align-items: center; margin-right: 10px;">
+            <div *ngIf="submitted && !isDataValid()" class="alert alert-danger" style="flex: 1; text-align: left; padding: 5px">
+                {{errorMsg}}
+            </div>
+        </div>
+        <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="context.readOnly">Ok</button>
+        <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    </div>
 </div>
