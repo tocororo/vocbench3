@@ -151,4 +151,8 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
         this.bindingsMap = bindings;
     }
 
+    private onDescriptionChange() {
+        this.savedStatus.emit(false);
+    }
+
 }

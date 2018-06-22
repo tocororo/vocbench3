@@ -4,7 +4,7 @@ import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTNode, ResourceUtils, SortAttribute } from "../../models/ARTResources";
 import { Configuration, ConfigurationComponents, ConfigurationProperty } from "../../models/Configuration";
 import { SettingsProp } from "../../models/Plugins";
-import { VariableBindings } from "../../models/Sparql";
+import { VariableBindings, BindingTypeEnum } from "../../models/Sparql";
 import { ConfigurationsServices } from "../../services/configurationsServices";
 import { SearchServices } from "../../services/searchServices";
 import { YasguiComponent } from "../../sparql/yasguiComponent";
@@ -29,6 +29,8 @@ export class CustomSearchModal implements ModalComponent<CustomSearchModalData> 
 
     private parameterization: VariableBindings;
     private bindingsMap: Map<string, ARTNode>;
+
+    private staticParameterization: boolean = true; //tells if the parameterization has only assigned values (no parameters to bind). Useful in UI.
 
     private query: string;
     private inferred: boolean = false;
@@ -70,6 +72,12 @@ export class CustomSearchModal implements ModalComponent<CustomSearchModalData> 
                         );
                     } else if (properties[i].name == "variableBindings") {
                         this.parameterization = properties[i].value;
+
+                        for (let par in this.parameterization) {
+                            if (this.parameterization[par].bindingType != BindingTypeEnum.assignment) {
+                                this.staticParameterization = false; //there is at least one binding not of assignment type (so to assign)
+                            }
+                        }
                     } else if (properties[i].name == "description") {
                         this.description = properties[i].value;
                     }

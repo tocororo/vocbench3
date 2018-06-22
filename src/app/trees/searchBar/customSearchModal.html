@@ -15,6 +15,10 @@
             {{description}}
         </div>
 
+        <div *ngIf="staticParameterization && !detailsOn" class="alert alert-warning" style="margin-bottom: 4px;">
+            This search has no parameters so can only be run as is.
+        </div>
+
         <query-param-form [bindings]="parameterization" (update)="onVarBindingsUpdate($event)" [configurable]="false" 
             [mode]="detailsOn ? 'sparql' : 'search'"></query-param-form>
 

@@ -19,7 +19,7 @@
             (paramsChange)="onParametrizationsChange($event)"></query-param-form>
         <div class="hbox" style="margin-top: 4px; align-items: center; flex: initial;">
             <label style="margin-right: 4px;">Description:</label>
-            <textarea class="form-control input-sm" style="resize: none" rows="3" [(ngModel)]="description"></textarea>
+            <textarea class="form-control input-sm" style="resize: none" rows="3" [(ngModel)]="description" (ngModelChange)="onDescriptionChange()"></textarea>
         </div>
     </div>
 
