@@ -52,7 +52,27 @@ export class ResViewUtils {
         ResViewPartition.superproperties,
         ResViewPartition.topconceptof,
         ResViewPartition.types
-    ]
+    ];
+
+    /**
+     * partitions where add external resource functionality is enabled.
+     */
+    public static addExternalResourcePartition: ResViewPartition[] = [
+        ResViewPartition.broaders,
+        ResViewPartition.classaxioms,
+        ResViewPartition.disjointProperties,
+        ResViewPartition.domains,
+        ResViewPartition.equivalentProperties,
+        ResViewPartition.facets,
+        ResViewPartition.labelRelations,
+        ResViewPartition.members,
+        ResViewPartition.properties, //how to determine if range is literal?
+        ResViewPartition.ranges,
+        ResViewPartition.schemes,
+        ResViewPartition.superproperties,
+        ResViewPartition.topconceptof,
+        ResViewPartition.types
+    ];
 
 }
 
@@ -70,4 +90,10 @@ export enum PropertyFacetsEnum {
     reflexive = "reflexive",
     irreflexive = "irreflexive",
     transitive = "transitive"
+}
+
+export enum AddAction {
+    default = "default",
+    manually = "manually",
+    remote = "remote"
 }

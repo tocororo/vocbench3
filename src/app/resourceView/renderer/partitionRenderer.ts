@@ -1,12 +1,12 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { ARTResource, ARTNode, ARTURIResource, ARTPredicateObjects, ResAttribute, ResourceUtils, ARTBNode } from "../../models/ARTResources";
-import { ResViewPartition, ResViewUtils } from "../../models/ResourceView";
-import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
-import { VBContext } from "../../utils/VBContext";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { ResourcesServices } from "../../services/resourcesServices";
+import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute, ResourceUtils } from "../../models/ARTResources";
+import { AddAction, ResViewPartition, ResViewUtils } from "../../models/ResourceView";
 import { CustomFormsServices } from "../../services/customFormsServices";
+import { ResourcesServices } from "../../services/resourcesServices";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { BrowseExternalResourceModalReturnData } from "../resViewModals/browseExternalResourceModal";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 
 @Component({
@@ -80,13 +80,15 @@ export abstract class PartitionRenderer {
     /**
      * Listener of add event fired by "+" or "add value (manually)" buttons (manually parameter true)
      */
-    private addHandler(predicate?: ARTURIResource, manually?: boolean) {
+    private addHandler(predicate?: ARTURIResource, action?: AddAction) {//manually becomes type: "default"|manuelly|remote
         if (!predicate) {
             this.getPredicateToEnrich().subscribe(
                 predicate => {
                     if (predicate) { //if not canceled
-                        if (manually) {
+                        if (action == AddAction.manually) {
                             this.addManually(predicate, true);
+                        } else if (action == AddAction.remote) {
+                            this.addExternal(predicate, true);
                         } else {
                             this.add(predicate, true);
                         }
@@ -94,8 +96,10 @@ export abstract class PartitionRenderer {
                 }
             )
         } else {
-            if (manually) {
+            if (action == AddAction.manually) {
                 this.addManually(predicate, false);
+            } else if (action == AddAction.remote) {
+                this.addExternal(predicate, false);
             } else {
                 this.add(predicate, false);
             }
@@ -147,6 +151,21 @@ export abstract class PartitionRenderer {
                         }
                     }
                 )
+            },
+            () => {}
+        );
+    }
+
+    private isAddExteranlResourceAllowed() {
+        return ResViewUtils.addExternalResourcePartition.indexOf(this.partition) != -1;
+    }
+
+    private addExternal(predicate: ARTURIResource, propChangeable: boolean) {
+        this.resViewModals.browseExternalResource("Select exteral resource", predicate, propChangeable).then(
+            (data: BrowseExternalResourceModalReturnData) => {
+                this.resourcesService.addValue(this.resource, data.property, data.resource).subscribe(
+                    stResp => this.update.emit()
+                );
             },
             () => {}
         );

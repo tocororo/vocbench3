@@ -17,7 +17,10 @@
                     <span class="caret" style="margin: 0px;"></span>
                 </button>
                 <ul class="dropdown-menu pull-right">
-                    <li [ngClass]="{ disabled: isAddDisabled() }"><a (click)="addManually()">Add value (manually)</a></li>
+                    <li [ngClass]="{ disabled: isAddDisabled() }"><a (click)="addManually()">Add value manually</a></li>
+                    <li *ngIf="isAddExteranlResourceAllowed()" [ngClass]="{ disabled: isAddDisabled() }">
+                        <a (click)="addExternalValue()">Add value from another project</a>
+                    </li>
                 </ul>
             </div>
         </span>

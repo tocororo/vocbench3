@@ -1,0 +1,73 @@
+<div class="modal-header">
+    <!-- <h3 class="modal-title">{{context.title}}</h3> -->
+    <div class="hbox" style="align-items: center">
+        <h3 class="modal-title" style="flex: 1">{{context.title}}</h3>
+        <span *ngIf="enrichingProperty">
+            <button class="btn btn-default btn-xs" title="Change property" (click)="changeProperty()" [disabled]="!context.propChangeable">
+                <rdf-resource [resource]="enrichingProperty"></rdf-resource>
+            </button>
+        </span>
+    </div>
+</div>
+<div class="modal-body vbox" style="height:70vh;">
+
+    <table class="table table-condensed table-borderless">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td><label>Project:</label></td>
+                <td>
+                    <select class="form-control input-xs" [(ngModel)]="project" (ngModelChange)="onProjectChange()">
+                        <option *ngFor="let p of projectList" [ngValue]="p">{{p.getName()}}</option>
+                    </select>
+                </td>
+            </tr>
+            <tr *ngIf="project">
+                <td><label>Type:</label></td>
+                <td>
+                    <select class="form-control input-xs" [(ngModel)]="activeView" (ngModelChange)="onAlignTypeChanged()">
+                        <option value="cls">Class</option>
+                        <option value="individual">Individual</option>
+                        <option value="property">Property</option>
+                        <option *ngIf="isProjectSKOS()" value="concept">Concept</option>
+                        <option *ngIf="isProjectSKOS()" value="conceptScheme">ConceptScheme</option>
+                        <option *ngIf="isProjectSKOS()" value="skosCollection">Collection</option>
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div *ngIf="project" class="vbox">
+
+        <!-- following components allow to browse external projects classes, concepts, schemes, propertyes
+        or individuals, and they are rendered based on the resource role -->
+        <class-tree-panel *ngIf="activeView=='cls'" (nodeSelected)="onResourceSelected($event)" [editable]="false">
+        </class-tree-panel>
+                
+        <concept-tree-panel *ngIf="activeView=='concept'" [schemeChangeable]="true" [schemes]="schemes" [editable]="false"
+            (nodeSelected)="onResourceSelected($event)" (schemeChanged)="onSchemeChanged()">
+        </concept-tree-panel>
+                
+        <property-tree-panel *ngIf="activeView=='property'" [editable]="false" (nodeSelected)="onResourceSelected($event)">
+        </property-tree-panel>
+            
+        <scheme-list-panel *ngIf="activeView=='conceptScheme'" [editable]="false" (nodeSelected)="onResourceSelected($event)">
+        </scheme-list-panel>
+
+        <collection-tree-panel *ngIf="activeView=='skosCollection'"  [editable]="false" (nodeSelected)="onResourceSelected($event)">
+        </collection-tree-panel>
+        
+        <class-individual-tree *ngIf="activeView=='individual'" [schemes]="schemes" [editable]="false" (nodeSelected)="onResourceSelected($event)">
+        </class-individual-tree>
+
+    </div>
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkClickable()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

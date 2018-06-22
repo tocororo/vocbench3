@@ -13,7 +13,10 @@
             </button>
             <ul class="dropdown-menu pull-right">
                 <li *ngIf="isAddManuallyAllowed()" [ngClass]="{ disabled: isAddDisabled() }">
-                    <a (click)="addManually()">Add value (manually)</a>
+                    <a (click)="addManually()">Add value manually</a>
+                </li>
+                <li *ngIf="isAddExteranlResourceAllowed()" [ngClass]="{ disabled: isAddDisabled() }">
+                    <a (click)="addExternalValue()">Add value from another project</a>
                 </li>
                 <li [ngClass]="{ disabled: isDeleteDisabled() }"><a (click)="removeAllValues()">Delete all values</a></li>
             </ul>

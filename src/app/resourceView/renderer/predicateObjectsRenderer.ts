@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, ResourceUtils } from "../../models/ARTResources";
-import { ResViewPartition, ResViewUtils } from "../../models/ResourceView";
-import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator"
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute, ResourceUtils } from "../../models/ARTResources";
+import { AddAction, ResViewPartition, ResViewUtils } from "../../models/ResourceView";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 
 @Component({
     selector: "pred-obj-renderer",
@@ -18,7 +18,7 @@ export class PredicateObjectsRenderer {
     @Input() readonly: boolean;
     @Input() rendering: boolean;
     @Input() partition: ResViewPartition;
-    @Output() add: EventEmitter<boolean> = new EventEmitter<boolean>();//boolean parameter: true if add canually, true or null add existing
+    @Output() add: EventEmitter<AddAction> = new EventEmitter<AddAction>();
     @Output() remove: EventEmitter<ARTNode> = new EventEmitter<ARTResource>(); //if the event doesn't contain the node, it means "delete all"
     @Output() edit: EventEmitter<ARTNode> = new EventEmitter<ARTResource>(); //require the parent partition renderer to edit the value
     @Output() update = new EventEmitter();
@@ -42,13 +42,19 @@ export class PredicateObjectsRenderer {
      * @param predicate property to enrich.
      */
     private addValue() {
-        this.add.emit();
+        this.add.emit(AddAction.default);
     }
     private isAddManuallyAllowed() {
         return ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
     }
     private addManually() {
-        this.add.emit(true);
+        this.add.emit(AddAction.manually);
+    }
+    private addExternalValue() {
+        this.add.emit(AddAction.remote);
+    }
+    private isAddExteranlResourceAllowed() {
+        return ResViewUtils.addExternalResourcePartition.indexOf(this.partition) != -1;
     }
     /**
      * Removes an object related to the given predicate.

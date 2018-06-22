@@ -13,8 +13,8 @@ import { FormRepresentationsPartitionRenderer } from '../resourceView/renderer/i
 import { ImportsPartitionRenderer } from '../resourceView/renderer/impl/importsPartitionRenderer';
 import { LabelRelationsPartitionRenderer } from '../resourceView/renderer/impl/labelRelationsPartitionRenderer';
 import { LexicalFormsPartitionRenderer } from '../resourceView/renderer/impl/lexicalFormsPartitionRenderer';
-import { LexicalSensesPartitionRenderer } from '../resourceView/renderer/impl/lexicalSensesPartitionRenderer';
 import { LexicalizationsPartitionRenderer } from '../resourceView/renderer/impl/lexicalizationsPartitionRenderer';
+import { LexicalSensesPartitionRenderer } from '../resourceView/renderer/impl/lexicalSensesPartitionRenderer';
 import { MembersOrderedPartitionRenderer } from '../resourceView/renderer/impl/membersOrderedPartitionRenderer';
 import { MembersPartitionRenderer } from '../resourceView/renderer/impl/membersPartitionRenderer';
 import { NotesPartitionRenderer } from '../resourceView/renderer/impl/notesPartitionRenderer';
@@ -28,8 +28,16 @@ import { SuperPropertiesPartitionRenderer } from '../resourceView/renderer/impl/
 import { TopConceptsPartitionRenderer } from '../resourceView/renderer/impl/topConceptsPartitionRenderer';
 import { TypesPartitionRenderer } from '../resourceView/renderer/impl/typesPartitionRenderer';
 import { PredicateObjectsRenderer } from '../resourceView/renderer/predicateObjectsRenderer';
+import { ResourceRenameComponent } from '../resourceView/resourceRenameComponent';
+import { ResourceViewComponent } from '../resourceView/resourceViewComponent';
+import { ResourceViewContextMenu } from '../resourceView/resourceViewCtxMenu';
+import { ResourceViewModal } from '../resourceView/resourceViewModal';
+import { ResourceViewPanelComponent } from '../resourceView/resourceViewPanel/resourceViewPanelComponent';
+import { ResourceViewSplittedComponent } from '../resourceView/resourceViewPanel/resourceViewSplittedComponent';
+import { ResourceViewTabbedComponent } from '../resourceView/resourceViewPanel/resourceViewTabbedComponent';
 import { AddManuallyValueModal } from '../resourceView/resViewModals/addManuallyValueModal';
 import { AddPropertyValueModal } from '../resourceView/resViewModals/addPropertyValueModal';
+import { BrowseExternalResourceModal } from '../resourceView/resViewModals/browseExternalResourceModal';
 import { ClassListCreatorModal } from '../resourceView/resViewModals/classListCreatorModal';
 import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
 import { DataRangeEditorModal } from '../resourceView/resViewModals/dataRangeEditorModal';
@@ -39,13 +47,6 @@ import { ResViewModalServices } from '../resourceView/resViewModals/resViewModal
 import { ResViewSettingsModal } from '../resourceView/resViewModals/resViewSettingsModal';
 import { EditableResourceComponent } from '../resourceView/resViewResources/editableResourceComponent';
 import { ReifiedResourceComponent } from '../resourceView/resViewResources/reifiedResourceComponent';
-import { ResourceRenameComponent } from '../resourceView/resourceRenameComponent';
-import { ResourceViewComponent } from '../resourceView/resourceViewComponent';
-import { ResourceViewContextMenu } from '../resourceView/resourceViewCtxMenu';
-import { ResourceViewModal } from '../resourceView/resourceViewModal';
-import { ResourceViewPanelComponent } from '../resourceView/resourceViewPanel/resourceViewPanelComponent';
-import { ResourceViewSplittedComponent } from '../resourceView/resourceViewPanel/resourceViewSplittedComponent';
-import { ResourceViewTabbedComponent } from '../resourceView/resourceViewPanel/resourceViewTabbedComponent';
 import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from "./treeAndListModule";
 
@@ -89,7 +90,8 @@ import { TreeAndListModule } from "./treeAndListModule";
         TypesPartitionRenderer,
         //modals
         ClassListCreatorModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal,
-        DataRangeEditor, ResViewSettingsModal, AddManuallyValueModal, PropertyChainCreatorModal
+        DataRangeEditor, ResViewSettingsModal, AddManuallyValueModal, PropertyChainCreatorModal,
+        BrowseExternalResourceModal
     ],
     exports: [
         ResourceViewPanelComponent, ResourceViewModal, ResourceViewComponent
@@ -97,7 +99,8 @@ import { TreeAndListModule } from "./treeAndListModule";
     providers: [ResViewModalServices],
     entryComponents: [
         ClassListCreatorModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal, 
-        ResourceViewModal, ResViewSettingsModal, AddManuallyValueModal, PropertyChainCreatorModal
+        ResourceViewModal, ResViewSettingsModal, AddManuallyValueModal, PropertyChainCreatorModal,
+        BrowseExternalResourceModal
     ]
 })
 export class ResourceViewModule { }

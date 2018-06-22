@@ -5,6 +5,7 @@ import { CustomFormModal, CustomFormModalData } from "../../customForms/customFo
 import { ARTBNode, ARTResource, ARTURIResource } from '../../models/ARTResources';
 import { AddManuallyValueData, AddManuallyValueModal } from "./addManuallyValueModal";
 import { AddPropertyValueModal, AddPropertyValueModalData } from "./addPropertyValueModal";
+import { BrowseExternalResourceModal, BrowseExternalResourceModalData } from './browseExternalResourceModal';
 import { ClassListCreatorModal, ClassListCreatorModalData } from "./classListCreatorModal";
 import { DataRangeEditorModal, DataRangeEditorModalData } from "./dataRangeEditorModal";
 import { InstanceListCreatorModal, InstanceListCreatorModalData } from "./instanceListCreatorModal";
@@ -123,6 +124,22 @@ export class ResViewModalServices {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         return this.modal.open(ResViewSettingsModal, overlayConfig).result;
+    }
+
+    /**
+     * 
+     * @param title 
+     * @param property 
+     * @param propChangeable 
+     */
+    browseExternalResource(title: string, property?: ARTURIResource, propChangeable?: boolean) {
+        var modalData = new BrowseExternalResourceModalData(title, property, propChangeable);
+        const builder = new BSModalContextBuilder<BrowseExternalResourceModalData>(
+            modalData, undefined, BrowseExternalResourceModalData
+        );
+        builder.keyboard(null);
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(BrowseExternalResourceModal, overlayConfig).result;
     }
 
 }
