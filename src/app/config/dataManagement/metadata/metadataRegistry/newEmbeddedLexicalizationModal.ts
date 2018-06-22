@@ -73,7 +73,7 @@ export class NewEmbeddedLexicalizationModal implements ModalComponent<NewEmbedde
             return;
         }
 
-        this.metadataRegistryService.addEmbeddedLexicalizationSets(new ARTURIResource(this.context.catalogRecordIdentity), 
+        this.metadataRegistryService.addEmbeddedLexicalizationSet(new ARTURIResource(this.context.catalogRecordIdentity), 
             new ARTURIResource(this.lexicalizationModel), this.language, lexicalizationSetPar, lexiconDatasetPar, 
             this.references, this.lexicalEntries, this.lexicalizations, this.percentage, this.avgNumOfLexicalizations).subscribe(
             stReps => {

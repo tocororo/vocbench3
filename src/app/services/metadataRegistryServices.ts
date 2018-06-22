@@ -72,10 +72,10 @@ export class MetadataRegistryServices {
      * @param percentage 
      * @param avgNumOfLexicalizations 
      */
-    addEmbeddedLexicalizationSets(dataset: ARTURIResource, lexicalizationModel: ARTURIResource, language: string, 
+    addEmbeddedLexicalizationSet(dataset: ARTURIResource, lexicalizationModel: ARTURIResource, language: string, 
         lexicalizationSet?: ARTURIResource, lexiconDataset?: ARTURIResource, references?: number, lexicalEntries?: number, 
         lexicalizations?: number, percentage?: number, avgNumOfLexicalizations?: number) {
-        console.log("[MetadataRegistryServices] addEmbeddedLexicalizationSets");
+        console.log("[MetadataRegistryServices] addEmbeddedLexicalizationSet");
         var params: any = {
             dataset: dataset,
             lexicalizationModel: lexicalizationModel,
@@ -102,7 +102,7 @@ export class MetadataRegistryServices {
         if (avgNumOfLexicalizations != null) {
             params.avgNumOfLexicalizations = avgNumOfLexicalizations;
         }
-        return this.httpMgr.doPost(this.serviceName, "addEmbeddedLexicalizationSets", params);
+        return this.httpMgr.doPost(this.serviceName, "addEmbeddedLexicalizationSet", params);
     }
 
     /**

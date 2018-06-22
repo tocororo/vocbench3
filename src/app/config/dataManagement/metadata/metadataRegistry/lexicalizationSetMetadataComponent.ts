@@ -142,7 +142,7 @@ export class LexicalizationSetMetadataComponent {
                     lexiconDatasetPar = new ARTURIResource(this.lexiconDataset);
                 }
 
-                this.metadataRegistryService.addEmbeddedLexicalizationSets(new ARTURIResource(this.dataset.identity), 
+                this.metadataRegistryService.addEmbeddedLexicalizationSet(new ARTURIResource(this.dataset.identity), 
                     new ARTURIResource(lexicalizationModelPar), this.language, new ARTURIResource(this.lexicalizationSetMetadata.identity),
                     lexiconDatasetPar, this.references, this.lexicalEntries, this.lexicalizations, this.percentage, this.avgNumOfLexicalizations).subscribe(
                     stResp => {
