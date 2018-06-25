@@ -39,6 +39,8 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     private converterUri: string;
     private converterQName: string;
 
+    private memoize: boolean = false;
+
     private multiple: boolean;
 
     private rangeTypes: HeaderRangeType[] = [
@@ -208,6 +210,10 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         )
     }
 
+    private isConverterRandom(): boolean {
+        return this.converterUri == "http://art.uniroma2.it/coda/contracts/randIdGen";
+    }
+
     ok(event: Event) {
         if (this.multiple) {
             this.basicModals.confirm("Edit header", "There are multiple header with the same name (" + this.headerName 
@@ -235,7 +241,8 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
             }
         }
 
-        this.s2rdfService.updateHeader(this.headerId, this.headerResource, rangeTypePar, rangeClassPar, this.converterQName, this.converterType, applyToAll).subscribe(
+        this.s2rdfService.updateHeader(this.headerId, this.headerResource, rangeTypePar, rangeClassPar, 
+            this.converterQName, this.converterType, this.memoize, applyToAll).subscribe(
             stResp => {
                 this.dialog.close();
             }

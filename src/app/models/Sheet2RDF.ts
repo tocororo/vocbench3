@@ -5,20 +5,17 @@ export class HeaderStruct {
     public id: string;
     public name: string;
     public isMultiple: boolean;
-
     public resource: ARTURIResource;
-
     public lang: string;
-
     public range: {
         type: RDFTypesEnum;
         cls: ARTURIResource;
     }
-
     public converter: {
         uri: string;
         type: RDFCapabilityType;
     };
+    public memoize: boolean;
 }
 
 export class TableContent {

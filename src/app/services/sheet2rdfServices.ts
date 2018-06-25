@@ -66,6 +66,7 @@ export class Sheet2RDFServices {
                 type: json.converter.type
             },
             isMultiple: json.isMultiple,
+            memoize: json.memoize,
 
             range: {
                 type: json.range.type,
@@ -76,7 +77,7 @@ export class Sheet2RDFServices {
     }
 
     updateHeader(headerId: string, headerResource: ARTURIResource, rangeType?: RDFTypesEnum, rangeClass?: ARTURIResource,
-        converterMention?: string, converterType?: RDFCapabilityType, applyToAll?: boolean) {
+        converterMention?: string, converterType?: RDFCapabilityType, memoize?: boolean, applyToAll?: boolean) {
         console.log("[Sheet2RDFServices] updateHeader");
         var params: any = {
             headerId: headerId,
@@ -91,6 +92,7 @@ export class Sheet2RDFServices {
         if (converterMention != null && converterType != null) {
             params.converterMention = converterMention;
             params.converterType = converterType;
+            params.memoize = memoize;
         }
         if (applyToAll != null) {
             params.applyToAll = applyToAll;
