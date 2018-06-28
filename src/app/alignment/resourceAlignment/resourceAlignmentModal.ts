@@ -6,7 +6,7 @@ import { BrowseExternalResourceModalReturnData } from "../../resourceView/resVie
 import { ResViewModalServices } from "../../resourceView/resViewModals/resViewModalServices";
 import { AlignmentServices } from "../../services/alignmentServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { AssistedSearchModal } from "./assistedSearchModal";
+import { AssistedSearchModal, AssistedSearchModalData } from "./assistedSearchModal";
 import { MapleServices } from "../../services/mapleServices";
 import { VBContext } from "../../utils/VBContext";
 
@@ -14,7 +14,7 @@ export class ResourceAlignmentModalData extends BSModalContext {
     /**
      * @param resource the resource to align
      */
-    constructor(public resource: ARTResource) {
+    constructor(public resource: ARTURIResource) {
         super();
     }
 }
@@ -89,7 +89,10 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
     }
 
     private openAssistedSearchModal() {
-        const builder = new BSModalContextBuilder<any>();
+        var modalData = new AssistedSearchModalData(this.context.resource);
+        const builder = new BSModalContextBuilder<AssistedSearchModalData>(
+            modalData, undefined, AssistedSearchModalData
+        );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         this.modal.open(AssistedSearchModal, overlayConfig).result;
     }

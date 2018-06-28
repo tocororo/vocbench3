@@ -3,7 +3,7 @@
         <span>&#9662;</span>
     </button>
     <ul class="dropdown-menu">
-        <li [ngClass]="{ disabled : isAlignDisabled() }">
+        <li *ngIf="resource.isURIResource()" [ngClass]="{ disabled : isAlignDisabled() }">
             <a (click)="alignResource()">Align with external resource</a>
         </li>
         <li *ngIf="isURIResource()" [ngClass]="{ disabled : isSetDeprecatedDisabled() }">

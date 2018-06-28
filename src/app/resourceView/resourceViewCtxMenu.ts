@@ -42,7 +42,7 @@ export class ResourceViewContextMenu {
      * aligned object
      */
     private openAlignmentModal() {
-        var modalData = new ResourceAlignmentModalData(this.resource);
+        var modalData = new ResourceAlignmentModalData(<ARTURIResource>this.resource); //cast since alignment is available only for URI
         const builder = new BSModalContextBuilder<ResourceAlignmentModalData>(
             modalData, undefined, ResourceAlignmentModalData
         );
