@@ -189,28 +189,6 @@ export class ProjectGroupsManagerComponent {
         );
     }
 
-    private updateBaseBroaderProp(propURI: string) {
-        let prop: ARTURIResource = new ARTURIResource(propURI, null, RDFResourceRolesEnum.objectProperty);
-        
-        this.prepareProjectAccess();
-        this.resourceService.getResourcePosition(prop).subscribe(
-            position => {
-                this.revokeProjectAccess();
-                if (position.isLocal()) {
-                    this.baseBroaderProp = prop.getURI();
-                    this.updateGroupSetting(Properties.pref_concept_tree_base_broader_prop, this.baseBroaderProp);
-                } else {
-                    this.basicModals.alert("Error", "Wrong URI: no resource with URI " + prop.getNominalValue() + " exists in the current project", "error");
-                    //temporarly reset the broader property and the restore it (in order to trigger the change detection editable-input)
-                    let oldBroaderProp = this.baseBroaderProp;
-                    this.baseBroaderProp = null;
-                    setTimeout(() => this.baseBroaderProp = oldBroaderProp);
-                }
-            }
-        );
-    }
-
-
     /**
      * BROADER/NARROWER PROPRETIES
      */

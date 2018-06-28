@@ -39,6 +39,7 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
     ]
 
     private userGroup: UsersGroup;
+    private userGroupBaseBroaderProp: string;
 
     constructor(public dialog: DialogRef<BSModalContext>, private resourceService: ResourcesServices, private propService: PropertyServices,
         private prefService: PreferencesSettingsServices, private vbProp: VBProperties, 
@@ -64,6 +65,14 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
         this.visualization = conceptTreePref.visualization;
 
         this.userGroup = VBContext.getProjectUserBinding().getGroup();
+        //in case of userGroup get the baseBroaderProp of the group
+        if (this.userGroup != null) { 
+            this.prefService.getPGSettings([Properties.pref_concept_tree_base_broader_prop], this.userGroup.iri, VBContext.getWorkingProject()).subscribe(
+                prefs => {
+                    this.userGroupBaseBroaderProp = prefs[Properties.pref_concept_tree_base_broader_prop];
+                }
+            );
+        }
     }
 
     private initBroaderProps(broadersPropsPref: string[]) {
@@ -99,30 +108,15 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
      */
 
     private changeBaseBroaderProperty() {
-        this.browsingModals.browsePropertyTree("Select root class", [SKOS.broader]).then(
+        let rootBroader: ARTURIResource = SKOS.broader;
+        if (this.userGroup != null) {
+            rootBroader = new ARTURIResource(this.userGroupBaseBroaderProp);
+        }
+        this.browsingModals.browsePropertyTree("Select root class", [rootBroader]).then(
             (prop: ARTURIResource) => {
                 this.baseBroaderProp = prop.getURI();
             },
             () => {}
-        );
-    }
-
-    private updateBaseBroaderProp(propURI: string) {
-        let prop: ARTURIResource = new ARTURIResource(propURI, null, RDFResourceRolesEnum.objectProperty);
-        //check if clsURI exist
-        this.resourceService.getResourcePosition(prop).subscribe(
-            position => {
-                if (position.isLocal()) {
-                    this.baseBroaderProp = prop.getURI();
-                    // this.broaderProperty = prop;
-                } else {
-                    this.basicModals.alert("Error", "Wrong URI: no resource with URI " + prop.getNominalValue() + " exists in the current project", "error");
-                    //temporarly reset the broader property and the restore it (in order to trigger the change detection editable-input)
-                    let oldBroaderProp = this.baseBroaderProp;
-                    this.baseBroaderProp = null;
-                    setTimeout(() => this.baseBroaderProp = oldBroaderProp);
-                }
-            }
         );
     }
 

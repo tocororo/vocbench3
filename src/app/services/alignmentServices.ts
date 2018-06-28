@@ -5,6 +5,7 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortA
 import { Deserializer } from "../utils/Deserializer";
 import { HttpServiceContext } from "../utils/HttpManager";
 import { AlignmentCell } from "../alignment/alignmentValidation/AlignmentCell";
+import { SearchMode } from '../models/Properties';
 
 @Injectable()
 export class AlignmentServices {
@@ -385,6 +386,34 @@ export class AlignmentServices {
             c.setComment(comment);
         }
         return c;
+    }
+
+
+    /**
+     * 
+     * @param inputRes 
+     * @param datasetIRI 
+     * @param rolesArray the sole role of the inputRes
+     * @param langs 
+     * @param searchModeList 
+     */
+    searchResources(inputRes: ARTURIResource, datasetIRI: ARTURIResource, rolesArray: RDFResourceRolesEnum[], 
+        langs?: string[], searchModeList?: SearchMode[]): Observable<ARTURIResource[]> {
+
+        console.log("[AlignmentServices] searchResources");
+        var params: any = {
+            inputRes: inputRes,
+            datasetIRI: datasetIRI,
+            rolesArray: rolesArray
+        };
+        if (langs != null) {
+            params.langs = langs;
+        }
+        if (langs != null) {
+            params.searchModeList = searchModeList;
+        }
+        return this.httpMgr.doGet(this.serviceName, "searchResources", params);
+
     }
 
 }

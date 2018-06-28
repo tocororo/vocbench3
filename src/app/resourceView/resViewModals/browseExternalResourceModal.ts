@@ -24,6 +24,12 @@ export class BrowseExternalResourceModalData extends BSModalContext {
     }
 }
 
+/**
+ * This modal is used to browse and select a resource belonging to an external project.
+ * This is used when aligning a resource, or when enriching a property for a resource 
+ * (only in this case a property is passed to the modal)
+ */
+
 @Component({
     selector: "browse-external-resource-modal",
     templateUrl: "./browseExternalResourceModal.html",
@@ -51,19 +57,21 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
         this.rootProperty = this.context.property;
         this.enrichingProperty = this.rootProperty;
 
-        this.checkPropertyRangeResource(this.enrichingProperty).subscribe(
-            allowsResource => {
-                if (!allowsResource) {
-                    this.basicModals.alert("Invalid property range", this.enrichingProperty.getShow() +
-                        " range doesn't admit resources. You cannot enrich this property with a remote value", "warning");
-                    this.cancel();
+        if (this.enrichingProperty != null) {
+            this.checkPropertyRangeResource(this.enrichingProperty).subscribe(
+                allowsResource => {
+                    if (!allowsResource) {
+                        this.basicModals.alert("Invalid property range", this.enrichingProperty.getShow() +
+                            " range doesn't admit resources. You cannot enrich this property with a remote value", "warning");
+                        this.cancel();
+                    }
                 }
-            }
-        );
+            );
+        }
 
         this.projService.listProjects(VBContext.getWorkingProject(), true, true).subscribe(
             projects => {
-                //keep only the projects (different from the current) compliant with the resource role to align
+                //keep only the projects different from the current
                 for (var i = 0; i < projects.length; i++) {
                     if (projects[i].isOpen() && projects[i].getName() != VBContext.getWorkingProject().getName()) {
                         this.projectList.push(projects[i])
@@ -82,8 +90,8 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
                     this.project = p;
                 }
             });
+            this.onProjectChange();
         }
-        this.onProjectChange();
     }
 
     private restoreLastType() {

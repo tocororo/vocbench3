@@ -19,8 +19,7 @@ export class ProjectsAdministrationComponent {
     private projUsersAspect: string = "Project-Users management";
     private projGroupsAspect: string = "Project-Groups management";
     private projSettingsAspect: string = "Project settings";
-    private aspectSelectors: string[] = [this.projUsersAspect, this.projGroupsAspect, this.projSettingsAspect];
-    private selectedAspect = this.aspectSelectors[0];
+    private selectedAspect: string;
 
     constructor(private projectService: ProjectServices) { }
 
@@ -39,16 +38,37 @@ export class ProjectsAdministrationComponent {
             AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_ROLE_MANAGEMENT)) { 
             this.selectedProject = VBContext.getWorkingProject();
         }
+
+        if (this.isProjUserManagementAuthorized()) {
+            this.selectedAspect = this.projUsersAspect;
+        } else if (this.isProjGroupManagementAuthorized()) {
+            this.selectedAspect = this.projGroupsAspect;
+        } else {
+            this.selectedAspect = this.projSettingsAspect;
+        }
     }
 
-    private changeAspect(aspect: string) {
-        this.selectedAspect = aspect;
-    }
+    // private changeAspect(aspect: string) {
+    //     this.selectedAspect = aspect;
+    // }
 
     private selectProject(project: Project) {
         if (this.selectedProject != project) {
             this.selectedProject = project;
         }
+    }
+
+    private isProjUserManagementAuthorized(): boolean {
+        return (
+            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_ROLE_MANAGEMENT) &&
+            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_GROUP_MANAGEMENT)
+        );
+    }
+    private isProjGroupManagementAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.USERS_GROUPS_MANAGEMENT);
+    }
+    private isProjSettingsAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_PROJECT_MANAGEMENT);
     }
 
 }

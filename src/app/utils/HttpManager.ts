@@ -409,9 +409,10 @@ export class HttpManager {
          * "statusText": "", "headers": {}, "type": 3, "url": null } 
          */
         if (err.status == 0 && !err.ok && err.statusText == "" && err.type == 3 && err.url == null) {
-            this.basicModals.alert("Error", "Connection with ST server has failed; please check your internet connection", "error");
+            let errorMsg = "Connection with ST server (" + this.serverhost + ") has failed; please check your internet connection";
+            this.basicModals.alert("Error", errorMsg, "error");
             error.name = "ConnectionError";
-            error.message = "Connection with ST server has failed; please check your internet connection";
+            error.message = errorMsg;
         } else if (err.status == 401 || err.status == 403) {
             error.name = "UnauthorizedRequestError";
             error.message = err._body;

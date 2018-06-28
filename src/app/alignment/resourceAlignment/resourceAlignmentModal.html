@@ -11,14 +11,11 @@
         </colgroup>
         <tbody>
             <tr>
-                <td><label>Value:</label></td>
+                <td nowrap><label>Source Resource:</label></td>
                 <td>
                     <div class="input-sm" style="border: 1px solid #ccc; background-color: #eee; opacity: 1; padding: 2px 10px;">
-                        <rdf-resource *ngIf="alignedObject" [resource]="alignedObject"></rdf-resource>
+                        <rdf-resource [resource]="context.resource"></rdf-resource>
                     </div>
-                </td>
-                <td>
-                    <button class="btn btn-default btn-sm" (click)="browse()">Browse</button>
                 </td>
             </tr>
             <tr>
@@ -29,10 +26,30 @@
                     </select>
                 </td>
                 <td>
-                    <div style="display: flex; align-items: center" title="Show all mapping properties">
-                        <span>All prop:</span>
-                        <input type="checkbox" style="margin-left: 3px;" [checked]="allPropCheck" 
-                            (change)="onAllPropCheckChange($event.target.checked)">
+                    <div class="checkbox" title="Show all mapping properties">
+                        <label style="white-space: nowrap">
+                            <input type="checkbox" [(ngModel)]="allPropCheck" (ngModelChange)="initPropList()">
+                            All prop.
+                        </label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap><label>Target Resource:</label></td>
+                <td>
+                    <div class="input-sm" style="border: 1px solid #ccc; background-color: #eee; opacity: 1; padding: 2px 10px;">
+                        <rdf-resource *ngIf="alignedObject" [resource]="alignedObject"></rdf-resource>
+                    </div>
+                </td>
+                <td>
+                    <div class="btn-group btn-group-sm" role="group" title="Pick external resource">
+                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a (click)="browseLocalProjects()">Browse local projects</a></li>
+                            <li><a (click)="assistedSearch()">Assisted search</a></li>
+                        </ul>
                     </div>
                 </td>
             </tr>

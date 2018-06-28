@@ -1,11 +1,14 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from 'ngx-modialog';
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { DialogRef, ModalComponent, OverlayConfig } from 'ngx-modialog';
+import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { BrowseExternalResourceModalReturnData } from "../../resourceView/resViewModals/browseExternalResourceModal";
 import { ResViewModalServices } from "../../resourceView/resViewModals/resViewModalServices";
 import { AlignmentServices } from "../../services/alignmentServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { AssistedSearchModal } from "./assistedSearchModal";
+import { MapleServices } from "../../services/mapleServices";
+import { VBContext } from "../../utils/VBContext";
 
 export class ResourceAlignmentModalData extends BSModalContext {
     /**
@@ -29,7 +32,8 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
     private alignedObject: ARTURIResource;
     
     constructor(public dialog: DialogRef<ResourceAlignmentModalData>, private alignService: AlignmentServices,
-        private resViewModals: ResViewModalServices, private basicModals: BasicModalServices) {
+        private mapleService: MapleServices, private resViewModals: ResViewModalServices, private basicModals: BasicModalServices, 
+        private modal: Modal) {
         this.context = dialog.context;
     }
     
@@ -51,13 +55,43 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
         this.initPropList();
     }
     
-    private browse() {
+    private browseLocalProjects() {
         this.resViewModals.browseExternalResource("Select remote resource").then(
             (data: BrowseExternalResourceModalReturnData) => { 
                 this.alignedObject = data.resource; 
             },
             () => { this.alignedObject = null; }
         );
+    }
+
+    private assistedSearch() {
+        this.mapleService.checkProjectMetadataAvailability().subscribe(
+            available => {
+                if (available) {
+                    this.openAssistedSearchModal();
+                } else {
+                    this.basicModals.confirm("Missing Project Metadata", "In order to exploit this feature, the system needs VoID/LIME metadata"
+                        + " for the current project (" + VBContext.getWorkingProject().getName() + "). This metadata is currently not available."
+                        + " Do you want to let the system proceed to the creation of them? If you refuse it will not be possible to use the "
+                        + " assisted-search feature.").then(
+                        confirm => {
+                            this.mapleService.profileProject().subscribe(
+                                resp => {
+                                    this.openAssistedSearchModal();
+                                }
+                            );
+                        },
+                        () => {} //user didn't confirm, don't do nothing
+                    );
+                }
+            }
+        );
+    }
+
+    private openAssistedSearchModal() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        this.modal.open(AssistedSearchModal, overlayConfig).result;
     }
     
     private isOkClickable(): boolean {

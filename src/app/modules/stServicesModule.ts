@@ -17,6 +17,7 @@ import { IcvServices } from "../services/icvServices";
 import { IndividualsServices } from "../services/individualsServices";
 import { InputOutputServices } from "../services/inputOutputServices";
 import { ManchesterServices } from "../services/manchesterServices";
+import { MapleServices } from '../services/mapleServices';
 import { MetadataRegistryServices } from "../services/metadataRegistryServices";
 import { MetadataServices } from "../services/metadataServices";
 import { OntoLexLemonServices } from "../services/ontoLexLemonServices";
@@ -27,8 +28,8 @@ import { ProjectServices } from "../services/projectServices";
 import { PropertyServices } from "../services/propertyServices";
 import { RefactorServices } from "../services/refactorServices";
 import { RepositoriesServices } from "../services/repositoriesServices";
-import { ResourceViewServices } from "../services/resourceViewServices";
 import { ResourcesServices } from "../services/resourcesServices";
+import { ResourceViewServices } from "../services/resourceViewServices";
 import { SearchServices } from "../services/searchServices";
 import { ServicesServices } from "../services/servicesServices";
 import { SettingsServices } from "../services/settingsServices";
@@ -63,6 +64,7 @@ import { VersionsServices } from "../services/versionsServices";
         IndividualsServices,
         InputOutputServices,
         ManchesterServices,
+        MapleServices,
         MetadataServices,
         MetadataRegistryServices,
         OntoLexLemonServices,

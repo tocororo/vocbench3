@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MappingPropertySelectionModal } from '../alignment/alignmentValidation/alignmentValidationModals/mappingPropertySelectionModal';
 import { ValidationReportModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationReportModal';
 import { ValidationSettingsModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationSettingsModal';
+import { AssistedSearchModal } from '../alignment/resourceAlignment/assistedSearchModal';
 import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceAlignmentModal';
 import { CollaborationModalServices } from "../collaboration/collaborationModalService";
 import { IssueListModal } from "../collaboration/issueListModal";
@@ -73,7 +74,7 @@ import { UserModule } from "./userModule";
         PromptModal, PromptPrefixedModal, PromptPropertiesModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal, LexicalEntryListModal, LexiconListModal,
-        ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal,
+        ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, AssistedSearchModal,
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
         ConverterPickerModal, SignaturePickerModal, StoreConfigurationModal, LoadConfigurationModal, ResourcePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
@@ -97,7 +98,7 @@ import { UserModule } from "./userModule";
         PromptModal, PromptPrefixedModal, PromptPropertiesModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal, LexicalEntryListModal, LexiconListModal,
-        ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal,
+        ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, AssistedSearchModal,
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
         ConverterPickerModal, SignaturePickerModal, StoreConfigurationModal, LoadConfigurationModal, ResourcePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,

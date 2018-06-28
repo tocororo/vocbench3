@@ -7,6 +7,7 @@ import { VBContext } from "./VBContext";
 enum Actions {
     ADMINISTRATION_PROJECT_MANAGEMENT, //generic for management of project
     ADMINISTRATION_ROLE_MANAGEMENT, //generic for management of roles
+    ADMINISTRATION_USER_GROUP_MANAGEMENT, //generic for management of user-groups
     ADMINISTRATION_USER_ROLE_MANAGEMENT, //generic for management of user-roles
     ALIGNMENT_ADD_ALIGNMENT,
     ALIGNMENT_LOAD_ALIGNMENT,
@@ -121,6 +122,7 @@ enum Actions {
     SKOS_REMOVE_TOP_CONCEPT,
     SPARQL_EVALUATE_QUERY,
     SPARQL_EXECUTE_UPDATE,
+    USERS_GROUPS_MANAGEMENT,
     VALIDATION, //generic for the validation operation
     VERSIONS_CREATE_VERSION_DUMP,
     VERSIONS_GET_VERSIONS
@@ -137,6 +139,7 @@ export class AuthorizationEvaluator {
     private static actionAuthGoalMap: { [key: number ]: string } = {
         [Actions.ADMINISTRATION_PROJECT_MANAGEMENT] : 'auth(pm(project,_), "CRUDV").',
         [Actions.ADMINISTRATION_ROLE_MANAGEMENT] : 'auth(rbac(_,_), "CRUDV").',
+        [Actions.ADMINISTRATION_USER_GROUP_MANAGEMENT] : '',//TODO
         [Actions.ADMINISTRATION_USER_ROLE_MANAGEMENT] : 'auth(rbac(user,_), "CRUDV").',
         [Actions.ALIGNMENT_ADD_ALIGNMENT] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', alignment), "C").',
         [Actions.ALIGNMENT_LOAD_ALIGNMENT] : 'auth(rdf(resource, alignment), "R").',
@@ -252,6 +255,7 @@ export class AuthorizationEvaluator {
         [Actions.SKOS_REMOVE_TOP_CONCEPT] : 'auth(rdf(concept, schemes), "D").',
         [Actions.SPARQL_EVALUATE_QUERY] : 'auth(rdf(sparql), "R").',
         [Actions.SPARQL_EXECUTE_UPDATE] : 'auth(rdf(sparql), "U").',
+        [Actions.USERS_GROUPS_MANAGEMENT] : '',//TODO
         [Actions.VALIDATION] : 'auth(rdf, "V").',
         [Actions.VERSIONS_CREATE_VERSION_DUMP] : 'auth(rdf(dataset, version), "C").',
         [Actions.VERSIONS_GET_VERSIONS] : 'auth(rdf(dataset, version), "R").',

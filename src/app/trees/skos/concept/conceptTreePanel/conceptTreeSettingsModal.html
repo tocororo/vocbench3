@@ -18,10 +18,14 @@
                 <label style="white-space: nowrap; margin: 0px 4px;">
                     Base broader property:
                 </label>
-                <input-editable *ngIf="baseBroaderProp" [value]="baseBroaderProp" (valueEdited)="updateBaseBroaderProp($event)" style="flex: 1;"></input-editable>
-                <button class="btn btn-default btn-sm" style="line-height: 1; margin-left: 4px;" (click)="changeBaseBroaderProperty()">
-                    <img src="../../../../../assets/images/icons/res/propObject.png"/>
-                </button>
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" [ngModel]="baseBroaderProp" readonly>
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" (click)="changeBaseBroaderProperty()">
+                            <img src="../../../../../assets/images/icons/res/propObject.png"/>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="panel panel-default vbox">
