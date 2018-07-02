@@ -208,7 +208,12 @@ export class ResourceViewComponent {
 
         var resourcePartition: any = this.resViewResponse.resource;
         this.resource = Deserializer.createRDFResource(resourcePartition);
-        if (this.resource.getRole() == RDFResourceRolesEnum.mention) {
+
+        let resPosition: string = this.resource.getAdditionalProperty(ResAttribute.RESOURCE_POSITION);
+        if (
+            this.resource.getRole() == RDFResourceRolesEnum.mention && //mention is also the default role (assigned when nature is empty)
+            (resPosition != null && !resPosition.startsWith('local:')) //so for setting readonly to true, check also if the res position is not local
+        ) {
             this.readonly = true;
         }
 
