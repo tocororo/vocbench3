@@ -49,9 +49,6 @@ export class CustomForm implements ControlValueAccessor {
                 this.formFields = form
                 /*initialize formEntries in order to adapt it to the view set checked at true to
                 all formEntries. (It wouldn't be necessary for all the entries but just for those optional*/
-                for (var i = 0; i < this.formFields.length; i++) {
-                    this.formFields[i]['checked'] = true;
-                }
                 this.propagateChange(this.formFields);
             },
             (err: Error) => {

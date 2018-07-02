@@ -1,14 +1,14 @@
-import { Component, ViewChild, ElementRef } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTResource, ARTURIResource } from "../../../../../models/ARTResources";
+import { CustomFormValue } from "../../../../../models/CustomForms";
 import { CustomFormsServices } from "../../../../../services/customFormsServices";
 import { SkosServices } from "../../../../../services/skosServices";
+import { VBProperties } from "../../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
-import { CustomForm, FormField, CustomFormValue } from "../../../../../models/CustomForms";
-import { ARTLiteral, ARTURIResource, ARTResource } from "../../../../../models/ARTResources";
-import { VBProperties } from "../../../../../utils/VBProperties";
+import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
 
 export class NewConceptFromLabelModalData extends BSModalContext {
     constructor(

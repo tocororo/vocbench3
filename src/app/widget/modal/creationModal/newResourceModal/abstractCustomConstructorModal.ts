@@ -1,10 +1,9 @@
 import { Component } from "@angular/core";
-import { ModalComponent } from "ngx-modialog";
-import { CustomFormsServices } from "../../../../services/customFormsServices"
-import { BasicModalServices } from "../../basicModal/basicModalServices"
-import { BrowsingModalServices } from "../../browsingModal/browsingModalServices"
-import { CustomForm, FormField } from "../../../../models/CustomForms"
-import { ARTURIResource } from "../../../../models/ARTResources"
+import { ARTURIResource } from "../../../../models/ARTResources";
+import { CustomForm, FormField } from "../../../../models/CustomForms";
+import { CustomFormsServices } from "../../../../services/customFormsServices";
+import { BasicModalServices } from "../../basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../browsingModal/browsingModalServices";
 
 @Component({
     selector: "custom-constructor",
@@ -82,10 +81,13 @@ export abstract class AbstractCustomConstructorModal {
      * Collect the data in the custom form fields and return them as json map object
      */
     collectCustomFormData(): any {
-        var entryMap: any = {}; //{key: svalue, key: value,...}
+        var entryMap: {[key: string]: any} = {}; //{key: svalue, key: value,...}
         for (var i = 0; i < this.formFields.length; i++) {
-            var entry = this.formFields[i];
-            if (entry['checked']) {
+            let entry = this.formFields[i];
+            let value: any = entry['value'];
+            let empty: boolean = false;
+            try { if (value.trim() == "") { empty = true; } } catch (err) {} //entry value could be not a string, so the check is in a try-catch
+            if (!empty) {
                 //add the entry only if not already in
                 var alreadyIn: boolean = false;
                 for (var key in entryMap) {
@@ -95,7 +97,7 @@ export abstract class AbstractCustomConstructorModal {
                     }
                 }
                 if (!alreadyIn) {
-                    entryMap[entry.getUserPrompt()] = entry['value'];
+                    entryMap[entry.getUserPrompt()] = value;
                 }
             }
         }
@@ -131,15 +133,11 @@ export abstract class AbstractCustomConstructorModal {
      */
     isCustomFormDataValid(): boolean {
         for (var i = 0; i < this.formFields.length; i++) {
-            var entry = this.formFields[i];
-            var emptyString :boolean = false;
-            //entry value could be not a string, so the check is in a try-catch
-            try {
-                if (entry['value'].trim() == "") {
-                    emptyString = true;
-                }
-            } catch (err) {}
-            if (entry['checked'] && (entry['value'] == null || emptyString)) {
+            let entry = this.formFields[i];
+            let value: any = entry['value'];
+            let empty: boolean = false;
+            try { if (value.trim() == "") { empty = true; } } catch (err) {} //entry value could be not a string, so the check is in a try-catch
+            if (entry.isMandatory() && (value == null || empty)) {
                 return false;
             }
         }

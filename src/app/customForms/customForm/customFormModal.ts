@@ -1,12 +1,10 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "ngx-modialog";
-import {FormField} from "../../models/CustomForms";
-import {RDFResourceRolesEnum} from "../../models/ARTResources";
-import {VBContext} from "../../utils/VBContext";
-import {BrowsingModalServices} from "../../widget/modal/browsingModal/browsingModalServices";
-import {BasicModalServices} from "../../widget/modal/basicModal/basicModalServices";
-import {CustomFormsServices} from "../../services/customFormsServices";
+import { Component } from "@angular/core";
+import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { FormField } from "../../models/CustomForms";
+import { CustomFormsServices } from "../../services/customFormsServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 
 export class CustomFormModalData extends BSModalContext {
     /**
@@ -40,14 +38,20 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
         this.context = dialog.context;
     }
 
+    /**
+     * Valid if all the mandatory fields are not empty
+     */
     private isInputValid(): boolean {
         var customFormValid: boolean = true;
         if (this.formFields != null) {
             for (var i = 0; i < this.formFields.length; i++) {
-                var entry = this.formFields[i];
-                var emptyString :boolean = false;
-                try { if (entry['value'].trim() == "") { emptyString = true; } } catch (err) {} //entry value could be not a string, so the check is in a try-catch
-                if (entry['checked'] && (entry['value'] == null || emptyString)) {
+                let entry = this.formFields[i];
+                let value: any = entry['value'];
+
+                let empty: boolean = false;
+                try { if (value.trim() == "") { empty = true; } } catch (err) {} //entry value could be not a string, so the check is in a try-catch
+
+                if (entry.isMandatory() && (value == null || empty)) {
                     customFormValid = false;
                 }
             }
@@ -56,10 +60,15 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
     }
 
     ok(event: Event) {
-        var entryMap: any = {}; //{key: svalue, key: value,...}
+        var entryMap: {[key: string]: any} = {}; //{key: value, key: value,...}
         for (var i = 0; i < this.formFields.length; i++) {
             var entry = this.formFields[i];
-            if (entry['checked']) {
+
+            let value: any = entry['value'];
+            let empty: boolean = false;
+            try { if (value.trim() == "") { empty = true; } } catch (err) {} //entry value could be not a string, so the check is in a try-catch
+
+            if (!empty) {
                 //add the entry only if not already in
                 var alreadyIn: boolean = false;
                 for (var key in entryMap) {
@@ -69,7 +78,7 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
                     }
                 }
                 if (!alreadyIn) {
-                    entryMap[entry.getUserPrompt()] = entry['value'];
+                    entryMap[entry.getUserPrompt()] = value;
                 }
             }
         }

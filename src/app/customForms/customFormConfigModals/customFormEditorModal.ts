@@ -175,7 +175,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
         }
 
         if (this.cfId == null) { //check only in create mode
-            if (this.cfShortId == null || !this.cfShortId.match(/^[a-zA-Z0-9]+$/i)) { //invalid character
+            if (this.cfShortId == null || !this.cfShortId.match(/^[a-zA-Z0-9.]+$/i)) { //invalid character
                 this.errorMsg = "The CustomForm ID is not valid (it may be empty or contain invalid characters). Please fix it."
                 valid = false;
             }
@@ -196,8 +196,8 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
         //update CRE only if ref is valid
         this.cfService.validatePearl(this.ref, this.type).subscribe(
             valid => {
-                if (this.description == undefined) { //set empty definition if it is not provided (prevent setting "undefined" as definition of CRE)
-                    this.description == "";
+                if (this.description == null) { //set empty definition if it is not provided (prevent setting "undefined" as definition of CRE)
+                    this.description = "";
                 }
                 //I don't distinguish between node and graph since if type is node showPropertyChain is ignored server-side
                 if (this.cfId != null) { //edit mode
