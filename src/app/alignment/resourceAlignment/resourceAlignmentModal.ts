@@ -1,14 +1,14 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent, OverlayConfig } from 'ngx-modialog';
 import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { ARTResource, ARTURIResource } from "../../models/ARTResources";
+import { ARTURIResource, ResourceUtils } from "../../models/ARTResources";
 import { BrowseExternalResourceModalReturnData } from "../../resourceView/resViewModals/browseExternalResourceModal";
 import { ResViewModalServices } from "../../resourceView/resViewModals/resViewModalServices";
 import { AlignmentServices } from "../../services/alignmentServices";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { AssistedSearchModal, AssistedSearchModalData } from "./assistedSearchModal";
 import { MapleServices } from "../../services/mapleServices";
 import { VBContext } from "../../utils/VBContext";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { AssistedSearchModal, AssistedSearchModalData } from "./assistedSearchModal";
 
 export class ResourceAlignmentModalData extends BSModalContext {
     /**
@@ -95,6 +95,18 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         this.modal.open(AssistedSearchModal, overlayConfig).result;
+    }
+
+    private enterManually() {
+        this.basicModals.prompt("Insert value manually", "IRI").then(
+            valueIRI => {
+                if (ResourceUtils.testIRI(valueIRI)) {
+                    this.alignedObject = new ARTURIResource(valueIRI);
+                } else {
+                    this.basicModals.alert("Invalid IRI", valueIRI + " is not a valid IRI", "warning");
+                }
+            }
+        );
     }
     
     private isOkClickable(): boolean {
