@@ -116,7 +116,6 @@ export class Sheet2RdfComponent {
         //for pearl
         this.pearl = "";
         this.updatePearl(this.pearl);
-        this.pearlUnsaved = false;
         this.pearlValidation = { valid: true, details: null };
         //for triples preview
         this.truncatedTriples = null;
@@ -148,6 +147,7 @@ export class Sheet2RdfComponent {
     // Updates the file to load when user change file on from filepicker
     private fileChangeEvent(file: File) {
         this.spreadsheetFile = file;
+        this.loadSpreadsheet();
     }
 
     private getHeaderCssClass(header: HeaderStruct) {
@@ -181,15 +181,12 @@ export class Sheet2RdfComponent {
      * ========================================================== */
 
     private pearl: string;
-    private pearlUnsaved: boolean = false;
     private pearlValidation: {valid: boolean, details: string} = { valid: true, details: null };
 
     private pearlValidationTimer: number;
 
     private onPearlChange(pearl: string) {
         this.pearl = pearl;
-        setTimeout(() => this.pearlUnsaved = true);
-
         //reset the previous timeout and set it again
         clearTimeout(this.pearlValidationTimer);
         this.pearlValidationTimer = window.setTimeout(() => { this.checkPearl() }, 1000);
@@ -218,15 +215,6 @@ export class Sheet2RdfComponent {
                 this.updatePearl(pearl);
             }
         )
-    }
-
-    private savePearl() {
-        this.s2rdfService.savePearl(this.pearl).subscribe(
-            stResp => {
-                this.pearlUnsaved = false;
-                this.checkPearl();
-            }
-        );
     }
 
     private checkPearl() {
@@ -269,9 +257,6 @@ export class Sheet2RdfComponent {
         this.pearl = undefined;
         setTimeout(() => {
             this.pearl = pearl;
-            // //this new setTimeout is required because codemirror component will fire immediately a "codechange" event.
-            // //so onPearlChange() that listens the event set pearlUnsaved to true.
-            // setTimeout(() => { this.pearlUnsaved = false; });
         });
     }
 
@@ -287,14 +272,7 @@ export class Sheet2RdfComponent {
     private exportFormats: RDFFormat[];
 
     private generateTriples() {
-        if (this.pearlUnsaved) {
-            this.basicModals.confirm("Unsaved pearl code", "Unsaved changes to pearl code. Are you sure to continue?", "warning").then(
-                (confirm: boolean) => {
-                    this.invokeGetTriplesPreview();
-                },
-                () => { return } //if user doesn't confirm, do not generate triples
-            );
-        } else if (this.pearlValidation != null && !this.pearlValidation.valid) {
+        if (this.pearlValidation != null && !this.pearlValidation.valid) {
             this.basicModals.alert("Invalid pearl code", "Pearl code contains error.", "warning");
             return;
         } else {
@@ -303,11 +281,15 @@ export class Sheet2RdfComponent {
     }
 
     private invokeGetTriplesPreview() {
-        this.s2rdfService.getTriplesPreview(this.maxSizePreviews).subscribe(
-            triplesPreview => {
-                this.totalTriples = triplesPreview.total;
-                this.truncatedTriples = triplesPreview.returned;
-                this.triplesPreview = triplesPreview.triples;
+        this.s2rdfService.savePearl(this.pearl).subscribe(
+            stResp => {
+                this.s2rdfService.getTriplesPreview(this.maxSizePreviews).subscribe(
+                    triplesPreview => {
+                        this.totalTriples = triplesPreview.total;
+                        this.truncatedTriples = triplesPreview.returned;
+                        this.triplesPreview = triplesPreview.triples;
+                    }
+                );
             }
         );
     }

@@ -5,8 +5,6 @@
             <div class="hbox" style="flex: initial; align-items: center;">
                 <label style="white-space: nowrap; margin-right: 4px;">Spreadsheet file:</label>
                 <file-picker (fileChanged)="fileChangeEvent($event)" [size]="'xs'" [accept]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"></file-picker>
-                <button class="btn btn-default btn-xs" style="margin-left: 4px;" (click)="loadSpreadsheet()"
-                    [disabled]="!spreadsheetFile">Load</button>
             </div>
         </div>
     </div>
@@ -21,21 +19,10 @@
                         <label>Spreadsheet preview</label>
                         <span *ngIf="truncatedRows != totalRows" style="margin-left: 5px;">(Rows: {{truncatedRows}} out of {{totalRows}})</span>
                     </span>
-                    
-                    <div class="dropdown pull-right" style="margin-left: 4px;">
-                        <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
-                            Legend <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a>
-                                    <div><span class="glyphicon glyphicon-stop unknownHeader"></span> Header with unknown or not valid associated property</div>
-                                    <div><span class="glyphicon glyphicon-stop propertyHeader"></span> Header with valid associated property</div>
-                                    <div><span class="glyphicon glyphicon-stop subjectHeader"></span> Subject header</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+
+                    <button class="btn btn-default btn-xs" (click)="generatePearl()" title="Generate Pearl" [disabled]="!tablePreview">
+                        <span class="glyphicon glyphicon-play"></span>
+                    </button>
                 </div>
                 <div class="subPanel-body vbox" style="padding: 0px; background: #eee;">
                     <table class="table scrollableContainer">
@@ -56,6 +43,22 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="subPanel-footer">
+                    <div class="dropdown pull-right dropup">
+                        <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                            Legend <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a>
+                                    <div><span class="glyphicon glyphicon-stop unknownHeader"></span> Header with unknown or not valid associated property</div>
+                                    <div><span class="glyphicon glyphicon-stop propertyHeader"></span> Header with valid associated property</div>
+                                    <div><span class="glyphicon glyphicon-stop subjectHeader"></span> Subject header</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
             <div class="sliderX" (mousedown)="onMousedownX($event);"></div>
@@ -64,25 +67,24 @@
                 <div class="subPanel-heading">
                     <label style="flex: 1;">
                         Pearl
-                        <span *ngIf="pearlUnsaved" title="Unsaved pearl code">*</span>
                     </label>
                     <span *ngIf="!pearlValidation.valid" class="glyphicon glyphicon-alert" style="margin-right: 8px; color: #d00;"
                         [title]="pearlValidation.details"></span>
-                    <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="generatePearl()" title="Generate Pearl" [disabled]="!tablePreview">
+
+                    <div class="btn-toolbar" role="toolbar">
+                        <button class="btn btn-default btn-xs" (click)="generateTriples()" title="Generate Triples" [disabled]="!pearl">
                             <span class="glyphicon glyphicon-play"></span>
                         </button>
-                        <button class="btn btn-default" (click)="savePearl()" title="Save Pearl" [disabled]="!pearlUnsaved">
-                            <span class="glyphicon glyphicon-floppy-disk"></span>
-                        </button>
-                        <!-- Workaround to show input file as simple <button> -->
-                        <input #inputFile type="file" (change)="loadPearl(inputFile.files[0])" accept=".pr, text/plain" style="display:none">
-                        <button class="btn btn-default" style="margin-left: -1px" (click)="inputFile.click()" title="Load Pearl" [disabled]="!tablePreview">
-                            <span class="glyphicon glyphicon-open"></span>
-                        </button>
-                        <button class="btn btn-default" (click)="exportPearl()" title="Export Pearl" [disabled]="!pearl">
-                            <span class="glyphicon glyphicon-save"></span>
-                        </button>
+                        <div class="btn-group btn-group-xs">
+                            <!-- Workaround to show input file as simple <button> -->
+                            <input #inputFile type="file" (change)="loadPearl(inputFile.files[0])" accept=".pr, text/plain" style="display:none">
+                            <button class="btn btn-default" style="margin-left: -1px" (click)="inputFile.click()" title="Load Pearl" [disabled]="!tablePreview">
+                                <span class="glyphicon glyphicon-open"></span>
+                            </button>
+                            <button class="btn btn-default" (click)="exportPearl()" title="Export Pearl" [disabled]="!pearl">
+                                <span class="glyphicon glyphicon-save"></span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="subPanel-body hbox">
@@ -106,21 +108,22 @@
                         <label>Generated triples preview</label>
                         <span *ngIf="truncatedTriples != totalTriples" style="margin-left: 5px;">({{truncatedTriples}} out of {{totalTriples}})</span>
                     </span>
-                    <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="generateTriples()" title="Generate Triples" [disabled]="!pearl">
-                            <span class="glyphicon glyphicon-play"></span>
-                        </button>
-                        <button class="btn btn-default" (click)="addTriples()" title="Add triples" [disabled]="!triplesPreview">
+
+                    <div class="btn-toolbar" role="toolbar">
+                        <button class="btn btn-default btn-xs" (click)="addTriples()" title="Add triples" [disabled]="!triplesPreview">
                             <span class="glyphicon glyphicon-import"></span>
                         </button>
-                    </div>
-                    <div class="dropdown pull-right" style="margin-left: 4px;">
-                        <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" [disabled]="!triplesPreview">
-                            Export as... <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li *ngFor="let f of exportFormats"><a (click)="exportTriplesAs(f)">{{f.name}}</a></li>
-                        </ul>
+
+                        <div class="btn-group btn-group-xs">
+                            <div class="dropdown pull-right">
+                                <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" [disabled]="!triplesPreview">
+                                    Export as... <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li *ngFor="let f of exportFormats"><a (click)="exportTriplesAs(f)">{{f.name}}</a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="subPanel-body vbox scrollableContainer">
