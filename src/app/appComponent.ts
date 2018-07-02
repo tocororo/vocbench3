@@ -119,10 +119,7 @@ export class AppComponent {
     }
 
     private isSheet2RdfAuthorized() {
-        return (
-            this.vbProp.getExperimentalFeaturesEnabled() &&
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SHEET_2_RDF)
-        );
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SHEET_2_RDF);
     }
 
     private isCollaborationAuthorized() {

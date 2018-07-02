@@ -28,6 +28,9 @@ export class StoreConfigurationModal implements ModalComponent<StoreConfiguratio
 
     private identifier: string;
 
+    private references: Reference[];
+    private selectedRef: Reference;
+
     constructor(public dialog: DialogRef<StoreConfigurationModalData>, private configurationsService: ConfigurationsServices) {
         this.context = dialog.context;
     }
@@ -43,7 +46,19 @@ export class StoreConfigurationModal implements ModalComponent<StoreConfiguratio
                     this.selectedScope = Reference.getRelativeReferenceScope(this.context.relativeRef);
                 }
             }
-        )
+        );
+
+        this.configurationsService.getConfigurationReferences(this.context.configurationComponent).subscribe(
+            refs => {
+                this.references = refs;
+            }
+        );
+    }
+
+    private selectReference(reference: Reference) {
+        this.selectedRef = reference;
+        this.identifier = this.selectedRef.identifier.substring(this.selectedRef.identifier.indexOf(":"));
+        this.selectedScope = this.selectedRef.getReferenceScope();
     }
 
     ok(event: Event) {

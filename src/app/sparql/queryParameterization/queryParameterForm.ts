@@ -20,6 +20,8 @@ export class QueryParameterForm {
     private bindingStructs: BindingStruct[];
     private useBindings: boolean = true;
 
+    private showDisplayName: boolean = false;
+
     constructor(private modal: Modal) { }
 
     ngOnChanges(changes: SimpleChanges) {

@@ -1,9 +1,15 @@
 <div class="subPanel vbox">
     <div *ngIf="mode=='sparql'" class="subPanel-heading">
         <label style="flex: 1">Variable bindings</label>
-        <button *ngIf="configurable" class="btn btn-xs btn-default" (click)="editParameterization()" title="Edit parameterization">
-            <span class="glyphicon glyphicon-pencil"></span>
-        </button>
+        <div class="btn-toolbar" role="toolbar">
+            <button class="btn btn-xs btn-default" [ngClass]="{ active: showDisplayName }" (click)="showDisplayName = !showDisplayName" 
+                title="Show variable bindings display name">
+                <span class="glyphicon glyphicon-eye-open"></span>
+            </button>
+            <button *ngIf="configurable" class="btn btn-xs btn-default" (click)="editParameterization()" title="Edit parameterization">
+                <span class="glyphicon glyphicon-pencil"></span>
+            </button>
+        </div>
     </div>
     <div class="subPanel-body vbox table-responsive">
         <table class="table table-condensed table-borderless">
@@ -17,12 +23,20 @@
                     <!-- In search mode the assignment should not be shown -->
                     <ng-template [ngIf]="mode=='sparql' || mode=='search' && b.bindingType != 'assignment'">
                         <td class="text-right" style="margin-right: 2px;">
-                            <label *ngIf="mode == 'sparql'; else searchModeBlock">{{b.varName}}:</label>
+                            <div *ngIf="mode == 'sparql'; then sparqlModeBlock; else searchModeBlock"></div>
+                            <ng-template #sparqlModeBlock>
+                                <ng-template [ngIf]="showDisplayName">
+                                    <label *ngIf="b.displayName">{{b.displayName}}:</label>
+                                    <label *ngIf="!b.displayName">{{b.varName}}:</label>
+                                </ng-template>
+                                <label *ngIf="!showDisplayName">{{b.varName}}:</label>
+                            </ng-template>
                             <ng-template #searchModeBlock>
                                 <label *ngIf="b.displayName">{{b.displayName}}:</label>
                                 <label *ngIf="!b.displayName">{{b.varName}}:</label>
                             </ng-template>
                         </td>
+
                         <td>
                             <ng-template [ngIf]="b.bindingType == 'assignment' && b.value">
                                 <input class="form-control input-sm" [ngModel]="b.value.toNT()" readonly>

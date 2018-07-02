@@ -30,6 +30,28 @@
         </tbody>
     </table>
 
+    <div class="panel panel-default vbox" style="margin-top: 6px;">
+        <div class="panel-body table-responsive" style="min-height: 80px;">
+            <table class="table table-condensed table-hoverable">
+                <colgroup>
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>Stored configurations</th>
+                        <th>Scope</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let ref of references" (click)="selectReference(ref)" [ngClass]="{active: selectedRef == ref}">
+                        <td>{{ref.identifier}}</td>
+                        <td>{{ref.getReferenceScope()}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!identifier">Ok</button>
