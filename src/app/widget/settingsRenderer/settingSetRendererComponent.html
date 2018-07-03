@@ -10,7 +10,19 @@
             <td style="padding: 2px 0px;">
                 <div [ngSwitch]="types[0].name">
                     <resource-picker *ngSwitchCase="'IRI'" [resource]="value[index]" [roles]="getIRIRoleConstraints()" [editable]="true"
-                        (resourceChanged)="updateIRI(index, $event)"></resource-picker>
+                        (resourceChanged)="updateValue(index, $event)">
+                    </resource-picker>
+
+                    <resource-picker *ngSwitchCase="'Resource'" [resource]="value[index]" [roles]="getIRIRoleConstraints(p)" [editable]="true"
+                        (resourceChanged)="updateValue(index, $event)">
+                    </resource-picker>
+
+                    <value-picker *ngSwitchCase="'RDFValue'" [value]="value[index]" [editable]="true" (valueChanged)="updateValue(index, $event)">
+                    </value-picker>
+
+                    <literal-picker *ngSwitchCase="'Literal'" [literal]="value[index]" (literalChanged)="updateValue(index, $event)">
+                    </literal-picker>
+
                     <textarea *ngSwitchDefault type="text" rows="1" class="form-control input-sm" style="resize: vertical" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()">
                     </textarea>
                 </div>

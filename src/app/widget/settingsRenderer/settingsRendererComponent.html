@@ -28,8 +28,18 @@
                         </div>
 
                         <resource-picker *ngSwitchCase="'IRI'" [resource]="p.value" [roles]="getIRIRoleConstraints(p)" [editable]="true"
-                            (resourceChanged)="updateIRI(p, $event)">
+                            (resourceChanged)="updateValue(p, $event)">
                         </resource-picker>
+
+                        <resource-picker *ngSwitchCase="'Resource'" [resource]="p.value" [roles]="getIRIRoleConstraints(p)" [editable]="true"
+                            (resourceChanged)="updateValue(p, $event)">
+                        </resource-picker>
+
+                        <value-picker *ngSwitchCase="'RDFValue'" [value]="p.value" [editable]="true" (valueChanged)="updateValue(p, $event)">
+                        </value-picker>
+
+                        <literal-picker *ngSwitchCase="'Literal'" [literal]="p.value" (literalChanged)="updateValue(p, $event)">
+                        </literal-picker>
 
                         <setting-set *ngSwitchCase="'Set'" [value]="p.value" [types]="p.type.typeArguments" (valueChanged)="updateSetValue(p, $event)"></setting-set>
 

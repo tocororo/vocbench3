@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ARTURIResource, RDFResourceRolesEnum } from '../../models/ARTResources';
+import { ARTURIResource, RDFResourceRolesEnum, ARTLiteral, ARTNode } from '../../models/ARTResources';
 import { SettingsPropType, SettingsPropTypeConstraint } from '../../models/Plugins';
 
 @Component({
@@ -52,8 +52,12 @@ export class SettingSetRendererComponent {
         return roles;
     }
 
-    private updateIRI(index: number, value: ARTURIResource) {
-        this.value[index] = value.toNT();
+    private updateValue(index: number, value: ARTNode) {
+        if (value == null) {
+            this.value[index] = null;
+        } else {
+            this.value[index] = value.toNT();
+        }
         this.onModelChange();
     }
 

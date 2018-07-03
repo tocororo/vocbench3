@@ -2,7 +2,7 @@ import { Component, forwardRef } from '@angular/core';
 import { Settings, SettingsProp, SettingsPropTypeConstraint } from '../../models/Plugins';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { ARTURIResource, RDFResourceRolesEnum } from '../../models/ARTResources';
+import { ARTURIResource, RDFResourceRolesEnum, ARTNode } from '../../models/ARTResources';
 
 @Component({
     selector: 'settings-renderer',
@@ -26,8 +26,12 @@ export class SettingsRendererComponent {
         this.propagateChange(this.settings);
     }
 
-    private updateIRI(prop: SettingsProp, value: ARTURIResource) {
-        prop.value = value.toNT();
+    private updateValue(prop: SettingsProp, value: ARTNode) {
+        if (value == null) {
+            prop.value = null;
+        } else {
+            prop.value = value.toNT();
+        }
         this.propagateChange(this.settings);
     }
 
