@@ -23,8 +23,17 @@
                     <literal-picker *ngSwitchCase="'Literal'" [literal]="value[index]" (literalChanged)="updateValue(index, $event)">
                     </literal-picker>
 
-                    <textarea *ngSwitchDefault type="text" rows="1" class="form-control input-sm" style="resize: vertical" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()">
+                    <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control input-sm" style="resize: vertical" [(ngModel)]="p.value">
                     </textarea>
+
+                    <div *ngSwitchDefault class="hbox" style="align-items: center; position: relative;">
+                        <textarea *ngSwitchDefault type="text" rows="1" class="form-control input-sm" 
+                            style="resize: vertical;" [(ngModel)]="p.value">
+                        </textarea>
+                        <span class="glyphicon glyphicon-warning-sign" style="position: absolute; top: 8px; right: 8px;"
+                            [title]="'This parameter has an unknown type (' + types[0].name + '). The entered value will be interpreted as a low-level JSON value.'">
+                        </span>
+                    </div>
                 </div>
             </td>
             <td style="padding: 0px;">

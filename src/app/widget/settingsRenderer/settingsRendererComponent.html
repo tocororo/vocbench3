@@ -45,8 +45,17 @@
 
                         <setting-map *ngSwitchCase="'Map'" [value]="p.value" [types]="p.type.typeArguments" (valueChanged)="updateMapValue(p, $event)"></setting-map>
 
-                        <textarea *ngSwitchDefault type="text" rows="1" class="form-control input-sm" style="resize: vertical" [(ngModel)]="p.value">
+                        <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control input-sm" style="resize: vertical" [(ngModel)]="p.value">
                         </textarea>
+
+                        <div *ngSwitchDefault class="hbox" style="align-items: center; position: relative;">
+                            <textarea *ngSwitchDefault type="text" rows="1" class="form-control input-sm" 
+                                style="resize: vertical;" [(ngModel)]="p.value">
+                            </textarea>
+                            <span class="glyphicon glyphicon-warning-sign" style="position: absolute; top: 8px; right: 8px;"
+                                [title]="'This parameter has an unknown type (' + p.type.name + '). The entered value will be interpreted as a low-level JSON value.'">
+                            </span>
+                        </div>
                     </div>
                 </ng-template>
 
