@@ -6,19 +6,17 @@
         </div>
     </div>
 </div>
-<div class="modal-body vbox" style="max-height: 75vh;">
+<div class="modal-body vbox scrollableContainer" style="max-height: 75vh;">
 
     <ng-template [ngIf]="targetPosition == 'local'">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <label>Projects</label>
             </div>
-            <div class="panel-body">
-                <div class="vbox scrollableContainer" style="border: 1px solid #ddd; max-height: 150px;">
-                    <div *ngFor="let p of projectList">
-                        <div class="listItem" [ngClass]="{ active : p == selectedProject }" (click)="selectProject(p)">
-                            {{p.getName()}}
-                        </div>
+            <div class="panel-body vbox scrollableContainer" style="max-height: 150px;">
+                <div *ngFor="let p of projectList">
+                    <div class="listItem" [ngClass]="{ active : p == selectedProject }" (click)="selectProject(p)">
+                        {{p.getName()}}
                     </div>
                 </div>
             </div>
@@ -38,13 +36,11 @@
             <div class="panel-heading">
                 <label>Remote datasets</label>
             </div>
-            <div class="panel-body">
-                <div class="vbox scrollableContainer" style="border: 1px solid #ddd; max-height: 150px;">
-                    <div *ngFor="let d of remoteDatasets">
-                        <div class="listItem" [ngClass]="{ active : d == selectedDataset }" (click)="selectDataset(d)" [title]="d.identity">
-                            <label *ngIf="d.title">{{d.title}}: </label>
-                            {{d.uriSpace}}
-                        </div>
+            <div class="panel-body vbox scrollableContainer" style="max-height: 150px;">
+                <div *ngFor="let d of remoteDatasets">
+                    <div class="listItem" [ngClass]="{ active : d == selectedDataset }" (click)="selectDataset(d)" [title]="d.identity">
+                        <label *ngIf="d.title">{{d.title}}: </label>
+                        {{d.uriSpace}}
                     </div>
                 </div>
             </div>
@@ -63,18 +59,18 @@
             <div class="panel-heading">
                 <label>Shared Lexicalization Sets</label>
             </div>
-            <div class="panel-body">
-                <table class="table table-condensed table-borderless">
+            <div class="panel-body scrollableContainer" style="max-height: 150px;">
+                <table class="table table-condensed table-borderless table-hoverable">
                     <thead>
                         <tr>
                             <th rowspan="2">Lang</th>
-                            <th colspan="2" class="text-center">
+                            <th colspan="3" class="text-center">
                                 Source project
                                 <button class="btn btn-default btn-xs" (click)="refreshSourceMetadata()">
                                     <span class="glyphicon glyphicon-refresh" [title]="'Refresh metadata of project ' + sourceProject.getName()"></span>
                                 </button>
                             </th>
-                            <th colspan="2" class="text-center">
+                            <th colspan="3" class="text-center">
                                 Target
                                 <span *ngIf="targetPosition == 'local'">
                                     project
@@ -88,8 +84,10 @@
                         <tr>
                             <th class="text-center" title="Percentage of resources that have a lexicalization in the given language">%</th>
                             <th class="text-center" title="Average number of lexicalizations">Avg</th>
+                            <th class="text-center" title="Lexicalization Model">LexModel</th>
                             <th class="text-center" title="Percentage of resources that have a lexicalization in the given language">%</th>
                             <th class="text-center" title="Average number of lexicalizations">Avg</th>
+                            <th class="text-center" title="Lexicalization Model">LexModel</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -104,8 +102,10 @@
                             </td>
                             <td class="text-center">{{sls[0].percentage}}</td>
                             <td class="text-center">{{sls[0].avgNumOfLexicalizations}}</td>
+                            <td class="text-center">{{getLexModelDisplayName(sls[0].lexicalizationModel)}}</td>
                             <td class="text-center">{{sls[1].percentage}}</td>
                             <td class="text-center">{{sls[1].avgNumOfLexicalizations}}</td>
+                            <td class="text-center">{{getLexModelDisplayName(sls[1].lexicalizationModel)}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -114,7 +114,7 @@
 
         <div class="panel panel-default" style="margin-top: 4px;">
             <div class="panel-heading">
-                <label>Search mode </label>
+                <label style="margin-right: 4px;">Search mode</label>
                 <span class="glyphicon glyphicon-info-sign" title="String match modes on which the lexicalizations comparison is based on.
                     If none is selected, 'Fuzzy' and 'Contains' are used by default"></span>
             </div>

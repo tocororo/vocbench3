@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
-import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../models/ARTResources";
-import { Deserializer } from "../utils/Deserializer";
-import { HttpServiceContext } from "../utils/HttpManager";
 import { AlignmentCell } from "../alignment/alignmentValidation/AlignmentCell";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../models/ARTResources";
 import { SearchMode } from '../models/Properties';
+import { Deserializer } from "../utils/Deserializer";
+import { HttpManager, HttpServiceContext } from "../utils/HttpManager";
 
 @Injectable()
 export class AlignmentServices {
@@ -392,27 +391,31 @@ export class AlignmentServices {
     /**
      * 
      * @param inputRes 
-     * @param datasetIRI 
-     * @param rolesArray the sole role of the inputRes
-     * @param langs 
+     * @param resourcePosition local/remote:<projectName/datasetIri>
+     * @param rolesArray the sole role of inputRes
+     * @param langToLexModel map langForTheSearch - LexModel
      * @param searchModeList 
      */
-    searchResources(inputRes: ARTURIResource, datasetIRI: ARTURIResource, rolesArray: RDFResourceRolesEnum[], 
-        langs?: string[], searchModeList?: SearchMode[]): Observable<ARTURIResource[]> {
+    searchResources(inputRes: ARTURIResource, resourcePosition: string, rolesArray: RDFResourceRolesEnum[], 
+        langToLexModel?: Map<string, ARTURIResource>, searchModeList?: SearchMode[]): Observable<ARTURIResource[]> {
 
         console.log("[AlignmentServices] searchResources");
         var params: any = {
-            inputRes: inputRes,
-            datasetIRI: datasetIRI,
+            intputRes: inputRes,
+            resourcePosition: resourcePosition,
             rolesArray: rolesArray
         };
-        if (langs != null) {
-            params.langs = langs;
+        if (langToLexModel != null) {
+            params.langToLexModel = langToLexModel;
         }
-        if (langs != null) {
+        if (searchModeList != null) {
             params.searchModeList = searchModeList;
         }
-        return this.httpMgr.doGet(this.serviceName, "searchResources", params);
+        return this.httpMgr.doGet(this.serviceName, "searchResources", params).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
 
     }
 

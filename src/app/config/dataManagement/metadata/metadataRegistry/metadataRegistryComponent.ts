@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { Observable } from "rxjs";
 import { ARTURIResource, ResourceUtils } from "../../../../models/ARTResources";
 import { CatalogRecord, DatasetMetadata, LexicalizationSetMetadata } from "../../../../models/Metadata";
 import { MetadataRegistryServices } from "../../../../services/metadataRegistryServices";
@@ -173,6 +174,21 @@ export class MetadataRegistryComponent {
                 this.initEmbeddedLexicalizationSets();
             }
         );
+    }
+
+    private deleteAllEmbeddedLexicalizationSet() {
+        let deleteFn: any[] = [];
+        this.lexicalizationSets.forEach(ls => {
+            deleteFn.push(this.metadataRegistryService.deleteEmbeddedLexicalizationSet(new ARTURIResource(ls.identity)));
+        });
+        UIUtils.startLoadingDiv(this.lexSetBlockDivElement.nativeElement);
+        Observable.forkJoin(deleteFn).subscribe(
+            resp => {
+                UIUtils.stopLoadingDiv(this.lexSetBlockDivElement.nativeElement);
+                this.initEmbeddedLexicalizationSets();
+            }
+        )
+
     }
 
 

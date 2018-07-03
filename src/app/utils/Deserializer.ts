@@ -66,6 +66,10 @@ export class Deserializer {
         if (resourcePosition != undefined) {
             node.setAdditionalProperty(ResAttribute.RESOURCE_POSITION, resourcePosition);
         }
+        var accessMethod: string = resJson[ResAttribute.ACCESS_METHOD];
+        if (accessMethod != undefined) {
+            node.setAdditionalProperty(ResAttribute.ACCESS_METHOD, accessMethod);
+        }
         var lang: string = resJson[ResAttribute.LANG];
         if (lang != undefined) {
             node.setAdditionalProperty(ResAttribute.LANG, lang);

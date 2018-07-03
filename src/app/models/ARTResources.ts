@@ -290,6 +290,7 @@ export class ResAttribute {
     public static NUM_INST = "numInst";
     public static HAS_CUSTOM_RANGE = "hasCustomRange";
     public static RESOURCE_POSITION = "resourcePosition";
+    public static ACCESS_METHOD = "accessMethod";
     public static LANG = "lang";
     public static GRAPHS = "graphs"; //used in getResourceView response
     public static MEMBERS = "members"; //used for ordered collections

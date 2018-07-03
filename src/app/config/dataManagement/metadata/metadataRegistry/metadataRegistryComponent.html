@@ -89,6 +89,10 @@
                                 [disabled]="!selectedLexicalizationSet || !isRemoveEmbeddedLexicalizationSetAuthorized()">
                                 <span class="glyphicon glyphicon-minus"></span>
                             </button>
+                            <button class="btn btn-default" title="Delete All Embedded Lexicalization Set" (click)="deleteAllEmbeddedLexicalizationSet()"
+                                [disabled]="!isRemoveEmbeddedLexicalizationSetAuthorized()">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
                         </div>
                     </div>
                     <div class="subPanel-body scrollableContainer">

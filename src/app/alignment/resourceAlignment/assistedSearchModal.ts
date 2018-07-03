@@ -1,16 +1,18 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from 'ngx-modialog';
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource, ResourcePositionEnum } from "../../models/ARTResources";
+import { ARTURIResource, ResourcePositionEnum, ResourceUtils } from "../../models/ARTResources";
 import { DatasetMetadata } from "../../models/Metadata";
 import { Project } from "../../models/Project";
 import { SearchMode } from "../../models/Properties";
+import { OntoLex, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { AlignmentServices } from "../../services/alignmentServices";
 import { MapleServices } from "../../services/mapleServices";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
 import { ProjectServices } from "../../services/projectServices";
 import { HttpServiceContext } from "../../utils/HttpManager";
 import { VBContext } from "../../utils/VBContext";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 export class AssistedSearchModalData extends BSModalContext {
     constructor(public resource: ARTURIResource) {
@@ -39,7 +41,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
     private datasetMetadataAvailabilityMap: Map<DatasetMetadata, boolean> = new Map();
 
     private sharedLexicalizationSets: LexicalizationSet[][]; //set of bidimensional array of LexicalizationSet (1st element info about 1st dataset)
-    private languagesToCheck: { lang: string, checked: boolean }[] = [];
+    private languagesToCheck: { lang: string, lexModel: string, checked: boolean }[] = [];
 
     private searchModes: { mode: SearchMode, show: string, checked: boolean }[] = [
         { mode: SearchMode.startsWith, show: "Starts with", checked: false },
@@ -50,7 +52,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
     ]
     
     constructor(public dialog: DialogRef<AssistedSearchModalData>, private projectService: ProjectServices, private alignmentService: AlignmentServices,
-        private metadataRegistryService: MetadataRegistryServices, private mapleService: MapleServices) {
+        private metadataRegistryService: MetadataRegistryServices, private mapleService: MapleServices, private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
@@ -190,10 +192,24 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
                     return s1[0].languageTag.localeCompare(s2[0].languageTag);
                 });
                 this.sharedLexicalizationSets.forEach(sls => {
-                    this.languagesToCheck.push({ lang: sls[0].languageTag, checked: false });
+                    this.languagesToCheck.push({ lang: sls[1].languageTag, lexModel: sls[1].lexicalizationModel, checked: false });
                 })
             }
         );
+    }
+
+    private getLexModelDisplayName(lexModelIri: string) {
+        if (lexModelIri == "<" + RDFS.uri + ">") {
+            return "RDFS";
+        } else if (lexModelIri == "<" + SKOS.uri + ">") {
+            return "SKOS";
+        } else if (lexModelIri == "<" + SKOSXL.uri + ">") {
+            return "SKOSXL";
+        } else if (lexModelIri == "<" + OntoLex.uri + ">") {
+            return "OntoLex";
+        } else {
+            return "Unknown";
+        }
     }
     
     /**
@@ -222,10 +238,10 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
         let resourcePosition: string = this.targetPosition + ":" + 
             ((this.targetPosition == ResourcePositionEnum.local) ? this.selectedProject.getName() : this.selectedDataset.identity);
 
-        let langsPar: string[];
+        let langsToLexModel: Map<string, ARTURIResource> = new Map();
         this.languagesToCheck.forEach(l => {
             if (l.checked) {
-                langsPar.push(l.lang);
+                langsToLexModel.set(l.lang, ResourceUtils.parseURI(l.lexModel));
             }
         });
 
@@ -234,13 +250,18 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
             if (m.checked) {
                 searchModePar.push(m.mode);
             }
-        })
-        //TODO
+        });
 
-        // this.alignmentService.searchResources(this.context.resource, null, [this.context.resource.getRole()], langsPar, searchModePar).subscribe(
-
-        // )
-        this.dialog.close();
+        this.alignmentService.searchResources(this.context.resource, resourcePosition, [this.context.resource.getRole()], langsToLexModel, searchModePar).subscribe(
+            searchResult => {
+                this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                    (selectedResource: any) => {
+                        this.dialog.close(selectedResource);
+                    },
+                    () => { }
+                );
+            }
+        );
     }
     
     cancel() {
