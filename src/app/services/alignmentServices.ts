@@ -401,7 +401,7 @@ export class AlignmentServices {
 
         console.log("[AlignmentServices] searchResources");
         var params: any = {
-            intputRes: inputRes,
+            inputRes: inputRes,
             resourcePosition: resourcePosition,
             rolesArray: rolesArray
         };

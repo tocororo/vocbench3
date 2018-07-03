@@ -94,7 +94,12 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
             modalData, undefined, AssistedSearchModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
-        this.modal.open(AssistedSearchModal, overlayConfig).result;
+        this.modal.open(AssistedSearchModal, overlayConfig).result.then(
+            resource => {
+                this.alignedObject = resource;
+            },
+            () => {}
+        );
     }
 
     private enterManually() {
