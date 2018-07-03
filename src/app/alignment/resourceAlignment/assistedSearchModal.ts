@@ -140,6 +140,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
             resp => {
                 HttpServiceContext.removeContextProject();
                 this.projectMetadataAvailabilityMap.set(this.selectedProject, true);
+                this.profileMediation();
             }
         );
     }
@@ -254,12 +255,16 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
 
         this.alignmentService.searchResources(this.context.resource, resourcePosition, [this.context.resource.getRole()], langsToLexModel, searchModePar).subscribe(
             searchResult => {
-                this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(
-                    (selectedResource: any) => {
-                        this.dialog.close(selectedResource);
-                    },
-                    () => { }
-                );
+                if (searchResult.length == 0) {
+                    this.basicModals.alert("Search", "No results found.", "warning");
+                } else {
+                    this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(
+                        (selectedResource: any) => {
+                            this.dialog.close(selectedResource);
+                        },
+                        () => { }
+                    );
+                }
             }
         );
     }
