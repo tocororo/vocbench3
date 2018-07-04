@@ -41,7 +41,6 @@ export class NamespacesAndImportsComponent {
 
     //Ontology res view
     private baseUriRes: ARTURIResource;
-    private baseUriResPosition: string;
 
     constructor(private metadataService: MetadataServices, private refactorService: RefactorServices, private preferences: VBProperties,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
@@ -51,8 +50,6 @@ export class NamespacesAndImportsComponent {
         this.refreshDefaultNamespace();
         this.refreshImports();
         this.refreshNSPrefixMappings();
-
-        this.baseUriResPosition = "local:" + VBContext.getWorkingProject().getName();
     }
 
     //inits or refreshes baseURI

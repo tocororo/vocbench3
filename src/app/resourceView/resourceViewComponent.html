@@ -148,6 +148,34 @@
             </properties-renderer>
         </ng-template>
     </div>
+    <div class="panel-footer">
+        <div class="pull-right">
+            <div class="dropup pull-right">
+                <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" style="padding: 0px; border: none; background-color: transparent;"
+                    [title]="resource.getAdditionalProperty('accessMethod')">
+                    <span [ngSwitch]="resource.getAdditionalProperty('accessMethod')">
+                        Position:
+                        <ng-template [ngSwitchCase]="'local'">
+                            <span *ngIf="resourcePositionLocalProj" class="glyphicon glyphicon-saved"></span>
+                            <span *ngIf="!resourcePositionLocalProj" class="glyphicon glyphicon-export"></span>
+                        </ng-template>
+                        <span *ngSwitchCase="'dereferenciation'" class="glyphicon glyphicon-save-file"></span>
+                        <img *ngSwitchCase="'sparql'" src="../../assets/images/icons/res/ontology.png" width="12px">
+                        <img *ngSwitchCase="'sparql-degraded'" src="../../assets/images/icons/res/ontology.png" style="opacity: .5;" width="12px">
+                    </span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li style="cursor: none">
+                        <a *ngIf="!resourcePosition?.isUnknown()">{{resourcePositionDetails}}</a>
+                        <a *ngIf="resourcePosition?.isUnknown()">
+                            Unknown dataset <a (click)="discoverDataset()">Discover</a>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
 
     <div #blockDiv class="blockingDiv" style="display:none">
         <div class="loadingDiv">

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from 'ngx-modialog';
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource, ResourcePositionEnum, ResourceUtils } from "../../models/ARTResources";
@@ -11,6 +11,7 @@ import { MapleServices } from "../../services/mapleServices";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
 import { ProjectServices } from "../../services/projectServices";
 import { HttpServiceContext } from "../../utils/HttpManager";
+import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
@@ -26,6 +27,8 @@ export class AssistedSearchModalData extends BSModalContext {
 })
 export class AssistedSearchModal implements ModalComponent<AssistedSearchModalData> {
     context: AssistedSearchModalData;
+
+    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
 
     private sourceProject: Project;
 
@@ -57,7 +60,6 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
     }
 
     ngOnInit() {
-
         this.sourceProject = VBContext.getWorkingProject();
         this.projectService.listProjects(this.sourceProject, true, true).subscribe(
             projects => {
@@ -253,8 +255,10 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
             }
         });
 
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.alignmentService.searchResources(this.context.resource, resourcePosition, [this.context.resource.getRole()], langsToLexModel, searchModePar).subscribe(
             searchResult => {
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 if (searchResult.length == 0) {
                     this.basicModals.alert("Search", "No results found.", "warning");
                 } else {

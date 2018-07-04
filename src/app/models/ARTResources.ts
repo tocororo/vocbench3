@@ -660,10 +660,10 @@ export class LocalResourcePosition extends ResourcePosition {
     }
 }
 export class RemoteResourcePosition extends ResourcePosition {
-    datasetMetadata: string;
+    datasetMetadata: ARTURIResource;
     constructor(datasetMetadata: string) {
         super();
-        this.datasetMetadata = datasetMetadata;
+        this.datasetMetadata = new ARTURIResource(datasetMetadata);
     }
     isRemote(): boolean {
         return true;

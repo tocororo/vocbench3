@@ -1,11 +1,12 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { CollaborationModalServices } from "../collaboration/collaborationModalService";
-import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../models/ARTResources";
+import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, LocalResourcePosition, RDFResourceRolesEnum, RemoteResourcePosition, ResAttribute, ResourcePosition, ResourceUtils, SortAttribute } from "../models/ARTResources";
 import { Issue } from "../models/Collaboration";
 import { VersionInfo } from "../models/History";
 import { PropertyFacet, ResViewPartition } from "../models/ResourceView";
 import { SemanticTurkey } from "../models/Vocabulary";
 import { CollaborationServices } from "../services/collaborationServices";
+import { MetadataRegistryServices } from "../services/metadataRegistryServices";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { VersionsServices } from "../services/versionsServices";
 import { Deserializer } from "../utils/Deserializer";
@@ -31,7 +32,6 @@ export class ResourceViewComponent {
 
     @Input() resource: ARTResource;
     @Input() readonly: boolean = false;
-    @Input() resourcePosition: string; //use to force the resource poisiton in getResourceView service
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)
 
@@ -48,6 +48,10 @@ export class ResourceViewComponent {
 
     private unknownHost: boolean = false; //tells if the resource view of the current resource failed to be fetched due to a UnknownHostException
     private unexistingResource: boolean = false; //tells if the requested resource does not exist (empty description)
+
+    private resourcePosition: ResourcePosition;
+    private resourcePositionDetails: string; //details about the resource position
+    private resourcePositionLocalProj: boolean = false;
 
     //partitions
     private resViewResponse: any = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
@@ -86,11 +90,10 @@ export class ResourceViewComponent {
 
     private eventSubscriptions: any[] = [];
 
-    constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices, 
-        private collaborationService: CollaborationServices, private eventHandler: VBEventHandler,
-        private vbProp: VBProperties, private vbCollaboration: VBCollaboration,
-        private basicModals: BasicModalServices, private resViewModals: ResViewModalServices,
-        private collabModals: CollaborationModalServices) {
+    constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices,
+        private collaborationService: CollaborationServices, private metadataRegistryService: MetadataRegistryServices,
+        private eventHandler: VBEventHandler, private vbProp: VBProperties, private vbCollaboration: VBCollaboration,
+        private basicModals: BasicModalServices, private resViewModals: ResViewModalServices, private collabModals: CollaborationModalServices) {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)
         ));
@@ -148,7 +151,7 @@ export class ResourceViewComponent {
         if (this.activeVersion != null) {
             HttpServiceContext.setContextVersion(this.activeVersion); //set temprorarly version
         }
-        this.resViewService.getResourceView(res, this.showInferred, this.resourcePosition).subscribe(
+        this.resViewService.getResourceView(res, this.showInferred).subscribe(
             stResp => {
                 HttpServiceContext.removeContextVersion();
                 this.resViewResponse = stResp;
@@ -209,13 +212,33 @@ export class ResourceViewComponent {
         var resourcePartition: any = this.resViewResponse.resource;
         this.resource = Deserializer.createRDFResource(resourcePartition);
 
-        let resPosition: string = this.resource.getAdditionalProperty(ResAttribute.RESOURCE_POSITION);
+        this.resourcePosition = ResourcePosition.deserialize(this.resource.getAdditionalProperty(ResAttribute.RESOURCE_POSITION));
         if (
             this.resource.getRole() == RDFResourceRolesEnum.mention && //mention is also the default role (assigned when nature is empty)
-            (resPosition != null && !resPosition.startsWith('local:')) //so for setting readonly to true, check also if the res position is not local
+            !this.resourcePosition.isLocal() //so for setting readonly to true, check also if the res position is not local
         ) {
             this.readonly = true;
         }
+
+        if (this.resourcePosition instanceof LocalResourcePosition) {
+            if (this.resourcePosition.project == VBContext.getWorkingProject().getName()) {
+                this.resourcePositionLocalProj = true;
+                this.resourcePositionDetails = "Current project: " + this.resourcePosition.project;
+            } else {
+                this.resourcePositionLocalProj = false;
+                this.resourcePositionDetails = "Other local project: " + this.resourcePosition.project;
+            }
+        } else if (this.resourcePosition instanceof RemoteResourcePosition) {
+            this.metadataRegistryService.getDatasetMetadata(this.resourcePosition.datasetMetadata).subscribe(
+                metadata => {
+                    if (metadata.title != null) {
+                        this.resourcePositionDetails = metadata.title + ": " + metadata.uriSpace;
+                    } else {
+                        this.resourcePositionDetails = metadata.uriSpace;
+                    }
+                }
+            );
+        } //else is unknown => the UI gives the possibility to discover the dataset
 
         var broadersPartition: any = this.resViewResponse[ResViewPartition.broaders];
         if (broadersPartition != null) {
@@ -621,6 +644,18 @@ export class ResourceViewComponent {
         if (this.collaborationWorking) { //status changed from notWorking to working => refresh issues lists
             this.initCollaboration();
         }
+    }
+
+    //Status bar
+
+    private discoverDataset() {
+        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+        this.metadataRegistryService.discoverDataset(<ARTURIResource>this.resource).subscribe(
+            metadataDataset => {
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                this.buildResourceView(this.resource);
+            }
+        )
     }
 
     /**

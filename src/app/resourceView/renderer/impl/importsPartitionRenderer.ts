@@ -32,7 +32,7 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
     rootProperty: ARTURIResource = OWL.imports;
     label = "Imports";
     addBtnImgTitle = "Add import";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/individual_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/propOntology_create.png");
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
