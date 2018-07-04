@@ -149,12 +149,11 @@
         </ng-template>
     </div>
     <div class="panel-footer">
-        <div class="pull-right">
+        <div *ngIf="resourcePosition" class="pull-right">
             <div class="dropup pull-right">
-                <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" style="padding: 0px; border: none; background-color: transparent;"
-                    [title]="resource.getAdditionalProperty('accessMethod')">
+                <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" style="padding: 0px; border: none; background-color: transparent;">
                     <span [ngSwitch]="resource.getAdditionalProperty('accessMethod')">
-                        Position:
+                        Status:
                         <ng-template [ngSwitchCase]="'local'">
                             <span *ngIf="resourcePositionLocalProj" class="glyphicon glyphicon-saved"></span>
                             <span *ngIf="!resourcePositionLocalProj" class="glyphicon glyphicon-export"></span>
@@ -165,10 +164,23 @@
                     </span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li style="cursor: none">
-                        <a *ngIf="!resourcePosition?.isUnknown()">{{resourcePositionDetails}}</a>
-                        <a *ngIf="resourcePosition?.isUnknown()">
-                            Unknown dataset <a (click)="discoverDataset()">Discover</a>
+                    <li>
+                        <a style="cursor: initial">
+                            <label>Access method:</label>
+                            {{resource.getAdditionalProperty('accessMethod')}}
+                        </a>
+                        <a *ngIf="resourcePosition.isLocal()" style="cursor: initial">
+                            <label *ngIf="resourcePositionLocalProj">Local Project: </label>
+                            <label *ngIf="!resourcePositionLocalProj">Other local Project: </label>
+                            {{resourcePositionDetails}}
+                        </a>
+                        <a *ngIf="resourcePosition.isRemote()" style="cursor: initial">
+                            <label>Remote Dataset: </label>
+                            {{resourcePositionDetails}}
+                        </a>
+                        <a *ngIf="resourcePosition.isUnknown()" style="cursor: initial">
+                            <label>Remote Dataset: </label>
+                            Unknown, <a (click)="discoverDataset()">discover</a>
                         </a>
                     </li>
                 </ul>

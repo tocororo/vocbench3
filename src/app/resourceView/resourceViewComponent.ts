@@ -221,18 +221,13 @@ export class ResourceViewComponent {
         }
 
         if (this.resourcePosition instanceof LocalResourcePosition) {
-            if (this.resourcePosition.project == VBContext.getWorkingProject().getName()) {
-                this.resourcePositionLocalProj = true;
-                this.resourcePositionDetails = "Current project: " + this.resourcePosition.project;
-            } else {
-                this.resourcePositionLocalProj = false;
-                this.resourcePositionDetails = "Other local project: " + this.resourcePosition.project;
-            }
+            this.resourcePositionLocalProj = this.resourcePosition.project == VBContext.getWorkingProject().getName();
+            this.resourcePositionDetails = this.resourcePosition.project;
         } else if (this.resourcePosition instanceof RemoteResourcePosition) {
             this.metadataRegistryService.getDatasetMetadata(this.resourcePosition.datasetMetadata).subscribe(
                 metadata => {
                     if (metadata.title != null) {
-                        this.resourcePositionDetails = metadata.title + ": " + metadata.uriSpace;
+                        this.resourcePositionDetails = metadata.title + ", " + metadata.uriSpace;
                     } else {
                         this.resourcePositionDetails = metadata.uriSpace;
                     }

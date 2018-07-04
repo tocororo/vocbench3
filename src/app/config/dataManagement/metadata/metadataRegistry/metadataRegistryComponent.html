@@ -90,7 +90,7 @@
                                 <span class="glyphicon glyphicon-minus"></span>
                             </button>
                             <button class="btn btn-default" title="Delete All Embedded Lexicalization Set" (click)="deleteAllEmbeddedLexicalizationSet()"
-                                [disabled]="!isRemoveEmbeddedLexicalizationSetAuthorized()">
+                                [disabled]="!isRemoveEmbeddedLexicalizationSetAuthorized() || lexicalizationSets.length == 0">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </button>
                         </div>

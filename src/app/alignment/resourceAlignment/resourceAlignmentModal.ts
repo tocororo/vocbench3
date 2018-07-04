@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent, OverlayConfig } from 'ngx-modialog';
 import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource, ResourceUtils } from "../../models/ARTResources";
@@ -6,6 +6,7 @@ import { BrowseExternalResourceModalReturnData } from "../../resourceView/resVie
 import { ResViewModalServices } from "../../resourceView/resViewModals/resViewModalServices";
 import { AlignmentServices } from "../../services/alignmentServices";
 import { MapleServices } from "../../services/mapleServices";
+import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AssistedSearchModal, AssistedSearchModalData } from "./assistedSearchModal";
@@ -25,6 +26,8 @@ export class ResourceAlignmentModalData extends BSModalContext {
 })
 export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentModalData> {
     context: ResourceAlignmentModalData;
+
+    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
     
     private mappingPropList: Array<ARTURIResource>;
     private mappingProperty: ARTURIResource;
@@ -75,8 +78,10 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
                         + " Do you want to let the system proceed to the creation of them? If you refuse it will not be possible to use the "
                         + " assisted-search feature.").then(
                         confirm => {
+                            UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
                             this.mapleService.profileProject().subscribe(
                                 resp => {
+                                    UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                                     this.openAssistedSearchModal();
                                 }
                             );

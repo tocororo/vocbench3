@@ -6,7 +6,7 @@ import { RefactorServices } from "../services/refactorServices";
 import { ResourcesServices } from "../services/resourcesServices";
 import { ResourceAlignmentModal, ResourceAlignmentModalData } from "../alignment/resourceAlignment/resourceAlignmentModal"
 import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
-import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, ResAttribute, ResourceUtils } from "../models/ARTResources";
 import { SKOS } from "../models/Vocabulary";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 
@@ -85,13 +85,13 @@ export class ResourceViewContextMenu {
     //menu items authorization
     private isSetDeprecatedDisabled(): boolean {
         return (
-            !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || 
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) || 
             !AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_SET_DEPRECATED, this.resource)
         );
     }
     private isAlignDisabled(): boolean {
         return (
-            !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || 
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) || 
 		    !AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ALIGNMENT_ADD_ALIGNMENT, this.resource)
         );
 	}
