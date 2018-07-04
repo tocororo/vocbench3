@@ -115,9 +115,14 @@
 
             <div class="panel panel-default" style="margin-top: 4px;">
                 <div class="panel-heading">
-                    <label style="margin-right: 4px;">Search mode</label>
-                    <span class="glyphicon glyphicon-info-sign" title="String match modes on which the lexicalizations comparison is based on.
-                        If none is selected, 'Fuzzy' and 'Contains' are used by default"></span>
+                    <span style="flex: 1">
+                        <label style="margin-right: 4px;">Search mode</label>
+                        <span class="glyphicon glyphicon-info-sign" title="String match modes on which the lexicalizations comparison is based on."></span>
+                    </span>
+                    <span *ngIf="getCheckedSearchMode().length == 0" class="greyText">
+                        <span class="glyphicon glyphicon-warning-sign"></span>
+                        If none is selected, 'Fuzzy' and 'Contains' are used by default
+                    </span>
                 </div>
                 <div class="panel-body">
                     <div *ngFor="let sm of searchModes" class="checkbox" style="margin: 5px 0px 0px">

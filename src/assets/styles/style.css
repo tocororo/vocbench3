@@ -610,6 +610,17 @@ textarea {
     margin: 2px; 
 }
 
+/* class to add to input-sm in order to create a container (similar to a form-control) for a rdf-resource */
+.input-resource {
+    border: 1px solid #ccc;
+    background-color: #eee;
+    padding: 2px 10px;
+    min-height: 28px; /* height of input-sm. Override if this class is used with a different input- size */
+    max-height: 140px;
+    height: initial; /* override the height of the input-sm */
+    overflow: auto;
+}
+
 /* ####################################
 ########## BOOTSTRAP OVERRIDE #########
 #####################################*/

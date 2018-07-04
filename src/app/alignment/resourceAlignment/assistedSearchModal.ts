@@ -48,7 +48,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
 
     private searchModes: { mode: SearchMode, show: string, checked: boolean }[] = [
         { mode: SearchMode.startsWith, show: "Starts with", checked: false },
-        { mode: SearchMode.contains, show: "Contains", checked: false },
+        { mode: SearchMode.contains, show: "Contains", checked: true },
         { mode: SearchMode.endsWith, show: "Ends with", checked: false },
         { mode: SearchMode.exact, show: "Exact", checked: false },
         { mode: SearchMode.fuzzy, show: "Fuzzy", checked: false }
@@ -214,6 +214,16 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
             return "Unknown";
         }
     }
+
+    private getCheckedSearchMode(): SearchMode[] {
+        let checkedSearchModes: SearchMode[] = [];
+        this.searchModes.forEach(m => {
+            if (m.checked) {
+                checkedSearchModes.push(m.mode);
+            }
+        });
+        return checkedSearchModes;
+    }
     
     /**
      * Ok is clickable when there is at least a shared lexicalization checked.
@@ -248,12 +258,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
             }
         });
 
-        let searchModePar: SearchMode[] = [];
-        this.searchModes.forEach(m => {
-            if (m.checked) {
-                searchModePar.push(m.mode);
-            }
-        });
+        let searchModePar: SearchMode[] = this.getCheckedSearchMode();
 
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.alignmentService.searchResources(this.context.resource, resourcePosition, [this.context.resource.getRole()], langsToLexModel, searchModePar).subscribe(
