@@ -4,13 +4,18 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { ARTURIResource } from "../../../../models/ARTResources";
 import { MetadataRegistryServices } from "../../../../services/metadataRegistryServices";
 
+export class NewCatalogRecordModalData extends BSModalContext {
+    constructor(public title: string) {
+        super();
+    }
+}
 
 @Component({
     selector: "catalog-record-modal",
     templateUrl: "./newCatalogRecordModal.html",
 })
-export class NewCatalogRecordModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class NewCatalogRecordModal implements ModalComponent<NewCatalogRecordModalData> {
+    context: NewCatalogRecordModalData;
 
     private dereferenceableValues: { label: string, value: any }[] = [
         { label: "Unknown", value: null },
@@ -24,7 +29,7 @@ export class NewCatalogRecordModal implements ModalComponent<BSModalContext> {
     private dereferenceable: { label: string, value: any } = this.dereferenceableValues[0];
     private sparqlEndpoint: string;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private metadataRegistryService: MetadataRegistryServices) {
+    constructor(public dialog: DialogRef<NewCatalogRecordModalData>, private metadataRegistryService: MetadataRegistryServices) {
         this.context = dialog.context;
     }
 

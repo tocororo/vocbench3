@@ -35,13 +35,15 @@
         <ng-template [ngIf]="targetPosition == 'remote'">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <label>Remote datasets</label>
+                    <label style="flex: 1;">Remote datasets</label>
+                    <button class="btn btn-default btn-xs" (click)="addRemoteDataset()" title="Add Remote Dataset">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
                 </div>
                 <div class="panel-body vbox scrollableContainer" style="max-height: 150px;">
                     <div *ngFor="let d of remoteDatasets">
                         <div class="listItem" [ngClass]="{ active : d == selectedDataset }" (click)="selectDataset(d)" [title]="d.identity">
-                            <label *ngIf="d.title">{{d.title}}: </label>
-                            {{d.uriSpace}}
+                            <span><label *ngIf="d.title">{{d.title}}:</label> {{d.uriSpace}}</span>
                         </div>
                     </div>
                 </div>

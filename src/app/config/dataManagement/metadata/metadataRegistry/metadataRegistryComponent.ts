@@ -8,7 +8,7 @@ import { MetadataRegistryServices } from "../../../../services/metadataRegistryS
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
-import { NewCatalogRecordModal } from "./newCatalogRecordModal";
+import { NewCatalogRecordModal, NewCatalogRecordModalData } from "./newCatalogRecordModal";
 import { NewDatasetVersionModal, NewDatasetVersionModalData } from "./newDatasetVersionModal";
 import { NewEmbeddedLexicalizationModal, NewEmbeddedLexicalizationModalData } from "./newEmbeddedLexicalizationModal";
 
@@ -85,7 +85,10 @@ export class MetadataRegistryComponent {
     }
 
     private addCatalogRecord() {
-        const builder = new BSModalContextBuilder<any>();
+        var modalData = new NewCatalogRecordModalData("New Catalog Record");
+        const builder = new BSModalContextBuilder<NewCatalogRecordModalData>(
+            modalData, undefined, NewCatalogRecordModalData
+        );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
         this.modal.open(NewCatalogRecordModal, overlayConfig).result.then(
             ok => {

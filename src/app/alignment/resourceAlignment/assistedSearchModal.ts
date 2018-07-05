@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, Modal, ModalComponent, OverlayConfig } from 'ngx-modialog';
 import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { NewCatalogRecordModal, NewCatalogRecordModalData } from "../../config/dataManagement/metadata/metadataRegistry/newCatalogRecordModal";
 import { ARTURIResource, LocalResourcePosition, RemoteResourcePosition, ResourcePosition, ResourcePositionEnum, ResourceUtils } from "../../models/ARTResources";
 import { DatasetMetadata } from "../../models/Metadata";
 import { Project } from "../../models/Project";
@@ -75,8 +76,13 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
             }
         );
 
+        this.initRemoteDatasets();
+    }
+
+    private initRemoteDatasets() {
         this.metadataRegistryService.getCatalogRecords().subscribe(
             catalogs => {
+                this.remoteDatasets = [];
                 catalogs.forEach(c => this.remoteDatasets.push(c.abstractDataset));
             }
         );
@@ -164,6 +170,20 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
                 }
             )
         }
+    }
+
+    private addRemoteDataset() {
+        var modalData = new NewCatalogRecordModalData("New Remote Dataset");
+        const builder = new BSModalContextBuilder<NewCatalogRecordModalData>(
+            modalData, undefined, NewCatalogRecordModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        this.modal.open(NewCatalogRecordModal, overlayConfig).result.then(
+            ok => {
+                this.initRemoteDatasets();
+            },
+            () => {}
+        );
     }
 
     private profileMediationRemoteDataset() {
