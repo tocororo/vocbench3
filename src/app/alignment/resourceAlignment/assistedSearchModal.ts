@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from 'ngx-modialog';
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource, ResourcePositionEnum, ResourceUtils } from "../../models/ARTResources";
+import { ARTURIResource, ResourcePositionEnum, ResourceUtils, ResourcePosition, LocalResourcePosition, RemoteResourcePosition } from "../../models/ARTResources";
 import { DatasetMetadata } from "../../models/Metadata";
 import { Project } from "../../models/Project";
 import { SearchMode } from "../../models/Properties";
@@ -43,7 +43,8 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
     private selectedDataset: DatasetMetadata;
     private datasetMetadataAvailabilityMap: Map<DatasetMetadata, boolean> = new Map();
 
-    private sharedLexicalizationSets: LexicalizationSet[][]; //set of bidimensional array of LexicalizationSet (1st element info about 1st dataset)
+    private pairedLexicalizationSets: LexicalizationSet[];
+
     private languagesToCheck: { lang: string, lexModel: string, checked: boolean }[] = [];
 
     private searchModes: { mode: SearchMode, show: string, checked: boolean }[] = [
@@ -81,21 +82,13 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
 
     private changeTargetPosition(position: ResourcePositionEnum) {
         this.targetPosition = position;
-        this.sharedLexicalizationSets = null;
+        this.pairedLexicalizationSets = null;
         this.languagesToCheck = [];
         if (this.targetPosition == ResourcePositionEnum.local && this.selectedProject != null) {
             this.selectProject(this.selectedProject);
         } else if (this.targetPosition == ResourcePositionEnum.remote && this.selectedDataset != null) {
             this.selectDataset(this.selectedDataset);
         }
-    }
-
-    private refreshSourceMetadata() {
-        this.mapleService.profileProject().subscribe(
-            resp => {
-                this.profileMediation();
-            }
-        );
     }
 
     private refreshTargetMetadata() {
@@ -184,18 +177,31 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
     //---------------------------
 
     private profileMediation() {
-        this.sharedLexicalizationSets = null;
+        this.pairedLexicalizationSets = null;
         this.languagesToCheck = [];
-        let resourcePosition: string = this.targetPosition + ":" + 
-            ((this.targetPosition == ResourcePositionEnum.local) ? this.selectedProject.getName() : this.selectedDataset.identity);
-        this.mapleService.profileMediationProblem(resourcePosition).subscribe(
+        
+        let resourcePosition: ResourcePosition;
+        if (this.targetPosition == ResourcePositionEnum.local) {
+            resourcePosition = new LocalResourcePosition(this.selectedProject.getName());
+        } else { //remote
+            resourcePosition = new RemoteResourcePosition(this.selectedDataset.identity);
+        }
+
+        this.mapleService.profileSingleResourceMatchProblem(this.context.resource, resourcePosition).subscribe(
             resp => {
-                this.sharedLexicalizationSets = resp.sharedLexicalizationSets;
-                this.sharedLexicalizationSets.sort((s1, s2) => {
-                    return s1[0].languageTag.localeCompare(s2[0].languageTag);
-                });
-                this.sharedLexicalizationSets.forEach(sls => {
-                    this.languagesToCheck.push({ lang: sls[1].languageTag, lexModel: sls[1].lexicalizationModel, checked: false });
+                this.pairedLexicalizationSets = [];
+                resp.pairedLexicalizationSets.forEach((pls: any) => {
+                    //second element of an element of pairedLexicalizationSets is the LexicalizationSet (for a lang) of the target
+                    this.pairedLexicalizationSets.push(pls[1]);
+                    //sort for lang
+                    this.pairedLexicalizationSets.sort((ls1, ls2) => {
+                        return ls1.languageTag.localeCompare(ls2.languageTag);
+                    });
+                    //init lang list (for checkboxes)
+                    this.pairedLexicalizationSets.forEach(ls => {
+                        this.languagesToCheck.push({ lang: ls.languageTag, lexModel: ls.lexicalizationModel, checked: false });
+                    })
+
                 })
             }
         );

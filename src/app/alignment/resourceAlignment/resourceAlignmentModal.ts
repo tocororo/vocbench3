@@ -68,32 +68,6 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
     }
 
     private assistedSearch() {
-        this.mapleService.checkProjectMetadataAvailability().subscribe(
-            available => {
-                if (available) {
-                    this.openAssistedSearchModal();
-                } else {
-                    this.basicModals.confirm("Missing Project Metadata", "In order to exploit this feature, the system needs VoID/LIME metadata"
-                        + " for the current project (" + VBContext.getWorkingProject().getName() + "). This metadata is currently not available."
-                        + " Do you want to let the system proceed to the creation of them? If you refuse it will not be possible to use the "
-                        + " assisted-search feature.").then(
-                        confirm => {
-                            UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-                            this.mapleService.profileProject().subscribe(
-                                resp => {
-                                    UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                                    this.openAssistedSearchModal();
-                                }
-                            );
-                        },
-                        () => {} //user didn't confirm, don't do nothing
-                    );
-                }
-            }
-        );
-    }
-
-    private openAssistedSearchModal() {
         var modalData = new AssistedSearchModalData(this.context.resource);
         const builder = new BSModalContextBuilder<AssistedSearchModalData>(
             modalData, undefined, AssistedSearchModalData

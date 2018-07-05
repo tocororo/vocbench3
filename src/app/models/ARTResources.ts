@@ -639,6 +639,9 @@ export abstract class ResourcePosition {
     isUnknown(): boolean {
         return false;
     }
+
+    abstract serialize(): string;
+
     static deserialize(resPositionJson: string): ResourcePosition {
         if (resPositionJson.startsWith(ResourcePositionEnum.local)) {
             return new LocalResourcePosition(resPositionJson.substring(resPositionJson.indexOf(":")+1));
@@ -653,25 +656,40 @@ export class LocalResourcePosition extends ResourcePosition {
     project: string;
     constructor(project: string) {
         super();
+        this.position = ResourcePositionEnum.local;
         this.project = project;
     }
     isLocal(): boolean {
         return true;
+    }
+    serialize(): string {
+        return this.position + ":" + this.project;
     }
 }
 export class RemoteResourcePosition extends ResourcePosition {
     datasetMetadata: ARTURIResource;
     constructor(datasetMetadata: string) {
         super();
+        this.position = ResourcePositionEnum.remote;
         this.datasetMetadata = new ARTURIResource(datasetMetadata);
     }
     isRemote(): boolean {
         return true;
     }
+    serialize(): string {
+        return this.position + ":" + this.datasetMetadata.getURI();
+    }
 }
 export class UnknownResourcePosition extends ResourcePosition {
+    constructor() {
+        super();
+        this.position = ResourcePositionEnum.unknown;
+    }
     isUnknown(): boolean {
         return true;
+    }
+    serialize(): string {
+        return this.position + ":";
     }
 }
 export enum ResourcePositionEnum {

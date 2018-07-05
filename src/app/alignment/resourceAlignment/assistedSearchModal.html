@@ -58,41 +58,21 @@
         <ng-template #mediationBlock>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <label>Shared Lexicalization Sets</label>
+                    <label style="margin-right: 4px;">Paired Lexicalization Sets</label>
+                    <span class="glyphicon glyphicon-info-sign" title="Lexicalization sets shared between the source resource and the target project/dataset."></span>
                 </div>
                 <div class="panel-body scrollableContainer" style="max-height: 150px;">
-                    <table class="table table-condensed table-borderless table-hoverable">
+                    <table class="table table-condensed table-hoverable">
                         <thead>
                             <tr>
-                                <th rowspan="2">Lang</th>
-                                <th colspan="3" class="text-center">
-                                    Source project
-                                    <button class="btn btn-default btn-xs" (click)="refreshSourceMetadata()">
-                                        <span class="glyphicon glyphicon-refresh" [title]="'Refresh metadata of project ' + sourceProject.getName()"></span>
-                                    </button>
-                                </th>
-                                <th colspan="3" class="text-center">
-                                    Target
-                                    <span *ngIf="targetPosition == 'local'">
-                                        project
-                                        <button class="btn btn-default btn-xs" (click)="refreshTargetMetadata()">
-                                                <span class="glyphicon glyphicon-refresh" [title]="'Refresh metadata of project ' + selectedProject.getName()"></span>
-                                        </button>
-                                    </span>
-                                    <span *ngIf="targetPosition == 'remote'">dataset</span>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th class="text-center" title="Percentage of resources that have a lexicalization in the given language">%</th>
-                                <th class="text-center" title="Average number of lexicalizations">Avg</th>
-                                <th class="text-center" title="Lexicalization Model">LexModel</th>
+                                <th>Lang</th>
                                 <th class="text-center" title="Percentage of resources that have a lexicalization in the given language">%</th>
                                 <th class="text-center" title="Average number of lexicalizations">Avg</th>
                                 <th class="text-center" title="Lexicalization Model">LexModel</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let sls of sharedLexicalizationSets; let index = index">
+                            <tr *ngFor="let ls of pairedLexicalizationSets; let index = index">
                                 <td>
                                     <div class="checkbox" style="margin: 0px;">
                                         <label>
@@ -101,13 +81,11 @@
                                         </label>
                                     </div>
                                 </td>
-                                <td class="text-center">{{sls[0].percentage*100}}</td>
-                                <td class="text-center">{{sls[0].avgNumOfLexicalizations}}</td>
-                                <td class="text-center">{{getLexModelDisplayName(sls[0].lexicalizationModel)}}</td>
-                                <td class="text-center">{{sls[1].percentage*100}}</td>
-                                <td class="text-center">{{sls[1].avgNumOfLexicalizations}}</td>
-                                <td class="text-center">{{getLexModelDisplayName(sls[1].lexicalizationModel)}}</td>
+                                <td class="text-center">{{ls.percentage*100}}</td>
+                                <td class="text-center">{{ls.avgNumOfLexicalizations}}</td>
+                                <td class="text-center">{{getLexModelDisplayName(ls.lexicalizationModel)}}</td>
                             </tr>
+                            
                         </tbody>
                     </table>
                 </div>

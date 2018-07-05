@@ -165,20 +165,20 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li>
-                        <a style="cursor: initial">
+                        <a style="cursor: initial; background-color: initial;">
                             <label>Access method:</label>
                             {{resource.getAdditionalProperty('accessMethod')}}
                         </a>
-                        <a *ngIf="resourcePosition.isLocal()" style="cursor: initial">
+                        <a *ngIf="resourcePosition.isLocal()" style="cursor: initial; background-color: initial;">
                             <label *ngIf="resourcePositionLocalProj">Local Project: </label>
                             <label *ngIf="!resourcePositionLocalProj">Other local Project: </label>
                             {{resourcePositionDetails}}
                         </a>
-                        <a *ngIf="resourcePosition.isRemote()" style="cursor: initial">
+                        <a *ngIf="resourcePosition.isRemote()" style="cursor: initial; background-color: initial;">
                             <label>Remote Dataset: </label>
                             {{resourcePositionDetails}}
                         </a>
-                        <a *ngIf="resourcePosition.isUnknown()" style="cursor: initial">
+                        <a *ngIf="resourcePosition.isUnknown()" style="cursor: initial; background-color: initial;">
                             <label>Remote Dataset: </label>
                             Unknown, <a (click)="discoverDataset()">discover</a>
                         </a>
