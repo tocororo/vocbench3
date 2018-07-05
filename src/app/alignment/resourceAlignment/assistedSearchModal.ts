@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, ModalComponent } from 'ngx-modialog';
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource, ResourcePositionEnum, ResourceUtils, ResourcePosition, LocalResourcePosition, RemoteResourcePosition } from "../../models/ARTResources";
+import { DialogRef, Modal, ModalComponent, OverlayConfig } from 'ngx-modialog';
+import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource, LocalResourcePosition, RemoteResourcePosition, ResourcePosition, ResourcePositionEnum, ResourceUtils } from "../../models/ARTResources";
 import { DatasetMetadata } from "../../models/Metadata";
 import { Project } from "../../models/Project";
 import { SearchMode } from "../../models/Properties";
@@ -14,6 +14,7 @@ import { HttpServiceContext } from "../../utils/HttpManager";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { AssistedSearchResultModal, AssistedSearchResultModalData } from "./assistedSearchResultModal";
 
 export class AssistedSearchModalData extends BSModalContext {
     constructor(public resource: ARTURIResource) {
@@ -56,7 +57,8 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
     ]
     
     constructor(public dialog: DialogRef<AssistedSearchModalData>, private projectService: ProjectServices, private alignmentService: AlignmentServices,
-        private metadataRegistryService: MetadataRegistryServices, private mapleService: MapleServices, private basicModals: BasicModalServices) {
+        private metadataRegistryService: MetadataRegistryServices, private mapleService: MapleServices,
+        private basicModals: BasicModalServices, private modal: Modal) {
         this.context = dialog.context;
     }
 
@@ -253,6 +255,15 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
         return ok;
     }
 
+    private selectSearchResult(searchResult: ARTURIResource[]) {
+        var modalData = new AssistedSearchResultModalData("Select search result", searchResult);
+        const builder = new BSModalContextBuilder<AssistedSearchResultModalData>(
+            modalData, undefined, AssistedSearchResultModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        return this.modal.open(AssistedSearchResultModal, overlayConfig).result;
+    }
+
     ok(event: Event) {
         let resourcePosition: string = this.targetPosition + ":" + 
             ((this.targetPosition == ResourcePositionEnum.local) ? this.selectedProject.getName() : this.selectedDataset.identity);
@@ -273,14 +284,14 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
                 if (searchResult.length == 0) {
                     this.basicModals.alert("Search", "No results found.", "warning");
                 } else {
-                    this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult).then(
-                        (selectedResource: any) => {
+                    this.selectSearchResult(searchResult).then(
+                        (selectedResource: ARTURIResource) => {
                             this.dialog.close(selectedResource);
-                        },
-                        () => { }
+                        }
                     );
                 }
-            }
+            },
+            () => {}
         );
     }
     

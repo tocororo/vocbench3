@@ -64,6 +64,7 @@ import { CustomFormModule } from "./customFormModule";
 import { SharedModule } from "./sharedModule";
 import { TreeAndListModule } from "./treeAndListModule";
 import { UserModule } from "./userModule";
+import { AssistedSearchResultModal } from '../alignment/resourceAlignment/assistedSearchResultModal';
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
@@ -74,7 +75,8 @@ import { UserModule } from "./userModule";
         PromptModal, PromptPrefixedModal, PromptPropertiesModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal, LexicalEntryListModal, LexiconListModal,
-        ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, AssistedSearchModal,
+        ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal,
+        ResourceAlignmentModal, AssistedSearchModal, AssistedSearchResultModal,
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
         ConverterPickerModal, SignaturePickerModal, StoreConfigurationModal, LoadConfigurationModal, ResourcePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
@@ -98,7 +100,8 @@ import { UserModule } from "./userModule";
         PromptModal, PromptPrefixedModal, PromptPropertiesModal, SelectionModal, ResourceSelectionModal, CustomFormSelectionModal,
         ClassTreeModal, ClassIndividualTreeModal, ConceptTreeModal, InstanceListModal,
         PropertyTreeModal, SchemeListModal, CollectionTreeModal, LexicalEntryListModal, LexiconListModal,
-        ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, ResourceAlignmentModal, AssistedSearchModal,
+        ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, 
+        ResourceAlignmentModal, AssistedSearchModal, AssistedSearchResultModal,
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
         ConverterPickerModal, SignaturePickerModal, StoreConfigurationModal, LoadConfigurationModal, ResourcePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,

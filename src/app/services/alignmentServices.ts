@@ -413,7 +413,7 @@ export class AlignmentServices {
         }
         return this.httpMgr.doGet(this.serviceName, "searchResources", params).map(
             stResp => {
-                return Deserializer.createURIArray(stResp);
+                return Deserializer.createURIArray(stResp, ["matchMode", "matchedLang"]);
             }
         );
 
