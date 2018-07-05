@@ -26,7 +26,7 @@
             <div *ngIf="selectedProject" style="margin-top: 4px;">
                 <div *ngIf="!isProjectMetadataAvailable(); else mediationBlock" class="alert alert-warning">
                     VoID/LIME Metadata not available for local project '{{selectedProject.getName()}}'.
-                    Click <a (click)="generateProjectMetadata()">here</a> to generate it.
+                    Click <a (click)="generateProjectMetadata()" style="cursor: pointer">here</a> to generate it.
                 </div>
             </div>
         </ng-template>
@@ -81,7 +81,9 @@
                                         </label>
                                     </div>
                                 </td>
-                                <td class="text-center">{{ls.percentage*100}}</td>
+                                <td class="text-center">
+                                    <span *ngIf="ls.percentage">{{ls.percentage*100}}</span>
+                                </td>
                                 <td class="text-center">{{ls.avgNumOfLexicalizations}}</td>
                                 <td class="text-center">{{getLexModelDisplayName(ls.lexicalizationModel)}}</td>
                             </tr>

@@ -1,8 +1,6 @@
 import { Component } from "@angular/core";
-import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
-import { ConfigurationComponents } from "../models/Configuration";
-import { LoadConfigurationModalReturnData } from "../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { ConfigurationsServices } from "../services/configurationsServices";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
     selector: "sparql-component",
@@ -17,7 +15,6 @@ import { ConfigurationsServices } from "../services/configurationsServices";
             color: rgb(51, 122, 183);
             line-height: 1.42857143;
             background-color: #eee;
-            cursor: default;
         }
     `]
 })

@@ -5,9 +5,9 @@
         <li *ngFor="let t of tabs" [ngClass]="{active : t.active}">
             <a (click)="selectTab(t, 'true')">
                 <rdf-resource [resource]="t.resource"></rdf-resource>
-                <span class="glyphicon glyphicon-remove-circle" (click)="closeTab(t, $event)"
-                    onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
-                    onmouseout="this.className='glyphicon glyphicon-remove-circle'; this.style.cursor='default'">
+                <span class="glyphicon glyphicon-remove-circle" (click)="closeTab(t, $event)" style="cursor: pointer"
+                    onmouseover="this.className='glyphicon glyphicon-remove-sign';"
+                    onmouseout="this.className='glyphicon glyphicon-remove-circle';">
                 </span>
             </a>
         </li>

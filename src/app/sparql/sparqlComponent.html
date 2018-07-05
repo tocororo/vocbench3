@@ -10,17 +10,17 @@
                     {{t.name}}
                     <span *ngIf="!t.saved">*</span>
                 </span>
-                <span *ngIf="tabs.length > 1" class="glyphicon glyphicon-remove-circle" (click)="closeTab(t)"
-                    onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
-                    onmouseout="this.className='glyphicon glyphicon-remove-circle'; this.style.cursor='default'">
+                <span *ngIf="tabs.length > 1" class="glyphicon glyphicon-remove-circle" (click)="closeTab(t)" style="cursor: pointer"
+                    onmouseover="this.className='glyphicon glyphicon-remove-sign';"
+                    onmouseout="this.className='glyphicon glyphicon-remove-circle';">
                 </span>
             </a>
         </li>
 
-        <li [ngClass]="{disabled : tabs.length==6}">
+        <li [ngStyle]="{ 'cursor': tabs.length>5 ? 'not-allowed' : 'pointer' }">
             <div class="btn-group btn-group-xs">
-                <button #addBtn class="btn btn-default addQueryBtn" (click)="addQueryTab()" (mouseup)="addBtn.blur()">+</button>
-                <button type="button" class="btn btn-default addQueryBtn dropdown-toggle" style="padding: 4px;" data-toggle="dropdown">
+                <button #addBtn class="btn btn-default addQueryBtn" (click)="addQueryTab()" (mouseup)="addBtn.blur()" [disabled]="tabs.length>5">+</button>
+                <button type="button" class="btn btn-default addQueryBtn dropdown-toggle" style="padding: 4px;" data-toggle="dropdown" [disabled]="tabs.length>5">
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">

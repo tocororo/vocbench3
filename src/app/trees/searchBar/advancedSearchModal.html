@@ -104,13 +104,11 @@
                             <div *ngFor="let t of group; let indexType=index; let lastType = last" class="hbox" style="align-items: center; flex: initial">
                                 <span class="tile">
                                     <rdf-resource [resource]="t"></rdf-resource>
-                                    <span class="glyphicon glyphicon-remove-circle" (click)="deleteType(group, indexType)"
-                                        onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
+                                    <span class="glyphicon glyphicon-remove-circle" (click)="deleteType(group, indexType)" style="cursor: pointer"
+                                        onmouseover="this.className='glyphicon glyphicon-remove-sign';"
                                         onmouseout="this.className='glyphicon glyphicon-remove-circle';">
                                     </span>
-                                    <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle"
-                                        onmouseover="this.style.cursor='not-allowed'">
-                                    </span>
+                                    <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle" style="cursor: not-allowed"></span>
                                 </span>
                                 <span *ngIf="!lastType">AND</span>
                             </div>
@@ -146,13 +144,11 @@
                             <div *ngFor="let s of group; let indexScheme=index; let lastScheme = last" class="hbox" style="align-items: center; flex: initial">
                                 <span class="tile">
                                     <rdf-resource [resource]="s"></rdf-resource>
-                                    <span class="glyphicon glyphicon-remove-circle" (click)="deleteScheme(group, indexScheme)"
-                                        onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
+                                    <span class="glyphicon glyphicon-remove-circle" (click)="deleteScheme(group, indexScheme)" 
+                                        style="cursor: pointer" onmouseover="this.className='glyphicon glyphicon-remove-sign';"
                                         onmouseout="this.className='glyphicon glyphicon-remove-circle';">
                                     </span>
-                                    <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle"
-                                        onmouseover="this.style.cursor='not-allowed'">
-                                    </span>
+                                    <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle" style="cursor: not-allowed"></span>
                                 </span>
                                 <span *ngIf="!lastScheme">AND</span>
                             </div>
@@ -197,7 +193,8 @@
                                         <span class="tile">
                                             <rdf-resource [resource]="v"></rdf-resource>
                                             <span class="glyphicon glyphicon-remove-circle" (click)="deleteIngoingValue(group, indexValue)"
-                                                onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
+                                                style="cursor: pointer"
+                                                onmouseover="this.className='glyphicon glyphicon-remove-sign';"
                                                 onmouseout="this.className='glyphicon glyphicon-remove-circle';">
                                             </span>
                                         </span>
@@ -252,7 +249,8 @@
                                         <span class="tile">
                                             <rdf-resource [resource]="v"></rdf-resource>
                                             <span class="glyphicon glyphicon-remove-circle" (click)="deleteOutgoingValue(group, indexValue)"
-                                                onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
+                                                style="cursor: pointer"
+                                                onmouseover="this.className='glyphicon glyphicon-remove-sign';"
                                                 onmouseout="this.className='glyphicon glyphicon-remove-circle';">
                                             </span>
                                         </span>

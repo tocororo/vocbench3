@@ -87,12 +87,10 @@
                                 class="tile" [ngClass]="{selectedResource : selectedPropInChain == prop}">
                                 {{prop.getURI()}}
                                 <span *ngIf="!context.readOnly" class="glyphicon glyphicon-remove-circle" (click)="removePropFromChain(prop)"
-                                    onmouseover="this.className='glyphicon glyphicon-remove-sign'; this.style.cursor='pointer'"
+                                    style="cursor: pointer" onmouseover="this.className='glyphicon glyphicon-remove-sign';"
                                     onmouseout="this.className='glyphicon glyphicon-remove-circle';">
                                 </span>
-                                <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle"
-                                    onmouseover="this.style.cursor='not-allowed'">
-                                </span>
+                                <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle" style="cursor: not-allowed"></span>
                             </span>
                         </div>
                         <div class="btn-group dropup" style="margin-left: 4px;">
