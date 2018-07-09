@@ -1,6 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
-import { ARTURIResource } from "../../models/ARTResources";
+import { ARTURIResource, ResourceUtils } from "../../models/ARTResources";
 import { ConfigurableExtensionFactory, ExtensionPointID, Plugin, PluginSpecification, Settings } from "../../models/Plugins";
 import { BackendTypesEnum, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
 import { DCT, OWL, OntoLex, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
@@ -101,10 +101,8 @@ export class CreateProjectComponent {
     private selectedRendEngPluginConf: Settings; //chosen configuration for the chosen rendering engine plugin
 
     private useProjMetadataProp: boolean = true;
-    private creationDatePropList: ARTURIResource[] = [DCT.created];
-    private creationDateProp: ARTURIResource = this.creationDatePropList[0];
-    private modificationDatePropList: ARTURIResource[] = [DCT.modified];
-    private modificationDateProp: ARTURIResource = this.modificationDatePropList[0];
+    private createdProp: string = DCT.created.getURI();
+    private modifiedProp: string = DCT.modified.getURI();
 
     constructor(private projectService: ProjectServices, private pluginService: PluginsServices, private extensionService: ExtensionsServices,
         private router: Router, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
@@ -317,6 +315,38 @@ export class CreateProjectComponent {
         )
     }
 
+    /**
+     * CREATED/MODIFIED PROPERTIES
+     */
+
+    private updateCreatedProp(propUri: string) {
+        if (!ResourceUtils.testIRI(propUri)) {
+            this.basicModals.alert("Invalid IRI", "The entered value '" + propUri + "' is not a valid IRI", "warning");
+            let backupProp = this.createdProp;
+            this.createdProp = null;
+            setTimeout(() => {
+                this.createdProp = backupProp;
+            });
+        } else {
+            this.createdProp = propUri;
+        }
+    }
+
+    private updateModifiedProp(propUri: string) {
+        if (!ResourceUtils.testIRI(propUri)) {
+            this.basicModals.alert("Invalid IRI", "The entered value '" + propUri + "' is not a valid IRI", "warning");
+            let backupProp = this.modifiedProp;
+            this.modifiedProp = null;
+            setTimeout(() => {
+                this.modifiedProp = backupProp;
+            });
+        } else {
+            this.modifiedProp = propUri;
+        }
+    }
+
+    //------------------------------------
+
     private createtNew() {
 
         //check project name
@@ -443,8 +473,8 @@ export class CreateProjectComponent {
         var creationProp: ARTURIResource;
         var modificationProp: ARTURIResource;
         if (this.useProjMetadataProp) {
-            creationProp = this.creationDateProp;
-            modificationProp = this.modificationDateProp;
+            creationProp = new ARTURIResource(this.createdProp);
+            modificationProp = new ARTURIResource(this.modifiedProp);
         }
 
         /**

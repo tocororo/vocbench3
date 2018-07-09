@@ -283,17 +283,15 @@
                                 <div class="form-group">
                                     <label class="control-label col-sm-1">Creation date:</label>
                                     <div class="col-sm-11">
-                                        <select class="form-control input-sm" [(ngModel)]="creationDateProp" name="creationDateProp" [title]="creationDateProp.getURI()">
-                                            <option *ngFor="let p of creationDatePropList" [ngValue]="p" [title]="p.getURI()">{{p.getShow()}}</option>
-                                        </select>
+                                        <input-editable [value]="createdProp" (valueEdited)="updateCreatedProp($event)" [disabled]="!useProjMetadataProp">
+                                        </input-editable>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-1">Modification date:</label>
                                     <div class="col-sm-11">
-                                        <select class="form-control input-sm" [(ngModel)]="modificationDateProp" name="modificationDateProp" [title]="modificationDateProp.getURI()">
-                                            <option *ngFor="let p of modificationDatePropList" [ngValue]="p" [title]="p.getURI()">{{p.getShow()}}</option>
-                                        </select>
+                                        <input-editable [value]="modifiedProp" (valueEdited)="updateModifiedProp($event)" [disabled]="!useProjMetadataProp">
+                                        </input-editable>
                                     </div>
                                 </div>
                             </form>
