@@ -66,20 +66,25 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
                         //in case range type is typedLiteral, the rangeColl (if available) represents the admitted datatypes
                         let datatypes = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
                         let dataRanges = ranges.rangeCollection ? ranges.rangeCollection.dataRanges : null;
-                        this.enrichWithTypedLiteral(predicate, ranges.rangeCollection.resources, ranges.rangeCollection.dataRanges);
+                        this.enrichWithTypedLiteral(predicate, datatypes, dataRanges);
                     } else if (ranges.type == RangeType.literal) {
-                        var options = [RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
-                        this.basicModals.select("Select range type", null, options).then(
-                            (selectedRange: any) => {
-                                if (selectedRange == RDFTypesEnum.typedLiteral) {
-                                    let datatypes = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
-                                    this.enrichWithTypedLiteral(predicate, datatypes);
-                                } else if (selectedRange == RDFTypesEnum.plainLiteral) {
-                                    this.enrichWithPlainLiteral(predicate);
-                                }
-                            },
-                            () => { }
-                        )
+                        let datatypes = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
+                        if (datatypes != null) {
+                            this.enrichWithTypedLiteral(predicate, datatypes, ranges.rangeCollection.dataRanges);
+                        } else {
+                            var options = [RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
+                            this.basicModals.select("Select range type", null, options).then(
+                                (selectedRange: any) => {
+                                    if (selectedRange == RDFTypesEnum.typedLiteral) {
+                                        let datatypes = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
+                                        this.enrichWithTypedLiteral(predicate, datatypes);
+                                    } else if (selectedRange == RDFTypesEnum.plainLiteral) {
+                                        this.enrichWithPlainLiteral(predicate);
+                                    }
+                                },
+                                () => { }
+                            );
+                        }
                     } else if (ranges.type == RangeType.undetermined) {
                         var options = [RDFTypesEnum.resource, RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
                         this.basicModals.select("Select range type", null, options).then(

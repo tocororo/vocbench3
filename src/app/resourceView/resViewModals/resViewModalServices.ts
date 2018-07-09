@@ -90,7 +90,7 @@ export class ResViewModalServices {
             modalData, undefined, AddPropertyValueModalData
         );
         builder.keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
         return this.modal.open(AddPropertyValueModal, overlayConfig).result;
     }
 
