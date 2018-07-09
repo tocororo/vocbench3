@@ -108,3 +108,11 @@ export class Language {
     public tag: string;
     public mandatory?: boolean;
 }
+
+/**
+ * Class useful to customize the language selection in the lang-picker
+ */
+export class LanguageConstraint {
+    public constrain: boolean; //if true, constrain the selection of a language only to a given language
+    public locale?: boolean = true; //if true, allow the selection of also the locale of a given language
+}

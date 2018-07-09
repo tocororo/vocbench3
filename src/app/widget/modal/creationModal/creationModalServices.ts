@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTLiteral, ARTResource, ARTURIResource } from "../../../models/ARTResources";
+import { LanguageConstraint } from '../../../models/LanguagesCountries';
 import { NewPlainLiteralModal, NewPlainLiteralModalData } from "./newPlainLiteralModal/newPlainLiteralModal";
 import { NewLexiconCfModal, NewLexiconCfModalData } from './newResourceModal/ontolex/newLexiconCfModal';
 import { NewOntoLexicalizationCfModal, NewOntoLexicalizationCfModalData } from './newResourceModal/ontolex/newOntoLexicalizationCfModal';
@@ -41,10 +42,12 @@ export class CreationModalServices {
      * @param clsChangeable tells if the class of the creating resource can be changed
      * @param literalLabel the label of the literal field (default "Label")
      * @param lang the selected default language in the lang-picker of the modal. If not provided, set the default VB language
+     * @param langConstraints constraints to apply to the lang
      * @return
      */
-    newResourceWithLiteralCf(title: string, cls: ARTURIResource, clsChangeable?: boolean, literalLabel?: string, lang?: string) {
-        var modalData = new NewResourceWithLiteralCfModalData(title, cls, clsChangeable, literalLabel, lang);
+    newResourceWithLiteralCf(title: string, cls: ARTURIResource, clsChangeable?: boolean, literalLabel?: string,
+            lang?: string, langConstraints?: LanguageConstraint) {
+        var modalData = new NewResourceWithLiteralCfModalData(title, cls, clsChangeable, literalLabel, lang, langConstraints);
         const builder = new BSModalContextBuilder<NewResourceWithLiteralCfModalData>(
             modalData, undefined, NewResourceWithLiteralCfModalData
         );

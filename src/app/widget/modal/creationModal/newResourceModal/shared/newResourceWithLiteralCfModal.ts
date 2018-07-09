@@ -1,12 +1,13 @@
-import { Component, ViewChild, ElementRef } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources";
+import { CustomFormValue } from "../../../../../models/CustomForms";
+import { LanguageConstraint } from "../../../../../models/LanguagesCountries";
 import { CustomFormsServices } from "../../../../../services/customFormsServices";
 import { BasicModalServices } from "../../../basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
-import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources";
-import { CustomFormValue } from "../../../../../models/CustomForms";
+import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
 
 export class NewResourceWithLiteralCfModalData extends BSModalContext {
     constructor(
@@ -14,7 +15,11 @@ export class NewResourceWithLiteralCfModalData extends BSModalContext {
         public cls: ARTURIResource, //class that this modal is creating an instance
         public clsChangeable: boolean = true,
         public literalLabel: string = "Label",
-        public lang: string
+        public lang: string,
+        public langConstraints: LanguageConstraint = {
+            constrain: false, //if true, constrains the selection of language only to the passed lang
+            locale: true, //if false, forbids the selection  of locales of the passed lang
+        },
     ) {
         super();
     }

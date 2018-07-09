@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, Output, EventEmitter } from "@angular/core";
+import { Component, Input, ViewChild, Output, EventEmitter, SimpleChanges } from "@angular/core";
 import { OverlayConfig } from "ngx-modialog";
 import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
 import { Observable } from "rxjs/Observable";
@@ -38,6 +38,7 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
     private lexiconList: ARTURIResource[];//list of lexicons, visible only when lexiconChangeable is true
     private workingLexicon: ARTURIResource;//keep track of the selected lexicon: could be assigned throught @Input lexicon or lexicon selection
     //(useful expecially when lexiconChangeable is true so the changes don't effect the lexicon in context)
+    private lexiconLang: string;
 
     private visualizationMode: LexEntryVisualizationMode;
 
@@ -80,10 +81,12 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
                 lexicons => {
                     this.lexiconList = lexicons;
                     this.workingLexicon = this.lexiconList[ResourceUtils.indexOfNode(this.lexiconList, activeLexicon)];
+                    this.initLexiconLang();
                 }
             );
         } else {
             this.workingLexicon = activeLexicon;
+            this.initLexiconLang();
         }
 
         this.visualizationMode = this.vbProp.getLexicalEntryListPreferences().visualization;
@@ -91,8 +94,19 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
         this.onDigitChange();
     }
 
+    private initLexiconLang() {
+        if (this.workingLexicon != null) {
+            this.ontolexService.getLexiconLanguage(this.workingLexicon).subscribe(
+                lang => {
+                    this.lexiconLang = lang;
+                }
+            );
+        }
+    }
+
     private create() {
-        this.creationModals.newResourceWithLiteralCf("Create new ontolex:LexicalEntry", OntoLex.lexicalEntry, true, "Canonical Form").then(
+        this.creationModals.newResourceWithLiteralCf("Create new ontolex:LexicalEntry", OntoLex.lexicalEntry, true, "Canonical Form",
+            this.lexiconLang, { constrain: true, locale: true }).then(
             (data: NewResourceWithLiteralCfModalReturnData) => {
                 this.ontolexService.createLexicalEntry(data.literal, this.workingLexicon, data.uriResource, data.cls, data.cfValue).subscribe();
             },
@@ -235,6 +249,7 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
      * (visible only if @Input lexiconChangeable is true).
      */
     private onLexiconSelectionChange() {
+        this.initLexiconLang();
         this.lexiconChanged.emit(this.workingLexicon);
     }
 
@@ -274,6 +289,7 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
 
     private onLexiconChanged(lexicon: ARTURIResource) {
         this.workingLexicon = lexicon;
+        this.initLexiconLang();
         //in case of visualization search based reset the list
         if (this.visualizationMode == LexEntryVisualizationMode.searchBased && this.lastSearch != null) {
             this.viewChildList.forceList([]);

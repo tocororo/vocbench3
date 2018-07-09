@@ -85,6 +85,18 @@ export class OntoLexLemonServices {
     }
 
     /**
+     * 
+     * @param lexicon 
+     */
+    getLexiconLanguage(lexicon: ARTURIResource) {
+        console.log("[OntoLexLemonServices] getLexiconLanguage");
+        var params: any = {
+            lexicon: lexicon
+        };
+        return this.httpMgr.doGet(this.serviceName, "getLexiconLanguage", params);
+    }
+
+    /**
      * Creates a new ontolex:LexicalEntry.
      * @param canonicalForm 
      * @param lexicon 

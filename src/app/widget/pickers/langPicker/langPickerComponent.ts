@@ -11,6 +11,8 @@ import { Language, Languages } from "../../../models/LanguagesCountries";
 export class LangPickerComponent implements OnInit {
 
     @Input() lang: string;
+    @Input() constrain: boolean = false; //if true, constrain the selection of language only to the input this.lang
+    @Input() locale: boolean = false; //if true, allow the selection of also the locale of this.lang (compatibly with the user assigned langugages)
     @Input() size: string = "sm";
     @Input() disabled: boolean = false;
     @Output() langChange = new EventEmitter<any>();
@@ -70,6 +72,12 @@ export class LangPickerComponent implements OnInit {
                 }
             } else {
                 this.language = this.lang;
+                //lang provided => check constraints
+                if (this.constrain) {
+                    this.languageList = this.languageList.filter((l: Language) => {
+                        return (l.tag == this.lang || (this.locale && l.tag.startsWith(this.lang + "-")));
+                    });
+                }
             }
         }
         this.langChange.emit(this.language);//and emit langChange event (could be null => no language available for the user)
