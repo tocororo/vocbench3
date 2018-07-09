@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from "@angular/core";
+import { Component, Input, ViewChild, Output, EventEmitter } from "@angular/core";
 import { OverlayConfig } from "ngx-modialog";
 import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
 import { Observable } from "rxjs/Observable";
@@ -28,10 +28,16 @@ import { LexicalEntryListSettingsModal } from "./lexicalEntryListSettingsModal";
 export class LexicalEntryListPanelComponent extends AbstractPanel {
     @Input() hideSearch: boolean = false; //if true hide the search bar
     @Input() lexicon: ARTURIResource;
+    @Input() lexiconChangeable: boolean = false; //if true, above the tree is shown a menu to select a lexicon
+    @Output() lexiconChanged = new EventEmitter<ARTURIResource>();//when dynamic lexicon is changed
 
     @ViewChild(LexicalEntryListComponent) viewChildList: LexicalEntryListComponent;
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.ontolexLexicalEntry;
+
+    private lexiconList: ARTURIResource[];//list of lexicons, visible only when lexiconChangeable is true
+    private workingLexicon: ARTURIResource;//keep track of the selected lexicon: could be assigned throught @Input lexicon or lexicon selection
+    //(useful expecially when lexiconChangeable is true so the changes don't effect the lexicon in context)
 
     private visualizationMode: LexEntryVisualizationMode;
 
@@ -56,8 +62,28 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
 
     ngOnInit() {
         super.ngOnInit();
-        if (this.lexicon === undefined) { //if @Input is not provided at all, get the lexicon from the preferences
-            this.lexicon = this.vbProp.getActiveLexicon();
+
+        /**
+         * in order to avoid to set twice the workingLexicon (now during the @Input check and then during the lexiconChangeable check),
+         * store it in a temp variable and then set to the workingLexicon (in case of lexiconChangeable, the workingLexicon would be
+         * subscribed from the active lexicon in the lexicon list)
+         */
+        let activeLexicon: ARTURIResource; 
+        if (this.lexicon == undefined) { //if @Input is not provided, get the lexicon from the preferences
+            activeLexicon = this.vbProp.getActiveLexicon();
+        } else { //if @Input lexicon is provided, initialize the tree with this lexicon
+            activeLexicon = this.lexicon;
+        }
+        if (this.lexiconChangeable) {
+            //init the scheme list if the concept tree allows dynamic change of scheme
+            this.ontolexService.getLexicons().subscribe(
+                lexicons => {
+                    this.lexiconList = lexicons;
+                    this.workingLexicon = this.lexiconList[ResourceUtils.indexOfNode(this.lexiconList, activeLexicon)];
+                }
+            );
+        } else {
+            this.workingLexicon = activeLexicon;
         }
 
         this.visualizationMode = this.vbProp.getLexicalEntryListPreferences().visualization;
@@ -68,7 +94,7 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
     private create() {
         this.creationModals.newResourceWithLiteralCf("Create new ontolex:LexicalEntry", OntoLex.lexicalEntry, true, "Canonical Form").then(
             (data: NewResourceWithLiteralCfModalReturnData) => {
-                this.ontolexService.createLexicalEntry(data.literal, this.lexicon, data.uriResource, data.cls, data.cfValue).subscribe();
+                this.ontolexService.createLexicalEntry(data.literal, this.workingLexicon, data.uriResource, data.cls, data.cfValue).subscribe();
             },
             () => { }
         );
@@ -96,7 +122,7 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
 
         UIUtils.startLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
         this.searchService.searchLexicalEntry(searchedText, searchSettings.useLocalName, searchSettings.useURI, searchSettings.useNotes,
-            searchSettings.stringMatchMode, [this.lexicon], searchLangs, includeLocales).subscribe(
+            searchSettings.stringMatchMode, [this.workingLexicon], searchLangs, includeLocales).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
                 if (this.visualizationMode == LexEntryVisualizationMode.indexBased) {
@@ -133,7 +159,7 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
     public selectAdvancedSearchedResource(resource: ARTURIResource) {
         this.ontolexService.getLexicalEntryLexicons(resource).subscribe(
             lexicons => {
-                let isInActiveLexicon: boolean = ResourceUtils.containsNode(lexicons, this.lexicon);
+                let isInActiveLexicon: boolean = ResourceUtils.containsNode(lexicons, this.workingLexicon);
                 if (isInActiveLexicon) {
                     this.selectSearchedResource(resource);
                 } else {
@@ -202,9 +228,25 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
         }
     }
 
+    //lexicon selection menu handlers
+
+    /**
+     * Listener to <select> element that allows to change dynamically the lexicon of the lex-entry list
+     * (visible only if @Input lexiconChangeable is true).
+     */
+    private onLexiconSelectionChange() {
+        this.lexiconChanged.emit(this.workingLexicon);
+    }
+
+    private getLexiconRendering(lexicon: ARTURIResource) {
+        return ResourceUtils.getRendering(lexicon, this.rendering);
+    }
+
+
+
     //@Override
     isCreateDisabled(): boolean {
-        return (!this.lexicon || this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
+        return (!this.workingLexicon || this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
     }
 
     private settings() {
@@ -231,7 +273,7 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
     }
 
     private onLexiconChanged(lexicon: ARTURIResource) {
-        this.lexicon = lexicon;
+        this.workingLexicon = lexicon;
         //in case of visualization search based reset the list
         if (this.visualizationMode == LexEntryVisualizationMode.searchBased && this.lastSearch != null) {
             this.viewChildList.forceList([]);

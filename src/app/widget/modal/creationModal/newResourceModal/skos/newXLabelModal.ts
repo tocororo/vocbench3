@@ -32,6 +32,8 @@ export class NewXLabelModalData extends BSModalContext {
 export class NewXLabelModal implements ModalComponent<NewXLabelModalData> {
     context: NewXLabelModalData;
 
+    private viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
+
     private value: string;
     private lang: string;
 
@@ -45,6 +47,12 @@ export class NewXLabelModal implements ModalComponent<NewXLabelModalData> {
         this.lang = this.context.lang;
         this.value = this.context.value;
         document.getElementById("toFocus").focus();
+    }
+
+    ngAfterViewInit() {
+        setTimeout(() => {
+            this.viewInitialized = true;
+        });
     }
 
     private onKeydown(event: KeyboardEvent) {

@@ -1,12 +1,27 @@
 <div class="hbox">
     <class-tree-panel [roots]="roots" context="clsIndTree" (nodeSelected)="onTreeClassSelected($event)" [editable]="false"></class-tree-panel>
 
-    <!-- Show instance-list or concept-tree depending on the selected class in class-tree -->
-    <instance-list-panel *ngIf="!isRangeConcept()" style="margin-left: 4px;" [cls]="selectedClass"
-        [editable]="editable" [deletable]="deletable" (nodeSelected)="onInstanceSelected($event)">
-    </instance-list-panel>
-    <concept-tree-panel *ngIf="isRangeConcept()" style="margin-left: 4px;" [schemes]="currentSchemes" 
-        [editable]="editable" [deletable]="deletable" [schemeChangeable]="true"
-        (nodeSelected)="onInstanceSelected($event)" (schemeChanged)="onConceptTreeSchemeChange($event)">
-    </concept-tree-panel>
+    <!-- Show appropriate tree/list according to the selected class -->
+    <div [ngSwitch]="selectedClass?.getURI()" class="vbox" style="margin-left: 4px;">
+
+        <concept-tree-panel *ngSwitchCase="'http://www.w3.org/2004/02/skos/core#Concept'"
+            [schemes]="currentSchemes" [editable]="editable" [deletable]="deletable" [schemeChangeable]="true"
+            (nodeSelected)="onInstanceSelected($event)" (schemeChanged)="onConceptTreeSchemeChange($event)">
+        </concept-tree-panel>
+
+        <collection-tree-panel *ngSwitchCase="'http://www.w3.org/2004/02/skos/core#Collection'"
+            [editable]="editable" [deletable]="deletable"
+            (nodeSelected)="onInstanceSelected($event)">
+        </collection-tree-panel>
+
+        <lexical-entry-list-panel *ngSwitchCase="'http://www.w3.org/ns/lemon/ontolex#LexicalEntry'"
+            [lexiconChangeable]="true" [editable]="editable" [deletable]="deletable"
+            (nodeSelected)="onInstanceSelected($event)" (lexiconChanged)="onLexEntryLexiconChange($event)">
+        </lexical-entry-list-panel>
+
+        <instance-list-panel *ngSwitchDefault 
+            [cls]="selectedClass" [editable]="editable" [deletable]="deletable" (nodeSelected)="onInstanceSelected($event)">
+        </instance-list-panel>
+    </div>
+
 </div>

@@ -48,17 +48,13 @@
         
         <datatype-list-panel *ngIf="viewType == 'datatypeList'" [full]="true" [deletable]="false" (nodeSelected)="onResourceSelected($event)"></datatype-list-panel>
         
-        <!-- <class-individual-tree *ngIf="viewType == 'classAndIndividual'" [roots]="rootsForClsIndList" [deletable]="false"
-            (nodeSelected)="onResourceSelected($event)">
-        </class-individual-tree> -->
-
         <div  *ngIf="viewType == 'classAndIndividual'" class="vbox">
             <div *ngIf="rootsForClsIndList" class="checkbox-inline" style="margin-bottom: 5px;">
                 <label>
                     <input type="checkbox" [(ngModel)]="showAllClass">Show all classes
                 </label>
             </div>
-            <class-individual-tree [deletable]="false" [roots]="showAllClass? defaultRootClass : rootsForClsIndList"
+            <class-individual-tree [deletable]="false" [roots]="showAllClass? defaultRootClasses : rootsForClsIndList"
                 (nodeSelected)="onResourceSelected($event)">
             </class-individual-tree>
         </div>

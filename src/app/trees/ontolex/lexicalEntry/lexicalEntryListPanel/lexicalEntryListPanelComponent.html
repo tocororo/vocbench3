@@ -30,6 +30,14 @@
 
     <!-- List -->
     <div class="panel-body vbox">
+
+        <div *ngIf="lexiconChangeable" style="padding-bottom: 3px; display: flex; align-items: center">
+            <span style="white-space: nowrap; margin: 0px 3px;">Lexicon:</span>
+            <select class="form-control input-xs" [(ngModel)]="workingLexicon" (ngModelChange)="onLexiconSelectionChange()">
+                <option *ngFor="let l of lexiconList" [ngValue]="l">{{getLexiconRendering(l)}}</option>
+            </select>
+        </div>
+
         <div *ngIf="visualizationMode == 'indexBased'" style="padding-bottom: 3px; display: flex; align-items: center">
             <select class="form-control input-xs" [(ngModel)]="firstDigitIndex" (ngModelChange)="onDigitChange()" style="width: initial">
                 <option *ngFor="let i of alphabet">{{i}}</option>
@@ -47,14 +55,14 @@
             Please use the search field to retrieve lexical entries
         </div>
 
-        <lexical-entry-list [lexicon]="lexicon" [index]="index" [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)">
+        <lexical-entry-list [lexicon]="workingLexicon" [index]="index" [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)">
         </lexical-entry-list>
     </div>
 
     <!-- Search -->
     <div *ngIf="!hideSearch" class="panel-footer">
         <search-bar (search)="doSearch($event)" (advancedSearch)="advancedSearch($event)" [roles]="[panelRole]" 
-            [context]="context" [disabled]="!lexicon">
+            [context]="context" [disabled]="!workingLexicon">
         </search-bar>
     </div>
     

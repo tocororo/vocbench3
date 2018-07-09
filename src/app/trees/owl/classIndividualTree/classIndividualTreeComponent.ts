@@ -62,6 +62,15 @@ export class ClassIndividualTreeComponent {
      */
     private onConceptTreeSchemeChange() {
         this.selectedInstance = null;
+        this.nodeSelected.emit(this.selectedInstance);
+    }
+
+    /**
+     * Listener to lexiconChanged event emitted by lexical-entry-list when range class is ontolex:LexicalEntry.
+     */
+    private onLexEntryLexiconChange() {
+        this.selectedInstance = null;
+        this.nodeSelected.emit(this.selectedInstance);
     }
 
     /**

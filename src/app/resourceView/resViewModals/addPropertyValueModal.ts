@@ -72,7 +72,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private rootsForClsIndList: ARTURIResource[];
     private rootsForClsTree: ARTURIResource[];
     private showAllClass: boolean = false;
-    private defaultRootClass: ARTURIResource = RDFS.resource;
+    private defaultRootClasses: ARTURIResource[] = [RDFS.resource];
 
     private showAspectSelector: boolean = false;
     private treeListAspectSelector: string = "Existing Resource";
