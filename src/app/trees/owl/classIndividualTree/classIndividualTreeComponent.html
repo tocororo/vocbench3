@@ -19,6 +19,10 @@
             (nodeSelected)="onInstanceSelected($event)" (lexiconChanged)="onLexEntryLexiconChange($event)">
         </lexical-entry-list-panel>
 
+        <lexical-sense-selector *ngSwitchCase="'http://www.w3.org/ns/lemon/ontolex#LexicalSense'"
+            (nodeSelected)="onInstanceSelected($event)">
+        </lexical-sense-selector>
+
         <instance-list-panel *ngSwitchDefault 
             [cls]="selectedClass" [editable]="editable" [deletable]="deletable" (nodeSelected)="onInstanceSelected($event)">
         </instance-list-panel>

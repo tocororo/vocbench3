@@ -30,6 +30,7 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
     @Input() lexicon: ARTURIResource;
     @Input() lexiconChangeable: boolean = false; //if true, above the tree is shown a menu to select a lexicon
     @Output() lexiconChanged = new EventEmitter<ARTURIResource>();//when dynamic lexicon is changed
+    @Output() indexChanged = new EventEmitter<string>();//when index changed
 
     @ViewChild(LexicalEntryListComponent) viewChildList: LexicalEntryListComponent;
 
@@ -285,6 +286,7 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
 
     private onDigitChange() {
         this.index = (this.indexLenght == 1) ? this.firstDigitIndex : this.firstDigitIndex + this.secondDigitIndex;
+        this.indexChanged.emit(this.index);
     }
 
     private onLexiconChanged(lexicon: ARTURIResource) {

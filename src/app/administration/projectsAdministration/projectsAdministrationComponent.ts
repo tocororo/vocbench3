@@ -38,7 +38,6 @@ export class ProjectsAdministrationComponent {
             AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_ROLE_MANAGEMENT)) { 
             this.selectedProject = VBContext.getWorkingProject();
         }
-
         if (this.isProjUserManagementAuthorized()) {
             this.selectedAspect = this.projUsersAspect;
         } else if (this.isProjGroupManagementAuthorized()) {
@@ -47,10 +46,6 @@ export class ProjectsAdministrationComponent {
             this.selectedAspect = this.projSettingsAspect;
         }
     }
-
-    // private changeAspect(aspect: string) {
-    //     this.selectedAspect = aspect;
-    // }
 
     private selectProject(project: Project) {
         if (this.selectedProject != project) {
@@ -65,7 +60,7 @@ export class ProjectsAdministrationComponent {
         );
     }
     private isProjGroupManagementAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.USERS_GROUPS_MANAGEMENT);
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_GROUP_MANAGEMENT);
     }
     private isProjSettingsAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_PROJECT_MANAGEMENT);

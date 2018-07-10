@@ -122,7 +122,6 @@ enum Actions {
     SKOS_REMOVE_TOP_CONCEPT,
     SPARQL_EVALUATE_QUERY,
     SPARQL_EXECUTE_UPDATE,
-    USERS_GROUPS_MANAGEMENT,
     VALIDATION, //generic for the validation operation
     VERSIONS_CREATE_VERSION_DUMP,
     VERSIONS_GET_VERSIONS
@@ -139,7 +138,7 @@ export class AuthorizationEvaluator {
     private static actionAuthGoalMap: { [key: number ]: string } = {
         [Actions.ADMINISTRATION_PROJECT_MANAGEMENT] : 'auth(pm(project,_), "CRUDV").',
         [Actions.ADMINISTRATION_ROLE_MANAGEMENT] : 'auth(rbac(_,_), "CRUDV").',
-        [Actions.ADMINISTRATION_USER_GROUP_MANAGEMENT] : '',//TODO
+        [Actions.ADMINISTRATION_USER_GROUP_MANAGEMENT] : 'auth(rbac(user,_), "CRUDV").',//TODO
         [Actions.ADMINISTRATION_USER_ROLE_MANAGEMENT] : 'auth(rbac(user,_), "CRUDV").',
         [Actions.ALIGNMENT_ADD_ALIGNMENT] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', alignment), "C").',
         [Actions.ALIGNMENT_LOAD_ALIGNMENT] : 'auth(rdf(resource, alignment), "R").',
@@ -255,7 +254,6 @@ export class AuthorizationEvaluator {
         [Actions.SKOS_REMOVE_TOP_CONCEPT] : 'auth(rdf(concept, schemes), "D").',
         [Actions.SPARQL_EVALUATE_QUERY] : 'auth(rdf(sparql), "R").',
         [Actions.SPARQL_EXECUTE_UPDATE] : 'auth(rdf(sparql), "U").',
-        [Actions.USERS_GROUPS_MANAGEMENT] : '',//TODO
         [Actions.VALIDATION] : 'auth(rdf, "V").',
         [Actions.VERSIONS_CREATE_VERSION_DUMP] : 'auth(rdf(dataset, version), "C").',
         [Actions.VERSIONS_GET_VERSIONS] : 'auth(rdf(dataset, version), "R").',
@@ -307,6 +305,7 @@ export class AuthorizationEvaluator {
                 // console.log("authorization cached", cachedAuth);
                 return cachedAuth;
             } else { //...otherwise compute authorization
+                console.log("auth compute for action", action);
                 let authorized: boolean = this.evaulatePrologGoal(goal); //cache the result of the evaluation for the given goal
                 this.authCache[goal] = authorized;
                 return authorized;
@@ -315,6 +314,7 @@ export class AuthorizationEvaluator {
     }
 
     private static evaulatePrologGoal(goal: string): boolean {
+        console.log("auth evaluate", goal);
         let query = Prolog.Parser.parseQuery(goal);
         let iter = Prolog.Solver.query(AuthorizationEvaluator.prologEngine, query);
         let next: boolean = iter.next();

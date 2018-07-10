@@ -255,6 +255,10 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         this.onResourceSelected(resource);
     }
 
+    private onConceptTreeSchemeChange() {
+        this.selectedResource = null;
+    }
+
     private onDatarangeChanged(datarange: ARTLiteral[]) {
         this.datarange = datarange;
     }

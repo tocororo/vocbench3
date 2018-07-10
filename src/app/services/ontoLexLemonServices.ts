@@ -173,6 +173,22 @@ export class OntoLexLemonServices {
     }
 
     /**
+     * Returns the senses of a lexicalEntry
+     * @param lexicalEntry 
+     */
+    getLexicalEntrySenses(lexicalEntry: ARTURIResource): Observable<ARTURIResource[]> {
+        console.log("[OntoLexLemonServices] getLexicalEntrySenses");
+        var params: any = {
+            lexicalEntry: lexicalEntry
+        };
+        return this.httpMgr.doGet(this.serviceName, "getLexicalEntrySenses", params).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
+    }
+
+    /**
      * Returns the 2-digits index of the given lexicalEntry 
      * @param lexicalEntry 
      */

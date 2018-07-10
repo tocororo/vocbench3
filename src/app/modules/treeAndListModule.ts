@@ -7,6 +7,7 @@ import { LexicalEntryListComponent } from '../trees/ontolex/lexicalEntry/lexical
 import { LexicalEntryListNodeComponent } from '../trees/ontolex/lexicalEntry/lexicalEntryList/lexicalEntryListNodeComponent';
 import { LexicalEntryListPanelComponent } from '../trees/ontolex/lexicalEntry/lexicalEntryListPanel/lexicalEntryListPanelComponent';
 import { LexicalEntryListSettingsModal } from '../trees/ontolex/lexicalEntry/lexicalEntryListPanel/lexicalEntryListSettingsModal';
+import { LexicalSenseSelectorComponent } from '../trees/ontolex/lexicalSenseSelector/lexicalSenseSelectorComponent';
 import { LexiconListComponent } from '../trees/ontolex/lexicon/lexiconList/lexiconListComponent';
 import { LexiconListNodeComponent } from '../trees/ontolex/lexicon/lexiconList/lexiconListNodeComponent';
 import { LexiconListPanelComponent } from '../trees/ontolex/lexicon/lexiconListPanel/lexiconListPanelComponent';
@@ -55,7 +56,7 @@ import { SharedModule } from './sharedModule';
         ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent, InstanceListNodeComponent,
         PropertyTreePanelComponent, PropertyTreeComponent, PropertyTreeNodeComponent,
         LexiconListPanelComponent, LexiconListComponent, LexiconListNodeComponent, LexicalEntryListPanelComponent, 
-        LexicalEntryListComponent, LexicalEntryListNodeComponent, LexicalEntryListSettingsModal,
+        LexicalEntryListComponent, LexicalEntryListNodeComponent, LexicalEntryListSettingsModal, LexicalSenseSelectorComponent,
         DatatypeListPanelComponent, DatatypeListComponent, DatatypeListNodeComponent,
         SearchBarComponent, SearchSettingsModal, ClassTreeSettingsModal, AdvancedSearchModal, CustomSearchModal, LoadCustomSearchModal
     ],
@@ -68,7 +69,7 @@ import { SharedModule } from './sharedModule';
         ClassIndividualTreeComponent, InstanceListPanelComponent, InstanceListComponent, InstanceListNodeComponent,
         PropertyTreePanelComponent, PropertyTreeComponent,
         LexiconListPanelComponent, LexiconListComponent, LexiconListNodeComponent,
-        LexicalEntryListPanelComponent, LexicalEntryListComponent, LexicalEntryListNodeComponent,
+        LexicalEntryListPanelComponent, LexicalEntryListComponent, LexicalEntryListNodeComponent, LexicalSenseSelectorComponent,
         DatatypeListPanelComponent, DatatypeListComponent, DatatypeListNodeComponent
     ],
     entryComponents: [

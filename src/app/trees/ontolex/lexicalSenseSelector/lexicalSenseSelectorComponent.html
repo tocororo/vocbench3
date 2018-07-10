@@ -1,0 +1,10 @@
+<div class="vbox">
+
+    <lexical-entry-list-panel style="flex: 3; margin-bottom: 4px;"
+        [lexiconChangeable]="true" [editable]="false" [deletable]="false" (nodeSelected)="onLexEntrySelected($event)"
+        (lexiconChanged)="onLexEntryLexiconChange($event)" (indexChanged)="onIndexChanged($event)">
+    </lexical-entry-list-panel>
+
+    <resource-list style="flex: 1" [resources]="lexicalSenses" (nodeSelected)="onLexicalSenseSelected($event)"></resource-list>
+
+</div>

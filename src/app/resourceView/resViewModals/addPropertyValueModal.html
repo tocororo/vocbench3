@@ -30,7 +30,7 @@
         </div>
 
         <concept-tree-panel *ngIf="viewType == 'conceptTree'" [deletable]="false" [schemeChangeable]="true" [schemes]="schemes"
-            (nodeSelected)="onResourceSelected($event)">
+            (nodeSelected)="onResourceSelected($event)"  (schemeChanged)="onConceptTreeSchemeChange($event)">
         </concept-tree-panel>
         
         <ng-template [ngIf]="viewType == 'propertyTree'">
