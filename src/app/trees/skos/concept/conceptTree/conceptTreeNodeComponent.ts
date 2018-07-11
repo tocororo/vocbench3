@@ -5,6 +5,7 @@ import { SkosServices } from "../../../../services/skosServices";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTreeNode } from "../../../abstractTreeNode";
 
 @Component({
@@ -18,8 +19,9 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
     //ConceptTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
 
-    constructor(private skosService: SkosServices, private vbProp: VBProperties, eventHandler: VBEventHandler, basicModals: BasicModalServices) {
-        super(eventHandler, basicModals);
+    constructor(private skosService: SkosServices, private vbProp: VBProperties, eventHandler: VBEventHandler,
+        basicModals: BasicModalServices, sharedModals: SharedModalServices) {
+        super(eventHandler, basicModals, sharedModals);
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
             (deletedConcept: ARTURIResource) => this.onTreeNodeDeleted(deletedConcept)));
         this.eventSubscriptions.push(eventHandler.narrowerCreatedEvent.subscribe(

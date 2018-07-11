@@ -1,10 +1,12 @@
-import { Component, Input, Output, ViewChild, ElementRef, EventEmitter } from "@angular/core";
-import { AbstractStruct } from "./abstractStruct";
-import { ARTURIResource, ARTResource, ResAttribute } from "../models/ARTResources";
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { SemanticTurkey } from "../models/Vocabulary";
+import { UIUtils } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
-import { UIUtils } from "../utils/UIUtils";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { AbstractStruct } from "./abstractStruct";
 
 @Component({
     selector: "tree",
@@ -39,8 +41,12 @@ export abstract class AbstractTree extends AbstractStruct {
     /**
      * CONSTRUCTOR
      */
-    constructor(eventHandler: VBEventHandler) {
+    protected basicModals: BasicModalServices;
+    protected sharedModals: SharedModalServices;
+    constructor(eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         super(eventHandler);
+        this.basicModals = basicModals;
+        this.sharedModals = sharedModals;
     }
 
     /**
@@ -138,6 +144,16 @@ export abstract class AbstractTree extends AbstractStruct {
         this.pendingSearchRoot = resource;
         this.pendingSearchPath = path;
         return false;
+    }
+
+    onTreeNodeNotFound(node: ARTURIResource) {
+        this.basicModals.confirm("Search", "Node " + node.getShow() + " is not reachable in the current tree. "
+            + "Do you want to open its ResourceView in a modal dialog?", "warning").then(
+            confirm => { 
+                this.sharedModals.openResourceView(node, false);
+            },
+            cancel => {}
+        );
     }
 
 }

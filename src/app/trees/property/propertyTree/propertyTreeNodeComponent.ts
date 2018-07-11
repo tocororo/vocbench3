@@ -3,6 +3,7 @@ import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../.
 import { PropertyServices } from "../../../services/propertyServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTreeNode } from "../../abstractTreeNode";
 
 @Component({
@@ -14,8 +15,9 @@ export class PropertyTreeNodeComponent extends AbstractTreeNode {
     //PropertyTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(PropertyTreeNodeComponent) viewChildrenNode: QueryList<PropertyTreeNodeComponent>;
 
-    constructor(private propService: PropertyServices, eventHandler: VBEventHandler, basicModals: BasicModalServices) {
-        super(eventHandler, basicModals);
+    constructor(private propService: PropertyServices, eventHandler: VBEventHandler, 
+        basicModals: BasicModalServices, sharedModals: SharedModalServices) {
+        super(eventHandler, basicModals, sharedModals);
         this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(
             (data: any) => this.onChildCreated(data.superProperty, data.subProperty)));
         this.eventSubscriptions.push(eventHandler.superPropertyAddedEvent.subscribe(

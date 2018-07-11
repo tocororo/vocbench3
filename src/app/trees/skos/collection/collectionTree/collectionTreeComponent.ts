@@ -6,6 +6,7 @@ import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTree } from "../../../abstractTree";
 import { CollectionTreeNodeComponent } from "./collectionTreeNodeComponent";
 
@@ -19,10 +20,10 @@ export class CollectionTreeComponent extends AbstractTree {
     //CollectionTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices, private basicModals: BasicModalServices,
-        eventHandler: VBEventHandler) {
+    constructor(private skosService: SkosServices, private searchService: SearchServices, 
+        eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
 
-        super(eventHandler);
+        super(eventHandler, basicModals, sharedModals);
 
         this.eventSubscriptions.push(eventHandler.rootCollectionCreatedEvent.subscribe(
             (newColl: ARTURIResource) => this.onRootCollectionCreated(newColl)));
@@ -63,7 +64,7 @@ export class CollectionTreeComponent extends AbstractTree {
         this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.skosCollection).subscribe(
             path => {
                 if (path.length == 0) {
-                    this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree", "warning");
+                    this.onTreeNodeNotFound(node);
                     return;
                 };
                 
@@ -84,7 +85,7 @@ export class CollectionTreeComponent extends AbstractTree {
                             }
                         }
                         //if this line is reached it means that the first node of the path has not been found
-                        this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree", "warning");
+                        this.onTreeNodeNotFound(node);
                     }
                 );
             }

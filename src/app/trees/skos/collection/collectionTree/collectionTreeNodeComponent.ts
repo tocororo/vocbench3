@@ -3,6 +3,7 @@ import { ARTResource, ARTURIResource, ResAttribute, ResourceUtils, SortAttribute
 import { SkosServices } from "../../../../services/skosServices";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTreeNode } from "../../../abstractTreeNode";
 
 @Component({
@@ -14,8 +15,9 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
     //CollectionTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
 
-    constructor(private skosService: SkosServices, eventHandler: VBEventHandler, basicModals: BasicModalServices) {
-        super(eventHandler, basicModals);
+    constructor(private skosService: SkosServices, eventHandler: VBEventHandler, 
+        basicModals: BasicModalServices, sharedModals: SharedModalServices) {
+        super(eventHandler, basicModals, sharedModals);
         this.eventSubscriptions.push(eventHandler.collectionDeletedEvent.subscribe(
             (deletedCollection: ARTResource) => this.onTreeNodeDeleted(deletedCollection)));
         this.eventSubscriptions.push(eventHandler.nestedCollectionCreatedEvent.subscribe(

@@ -1,11 +1,12 @@
-import { Component, Input, Output, ViewChild, QueryList, ElementRef, EventEmitter } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Output, QueryList, ViewChild } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { AbstractNode } from "./abstractNode";
-import { ARTResource, ARTURIResource, ARTNode, ResAttribute } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { SemanticTurkey } from "../models/Vocabulary";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBContext } from "../utils/VBContext";
+import { VBEventHandler } from "../utils/VBEventHandler";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { AbstractNode } from "./abstractNode";
 
 @Component({
     selector: "tree-node",
@@ -34,7 +35,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
      * CONSTRUCTOR
      */
     protected basicModals: BasicModalServices;
-    constructor(eventHandler: VBEventHandler, basicModals: BasicModalServices) {
+    constructor(eventHandler: VBEventHandler, basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
         super(eventHandler);
         this.basicModals = basicModals;
     }
@@ -164,7 +165,13 @@ export abstract class AbstractTreeNode extends AbstractNode {
             }
         }
         //if this line is reached it means that the first node of the path has not been found
-        this.basicModals.alert("Search", "Node " + path[path.length-1].getShow() + " is not reachable in the current tree", "warning");
+        this.basicModals.confirm("Search", "Node " + path[path.length-1].getShow() + " is not reachable in the current tree. "
+            + "Do you want to open its ResourceView in a modal dialog?", "warning").then(
+            confirm => { 
+                this.sharedModals.openResourceView(path[path.length-1], false);
+            },
+            cancel => {}
+        );
     }
 
     /**

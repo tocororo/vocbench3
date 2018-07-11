@@ -8,6 +8,7 @@ import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTree } from "../../../abstractTree";
 import { ConceptTreeNodeComponent } from "./conceptTreeNodeComponent";
 
@@ -26,9 +27,9 @@ export class ConceptTreeComponent extends AbstractTree {
     //ConceptTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices, private basicModals: BasicModalServices,
-        private vbProp: VBProperties, eventHandler: VBEventHandler) {
-        super(eventHandler);
+    constructor(private skosService: SkosServices, private searchService: SearchServices, private vbProp: VBProperties,
+        eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
+        super(eventHandler, basicModals, sharedModals);
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
             (data: {concept: ARTURIResource, schemes: ARTURIResource[]}) => this.onTopConceptCreated(data.concept, data.schemes)));
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
@@ -97,8 +98,7 @@ export class ConceptTreeComponent extends AbstractTree {
         this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, schemes).subscribe(
             path => {
                 if (path.length == 0) {
-                    this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree", "warning");
-                    return;
+                    this.onTreeNodeNotFound(node);
                 };
                 //open tree from root to node
                 this.openRoot(path, node); 

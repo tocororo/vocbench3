@@ -6,6 +6,7 @@ import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTree } from "../../abstractTree";
 import { PropertyTreeNodeComponent } from "./propertyTreeNodeComponent";
 
@@ -23,9 +24,9 @@ export class PropertyTreeComponent extends AbstractTree {
     @ViewChildren(PropertyTreeNodeComponent) viewChildrenNode: QueryList<PropertyTreeNodeComponent>;
 
     constructor(private propertyService: PropertyServices, private searchService: SearchServices,
-        private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+        eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         
-        super(eventHandler);
+        super(eventHandler, basicModals, sharedModals);
 
         this.eventSubscriptions.push(eventHandler.topPropertyCreatedEvent.subscribe(
             (node: ARTURIResource) => this.onTopPropertyCreated(node)));
@@ -150,7 +151,7 @@ export class PropertyTreeComponent extends AbstractTree {
         this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.property).subscribe(
             path => {
                 if (path.length == 0) {
-                    this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree", "warning");
+                    this.onTreeNodeNotFound(node);
                     return;
                 };
                 
@@ -171,7 +172,7 @@ export class PropertyTreeComponent extends AbstractTree {
                             }
                         }
                         //if this line is reached it means that the first node of the path has not been found
-                        this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree", "warning");
+                        this.onTreeNodeNotFound(node);
                     }
                 );
             }

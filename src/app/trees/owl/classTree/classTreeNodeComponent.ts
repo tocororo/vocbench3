@@ -7,6 +7,7 @@ import { TreeListContext } from "../../../utils/UIUtils";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTreeNode } from "../../abstractTreeNode";
 
 @Component({
@@ -24,8 +25,9 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
 
     private showInstanceNumber: boolean = false;
 
-    constructor(private clsService: ClassesServices, private pref: VBProperties, eventHandler: VBEventHandler, basicModals: BasicModalServices) {
-        super(eventHandler, basicModals);
+    constructor(private clsService: ClassesServices, private pref: VBProperties, eventHandler: VBEventHandler,
+        basicModals: BasicModalServices, sharedModals: SharedModalServices) {
+        super(eventHandler, basicModals, sharedModals);
         this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(
             (data: any) => this.onChildCreated(data.superClass, data.subClass)));
         this.eventSubscriptions.push(eventHandler.superClassAddedEvent.subscribe(
