@@ -243,6 +243,15 @@ export class ProjectUsersManagerComponent {
         );
     }
 
+    private changeGroupLimitations() {
+        let limitations: boolean = !this.puBinding.isSubjectToGroupLimitations();
+        this.groupsService.setGroupLimitationsToUser(this.project.getName(), this.selectedUser.getEmail(), this.puBinding.getGroup().iri, limitations).subscribe(
+            stResp => {
+                this.puBinding.setGroupLimitations(limitations);
+            }
+        );
+    }
+
     private isGroupAlreadyAssigned(group: UsersGroup): boolean {
         if (this.puBinding != undefined) {
             let assignedGroup = this.puBinding.getGroup();

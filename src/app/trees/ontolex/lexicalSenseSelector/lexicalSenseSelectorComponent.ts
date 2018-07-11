@@ -28,13 +28,6 @@ export class LexicalSenseSelectorComponent {
                 this.lexicalSenses = senses;
             }
         );
-
-        // this.lexicalSenses = [
-        //     new ARTURIResource("http://aaaa#sense1", "sense 1"),
-        //     new ARTURIResource("http://aaaa#sense2", "sense 2"),
-        //     new ARTURIResource("http://aaaa#sense3", "sense 3"),
-        //     new ARTURIResource("http://aaaa#sense4", "sense 4"),
-        // ];
     }
 
     private onLexEntryLexiconChange() {

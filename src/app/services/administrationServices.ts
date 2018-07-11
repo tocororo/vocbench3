@@ -80,7 +80,7 @@ export class AdministrationServices {
                 if (stResp.group != null) {
                     group = UsersGroup.deserialize(stResp.group);
                 }
-                return new ProjectUserBinding(stResp.projectName, stResp.userEmail, stResp.roles, group, stResp.languages);
+                return new ProjectUserBinding(stResp.projectName, stResp.userEmail, stResp.roles, group, stResp.groupLimitations, stResp.languages);
             }
         );
     }

@@ -71,7 +71,10 @@
                     <div class="hbox">
                         <div class="subPanel vbox" style="margin: 0px">
                             <div class="subPanel-heading">
-                                <label>Assigned Group:</label>
+                                <label style="flex: 1">Assigned Group:</label>
+                                <input *ngIf="puBinding?.getGroup()" type="checkbox" [ngModel]="puBinding.isSubjectToGroupLimitations()" 
+                                    (click)="changeGroupLimitations()" title="If checked, the user is subject to the group limitations"
+                                    [disabled]="selectedUser.isAdmin()">
                             </div>
                             <div class="subPanel-body vbox scrollableContainer">
                                 <ng-template [ngIf]="puBinding">

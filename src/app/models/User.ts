@@ -145,15 +145,17 @@ export class ProjectUserBinding {
     private userEmail: string;
     private roles: string[] = [];
     private group: UsersGroup;
+    private groupLimitations: boolean;
     private languages: string[] = [];
 
-    constructor(projectName: string, userEmail: string, roles?: string[], group?: UsersGroup, languages?: string[]) {
+    constructor(projectName: string, userEmail: string, roles?: string[], group?: UsersGroup, groupLimitations?: boolean, languages?: string[]) {
         this.projectName = projectName;
         this.userEmail = userEmail;
         if (roles != undefined) {
             this.roles = roles;
         }
         this.group = group;
+        this.groupLimitations = groupLimitations;
         if (languages != undefined) {
             this.languages = languages
         }
@@ -201,6 +203,14 @@ export class ProjectUserBinding {
 
     removeGroup() {
         this.group = null;
+    }
+
+    setGroupLimitations(limitations: boolean) {
+        this.groupLimitations = limitations
+    }
+
+    isSubjectToGroupLimitations(): boolean {
+        return this.groupLimitations;
     }
 
     setLanguages(languages: string[]) {

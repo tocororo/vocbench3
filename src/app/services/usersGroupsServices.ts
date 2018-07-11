@@ -201,6 +201,24 @@ export class UsersGroupsServices {
     }
 
     /**
+     * 
+     * @param projectName
+     * @param email
+     * @param groupName
+     * @param limitations
+     */
+    setGroupLimitationsToUser(projectName: string, email: string, groupIri: ARTURIResource, limitations: boolean) {
+        console.log("[UsersGroupServices] setGroupLimitationsToUser");
+        var params: any = {
+            projectName: projectName,
+            email: email,
+            groupIri: groupIri,
+            limitations: limitations
+        };
+        return this.httpMgr.doPost(this.serviceName, "setGroupLimitationsToUser", params);
+    }
+
+    /**
      * Removes a role to a user in a project
      * @param projectName
      * @param email
