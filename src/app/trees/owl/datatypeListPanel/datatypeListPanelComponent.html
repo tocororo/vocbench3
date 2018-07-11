@@ -27,7 +27,8 @@
     
     <!-- Tree -->
     <div class="panel-body vbox">
-        <datatype-list [full]="full" [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)">
+        <datatype-list [full]="full" [rendering]="rendering" [showDeprecated]="showDeprecated" [context]="context"
+            (nodeSelected)="onNodeSelected($event)">
         </datatype-list>
     </div>
 

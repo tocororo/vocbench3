@@ -27,7 +27,8 @@
     
     <!-- Tree -->
     <div class="panel-body vbox">
-        <instance-list [cls]="cls" [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)">
+        <instance-list [cls]="cls" [rendering]="rendering" [showDeprecated]="showDeprecated" [context]="context"
+            (nodeSelected)="onNodeSelected($event)">
         </instance-list>
     </div>
 

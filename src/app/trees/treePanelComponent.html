@@ -58,8 +58,7 @@
         <div [ngClass]="{vbox : activeTab == 'cls'}" [hidden]="activeTab != 'cls'">
             <class-individual-tree-panel (classSelected)="onNodeSelected($event)" (instanceSelected)="onNodeSelected($event)"
                 (classDeleted)="onNodeDeleted($event)" (instanceDeleted)="onNodeDeleted($event)"
-                (advancedSearch)="advancedSearch($event)"
-                [context]="context" [readonly]="readonly">
+                (advancedSearch)="advancedSearch($event)" [context]="context" [readonly]="readonly">
             </class-individual-tree-panel>
         </div>
         <ng-template [ngIf]="isProjectSKOS() || isProjectOntolex()">

@@ -1,10 +1,10 @@
-import { Component, Input, QueryList, ViewChildren } from "@angular/core";
+import { Component, QueryList, ViewChildren } from "@angular/core";
 import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
-import { TreeListContext, UIUtils } from "../../../../utils/UIUtils";
+import { UIUtils } from "../../../../utils/UIUtils";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from "../../../../utils/VBProperties";
@@ -18,8 +18,6 @@ import { LexiconListNodeComponent } from "./lexiconListNodeComponent";
     host: { class: "treeListComponent" }
 })
 export class LexiconListComponent extends AbstractList {
-
-    @Input() context: TreeListContext; //useful to determine if show the radio buttons
 
     @ViewChildren(LexiconListNodeComponent) viewChildrenNode: QueryList<LexiconListNodeComponent>;
 

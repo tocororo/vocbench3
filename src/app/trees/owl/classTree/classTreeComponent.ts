@@ -3,7 +3,7 @@ import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } fr
 import { ClassesServices } from "../../../services/classesServices";
 import { SearchServices } from "../../../services/searchServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
-import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
+import { UIUtils } from "../../../utils/UIUtils";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -19,7 +19,6 @@ import { ClassTreeNodeComponent } from "./classTreeNodeComponent";
 export class ClassTreeComponent extends AbstractTree {
     @Input('roots') rootClasses: ARTURIResource[];
     @Input() filterEnabled: boolean = false;
-    @Input() context: TreeListContext;
 
     //ClassTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;

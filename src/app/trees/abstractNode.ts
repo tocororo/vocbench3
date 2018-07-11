@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { ARTURIResource, ARTResource, ResAttribute } from "../models/ARTResources";
 import { VBEventHandler } from "../utils/VBEventHandler";
+import { TreeListContext } from "../utils/UIUtils";
 
 @Component({
     selector: "node",
@@ -15,6 +16,7 @@ export abstract class AbstractNode {
     @Input() node: ARTURIResource;
     @Input() rendering: boolean; //if true the node be rendered with the show, with the qname otherwise
     @Input() showDeprecated: boolean;
+    @Input() context: TreeListContext;
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
     eventSubscriptions: any[] = [];

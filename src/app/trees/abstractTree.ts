@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { SemanticTurkey } from "../models/Vocabulary";
-import { UIUtils } from "../utils/UIUtils";
+import { UIUtils, TreeListContext } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -147,13 +147,18 @@ export abstract class AbstractTree extends AbstractStruct {
     }
 
     onTreeNodeNotFound(node: ARTURIResource) {
-        this.basicModals.confirm("Search", "Node " + node.getShow() + " is not reachable in the current tree. "
-            + "Do you want to open its ResourceView in a modal dialog?", "warning").then(
-            confirm => { 
-                this.sharedModals.openResourceView(node, false);
-            },
-            cancel => {}
-        );
+        if (this.context == TreeListContext.dataPanel) {
+            this.basicModals.confirm("Search", "Node " + node.getShow() + " is not reachable in the current tree. "
+                + "Do you want to open its ResourceView in a modal dialog?", "warning").then(
+                confirm => { 
+                    this.sharedModals.openResourceView(node, false);
+                },
+                cancel => {}
+            );
+        } else {
+            this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree.", "warning");
+        }
+        
     }
 
 }

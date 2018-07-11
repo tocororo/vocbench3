@@ -50,7 +50,7 @@
             Please use the search field to retrieve concepts
         </div>
 
-        <concept-tree [schemes]="workingSchemes" [rendering]="rendering" [showDeprecated]="showDeprecated"
+        <concept-tree [schemes]="workingSchemes" [rendering]="rendering" [showDeprecated]="showDeprecated" [context]="context"
             (nodeSelected)="onNodeSelected($event)" (conceptRemovedFromScheme)="onConceptRemovedFromScheme($event)">
         </concept-tree>
     </div>

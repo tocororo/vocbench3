@@ -21,7 +21,6 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
 
     @Input() root: boolean = false;
     @Input() filterEnabled: boolean = false;
-    @Input() context: TreeListContext;
 
     private showInstanceNumber: boolean = false;
 

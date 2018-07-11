@@ -1,6 +1,7 @@
-import { Component, Input, Output, ViewChild, ElementRef, EventEmitter, QueryList } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Subscriber } from "rxjs";
 import { ARTURIResource, ResAttribute } from "../models/ARTResources";
+import { TreeListContext } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
 
 @Component({
@@ -11,6 +12,7 @@ export abstract class AbstractStruct {
 
     @Input() rendering: boolean = true; //if true the nodes in the list should be rendered with the show, with the qname otherwise
     @Input() showDeprecated: boolean = true;
+    @Input() context: TreeListContext;
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
     /**

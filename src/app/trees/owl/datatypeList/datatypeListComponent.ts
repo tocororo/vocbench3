@@ -4,7 +4,7 @@ import { SemanticTurkey } from "../../../models/Vocabulary";
 import { DatatypesServices } from "../../../services/datatypesServices";
 import { SearchServices } from "../../../services/searchServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
-import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
+import { UIUtils } from "../../../utils/UIUtils";
 import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
@@ -19,7 +19,6 @@ import { DatatypeListNodeComponent } from "./datatypeListNodeComponent";
 })
 export class DatatypeListComponent extends AbstractList {
 
-    @Input() context: TreeListContext; //useful to determine if show the checkboxes
     @Input() full: boolean = false; //if true show all the datatypes (also the owl2 that are not declared as rdfs:Datatype)
 
     @ViewChildren(DatatypeListNodeComponent) viewChildrenNode: QueryList<DatatypeListNodeComponent>;

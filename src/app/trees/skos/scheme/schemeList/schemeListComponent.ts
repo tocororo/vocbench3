@@ -1,10 +1,10 @@
-import { Component, Input, QueryList, ViewChildren } from "@angular/core";
+import { Component, QueryList, ViewChildren } from "@angular/core";
 import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
-import { TreeListContext, UIUtils } from "../../../../utils/UIUtils";
+import { UIUtils } from "../../../../utils/UIUtils";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from "../../../../utils/VBProperties";
@@ -18,8 +18,6 @@ import { SchemeListNodeComponent } from "./schemeListNodeComponent";
     host: { class: "treeListComponent" }
 })
 export class SchemeListComponent extends AbstractList {
-
-    @Input() context: TreeListContext; //useful to determine if show the checkboxes
 
     @ViewChildren(SchemeListNodeComponent) viewChildrenNode: QueryList<SchemeListNodeComponent>;
 

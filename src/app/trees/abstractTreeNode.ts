@@ -7,6 +7,7 @@ import { VBEventHandler } from "../utils/VBEventHandler";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { AbstractNode } from "./abstractNode";
+import { TreeListContext } from "../utils/UIUtils";
 
 @Component({
     selector: "tree-node",
@@ -165,13 +166,17 @@ export abstract class AbstractTreeNode extends AbstractNode {
             }
         }
         //if this line is reached it means that the first node of the path has not been found
-        this.basicModals.confirm("Search", "Node " + path[path.length-1].getShow() + " is not reachable in the current tree. "
-            + "Do you want to open its ResourceView in a modal dialog?", "warning").then(
-            confirm => { 
-                this.sharedModals.openResourceView(path[path.length-1], false);
-            },
-            cancel => {}
-        );
+        if (this.context == TreeListContext.dataPanel) {
+            this.basicModals.confirm("Search", "Node " + path[path.length-1].getShow() + " is not reachable in the current tree. "
+                + "Do you want to open its ResourceView in a modal dialog?", "warning").then(
+                confirm => { 
+                    this.sharedModals.openResourceView(path[path.length-1], false);
+                },
+                cancel => {}
+            );
+        } else {
+            this.basicModals.alert("Search", "Node " + path[path.length-1].getShow() + " is not reachable in the current tree.", "warning");
+        }
     }
 
     /**

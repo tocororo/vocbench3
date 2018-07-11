@@ -63,7 +63,7 @@
     <!-- Tree -->
     <div class="panel-body vbox">
         <property-tree [rendering]="rendering" [showDeprecated]="showDeprecated" [type]="type" [resource]="resource" [roots]="rootProperties"
-            (nodeSelected)="onNodeSelected($event)">
+            [context]="context" (nodeSelected)="onNodeSelected($event)">
         </property-tree>
     </div>
 
