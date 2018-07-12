@@ -31,9 +31,20 @@
                 <tr>
                     <td><label>SPARQL Endpoint:</label></td>
                     <td>
-                        <input-editable [value]="dataset?.sparqlEndpoint" (valueEdited)="updateSparqlEndpoint($event)" 
-                            [disabled]="!dataset" allowEmpty="true">
-                        </input-editable>
+                        <div class="hbox" style="align-items: center;">
+                            <input-editable style="flex: 1; margin-right: 4px;" [value]="dataset?.sparqlEndpointMetadata.id"
+                                (valueEdited)="updateSparqlEndpoint($event)" [disabled]="!dataset" allowEmpty="true">
+                            </input-editable>
+                            <div class="checkbox-inline">
+                                <label>
+                                    <input type="checkbox" [(ngModel)]="sparqlLimitations" (ngModelChange)="updateSparqlLimitations()"
+                                        [disabled]="!dataset?.sparqlEndpointMetadata.id">No aggregation
+                                </label>
+                                <span class="glyphicon glyphicon-info-sign" 
+                                    title="If checked it means that the aggregation is supported, but its support is insufficient for the purposes of Vocbench">
+                                </span>
+                            </div>
+                        </div>
                     </td>
                 </tr>
                 <tr>

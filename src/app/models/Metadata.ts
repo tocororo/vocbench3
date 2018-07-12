@@ -1,4 +1,4 @@
-import { ARTURIResource } from "./ARTResources";
+import { ResourceUtils } from "./ARTResources";
 
 export class PrefixMapping {
     public prefix: string;
@@ -40,8 +40,20 @@ export class DatasetMetadata {
     public uriSpace: string;
     public title: string;
     public dereferenciationSystem: string;
-    public sparqlEndpoint: string;
+    public sparqlEndpointMetadata: SparqlEndpointMetadata;
     public versionInfo: string;
+
+    public static deserialize(datasetMetadataJson: any): DatasetMetadata {
+        let sparqlEndpointMetadata: SparqlEndpointMetadata = SparqlEndpointMetadata.deserialize(datasetMetadataJson.sparqlEndpointMetadata);
+        return {
+            identity: datasetMetadataJson.identity,
+            uriSpace: datasetMetadataJson.uriSpace,
+            title: datasetMetadataJson.title,
+            dereferenciationSystem: datasetMetadataJson.dereferenciationSystem,
+            sparqlEndpointMetadata: sparqlEndpointMetadata,
+            versionInfo: datasetMetadataJson.versionInfo
+        }
+    }
 }
 
 export class CatalogRecord {
@@ -50,6 +62,39 @@ export class CatalogRecord {
     public modified: Date;
     public abstractDataset: DatasetMetadata;
     public versions: DatasetMetadata[];
+
+    public static deserialize(catalogRecordJson: any) {
+        let versions: DatasetMetadata[];
+        if (catalogRecordJson.versions) {
+            versions = [];
+            for (var i = 0; i < catalogRecordJson.versions.length; i++) {
+                versions.push(DatasetMetadata.deserialize(catalogRecordJson.versions[i]));
+            }
+        }
+        return {
+            identity: catalogRecordJson.identity,
+            issued: catalogRecordJson.issued,
+            modified: catalogRecordJson.modified,
+            abstractDataset: DatasetMetadata.deserialize(catalogRecordJson.abstractDataset),
+            versions: versions
+        }
+    }
+}
+
+export class SparqlEndpointMetadata {
+    id: string;
+    limitations: string[];
+    public static deserialize(metadataJson: any): SparqlEndpointMetadata {
+        if (metadataJson) {
+            return {
+                id: ResourceUtils.parseURI(metadataJson['@id']).getURI(),
+                limitations: metadataJson.limitations
+            }
+        } else {
+            return { id: null, limitations: null }
+        }
+        
+    }
 }
 
 export class LexicalizationSetMetadata {

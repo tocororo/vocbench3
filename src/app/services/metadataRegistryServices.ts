@@ -180,6 +180,38 @@ export class MetadataRegistryServices {
     }
 
     /**
+     * 
+     * @param endpoint 
+     * @param limitation 
+     */
+    setSPARQLEndpointLimitation(endpoint: ARTURIResource, limitation?: ARTURIResource) {
+        console.log("[MetadataRegistryServices] setSPARQLEndpointLimitation");
+        var params: any = {
+            endpoint: endpoint,
+        }
+        if (endpoint != null) {
+            params.limitation = limitation;
+        }
+        return this.httpMgr.doPost(this.serviceName, "setSPARQLEndpointLimitation", params);
+    }
+
+    /**
+     * 
+     * @param endpoint 
+     * @param limitation 
+     */
+    removeSPARQLEndpointLimitation(endpoint: ARTURIResource, limitation?: ARTURIResource) {
+        console.log("[MetadataRegistryServices] removeSPARQLEndpointLimitation");
+        var params: any = {
+            endpoint: endpoint,
+        }
+        if (endpoint != null) {
+            params.limitation = limitation;
+        }
+        return this.httpMgr.doPost(this.serviceName, "removeSPARQLEndpointLimitation", params);
+    }
+
+    /**
      * Deletes a catalog record
      * @param catalogRecord 
      */
@@ -209,7 +241,15 @@ export class MetadataRegistryServices {
     getCatalogRecords(): Observable<CatalogRecord[]> {
         console.log("[MetadataRegistryServices] getCatalogRecords");
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "getCatalogRecords", params);
+        return this.httpMgr.doGet(this.serviceName, "getCatalogRecords", params).map(
+            stResp => {
+                let records: CatalogRecord[] = [];
+                for (var i = 0; i < stResp.length; i++) {
+                    records.push(CatalogRecord.deserialize(stResp[i]));
+                }
+                return records;
+            }
+        );
     }
 
     /**
@@ -221,7 +261,11 @@ export class MetadataRegistryServices {
         var params: any = {
             dataset: dataset
         }
-        return this.httpMgr.doGet(this.serviceName, "getDatasetMetadata", params);
+        return this.httpMgr.doGet(this.serviceName, "getDatasetMetadata", params).map(
+            stResp => {
+                return DatasetMetadata.deserialize(stResp);
+            }
+        );
     }
 
     /**

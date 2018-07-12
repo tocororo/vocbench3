@@ -47,7 +47,7 @@
             <label>Dataset:</label>
         </div>
         <div class="panel-body vbox">
-            <dataset-metadata [dataset]="selectedCatalog?.abstractDataset"></dataset-metadata>
+            <dataset-metadata [dataset]="activeDatasetMetadata" (update)="onDatasetUpdate()"></dataset-metadata>
 
             <div class="hbox" style="margin-top: 4px;">
                 <!-- Other versions -->
@@ -67,7 +67,8 @@
                     </div>
                     <div class="subPanel-body scrollableContainer">
                         <dataset-metadata *ngFor="let v of selectedCatalog?.versions" [dataset]="v" style="margin-bottom: 2px;"
-                            (click)="selectedVersion = v" [ngClass]="{ activePanel : v == selectedVersion }" version="true">
+                            (click)="selectedVersion = v" [ngClass]="{ activePanel : v == selectedVersion }" version="true"
+                            (update)="onVersionUpdate()">
                         </dataset-metadata>
                     </div>
                 </div>

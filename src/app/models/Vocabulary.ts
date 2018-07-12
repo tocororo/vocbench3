@@ -260,4 +260,6 @@ export class SemanticTurkey {
 
     public static standardDereferenciation = "http://semanticturkey.uniroma2.it/ns/mdreg#standardDereferenciation";
     public static noDereferenciation = "http://semanticturkey.uniroma2.it/ns/mdreg#noDereferenciation";
+
+    public static noAggregation = "http://semanticturkey.uniroma2.it/ns/mdreg#noAggregation";
 }

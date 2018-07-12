@@ -24,6 +24,7 @@ export class MetadataRegistryComponent {
 
     private catalogs: CatalogRecord[];
     private selectedCatalog: CatalogRecord;
+    private activeDatasetMetadata: DatasetMetadata; //dataset of the selected CatalogRecord
     private selectedVersion: DatasetMetadata;
 
     private lexicalizationSets: LexicalizationSetMetadata[] = [];
@@ -64,8 +65,21 @@ export class MetadataRegistryComponent {
             this.selectedCatalog = catalog;
             this.selectedVersion = null;
             this.lexicalizationSets = [];
-            this.initEmbeddedLexicalizationSets();
+            this.initActiveDatasetMetadata();
         }
+    }
+
+    private initActiveDatasetMetadata() {
+        this.metadataRegistryService.getDatasetMetadata(new ARTURIResource(this.selectedCatalog.abstractDataset.identity)).subscribe(
+            dataset => {
+                this.activeDatasetMetadata = dataset;
+                this.initEmbeddedLexicalizationSets();
+            }
+        )
+    }
+
+    private onDatasetUpdate() {
+        this.initActiveDatasetMetadata();
     }
 
     private discoverDataset() {
@@ -130,6 +144,10 @@ export class MetadataRegistryComponent {
                 this.initCatalogRecords();
             }
         );
+    }
+
+    private onVersionUpdate() {
+        this.initCatalogRecords(this.selectedCatalog.identity);
     }
 
     /**
