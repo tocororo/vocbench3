@@ -289,7 +289,15 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                             this.basicModals.selectResource("Search", message, schemes, this.rendering).then(
                                 (scheme: ARTURIResource) => {
                                     this.vbProp.setActiveSchemes(this.workingSchemes.concat(scheme)); //update the active schemes
-                                    this.openTreeAt(resource); //then open the tree on the searched resource
+                                    /**
+                                     * even if workingSchemes will be updated in onSchemeChanged (once the schemeChangedEvent is emitted in
+                                     * setActiveSchemes()), I update it here so that the child ConceptTreeComponent detect the change
+                                     * of the @Input schemes and in openTreeAt() call getPathFromRoot with the updated schemes
+                                     */
+                                    this.workingSchemes.push(scheme);
+                                    setTimeout(() => {
+                                        this.openTreeAt(resource); //then open the tree on the searched resource
+                                    });
                                 },
                                 () => {}
                             );
