@@ -9,7 +9,9 @@
                 <tr>
                     <td><label>Title:</label></td>
                     <td>
-                        <input class="form-control input-sm" [ngModel]="dataset?.title" disabled>
+                        <input-editable [value]="dataset?.title" (valueEdited)="updateTitle($event)" 
+                            [disabled]="!dataset" allowEmpty="true">
+                        </input-editable>
                     </td>
                 </tr>
                 <tr>

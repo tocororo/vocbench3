@@ -130,6 +130,22 @@ export class MetadataRegistryServices {
     }
 
     /**
+     * Sets the title of a dataset.
+     * @param dataset 
+     * @param title 
+     */
+    setTitle(dataset: ARTURIResource, title?: string) {
+        console.log("[MetadataRegistryServices] setTitle");
+        var params: any = {
+            dataset: dataset,
+        }
+        if (title != null) {
+            params.title = title;
+        }
+        return this.httpMgr.doPost(this.serviceName, "setTitle", params);
+    }
+
+    /**
      * Sets whether a dataset is derefereanceable or not. If value is true, then sets
 	 * mdreg:standardDereferenciation and if false sets mdreg:noDereferenciation. If
 	 * is not passed, the dereferenciation system is left unspecified.

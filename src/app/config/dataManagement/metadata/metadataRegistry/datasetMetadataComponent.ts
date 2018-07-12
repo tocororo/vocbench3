@@ -37,6 +37,18 @@ export class DatasetMetadataComponent {
         }
     }
 
+    private updateTitle(newValue: string) {
+        let title: string = null;
+        if (newValue != null && newValue.trim() != "") {
+            title = newValue;
+        }
+        this.metadataRegistryService.setTitle(new ARTURIResource(this.dataset.identity), title).subscribe(
+            stResp => {
+                this.dataset.title = title;
+            }
+        );
+    }
+
     private updateSparqlEndpoint(newValue: string) {
         let endpointPar: ARTURIResource;
         if (newValue != null && newValue.trim() != "") {
