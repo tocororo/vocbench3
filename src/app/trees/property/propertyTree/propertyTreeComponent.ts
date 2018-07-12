@@ -127,7 +127,7 @@ export class PropertyTreeComponent extends AbstractTree {
                 err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             );
         } else if (this.type == RDFResourceRolesEnum.property) {
-            this.propertyService.getTopRDFProperties().subscribe(
+            this.propertyService.getTopProperties().subscribe(
                 props => {
                     ResourceUtils.sortResources(props, orderAttribute);
                     this.roots = props;
