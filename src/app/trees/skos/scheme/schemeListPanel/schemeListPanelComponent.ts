@@ -1,11 +1,12 @@
 import { Component, ViewChild } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { SearchSettings } from "../../../../models/Properties";
-import { SKOS } from "../../../../models/Vocabulary";
+import { OntoLex, SKOS } from "../../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
+import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from '../../../../utils/VBProperties';
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
@@ -25,14 +26,23 @@ export class SchemeListPanelComponent extends AbstractPanel {
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.conceptScheme;
 
+    private modelType: string;
+
     constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, 
         eventHandler: VBEventHandler, vbProp: VBProperties) {
         super(cfService, resourceService, basicModals, eventHandler, vbProp);
     }
 
+    ngOnInit() {
+        super.ngOnInit();
+        this.modelType = VBContext.getWorkingProject().getModelType();
+    }
+
     private create() {
-        this.creationModals.newResourceWithLiteralCf("Create new skos:ConceptScheme", SKOS.conceptScheme, true).then(
+        let metaClass: ARTURIResource = this.modelType == OntoLex.uri ? OntoLex.conceptSet : SKOS.conceptScheme;
+
+        this.creationModals.newResourceWithLiteralCf("Create new " + metaClass.getShow(), metaClass, true).then(
             (data: NewResourceWithLiteralCfModalReturnData) => {
                 this.skosService.createConceptScheme(data.literal, data.uriResource, data.cls, data.cfValue).subscribe(
                     newScheme => { },

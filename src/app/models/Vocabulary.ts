@@ -223,7 +223,9 @@ export class OntoLex {
     public static uri = "http://www.w3.org/ns/lemon/ontolex";
     public static namespace = OntoLex.uri + "#";
     //CLASSES
+    public static conceptSet = new ARTURIResource(OntoLex.namespace + "ConceptSet", "ontolex:ConceptSet", RDFResourceRolesEnum.cls);
     public static form = new ARTURIResource(OntoLex.namespace + "Form", "ontolex:Form", RDFResourceRolesEnum.cls);
+    public static lexicalConcept = new ARTURIResource(OntoLex.namespace + "LexicalConcept", "ontolex:LexicalConcept", RDFResourceRolesEnum.cls);
     public static lexicalEntry = new ARTURIResource(OntoLex.namespace + "LexicalEntry", "ontolex:LexicalEntry", RDFResourceRolesEnum.cls);
     public static lexicalSense = new ARTURIResource(OntoLex.namespace + "LexicalSense", "ontolex:LexicalSense", RDFResourceRolesEnum.cls);
     //PROPERTIES

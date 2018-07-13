@@ -4,12 +4,14 @@ import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from "rxjs/Observable";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { ConceptTreeVisualizationMode, SearchSettings } from "../../../../models/Properties";
+import { OntoLex, SKOS } from "../../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../../utils/UIUtils";
+import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
@@ -32,6 +34,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     @ViewChild(ConceptTreeComponent) viewChildTree: ConceptTreeComponent
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.concept;
+
+    private modelType: string;
 
     private schemeList: Array<ARTURIResource>;
     private selectedSchemeUri: string; //needed for the <select> element where I cannot use ARTURIResource as <option> values
@@ -58,6 +62,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         super.ngOnInit();
 
         this.visualizationMode = this.vbProp.getConceptTreePreferences().visualization;
+        this.modelType = VBContext.getWorkingProject().getModelType();
             
         if (this.schemes === undefined) { //if @Input is not provided at all, get the scheme from the preferences
             this.workingSchemes = this.vbProp.getActiveSchemes();
@@ -94,7 +99,9 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     //top bar commands handlers
 
     createRoot() {
-        this.creationModals.newConceptCf("Create new skos:Concept", null, this.workingSchemes, true).then(
+        let metaClass: ARTURIResource = this.modelType == OntoLex.uri ? OntoLex.lexicalConcept : SKOS.concept;
+
+        this.creationModals.newConceptCf("Create new skos:Concept", null, this.workingSchemes, metaClass, true).then(
             (data: NewConceptCfModalReturnData) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue).subscribe(
@@ -118,7 +125,9 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     }
 
     createChild() {
-        this.creationModals.newConceptCf("Create a skos:narrower", this.selectedNode, null, true).then(
+        let metaClass: ARTURIResource = this.modelType == OntoLex.uri ? OntoLex.lexicalConcept : SKOS.concept;
+
+        this.creationModals.newConceptCf("Create a skos:narrower", this.selectedNode, null, metaClass, true).then(
             (data: NewConceptCfModalReturnData) => {
                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 this.skosService.createConcept(data.label, data.schemes, data.uriResource, this.selectedNode, data.cls, data.broaderProp, data.cfValue).subscribe(

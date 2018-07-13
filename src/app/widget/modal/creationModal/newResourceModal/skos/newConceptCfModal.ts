@@ -16,6 +16,7 @@ export class NewConceptCfModalData extends BSModalContext {
         public title: string = "Modal title",
         public broader: ARTURIResource,
         public schemes: ARTURIResource[],
+        public cls: ARTURIResource,
         public clsChangeable: boolean = true,
         public lang: string
     ) {
@@ -50,7 +51,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
 
     ngOnInit() {
         this.lang = this.context.lang;
-        this.resourceClass = SKOS.concept;
+        this.resourceClass = this.context.cls ? this.context.cls : SKOS.concept;
         this.selectCustomForm();
 
         if (this.context.broader) {
@@ -109,7 +110,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
         var returnedData: NewConceptCfModalReturnData = {
             uriResource: null,
             label: new ARTLiteral(this.label, null, this.lang),
-            cls: null,
+            cls: this.resourceClass,
             broaderProp: null,
             schemes: this.schemes,
             cfValue: null
@@ -117,10 +118,6 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
         //Set URI only if localName is not empty
         if (this.uri != null && this.uri.trim() != "") {
             returnedData.uriResource = new ARTURIResource(this.uri);
-        }
-        //set class only if not the default
-        if (this.resourceClass.getURI() != SKOS.concept.getURI()) {
-            returnedData.cls = this.resourceClass;
         }
         //set broaderProp only if not the default
         if (this.broaderProp.getURI() != SKOS.broader.getURI()) {
