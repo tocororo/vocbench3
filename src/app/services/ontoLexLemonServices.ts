@@ -201,6 +201,19 @@ export class OntoLexLemonServices {
     }
 
     /**
+     * 
+     * @param lexicalEntry 
+     */
+    getLexicalEntryLanguage(lexicalEntry: ARTURIResource): Observable<string> {
+        console.log("[OntoLexLemonServices] getLexicalEntryLanguage");
+        var params: any = {
+            lexicalEntry: lexicalEntry
+        };
+        return this.httpMgr.doGet(this.serviceName, "getLexicalEntryLanguage", params);
+    }
+
+
+    /**
      * Sets the canonical form of a given lexical entry.
      * @param lexicalEntry 
      * @param writtenRep 
@@ -242,6 +255,18 @@ export class OntoLexLemonServices {
             params.customFormValue = customFormValue;
         }
         return this.httpMgr.doPost(this.serviceName, "addOtherForm", params);
+    }
+
+    /**
+     * 
+     * @param form 
+     */
+    getFormLanguage(form: ARTResource): Observable<string> {
+        console.log("[OntoLexLemonServices] getFormLanguage");
+        var params: any = {
+            form: form
+        };
+        return this.httpMgr.doGet(this.serviceName, "getFormLanguage", params);
     }
     
     /**

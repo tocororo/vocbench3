@@ -33,6 +33,8 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
     addBtnImgTitle = "Add a lexical form";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/propObject_create.png");
 
+    private lexiconLang: string; //cache the language of the lexicon
+
     constructor(resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, resViewModals: ResViewModalServices, private creationModals: CreationModalServices,
         private ontolexService: OntoLexLemonServices, private browsingModals: BrowsingModalServices) {
@@ -40,28 +42,40 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-
         if (!this.isKnownProperty(predicate)) {
-            this.basicModals.alert("Unknown property", predicate.getShow() + " is not a class axiom known property, it cannot be handled.", "error");
+            this.basicModals.alert("Unknown property", predicate.getShow() + " is not a lexical form known property, it cannot be handled.", "error");
             return;
         }
 
-        this.creationModals.newResourceWithLiteralCf("Create " + predicate.getShow(), OntoLex.form, true, "Written rep").then(
-            (data: NewResourceWithLiteralCfModalReturnData) => {
-                if (predicate.getURI() == OntoLex.canonicalForm.getURI()) {
-                    this.ontolexService.setCanonicalForm(<ARTURIResource>this.resource, data.literal, data.uriResource, data.cfValue).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                } else if (predicate.getURI() == OntoLex.otherForm.getURI()) {
-                    this.ontolexService.addOtherForm(<ARTURIResource>this.resource, data.literal, data.uriResource, data.cfValue).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                }
-            },
-            () => {}
+        this.getLexiconLang().subscribe(
+            lang => {
+                this.lexiconLang = lang;
+                this.creationModals.newResourceWithLiteralCf("Create " + predicate.getShow(), OntoLex.form, true, "Written rep", this.lexiconLang, { constrain: true, locale: true }).then(
+                    (data: NewResourceWithLiteralCfModalReturnData) => {
+                        if (predicate.getURI() == OntoLex.canonicalForm.getURI()) {
+                            this.ontolexService.setCanonicalForm(<ARTURIResource>this.resource, data.literal, data.uriResource, data.cfValue).subscribe(
+                                stResp => this.update.emit(null)
+                            );
+                        } else if (predicate.getURI() == OntoLex.otherForm.getURI()) {
+                            this.ontolexService.addOtherForm(<ARTURIResource>this.resource, data.literal, data.uriResource, data.cfValue).subscribe(
+                                stResp => this.update.emit(null)
+                            );
+                        }
+                    },
+                    () => {}
+                );
+            }
         );
-
     }
+
+    private getLexiconLang(): Observable<string> {
+        if (this.lexiconLang == null) {
+            return this.ontolexService.getLexicalEntryLanguage(<ARTURIResource>this.resource);
+        } else {
+            return Observable.of(this.lexiconLang);
+        }
+    }
+
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
         return Observable.fromPromise(

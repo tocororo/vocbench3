@@ -114,5 +114,5 @@ export class Language {
  */
 export class LanguageConstraint {
     public constrain: boolean; //if true, constrain the selection of a language only to a given language
-    public locale?: boolean = true; //if true, allow the selection of also the locale of a given language
+    public locale: boolean; //if true, allow the selection of also the locale of a given language
 }

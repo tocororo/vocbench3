@@ -31,6 +31,8 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
     addBtnImgTitle = "Add a representation";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/propDatatype_create.png");
 
+    private lexiconLang: string; //cache the language of the lexicon
+
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
         resViewModals: ResViewModalServices, private ontolexService: OntoLexLemonServices) {
@@ -39,14 +41,27 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
 
     //add as top concept
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
-            (literal: ARTLiteral) => {
-                this.ontolexService.addFormRepresentation(this.resource, literal, predicate).subscribe(
-                    stResp => this.update.emit()
-                )
-            },
-            () => {}
+        this.getLexiconLang().subscribe(
+            lang => {
+                this.lexiconLang = lang;
+                this.creationModals.newPlainLiteral("Add " + predicate.getShow(), null, false, this.lexiconLang, false, { constrain: true, locale: true }).then(
+                    (literal: ARTLiteral) => {
+                        this.ontolexService.addFormRepresentation(this.resource, literal, predicate).subscribe(
+                            stResp => this.update.emit()
+                        )
+                    },
+                    () => {}
+                );
+            }
         );
+    }
+
+    private getLexiconLang(): Observable<string> {
+        if (this.lexiconLang == null) {
+            return this.ontolexService.getFormLanguage(this.resource);
+        } else {
+            return Observable.of(this.lexiconLang);
+        }
     }
 
     getPredicateToEnrich(): Observable<ARTURIResource> {

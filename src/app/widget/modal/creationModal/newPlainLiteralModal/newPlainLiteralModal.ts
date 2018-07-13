@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { ARTLiteral } from "../../../../models/ARTResources";
+import { LanguageConstraint } from "../../../../models/LanguagesCountries";
 
 export class NewPlainLiteralModalData extends BSModalContext {
     /**
@@ -16,7 +17,8 @@ export class NewPlainLiteralModalData extends BSModalContext {
         public value: string,
         public valueReadonly: boolean = false,
         public lang: string,
-        public langReadonly: boolean = false
+        public langReadonly: boolean = false,
+        public langConstraints: LanguageConstraint = { constrain: false, locale: true }
     ) {
         super();
     }

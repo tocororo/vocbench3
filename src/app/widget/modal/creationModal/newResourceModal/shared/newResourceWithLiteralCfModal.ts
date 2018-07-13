@@ -16,10 +16,7 @@ export class NewResourceWithLiteralCfModalData extends BSModalContext {
         public clsChangeable: boolean = true,
         public literalLabel: string = "Label",
         public lang: string,
-        public langConstraints: LanguageConstraint = {
-            constrain: false, //if true, constrains the selection of language only to the passed lang
-            locale: true, //if false, forbids the selection  of locales of the passed lang
-        },
+        public langConstraints: LanguageConstraint = { constrain: false, locale: true }
     ) {
         super();
     }
