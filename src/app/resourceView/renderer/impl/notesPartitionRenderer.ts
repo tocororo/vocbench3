@@ -1,19 +1,18 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
+import { ARTNode, ARTResource, ARTURIResource } from "../../../models/ARTResources";
+import { CustomFormValue } from "../../../models/CustomForms";
+import { ResViewPartition } from "../../../models/ResourceView";
+import { SKOS } from "../../../models/Vocabulary";
+import { CustomFormsServices } from "../../../services/customFormsServices";
 import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
-import { CustomFormsServices } from "../../../services/customFormsServices";
 import { SkosServices } from "../../../services/skosServices";
-import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
-import { VBEventHandler } from "../../../utils/VBEventHandler"
-import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
-import { CustomFormValue } from "../../../models/CustomForms"
-import { SKOS } from "../../../models/Vocabulary"
-import { ResViewPartition } from "../../../models/ResourceView";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
     selector: "notes-renderer",

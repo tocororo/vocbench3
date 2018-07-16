@@ -114,7 +114,6 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     }
 
     add(predicate: ARTURIResource) {
-
         if (predicate.getURI() == SKOSXL.prefLabel.getURI() || 
             predicate.getURI() == SKOSXL.altLabel.getURI() || 
             predicate.getURI() == SKOSXL.hiddenLabel.getURI()

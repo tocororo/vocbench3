@@ -40,7 +40,7 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue("Add an inverse property", this.resource, this.rootProperty, propChangeable).then(
+        this.resViewModals.addPropertyValue("Add an inverse property", this.resource, predicate, propChangeable).then(
             (data: AddPropertyValueModalReturnData) => {
                 let prop: ARTURIResource = data.property;
                 let inverseProp: ARTURIResource = data.value;

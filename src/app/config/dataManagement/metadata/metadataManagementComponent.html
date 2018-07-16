@@ -2,9 +2,9 @@
 
     <div class="btn-group pull-right" style="margin-bottom: 5px">
         <button class="btn btn-default" [routerLink]="['/Metadata/Imports']" routerLinkActive="active">Namespaces and Imports</button>
-        <button class="btn btn-default" [routerLink]="['/Metadata/Vocabularies']" [disabled]="!isMetadataVocAuthorized()"
+        <button *ngIf="isMetadataVocAuthorized()" class="btn btn-default" [routerLink]="['/Metadata/Vocabularies']"
             routerLinkActive="active">Metadata Vocabularies</button>
-        <button class="btn btn-default" [routerLink]="['/Metadata/MetadataRegistry']" [disabled]="!isMetadataRegistryAuthorized()"
+        <button *ngIf="isMetadataRegistryAuthorized()" class="btn btn-default" [routerLink]="['/Metadata/MetadataRegistry']" 
             routerLinkActive="active">Metadata Registry</button>
     </div>
     <router-outlet></router-outlet>

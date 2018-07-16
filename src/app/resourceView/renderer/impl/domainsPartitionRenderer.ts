@@ -38,7 +38,7 @@ export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue("Add a domain", this.resource, this.rootProperty, propChangeable).then(
+        this.resViewModals.addPropertyValue("Add a domain", this.resource, predicate, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var value: any = data.value; //value can be a class or a manchester Expression

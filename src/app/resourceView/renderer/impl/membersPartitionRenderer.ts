@@ -42,7 +42,7 @@ export class MembersPartitionRenderer extends PartitionRenderSingleRoot {
      * Adds a member in a collection (unordered)
      */
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue("Add a member", this.resource, this.rootProperty, propChangeable).then(
+        this.resViewModals.addPropertyValue("Add a member", this.resource, predicate, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var member: ARTResource = data.value;

@@ -1,28 +1,22 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
-import { ARTResource, ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../../models/ARTResources";
-import { SKOSXL } from "../../../models/Vocabulary";
+import { ARTNode, ARTResource, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { PropertyServices } from "../../../services/propertyServices";
+import { SKOSXL } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
+import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
-import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
     selector: "label-relations-renderer",
     templateUrl: "../partitionRenderer.html",
 })
 export class LabelRelationsPartitionRenderer extends PartitionRenderSingleRoot {
-
-    //inherited from PartitionRenderSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     partition = ResViewPartition.labelRelations;
     rootProperty: ARTURIResource = SKOSXL.labelRelation;
@@ -37,7 +31,7 @@ export class LabelRelationsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue("Add a label relation", this.resource, this.rootProperty, propChangeable).then(
+        this.resViewModals.addPropertyValue("Add a label relation", this.resource, predicate, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var label: ARTResource = data.value;

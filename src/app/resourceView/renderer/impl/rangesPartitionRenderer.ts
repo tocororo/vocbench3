@@ -1,17 +1,17 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
-import { ManchesterServices } from "../../../services/manchesterServices";
-import { ARTNode, ARTBNode, ARTResource, ARTURIResource, ResAttribute, RDFResourceRolesEnum, ARTLiteral } from "../../../models/ARTResources";
+import { ARTBNode, ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { RDFS, XmlSchema } from "../../../models/Vocabulary";
-import { PropertyServices } from "../../../services/propertyServices";
+import { RDFS } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
+import { ManchesterServices } from "../../../services/manchesterServices";
+import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
-import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
     selector: "ranges-renderer",
@@ -38,7 +38,7 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue("Add a range", this.resource, this.rootProperty, propChangeable).then(
+        this.resViewModals.addPropertyValue("Add a range", this.resource, predicate, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var value: any = data.value; //value can be a class, manchester Expression, or a datatype (if resource is a datatype prop)

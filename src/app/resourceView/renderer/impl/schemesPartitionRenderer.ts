@@ -1,19 +1,18 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
-import { SkosServices } from "../../../services/skosServices";
-import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
-import { SKOS } from "../../../models/Vocabulary";
+import { ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { PropertyServices } from "../../../services/propertyServices";
+import { SKOS } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
+import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
-import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { SkosServices } from "../../../services/skosServices";
+import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
-import { UIUtils } from "../../../utils/UIUtils";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
     selector: "schemes-renderer",
@@ -41,7 +40,7 @@ export class SchemesPartitionRenderer extends PartitionRenderSingleRoot {
 
     //add as top concept
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue("Add Concept to a Scheme", this.resource, this.rootProperty, propChangeable).then(
+        this.resViewModals.addPropertyValue("Add Concept to a Scheme", this.resource, predicate, propChangeable).then(
             (data: any) => {
                 var prop: ARTURIResource = data.property;
                 var scheme: ARTURIResource = data.value;
