@@ -200,7 +200,6 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
 
     private profileMediation() {
         this.pairedLexicalizationSets = null;
-        this.languagesToCheck = [];
         
         let resourcePosition: ResourcePosition;
         if (this.targetPosition == ResourcePositionEnum.local) {
@@ -219,12 +218,12 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
                     this.pairedLexicalizationSets.sort((ls1, ls2) => {
                         return ls1.languageTag.localeCompare(ls2.languageTag);
                     });
-                    //init lang list (for checkboxes)
-                    this.pairedLexicalizationSets.forEach(ls => {
-                        this.languagesToCheck.push({ lang: ls.languageTag, lexModel: ls.lexicalizationModel, checked: false });
-                    })
-
-                })
+                });
+                //init lang list (for checkboxes)
+                this.languagesToCheck = [];
+                this.pairedLexicalizationSets.forEach(ls => {
+                    this.languagesToCheck.push({ lang: ls.languageTag, lexModel: ls.lexicalizationModel, checked: false });
+                });
             }
         );
     }
