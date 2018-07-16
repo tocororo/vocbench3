@@ -12,14 +12,16 @@
                 <img [src]="addBtnImgSrc"/>
             </button>
         </span>
-        <span *ngIf="isAddManuallyAllowed()" class="groupPanel-heading-content groupPanel-dropdown-btn">
+        <span *ngIf="isAddManuallyAllowed() || isAddExteranlResourceAllowed()" class="groupPanel-heading-content groupPanel-dropdown-btn">
             <div class="btn-group" style="vertical-align: initial;">
                 <button class="transparentBtn" style="width: 12px;" data-toggle="dropdown">
                     <span class="caret" style="margin: 0px;"></span>
                 </button>
                 <ul class="dropdown-menu pull-right">
-                    <li [ngClass]="{ disabled: isAddDisabled() }"><a (click)="addHandler(null, 'manually')">Add value manually</a></li>
-                    <li *ngIf="isAddExteranlResourceAllowed()" [ngClass]="{ disabled: isAddDisabled() }">
+                    <li [ngClass]="{ disabled: isAddDisabled() }" *ngIf="isAddManuallyAllowed()">
+                        <a (click)="addHandler(null, 'manually')">Add value manually</a>
+                    </li>
+                    <li [ngClass]="{ disabled: isAddDisabled() }" *ngIf="isAddExteranlResourceAllowed()">
                         <a (click)="addHandler(null, 'remote')">Add value from another project</a>
                     </li>
                 </ul>
