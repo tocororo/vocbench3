@@ -302,6 +302,32 @@ export class ProjectUsersManagerComponent {
         this.puBinding.addLanguage(this.selectedLang.tag);
         this.adminService.updateLanguagesOfUserInProject(this.project.getName(), this.selectedUser.getEmail(), this.puBinding.getLanguages()).subscribe(
             stResp => {
+                this.updateLanguagesOfUserInProjectAfterAdd();
+            }
+        );
+    }
+
+    private addAllLanguages() {
+        let langs: string[] = [];
+        this.projectLanguages.forEach(l => {
+            langs.push(l.tag);
+        });
+        this.puBinding.setLanguages(langs);
+        this.updateLanguagesOfUserInProjectAfterAdd();
+    }
+
+    private addProficienciesLangs() {
+        this.projectLanguages.forEach(l => {
+            if (!this.isLangAlreadyAssigned(l) && this.isInUserLangProficiencies(l.tag)) {
+                this.puBinding.addLanguage(l.tag);
+            }
+        });
+        this.updateLanguagesOfUserInProjectAfterAdd();
+    }
+
+    private updateLanguagesOfUserInProjectAfterAdd() {
+        this.adminService.updateLanguagesOfUserInProject(this.project.getName(), this.selectedUser.getEmail(), this.puBinding.getLanguages()).subscribe(
+            stResp => {
                 VBContext.setProjectUserBinding(this.puBinding);
                 this.selectedLang = null;
             }
@@ -310,6 +336,26 @@ export class ProjectUsersManagerComponent {
 
     private removeLanguage() {
         this.puBinding.removeLanguage(this.selectedUserLang.tag);
+        this.updateLanguagesOfUserInProjectAfterRemove();
+    }
+
+    private removeAllLanguages() {
+        this.puBinding.setLanguages([]);
+        this.updateLanguagesOfUserInProjectAfterRemove();
+    }
+
+    private leaveProficienciesLangs() {
+        let langs: string[] = [];
+        this.puBinding.getLanguages().forEach(l => {
+            if (this.isInUserLangProficiencies(l)) {
+                langs.push(l);
+            }
+        });
+        this.puBinding.setLanguages(langs);
+        this.updateLanguagesOfUserInProjectAfterRemove();
+    }
+
+    private updateLanguagesOfUserInProjectAfterRemove() {
         this.adminService.updateLanguagesOfUserInProject(this.project.getName(), this.selectedUser.getEmail(), this.puBinding.getLanguages()).subscribe(
             stResp => {
                 //if no languages are assigned for the admin => assign all project languages
@@ -321,6 +367,7 @@ export class ProjectUsersManagerComponent {
             }
         );
     }
+
 
     private isLangAlreadyAssigned(lang: Language): boolean {
         if (this.puBinding == undefined) {
@@ -335,9 +382,9 @@ export class ProjectUsersManagerComponent {
         return false;
     }
 
-    private isInUserLangProficiencies(lang: Language): boolean {
+    private isInUserLangProficiencies(lang: string): boolean {
         if (this.selectedUser != null) {
-            return this.selectedUser.getLanguageProficiencies().indexOf(lang.tag) != -1;
+            return this.selectedUser.getLanguageProficiencies().indexOf(lang) != -1;
         } else {
             return false;
         }
