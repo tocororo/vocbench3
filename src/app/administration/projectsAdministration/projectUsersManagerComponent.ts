@@ -8,6 +8,7 @@ import { AdministrationServices } from "../../services/administrationServices";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 import { UserServices } from "../../services/userServices";
 import { UsersGroupsServices } from "../../services/usersGroupsServices";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { UserProjBindingModal, UserProjBindingModalData } from "./userProjBindingModal";
@@ -197,14 +198,6 @@ export class ProjectUsersManagerComponent {
         return false;
     }
 
-    private isSelectedUserAdmin() {
-        if (this.selectedUser == null) {
-            return false;
-        } else {
-            return this.selectedUser.isAdmin();
-        }
-    }
-
     //GROUPS
 
     private selectUserGroup(group: UsersGroup) {
@@ -388,6 +381,23 @@ export class ProjectUsersManagerComponent {
         } else {
             return false;
         }
+    }
+
+    //AUTH
+
+    private isSelectedUserAdmin() {
+        if (this.selectedUser == null) {
+            return false;
+        } else {
+            return this.selectedUser.isAdmin();
+        }
+    }
+
+    private isRoleManagementAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_GROUP_MANAGEMENT);
+    }
+    private isGroupManagementAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_GROUP_MANAGEMENT);
     }
 
 }

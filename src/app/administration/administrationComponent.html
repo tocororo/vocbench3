@@ -5,8 +5,7 @@
             [disabled]="!isProjManagementAuthorized()">Projects</button>
         <button class="btn btn-default" [routerLink]="['/Administration/Roles']" routerLinkActive="active" 
             [disabled]="!isRoleManagementAuthorized()">Roles</button>
-        <button class="btn btn-default" [routerLink]="['/Administration/Groups']" routerLinkActive="active" 
-            [disabled]="!isGroupManagementAuthorized()">Groups</button>
+        <button *ngIf="isAdmin()" class="btn btn-default" [routerLink]="['/Administration/Groups']" routerLinkActive="active">Groups</button>
         <button *ngIf="isAdmin()" class="btn btn-default" [routerLink]="['/Administration/Configuration']" routerLinkActive="active">Configuration</button>
     </div>
     <router-outlet></router-outlet>

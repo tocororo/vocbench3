@@ -19,6 +19,7 @@ enum Actions {
     CLASSES_GET_CLASS_TAXONOMY, //valid for getClassesInfo and getSubClasses
     CLASSES_GET_INSTANCES,
     CLASSES_REMOVE_CLASS_AXIOM,
+    COLLABORATION,
     CUSTOM_FORMS_CREATE_FORM_MAPPING,
     CUSTOM_FORMS_CREATE_COLLECTION,
     CUSTOM_FORMS_CREATE_FORM,
@@ -136,10 +137,10 @@ export class AuthorizationEvaluator {
     private static authCache: { [goal: string]: boolean } = {}
 
     private static actionAuthGoalMap: { [key: number ]: string } = {
-        [Actions.ADMINISTRATION_PROJECT_MANAGEMENT] : 'auth(pm(project,_), "CRUDV").',
-        [Actions.ADMINISTRATION_ROLE_MANAGEMENT] : 'auth(rbac(_,_), "CRUDV").',
-        [Actions.ADMINISTRATION_USER_GROUP_MANAGEMENT] : 'auth(rbac(user,_), "CRUDV").',//TODO
-        [Actions.ADMINISTRATION_USER_ROLE_MANAGEMENT] : 'auth(rbac(user,_), "CRUDV").',
+        [Actions.ADMINISTRATION_PROJECT_MANAGEMENT] : 'auth(pm(project,_), "CRUD").',
+        [Actions.ADMINISTRATION_ROLE_MANAGEMENT] : 'auth(rbac(_,_), "CRUD").',
+        [Actions.ADMINISTRATION_USER_GROUP_MANAGEMENT] : 'auth(pm(project, group), "CU").', //generic for management of UsersGroup in project
+        [Actions.ADMINISTRATION_USER_ROLE_MANAGEMENT] : 'auth(rbac(user,_), "CRUD").',
         [Actions.ALIGNMENT_ADD_ALIGNMENT] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', alignment), "C").',
         [Actions.ALIGNMENT_LOAD_ALIGNMENT] : 'auth(rdf(resource, alignment), "R").',
         [Actions.CLASSES_CREATE_CLASS] :  'auth(rdf(cls), "C").',
@@ -150,6 +151,7 @@ export class AuthorizationEvaluator {
         [Actions.CLASSES_GET_CLASS_TAXONOMY] :  'auth(rdf(cls, taxonomy), "R").',
         [Actions.CLASSES_GET_INSTANCES] :  'auth(rdf(cls, instances), "R").',
         [Actions.CLASSES_REMOVE_CLASS_AXIOM] :  'auth(rdf(cls, taxonomy), "D").', //@PreAuthorize of removeOneOf/UnionOf/IntersectionOf...
+        [Actions.COLLABORATION] :  'auth(pm(project, collaboration), "CRUD").',  //generic for Collaboration (creation and assignment of CS project)
         [Actions.CUSTOM_FORMS_CREATE_FORM_MAPPING] :  'auth(cform(form, mapping), "C").', 
         [Actions.CUSTOM_FORMS_CREATE_COLLECTION] :  'auth(cform(formCollection), "C").', 
         [Actions.CUSTOM_FORMS_CREATE_FORM] :  'auth(cform(formCollection), "C").', 
@@ -305,7 +307,6 @@ export class AuthorizationEvaluator {
                 // console.log("authorization cached", cachedAuth);
                 return cachedAuth;
             } else { //...otherwise compute authorization
-                console.log("auth compute for action", action);
                 let authorized: boolean = this.evaulatePrologGoal(goal); //cache the result of the evaluation for the given goal
                 this.authCache[goal] = authorized;
                 return authorized;
@@ -314,7 +315,6 @@ export class AuthorizationEvaluator {
     }
 
     private static evaulatePrologGoal(goal: string): boolean {
-        console.log("auth evaluate", goal);
         let query = Prolog.Parser.parseQuery(goal);
         let iter = Prolog.Solver.query(AuthorizationEvaluator.prologEngine, query);
         let next: boolean = iter.next();

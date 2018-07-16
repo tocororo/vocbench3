@@ -1,20 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
-import { ARTURIResource, ARTResource, RDFResourceRolesEnum } from '../models/ARTResources';
-import { Language, Languages } from '../models/LanguagesCountries';
-import { Properties, ClassIndividualPanelSearchMode, ClassTreePreference, ResourceViewMode, SearchSettings, SearchMode } from '../models/Properties';
-import { ProjectTableColumnStruct } from '../models/Project';
-import { ExtensionPointID } from '../models/Plugins';
-import { Cookie } from '../utils/Cookie';
-import { VBEventHandler } from '../utils/VBEventHandler';
-import { UIUtils } from '../utils/UIUtils';
-import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices'
-import { OWL, RDFS } from '../models/Vocabulary';
-import { VBContext } from './VBContext';
 import { CollaborationServices } from '../services/collaborationServices';
 import { ProjectServices } from '../services/projectServices';
+import { VBEventHandler } from '../utils/VBEventHandler';
 
 @Injectable()
 export class VBCollaboration {

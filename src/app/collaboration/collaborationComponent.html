@@ -10,13 +10,10 @@
                 <span class="glyphicon glyphicon-cog"></span>
             </button>
             <ul class="dropdown-menu pull-right">
-                <li><a (click)="openProjectConfig()">Project configuration</a></li>
+                <li *ngIf="isCollProjManagementAuthorized()"><a (click)="openProjectConfig()">Project configuration</a></li>
                 <li><a (click)="openUserConfig()">User configuration</a></li>
-                <li>
-                    <a (click)="assignProject()" 
-                        [ngClass]="{ disabled : projSettingsConfigured && userSettingsConfigured && !csProjectLinked }">
-                        Assign CS project
-                    </a>
+                <li *ngIf="isCollProjManagementAuthorized()" [ngClass]="{ disabled : !csProjectLinked }">
+                    <a (click)="assignProject()">Assign CS project</a>
                 </li>
             </ul>
         </div>
@@ -27,8 +24,10 @@
 
         <!-- Mandatory settings not configured (missing serverURL) -->
         <div *ngIf="!projSettingsConfigured; else elseBlock1" class="alert alert-warning" style="margin: 3px;">
-            No Collaboration System has been configured. Please, 
-            <a style="cursor: pointer" (click)="openProjectConfig()">configure</a> a CS.
+            No Collaboration System has been configured. 
+            <span *ngIf="isCollProjManagementAuthorized()">
+                Please, <a style="cursor: pointer" (click)="openProjectConfig()">configure</a> a CS.
+            </span>
         </div>
         <ng-template #elseBlock1>
             <!-- Mandatory settings configured, Mandatory preferences not configured (missing credentials) -->
@@ -41,14 +40,16 @@
                 <!-- Mandatory settings and preferences configured, but no project is linked (optional settings) -->
                 <div *ngIf="!csProjectLinked; else elseBlock3" class="alert alert-warning" style="margin: 3px;">
                     There is no CS project assigned to this Vocbench project.
-                    <a style="cursor: pointer" (click)="assignProject()">Create or assign</a> a project.
+                    <span *ngIf="isCollProjManagementAuthorized()">
+                        <a style="cursor: pointer" (click)="assignProject()">Create or assign</a> a project.
+                    </span>
                 </div>
 
                 <ng-template #elseBlock3>
                     <!-- All configured: mandatory settings and preferences, project linked -->
                     <div *ngIf="!csWorking" class="alert alert-warning" style="margin: 3px;">
                         Collaboration System seems to be configured but it is not working. 
-                        Please, check if the configuration is valid, or be sure that the CS server is running.
+                        Please, check that the configuration is valid, or be sure that the CS server is running.
                     </div>
                 </ng-template>
 
@@ -56,8 +57,7 @@
 
         </ng-template>
 
-
-
+        
         <table *ngIf="issues" class="table table-condensed table-hoverable">
             <colgroup>
                 <col style="width: 1%">

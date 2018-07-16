@@ -41,10 +41,6 @@ export class AdministrationComponent {
         return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_ROLE_MANAGEMENT);
     }
 
-    private isGroupManagementAuthorized(): boolean {
-        return VBContext.getLoggedUser().isAdmin(); //only admin
-    }
-
     private isProjManagementAuthorized(): boolean {
         return (
             AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_PROJECT_MANAGEMENT) ||

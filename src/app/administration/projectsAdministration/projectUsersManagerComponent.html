@@ -26,7 +26,7 @@
         <div class="subPanel-body vbox">
 
             <!-- Roles -->
-            <div *ngIf="!isSelectedUserAdmin()" class="panel panel-default vbox" style="margin-bottom: 4px">
+            <div *ngIf="isRoleManagementAuthorized() && !isSelectedUserAdmin()" class="panel panel-default vbox" style="margin-bottom: 4px">
                 <div class="panel-body vbox">
                     <div class="hbox">
                         <div class="subPanel vbox" style="margin: 0px">
@@ -66,7 +66,7 @@
             </div>
 
             <!-- Groups -->
-            <div class="panel panel-default vbox" style="margin-bottom: 4px">
+            <div *ngIf="isGroupManagementAuthorized()" class="panel panel-default vbox" style="margin-bottom: 4px">
                 <div class="panel-body vbox">
                     <div class="hbox">
                         <div class="subPanel vbox" style="margin: 0px">

@@ -1,16 +1,13 @@
-import { Component, HostListener, ViewChild, ElementRef } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { CollaborationProjSettingsModal } from "./modals/collaborationProjSettingsModal";
-import { CollaborationProjectModal } from "./modals/collaborationProjectModal";
-import { CollaborationServices } from "../services/collaborationServices";
-import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
-import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { ARTURIResource, ResourceUtils } from '../models/ARTResources';
 import { Issue } from '../models/Collaboration';
-import { VBContext } from '../utils/VBContext';
+import { CollaborationServices } from "../services/collaborationServices";
+import { ResourcesServices } from '../services/resourcesServices';
+import { AuthorizationEvaluator } from '../utils/AuthorizationEvaluator';
 import { UIUtils } from '../utils/UIUtils';
 import { VBCollaboration } from '../utils/VBCollaboration';
-import { ResourcesServices } from '../services/resourcesServices';
-import { ARTURIResource, ResourceUtils } from '../models/ARTResources';
+import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { CollaborationModalServices } from './collaborationModalService';
 
 @Component({
@@ -130,6 +127,10 @@ export class CollaborationComponent {
 
     private onResourceClick(resource: ARTURIResource) {
         this.sharedModals.openResourceView(resource, true);
+    }
+
+    private isCollProjManagementAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.COLLABORATION);
     }
 
 }
