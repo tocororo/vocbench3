@@ -186,13 +186,17 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
 
     private chooseConverter() {
         let capabilities: RDFCapabilityType[] = [];
-        if (this.selectedRangeType != null) {
-            if (this.selectedRangeType.type == RDFTypesEnum.literal) {
-                capabilities.push(RDFCapabilityType.literal);
-            } else if (this.selectedRangeType.type == RDFTypesEnum.resource) {
-                capabilities.push(RDFCapabilityType.uri)
+        if (this.headerResource.getRole() == RDFResourceRolesEnum.cls) {
+            capabilities.push(RDFCapabilityType.uri);
+        } else {
+            if (this.selectedRangeType != null) {
+                if (this.selectedRangeType.type == RDFTypesEnum.literal) {
+                    capabilities.push(RDFCapabilityType.literal);
+                } else if (this.selectedRangeType.type == RDFTypesEnum.resource) {
+                    capabilities.push(RDFCapabilityType.uri)
+                }
             }
-        }//To test
+        }
         this.sharedModals.selectConverter("Select converter", null, capabilities).then(
             (converter: {projectionOperator: string, contractDesctiption: ConverterContractDescription }) => {
                 let capabilityType: RDFCapabilityType = converter.contractDesctiption.getRDFCapability();

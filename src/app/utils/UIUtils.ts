@@ -85,15 +85,25 @@ export class UIUtils {
     private static collectionDeprecatedImgSrc = require("../../assets/images/icons/res/collection_deprecated.png");
     private static collectionImportedDeprecatedImgSrc = require("../../assets/images/icons/res/collection_imported_deprecated.png");
 
+    private static datatypeImgSrc = require("../../assets/images/icons/res/datatype.png");
+    private static datatypeImportedImgSrc = require("../../assets/images/icons/res/datatype_imported.png");
+    private static datatypeDeprecatedImgSrc = require("../../assets/images/icons/res/datatype_deprecated.png");
+    private static datatypeImportedDeprecatedImgSrc = require("../../assets/images/icons/res/datatype_imported_deprecated.png");
+
     private static lexiconImgSrc = require("../../assets/images/icons/res/individual.png");
     // private static lexiconImportedImgSrc = require("../../assets/images/icons/res/collection_imported.png");
     // private static lexiconDeprecatedImgSrc = require("../../assets/images/icons/res/collection_deprecated.png");
     // private static lexiconImportedDeprecatedImgSrc = require("../../assets/images/icons/res/collection_imported_deprecated.png");
 
     private static lexicEntryImgSrc = require("../../assets/images/icons/res/lexEntry.png");
-    // private static lexicEntryImportedImgSrc = require("../../assets/images/icons/res/collection_imported.png");
-    // private static lexicEntryDeprecatedImgSrc = require("../../assets/images/icons/res/collection_deprecated.png");
-    // private static lexicEntryImportedDeprecatedImgSrc = require("../../assets/images/icons/res/collection_imported_deprecated.png");
+    private static lexicEntryImportedImgSrc = require("../../assets/images/icons/res/lexEntry_imported.png");
+    private static lexicEntryDeprecatedImgSrc = require("../../assets/images/icons/res/lexEntry_deprecated.png");
+    private static lexicEntryImportedDeprecatedImgSrc = require("../../assets/images/icons/res/lexEntry_imported_deprecated.png");
+
+    private static lexicalFormImgSrc = require("../../assets/images/icons/res/lexForm.png");
+    private static lexicalFormImportedImgSrc = require("../../assets/images/icons/res/lexForm_imported.png");
+    private static lexicalFormDeprecatedImgSrc = require("../../assets/images/icons/res/lexForm_deprecated.png");
+    private static lexicalFormImportedDeprecatedImgSrc = require("../../assets/images/icons/res/lexForm_imported_deprecated.png");
 
     private static orderedCollectionImgSrc = require("../../assets/images/icons/res/orderedCollection.png");
     private static orderedCollectionImportedImgSrc = require("../../assets/images/icons/res/orderedCollection_imported.png");
@@ -182,14 +192,14 @@ export class UIUtils {
                     imgSrc = this.conceptSchemeDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.dataRange) {
-                imgSrc = this.classImgSrc;
+                imgSrc = this.datatypeImgSrc;
                 if (!explicit) {
-                    imgSrc = this.classImportedImgSrc;
+                    imgSrc = this.datatypeImportedImgSrc;
                     if (deprecated) {
-                        imgSrc = this.classImportedDeprecatedImgSrc;
+                        imgSrc = this.datatypeImportedDeprecatedImgSrc;
                     }
                 } else if (deprecated) {
-                    imgSrc = this.classDeprecatedImgSrc;
+                    imgSrc = this.datatypeDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.datatypeProperty) {
                 imgSrc = this.propDatatypeImgSrc;
@@ -244,16 +254,26 @@ export class UIUtils {
                 } else if (deprecated) {
                     imgSrc = this.propObjectDeprecatedImgSrc;
                 }
+            } else if (role == RDFResourceRolesEnum.ontolexForm) {
+                imgSrc = this.lexicalFormImgSrc;
+                if (!explicit) {
+                    imgSrc = this.lexicalFormImportedImgSrc;
+                    if (deprecated) {
+                        imgSrc = this.lexicalFormImportedDeprecatedImgSrc;
+                    }
+                } else if (deprecated) {
+                    imgSrc = this.lexicalFormDeprecatedImgSrc;
+                }
             } else if (role == RDFResourceRolesEnum.ontolexLexicalEntry) {
                 imgSrc = this.lexicEntryImgSrc;
-                // if (!explicit) {
-                //     imgSrc = this.lexicEntryImportedImgSrc;
-                //     if (deprecated) {
-                //         imgSrc = this.lexicEntryImportedDeprecatedImgSrc;
-                //     }
-                // } else if (deprecated) {
-                //     imgSrc = this.lexicEntryDeprecatedImgSrc;
-                // }
+                if (!explicit) {
+                    imgSrc = this.lexicEntryImportedImgSrc;
+                    if (deprecated) {
+                        imgSrc = this.lexicEntryImportedDeprecatedImgSrc;
+                    }
+                } else if (deprecated) {
+                    imgSrc = this.lexicEntryDeprecatedImgSrc;
+                }
             } else if (role == RDFResourceRolesEnum.ontology) {
                 imgSrc = this.ontologyImgSrc;
             } else if (role == RDFResourceRolesEnum.ontologyProperty) {
