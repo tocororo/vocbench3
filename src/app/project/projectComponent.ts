@@ -151,13 +151,13 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         const builder = new BSModalContextBuilder<ProjectPropertiesModalData>(
             modalData, undefined, ProjectPropertiesModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         return this.modal.open(ProjectPropertiesModal, overlayConfig)
     }
 
     private openACLModal() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         return this.modal.open(ProjectACLModal, overlayConfig);
     }
 
@@ -169,7 +169,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         const builder = new BSModalContextBuilder<RemoteRepoModalData>(
             modalData, undefined, RemoteRepoModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(RemoteRepoModal, overlayConfig)
     }
 
@@ -179,7 +179,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
 
     private openTableConfig() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('sm').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('sm').keyboard(27).toJSON() };
         this.modal.open(ProjectTableConfigModal, overlayConfig).result.then(
             res => {
                 this.initTable();

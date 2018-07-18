@@ -298,7 +298,7 @@ export class NamespacesAndImportsComponent {
         const builder = new BSModalContextBuilder<PrefixNamespaceModalData>(
             modalData, undefined, PrefixNamespaceModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(PrefixNamespaceModal, overlayConfig).result;
     }
 
@@ -415,7 +415,7 @@ export class NamespacesAndImportsComponent {
 
     private openOntologyMirror() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         this.modal.open(OntologyMirrorModal, overlayConfig).result.then(
             (changed: boolean) => {
                 if (changed) {

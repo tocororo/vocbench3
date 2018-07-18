@@ -103,7 +103,7 @@ export class MetadataRegistryComponent {
         const builder = new BSModalContextBuilder<NewCatalogRecordModalData>(
             modalData, undefined, NewCatalogRecordModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         this.modal.open(NewCatalogRecordModal, overlayConfig).result.then(
             ok => {
                 this.initCatalogRecords();
@@ -129,7 +129,7 @@ export class MetadataRegistryComponent {
         const builder = new BSModalContextBuilder<NewDatasetVersionModalData>(
             modalData, undefined, NewDatasetVersionModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(NewDatasetVersionModal, overlayConfig).result.then(
             ok => {
                 this.initCatalogRecords(this.selectedCatalog.identity);
@@ -180,7 +180,7 @@ export class MetadataRegistryComponent {
         const builder = new BSModalContextBuilder<NewEmbeddedLexicalizationModalData>(
             modalData, undefined, NewEmbeddedLexicalizationModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(NewEmbeddedLexicalizationModal, overlayConfig).result.then(
             ok => {
                 this.initEmbeddedLexicalizationSets();

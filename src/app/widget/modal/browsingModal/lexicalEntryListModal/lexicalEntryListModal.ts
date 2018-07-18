@@ -69,7 +69,7 @@ export class LexicalEntryListModal implements ModalComponent<LexicalEntryListMod
         const builder = new BSModalContextBuilder<LexiconListModalData>(
             modalData, undefined, LexiconListModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(LexiconListModal, overlayConfig).result;
     }
 

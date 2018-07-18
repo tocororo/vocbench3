@@ -130,7 +130,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
 
     private settings() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ClassTreeSettingsModal, overlayConfig).result.then(
             changesDone => {
                 this.filterEnabled = this.vbProp.getClassTreePreferences().filterEnabled;

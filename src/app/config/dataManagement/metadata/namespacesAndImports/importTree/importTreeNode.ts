@@ -86,7 +86,7 @@ export class ImportTreeNodeComponent {
         const builder = new BSModalContextBuilder<ImportOntologyModalData>(
             modalData, undefined, ImportOntologyModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ImportOntologyModal, overlayConfig).result;
     }
 

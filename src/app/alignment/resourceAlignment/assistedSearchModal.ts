@@ -177,7 +177,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
         const builder = new BSModalContextBuilder<NewCatalogRecordModalData>(
             modalData, undefined, NewCatalogRecordModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         this.modal.open(NewCatalogRecordModal, overlayConfig).result.then(
             ok => {
                 this.initRemoteDatasets();
@@ -279,7 +279,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
         const builder = new BSModalContextBuilder<AssistedSearchResultModalData>(
             modalData, undefined, AssistedSearchResultModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(AssistedSearchResultModal, overlayConfig).result;
     }
 

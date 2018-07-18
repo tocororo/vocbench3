@@ -97,7 +97,7 @@ export class RolesAdministrationComponent {
         const builder = new BSModalContextBuilder<ImportRoleModalData>(
             modalData, undefined, ImportRoleModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         this.modal.open(ImportRoleModal, overlayConfig).result.then(
             (data: any) => {
                 if (this.roleExists(data.name)) {
@@ -158,7 +158,7 @@ export class RolesAdministrationComponent {
         const builder = new BSModalContextBuilder<CapabilityEditorModalData>(
             modalData, undefined, CapabilityEditorModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(CapabilityEditorModal, overlayConfig).result.then(
             (capability: any) => {
                 if (this.capabilityList.indexOf(capability) != -1) {
@@ -191,7 +191,7 @@ export class RolesAdministrationComponent {
         const builder = new BSModalContextBuilder<CapabilityEditorModalData>(
             modalData, undefined, CapabilityEditorModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(CapabilityEditorModal, overlayConfig).result.then(
             (capability: any) => {
                 if (this.capabilityList.indexOf(capability) != -1) {

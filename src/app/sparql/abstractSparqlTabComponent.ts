@@ -298,7 +298,7 @@ export abstract class AbstractSparqlTabComponent {
         const builder = new BSModalContextBuilder<ExportResultAsRdfModalData>(
             modalData, undefined, ExportResultAsRdfModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ExportResultAsRdfModal, overlayConfig).result;
     }
 

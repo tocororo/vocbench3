@@ -167,7 +167,7 @@ export class Sheet2RdfComponent {
         const builder = new BSModalContextBuilder<HeaderEditorModalData>(
             modalData, undefined, HeaderEditorModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         this.modal.open(HeaderEditorModal, overlayConfig).result.then(
             () => { //closed with the "ok" button, so changes performed => update header
                 this.initHeaders();

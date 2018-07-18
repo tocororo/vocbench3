@@ -65,7 +65,7 @@ export abstract class AbstractHistValidComponent {
         const builder = new BSModalContextBuilder<OperationParamsModalData>(
             modalData, undefined, OperationParamsModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(OperationParamsModal, overlayConfig);
     }
 
@@ -74,7 +74,7 @@ export abstract class AbstractHistValidComponent {
         const builder = new BSModalContextBuilder<CommitDeltaModalData>(
             modalData, undefined, CommitDeltaModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         return this.modal.open(CommitDeltaModal, overlayConfig);
     }
 

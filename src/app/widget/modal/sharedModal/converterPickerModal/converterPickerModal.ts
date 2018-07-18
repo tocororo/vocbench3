@@ -106,8 +106,7 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
         const builder = new BSModalContextBuilder<SignaturePickerModalData>(
             modalData, undefined, SignaturePickerModalData
         );
-        builder.keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(SignaturePickerModal, overlayConfig).result.then(
             (signature: SignatureDescription) => {
                 this.selectedSignature = signature;

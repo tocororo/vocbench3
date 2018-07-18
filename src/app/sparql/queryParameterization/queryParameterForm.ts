@@ -73,7 +73,7 @@ export class QueryParameterForm {
         const builder = new BSModalContextBuilder<QueryParameterizerModalData>(
             modalData, undefined, QueryParameterizerModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         this.modal.open(QueryParameterizerModal, overlayConfig).result.then(
             (updatedVarBindings: VariableBindings) => {
                 this.bindings = updatedVarBindings;

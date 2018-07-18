@@ -46,7 +46,7 @@ export class UsersAdministrationComponent {
         const builder = new BSModalContextBuilder<UserCreateModalData>(
             modalData, undefined, UserCreateModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         return this.modal.open(UserCreateModal, overlayConfig).result.then(
             res => {
                 this.initUserList();

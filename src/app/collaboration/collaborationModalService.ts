@@ -22,7 +22,7 @@ export class CollaborationModalServices {
      */
     openIssueList(): Promise<Issue> {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(IssueListModal, overlayConfig).result;
     }
 
@@ -31,7 +31,7 @@ export class CollaborationModalServices {
      */
     editCollaborationProjectSettings() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(CollaborationProjSettingsModal, overlayConfig).result;
     }
 
@@ -40,7 +40,7 @@ export class CollaborationModalServices {
      */
     editCollaborationUserSettings() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(CollaborationUserSettingsModal, overlayConfig).result;
     }
 
@@ -49,7 +49,7 @@ export class CollaborationModalServices {
      */
     editCollaborationProject() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(CollaborationProjectModal, overlayConfig).result;
     }
 
@@ -58,7 +58,7 @@ export class CollaborationModalServices {
      */
     createIssue() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(CreateIssueModal, overlayConfig).result;
     }
 

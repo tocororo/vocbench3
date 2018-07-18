@@ -144,7 +144,7 @@ export class UserProfileComponent {
 
     private changePwd() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         this.modal.open(ChangePasswordModal, overlayConfig);
     }
 

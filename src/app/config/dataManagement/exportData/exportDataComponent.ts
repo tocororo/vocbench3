@@ -214,7 +214,7 @@ export class ExportDataComponent {
         const builder = new BSModalContextBuilder<FilterGraphsModalData>(
             modalData, undefined, FilterGraphsModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(FilterGraphsModal, overlayConfig).result;
     }
 

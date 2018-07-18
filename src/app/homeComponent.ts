@@ -26,7 +26,7 @@ export class HomeComponent {
             this.router.navigate(['/Projects']); //redirect to project
         } else {
             const builder = new BSModalContextBuilder<any>();
-            let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+            let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
             this.modal.open(ProjectListModal, overlayConfig);
         }
     }

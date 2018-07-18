@@ -60,7 +60,7 @@ export class RemoteAccessConfigModal implements ModalComponent<RemoteAccessConfi
 
     private changeRemoteConfig() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
 
         this.modal.open(RemoteAccessConfigEditorModal, overlayConfig).result.then(
             (newConfig: any) => {

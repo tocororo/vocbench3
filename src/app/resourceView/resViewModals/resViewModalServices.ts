@@ -31,8 +31,7 @@ export class ResViewModalServices {
         const builder = new BSModalContextBuilder<ClassListCreatorModalData>(
             modalData, undefined, ClassListCreatorModalData
         );
-        builder.size("lg").keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         return this.modal.open(ClassListCreatorModal, overlayConfig).result;
     }
 
@@ -46,8 +45,7 @@ export class ResViewModalServices {
         const builder = new BSModalContextBuilder<InstanceListCreatorModalData>(
             modalData, undefined, InstanceListCreatorModalData
         );
-        builder.size("lg").keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         return this.modal.open(InstanceListCreatorModal, overlayConfig).result;
     }
 
@@ -56,8 +54,7 @@ export class ResViewModalServices {
         const builder = new BSModalContextBuilder<InstanceListCreatorModalData>(
             modalData, undefined, InstanceListCreatorModalData
         );
-        builder.size("lg").keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         return this.modal.open(PropertyChainCreatorModal, overlayConfig).result;
     }
 
@@ -71,7 +68,7 @@ export class ResViewModalServices {
         const builder = new BSModalContextBuilder<CustomFormModalData>(
             modalData, undefined, CustomFormModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(CustomFormModal, overlayConfig).result;
     }
 
@@ -89,8 +86,7 @@ export class ResViewModalServices {
         const builder = new BSModalContextBuilder<AddPropertyValueModalData>(
             modalData, undefined, AddPropertyValueModalData
         );
-        builder.keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(AddPropertyValueModal, overlayConfig).result;
     }
 
@@ -99,7 +95,7 @@ export class ResViewModalServices {
         const builder = new BSModalContextBuilder<AddManuallyValueData>(
             modalData, undefined, AddManuallyValueData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(AddManuallyValueModal, overlayConfig).result;
     }
 
@@ -112,8 +108,7 @@ export class ResViewModalServices {
         const builder = new BSModalContextBuilder<DataRangeEditorModalData>(
             modalData, undefined, DataRangeEditorModalData
         );
-        builder.keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(DataRangeEditorModal, overlayConfig).result;
     }
 
@@ -122,7 +117,7 @@ export class ResViewModalServices {
      */
     editSettings() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ResViewSettingsModal, overlayConfig).result;
     }
 
@@ -137,8 +132,7 @@ export class ResViewModalServices {
         const builder = new BSModalContextBuilder<BrowseExternalResourceModalData>(
             modalData, undefined, BrowseExternalResourceModalData
         );
-        builder.keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(BrowseExternalResourceModal, overlayConfig).result;
     }
 

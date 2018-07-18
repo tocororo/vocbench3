@@ -32,7 +32,7 @@ export class SharedModalServices {
         const builder = new BSModalContextBuilder<PluginConfigModalData>(
             modalData, undefined, PluginConfigModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(PluginConfigModal, overlayConfig).result;
     }
 
@@ -46,7 +46,7 @@ export class SharedModalServices {
         const builder = new BSModalContextBuilder<RemoteAccessConfigModalData>(
             modalData, undefined, RemoteAccessConfigModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(RemoteAccessConfigModal, overlayConfig).result;
     }
 
@@ -61,7 +61,7 @@ export class SharedModalServices {
         const builder = new BSModalContextBuilder<RemoteRepoSelectionModalData>(
             modalData, undefined, RemoteRepoSelectionModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         return this.modal.open(RemoteRepoSelectionModal, overlayConfig).result;
     }
 
@@ -74,7 +74,7 @@ export class SharedModalServices {
         const builder = new BSModalContextBuilder<ResourceViewModalData>(
             modalData, undefined, ResourceViewModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         return this.modal.open(ResourceViewModal, overlayConfig).result;
     }
 
@@ -89,7 +89,7 @@ export class SharedModalServices {
         const builder = new BSModalContextBuilder<LanguageSelectorModalData>(
             modalData, undefined, LanguageSelectorModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(LanguageSelectorModal, overlayConfig).result;
     }
 
@@ -103,8 +103,7 @@ export class SharedModalServices {
         const builder = new BSModalContextBuilder<ConverterPickerModalData>(
             modalData, undefined, ConverterPickerModalData
         );
-        builder.size('lg').keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         return this.modal.open(ConverterPickerModal, overlayConfig).result;
     }
 
@@ -122,7 +121,7 @@ export class SharedModalServices {
         const builder = new BSModalContextBuilder<StoreConfigurationModalData>(
             modalData, undefined, StoreConfigurationModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(StoreConfigurationModal, overlayConfig).result;
     }
 
@@ -139,7 +138,7 @@ export class SharedModalServices {
         const builder = new BSModalContextBuilder<LoadConfigurationModalData>(
             modalData, undefined, LoadConfigurationModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(LoadConfigurationModal, overlayConfig).result;
     }
 
@@ -154,7 +153,7 @@ export class SharedModalServices {
         const builder = new BSModalContextBuilder<ResourcePickerModalData>(
             modalData, undefined, ResourcePickerModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ResourcePickerModal, overlayConfig).result;
     }
 
@@ -168,7 +167,7 @@ export class SharedModalServices {
         const builder = new BSModalContextBuilder<ImportOntologyModalData>(
             modalData, undefined, ImportOntologyModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ImportOntologyModal, overlayConfig).result;
     }
 

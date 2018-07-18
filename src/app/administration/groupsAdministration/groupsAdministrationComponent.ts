@@ -76,7 +76,7 @@ export class GroupsAdministrationComponent {
         const builder = new BSModalContextBuilder<GroupEditorModalData>(
             modalData, undefined, GroupEditorModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(GroupEditorModal, overlayConfig).result;
     }
     

@@ -88,7 +88,7 @@ export class VersioningComponent {
         const builder = new BSModalContextBuilder<DumpCreationModalData>(
             modalData, undefined, DumpCreationModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(DumpCreationModal, overlayConfig).result;
     }
 

@@ -246,7 +246,7 @@ export class AlignmentValidationComponent {
         const builder = new BSModalContextBuilder<MappingPropertySelectionModalData>(
             modalData, undefined, MappingPropertySelectionModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(MappingPropertySelectionModal, overlayConfig).result;
     }
 
@@ -344,7 +344,7 @@ export class AlignmentValidationComponent {
         var oldAlignPerPage = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
 
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
 
         this.modal.open(ValidationSettingsModal, overlayConfig).result.then(
             () => {
@@ -455,8 +455,7 @@ export class AlignmentValidationComponent {
                 const builder = new BSModalContextBuilder<ValidationReportModalData>(
                     modalData, undefined, ValidationReportModalData
                 );
-                builder.size("lg").keyboard(null);
-                let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+                let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
                 return this.modal.open(ValidationReportModal, overlayConfig).result;
             }
         )

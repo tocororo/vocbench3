@@ -41,7 +41,7 @@ export class BasicModalServices {
         const builder = new BSModalContextBuilder<PromptModalData>(
             modalData, undefined, PromptModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(PromptModal, overlayConfig).result;
     }
 
@@ -61,7 +61,7 @@ export class BasicModalServices {
         const builder = new BSModalContextBuilder<PromptPrefixedModalData>(
             modalData, undefined, PromptPrefixedModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(PromptPrefixedModal, overlayConfig).result;
     }
 
@@ -76,7 +76,7 @@ export class BasicModalServices {
         const builder = new BSModalContextBuilder<PromptPropertiesModalData>(
             modalData, undefined, PromptPropertiesModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(PromptPropertiesModal, overlayConfig).result;
     }
 
@@ -95,7 +95,7 @@ export class BasicModalServices {
         const builder = new BSModalContextBuilder<ConfirmModalData>(
             modalData, undefined, ConfirmModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ConfirmModal, overlayConfig).result;
     }
 
@@ -115,7 +115,7 @@ export class BasicModalServices {
         const builder = new BSModalContextBuilder<ConfirmCheckModalData>(
             modalData, undefined, ConfirmCheckModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ConfirmCheckModal, overlayConfig).result;
     }
 
@@ -133,7 +133,7 @@ export class BasicModalServices {
         const builder = new BSModalContextBuilder<AlertModalData>(
             modalData, undefined, AlertModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(AlertModal, overlayConfig).result;
     }
 
@@ -153,7 +153,7 @@ export class BasicModalServices {
         const builder = new BSModalContextBuilder<AlertCheckModalData>(
             modalData, undefined, AlertCheckModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(AlertCheckModal, overlayConfig).result;
     }
 
@@ -189,7 +189,7 @@ export class BasicModalServices {
         const builder = new BSModalContextBuilder<SelectionModalData>(
             modalData, undefined, SelectionModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(SelectionModal, overlayConfig).result;
     }
 
@@ -205,7 +205,7 @@ export class BasicModalServices {
         const builder = new BSModalContextBuilder<DownloadModalData>(
             modalData, undefined, DownloadModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(DownloadModal, overlayConfig).result;
     }
 
@@ -222,7 +222,7 @@ export class BasicModalServices {
         const builder = new BSModalContextBuilder<FilePickerModalData>(
             modalData, undefined, FilePickerModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(FilePickerModal, overlayConfig).result;
     }
 
@@ -239,7 +239,7 @@ export class BasicModalServices {
         const builder = new BSModalContextBuilder<ResourceSelectionModalData>(
             modalData, undefined, ResourceSelectionModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ResourceSelectionModal, overlayConfig).result;
     }
 
@@ -255,7 +255,7 @@ export class BasicModalServices {
         const builder = new BSModalContextBuilder<CustomFormSelectionModalData>(
             modalData, undefined, CustomFormSelectionModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(CustomFormSelectionModal, overlayConfig).result;
     }
 

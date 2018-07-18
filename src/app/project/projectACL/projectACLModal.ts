@@ -176,8 +176,7 @@ export class ProjectACLModal implements ModalComponent<BSModalContext> {
         const builder = new BSModalContextBuilder<ACLEditorModalData>(
             modalData, undefined, ACLEditorModalData
         );
-        builder.size("sm").keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('sm').keyboard(27).toJSON() };
         return this.modal.open(ACLEditorModal, overlayConfig).result.then(
             (update: any) => {
                 if (update) {

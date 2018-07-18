@@ -31,7 +31,7 @@ export class CreationModalServices {
         const builder = new BSModalContextBuilder<NewResourceCfModalData>(
             modalData, undefined, NewResourceCfModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(NewResourceCfModal, overlayConfig).result;
     }
 
@@ -51,7 +51,7 @@ export class CreationModalServices {
         const builder = new BSModalContextBuilder<NewResourceWithLiteralCfModalData>(
             modalData, undefined, NewResourceWithLiteralCfModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(NewResourceWithLiteralCfModal, overlayConfig).result;
     }
 
@@ -70,7 +70,7 @@ export class CreationModalServices {
         const builder = new BSModalContextBuilder<NewConceptCfModalData>(
             modalData, undefined, NewConceptCfModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(NewConceptCfModal, overlayConfig).result;
     }
 
@@ -84,7 +84,7 @@ export class CreationModalServices {
         const builder = new BSModalContextBuilder<NewLexiconCfModalData>(
             modalData, undefined, NewLexiconCfModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(NewLexiconCfModal, overlayConfig).result;
     }
 
@@ -100,7 +100,7 @@ export class CreationModalServices {
         const builder = new BSModalContextBuilder<NewOntoLexicalizationCfModalData>(
             modalData, undefined, NewOntoLexicalizationCfModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(NewOntoLexicalizationCfModal, overlayConfig).result;
     }
 
@@ -119,7 +119,7 @@ export class CreationModalServices {
         const builder = new BSModalContextBuilder<NewXLabelModalData>(
             modalData, undefined, NewXLabelModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(NewXLabelModal, overlayConfig).result;
     }
 
@@ -138,7 +138,7 @@ export class CreationModalServices {
         const builder = new BSModalContextBuilder<NewPlainLiteralModalData>(
             modalData, undefined, NewPlainLiteralModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(NewPlainLiteralModal, overlayConfig).result;
     }
 
@@ -153,7 +153,7 @@ export class CreationModalServices {
         const builder = new BSModalContextBuilder<NewTypedLiteralModalData>(
             modalData, undefined, NewTypedLiteralModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(NewTypedLiteralModal, overlayConfig).result;
     }
 
@@ -170,7 +170,7 @@ export class CreationModalServices {
         const builder = new BSModalContextBuilder<NewConceptFromLabelModalData>(
             modalData, undefined, NewConceptFromLabelModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(NewConceptFromLabelModal, overlayConfig).result;
     }
 

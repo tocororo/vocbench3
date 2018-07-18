@@ -267,7 +267,7 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
 
     private settings() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(LexicalEntryListSettingsModal, overlayConfig).result.then(
             changesDone => {
                 this.visualizationMode = this.vbProp.getLexicalEntryListPreferences().visualization;

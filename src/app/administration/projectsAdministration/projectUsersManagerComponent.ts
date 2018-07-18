@@ -112,7 +112,7 @@ export class ProjectUsersManagerComponent {
         const builder = new BSModalContextBuilder<UserProjBindingModalData>(
             modalData, undefined, UserProjBindingModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(UserProjBindingModal, overlayConfig).result.then(
             data => {
                 var user: User = data.user;

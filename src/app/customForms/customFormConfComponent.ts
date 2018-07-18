@@ -37,7 +37,7 @@ export class CustomFormConfigComponent {
 
     private showBrokenCFS() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         return this.modal.open(BrokenCFStructReportModal, overlayConfig)
     }
 
@@ -64,7 +64,7 @@ export class CustomFormConfigComponent {
 
     private createFormCollMapping() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(FormCollMappingModal, overlayConfig).result.then(
             res => {
                 var resource: ARTURIResource = res.resource;
@@ -132,8 +132,8 @@ export class CustomFormConfigComponent {
         const builder = new BSModalContextBuilder<FormCollEditorModalData>(
             modalData, undefined, FormCollEditorModalData
         );
-        builder.size("lg").keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        builder.size("lg").keyboard(27);
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(FormCollEditorModal, overlayConfig).result.then(
             res => this.initFormCollList(),
             () => { }
@@ -145,8 +145,8 @@ export class CustomFormConfigComponent {
         const builder = new BSModalContextBuilder<FormCollEditorModalData>(
             modalData, undefined, FormCollEditorModalData
         );
-        builder.size("lg").keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        builder.size("lg").keyboard(27);
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(FormCollEditorModal, overlayConfig).result.then(
             res => { },
             () => { }
@@ -201,7 +201,7 @@ export class CustomFormConfigComponent {
         const builder = new BSModalContextBuilder<ImportCfModalData>(
             modalData, undefined, ImportCfModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ImportCfModal, overlayConfig).result.then(
             (data: any) => {
                 this.customFormsService.importFormCollection(data.file, data.id).subscribe(
@@ -244,8 +244,7 @@ export class CustomFormConfigComponent {
         const builder = new BSModalContextBuilder<CustomFormEditorModalData>(
             modalData, undefined, CustomFormEditorModalData
         );
-        builder.size("lg").keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         return this.modal.open(CustomFormEditorModal, overlayConfig).result.then(
             res => this.initCustomFormList(),
             () => { }
@@ -257,8 +256,7 @@ export class CustomFormConfigComponent {
         const builder = new BSModalContextBuilder<CustomFormEditorModalData>(
             modalData, undefined, CustomFormEditorModalData
         );
-        builder.size("lg").keyboard(null);
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         return this.modal.open(CustomFormEditorModal, overlayConfig).result.then(
             res => { },
             () => { }
@@ -335,7 +333,7 @@ export class CustomFormConfigComponent {
         const builder = new BSModalContextBuilder<ImportCfModalData>(
             modalData, undefined, ImportCfModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         this.modal.open(ImportCfModal, overlayConfig).result.then(
             (data: any) => {
                 this.customFormsService.importCustomForm(data.file, data.id).subscribe(

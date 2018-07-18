@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
+import { BasicModalServices } from "../../basicModal/basicModalServices";
 import { Language, Languages } from "../../../../models/LanguagesCountries";
 import { VBProperties } from "../../../../utils/VBProperties";
 

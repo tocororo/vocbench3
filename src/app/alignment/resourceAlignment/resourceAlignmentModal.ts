@@ -72,7 +72,7 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
         const builder = new BSModalContextBuilder<AssistedSearchModalData>(
             modalData, undefined, AssistedSearchModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         this.modal.open(AssistedSearchModal, overlayConfig).result.then(
             resource => {
                 this.alignedObject = resource;

@@ -25,7 +25,7 @@ export class HistoryFilterComponent {
 
     private selectOperationFilter() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(OperationSelectModal, overlayConfig).result.then(
             (operations: any) => {
                 //for each operation to add, add it only if not already in operations array

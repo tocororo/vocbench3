@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from "../../../models/ARTResources";
-import { ClassIndividualTreeModal, ClassIndividualTreeModalData } from "../browsingModal/classIndividualTreeModal/classIndividualTreeModal";
-import { ClassTreeModal, ClassTreeModalData } from "../browsingModal/classTreeModal/classTreeModal";
-import { CollectionTreeModal, CollectionTreeModalData } from "../browsingModal/collectionTreeModal/collectionTreeModal";
-import { ConceptTreeModal, ConceptTreeModalData } from "../browsingModal/conceptTreeModal/conceptTreeModal";
-import { InstanceListModal, InstanceListModalData } from "../browsingModal/instanceListModal/instanceListModal";
-import { PropertyTreeModal, PropertyTreeModalData } from "../browsingModal/propertyTreeModal/propertyTreeModal";
-import { SchemeListModal, SchemeListModalData } from "../browsingModal/schemeListModal/schemeListModal";
+import { ClassIndividualTreeModal, ClassIndividualTreeModalData } from "./classIndividualTreeModal/classIndividualTreeModal";
+import { ClassTreeModal, ClassTreeModalData } from "./classTreeModal/classTreeModal";
+import { CollectionTreeModal, CollectionTreeModalData } from "./collectionTreeModal/collectionTreeModal";
+import { ConceptTreeModal, ConceptTreeModalData } from "./conceptTreeModal/conceptTreeModal";
+import { InstanceListModal, InstanceListModalData } from "./instanceListModal/instanceListModal";
+import { PropertyTreeModal, PropertyTreeModalData } from "./propertyTreeModal/propertyTreeModal";
+import { SchemeListModal, SchemeListModalData } from "./schemeListModal/schemeListModal";
 import { LexicalEntryListModal, LexicalEntryListModalData } from './lexicalEntryListModal/lexicalEntryListModal';
 import { LexiconListModal, LexiconListModalData } from './lexiconListModal/lexiconListModal';
 
@@ -30,7 +30,7 @@ export class BrowsingModalServices {
         const builder = new BSModalContextBuilder<ClassTreeModalData>(
             modalData, undefined, ClassTreeModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ClassTreeModal, overlayConfig).result;
     }
 
@@ -44,7 +44,7 @@ export class BrowsingModalServices {
         const builder = new BSModalContextBuilder<ClassIndividualTreeModalData>(
             modalData, undefined, ClassIndividualTreeModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.size("lg").keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         return this.modal.open(ClassIndividualTreeModal, overlayConfig).result;
     }
 
@@ -59,7 +59,7 @@ export class BrowsingModalServices {
         const builder = new BSModalContextBuilder<InstanceListModalData>(
             modalData, undefined, InstanceListModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(InstanceListModal, overlayConfig).result;
     }
 
@@ -75,7 +75,7 @@ export class BrowsingModalServices {
         const builder = new BSModalContextBuilder<ConceptTreeModalData>(
             modalData, undefined, ConceptTreeModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ConceptTreeModal, overlayConfig).result;
     }
 
@@ -89,7 +89,7 @@ export class BrowsingModalServices {
         const builder = new BSModalContextBuilder<CollectionTreeModalData>(
             modalData, undefined, CollectionTreeModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(CollectionTreeModal, overlayConfig).result;
     }
 
@@ -103,7 +103,7 @@ export class BrowsingModalServices {
         const builder = new BSModalContextBuilder<SchemeListModalData>(
             modalData, undefined, SchemeListModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(SchemeListModal, overlayConfig).result;
     }
 
@@ -120,7 +120,7 @@ export class BrowsingModalServices {
         const builder = new BSModalContextBuilder<PropertyTreeModalData>(
             modalData, undefined, PropertyTreeModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(PropertyTreeModal, overlayConfig).result;
     }
 
@@ -135,7 +135,7 @@ export class BrowsingModalServices {
         const builder = new BSModalContextBuilder<LexicalEntryListModalData>(
             modalData, undefined, LexicalEntryListModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(LexicalEntryListModal, overlayConfig).result;
     }
 
@@ -148,7 +148,7 @@ export class BrowsingModalServices {
         const builder = new BSModalContextBuilder<LexiconListModalData>(
             modalData, undefined, LexiconListModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(LexiconListModal, overlayConfig).result;
     }
 

@@ -6,7 +6,7 @@ import { Subscription } from "rxjs/Subscription";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { SearchMode, SearchSettings } from "../../models/Properties";
 import { SearchServices } from "../../services/searchServices";
-import { LoadCustomSearchModal } from "../../trees/searchBar/loadCustomSearchModal";
+import { LoadCustomSearchModal } from "./loadCustomSearchModal";
 import { TreeListContext } from "../../utils/UIUtils";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 import { VBProperties } from "../../utils/VBProperties";
@@ -97,13 +97,13 @@ export class SearchBarComponent {
         const builder = new BSModalContextBuilder<SearchSettingsModalData>(
             modalData, undefined, SearchSettingsModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(SearchSettingsModal, overlayConfig);
     }
 
     private advancedSearch() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         this.modal.open(AdvancedSearchModal, overlayConfig).result.then(
             (resource: ARTResource) => {
                 this.advancedSearchEvent.emit(resource);
@@ -114,14 +114,14 @@ export class SearchBarComponent {
 
     private customSearch() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         this.modal.open(LoadCustomSearchModal, overlayConfig).result.then(
             customSearchRef => {
                 var modalData = new CustomSearchModalData(customSearchRef);
                 const builder = new BSModalContextBuilder<CustomSearchModalData>(
                     modalData, undefined, SearchSettingsModalData
                 );
-                let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+                let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
                 this.modal.open(CustomSearchModal, overlayConfig).result.then(
                     (resource: ARTResource) => {
                         //exploit the same event (and related handler) of advanced search

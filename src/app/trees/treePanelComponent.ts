@@ -3,11 +3,11 @@ import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { OntoLex, SKOS } from "../models/Vocabulary";
-import { ClassIndividualTreePanelComponent } from "../trees/owl/classIndividualTreePanel/classIndividualTreePanelComponent";
-import { PropertyTreePanelComponent } from "../trees/property/propertyTreePanel/propertyTreePanelComponent";
-import { CollectionTreePanelComponent } from "../trees/skos/collection/collectionTreePanel/collectionTreePanelComponent";
-import { ConceptTreePanelComponent } from "../trees/skos/concept/conceptTreePanel/conceptTreePanelComponent";
-import { SchemeListPanelComponent } from "../trees/skos/scheme/schemeListPanel/schemeListPanelComponent";
+import { ClassIndividualTreePanelComponent } from "./owl/classIndividualTreePanel/classIndividualTreePanelComponent";
+import { PropertyTreePanelComponent } from "./property/propertyTreePanel/propertyTreePanelComponent";
+import { CollectionTreePanelComponent } from "./skos/collection/collectionTreePanel/collectionTreePanelComponent";
+import { ConceptTreePanelComponent } from "./skos/concept/conceptTreePanel/conceptTreePanelComponent";
+import { SchemeListPanelComponent } from "./skos/scheme/schemeListPanel/schemeListPanelComponent";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { TreeListContext } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
@@ -136,7 +136,7 @@ export class TreePanelComponent {
 
     private openSettings() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(null).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(TreeListSettingsModal, overlayConfig).result;
     }
 
