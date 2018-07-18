@@ -294,7 +294,12 @@ export class OntoLexLemonServices {
         var params: any = {
             lexicalEntry: lexicalEntry
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteLexicalEntry", params);
+        return this.httpMgr.doPost(this.serviceName, "deleteLexicalEntry", params).map(
+            stResp => {
+                this.eventHandler.lexicalEntryDeletedEvent.emit(lexicalEntry);
+                return stResp;
+            }
+        );
     }
 
     /**

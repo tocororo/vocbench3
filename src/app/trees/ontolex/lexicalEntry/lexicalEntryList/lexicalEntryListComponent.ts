@@ -36,7 +36,7 @@ export class LexicalEntryListComponent extends AbstractList {
         ));
         //here there is no need to check for the index (leading char of the entry) since if the entry uri is not found it is not deleted
         this.eventSubscriptions.push(eventHandler.lexicalEntryDeletedEvent.subscribe(
-            (data: any) => { if (data.lexicon.getURI() == this.lexicon.getURI()) this.onListNodeDeleted(data.entry); } ));
+            (lexEntry: ARTURIResource) => this.onListNodeDeleted(lexEntry)));
     }
 
     ngOnInit() {

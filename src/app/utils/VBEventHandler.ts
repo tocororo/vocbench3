@@ -65,7 +65,7 @@ export class VBEventHandler {
     public lexiconDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("lexiconDeletedEvent");
     public lexiconChangedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("lexiconChangedEvent");
     public lexicalEntryCreatedEvent: EventEmitter<{ entry: ARTURIResource, lexicon: ARTURIResource }> = new VBEventEmitter("lexicalEntryCreatedEvent");
-    public lexicalEntryDeletedEvent: EventEmitter<{ entry: ARTURIResource, lexicon: ARTURIResource }> = new VBEventEmitter("lexicalEntryDeletedEvent");
+    public lexicalEntryDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("lexicalEntryDeletedEvent");
 
     //DATATYPE EVENTS
     public datatypeCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("datatypeCreatedEvent");
