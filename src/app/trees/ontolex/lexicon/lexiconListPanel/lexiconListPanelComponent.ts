@@ -84,6 +84,7 @@ export class LexiconListPanelComponent extends AbstractPanel {
     }
 
     refresh() {
+        this.selectedNode = null;
         this.viewChildList.initList();
     }
 

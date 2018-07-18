@@ -1,6 +1,6 @@
 import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
 import { OWL, RDF, XmlSchema } from "../models/Vocabulary";
-import { VBContext } from "../utils/VBContext";
+import { VBContext } from "./VBContext";
 
 
 export class UIUtils {
@@ -90,10 +90,10 @@ export class UIUtils {
     private static datatypeDeprecatedImgSrc = require("../../assets/images/icons/res/datatype_deprecated.png");
     private static datatypeImportedDeprecatedImgSrc = require("../../assets/images/icons/res/datatype_imported_deprecated.png");
 
-    private static lexiconImgSrc = require("../../assets/images/icons/res/individual.png");
-    // private static lexiconImportedImgSrc = require("../../assets/images/icons/res/collection_imported.png");
-    // private static lexiconDeprecatedImgSrc = require("../../assets/images/icons/res/collection_deprecated.png");
-    // private static lexiconImportedDeprecatedImgSrc = require("../../assets/images/icons/res/collection_imported_deprecated.png");
+    private static lexiconImgSrc = require("../../assets/images/icons/res/lexicon.png");
+    private static lexiconImportedImgSrc = require("../../assets/images/icons/res/lexicon_imported.png");
+    private static lexiconDeprecatedImgSrc = require("../../assets/images/icons/res/lexicon_deprecated.png");
+    private static lexiconImportedDeprecatedImgSrc = require("../../assets/images/icons/res/lexicon_imported_deprecated.png");
 
     private static lexicEntryImgSrc = require("../../assets/images/icons/res/lexEntry.png");
     private static lexicEntryImportedImgSrc = require("../../assets/images/icons/res/lexEntry_imported.png");
@@ -223,14 +223,14 @@ export class UIUtils {
                 }
             } else if (role == RDFResourceRolesEnum.limeLexicon) {
                 imgSrc = this.lexiconImgSrc;
-                // if (!explicit) {
-                //     imgSrc = this.lexiconImportedImgSrc;
-                //     if (deprecated) {
-                //         imgSrc = this.lexiconImportedDeprecatedImgSrc;
-                //     }
-                // } else if (deprecated) {
-                //     imgSrc = this.lexiconDeprecatedImgSrc;
-                // }
+                if (!explicit) {
+                    imgSrc = this.lexiconImportedImgSrc;
+                    if (deprecated) {
+                        imgSrc = this.lexiconImportedDeprecatedImgSrc;
+                    }
+                } else if (deprecated) {
+                    imgSrc = this.lexiconDeprecatedImgSrc;
+                }
             } else if (role == RDFResourceRolesEnum.mention) {
                 imgSrc = this.mentionImgSrc;
                 // if role is not defined and rdfResource is a URIRes which baseURI is not the project baseURI

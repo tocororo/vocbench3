@@ -3,7 +3,7 @@ import {
 } from "../models/ARTResources";
 import { User } from "../models/User";
 import { SemanticTurkey } from "../models/Vocabulary";
-import { VBContext } from "../utils/VBContext";
+import { VBContext } from "./VBContext";
 
 export class Deserializer {
 

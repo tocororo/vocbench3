@@ -3,14 +3,14 @@
     <div class="panel-heading">
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
             <button class="btn btn-default" title="Create Lexicon" (click)="create()" [disabled]="isCreateDisabled()">
-                <img src="../../../../../assets/images/icons/actions/individual_create.png" class="panelButtonImg"/>
+                <img src="../../../../../assets/images/icons/actions/lexicon_create.png" class="panelButtonImg"/>
             </button>
             <ng-template [ngIf]="deletable">
                 <button class="btn btn-default" title="Delete Lexicon" (click)="delete()" [disabled]="isDeleteDisabled()">
-                    <img src="../../../../../assets/images/icons/actions/individual_delete.png" class="panelButtonImg"/>
+                    <img src="../../../../../assets/images/icons/actions/lexicon_delete.png" class="panelButtonImg"/>
                 </button>
                 <button class="btn btn-default" title="Deprecate Lexicon" (click)="deprecate()" [disabled]="isDeprecateDisabled()">
-                    <img src="../../../../../assets/images/icons/actions/individual_deprecate.png" class="panelButtonImg"/>
+                    <img src="../../../../../assets/images/icons/actions/lexicon_deprecate.png" class="panelButtonImg"/>
                 </button>
             </ng-template>
         </div>
