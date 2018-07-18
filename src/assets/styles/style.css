@@ -134,6 +134,13 @@ rdf-resource > .rdfResourceIcon {
     height: 16px;
     margin-right: 5px;
 }
+/* Ellipsis of the content of a rdf-resource in a button, in a navigation tab (ResView tabs), and in a panel-heading (heading of ResView) */
+button > rdf-resource > span, .nav-tabs rdf-resource > span, .panel-heading rdf-resource > span {
+	max-width: 200px;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
 .stagingAdd {
     color: green; font-style: italic;
@@ -726,4 +733,10 @@ input[type="radio"], input[type="checkbox"] {
 }
 .nav-tabs>li>a>.glyphicon {/*To avoid to stretch the tab when there is a glyphicon in the link*/
     line-height: 1.0;
+}
+
+.modal-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
