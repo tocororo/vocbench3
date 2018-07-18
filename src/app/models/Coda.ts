@@ -140,3 +140,12 @@ export enum RequirementLevels {
     uri = "uri",
     literal = "literal"
 }
+
+export enum XRole {
+    concept = "concept",
+    conceptScheme = "conceptScheme",
+    skosCollection = "skosCollection",
+    xLabel = "xLabel",
+    xNote = "xNote",
+    undetermined = "undetermined"
+}

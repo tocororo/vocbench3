@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResourceUtils } from "../models/ARTResources";
-import { ConverterContractDescription, ConverterUtils, RDFCapabilityType } from "../models/Coda";
+import { ConverterContractDescription, ConverterUtils, RDFCapabilityType, XRole } from "../models/Coda";
 import { HeaderStruct } from "../models/Sheet2RDF";
 import { RDFS } from "../models/Vocabulary";
 import { PropertyServices, RangeType } from "../services/propertyServices";
@@ -38,6 +38,8 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     private converterType: RDFCapabilityType;
     private converterUri: string;
     private converterQName: string;
+    private converterXRole: XRole = XRole.undetermined;
+    private xRoles: XRole[] = [XRole.undetermined, XRole.concept, XRole.conceptScheme, XRole.skosCollection, XRole.xLabel, XRole.xNote];
 
     private memoize: boolean = false;
 
@@ -72,6 +74,8 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
                 this.headerResource = header.resource;
                 this.converterType = header.converter.type;
                 this.converterUri = header.converter.uri;
+                this.converterXRole = (header.converter.xRole) ? header.converter.xRole : XRole.undetermined;
+                this.memoize = header.converter.memoize;
                 if (this.converterUri != null) {
                     this.converterQName = ConverterUtils.getConverterQName(this.converterUri);
                 }
@@ -245,8 +249,13 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
             }
         }
 
+        let xRolePar: XRole = null;
+        if (this.converterXRole != XRole.undetermined) {
+            xRolePar = this.converterXRole;
+        }
+
         this.s2rdfService.updateHeader(this.headerId, this.headerResource, rangeTypePar, rangeClassPar, 
-            this.converterQName, this.converterType, this.memoize, applyToAll).subscribe(
+            this.converterQName, this.converterType, xRolePar, this.memoize, applyToAll).subscribe(
             stResp => {
                 this.dialog.close();
             }

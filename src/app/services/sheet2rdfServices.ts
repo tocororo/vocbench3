@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTURIResource, RDFTypesEnum } from "../models/ARTResources";
-import { RDFCapabilityType } from "../models/Coda";
+import { RDFCapabilityType, XRole } from "../models/Coda";
 import { RDFFormat } from "../models/RDFFormat";
 import { HeaderStruct, TableRow, TriplePreview } from "../models/Sheet2RDF";
 import { Deserializer } from "../utils/Deserializer";
@@ -63,10 +63,11 @@ export class Sheet2RDFServices {
             lang: json.lang,
             converter: {
                 uri: json.converter.uri,
-                type: json.converter.type
+                type: json.converter.type,
+                xRole: json.converter.xRole,
+                memoize: json.converter.memoize
             },
             isMultiple: json.isMultiple,
-            memoize: json.memoize,
 
             range: {
                 type: json.range.type,
@@ -77,7 +78,7 @@ export class Sheet2RDFServices {
     }
 
     updateHeader(headerId: string, headerResource: ARTURIResource, rangeType?: RDFTypesEnum, rangeClass?: ARTURIResource,
-        converterMention?: string, converterType?: RDFCapabilityType, memoize?: boolean, applyToAll?: boolean) {
+        converterMention?: string, converterType?: RDFCapabilityType, converterXRole?: XRole, memoize?: boolean, applyToAll?: boolean) {
         console.log("[Sheet2RDFServices] updateHeader");
         var params: any = {
             headerId: headerId,
@@ -92,6 +93,7 @@ export class Sheet2RDFServices {
         if (converterMention != null && converterType != null) {
             params.converterMention = converterMention;
             params.converterType = converterType;
+            params.converterXRole = converterXRole;
             params.memoize = memoize;
         }
         if (applyToAll != null) {

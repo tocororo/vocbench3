@@ -104,7 +104,6 @@
                     title="If left empty, the system will try to automatically detect the most suitable converter">
                 </span>
             </label>
-            
         </div>
         <div class="groupPanel-body">
             <table class="table table-borderless table-condensed">
@@ -121,7 +120,13 @@
                         </td>
                     </tr>
                     <tr *ngIf="isConverterRandom()">
-                        <td colspan="5" class="text-right">
+                        <td class="text-right"><label>xRole:</label></td>
+                        <td>
+                            <select class="form-control input-sm" [(ngModel)]="converterXRole">
+                                <option *ngFor="let r of xRoles">{{r}}</option>
+                            </select>
+                        </td>
+                        <td colspan="3" class="text-right">
                             <div class="checkbox-inline">
                                 <label>
                                     <input type="checkbox" [(ngModel)]="memoize">Memoize

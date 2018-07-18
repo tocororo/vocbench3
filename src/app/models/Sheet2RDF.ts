@@ -1,5 +1,5 @@
 import { ARTURIResource, RDFTypesEnum, RDFResourceRolesEnum } from "./ARTResources";
-import { RDFCapabilityType } from "./Coda";
+import { RDFCapabilityType, XRole } from "./Coda";
 
 export class HeaderStruct {
     public id: string;
@@ -14,8 +14,9 @@ export class HeaderStruct {
     public converter: {
         uri: string;
         type: RDFCapabilityType;
+        xRole: XRole;
+        memoize: boolean;
     };
-    public memoize: boolean;
 }
 
 export class TableContent {
