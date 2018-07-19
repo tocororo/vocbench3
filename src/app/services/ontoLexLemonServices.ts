@@ -212,6 +212,34 @@ export class OntoLexLemonServices {
         return this.httpMgr.doGet(this.serviceName, "getLexicalEntryLanguage", params);
     }
 
+    /**
+     * 
+     * @param lexicalEntry 
+     * @param constituentLexicalEntries 
+     * @param ordered 
+     */
+    setLexicalEntryConstituents(lexicalEntry: ARTURIResource, constituentLexicalEntries: ARTURIResource[], ordered: boolean) {
+        console.log("[OntoLexLemonServices] setLexicalEntryConstituents");
+        var params: any = {
+            lexicalEntry: lexicalEntry,
+            constituentLexicalEntries: constituentLexicalEntries,
+            ordered: ordered
+        };
+        return this.httpMgr.doPost(this.serviceName, "setLexicalEntryConstituents", params);
+    }
+
+    /**
+     * 
+     * @param lexicalEntry 
+     */
+	clearLexicalEntryConstituents(lexicalEntry: ARTURIResource) {
+        console.log("[OntoLexLemonServices] clearLexicalEntryConstituents");
+        var params: any = {
+            lexicalEntry: lexicalEntry
+        };
+        return this.httpMgr.doPost(this.serviceName, "clearLexicalEntryConstituents", params);
+    }
+
 
     /**
      * Sets the canonical form of a given lexical entry.

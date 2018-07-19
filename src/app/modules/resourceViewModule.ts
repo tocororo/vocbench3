@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BroadersPartitionRenderer } from '../resourceView/renderer/impl/broadersPartitionRenderer';
 import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/renderer/impl/classAxiomPartitionRenderer';
+import { ConstituentsPartitionRenderer } from '../resourceView/renderer/impl/constituentsPartitionRenderer';
 import { DenotationsPartitionRenderer } from '../resourceView/renderer/impl/denotationsPartitionRenderer';
 import { DisjointPropertiesPartitionRenderer } from '../resourceView/renderer/impl/disjointPropertiesRenderer';
 import { DomainsPartitionRenderer } from '../resourceView/renderer/impl/domainsPartitionRenderer';
@@ -22,6 +23,7 @@ import { PropertiesPartitionRenderer } from '../resourceView/renderer/impl/prope
 import { PropertyChainRenderer } from '../resourceView/renderer/impl/propertyChainRenderer';
 import { PropertyFacetsPartitionRenderer } from '../resourceView/renderer/impl/propertyFacetsPartitionRenderer';
 import { RangesPartitionRenderer } from '../resourceView/renderer/impl/rangesPartitionRenderer';
+import { RdfsMembersPartitionRenderer } from '../resourceView/renderer/impl/rdfsMembersPartitionRenderer';
 import { SchemesPartitionRenderer } from '../resourceView/renderer/impl/schemesPartitionRenderer';
 import { SubtermsPartitionRenderer } from '../resourceView/renderer/impl/subtermsPartitionRenderer';
 import { SuperPropertiesPartitionRenderer } from '../resourceView/renderer/impl/superPropertiesPartitionRenderer';
@@ -39,10 +41,12 @@ import { AddManuallyValueModal } from '../resourceView/resViewModals/addManually
 import { AddPropertyValueModal } from '../resourceView/resViewModals/addPropertyValueModal';
 import { BrowseExternalResourceModal } from '../resourceView/resViewModals/browseExternalResourceModal';
 import { ClassListCreatorModal } from '../resourceView/resViewModals/classListCreatorModal';
+import { ConstituentListCreatorModal } from '../resourceView/resViewModals/constituentListCreatorModal';
 import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
 import { DataRangeEditorModal } from '../resourceView/resViewModals/dataRangeEditorModal';
 import { InstanceListCreatorModal } from '../resourceView/resViewModals/instanceListCreatorModal';
 import { PropertyChainCreatorModal } from '../resourceView/resViewModals/propertyChainCreatorModal';
+import { RdfsMembersModal } from '../resourceView/resViewModals/rdfsMembersModal';
 import { ResViewModalServices } from '../resourceView/resViewModals/resViewModalServices';
 import { ResViewSettingsModal } from '../resourceView/resViewModals/resViewSettingsModal';
 import { EditableResourceComponent } from '../resourceView/resViewResources/editableResourceComponent';
@@ -63,6 +67,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         //renderers
         BroadersPartitionRenderer,
         ClassAxiomPartitionPartitionRenderer, 
+        ConstituentsPartitionRenderer,
         DenotationsPartitionRenderer,
         DisjointPropertiesPartitionRenderer,
         DomainsPartitionRenderer,
@@ -83,24 +88,41 @@ import { TreeAndListModule } from "./treeAndListModule";
         PropertyChainRenderer,
         PropertyFacetsPartitionRenderer,
         RangesPartitionRenderer,
+        RdfsMembersPartitionRenderer,
         SchemesPartitionRenderer,
         SubtermsPartitionRenderer,
         SuperPropertiesPartitionRenderer,
         TopConceptsPartitionRenderer,
         TypesPartitionRenderer,
         //modals
-        ClassListCreatorModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal,
-        DataRangeEditor, ResViewSettingsModal, AddManuallyValueModal, PropertyChainCreatorModal,
-        BrowseExternalResourceModal
+        AddManuallyValueModal,
+        AddPropertyValueModal,
+        BrowseExternalResourceModal,
+        ClassListCreatorModal,
+        ConstituentListCreatorModal,
+        DataRangeEditorModal,
+        DataRangeEditor,
+        InstanceListCreatorModal,
+        PropertyChainCreatorModal,
+        RdfsMembersModal,
+        ResViewSettingsModal
     ],
     exports: [
         ResourceViewPanelComponent, ResourceViewModal, ResourceViewComponent
     ],
     providers: [ResViewModalServices],
     entryComponents: [
-        ClassListCreatorModal, InstanceListCreatorModal, AddPropertyValueModal, DataRangeEditorModal, 
-        ResourceViewModal, ResViewSettingsModal, AddManuallyValueModal, PropertyChainCreatorModal,
-        BrowseExternalResourceModal
+        AddManuallyValueModal,
+        AddPropertyValueModal,
+        BrowseExternalResourceModal,
+        ClassListCreatorModal,
+        ConstituentListCreatorModal,
+        DataRangeEditorModal,
+        DataRangeEditor,
+        InstanceListCreatorModal,
+        PropertyChainCreatorModal,
+        RdfsMembersModal,
+        ResViewSettingsModal
     ]
 })
 export class ResourceViewModule { }

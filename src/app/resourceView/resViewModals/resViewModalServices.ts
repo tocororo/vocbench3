@@ -7,9 +7,11 @@ import { AddManuallyValueData, AddManuallyValueModal } from "./addManuallyValueM
 import { AddPropertyValueModal, AddPropertyValueModalData } from "./addPropertyValueModal";
 import { BrowseExternalResourceModal, BrowseExternalResourceModalData } from './browseExternalResourceModal';
 import { ClassListCreatorModal, ClassListCreatorModalData } from "./classListCreatorModal";
+import { ConstituentListCreatorModal, ConstituentListCreatorModalData } from './constituentListCreatorModal';
 import { DataRangeEditorModal, DataRangeEditorModalData } from "./dataRangeEditorModal";
 import { InstanceListCreatorModal, InstanceListCreatorModalData } from "./instanceListCreatorModal";
 import { PropertyChainCreatorModal, PropertyChainCreatorModalData } from './propertyChainCreatorModal';
+import { RdfsMembersModal, RdfsMembersModalData } from './rdfsMembersModal';
 import { ResViewSettingsModal } from "./resViewSettingsModal";
 
 /**
@@ -90,6 +92,11 @@ export class ResViewModalServices {
         return this.modal.open(AddPropertyValueModal, overlayConfig).result;
     }
 
+    /**
+     * 
+     * @param property 
+     * @param propChangeable 
+     */
     addManualValue(property: ARTURIResource, propChangeable?: boolean) {
         var modalData = new AddManuallyValueData(property, propChangeable);
         const builder = new BSModalContextBuilder<AddManuallyValueData>(
@@ -97,6 +104,33 @@ export class ResViewModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(AddManuallyValueModal, overlayConfig).result;
+    }
+
+    /**
+     * 
+     * @param property 
+     * @param propChangeable 
+     */
+    addRdfsMembers(property: ARTURIResource, propChangeable?: boolean) {
+        var modalData = new RdfsMembersModalData(property, propChangeable);
+        const builder = new BSModalContextBuilder<RdfsMembersModalData>(
+            modalData, undefined, RdfsMembersModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        return this.modal.open(RdfsMembersModal, overlayConfig).result;
+    }
+
+    /**
+     * 
+     * @param title 
+     */
+    createConstituentList(title: string) {
+        var modalData = new ConstituentListCreatorModalData(title);
+        const builder = new BSModalContextBuilder<ConstituentListCreatorModalData>(
+            modalData, undefined, ConstituentListCreatorModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
+        return this.modal.open(ConstituentListCreatorModal, overlayConfig).result;
     }
 
     /**

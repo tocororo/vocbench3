@@ -1,6 +1,7 @@
 export enum ResViewPartition {
     broaders = "broaders",
     classaxioms = "classaxioms",
+    constituents = "constituents",
     denotations = "denotations",
     disjointProperties = "disjointProperties",
     domains = "domains",
@@ -19,6 +20,7 @@ export enum ResViewPartition {
     notes = "notes",
     properties = "properties",
     ranges = "ranges",
+    rdfsMembers = "rdfsMembers",
     schemes = "schemes",
     subPropertyChains = "subPropertyChains",
     subterms = "subterms",
@@ -36,6 +38,7 @@ export class ResViewUtils {
     public static addManuallyPartition: ResViewPartition[] = [
         ResViewPartition.broaders,
         ResViewPartition.classaxioms,
+        ResViewPartition.constituents,
         ResViewPartition.disjointProperties,
         ResViewPartition.domains,
         ResViewPartition.equivalentProperties,
@@ -47,6 +50,7 @@ export class ResViewUtils {
         ResViewPartition.notes,
         ResViewPartition.properties,
         ResViewPartition.ranges,
+        ResViewPartition.rdfsMembers,
         ResViewPartition.schemes,
         ResViewPartition.subterms,
         ResViewPartition.superproperties,

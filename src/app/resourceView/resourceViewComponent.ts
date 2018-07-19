@@ -57,6 +57,7 @@ export class ResourceViewComponent {
     private resViewResponse: any = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
     private broadersColl: ARTPredicateObjects[] = null;
     private classAxiomColl: ARTPredicateObjects[] = null;
+    private constituentsColl: ARTPredicateObjects[] = null;
     private denotationsColl: ARTPredicateObjects[] = null;
     private disjointPropertiesColl: ARTPredicateObjects[] = null;
     private domainsColl: ARTPredicateObjects[] = null;
@@ -76,6 +77,7 @@ export class ResourceViewComponent {
     private propertiesColl: ARTPredicateObjects[] = null;
     private propertyFacets: PropertyFacet[] = null;
     private rangesColl: ARTPredicateObjects[] = null;
+    private rdfsMembersColl: ARTPredicateObjects[] = null;
     private schemesColl: ARTPredicateObjects[] = null;
     private subPropertyChainsColl: ARTPredicateObjects[] = null;
     private subtermsColl: ARTPredicateObjects[] = null;
@@ -183,6 +185,7 @@ export class ResourceViewComponent {
         //reset all partitions
         this.broadersColl = null;
         this.classAxiomColl = null;
+        this.constituentsColl = null;
         this.denotationsColl = null;
         this.disjointPropertiesColl = null;
         this.domainsColl = null;
@@ -202,6 +205,7 @@ export class ResourceViewComponent {
         this.propertiesColl = null;
         this.propertyFacets = null;
         this.rangesColl = null;
+        this.rdfsMembersColl = null;
         this.schemesColl = null;
         this.subPropertyChainsColl = null;
         this.subtermsColl = null;
@@ -247,6 +251,13 @@ export class ResourceViewComponent {
             this.classAxiomColl = Deserializer.createPredicateObjectsList(classAxiomsPartition);
             this.filterInferredFromPredObjList(this.classAxiomColl);
             this.sortObjects(this.classAxiomColl);
+        }
+
+        var constituentsPartition: any = this.resViewResponse[ResViewPartition.constituents];
+        if (constituentsPartition != null) {
+            this.constituentsColl = Deserializer.createPredicateObjectsList(constituentsPartition);
+            this.filterInferredFromPredObjList(this.constituentsColl);
+            this.sortObjects(this.constituentsColl);
         }
 
         var denotationsPartition: any = this.resViewResponse[ResViewPartition.denotations];
@@ -385,6 +396,13 @@ export class ResourceViewComponent {
             this.sortObjects(this.rangesColl);
         }
 
+        var rdfsMembersPartition: any = this.resViewResponse[ResViewPartition.rdfsMembers];
+        if (rdfsMembersPartition != null) {
+            this.rdfsMembersColl = Deserializer.createPredicateObjectsList(rdfsMembersPartition);
+            this.filterInferredFromPredObjList(this.rdfsMembersColl);
+            // this.sortObjects(this.rdfsMembersColl); ordered server-side
+        }
+
         var schemesPartition: any = this.resViewResponse[ResViewPartition.schemes];
         if (schemesPartition != null) {
             this.schemesColl = Deserializer.createPredicateObjectsList(schemesPartition);
@@ -435,6 +453,7 @@ export class ResourceViewComponent {
             //partitions optional
             this.broadersColl == null &&
             this.classAxiomColl == null &&
+            this.constituentsColl == null &&
             this.denotationsColl == null &&
             this.disjointPropertiesColl == null &&
             this.domainsColl == null &&
@@ -452,6 +471,7 @@ export class ResourceViewComponent {
             this.notesColl == null &&
             this.propertyFacets == null &&
             this.rangesColl == null &&
+            this.rdfsMembersColl == null &&
             this.subPropertyChainsColl == null &&
             this.schemesColl == null &&
             this.subtermsColl == null &&

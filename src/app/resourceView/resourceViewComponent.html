@@ -143,6 +143,12 @@
             <imports-renderer *ngIf="importsColl" [pred-obj-list]="importsColl" [resource]="resource" [rendering]="rendering"
                 [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </imports-renderer>
+            <constituents-renderer *ngIf="constituentsColl" [pred-obj-list]="constituentsColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </constituents-renderer>
+            <rdfs-members-renderer *ngIf="rdfsMembersColl" [pred-obj-list]="rdfsMembersColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </rdfs-members-renderer>
             <properties-renderer *ngIf="propertiesColl" [pred-obj-list]="propertiesColl" [resource]="resource" [rendering]="rendering"
                 [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </properties-renderer>

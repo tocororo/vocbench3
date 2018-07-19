@@ -252,6 +252,8 @@ export class Decomp {
     public static uri = "http://www.w3.org/ns/lemon/decomp";
     public static namespace = Decomp.uri + "#";
 
+    public static component = new ARTURIResource(Decomp.namespace + "Component", "decomp:Component", RDFResourceRolesEnum.cls);
+    public static constituent = new ARTURIResource(Decomp.namespace + "constituent", "decomp:constituent", RDFResourceRolesEnum.objectProperty);
     public static subterm = new ARTURIResource(Decomp.namespace + "subterm", "decomp:subterm", RDFResourceRolesEnum.objectProperty);
 }
 
