@@ -257,7 +257,7 @@ export class ResourceViewComponent {
         if (constituentsPartition != null) {
             this.constituentsColl = Deserializer.createPredicateObjectsList(constituentsPartition);
             this.filterInferredFromPredObjList(this.constituentsColl);
-            this.sortObjects(this.constituentsColl);
+            // this.sortObjects(this.constituentsColl); ordered server-side
         }
 
         var denotationsPartition: any = this.resViewResponse[ResViewPartition.denotations];
