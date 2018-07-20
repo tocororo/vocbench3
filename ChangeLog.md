@@ -1,21 +1,45 @@
-# 4.0.0-beta.1 (dd-mm-yyyy)
-  * Enabled "Add manually" option for notes ResourceView partition.
-  * Enabled possibility to add a resource to an existing issue (Collaboration System tool).
-  * Enabled creation of skosxl labels that are instances of a subClass of skosxl:Label.
+# 4.0.0-beta.1 (dd-07-2018)
+  * Improved ResourceView
+    * Enabled "Add manually" option for "notes" partition;
+    * Added "Add value from another project" action in some partitions;
+    * Changed the "show more" function in "show all";
+    * Added a status bar (footer) that show details about the resource position.
+  * Enabled the possibility to create resources when enriching a property.
+  * Improved the Collaboration System:
+    * Improved the setup;
+    * Enabled possibility to add a resource to an existing issue (Collaboration System tool);
+    * Removed from the "experimental features".
+  * Improved Sheet2RDF (no more an "experimental features").
   * Enabled management of OntoLex projects
-    * Allowed creation of OntoLex projects (both onto-model and lexical model).
-    * Added Lexicon and Lex.Entry panels in Data page.
-    * Added new ResourceView partitions: "lexicalSenses", "denotations" and "evokedLexicalConcepts".
-  * Implemented the storage management of SPARQL queries.
+    * Allowed creation of OntoLex projects (both onto-model and lexical model);
+    * Added Lexicon and Lex.Entry panels in Data page;
+    * Added new dedicated ResourceView partitions.
+  * Added Datatype panel in Data page.
+  * Introduced the new search-mode for exploring Concepts and LexicalEntries.
   * Enabled customization of the concept tree hierarchy:
     * Enabled possibility to customize the property during the creation of a sub concept;
     * Enabled the customization of the properties on which base the tree hierarchy.
-  * Enabled the possibility to change the credentials of remote repositories.
+  * Added a button for deprecating a resource in tree/list panel toolbar.
+  * Implemented the management of UsersGroup and their constraints on ConceptSchemes.
+  * Implemented the search-assisted alignment.
+  * Implemented "advanced search".
+  * Implemented "custom search" based on parameterized queries.
+  * Improved search by adding two new search modes ("exact" and "fuzzy") and a "use notes" parameter.
+  * Improved SPARQL:
+    * Implemented parameterized queries;
+    * Implemented the storage management of "standard" and parameterized queries.
   * Implemented UI for the management of MetadataRegistry.
-  * Implemented UI for the management of UsersGroup.
-  * Enabled "advanced search".
+  * Rearranged "Metadata Management" and "Namespaces and Imports" sections.
   * Adopted new Extensions in place of old Plugins.
-  * Enabled possibility to change the password.
+  * Improved Settings and Configurations:
+    * Implemented storage.
+    * Adopted dedicated input fields in forms in order to help the user to enter suitable values.
+  * Enabled possibility to store and load an exporter chain.
+  * Implemented UI for RdfFormatter and Deployer in the data exporter.
+  * Added importer and lifter for zThes format.
+  * Improved UI for changing the system administrator and email configuration.
+  * Enabled the change password feature.
+  * Enabled the possibility to change the credentials of remote repositories.
   * minor bug-fixes.
 
 # 3.0.0 (08-02-2018)
