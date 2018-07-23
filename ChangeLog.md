@@ -1,4 +1,4 @@
-# 4.0.0-beta.1 (dd-07-2018)
+# 4.0.0 (23-07-2018)
   * Improved ResourceView
     * Enabled "Add manually" option for "notes" partition;
     * Added "Add value from another project" action in some partitions;
