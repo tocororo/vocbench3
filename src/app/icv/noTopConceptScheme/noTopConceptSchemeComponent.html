@@ -24,7 +24,7 @@
                 <tbody>
                     <tr *ngFor="let scheme of brokenSchemeList">
                         <td>
-                            <rdf-resource [resource]="scheme"></rdf-resource>
+                            <rdf-resource class="clickable" [resource]="scheme" (click)="onResourceClick(scheme)"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">
                             <button class="btn btn-xs btn-default" (click)="selectTopConcept(scheme)">Select top concept</button>

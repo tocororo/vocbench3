@@ -1,15 +1,15 @@
 import { Component } from "@angular/core";
 import { Observable } from 'rxjs/Observable';
+import { ARTURIResource } from "../../models/ARTResources";
+import { IcvServices } from "../../services/icvServices";
+import { SkosServices } from "../../services/skosServices";
+import { UIUtils } from "../../utils/UIUtils";
+import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { NewConceptCfModalReturnData } from "../../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal";
-import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { SKOS, SKOSXL } from "../../models/Vocabulary";
-import { VBProperties } from "../../utils/VBProperties";
-import { UIUtils } from "../../utils/UIUtils";
-import { IcvServices } from "../../services/icvServices";
-import { SkosServices } from "../../services/skosServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
     selector: "no-top-concept-scheme-component",
@@ -22,7 +22,7 @@ export class NoTopConceptSchemeComponent {
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private preferences: VBProperties,
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices,
-        private creationModals: CreationModalServices) { }
+        private creationModals: CreationModalServices, private sharedModals: SharedModalServices) { }
 
     /**
      * Run the check
@@ -118,7 +118,11 @@ export class NoTopConceptSchemeComponent {
                 );
             },
             () => { }
-            );
+        );
+    }
+
+    private onResourceClick(res: ARTURIResource) {
+        this.sharedModals.openResourceView(res, false);
     }
 
 }

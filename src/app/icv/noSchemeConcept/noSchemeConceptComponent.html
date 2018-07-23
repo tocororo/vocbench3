@@ -28,7 +28,7 @@
                 <tbody>
                     <tr *ngFor="let concept of brokenConceptList">
                         <td>
-                            <rdf-resource [resource]="concept"></rdf-resource>
+                            <rdf-resource class="clickable" [resource]="concept" (click)="onResourceClick(concept)"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">
                             <button class="btn btn-xs btn-default" (click)="addToScheme(concept)">Add to a skos:ConceptScheme</button>

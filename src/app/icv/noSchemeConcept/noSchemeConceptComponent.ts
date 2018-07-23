@@ -1,10 +1,11 @@
 import { Component } from "@angular/core";
 import { Observable } from 'rxjs/Observable';
-import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
-import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { ARTURIResource } from "../../models/ARTResources";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
 import { UIUtils } from "../../utils/UIUtils";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
     selector: "no-scheme-concept-component",
@@ -15,7 +16,8 @@ export class NoSchemeConceptComponent {
 
     private brokenConceptList: Array<ARTURIResource>;
 
-    constructor(private icvService: IcvServices, private skosService: SkosServices, private browsingModals: BrowsingModalServices) { }
+    constructor(private icvService: IcvServices, private skosService: SkosServices, private browsingModals: BrowsingModalServices,
+        private sharedModals: SharedModalServices) { }
 
     /**
      * Run the check
@@ -85,6 +87,10 @@ export class NoSchemeConceptComponent {
                 this.runIcv();
             }
         );
+    }
+
+    private onResourceClick(res: ARTURIResource) {
+        this.sharedModals.openResourceView(res, false);
     }
 
 }

@@ -108,7 +108,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         ResViewSettingsModal
     ],
     exports: [
-        ResourceViewPanelComponent, ResourceViewModal, ResourceViewComponent
+        ResourceViewPanelComponent, ResourceViewComponent
     ],
     providers: [ResViewModalServices],
     entryComponents: [
@@ -122,7 +122,8 @@ import { TreeAndListModule } from "./treeAndListModule";
         InstanceListCreatorModal,
         PropertyChainCreatorModal,
         RdfsMembersModal,
-        ResViewSettingsModal
+        ResViewSettingsModal,
+        ResourceViewModal
     ]
 })
 export class ResourceViewModule { }

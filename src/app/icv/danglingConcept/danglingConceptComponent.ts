@@ -1,11 +1,12 @@
 import { Component } from "@angular/core";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
-import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { VBProperties } from "../../utils/VBProperties";
-import { UIUtils } from "../../utils/UIUtils";
+import { ARTURIResource } from "../../models/ARTResources";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
+import { UIUtils } from "../../utils/UIUtils";
+import { VBProperties } from "../../utils/VBProperties";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
     selector: "dangling-concept-component",
@@ -19,7 +20,7 @@ export class DanglingConceptComponent {
     private brokenConceptList: Array<ARTURIResource>;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private preferences: VBProperties,
-        private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) { }
+        private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
         this.skosService.getAllSchemes().subscribe(
@@ -163,6 +164,10 @@ export class DanglingConceptComponent {
                 this.runIcv();
             }
         )
+    }
+
+    private onResourceClick(res: ARTURIResource) {
+        this.sharedModals.openResourceView(res, false);
     }
 
 }

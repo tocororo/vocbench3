@@ -1,37 +1,34 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
+import { BrokenAlignmentComponent } from "../icv/brokenAlignment/brokenAlignmentComponent";
+import { BrokenDefinitionComponent } from "../icv/brokenDefinition/brokenDefinitionComponent";
+import { ConflictualLabelComponent } from "../icv/conflictualLabel/conflictualLabelComponent";
+import { CyclicConceptComponent } from "../icv/cyclicConcept/cyclicConceptComponent";
+import { DanglingConceptComponent } from "../icv/danglingConcept/danglingConceptComponent";
+import { DanglingXLabelComponent } from "../icv/danglingXLabel/danglingXLabelComponent";
+import { DisjointExactMatchConceptComponent } from "../icv/disjointExactMatchConcept/disjointExactMatchConceptComponent";
+import { DisjointRelatedConceptComponent } from "../icv/disjointRelatedConcept/disjointRelatedConceptComponent";
+import { ExtraSpaceLabelComponent } from "../icv/extraSpaceLabel/extraSpaceLabelComponent";
+import { HierarchicalRedundancyComponent } from "../icv/hierarchicalRedundancy/hierarchicalRedundancyComponent";
+import { IcvComponent } from "../icv/icvComponent";
+import { IcvConfigPanelComponent } from "../icv/icvConfigPanelComponent";
+import { IcvListComponent } from "../icv/icvListComponent";
+import { icvRouting } from "../icv/icvRoutes";
+import { InvalidUriComponent } from "../icv/invalidUri/invalidUriComponent";
+import { MultiplePrefLabelComponent } from "../icv/multiplePrefLabel/multiplePrefLabelComponent";
+import { NoDefinitionResourceComponent } from "../icv/noDefinitionResource/noDefinitionResourceComponent";
+import { NoLabelResourceComponent } from "../icv/noLabelResource/noLabelResourceComponent";
+import { NoLangLabelComponent } from "../icv/noLangLabel/noLangLabelComponent";
+import { NoMandatoryLabelComponent } from "../icv/noMandatoryLabel/noMandatoryLabelComponent";
+import { NoSchemeConceptComponent } from "../icv/noSchemeConcept/noSchemeConceptComponent";
+import { NoTopConceptSchemeComponent } from "../icv/noTopConceptScheme/noTopConceptSchemeComponent";
+import { OnlyAltLabelResourceComponent } from "../icv/onlyAltLabelResource/onlyAltLabelResourceComponent";
+import { OverlappedLabelComponent } from "../icv/overlappedLabel/overlappedLabelComponent";
+import { TopConceptWithBroaderComponent } from "../icv/topConceptWithBroader/topConceptWithBroaderComponent";
 import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from "./treeAndListModule";
 
-import { IcvComponent } from "../icv/icvComponent";
-import { IcvListComponent } from "../icv/icvListComponent";
-import { DanglingConceptComponent } from "../icv/danglingConcept/danglingConceptComponent";
-import { NoSchemeConceptComponent } from "../icv/noSchemeConcept/noSchemeConceptComponent";
-import { NoTopConceptSchemeComponent } from "../icv/noTopConceptScheme/noTopConceptSchemeComponent";
-import { TopConceptWithBroaderComponent } from "../icv/topConceptWithBroader/topConceptWithBroaderComponent";
-import { DisjointExactMatchConceptComponent } from "../icv/disjointExactMatchConcept/disjointExactMatchConceptComponent";
-import { DisjointRelatedConceptComponent } from "../icv/disjointRelatedConcept/disjointRelatedConceptComponent";
-import { HierarchicalRedundancyComponent } from "../icv/hierarchicalRedundancy/hierarchicalRedundancyComponent";
-import { NoLabelResourceComponent } from "../icv/noLabelResource/noLabelResourceComponent";
-import { OnlyAltLabelResourceComponent } from "../icv/onlyAltLabelResource/onlyAltLabelResourceComponent";
-import { OverlappedLabelComponent } from "../icv/overlappedLabel/overlappedLabelComponent";
-import { NoLangLabelComponent } from "../icv/noLangLabel/noLangLabelComponent";
-import { DanglingXLabelComponent } from "../icv/danglingXLabel/danglingXLabelComponent";
-import { NoMandatoryLabelComponent } from "../icv/noMandatoryLabel/noMandatoryLabelComponent";
-import { MultiplePrefLabelComponent } from "../icv/multiplePrefLabel/multiplePrefLabelComponent";
-import { ExtraSpaceLabelComponent } from "../icv/extraSpaceLabel/extraSpaceLabelComponent";
-import { NoDefinitionResourceComponent } from "../icv/noDefinitionResource/noDefinitionResourceComponent";
-import { CyclicConceptComponent } from "../icv/cyclicConcept/cyclicConceptComponent";
-import { BrokenAlignmentComponent } from "../icv/brokenAlignment/brokenAlignmentComponent";
-import { BrokenDefinitionComponent } from "../icv/brokenDefinition/brokenDefinitionComponent";
-import { InvalidUriComponent } from "../icv/invalidUri/invalidUriComponent";
-import { ConflictualLabelComponent } from "../icv/conflictualLabel/conflictualLabelComponent";
-
-import { IcvConfigPanelComponent } from "../icv/icvConfigPanelComponent";
-
-import { icvRouting } from "../icv/icvRoutes";
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, icvRouting],
