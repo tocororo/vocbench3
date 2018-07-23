@@ -93,8 +93,10 @@ export class Sheet2RDFServices {
         if (converterMention != null && converterType != null) {
             params.converterMention = converterMention;
             params.converterType = converterType;
-            params.converterXRole = converterXRole;
             params.memoize = memoize;
+            if (converterXRole != null) {
+                params.converterXRole = converterXRole;
+            }
         }
         if (applyToAll != null) {
             params.applyToAll = applyToAll;
