@@ -1,3 +1,5 @@
+# x.x.x (dd-MM-yyyy)
+
 # 4.0.0 (23-07-2018)
   * Improved ResourceView
     * Enabled "Add manually" option for "notes" partition;
