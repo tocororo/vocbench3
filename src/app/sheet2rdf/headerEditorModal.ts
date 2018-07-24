@@ -190,7 +190,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
 
     private chooseConverter() {
         let capabilities: RDFCapabilityType[] = [];
-        if (this.headerResource.getRole() == RDFResourceRolesEnum.cls) {
+        if (this.headerResource != null && this.headerResource.getRole() == RDFResourceRolesEnum.cls) {
             capabilities.push(RDFCapabilityType.uri);
         } else {
             if (this.selectedRangeType != null) {
