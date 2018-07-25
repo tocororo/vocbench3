@@ -60,7 +60,7 @@
     <div class="hbox pull-right" style="align-items: center">
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default btn-xs" title="Save parameterized query" (click)="saveConfiguration()">
+                <button class="btn btn-default btn-xs" title="Save parameterized query" (click)="saveConfiguration()" [disabled]="!storedQueryReference">
                     <span class="glyphicon glyphicon-floppy-save"></span>
                 </button>
                 <button class="btn btn-default btn-xs" title="Load parameterized query" (click)="loadConfiguration()">
