@@ -1,4 +1,6 @@
-# x.x.x (dd-MM-yyyy)
+# 4.0.1 (26-07-2018)
+  * Fixed bug that ignored the language during the creation of plain literal;
+  * Minor bugfixes.
 
 # 4.0.0 (23-07-2018)
   * Improved ResourceView

@@ -138,9 +138,11 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
     }
 
     private generateProjectMetadata() {
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         HttpServiceContext.setContextProject(this.selectedProject);
         this.mapleService.profileProject().subscribe(
             resp => {
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 HttpServiceContext.removeContextProject();
                 this.projectMetadataAvailabilityMap.set(this.selectedProject, true);
                 this.profileMediation();
