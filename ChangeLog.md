@@ -1,3 +1,11 @@
+# Reference to Semantic Turkey Change Log
+This changelog is limited to changes brough to the Vocbench 3 client application.
+The full changelog of the platform includes also changes brought to the Semantic Turkey backend:
+https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
+
+# 4.0.2 (27-07-2018)
+  * no changes to the client, consult ST ChangeLog for details on the server
+  
 # 4.0.1 (26-07-2018)
   * Fixed bug that ignored the language during the creation of plain literal;
   * Minor bugfixes.
