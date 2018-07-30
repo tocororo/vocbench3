@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body vbox" style="min-height: 50vh; max-height: 75vh;">
     
-    <div class="hbox" style="align-items: center; flex: initial; margin-bottom: 5px;">
+    <div class="hbox" style="align-items: center; flex: initial;">
         <label style="white-space: nowrap; margin: 0px 3px;">Form Collection ID:</label>
         <div class="hbox">
             <div class="input-group input-group-xs">
@@ -13,14 +13,14 @@
         </div>
     </div>
     
-    <div class="hbox">
+    <div class="hbox" style="margin: 10px 0 10px;">
         <div class="panel panel-default vbox">
             <div class="panel-heading">
                 <label style="flex: 1">Custom Forms:</label>
             </div>
             <div class="panel-body vbox">
                 <div class="scrollableContainer">
-                    <table class="table table-condensed table-borderless table-hoverable">
+                    <table class="table table-condensed table-borderless table-hoverable" style="table-layout: fixed">
                         <tbody>
                             <tr *ngFor="let cForm of forms" (click)="selectForm(cForm)"
                                 [ngClass]="{active: cForm == selectedForm, greyText: cForm.getLevel() == 'system'}">
@@ -47,7 +47,7 @@
             </div>
             <div class="panel-body vbox">
                 <div class="scrollableContainer">
-                    <table class="table table-condensed table-borderless table-hoverable">
+                    <table class="table table-condensed table-borderless table-hoverable" style="table-layout: fixed">
                         <tbody>
                             <tr *ngFor="let cForm of formsAvailable" (click)="selectFormAvailable(cForm)"
                                 [ngClass]="{active: cForm == selectedFormAvailable, greyText: cForm.getLevel() == 'system'}">
@@ -60,7 +60,7 @@
         </div>
     </div>
 
-    <div class="panel panel-default vbox" style="margin-top: 5px;">
+    <div class="panel panel-default vbox" style="min-height: 100px;">
         <div class="panel-heading">
             <label style="flex: 1">
                 Suggestions:
@@ -91,11 +91,7 @@
             </div>
         </div>
         <div class="panel-body vbox">
-            <div class="scrollableContainer">
-                <div *ngFor="let s of suggestions" class="listItem" [ngClass]="{active: s == selectedSuggestion}" (click)="selectSuggestion(s)">
-                    <rdf-resource [resource]="s"></rdf-resource>
-                </div>
-            </div>
+            <resource-list [resources]="suggestions" (nodeSelected)="selectSuggestion($event)"></resource-list>
         </div>
     </div>
     

@@ -37,7 +37,7 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
             fc => {
                 var suggestions: ARTURIResource[] = fc.getSuggestions();
                 if (suggestions.length == 0) {
-                    this.basicModals.alert("Suggested resources", "No classes/properties suggested for the FormCollection " + fc.getId, "warning");
+                    this.basicModals.alert("Suggested resources", "No classes/properties suggested for the FormCollection " + fc.getId(), "warning");
                 } else {
                     this.basicModals.selectResource("Suggested resources", null, suggestions).then(
                         res => {
