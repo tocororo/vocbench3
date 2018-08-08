@@ -142,7 +142,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
         if (serializedPropChain.length > 0) {
             serializedPropChain = serializedPropChain.slice(0, -1);//delete last ","
         }
-        this.basicModals.prompt("Edit property chain", null, "Write the chain as sequenze of IRI comma (,) separated", serializedPropChain, true).then(
+        this.basicModals.prompt("Edit property chain", null, "Write the chain as sequence of comma (,) separated IRIs", serializedPropChain, true).then(
             (value: any) => {
                 var chain: string = String(value).trim();
                 if (chain.length != 0) {
