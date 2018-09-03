@@ -4,6 +4,7 @@ import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { Reference } from "../../../../models/Configuration";
 import { Scope, ScopeUtils } from "../../../../models/Plugins";
 import { ConfigurationsServices } from "../../../../services/configurationsServices";
+import { BasicModalServices } from "../../basicModal/basicModalServices";
 
 export class StoreConfigurationModalData extends BSModalContext {
     constructor(
@@ -31,7 +32,8 @@ export class StoreConfigurationModal implements ModalComponent<StoreConfiguratio
     private references: Reference[];
     private selectedRef: Reference;
 
-    constructor(public dialog: DialogRef<StoreConfigurationModalData>, private configurationsService: ConfigurationsServices) {
+    constructor(public dialog: DialogRef<StoreConfigurationModalData>, private configurationsService: ConfigurationsServices,
+        private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
@@ -62,6 +64,13 @@ export class StoreConfigurationModal implements ModalComponent<StoreConfiguratio
     }
 
     ok(event: Event) {
+        let idRegexp = new RegExp("^[\\w\\s\.,-]+$"); //regexp for validating id (id will be the name of the file storing the configuration)
+        if (!idRegexp.test(this.identifier)) {
+            this.basicModals.alert("Invalid ID", "ID contains character(s) not allowed", "warning");
+            return;
+        }
+
+
         //this is strange: I get the configuration scopes from the server but I need to hardwire the convertion to the serialization for the relativeReference
         let scopeSerialization: string = ScopeUtils.serializeScope(<Scope>this.selectedScope);
         let relativeReference: string = scopeSerialization + ":" + this.identifier;

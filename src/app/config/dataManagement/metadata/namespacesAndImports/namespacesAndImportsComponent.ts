@@ -1,14 +1,13 @@
 import { Component, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource } from "../../../../models/ARTResources";
+import { ARTURIResource, ResourceUtils } from "../../../../models/ARTResources";
 import { ImportType, OntologyImport, PrefixMapping } from "../../../../models/Metadata";
 import { ResourceViewComponent } from "../../../../resourceView/resourceViewComponent";
 import { MetadataServices } from "../../../../services/metadataServices";
 import { RefactorServices } from "../../../../services/refactorServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../../utils/UIUtils";
-import { VBContext } from "../../../../utils/VBContext";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../../widget/modal/sharedModal/sharedModalServices";
@@ -123,10 +122,8 @@ export class NamespacesAndImportsComponent {
         if (this.bind) {
             if (this.namespace.endsWith("#")) {
                 this.baseURI = this.namespace.slice(0, -1);
-                this.baseUriRes = new ARTURIResource(this.baseURI);
             } else {
                 this.baseURI = this.namespace;
-                this.baseUriRes = new ARTURIResource(this.baseURI);
             }
         }
     }
@@ -142,14 +139,14 @@ export class NamespacesAndImportsComponent {
      * Tells if baseURI is valid. BaseURI is valid if startsWith http://
      */
     private isBaseURIValid() {
-        return (this.baseURI && this.baseURI.startsWith("http://"));
+        return (this.baseURI && ResourceUtils.testIRI(this.baseURI));
     }
 
     /**
      * Tells if namespace is valid. Namespace is valid if starts with http:// and ends with #
      */
     private isNamespaceValid() {
-        return (this.namespace && this.namespace.startsWith("http://") && (this.namespace.endsWith("#") || this.namespace.endsWith("/")));
+        return (this.namespace && ResourceUtils.testIRI(this.namespace) && (this.namespace.endsWith("#") || this.namespace.endsWith("/")));
     }
 
     /**
