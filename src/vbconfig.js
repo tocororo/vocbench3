@@ -1,20 +1,18 @@
 /**
- * Tells if the system should use the IP of the machine which is serving the VB3 content to query the ST server.
- * N.B. This can be left to true only if VocBench3 and SemanticTurkey are running on the same machine,
- * otherwise, set this to false and change the value of the st_host parameter
- */
-var dynamic_st_host_resolution = true;
-
-/**
  * IP address/logical host name of the machine which hosts SemanticTurkey.
- * Configure this parameter only if dynamic_st_host_resolution is set to false.
+ * By default it is resolved dynamically by using the same address of the *VocBench* host machine,
+ * (if VocBench3 and SemanticTurkey are running on the same machine this can be left commented),
+ * if you want to change the address you must uncomment the line and edit the value.
  */
-var st_host = "127.0.0.1";
+// var st_host = "127.0.0.1";
 
 /**
- * Port where SemanticTurkey server is listening (optional)
+ * Port where SemanticTurkey server is listening.
+ * By default it is resolved dynamically by using the same port of the *VocBench* host machine,
+ * (if VocBench3 and SemanticTurkey are running on the same container this can be left commented),
+ * if you want to change the port you must uncomment the line and edit the value.
  */
-var st_port = "1979";
+// var st_port = "1979";
 
 /**   
  * Path where SemanticTurkey server is listening. If omitted, the sole host is considered.

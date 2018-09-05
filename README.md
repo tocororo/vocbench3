@@ -83,30 +83,38 @@ unless you have changed the port in `package.json` `"start": "webpack-dev-server
 The custom settings below are not possible when running VocBench from inside the Karaf container as in the standalone distribution. You might want to have VocBench installed as a separate web application in a dedicated server, as explained in the previous sections.
 
 In *vbconfis.js* (under *src/* of the source package, or under the root folder of the built distribution) it is possible to configure the *SemanticTurkey* host resolution.
-By default *VocBench3* resolves the IP address of the *SemanticTurkey* server dynamically by using the same IP address of the *VocBench* host machine.
-This is determined by the configuration property `dynamic_st_host_resolution` (by default set to `true`).
+By default *VocBench3* dynamically resolves the IP address of the *SemanticTurkey* server (by using the same IP address of the *VocBench* host machine) and the port number (by using the same port of the *VocBench* container).
+In case you have installed VocBench in a different container or in a dedicated server you might have to change the following configuration.
 ```
-/**
- * Tells if the system should use the IP of the machine which is serving the VB3 content to query the ST server.
- * N.B. This can be left to true only if VocBench3 and SemanticTurkey are running on the same machine,
- * otherwise, set this to false and change the value of the st_host parameter
- */
-var dynamic_st_host_resolution = true;
-```
-In case *VocBench3* and *SemanticTurkey* run on two different hosts, it is possible to provide the *SemanticTurkey* IP address statically by setting the previous property to `false` and modifying 
-the property `st_host` with the address of the target host (the property `st_host` is ignored if `dynamic_st_host_resolution` is `true`).
-```
-var dynamic_st_host_resolution = false;
 /**
  * IP address/logical host name of the machine which hosts SemanticTurkey.
- * Configure this parameter only if dynamic_st_host_resolution is set to false.
+ * By default it is resolved dynamically by using the same address of the *VocBench* host machine,
+ * (if VocBench3 and SemanticTurkey are running on the same machine this can be left commented),
+ * if you want to change the address you must uncomment the line and edit the value.
  */
-var st_host = "127.0.0.1";
-```
-It is also possible to change the port where SemanticTurkey is listening (the default is `1979`) by changing `st_port` property.
-```
+// var st_host = "127.0.0.1";
+
 /**
- * Port where SemanticTurkey server is listening
+ * Port where SemanticTurkey server is listening.
+ * By default it is resolved dynamically by using the same port of the *VocBench* host machine,
+ * (if VocBench3 and SemanticTurkey are running on the same container this can be left commented),
+ * if you want to change the port you must uncomment the line and edit the value.
  */
-var st_port = "1979";
+// var st_port = "1979";
+```
+It is also possible to change the path where SemanticTurkey server is listening and the protocol to use
+```
+/**   
+ * Path where SemanticTurkey server is listening. If omitted, the sole host is considered.
+ * Please note that the path of Semantic Turkey services is defined as in:
+ *  http://semanticturkey.uniroma2.it/doc/user/web_api.jsf#services_address_structure
+ *  This additional path information is considered to be the starting part of the path described above, 
+ *  and is usually necessary in case Semantic Turkey is installed behind a proxy redirecting the ST URL.
+ */ 
+var st_path;
+
+/**
+ * Protocol - either http or https
+ */
+var st_protocol = "http";
 ```

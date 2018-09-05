@@ -32,17 +32,13 @@ export class HttpManager {
 
         this.serverhost = window['st_protocol'] + "://"; //protocol (http/https)
 
-        let dynamic_st_host_resolution: boolean = window['dynamic_st_host_resolution'];
-        if (dynamic_st_host_resolution) {
-            this.serverhost += location.hostname;
-        } else {
-            this.serverhost += window['st_host'];
-        }
+        let st_host: string = window['st_host'];
+        st_host ? this.serverhost += st_host : this.serverhost += location.hostname;
 
-        let st_port: string = window['st_port']; //port number (optional)
-        if (st_port != null) {
-            this.serverhost += ":" + st_port;
-        }
+        let port: string;
+        let st_port: string = window['st_port'];
+        st_port ? port = st_port : port = location.port;
+        this.serverhost += ":" + port;
 
         let st_path: string = window['st_path']; //url path (optional)
         if (st_path != null) {
