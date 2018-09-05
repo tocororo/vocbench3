@@ -8,10 +8,10 @@
 // var st_host = "127.0.0.1";
 
 /**
- * Port of the machine hosting Semantic Turkey.
+ * Port of the container hosting Semantic Turkey.
  * By default (variable left unspecified) the port is resolved dynamically by using the same port of the 
- * machine hosting VocBench.
- * Thus if VocBench3 and Semantic Turkey are running on the same machine this variable can be left commented,
+ * container hosting VocBench.
+ * Thus if VocBench3 and Semantic Turkey are running on the same container this variable can be left commented,
  * otherwise uncomment the line and edit the value.
  */
 // var st_port = "1979";
