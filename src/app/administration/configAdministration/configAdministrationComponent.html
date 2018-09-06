@@ -66,6 +66,26 @@
                                 </td>
                                 <td><input class="form-control input-sm" [(ngModel)]="emailConfig.mailSmtpPort"></td>
                             </tr>
+
+                            <tr>
+                                <td>
+                                    <span class="glyphicon glyphicon-info-sign" title="Cryptographic protocol"></span>
+                                </td>
+                                <td nowrap>
+                                    <label>Cryptographic protocol:</label>
+                                </td>
+                                <td>
+                                    <select class="form-control input-sm" [(ngModel)]="cryptoProtocol" (ngModelChange)="updateProtocol()">
+                                        <option>SSL</option>
+                                        <option>TLS</option>
+                                        <option>None</option>
+                                        <!-- <option [selected]="emailConfig.mailSmtpSslEnable">SSL</option>
+                                        <option [selected]="emailConfig.mailSmtpStarttlsEnable">TLS</option>
+                                        <option [selected]="!emailConfig.mailSmtpSslEnable && !emailConfig.mailSmtpStarttlsEnable">None</option> -->
+                                    </select>
+                                </td>
+                            </tr>
+
                             <tr>
                                 <td>
                                     <span class="glyphicon glyphicon-info-sign" title="True if SMTP server requires authentication"></span>
@@ -131,9 +151,10 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="panel-footer">
-                    <button type="submit" class="btn btn-default btn-sm pull-right" (click)="updateEmailConfig()" [disabled]="!isEmailConfigChanged()">Submit</button>
-                    <span class="clearfix"></span>
+                <div class="panel-footer" style="text-align: right;">
+                    <button class="btn btn-info btn-sm" (click)="testEmailConfig()">Test</button>
+                    <button type="submit" class="btn btn-default btn-sm" (click)="updateEmailConfig()" [disabled]="!isEmailConfigChanged()">Submit</button>
+                    <!-- <span class="clearfix"></span> -->
                 </div>
             </div>
 

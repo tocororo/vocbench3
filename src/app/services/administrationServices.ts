@@ -43,13 +43,15 @@ export class AdministrationServices {
      * @param mailFromAlias 
      * @param mailFromPassword 
      */
-    updateEmailConfig(mailSmtpHost: string, mailSmtpPort: string, mailSmtpAuth: string,
+    updateEmailConfig(mailSmtpHost: string, mailSmtpPort: string, mailSmtpAuth: boolean, mailSmtpSsl: boolean, mailSmtpTls: boolean,
         mailFromAddress: string, mailFromAlias: string, mailFromPassword?: string) {
         console.log("[AdministrationServices] updateEmailConfig");
         var params: any = {
             mailSmtpHost: mailSmtpHost,
             mailSmtpPort: mailSmtpPort,
             mailSmtpAuth: mailSmtpAuth,
+            mailSmtpSsl: mailSmtpSsl,
+            mailSmtpTls: mailSmtpTls,
             mailFromAddress: mailFromAddress,
             mailFromAlias: mailFromAlias
         }
@@ -57,6 +59,18 @@ export class AdministrationServices {
             params.mailFromPassword = mailFromPassword
         }
         return this.httpMgr.doPost(this.serviceName, "updateEmailConfig", params);
+    }
+
+    /**
+     * 
+     * @param mailTo 
+     */
+    testEmailConfig(mailTo: string) {
+        console.log("[AdministrationServices] testEmailConfig");
+        var params: any = {
+            mailTo: mailTo
+        }
+        return this.httpMgr.doGet(this.serviceName, "testEmailConfig", params);
     }
 
 
