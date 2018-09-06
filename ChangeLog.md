@@ -4,6 +4,12 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
+# 5.0.0-beta.1 (dd-MM-yyyy)
+  * Changed dynamic settings on vbconfig.js
+  * Updated e-mail configuration, now it is possible to use, beside SSL, TLS or no cryptographic protocol at all;
+    Added possibility to test the e-mail configuration. 
+  * Bugfixes.
+
 # 4.0.2 (27-07-2018)
   * no changes to the client, consult ST ChangeLog for details on the server
   
