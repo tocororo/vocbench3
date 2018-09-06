@@ -63,7 +63,7 @@
  */
 
 export class STResponseUtils {
-    
+
     public static contentTypeXml: string = "application/xml";
     public static contentTypeJson: string = "application/json";
 
@@ -81,14 +81,14 @@ export class STResponseUtils {
             }
         }
     }
-    
+
     /**
      * Returns true if the response is an error/exception/fail response
      */
     static isErrorResponse(stResp: any): boolean {
         return (this.isError(stResp) || this.isException(stResp) || this.isFail(stResp));
     }
-    
+
     /**
      * Returns the error message in case the response is an error/exception/fail response
      * To use only in case isErrorResponse returns true
@@ -106,11 +106,7 @@ export class STResponseUtils {
     }
 
     static getErrorResponseExceptionName(stResp: any): string {
-        let name: string;
-        //07/09/2017 currently ST return only exception error response, so I get directly the message of an exception response
-        let errorMsg = this.getExceptionMessage(stResp);
-        name = errorMsg.substring(0, errorMsg.indexOf(":"));
-        return name;
+        return this.getExceptionName(stResp);
     }
 
     static getErrorResponseExceptionMessage(stResp: any): string {
@@ -119,13 +115,17 @@ export class STResponseUtils {
         let errorMsg = this.getExceptionMessage(stResp);
         let errorMsgStartingIdx = errorMsg.indexOf(":");
         //if there is no ":" it means that the error msg contains just the exception name, so return it as the whole message
-        if (errorMsgStartingIdx == -1) { 
+        if (errorMsgStartingIdx == -1) {
             return errorMsg;
         }
         message = errorMsg.substring(errorMsgStartingIdx + 2, errorMsg.length);
         return message;
     }
-    
+
+    static getErrorResponseExceptionStackTrace(stResp: any): string {
+        return this.getExceptionStackTrace(stResp);
+    }
+
     /**
      * Checks if the response is an exception response
      */
@@ -140,7 +140,7 @@ export class STResponseUtils {
             }
         }
     }
-    
+
     /**
 	 * Returns the exception message
 	 */
@@ -151,7 +151,29 @@ export class STResponseUtils {
             return stResp.stresponse.msg;
         }
     }
-	
+
+    /**
+	 * Returns the exception name
+	 */
+    private static getExceptionName(stResp: any): string {
+        if (stResp instanceof Document) { //XML
+            return stResp.getElementsByTagName("stresponse")[0].getAttribute("exception");
+        } else { //JSON 
+            return stResp.stresponse.exception;
+        }
+    }
+
+    /**
+	 * Returns the exception stack trace
+	 */
+    private static getExceptionStackTrace(stResp: any): string {
+        if (stResp instanceof Document) { //XML
+            return stResp.getElementsByTagName("stackTrace")[0].textContent;
+        } else { //JSON 
+            return stResp.stresponse.stackTrace;
+        }
+    }
+
 	/**
 	 * Checks if the response is an exception response
 	 */
@@ -166,7 +188,7 @@ export class STResponseUtils {
             }
         }
     }
-	
+
 	/**
 	 * Returns the exception message
 	 */
@@ -177,7 +199,7 @@ export class STResponseUtils {
             return stResp.stresponse.msg;
         }
     }
-	
+
 	/**
 	 * Checks if the response is a fail response
 	 */
@@ -193,7 +215,7 @@ export class STResponseUtils {
         }
 
     }
-	
+
 	/**
 	 * Returns the fail message
 	 */

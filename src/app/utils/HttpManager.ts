@@ -253,6 +253,7 @@ export class HttpManager {
             if (STResponseUtils.isErrorResponse(xmlResp)) { //is an error
                 let err = new Error(STResponseUtils.getErrorResponseExceptionMessage(xmlResp));
                 err.name = STResponseUtils.getErrorResponseExceptionName(xmlResp);
+                err.stack = STResponseUtils.getErrorResponseExceptionStackTrace(xmlResp);
                 throw err;
             } else { //not an error => return a blob
                 var blobResp = new Blob([arrayBuffer], { type: respContType });
@@ -384,6 +385,7 @@ export class HttpManager {
         if (STResponseUtils.isErrorResponse(res)) {
             let err = new Error(STResponseUtils.getErrorResponseExceptionMessage(res));
             err.name = STResponseUtils.getErrorResponseExceptionName(res);
+            err.stack = STResponseUtils.getErrorResponseExceptionStackTrace(res);
             throw err;
         } else {
             return STResponseUtils.getResponseData(res);
@@ -435,7 +437,8 @@ export class HttpManager {
             if (errorAlertOpt.show) { //if the alert should be shown
                 if (errorAlertOpt.exceptionsToSkip == null || errorAlertOpt.exceptionsToSkip.indexOf(error.name) == -1) {
                     let errorMsg = error.message != null ? error.message : "Unknown response from the server";
-                    this.basicModals.alert("Error", error.message, "error", error.name);
+                    let errorDetails = error.stack ? error.stack : error.name;
+                    this.basicModals.alert("Error", errorMsg, "error", errorDetails);
                 }
             }
         }
@@ -445,7 +448,8 @@ export class HttpManager {
             error = (<Error>err);
             if (errorAlertOpt.exceptionsToSkip == null || errorAlertOpt.exceptionsToSkip.indexOf(error.name) == -1) {
                 let errorMsg = error.message != null ? error.message : "Unknown response from the server";
-                this.basicModals.alert("Error", error.message, "error", error.name);
+                let errorDetails = error.stack ? error.stack : error.name;
+                this.basicModals.alert("Error", errorMsg, "error", errorDetails);
             }
         }
         UIUtils.stopAllLoadingDiv();

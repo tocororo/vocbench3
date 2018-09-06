@@ -340,7 +340,9 @@ export class ProjectServices {
                     "have the st-changetracking-sail.jar bundle deployed within the triple store connected for this project";
                 basicModals.alert("Error", message, "error", error.name + ": " + error.message);
             } else {
-                basicModals.alert("Error", error.message, "error", error.name);
+                let errorMsg = error.message != null ? error.message : "Unknown response from the server";
+                let errorDetails = error.stack ? error.stack : error.name;
+                basicModals.alert("Error", errorMsg, "error", errorDetails);
             }
         }
     }
