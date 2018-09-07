@@ -1,13 +1,14 @@
 import { Component, ViewChild } from "@angular/core";
-import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
-import { DialogRef, ModalComponent, Modal, OverlayConfig } from "ngx-modialog";
+import { DialogRef, Modal, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from "../../models/ARTResources";
 import { CustomForm, CustomFormType } from "../../models/CustomForms";
-import { CodemirrorComponent } from "../../widget/codemirror/codemirrorComponent";
-import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { CustomFormsServices } from "../../services/customFormsServices";
+import { ResourcesServices } from "../../services/resourcesServices";
+import { CodemirrorComponent } from "../../widget/codemirror/codemirrorComponent";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
 export class CustomFormEditorModalData extends BSModalContext {
     /**
@@ -44,8 +45,9 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
     private submitted: boolean = false;
     private errorMsg: string;
 
-    constructor(public dialog: DialogRef<CustomFormEditorModalData>, private modal: Modal, private browsingModals: BrowsingModalServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private cfService: CustomFormsServices) {
+    constructor(public dialog: DialogRef<CustomFormEditorModalData>, private modal: Modal, private resourceService: ResourcesServices,
+        private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
+        private cfService: CustomFormsServices) {
         this.context = dialog.context;
     }
 
@@ -61,11 +63,33 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
                     this.ref = cf.getRef();
                     if (this.type == "graph") {
                         this.showPropertyChain = cf.getShowPropertyChain();
+                        if (this.showPropertyChain.length > 0) {
+                            this.initShowPropChain();
+                        }
                     }
                 },
                 err => { this.dialog.dismiss() }
             )
         }
+    }
+
+    private initShowPropChain() {
+        this.resourceService.getResourcesInfo(this.showPropertyChain).subscribe(
+            chain => {
+                /**
+                 * Here I don't assign chain to showPropertyChain
+                 * (this.showPropertyChain = chain)
+                 * since getResourcesInfo() returns a list without duplicate
+                 */
+                for (var i = 0; i < this.showPropertyChain.length; i++) {
+                    chain.forEach((el: ARTURIResource) => {
+                        if (this.showPropertyChain[i].getURI() == el.getURI()) {
+                            this.showPropertyChain[i] = el;
+                        }
+                    });
+                }
+            }
+        );
     }
 
     private pickConverter() {
@@ -142,19 +166,16 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
         if (serializedPropChain.length > 0) {
             serializedPropChain = serializedPropChain.slice(0, -1);//delete last ","
         }
-        this.basicModals.prompt("Edit property chain", null, "Write the chain as sequence of comma (,) separated IRIs", serializedPropChain, true).then(
+
+        this.basicModals.prompt("Edit property chain", null, "Write the chain as sequence of comma (,) separated IRIs (QNames are accepted as well)",
+            serializedPropChain, true).then(
             (value: any) => {
                 var chain: string = String(value).trim();
                 if (chain.length != 0) {
                     this.cfService.validateShowPropertyChain(chain).subscribe(
-                        stResp => {
-                            //convert the chain from string to ARTURIResource[]
-                            var propChain: ARTURIResource[] = [];
-                            var splitted: string[] = chain.split(",");
-                            for (var i = 0; i< splitted.length; i++) {
-                                propChain.push(new ARTURIResource(splitted[i].trim(), null, null));
-                            }
-                            this.showPropertyChain = propChain; //if valid update chain
+                        chainIRIs => {
+                            this.showPropertyChain = chainIRIs;
+                            this.initShowPropChain();
                         }
                     )
                 } else {

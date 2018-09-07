@@ -578,12 +578,16 @@ export class CustomFormsServices {
 	 * @param propertyChain
 	 * @return
 	 */
-    validateShowPropertyChain(propChain: string) {
+    validateShowPropertyChain(propChain: string): Observable<ARTURIResource[]> {
         console.log("[CustomFormsServices] validateShowPropertyChain");
         var params: any = {
             propChain: propChain
         };
-        return this.httpMgr.doGet(this.serviceName, "validateShowPropertyChain", params);
+        return this.httpMgr.doGet(this.serviceName, "validateShowPropertyChain", params).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp);
+            }
+        );
     }
 
     /**

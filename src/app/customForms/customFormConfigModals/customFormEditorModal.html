@@ -85,7 +85,8 @@
                         <div class="hbox tile-group">
                             <span *ngFor="let prop of showPropertyChain" (click)="selectPropInChain(prop)" 
                                 class="tile" [ngClass]="{selectedResource : selectedPropInChain == prop}">
-                                {{prop.getURI()}}
+                                <!-- {{prop.getURI()}} {{prop.getShow()}} -->
+                                <rdf-resource [resource]="prop"></rdf-resource>
                                 <span *ngIf="!context.readOnly" class="glyphicon glyphicon-remove-circle" (click)="removePropFromChain(prop)"
                                     style="cursor: pointer" onmouseover="this.className='glyphicon glyphicon-remove-sign';"
                                     onmouseout="this.className='glyphicon glyphicon-remove-circle';">
