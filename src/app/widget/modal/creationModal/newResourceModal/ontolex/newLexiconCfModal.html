@@ -22,14 +22,14 @@
                     <td>
                         <div class="hbox" style="align-items: center;">
                             <input #toFocus type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" [(ngModel)]="title">
-                            <lang-picker [lang]="title_lang" (langChange)="onTitleLangChange($event)"></lang-picker>
+                            <lang-picker [(ngModel)]="title_lang"></lang-picker>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td class="text-right"><label>Language:</label></td>
                     <td>
-                        <lang-picker [lang]="lang" (langChange)="onLangChange($event)"></lang-picker>
+                        <lang-picker [(ngModel)]="lang"></lang-picker>
                     </td>
                 </tr>
                 <tr>

@@ -57,13 +57,13 @@
                                     (input)="onEntryValueChange($event.target.value, field)"></textarea>
 
                                 <span *ngIf="field.getLang()" style="margin-left: 4px;">
-                                    <lang-picker size="sm" [lang]="field.getLang()" disabled="true">
+                                    <lang-picker size="sm" [ngModel]="field.getLang()" disabled="true">
                                     </lang-picker>
                                 </span>
                                 <span *ngIf="field.getConverter() == 'http://art.uniroma2.it/coda/contracts/langString' 
                                         && field.getConverterArg()" style="margin-left: 4px;">
-                                    <lang-picker size="sm" [lang]="field.getConverterArg().value"
-                                        (langChange)="onConverterLangChange($event, field.getConverterArg())">
+                                    <lang-picker size="sm" [ngModel]="field.getConverterArg().value"
+                                        (ngModelChange)="onConverterLangChange($event, field.getConverterArg())">
                                     </lang-picker>
                                 </span>
                             </div>

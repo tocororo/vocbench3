@@ -57,12 +57,6 @@ export class NewResourceWithLiteralCfModal extends AbstractCustomConstructorModa
         });
     }
 
-    private onLangChange(newLang: string) {
-        setTimeout(() => {
-            this.lang = newLang;
-        });
-    }
-
     changeClass() {
         this.changeClassWithRoot(this.context.cls);
     }

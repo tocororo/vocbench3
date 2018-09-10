@@ -53,18 +53,6 @@ export class NewLexiconCfModal extends AbstractCustomConstructorModal implements
         });
     }
 
-    private onTitleLangChange(newLang: string) {
-        setTimeout(() => {
-            this.title_lang = newLang;
-        });
-    }
-
-    private onLangChange(newLang: string) {
-        setTimeout(() => {
-            this.lang = newLang;
-        });
-    }
-
     changeClass() {
         this.changeClassWithRoot(Lime.lexicon);
     }

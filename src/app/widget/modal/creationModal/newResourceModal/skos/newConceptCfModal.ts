@@ -73,12 +73,6 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
         });
     }
 
-    private onLangChange(newLang: string) {
-        setTimeout(() => {
-            this.lang = newLang;
-        });
-    }
-
     private onSchemesChanged(schemes: ARTURIResource[]) {
         this.schemes = schemes;
     }

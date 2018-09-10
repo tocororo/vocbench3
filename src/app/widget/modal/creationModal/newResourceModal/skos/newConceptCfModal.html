@@ -27,7 +27,7 @@
                     <td>
                         <div class="hbox" style="align-items: center; margin-bottom: 4px;">
                             <input #toFocus type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" name="label" [(ngModel)]="label">
-                            <lang-picker [lang]="lang" (langChange)="onLangChange($event)"></lang-picker>
+                            <lang-picker [(ngModel)]="lang"></lang-picker>
                         </div>
                     </td>
                 </tr>
