@@ -38,6 +38,7 @@ export class RefactorComponent {
                 this.refactorService.SKOStoSKOSXL(this.reifyNotes).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                        this.basicModals.alert("Refactor", "Refactoring process completed");
                     }
                 );
             },
@@ -52,6 +53,7 @@ export class RefactorComponent {
                 this.refactorService.SKOSXLtoSKOS().subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                        this.basicModals.alert("Refactor", "Refactoring process completed");
                     }
                 );
             },
@@ -67,6 +69,7 @@ export class RefactorComponent {
                 this.refactorService.migrateDefaultGraphToBaseURIGraph().subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                        this.basicModals.alert("Refactor", "Refactoring process completed");
                     }
                 );
             },

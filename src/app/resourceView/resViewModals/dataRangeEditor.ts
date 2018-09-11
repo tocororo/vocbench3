@@ -1,6 +1,5 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { ARTURIResource, ARTLiteral } from "../../models/ARTResources";
-import { XmlSchema } from "../../models/Vocabulary";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { ARTLiteral } from "../../models/ARTResources";
 
 @Component({
     selector: "data-range-editor",
@@ -11,8 +10,7 @@ export class DataRangeEditor {
     @Input() datarange: ARTLiteral[];
     @Output() datarangeChange: EventEmitter<ARTLiteral[]> = new EventEmitter();
 
-    private value: string;
-    private datatype: ARTURIResource;
+    private value: ARTLiteral;
 
     ngOnInit() {
         if (this.datarange === undefined) {
@@ -20,18 +18,13 @@ export class DataRangeEditor {
         }
     }
 
-    private onDatatypeChange(dt: ARTURIResource) {
-        this.datatype = dt;
-    }
-
     private add() {
         for (var i = 0; i < this.datarange.length; i++) {
-            if (this.datarange[i].getValue() == this.value && this.datarange[i].getDatatype() == this.datatype.getURI()) {
+            if (this.datarange[i].getValue() == this.value.getValue() && this.datarange[i].getDatatype() == this.value.getDatatype()) {
                 return; //datarange already in list => do not add
             }
         }
-        this.datarange.push(new ARTLiteral(this.value, this.datatype.getURI()));
-        this.value = null;
+        this.datarange.push(this.value);
         //emit event to inform the parent that the list is changed
         this.datarangeChange.emit(this.datarange);
     }

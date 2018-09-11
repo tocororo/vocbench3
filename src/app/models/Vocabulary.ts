@@ -6,6 +6,7 @@ export class RDF {
     // CLASSES
     public static alt = new ARTURIResource(RDF.namespace + "Alt", "rdf:Alt", RDFResourceRolesEnum.cls);
     public static bag = new ARTURIResource(RDF.namespace + "Bag", "rdf:Bag", RDFResourceRolesEnum.cls);
+    public static langString = new ARTURIResource(RDF.namespace + "langString", "rdf:langString", RDFResourceRolesEnum.cls);
     public static list = new ARTURIResource(RDF.namespace + "List", "rdf:List", RDFResourceRolesEnum.cls);
     public static property = new ARTURIResource(RDF.namespace + "Property", "rdf:Property", RDFResourceRolesEnum.cls);
     public static seq = new ARTURIResource(RDF.namespace + "Seq", "rdf:Seq", RDFResourceRolesEnum.cls);

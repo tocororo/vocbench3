@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, Output, forwardRef } from "@angular/core";
+import { Component, EventEmitter, forwardRef, Input, Output } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ARTURIResource, ResourceUtils } from "../../models/ARTResources";
-import { RDFS, XmlSchema, OWL } from "../../models/Vocabulary";
+import { ARTLiteral, ARTURIResource, ResourceUtils } from "../../models/ARTResources";
+import { RDF, RDFS, XmlSchema } from "../../models/Vocabulary";
 import { DatatypesServices } from "../../services/datatypesServices";
 
 @Component({
@@ -15,15 +15,18 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
 
     @Input() allowedDatatypes: ARTURIResource[]; //the datatypes allowed by the component
     @Output() datatypeChange: EventEmitter<ARTURIResource> = new EventEmitter();
+    @Output() langChange: EventEmitter<string> = new EventEmitter();
 
     private datatypeList: ARTURIResource[];
     private datatype: ARTURIResource;
 
+    private lang: string; //optional, used only if datatype is xsd:string or rdfs:langString
+
     private numericInput: boolean = false;
     private inputNumberSign: "positive" | "negative" | "any" = "any";
 
-    private value: string;
-
+    private stringValue: string;
+    
     constructor(private datatypeService: DatatypesServices) {}
 
     ngOnInit() {
@@ -91,9 +94,9 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
 
     private onDatatypeChange() {
         this.updateInputConfiguration();
-        this.value = null;
-        this.propagateChange(this.value);
         this.datatypeChange.emit(this.datatype);
+        this.stringValue = null;
+        this.onValueChanged();
     }
 
     private updateInputConfiguration() {
@@ -135,17 +138,43 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
         }
     }
 
+    private onLangChanged() {
+        this.langChange.emit(this.lang);
+        this.onValueChanged();
+    }
+
     private onValueChanged() {
-        //in case of number value, convert it to string in order to generate a valid NTriple representation
-        this.propagateChange(this.value+"");
+        if (this.stringValue == null) {
+            this.propagateChange(null);    
+        } else {
+            if (this.datatype.getURI() != RDF.langString.getURI()) {
+                this.lang = null;
+            }
+            this.propagateChange(new ARTLiteral(this.stringValue+"", this.datatype.getURI(), this.lang));
+        }
     }
 
     //---- method of ControlValueAccessor and Validator interfaces ----
     /**
      * Write a new value to the element.
      */
-    writeValue(obj: string) {
-        this.value = obj;
+    writeValue(obj: ARTLiteral) {
+        if (obj != null) {
+            this.stringValue = obj.getValue();
+            let dt: string = obj.getDatatype();
+            if (dt != null) {
+                this.datatypeList.forEach(el => {
+                    if (el.getURI() == dt)  {
+                        this.datatype = el;
+                    }
+                });
+            }
+            this.lang = obj.getLang();
+        } else {
+            this.stringValue = null;
+            this.datatype = null;
+            this.lang = null;
+        }
     }
     /**
      * Set the function to be called when the control receives a change event.
@@ -160,7 +189,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
 
     // the method set in registerOnChange, it is just a placeholder for a method that takes one parameter, 
     // we use it to emit changes back to the parent
-    private propagateChange = (_: any) => { };
+    private propagateChange = (_: ARTLiteral) => { };
 
     //--------------------------------------------------
 
