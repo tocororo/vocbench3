@@ -52,7 +52,14 @@
         <table class="table table-striped table-condensed table-hoverable" style="flex: 1">
             <thead>
                 <tr>
-                    <th *ngFor="let h of headers">{{h}}</th>
+                    <th *ngFor="let h of headers">
+                        {{h}}
+                        <button *ngIf="resultType != 'boolean'" class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="sortResult(h)">
+                            <span class="glyphicon glyphicon-sort-by-alphabet" *ngSwitchCase="h+asc_Order" ></span>
+                            <span class="glyphicon glyphicon-sort-by-alphabet-alt" *ngSwitchCase="h+desc_Order"></span>
+                            <span class="glyphicon glyphicon-sort" *ngSwitchDefault></span>
+                        </button>
+                    </th>
                 </tr>
             </thead>
             <tbody style="overflow: auto;">

@@ -43,6 +43,9 @@ export abstract class AbstractSparqlTabComponent {
     private queryValid: boolean = true;
     private queryTime: string;
     
+    private sortOrder: string;
+    private asc_Order: string = "_asc";
+    private desc_Order: string = "_desc";
 
     //result paging
     private resultsPage: number = 0;
@@ -130,6 +133,7 @@ export abstract class AbstractSparqlTabComponent {
             if (this.queryResult.length % this.resultsLimit > 0) {
                 this.resultsTotPage++;
             }
+            this.sortOrder = this.headers[0]+"_asc";
         } else if (stResp.resultType == ResultType.boolean) {
             this.headers = ["boolean"];
             this.queryResult = Boolean(stResp.sparql.boolean);
@@ -344,6 +348,20 @@ export abstract class AbstractSparqlTabComponent {
                 show += "^^<" + binding.datatype + ">";
             }
             return show;
+        }
+    }
+
+    private sortResult(header: string) {
+        if (this.sortOrder == header + this.asc_Order) { //from ascending to descending (alphabetical) order
+            this.queryResult.sort((binding1: any, binding2: any) => {
+                return -binding1[header].value.localeCompare(binding2[header].value);
+            });
+            this.sortOrder = header + this.desc_Order;
+        } else {
+            this.queryResult.sort((binding1: any, binding2: any) => { //from descending to ascending (alphabetical) order
+                return binding1[header].value.localeCompare(binding2[header].value);
+            });
+            this.sortOrder = header + this.asc_Order;
         }
     }
 
