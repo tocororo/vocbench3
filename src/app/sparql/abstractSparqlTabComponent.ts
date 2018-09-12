@@ -133,7 +133,6 @@ export abstract class AbstractSparqlTabComponent {
             if (this.queryResult.length % this.resultsLimit > 0) {
                 this.resultsTotPage++;
             }
-            this.sortOrder = this.headers[0]+"_asc";
         } else if (stResp.resultType == ResultType.boolean) {
             this.headers = ["boolean"];
             this.queryResult = Boolean(stResp.sparql.boolean);
