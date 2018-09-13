@@ -1,4 +1,4 @@
-<ng-template [ngIf]="!editInProgress">
+<ng-template [ngIf]="!editInProgress && !editLiteralInProgress">
     <rdf-resource [resource]="resource" [rendering]="rendering" style="flex:1" (dblclick)="resourceDblClick()"></rdf-resource>
     <div class="dropdown pull-right" title="Edit">
         <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" [disabled]="editMenuDisabled">
@@ -6,10 +6,20 @@
         </button>
         <ul class="dropdown-menu">
             <!-- Edit menu item -->
-            <li [ngSwitch]="editActionScenario" [ngClass]="{ disabled: !isEditAuthorized() || isInferred }">
+            <!-- <li [ngSwitch]="editActionScenario" [ngClass]="{ disabled: !isEditAuthorized() || isInferred }">
                 <a *ngSwitchCase="'xLabel'" (click)="edit()">Edit literal content</a>
                 <a *ngSwitchDefault (click)="edit()">Edit</a>
+            </li> -->
+
+            <li *ngIf="editActionScenario == 'xLabel' || editActionScenario == 'plainLiteral' || editActionScenario == 'typedLiteral'"
+                [ngClass]="{ disabled: !isEditAuthorized() || isInferred }">
+                <a (click)="editLiteral()">Edit literal content</a>
             </li>
+
+            <li *ngIf="editActionScenario != 'xLabel'" [ngClass]="{ disabled: !isEditAuthorized() || isInferred }">
+                <a (click)="edit()">Edit</a>
+            </li>
+
 
             <li *ngIf="isReplaceMenuItemAvailable" [ngClass]="{ disabled: !isEditAuthorized() || isInferred }">
                 <a (click)="replace()">Replace with existing resource</a>
@@ -30,8 +40,8 @@
     </div>
 </ng-template>
 
-<ng-template [ngIf]="editInProgress">
-    <div class="input-group input-group-xs">
+<ng-template [ngIf]="editInProgress || editLiteralInProgress">
+    <div class="input-group input-group-xs" style="flex: 1;">
         <input type="text" class="form-control" [(ngModel)]="resourceStringValue">
         <div class="input-group-btn">
             <button class="btn btn-default" style="width:15px; padding: 0px;" (click)="confirmEdit()" placeholder="Confirm">

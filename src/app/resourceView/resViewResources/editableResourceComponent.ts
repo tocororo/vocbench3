@@ -54,6 +54,7 @@ export class EditableResourceComponent {
 	private isXLabelMenuItemAvailable: boolean = false;
 	private isReplaceMenuItemAvailable: boolean = true;
 	private editInProgress: boolean = false;
+	private editLiteralInProgress: boolean = false;
 	private resourceStringValuePristine: string;
 	private resourceStringValue: string; //editable representation of the resource
 
@@ -66,6 +67,8 @@ export class EditableResourceComponent {
 	ngOnInit() {
 		if (this.resource instanceof ARTLiteral && this.resource.getDatatype() == null) {
 			this.editActionScenario = EditActionScenarioEnum.plainLiteral;
+		} else if (this.resource instanceof ARTLiteral && this.resource.getDatatype() != null) {
+			this.editActionScenario = EditActionScenarioEnum.typedLiteral;
 		} else if (this.resource.getRole() == RDFResourceRolesEnum.xLabel) {
 			this.editActionScenario = EditActionScenarioEnum.xLabel;
 		} else if (this.partition == ResViewPartition.subPropertyChains) {
@@ -109,17 +112,19 @@ export class EditableResourceComponent {
 
 	//======== "edit" HANDLER ========
 
+	private editLiteral() {
+		if (this.editActionScenario == EditActionScenarioEnum.xLabel) {
+			this.resourceStringValue = this.resource.getShow()
+		} else if (this.editActionScenario == EditActionScenarioEnum.typedLiteral || this.editActionScenario == EditActionScenarioEnum.plainLiteral) {
+			this.resourceStringValue = (<ARTLiteral>this.resource).getValue();
+		}
+		this.resourceStringValuePristine = this.resourceStringValue;
+		this.editLiteralInProgress = true;
+	}
+
 	private edit() {
 		if (this.editActionScenario == EditActionScenarioEnum.partition) {
 			this.editOutput.emit();
-		} else if (this.editActionScenario == EditActionScenarioEnum.xLabel) {
-			this.resourceStringValue = this.resource.getShow()
-			this.resourceStringValuePristine = this.resourceStringValue;
-			this.editInProgress = true;
-		} else if (this.editActionScenario == EditActionScenarioEnum.plainLiteral) {
-			this.resourceStringValue = (<ARTLiteral>this.resource).getValue();
-			this.resourceStringValuePristine = this.resourceStringValue;
-			this.editInProgress = true;
 		} else { //default
 			//special case: resource is a data range => don't edit inline dataranges, but open the editor instead
 			if (this.resource instanceof ARTBNode && this.resource.getRole() == RDFResourceRolesEnum.dataRange) {
@@ -195,14 +200,19 @@ export class EditableResourceComponent {
 
 	private confirmEdit() {
 		if (this.resourceStringValue != this.resourceStringValuePristine) { //apply edit only if the representation is changed
-			if (this.editActionScenario == EditActionScenarioEnum.plainLiteral) {
-				let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, (<ARTLiteral>this.resource).getLang());
-				this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
-			} else if (this.editActionScenario == EditActionScenarioEnum.xLabel) {
-				let oldLitForm: ARTLiteral = new ARTLiteral(this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
-				let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, this.resource.getAdditionalProperty(ResAttribute.LANG));
-				this.applyUpdate(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
-			} else {
+			if (this.editLiteralInProgress) {
+				if (this.editActionScenario == EditActionScenarioEnum.plainLiteral) {
+					let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, (<ARTLiteral>this.resource).getLang());
+					this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
+				} else if (this.editActionScenario == EditActionScenarioEnum.typedLiteral) {
+					let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, (<ARTLiteral>this.resource).getDatatype(), null);
+					this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
+				} else if (this.editActionScenario == EditActionScenarioEnum.xLabel) {
+					let oldLitForm: ARTLiteral = new ARTLiteral(this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
+					let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, this.resource.getAdditionalProperty(ResAttribute.LANG));
+					this.applyUpdate(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
+				}
+			} else { //editInProgress
 				try {
 					let newValue: ARTNode;
 					//parse the string typed by the user
@@ -223,43 +233,8 @@ export class EditableResourceComponent {
 					} else {
 						throw new Error("Not a valid N-Triples representation: " + this.resourceStringValue);
 					}
-
-					// let newValue: ARTNode = this.resource.clone(); //clone so the newValue maintain additional attributes of the old value
-					// if (this.resource.isURIResource()) {
-					// 	let uriRes: ARTURIResource = ResourceUtils.parseURI(this.resourceStringValue);
-					// 	(<ARTURIResource>newValue).setURI(uriRes.getURI());
-					// 	(<ARTURIResource>newValue).setShow(null);
-					// } else if (this.resource.isBNode()) {
-					// 	let bNodeRes: ARTBNode = ResourceUtils.parseBNode(this.resourceStringValue);
-					// 	(<ARTBNode>newValue).setId(bNodeRes.getId());
-					// 	(<ARTBNode>newValue).setShow(null);
-					// } else if (this.resource.isLiteral()) {
-					// 	let literal: ARTLiteral = ResourceUtils.parseLiteral(this.resourceStringValue);
-					// 	(<ARTLiteral>newValue).setValue(literal.getValue());
-					// 	(<ARTLiteral>newValue).setLang(literal.getLang());
-					// 	(<ARTLiteral>newValue).setDatatype(literal.getDatatype());
-					// }
-
-					// let newValue: ARTNode;
-					// if (this.resource.isURIResource()) {
-					// 	newValue = ResourceUtils.parseURI(this.resourceStringValue);
-					// 	(<ARTURIResource>newValue).setShow((<ARTURIResource>newValue).getURI());
-					// } else if (this.resource.isBNode()) {
-					// 	newValue = ResourceUtils.parseBNode(this.resourceStringValue);
-					// 	(<ARTBNode>newValue).setShow((<ARTBNode>newValue).getId());
-					// } else if (this.resource.isLiteral()) {
-					// 	newValue = ResourceUtils.parseLiteral(this.resourceStringValue);
-					// }
-					// newValue.setAdditionalProperty(ResAttribute.EXPLICIT, true);
-
-					//special case: update of literal form of a skosxl label (role of value is xLabel && new value is a literal)
-					if (this.resource.getRole() == RDFResourceRolesEnum.xLabel && newValue.isLiteral()) {
-						let oldLitForm: ARTLiteral = new ARTLiteral(this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
-						this.applyUpdate(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
-						//case new value has a nature not compliant with the range type
-					// } else if ((this.rangeType == RDFTypesEnum.literal && !newValue.isLiteral()) ||
-					// 	this.rangeType == RDFTypesEnum.resource && !newValue.isResource()) {
-					} else if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
+					//check consistency of the new value
+					if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
 						let warningMsg = "The type of the new value is not compliant with the range of the property " + this.predicate.getShow()
 							+ ". The change may cause an inconsistency. Do you want to apply the change? ";
 						this.basicModals.confirm("Warning", warningMsg, "warning").then(
@@ -275,7 +250,7 @@ export class EditableResourceComponent {
 				}
 			}
 		} else {
-			this.editInProgress = false;
+			this.cancelEdit();
 		}
 	}
 
@@ -300,7 +275,7 @@ export class EditableResourceComponent {
 	private applyUpdate(subject: ARTResource, predicate: ARTURIResource, oldValue: ARTNode, newValue: ARTNode) {
 		this.resourcesService.updateTriple(subject, predicate, oldValue, newValue).subscribe(
 			stResp => {
-				this.editInProgress = false;
+				this.cancelEdit;
 				/** Event propagated to the resView that refreshes.
 				 * I cannot simply update the rdf-resource since the URI of the resource
 				 * in the predicate objects list stored in the partition render is still the same */
@@ -328,6 +303,7 @@ export class EditableResourceComponent {
 
 	private cancelEdit() {
 		this.editInProgress = false;
+		this.editLiteralInProgress = false;
 	}
 
 	//================================
@@ -440,7 +416,8 @@ export class EditableResourceComponent {
 
 enum EditActionScenarioEnum {
 	xLabel = "xLabel", //edit should allow to change the literal form
-	plainLiteral = "isPlainLiteral", //edit should allow to change the literal
+	plainLiteral = "plainLiteral", //edit should allow to change the content of the literal without langTag
+	typedLiteral = "typedLiteral", //edit should allow to change the content of the literal without datatype
 	partition = "partition", //edit should be handled ad hoc by the partition (an event is emitted)
 	default = "default" //edit should allow to edit the NT form (iri/bnode/...)
 }
