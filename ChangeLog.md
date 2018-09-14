@@ -8,6 +8,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Changed dynamic settings on vbconfig.js
   * Updated e-mail configuration, now it is possible to use, beside SSL, TLS or no cryptographic protocol at all;
     Added possibility to test the e-mail configuration. 
+  * Fixed bug in the Validation tab, where the optional time lower bound was always ignored 
   * Bugfixes.
 
 # 4.0.2 (27-07-2018)

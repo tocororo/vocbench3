@@ -56,10 +56,9 @@ export class ValidationServices {
     getCommits(timeUpperBound: string, operationFilter?: ARTURIResource[], timeLowerBound?: string,
             operationSorting?: SortingDirection, timeSorting?: SortingDirection, page?: number, limit?: number): Observable<CommitInfo[]> {
         console.log("[ValidationServices] getCommits");
-        var params: any = {
-            timeUpperBound: timeUpperBound
-        };
+        var params: any = {};
         if (operationFilter != null) { params.operationFilter = operationFilter; }
+        if (timeLowerBound != null) { params.timeLowerBound = timeLowerBound; }
         if (timeUpperBound != null) { params.timeUpperBound = timeUpperBound; }
         if (operationSorting != null) { params.operationSorting = operationSorting; }
         if (timeSorting != null) { params.timeSorting = timeSorting; }
