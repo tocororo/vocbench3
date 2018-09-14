@@ -17,14 +17,29 @@
             <tr>
                 <td nowrap><label>Password:</label><span style="color: red">*</span></td>
                 <td>
-                    <input type="password" class="form-control input-sm" placeholder="password" [(ngModel)]="form.password" name="password"
-                        (ngModelChange)="onModelChange()">
+                    <div class="input-group input-group-sm">
+                        <input *ngIf="!showPwd" type="password" class="form-control" [(ngModel)]="form.password" (ngModelChange)="onModelChange()" name="password" placeholder="password">
+                        <input *ngIf="showPwd" class="form-control" [(ngModel)]="form.password" name="password" placeholder="password">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" [ngClass]="{ active : showPwd }" (mousedown)="showPwd = true" (mouseup)="showPwd = false">
+                                <span *ngIf="!showPwd" class="glyphicon glyphicon-eye-close"></span>
+                                <span *ngIf="showPwd" class="glyphicon glyphicon-eye-open"></span>
+                            </button>
+                        </span>
+                    </div>
                 </td>
                 <td nowrap><label>Confirm password:</label><span style="color: red">*</span></td>
                 <td>
-                    <input type="password" class="form-control input-sm"  [ngClass]="{invalid : !isConfirmPwdOk()}"
-                        placeholder="password" [(ngModel)]="form.confirmedPassword" name="confirmedPassword"
-                        (ngModelChange)="onModelChange()">
+                    <div class="input-group input-group-sm">
+                        <input *ngIf="!showPwdConf" type="password" class="form-control" [ngClass]="{invalid : !isConfirmPwdOk()}" [(ngModel)]="form.confirmedPassword" (ngModelChange)="onModelChange()" name="confirmedPassword" placeholder="password">
+                        <input *ngIf="showPwdConf" class="form-control" [ngClass]="{invalid : !isConfirmPwdOk()}" [(ngModel)]="form.confirmedPassword" name="confirmedPassword" placeholder="password">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" [ngClass]="{ active : showPwdConf }" (mousedown)="showPwdConf = true" (mouseup)="showPwdConf = false">
+                                <span *ngIf="!showPwdConf" class="glyphicon glyphicon-eye-close"></span>
+                                <span *ngIf="showPwdConf" class="glyphicon glyphicon-eye-open"></span>
+                            </button>
+                        </span>
+                    </div>
                 </td>
             </tr>
             <tr>
