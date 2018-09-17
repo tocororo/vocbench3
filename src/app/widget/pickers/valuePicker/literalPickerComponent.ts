@@ -40,10 +40,6 @@ export class LiteralPickerComponent {
          * is true just one of plain or typed (xor between plain and typed)
          */
         this.menuAsButton = (this.plain && !this.typed) || (!this.plain && this.typed);
-        //special case: plain not allowed, but allowed datatype string
-        if (!this.plain && this.datatypes != null && ResourceUtils.containsNode(this.datatypes, XmlSchema.string)) {
-            this.plain = true;
-        }
     }
 
     private pickLiteral(type?: RDFTypesEnum) {
