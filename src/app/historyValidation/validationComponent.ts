@@ -47,7 +47,11 @@ export class ValidationComponent extends AbstractHistValidComponent {
 
     listCommits() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.validationService.getCommits(this.tipTime, this.operations, this.getFormattedFromTime(), 
+        let timeUpperBound: string = this.getFormattedToTime();
+        if (timeUpperBound == null) {
+            timeUpperBound = this.tipTime;
+        }
+        this.validationService.getCommits(this.operations, timeUpperBound, this.getFormattedFromTime(), 
             this.operationSorting, this.timeSorting, this.page, this.limit).subscribe(
             commits => {
                 this.commits = commits;

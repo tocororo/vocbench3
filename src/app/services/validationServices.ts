@@ -44,16 +44,15 @@ export class ValidationServices {
 
     /**
      * 
-     * @param tipRevisionNumber 
      * @param operationFilter 
-     * @param timeLowerBound 
      * @param timeUpperBound 
+     * @param timeLowerBound 
      * @param operationSorting 
      * @param timeSorting 
      * @param page 
      * @param limit 
      */
-    getCommits(timeUpperBound: string, operationFilter?: ARTURIResource[], timeLowerBound?: string,
+    getCommits(operationFilter?: ARTURIResource[], timeUpperBound?: string, timeLowerBound?: string,
             operationSorting?: SortingDirection, timeSorting?: SortingDirection, page?: number, limit?: number): Observable<CommitInfo[]> {
         console.log("[ValidationServices] getCommits");
         var params: any = {};

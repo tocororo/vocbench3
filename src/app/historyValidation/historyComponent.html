@@ -41,7 +41,7 @@
     
     <div class="panel-body vbox">
 
-        <history-filter *ngIf="showFilterBox" class="vbox" style="margin-bottom: 6px" (apply)="onFilterApplied($event)"
+        <history-filter *ngIf="showFilterBox" class="vbox" style="margin-bottom: 6px; min-height: 115px;" (apply)="onFilterApplied($event)"
             [operations]="operations" [fromTime]="fromTime" [toTime]="toTime"></history-filter>
 
         <div class="table-responsive" style="flex: 3;">
@@ -49,10 +49,6 @@
             <table class="table table-condensed table-hoverable">
                 <colgroup>
                     <col style="width: 1%">
-                    <!--<col>
-                    <col>
-                    <col>
-                    <col>-->
                 </colgroup>
                 <thead>
                     <tr>
