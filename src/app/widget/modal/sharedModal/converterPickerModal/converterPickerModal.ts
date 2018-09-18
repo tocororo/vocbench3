@@ -33,6 +33,7 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
     private converters: ConverterContractDescription[];
     private selectedConverter: ConverterContractDescription;
     private selectedConverterType: RDFCapabilityType; //uri/literal
+    private concerterTypeConstrained: boolean = false; //if true disable the selection of converter type (uri/literal) when available
     private selectedSignature: SignatureDescription;
 
     private projectionOperator: string = "";
@@ -78,12 +79,28 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
                 }
             }
         );
+        /**
+         * selection of converter type constrained if:
+         * allowed capabilities are only literal (no node or uri) => constrained to literal
+         * allowed capabilities is only uri (no other capabilities) => constrained to uri
+         */
+        if (this.context.capabilities != null &&
+            ((this.context.capabilities.length > 0 && this.context.capabilities.indexOf(RDFCapabilityType.node) == -1 && this.context.capabilities.indexOf(RDFCapabilityType.uri) == -1 ) ||
+            (this.context.capabilities.length == 1 && this.context.capabilities[0] == RDFCapabilityType.uri))
+         ) {
+            this.concerterTypeConstrained = true;
+        }
     }
 
     private selectConverter(converter: ConverterContractDescription) {
         if (converter != this.selectedConverter) {
             this.selectedConverter = converter;
-            if (this.selectedConverter.getRDFCapability() == RDFCapabilityType.literal || this.selectedConverter.getRDFCapability() == RDFCapabilityType.typedLiteral) {
+            if (this.selectedConverter.getRDFCapability() == RDFCapabilityType.literal ||
+                this.selectedConverter.getRDFCapability() == RDFCapabilityType.typedLiteral ||
+                (this.selectedConverter.getRDFCapability() == RDFCapabilityType.node && 
+                this.context.capabilities != null && this.context.capabilities.length > 0 && 
+                this.context.capabilities.indexOf(RDFCapabilityType.node) == -1 && this.context.capabilities.indexOf(RDFCapabilityType.uri) == -1)
+            ) {
                 this.selectedConverterType = RDFCapabilityType.literal;
             } else { //'node' or 'uri'
                 this.selectedConverterType = RDFCapabilityType.uri;

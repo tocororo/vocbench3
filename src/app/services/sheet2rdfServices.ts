@@ -60,7 +60,6 @@ export class Sheet2RDFServices {
             id: json.id,
             name: json.name,
             resource: (json.resource) ? Deserializer.createURI(json.resource) : null,
-            lang: json.lang,
             converter: {
                 uri: json.converter.uri,
                 type: json.converter.type,
@@ -71,14 +70,16 @@ export class Sheet2RDFServices {
 
             range: {
                 type: json.range.type,
-                cls: (json.range.cls) ? Deserializer.createURI(json.range.cls) : null
+                resource: (json.range.resource) ? Deserializer.createURI(json.range.resource) : null,
+                lang: json.range.lang
             }
         }
         return h;
     }
 
     updateHeader(headerId: string, headerResource: ARTURIResource, rangeType?: RDFTypesEnum, rangeClass?: ARTURIResource,
-        converterMention?: string, converterType?: RDFCapabilityType, converterXRole?: XRole, memoize?: boolean, applyToAll?: boolean) {
+        lang?: string, rangeDatatype?: ARTURIResource, converterMention?: string, converterType?: RDFCapabilityType, converterXRole?: XRole, 
+        memoize?: boolean, applyToAll?: boolean) {
         console.log("[Sheet2RDFServices] updateHeader");
         var params: any = {
             headerId: headerId,
@@ -89,6 +90,12 @@ export class Sheet2RDFServices {
         }
         if (rangeClass != null) {
             params.rangeClass = rangeClass;
+        }
+        if (lang != null) {
+            params.lang = lang;
+        }
+        if (rangeDatatype != null) {
+            params.rangeDatatype = rangeDatatype;
         }
         if (converterMention != null && converterType != null) {
             params.converterMention = converterMention;

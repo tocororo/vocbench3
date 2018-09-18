@@ -91,6 +91,24 @@
                         </div>
                     </td>
                 </tr>
+
+                <tr *ngIf="selectedRangeType?.type == 'literal'">
+                    <td>
+                        <select class="form-control input-sm" [(ngModel)]="literalDetail" (ngModelChange)="onLiteralDetailChange()">
+                            <option>----</option>
+                            <option>Lang</option>
+                            <option>Datatype</option>
+                        </select>
+                    </td>
+                    <td [ngSwitch]="literalDetail">
+                        <lang-picker *ngSwitchCase="'Lang'" [(ngModel)]="language"></lang-picker>
+                        <select *ngSwitchCase="'Datatype'" class="form-control input-sm" [(ngModel)]="datatype">
+                            <option *ngFor="let dt of datatypeList" [ngValue]="dt">{{dt.getShow()}}</option>
+                        </select>
+                        <input *ngSwitchDefault class="form-control input-sm" disabled>
+                    </td>
+                </tr>
+
             </ng-template>
 
         </tbody>

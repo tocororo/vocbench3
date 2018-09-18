@@ -6,10 +6,10 @@ export class HeaderStruct {
     public name: string;
     public isMultiple: boolean;
     public resource: ARTURIResource;
-    public lang: string;
     public range: {
         type: RDFTypesEnum;
-        cls: ARTURIResource;
+        resource?: ARTURIResource; //range class (in case type is resource) or datatype (type literal)
+        lang?: string;
     }
     public converter: {
         uri: string;

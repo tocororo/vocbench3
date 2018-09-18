@@ -243,7 +243,8 @@ export class Sheet2RdfComponent {
         this.sharedModals.selectConverter("Pick a converter", null).then(
             (converter: {projectionOperator: string, contractDesctiption: any }) => {
                 this.viewChildCodemirror.insertAtCursor(converter.projectionOperator);
-            }
+            },
+            () => {}
         )
     }
 

@@ -10,6 +10,8 @@ import { Sheet2RDFServices } from "../services/sheet2rdfServices";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { DatatypesServices } from "../services/datatypesServices";
+import { Observable } from "rxjs";
 
 export class HeaderEditorModalData extends BSModalContext {
     /**
@@ -61,7 +63,13 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         //"true" only if the property assigned to the header doesn't have rangeCollection (so leave the choice to the user), or it contains rdfs:Resource
     private nullRangeClass: ARTURIResource = new ARTURIResource("-----"); //fake IRI that stands for "no range class"
 
-    constructor(public dialog: DialogRef<HeaderEditorModalData>, private s2rdfService: Sheet2RDFServices, private propService: PropertyServices,
+    private literalDetail: "Lang" | "Datatype";
+    private language: string;
+    private datatype: ARTURIResource;
+    private datatypeList: ARTURIResource[] = [];
+
+    constructor(public dialog: DialogRef<HeaderEditorModalData>, private s2rdfService: Sheet2RDFServices, 
+        private propService: PropertyServices, private datatypeService: DatatypesServices,
         private basicModals: BasicModalServices, private browingModals: BrowsingModalServices, private sharedModals: SharedModalServices) {
         this.context = dialog.context;
     }
@@ -81,6 +89,35 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
                 }
                 this.multiple = header.isMultiple;
 
+                if (header.range.type == RDFTypesEnum.literal) {
+                    //init selectedRangeType
+                    this.rangeTypes.forEach((t: HeaderRangeType) => {
+                        if (t.type+"" == header.range.type+"") {
+                            this.selectedRangeType = t;
+                        }
+                    });
+                    //try to init datatype
+                    let rngDatatype: ARTURIResource = header.range.resource; //in case of range type 'literal', the cls tells the datatype
+                    if (rngDatatype != null) {
+                        this.initDatatypeList().subscribe(
+                            () => {
+                                this.datatypeList.forEach(dt => {
+                                    if (dt.getURI() == rngDatatype.getURI()) {
+                                        console.log("dt.getURI() == rngDatatype.getURI()", dt.getURI(), rngDatatype.getURI());
+                                        this.datatype = dt;
+                                    }
+                                })
+                            }
+                        );
+                        this.literalDetail = "Datatype";
+                    }
+                    //try to init language
+                    if (header.range.lang != null) {
+                        this.language = header.range.lang;
+                        this.literalDetail = "Lang"
+                    }
+                }
+                
                 if (this.isHeaderResourceProperty()) {
                     this.updateHeaderPropertyRange(header);
                 }
@@ -137,17 +174,20 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
                     });
                     this.rangeTypeChangeable = rngType == RDFTypesEnum.undetermined;
 
-                    //if the range class was already set => add the class and set as selected
-                    let rngClass: ARTURIResource = header.range.cls;
-                    if (rngClass != null) {
-                        let rngClassIdx: number = ResourceUtils.indexOfNode(this.rangeClasses, rngClass);
-                        if (rngClassIdx != -1) { //rngClass already among the listed range classes
-                            this.selectedRangeClass = this.rangeClasses[rngClassIdx];
-                        } else {
-                            this.rangeClasses.push(rngClass);
-                            this.selectedRangeClass = rngClass;
+                    if (rngType == RDFTypesEnum.resource) {
+                        //try to init range class
+                        let rngClass: ARTURIResource = header.range.resource; //in case of range type 'resource', the cls tells the range class of the prop
+                        if (rngClass != null) {
+                            let rngClassIdx: number = ResourceUtils.indexOfNode(this.rangeClasses, rngClass);
+                            if (rngClassIdx != -1) { //rngClass already among the listed range classes
+                                this.selectedRangeClass = this.rangeClasses[rngClassIdx];
+                            } else {
+                                this.rangeClasses.push(rngClass);
+                                this.selectedRangeClass = rngClass;
+                            }
                         }
                     }
+
                 }
             }
         )
@@ -222,6 +262,27 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         return this.converterUri == "http://art.uniroma2.it/coda/contracts/randIdGen";
     }
 
+    private onLiteralDetailChange() {
+        if (this.literalDetail == "Datatype") {
+            if (this.datatypeList.length == 0) { //if datatype list is empty => initialize it
+                this.initDatatypeList().subscribe();
+            }
+        }
+    }
+
+    private initDatatypeList(): Observable<any> {
+        if (this.datatypeList.length == 0) {
+            return this.datatypeService.getDatatypes().map(
+                datatypes => {
+                    datatypes.sort((dt1: ARTURIResource, dt2: ARTURIResource) => {
+                        return dt1.getShow().localeCompare(dt2.getShow());
+                    });
+                    this.datatypeList = datatypes;
+                }
+            );
+        }
+    }
+
     ok(event: Event) {
         if (this.multiple) {
             this.basicModals.confirm("Edit header", "There are multiple header with the same name (" + this.headerName 
@@ -249,12 +310,22 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
             }
         }
 
+        let langPar: string = null;
+        let datatypePar: ARTURIResource = null;
+        if (rangeTypePar == RDFTypesEnum.literal) {
+            if (this.literalDetail == "Datatype") {
+                datatypePar = this.datatype;
+            } else if (this.literalDetail == "Lang") {
+                langPar = this.language;
+            }
+        }
+
         let xRolePar: XRole = null;
         if (this.converterXRole != XRole.undetermined) {
             xRolePar = this.converterXRole;
         }
 
-        this.s2rdfService.updateHeader(this.headerId, this.headerResource, rangeTypePar, rangeClassPar, 
+        this.s2rdfService.updateHeader(this.headerId, this.headerResource, rangeTypePar, rangeClassPar, langPar, datatypePar,
             this.converterQName, this.converterType, xRolePar, this.memoize, applyToAll).subscribe(
             stResp => {
                 this.dialog.close();
