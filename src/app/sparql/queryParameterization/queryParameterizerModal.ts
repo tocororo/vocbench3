@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from "rxjs/Observable";
-import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResourceUtils } from "../../models/ARTResources";
+import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResourceUtils, ARTResource } from "../../models/ARTResources";
 import { BindingTypeEnum, VariableBindings } from "../../models/Sparql";
 import { DatatypesServices } from "../../services/datatypesServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
@@ -165,6 +165,14 @@ export class QueryParameterizerModal implements ModalComponent<QueryParameterize
                 },
                 () => {}
             );
+        }
+    }
+
+    private updateValue(binding: BindingStruct, value: ARTNode) {
+        if (value != null) {
+            binding.value = value.toNT();
+        } else {
+            binding.value = null;
         }
     }
 

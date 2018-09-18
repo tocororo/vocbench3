@@ -98,7 +98,7 @@ export class IcvListComponent {
             },
             {
                 name: "Conflictual label resources", model: [], lexicalization: [SKOS.uri, SKOSXL.uri], routeName: "/Icv/ConflictualLabelResource",
-                description: "Resources that have the same label in the same language",
+                description: "Resources or, specifically, concepts in the same scheme, that have the same preferred label in the same language",
                 authAction: AuthorizationEvaluator.Actions.ICV_GENERIC_RESOURCE
             },
             {

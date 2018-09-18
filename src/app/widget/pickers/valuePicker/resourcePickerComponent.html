@@ -2,25 +2,8 @@
     <input type="text" class="form-control" [(ngModel)]="resourceIRI" (ngModelChange)="onModelChanged()"
         placeholder="http://example.org" [readonly]="!editable" [disabled]="disabled">
     <div class="input-group-btn">
-        <button *ngIf="menuAsButton; else menuBlock" class="btn btn-default" (click)="pickResource()"
-            title="Pick an existing resource" [disabled]="disabled">
-            <img [src]="btnImageSrc">
+        <button class="btn btn-default" (click)="pickResource()" title="Pick an existing resource" [disabled]="disabled">
+            <span class="glyphicon glyphicon-pencil"></span>
         </button>
-
-        <ng-template #menuBlock>
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Pick an existing resource" [disabled]="disabled">
-                <img src="../../../../assets/images/icons/res/class.png">
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-right">
-                <li *ngIf="pickableRole('cls')"><a (click)="pickResource('cls')">Class</a></li>
-                <li *ngIf="pickableRole('individual')"><a (click)="pickResource('individual')">Instance</a></li>
-                <li *ngIf="pickableRole('concept')"><a (click)="pickResource('concept')">Concept</a></li>
-                <li *ngIf="pickableRole('conceptScheme')"><a (click)="pickResource('conceptScheme')">ConceptScheme</a></li>
-                <li *ngIf="pickableRole('skosCollection')"><a (click)="pickResource('skosCollection')">Collection</a></li>
-                <li *ngIf="pickableRole('property')"><a (click)="pickResource('property')">Property</a></li>
-                <li *ngIf="pickableRole('ontolexLexicalEntry')"><a (click)="pickResource('ontolexLexicalEntry')">Ontolex LexicalEntry</a></li>
-            </ul>
-        </ng-template>
     </div>
 </div>

@@ -32,9 +32,13 @@ export class SelectionModal implements ModalComponent<SelectionModalData> {
     context: SelectionModalData;
     
     private optionSelected: any;
+    private size: number = 20;
     
     constructor(public dialog: DialogRef<SelectionModalData>) {
         this.context = dialog.context;
+        if (this.context.options.length < this.size) {
+            this.size = this.context.options.length;
+        }
     }
 
     ok(event: Event) {

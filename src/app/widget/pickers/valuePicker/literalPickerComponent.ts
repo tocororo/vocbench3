@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
-import { ARTLiteral, ARTURIResource, RDFTypesEnum, ResourceUtils } from '../../../models/ARTResources';
-import { XmlSchema } from '../../../models/Vocabulary';
+import { ARTLiteral, ARTURIResource, RDFTypesEnum } from '../../../models/ARTResources';
+import { BasicModalServices } from '../../modal/basicModal/basicModalServices';
 import { CreationModalServices } from '../../modal/creationModal/creationModalServices';
 
 @Component({
@@ -18,9 +18,7 @@ export class LiteralPickerComponent {
 
     private literalNT: string;
 
-    private menuAsButton: boolean = false; //if there is just a role => do not show a dropdown menu, just a button
-    
-    constructor(private creationModals: CreationModalServices) { }
+    constructor(private creationModals: CreationModalServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.init();
@@ -34,22 +32,32 @@ export class LiteralPickerComponent {
         if (this.literal) {
             this.literalNT = this.literal.toNT();
         }
-
-        /**
-         * menu for choosing among typed and plain literal is visible as button only if
-         * is true just one of plain or typed (xor between plain and typed)
-         */
-        this.menuAsButton = (this.plain && !this.typed) || (!this.plain && this.typed);
     }
 
-    private pickLiteral(type?: RDFTypesEnum) {
-        if (type == null) { //pickLiteral from button => create the only literal allowed
+    private pickLiteral() {
+        let resourceTypes: {[key: string]: RDFTypesEnum} = {
+            "Plain Literal": RDFTypesEnum.plainLiteral,
+            "Typed Literal": RDFTypesEnum.typedLiteral
+        };
+
+        if (this.plain && this.typed) {
+            this.basicModals.select("Create literal", "Select the type of literal to create", Object.keys(resourceTypes)).then(
+                (type: string) => {
+                    this.createLiteral(resourceTypes[type]);
+                },
+                () => {}
+            ); 
+        } else {
             if (this.plain) {
-                this.pickLiteral(RDFTypesEnum.plainLiteral);
+                this.createLiteral(RDFTypesEnum.plainLiteral);
             } else if (this.typed) {
-                this.pickLiteral(RDFTypesEnum.typedLiteral);
+                this.createLiteral(RDFTypesEnum.typedLiteral);
             }
-        } else if (type == RDFTypesEnum.typedLiteral) {
+        }
+    }
+
+    private createLiteral(type: RDFTypesEnum) {
+        if (type == RDFTypesEnum.typedLiteral) {
             this.creationModals.newTypedLiteral("Create typed literal", this.datatypes).then(
                 (value: ARTLiteral) => {
                     this.literal = value;
@@ -69,6 +77,5 @@ export class LiteralPickerComponent {
             );
         }
     }
-
 
 }

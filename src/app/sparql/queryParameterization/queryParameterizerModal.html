@@ -42,17 +42,7 @@
                         </td>
                         <td>
                             <div *ngIf="b.bindingType?.value=='assignment'; else constraintBlock" class="input-group input-group-sm">
-                                <input type="text" class="form-control" [(ngModel)]="b.value" disabled>
-                                <div class="input-group-btn">
-                                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-right">
-                                        <li><a (click)="setAssignemntValue(b, 'resource')">Resource</a></li>
-                                        <li><a (click)="setAssignemntValue(b, 'typedLiteral')">Typed literal</a></li>
-                                        <li><a (click)="setAssignemntValue(b, 'plainLiteral')">Plain literal</a></li>
-                                    </ul>
-                                </div>
+                                <value-picker [value]="b.value" (valueChanged)="updateValue(b, $event)"></value-picker>
                             </div>
                             <ng-template #constraintBlock>
                                 <select *ngIf="b.bindingType?.specialization=='datatype'; else roleBlock" class="form-control input-sm" [(ngModel)]="b.datatype">

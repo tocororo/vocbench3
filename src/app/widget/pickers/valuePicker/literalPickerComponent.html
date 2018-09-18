@@ -1,19 +1,8 @@
 <div class="input-group input-group-sm">
     <input type="text" class="form-control" [ngModel]="literalNT" [disabled]="disabled" readonly>
     <div class="input-group-btn">
-        <button *ngIf="menuAsButton; else menuBlock" class="btn btn-default" style="min-width: 38px;" (click)="pickLiteral()"
-            title="Pick an existing resource" [disabled]="disabled">
+        <button class="btn btn-default" (click)="pickLiteral()" title="Pick an existing resource" [disabled]="disabled">
             <span class="glyphicon glyphicon-pencil"></span>
         </button>
-
-        <ng-template #menuBlock>
-            <button class="btn btn-default dropdown-toggle" style="min-width: 38px;" data-toggle="dropdown" title="Create a literal" [disabled]="disabled">
-                <span class="glyphicon glyphicon-pencil"></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-right">
-                <li *ngIf="plain"><a (click)="pickLiteral('plainLiteral')">Plain Literal</a></li>
-                <li *ngIf="typed"><a (click)="pickLiteral('typedLiteral')">Typed Literal</a></li>
-            </ul>
-        </ng-template>
     </div>
 </div>

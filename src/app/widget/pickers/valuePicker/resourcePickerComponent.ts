@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/
 import { ARTURIResource, RDFResourceRolesEnum } from '../../../models/ARTResources';
 import { OntoLex, SKOS } from '../../../models/Vocabulary';
 import { ResourcesServices } from '../../../services/resourcesServices';
-import { UIUtils } from '../../../utils/UIUtils';
 import { VBContext } from '../../../utils/VBContext';
 import { VBProperties } from '../../../utils/VBProperties';
+import { BasicModalServices } from '../../modal/basicModal/basicModalServices';
 import { BrowsingModalServices } from '../../modal/browsingModal/browsingModalServices';
 
 @Component({
@@ -21,10 +21,8 @@ export class ResourcePickerComponent {
 
     private resourceIRI: string;
 
-    private menuAsButton: boolean = false; //if there is just a role => do not show a dropdown menu, just a button
-    private btnImageSrc: string;
-    
-    constructor(private resourceService: ResourcesServices, private browsingModals: BrowsingModalServices, private vbProp: VBProperties) { }
+    constructor(private resourceService: ResourcesServices, private browsingModals: BrowsingModalServices,
+        private basicModals: BasicModalServices, private vbProp: VBProperties) { }
 
     ngOnInit() {
         this.init();
@@ -45,10 +43,6 @@ export class ResourcePickerComponent {
         } else {
             this.resourceIRI = null;
         }
-        if (this.roles != null && this.roles.length == 1) {
-            this.menuAsButton = true;
-            this.btnImageSrc = UIUtils.getRoleImageSrc(this.roles[0]);
-        }
     }
 
     private onModelChanged() {
@@ -65,10 +59,35 @@ export class ResourcePickerComponent {
         this.resourceChanged.emit(returnedRes);
     }
 
-    private pickResource(role: RDFResourceRolesEnum) {
-        if (role == null) { //called from UI in case there is just one role in roles array
-            role = this.roles[0];
+    private pickResource() {
+        let resourceTypes: {[key: string]: RDFResourceRolesEnum} = {
+            "Class": RDFResourceRolesEnum.cls,
+            "Individual": RDFResourceRolesEnum.individual,
+            "Concept": RDFResourceRolesEnum.concept,
+            "ConceptScheme": RDFResourceRolesEnum.conceptScheme,
+            "Collection": RDFResourceRolesEnum.skosCollection,
+            "Property": RDFResourceRolesEnum.property,
+            "Ontolex LexicalEntry": RDFResourceRolesEnum.ontolexLexicalEntry
+        };
+        let options: string[] = [];
+        for (let key in resourceTypes) {
+            if (this.pickableRole(resourceTypes[key])) {
+                options.push(key);
+            }
         }
+        if (options.length == 1) {
+            this.openSelectionResource(resourceTypes[options[0]]);
+        } else {
+            this.basicModals.select("Pick resource", "Select the type of resource to pick", options).then(
+                (role: string) => {
+                    this.openSelectionResource(resourceTypes[role]);
+                },
+                () => {}
+            ); 
+        }
+    }
+
+    private openSelectionResource(role: RDFResourceRolesEnum) {
         if (role == RDFResourceRolesEnum.cls) {
             this.browsingModals.browseClassTree("Select a Class").then(
                 (selectedResource: ARTURIResource) => {
