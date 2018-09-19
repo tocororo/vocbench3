@@ -23,9 +23,9 @@ export class Issue {
         this.resolution = resolution;
         this.category = category;
 
-        if (status == "To Do") {
+        if (status == "To Do" || status == "Reopened" || status == "Open") {
             this.statusClass = "label-primary";
-        } else if (status == "Done") {
+        } else if (status == "Done" || status == "Resolved" || status == "Closed") {
             this.statusClass = "label-success";
         } else if (status == "In Progress") {
             this.statusClass = "label-warning";

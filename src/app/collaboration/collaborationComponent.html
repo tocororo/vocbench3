@@ -72,7 +72,13 @@
                         </td>
                         <td>{{i.getSummary()}}</td>
                         <td>
-                            <rdf-resource *ngFor="let r of i.getResources()" [resource]="r" class="clickable" (click)="onResourceClick(r)"></rdf-resource>
+                            <div *ngIf="i.getResources().length > 0; else noResBlock">
+                                <rdf-resource *ngFor="let r of i.getResources()" [resource]="r" class="clickable" (click)="onResourceClick(r)"></rdf-resource>
+                            </div>
+                            <ng-template #noResBlock>
+                                <span class="glyphicon glyphicon-warning-sign" style="color: #f0ad4e; padding: 0px 2px;"></span>
+                                <span style="font-style: italic; color: grey;">No resource(s) associated to this issue</span>
+                            </ng-template>
                         </td>
                         <td class="text-center">
                             <span [class]="'label ' + i.getStatusClass()" style="font-size: 100%">{{i.getStatus()}}</span>
