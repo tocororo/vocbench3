@@ -8,7 +8,6 @@ import { CustomReuseStrategy } from "../a2Customization/CustomReuseStrategy";
 import { AlignmentValidationComponent } from "../alignment/alignmentValidation/alignmentValidationComponent";
 import { AppComponent } from "../appComponent";
 import { appRouting } from '../appRoutes';
-import { CollaborationComponent } from "../collaboration/collaborationComponent";
 import { ConfigBarComponent } from "../config/configBar/configBarComponent";
 import { ExportDataComponent } from "../config/dataManagement/exportData/exportDataComponent";
 import { LoadDataComponent } from "../config/dataManagement/loadData/loadDataComponent";
@@ -23,6 +22,7 @@ import { VBCollaboration } from '../utils/VBCollaboration';
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
 import { AdministrationModule } from "./administrationModule";
+import { CollaborationModule } from './collaborationModule';
 import { CustomFormModule } from "./customFormModule";
 import { HistoryValidationModule } from "./historyValidationModule";
 import { ICVModule } from "./icvModule";
@@ -46,7 +46,7 @@ import { VBModalModule } from "./vbModalModule";
 
             SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule,
             ProjectModule, UserModule, ICVModule, AdministrationModule, CustomFormModule, MetadataModule,
-            HistoryValidationModule, PreferencesModule, Sheet2RdfModule, SparqlModule,
+            HistoryValidationModule, PreferencesModule, Sheet2RdfModule, SparqlModule, CollaborationModule,
 
             STServicesModule,
             appRouting,
@@ -63,7 +63,6 @@ import { VBModalModule } from "./vbModalModule";
             HomeComponent,
             DataComponent,
             AlignmentValidationComponent,
-            CollaborationComponent,
             LoadDataComponent,
             ExportDataComponent,
             RefactorComponent,

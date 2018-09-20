@@ -5,13 +5,8 @@ import { MappingPropertySelectionModal } from '../alignment/alignmentValidation/
 import { ValidationReportModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationReportModal';
 import { ValidationSettingsModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationSettingsModal';
 import { AssistedSearchModal } from '../alignment/resourceAlignment/assistedSearchModal';
+import { AssistedSearchResultModal } from '../alignment/resourceAlignment/assistedSearchResultModal';
 import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceAlignmentModal';
-import { CollaborationModalServices } from "../collaboration/collaborationModalService";
-import { IssueListModal } from "../collaboration/issueListModal";
-import { CollaborationProjectModal } from "../collaboration/modals/collaborationProjectModal";
-import { CollaborationProjSettingsModal } from "../collaboration/modals/collaborationProjSettingsModal";
-import { CollaborationUserSettingsModal } from "../collaboration/modals/collaborationUserSettingsModal";
-import { CreateIssueModal } from "../collaboration/modals/createIssueModal";
 import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
 import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreationModal";
 import { AlertCheckModal } from '../widget/modal/basicModal/alertModal/alertCheckModal';
@@ -64,7 +59,6 @@ import { CustomFormModule } from "./customFormModule";
 import { SharedModule } from "./sharedModule";
 import { TreeAndListModule } from "./treeAndListModule";
 import { UserModule } from "./userModule";
-import { AssistedSearchResultModal } from '../alignment/resourceAlignment/assistedSearchResultModal';
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
@@ -80,11 +74,12 @@ import { AssistedSearchResultModal } from '../alignment/resourceAlignment/assist
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
         ConverterPickerModal, SignaturePickerModal, StoreConfigurationModal, LoadConfigurationModal, ResourcePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
-        EditableNsInput, SchemeSelectionComponent,
-        CollaborationProjSettingsModal, CollaborationUserSettingsModal, CollaborationProjectModal, CreateIssueModal, IssueListModal
+        EditableNsInput, SchemeSelectionComponent
     ],
     exports: [],
-    providers: [BasicModalServices, BrowsingModalServices, CreationModalServices, SharedModalServices, CollaborationModalServices],
+    providers: [
+        BasicModalServices, BrowsingModalServices, CreationModalServices, SharedModalServices, 
+    ],
     //components never used outside the module (so not in exports array), but rendered (loaded) dynamically
     /**
      * (From ngModule FAQ https://angular.io/docs/ts/latest/cookbook/ngmodule-faq.html#!#q-what-not-to-export)
@@ -104,8 +99,7 @@ import { AssistedSearchResultModal } from '../alignment/resourceAlignment/assist
         ResourceAlignmentModal, AssistedSearchModal, AssistedSearchResultModal,
         RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
         ConverterPickerModal, SignaturePickerModal, StoreConfigurationModal, LoadConfigurationModal, ResourcePickerModal,
-        PluginConfigModal, FilterGraphsModal, DumpCreationModal,
-        CollaborationProjSettingsModal, CollaborationUserSettingsModal, CollaborationProjectModal, CreateIssueModal, IssueListModal
+        PluginConfigModal, FilterGraphsModal, DumpCreationModal
     ]
 })
 export class VBModalModule { }

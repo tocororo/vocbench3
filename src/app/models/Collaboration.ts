@@ -76,6 +76,13 @@ export class Issue {
 
 }
 
+export class IssuesStruct {
+    issues: Issue[];
+    more: boolean;
+    numIssues: number;
+    numPagesTotal: number;
+}
+
 export class CollaborationUtils {
 
     public static parseIssue(json: any): Issue {
@@ -90,29 +97,26 @@ export class CollaborationUtils {
         return issues;
     }
 
-    public static sortIssues(issues: Issue[], attribute: "key" | "status", descending?: boolean) {
-        if (attribute == "status") {
-            issues.sort(
-                function (i1: Issue, i2: Issue) {
-                    if (descending) {
-                        return -i1.getStatus().localeCompare(i2.getStatus())
-                    } else {
-                        return i1.getStatus().localeCompare(i2.getStatus())
-                    }
+    public static sortIssues(issues: Issue[], attribute: "key" | "status" | "id", descending?: boolean) {
+        issues.sort(
+            (i1: Issue, i2: Issue) => {
+                if (descending) {
+                    return -i1[attribute].localeCompare(i2[attribute]);
+                } else {
+                    return i1[attribute].localeCompare(i2[attribute]);
                 }
-            );
-        }
-        if (attribute == "key") {
-            issues.sort(
-                function (i1: Issue, i2: Issue) {
-                    if (descending) {
-                        return -i1.getKey().localeCompare(i2.getKey())
-                    } else {
-                        return i1.getKey().localeCompare(i2.getKey())
-                    }
-                }
-            );
-        }
+            }
+        );
     }
 
+}
+
+/**
+ * Context of the issues list. Useful in orderd to render different the issues list depending on the context:
+ * - in the dashboard the issues are not selectable
+ * - in the modal to assign issue to a resource the issues are selectable and the column about the assigned resource is not shown
+ */
+export enum IssuesListCtx {
+    Dashboard = "Dashboard",
+    Assignment = "Assignment"
 }

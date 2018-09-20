@@ -1,14 +1,13 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { ARTURIResource, ResourceUtils } from '../models/ARTResources';
-import { Issue } from '../models/Collaboration';
 import { CollaborationServices } from "../services/collaborationServices";
 import { ResourcesServices } from '../services/resourcesServices';
 import { AuthorizationEvaluator } from '../utils/AuthorizationEvaluator';
-import { UIUtils } from '../utils/UIUtils';
 import { VBCollaboration } from '../utils/VBCollaboration';
+import { VBEventHandler } from '../utils/VBEventHandler';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { CollaborationModalServices } from './collaborationModalService';
+import { IssueListComponent } from './issueListComponent';
 
 @Component({
     selector: 'collaboration-component',
@@ -18,6 +17,9 @@ import { CollaborationModalServices } from './collaborationModalService';
 export class CollaborationComponent {
 
     @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild(IssueListComponent) viewChildList: IssueListComponent;
+    
+    private eventSubscriptions: any[] = [];
 
     //TODO configuration only available to sys admin or users with privileges
 
@@ -25,19 +27,21 @@ export class CollaborationComponent {
     private userSettingsConfigured: boolean; //credentials
     private csProjectLinked: boolean;
 
-    private csWorking: boolean = true;
-
-    private issues: Issue[];
+    private csWorking: boolean;
 
     constructor(private collaborationService: CollaborationServices, private resourceService: ResourcesServices, private vbCollaboration: VBCollaboration, 
-        private collModals: CollaborationModalServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {}
+        private collModals: CollaborationModalServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices,
+        private eventHandler: VBEventHandler) {
+        this.eventSubscriptions.push(eventHandler.collaborationSystemStatusChanged.subscribe(
+            () => this.onCollaborationSystemStatusChange()
+        ));
+    }
 
     ngOnInit() {
         this.initIssueList();
     }
 
     private initIssueList() {
-        this.issues = [];
         /**
          * Gets the status of the CS, so checks if settings and preferences are configured, if a project is linked,
          * then retrieves the issues list.
@@ -49,51 +53,20 @@ export class CollaborationComponent {
                 this.userSettingsConfigured = this.vbCollaboration.isUserSettingsConfigured();
 
                 if (this.userSettingsConfigured && this.projSettingsConfigured && this.csProjectLinked && this.vbCollaboration.isEnabled()) {
-                    this.csWorking = true;
-                    this.vbCollaboration.setWorking(this.csWorking);
-                    UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-                    this.collaborationService.listIssues().subscribe(
-                        issues => {
-                            UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                            this.issues = issues;
-                            this.enrichIssuesWithResources();
-                        },
-                        (err: Error) => {
-                            //in case listIssues throws a ConnectException set the "working" flag to false
-                            if (err.name.endsWith("ConnectException")) {
-                                this.basicModals.alert("Error", "Cannot retrieve the issues list. " +
-                                    "Connection to Collaboration System server failed." , "error", err.name + " " + err.message);
-                            }
-                            this.csWorking = false;
-                            this.vbCollaboration.setWorking(this.csWorking);
-                        }
-                    )
+                    //if system was already working simply try to refresh the issue list
+                    if (this.csWorking) {
+                        this.viewChildList.refresh();
+                    } else { 
+                        //otherwise update csWorking (conseguentially the issue-list updates itself since csWorking turns to true, it is rendered and initialized again)
+                        this.csWorking = true;
+                        /**
+                         * Do not update the working status in vbCollaboration, it will be updated by IssueListComponent
+                         * if the issues retrieving goes ok. Otherwise the collaborationSystemStatusChanged would be catched by the 
+                         * CS handlers in the open ResourceViews and they will execute other requests, in addition to listIssues()
+                         * in IssueListComponent, that would fail as well as listIssues and it will show multiple error dialog.
+                         */
+                    }
                 }
-            }
-        );
-    }
-
-    private enrichIssuesWithResources() {
-        let resources: ARTURIResource[] = [];
-        this.issues.forEach((issue: Issue) => {
-            let labels: string[] = issue.getLabels();
-            labels.forEach((label: string) => {
-                let res: ARTURIResource = new ARTURIResource(label);
-                if (!ResourceUtils.containsNode(resources, res)) {
-                    resources.push(res);
-                }
-            });
-        });
-
-        this.resourceService.getResourcesInfo(resources).subscribe(
-            resInfos => {
-                resInfos.forEach((res: ARTURIResource) => {
-                    this.issues.forEach((issue: Issue) => {
-                        if (issue.getLabels().indexOf(res.getURI()) != -1) {
-                            issue.addResource(res);
-                        }
-                    });
-                });
             }
         );
     }
@@ -125,12 +98,12 @@ export class CollaborationComponent {
         );
     }
 
-    private onResourceClick(resource: ARTURIResource) {
-        this.sharedModals.openResourceView(resource, true);
-    }
-
     private isCollProjManagementAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.COLLABORATION);
+    }
+
+    private onCollaborationSystemStatusChange() {
+        this.csWorking = this.vbCollaboration.isWorking();
     }
 
 }

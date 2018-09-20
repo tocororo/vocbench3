@@ -37,13 +37,15 @@ export class CollaborationProjectModal implements ModalComponent<BSModalContext>
                 this.projects = resp.projects;
             },
             (err: Error) => {
-                this.basicModals.alert("Error", "Cannot retrieve the projects list. Connection to Collaboration System server failed." ,
-                    "error", err.name + " " + err.message).then(
-                    () => {
-                        this.vbCollaboration.setWorking(false);
-                        this.dialog.dismiss();
-                    }
-                );
+                if (err.name.endsWith("ConnectException")) {
+                    this.basicModals.alert("Error", "Cannot retrieve the issues list. " +
+                        "Connection to Collaboration System server failed." , "error", err.name + " " + err.message);
+                } else if (err.name.endsWith("CollaborationBackendException")) {
+                    this.basicModals.alert("Error", "Cannot retrieve the issues list. " +
+                        "Connection to Collaboration System server failed during the Login. Please check the credentials.", "error", err.stack);
+                }
+                this.vbCollaboration.setWorking(false);
+                this.dialog.dismiss();
             }
         );
     }

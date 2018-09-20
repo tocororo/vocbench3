@@ -612,14 +612,12 @@ export class ResourceViewComponent {
                     this.issuesStruct.issues = issues;
                 }
             },
-            err => {
-                if (err.name.endsWith("ConnectException")) {
-                    if (this.collaborationWorking) {
-                        this.basicModals.alert("Collaboration System error", "The Collaboration System seems to be configured "
-                            + "but it's not working (configuration could be not valid or the server may be not reachable), "
-                            + "so it will be disabled.", "error");
-                        this.vbCollaboration.setWorking(false);
-                    }
+            (err: Error) => {
+                if (this.collaborationWorking) {
+                    this.basicModals.alert("Collaboration System error", "The Collaboration System seems to be configured "
+                        + "but it's not working (configuration could be not valid or the server may be not reachable), "
+                        + "so it will be disabled.", "error", err.stack);
+                    this.vbCollaboration.setWorking(false);
                 }
             }
         )
@@ -648,9 +646,10 @@ export class ResourceViewComponent {
                     stResp => {
                         UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                         this.initCollaboration();
-                    }
+                    },
                 );
-            }
+            },
+            () => {}
         )
     }
 
