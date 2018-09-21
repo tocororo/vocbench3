@@ -97,10 +97,12 @@ export class Deserializer {
         }
         var schemesAttr: string = resJson[ResAttribute.SCHEMES];
         if (schemesAttr != undefined) {
-            let splittedSchemes: string[] = schemesAttr.split(",");
             let schemes: ARTURIResource[] = []
-            for (var i = 0; i < splittedSchemes.length; i++) {
-                schemes.push(new ARTURIResource(splittedSchemes[i].trim()));
+            if (schemesAttr != "") {
+                let splittedSchemes: string[] = schemesAttr.split(",");
+                for (var i = 0; i < splittedSchemes.length; i++) {
+                    schemes.push(new ARTURIResource(splittedSchemes[i].trim()));
+                }
             }
             node.setAdditionalProperty(ResAttribute.SCHEMES, schemes);
         }

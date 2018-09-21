@@ -286,32 +286,50 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                 if (isInActiveSchemes) {
                     this.openTreeAt(resource);
                 } else {
-                    let message = "Searched concept '" + resource.getShow() + "' is not reachable in the tree since it belongs to the following";
-                    if (schemes.length > 1) {
-                        message += " schemes. If you want to activate one of these schemes and continue the search, "
-                            + "please select the scheme you want to activate and press OK.";
-                    } else {
-                        message += " scheme. If you want to activate the scheme and continue the search, please select it and press OK.";
-                    }
-                    this.resourceService.getResourcesInfo(schemes).subscribe(
-                        schemes => {
-                            this.basicModals.selectResource("Search", message, schemes, this.rendering).then(
-                                (scheme: ARTURIResource) => {
-                                    this.vbProp.setActiveSchemes(this.workingSchemes.concat(scheme)); //update the active schemes
-                                    /**
-                                     * even if workingSchemes will be updated in onSchemeChanged (once the schemeChangedEvent is emitted in
-                                     * setActiveSchemes()), I update it here so that the child ConceptTreeComponent detect the change
-                                     * of the @Input schemes and in openTreeAt() call getPathFromRoot with the updated schemes
-                                     */
-                                    this.workingSchemes.push(scheme);
-                                    setTimeout(() => {
-                                        this.openTreeAt(resource); //then open the tree on the searched resource
-                                    });
-                                },
-                                () => {}
-                            );
+                    if (schemes.length == 0) { //searched concept doesn't belong to any scheme => ask switch to no-scheme mode
+                        this.basicModals.confirm("Search", "Searched concept '" + resource.getShow() + "' does not belong to any scheme. Do you want to switch to no-scheme mode?", "warning").then(
+                            confirm => {
+                                this.vbProp.setActiveSchemes([]); //update the active schemes
+                                /**
+                                 * even if workingSchemes will be updated in onSchemeChanged (once the schemeChangedEvent is emitted in
+                                 * setActiveSchemes()), I update it here so that the child ConceptTreeComponent detects the change
+                                 * of the @Input schemes and in openTreeAt() call getPathFromRoot with the updated schemes
+                                 */
+                                this.workingSchemes = [];
+                                setTimeout(() => {
+                                    this.openTreeAt(resource); //then open the tree on the searched resource
+                                });
+                            },
+                            cancel => {}
+                        )
+                    } else { //searched concept belongs to at least one scheme => ask to activate one of them
+                        let message = "Searched concept '" + resource.getShow() + "' is not reachable in the tree since it belongs to the following";
+                        if (schemes.length > 1) {
+                            message += " schemes. If you want to activate one of these schemes and continue the search, "
+                                + "please select the scheme you want to activate and press OK.";
+                        } else {
+                            message += " scheme. If you want to activate the scheme and continue the search, please select it and press OK.";
                         }
-                    );
+                        this.resourceService.getResourcesInfo(schemes).subscribe(
+                            schemes => {
+                                this.basicModals.selectResource("Search", message, schemes, this.rendering).then(
+                                    (scheme: ARTURIResource) => {
+                                        this.vbProp.setActiveSchemes(this.workingSchemes.concat(scheme)); //update the active schemes
+                                        /**
+                                         * even if workingSchemes will be updated in onSchemeChanged (once the schemeChangedEvent is emitted in
+                                         * setActiveSchemes()), I update it here so that the child ConceptTreeComponent detects the change
+                                         * of the @Input schemes and in openTreeAt() call getPathFromRoot with the updated schemes
+                                         */
+                                        this.workingSchemes.push(scheme);
+                                        setTimeout(() => {
+                                            this.openTreeAt(resource); //then open the tree on the searched resource
+                                        });
+                                    },
+                                    () => {}
+                                );
+                            }
+                        );
+                    }
                 }
             }
         );
