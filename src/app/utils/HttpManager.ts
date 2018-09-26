@@ -439,7 +439,7 @@ export class HttpManager {
                 }
             );
         } else if (err.status == 500 || err.status == 404) { //in case of server error (e.g. out of memory)
-            let errorMsg = err.statusText != null ? err.statusText : "Unknown response from the server";
+            let errorMsg = (err.statusText != null ? err.statusText : "Unknown response from the server") + " (status: " + err.status + ")";
             error.name = "ServerError";
             error.message = errorMsg;
             this.basicModals.alert("Error", errorMsg, "error", err._body);
