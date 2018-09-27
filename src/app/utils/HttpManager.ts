@@ -351,18 +351,7 @@ export class HttpManager {
             } else if (paramValue instanceof ARTURIResource || paramValue instanceof ARTBNode || paramValue instanceof ARTLiteral) {
                 strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent((<ARTNode>paramValue).toNT()));
             } else if (paramValue instanceof CustomFormValue) {
-                let userPromptMap: { [key: string]: string } = paramValue.getUserPromptMap();
-                let encodedUserPromptMap: {[key: string]: string} = {};
-                Object.keys(userPromptMap).forEach((key: string) => {
-                    let value = userPromptMap[key];
-                    if (value != null) {
-                        encodedUserPromptMap[key] = encodeURIComponent(value);
-                    } else {
-                        encodedUserPromptMap[key] = value;
-                    }
-                });
-                let encodedCFValue: CustomFormValue = new CustomFormValue(paramValue.getCustomFormId(), encodedUserPromptMap);
-                strBuilder.push(encodeURIComponent(paramName) + "=" + JSON.stringify(encodedCFValue));
+                strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent(JSON.stringify(paramValue)));
             } else {
                 strBuilder.push(encodeURIComponent(paramName) + "=" + encodeURIComponent(paramValue));
             }
