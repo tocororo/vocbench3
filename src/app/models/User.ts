@@ -17,6 +17,7 @@ export class User {
     private languageProficiencies: string[];
     private status: UserStatusEnum;
     private admin: boolean = false;
+    private online: boolean = false;
 
     constructor(email: string, givenName: string, familyName: string, iri: string) {
         this.email = email;
@@ -137,6 +138,13 @@ export class User {
         return this.admin;
     }
 
+    setOnline(online: boolean) {
+        this.online = online;
+    }
+
+    isOnline(): boolean {
+        return this.online;
+    }
 }
 
 export class ProjectUserBinding {

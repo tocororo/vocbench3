@@ -299,6 +299,7 @@ export class Deserializer {
         user.setRegistrationDate(userJson.registrationDate);
         user.setStatus(userJson.status);
         user.setAdmin(userJson.admin);
+        user.setOnline(userJson.online);
         if (userJson.birthday != undefined) {
             user.setBirthday(userJson.birthday);
         }

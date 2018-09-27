@@ -56,6 +56,23 @@ export class UserServices {
     }
 
     /**
+     * Lists all the online users
+     */
+    listOnlineUsers(): Observable<User[]> {
+        console.log("[UserServices] listOnlineUsers");
+        var params: any = {}
+        return this.httpMgr.doGet(this.serviceName, "listOnlineUsers", params).map(
+            stResp => {
+                let users: User[] = Deserializer.createUsersArray(stResp);
+                users.sort((u1: User, u2: User) => {
+                    return u1.getGivenName().localeCompare(u2.getGivenName());
+                });
+                return users;
+            }
+        );
+    }
+
+    /**
      * Returns the capabilities of the current logged user in according the roles he has in the current project.
      * Note: this is used just in projectListModal and not in projectComponent,
      * since the latter is accessed only by the admin that doesn't require authorization check and has no capabilities
