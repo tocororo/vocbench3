@@ -131,13 +131,14 @@ export class RdfResourceComponent {
 			if (urlArray.length > 0) {
 				this.literalWithLink = true;
 				this.splittedLiteral = [];
-				let idx: number = 0;
 				for (var i = 0; i < urlArray.length; i++) {
+					let idx: number = 0;
 					let urlStartIdx: number = value.indexOf(urlArray[i]);
 					let urlEndIdx: number = value.indexOf(urlArray[i]) + urlArray[i].length;
 					this.splittedLiteral.push(value.substring(idx, urlStartIdx)); //what there is before url
 					this.splittedLiteral.push(value.substring(urlStartIdx, urlEndIdx)); //url
 					idx = urlEndIdx;
+					value = value.substring(idx);
 					//what there is between url and the end of the string
 					if (urlArray[i+1] == null && idx != value.length) { //if there is no further links but there is text after last url
 						this.splittedLiteral.push(value.substring(idx, value.length));
