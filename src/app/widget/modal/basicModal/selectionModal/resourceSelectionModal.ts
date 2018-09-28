@@ -29,10 +29,12 @@ export class ResourceSelectionModalData extends BSModalContext {
 export class ResourceSelectionModal implements ModalComponent<ResourceSelectionModalData> {
     context: ResourceSelectionModalData;
     
+    private rendering: boolean;
     private resourceSelected: ARTNode;
     
     constructor(public dialog: DialogRef<ResourceSelectionModalData>) {
         this.context = dialog.context;
+        this.rendering = this.context.rendering;
     }
     
     private isResourceSelected(resource: ARTNode) {
