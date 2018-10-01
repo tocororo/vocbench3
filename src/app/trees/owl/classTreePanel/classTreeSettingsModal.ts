@@ -123,13 +123,6 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
                     filterMapEntry.subClasses = [];
     
                     classes.forEach(c => {
-                        let graphs: ARTURIResource[] = c.getGraphs();
-                        for (var i = 0; i < graphs.length; i++) {
-                            if (graphs[i].getURI() == projBaseURI) {
-                                return; //subclass not defined by a vocabulary, but defined in the main graph, so cannot be filtered
-                            }
-                        }
-                        
                         if (filteredSubClssPref != null) { //exists a subclasses filter for the selected class
                             filterMapEntry.subClasses.push({ 
                                 checked: filteredSubClssPref.indexOf(c.getURI()) == -1, //subClass not in the filter, so checked (visible)
@@ -137,7 +130,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
                                 resource: c 
                             });
                         } else { //doesn't exist a subclasses filter for the selected class => every subclasses is checked
-                        filterMapEntry.subClasses.push({ checked: true, disabled: c.getURI() == OWL.thing.getURI(), resource: c });
+                            filterMapEntry.subClasses.push({ checked: true, disabled: c.getURI() == OWL.thing.getURI(), resource: c });
                         }
                     });
                 }
