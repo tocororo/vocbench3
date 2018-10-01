@@ -89,13 +89,21 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
                 }
                 this.multiple = header.isMultiple;
 
+                //init selectedRangeType
+                this.rangeTypes.forEach((t: HeaderRangeType) => {
+                    if (t.type+"" == header.range.type+"") {
+                        this.selectedRangeType = t;
+                    }
+                });
+
+                this.rangeClasses = [this.nullRangeClass];
+                this.selectedRangeClass = this.nullRangeClass;
+                if (header.range.resource != null) {
+                    this.rangeClasses.push(header.range.resource);
+                    this.selectedRangeClass = this.rangeClasses[this.rangeClasses.length-1];
+                }
+
                 if (header.range.type == RDFTypesEnum.literal) {
-                    //init selectedRangeType
-                    this.rangeTypes.forEach((t: HeaderRangeType) => {
-                        if (t.type+"" == header.range.type+"") {
-                            this.selectedRangeType = t;
-                        }
-                    });
                     //try to init datatype
                     let rngDatatype: ARTURIResource = header.range.resource; //in case of range type 'literal', the cls tells the datatype
                     if (rngDatatype != null) {
@@ -103,7 +111,6 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
                             () => {
                                 this.datatypeList.forEach(dt => {
                                     if (dt.getURI() == rngDatatype.getURI()) {
-                                        console.log("dt.getURI() == rngDatatype.getURI()", dt.getURI(), rngDatatype.getURI());
                                         this.datatype = dt;
                                     }
                                 })
@@ -147,16 +154,18 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         //update range type, class, ...
         this.propService.getRange(this.headerResource).subscribe(
             range => {
-                this.rangeTypes.forEach((t: HeaderRangeType) => {
-                    if (t.type+"" == range.ranges.type+"") {
-                        this.selectedRangeType = t;
-                    }
-                });
+                if (range.ranges.type != RDFTypesEnum.undetermined+"") {
+                    this.rangeTypes.forEach((t: HeaderRangeType) => {
+                        if (t.type+"" == range.ranges.type+"") {
+                            this.selectedRangeType = t;
+                        }
+                    });
+                }
                 this.rangeTypeChangeable = range.ranges.type == RangeType.undetermined;
-                this.rangeClasses = [this.nullRangeClass];
-                this.selectedRangeClass = this.nullRangeClass;
                 //if a collection of admitted range classes is provided
                 if (range.ranges.rangeCollection != null) {
+                    this.rangeClasses = [this.nullRangeClass];
+                    this.selectedRangeClass = this.nullRangeClass;
                     this.rangeClasses.push(...range.ranges.rangeCollection.resources);
                     this.rangeClassChangeable = ResourceUtils.containsNode(this.rangeClasses, RDFS.resource);
                 } else {
