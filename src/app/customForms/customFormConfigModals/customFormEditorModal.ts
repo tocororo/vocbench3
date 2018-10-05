@@ -2,7 +2,7 @@ import { Component, ViewChild } from "@angular/core";
 import { DialogRef, Modal, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from "../../models/ARTResources";
-import { CustomForm, CustomFormType } from "../../models/CustomForms";
+import { CustomForm, CustomFormType, EditorMode } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { CodemirrorComponent } from "../../widget/codemirror/codemirrorComponent";
@@ -31,6 +31,10 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
 
     @ViewChild(CodemirrorComponent) viewChildCodemirror: CodemirrorComponent;
 
+    private mode: EditorMode;
+
+    private namespaceLocked: boolean = true;
+
     private cfPrefix: string = CustomForm.PREFIX;
     private cfId: string;
     private cfShortId: string;
@@ -53,9 +57,11 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
 
     ngOnInit() {
         if (this.context.id != undefined) { //CRE id provided, so the modal works in edit mode
+            this.mode = EditorMode.edit;
             this.cfService.getCustomForm(this.context.id).subscribe(
                 cf => {
                     this.cfId = cf.getId();
+                    this.cfPrefix = this.cfId.substring(0, this.cfId.lastIndexOf(".") + 1);
                     this.cfShortId = this.cfId.replace(this.cfPrefix, "");
                     this.name = cf.getName();
                     this.type = cf.getType();
@@ -70,6 +76,8 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
                 },
                 err => { this.dialog.dismiss() }
             )
+        } else {
+            this.mode = EditorMode.create;
         }
     }
 
@@ -98,6 +106,27 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
                 this.viewChildCodemirror.insertAtCursor(converter.projectionOperator);
             }
         )
+    }
+
+    //========= ID Namespace-lock HANDLER =========
+
+    private unlockNamespace() {
+        this.namespaceLocked = !this.namespaceLocked;
+        if (this.namespaceLocked) { //from free id to locked namespace
+            this.fromIdToPrefixAndShortId();
+        } else { //from locked namespace to free id
+            this.cfId = this.cfPrefix + (this.cfShortId != null ? this.cfShortId : "");
+        }
+    }
+
+    private fromIdToPrefixAndShortId() {
+        let separatorIdx: number = this.cfId.lastIndexOf(".");
+        if (separatorIdx > 0) {
+            this.cfPrefix = this.cfId.substring(0, separatorIdx + 1);
+            this.cfShortId = this.cfId.substring(separatorIdx + 1);
+        } else {  //no . in the id => restore the original id
+            this.cfShortId = null;
+        }
     }
 
     //========= PROPERTY CHAIN HANDLERS ============
@@ -221,7 +250,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
                     this.description = "";
                 }
                 //I don't distinguish between node and graph since if type is node showPropertyChain is ignored server-side
-                if (this.cfId != null) { //edit mode
+                if (this.mode == EditorMode.edit) {
                     if (this.type == "node") {
                         this.cfService.updateCustomForm(this.cfId, this.name, this.description, this.ref).subscribe(
                             stResp => {
@@ -238,8 +267,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
                         );
                     }
                 } else { //create mode
-                    this.cfService.createCustomForm(
-                        this.type, this.cfPrefix + this.cfShortId, this.name, this.description, this.ref, this.showPropertyChain).subscribe(
+                    this.cfService.createCustomForm(this.type, this.cfPrefix + this.cfShortId, this.name, this.description, this.ref, this.showPropertyChain).subscribe(
                         stResp => {
                             event.stopPropagation();
                             this.dialog.close();

@@ -255,3 +255,8 @@ export enum CustomFormLevel {
     system = "system",
     project = "project"
 }
+
+export enum EditorMode {
+    create = "create",
+    edit = "edit"
+}

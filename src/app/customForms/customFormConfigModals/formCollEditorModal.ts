@@ -3,7 +3,7 @@ import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { Observable } from 'rxjs/Observable';
 import { CustomFormsServices } from "../../services/customFormsServices";
-import { FormCollection, CustomForm, CustomFormLevel } from "../../models/CustomForms";
+import { FormCollection, CustomForm, CustomFormLevel, EditorMode } from "../../models/CustomForms";
 import { ARTURIResource, ResourceUtils } from "../../models/ARTResources";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 
@@ -25,6 +25,10 @@ export class FormCollEditorModalData extends BSModalContext {
 })
 export class FormCollEditorModal implements ModalComponent<FormCollEditorModalData> {
     context: FormCollEditorModalData;
+
+    private mode: EditorMode;
+
+    private namespaceLocked: boolean = true;
 
     private fcPrefix: string = FormCollection.PREFIX;
     private fcId: string;
@@ -54,9 +58,11 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
 
     ngOnInit() {
         if (this.context.id != undefined) { //CR id provided, so the modal works in edit mode
+            this.mode = EditorMode.edit;
             this.cfService.getFormCollection(this.context.id).subscribe(
                 fc => {
                     this.fcId = fc.getId();
+                    this.fcPrefix = this.fcId.substring(0, this.fcId.lastIndexOf(".") + 1);
                     this.fcShortId = this.fcId.replace(this.fcPrefix, "");
                     this.forms = fc.getForms();
                     // this.formsPristine.push(...this.forms);
@@ -87,6 +93,7 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
                 err => { this.dialog.dismiss() }
             );
         } else {
+            this.mode = EditorMode.create;
             this.cfService.getAllCustomForms().subscribe(
                 cForms => {
                     this.formsAvailable = cForms;
@@ -95,6 +102,29 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
             );
         }
     }
+
+    //========= ID Namespace-lock HANDLER =========
+    
+    private unlockNamespace() {
+        this.namespaceLocked = !this.namespaceLocked;
+        if (this.namespaceLocked) { //from free id to locked namespace
+            this.fromIdToPrefixAndShortId();
+        } else { //from locked namespace to free id
+            this.fcId = this.fcPrefix + (this.fcShortId != null ? this.fcShortId : "");
+        }
+    }
+
+    private fromIdToPrefixAndShortId() {
+        let separatorIdx: number = this.fcId.lastIndexOf(".");
+        if (separatorIdx > 0) {
+            this.fcPrefix = this.fcId.substring(0, separatorIdx + 1);
+            this.fcShortId = this.fcId.substring(separatorIdx + 1);
+        } else {  //no . in the id => restore the original id
+            this.fcShortId = null;
+        }
+    }
+
+    //=========================================
 
     private selectForm(form: CustomForm) {
         if (this.context.readOnly) {
@@ -215,7 +245,7 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
         }
         let formIds: string[] = [];
         this.forms.forEach(f => formIds.push(f.getId()));
-        if (this.fcId != null) { //edit mode
+        if (this.mode == EditorMode.edit) {
             this.cfService.updateFromCollection(this.fcId, formIds, this.suggestions).subscribe(
                 stResp => {
                     event.stopPropagation();

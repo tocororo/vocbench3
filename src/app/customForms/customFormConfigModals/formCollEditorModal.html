@@ -5,10 +5,23 @@
     
     <div class="hbox" style="align-items: center; flex: initial;">
         <label style="white-space: nowrap; margin: 0px 3px;">Form Collection ID:</label>
-        <div class="hbox">
-            <div class="input-group input-group-xs">
-                <span class="input-group-addon" style="padding-right: 2px">{{fcPrefix}}</span>
-                <input type="text" class="form-control" [(ngModel)]="fcShortId" [disabled]="fcId">
+        <div class="input-group input-group-xs" style="flex: 1">
+            <ng-template [ngIf]="namespaceLocked">
+                <span class="input-group-addon" style="padding-right: 5px;">
+                    {{fcPrefix}}
+                </span>
+                <input type="text" class="form-control" [(ngModel)]="fcShortId" [disabled]="mode == 'edit'" sanitized>
+            </ng-template>
+            
+            <ng-template [ngIf]="!namespaceLocked">
+                <input type="text" class="form-control" [(ngModel)]="fcId" [disabled]="mode == 'edit'" sanitized>
+            </ng-template>
+            
+            <div class="input-group-btn">
+                <button class="btn btn-default" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"
+                    title="Lock/Unlock namespace" [ngClass]="{active: namespaceLocked}" [disabled]="mode == 'edit'">
+                    <span class="glyphicon glyphicon-lock" style="font-size: 10px;"></span>
+                </button>
             </div>
         </div>
     </div>
