@@ -335,6 +335,8 @@ export class VBProperties {
             stResp => {
                 //experimental_features_enabled
                 this.experimentalFeaturesEnabled = stResp[Properties.setting_experimental_features_enabled];
+                //show_flags
+                this.showFlags = stResp[Properties.pref_show_flags];
                 //languages
                 try {
                     var systemLanguages = <Language[]>JSON.parse(stResp[Properties.setting_languages]);
