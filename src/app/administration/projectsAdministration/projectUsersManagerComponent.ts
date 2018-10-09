@@ -128,7 +128,7 @@ export class ProjectUsersManagerComponent {
     }
 
     private removeUserFromProject() {
-        this.adminService.removeAllRolesFromUser(this.project.getName(), this.selectedUser.getEmail()).subscribe(
+        this.adminService.removeUserFromProject(this.project.getName(), this.selectedUser.getEmail()).subscribe(
             stResp => {
                 for (var i = 0; i < this.usersBound.length; i++) {
                     if (this.usersBound[i].getEmail() == this.selectedUser.getEmail()) {

@@ -132,18 +132,18 @@ export class AdministrationServices {
     }
 
     /**
-     * Removes a role to a user in a project
+     * Removes user from a project
      * @param projectName
      * @param email
      * @param role
      */
-    removeAllRolesFromUser(projectName: string, email: string) {
-        console.log("[AdministrationServices] removeAllRolesFromUser");
+    removeUserFromProject(projectName: string, email: string) {
+        console.log("[AdministrationServices] removeUserFromProject");
         var params: any = {
             projectName: projectName,
             email: email
         };
-        return this.httpMgr.doGet(this.serviceName, "removeAllRolesFromUser", params);
+        return this.httpMgr.doGet(this.serviceName, "removeUserFromProject", params);
     }
 
     /**
