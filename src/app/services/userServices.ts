@@ -99,7 +99,11 @@ export class UserServices {
         }
         return this.httpMgr.doGet(this.serviceName, "listUsersBoundToProject", params).map(
             stResp => {
-                return Deserializer.createUsersArray(stResp);
+                let users: User[] = Deserializer.createUsersArray(stResp);
+                users.sort((u1: User, u2: User) => {
+                    return u1.getGivenName().localeCompare(u2.getGivenName());
+                });
+                return users;
             }
         );
     }
