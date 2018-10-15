@@ -5,6 +5,9 @@
             <div class="hbox" style="flex: initial; align-items: center;">
                 <label style="white-space: nowrap; margin-right: 4px;">Spreadsheet file:</label>
                 <file-picker (fileChanged)="fileChangeEvent($event)" [size]="'xs'" [accept]="'.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'"></file-picker>
+                <button class="btn btn-default btn-xs" style="margin-left: 4px;" (click)="loadSpreadsheet()" [disabled]="!spreadsheetFile">
+                    <span class="glyphicon glyphicon-refresh" title="Reload"></span>
+                </button>
             </div>
         </div>
     </div>

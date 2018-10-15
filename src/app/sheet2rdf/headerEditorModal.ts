@@ -31,8 +31,6 @@ export class HeaderEditorModalData extends BSModalContext {
 export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> {
     context: HeaderEditorModalData;
 
-    // private header: HeaderStruct;
-
     private headerName: string;
     private headerId: string;
     private headerResource: ARTURIResource;
@@ -49,7 +47,8 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
 
     private rangeTypes: HeaderRangeType[] = [
         { type: RDFTypesEnum.resource, show: "Resource" }, 
-        { type: RDFTypesEnum.literal, show: "Literal" },
+        { type: RDFTypesEnum.plainLiteral, show: "Plain Literal" },
+        { type: RDFTypesEnum.typedLiteral, show: "Typed Literal" },
         { type: RDFTypesEnum.undetermined, show: "-----" }
     ];
     private selectedRangeType: HeaderRangeType;
@@ -63,7 +62,6 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         //"true" only if the property assigned to the header doesn't have rangeCollection (so leave the choice to the user), or it contains rdfs:Resource
     private nullRangeClass: ARTURIResource = new ARTURIResource("-----"); //fake IRI that stands for "no range class"
 
-    private literalDetail: "Lang" | "Datatype";
     private language: string;
     private datatype: ARTURIResource;
     private datatypeList: ARTURIResource[] = [];
@@ -103,25 +101,19 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
                     this.selectedRangeClass = this.rangeClasses[this.rangeClasses.length-1];
                 }
 
-                if (header.range.type == RDFTypesEnum.literal) {
+                if (header.range.type == RDFTypesEnum.typedLiteral) {
                     //try to init datatype
                     let rngDatatype: ARTURIResource = header.range.resource; //in case of range type 'literal', the cls tells the datatype
+                    console.log("rngDatatype", rngDatatype);
                     if (rngDatatype != null) {
-                        this.initDatatypeList().subscribe(
-                            () => {
-                                this.datatypeList.forEach(dt => {
-                                    if (dt.getURI() == rngDatatype.getURI()) {
-                                        this.datatype = dt;
-                                    }
-                                })
-                            }
-                        );
-                        this.literalDetail = "Datatype";
+                        this.datatype = rngDatatype;
+                        this.initDatatypeList();
                     }
+                }
+                if (header.range.type == RDFTypesEnum.plainLiteral) {
                     //try to init language
                     if (header.range.lang != null) {
                         this.language = header.range.lang;
-                        this.literalDetail = "Lang"
                     }
                 }
                 
@@ -181,7 +173,6 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
                             this.selectedRangeType = t;
                         }
                     });
-                    this.rangeTypeChangeable = rngType == RDFTypesEnum.undetermined;
 
                     if (rngType == RDFTypesEnum.resource) {
                         //try to init range class
@@ -243,7 +234,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
             capabilities.push(RDFCapabilityType.uri);
         } else {
             if (this.selectedRangeType != null) {
-                if (this.selectedRangeType.type == RDFTypesEnum.literal) {
+                if (this.selectedRangeType.type == RDFTypesEnum.typedLiteral || this.selectedRangeType.type == RDFTypesEnum.plainLiteral) {
                     capabilities.push(RDFCapabilityType.literal);
                 } else if (this.selectedRangeType.type == RDFTypesEnum.resource) {
                     capabilities.push(RDFCapabilityType.uri)
@@ -271,8 +262,8 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         return this.converterUri == "http://art.uniroma2.it/coda/contracts/randIdGen";
     }
 
-    private onLiteralDetailChange() {
-        if (this.literalDetail == "Datatype") {
+    private onRangeTypeChange() {
+        if (this.selectedRangeType.type == RDFTypesEnum.typedLiteral) {
             if (this.datatypeList.length == 0) { //if datatype list is empty => initialize it
                 this.initDatatypeList().subscribe();
             }
@@ -287,6 +278,13 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
                         return dt1.getShow().localeCompare(dt2.getShow());
                     });
                     this.datatypeList = datatypes;
+
+                    console.log("this.datatype", this.datatype);
+                    this.datatypeList.forEach(dt => {
+                        if (dt.getURI() == this.datatype.getURI()) {
+                            this.datatype = dt;
+                        }
+                    });
                 }
             );
         }
@@ -319,14 +317,23 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
             }
         }
 
-        let langPar: string = null;
-        let datatypePar: ARTURIResource = null;
-        if (rangeTypePar == RDFTypesEnum.literal) {
-            if (this.literalDetail == "Datatype") {
-                datatypePar = this.datatype;
-            } else if (this.literalDetail == "Lang") {
-                langPar = this.language;
-            }
+        let langPar: string = this.language;
+        let datatypePar: ARTURIResource = this.datatype;
+        /**
+         * According to the literal range type, remove the "other" parameter:
+         * - if typedLiteral avoid to pass the language
+         * - if plain avoid to pass the datatype.
+         * This is necessary in order to "disambiguate" the serialization of literal converter server-side.
+         * If both lang and datatype are passed (language taken from header, datatype assigned through the editor), 
+         * the server don't know which serialization adopt between literal@xy or literal^^<dt>
+         * 
+         * In case the range type is uri, leave them both since in some scenario they could be useful
+         * (e.g. for XLabel, the range type is uri, but the language is still necessary)
+         */
+        if (rangeTypePar == RDFTypesEnum.typedLiteral) {
+            langPar = null;
+        } else if (rangeTypePar == RDFTypesEnum.plainLiteral) {
+            datatypePar = null;
         }
 
         let xRolePar: XRole = null;
