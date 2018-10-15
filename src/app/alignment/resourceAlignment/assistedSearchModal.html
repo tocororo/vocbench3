@@ -3,7 +3,8 @@
         <div class="hbox" style="align-items: center">
             <h3 class="modal-title" style="flex: 1">Assisted search</h3>
             <div class="btn-group btn-group-sm pull-right" style="margin-bottom: 5px; align-self: flex-end;">
-                <button *ngFor="let p of positions" class="btn btn-default" [ngClass]="{ active : targetPosition == p }" (click)="changeTargetPosition(p)">{{p}}</button>
+                <button class="btn btn-default" [ngClass]="{ active : targetPosition == p }" (click)="changeTargetPosition('local')">Local</button>
+                <button class="btn btn-default" [ngClass]="{ active : targetPosition == p }" (click)="changeTargetPosition('remote')" [disabled]="!isRemoteAuthorized()">Remote</button>
             </div>
         </div>
     </div>

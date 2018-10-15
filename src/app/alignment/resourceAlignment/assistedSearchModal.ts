@@ -16,6 +16,7 @@ import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AssistedSearchResultModal, AssistedSearchResultModalData } from "./assistedSearchResultModal";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 
 export class AssistedSearchModalData extends BSModalContext {
     constructor(public resource: ARTURIResource) {
@@ -34,8 +35,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
 
     private sourceProject: Project;
 
-    private positions: ResourcePositionEnum[] = [ResourcePositionEnum.local, ResourcePositionEnum.remote];
-    private targetPosition: ResourcePositionEnum = this.positions[0];
+    private targetPosition: ResourcePositionEnum = ResourcePositionEnum.local;
 
     private projectList: Project[] = [];
     private selectedProject: Project;
@@ -80,12 +80,14 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
     }
 
     private initRemoteDatasets() {
-        this.metadataRegistryService.getCatalogRecords().subscribe(
-            catalogs => {
-                this.remoteDatasets = [];
-                catalogs.forEach(c => this.remoteDatasets.push(c.abstractDataset));
-            }
-        );
+        if (this.isRemoteAuthorized()) {
+            this.metadataRegistryService.getCatalogRecords().subscribe(
+                catalogs => {
+                    this.remoteDatasets = [];
+                    catalogs.forEach(c => this.remoteDatasets.push(c.abstractDataset));
+                }
+            );
+        }
     }
 
     private changeTargetPosition(position: ResourcePositionEnum) {
@@ -283,6 +285,13 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(AssistedSearchResultModal, overlayConfig).result;
+    }
+
+    /**
+     * Remote Assisted-search requires to initialize the catalog records, so it needs that the user has the required capabilities
+     */
+    private isRemoteAuthorized() {
+        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_REGISTRY_READ);
     }
 
     ok(event: Event) {
