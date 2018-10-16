@@ -106,7 +106,7 @@ export class EditableResourceComponent {
 			(!this.isInferred && !inMainGraph) || //neither in the main graph nor in inference graph
 			// (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT)) || 
 			this.readonly || 
-			(this.resource.isResource() && ResourceUtils.isReourceInStaging(<ARTResource>this.resource))
+			ResourceUtils.isReourceInStaging(this.resource)
 		);
 	}
 

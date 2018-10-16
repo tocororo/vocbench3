@@ -583,7 +583,7 @@ export class ResourceUtils {
      * Returns true if the resource is in the staging (add or remove) graph, false otherwise
      * @param resource 
      */
-    static isReourceInStaging(resource: ARTResource): boolean {
+    static isReourceInStaging(resource: ARTNode): boolean {
         let graphs: ARTURIResource[] = resource.getGraphs();
         for (var i = 0; i < graphs.length; i++) {
             //I can't figure out why cannot use SemanticTurkey.stagingAddGraph here (error "cannot read 'cls' of undefined")
