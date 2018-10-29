@@ -55,6 +55,7 @@ import { RemoteAccessConfigModal } from "../widget/modal/sharedModal/remoteAcces
 import { RemoteRepoSelectionModal } from "../widget/modal/sharedModal/remoteRepoSelectionModal/remoteRepoSelectionModal";
 import { ResourcePickerModal } from '../widget/modal/sharedModal/resourcePickerModal/resourcePickerModal';
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { UserSelectionModal } from '../widget/modal/sharedModal/userSelectionModal/userSelectionModal';
 import { CustomFormModule } from "./customFormModule";
 import { SharedModule } from "./sharedModule";
 import { TreeAndListModule } from "./treeAndListModule";
@@ -71,7 +72,7 @@ import { UserModule } from "./userModule";
         PropertyTreeModal, SchemeListModal, CollectionTreeModal, LexicalEntryListModal, LexiconListModal,
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal,
         ResourceAlignmentModal, AssistedSearchModal, AssistedSearchResultModal,
-        RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
+        RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal, UserSelectionModal,
         ConverterPickerModal, SignaturePickerModal, StoreConfigurationModal, LoadConfigurationModal, ResourcePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal,
         EditableNsInput, SchemeSelectionComponent
@@ -97,7 +98,7 @@ import { UserModule } from "./userModule";
         PropertyTreeModal, SchemeListModal, CollectionTreeModal, LexicalEntryListModal, LexiconListModal,
         ValidationSettingsModal, ValidationReportModal, MappingPropertySelectionModal, 
         ResourceAlignmentModal, AssistedSearchModal, AssistedSearchResultModal,
-        RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal,
+        RemoteAccessConfigModal, RemoteAccessConfigEditorModal, RemoteRepoSelectionModal, LanguageSelectorModal, UserSelectionModal,
         ConverterPickerModal, SignaturePickerModal, StoreConfigurationModal, LoadConfigurationModal, ResourcePickerModal,
         PluginConfigModal, FilterGraphsModal, DumpCreationModal
     ]

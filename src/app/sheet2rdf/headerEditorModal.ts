@@ -104,7 +104,6 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
                 if (header.range.type == RDFTypesEnum.typedLiteral) {
                     //try to init datatype
                     let rngDatatype: ARTURIResource = header.range.resource; //in case of range type 'literal', the cls tells the datatype
-                    console.log("rngDatatype", rngDatatype);
                     if (rngDatatype != null) {
                         this.datatype = rngDatatype;
                         this.initDatatypeList();
@@ -279,7 +278,6 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
                     });
                     this.datatypeList = datatypes;
 
-                    console.log("this.datatype", this.datatype);
                     this.datatypeList.forEach(dt => {
                         if (dt.getURI() == this.datatype.getURI()) {
                             this.datatype = dt;

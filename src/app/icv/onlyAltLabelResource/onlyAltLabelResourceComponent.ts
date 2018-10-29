@@ -32,7 +32,6 @@ export class OnlyAltLabelResourceComponent extends AbstractIcvComponent {
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
         this.icvService.listResourcesWithAltNoPrefLabel(this.rolesToCheck).subscribe(
             resources => {
-                console.log("resources");
                 UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"));
                 this.brokenRecordList = [];
                 resources.forEach(r => {

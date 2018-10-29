@@ -38,7 +38,6 @@ export class ConflictualLabelComponent extends AbstractIcvComponent {
                     //looks for the record with the same label
                     let sameLabelRecord: { resources: ARTResource[], label: ARTLiteral|ARTResource };
                     for (var i = 0; i < this.brokenRecordList.length; i++) {
-                        console.log("comparing labels", this.brokenRecordList[i].label.getShow(), labelRes.getShow());
                         if (this.brokenRecordList[i].label.getShow() == labelRes.getShow()) {
                             sameLabelRecord = this.brokenRecordList[i];
                             break;

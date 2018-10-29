@@ -1,13 +1,12 @@
 import { Component } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ARTResource, ARTURIResource, ResourceUtils } from "../models/ARTResources";
+import { CommitInfo, SortingDirection } from "../models/History";
+import { User } from "../models/User";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { CommitDeltaModal, CommitDeltaModalData } from "./commitDeltaModal";
 import { OperationParamsModal, OperationParamsModalData } from "./operationParamsModal";
-import { OperationSelectModal } from "./operationSelectModal";
-import { HistoryServices } from "../services/historyServices";
-import { CommitInfo, SortingDirection } from "../models/History";
-import { ARTURIResource, ARTResource, ResourceUtils } from "../models/ARTResources";
-import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
 /**
  * This abstract class is used to keep the attributes and mehtods that HistoryComponent and ValidationComponent have in common
@@ -28,6 +27,8 @@ export abstract class AbstractHistValidComponent {
     showFilterBox: boolean = false;
     //operation
     operations: ARTURIResource[] = [];
+    //performers
+    performers: User[] = [];
     //time
     fromTime: any;
     toTime: any;
@@ -95,8 +96,9 @@ export abstract class AbstractHistValidComponent {
         this.showFilterBox = !this.showFilterBox;
     }
 
-    onFilterApplied(filters: { operations: ARTURIResource[], fromTime: string, toTime: string }) {
+    onFilterApplied(filters: { operations: ARTURIResource[], performers: User[], fromTime: string, toTime: string }) {
         this.operations = filters.operations;
+        this.performers = filters.performers;
         this.fromTime = filters.fromTime;
         this.toTime = filters.toTime;
         this.init();
@@ -116,6 +118,17 @@ export abstract class AbstractHistValidComponent {
         } else {
             return new Date(this.toTime).toISOString();
         }
+    }
+
+    getPerformersIRI(): ARTURIResource[] {
+        let performersIRI: ARTURIResource[];
+        if (this.performers.length > 0) {
+            performersIRI = [];
+            this.performers.forEach((p: User) => {
+                performersIRI.push(new ARTURIResource(p.getIri()));
+            })
+        }
+        return performersIRI;
     }
 
     //Utility

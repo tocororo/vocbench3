@@ -2,8 +2,8 @@ import { Component } from "@angular/core";
 import { Modal } from 'ngx-modialog/plugins/bootstrap';
 import { HistoryServices } from "../services/historyServices";
 import { UIUtils } from "../utils/UIUtils";
-import { AbstractHistValidComponent } from "./abstractHistValidComponent";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { AbstractHistValidComponent } from "./abstractHistValidComponent";
 
 @Component({
     selector: "history-component",
@@ -22,7 +22,7 @@ export class HistoryComponent extends AbstractHistValidComponent {
     init() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.commits = [];
-        this.historyService.getCommitSummary(this.operations, this.getFormattedFromTime(), this.getFormattedToTime(), this.limit).subscribe(
+        this.historyService.getCommitSummary(this.operations, this.getPerformersIRI(), null, this.getFormattedFromTime(), this.getFormattedToTime(), this.limit).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.pageCount = stResp.pageCount;
@@ -36,7 +36,7 @@ export class HistoryComponent extends AbstractHistValidComponent {
 
     listCommits() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.historyService.getCommits(this.tipRevisionNumber, this.operations, this.getFormattedFromTime(), this.getFormattedToTime(),
+        this.historyService.getCommits(this.tipRevisionNumber, this.operations, this.getPerformersIRI(), null, this.getFormattedFromTime(), this.getFormattedToTime(),
             this.operationSorting, this.timeSorting, this.page, this.limit).subscribe(
             commits => {
                 this.commits = commits;

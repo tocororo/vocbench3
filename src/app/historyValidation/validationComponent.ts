@@ -1,11 +1,10 @@
 import { Component } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
-import { AbstractHistValidComponent } from "./abstractHistValidComponent";
-import { ValidationServices } from "../services/validationServices";
+import { Modal } from 'ngx-modialog/plugins/bootstrap';
 import { CommitInfo } from "../models/History";
-import { ARTResource, ResourceUtils } from "../models/ARTResources";
+import { ValidationServices } from "../services/validationServices";
 import { UIUtils } from "../utils/UIUtils";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { AbstractHistValidComponent } from "./abstractHistValidComponent";
 
 @Component({
     selector: "validation-component",
@@ -33,7 +32,7 @@ export class ValidationComponent extends AbstractHistValidComponent {
     init() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.commits = [];
-        this.validationService.getStagedCommitSummary(this.operations, this.getFormattedFromTime(), this.getFormattedToTime(), this.limit).subscribe(
+        this.validationService.getStagedCommitSummary(this.operations, this.getPerformersIRI(), this.getFormattedFromTime(), this.getFormattedToTime(), this.limit).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.pageCount = stResp.pageCount;
@@ -51,7 +50,7 @@ export class ValidationComponent extends AbstractHistValidComponent {
         if (timeUpperBound == null) {
             timeUpperBound = this.tipTime;
         }
-        this.validationService.getCommits(this.operations, timeUpperBound, this.getFormattedFromTime(), 
+        this.validationService.getCommits(this.operations, this.getPerformersIRI(), timeUpperBound, this.getFormattedFromTime(), 
             this.operationSorting, this.timeSorting, this.page, this.limit).subscribe(
             commits => {
                 this.commits = commits;

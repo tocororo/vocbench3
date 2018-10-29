@@ -12,7 +12,6 @@ export class HistoryServices {
 
     constructor(private httpMgr: HttpManager) { }
 
-
     /**
      * 
      * @param operationFilter 
@@ -20,20 +19,16 @@ export class HistoryServices {
      * @param timeUpperBound 
      * @param limit 
      */
-    getCommitSummary(operationFilter?: ARTURIResource[], timeLowerBound?: string, timeUpperBound?: string, limit?: number) {
+    getCommitSummary(operationFilter?: ARTURIResource[], performerFilter?: ARTURIResource[], validatorFilter?: ARTURIResource[],
+        timeLowerBound?: string, timeUpperBound?: string, limit?: number) {
         console.log("[HistoryServices] getCommitSummary");
-        var params: any = {};
-        if (operationFilter != null) {
-            params.operationFilter = operationFilter;
-        }
-        if (timeLowerBound != null) {
-            params.timeLowerBound = timeLowerBound;
-        }
-        if (timeUpperBound != null) {
-            params.timeUpperBound = timeUpperBound;
-        }
-        if (limit != null) {
-            params.limit = limit;
+        var params: any = {
+            operationFilter: operationFilter,
+            performerFilter: performerFilter,
+            validatorFilter: validatorFilter,
+            timeLowerBound: timeLowerBound,
+            timeUpperBound: timeUpperBound,
+            limit: limit
         }
         return this.httpMgr.doGet(this.serviceName, "getCommitSummary", params).map(
             stResp => {
@@ -53,20 +48,23 @@ export class HistoryServices {
      * @param page 
      * @param limit 
      */
-    getCommits(tipRevisionNumber: number, operationFilter?: ARTURIResource[], timeLowerBound?: string, timeUpperBound?: string,
-            operationSorting?: SortingDirection, timeSorting?: SortingDirection, page?: number, limit?: number): Observable<CommitInfo[]> {
+    getCommits(tipRevisionNumber: number, operationFilter?: ARTURIResource[], performerFilter?: ARTURIResource[], validatorFilter?: ARTURIResource[],
+            timeLowerBound?: string, timeUpperBound?: string, operationSorting?: SortingDirection, timeSorting?: SortingDirection, 
+            page?: number, limit?: number): Observable<CommitInfo[]> {
         console.log("[HistoryServices] getCommits");
         var params: any = {
-            tipRevisionNumber: tipRevisionNumber
+            tipRevisionNumber: tipRevisionNumber,
+
+            operationFilter: operationFilter,
+            performerFilter: performerFilter,
+            validatorFilter: validatorFilter,
+            timeLowerBound: timeLowerBound,
+            timeUpperBound: timeUpperBound,
+            operationSorting: operationSorting,
+            timeSorting: timeSorting,
+            page: page,
+            limit: limit
         };
-        if (operationFilter != null) { params.operationFilter = operationFilter; }
-        if (timeLowerBound != null) { params.timeLowerBound = timeLowerBound; }
-        if (timeUpperBound != null) { params.timeUpperBound = timeUpperBound; }
-        if (operationSorting != null) { params.operationSorting = operationSorting; }
-        if (timeSorting != null) { params.timeSorting = timeSorting; }
-        if (page != null) { params.page = page; }
-        if (limit != null) { params.limit = limit; }
-        
         return this.httpMgr.doGet(this.serviceName, "getCommits", params).map(
             stResp => {
                 var commits: CommitInfo[] = [];

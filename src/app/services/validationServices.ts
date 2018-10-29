@@ -20,21 +20,16 @@ export class ValidationServices {
      * @param timeUpperBound 
      * @param limit 
      */
-    getStagedCommitSummary(operationFilter?: ARTURIResource[], timeLowerBound?: string, timeUpperBound?: string, limit?: number) {
+    getStagedCommitSummary(operationFilter?: ARTURIResource[], performerFilter?: ARTURIResource[], timeLowerBound?: string,
+        timeUpperBound?: string, limit?: number) {
         console.log("[ValidationServices] getStagedCommitSummary");
-        var params: any = {};
-        if (operationFilter != null) {
-            params.operationFilter = operationFilter;
-        }
-        if (timeLowerBound != null) {
-            params.timeLowerBound = timeLowerBound;
-        }
-        if (timeUpperBound != null) {
-            params.timeUpperBound = timeUpperBound;
-        }
-        if (limit != null) {
-            params.limit = limit;
-        }
+        var params: any = {
+            operationFilter: operationFilter,
+            performerFilter: performerFilter,
+            timeLowerBound: timeLowerBound,
+            timeUpperBound: timeUpperBound,
+            limit: limit
+        };
         return this.httpMgr.doGet(this.serviceName, "getStagedCommitSummary", params).map(
             stResp => {
                 return stResp;
@@ -52,18 +47,20 @@ export class ValidationServices {
      * @param page 
      * @param limit 
      */
-    getCommits(operationFilter?: ARTURIResource[], timeUpperBound?: string, timeLowerBound?: string,
+    getCommits(operationFilter?: ARTURIResource[], performerFilter?: ARTURIResource[], timeUpperBound?: string, timeLowerBound?: string,
             operationSorting?: SortingDirection, timeSorting?: SortingDirection, page?: number, limit?: number): Observable<CommitInfo[]> {
         console.log("[ValidationServices] getCommits");
-        var params: any = {};
-        if (operationFilter != null) { params.operationFilter = operationFilter; }
-        if (timeLowerBound != null) { params.timeLowerBound = timeLowerBound; }
-        if (timeUpperBound != null) { params.timeUpperBound = timeUpperBound; }
-        if (operationSorting != null) { params.operationSorting = operationSorting; }
-        if (timeSorting != null) { params.timeSorting = timeSorting; }
-        if (page != null) { params.page = page; }
-        if (limit != null) { params.limit = limit; }
-        
+        var params: any = {
+            operationFilter: operationFilter,
+            performerFilter: performerFilter,
+            timeLowerBound: timeLowerBound,
+            timeUpperBound: timeUpperBound,
+            operationSorting: operationSorting,
+            timeSorting: timeSorting,
+            page: page,
+            limit: limit
+        };
+
         return this.httpMgr.doGet(this.serviceName, "getCommits", params).map(
             stResp => {
                 var commits: CommitInfo[] = [];

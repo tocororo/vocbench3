@@ -29,9 +29,7 @@ export class GroupsAdministrationComponent {
                 this.selectedGroup = null;
 
                 if (groupToSelect != null) {
-                    console.log("selecting updated group", groupToSelect)
                     this.groupList.forEach((g: UsersGroup) => {
-                        console.log("compare", g.iri, groupToSelect.iri);
                         if (g.iri.getURI() == groupToSelect.iri.getURI()) {
                             this.selectGroup(g);
                         }

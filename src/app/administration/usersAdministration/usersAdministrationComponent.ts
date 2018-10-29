@@ -103,7 +103,7 @@ export class UsersAdministrationComponent {
 
     private deleteUser() {
         this.basicModals.confirm("Delete user", "You are deleting user "
-            + this.selectedUser.getGivenName() + " " + this.selectedUser.getFamilyName() + ". Are you sure?", "warning").then(
+            + this.selectedUser.getShow() + ". Are you sure?", "warning").then(
             result => {
                 this.userService.deleteUser(this.selectedUser.getEmail()).subscribe(
                     stResp => {

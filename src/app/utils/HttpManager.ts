@@ -328,6 +328,7 @@ export class HttpManager {
         var strBuilder: string[] = [];
         for (var paramName in params) {
             var paramValue = params[paramName];
+            if (paramValue == null) continue;
             if (Array.isArray(paramValue)) {
                 let stringArray: string[] = [];
                 for (var i = 0; i < paramValue.length; i++) {

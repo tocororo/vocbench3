@@ -7,6 +7,7 @@ import { RDFCapabilityType } from "../../../models/Coda";
 import { ImportType } from '../../../models/Metadata';
 import { Settings } from "../../../models/Plugins";
 import { RemoteRepositoryAccessConfig } from "../../../models/Project";
+import { User } from '../../../models/User';
 import { ResourceViewModal, ResourceViewModalData } from "../../../resourceView/resourceViewModal";
 import { LoadConfigurationModal, LoadConfigurationModalData } from "./configurationStoreModal/loadConfigurationModal";
 import { StoreConfigurationModal, StoreConfigurationModalData } from "./configurationStoreModal/storeConfigurationModal";
@@ -16,6 +17,7 @@ import { PluginConfigModal, PluginConfigModalData } from "./pluginConfigModal/pl
 import { RemoteAccessConfigModal, RemoteAccessConfigModalData } from "./remoteAccessConfigModal/remoteAccessConfigModal";
 import { RemoteRepoSelectionModal, RemoteRepoSelectionModalData } from "./remoteRepoSelectionModal/remoteRepoSelectionModal";
 import { ResourcePickerModal, ResourcePickerModalData } from './resourcePickerModal/resourcePickerModal';
+import { UserSelectionModal, UserSelectionModalData } from './userSelectionModal/userSelectionModal';
 
 @Injectable()
 export class SharedModalServices {
@@ -169,6 +171,22 @@ export class SharedModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ImportOntologyModal, overlayConfig).result;
+    }
+
+    /**
+     * Selects and returns a user
+     * @param title 
+     * @param projectDependent if true, the modal allows to select only users bound to the current project
+     * @param unselectableUsers a (optional) list of user not selectable (disabled). This list can be useful in order to
+     * disable the selection of some users when the modal is used to enrich an existing list of users
+     */
+    selectUser(title: string, projectDependent?: boolean, unselectableUsers?: User[]) {
+        var modalData = new UserSelectionModalData(title, projectDependent, unselectableUsers);
+        const builder = new BSModalContextBuilder<UserSelectionModalData>(
+            modalData, undefined, UserSelectionModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        return this.modal.open(UserSelectionModal, overlayConfig).result;
     }
 
 }

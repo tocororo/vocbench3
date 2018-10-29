@@ -167,7 +167,6 @@ export class BasicModalServices {
         return this.alertCheck(title, message, "Don't show this again", "warning").then(
             confirm => {
                 if (confirm) {
-                    console.log("checked, update cookie");
                     Cookie.setCookie(warningCookie, "false", 365*10, VBContext.getLoggedUser().getIri());
                 }
             }

@@ -1,8 +1,10 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
-import { OperationSelectModal } from "./operationSelectModal";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource, ResourceUtils } from "../models/ARTResources";
+import { User } from "../models/User";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { OperationSelectModal } from "./operationSelectModal";
 
 @Component({
     selector: "history-filter",
@@ -11,11 +13,12 @@ import { ARTURIResource, ResourceUtils } from "../models/ARTResources";
 export class HistoryFilterComponent {
 
     @Input() operations: ARTURIResource[];
+    @Input() performers: User[];
     @Input() fromTime: string;
     @Input() toTime: string;
-    @Output() apply: EventEmitter<{ operations: ARTURIResource[], fromTime: string, toTime: string }> = new EventEmitter();
+    @Output() apply: EventEmitter<{ operations: ARTURIResource[], performers: User[], fromTime: string, toTime: string }> = new EventEmitter();
 
-    constructor(private modal: Modal) {}
+    constructor(private modal: Modal, private sharedModals: SharedModalServices) {}
 
     ngOnInit() {
         if (this.operations == null) {
@@ -43,8 +46,26 @@ export class HistoryFilterComponent {
         this.operations.splice(this.operations.indexOf(operation), 1);
     }
 
+    private selectOperationPerformer() {
+        this.sharedModals.selectUser("Select User", true).then(
+            (user: User) => {
+                for (let i = 0; i < this.performers.length; i++) {
+                    if (this.performers[i].getIri() == user.getIri()) {
+                        return; //user already in
+                    }
+                }
+                this.performers.push(user);
+            },
+            () => {}
+        );
+    }
+
+    private removeOperationPerformer(user: User) {
+        this.performers.splice(this.performers.indexOf(user), 1);
+    }
+
     private applyFilter() {
-        this.apply.emit({ operations: this.operations, fromTime: this.fromTime, toTime: this.toTime });
+        this.apply.emit({ operations: this.operations, performers: this.performers, fromTime: this.fromTime, toTime: this.toTime });
     }
 
 }

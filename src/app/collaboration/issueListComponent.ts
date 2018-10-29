@@ -115,7 +115,6 @@ export class IssueListComponent {
      * Refresh the list of issue from outside
      */
     public refresh() {
-        console.log("list refresh")
         this.page = 0;
         this.listIssues();
     }

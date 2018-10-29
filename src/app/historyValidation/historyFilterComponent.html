@@ -20,6 +20,23 @@
 
         <div class="subPanel vbox" style="margin-right: 4px">
             <div class="subPanel-heading">
+                <label style="flex: 1;">Performers</label>
+                <button class="btn btn-xs btn-default" (click)="selectOperationPerformer()">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </div>
+            <div class="subPanel-body scrollableContainer">
+                <div *ngFor="let p of performers" class="listItem">
+                    <span style="flex: 1">{{p.getShow()}}<span class="greyText">&nbsp;({{p.getEmail()}})</span></span>
+                    <button class="btn btn-xs btn-default" (click)="removeOperationPerformer(u)">
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="subPanel vbox" style="margin-right: 4px">
+            <div class="subPanel-heading">
                 <label>
                     Time
                     <span class="glyphicon glyphicon-info-sign" title="Datetime format: yyyy-MM-ddThh:mm"></span>

@@ -145,6 +145,10 @@ export class User {
     isOnline(): boolean {
         return this.online;
     }
+
+    getShow(): string {
+        return this.givenName + " " + this.familyName;
+    }
 }
 
 export class ProjectUserBinding {

@@ -93,7 +93,6 @@ export class CustomSearchModal implements ModalComponent<CustomSearchModalData> 
     ok(event: Event) {
         let filled: boolean = true;
         for (let key of Array.from(this.bindingsMap.keys())) {
-            console.log("key", key, "value", this.bindingsMap.get(key));
             if (this.bindingsMap.get(key) == null) {
                 this.basicModals.alert("Missing binding", "Missing variable binding '" + key + "'", "warning");
                 return;

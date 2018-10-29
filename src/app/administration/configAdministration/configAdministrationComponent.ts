@@ -68,7 +68,6 @@ export class ConfigAdministrationComponent {
                 }
                 this.pristineEmailConfig = Object.assign({}, this.emailConfig);
 
-                console.log(this.emailConfig);
                 //init cryptoProtocol
                 this.cryptoProtocol = "None";
                 if (this.emailConfig.mailSmtpSslEnable) {
@@ -76,7 +75,6 @@ export class ConfigAdministrationComponent {
                 } else if (this.emailConfig.mailSmtpStarttlsEnable) {
                     this.cryptoProtocol = "TLS";
                 }
-                console.log(this.cryptoProtocol);
 
                 this.adminMail = conf.adminAddress;
                 this.pristineAdminMail = conf.adminAddress;
