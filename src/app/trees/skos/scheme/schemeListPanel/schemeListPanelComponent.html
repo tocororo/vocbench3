@@ -16,7 +16,7 @@
         </div>
         <div style="flex: 1"></div>
         <div class="btn-toolbar" role="toolbar">
-            <div *ngIf="editable" class="btn-group btn-group-xs" role="group" style="margin-right: 5px;">
+            <div *ngIf="editable && context == 'dataPanel'" class="btn-group btn-group-xs" role="group" style="margin-right: 5px;">
                 <button class="btn btn-default" title="Select all schemes" (click)="activateAllScheme()">
                     <span class="glyphicon glyphicon-check" style="width: 16px;"></span>
                 </button>

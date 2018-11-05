@@ -3,6 +3,7 @@ import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource, ResourceUtils } from "../models/ARTResources";
 import { User } from "../models/User";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { OperationSelectModal } from "./operationSelectModal";
 
@@ -18,7 +19,7 @@ export class HistoryFilterComponent {
     @Input() toTime: string;
     @Output() apply: EventEmitter<{ operations: ARTURIResource[], performers: User[], fromTime: string, toTime: string }> = new EventEmitter();
 
-    constructor(private modal: Modal, private sharedModals: SharedModalServices) {}
+    constructor(private modal: Modal, private sharedModals: SharedModalServices, private basicModals: BasicModalServices) {}
 
     ngOnInit() {
         if (this.operations == null) {
@@ -65,6 +66,15 @@ export class HistoryFilterComponent {
     }
 
     private applyFilter() {
+        let timeRegexp: RegExp = new RegExp("^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}$");
+        if (this.fromTime != null && !timeRegexp.test(this.fromTime)) {
+            this.basicModals.alert("Invalid time", "'From' time parameter does not comply with the datetime format yyyy-MM-ddThh:mm", "error");
+            return;
+        }
+        if (this.toTime != null && !timeRegexp.test(this.toTime)) {
+            this.basicModals.alert("Invalid time", "'To' time parameter does not comply with the datetime format yyyy-MM-ddThh:mm", "error");
+            return;
+        }
         this.apply.emit({ operations: this.operations, performers: this.performers, fromTime: this.fromTime, toTime: this.toTime });
     }
 
