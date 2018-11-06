@@ -70,7 +70,7 @@ export class HttpManager {
         console.log("[GET]: " + url);
 
         var headers = new Headers();
-        headers.append('Accept', STResponseUtils.contentTypeJson);
+        headers.append('Accept', STResponseUtils.ContentType.applicationJson);
         var requestOptions = new RequestOptions({ headers: headers, withCredentials: true });
 
         //execute request
@@ -113,7 +113,7 @@ export class HttpManager {
 
         var headers = new Headers();
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        headers.append('Accept', STResponseUtils.contentTypeJson);
+        headers.append('Accept', STResponseUtils.ContentType.applicationJson);
         var requestOptions = new RequestOptions({ headers: headers, withCredentials: true });
 
         //execute request
@@ -159,7 +159,7 @@ export class HttpManager {
         }
 
         var headers = new Headers();
-        headers.append('Accept', STResponseUtils.contentTypeJson);
+        headers.append('Accept', STResponseUtils.ContentType.applicationJson);
         var requestOptions = new RequestOptions({ headers: headers, withCredentials: true });
 
         //execute request
@@ -246,10 +246,10 @@ export class HttpManager {
     private arrayBufferRespHandler(res: Response) {
         var arrayBuffer = res.arrayBuffer();
         var respContType = res.headers.get("content-type");
-        if (respContType.includes(STResponseUtils.contentTypeXml+";")) { //could be an error xml response
+        if (respContType.includes(STResponseUtils.ContentType.applicationXml+";")) { //could be an error xml response
             //convert arrayBuffer to xml Document
             var respContentAsString = String.fromCharCode.apply(String, new Uint8Array(arrayBuffer));
-            var xmlResp = new DOMParser().parseFromString(respContentAsString, STResponseUtils.contentTypeXml);
+            var xmlResp = new DOMParser().parseFromString(respContentAsString, STResponseUtils.ContentType.applicationXml);
             if (STResponseUtils.isErrorResponse(xmlResp)) { //is an error
                 let err = new Error(STResponseUtils.getErrorResponseExceptionMessage(xmlResp));
                 err.name = STResponseUtils.getErrorResponseExceptionName(xmlResp);
@@ -367,11 +367,11 @@ export class HttpManager {
      * @return returns an object json (any) in case of json response, an xml Document in case of xml response
      */
     private handleJsonXmlResponse(res: Response): any | Document {
-        if (res.headers.get("Content-Type").indexOf(STResponseUtils.contentTypeXml) != -1) { //is response Xml?
+        if (res.headers.get("Content-Type").indexOf(STResponseUtils.ContentType.applicationXml) != -1) { //is response Xml?
             var parser = new DOMParser();
-            var stResp = parser.parseFromString(res.text(), STResponseUtils.contentTypeXml);
+            var stResp = parser.parseFromString(res.text(), STResponseUtils.ContentType.applicationXml);
             return stResp;
-        } else if (res.headers.get("Content-Type").indexOf(STResponseUtils.contentTypeJson) != -1) { //is response json?
+        } else if (res.headers.get("Content-Type").indexOf(STResponseUtils.ContentType.applicationJson) != -1) { //is response json?
             return res.json();
         }
     }

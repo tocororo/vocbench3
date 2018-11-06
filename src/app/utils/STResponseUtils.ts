@@ -1,4 +1,4 @@
-/**
+/*
  * This class provides utilities to handle the ST services responses.
  * A service's response could be JSON or XML. For each of these 3 response type are available
  * - reply: see below
@@ -62,10 +62,14 @@
  * 
  */
 
+enum ContentType {
+    applicationXml = "application/xml",
+    applicationJson = "application/json"
+}
+
 export class STResponseUtils {
 
-    public static contentTypeXml: string = "application/xml";
-    public static contentTypeJson: string = "application/json";
+    public static ContentType = ContentType;
 
     /**
      * Returns the data content of the response

@@ -32,7 +32,18 @@
             </tr>
             <tr>
                 <td nowrap>Password</td>
-                <td><input type="text" class="form-control input-sm" [ngModel]="selectedConfig.password" placeholder="password" readonly></td>
+                <td>
+                    <div class="input-group input-group-sm">
+                        <input *ngIf="!showPwd" type="password" class="form-control" [ngModel]="selectedConfig.password" placeholder="password" readonly>
+                        <input *ngIf="showPwd" class="form-control" [ngModel]="selectedConfig.password" placeholder="password" readonly>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" [ngClass]="{ active : showPwd }" (mousedown)="showPwd = true" (mouseup)="showPwd = false">
+                                <span *ngIf="!showPwd" class="glyphicon glyphicon-eye-close"></span>
+                                <span *ngIf="showPwd" class="glyphicon glyphicon-eye-open"></span>
+                            </button>
+                        </span>
+                    </div>
+                </td>
                 <td><span class="glyphicon glyphicon-info-sign" style="margin-left: 5px" title="Password for the user connecting to the rdf repository"></span></td>
             </tr>
         </tbody>
