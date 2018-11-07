@@ -96,8 +96,14 @@ export class VBProperties {
 
                 this.showFlags = prefs[Properties.pref_show_flags] == "true";
 
-                this.showInstancesNumber = prefs[Properties.pref_show_instances_number] == "true";
-                
+                let showInstPref: string = prefs[Properties.pref_show_instances_number];
+                if (showInstPref != null) {
+                    this.showInstancesNumber = showInstPref == "true";
+                } else { //if not specified, true for RDFS and OWL projects, false otherwise
+                    let modelType: string = VBContext.getWorkingProject().getModelType();
+                    this.showInstancesNumber = modelType == RDFS.uri || modelType == OWL.uri;
+                }
+
                 this.projectThemeId = prefs[Properties.pref_project_theme];
                 UIUtils.changeNavbarTheme(this.projectThemeId);
 
