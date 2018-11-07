@@ -23,11 +23,13 @@ export class LexicalSenseSelectorComponent {
     private onLexEntrySelected(lexEntry: ARTURIResource) {
         this.selectedLexicalEntry = lexEntry;
         this.onLexicalSenseSelected(null);
-        this.ontolexService.getLexicalEntrySenses(this.selectedLexicalEntry).subscribe(
-            senses => {
-                this.lexicalSenses = senses;
-            }
-        );
+        if (this.selectedLexicalEntry != null) {
+            this.ontolexService.getLexicalEntrySenses(this.selectedLexicalEntry).subscribe(
+                senses => {
+                    this.lexicalSenses = senses;
+                }
+            );
+        }
     }
 
     private onLexEntryLexiconChange() {

@@ -39,7 +39,7 @@ export class PropertyTreeNodeComponent extends AbstractTreeNode {
             subProps => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(subProps, this.rendering ? SortAttribute.show : SortAttribute.value);
-                this.node.setAdditionalProperty(ResAttribute.CHILDREN, subProps); //append the retrieved node as child of the expanded node
+                this.children = subProps;
                 this.open = true;
             }
         );

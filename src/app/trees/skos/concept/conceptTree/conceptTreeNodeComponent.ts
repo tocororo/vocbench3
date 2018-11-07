@@ -53,7 +53,7 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(narrower, this.rendering ? SortAttribute.show : SortAttribute.value);
                 //append the retrieved node as child of the expanded node
-                this.node.setAdditionalProperty(ResAttribute.CHILDREN, narrower);
+                this.children = narrower;
                 this.open = true;
             }
         );

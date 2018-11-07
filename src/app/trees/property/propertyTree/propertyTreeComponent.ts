@@ -32,10 +32,6 @@ export class PropertyTreeComponent extends AbstractTree {
             (node: ARTURIResource) => this.onTopPropertyCreated(node)));
         this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(
             (property: ARTURIResource) => this.onTreeNodeDeleted(property)));
-        this.eventSubscriptions.push(eventHandler.subPropertyCreatedEvent.subscribe(
-            (data: any) => this.onSubPropertyCreated(data.subProperty, data.superProperty)));
-        this.eventSubscriptions.push(eventHandler.superPropertyAddedEvent.subscribe(
-            (data: any) => this.onSuperPropertyAdded(data.subProperty, data.superProperty)));
     }
 
     /**
@@ -179,28 +175,6 @@ export class PropertyTreeComponent extends AbstractTree {
 
     private onTopPropertyCreated(property: ARTURIResource) {
         this.roots.unshift(property);
-    }
-
-    private onSubPropertyCreated(subProperty: ARTURIResource, superProperty: ARTURIResource) {
-        //if the subProperty was a root property, should be removed from the root array (propertyTree)
-        //check if the property to delete is a topProperty
-        for (var i = 0; i < this.roots.length; i++) {
-            if (this.roots[i].getURI() == subProperty.getURI()) {
-                this.roots.splice(i, 1);
-                break;
-            }
-        }
-    }
-
-    private onSuperPropertyAdded(subProperty: ARTURIResource, superProperty: ARTURIResource) {
-        //if the superProperty is a root property add subProperty to its children
-        for (var i = 0; i < this.roots.length; i++) {
-            if (this.roots[i].getURI() == superProperty.getURI()) {
-                this.roots[i].getAdditionalProperty(ResAttribute.CHILDREN).push(subProperty);
-                this.roots[i].setAdditionalProperty(ResAttribute.MORE, 1);
-                break;
-            }
-        }
     }
 
 }

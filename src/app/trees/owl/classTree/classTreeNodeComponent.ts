@@ -66,7 +66,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
             subClasses => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(subClasses, this.rendering ? SortAttribute.show : SortAttribute.value);
-                this.node.setAdditionalProperty(ResAttribute.CHILDREN, subClasses); //append the retrieved node as child of the expanded node
+                this.children = subClasses;
                 this.open = true;
             }
         );
@@ -94,11 +94,10 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
             let classTreePref = this.pref.getClassTreePreferences();
             //if subClass filter is enabled and there is a filter for the children of the given node
             if (this.filterEnabled && classTreePref.filterMap[this.node.getURI()] != null) {
-                let children: ARTURIResource[] = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
-                if (children.length > 0) {
+                if (this.children.length > 0) {
                     let childNotFiltered: boolean = false;
-                    for (var i = 0; i < children.length; i++) { //if there is at least one child not filtered out
-                        if (classTreePref.filterMap[this.node.getURI()].indexOf(children[i].getURI()) == -1) {
+                    for (var i = 0; i < this.children.length; i++) { //if there is at least one child not filtered out
+                        if (classTreePref.filterMap[this.node.getURI()].indexOf(this.children[i].getURI()) == -1) {
                             return true;
                         }
                     }

@@ -26,11 +26,7 @@ export class ClassesServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getClassesInfo", params).map(
             stResp => {
-                var classes = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < classes.length; i++) {
-                    classes[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return classes;
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -47,11 +43,7 @@ export class ClassesServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getSubClasses", params).map(
             stResp => {
-                var subClasses = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < subClasses.length; i++) {
-                    subClasses[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return subClasses;
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -100,10 +92,8 @@ export class ClassesServices {
             cls => {
                 return this.resourceService.getResourceDescription(cls).map(
                     resource => {
-                        resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
                         resource.setAdditionalProperty(ResAttribute.NUM_INST, 0);
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
-                        
                         this.eventHandler.subClassCreatedEvent.emit({ subClass: resource, superClass: superClass });
                         return resource;
                     }

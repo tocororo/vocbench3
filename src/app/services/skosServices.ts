@@ -39,11 +39,7 @@ export class SkosServices {
         }
         return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params).map(
             stResp => {
-                var topConcepts = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < topConcepts.length; i++) {
-                    topConcepts[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return topConcepts;
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -74,11 +70,7 @@ export class SkosServices {
         }
         return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params).map(
             stResp => {
-                var narrower = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < narrower.length; i++) {
-                    narrower[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return narrower;
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -158,7 +150,6 @@ export class SkosServices {
             concept => {
                 return this.resourceService.getResourceDescription(concept).map(
                     resource => {
-                        resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
                         if (broaderConcept != null) {
                             this.eventHandler.narrowerCreatedEvent.emit({ narrower: <ARTURIResource>resource, broader: broaderConcept });
@@ -566,11 +557,7 @@ export class SkosServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getRootCollections", params).map(
             stResp => {
-                var rootColl = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < rootColl.length; i++) {
-                    rootColl[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return rootColl;
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -586,11 +573,7 @@ export class SkosServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getNestedCollections", params).map(
             stResp => {
-                var nestedColl = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < nestedColl.length; i++) {
-                    nestedColl[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return nestedColl;
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -643,7 +626,6 @@ export class SkosServices {
             collection => {
                 return this.resourceService.getResourceDescription(collection).map(
                     resource => {
-                        resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
                         if (containingCollection != null) {
                             this.eventHandler.nestedCollectionCreatedEvent.emit({ nested: resource, container: containingCollection });

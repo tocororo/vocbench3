@@ -24,11 +24,7 @@ export class PropertyServices {
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getTopProperties", params).map(
             stResp => {
-                var topProperties = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < topProperties.length; i++) {
-                    topProperties[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return topProperties;
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -42,11 +38,7 @@ export class PropertyServices {
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getTopRDFProperties", params).map(
             stResp => {
-                var topProperties = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < topProperties.length; i++) {
-                    topProperties[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return topProperties;
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -60,11 +52,7 @@ export class PropertyServices {
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getTopObjectProperties", params).map(
             stResp => {
-                var topProperties = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < topProperties.length; i++) {
-                    topProperties[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return topProperties;
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -78,11 +66,7 @@ export class PropertyServices {
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getTopDatatypeProperties", params).map(
             stResp => {
-                var topProperties = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < topProperties.length; i++) {
-                    topProperties[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return topProperties;
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -96,11 +80,7 @@ export class PropertyServices {
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getTopAnnotationProperties", params).map(
             stResp => {
-                var topProperties = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < topProperties.length; i++) {
-                    topProperties[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return topProperties;
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -114,11 +94,7 @@ export class PropertyServices {
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getTopOntologyProperties", params).map(
             stResp => {
-                var topProperties = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < topProperties.length; i++) {
-                    topProperties[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return topProperties;
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -135,11 +111,7 @@ export class PropertyServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getSubProperties", params).map(
             stResp => {
-                var subProps = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < subProps.length; i++) {
-                    subProps[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return subProps;
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -156,11 +128,7 @@ export class PropertyServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getPropertiesInfo", params).map(
             stResp => {
-                var props = Deserializer.createURIArray(stResp);
-                for (var i = 0; i < props.length; i++) {
-                    props[i].setAdditionalProperty(ResAttribute.CHILDREN, []);
-                }
-                return props;
+                return Deserializer.createURIArray(stResp);
             }
         );
     }
@@ -296,7 +264,6 @@ export class PropertyServices {
             property => {
                 return this.resourceService.getResourceDescription(property).map(
                     resource => {
-                        resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
                         if (superProperty != null) {
                             this.eventHandler.subPropertyCreatedEvent.emit({ subProperty: <ARTURIResource>resource, superProperty: superProperty });

@@ -248,11 +248,11 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     }
 
     private onPropertySelected(resource: ARTURIResource) {
+        this.onResourceSelected(resource);
         //Inverse Property checbox is enabled only for object properties, for other properties set it unchecked and disable it
-        if (resource.getRole() != RDFResourceRolesEnum.objectProperty) {
+        if (resource != null && resource.getRole() != RDFResourceRolesEnum.objectProperty) {
             this.inverseProp = false;
         }
-        this.onResourceSelected(resource);
     }
 
     private onConceptTreeSchemeChange() {

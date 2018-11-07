@@ -39,7 +39,7 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
             nestedColl => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(nestedColl, this.rendering ? SortAttribute.show : SortAttribute.value);
-                this.node.setAdditionalProperty(ResAttribute.CHILDREN, nestedColl); //append the retrieved node as child of the expanded node
+                this.children = nestedColl;
                 this.open = true;
             }
         );
@@ -50,7 +50,7 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
     private onNestedCollectionAddedFirst(nested: ARTURIResource, container: ARTURIResource) {
         //add the new collection as children only if the container is the current collection
         if (this.node.getURI() == container.getURI()) {
-            this.node.getAdditionalProperty(ResAttribute.CHILDREN).unshift(nested);
+            this.children.unshift(nested);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
             this.open = true;
         }
@@ -59,7 +59,7 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
     private onNestedCollectionAddedLast(nested: ARTURIResource, container: ARTURIResource) {
         //add the new collection as children only if the container is the current collection
         if (this.node.getURI() == container.getURI()) {
-            this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(nested);
+            this.children.push(nested);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
             this.open = true;
         }
@@ -68,7 +68,7 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
     private onNestedCollectionAddedInPosition(nested: ARTURIResource, container: ARTURIResource, position: number) {
         //add the new collection as children only if the container is the current collection
         if (this.node.getURI() == container.getURI()) {
-            this.node.getAdditionalProperty(ResAttribute.CHILDREN).splice(position, 0, nested);
+            this.children.splice(position, 0, nested);
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
             this.open = true;
         }

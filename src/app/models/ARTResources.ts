@@ -303,7 +303,6 @@ export class ResAttribute {
     public static DEPRECATED = "deprecated";
 
     //never in st responses, added because are useful for tree
-    public static CHILDREN = "children"; //stores an array of children resources
     public static SELECTED = "selected"; //if true, render the node as selected
     public static NEW = "new"; //if true, the resource is made visible after the treeNodeComponent is initialized
 

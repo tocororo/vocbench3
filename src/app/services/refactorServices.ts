@@ -149,7 +149,6 @@ export class RefactorServices {
             concept => {
                 return this.resourceService.getResourceDescription(concept).map(
                     resource => {
-                        resource.setAdditionalProperty(ResAttribute.CHILDREN, []);
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
                         if (broaderConcept != null) { //created narrower
                             this.eventHandler.narrowerCreatedEvent.emit({narrower: <ARTURIResource>resource, broader: broaderConcept});

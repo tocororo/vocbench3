@@ -85,7 +85,7 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
 
     private onPropertySelected(property: ARTURIResource) {
         this.selectedTreeProperty = property;
-        if (property.getRole() != RDFResourceRolesEnum.objectProperty) {
+        if (property != null && property.getRole() != RDFResourceRolesEnum.objectProperty) {
             this.inverseProp = false;
         }
     }

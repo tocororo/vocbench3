@@ -30,6 +30,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
     /**
      * ATTRIBUTES
      */
+    children: ARTURIResource[] = [];
     open: boolean = false;
 
     /**
@@ -51,13 +52,6 @@ export abstract class AbstractTreeNode extends AbstractNode {
             this.treeNodeElement.nativeElement.scrollIntoView({block: 'end', behavior: 'smooth'});
             this.node.deleteAdditionalProperty(ResAttribute.NEW);
         }
-        //in case of node initialized after switching on the "showDeprecated" and the node was expanded
-        if (
-            this.node.getAdditionalProperty(ResAttribute.CHILDREN) != null && 
-            this.node.getAdditionalProperty(ResAttribute.CHILDREN).length > 0
-        ) {
-            setTimeout(() => this.open = true);
-        }
     }
 
     /**
@@ -66,11 +60,10 @@ export abstract class AbstractTreeNode extends AbstractNode {
     private showExpandCollapse(): boolean {
         let more: boolean = this.node.getAdditionalProperty(ResAttribute.MORE);
         if (more) {
-            let children: ARTURIResource[] = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
-            if (children.length > 0) {
+            if (this.children.length > 0) {
                 let childNotDeprecated: boolean = false;
-                for (var i = 0; i < children.length; i++) {
-                    if (!children[i].isDeprecated()) {
+                for (var i = 0; i < this.children.length; i++) {
+                    if (!this.children[i].isDeprecated()) {
                         childNotDeprecated = true;
                         break;
                     }
@@ -108,7 +101,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
    	 */
     private collapseNode() {
         this.open = false;
-        this.node.setAdditionalProperty(ResAttribute.CHILDREN, []);
+        this.children = [];
     }
 
     /**
@@ -146,9 +139,8 @@ export abstract class AbstractTreeNode extends AbstractNode {
     private expandChild(path: ARTURIResource[]) {
         //If the deprecated nodes are hidden, check if the path pass through a deprecated node not visible
         if (!this.showDeprecated) {
-            let children: ARTURIResource[] = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
-            for (var i = 0; i < children.length; i++) {
-                if (children[i].getURI() == path[0].getURI() && children[i].isDeprecated()) {
+            for (var i = 0; i < this.children.length; i++) {
+                if (this.children[i].getURI() == path[0].getURI() && this.children[i].isDeprecated()) {
                     this.basicModals.alert("Search", "Node " + path[path.length-1].getShow() + 
                         " is not reachable in the current tree since the path to reach it contains a deprecated node." +
                         " Enable the show of deprecated resources and repeat the search", "warning");
@@ -197,20 +189,19 @@ export abstract class AbstractTreeNode extends AbstractNode {
     //BROADCAST EVENTS HANDLERS
 
     onTreeNodeDeleted(deletedNode: ARTResource) {
-        var children = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
-        for (var i = 0; i < children.length; i++) {
-            if (children[i].getURI() == deletedNode.getNominalValue()) {
+        for (var i = 0; i < this.children.length; i++) {
+            if (this.children[i].getURI() == deletedNode.getNominalValue()) {
                 if (VBContext.getWorkingProject().isValidationEnabled()) {
                     //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
-                    let stagedRes: ARTURIResource = children[i].clone();
+                    let stagedRes: ARTURIResource = this.children[i].clone();
                     stagedRes.setGraphs([new ARTURIResource(SemanticTurkey.stagingRemoveGraph + VBContext.getWorkingProject().getBaseURI())]);
                     stagedRes.setAdditionalProperty(ResAttribute.EXPLICIT, false);
                     stagedRes.setAdditionalProperty(ResAttribute.SELECTED, false);
-                    children[i] = stagedRes;
+                    this.children[i] = stagedRes;
                 } else {
-                    children.splice(i, 1);
+                    this.children.splice(i, 1);
                     //if node has no more children change info of node so the UI will update
-                    if (children.length == 0) {
+                    if (this.children.length == 0) {
                         this.node.setAdditionalProperty(ResAttribute.MORE, 0);
                         this.open = false;
                     }
@@ -225,8 +216,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
         if (this.node.getNominalValue() == parent.getNominalValue()) {
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
             if (this.open) { //if node is open, show the child with its children
-                let children: ARTResource[] = this.node.getAdditionalProperty(ResAttribute.CHILDREN);
-                children.unshift(child);
+                this.children.unshift(<ARTURIResource>child);
             } else {
                 this.expandNode().subscribe();
             }
@@ -238,7 +228,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
             this.node.setAdditionalProperty(ResAttribute.MORE, 1); //update more
             //if it was open add the child to the visible children
             if (this.open) {
-                this.node.getAdditionalProperty(ResAttribute.CHILDREN).push(child);
+                this.children.push(<ARTURIResource>child);
             }
         }
     }
