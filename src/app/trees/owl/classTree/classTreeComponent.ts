@@ -34,19 +34,15 @@ export class ClassTreeComponent extends AbstractTree {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['rootClasses']) {
-            this.initTree();
+            this.init();
         }
     }
 
-    initTree() {
+    initImpl() {
         if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_GET_CLASS_TAXONOMY)) {
             return;
         }
         
-        this.roots = [];
-        this.selectedNode = null;
-        this.rootLimit = this.initialRoots;
-
         let clsTreeRoots: ARTURIResource[] = this.rootClasses;
         if (clsTreeRoots == undefined || clsTreeRoots.length == 0) {
             clsTreeRoots = [new ARTURIResource(this.vbProp.getClassTreePreferences().rootClassUri)];

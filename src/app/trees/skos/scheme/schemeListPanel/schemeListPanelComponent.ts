@@ -134,8 +134,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
     }
 
     refresh() {
-        this.selectedNode = null;
-        this.viewChildList.initList();
+        this.viewChildList.init();
     }
 
 }

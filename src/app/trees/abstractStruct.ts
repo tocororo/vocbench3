@@ -41,6 +41,8 @@ export abstract class AbstractStruct {
 
     abstract init(): void;
 
+    abstract setInitialStatus(): void
+
     private onNodeSelected(node: ARTURIResource) {
         if (this.selectedNode != undefined) {
             this.selectedNode.deleteAdditionalProperty(ResAttribute.SELECTED);

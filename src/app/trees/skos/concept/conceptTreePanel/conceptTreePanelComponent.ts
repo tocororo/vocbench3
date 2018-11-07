@@ -167,10 +167,9 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     }
 
     refresh() {
-        this.selectedNode = null;
         if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {
             //in index based visualization reinit the list
-            this.viewChildTree.initTree();
+            this.viewChildTree.init();
         } else if (this.visualizationMode == ConceptTreeVisualizationMode.searchBased) {
             //in search based visualization repeat the search
             if (this.lastSearch != undefined) {

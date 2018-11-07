@@ -71,8 +71,7 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
     }
 
     refresh() {
-        this.selectedNode = null;
-        this.viewChildTree.initTree();
+        this.viewChildTree.init();
     }
 
     //search handlers

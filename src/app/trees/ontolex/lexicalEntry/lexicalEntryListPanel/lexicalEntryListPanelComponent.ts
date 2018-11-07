@@ -231,10 +231,9 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
     }
 
     refresh() {
-        this.selectedNode = null;
         if (this.visualizationMode == LexEntryVisualizationMode.indexBased) {
             //in index based visualization reinit the list
-            this.viewChildList.initList();
+            this.viewChildList.init();
         } else if (this.visualizationMode == LexEntryVisualizationMode.searchBased) {
             //in search based visualization repeat the search
             if (this.lastSearch != undefined) {

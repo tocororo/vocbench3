@@ -55,24 +55,32 @@ export abstract class AbstractTree extends AbstractStruct {
 
     /**
      * Here I use ngAfterViewInit instead of ngOnInit because I need to wait that 
-     * the view is initialized because in initTree() there is a reference to #blockDivTree
+     * the view is initialized because in initImpl() there is a reference to #blockDivTree
      */
     ngAfterViewInit() {
-        /* Following check needed to avoid to call 2 times initTree() if an @Input is provided:
+        /* Following check needed to avoid to call 2 times initImpl() if an @Input is provided:
          * - 1st time in ngOnChanges when the input value is bound (so changes from undefined to its value)
          * - 2nd time here in ngAfterViewInit
          * I cannot resolve by deleting this method since if the @Input is not provided at all,
          * ngOnChanges is not called, so neither initTree */
         if (this.roots == undefined) {
-            this.initTree();
+            this.init();
         }
     }
 
     init() {
-        this.initTree();
+        this.setInitialStatus();
+        this.initImpl();
     }
 
-    abstract initTree(): void;
+    abstract initImpl(): void;
+
+    setInitialStatus() {
+        this.roots = [];
+        this.selectedNode = null;
+        this.nodeSelected.emit(this.selectedNode);
+        this.rootLimit = this.initialRoots;
+    }
 
     abstract openTreeAt(node: ARTURIResource): void;
 

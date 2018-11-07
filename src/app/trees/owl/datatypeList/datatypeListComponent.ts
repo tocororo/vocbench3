@@ -36,14 +36,10 @@ export class DatatypeListComponent extends AbstractList {
         if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.DATATYPES_GET_DATATYPES)) {
             return;
         }
-        this.initList();
+        this.init();
     }
 
-    initList() {
-        this.list = [];
-        this.selectedNode = null;
-        this.nodeLimit = this.initialNodes;
-
+    initImpl() {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         if (this.full) {
             this.datatypeService.getDatatypes().subscribe(

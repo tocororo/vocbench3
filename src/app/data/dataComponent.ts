@@ -23,6 +23,8 @@ export class DataComponent {
     @ViewChild('resViewPanel',  { read: ElementRef }) private resViewPanelRef: ElementRef;
 
     private onNodeSelected(node: ARTResource) {
+        if (node == null) return;
+
         if (this.resViewPanelFlex == 0) { //if the right panel is collapsed, open it
             this.resViewPanelFlex = this.maxPanelSize;
             this.treePanelFlex = 2;

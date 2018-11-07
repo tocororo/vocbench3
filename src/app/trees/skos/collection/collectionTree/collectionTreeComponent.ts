@@ -39,14 +39,10 @@ export class CollectionTreeComponent extends AbstractTree {
             (data: any) => this.onNestedCollectionAdded(data.nested, data.container)));
     }
 
-    initTree() {
+    initImpl() {
         if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_COLLECTION_TAXONOMY)) {
             return;
         }
-
-        // this.roots = []; //Don't know why, this throws an ExpressionChangedAfterItHasBeenCheckedError while the same code works fine in other trees
-        this.selectedNode = null;
-        this.rootLimit = this.initialRoots;
 
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.skosService.getRootCollections().subscribe( //new service
@@ -95,7 +91,6 @@ export class CollectionTreeComponent extends AbstractTree {
     //EVENT LISTENERS
 
     private onRootCollectionCreated(collection: ARTURIResource) {
-        // this.roots.push(collection);
         this.roots.unshift(collection);
     }
 

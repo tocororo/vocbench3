@@ -43,18 +43,14 @@ export class PropertyTreeComponent extends AbstractTree {
      */
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource']) {
-            this.initTree();
+            this.init();
         }
     }
 
-    initTree() {
+    initImpl() {
         if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_GET_PROPERTY_TAXONOMY)) {
             return;
         }
-
-        this.roots = [];
-        this.selectedNode = null;
-        this.rootLimit = this.initialRoots;
 
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
 
@@ -182,7 +178,6 @@ export class PropertyTreeComponent extends AbstractTree {
     //EVENT LISTENERS
 
     private onTopPropertyCreated(property: ARTURIResource) {
-        // this.roots.push(property);
         this.roots.unshift(property);
     }
 

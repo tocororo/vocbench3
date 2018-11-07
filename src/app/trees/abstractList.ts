@@ -34,10 +34,18 @@ export abstract class AbstractList extends AbstractStruct {
      */
 
     init() {
-        this.initList();
+        this.setInitialStatus();        
+        this.initImpl();
     }
 
-    abstract initList(): void;
+    abstract initImpl(): void;
+
+    setInitialStatus() {
+        this.list = [];
+        this.selectedNode = null;
+        this.nodeSelected.emit(this.selectedNode);
+        this.nodeLimit = this.initialNodes;
+    }
 
     /**
      * type of the node param depends on the list implementation

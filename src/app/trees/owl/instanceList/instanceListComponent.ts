@@ -50,43 +50,37 @@ export class InstanceListComponent extends AbstractList {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        this.selectedNode = null;
         //viewInitialized needed to prevent the initialization of the list before view is initialized
         if (this.viewInitialized) {
-            if (changes['cls']) {
+            if (changes['cls'] && changes['cls'].currentValue) {
                 let numInst: number = this.cls.getAdditionalProperty(ResAttribute.NUM_INST);
                 if (this.cls.getAdditionalProperty(ResAttribute.NUM_INST) > this.instanceLimit) {
                     this.basicModals.confirm("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
                         + ") has too many instances (" + numInst + "). Retrieving them all could be a very long process "
                         + "and it may slow down the server. Do you want to continue anyway?", "warning").then(
                         (confirm: any) => {
-                            this.initList();
+                            this.init();
                         },
                         (cancel: any) =>  {
                             this.list = [];
                         }
                     );
                 } else {
-                    this.initList();
+                    this.init();
                 }
             }
         }
-        
     }
 
     ngAfterViewInit() {
         this.viewInitialized = true;
-        this.initList();
+        this.init();
     }
 
-    initList() {
+    initImpl() {
         if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_GET_INSTANCES)) {
             return;
         }
-
-        this.selectedNode = null;
-        this.list = [];
-        this.nodeLimit = this.initialNodes;
 
         if (this.cls != undefined) {
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);

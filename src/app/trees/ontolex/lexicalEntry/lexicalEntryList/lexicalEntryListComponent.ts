@@ -43,20 +43,17 @@ export class LexicalEntryListComponent extends AbstractList {
         if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_GET_LEXICAL_ENTRY)) {
             return;
         }
-        this.initList();
+        this.init();
     }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['index'] && !changes['index'].firstChange || changes['lexicon'] && !changes['lexicon'].firstChange) {
-            this.initList();
+            this.init();
         }
     }
 
-    initList() {
+    initImpl() {
         if (this.lexicon != undefined) {
-            this.selectedNode = null;
-            this.nodeLimit = this.initialNodes;
-
             if (this.vbProp.getLexicalEntryListPreferences().visualization == LexEntryVisualizationMode.indexBased && this.index != undefined) {
                 this.list = [];
                 UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
@@ -80,8 +77,7 @@ export class LexicalEntryListComponent extends AbstractList {
     }
 
     public forceList(list: ARTURIResource[]) {
-        this.selectedNode = null;
-        this.nodeLimit = this.initialNodes;
+        this.setInitialStatus();
         this.list = list;
     }
 

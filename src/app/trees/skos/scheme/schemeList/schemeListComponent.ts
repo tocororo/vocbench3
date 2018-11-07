@@ -40,14 +40,10 @@ export class SchemeListComponent extends AbstractList {
         if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_SCHEMES)) {
             return;
         }
-        this.initList();
+        this.init();
     }
 
-    initList() {
-        this.list = [];
-        this.selectedNode = null;
-        this.nodeLimit = this.initialNodes;
-
+    initImpl() {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.skosService.getAllSchemes().subscribe(
             schemes => {

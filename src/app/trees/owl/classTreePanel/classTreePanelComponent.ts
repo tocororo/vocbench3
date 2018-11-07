@@ -84,9 +84,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     }
 
     refresh() {
-        this.selectedNode = null; //instance list refresh automatically after this since it listen for changes on cls
-        this.nodeSelected.emit(this.selectedNode); //emit nodeSelected with node null, so classIndividualTreePanel reset the instance list
-        this.viewChildTree.initTree();
+        this.viewChildTree.init();
     }
 
     //search handlers

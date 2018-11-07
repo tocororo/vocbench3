@@ -55,8 +55,7 @@ export class DatatypeListPanelComponent extends AbstractPanel {
     }
 
     refresh() {
-        this.selectedNode = null;
-        this.viewChildList.initList();
+        this.viewChildList.init();
     }
 
     //search handlers

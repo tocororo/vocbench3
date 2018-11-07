@@ -39,14 +39,10 @@ export class LexiconListComponent extends AbstractList {
         if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_GET_LEXICON)) {
             return;
         }
-        this.initList();
+        this.init();
     }
 
-    initList() {
-        this.list = [];
-        this.selectedNode = null;
-        this.nodeLimit = this.initialNodes;
-
+    initImpl() {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.ontolexService.getLexicons().subscribe(
             lexicons => {

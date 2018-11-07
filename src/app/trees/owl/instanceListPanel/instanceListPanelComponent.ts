@@ -68,8 +68,7 @@ export class InstanceListPanelComponent extends AbstractPanel {
     }
 
     refresh() {
-        this.selectedNode = null;
-        this.viewChildInstanceList.initList();
+        this.viewChildInstanceList.init();
     }
 
     //search handlers

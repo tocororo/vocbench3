@@ -45,20 +45,16 @@ export class ConceptTreeComponent extends AbstractTree {
      */
     ngOnChanges(changes: SimpleChanges) {
         if (changes['schemes']) {
-            this.initTree();
+            this.init();
         }
     }
 
-    initTree() {
+    initImpl() {
         if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_CONCEPT_TAXONOMY)) {
             return;
         }
 
-        this.roots = [];
         if (this.vbProp.getConceptTreePreferences().visualization == ConceptTreeVisualizationMode.hierarchyBased) {
-            this.selectedNode = null;
-            this.rootLimit = this.initialRoots;
-
             let prefs: ConceptTreePreference = this.vbProp.getConceptTreePreferences();
             let broaderProps: ARTURIResource[] = [];
             prefs.broaderProps.forEach((prop: string) => broaderProps.push(new ARTURIResource(prop)));
@@ -85,9 +81,8 @@ export class ConceptTreeComponent extends AbstractTree {
     }
 
     public forceList(list: ARTURIResource[]) {
+        this.setInitialStatus();
         this.roots = list;
-        this.selectedNode = null;
-        this.rootLimit = this.initialRoots;
     }
 
     openTreeAt(node: ARTURIResource) {
