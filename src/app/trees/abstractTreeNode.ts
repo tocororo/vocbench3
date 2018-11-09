@@ -190,7 +190,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
 
     onTreeNodeDeleted(deletedNode: ARTResource) {
         for (var i = 0; i < this.children.length; i++) {
-            if (this.children[i].getURI() == deletedNode.getNominalValue()) {
+            if (this.children[i].getNominalValue() == deletedNode.getNominalValue()) {
                 if (VBContext.getWorkingProject().isValidationEnabled()) {
                     //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
                     let stagedRes: ARTURIResource = this.children[i].clone();
@@ -234,7 +234,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
     }
 
     onParentRemoved(parent: ARTResource, child: ARTResource) {
-        if (parent.getNominalValue() == this.node.getURI()) {
+        if (parent.getNominalValue() == this.node.getNominalValue()) {
             this.onTreeNodeDeleted(child);
         }
     }

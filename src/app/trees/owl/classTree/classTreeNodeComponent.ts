@@ -68,6 +68,10 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
                 ResourceUtils.sortResources(subClasses, this.rendering ? SortAttribute.show : SortAttribute.value);
                 this.children = subClasses;
                 this.open = true;
+                if (this.children.length == 0) {
+                    this.open = false;
+                    this.node.setAdditionalProperty(ResAttribute.MORE, 0);
+                }
             }
         );
     }

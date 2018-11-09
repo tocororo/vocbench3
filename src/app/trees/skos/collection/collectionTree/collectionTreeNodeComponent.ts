@@ -41,6 +41,10 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
                 ResourceUtils.sortResources(nestedColl, this.rendering ? SortAttribute.show : SortAttribute.value);
                 this.children = nestedColl;
                 this.open = true;
+                if (this.children.length == 0) {
+                    this.open = false;
+                    this.node.setAdditionalProperty(ResAttribute.MORE, 0);
+                }
             }
         );
     }

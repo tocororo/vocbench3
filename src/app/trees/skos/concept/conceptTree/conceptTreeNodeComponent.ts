@@ -55,6 +55,10 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
                 //append the retrieved node as child of the expanded node
                 this.children = narrower;
                 this.open = true;
+                if (this.children.length == 0) {
+                    this.open = false;
+                    this.node.setAdditionalProperty(ResAttribute.MORE, 0);
+                }
             }
         );
     }

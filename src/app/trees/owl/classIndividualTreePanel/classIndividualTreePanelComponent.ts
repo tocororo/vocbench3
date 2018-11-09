@@ -44,7 +44,7 @@ export class ClassIndividualTreePanelComponent {
 
     private rendering: boolean = false; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
 
-    private selectedClass: ARTURIResource;
+    private selectedClass: ARTURIResource = null;
     private selectedInstance: ARTURIResource;
 
     private rolesForSearch: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual];

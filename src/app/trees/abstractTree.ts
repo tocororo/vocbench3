@@ -36,7 +36,7 @@ export abstract class AbstractTree extends AbstractStruct {
     /**
      * ATTRIBUTES
      */
-    roots: ARTURIResource[];
+    roots: ARTURIResource[] = [];
 
     /**
      * CONSTRUCTOR

@@ -41,6 +41,10 @@ export class PropertyTreeNodeComponent extends AbstractTreeNode {
                 ResourceUtils.sortResources(subProps, this.rendering ? SortAttribute.show : SortAttribute.value);
                 this.children = subProps;
                 this.open = true;
+                if (this.children.length == 0) {
+                    this.open = false;
+                    this.node.setAdditionalProperty(ResAttribute.MORE, 0);
+                }
             }
         );
     }
