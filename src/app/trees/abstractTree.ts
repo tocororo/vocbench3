@@ -36,7 +36,7 @@ export abstract class AbstractTree extends AbstractStruct {
     /**
      * ATTRIBUTES
      */
-    roots: ARTURIResource[] = [];
+    roots: ARTURIResource[];
 
     /**
      * CONSTRUCTOR
@@ -58,13 +58,13 @@ export abstract class AbstractTree extends AbstractStruct {
      * the view is initialized because in initImpl() there is a reference to #blockDivTree
      */
     ngAfterViewInit() {
-        /* Following check needed to avoid to call 2 times initImpl() if an @Input is provided:
-         * - 1st time in ngOnChanges when the input value is bound (so changes from undefined to its value)
+        /* The following check is needed to avoid to call 2 times initImpl() if an @Input is provided:
+         * - 1st time in ngOnChanges (if it is defined in the treeComponent implementation) when the @Input parameter is bound 
          * - 2nd time here in ngAfterViewInit
-         * I cannot resolve by deleting this method since if the @Input is not provided at all,
-         * ngOnChanges is not called, so neither initTree */
+         * I cannot resolve by deleting this method since if none of the @Input parameters is provided to the treeComponent,
+         * ngOnChanges() is not called, so neither init()) */
         if (this.roots == undefined) {
-            this.init();
+            setTimeout(() => { this.init(); });
         }
     }
 
