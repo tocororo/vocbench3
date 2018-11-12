@@ -19,12 +19,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 })
 export class SubtermsPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PartitionRenderSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
-
     partition = ResViewPartition.subterms;
     rootProperty: ARTURIResource = Decomp.subterm;
     label = "Subterms";
@@ -39,11 +33,13 @@ export class SubtermsPartitionRenderer extends PartitionRenderSingleRoot {
 
     //add as top concept
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.browsingModals.browseLexicalEntryList("Add a subterm", null, true, true, false).then(
-            (lexEntry: ARTURIResource) => {
-                this.ontolexService.addSubterm(<ARTURIResource>this.resource, lexEntry, predicate).subscribe(
-                    stResp => this.update.emit()
-                )
+        this.browsingModals.browseLexicalEntryList("Add a subterm", null, true, true, false, true).then(
+            (values: ARTURIResource[]) => {
+                let addFunctions: Observable<any>[] = [];
+                values.forEach((v: ARTURIResource) => {
+                    addFunctions.push(this.ontolexService.addSubterm(<ARTURIResource>this.resource, v, predicate));
+                });
+                this.addMultiple(addFunctions);
             },
             () => {}
         )

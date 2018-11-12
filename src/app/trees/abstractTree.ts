@@ -79,6 +79,8 @@ export abstract class AbstractTree extends AbstractStruct {
         this.roots = [];
         this.selectedNode = null;
         this.nodeSelected.emit(this.selectedNode);
+        this.checkedNodes = [];
+        this.nodeChecked.emit(this.checkedNodes);
         this.rootLimit = this.initialRoots;
     }
 

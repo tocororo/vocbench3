@@ -118,6 +118,24 @@ export abstract class PartitionRenderer {
      */
     abstract add(predicate: ARTURIResource, propChangeable: boolean): void;
 
+    /**
+     * Invokes an array of functions in order to add multiple values
+     * @param addFunctions 
+     */
+    protected addMultiple(addFunctions: Observable<any>[]) {
+        if (addFunctions.length == 0) { //no more function to call
+            this.update.emit();
+        } else {
+            addFunctions[0].subscribe(
+                stResp => {
+                    //remove the first function (the one just called) and call itself recursively untill there are no more functions
+                    addFunctions.shift();
+                    this.addMultiple(addFunctions);
+                }
+            );
+        }
+    }
+
     private isAddManuallyAllowed() {
         return ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
     }

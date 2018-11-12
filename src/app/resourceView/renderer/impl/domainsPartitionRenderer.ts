@@ -19,12 +19,6 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 })
 export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PartitionRenderSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
-
     partition = ResViewPartition.domains;
     rootProperty: ARTURIResource = RDFS.domain;
     label = "Domains";
@@ -40,25 +34,25 @@ export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
     add(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.addPropertyValue("Add a domain", this.resource, predicate, propChangeable).then(
             (data: any) => {
-                var prop: ARTURIResource = data.property;
-                var value: any = data.value; //value can be a class or a manchester Expression
+                let prop: ARTURIResource = data.property;
+                let value: any = data.value; //value can be class(es) or a manchester Expression
                 
                 if (typeof value == "string") {
                     this.manchService.createRestriction(<ARTURIResource>this.resource, prop, value).subscribe(
                         stResp => this.update.emit(null)
                     );
-                } else { //value is an ARTURIResource (a class selected from the tree)
+                } else { //value is ARTURIResource[] (class(es) selected from the tree)
+                    let addFunctions: Observable<any>[] = [];
                     if (prop.getURI() == this.rootProperty.getURI()) { //it's using an rdfs:domain
-                        this.propService.addPropertyDomain(<ARTURIResource>this.resource, value).subscribe(
-                            stResp => this.update.emit(null)
-                        );
+                        value.forEach((v: ARTURIResource) => {
+                            addFunctions.push(this.propService.addPropertyDomain(<ARTURIResource>this.resource, v));
+                        });
                     } else { //it's using a subProperty of rdfs:domain
-                        this.resourcesService.addValue(this.resource, prop, value).subscribe(
-                            stResp => {
-                                this.update.emit(null);
-                            }
-                        );
+                        value.forEach((v: ARTURIResource) => {
+                            addFunctions.push(this.resourcesService.addValue(this.resource, prop, v));
+                        });
                     }
+                    this.addMultiple(addFunctions);
                 }
             },
             () => {}

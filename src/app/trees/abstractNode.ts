@@ -15,11 +15,18 @@ export abstract class AbstractNode {
 
     @Input() node: ARTURIResource;
     @Input() rendering: boolean; //if true the node be rendered with the show, with the qname otherwise
+    @Input() multiselection: boolean; //if true enabled the selection of multiple resources via checkboxes
     @Input() showDeprecated: boolean;
     @Input() context: TreeListContext;
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeChecked = new EventEmitter<{ node: ARTURIResource, checked: boolean }>();
 
     eventSubscriptions: any[] = [];
+
+    /**
+     * ATTRIBUTES
+     */
+    checked: boolean = false;
 
     /**
      * CONSTRUCTOR
@@ -44,6 +51,10 @@ export abstract class AbstractNode {
 
     selectNode() {
         this.nodeSelected.emit(this.node);
+    }
+
+    onNodeCheckChange() {
+        this.nodeChecked.emit({ node: this.node, checked: this.checked });
     }
 
 

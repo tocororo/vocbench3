@@ -25,28 +25,37 @@
                     <input type="checkbox" [(ngModel)]="showAllClass">Show all classes
                 </label>
             </div>
-            <class-tree-panel (nodeSelected)="onResourceSelected($event)" [roots]="showAllClass? defaultRootClass : rootsForClsIndList"
-                [deletable]="false"></class-tree-panel>
+            <class-tree-panel [roots]="showAllClass? defaultRootClass : rootsForClsIndList" [deletable]="false" [allowMultiselection]="context.allowMultiselection"
+                (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
+            </class-tree-panel>
         </div>
 
-        <concept-tree-panel *ngIf="viewType == 'conceptTree'" [deletable]="false" [schemeChangeable]="true" [schemes]="schemes"
-            (nodeSelected)="onResourceSelected($event)"  (schemeChanged)="onConceptTreeSchemeChange($event)">
+        <concept-tree-panel *ngIf="viewType == 'conceptTree'" [deletable]="false" [schemeChangeable]="true" [schemes]="schemes" [allowMultiselection]="context.allowMultiselection"
+            (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (schemeChanged)="onConceptTreeSchemeChange($event)"
+            (multiselectionStatus)="onMultiselectionChange($event)">
         </concept-tree-panel>
         
         <ng-template [ngIf]="viewType == 'propertyTree'">
-            <property-tree-panel *ngIf="viewType == 'propertyTree'" [deletable]="false" [type]="propertyType"
-                (nodeSelected)="onPropertySelected($event)">
+            <property-tree-panel *ngIf="viewType == 'propertyTree'" [deletable]="false" [type]="propertyType" [allowMultiselection]="context.allowMultiselection"
+                (nodeSelected)="onPropertySelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
             </property-tree-panel>
             <div *ngIf="showInversePropertyCheckbox" class="checkbox" style="margin: 8px 0 0 0;">
                 <label>
-                    <input type="checkbox" [(ngModel)]="inverseProp" [disabled]="selectedResource?.getRole() != 'objectProperty'">Inverse Property
+                    <input type="checkbox" [(ngModel)]="inverseProp" [disabled]="!isInversePropertyCheckboxEnabled()">Inverse Property
+                    <span *ngIf="multiselection" class="glyphicon glyphicon-exclamation-sign"
+                        title="In case of multiple properties selected, the 'Inverse Property' flag is applied to all of them (available only if all for ObjectProperties)">
+                    </span>
                 </label>
             </div>
         </ng-template>
         
-        <scheme-list-panel *ngIf="viewType == 'schemeList'" [deletable]="false" (nodeSelected)="onResourceSelected($event)"></scheme-list-panel>
+        <scheme-list-panel *ngIf="viewType == 'schemeList'" [deletable]="false" [allowMultiselection]="context.allowMultiselection"
+            (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
+        </scheme-list-panel>
         
-        <datatype-list-panel *ngIf="viewType == 'datatypeList'" [full]="true" [deletable]="false" (nodeSelected)="onResourceSelected($event)"></datatype-list-panel>
+        <datatype-list-panel *ngIf="viewType == 'datatypeList'" [full]="true" [deletable]="false"  [allowMultiselection]="context.allowMultiselection"
+            (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
+        </datatype-list-panel>
         
         <div  *ngIf="viewType == 'classAndIndividual'" class="vbox">
             <div *ngIf="rootsForClsIndList" class="checkbox-inline" style="margin-bottom: 5px;">
@@ -54,8 +63,8 @@
                     <input type="checkbox" [(ngModel)]="showAllClass">Show all classes
                 </label>
             </div>
-            <class-individual-tree [deletable]="false" [roots]="showAllClass? defaultRootClasses : rootsForClsIndList"
-                (nodeSelected)="onResourceSelected($event)">
+            <class-individual-tree [deletable]="false" [roots]="showAllClass? defaultRootClasses : rootsForClsIndList" [allowMultiselection]="context.allowMultiselection"
+                (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
             </class-individual-tree>
         </div>
     </div>

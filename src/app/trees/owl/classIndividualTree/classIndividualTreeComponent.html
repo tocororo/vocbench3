@@ -5,18 +5,20 @@
     <div [ngSwitch]="selectedClass?.getURI()" class="vbox" style="margin-left: 4px;">
 
         <concept-tree-panel *ngSwitchCase="'http://www.w3.org/2004/02/skos/core#Concept'"
-            [schemes]="currentSchemes" [editable]="editable" [deletable]="deletable" [schemeChangeable]="true"
-            (nodeSelected)="onInstanceSelected($event)" (schemeChanged)="onConceptTreeSchemeChange($event)">
+            [schemes]="currentSchemes" [editable]="editable" [deletable]="deletable" [schemeChangeable]="true" [allowMultiselection]="allowMultiselection"
+            (nodeSelected)="onInstanceSelected($event)" (nodeChecked)="onNodeChecked($event)"
+            (schemeChanged)="onConceptTreeSchemeChange($event)" (multiselectionStatus)="onMultiselectionChange($event)">
         </concept-tree-panel>
 
         <collection-tree-panel *ngSwitchCase="'http://www.w3.org/2004/02/skos/core#Collection'"
-            [editable]="editable" [deletable]="deletable"
-            (nodeSelected)="onInstanceSelected($event)">
+            [editable]="editable" [deletable]="deletable" [allowMultiselection]="allowMultiselection"
+            (nodeSelected)="onInstanceSelected($event)" (nodeChecked)="onNodeChecked($event)" (multiselectionStatus)="onMultiselectionChange($event)">
         </collection-tree-panel>
 
         <lexical-entry-list-panel *ngSwitchCase="'http://www.w3.org/ns/lemon/ontolex#LexicalEntry'"
-            [lexiconChangeable]="true" [editable]="editable" [deletable]="deletable"
-            (nodeSelected)="onInstanceSelected($event)" (lexiconChanged)="onLexEntryLexiconChange($event)">
+            [lexiconChangeable]="true" [editable]="editable" [deletable]="deletable" [allowMultiselection]="allowMultiselection"
+            (nodeSelected)="onInstanceSelected($event)" (nodeChecked)="onNodeChecked($event)"
+            (lexiconChanged)="onLexEntryLexiconChange($event)" (multiselectionStatus)="onMultiselectionChange($event)">
         </lexical-entry-list-panel>
 
         <lexical-sense-selector *ngSwitchCase="'http://www.w3.org/ns/lemon/ontolex#LexicalSense'"
@@ -24,7 +26,8 @@
         </lexical-sense-selector>
 
         <instance-list-panel *ngSwitchDefault 
-            [cls]="selectedClass" [editable]="editable" [deletable]="deletable" (nodeSelected)="onInstanceSelected($event)">
+            [cls]="selectedClass" [editable]="editable" [deletable]="deletable" [allowMultiselection]="allowMultiselection"
+            (nodeSelected)="onInstanceSelected($event)" (nodeChecked)="onNodeChecked($event)" (multiselectionStatus)="onMultiselectionChange($event)">
         </instance-list-panel>
     </div>
 

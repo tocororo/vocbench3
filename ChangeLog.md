@@ -5,10 +5,11 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 5.0.0-beta.1 (dd-MM-yyyy)
-  * Changed dynamic settings on vbconfig.js
+  * Enabled multiselection in trees and lists when adding a value to a property.
+  * Changed dynamic settings on vbconfig.js.
   * Updated e-mail configuration, now it is possible to use, beside SSL, TLS or no cryptographic protocol at all;
     Added possibility to test the e-mail configuration. 
-  * Fixed bug in the Validation tab, where the optional time lower bound was always ignored 
+  * Fixed bug in the Validation tab, where the optional time lower bound was always ignored.
   * Bugfixes.
 
 # 4.0.2 (27-07-2018)

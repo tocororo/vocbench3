@@ -18,12 +18,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 })
 export class DisjointPropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PartitionRenderSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
-
     partition = ResViewPartition.disjointProperties;
     rootProperty: ARTURIResource = OWL.propertyDisjointWith;
     label = "Disjoint properties";
@@ -40,11 +34,14 @@ export class DisjointPropertiesPartitionRenderer extends PartitionRenderSingleRo
         this.resViewModals.addPropertyValue("Add a disjoint property", this.resource, this.rootProperty, propChangeable).then(
             (data: any) => {
                 let prop: ARTURIResource = data.property;
-                let equivProp: ARTURIResource = data.value;
                 let inverse: boolean = data.inverseProperty;
-                this.propService.addPropertyDisjointWith(<ARTURIResource>this.resource, equivProp, prop, inverse).subscribe(
-                    stResp => this.update.emit(null)
-                );
+                let values: ARTURIResource[] = data.value;
+
+                let addFunctions: Observable<any>[] = [];
+                values.forEach((v: ARTURIResource) => {
+                    addFunctions.push(this.propService.addPropertyDisjointWith(<ARTURIResource>this.resource, v, prop, inverse));
+                });
+                this.addMultiple(addFunctions);
             },
             () => {}
         )

@@ -7,8 +7,8 @@
                     <div class="listNodeItem">
                         <input *ngIf="context == 'dataPanel'" type="radio" style="margin-right: 5px;" name="lex_radio" [value]="n"
                             [(ngModel)]="activeLexicon" (ngModelChange)="updateActiveLexiconPref()">
-                        <lexicon-list-node [node]="n" [rendering]="rendering" [showDeprecated]="showDeprecated" 
-                            (nodeSelected)="onNodeSelected($event)" style="flex: 1">
+                        <lexicon-list-node [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" 
+                            (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" style="flex: 1">
                         </lexicon-list-node>
                     </div>
                 </div>

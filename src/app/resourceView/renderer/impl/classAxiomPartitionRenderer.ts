@@ -19,12 +19,6 @@ import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 })
 export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMultiRoot {
 
-    //inherited from PredObjListMultirootRenderer
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
-
     partition = ResViewPartition.classaxioms;
     rootProperties: ARTURIResource[] = [
         RDFS.subClassOf, OWL.equivalentClass, OWL.disjointWith,
@@ -70,16 +64,20 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
                         this.manchService.createRestriction(<ARTURIResource>this.resource, predicate, value).subscribe(
                             stResp => this.update.emit(null)
                         );
-                    } else { //value is an ARTURIResource (a class selected from the tree)
+                    } else { //value is an ARTURIResource[] (class(es) selected from the tree)
+                        let values: ARTURIResource[] = data.value;
+                        let addFunctions: Observable<any>[] = [];
+
                         if (predicate.getURI() == RDFS.subClassOf.getURI()) {
-                            this.clsService.addSuperCls(<ARTURIResource>this.resource, value).subscribe(
-                                stResp => this.update.emit(null)
-                            );
+                            values.forEach((v: ARTURIResource) => {
+                                addFunctions.push(this.clsService.addSuperCls(<ARTURIResource>this.resource, v));
+                            });
                         } else {
-                            this.resourcesService.addValue(this.resource, predicate, value).subscribe(
-                                stResp => this.update.emit(null)
-                            );
+                            values.forEach((v: ARTURIResource) => {
+                                addFunctions.push(this.resourcesService.addValue(this.resource, predicate, v));
+                            });
                         }
+                        this.addMultiple(addFunctions);
                     }
                 },
                 () => { }

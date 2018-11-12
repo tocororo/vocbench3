@@ -11,11 +11,12 @@
         </button>
     </div>
 
-    <lexical-entry-list-panel [editable]="context.editable" [deletable]="context.deletable" [lexicon]="activeLexicon" (nodeSelected)="onLexiconSelected($event)">
+    <lexical-entry-list-panel [editable]="context.editable" [deletable]="context.deletable" [lexicon]="activeLexicon" [allowMultiselection]="context.allowMultiselection"
+        (nodeSelected)="onLexiconSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="multiselection = $event">
     </lexical-entry-list-panel>
     
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedEntry">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkEnabled()">Ok</button>
     <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
 </div>

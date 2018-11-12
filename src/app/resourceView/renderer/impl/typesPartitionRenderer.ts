@@ -20,12 +20,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 })
 export class TypesPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PartitionRenderSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
-
     partition = ResViewPartition.types;
     rootProperty: ARTURIResource = RDF.type;
     label = "Types";
@@ -41,20 +35,26 @@ export class TypesPartitionRenderer extends PartitionRenderSingleRoot {
     add(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.addPropertyValue("Add a type", this.resource, predicate, propChangeable).then(
             (data: any) => {
-                var prop: ARTURIResource = data.property;
-                var typeClass: ARTURIResource = data.value;
+                let prop: ARTURIResource = data.property;
+                let values: ARTURIResource[] = data.value;
+                let addFunctions: Observable<any>[] = [];
+
                 if (prop.getURI() == this.rootProperty.getURI()) { //it's adding an rdf:type
-                    this.individualService.addType(<ARTURIResource>this.resource, typeClass).subscribe(
-                        stResp => this.update.emit(null)
-                    ) ;
+                    values.forEach((v: ARTURIResource) => {
+                        addFunctions.push(this.individualService.addType(<ARTURIResource>this.resource, v));
+                    });
                 } else { //it's adding a subProperty of rdf:type
-                    this.resourcesService.addValue(this.resource, prop, typeClass).subscribe(
-                        stResp => {
-                            this.eventHandler.typeAddedEvent.emit({resource: this.resource, type: typeClass});
-                            this.update.emit(null);
-                        }
-                    );
+                    values.forEach((v: ARTURIResource) => {
+                        addFunctions.push(
+                            this.resourcesService.addValue(this.resource, prop, v).map(
+                                stResp => {
+                                    this.eventHandler.typeAddedEvent.emit({resource: this.resource, type: v});
+                                }
+                            )
+                        );
+                    });
                 }
+                this.addMultiple(addFunctions);
             },
             () => {}
         )

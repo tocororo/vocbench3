@@ -40,11 +40,14 @@ export class EquivalentPropertiesPartitionRenderer extends PartitionRenderSingle
         this.resViewModals.addPropertyValue("Add an equivalent property", this.resource, predicate, propChangeable).then(
             (data: any) => {
                 let prop: ARTURIResource = data.property;
-                let equivProp: ARTURIResource = data.value;
                 let inverse: boolean = data.inverseProperty;
-                this.propService.addEquivalentProperty(<ARTURIResource>this.resource, equivProp, prop, inverse).subscribe(
-                    stResp => this.update.emit(null)
-                );
+                let values: ARTURIResource[] = data.value;
+
+                let addFunctions: Observable<any>[] = [];
+                values.forEach((v: ARTURIResource) => {
+                    addFunctions.push(this.propService.addEquivalentProperty(<ARTURIResource>this.resource, v, prop, inverse));
+                });
+                this.addMultiple(addFunctions);
             },
             () => {}
         )

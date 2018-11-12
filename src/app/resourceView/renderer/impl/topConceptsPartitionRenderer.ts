@@ -20,12 +20,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 })
 export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PartitionRenderSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource: ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
-
     partition = ResViewPartition.topconceptof;
     rootProperty: ARTURIResource = SKOS.topConceptOf;
     label = "Top Concept of";
@@ -42,20 +36,27 @@ export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
     add(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.addPropertyValue("Set as top Concept of", this.resource, predicate, propChangeable).then(
             (data: any) => {
-                var prop: ARTURIResource = data.property;
-                var scheme: ARTURIResource = data.value;
+
+                let prop: ARTURIResource = data.property;
+                let values: ARTURIResource[] = data.value;
+                let addFunctions: Observable<any>[] = [];
+
                 if (prop.getURI() == this.rootProperty.getURI()) { //it's adding a concept as skos:topConceptOf
-                    this.skosService.addTopConcept(<ARTURIResource>this.resource, scheme).subscribe(
-                        stResp => this.update.emit(null)
-                    ) ;
+                    values.forEach((v: ARTURIResource) => {
+                        addFunctions.push(this.skosService.addTopConcept(<ARTURIResource>this.resource, v));
+                    });
                 } else { //it's adding a subProperty of skos:topConceptOf
-                    this.resourcesService.addValue(this.resource, prop, scheme).subscribe(
-                        stResp => {
-                            this.eventHandler.topConceptCreatedEvent.emit({concept: <ARTURIResource>this.resource, schemes: [scheme]});
-                            this.update.emit(null);
-                        }
-                    );
+                    values.forEach((v: ARTURIResource) => {
+                        addFunctions.push(
+                            this.resourcesService.addValue(this.resource, prop, v).map(
+                                stResp => {
+                                    this.eventHandler.topConceptCreatedEvent.emit({concept: <ARTURIResource>this.resource, schemes: [v]});
+                                }
+                            )
+                        );
+                    });
                 }
+                this.addMultiple(addFunctions);
             },
             () => {}
         );

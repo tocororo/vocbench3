@@ -20,12 +20,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 })
 export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PartitionRenderSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
-
     partition = ResViewPartition.membersOrdered;
     addManuallyAllowed: boolean = false;
     rootProperty = SKOS.memberList;
@@ -65,13 +59,11 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
      * Adds a first member to an ordered collection 
      */
     private addFirst(predicate?: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false).then(
+        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, false).then(
             (data: any) => {
-                var prop: ARTURIResource = data.property;
-                var member: ARTResource = data.value;
-                this.skosService.addFirstToOrderedCollection(this.resource, member).subscribe(
-                    stResp => this.update.emit(null)
-                );
+                let values: ARTResource[] = data.value;
+                let addFunctions: Observable<any>[] = [this.skosService.addFirstToOrderedCollection(this.resource, values[0])];
+                this.addMultiple(addFunctions);
             },
             () => { }
         );
@@ -81,13 +73,11 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
      * Adds a last member to an ordered collection 
      */
     private addLast(predicate?: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false).then(
+        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, false).then(
             (data: any) => {
-                var prop: ARTURIResource = data.property;
-                var member: ARTResource = data.value;
-                this.skosService.addLastToOrderedCollection(this.resource, member).subscribe(
-                    stResp => this.update.emit(null)
-                );
+                let values: ARTResource[] = data.value;
+                let addFunctions: Observable<any>[] = [this.skosService.addLastToOrderedCollection(this.resource, values[0])];
+                this.addMultiple(addFunctions);
             },
             () => { }
         );
@@ -97,14 +87,12 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
      * Adds a member in a given position to an ordered collection 
      */
     private addBefore(predicate?: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false).then(
+        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, false).then(
             (data: any) => {
-                var prop: ARTURIResource = data.property;
-                var member: ARTResource = data.value;
-                var position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue());
-                this.skosService.addInPositionToOrderedCollection(this.resource, member, position).subscribe(
-                    stResp => this.update.emit(null)
-                );
+                let position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue());
+                let values: ARTResource[] = data.value;
+                let addFunctions: Observable<any>[] = [this.skosService.addInPositionToOrderedCollection(this.resource, values[0], position)];
+                this.addMultiple(addFunctions);
             },
             () => { }
         );
@@ -114,14 +102,12 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
      * Adds a member in a given position to an ordered collection 
      */
     private addAfter(predicate?: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false).then(
+        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, false).then(
             (data: any) => {
-                var prop: ARTURIResource = data.property;
-                var member: ARTResource = data.value;
-                var position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue()) + 1;
-                this.skosService.addInPositionToOrderedCollection(this.resource, member, position).subscribe(
-                    stResp => this.update.emit(null)
-                );
+                let position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue()) + 1;
+                let values: ARTResource[] = data.value;
+                let addFunctions: Observable<any>[] = [this.skosService.addInPositionToOrderedCollection(this.resource, values[0], position)];
+                this.addMultiple(addFunctions);
             },
             () => { }
         );

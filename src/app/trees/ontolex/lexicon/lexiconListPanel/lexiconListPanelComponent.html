@@ -16,18 +16,42 @@
         </div>
         <div style="flex: 1"></div>
         <div class="btn-toolbar" role="toolbar">
-            <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering = !rendering" [ngClass]="{active: rendering}">
-                <span class="glyphicon glyphicon-font"></span>
-            </button>
             <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
                 <span class="glyphicon glyphicon-refresh"></span>
             </button>
+        </div>
+
+        <div class="dropdown pull-right">
+            <button class="dropdown-toggle transparentBtn" data-toggle="dropdown">
+                <span>&#9662;</span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a (click)="rendering = !rendering">
+                        <span style="flex: 1;">
+                            <span class="glyphicon glyphicon-font" style="margin-right: 4px;"></span>
+                            Rendering
+                        </span>
+                        <span *ngIf="rendering" class="glyphicon glyphicon-ok pull-right"></span>
+                    </a>
+                </li>
+                <li *ngIf="allowMultiselection">
+                    <a (click)="toggleMultiselection()">
+                        <span style="flex: 1;">
+                            <span class="glyphicon glyphicon-check" style="margin-right: 4px;"></span>
+                            Multiselection
+                        </span>
+                        <span *ngIf="multiselection" class="glyphicon glyphicon-ok pull-right"></span>
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
     
     <!-- List -->
     <div class="panel-body vbox">
-        <lexicon-list [rendering]="rendering" [showDeprecated]="showDeprecated" (nodeSelected)="onNodeSelected($event)" [context]="context">
+        <lexicon-list [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context" 
+            (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" >
         </lexicon-list>
     </div>
 

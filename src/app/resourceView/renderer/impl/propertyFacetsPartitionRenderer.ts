@@ -21,11 +21,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
 
     @Input('facets') facets: PropertyFacet[];
-    //inherited from PartitionRenderSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     partition = ResViewPartition.facets;
     rootProperty: ARTURIResource = OWL.inverseOf;
@@ -43,11 +38,14 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
         this.resViewModals.addPropertyValue("Add an inverse property", this.resource, predicate, propChangeable).then(
             (data: AddPropertyValueModalReturnData) => {
                 let prop: ARTURIResource = data.property;
-                let inverseProp: ARTURIResource = data.value;
                 let inverse: boolean = data.inverseProperty;
-                this.propService.addInverseProperty(<ARTURIResource>this.resource, inverseProp, prop, inverse).subscribe(
-                    stResp => this.update.emit(null)
-                );
+                let values: ARTURIResource[] = data.value;
+
+                let addFunctions: Observable<any>[] = [];
+                values.forEach((v: ARTURIResource) => {
+                    addFunctions.push(this.propService.addInverseProperty(<ARTURIResource>this.resource, v, prop, inverse));
+                });
+                this.addMultiple(addFunctions);
             },
             () => { }
         );

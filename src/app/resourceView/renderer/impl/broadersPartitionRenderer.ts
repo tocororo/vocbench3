@@ -21,12 +21,6 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 })
 export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from partitionRendererSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
-
     partition = ResViewPartition.broaders;
     rootProperty: ARTURIResource = SKOS.broader;
     label = "Broaders";
@@ -42,20 +36,27 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
     add(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.addPropertyValue("Add a broader", this.resource, predicate, propChangeable).then(
             (data: any) => {
-                var prop: ARTURIResource = data.property;
-                var broader: ARTURIResource = data.value;
+                let prop: ARTURIResource = data.property;
+                let values: ARTURIResource[] = data.value;
+                let addFunctions: Observable<any>[] = [];
+
                 if (prop.getURI() == this.rootProperty.getURI()) { //it's adding a concept as skos:broader
-                    this.skosService.addBroaderConcept(<ARTURIResource>this.resource, broader).subscribe(
-                        stResp => this.update.emit(null)
-                    ) ;
-                } else { //it's using a subProperty of skos:broader
-                    this.resourcesService.addValue(this.resource, prop, broader).subscribe(
-                        stResp =>{
-                            this.eventHandler.broaderAddedEvent.emit({narrower: <ARTURIResource>this.resource, broader: broader});
-                            this.update.emit(null);
-                        }
-                    );
+                    values.forEach((v: ARTURIResource) => {
+                        addFunctions.push(this.skosService.addBroaderConcept(<ARTURIResource>this.resource, v));
+                    });
+                } else { //it's enriching a subProperty of skos:broader
+                    values.forEach((v: ARTURIResource) => {
+                        addFunctions.push(
+                            this.resourcesService.addValue(this.resource, prop, v).map(
+                                stResp => {
+                                    this.eventHandler.broaderAddedEvent.emit({narrower: <ARTURIResource>this.resource, broader: v});
+                                    this.update.emit(null);
+                                }
+                            )
+                        );
+                    });
                 }
+                this.addMultiple(addFunctions);
             },
             () => {}
         );

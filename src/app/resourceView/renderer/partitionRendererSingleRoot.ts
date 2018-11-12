@@ -8,6 +8,7 @@ import { ResourcesServices } from "../../services/resourcesServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
+import { AddPropertyValueModalReturnData } from "../resViewModals/addPropertyValueModal";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { PartitionRenderer } from "./partitionRenderer";
 
@@ -200,9 +201,14 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
      */
     private enrichWithResource(predicate: ARTURIResource) {
         this.resViewModals.addPropertyValue("Add " + predicate.getShow(), this.resource, predicate, false).then(
-            (data: any) => {
-                let value: ARTURIResource = data.value;
-                this.addPartitionAware(this.resource, predicate, value);
+            (data: AddPropertyValueModalReturnData) => {
+                let prop: ARTURIResource = data.property;
+                let values: ARTURIResource[] = data.value;
+                let addFunctions: Observable<any>[] = [];
+                values.forEach((v: ARTURIResource) => {
+                    addFunctions.push(this.resourcesService.addValue(<ARTURIResource>this.resource, prop, v));
+                });
+                this.addMultiple(addFunctions);
             },
             () => { }
         )

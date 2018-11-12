@@ -20,12 +20,6 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 })
 export class MembersPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PartitionRenderSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
-
     partition = ResViewPartition.members;
     rootProperty = SKOS.member;
     label = "Members";
@@ -44,24 +38,28 @@ export class MembersPartitionRenderer extends PartitionRenderSingleRoot {
     add(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.addPropertyValue("Add a member", this.resource, predicate, propChangeable).then(
             (data: any) => {
-                var prop: ARTURIResource = data.property;
-                var member: ARTResource = data.value;
+                let prop: ARTURIResource = data.property;
+                let values: ARTURIResource[] = data.value;
+                let addFunctions: Observable<any>[] = [];
 
                 if (prop.getURI() == this.rootProperty.getURI()) { //it's using skos:member
-                    this.skosService.addToCollection(this.resource, member).subscribe(
-                        stResp => this.update.emit(null)
-                    );
-                } else { //it's using a subProperty of skos:member
-                    this.resourcesService.addValue(this.resource, prop, member).subscribe(
-                        stResp => {
-                            if (member.getRole() == RDFResourceRolesEnum.skosCollection ||
-                                member.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
-                                this.eventHandler.nestedCollectionAddedEvent.emit({ nested: member, container: this.resource });
-                            }
-                            this.update.emit(null);
-                        }
-                    );
+                    values.forEach((v: ARTURIResource) => {
+                        addFunctions.push(this.skosService.addToCollection(<ARTURIResource>this.resource, v));
+                    });
+                } else { //it's enriching a subProperty of skos:member
+                    values.forEach((v: ARTURIResource) => {
+                        addFunctions.push(
+                            this.resourcesService.addValue(this.resource, prop, v).map(
+                                stResp => {
+                                    if (v.getRole() == RDFResourceRolesEnum.skosCollection || v.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
+                                        this.eventHandler.nestedCollectionAddedEvent.emit({ nested: v, container: this.resource });
+                                    }
+                                }
+                            )
+                        );
+                    });
                 }
+                this.addMultiple(addFunctions);
             },
             () => { }
         );

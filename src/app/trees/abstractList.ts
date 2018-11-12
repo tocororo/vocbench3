@@ -44,6 +44,8 @@ export abstract class AbstractList extends AbstractStruct {
         this.list = [];
         this.selectedNode = null;
         this.nodeSelected.emit(this.selectedNode);
+        this.checkedNodes = [];
+        this.nodeChecked.emit(this.checkedNodes);
         this.nodeLimit = this.initialNodes;
     }
 

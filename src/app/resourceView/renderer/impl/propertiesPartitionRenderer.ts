@@ -21,12 +21,6 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 })
 export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PartitionRenderSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
-
     partition = ResViewPartition.properties;
     rootProperty: ARTURIResource = null; //there is no root property for this partition
     label = "Other properties";

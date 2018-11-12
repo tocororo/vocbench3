@@ -1,10 +1,10 @@
 import { Component } from "@angular/core";
-import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent, OverlayConfig } from "ngx-modialog";
-import { LexiconListModalData, LexiconListModal } from "../lexiconListModal/lexiconListModal";
-import { VBProperties } from "../../../../utils/VBProperties";
+import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from '../../../../models/ARTResources';
 import { ResourcesServices } from "../../../../services/resourcesServices";
+import { VBProperties } from "../../../../utils/VBProperties";
+import { LexiconListModal, LexiconListModalData } from "../lexiconListModal/lexiconListModal";
 
 export class LexicalEntryListModalData extends BSModalContext {
     constructor(
@@ -12,7 +12,8 @@ export class LexicalEntryListModalData extends BSModalContext {
         public lexicon: ARTURIResource,
         public lexiconChangeable: boolean = false,
         public editable: boolean = false,
-        public deletable: boolean = false
+        public deletable: boolean = false,
+        public allowMultiselection: boolean = false
     ) {
         super();
     }
@@ -27,6 +28,9 @@ export class LexicalEntryListModal implements ModalComponent<LexicalEntryListMod
 
     private activeLexicon: ARTURIResource;
     private selectedEntry: ARTURIResource;
+    private checkedResources: ARTURIResource[] = [];
+
+    private multiselection: boolean = false;
 
     constructor(public dialog: DialogRef<LexicalEntryListModalData>, private modal: Modal, private resourceService: ResourcesServices,
         private vbProp: VBProperties) {
@@ -73,10 +77,19 @@ export class LexicalEntryListModal implements ModalComponent<LexicalEntryListMod
         return this.modal.open(LexiconListModal, overlayConfig).result;
     }
 
+    private isOkEnabled() {
+        if (this.multiselection) {
+            return this.checkedResources.length > 0;
+        } else {
+            return this.selectedEntry != null;
+        }
+    }
+
     ok(event: Event) {
+        let returnValue: any = this.multiselection ? this.checkedResources : this.selectedEntry; //ARTURIResource or ARTURIResource (multiselection on)
         event.stopPropagation();
         event.preventDefault();
-        this.dialog.close(this.selectedEntry);
+        this.dialog.close(returnValue);
     }
 
     cancel() {

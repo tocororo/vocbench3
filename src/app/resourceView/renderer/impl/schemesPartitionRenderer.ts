@@ -20,12 +20,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 })
 export class SchemesPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PartitionRenderSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
-
     partition = ResViewPartition.schemes;
     rootProperty: ARTURIResource = SKOS.inScheme;
     label = "Schemes";
@@ -42,22 +36,27 @@ export class SchemesPartitionRenderer extends PartitionRenderSingleRoot {
     add(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.addPropertyValue("Add Concept to a Scheme", this.resource, predicate, propChangeable).then(
             (data: any) => {
-                var prop: ARTURIResource = data.property;
-                var scheme: ARTURIResource = data.value;
+                let prop: ARTURIResource = data.property;
+                let values: ARTURIResource[] = data.value;
+                let addFunctions: Observable<any>[] = [];
+
                 if (prop.getURI() == this.rootProperty.getURI()) { //it's adding a concept to a scheme with skos:inScheme
-                    this.skosService.addConceptToScheme(<ARTURIResource>this.resource, scheme).subscribe(
-                        stResp => this.update.emit(null)
-                    );
+                    values.forEach((v: ARTURIResource) => {
+                        addFunctions.push(this.skosService.addConceptToScheme(<ARTURIResource>this.resource, v));
+                    });
                 } else { //it's enriching a subProperty of skos:inScheme
-                    this.resourcesService.addValue(this.resource, prop, scheme).subscribe(
-                        stResp => {
-                            //Here I should emit conceptAddedToSchemEvent but I can't since I don't know if this.resource has broader and child
-                            //(to show in tree when attached). In this rare case I suppose that the user should refresh the tree
-                            this.update.emit(null);
-                            //emit conceptAddedToSchemEvent when supported
-                        }
-                    );
+                    values.forEach((v: ARTURIResource) => {
+                        addFunctions.push(
+                            this.resourcesService.addValue(this.resource, prop, v).map(
+                                stResp => {
+                                    ////Here I should emit conceptAddedToSchemEvent but I can't since I don't know if this.resource has broader and child
+                                    ////to show in tree when attached). In this rare case I suppose that the user should refresh the tree
+                                }
+                            )
+                        );
+                    });
                 }
+                this.addMultiple(addFunctions);
             },
             () => { }
         )

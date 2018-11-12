@@ -1,23 +1,26 @@
 <div class="treeNode" #treeNodeElement>
-	<div class="expandCollapseBtnContainer">
+    <div class="expandCollapseBtnContainer">
         <ng-template [ngIf]="showExpandCollapse() && showExpandCollapseForClassFilter()">
             <img *ngIf="!open" src="../../../../assets/images/icons/arrow.png" class="arrow-right" (click)="expandNode().subscribe()">
             <img *ngIf="open" src="../../../../assets/images/icons/arrow.png" (click)="collapseNode()">
         </ng-template>
-	</div>
-	<rdf-resource [resource]="node" [rendering]="rendering" (click)="selectNode()" 
-        [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
-    <div *ngIf="node.getAdditionalProperty('numInst') > 0 && this.showInstanceNumber" style="position: absolute; margin: 4px; top: 0; right: 0;">
-        <span class="label label-warning">{{node.getAdditionalProperty('numInst')}}</span>
     </div>
+    <div class="hbox" style="position: relative">
+        <rdf-resource [resource]="node" [rendering]="rendering" (click)="selectNode()" 
+            [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
+        <div *ngIf="node.getAdditionalProperty('numInst') > 0 && this.showInstanceNumber" style="position: absolute; margin: 4px; top: 0; right: 0;">
+            <span class="label label-warning">{{node.getAdditionalProperty('numInst')}}</span>
+        </div>
+    </div>
+    <input *ngIf="multiselection" type="checkbox" style="margin-left: 5px;" [(ngModel)]="checked" (ngModelChange)="onNodeCheckChange()">
 </div>
 
 <div class="subTree" *ngIf="node.getAdditionalProperty('more')==1">
     <ng-template ngFor let-n [ngForOf]="children">
         <ng-template [ngIf]="!filterOutRootSubClass(n)">
             <class-tree-node *ngIf="!n.isDeprecated() || showDeprecated && n.isDeprecated()"
-                [node]="n" [rendering]="rendering" [showDeprecated]="showDeprecated" [filterEnabled]="filterEnabled" [context]="context"
-                (nodeSelected)="onNodeSelected($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
+                [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [filterEnabled]="filterEnabled" [context]="context"
+                (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
             </class-tree-node>
         </ng-template>
     </ng-template>

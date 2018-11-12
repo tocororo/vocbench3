@@ -20,12 +20,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 })
 export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PartitionRenderSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
-
     partition = ResViewPartition.superproperties;
     rootProperty: ARTURIResource = RDFS.subPropertyOf;
     label = "Superproperties";
@@ -42,11 +36,14 @@ export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot 
         this.resViewModals.addPropertyValue("Add a superproperty", this.resource, predicate, propChangeable).then(
             (data: AddPropertyValueModalReturnData) => {
                 let prop: ARTURIResource = data.property;
-                let superProp: ARTURIResource = data.value;
                 let inverse: boolean = data.inverseProperty;
-                this.propService.addSuperProperty(<ARTURIResource>this.resource, superProp, prop, inverse).subscribe(
-                    stResp => this.update.emit(null)
-                );
+                let values: ARTURIResource[] = data.value;
+
+                let addFunctions: Observable<any>[] = [];
+                values.forEach((v: ARTURIResource) => {
+                    addFunctions.push(this.propService.addSuperProperty(<ARTURIResource>this.resource, v, prop, inverse));
+                });
+                this.addMultiple(addFunctions);
             },
             () => { }
         )

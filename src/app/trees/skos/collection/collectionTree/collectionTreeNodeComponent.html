@@ -7,13 +7,14 @@
         </div>
         <rdf-resource [resource]="node" [rendering]="rendering" (click)="selectNode()" 
                 [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
+        <input *ngIf="multiselection" type="checkbox" style="margin-left: 5px;" [(ngModel)]="checked" (ngModelChange)="onNodeCheckChange()">
 </div>
 
 <div class="subTree" *ngIf="node.getAdditionalProperty('more')==1">
         <ng-template ngFor let-n [ngForOf]="children">
                 <collection-tree-node *ngIf="!n.isDeprecated() || showDeprecated && n.isDeprecated()"
-                        [node]="n" [rendering]="rendering" [showDeprecated]="showDeprecated" [context]="context"
-                        (nodeSelected)="onNodeSelected($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
+                        [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context"
+                        (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
                 </collection-tree-node>
         </ng-template>
 </div>

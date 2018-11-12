@@ -5,6 +5,7 @@ import { ARTLiteral, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttri
 import { OWL, RDF, RDFS, SKOS, SKOSXL } from '../../models/Vocabulary';
 import { ManchesterServices } from "../../services/manchesterServices";
 import { PropertyServices, RangeType } from "../../services/propertyServices";
+import { TreeListContext } from "../../utils/UIUtils";
 import { VBProperties } from '../../utils/VBProperties';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { BrowsingModalServices } from '../../widget/modal/browsingModal/browsingModalServices';
@@ -40,12 +41,15 @@ export class AddPropertyValueModalData extends BSModalContext {
      *  Useful, in case the modal is used to add a range to a property, to know if the property is a datatype
      * @param property root property that the modal should allow to enrich
      * @param propChangeable tells whether the input property can be changed exploring the properties subtree.
+     * @param allowMultiselection tells whether the multiselection in the tree/list is allowed. Default is true. (some scenario may
+     * require to disable the multiselection, like the addFirst/After...() in oreded collection).
      */
     constructor(
         public title: string = 'Add property value',
         public resource: ARTResource,
         public property: ARTURIResource,
-        public propChangeable: boolean = true
+        public propChangeable: boolean = true, 
+        public allowMultiselection: boolean = true, 
     ) {
         super();
     }
@@ -62,6 +66,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private enrichingProperty: ARTURIResource;
 
     private viewType: ViewType;
+    private multiselection: boolean = false;
 
     //restrictions for trees/lists
     //attribute useful for different Tree/list components
@@ -85,8 +90,9 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
 
     //available returned data
     private selectedResource: ARTURIResource; //the trees and lists shows only ARTURIResource at the moment
+    private checkedResources: ARTURIResource[] = []; //the adding resources (in case of multiple selection)
     private manchExpr: string;
-    private inverseProp: boolean = false;
+    private inverseProp: boolean = false; //for properties selection (when viewType is propertyTree and showInversePropertyCheckbox is true)
     private datarange: ARTLiteral[];
 
     constructor(public dialog: DialogRef<AddPropertyValueModalData>, public manchService: ManchesterServices, private propService: PropertyServices, 
@@ -255,12 +261,36 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         }
     }
 
+    /**
+     * Inverse Property flag should be enabled only when the selectedResource in an ObjectProperty
+     * or, in multiselection mode, when all the checkedResources are ObjectProperty
+     */
+    private isInversePropertyCheckboxEnabled() {
+        let enabled: boolean;
+        if (this.multiselection) {
+            let notObjProp: boolean = false;
+            this.checkedResources.forEach((r: ARTURIResource) => { if (r.getRole() != RDFResourceRolesEnum.objectProperty) notObjProp = true; });
+            enabled = !notObjProp;
+        } else {
+            enabled = this.selectedResource != null && this.selectedResource.getRole() == RDFResourceRolesEnum.objectProperty;
+        }
+        if (!enabled) {
+            this.inverseProp = false;
+        }
+        return enabled;
+    }
+
     private onConceptTreeSchemeChange() {
         this.selectedResource = null;
     }
 
     private onDatarangeChanged(datarange: ARTLiteral[]) {
         this.datarange = datarange;
+    }
+
+    private onMultiselectionChange(multiselection: boolean) {
+        this.multiselection = multiselection;
+        this.inverseProp = false; //reset inverseProp flag
     }
 
     /**
@@ -273,7 +303,11 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         } else if (this.selectedAspectSelector == this.dataRangeAspectSelector) {
             return (this.datarange != null && this.datarange.length > 0);
         } else {
-            return this.selectedResource != null;
+            if (this.multiselection) {
+                return this.checkedResources.length > 0;
+            } else {
+                return this.selectedResource != null;
+            }
         }
     }
 
@@ -301,10 +335,16 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
             }
             this.dialog.close(returnedData);
         } else { //treeListAspectSelector
-            this.selectedResource.deleteAdditionalProperty(ResAttribute.SELECTED);
+            let values: ARTURIResource[]; //selected resource or checked resources
+            if (this.multiselection) {
+                values = this.checkedResources;
+            } else {
+                this.selectedResource.deleteAdditionalProperty(ResAttribute.SELECTED);
+                values = [this.selectedResource];
+            }
             let returnedData: AddPropertyValueModalReturnData = {
                 property: this.enrichingProperty,
-                value: this.selectedResource,
+                value: values
             }
             if (this.showInversePropertyCheckbox) {
                 returnedData.inverseProperty = this.inverseProp;
@@ -321,7 +361,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
 
 export class AddPropertyValueModalReturnData {
     property: ARTURIResource;
-    value: any;
+    value: any; //string in case of manchester expr || ARTLiteral[] if dataRange || ARTURIResource[] in other cases
     inverseProperty?: boolean;
 }
 

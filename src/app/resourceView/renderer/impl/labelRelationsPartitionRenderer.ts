@@ -33,11 +33,14 @@ export class LabelRelationsPartitionRenderer extends PartitionRenderSingleRoot {
     add(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.addPropertyValue("Add a label relation", this.resource, predicate, propChangeable).then(
             (data: any) => {
-                var prop: ARTURIResource = data.property;
-                var label: ARTResource = data.value;
-                this.resourcesService.addValue(this.resource, prop, label).subscribe(
-                    stResp => this.update.emit(null)
-                );
+                let prop: ARTURIResource = data.property;
+                let values: ARTURIResource[] = data.value;
+
+                let addFunctions: Observable<any>[] = [];
+                values.forEach((v: ARTURIResource) => {
+                    addFunctions.push(this.resourcesService.addValue(this.resource, prop, v));
+                });
+                this.addMultiple(addFunctions);
             },
             () => {}
         )

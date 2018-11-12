@@ -101,6 +101,9 @@ export abstract class AbstractTreeNode extends AbstractNode {
    	 */
     private collapseNode() {
         this.open = false;
+        this.children.forEach((c: ARTURIResource) => {
+            this.nodeChecked.emit({node: c, checked: false}); //uncheck all the children
+        })
         this.children = [];
     }
 
@@ -176,6 +179,10 @@ export abstract class AbstractTreeNode extends AbstractNode {
      */
     private onNodeSelected(node: ARTURIResource) {
         this.nodeSelected.emit(node);
+    }
+
+    private onNodeChecked(event: { node: ARTURIResource, checked: boolean }) {
+        this.nodeChecked.emit(event);
     }
 
     //Listeners to node expansion start/end. Simply forward the event to the parent

@@ -19,12 +19,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 })
 export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PartitionRenderSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
-
     partition = ResViewPartition.ranges;
     rootProperty: ARTURIResource = RDFS.range;
     label = "Ranges";
@@ -40,47 +34,55 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
     add(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.addPropertyValue("Add a range", this.resource, predicate, propChangeable).then(
             (data: any) => {
-                var prop: ARTURIResource = data.property;
-                var value: any = data.value; //value can be a class, manchester Expression, or a datatype (if resource is a datatype prop)
+                let prop: ARTURIResource = data.property;
+                let value: any = data.value; //value can be a class, manchester Expression, or a datatype (if resource is a datatype prop)
                 /** If the rerource is a datatype property, value could be a:
-                 * - datatype (ARTURIResource)
-                 * - datarange (array of ARTLiteral)
-                 * Otherwise, if the resource is a object/annotation/ontologyProperty, value could be a:
+                 * - datatype (ARTURIResource[])
+                 * - datarange (ARTLiteral[])
+                 */
+                if (this.resource.getRole() == RDFResourceRolesEnum.datatypeProperty) {
+                    if (value instanceof Array) {
+                        let addFunctions: Observable<any>[] = [];
+
+                        if (value[0] instanceof ARTLiteral) { //datarange
+                            this.propService.setDataRange(<ARTURIResource>this.resource, value).subscribe(
+                                stResp => this.update.emit(null)
+                            );
+                        } else { //instance of ARTURIResource => datatype
+                            if (prop.getURI() == this.rootProperty.getURI()) { //it's using rdfs:range
+                                value.forEach((v: ARTURIResource) => {
+                                    addFunctions.push(this.propService.addPropertyRange(<ARTURIResource>this.resource, v));
+                                });
+                            } else { //it's using a subProperty of rdfs:range
+                                value.forEach((v: ARTURIResource) => {
+                                    addFunctions.push(this.resourcesService.addValue(this.resource, prop, v));
+                                });
+                            }
+                            this.addMultiple(addFunctions);
+                        }
+                    }
+                }
+                /** Otherwise, if the resource is a object/annotation/ontologyProperty, value could be a:
                  * - resource
                  * - manchester expression
                  */
-                if (this.resource.getRole() == RDFResourceRolesEnum.datatypeProperty) {
-                    if (value instanceof Array) { // datarange
-                        this.propService.setDataRange(<ARTURIResource>this.resource, value).subscribe(
-                            stResp => this.update.emit(null)
-                        )
-                    } else if (value instanceof ARTURIResource) { //datatype
-                        if (prop.getURI() == this.rootProperty.getURI()) { //it's using rdfs:range
-                            this.propService.addPropertyRange(<ARTURIResource>this.resource, value).subscribe(
-                                stResp => this.update.emit(null)
-                            );
-                        } else { //it's using a subProperty of rdfs:range
-                            this.resourcesService.addValue(this.resource, prop, value).subscribe(
-                                stResp => this.update.emit(null)
-                            );
-                        }
-                    }
-                } else {
+                else {
                     if (typeof value == "string") {
                         this.manchService.createRestriction(<ARTURIResource>this.resource, prop, value).subscribe(
                             stResp => this.update.emit(null)
                         );
-                    } else { //value is an ARTURIResource (a class selected from the tree)
+                    } else { //value is ARTURIResource[] (class(es) selected from the tree)
+                        let addFunctions: Observable<any>[] = [];
                         if (prop.getURI() == this.rootProperty.getURI()) { //it's using rdfs:range
-                            this.propService.addPropertyRange(<ARTURIResource>this.resource, value).subscribe(
-                                stResp => this.update.emit(null)
-                            );
+                            value.forEach((v: ARTURIResource) => {
+                                addFunctions.push(this.propService.addPropertyRange(<ARTURIResource>this.resource, v));
+                            });
                         } else { //it's using a subProperty of rdfs:range
-                            this.resourcesService.addValue(this.resource, prop, value).subscribe(
-                                stResp => this.update.emit(null)
-                                
-                            );
+                            value.forEach((v: ARTURIResource) => {
+                                addFunctions.push(this.resourcesService.addValue(this.resource, prop, v));
+                            });
                         }
+                        this.addMultiple(addFunctions);
                     }
                 }
             },

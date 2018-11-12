@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Subscriber } from "rxjs";
-import { ARTURIResource, ResAttribute } from "../models/ARTResources";
+import { ARTURIResource, ResAttribute, ResourceUtils } from "../models/ARTResources";
 import { TreeListContext } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
 
@@ -11,9 +11,11 @@ import { VBEventHandler } from "../utils/VBEventHandler";
 export abstract class AbstractStruct {
 
     @Input() rendering: boolean = true; //if true the nodes in the list should be rendered with the show, with the qname otherwise
+    @Input() multiselection: boolean = false; //if true enabled the selection of multiple resources via checkboxes
     @Input() showDeprecated: boolean = true;
     @Input() context: TreeListContext;
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeChecked = new EventEmitter<ARTURIResource[]>();
 
     /**
      * ATTRIBUTES
@@ -21,6 +23,7 @@ export abstract class AbstractStruct {
 
     eventSubscriptions: Subscriber<any>[] = [];
     selectedNode: ARTURIResource;
+    checkedNodes: ARTURIResource[] = [];
 
     /**
      * CONSTRUCTOR
@@ -50,6 +53,18 @@ export abstract class AbstractStruct {
         this.selectedNode = node;
         this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
         this.nodeSelected.emit(node);
+    }
+
+    private onNodeChecked(event: { node: ARTURIResource, checked: boolean }) {
+        if (event.checked) {
+            this.checkedNodes.push(event.node);
+        } else {
+            let nodeIdx: number = ResourceUtils.indexOfNode(this.checkedNodes, event.node);
+            if (nodeIdx != -1) {
+                this.checkedNodes.splice(nodeIdx, 1);
+            }
+        }
+        this.nodeChecked.emit(this.checkedNodes)
     }
 
 }

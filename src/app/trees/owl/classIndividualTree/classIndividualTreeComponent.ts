@@ -13,7 +13,10 @@ export class ClassIndividualTreeComponent {
     @Input() schemes: ARTURIResource[]; //scheme to use in case the class selected is skos:Concept
     @Input() editable: boolean = true; //used only in right panel (instance/concept)
     @Input() deletable: boolean = true; //used only in right panel (instance/concept)
+    @Input() allowMultiselection: boolean = false; //tells if the multiselection is allowed in the instance list panel
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();//when an instance or a concept is selected
+    @Output() nodeChecked = new EventEmitter<ARTURIResource[]>();
+    @Output() multiselectionStatus = new EventEmitter<boolean>(); //emitted when the multiselection changes status (activated/deactivated)
     /*in the future I might need an Output for selected class. In case, change nodeSelected in instanceSelected and
     create classSelected Output. (Memo: nodeSelected is to maintain the same Output of the other tree components)*/
 
@@ -57,6 +60,10 @@ export class ClassIndividualTreeComponent {
         this.nodeSelected.emit(this.selectedInstance);
     }
 
+    private onNodeChecked(nodes: ARTURIResource[]) {
+        this.nodeChecked.emit(nodes);
+    }
+
     /**
      * Listener to schemeChanged event emitted by concept-tree when range class is skos:Concept.
      */
@@ -71,6 +78,10 @@ export class ClassIndividualTreeComponent {
     private onLexEntryLexiconChange() {
         this.selectedInstance = null;
         this.nodeSelected.emit(this.selectedInstance);
+    }
+
+    private onMultiselectionChange(multiselection: boolean) {
+        this.multiselectionStatus.emit(multiselection);
     }
 
     /**
