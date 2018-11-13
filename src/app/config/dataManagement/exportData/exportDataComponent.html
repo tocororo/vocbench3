@@ -82,7 +82,7 @@
                                 </extension-configurator>
                                 <button class="btn btn-default" (click)="configureGraphs(filterChainEl)" style="margin-left: 4px;">Graphs</button>
                             </td>
-                            <td class="text-center" style="font-size: 14px; font-weight: 700;">
+                            <td class="text-center" style="font-size: 14px;">
                                 <span *ngIf="requireConfiguration(filterChainEl)" class="glyphicon glyphicon-warning-sign"
                                     title="This filter needs to be configured"></span>
                             </td>
@@ -106,37 +106,47 @@
                         <col>
                     </colgroup>
                     <!-- When a deployer source is specified (so a deployer is used) -->
-                    <tr *ngIf="selectedDeployment.source">
+                    <tr *ngIf="useDeployer()">
                         <td><label>Deployer:</label></td>
                         <td>
-                            <ng-template [ngIf]="selectedDeployment.source == 'repository'">
-                                <extension-configurator #deployerConfigurator *ngIf="repoSourcedDeployer" [extensions]="repoSourcedDeployer"
-                                    (extensionUpdated)="selectedDeployerExtension = $event"
-                                    (configurationUpdated)="selectedDeployerConfig = $event"
-                                    (configStatusUpdated)="onDeployerConfigStatusUpdated($event)"
-                                    style="flex: 1;">
-                                </extension-configurator>
-                            </ng-template>
-                            <ng-template [ngIf]="selectedDeployment.source == 'stream'">
-                                <extension-configurator #deployerConfigurator *ngIf="streamSourcedDeployer" [extensions]="streamSourcedDeployer"
-                                    (extensionUpdated)="selectedDeployerExtension = $event"
-                                    (configurationUpdated)="selectedDeployerConfig = $event"
-                                    (configStatusUpdated)="onDeployerConfigStatusUpdated($event)"
-                                    style="flex: 1;">
-                                </extension-configurator>
-                            </ng-template>
+                            <div class="hbox" style="align-items: center">
+                                <ng-template [ngIf]="selectedDeployment.source == 'repository'">
+                                    <extension-configurator #deployerConfigurator *ngIf="repoSourcedDeployer" [extensions]="repoSourcedDeployer"
+                                        (extensionUpdated)="selectedDeployerExtension = $event"
+                                        (configurationUpdated)="onDeployerConfigUpdated($event)"
+                                        (configStatusUpdated)="onDeployerConfigStatusUpdated($event)"
+                                        style="flex: 1;">
+                                    </extension-configurator>
+                                </ng-template>
+                                <ng-template [ngIf]="selectedDeployment.source == 'stream'">
+                                    <extension-configurator #deployerConfigurator *ngIf="streamSourcedDeployer" [extensions]="streamSourcedDeployer"
+                                        (extensionUpdated)="selectedDeployerExtension = $event"
+                                        (configurationUpdated)="onDeployerConfigUpdated($event)"
+                                        (configStatusUpdated)="onDeployerConfigStatusUpdated($event)"
+                                        style="flex: 1;">
+                                    </extension-configurator>
+                                </ng-template>
+                                <div *ngIf="requireConfigurationDeployer()" style="font-size: 14px; margin-left: 4px;">
+                                    <span class="glyphicon glyphicon-warning-sign" title="Configuration required"></span>
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     <!-- Reformatter available only when not using a deployer, or when using a stream-source deployer -->
-                    <tr *ngIf="!selectedDeployment.source || selectedDeployment.source == 'stream'">
+                    <tr *ngIf="useReformatter()">
                         <td><label>Reformatter:</label></td>
                         <td>
-                            <div class="hbox">
-                                <extension-configurator *ngIf="reformatters" [extensions]="reformatters"
+                            <div class="hbox" style="align-items: center">
+                                <extension-configurator #reformatterConfigurator *ngIf="reformatters" [extensions]="reformatters"
                                     (extensionUpdated)="onReformatterExtensionUpdated($event)"
-                                    (configurationUpdated)="selectedReformatterConfig = $event"
+                                    (configurationUpdated)="onReformatterConfigUpdated($event)"
+                                    (configStatusUpdated)="onReformatterConfigStatusUpdated($event)"
                                     style="flex: 1;">
                                 </extension-configurator>
+
+                                <div *ngIf="requireConfigurationFormatter()" style="font-size: 14px; margin-left: 4px;">
+                                    <span class="glyphicon glyphicon-warning-sign" title="Configuration required"></span>
+                                </div>
         
                                 <div class="hbox" style="align-items: center; flex: initial; margin-left: 8px;">
                                     <label style="white-space: nowrap; margin-right: 4px;">Export Format:</label>

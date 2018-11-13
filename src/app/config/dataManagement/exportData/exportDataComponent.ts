@@ -25,6 +25,7 @@ export class ExportDataComponent {
     //ExtensionConfiguratorComponent children of this Component (useful to load single configurations of a chain)
     @ViewChildren(ExtensionConfiguratorComponent) viewChildrenExtConfig: QueryList<ExtensionConfiguratorComponent>;
     @ViewChild("deployerConfigurator") deployerConfigurator: ExtensionConfiguratorComponent;
+    @ViewChild("reformatterConfigurator") reformatterConfigurator: ExtensionConfiguratorComponent;
 
     private includeInferred: boolean = false;
 
@@ -40,6 +41,9 @@ export class ExportDataComponent {
     private reformatters: ExtensionFactory[];
     private selectedReformatterExtension: ExtensionFactory;
     private selectedReformatterConfig: Settings;
+
+    private reformatterStatus: ExtensionConfigurationStatus;
+    private reformatterRelativeRef: string;
 
     private exportFormats: DataFormat[];
     private selectedExportFormat: DataFormat;
@@ -233,27 +237,78 @@ export class ExportDataComponent {
      * Reformatter
      * =====================================*/
 
+    /**
+     * Returns true if a reformatter is used
+     */
+    private useReformatter(): boolean {
+        //Reformatter available only when not using a deployer, or when using a stream-source deployer
+        return !this.selectedDeployment.source || this.selectedDeployment.source == DeploySource.stream;
+    }
+
+    private onReformatterConfigUpdated(config: Settings) {
+        setTimeout(() => { //in order to prevent ExpressionChangedAfterItHasBeenCheckedError when calling requireConfigurationDeployer() in UI
+            this.selectedReformatterConfig = config;
+        });
+    }
+
     private onReformatterExtensionUpdated(ext: ExtensionFactory) {
+        /**
+         * extensionUpdated event is emitted from the ExtensionConfigurator even when changes only its configuration.
+         * Here I check if the selected extension is effectively changed
+         */
+        let extensionChanged: boolean = this.selectedReformatterExtension != null && this.selectedReformatterExtension.id != ext.id;
         this.selectedReformatterExtension = ext;
-        this.exportService.getExportFormats(this.selectedReformatterExtension.id).subscribe(
-            formats => {
-                this.exportFormats = formats;
-                //set rdf/xml format as default
-                let rdfIdx: number = 0;
-                for (var i = 0; i < this.exportFormats.length; i++) {
-                    if (this.exportFormats[i].name == "RDF/XML") {
-                        rdfIdx = i;
-                        break;
+        //update the exportFormats if never initialized or if the selected extension has been changed
+        if (extensionChanged || this.exportFormats == null) {
+            this.exportService.getExportFormats(this.selectedReformatterExtension.id).subscribe(
+                formats => {
+                    this.exportFormats = formats;
+                    //set rdf/xml format as default (if found)
+                    let rdfIdx: number = 0;
+                    for (var i = 0; i < this.exportFormats.length; i++) {
+                        if (this.exportFormats[i].name == "RDF/XML") {
+                            rdfIdx = i;
+                            break;
+                        }
                     }
+                    this.selectedExportFormat = this.exportFormats[rdfIdx];
                 }
-                this.selectedExportFormat = this.exportFormats[rdfIdx];
-            }
-        )
+            );
+        }
+    }
+
+    private onReformatterConfigStatusUpdated(statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
+        this.reformatterStatus = statusEvent.status;
+        this.reformatterRelativeRef = statusEvent.relativeReference;
+    }
+
+    /**
+     * Returns true if the reformatter requires edit of the configuration and it is not configured
+     */
+    private requireConfigurationFormatter(): boolean {
+        if (this.selectedReformatterConfig != null) {//check required because config could be not yet initialized
+            return this.selectedReformatterConfig.requireConfiguration();
+        }
+        return false;
     }
 
     /** =====================================
      * Deployer
      * =====================================*/
+
+    /**
+     * Returns true if a deployer is used
+     */
+    private useDeployer(): boolean {
+        //When a deployer source is specified (so a deployer is used)
+        return this.selectedDeployment.source != null;
+    }
+    
+    private onDeployerConfigUpdated(config: Settings) {
+        setTimeout(() => { //in order to prevent ExpressionChangedAfterItHasBeenCheckedError when calling requireConfigurationDeployer() in UI
+            this.selectedDeployerConfig = config;
+        });
+    }
     
     private onDeployerConfigStatusUpdated(statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
         this.deployerStatus = statusEvent.status;
@@ -310,7 +365,7 @@ export class ExportDataComponent {
 
         //deployerSpec
         let deployerSpec: { extensionID: string, configRef: string };
-        if (this.selectedDeployment.source != null) {
+        if (this.useDeployer()) {
             if (this.deployerStatus == ExtensionConfigurationStatus.unsaved) {
                 this.basicModals.alert("Unsaved configuration", "Deployer configuration is not saved. " +
                     "In order to save the exporter configuration all its sub-configurations need to be saved.", "warning");
@@ -322,11 +377,27 @@ export class ExportDataComponent {
             }
         }
 
+        //reformatter (sempre in deployerSpec?)
+        let reformattingExporterSpec: { extensionID: string, configRef: string };
+        if (this.useReformatter()) {
+            if (this.reformatterStatus == ExtensionConfigurationStatus.unsaved) {
+                this.basicModals.alert("Unsaved configuration", "Reformatter configuration is not saved. " +
+                    "In order to save the exporter configuration all its sub-configurations need to be saved.", "warning");
+                return;
+            }
+            reformattingExporterSpec = {
+                extensionID: this.selectedReformatterExtension.id,
+                configRef: this.reformatterRelativeRef
+            }
+        }
+
+
         let config: { [key: string]: any } = {
             graphs: graphs,
             transformationPipeline: transformationPipeline,
             includeInferred: this.includeInferred,
-            deployerSpec: deployerSpec
+            deployerSpec: deployerSpec,
+            reformattingExporterSpec: reformattingExporterSpec
         }
 
         this.sharedModals.storeConfiguration("Save exporter chain configuration", ConfigurationComponents.EXPORTER, config).then(
@@ -342,46 +413,52 @@ export class ExportDataComponent {
             (conf: LoadConfigurationModalReturnData) => {
                 this.filtersChain = []; //reset the chain
                 let configurations: SettingsProp[] = conf.configuration.properties;
+
+                let deployerSpec: {extensionID: string, configRef: string};
+                let reformattingExporterSpec: {extensionID: string, configRef: string};
+
                 for (var i = 0; i < configurations.length; i++) {
                     if (configurations[i].name == "transformationPipeline") {
                         //value of a stored transformationPipeline (see loadConfiguration response)
                         let chain: [{extensionID: string, configRef: string}, string[]][] = configurations[i].value;
 
-                        //for each element of the pipeline append a filter (so that a ExtensionConfiguratorComponent is instantiated for each one of them)
-                        chain.forEach(() => {
-                            this.appendFilter();
-                        });
+                        if (chain.length > 0) {
+                            //for each element of the pipeline append a filter (so that a ExtensionConfiguratorComponent is instantiated for each one of them)
+                            chain.forEach(() => {
+                                this.appendFilter();
+                            });
 
-                        //...and force a configuration
-                        setTimeout(() => {  //wait that the ExtensionConfiguratorComponent for the new appended transformers are initialized
-                            /**
-                             * collect the ExtensionConfiguratorComponent for the transformators. This is necessary since
-                             * there are also the ExtensionConfiguratorComponent for dployer and serializer, so I need to ensure
-                             * that the configuration is forced to the ExtensionConfiguratorComponent of the transformators
-                             */
-                            let tranformerConfigurators: ExtensionConfiguratorComponent[] = [];
-                            //consider just the first step of the stored pipeline and iterate over all the ExtensionConfiguratorComponent
-                            let firstTransformerExtId = chain[0][0].extensionID;
-                            let extConfigurators: ExtensionConfiguratorComponent[] = this.viewChildrenExtConfig.toArray();
-                            extConfigurators.forEach(extConfComp => {
-                                extConfComp.extensions.forEach(ext => {
-                                    if (ext.id == firstTransformerExtId) {
-                                        tranformerConfigurators.push(extConfComp);
-                                    }
+                            //...and force a configuration
+                            setTimeout(() => {  //wait that the ExtensionConfiguratorComponent for the new appended transformers are initialized
+                                /**
+                                 * collect the ExtensionConfiguratorComponent for the transformators. This is necessary since
+                                 * there are also the ExtensionConfiguratorComponent for deployer and serializer, so I need to ensure
+                                 * that the configuration is forced to the ExtensionConfiguratorComponent of the transformators
+                                 */
+                                let tranformerConfigurators: ExtensionConfiguratorComponent[] = [];
+                                //consider just the first step of the stored pipeline and iterate over all the ExtensionConfiguratorComponent
+                                let firstTransformerExtId = chain[0][0].extensionID;
+                                let extConfigurators: ExtensionConfiguratorComponent[] = this.viewChildrenExtConfig.toArray();
+                                extConfigurators.forEach(extConfComp => {
+                                    extConfComp.extensions.forEach(ext => {
+                                        if (ext.id == firstTransformerExtId) {
+                                            tranformerConfigurators.push(extConfComp);
+                                        }
+                                    });
+                                });
+                                //now iterate over the step of the stored pipeline and force the config of the tranformerConfigurators
+                                chain.forEach((c : [{extensionID: string, configRef: string}, string[]], index: number) => {
+                                    let extConfPair = c[0];
+                                    tranformerConfigurators[index].forceConfiguration(extConfPair.extensionID, extConfPair.configRef);
+
+                                    let graphs = c[1];
+                                    //check all the graphs in the graphs parameter
+                                    this.filtersChain[index].filterGraphs.forEach((fg: GraphStruct) => {
+                                        fg.checked = graphs.indexOf(fg.graph.toNT()) != -1;
+                                    });
                                 });
                             });
-                            //now iterate over the step of the stored pipeline and force the config of the tranformerConfigurators
-                            chain.forEach((c : [{extensionID: string, configRef: string}, string[]], index: number) => {
-                                let extConfPair = c[0];
-                                tranformerConfigurators[index].forceConfiguration(extConfPair.extensionID, extConfPair.configRef);
-
-                                let graphs = c[1];
-                                //check all the graphs in the graphs parameter
-                                this.filtersChain[index].filterGraphs.forEach((fg: GraphStruct) => {
-                                    fg.checked = graphs.indexOf(fg.graph.toNT()) != -1;
-                                });
-                            });
-                        });
+                        }
                     } else if (configurations[i].name == "graphs") {
                         let graphs: string[] = configurations[i].value;
                         this.exportGraphs.forEach((gs: GraphStruct) => {
@@ -390,47 +467,67 @@ export class ExportDataComponent {
                     } else if (configurations[i].name == "includeInferred") {
                         this.includeInferred = configurations[i].value;
                     } else if (configurations[i].name == "deployerSpec") {
-                        let deployerSpec: {extensionID: string, configRef: string} = configurations[i].value;
-                        if (deployerSpec != null) { //deployer specified, select the sourced deployer in the menu
-                            let found: boolean = false;
-                            //look among stream-sourced deployer
-                            this.streamSourcedDeployer.forEach((deployer: ExtensionFactory) => {
-                                if (deployer.id == deployerSpec.extensionID) {
-                                    //select the stream-sourced option in the menu
-                                    this.deploymentOptions.forEach(opt => {
-                                        if (opt.source == DeploySource.stream) {
-                                            this.selectedDeployment = opt;
-                                        }
-                                    })
-                                    found = true;
-                                }
-                            });
-                            //deployer not found among the stream-sourced deployer, so the deployer is repository sourced
-                            if (!found) { 
-                                //select the repository-sourced option in the menu
-                                this.deploymentOptions.forEach(opt => {
-                                    if (opt.source == DeploySource.repository) {
-                                        this.selectedDeployment = opt;
-                                    }
-                                })
-                            }
-                            
-                            setTimeout(() => {
-                                this.deployerConfigurator.forceConfiguration(deployerSpec.extensionID, deployerSpec.configRef);
-                            });
-                        } else { //deployer not specified
-                            //select the no-deployer option in the menu
-                            this.deploymentOptions.forEach(opt => {
-                                if (opt.source == null) {
-                                    this.selectedDeployment = opt;
-                                }
-                            });
-                        }
+                        deployerSpec = configurations[i].value;
+                    } else if (configurations[i].name == "reformattingExporterSpec") {
+                        reformattingExporterSpec = configurations[i].value;
                     }
+                }
+
+                /**
+                 * Restore the deployment: deployer + reformatter
+                 */
+                if (deployerSpec != null && reformattingExporterSpec != null) {//both deployer and reformatter provided => stream-sourced deployment
+                    this.deploymentOptions.forEach(opt => {
+                        if (opt.source == DeploySource.stream) {
+                            this.selectedDeployment = opt;
+                        }
+                    });
+                    //restore the reformatter configuration and the (stream-sourced) deployer configuration
+                    setTimeout(() => { //timeout needed in order to let the UI update after the selection of the deployment
+                        this.reformatterConfigurator.forceConfiguration(reformattingExporterSpec.extensionID, reformattingExporterSpec.configRef);
+                        this.deployerConfigurator.forceConfiguration(deployerSpec.extensionID, deployerSpec.configRef);
+                    });
+                } else if (deployerSpec != null) {  //only deployer specified => repository-sourced deployment
+                    this.deploymentOptions.forEach(opt => {
+                        if (opt.source == DeploySource.repository) {
+                            this.selectedDeployment = opt;
+                        }
+                    });
+                    //restore the (repository-sourced) deployer configuration
+                    setTimeout(() => {
+                        this.deployerConfigurator.forceConfiguration(deployerSpec.extensionID, deployerSpec.configRef);
+                    });
+                } else if (reformattingExporterSpec != null) { //only reformatter specified => no source for deployment
+                    this.deploymentOptions.forEach(opt => {
+                        if (opt.source == null) {
+                            this.selectedDeployment = opt;
+                        }
+                    });
+                    setTimeout(() => { //timeout needed in order to let the UI update after the selection of the deployment
+                        this.reformatterConfigurator.forceConfiguration(reformattingExporterSpec.extensionID, reformattingExporterSpec.configRef);
+                    });
                 }
 
             }
         );
+    }
+
+    private restoreReformatter(reformattingExporterSpec: {extensionID: string, configRef: string}) {
+        //look among the reformatters
+        this.reformatters.forEach((reformatter: ExtensionFactory) => {
+            if (reformatter.id == reformattingExporterSpec.extensionID) {
+                //select the stream-sourced option in the menu
+                this.deploymentOptions.forEach(opt => {
+                    if (opt.source == DeploySource.stream) {
+                        this.selectedDeployment = opt;
+                    }
+                })
+            }
+        });
+        
+        setTimeout(() => {
+            this.reformatterConfigurator.forceConfiguration(reformattingExporterSpec.extensionID, reformattingExporterSpec.configRef);
+        });
     }
 
 
@@ -472,7 +569,7 @@ export class ExportDataComponent {
                 factoryId: this.selectedReformatterExtension.id
             };
             if (this.selectedReformatterConfig != null) {
-                if (this.selectedReformatterConfig.requireConfiguration()) {
+                if (this.requireConfigurationFormatter()) {
                     this.basicModals.alert("Missing configuration", "The reformatting exporter ("
                         + this.selectedReformatterConfig.shortName + ") needs to be configured", "warning");
                     return;
@@ -491,7 +588,7 @@ export class ExportDataComponent {
                 factoryId: this.selectedDeployerExtension.id
             }
             if (this.selectedDeployerConfig != null) {
-                if (this.selectedDeployerConfig.requireConfiguration()) {
+                if (this.requireConfigurationDeployer()) {
                     this.basicModals.alert("Missing configuration", "The deployer needs to be configured", "warning");
                     return;
                 }
