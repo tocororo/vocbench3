@@ -24,16 +24,29 @@ export class ResourceViewPanelComponent {
 
     constructor(private eventHandler: VBEventHandler, private preferences: VBProperties) {
         this.eventHandler.resViewModeChangedEvent.subscribe(
-            (newResViewMode: ResourceViewMode) => { 
-                let resToRestore: ARTResource;
-                if (newResViewMode == ResourceViewMode.splitted) { //changed from tabbed to splitted
-                    resToRestore = this.resViewTabbedChild.getMainResource();
-                } else { //changed from splitted to tabbed
-                    resToRestore = this.resViewSplittedChild.getMainResource();
+            (event: { mode: ResourceViewMode, fromVbPref: boolean }) => { 
+                /**
+                 * The change event could be emitted from:
+                 * - Vocbench Preferences page: in this case, since the mode change does not fire the update of the ResViewPanel view 
+                 * (the view is not active in that moment), the change from a view to the other is not performed, so it is not possible
+                 * to call .selectResource(...) for the proper AbstractResourceViewPanel (splitted or tabbed). So, simply reset the 
+                 * selected resources
+                 * - ResourceView Settings modal: update the view mode and select back the resource currently selected in the main tab/panel.
+                 */
+                if (event.fromVbPref) {
+                    this.empty.emit();
+                } else { //from ResourceView Settings modal
+                    let resToRestore: ARTResource;
+                    let newResViewMode: ResourceViewMode = event.mode;
+                    if (newResViewMode == ResourceViewMode.splitted) { //changed from tabbed to splitted
+                        resToRestore = this.resViewTabbedChild.getMainResource();
+                    } else { //changed from splitted to tabbed
+                        resToRestore = this.resViewSplittedChild.getMainResource();
+                    }
+                    this.resViewMode = newResViewMode;
+                    //timeout in order to wait that the RVPanel is updated after the change of mode
+                    setTimeout(() => { this.selectResource(resToRestore); });
                 }
-                this.resViewMode = newResViewMode;
-                //timeout in order to wait that the RVPanel is updated after the change of mode
-                setTimeout(() => { this.selectResource(resToRestore); });
             }
         );
     }

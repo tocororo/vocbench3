@@ -32,7 +32,7 @@ export class ResViewSettingsModal implements ModalComponent<BSModalContext> {
     ok(event: Event) {
         if (this.mode != this.modePristine) {
             this.vbProp.setResourceViewMode(this.mode);
-            this.eventHandler.resViewModeChangedEvent.emit(this.mode);
+            this.eventHandler.resViewModeChangedEvent.emit({ mode: this.mode, fromVbPref: false });
         }
         if (this.tabSync != this.tabSyncPristine) {
             this.vbProp.setResourceViewTabSync(this.tabSync);

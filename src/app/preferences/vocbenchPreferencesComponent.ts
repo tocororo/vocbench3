@@ -40,7 +40,7 @@ export class VocbenchPreferencesComponent {
 
     private onResViewModeChanged() {
         this.properties.setResourceViewMode(this.resViewMode);
-        this.eventHandler.resViewModeChangedEvent.emit(this.resViewMode);
+        this.eventHandler.resViewModeChangedEvent.emit({ mode: this.resViewMode, fromVbPref: true });
     }
 
     private onTabSyncChange() {

@@ -75,8 +75,11 @@ export class VBEventHandler {
     //data loaded/imported/removed/refactored => trees/lists need to be resfreshed
     public refreshDataBroadcastEvent: EventEmitter<any> = new VBEventEmitter("refreshDataBroadcastEvent", true);
 
-    //user changes resourceViewMode preference => resource view panel need to be updated
-    public resViewModeChangedEvent: EventEmitter<ResourceViewMode> = new VBEventEmitter("resViewModeChangedEvent");
+    /**
+     * user changes resourceViewMode preference => resource view panel need to be updated
+     * (fromVbPref param is true when the mode is changed from 'Vocbench Preferences' page, false if it's changed from 'ResourceView settings' modal)
+     */
+    public resViewModeChangedEvent: EventEmitter<{ mode: ResourceViewMode, fromVbPref: boolean }> = new VBEventEmitter("resViewModeChangedEvent");
     public resViewTabSyncChangedEvent: EventEmitter<boolean> = new VBEventEmitter("resViewTabSyncChangedEvent");
 
     public resourceRenamedEvent: EventEmitter<{ oldResource: ARTResource, newResource: ARTResource }> = new VBEventEmitter("resourceRenamedEvent");
