@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { ARTNode, ARTResource, ARTURIResource } from "../../../models/ARTResources";
+import { ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
 import { SKOSXL } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
@@ -10,6 +10,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { MultiAddFunction } from "../partitionRenderer";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
@@ -36,9 +37,12 @@ export class LabelRelationsPartitionRenderer extends PartitionRenderSingleRoot {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;
 
-                let addFunctions: Observable<any>[] = [];
+                let addFunctions: MultiAddFunction[] = [];
                 values.forEach((v: ARTURIResource) => {
-                    addFunctions.push(this.resourcesService.addValue(this.resource, prop, v));
+                    addFunctions.push({
+                        function: this.resourcesService.addValue(this.resource, prop, v),
+                        value: v
+                    });
                 });
                 this.addMultiple(addFunctions);
             },

@@ -3,8 +3,7 @@
 </div>
 <div class="modal-body vbox" style="max-height: 70vh;">
     <div [class]="msgStyle">
-        {{context.message}}
-
+        <span style="white-space: pre-line">{{context.message}}</span>
         <div *ngIf="context.details" class="vbox" style="margin-top: 5px;">
             <div (click)="detailsCollapsed = !detailsCollapsed" style="align-self: left">
                 <div class="expandCollapseBtnContainer" style="display: inline">

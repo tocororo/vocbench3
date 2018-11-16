@@ -1,17 +1,18 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
-import { CustomFormsServices } from "../../../services/customFormsServices";
-import { ResourcesServices } from "../../../services/resourcesServices";
-import { ClassesServices } from "../../../services/classesServices";
-import { PropertyServices, RangeType, RangeResponse } from "../../../services/propertyServices";
-import { ManchesterServices } from "../../../services/manchesterServices";
-import { ARTURIResource, ARTNode, ARTBNode, RDFTypesEnum, ResAttribute, ResourceUtils } from "../../../models/ARTResources";
-import { RDFS, OWL } from "../../../models/Vocabulary";
+import { ARTBNode, ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
+import { OWL, RDFS } from "../../../models/Vocabulary";
+import { ClassesServices } from "../../../services/classesServices";
+import { CustomFormsServices } from "../../../services/customFormsServices";
+import { ManchesterServices } from "../../../services/manchesterServices";
+import { PropertyServices, RangeResponse } from "../../../services/propertyServices";
+import { ResourcesServices } from "../../../services/resourcesServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { MultiAddFunction } from "../partitionRenderer";
+import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
 
 @Component({
     selector: "class-axiom-renderer",
@@ -66,15 +67,21 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
                         );
                     } else { //value is an ARTURIResource[] (class(es) selected from the tree)
                         let values: ARTURIResource[] = data.value;
-                        let addFunctions: Observable<any>[] = [];
+                        let addFunctions: MultiAddFunction[] = [];
 
                         if (predicate.getURI() == RDFS.subClassOf.getURI()) {
                             values.forEach((v: ARTURIResource) => {
-                                addFunctions.push(this.clsService.addSuperCls(<ARTURIResource>this.resource, v));
+                                addFunctions.push({
+                                    function: this.clsService.addSuperCls(<ARTURIResource>this.resource, v),
+                                    value: v
+                                });
                             });
                         } else {
                             values.forEach((v: ARTURIResource) => {
-                                addFunctions.push(this.resourcesService.addValue(this.resource, predicate, v));
+                                addFunctions.push({
+                                    function: this.resourcesService.addValue(this.resource, predicate, v),
+                                    value: v
+                                });
                             });
                         }
                         this.addMultiple(addFunctions);

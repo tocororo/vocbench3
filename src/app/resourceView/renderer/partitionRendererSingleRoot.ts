@@ -10,7 +10,7 @@ import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsing
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { AddPropertyValueModalReturnData } from "../resViewModals/addPropertyValueModal";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { PartitionRenderer } from "./partitionRenderer";
+import { MultiAddFunction, PartitionRenderer } from "./partitionRenderer";
 
 @Component({
     selector: "partition-renderer-single",
@@ -204,9 +204,12 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
             (data: AddPropertyValueModalReturnData) => {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;
-                let addFunctions: Observable<any>[] = [];
+                let addFunctions: MultiAddFunction[] = [];
                 values.forEach((v: ARTURIResource) => {
-                    addFunctions.push(this.resourcesService.addValue(<ARTURIResource>this.resource, prop, v));
+                    addFunctions.push({
+                        function: this.resourcesService.addValue(<ARTURIResource>this.resource, prop, v),
+                        value: v
+                    });
                 });
                 this.addMultiple(addFunctions);
             },

@@ -1,19 +1,20 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
-import { ARTResource, ARTURIResource, ARTNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFTypesEnum } from "../../../models/ARTResources";
-import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
-import { FormCollection, CustomForm } from "../../../models/CustomForms";
+import { ARTLiteral, ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
+import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
+import { CustomFormsServices } from "../../../services/customFormsServices";
 import { PropertyServices, RangeResponse } from "../../../services/propertyServices";
+import { ResourcesServices } from "../../../services/resourcesServices";
 import { SkosServices } from "../../../services/skosServices";
 import { SkosxlServices } from "../../../services/skosxlServices";
-import { CustomFormsServices } from "../../../services/customFormsServices";
-import { ResourcesServices } from "../../../services/resourcesServices";
-import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
+import { NewXLabelModalReturnData } from "../../../widget/modal/creationModal/newResourceModal/skos/newXLabelModal";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { MultiAddError, MultiAddFunction } from "../partitionRenderer";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
     selector: "properties-renderer",
@@ -42,41 +43,57 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
         if (predicate.getURI() == SKOSXL.prefLabel.getURI() ||
             predicate.getURI() == SKOSXL.altLabel.getURI() ||
             predicate.getURI() == SKOSXL.hiddenLabel.getURI()
-        ) {
-            this.creationModals.newXLabel("Add " + predicate.getShow()).then(
-                data => {
-                    switch (predicate.getURI()) {
-                        case SKOSXL.prefLabel.getURI(): {
-                            this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, data.label, data.cls).subscribe(
-                                stResp => this.update.emit(null),
-                                (err: Error) => {
-                                    if (err.name.endsWith('PrefAltLabelClashException')) {
-                                        this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-                                            confirm => {
-                                                this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, data.label, data.cls, false).subscribe(
-                                                    stResp => this.update.emit(null)
-                                                );
-                                            },
-                                            () => {}
-                                        );
-                                    }
+        ) { //SKOSXL
+            let prefLabelPred: boolean = predicate.getURI() == SKOSXL.prefLabel.getURI();
+            this.creationModals.newXLabel("Add " + predicate.getShow(), null, null, null, null, null, { enabled: true, prefLabel: !prefLabelPred }).then(
+                (data: NewXLabelModalReturnData) => {
+                    let addFunctions: MultiAddFunction[] = [];
+                    let errorHandler: (errors: MultiAddError[]) => void;
+
+                    if (predicate.getURI() == SKOSXL.prefLabel.getURI()) {
+                        data.labels.forEach((label: ARTLiteral) => {
+                            addFunctions.push({ 
+                                function: this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, label, data.cls), 
+                                value: label 
+                            });
+                        });
+                        errorHandler = (errors: MultiAddError[]) => {
+                            if (errors.length == 1) { //if 
+                                let err: Error = errors[0].error;
+                                if (err.name.endsWith('PrefAltLabelClashException')) {
+                                    this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                        confirm => {
+                                            this.skosxlService.setPrefLabel(<ARTURIResource>this.resource, <ARTLiteral>errors[0].value, data.cls, false).subscribe(
+                                                stResp => this.update.emit(null)
+                                            );
+                                        },
+                                        () => {}
+                                    );
                                 }
-                            );
-                            break;
+                            } else {
+                                let message = "The addition of the following values have failed:"
+                                errors.forEach((e: MultiAddError) => {
+                                    message += "\n\n" + e.value.toNT() + "\nReason:\n" + e.error.name + ((e.error.message != null) ? ":\n" + e.error.message : "");
+                                });
+                                this.basicModals.alert("Error", message, "error");
+                            }
                         }
-                        case SKOSXL.altLabel.getURI(): {
-                            this.skosxlService.addAltLabel(<ARTURIResource>this.resource, data.label, data.cls).subscribe(
-                                stResp => this.update.emit(null),
-                            );
-                            break;
-                        }
-                        case SKOSXL.hiddenLabel.getURI(): {
-                            this.skosxlService.addHiddenLabel(<ARTURIResource>this.resource, data.label, data.cls).subscribe(
-                                stResp => this.update.emit(null)
-                            );
-                            break;
-                        }
+                    } else if (predicate.getURI() == SKOSXL.altLabel.getURI()) {
+                        data.labels.forEach((label: ARTLiteral) => {
+                            addFunctions.push({ 
+                                function: this.skosxlService.addAltLabel(<ARTURIResource>this.resource, label, data.cls), 
+                                value: label 
+                            });
+                        });
+                    } else if (predicate.getURI() == SKOSXL.hiddenLabel.getURI()) {
+                        data.labels.forEach((label: ARTLiteral) => {
+                            addFunctions.push({ 
+                                function: this.skosxlService.addHiddenLabel(<ARTURIResource>this.resource, label, data.cls), 
+                                value: label 
+                            });
+                        });
                     }
+                    this.addMultiple(addFunctions, errorHandler);
                 },
                 () => {}
             );

@@ -12,6 +12,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { MultiAddFunction } from "../partitionRenderer";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
@@ -36,24 +37,27 @@ export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
     add(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.addPropertyValue("Set as top Concept of", this.resource, predicate, propChangeable).then(
             (data: any) => {
-
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;
-                let addFunctions: Observable<any>[] = [];
+                let addFunctions: MultiAddFunction[] = [];
 
                 if (prop.getURI() == this.rootProperty.getURI()) { //it's adding a concept as skos:topConceptOf
                     values.forEach((v: ARTURIResource) => {
-                        addFunctions.push(this.skosService.addTopConcept(<ARTURIResource>this.resource, v));
+                        addFunctions.push({
+                            function: this.skosService.addTopConcept(<ARTURIResource>this.resource, v),
+                            value: v
+                        });
                     });
                 } else { //it's adding a subProperty of skos:topConceptOf
                     values.forEach((v: ARTURIResource) => {
-                        addFunctions.push(
-                            this.resourcesService.addValue(this.resource, prop, v).map(
+                        addFunctions.push({
+                            function: this.resourcesService.addValue(this.resource, prop, v).map(
                                 stResp => {
                                     this.eventHandler.topConceptCreatedEvent.emit({concept: <ARTURIResource>this.resource, schemes: [v]});
                                 }
-                            )
-                        );
+                            ),
+                            value: v
+                        });
                     });
                 }
                 this.addMultiple(addFunctions);

@@ -1,19 +1,19 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
+import { ARTNode, ARTURIResource } from "../../../models/ARTResources";
+import { ResViewPartition } from "../../../models/ResourceView";
+import { SKOS } from "../../../models/Vocabulary";
+import { CustomFormsServices } from "../../../services/customFormsServices";
+import { PropertyServices } from "../../../services/propertyServices";
+import { ResourcesServices } from "../../../services/resourcesServices";
 import { SkosServices } from "../../../services/skosServices";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { VBContext } from "../../../utils/VBContext";
-import { ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute, RDFTypesEnum, ResourceUtils } from "../../../models/ARTResources";
-import { SKOS } from "../../../models/Vocabulary"
-import { ResViewPartition } from "../../../models/ResourceView";
-import { PropertyServices } from "../../../services/propertyServices";
-import { CustomFormsServices } from "../../../services/customFormsServices";
-import { ResourcesServices } from "../../../services/resourcesServices";
-import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { MultiAddFunction } from "../partitionRenderer";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
     selector: "broaders-renderer",
@@ -38,22 +38,25 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
             (data: any) => {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;
-                let addFunctions: Observable<any>[] = [];
+                let addFunctions: MultiAddFunction[] = [];
 
                 if (prop.getURI() == this.rootProperty.getURI()) { //it's adding a concept as skos:broader
                     values.forEach((v: ARTURIResource) => {
-                        addFunctions.push(this.skosService.addBroaderConcept(<ARTURIResource>this.resource, v));
+                        addFunctions.push({
+                            function: this.skosService.addBroaderConcept(<ARTURIResource>this.resource, v),
+                            value: v
+                        });
                     });
                 } else { //it's enriching a subProperty of skos:broader
                     values.forEach((v: ARTURIResource) => {
-                        addFunctions.push(
-                            this.resourcesService.addValue(this.resource, prop, v).map(
+                        addFunctions.push({
+                            function: this.resourcesService.addValue(this.resource, prop, v).map(
                                 stResp => {
                                     this.eventHandler.broaderAddedEvent.emit({narrower: <ARTURIResource>this.resource, broader: v});
-                                    this.update.emit(null);
                                 }
-                            )
-                        );
+                            ),
+                            value: v
+                        });
                     });
                 }
                 this.addMultiple(addFunctions);

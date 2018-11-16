@@ -11,6 +11,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { MultiAddFunction } from "../partitionRenderer";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
@@ -42,7 +43,7 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
                  */
                 if (this.resource.getRole() == RDFResourceRolesEnum.datatypeProperty) {
                     if (value instanceof Array) {
-                        let addFunctions: Observable<any>[] = [];
+                        let addFunctions: MultiAddFunction[] = [];
 
                         if (value[0] instanceof ARTLiteral) { //datarange
                             this.propService.setDataRange(<ARTURIResource>this.resource, value).subscribe(
@@ -51,11 +52,17 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
                         } else { //instance of ARTURIResource => datatype
                             if (prop.getURI() == this.rootProperty.getURI()) { //it's using rdfs:range
                                 value.forEach((v: ARTURIResource) => {
-                                    addFunctions.push(this.propService.addPropertyRange(<ARTURIResource>this.resource, v));
+                                    addFunctions.push({
+                                        function: this.propService.addPropertyRange(<ARTURIResource>this.resource, v),
+                                        value: v
+                                    });
                                 });
                             } else { //it's using a subProperty of rdfs:range
                                 value.forEach((v: ARTURIResource) => {
-                                    addFunctions.push(this.resourcesService.addValue(this.resource, prop, v));
+                                    addFunctions.push({
+                                        function: this.resourcesService.addValue(this.resource, prop, v),
+                                        value: v
+                                    });
                                 });
                             }
                             this.addMultiple(addFunctions);
@@ -72,14 +79,20 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
                             stResp => this.update.emit(null)
                         );
                     } else { //value is ARTURIResource[] (class(es) selected from the tree)
-                        let addFunctions: Observable<any>[] = [];
+                        let addFunctions: MultiAddFunction[] = [];
                         if (prop.getURI() == this.rootProperty.getURI()) { //it's using rdfs:range
                             value.forEach((v: ARTURIResource) => {
-                                addFunctions.push(this.propService.addPropertyRange(<ARTURIResource>this.resource, v));
+                                addFunctions.push({
+                                    function: this.propService.addPropertyRange(<ARTURIResource>this.resource, v),
+                                    value: v
+                                });
                             });
                         } else { //it's using a subProperty of rdfs:range
                             value.forEach((v: ARTURIResource) => {
-                                addFunctions.push(this.resourcesService.addValue(this.resource, prop, v));
+                                addFunctions.push({
+                                    function: this.resourcesService.addValue(this.resource, prop, v),
+                                    value: v
+                                });
                             });
                         }
                         this.addMultiple(addFunctions);

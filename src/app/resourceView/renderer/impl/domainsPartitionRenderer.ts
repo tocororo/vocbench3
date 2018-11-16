@@ -1,17 +1,18 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
-import { ManchesterServices } from "../../../services/manchesterServices";
-import { ARTNode, ARTBNode, ARTResource, ARTURIResource, ResAttribute } from "../../../models/ARTResources";
-import { RDFS } from "../../../models/Vocabulary";
+import { ARTBNode, ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { PropertyServices } from "../../../services/propertyServices";
+import { RDFS } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
+import { ManchesterServices } from "../../../services/manchesterServices";
+import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
-import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { MultiAddFunction } from "../partitionRenderer";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
     selector: "domains-renderer",
@@ -42,14 +43,20 @@ export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
                         stResp => this.update.emit(null)
                     );
                 } else { //value is ARTURIResource[] (class(es) selected from the tree)
-                    let addFunctions: Observable<any>[] = [];
+                    let addFunctions: MultiAddFunction[] = [];
                     if (prop.getURI() == this.rootProperty.getURI()) { //it's using an rdfs:domain
                         value.forEach((v: ARTURIResource) => {
-                            addFunctions.push(this.propService.addPropertyDomain(<ARTURIResource>this.resource, v));
+                            addFunctions.push({
+                                function: this.propService.addPropertyDomain(<ARTURIResource>this.resource, v),
+                                value: v
+                            });
                         });
                     } else { //it's using a subProperty of rdfs:domain
                         value.forEach((v: ARTURIResource) => {
-                            addFunctions.push(this.resourcesService.addValue(this.resource, prop, v));
+                            addFunctions.push({
+                                function: this.resourcesService.addValue(this.resource, prop, v),
+                                value: v
+                            });
                         });
                     }
                     this.addMultiple(addFunctions);

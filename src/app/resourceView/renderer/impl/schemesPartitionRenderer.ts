@@ -12,6 +12,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { MultiAddFunction } from "../partitionRenderer";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
@@ -38,22 +39,21 @@ export class SchemesPartitionRenderer extends PartitionRenderSingleRoot {
             (data: any) => {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;
-                let addFunctions: Observable<any>[] = [];
+                let addFunctions: MultiAddFunction[] = [];
 
                 if (prop.getURI() == this.rootProperty.getURI()) { //it's adding a concept to a scheme with skos:inScheme
                     values.forEach((v: ARTURIResource) => {
-                        addFunctions.push(this.skosService.addConceptToScheme(<ARTURIResource>this.resource, v));
+                        addFunctions.push({
+                            function: this.skosService.addConceptToScheme(<ARTURIResource>this.resource, v),
+                            value: v
+                        });
                     });
                 } else { //it's enriching a subProperty of skos:inScheme
                     values.forEach((v: ARTURIResource) => {
-                        addFunctions.push(
-                            this.resourcesService.addValue(this.resource, prop, v).map(
-                                stResp => {
-                                    ////Here I should emit conceptAddedToSchemEvent but I can't since I don't know if this.resource has broader and child
-                                    ////to show in tree when attached). In this rare case I suppose that the user should refresh the tree
-                                }
-                            )
-                        );
+                        addFunctions.push({
+                            function: this.resourcesService.addValue(this.resource, prop, v),
+                            value: v
+                        });
                     });
                 }
                 this.addMultiple(addFunctions);

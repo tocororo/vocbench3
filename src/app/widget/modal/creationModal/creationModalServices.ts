@@ -112,10 +112,12 @@ export class CreationModalServices {
      * @param lang the language selected as default
      * @param langReadonly if true the language selection is disable and language cannot be changed
      * @param clsChangeable tells if the class of the creating resource can be changed
+     * @param multivalueOpt options about the creation of multiple labels
      * @return if the modal closes with ok returns a promise containing an object with label and cls
      */
-    newXLabel(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean, clsChangeable?: boolean) {
-        var modalData = new NewXLabelModalData(title, value, valueReadonly, lang, langReadonly, clsChangeable);
+    newXLabel(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean, 
+        clsChangeable?: boolean, multivalueOpt?: { enabled: boolean, prefLabel?: boolean }) {
+        var modalData = new NewXLabelModalData(title, value, valueReadonly, lang, langReadonly, clsChangeable, multivalueOpt);
         const builder = new BSModalContextBuilder<NewXLabelModalData>(
             modalData, undefined, NewXLabelModalData
         );

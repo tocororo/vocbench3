@@ -1,14 +1,15 @@
 import { Component } from "@angular/core";
-import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
-import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { ARTURIResource, ARTResource, ARTLiteral, RDFTypesEnum } from "../../models/ARTResources";
+import { ARTLiteral, ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
-import { VBContext } from "../../utils/VBContext";
 import { IcvServices } from "../../services/icvServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { SkosServices } from "../../services/skosServices";
 import { SkosxlServices } from "../../services/skosxlServices";
+import { VBContext } from "../../utils/VBContext";
+import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
+import { NewXLabelModalReturnData } from "../../widget/modal/creationModal/newResourceModal/skos/newXLabelModal";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
     selector: "no-label-resource-component",
@@ -82,8 +83,8 @@ export class NoLabelResourceComponent {
             );
         } else if (this.lexicalizationModel == SKOSXL.uri) {
             this.creationModals.newXLabel("Add skosxl:prefLabel").then(
-                (data: any) => {
-                    this.skosxlService.setPrefLabel(resource, data.label, data.class).subscribe(
+                (data: NewXLabelModalReturnData) => {
+                    this.skosxlService.setPrefLabel(resource, data.labels[0], data.cls).subscribe(
                         stResp => {
                             this.runIcv();
                         }

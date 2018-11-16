@@ -12,6 +12,7 @@ import { BrowsingModalServices } from "../../../widget/modal/browsingModal/brows
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { AddPropertyValueModalReturnData } from "../../resViewModals/addPropertyValueModal";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { MultiAddFunction } from "../partitionRenderer";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
@@ -39,9 +40,12 @@ export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot 
                 let inverse: boolean = data.inverseProperty;
                 let values: ARTURIResource[] = data.value;
 
-                let addFunctions: Observable<any>[] = [];
+                let addFunctions: MultiAddFunction[] = [];
                 values.forEach((v: ARTURIResource) => {
-                    addFunctions.push(this.propService.addSuperProperty(<ARTURIResource>this.resource, v, prop, inverse));
+                    addFunctions.push({
+                        function: this.propService.addSuperProperty(<ARTURIResource>this.resource, v, prop, inverse),
+                        value: v
+                    });
                 });
                 this.addMultiple(addFunctions);
             },

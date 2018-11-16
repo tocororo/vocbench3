@@ -11,6 +11,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { MultiAddFunction } from "../partitionRenderer";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
@@ -35,9 +36,12 @@ export class SubtermsPartitionRenderer extends PartitionRenderSingleRoot {
     add(predicate: ARTURIResource, propChangeable: boolean) {
         this.browsingModals.browseLexicalEntryList("Add a subterm", null, true, true, false, true).then(
             (values: ARTURIResource[]) => {
-                let addFunctions: Observable<any>[] = [];
+                let addFunctions: MultiAddFunction[] = [];
                 values.forEach((v: ARTURIResource) => {
-                    addFunctions.push(this.ontolexService.addSubterm(<ARTURIResource>this.resource, v, predicate));
+                    addFunctions.push({
+                        function: this.ontolexService.addSubterm(<ARTURIResource>this.resource, v, predicate),
+                        value: v
+                    });
                 });
                 this.addMultiple(addFunctions);
             },

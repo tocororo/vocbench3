@@ -12,6 +12,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { MultiAddFunction } from "../partitionRenderer";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
@@ -62,7 +63,10 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
         this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, false).then(
             (data: any) => {
                 let values: ARTResource[] = data.value;
-                let addFunctions: Observable<any>[] = [this.skosService.addFirstToOrderedCollection(this.resource, values[0])];
+                let addFunctions: MultiAddFunction[] = [{
+                    function: this.skosService.addFirstToOrderedCollection(this.resource, values[0]),
+                    value: values[0]
+                }];
                 this.addMultiple(addFunctions);
             },
             () => { }
@@ -76,7 +80,10 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
         this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, false).then(
             (data: any) => {
                 let values: ARTResource[] = data.value;
-                let addFunctions: Observable<any>[] = [this.skosService.addLastToOrderedCollection(this.resource, values[0])];
+                let addFunctions: MultiAddFunction[] = [{
+                    function: this.skosService.addLastToOrderedCollection(this.resource, values[0]),
+                    value: values[0]
+                }];
                 this.addMultiple(addFunctions);
             },
             () => { }
@@ -91,7 +98,10 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
             (data: any) => {
                 let position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue());
                 let values: ARTResource[] = data.value;
-                let addFunctions: Observable<any>[] = [this.skosService.addInPositionToOrderedCollection(this.resource, values[0], position)];
+                let addFunctions: MultiAddFunction[] = [{
+                    function: this.skosService.addInPositionToOrderedCollection(this.resource, values[0], position),
+                    value: values[0]
+                }];
                 this.addMultiple(addFunctions);
             },
             () => { }
@@ -106,7 +116,10 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
             (data: any) => {
                 let position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue()) + 1;
                 let values: ARTResource[] = data.value;
-                let addFunctions: Observable<any>[] = [this.skosService.addInPositionToOrderedCollection(this.resource, values[0], position)];
+                let addFunctions: MultiAddFunction[] = [{
+                    function: this.skosService.addInPositionToOrderedCollection(this.resource, values[0], position),
+                    value: values[0]
+                }];
                 this.addMultiple(addFunctions);
             },
             () => { }

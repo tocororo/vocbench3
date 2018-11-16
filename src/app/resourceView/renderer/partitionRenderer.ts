@@ -120,17 +120,45 @@ export abstract class PartitionRenderer {
 
     /**
      * Invokes an array of functions in order to add multiple values
-     * @param addFunctions 
+     * @param addFunctions array of observable to invoke with the related value that it is adding
+     * @param errorHandler handler executed in case one of the add functions fails
+     * @param errors list of the errors collected during the recursively invocation of addMultiple().
      */
-    protected addMultiple(addFunctions: Observable<any>[]) {
+    protected addMultiple(addFunctions: MultiAddFunction[], errorHandler?: (errors: MultiAddError[]) => void, errors?: MultiAddError[]) {
+        if (errors == null) errors = [];
+
         if (addFunctions.length == 0) { //no more function to call
+            //handle the errors, if any, if an handler is defined
+            if (errors.length > 0) {
+                if (errorHandler != null) {
+                    errorHandler(errors);
+                } else {
+                    let message: string;
+                    let details: string;
+                    if (errors.length == 1) {
+                        message = "The addition of " + errors[0].value.toNT() + " has failed due to the following reason:\n" +  errors[0].error.name + 
+                            ((errors[0].error.message != null) ? ":\n" + errors[0].error.message : "");
+                        details = errors[0].error.stack;
+                    } else {
+                        message = "The addition of the following values have failed:"
+                        errors.forEach((e: MultiAddError) => {
+                            message += "\n\n" + e.value.toNT() + "\nReason:\n" + e.error.name + ((e.error.message != null) ? ":\n" + e.error.message : "");
+                        })
+                    }
+                    this.basicModals.alert("Error", message, "error", details);
+                }
+            }
             this.update.emit();
         } else {
-            addFunctions[0].subscribe(
+            addFunctions[0].function.subscribe(
                 stResp => {
-                    //remove the first function (the one just called) and call itself recursively untill there are no more functions
-                    addFunctions.shift();
-                    this.addMultiple(addFunctions);
+                    addFunctions.shift(); //remove the first function (the one just called) and call itself recursively
+                    this.addMultiple(addFunctions, errorHandler, errors);
+                },
+                err => {
+                    errors.push({ value: addFunctions[0].value, error: err }); //collect the value and the error catched
+                    addFunctions.shift(); //remove the first function (the one just called) and call itself recursively
+                    this.addMultiple(addFunctions, errorHandler, errors);
                 }
             );
         }
@@ -318,4 +346,14 @@ export abstract class PartitionRenderer {
         );
     }
 
+}
+
+export class MultiAddFunction {
+    function: Observable<any>;
+    value: ARTNode;
+}
+
+export class MultiAddError { 
+    value: ARTNode;
+    error: Error;
 }

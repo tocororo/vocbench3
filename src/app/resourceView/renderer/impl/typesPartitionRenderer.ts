@@ -13,6 +13,7 @@ import { BrowsingModalServices } from "../../../widget/modal/browsingModal/brows
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
+import { MultiAddFunction } from "../partitionRenderer";
 
 @Component({
     selector: "types-renderer",
@@ -37,21 +38,25 @@ export class TypesPartitionRenderer extends PartitionRenderSingleRoot {
             (data: any) => {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;
-                let addFunctions: Observable<any>[] = [];
+                let addFunctions: MultiAddFunction[] = [];
 
                 if (prop.getURI() == this.rootProperty.getURI()) { //it's adding an rdf:type
                     values.forEach((v: ARTURIResource) => {
-                        addFunctions.push(this.individualService.addType(<ARTURIResource>this.resource, v));
+                        addFunctions.push({
+                            function: this.individualService.addType(<ARTURIResource>this.resource, v),
+                            value: v
+                        });
                     });
                 } else { //it's adding a subProperty of rdf:type
                     values.forEach((v: ARTURIResource) => {
-                        addFunctions.push(
-                            this.resourcesService.addValue(this.resource, prop, v).map(
+                        addFunctions.push({
+                            function: this.resourcesService.addValue(this.resource, prop, v).map(
                                 stResp => {
                                     this.eventHandler.typeAddedEvent.emit({resource: this.resource, type: v});
                                 }
-                            )
-                        );
+                            ),
+                            value: v
+                        });
                     });
                 }
                 this.addMultiple(addFunctions);

@@ -10,6 +10,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { MultiAddFunction } from "../partitionRenderer";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
@@ -37,9 +38,12 @@ export class DisjointPropertiesPartitionRenderer extends PartitionRenderSingleRo
                 let inverse: boolean = data.inverseProperty;
                 let values: ARTURIResource[] = data.value;
 
-                let addFunctions: Observable<any>[] = [];
+                let addFunctions: MultiAddFunction[] = [];
                 values.forEach((v: ARTURIResource) => {
-                    addFunctions.push(this.propService.addPropertyDisjointWith(<ARTURIResource>this.resource, v, prop, inverse));
+                    addFunctions.push({
+                        function: this.propService.addPropertyDisjointWith(<ARTURIResource>this.resource, v, prop, inverse),
+                        value: v
+                    });
                 });
                 this.addMultiple(addFunctions);
             },
