@@ -11,6 +11,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { MultiAddFunction } from "../partitionRenderer";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
@@ -18,12 +19,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
     templateUrl: "../partitionRenderer.html",
 })
 export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleRoot {
-
-    //inherited from PartitionRenderSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     partition = ResViewPartition.formRepresentations;
     rootProperty: ARTURIResource = OntoLex.representation;
@@ -44,11 +39,16 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
         this.getLexiconLang().subscribe(
             lang => {
                 this.lexiconLang = lang;
-                this.creationModals.newPlainLiteral("Add " + predicate.getShow(), null, false, this.lexiconLang, false, { constrain: true, locale: true }).then(
-                    (literal: ARTLiteral) => {
-                        this.ontolexService.addFormRepresentation(this.resource, literal, predicate).subscribe(
-                            stResp => this.update.emit()
-                        )
+                this.creationModals.newPlainLiteral("Add " + predicate.getShow(), null, false, this.lexiconLang, false, { constrain: true, locale: true }, { enabled: true, allowSameLang: false }).then(
+                    (literals: ARTLiteral[]) => {
+                        let addFunctions: MultiAddFunction[] = [];
+                        literals.forEach((literal: ARTLiteral) => {
+                            addFunctions.push({ 
+                                function: this.ontolexService.addFormRepresentation(this.resource, literal, predicate), 
+                                value: literal
+                            });
+                        });
+                        this.addMultiple(addFunctions);
                     },
                     () => {}
                 );

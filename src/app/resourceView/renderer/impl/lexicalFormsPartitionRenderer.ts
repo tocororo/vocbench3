@@ -20,12 +20,6 @@ import { NewResourceWithLiteralCfModalReturnData } from "../../../widget/modal/c
 })
 export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
 
-    //inherited from PartitionRenderSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
-
     partition = ResViewPartition.lexicalForms;
     rootProperties: ARTURIResource[] = [OntoLex.otherForm, OntoLex.canonicalForm];
     knownProperties: ARTURIResource[] = this.rootProperties;

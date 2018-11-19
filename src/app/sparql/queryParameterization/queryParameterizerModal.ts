@@ -160,8 +160,8 @@ export class QueryParameterizerModal implements ModalComponent<QueryParameterize
             );
         } else if (type == RDFTypesEnum.plainLiteral) {
             this.creationModals.newPlainLiteral("Create literal").then(
-                (value: ARTLiteral) => {
-                    binding.value = value.toNT();
+                (value: ARTLiteral[]) => {
+                    binding.value = value[0].toNT();
                 },
                 () => {}
             );

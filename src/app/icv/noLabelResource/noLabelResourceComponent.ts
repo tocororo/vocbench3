@@ -72,8 +72,8 @@ export class NoLabelResourceComponent {
     fix(resource: ARTURIResource) {
         if (this.lexicalizationModel == SKOS.uri) {
             this.creationModals.newPlainLiteral("Add skos:prefLabel").then(
-                (literal: any) => {
-                    this.skosService.setPrefLabel(resource, literal).subscribe(
+                (literal: ARTLiteral[]) => {
+                    this.skosService.setPrefLabel(resource, literal[0]).subscribe(
                         stResp => {
                             this.runIcv();
                         }
@@ -94,8 +94,8 @@ export class NoLabelResourceComponent {
             );
         } else { //OWL 
             this.creationModals.newPlainLiteral("Add rdfs:label").then(
-                (literal: any) => {
-                    this.resourcesService.addValue(resource, RDFS.label,(<ARTLiteral>literal)).subscribe(
+                (literal: ARTLiteral[]) => {
+                    this.resourcesService.addValue(resource, RDFS.label, literal[0]).subscribe(
                         stResp => {
                             this.runIcv();
                         }

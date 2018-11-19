@@ -68,8 +68,8 @@ export class LiteralPickerComponent {
             );
         } else if (type == RDFTypesEnum.plainLiteral) {
             this.creationModals.newPlainLiteral("Create literal").then(
-                (value: ARTLiteral) => {
-                    this.literal = value;
+                (value: ARTLiteral[]) => {
+                    this.literal = value[0];
                     this.literalNT = this.literal.toNT();
                     this.literalChanged.emit(this.literal);
                 },

@@ -116,7 +116,7 @@ export class CreationModalServices {
      * @return if the modal closes with ok returns a promise containing an object with label and cls
      */
     newXLabel(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean, 
-        clsChangeable?: boolean, multivalueOpt?: { enabled: boolean, prefLabel?: boolean }) {
+        clsChangeable?: boolean, multivalueOpt?: { enabled: boolean, allowSameLang: boolean }) {
         var modalData = new NewXLabelModalData(title, value, valueReadonly, lang, langReadonly, clsChangeable, multivalueOpt);
         const builder = new BSModalContextBuilder<NewXLabelModalData>(
             modalData, undefined, NewXLabelModalData
@@ -133,10 +133,12 @@ export class CreationModalServices {
      * @param lang the language selected as default
      * @param langReadonly if true the language selection is disable and language cannot be changed
      * @param langConstraints constraints to apply to the lang
+     * @param multivalueOpt options about the creation of multiple labels
      * @return if the modal closes with ok returns a promise containing an ARTLiteral
      */
-    newPlainLiteral(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean, langConstraints?: LanguageConstraint) {
-        var modalData = new NewPlainLiteralModalData(title, value, valueReadonly, lang, langReadonly, langConstraints);
+    newPlainLiteral(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean,
+        langConstraints?: LanguageConstraint, multivalueOpt?: { enabled: boolean, allowSameLang: boolean }) {
+        var modalData = new NewPlainLiteralModalData(title, value, valueReadonly, lang, langReadonly, langConstraints, multivalueOpt);
         const builder = new BSModalContextBuilder<NewPlainLiteralModalData>(
             modalData, undefined, NewPlainLiteralModalData
         );

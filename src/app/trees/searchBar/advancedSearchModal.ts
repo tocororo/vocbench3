@@ -224,8 +224,8 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
             );
         } else if (type == RDFTypesEnum.plainLiteral) {
             this.creationModals.newPlainLiteral("Create literal").then(
-                (value: ARTLiteral) => {
-                    group.second.push(value);
+                (value: ARTLiteral[]) => {
+                    group.second.push(value[0]);
                 },
                 () => {}
             );

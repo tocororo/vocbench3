@@ -177,8 +177,8 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
      */
     private enrichWithPlainLiteral(predicate: ARTURIResource) {
         this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
-            (literal: ARTLiteral) => {
-                this.addPartitionAware(this.resource, predicate, literal);
+            (literal: ARTLiteral[]) => {
+                this.addPartitionAware(this.resource, predicate, literal[0]);
             },
             () => { }
         );

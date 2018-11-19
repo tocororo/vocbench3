@@ -23,7 +23,7 @@ export class NewXLabelModalData extends BSModalContext {
         public lang: string,
         public langReadonly: boolean = false,
         public clsChangeable: boolean = true,
-        public multiLabelOpt: { enabled: boolean, prefLabel?: boolean } = { enabled: false }
+        public multiLabelOpt: { enabled: boolean, allowSameLang: boolean } = { enabled: false, allowSameLang: true }
     ) {
         super();
     }
@@ -100,7 +100,7 @@ export class NewXLabelModal implements ModalComponent<NewXLabelModalData> {
          * of a label already addded to the values array
          */
         let violated: boolean = false;
-        if (!this.context.multiLabelOpt.prefLabel && this.value != null && this.value.length > 0) {
+        if (!this.context.multiLabelOpt.allowSameLang && this.value != null && this.value.length > 0) {
             this.values.forEach((v: ARTLiteral) => {
                 if (v.getLang() == this.lang) {
                     violated = true;

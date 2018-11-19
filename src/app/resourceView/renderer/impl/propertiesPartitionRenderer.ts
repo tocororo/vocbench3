@@ -45,7 +45,7 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
             predicate.getURI() == SKOSXL.hiddenLabel.getURI()
         ) { //SKOSXL
             let prefLabelPred: boolean = predicate.getURI() == SKOSXL.prefLabel.getURI();
-            this.creationModals.newXLabel("Add " + predicate.getShow(), null, null, null, null, null, { enabled: true, prefLabel: !prefLabelPred }).then(
+            this.creationModals.newXLabel("Add " + predicate.getShow(), null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
                 (data: NewXLabelModalReturnData) => {
                     let addFunctions: MultiAddFunction[] = [];
                     let errorHandler: (errors: MultiAddError[]) => void;
@@ -103,42 +103,62 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
             predicate.getURI() == SKOS.hiddenLabel.getURI() ||
             predicate.getURI() == RDFS.label.getURI()
         ) {
-            this.creationModals.newPlainLiteral("Add " + predicate.getShow()).then(
-                (literal: any) => {
-                    switch (predicate.getURI()) {
-                        case SKOS.prefLabel.getURI():
-                            this.skosService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal)).subscribe(
-                                stResp => this.update.emit(null),
-                                (err: Error) => {
-                                    if (err.name.endsWith('PrefAltLabelClashException')) {
-                                        this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-                                            confirm => {
-                                                this.skosService.setPrefLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal), false).subscribe(
-                                                    stResp => this.update.emit(null)
-                                                );
-                                            },
-                                            () => {}
-                                        );
-                                    }
+            let prefLabelPred: boolean = predicate.getURI() == SKOS.prefLabel.getURI();
+            this.creationModals.newPlainLiteral("Add " + predicate.getShow(), null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
+                (labels: ARTLiteral[]) => {
+                    let addFunctions: MultiAddFunction[] = [];
+                    let errorHandler: (errors: MultiAddError[]) => void;
+                    if (predicate.getURI() == SKOS.prefLabel.getURI()) {
+                        labels.forEach((label: ARTLiteral) => {
+                            addFunctions.push({ 
+                                function: this.skosService.setPrefLabel(<ARTURIResource>this.resource, label), 
+                                value: label 
+                            });
+                        });
+                        errorHandler = (errors: MultiAddError[]) => {
+                            if (errors.length == 1) { //if only one error, try to handle it
+                                let err: Error = errors[0].error;
+                                if (err.name.endsWith('PrefAltLabelClashException')) {
+                                    this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                        confirm => {
+                                            this.skosService.setPrefLabel(<ARTURIResource>this.resource, <ARTLiteral>errors[0].value, false).subscribe(
+                                                stResp => this.update.emit(null)
+                                            );
+                                        },
+                                        () => {}
+                                    );
                                 }
-                            );
-                            break;
-                        case SKOS.altLabel.getURI():
-                            this.skosService.addAltLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal)).subscribe(
-                                stResp => this.update.emit(null)
-                            );
-                            break;
-                        case SKOS.hiddenLabel.getURI():
-                            this.skosService.addHiddenLabel(<ARTURIResource>this.resource, (<ARTLiteral>literal)).subscribe(
-                                stResp => this.update.emit(null)
-                            );
-                            break;
-                        case RDFS.label.getURI():
-                            this.resourcesService.addValue(<ARTURIResource>this.resource, predicate,  (<ARTLiteral>literal)).subscribe(
-                                stResp => this.update.emit(null)
-                            );
-                            break;
+                            } else {
+                                let message = "The addition of the following values have failed:"
+                                errors.forEach((e: MultiAddError) => {
+                                    message += "\n\n" + e.value.toNT() + "\nReason:\n" + e.error.name + ((e.error.message != null) ? ":\n" + e.error.message : "");
+                                });
+                                this.basicModals.alert("Error", message, "error");
+                            }
+                        }
+                    } else if (predicate.getURI() == SKOS.altLabel.getURI()) {
+                        labels.forEach((label: ARTLiteral) => {
+                            addFunctions.push({ 
+                                function: this.skosService.addAltLabel(<ARTURIResource>this.resource, label), 
+                                value: label 
+                            });
+                        });
+                    } else if (predicate.getURI() == SKOS.hiddenLabel.getURI()) {
+                        labels.forEach((label: ARTLiteral) => {
+                            addFunctions.push({ 
+                                function: this.skosService.addHiddenLabel(<ARTURIResource>this.resource, label), 
+                                value: label 
+                            });
+                        });
+                    } else if (predicate.getURI() == RDFS.label.getURI()) {
+                        labels.forEach((label: ARTLiteral) => {
+                            addFunctions.push({ 
+                                function: this.resourcesService.addValue(this.resource, predicate, label),
+                                value: label 
+                            });
+                        });
                     }
+                    this.addMultiple(addFunctions, errorHandler);
                 },
                 () => { }
             );
