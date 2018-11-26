@@ -34,9 +34,11 @@ export class RefactorServices {
     /**
      * Refactors SKOSXL data (labels and notes) into SKOS
      */
-    SKOSXLtoSKOS() {
+    SKOSXLtoSKOS(flattenNotes: boolean) {
         console.log("[RefactorServices] SKOSXLtoSKOS");
-        var params: any = {};
+        var params: any = {
+            flattenNotes: flattenNotes
+        };
         return this.httpMgr.doGet(this.serviceName, "SKOSXLtoSKOS", params).map(
             stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);

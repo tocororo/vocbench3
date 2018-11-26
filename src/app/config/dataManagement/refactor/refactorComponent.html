@@ -35,7 +35,10 @@
                         Note: this is <strong>not</strong> a loss-less operation, all the information related to the SKOS-XL labels and notes will be lost.
                     </div>
                 </div>
-                <div class="subPanel-footer">
+                <div class="subPanel-footer hbox" style="align-items: center; justify-content: flex-end">
+                    <div class="checkbox" style="margin: 0px 10px; display: inline-block">
+                        <label><input type="checkbox" [(ngModel)]="flattenNotes">Flatten reified SKOS notes</label>
+                    </div>
                     <button class="btn btn-sm btn-default pull-right" (click)="skosxlToSkos()" [disabled]="!isSkoxlToSkosAuthorized()">Refactor</button>
                     <span class="clearfix"></span>
                 </div>

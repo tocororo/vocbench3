@@ -16,6 +16,7 @@ export class RefactorComponent {
     private lexicalizationModel: string; //RDFS, SKOS, SKOS-XL
     
     private reifyNotes: boolean = false; //used in skos->skoxl
+    private flattenNotes: boolean = false; //used in skosxl->skos
 
     constructor(private refactorService: RefactorServices, private basicModals: BasicModalServices) { }
 
@@ -50,7 +51,7 @@ export class RefactorComponent {
         this.basicModals.confirm("SKOS-XL to SKOS", "This could be a long process. Are you sure to continue?", "warning").then(
             confirm => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.refactorService.SKOSXLtoSKOS().subscribe(
+                this.refactorService.SKOSXLtoSKOS(this.flattenNotes).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.basicModals.alert("Refactor", "Refactoring process completed");
