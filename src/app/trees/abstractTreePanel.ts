@@ -1,18 +1,15 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { AbstractPanel } from "./abstractPanel";
+import { Component } from "@angular/core";
+import { GraphModalServices } from "../graph/modal/graphModalServices";
+import { ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { CustomFormsServices } from "../services/customFormsServices";
 import { ResourcesServices } from "../services/resourcesServices";
-import { ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
-import { CustomForm } from "../models/CustomForms";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
-import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { AbstractPanel } from "./abstractPanel";
 
-@Component({
-    selector: "panel",
-    templateUrl: "./owl/classTreePanel/classTreePanelComponent.html", //placeholder template
-})
+@Component({})
 export abstract class AbstractTreePanel extends AbstractPanel {
 
     /**
@@ -23,13 +20,15 @@ export abstract class AbstractTreePanel extends AbstractPanel {
      * ATTRIBUTES
      */
 
+    
 
     /**
      * CONSTRUCTOR
      */
-    constructor(cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, 
+    constructor(cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, resourceService, basicModals, eventHandler, vbProp);
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
+        this.graphModals = graphModals;
     }
 
     /**

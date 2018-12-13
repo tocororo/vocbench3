@@ -1,4 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
+import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { SearchSettings } from "../../../../models/Properties";
 import { SKOS } from "../../../../models/Vocabulary";
@@ -28,9 +29,9 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
     private searchInputPlaceholder: string;
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices,
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, resourceService, basicModals, eventHandler, vbProp);
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
     }
 
     //top bar commands handlers

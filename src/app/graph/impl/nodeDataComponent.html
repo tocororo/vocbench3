@@ -1,0 +1,48 @@
+<svg:g [attr.transform]="'translate(' + node.x + ',' + node.y + ')'">
+    <svg:g (click)="onClick()" (dblclick)="onDblClick()" style="cursor: pointer;">
+
+
+        <ng-template [ngIf]="node.res.isResource()">
+            <defs>
+                <linearGradient [attr.id]="'gradient'+node.index" x2="0%" y2="100%">
+                    <stop offset="0%" [attr.class]="nodeClass"/>
+                    <stop [attr.offset]="stripePercentage + '%'" [attr.class]="nodeClass"/>
+                    <stop [attr.offset]="stripePercentage + '%'" style="stop-color: black"/>
+                    <stop [attr.offset]="stripePercentage + 2 + '%'" style="stop-color: black"/>
+                    <stop [attr.offset]="stripePercentage + 2 + '%'" style="stop-color: white"/>
+                    <stop offset="100%" style="stop-color: white"/>
+                </linearGradient>
+            </defs>
+
+            <svg:rect class="graphNode" rx="5" ry="5" [attr.x]="-rectBase/2" [attr.y]="-rectHeight/2" 
+                [attr.width]="rectBase" [attr.height]="rectHeight" [attr.fill]="'url(#gradient'+node.index+')'">
+            </svg:rect>
+
+            <svg:text [attr.x]="-rectBase/2+3" [attr.y]="-rectHeight/2+3" dominant-baseline="hanging">
+                <!-- :Class name -->
+                <!-- <svg:title>{{getRendering()}}</svg:title> -->
+            </svg:text>
+
+            <svg:text #textEl style="visibility: hidden">{{getRendering()}}</svg:text>
+            <svg:text [attr.x]="-rectBase/2+3" [attr.y]="-rectHeight/2+stripeHeight+3" dominant-baseline="hanging">
+                {{getRenderingNormalized()}}
+                <svg:title>{{getRendering()}}</svg:title>
+            </svg:text>
+        </ng-template>
+
+        <!-- For literal no top stripe -->
+        <ng-template [ngIf]="!node.res.isResource()">
+            <svg:rect class="graphNode" rx="5" ry="5" [attr.x]="-rectBase/2" [attr.y]="-rectHeight/2" 
+                [attr.width]="rectBase" [attr.height]="rectHeight" fill="white">
+            </svg:rect>
+
+            <svg:text #textEl style="visibility: hidden">{{getRendering()}}</svg:text>
+            <svg:text text-anchor="middle" dominant-baseline="central">
+                {{getRenderingNormalized()}}
+                <svg:title>{{getRendering()}}</svg:title>
+            </svg:text>
+        </ng-template>
+            
+        
+    </svg:g>
+</svg:g>

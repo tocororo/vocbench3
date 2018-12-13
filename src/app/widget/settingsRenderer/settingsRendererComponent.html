@@ -48,6 +48,8 @@
                         <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control input-sm" style="resize: vertical" [(ngModel)]="p.value">
                         </textarea>
 
+                        <input *ngSwitchCase="'int'" type="number" class="form-control input-sm" step="1" [(ngModel)]="p.value">
+
                         <div *ngSwitchDefault class="hbox" style="align-items: center; position: relative;">
                             <textarea *ngSwitchDefault type="text" rows="1" class="form-control input-sm" 
                                 style="resize: vertical;" [(ngModel)]="p.value">

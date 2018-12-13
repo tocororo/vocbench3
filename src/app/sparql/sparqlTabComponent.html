@@ -87,15 +87,18 @@
         </table>
     </div>
 
-    <div *ngIf="queryResult.length > resultsLimit">
-        <div class="btn-group btn-group-xs pull-right" style="margin-top: 4px;" role="group">
+    <div style="margin-top: 4px;">
+        <button *ngIf="isOpenGraphEnabled()" class="btn btn-xs btn-default" (click)="openGraph()">
+            <img src="../../assets/images/icons/res/ontology.png" title="See results as graph" width="11px">
+        </button>
+        <div class="btn-group btn-group-xs pull-right" role="group">
             <button class="btn btn-default" title="Previous page" (click)="resultsPage=resultsPage-1" [disabled]="resultsPage==0">
                 <span class="glyphicon glyphicon-triangle-left"></span>
             </button>
             <button class="btn btn-default" style="cursor: auto" disabled>
                 <span>{{resultsPage+1}} of {{resultsTotPage}}</span>
             </button>
-            <button class="btn btn-default" title="Next page" (click)="resultsPage=resultsPage+1" [disabled]="resultsPage==resultsTotPage-1">
+            <button class="btn btn-default" title="Next page" (click)="resultsPage=resultsPage+1" [disabled]="resultsPage>=resultsTotPage-1">
                 <span class="glyphicon glyphicon-triangle-right"></span>
             </button>
         </div>

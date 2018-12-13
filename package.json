@@ -31,12 +31,14 @@
     "codemirror": "5.26.0",
     "yasgui-yasqe": "2.11.14",
     "jsprolog": "0.2.2",
-    "ng2-completer": "1.6.3"
+    "ng2-completer": "1.6.3",
+    "d3": "5.7.0"
   },
   "devDependencies": {
     "@types/codemirror": "^0.0.41",
     "@types/jquery": "^3.2.3",
     "@types/node": "^6.0.45",
+    "@types/d3": "5.0.1",
     "angular2-template-loader": "^0.6.0",
     "awesome-typescript-loader": "^3.0.4",
     "css-loader": "^0.26.1",

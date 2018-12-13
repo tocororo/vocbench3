@@ -1,0 +1,82 @@
+<div class="panel panel-default vbox">
+    <div class="panel-heading">
+        <label></label>
+        <span style="flex: 1;"></span>
+        <!-- <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default">
+                    <span class="glyphicon glyphicon-font"></span>
+                </button>
+            </div>
+        </div> -->
+        <div class="dropdown pull-right">
+            <button class="dropdown-toggle transparentBtn" data-toggle="dropdown">
+                <span>&#9662;</span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a (click)="rendering = !rendering">
+                        <span style="flex: 1;">
+                            <span class="glyphicon glyphicon-font" style="margin-right: 4px;"></span>
+                            Rendering
+                        </span>
+                        <span *ngIf="rendering" class="glyphicon glyphicon-ok pull-right"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="panel-body hbox">
+        <graph-explore class="vbox" [graph]="graph" [mode]="mode" [rendering]="rendering" (nodeSelected)="onNodeSelected($event)"></graph-explore>
+
+        <div class="panel panel-default" style="width: 300px; margin-left: 4px;">
+            <div class="panel-body">
+                <table class="table table-condensed table-borderless">
+                    <colgroup>
+                        <col style="width: 1%">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td><label>Resource:</label></td>
+                            <td><rdf-resource *ngIf="selectedNode" [resource]="selectedNode"></rdf-resource></td>
+                        </tr>
+                        <tr *ngIf="selectedNode?.isURIResource()">
+                            <td><label>IRI:</label></td>
+                            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{selectedNode?.getURI()}}</td>
+                        </tr>
+                        <tr *ngIf="selectedNode?.isBNode()">
+                            <td><label>ID:</label></td>
+                            <td>{{selectedNode?.getId()}}</td>
+                        </tr>
+                        <tr>
+                            <td><label>Label:</label></td>
+                            <td>{{selectedNode?.getShow()}}</td>
+                        </tr>
+                        <tr>
+                            <td><label>Role:</label></td>
+                            <td>{{selectedNode?.getRole()}}</td>
+                        </tr>
+                        <tr *ngIf="selectedNode?.isResource()">
+                            <td><label>Deprecated:</label></td>
+                            <td>{{selectedNode?.isDeprecated()}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr *ngIf="selectedNode?.isResource()">
+                            <td colspan="2">
+                                Show the complete <a style="cursor: pointer" (click)="showResourceView()">ResourceView</a>
+                            </td>
+                        </tr>   
+                    </tfoot>
+                </table>
+
+                <!-- Slider for changing the forces -->
+                <!-- <div class="panel panel-default">
+                    <div class="panel-body">
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>

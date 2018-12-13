@@ -1,0 +1,21 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+        Graph
+    </h3>
+</div>
+<div class="modal-body vbox blockingDivHost" style="min-height: 20vh; height: 80vh">
+
+    <graph-panel class="vbox" [graph]="context.graph" [mode]="context.mode" [rendering]="context.rendering"></graph-panel>
+
+    <div #blockingDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+</div>

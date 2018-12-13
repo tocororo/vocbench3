@@ -26,3 +26,16 @@ export enum QueryMode {
     query = "query",
     update = "update"
 }
+
+export class GraphResultBindings {
+    subj: GraphBinding;
+    pred: GraphBinding;
+    obj: GraphBinding;
+}
+
+export class GraphBinding {
+    type: "uri" | "literal" | "bnode";
+    value: string;
+    datatype?: string;
+    'xml:lang': string;
+}

@@ -24,6 +24,7 @@ import { VBProperties } from "../utils/VBProperties";
 import { AdministrationModule } from "./administrationModule";
 import { CollaborationModule } from './collaborationModule';
 import { CustomFormModule } from "./customFormModule";
+import { GraphModule } from './graphModule';
 import { HistoryValidationModule } from "./historyValidationModule";
 import { ICVModule } from "./icvModule";
 import { MetadataModule } from "./metadataModule";
@@ -44,7 +45,7 @@ import { VBModalModule } from "./vbModalModule";
             BrowserModule,
             FormsModule, //check if this is still necessary when declarated component are reduced in favor of more imported modules
 
-            SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule,
+            SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule, GraphModule,
             ProjectModule, UserModule, ICVModule, AdministrationModule, CustomFormModule, MetadataModule,
             HistoryValidationModule, PreferencesModule, Sheet2RdfModule, SparqlModule, CollaborationModule,
 

@@ -1,4 +1,5 @@
 import { Component, Input, ViewChild } from "@angular/core";
+import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { SearchSettings } from "../../../../models/Properties";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -25,9 +26,9 @@ export class LexiconListPanelComponent extends AbstractPanel {
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.limeLexicon;
 
     constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, 
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, resourceService, basicModals, eventHandler, vbProp);
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
         
     }
 

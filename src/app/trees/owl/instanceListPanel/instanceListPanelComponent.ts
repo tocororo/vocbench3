@@ -1,4 +1,6 @@
 import { Component, Input, ViewChild } from "@angular/core";
+import { GraphModalServices } from "../../../graph/modal/graphModalServices";
+import { GraphMode } from "../../../graph/abstractGraph";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
 import { SearchSettings } from "../../../models/Properties";
 import { ClassesServices } from "../../../services/classesServices";
@@ -26,12 +28,13 @@ export class InstanceListPanelComponent extends AbstractPanel {
     @ViewChild(InstanceListComponent) viewChildInstanceList: InstanceListComponent;
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
+    graphMode: GraphMode = GraphMode.dataOriented;
     rendering: boolean = false; //override the value in AbstractPanel
 
     constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices,
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, resourceService, basicModals, eventHandler, vbProp);
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
     }
 
     //@Override

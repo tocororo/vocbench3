@@ -1,0 +1,128 @@
+.graphContainer {
+    background-color: #ddd
+}
+
+/* Nodes */
+
+.graphNode {
+    stroke: #000;
+    stroke-width: 1px;
+}
+.graphNode:hover {
+    stroke-width: 2px;
+}
+
+/* If node has children to expand */
+.parentNode {
+    stroke-width: 5px;
+}
+
+.deprecated { 
+    stroke: #8e4a4c !important;
+    stroke-width: 2px;
+    /* Following for deprecated "D" symbol */
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.unkwnownNode {
+    fill: #eee;
+}
+
+.literal { fill: #fff; }
+
+.bnode { fill: #ddd; } /* Same of the background in order to simulate transparency */
+
+.annotationProperty { fill: #ffad00; stop-color: #ffad00; }
+.annotationPropertyImported { fill: #fadda0; stop-color: #fadda0; }
+.annotationPropertyDeprecated { fill: #bda87d; stop-color: #bda87d; }
+
+.cls { fill: #d5a833; stop-color: #d5a833; }
+.clsImported { fill: #e8d095; stop-color: #e8d095; }
+.clsDeprecated { fill: #a39779; stop-color: #a39779; }
+
+.concept { fill: #81bcce; stop-color: #81bcce; }
+.conceptImported { fill: #9cd8e8; stop-color: #9cd8e8; }
+.conceptDeprecated { fill: #517581; stop-color: #517581; }
+
+.conceptScheme { fill: #6c6e59; stop-color: #6c6e59; }
+.conceptSchemeImported { fill: #9fa18c; stop-color: #9fa18c; }
+.conceptSchemeDeprecated { fill: #60615a; stop-color: #60615a; }
+
+.dataRange { fill: #d67233; stop-color: #d67233; }
+.dataRangeImported { fill: #f5a367; stop-color: #f5a367; }
+.dataRangeDeprecated { fill: #a38979; stop-color: #a38979; }
+
+.datatypeProperty { fill: #329973; stop-color: #329973; }
+.datatypePropertyImported { fill: #9fd4c0; stop-color: #9fd4c0; }
+.datatypePropertyDeprecated { fill: #546e64; stop-color: #546e64; }
+
+.individual { fill: #652a64; stop-color: #652a64; }
+.individualImported { fill: #bf95bf; stop-color: #bf95bf; }
+.individualDeprecated { fill: #403340; stop-color: #403340; }
+
+.limeLexicon { fill: #500000; stop-color: #500000; }
+.limeLexiconImported { fill: #974d4d; stop-color: #974d4d; }
+.limeLexiconDeprecated { fill: #261c1b; stop-color: #261c1b; }
+
+.objectProperty { fill: #336699; stop-color: #336699; }
+.objectPropertyImported { fill: #9fb9d4; stop-color: #9fb9d4; }
+.objectPropertyDeprecated { fill: #54616e; stop-color: #54616e; }
+
+.ontolexForm { fill: #6a4733; stop-color: #6a4733; }
+.ontolexFormImported { fill: #9b7a67; stop-color: #9b7a67; }
+.ontolexFormDeprecated { fill: #4a423d; stop-color: #4a423d; }
+
+.ontolexLexicalEntry { fill: #c49a5e; stop-color: #c49a5e; }
+.ontolexLexicalEntryImported { fill: #eec790;  stop-color: #eec790;}
+.ontolexLexicalEntryDeprecated { fill: #a39786; stop-color: #a39786; }
+
+.ontolexLexicalSense { fill: #69a5b5; stop-color: #69a5b5; }
+.ontolexLexicalSenseImported { fill: #9cd8e8; stop-color: #9cd8e8; }
+.ontolexLexicalSenseDeprecated { fill: #84969c; stop-color: #84969c; }
+
+.ontology { fill: #fff; stop-color: #fff; }
+
+.ontologyProperty { fill: #826a4a; stop-color: #826a4a; }
+.ontologyPropertyImported { fill: #ccbeab; stop-color: #ccbeab; }
+.ontologyPropertyDeprecated { fill: #665f57; stop-color: #665f57; }
+
+.property { fill: #336699; stop-color: #336699; }
+.propertyImported { fill: #9fb9d4; stop-color: #9fb9d4; }
+.propertyDeprecated { fill: #54616e; stop-color: #54616e; }
+
+.skosCollection { fill: #81bcce; stop-color: #81bcce; }
+.skosCollectionImported { fill: #9cd8e8; stop-color: #9cd8e8; }
+.skosCollectionDeprecated { fill: #517581; stop-color: #517581; }
+
+.xLabel { fill: #d0ad4b; stop-color: #d0ad4b; }
+.xLabelImported { fill: #f5d97e; stop-color: #f5d97e; }
+.xLabelDeprecated { fill: #a89e83; stop-color: #a89e83; }
+
+/* Links */
+
+.link {
+    stroke: #000;
+    stroke-width: 2px;
+    fill: none;
+}
+/* .link:hover {
+    stroke-width: 3px;
+} */
+
+.annotationPropertyLink { stroke: #ffad00 !important; }
+.datatypePropertyLink { stroke: #329973 !important; }
+.objectPropertyLink { stroke: #336699 !important; }
+.ontologyPropertyLink { stroke: #826a4a !important; }
+.propertyLink { stroke: #336699 !important; }
+
+/* Arrows */
+
+.arrow { fill: #000 }
+
+.annotationPropertyArrow { fill: #ffad00 !important; }
+.datatypePropertyArrow { fill: #329973 !important; }
+.objectPropertyArrow { fill: #336699 !important; }
+.ontologyPropertyArrow { fill: #826a4a !important; }
+.propertyArrow { fill: #336699 !important; }
+

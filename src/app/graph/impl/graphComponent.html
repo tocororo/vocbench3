@@ -1,0 +1,16 @@
+<svg:svg #svg [attr.width]="options.width" [attr.height]="options.height" class="graphContainer">
+    <svg:g *ngIf="initialized" [zoomableOf]="svg">
+        <svg:g *ngFor="let link of graph.links" [link]="link" [mode]="mode"></svg:g>
+
+        <ng-template [ngIf]="mode=='modelOriented'">
+            <svg:g *ngFor="let node of graph.nodes" [nodeModel]="node" (nodeClicked)="onNodeClicked($event)" (nodeDblClicked)="onNodeDblClicked($event)"
+                [draggableNode]="node" [draggableInGraph]="graph" [rendering]="rendering">
+            </svg:g>
+        </ng-template>
+        <ng-template [ngIf]="mode=='dataOriented'">
+            <svg:g *ngFor="let node of graph.nodes" [nodeData]="node" (nodeClicked)="onNodeClicked($event)" (nodeDblClicked)="onNodeDblClicked($event)"
+                [draggableNode]="node" [draggableInGraph]="graph" [rendering]="rendering">
+            </svg:g>
+        </ng-template>
+    </svg:g>
+</svg:svg>

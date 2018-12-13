@@ -2,10 +2,11 @@ import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from "rxjs/Observable";
+import { GraphModalServices } from "../graph/modal/graphModalServices";
 import { ARTBNode, ARTResource, ARTURIResource } from "../models/ARTResources";
 import { Configuration, ConfigurationProperty } from "../models/Configuration";
 import { PrefixMapping } from "../models/Metadata";
-import { QueryMode, ResultType } from "../models/Sparql";
+import { GraphResultBindings, QueryMode, ResultType } from "../models/Sparql";
 import { ConfigurationsServices } from "../services/configurationsServices";
 import { ExportServices } from "../services/exportServices";
 import { SearchServices } from "../services/searchServices";
@@ -13,14 +14,13 @@ import { SparqlServices } from "../services/sparqlServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { UIUtils } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
+import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
 import { SharedModalServices } from '../widget/modal/sharedModal/sharedModalServices';
 import { ExportResultAsRdfModal, ExportResultAsRdfModalData } from "./exportResultAsRdfModal";
 import { YasguiComponent } from "./yasguiComponent";
 
-@Component({
-    selector: "abstract-sparql-tab",
-})
+@Component({})
 export abstract class AbstractSparqlTabComponent {
 
     @ViewChild(YasguiComponent) viewChildYasgui: YasguiComponent;
@@ -58,16 +58,20 @@ export abstract class AbstractSparqlTabComponent {
     protected searchService: SearchServices;
     protected basicModals: BasicModalServices;
     protected sharedModals: SharedModalServices;
+    protected graphModals: GraphModalServices;
     protected modal: Modal;
-    constructor(sparqlService: SparqlServices, exportService: ExportServices,  configurationsService: ConfigurationsServices,
-        searchService: SearchServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, modal: Modal) {
+    protected vbProp: VBProperties;
+    constructor(sparqlService: SparqlServices, exportService: ExportServices, configurationsService: ConfigurationsServices,
+        searchService: SearchServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices, modal: Modal, vbProp: VBProperties) {
         this.sparqlService = sparqlService;
         this.exportService = exportService;
         this.configurationsService = configurationsService;
         this.searchService = searchService;
         this.basicModals = basicModals;
         this.sharedModals = sharedModals;
+        this.graphModals = graphModals;
         this.modal = modal;
+        this.vbProp = vbProp;
     }
 
     ngOnInit() {
@@ -362,6 +366,14 @@ export abstract class AbstractSparqlTabComponent {
             });
             this.sortOrder = header + this.asc_Order;
         }
+    }
+
+    private isOpenGraphEnabled() {
+        return this.resultType == 'graph' && this.queryResult.length > 0 && this.vbProp.getExperimentalFeaturesEnabled();
+    }
+
+    private openGraph() {
+        this.graphModals.openGraphQuertyResult(<GraphResultBindings[]>this.queryResult);
     }
 
     //LOAD/SAVE/PARAMETERIZE QUERY

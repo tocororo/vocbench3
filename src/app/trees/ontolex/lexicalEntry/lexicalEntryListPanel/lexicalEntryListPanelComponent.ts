@@ -1,7 +1,8 @@
-import { Component, Input, ViewChild, Output, EventEmitter, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { OverlayConfig } from "ngx-modialog";
 import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
 import { Observable } from "rxjs/Observable";
+import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { LexEntryVisualizationMode, SearchSettings } from "../../../../models/Properties";
 import { OntoLex } from "../../../../models/Vocabulary";
@@ -55,8 +56,8 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
 
     constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         private modal: Modal, cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, resourceService, basicModals, eventHandler, vbProp);
+        graphModals: GraphModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
 
         this.eventSubscriptions.push(eventHandler.lexiconChangedEvent.subscribe(
             (lexicon: ARTURIResource) => this.onLexiconChanged(lexicon)));

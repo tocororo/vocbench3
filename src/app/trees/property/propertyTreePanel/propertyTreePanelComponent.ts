@@ -1,4 +1,5 @@
 import { Component, Input, ViewChild } from "@angular/core";
+import { GraphModalServices } from "../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
 import { SearchSettings } from "../../../models/Properties";
 import { OWL, RDF } from "../../../models/Vocabulary";
@@ -30,9 +31,9 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
     rendering: boolean = false; //override the value in AbstractPanel
 
     constructor(private propService: PropertyServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices,
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, resourceService, basicModals, eventHandler, vbProp);
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
     }
 
     createRoot(role: RDFResourceRolesEnum) {

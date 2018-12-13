@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { GraphModalServices } from "../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
 import { SearchSettings } from "../../../models/Properties";
 import { OWL, RDFS } from "../../../models/Vocabulary";
@@ -36,9 +37,9 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     private creatingClassType: ARTURIResource = OWL.class;
 
     constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        private modal: Modal, cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, 
-        eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, resourceService, basicModals, eventHandler, vbProp);
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
+        eventHandler: VBEventHandler, vbProp: VBProperties, private modal: Modal) {
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
     }
 
     ngOnInit() {

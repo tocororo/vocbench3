@@ -1,4 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
+import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { SearchSettings } from "../../../../models/Properties";
 import { OntoLex, SKOS } from "../../../../models/Vocabulary";
@@ -29,9 +30,9 @@ export class SchemeListPanelComponent extends AbstractPanel {
     private modelType: string;
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, 
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, resourceService, basicModals, eventHandler, vbProp);
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
     }
 
     ngOnInit() {

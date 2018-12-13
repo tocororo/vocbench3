@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { GraphModalServices } from "../graph/modal/graphModalServices";
+import { GraphMode } from "../graph/abstractGraph";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
 import { CustomFormsServices } from "../services/customFormsServices";
 import { ResourcesServices } from "../services/resourcesServices";
@@ -8,10 +10,7 @@ import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
-@Component({
-    selector: "panel",
-    template: ""
-})
+@Component({})
 export abstract class AbstractPanel {
 
     /**
@@ -38,7 +37,10 @@ export abstract class AbstractPanel {
     multiselection: boolean = false; //if true enabled the selection of multiple resources via checkboxes
     showDeprecated: boolean = true;
     eventSubscriptions: any[] = [];
-    selectedNode: ARTURIResource;
+    selectedNode: ARTURIResource = null;
+
+    // abstract graphMode: GraphMode;
+    graphMode: GraphMode = GraphMode.modelOriented; //at the moment, set the default to data oriented and override it in concept and individuals panel. Restore the abstract later
 
     /**
      * CONSTRUCTOR
@@ -46,12 +48,15 @@ export abstract class AbstractPanel {
     protected cfService: CustomFormsServices;
     protected resourceService: ResourcesServices;
     protected basicModals: BasicModalServices;
+    protected graphModals: GraphModalServices;
     protected eventHandler: VBEventHandler;
     protected vbProp: VBProperties;
-    constructor(cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
+    constructor(cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
+        eventHandler: VBEventHandler, vbProp: VBProperties) {
         this.cfService = cfService;
         this.resourceService = resourceService;
         this.basicModals = basicModals;
+        this.graphModals = graphModals;
         this.eventHandler = eventHandler;
         this.vbProp = vbProp;
 
@@ -84,6 +89,10 @@ export abstract class AbstractPanel {
         this.multiselectionStatus.emit(this.multiselection);
     }
 
+    protected openGraph() {
+        this.graphModals.openExplorationGraph(this.selectedNode, this.graphMode);
+    }
+
     //the following determine if the create/delete buttons are disabled in the UI. They could be overriden in the extending components
     isCreateDisabled(): boolean {
         return (this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
@@ -99,6 +108,10 @@ export abstract class AbstractPanel {
             !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly ||
             !AuthorizationEvaluator.Tree.isDeprecateAuthorized(this.selectedNode)
         );
+    }
+
+    isOpenGraphEnabled(): boolean {
+        return this.selectedNode && this.isContextDataPanel() && this.vbProp.getExperimentalFeaturesEnabled();
     }
 
     isContextDataPanel(): boolean {

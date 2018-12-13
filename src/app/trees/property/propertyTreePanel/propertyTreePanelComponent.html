@@ -50,25 +50,19 @@
         <div style="flex: 1"></div>
 
         <div class="btn-toolbar" role="toolbar">
+            <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering=!rendering">
+                <span class="glyphicon glyphicon-font"></span>
+            </button>
             <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
                 <span class="glyphicon glyphicon-refresh"></span>
             </button>
         </div>
 
         <div class="dropdown pull-right">
-            <button class="dropdown-toggle transparentBtn" data-toggle="dropdown">
+            <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" [disabled]="!allowMultiselection && !isOpenGraphEnabled()">
                 <span>&#9662;</span>
             </button>
             <ul class="dropdown-menu">
-                <li>
-                    <a (click)="rendering = !rendering">
-                        <span style="flex: 1;">
-                            <span class="glyphicon glyphicon-font" style="margin-right: 4px;"></span>
-                            Rendering
-                        </span>
-                        <span *ngIf="rendering" class="glyphicon glyphicon-ok pull-right"></span>
-                    </a>
-                </li>
                 <li *ngIf="allowMultiselection">
                     <a (click)="toggleMultiselection()">
                         <span style="flex: 1;">
@@ -76,6 +70,12 @@
                             Multiselection
                         </span>
                         <span *ngIf="multiselection" class="glyphicon glyphicon-ok pull-right"></span>
+                    </a>
+                </li>
+                <li *ngIf="isOpenGraphEnabled()">
+                    <a (click)="openGraph()">
+                        <img src="../../../../assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
+                        See graph rooted on selected node
                     </a>
                 </li>
             </ul>

@@ -1,15 +1,17 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
 import { Modal } from 'ngx-modialog/plugins/bootstrap';
+import { Observable } from "rxjs/Observable";
+import { GraphModalServices } from "../graph/modal/graphModalServices";
+import { ConfigurationComponents } from "../models/Configuration";
 import { ConfigurationsServices } from "../services/configurationsServices";
 import { ExportServices } from "../services/exportServices";
 import { SearchServices } from "../services/searchServices";
 import { SparqlServices } from "../services/sparqlServices";
+import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
+import { LoadConfigurationModalReturnData } from "../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from '../widget/modal/sharedModal/sharedModalServices';
 import { AbstractSparqlTabComponent } from "./abstractSparqlTabComponent";
-import { LoadConfigurationModalReturnData } from "../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
-import { ConfigurationComponents } from "../models/Configuration";
 
 @Component({
     selector: "sparql-tab",
@@ -18,8 +20,8 @@ import { ConfigurationComponents } from "../models/Configuration";
 export class SparqlTabComponent extends AbstractSparqlTabComponent {
 
     constructor(sparqlService: SparqlServices, exportService: ExportServices, configurationsService: ConfigurationsServices,
-        searchService: SearchServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, modal: Modal) {
-        super(sparqlService, exportService, configurationsService, searchService, basicModals, sharedModals, modal);
+        searchService: SearchServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices, modal: Modal, vbProp: VBProperties) {
+        super(sparqlService, exportService, configurationsService, searchService, basicModals, sharedModals, graphModals, modal, vbProp);
     }
 
     evaluateQueryImpl(): Observable<any> {

@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from "rxjs/Observable";
+import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
+import { GraphMode } from "../../../../graph/abstractGraph";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { ConceptTreeVisualizationMode, SearchSettings } from "../../../../models/Properties";
 import { OntoLex, SKOS } from "../../../../models/Vocabulary";
@@ -34,6 +36,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     @ViewChild(ConceptTreeComponent) viewChildTree: ConceptTreeComponent
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.concept;
+    graphMode: GraphMode = GraphMode.dataOriented;
 
     private modelType: string;
 
@@ -48,11 +51,10 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     //for visualization searchBased
     private lastSearch: string;
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices,
-        private creationModals: CreationModalServices, private modal: Modal,
-        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, 
-        eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, resourceService, basicModals, eventHandler, vbProp);
+    constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
+        eventHandler: VBEventHandler, vbProp: VBProperties, private modal: Modal) {
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
             (schemes: ARTURIResource[]) => this.onSchemeChanged(schemes)));

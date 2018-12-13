@@ -1,0 +1,15 @@
+<svg:defs>
+    <svg:marker [attr.id]="'arrow'+link.index" [attr.class]="'arrow '+arrowClass" viewBox="0 -5 10 10" refX="8" refY="0"
+        markerWidth="4" markerHeight="4" orient="auto">
+        <svg:path d="M0,-5L10,0L0,5"></path>
+    </svg:marker>
+</svg:defs>
+
+<svg:path [attr.class]="'link '+linkClass" [attr.marker-end]="'url(#arrow' + link.index + ')'" [attr.stroke-dasharray]="dashed ? '10,3' : ''"
+    [attr.d]="computePath()" (click)="showLabel=!showLabel" style="cursor: pointer;">
+    <svg:title *ngIf="link.predicate">{{link.predicate.toNT()}}</svg:title>
+</svg:path>
+
+<svg:g *ngIf="showLabel && link.predicate" [attr.transform]="getLabelTransform()">
+    <svg:text text-anchor="middle">{{link.predicate.getShow()}}</svg:text>
+</svg:g>
