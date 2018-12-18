@@ -1,0 +1,59 @@
+<div class="blockingDivHost">
+    <div class="modal-header">
+        <h3 class="modal-title">Concept tree settings</h3>
+    </div>
+    <div class="modal-body vbox" style="max-height: 70vh;">
+
+        <div class="alert alert-warning">
+            You are going to add the concept '{{context.concept.getShow()}}' and its descendants to the scheme '{{context.scheme.getShow()}}'.
+            Are you sure?<br>
+        </div>
+
+        <div class="checkbox-inline" style="margin: 8px 6px; align-self: flex-end;">
+            <label>
+                <input type="checkbox" [(ngModel)]="setTopConcept">Set top concept
+            </label>
+            <span class="glyphicon glyphicon-info-sign" title="If checked, set the provided concept as top concept of the target scheme"></span>
+        </div>
+        
+        <div *ngIf="schemeList.length > 0" class="groupPanel vbox">
+            <div class="groupPanel-heading">
+                <div class="expandCollapseBtnContainer groupPanel-heading-content" style="margin: 0px">
+                    <img src="../../../../../assets/images/icons/arrow.png" (click)="collapsed = !collapsed" [ngClass]="{'arrow-right': collapsed}">
+                </div>
+                <span style="flex: 1">
+                    <label class="groupPanel-heading-content">Schemes filter:</label>
+                </span>
+            </div>
+            <div class="groupPanel-body vbox">
+                <ng-template [ngIf]="!collapsed">
+
+                    <div class="alert alert-info">
+                        Only the concepts (among the descendants of '{{context.concept.getShow()}}') belonging to at least one of the following
+                        schemes will be added to the target scheme.
+                    </div>
+
+                    <div class="scrollableContainer" style="margin-top: 6px; border: 1px solid #ccc; border-radius: 3px;">
+                        <div *ngFor="let s of schemeList" class="listItem hbox" [ngClass]="{active : s == selectedScheme}">
+                            <rdf-resource [resource]="s.scheme" style="flex: 1;"></rdf-resource>
+                            <input type="checkbox" [(ngModel)]="s.checked">
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkEnabled()">Ok</button>
+        <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    </div>
+
+    <div #blockingDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../../../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+</div>

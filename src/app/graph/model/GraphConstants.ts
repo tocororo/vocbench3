@@ -24,3 +24,7 @@ export class Size {
         cut: 10
     }
 }
+
+export class Constants {
+    public static normalVectorMultiplier: number = 30;
+}

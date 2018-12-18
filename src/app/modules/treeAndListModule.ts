@@ -36,6 +36,7 @@ import { CollectionTreeNodeComponent } from '../trees/skos/collection/collection
 import { CollectionTreePanelComponent } from '../trees/skos/collection/collectionTreePanel/collectionTreePanelComponent';
 import { ConceptTreeComponent } from '../trees/skos/concept/conceptTree/conceptTreeComponent';
 import { ConceptTreeNodeComponent } from '../trees/skos/concept/conceptTree/conceptTreeNodeComponent';
+import { AddToSchemeModal } from '../trees/skos/concept/conceptTreePanel/addToSchemeModal';
 import { ConceptTreePanelComponent } from '../trees/skos/concept/conceptTreePanel/conceptTreePanelComponent';
 import { ConceptTreeSettingsModal } from '../trees/skos/concept/conceptTreePanel/conceptTreeSettingsModal';
 import { SchemeListComponent } from '../trees/skos/scheme/schemeList/schemeListComponent';
@@ -49,7 +50,7 @@ import { SharedModule } from './sharedModule';
     imports: [CommonModule, FormsModule, RouterModule, SharedModule, Ng2CompleterModule], 
     declarations: [
         TreePanelComponent, TreeListSettingsModal,
-        ConceptTreePanelComponent, ConceptTreeComponent, ConceptTreeNodeComponent, ConceptTreeSettingsModal,
+        ConceptTreePanelComponent, ConceptTreeComponent, ConceptTreeNodeComponent, ConceptTreeSettingsModal, AddToSchemeModal,
         CollectionTreePanelComponent, CollectionTreeComponent, CollectionTreeNodeComponent,
         SchemeListPanelComponent, SchemeListComponent, SchemeListNodeComponent,
         ClassIndividualTreePanelComponent, ClassTreePanelComponent, ClassTreeComponent, ClassTreeNodeComponent,
@@ -74,7 +75,7 @@ import { SharedModule } from './sharedModule';
     ],
     entryComponents: [
         SearchSettingsModal, AdvancedSearchModal, CustomSearchModal, LoadCustomSearchModal,
-        ClassTreeSettingsModal, ConceptTreeSettingsModal,  LexicalEntryListSettingsModal, TreeListSettingsModal
+        ClassTreeSettingsModal, ConceptTreeSettingsModal, AddToSchemeModal, LexicalEntryListSettingsModal, TreeListSettingsModal
     ]
 })
 export class TreeAndListModule { }

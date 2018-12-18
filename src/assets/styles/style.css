@@ -135,7 +135,7 @@ rdf-resource > .rdfResourceIcon {
     margin-right: 5px;
 }
 /* Ellipsis of the content of a rdf-resource in a button, in a navigation tab (ResView tabs), and in a panel-heading (heading of ResView) */
-button > rdf-resource > span, .nav-tabs rdf-resource > span, .panel-heading rdf-resource > span, graph-panel td > rdf-resource > span {
+button > rdf-resource > span, .nav-tabs rdf-resource > span, .panel-heading rdf-resource > span {
 	max-width: 200px;
 	overflow: hidden;
     text-overflow: ellipsis;
@@ -744,6 +744,6 @@ input[type="radio"], input[type="checkbox"] {
 @media (min-width: 768px) {
     .modal-xl {
         width: 90%;
-        max-width:1200px;
+        max-width:1600px;
     }
 }

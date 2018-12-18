@@ -1,14 +1,16 @@
 import { EventEmitter } from "@angular/core";
 import * as d3 from "d3";
-import { ARTURIResource, ARTNode } from "../../models/ARTResources";
+import { ARTNode } from "../../models/ARTResources";
+import { Size } from "./GraphConstants";
 import { Link } from "./Link";
 import { Node } from "./Node";
-import { forceLink } from "d3";
-import { Size } from "./GraphConstants";
+import { options } from "jsprolog/dist/prologSolver";
 
 export class ForceDirectedGraph {
     public ticker: EventEmitter<d3.Simulation<Node, Link>> = new EventEmitter(); //at every tick of the simulation, emits an event
     public simulation: d3.Simulation<any, any>;
+
+    public options: GraphOptions;
 
     public nodes: Node[] = [];
     public links: Link[] = [];
@@ -22,16 +24,19 @@ export class ForceDirectedGraph {
         if (!options || !options.width || !options.height) {
             throw new Error('missing options when initializing simulation');
         }
-        /** Creating the simulation */
+        this.options = options;
+
+        //Creating the simulation
         if (!this.simulation) {
             const ticker = this.ticker;
 
             // Creating the force simulation and defining the charges
             this.simulation = d3.forceSimulation();
-            this.simulation.force("centers", d3.forceCenter(options.width / 2, options.height / 2))
-            this.simulation.force("charge", d3.forceManyBody().strength(-50)) //repulsion (if strength negative), attraction (if positive) among nodes
-            // this.simulation.force("collide", d3.forceCollide().strength(2).radius(15)) //avoid collision between nodes in the given radius
-            this.simulation.force("collide", d3.forceCollide().strength(2).radius(Size.Circle.radius)) //avoid collision between nodes in the given radius
+            //init forces
+            this.simulation.force("center", d3.forceCenter(this.options.width / 2, this.options.height / 2))
+            this.simulation.force("charge", d3.forceManyBody());
+            this.simulation.force("collide", d3.forceCollide());
+            this.simulation.force('link', d3.forceLink());
 
             // Connecting the d3 ticker to an angular event emitter
             this.simulation.on('tick', function () {
@@ -44,6 +49,26 @@ export class ForceDirectedGraph {
     private update() {
         this.initNodes();
         this.initLinks();
+        this.updateForces();
+    }
+
+    public updateForces() {
+        let chargeForce: d3.ForceManyBody<{}> = this.simulation.force('charge'); //repulsion (if strength negative), attraction (if positive) among nodes
+        chargeForce
+            .strength(this.options.forces.charge.strength) 
+            // .distanceMin(this.options.forces.charge.distanceMin)
+            // .distanceMax(this.options.forces.charge.distanceMax);
+        
+        let collideForce: d3.ForceCollide<{}> = this.simulation.force('collide'); //avoid collision between nodes in the given radius
+        collideForce
+            .strength(this.options.forces.collide.strength)
+            .radius(this.options.forces.collide.strength);
+
+        let linkForce: d3.ForceLink<{}, Link> = this.simulation.force('link');
+        linkForce
+            .strength(this.options.forces.link.strength)
+            .distance(this.options.forces.link.distance);
+
         this.simulation.restart();
     }
 
@@ -89,8 +114,11 @@ export class ForceDirectedGraph {
                 }
             };
         }
-        this.simulation.force('link', d3.forceLink(this.links).strength(0.1).distance(100));
+        let linkForce: d3.ForceLink<{}, Link> = this.simulation.force('link');
+        linkForce.links(this.links);
     }
+
+
 
     public addChildren(node: Node, children: Node[]) {
         //Add childrens to the nodes array
@@ -221,4 +249,51 @@ export class ForceDirectedGraph {
 export class GraphOptions {
     width: number;
     height: number;
+    forces: GraphForces;
+
+    constructor(width: number, height: number, forces?: GraphForces) {
+        this.width = width;
+        this.height = height;
+        if (forces) {
+            this.forces = forces
+        } else {
+            this.forces = new GraphForces();
+        }
+    }
 }
+
+export class GraphForces {
+    charge: ForceCharge;
+    collide: ForceCollide;
+    link: ForceLink;
+    constructor() {
+        this.charge = {
+            strength: -50,
+            // distanceMin: 1,
+            // distanceMax: 2000
+        };
+        this.collide = {
+            strength: 1,
+            radius: Size.Circle.radius
+        };
+        this.link = {
+            strength: 0.2,
+            distance: 200
+        };
+    }
+}
+
+export class ForceCharge {
+    strength: number;
+    distanceMin?: number;
+    distanceMax?: number;
+}
+export class ForceCollide {
+    strength: number;
+    radius: number;
+}
+export class ForceLink {
+    strength: number;
+    distance: number;
+}
+

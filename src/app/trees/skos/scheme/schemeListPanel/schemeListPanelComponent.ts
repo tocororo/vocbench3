@@ -134,6 +134,30 @@ export class SchemeListPanelComponent extends AbstractPanel {
         this.viewChildList.deactivateAllScheme();
     }
 
+    private isAddAllConceptsEnabled() {
+        return this.selectedNode != null && this.isContextDataPanel();
+    }
+
+    private addAllConcepts() {
+        //message to warn the user that in case of a lot of concept the process could be long?
+        this.basicModals.confirm("Add concepts to scheme", "You are going to add all the existing concepts to the scheme '" + this.selectedNode.getShow() +
+            "'. Are you sure?\nNote: The added concepts may result as dangling in the target scheme, so they could be not visible in the concept tree", "warning").then(
+            confirm => {
+                this.skosService.addMultipleConceptsToScheme(this.selectedNode).subscribe(
+                    stResp => {
+                        //in case the target scheme is active
+                        if (this.vbProp.isActiveScheme(this.selectedNode)) {
+                            //emit schemeChangedEvent so that the concept tree refreshes
+                            this.eventHandler.schemeChangedEvent.emit(this.vbProp.getActiveSchemes());
+                        }
+                    }
+                );
+            },
+            () => {}
+        );
+        
+    }
+
     refresh() {
         this.viewChildList.init();
     }

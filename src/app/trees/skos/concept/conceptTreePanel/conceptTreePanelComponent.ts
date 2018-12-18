@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from "rxjs/Observable";
-import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { GraphMode } from "../../../../graph/abstractGraph";
+import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { ConceptTreeVisualizationMode, SearchSettings } from "../../../../models/Properties";
 import { OntoLex, SKOS } from "../../../../models/Vocabulary";
@@ -17,10 +17,12 @@ import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { NewConceptCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal";
 import { AbstractTreePanel } from "../../../abstractTreePanel";
 import { ConceptTreeComponent } from "../conceptTree/conceptTreeComponent";
+import { AddToSchemeModal, AddToSchemeModalData } from "./addToSchemeModal";
 import { ConceptTreeSettingsModal } from "./conceptTreeSettingsModal";
 
 @Component({
@@ -53,7 +55,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties, private modal: Modal) {
+        eventHandler: VBEventHandler, vbProp: VBProperties,  private browsingModals: BrowsingModalServices, private modal: Modal) {
         super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
@@ -368,6 +370,24 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             },
             () => {}
         );
+    }
+
+    private isAddToSchemeEnabled() {
+        return this.selectedNode != null && this.isContextDataPanel() && 
+            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_ADD_MULTIPLE_TO_SCHEME);
+    }
+    private addToScheme() {
+        this.browsingModals.browseSchemeList("Select scheme").then(
+            scheme => {
+                var modalData = new AddToSchemeModalData("Add concepts to scheme", this.selectedNode, scheme);
+                const builder = new BSModalContextBuilder<AddToSchemeModalData>(
+                    modalData, undefined, AddToSchemeModalData
+                );
+                let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+                return this.modal.open(AddToSchemeModal, overlayConfig).result;
+            },
+            () => {}
+        )
     }
 
     //EVENT LISTENERS

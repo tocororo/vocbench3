@@ -1,11 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output } from "@angular/core";
 import { D3Service } from "./d3/d3Services";
-import { ForceDirectedGraph, GraphOptions } from "./model/ForceDirectedGraph";
+import { ForceDirectedGraph, GraphOptions, GraphForces } from "./model/ForceDirectedGraph";
 import { Node } from "./model/Node";
 
 @Component({
-    selector: "",
-    template: "",
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export abstract class AbstractGraph {
@@ -17,7 +15,7 @@ export abstract class AbstractGraph {
     private initialized: boolean = false; //true once the graph will be initialized (useful in order to not render the graph view until then)
 
     // protected graph: ForceDirectedGraph;
-    protected options: GraphOptions = { width: 800, height: 400 }; //initial w & h (will be updated later)
+    protected options: GraphOptions = new GraphOptions(800, 400); //initial w & h (will be updated later)
 
     constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef) { }
 
@@ -38,6 +36,11 @@ export abstract class AbstractGraph {
     };
 
     protected abstract onNodeDblClicked(node: Node): void;
+
+    public updateForces(forces: GraphForces) {
+        this.graph.options.forces = forces;
+        this.graph.updateForces();
+    }
 
 }
 

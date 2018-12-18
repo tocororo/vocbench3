@@ -26,12 +26,12 @@
 }
 
 .unkwnownNode {
-    fill: #eee;
+    fill: #eee; stop-color: #eee;
 }
 
 .literal { fill: #fff; }
 
-.bnode { fill: #ddd; } /* Same of the background in order to simulate transparency */
+.bnode { fill: #ddd; stop-color: #ddd; } /* Same of the background in order to simulate transparency */
 
 .annotationProperty { fill: #ffad00; stop-color: #ffad00; }
 .annotationPropertyImported { fill: #fadda0; stop-color: #fadda0; }
@@ -118,11 +118,11 @@
 
 /* Arrows */
 
-.arrow { fill: #000 }
+.arrow { fill: #000; stroke: black }
 
 .annotationPropertyArrow { fill: #ffad00 !important; }
 .datatypePropertyArrow { fill: #329973 !important; }
 .objectPropertyArrow { fill: #336699 !important; }
 .ontologyPropertyArrow { fill: #826a4a !important; }
-.propertyArrow { fill: #336699 !important; }
+/* .propertyArrow { fill: #336699 !important; } */
 

@@ -36,7 +36,7 @@
 
         <div class="dropdown pull-right">
             <!-- Disabled when all the options are not available -->
-            <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" [disabled]="!allowMultiselection && !isOpenGraphEnabled()">
+            <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" [disabled]="!allowMultiselection && !isOpenGraphEnabled() && !isAddToSchemeEnabled()">
                 <span>&#9662;</span>
             </button>
             <ul class="dropdown-menu">
@@ -47,6 +47,12 @@
                             Multiselection
                         </span>
                         <span *ngIf="multiselection" class="glyphicon glyphicon-ok pull-right"></span>
+                    </a>
+                </li>
+                <li *ngIf="isAddToSchemeEnabled()">
+                    <a (click)="addToScheme()">
+                        <span class="glyphicon glyphicon-share-alt" style="margin-right: 4px;"></span>
+                        Add selected concept's subtree to scheme...
                     </a>
                 </li>
                 <li *ngIf="isOpenGraphEnabled()">

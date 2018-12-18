@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { RDFResourceRolesEnum } from '../../models/ARTResources';
+import { GraphMode } from '../abstractGraph';
+import { Constants } from '../model/GraphConstants';
 import { Link } from '../model/Link';
 import { MathUtils } from '../model/MathUtils';
-import { GraphMode } from '../abstractGraph';
 
 @Component({
     selector: '[link]',
@@ -12,6 +13,8 @@ import { GraphMode } from '../abstractGraph';
 export class LinkComponent {
     @Input('link') link: Link;
     @Input() mode: GraphMode;
+
+    @ViewChild('textEl') textElement: ElementRef;
 
     private linkClass: string = "";
     private arrowClass: string = "";
@@ -48,7 +51,7 @@ export class LinkComponent {
             let endpoint = MathUtils.getIntersectionPoint(this.link, this.mode);
             if (this.link.offset != 0) { //in case the offset, compute the control point for the Quadratic Bezier curve
                 let center = MathUtils.computeCenter(this.link.source, this.link.target);
-                let normal = MathUtils.calculateNormalVector(this.link.source, this.link.target, 10*this.link.offset);
+                let normal = MathUtils.calculateNormalVector(this.link.source, this.link.target, Constants.normalVectorMultiplier*this.link.offset);
                 let controlPointX = center.x + normal.x;
                 let controlPointY = center.y + normal.y;
                 path = path + " Q" + controlPointX + " " + controlPointY;
@@ -58,9 +61,14 @@ export class LinkComponent {
         return path;
     }
 
+
+    /**
+     * Link label utils
+     */
+
     private getLabelPosition() {
         let center = MathUtils.computeCenter(this.link.source, this.link.target);
-        let normal = MathUtils.calculateNormalVector(this.link.source, this.link.target, 10*this.link.offset);
+        let normal = MathUtils.calculateNormalVector(this.link.source, this.link.target, Constants.normalVectorMultiplier*this.link.offset);
         let controlPointX = center.x + normal.x;
         let controlPointY = center.y + normal.y;
         return { x: controlPointX, y: controlPointY };
@@ -69,6 +77,15 @@ export class LinkComponent {
     private getLabelTransform() {
         let labelPosition = this.getLabelPosition();
         return "translate(" + labelPosition.x + "," + labelPosition.y + ")";
+    }
+
+    private getLabelRectWidth() {
+        // console.log("this.textElement null?", (this.textElement == null))
+        let padding = 2;
+        if (this.textElement != null) {
+            return this.textElement.nativeElement.clientWidth  + padding*2;
+        }
+        return padding*2;
     }
 
 }

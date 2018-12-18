@@ -29,54 +29,117 @@
     <div class="panel-body hbox">
         <graph-explore class="vbox" [graph]="graph" [mode]="mode" [rendering]="rendering" (nodeSelected)="onNodeSelected($event)"></graph-explore>
 
-        <div class="panel panel-default" style="width: 300px; margin-left: 4px;">
-            <div class="panel-body">
-                <table class="table table-condensed table-borderless">
-                    <colgroup>
-                        <col style="width: 1%">
-                        <col>
-                    </colgroup>
-                    <tbody>
-                        <tr>
-                            <td><label>Resource:</label></td>
-                            <td><rdf-resource *ngIf="selectedNode" [resource]="selectedNode"></rdf-resource></td>
-                        </tr>
-                        <tr *ngIf="selectedNode?.isURIResource()">
-                            <td><label>IRI:</label></td>
-                            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{selectedNode?.getURI()}}</td>
-                        </tr>
-                        <tr *ngIf="selectedNode?.isBNode()">
-                            <td><label>ID:</label></td>
-                            <td>{{selectedNode?.getId()}}</td>
-                        </tr>
-                        <tr>
-                            <td><label>Label:</label></td>
-                            <td>{{selectedNode?.getShow()}}</td>
-                        </tr>
-                        <tr>
-                            <td><label>Role:</label></td>
-                            <td>{{selectedNode?.getRole()}}</td>
-                        </tr>
-                        <tr *ngIf="selectedNode?.isResource()">
-                            <td><label>Deprecated:</label></td>
-                            <td>{{selectedNode?.isDeprecated()}}</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr *ngIf="selectedNode?.isResource()">
-                            <td colspan="2">
-                                Show the complete <a style="cursor: pointer" (click)="showResourceView()">ResourceView</a>
-                            </td>
-                        </tr>   
-                    </tfoot>
-                </table>
+        <div class="vbox" style="flex: initial; width: 300px; margin-left: 4px;">
+            <div class="panel panel-default vbox">
+                <div class="panel-body">
+                    <table class="table table-condensed table-borderless">
+                        <colgroup>
+                            <col style="width: 1%">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td><label>Resource:</label></td>
+                                <td><rdf-resource *ngIf="selectedNode" [resource]="selectedNode"></rdf-resource></td>
+                            </tr>
+                            <tr *ngIf="selectedNode?.isURIResource()">
+                                <td><label>IRI:</label></td>
+                                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{selectedNode?.getURI()}}</td>
+                            </tr>
+                            <tr *ngIf="selectedNode?.isBNode()">
+                                <td><label>ID:</label></td>
+                                <td>{{selectedNode?.getId()}}</td>
+                            </tr>
+                            <tr>
+                                <td><label>Label:</label></td>
+                                <td>{{selectedNode?.getShow()}}</td>
+                            </tr>
+                            <tr>
+                                <td><label>Role:</label></td>
+                                <td>{{selectedNode?.getRole()}}</td>
+                            </tr>
+                            <tr *ngIf="selectedNode?.isResource()">
+                                <td><label>Deprecated:</label></td>
+                                <td>{{selectedNode?.isDeprecated()}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr *ngIf="selectedNode?.isResource()">
+                                <td colspan="2">
+                                    Show the complete <a style="cursor: pointer" (click)="showResourceView()">ResourceView</a>
+                                </td>
+                            </tr>   
+                        </tfoot>
+                    </table>
 
-                <!-- Slider for changing the forces -->
-                <!-- <div class="panel panel-default">
-                    <div class="panel-body">
-                    </div>
-                </div> -->
+                </div>
             </div>
+
+            <!-- Slider for changing the forces -->
+            <div class="panel panel-default vbox" style="margin-top: 4px;">
+                <div class="panel-body table-responsive">
+                    <table class="table table-condensed table-borderless">
+                        <tbody>
+                            <!-- <tr><td colspan="2" class="text-center"><label>Charge</label></td></tr>
+                            <tr>
+                                <td>Strength:</td>
+                                <td>
+                                    <input type="range" [(ngModel)]="forces.charge.strength" (ngModelChange)="onForceChange()"
+                                        min="-200" max="50" step="1" [title]="forces.charge.strength">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Distance Min:</td>
+                                <td>
+                                    <input type="range" [(ngModel)]="forces.charge.distanceMin" (ngModelChange)="onForceChange()"
+                                        min="0" max="50" step="1" [title]="forces.charge.distanceMin">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Distance Max:</td>
+                                <td>
+                                    <input type="range" [(ngModel)]="forces.charge.distanceMax" (ngModelChange)="onForceChange()"
+                                        min="0" max="2000" step="1" [title]="forces.charge.distanceMax">
+                                </td>
+                            </tr>
+
+                            <tr><td colspan="2" class="text-center"><label>Collide</label></td></tr>
+                            <tr>
+                                <td>Strength:</td>
+                                <td>
+                                    <input type="range" [(ngModel)]="forces.collide.strength" (ngModelChange)="onForceChange()"
+                                        min="0" max="1" step=".1" [title]="forces.collide.strength">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Radius:</td>
+                                <td>
+                                    <input type="range" [(ngModel)]="forces.collide.radius" (ngModelChange)="onForceChange()"
+                                        min="0" max="100" step="1" [title]="forces.collide.radius">
+                                </td>
+                            </tr> -->
+
+                            <tr><td colspan="2" class="text-center"><label>Links</label></td></tr>
+                            <tr>
+                                <td>Strength:</td>
+                                <td>
+                                    <input type="range" [(ngModel)]="forces.link.strength" (ngModelChange)="onForceChange()"
+                                        min="0" max="1" step="0.1" [title]="forces.link.strength">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Distance:</td>
+                                <td>
+                                    <input type="range" [(ngModel)]="forces.link.distance" (ngModelChange)="onForceChange()"
+                                        min="100" max="500" step="1" [title]="forces.link.distance">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
         </div>
     </div>
 </div>

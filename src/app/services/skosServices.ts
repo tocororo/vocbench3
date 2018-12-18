@@ -296,6 +296,37 @@ export class SkosServices {
         );
     }
 
+    /**
+     * Perform a mass assignement of a set of concepts to a scheme.
+     * This service takes as parameter the ConceptScheme to which the concepts should be added.
+     * The set of concepts can be determined by providing a root concept, in this way that concept and its subtree is added to the scheme, 
+     * or by not providing any concept at all so that all the existing concepts are moved in the scheme.
+     * 
+     * @param scheme 
+     * @param rootConcept 
+     * @param inSchemeProp 
+     * @param broaderProps 
+     * @param narrowerProps 
+     * @param includeSubProperties 
+     * @param filterSchemes 
+     */
+    addMultipleConceptsToScheme(scheme: ARTURIResource, rootConcept?: ARTURIResource,
+        inSchemeProp?: ARTURIResource, broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], 
+        includeSubProperties?: boolean, filterSchemes?: ARTURIResource[], setTopConcept?: boolean) {
+        console.log("[SkosServices] addMultipleConceptsToScheme");
+        var params: any = {
+            scheme: scheme,
+            rootConcept: rootConcept,
+            inSchemeProp: inSchemeProp,
+            broaderProps: broaderProps,
+            narrowerProps: narrowerProps,
+            includeSubProperties: includeSubProperties,
+            filterSchemes: filterSchemes,
+            setTopConcept: setTopConcept
+        };
+        return this.httpMgr.doPost(this.serviceName, "addMultipleConceptsToScheme", params);
+    }
+
     //====== Scheme services ======
 
     /**
