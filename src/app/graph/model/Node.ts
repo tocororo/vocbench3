@@ -37,15 +37,15 @@ export class Node implements d3.SimulationNodeDatum {
                         this.shape = NodeShape.rect;
                     } else if (
                         role == RDFResourceRolesEnum.conceptScheme ||
-                        role == RDFResourceRolesEnum.limeLexicon ||
-                        role == RDFResourceRolesEnum.ontolexForm ||
-                        role == RDFResourceRolesEnum.ontolexLexicalEntry ||
                         role == RDFResourceRolesEnum.skosCollection ||
                         role == RDFResourceRolesEnum.skosOrderedCollection
                     ) {
                         this.shape = NodeShape.square;
                     } else if (
                         role == RDFResourceRolesEnum.individual ||
+                        role == RDFResourceRolesEnum.limeLexicon ||
+                        role == RDFResourceRolesEnum.ontolexForm ||
+                        role == RDFResourceRolesEnum.ontolexLexicalEntry ||
                         role == RDFResourceRolesEnum.ontolexLexicalSense
                     ) {
                         this.shape = NodeShape.octagon;

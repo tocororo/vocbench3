@@ -10,9 +10,8 @@
 </svg:defs>
 
 
-<!-- <svg:path [attr.class]="'link '+linkClass" [attr.marker-end]="'url(#arrow' + link.index + ')'" [attr.stroke-dasharray]="dashed ? '10,3' : ''"
-    [attr.d]="computePath()" (click)="showLabel=!showLabel" style="cursor: pointer;"> -->
-<svg:path [attr.class]="'link'" [attr.marker-end]="'url(#arrow' + link.index + ')'" [attr.d]="computePath()" (click)="showLabel=!showLabel" style="cursor: pointer;">
+<!-- <svg:path [attr.class]="'link '+linkClass" [attr.marker-end]="'url(#arrow' + link.index + ')'" [attr.d]="computePath()"> -->
+<svg:path [attr.class]="'link'" [attr.marker-end]="'url(#arrow' + link.index + ')'" [attr.d]="computePath()">
     <svg:title *ngIf="link.predicate">{{link.predicate.toNT()}}</svg:title>
 </svg:path>
 
@@ -20,8 +19,8 @@
 <!-- <svg:g *ngIf="showLabel && link.predicate" [attr.transform]="getLabelTransform()">
     <svg:text text-anchor="middle">{{link.predicate.getShow()}}</svg:text>
 </svg:g> -->
-<svg:g *ngIf="link.predicate" [attr.transform]="getLabelTransform()">
-    <svg:rect [attr.x]="-getLabelRectWidth()/2" y="-6" [attr.width]="getLabelRectWidth()" height="12" fill="#ddd"></svg:rect>
+<svg:g *ngIf="link.predicate" [attr.transform]="getLabelTransform()" style="font-size: 9px;">
+    <svg:rect [attr.x]="-getLabelRectWidth()/2" y="-4" [attr.width]="getLabelRectWidth()" height="8" fill="#ddd"></svg:rect>
     <svg:text #textEl style="visibility: hidden">{{link.predicate.getShow()}}</svg:text>
     <svg:text text-anchor="middle" dominant-baseline="central">{{link.predicate.getShow()}}</svg:text>
 </svg:g>

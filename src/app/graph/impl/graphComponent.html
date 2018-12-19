@@ -1,4 +1,26 @@
 <svg:svg #svg [attr.width]="options.width" [attr.height]="options.height" class="graphContainer">
+
+    <defs>
+        <linearGradient id="objectPropertyGradient" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color: white"/>
+            <stop offset="6%" style="stop-color: white"/>
+            <stop offset="8%" style="stop-color: #336699"/>
+            <stop offset="100%" style="stop-color: #336699"/>
+        </linearGradient>
+        <linearGradient id="objectPropertyImportedGradient" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color: white"/>
+            <stop offset="6%" style="stop-color: white"/>
+            <stop offset="8%" style="stop-color: #9fb9d4"/>
+            <stop offset="100%" style="stop-color: #9fb9d4"/>
+        </linearGradient>
+        <linearGradient id="objectPropertyDeprecatedGradient" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color: white"/>
+            <stop offset="6%" style="stop-color: white"/>
+            <stop offset="8%" style="stop-color: #54616e"/>
+            <stop offset="100%" style="stop-color: #54616e"/>
+        </linearGradient>
+    </defs>
+
     <svg:g *ngIf="initialized" [zoomableOf]="svg">
         <svg:g *ngFor="let link of graph.links" [link]="link" [mode]="mode"></svg:g>
 

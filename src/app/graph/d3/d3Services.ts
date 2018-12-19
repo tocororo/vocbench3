@@ -68,8 +68,8 @@ export class D3Service {
                 if (!d3.event.active) {
                     graph.simulation.alphaTarget(0);
                 }
-                // node['fx'] = null;
-                // node['fy'] = null;
+                node['fx'] = null;
+                node['fy'] = null;
             }
         }
 

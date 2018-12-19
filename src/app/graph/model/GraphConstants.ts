@@ -26,5 +26,6 @@ export class Size {
 }
 
 export class Constants {
-    public static normalVectorMultiplier: number = 30;
+    public static normalVectorMultiplier: number = 20;
+    public static loopPathMultiplier: number = 20;
 }

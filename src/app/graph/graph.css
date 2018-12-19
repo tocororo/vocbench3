@@ -20,9 +20,6 @@
 .deprecated { 
     stroke: #8e4a4c !important;
     stroke-width: 2px;
-    /* Following for deprecated "D" symbol */
-    font-size: 18px;
-    font-weight: bold;
 }
 
 .unkwnownNode {
@@ -106,9 +103,6 @@
     stroke-width: 2px;
     fill: none;
 }
-/* .link:hover {
-    stroke-width: 3px;
-} */
 
 .annotationPropertyLink { stroke: #ffad00 !important; }
 .datatypePropertyLink { stroke: #329973 !important; }

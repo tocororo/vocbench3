@@ -2,8 +2,8 @@ import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { RDFResourceRolesEnum } from '../../models/ARTResources';
 import { GraphMode } from '../abstractGraph';
 import { Constants } from '../model/GraphConstants';
+import { GraphUtils } from '../model/GraphUtils';
 import { Link } from '../model/Link';
-import { MathUtils } from '../model/MathUtils';
 
 @Component({
     selector: '[link]',
@@ -44,14 +44,16 @@ export class LinkComponent {
     private computePath() {
         let path: string = "M" + this.link.source.x + " " + this.link.source.y; //path start
         if (this.link.source == this.link.target) { //loop path
-            let dy = MathUtils.getNodeHeight(this.link.source.getNodeShape(this.mode)) / 2;
-            path = path + " c -30 -" + (dy+30) + " 20 -" + (dy+30); //control points for curve dx1 dy1 dx2 dy2;
-            path = path + " 10 -" + dy; //endpoint of the curve
+            let borderDistY = GraphUtils.getNodeHeight(this.link.source.getNodeShape(this.mode)) / 2;
+            let sign = this.link.offset > 0 ? 1 : -1;
+            let dy = (borderDistY+Math.abs(Constants.loopPathMultiplier*this.link.offset))*sign;
+            path = path + " c -30 " + dy + " 20 " + dy; //control points for curve dx1 dy1 dx2 dy2 (relative to the starting point);
+            path = path + " 10 " + borderDistY*sign; //endpoint of the curve
         } else {
-            let endpoint = MathUtils.getIntersectionPoint(this.link, this.mode);
+            let endpoint = GraphUtils.getIntersectionPoint(this.link, this.mode);
             if (this.link.offset != 0) { //in case the offset, compute the control point for the Quadratic Bezier curve
-                let center = MathUtils.computeCenter(this.link.source, this.link.target);
-                let normal = MathUtils.calculateNormalVector(this.link.source, this.link.target, Constants.normalVectorMultiplier*this.link.offset);
+                let center = GraphUtils.computeCenter(this.link.source, this.link.target);
+                let normal = GraphUtils.calculateNormalVector(this.link.source, this.link.target, Constants.normalVectorMultiplier*this.link.offset);
                 let controlPointX = center.x + normal.x;
                 let controlPointY = center.y + normal.y;
                 path = path + " Q" + controlPointX + " " + controlPointY;
@@ -67,11 +69,20 @@ export class LinkComponent {
      */
 
     private getLabelPosition() {
-        let center = MathUtils.computeCenter(this.link.source, this.link.target);
-        let normal = MathUtils.calculateNormalVector(this.link.source, this.link.target, Constants.normalVectorMultiplier*this.link.offset);
-        let controlPointX = center.x + normal.x;
-        let controlPointY = center.y + normal.y;
-        return { x: controlPointX, y: controlPointY };
+        let position: { x: number, y: number } = { x: 0, y: 0 };
+        if (this.link.source == this.link.target) { //loop path
+            let borderDistY = GraphUtils.getNodeHeight(this.link.source.getNodeShape(this.mode)) / 2;
+            let sign = this.link.offset > 0 ? 1 : -1;
+            let dy = (borderDistY+Math.abs(Constants.loopPathMultiplier*this.link.offset))*sign;
+            position.x = this.link.source.x;
+            position.y = this.link.source.y + dy;
+        } else { //"normal" path, the label is positioned in corrispondece of the control point of the curve
+            let center = GraphUtils.computeCenter(this.link.source, this.link.target);
+            let normal = GraphUtils.calculateNormalVector(this.link.source, this.link.target, Constants.normalVectorMultiplier*this.link.offset);
+            position.x = center.x + normal.x;
+            position.y = center.y + normal.y;
+        }
+        return position;
     }
 
     private getLabelTransform() {
@@ -80,10 +91,9 @@ export class LinkComponent {
     }
 
     private getLabelRectWidth() {
-        // console.log("this.textElement null?", (this.textElement == null))
-        let padding = 2;
+        let padding = 1;
         if (this.textElement != null) {
-            return this.textElement.nativeElement.clientWidth  + padding*2;
+            return this.textElement.nativeElement.clientWidth + padding*2;
         }
         return padding*2;
     }

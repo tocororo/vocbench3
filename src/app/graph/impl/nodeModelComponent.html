@@ -1,11 +1,13 @@
 <svg:g [attr.transform]="'translate(' + node.x + ',' + node.y + ')'">
     <svg:g (click)="onClick()" (dblclick)="onDblClick()" style="cursor: pointer;">
 
+        <ng-template [ngIf]="node.res.isResource()">
             <svg:circle *ngIf="nodeShape=='circle'" [attr.class]="'graphNode '+nodeClass" cx="0" cy="0" [attr.r]="circleRadius">
             </svg:circle> 
     
-            <svg:rect *ngIf="nodeShape=='rect'" [attr.class]="'graphNode '+nodeClass" rx="5" ry="5"
-                [attr.x]="-rectBase/2" [attr.y]="-rectHeight/2" [attr.width]="rectBase" [attr.height]="rectHeight">
+            <svg:rect *ngIf="nodeShape=='rect'" [attr.fill]="isObjectProperty ? 'url(#'+nodeClass+'Gradient)' : ''"
+                [attr.class]="'graphNode ' + (!isObjectProperty ? nodeClass : '')" [attr.ngClass]="{ deprecated : deprecated }"
+                rx="5" ry="5" [attr.x]="-rectBase/2" [attr.y]="-rectHeight/2" [attr.width]="rectBase" [attr.height]="rectHeight">
             </svg:rect>
             
             <svg:rect *ngIf="nodeShape=='square'" [attr.class]="'graphNode '+nodeClass" rx="5" ry="5" 
@@ -16,16 +18,22 @@
     
             <polygon *ngIf="nodeShape=='label'" [attr.points]="labelPoints" stroke-linejoin="round" [attr.class]="'graphNode '+nodeClass"/>
             
-            <svg:text *ngIf="deprecated" class="deprecated" fill="#8e4a4c" [attr.transform]="'translate(-6, 6)'">D</svg:text>
+            <svg:text *ngIf="deprecated" class="deprecated" style="font-size: 18px;" fill="#8e4a4c" [attr.transform]="'translate(-6, 6)'">D</svg:text>
+        </ng-template>
+
+        <ng-template [ngIf]="!node.res.isResource()">
+            <svg:rect class="graphNode literal" [attr.x]="-rectBase/2" [attr.y]="-rectHeight/2" [attr.width]="rectBase" [attr.height]="rectHeight">
+            </svg:rect>
+        </ng-template>
     
     
-            <svg:text #textEl style="visibility: hidden">{{getRendering()}}</svg:text>
-            <svg:text text-anchor="middle" dominant-baseline="central">
-                {{getRenderingNormalized()}}
-                <svg:title>{{getRendering()}}</svg:title>
-            </svg:text>
-            
-            <svg:title>{{node.res.toNT()}}</svg:title>
+        <svg:text #textEl style="visibility: hidden">{{getRendering()}}</svg:text>
+        <svg:text text-anchor="middle" dominant-baseline="central">
+            {{getRenderingNormalized()}}
+            <svg:title>{{getRendering()}}</svg:title>
+        </svg:text>
+        
+        <svg:title>{{node.res.toNT()}}</svg:title>
 
         
     </svg:g>

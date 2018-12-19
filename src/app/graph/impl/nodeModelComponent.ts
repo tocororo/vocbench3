@@ -1,8 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { Size } from '../model/GraphConstants';
-import { Node, NodeShape } from '../model/Node';
+import { RDFResourceRolesEnum } from '../../models/ARTResources';
 import { GraphMode } from '../abstractGraph';
 import { AbstractGraphNode } from '../abstractGraphNode';
+import { Size } from '../model/GraphConstants';
+import { Node, NodeShape } from '../model/Node';
 
 @Component({
     selector: '[nodeModel]',
@@ -36,10 +37,14 @@ export class NodeModelComponent extends AbstractGraphNode {
         (Size.Label.base / 2 - Size.Label.cut) + " " + (Size.Label.height / 2) + " , " +
         (-Size.Label.base / 2) + " " + (Size.Label.height / 2);
 
+    private isObjectProperty: boolean;
+
     ngOnInit() {
         this.node = this.nodeModel;
         this.initNode();
         this.nodeShape = this.node.getNodeShape(GraphMode.modelOriented);
+
+        this.isObjectProperty = this.node.res.getRole() == RDFResourceRolesEnum.objectProperty;
     }
 
 }

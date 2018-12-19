@@ -32,8 +32,8 @@
 
         <!-- For literal no top stripe -->
         <ng-template [ngIf]="!node.res.isResource()">
-            <svg:rect class="graphNode" rx="5" ry="5" [attr.x]="-rectBase/2" [attr.y]="-rectHeight/2" 
-                [attr.width]="rectBase" [attr.height]="rectHeight" fill="white">
+            <svg:rect class="graphNode literal" [attr.x]="-rectBase/2" [attr.y]="-rectHeight/2" 
+                [attr.width]="rectBase" [attr.height]="rectHeight">
             </svg:rect>
 
             <svg:text #textEl style="visibility: hidden">{{getRendering()}}</svg:text>
@@ -43,6 +43,8 @@
             </svg:text>
         </ng-template>
             
+        <svg:text *ngIf="deprecated" class="deprecated" fill="#8e4a4c" dominant-baseline="hanging"
+            [attr.transform]="'translate('+(rectBase/2-10)+', -'+(rectHeight/2-4)+')'">D</svg:text>
         
     </svg:g>
 </svg:g>

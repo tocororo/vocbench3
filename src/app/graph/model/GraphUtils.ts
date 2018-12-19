@@ -1,9 +1,10 @@
+import * as d3 from "d3";
 import { GraphMode } from "../abstractGraph";
 import { Size } from "./GraphConstants";
 import { Link } from "./Link";
 import { Node, NodeShape } from "./Node";
 
-export class MathUtils {
+export class GraphUtils {
 
 
     public static computeCenter(node1: Node, node2: Node): { x: number, y: number } {
@@ -120,6 +121,16 @@ export class MathUtils {
         } else if (nodeShape == NodeShape.square) {
             return Size.Square.side;
         }
+    }
+
+    /**
+     * Check if two links are overlapped, namely if they link the same two nodes (source-target)
+     * @param link1 
+     * @param link2 
+     */
+    public static areLinksOverlapped(link1: Link, link2: Link) {
+        return link1.source == link2.source && link1.target == link2.target ||
+            link1.source == link2.target && link1.target == link2.source;
     }
 
 }

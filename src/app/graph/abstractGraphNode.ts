@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { ARTNode, RDFResourceRolesEnum, ResAttribute, ResourceUtils } from '../models/ARTResources';
-import { Node } from './model/Node';
 import { GraphMode } from './abstractGraph';
-import { MathUtils } from './model/MathUtils';
+import { GraphUtils } from './model/GraphUtils';
+import { Node } from './model/Node';
 
 @Component({})
 export abstract class AbstractGraphNode {
@@ -10,13 +10,12 @@ export abstract class AbstractGraphNode {
     @ViewChild('textEl') textElement: ElementRef;
 
     @Input() rendering: boolean = true;
-    // @Input() mode: GraphMode;
     @Output() nodeClicked: EventEmitter<Node> = new EventEmitter<Node>();
     @Output() nodeDblClicked: EventEmitter<Node> = new EventEmitter<Node>();
 
-    protected node: Node;
-
     protected abstract graphMode: GraphMode;
+
+    protected node: Node;
 
     private nodeClass: string;
     private deprecated: boolean = false;
@@ -34,7 +33,7 @@ export abstract class AbstractGraphNode {
         let truncatedText = text;
         if (this.textElement != null) {
             let textElementWidth = this.textElement.nativeElement.clientWidth;
-            let nodeWidth = MathUtils.getNodeWidth(this.node.getNodeShape(this.graphMode));
+            let nodeWidth = GraphUtils.getNodeWidth(this.node.getNodeShape(this.graphMode)) - 4; //subtract 4 as padding
             if (textElementWidth > nodeWidth) {
                 let ratio = textElementWidth / nodeWidth;
                 let truncateAt = Math.floor(truncatedText.length / ratio);
@@ -49,13 +48,12 @@ export abstract class AbstractGraphNode {
 
     private initNodeStyle() {
         let res: ARTNode = this.node.res;
-        let explicit: boolean = res.getAdditionalProperty(ResAttribute.EXPLICIT) ||
-            res.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
 
         if (this.node.res.isURIResource()) {
             let role: RDFResourceRolesEnum = res.getRole();
+            let explicit: boolean = res.getAdditionalProperty(ResAttribute.EXPLICIT) || res.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
             this.deprecated = res.getAdditionalProperty(ResAttribute.DEPRECATED);
-
+            
             if (role == RDFResourceRolesEnum.annotationProperty ||
                 role == RDFResourceRolesEnum.cls ||
                 role == RDFResourceRolesEnum.concept ||
@@ -101,12 +99,6 @@ export abstract class AbstractGraphNode {
             }
         } else if (res.isBNode()) {
             this.nodeClass = "bnode";
-        } else { //literal
-            this.nodeClass = "literal";
-        }
-
-        if (this.deprecated) {
-            this.nodeClass += " deprecated";
         }
     }
 

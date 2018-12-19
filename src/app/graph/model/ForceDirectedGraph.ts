@@ -2,9 +2,9 @@ import { EventEmitter } from "@angular/core";
 import * as d3 from "d3";
 import { ARTNode } from "../../models/ARTResources";
 import { Size } from "./GraphConstants";
+import { GraphUtils } from "./GraphUtils";
 import { Link } from "./Link";
 import { Node } from "./Node";
-import { options } from "jsprolog/dist/prologSolver";
 
 export class ForceDirectedGraph {
     public ticker: EventEmitter<d3.Simulation<Node, Link>> = new EventEmitter(); //at every tick of the simulation, emits an event
@@ -62,7 +62,7 @@ export class ForceDirectedGraph {
         let collideForce: d3.ForceCollide<{}> = this.simulation.force('collide'); //avoid collision between nodes in the given radius
         collideForce
             .strength(this.options.forces.collide.strength)
-            .radius(this.options.forces.collide.strength);
+            .radius(this.options.forces.collide.radius);
 
         let linkForce: d3.ForceLink<{}, Link> = this.simulation.force('link');
         linkForce
@@ -82,37 +82,39 @@ export class ForceDirectedGraph {
          * so they will be rendered with different x,y coordinates (not overlapping each other).
          */
         if (this.links.length > 0 && this.links[0].predicate != null) {
-            //sort links by source and target
-            this.links.sort((a: Link, b: Link) => {
-                if (a.source.res.getNominalValue() > b.source.res.getNominalValue()) { return 1; }
-                else if (a.source.res.getNominalValue() < b.source.res.getNominalValue()) { return -1; }
-                else {
-                    if (a.target.res.getNominalValue() > b.target.res.getNominalValue()) { return 1; }
-                    if (a.target.res.getNominalValue() < b.target.res.getNominalValue()) { return -1; }
-                    else { return 0; }
-                }
-            });
-            //iterate over the links in order to collect equal links
-            for (let i = 0; i < this.links.length-1; i++) {
-                //if two consicutive links have the same source-target links...
-                if (this.links[i].source == this.links[i + 1].source && this.links[i].target == this.links[i + 1].target) {
-                    let equalLinks: Link[] = [this.links[i], this.links[i + 1]]; //...init an array (of equal links) with the two links
-                    for (var j = i+1; j < this.links.length-1; j++) { //from the index of the 2nd link onwards looks for other euqal links
-                        if (this.links[j].source == this.links[j + 1].source && this.links[j].target == this.links[j + 1].target) {
-                            equalLinks.push(this.links[j+1]);
-                        } else break;
-                    }
-                    if (equalLinks.length > 0) { //if equal links are found set the offset (balanced around 0, e.g. -2, -1, 0, 1, 2)
-                        for (let k = 0; k < equalLinks.length; k++) {
-                            (k%2==0) ? equalLinks[k].offset = k+1 : equalLinks[k].offset = -k; //even index => offset positive, odd index => offset negative
-                        }
-                        if (equalLinks.length % 2 == 1) { //in case of odd number of equal links
-                            equalLinks[equalLinks.length-1].offset = 0; //balance the offset of the last link to 0
-                        }
-                        i = j; //update the index of the outer loop
+            let yetOverlapped: Link[] = []; //links already considered among the overlapped
+            for (let i = 0; i < this.links.length; i++) {
+                let link1: Link = this.links[i];
+                if (yetOverlapped.indexOf(link1) != -1) continue;
+                let overlappingLinks: Link[] = []; //links overlapping link1
+                for (let j = i+1; j < this.links.length; j++) {
+                    let link2: Link = this.links[j];
+                    if (GraphUtils.areLinksOverlapped(link1, link2)) {
+                        yetOverlapped.push(link2);
+                        overlappingLinks.push(link2);
                     }
                 }
-            };
+                if (overlappingLinks.length > 0) { //there are links overlapping link1
+                    yetOverlapped.push(link1);
+                    overlappingLinks.push(link1);
+                    let shift = Math.floor(overlappingLinks.length / 2);
+                    for (let j = 0; j < overlappingLinks.length; j++) {
+                        overlappingLinks[j].offset = j-shift;
+                    }
+                    /**
+                     * changes the 0 offset if
+                     * - loop links (offset is used as multiplier, avoids multiplication for 0),
+                     * - odd number of links ("balances" the distribution of the links)
+                     */
+                    if (overlappingLinks[0].source == overlappingLinks[0].target || overlappingLinks.length % 2 == 0) {
+                        overlappingLinks.forEach(l => {
+                            if (l.offset == 0) {
+                                l.offset = overlappingLinks.length - shift;
+                            }
+                        })
+                    }
+                }
+            }
         }
         let linkForce: d3.ForceLink<{}, Link> = this.simulation.force('link');
         linkForce.links(this.links);
