@@ -13,6 +13,7 @@ export class Node implements d3.SimulationNodeDatum {
     fy?: number | null;
 
     res: ARTNode;
+    fixed: boolean = false;
 
     private shape: NodeShape;
     

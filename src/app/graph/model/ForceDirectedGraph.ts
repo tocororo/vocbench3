@@ -69,7 +69,7 @@ export class ForceDirectedGraph {
             .strength(this.options.forces.link.strength)
             .distance(this.options.forces.link.distance);
 
-        this.simulation.restart();
+        this.simulation.alpha(0.5).restart();
     }
 
     private initNodes() {

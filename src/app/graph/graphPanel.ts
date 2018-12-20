@@ -17,7 +17,7 @@ export class GraphPanel {
 
     @ViewChild(ExplorationGraphComponent) viewChildGraph: ExplorationGraphComponent;
 
-    private selectedNode: ARTNode;
+    private selectedNode: Node;
 
     private forces: GraphForces = new GraphForces();
 
@@ -32,10 +32,32 @@ export class GraphPanel {
     }
 
     private showResourceView() {
-        this.sharedModals.openResourceView(<ARTResource>this.selectedNode, false);
+        this.sharedModals.openResourceView(<ARTResource>this.selectedNode.res, false);
+    }
+
+    private fixNode() {
+        this.selectedNode.fixed = !this.selectedNode.fixed;
+        if (!this.selectedNode.fixed) {
+            this.selectedNode.fx = null;
+            this.selectedNode.fy = null;
+        }
+    }
+    private fixAll() {
+        this.graph.nodes.forEach(n => {
+            n.fixed = true;
+            n.fx = n.x;
+            n.fy = n.y;
+        });
+    }
+    private unfixAll() {
+        this.graph.nodes.forEach(n => {
+            n.fixed = false;
+            n.fx = null;
+            n.fy = null;
+        });
     }
 
     private onNodeSelected(node: Node) {
-        this.selectedNode = <ARTResource>node.res;
+        this.selectedNode = node;
     }
 }

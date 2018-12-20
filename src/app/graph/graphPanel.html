@@ -2,28 +2,10 @@
     <div class="panel-heading">
         <label></label>
         <span style="flex: 1;"></span>
-        <!-- <div class="btn-toolbar" role="toolbar">
-            <div class="btn-group btn-group-xs">
-                <button class="btn btn-default">
-                    <span class="glyphicon glyphicon-font"></span>
-                </button>
-            </div>
-        </div> -->
-        <div class="dropdown pull-right">
-            <button class="dropdown-toggle transparentBtn" data-toggle="dropdown">
-                <span>&#9662;</span>
+        <div class="btn-toolbar" role="toolbar">
+            <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering=!rendering">
+                <span class="glyphicon glyphicon-font"></span>
             </button>
-            <ul class="dropdown-menu">
-                <li>
-                    <a (click)="rendering = !rendering">
-                        <span style="flex: 1;">
-                            <span class="glyphicon glyphicon-font" style="margin-right: 4px;"></span>
-                            Rendering
-                        </span>
-                        <span *ngIf="rendering" class="glyphicon glyphicon-ok pull-right"></span>
-                    </a>
-                </li>
-            </ul>
         </div>
     </div>
     <div class="panel-body hbox">
@@ -31,6 +13,24 @@
 
         <div class="vbox" style="flex: initial; width: 300px; margin-left: 4px;">
             <div class="panel panel-default vbox">
+                <div class="panel-heading">
+                    <label></label>
+                    <span style="flex: 1;"></span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group btn-group-xs">
+                            <button type="button" class="btn btn-default" [ngClass]="{ active: selectedNode?.fixed }" title="Fix node position" (click)="fixNode()" [disabled]="!selectedNode">
+                                <span class="glyphicon glyphicon-lock"></span>
+                            </button>
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a (click)="fixAll()">Fix all nodes</a></li>
+                                <li><a (click)="unfixAll()">Unfix all nodes</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 <div class="panel-body">
                     <table class="table table-condensed table-borderless">
                         <colgroup>
@@ -40,31 +40,31 @@
                         <tbody>
                             <tr>
                                 <td><label>Resource:</label></td>
-                                <td><rdf-resource *ngIf="selectedNode" [resource]="selectedNode"></rdf-resource></td>
+                                <td><rdf-resource *ngIf="selectedNode" [resource]="selectedNode.res"></rdf-resource></td>
                             </tr>
-                            <tr *ngIf="selectedNode?.isURIResource()">
+                            <tr *ngIf="selectedNode?.res.isURIResource()">
                                 <td><label>IRI:</label></td>
-                                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{selectedNode?.getURI()}}</td>
+                                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{selectedNode?.res.getURI()}}</td>
                             </tr>
-                            <tr *ngIf="selectedNode?.isBNode()">
+                            <tr *ngIf="selectedNode?.res.isBNode()">
                                 <td><label>ID:</label></td>
-                                <td>{{selectedNode?.getId()}}</td>
+                                <td>{{selectedNode?.res.getId()}}</td>
                             </tr>
                             <tr>
                                 <td><label>Label:</label></td>
-                                <td>{{selectedNode?.getShow()}}</td>
+                                <td>{{selectedNode?.res.getShow()}}</td>
                             </tr>
                             <tr>
                                 <td><label>Role:</label></td>
-                                <td>{{selectedNode?.getRole()}}</td>
+                                <td>{{selectedNode?.res.getRole()}}</td>
                             </tr>
-                            <tr *ngIf="selectedNode?.isResource()">
+                            <tr *ngIf="selectedNode?.res.isResource()">
                                 <td><label>Deprecated:</label></td>
-                                <td>{{selectedNode?.isDeprecated()}}</td>
+                                <td>{{selectedNode?.res.isDeprecated()}}</td>
                             </tr>
                         </tbody>
                         <tfoot>
-                            <tr *ngIf="selectedNode?.isResource()">
+                            <tr *ngIf="selectedNode?.res.isResource()">
                                 <td colspan="2">
                                     Show the complete <a style="cursor: pointer" (click)="showResourceView()">ResourceView</a>
                                 </td>
@@ -128,7 +128,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Distance:</td>
+                                <td>Length:</td>
                                 <td>
                                     <input type="range" [(ngModel)]="forces.link.distance" (ngModelChange)="onForceChange()"
                                         min="100" max="500" step="1" [title]="forces.link.distance">
