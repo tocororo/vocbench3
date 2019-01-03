@@ -240,26 +240,26 @@ export class HttpManager {
 
     /**
      * Handle the response of downloadFile that returns an array buffer.
-     * This method check if the response is xml, in case it could be an xml error response.
+     * This method check if the response is json, in case it could be an json error response.
      * In case, throws an error containing the error message in the response.
      */
     private arrayBufferRespHandler(res: Response) {
         var arrayBuffer = res.arrayBuffer();
         var respContType = res.headers.get("content-type");
-        if (respContType.includes(STResponseUtils.ContentType.applicationXml+";")) { //could be an error xml response
-            //convert arrayBuffer to xml Document
+        if (respContType.includes(STResponseUtils.ContentType.applicationJson+";")) { //could be an error response
+            //convert arrayBuffer to json object
             var respContentAsString = String.fromCharCode.apply(String, new Uint8Array(arrayBuffer));
-            var xmlResp = new DOMParser().parseFromString(respContentAsString, STResponseUtils.ContentType.applicationXml);
-            if (STResponseUtils.isErrorResponse(xmlResp)) { //is an error
-                let err = new Error(STResponseUtils.getErrorResponseExceptionMessage(xmlResp));
-                err.name = STResponseUtils.getErrorResponseExceptionName(xmlResp);
-                err.stack = STResponseUtils.getErrorResponseExceptionStackTrace(xmlResp);
+            let jsonResp = JSON.parse(respContentAsString);
+            if (STResponseUtils.isErrorResponse(jsonResp)) { //is an error
+                let err = new Error(STResponseUtils.getErrorResponseExceptionMessage(jsonResp));
+                err.name = STResponseUtils.getErrorResponseExceptionName(jsonResp);
+                err.stack = STResponseUtils.getErrorResponseExceptionStackTrace(jsonResp);
                 throw err;
             } else { //not an error => return a blob
                 var blobResp = new Blob([arrayBuffer], { type: respContType });
                 return blobResp;
             }
-        } else { //not xml => return a blob
+        } else { //not json => return a blob
             var blobResp = new Blob([arrayBuffer], { type: respContType });
             return blobResp;
         }
