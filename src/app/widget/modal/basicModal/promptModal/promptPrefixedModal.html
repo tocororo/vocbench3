@@ -7,9 +7,23 @@
         <label *ngIf="context.label" style="margin-right: 4px;">{{context.label}}:</label>
         <div class="col-sm-12">
             <div class="input-group input-group-sm">
-                <span class="input-group-addon" style="padding-right: 2px">{{context.prefix}}</span>
-                <input id="toFocus" type="text" class="form-control" [(ngModel)]="inputTxt"
-                    (keydown)="onKeydown($event)" [sanitized]="context.inputSanitized">
+                <ng-template [ngIf]="namespaceLocked">
+                    <span class="input-group-addon" style="padding-right: 5px;">{{context.prefix}}</span>
+                    <input id="toFocus" type="text" class="form-control" [(ngModel)]="prefixedTxt"
+                        (keydown)="onKeydown($event)" [sanitized]="context.inputSanitized">
+                </ng-template>
+                
+                <ng-template [ngIf]="!namespaceLocked">
+                    <input id="toFocus" type="text" class="form-control" [(ngModel)]="expandedTxt"
+                        (keydown)="onKeydown($event)" [sanitized]="context.inputSanitized">
+                </ng-template>
+                
+                <div *ngIf="context.prefixEditable" class="input-group-btn">
+                    <button class="btn btn-default" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"
+                        title="Lock/Unlock namespace" [ngClass]="{active: namespaceLocked}">
+                        <span class="glyphicon glyphicon-lock" style="font-size: 10px;"></span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

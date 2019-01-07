@@ -54,10 +54,11 @@ export class BasicModalServices {
      * @param value the value inserted by default in the input field
      * @param inputOptional tells if the input field is optional or mandatory
      * @param inputSanitized tells if the text in the input field should be sanitized
+     * @param prefixEditable tells if the prefix (namespace) in the input field can be edited
      * @return if the modal closes with ok returns a promise containing the input text
      */
-    promptPrefixed(title: string, prefix: string, label?: string, value?: string, inputOptional?: boolean, inputSanitized?: boolean) {
-        var modalData = new PromptPrefixedModalData(title, prefix, label, value, false, inputOptional, inputSanitized);
+    promptPrefixed(title: string, prefix: string, label?: string, value?: string, inputOptional?: boolean, inputSanitized?: boolean, prefixEditable?: boolean) {
+        var modalData = new PromptPrefixedModalData(title, prefix, label, value, false, inputOptional, inputSanitized, prefixEditable);
         const builder = new BSModalContextBuilder<PromptPrefixedModalData>(
             modalData, undefined, PromptPrefixedModalData
         );

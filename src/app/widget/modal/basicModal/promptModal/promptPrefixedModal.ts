@@ -19,7 +19,8 @@ export class PromptPrefixedModalData extends BSModalContext {
         public value: string,
         public hideNo: boolean = false,
         public inputOptional: boolean = false,
-        public inputSanitized: boolean = false
+        public inputSanitized: boolean = false,
+        public prefixEditable: boolean = false
     ) {
         super();
     }
@@ -32,23 +33,56 @@ export class PromptPrefixedModalData extends BSModalContext {
 export class PromptPrefixedModal implements ModalComponent<PromptPrefixedModalData> {
     context: PromptPrefixedModalData;
 
-    private inputTxt: string;
+    private expandedTxt: string;
+    private prefixedTxt: string;
 
+    private namespaceLocked: boolean = true;
     private submitted: boolean = false;
 
     constructor(public dialog: DialogRef<PromptPrefixedModalData>) {
         this.context = dialog.context;
-        this.inputTxt = this.context.value;
+        this.prefixedTxt = this.context.value;
     }
 
-    ngOnInit() {
+    ngAfterViewInit() {
         document.getElementById("toFocus").focus();
     }
+
+    //========= ID Namespace-lock HANDLER =========
+
+    private unlockNamespace() {
+        this.namespaceLocked = !this.namespaceLocked;
+        if (this.namespaceLocked) { //from free id to locked namespace
+            this.fromExpandedToPrefixed();
+        } else { //from locked namespace to free id
+            this.expandedTxt = this.context.prefix + (this.prefixedTxt != null ? this.prefixedTxt : "");
+        }
+    }
+
+    private fromExpandedToPrefixed() {
+        let separatorIdx: number = this.expandedTxt.lastIndexOf(".");
+        if (separatorIdx > 0) {
+            this.context.prefix = this.expandedTxt.substring(0, separatorIdx + 1);
+            this.prefixedTxt = this.expandedTxt.substring(separatorIdx + 1);
+        } else {  //no . in the id => restore the original id
+            this.prefixedTxt = null;
+        }
+    }
+
+    //============================
 
     ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
-        this.dialog.close(this.inputTxt);
+
+        let value: string;
+        if (this.namespaceLocked) {
+            value = this.context.prefix + this.prefixedTxt;
+        } else {
+            value = this.expandedTxt;
+        }
+
+        this.dialog.close(value);
     }
 
     cancel() {
@@ -65,7 +99,11 @@ export class PromptPrefixedModal implements ModalComponent<PromptPrefixedModalDa
     }
 
     private isInputValid(): boolean {
-        return (this.inputTxt != undefined && this.inputTxt.trim() != "");
+        if (this.namespaceLocked) {
+            return (this.prefixedTxt != undefined && this.prefixedTxt.trim() != "");
+        } else {
+            return (this.expandedTxt != undefined && this.expandedTxt.trim() != "");
+        }
     }
 
 }
