@@ -8,7 +8,6 @@ import { MetadataServices } from "../../../../services/metadataServices";
 import { RefactorServices } from "../../../../services/refactorServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../../utils/UIUtils";
-import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../../widget/modal/sharedModal/sharedModalServices";
 import { OntologyMirrorModal } from "./ontologyMirrorModal";
@@ -41,7 +40,7 @@ export class NamespacesAndImportsComponent {
     //Ontology res view
     private baseUriRes: ARTURIResource;
 
-    constructor(private metadataService: MetadataServices, private refactorService: RefactorServices, private preferences: VBProperties,
+    constructor(private metadataService: MetadataServices, private refactorService: RefactorServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {

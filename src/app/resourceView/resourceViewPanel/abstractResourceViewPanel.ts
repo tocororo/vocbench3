@@ -1,11 +1,25 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Subscriber } from "rxjs";
 import { ARTResource } from "../../models/ARTResources";
+import { VBEventHandler } from "../../utils/VBEventHandler";
+import { Output, EventEmitter } from "@angular/core";
 
-@Component({
-    selector: "abstract-res-view",
-    templateUrl: "./resourceViewTabbedComponent.html", //placeholder template
-})
 export abstract class AbstractResourceViewPanel {
+
+    //tells to the parent component that there are no more RV open
+    @Output() empty: EventEmitter<any> = new EventEmitter();
+
+    eventSubscriptions: Subscriber<any>[] = [];
+
+    /**
+     * CONSTRUCTOR
+     */
+    protected eventHandler: VBEventHandler;
+    constructor(eventHandler: VBEventHandler) {
+        this.eventHandler = eventHandler;
+        this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => {
+            this.onRefreshDataBroadcast()
+        }));
+    }
 
     /**
      * METHODS
@@ -14,5 +28,11 @@ export abstract class AbstractResourceViewPanel {
     abstract deleteResource(resource: ARTResource): void;
     abstract getMainResource(): ARTResource;
     abstract objectDblClick(obj: ARTResource): void;
+
+    abstract onRefreshDataBroadcast(): void;
+
+    ngOnDestroy() {
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    }
 
 }

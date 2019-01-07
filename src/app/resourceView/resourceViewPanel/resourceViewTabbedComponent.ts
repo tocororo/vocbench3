@@ -1,8 +1,8 @@
-import { Component, Output, EventEmitter } from "@angular/core";
-import { AbstractResourceViewPanel } from "./abstractResourceViewPanel";
-import { ARTResource, ResAttribute, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { VBProperties } from "../../utils/VBProperties";
+import { Component, EventEmitter, Output } from "@angular/core";
+import { ARTResource } from "../../models/ARTResources";
 import { VBEventHandler } from "../../utils/VBEventHandler";
+import { VBProperties } from "../../utils/VBProperties";
+import { AbstractResourceViewPanel } from "./abstractResourceViewPanel";
 
 @Component({
     selector: "resource-view-tabbed",
@@ -13,15 +13,11 @@ export class ResourceViewTabbedComponent extends AbstractResourceViewPanel {
     private tabs: Array<Tab> = [];
     private sync: boolean = false;
 
-    //tells to the parent component that there are no more tab open
-    @Output() empty: EventEmitter<any> = new EventEmitter();
     //emits event when a tab is selected, useful to keep in sync tabbed ResView and trees/lists
     @Output() tabSelect: EventEmitter<ARTResource> = new EventEmitter();
 
-    private eventSubscriptions: any[] = [];
-
-    constructor(private vbProps: VBProperties, private eventHandler: VBEventHandler) {
-        super();
+    constructor(private vbProps: VBProperties, eventHandler: VBEventHandler) {
+        super(eventHandler);
         this.eventHandler.resViewTabSyncChangedEvent.subscribe(
             (sync: boolean) => { this.sync = sync; }
         );
@@ -29,10 +25,6 @@ export class ResourceViewTabbedComponent extends AbstractResourceViewPanel {
 
     ngOnInit() {
         this.sync = this.vbProps.getResourceViewTabSync();
-    }
-
-    ngOnDestroy() {
-        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
 
     selectResource(resource: ARTResource) {
@@ -111,7 +103,7 @@ export class ResourceViewTabbedComponent extends AbstractResourceViewPanel {
         }
     }
 
-    private closeTab(t: Tab, e?: Event) {
+    private closeTab(t: Tab) {
         let tabIdx = this.tabs.indexOf(t);
         //if the closed tab is active and not the only open, change the active tab
         if (t.active && this.tabs.length > 1) {
@@ -128,9 +120,9 @@ export class ResourceViewTabbedComponent extends AbstractResourceViewPanel {
     }
 
     /**
-     * Close all tabs (except the first in synch with the tree) and update active tab
+     * Close all tabs
      */
-    private closeAllTabs(e: Event) {
+    private closeAllTabs() {
         this.tabs = [];
         this.empty.emit();
     }
@@ -160,6 +152,10 @@ export class ResourceViewTabbedComponent extends AbstractResourceViewPanel {
 
         // Solved the previous problem simply cheching in ngOnChanges of ResourceView if the nominalValue of the resource has changed
         tab.resource = resource;
+    }
+
+    onRefreshDataBroadcast() {
+        this.closeAllTabs();
     }
 
 }

@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import { TreePanelComponent } from "../trees/treePanelComponent";
+import { Component, ElementRef, ViewChild } from "@angular/core";
+import { ARTResource } from "../models/ARTResources";
 import { ResourceViewPanelComponent } from "../resourceView/resourceViewPanel/resourceViewPanelComponent";
-import { ARTResource, ARTURIResource } from "../models/ARTResources";
+import { TreePanelComponent } from "../trees/treePanelComponent";
 
 @Component({
     selector: "data-component",
@@ -94,7 +94,7 @@ export class DataComponent {
     }
 
     private onResViewEmpty() {
-        this.resViewPanelFlex = 0;   
+        this.resViewPanelFlex = 0;
     }
 
     //when a tab describing a concept is selected (only in res view in tab mode)

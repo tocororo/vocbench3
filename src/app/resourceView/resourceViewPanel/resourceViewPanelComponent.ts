@@ -83,8 +83,8 @@ export class ResourceViewPanelComponent {
         this.tabSelect.emit(resource);
     }
 
-    //when there is no more tab open
-    private onTabEmpty() {
+    //when there is no more RV open
+    private onEmpty() {
         this.empty.emit();
     }
 

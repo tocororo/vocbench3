@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
-import { AbstractResourceViewPanel } from "./abstractResourceViewPanel";
 import { ARTResource, ResAttribute } from "../../models/ARTResources";
-import { ResourceViewComponent } from "../resourceViewComponent";
+import { VBEventHandler } from "../../utils/VBEventHandler";
+import { AbstractResourceViewPanel } from "./abstractResourceViewPanel";
 
 @Component({
     selector: "resource-view-splitted",
@@ -14,6 +14,10 @@ export class ResourceViewSplittedComponent extends AbstractResourceViewPanel {
     private resStack: Array<ARTResource> = [];
     private object: ARTResource; //this represent a double clicked object in a resource view (to show in the 2nd RV)
 
+    constructor(eventHandler: VBEventHandler) {
+        super(eventHandler);
+    }
+
     selectResource(resource: ARTResource) {
         this.resource = resource;
     }
@@ -22,6 +26,7 @@ export class ResourceViewSplittedComponent extends AbstractResourceViewPanel {
         this.resource = null;
         this.object = null;
         this.resStack = [];
+        this.empty.emit();
     }
 
     private closeSecondaryResView() {
@@ -67,6 +72,10 @@ export class ResourceViewSplittedComponent extends AbstractResourceViewPanel {
     private onSecondaryResourceUpdate(resource: ARTResource) {
         this.object[ResAttribute.SHOW] = resource.getShow();
         this.object[ResAttribute.ROLE] = resource.getRole();
+    }
+
+    onRefreshDataBroadcast() {
+        this.deleteResource(null); //reset main and secondary resources and the stach resources
     }
 
 }
