@@ -168,9 +168,8 @@ export class CustomFormConfigComponent {
     }
 
     private cloneFormCollection() {
-        this.basicModals.promptPrefixed("Clone FormCollection", FormCollection.PREFIX, "ID", null, false, true).then(
-            (value: any) => {
-                let fcId = FormCollection.PREFIX + value;
+        this.basicModals.promptPrefixed("Clone FormCollection", FormCollection.PREFIX, "ID", null, false, true, true).then(
+            (fcId: any) => {
                 for (var i = 0; i < this.formCollectionList.length; i++) {
                     if (this.formCollectionList[i].getId() == fcId) {
                         this.basicModals.alert("Duplicated ID", "A CustomForm with ID " + fcId + " already exists", "error");
@@ -264,9 +263,8 @@ export class CustomFormConfigComponent {
     }
 
     private cloneCustomForm() {
-        this.basicModals.promptPrefixed("Clone CustomForm", CustomForm.PREFIX, "ID", null, false, true).then(
-            (value: any) => {
-                let fcId = CustomForm.PREFIX + value;
+        this.basicModals.promptPrefixed("Clone CustomForm", CustomForm.PREFIX, "ID", null, false, true, true).then(
+            (fcId: any) => {
                 for (var i = 0; i < this.customFormList.length; i++) {
                     if (this.customFormList[i].getId() == fcId) {
                         this.basicModals.alert("Duplicated ID", "A CustomForm with ID " + fcId + " already exists", "error");

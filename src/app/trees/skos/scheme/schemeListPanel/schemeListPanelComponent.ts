@@ -7,6 +7,7 @@ import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
+import { UIUtils } from "../../../../utils/UIUtils";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from '../../../../utils/VBProperties';
@@ -140,11 +141,13 @@ export class SchemeListPanelComponent extends AbstractPanel {
 
     private addAllConcepts() {
         //message to warn the user that in case of a lot of concept the process could be long?
-        this.basicModals.confirm("Add concepts to scheme", "You are going to add all the existing concepts to the scheme '" + this.selectedNode.getShow() +
-            "'. Are you sure?\nNote: The added concepts may result as dangling in the target scheme, so they could be not visible in the concept tree", "warning").then(
+        this.basicModals.confirm("Add concepts to scheme", "You are going to add all the existing concepts to the scheme '" +
+            this.selectedNode.getShow() + "'. Are you sure?", "warning").then(
             confirm => {
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.skosService.addMultipleConceptsToScheme(this.selectedNode).subscribe(
                     stResp => {
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         //in case the target scheme is active
                         if (this.vbProp.isActiveScheme(this.selectedNode)) {
                             //emit schemeChangedEvent so that the concept tree refreshes
