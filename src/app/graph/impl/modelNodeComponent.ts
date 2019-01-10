@@ -6,13 +6,13 @@ import { Size } from '../model/GraphConstants';
 import { Node, NodeShape } from '../model/Node';
 
 @Component({
-    selector: '[nodeModel]',
-    templateUrl: "./nodeModelComponent.html",
+    selector: '[modelNode]',
+    templateUrl: "./modelNodeComponent.html",
     styleUrls: ['../graph.css']
 })
 export class NodeModelComponent extends AbstractGraphNode {
 
-    @Input() nodeModel: Node;
+    @Input() modelNode: Node;
 
     graphMode = GraphMode.modelOriented;
 
@@ -40,7 +40,7 @@ export class NodeModelComponent extends AbstractGraphNode {
     private isObjectProperty: boolean;
 
     ngOnInit() {
-        this.node = this.nodeModel;
+        this.node = this.modelNode;
         this.initNode();
         this.nodeShape = this.node.getNodeShape(GraphMode.modelOriented);
 

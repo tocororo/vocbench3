@@ -1,10 +1,11 @@
 import { Component, Input, ViewChild } from "@angular/core";
-import { ARTResource, ARTURIResource, ARTNode } from "../models/ARTResources";
+import { ARTResource } from "../models/ARTResources";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { GraphMode } from "./abstractGraph";
+import { DataGraphComponent } from "./impl/dataGraphComponent";
+import { ModelGraphComponent } from "./impl/modelGraphComponent";
 import { ForceDirectedGraph, GraphForces } from "./model/ForceDirectedGraph";
 import { Node } from "./model/Node";
-import { GraphMode } from "./abstractGraph";
-import { ExplorationGraphComponent } from "./impl/explorationGraphComponent";
 
 @Component({
     selector: 'graph-panel',
@@ -15,20 +16,20 @@ export class GraphPanel {
     @Input() mode: GraphMode;
     @Input() rendering: boolean = true;
 
-    @ViewChild(ExplorationGraphComponent) viewChildGraph: ExplorationGraphComponent;
+    @ViewChild(DataGraphComponent) viewChildDataGraph: DataGraphComponent;
+    @ViewChild(ModelGraphComponent) viewChildModelGraph: ModelGraphComponent;
 
     private selectedNode: Node;
-
     private forces: GraphForces = new GraphForces();
-
 
     constructor(private sharedModals: SharedModalServices) { }
 
-    ngOnInit() {
-    }
-
     private onForceChange() {
-        this.viewChildGraph.updateForces(this.forces);
+        if (this.mode == GraphMode.dataOriented) {
+            this.viewChildDataGraph.updateForces(this.forces);
+        } else {
+            this.viewChildModelGraph.updateForces(this.forces);
+        }
     }
 
     private showResourceView() {

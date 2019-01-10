@@ -1,5 +1,7 @@
 .graphContainer {
-    background-color: #ddd
+    background-color: #ddd;
+    width: 100%;
+    height: 100%;
 }
 
 /* Nodes */

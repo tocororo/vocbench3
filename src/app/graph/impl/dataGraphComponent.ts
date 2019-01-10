@@ -3,18 +3,20 @@ import { ARTURIResource, ARTPredicateObjects, ARTNode, RDFResourceRolesEnum, ART
 import { ResourceViewServices } from "../../services/resourceViewServices";
 import { D3Service } from "../d3/d3Services";
 import { Node } from "../model/Node";
-import { AbstractGraph } from "../abstractGraph";
+import { AbstractGraph, GraphMode } from "../abstractGraph";
 import { ResViewPartition } from "../../models/ResourceView";
 import { Deserializer } from "../../utils/Deserializer";
 import { Link } from "../model/Link";
 
 @Component({
-    selector: 'graph-explore',
-    templateUrl: "./graphComponent.html",
+    selector: 'graph-data',
+    templateUrl: "./dataGraphComponent.html",
     changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['../graph.css']
 })
-export class ExplorationGraphComponent extends AbstractGraph {
+export class DataGraphComponent extends AbstractGraph {
+
+    protected mode = GraphMode.dataOriented;
 
     private rvPartitions: ResViewPartition[] = [
         ResViewPartition.broaders, ResViewPartition.classaxioms, ResViewPartition.constituents, ResViewPartition.denotations,

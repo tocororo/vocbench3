@@ -5,20 +5,20 @@ import { D3Service } from '../graph/d3/d3Services';
 import { DraggableDirective } from '../graph/d3/draggableDirective';
 import { ZoomableDirective } from '../graph/d3/zoomableDirective';
 import { GraphPanel } from '../graph/graphPanel';
-import { ExplorationGraphComponent } from '../graph/impl/explorationGraphComponent';
-import { GraphComponent } from '../graph/impl/graphComponent';
+import { DataGraphComponent } from '../graph/impl/dataGraphComponent';
+import { DataNodeComponent } from '../graph/impl/dataNodeComponent';
+import { LinkComponent } from '../graph/impl/linkComponent';
+import { ModelGraphComponent } from '../graph/impl/modelGraphComponent';
+import { NodeModelComponent } from '../graph/impl/modelNodeComponent';
 import { GraphModal } from "../graph/modal/graphModal";
 import { GraphModalServices } from '../graph/modal/graphModalServices';
-import { LinkComponent } from '../graph/impl/linkComponent';
-import { NodeDataComponent } from '../graph/impl/nodeDataComponent';
-import { NodeModelComponent } from '../graph/impl/nodeModelComponent';
 import { SharedModule } from './sharedModule';
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule],
     declarations: [
-        LinkComponent, NodeModelComponent, NodeDataComponent, DraggableDirective, ZoomableDirective,
-        GraphPanel, GraphComponent, ExplorationGraphComponent,
+        LinkComponent, NodeModelComponent, DataNodeComponent, DraggableDirective, ZoomableDirective,
+        GraphPanel, ModelGraphComponent, DataGraphComponent,
         //modals
         GraphModal
     ],

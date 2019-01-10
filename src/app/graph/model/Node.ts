@@ -13,12 +13,14 @@ export class Node implements d3.SimulationNodeDatum {
     fy?: number | null;
 
     res: ARTNode;
+    openBy: Node[]; //list of nodes that have opened the current one (useful for handling the node closing)
     fixed: boolean = false;
 
     private shape: NodeShape;
     
     constructor(res: ARTNode) {
         this.res = res;
+        this.openBy = [];
     }
 
     getNodeShape(graphMode: GraphMode): NodeShape {

@@ -9,7 +9,8 @@
         </div>
     </div>
     <div class="panel-body hbox">
-        <graph-explore class="vbox" [graph]="graph" [mode]="mode" [rendering]="rendering" (nodeSelected)="onNodeSelected($event)"></graph-explore>
+        <graph-model *ngIf="mode=='modelOriented'" class="vbox" [graph]="graph" [rendering]="rendering" (nodeSelected)="onNodeSelected($event)"></graph-model>
+        <graph-data *ngIf="mode=='dataOriented'" class="vbox" [graph]="graph" [rendering]="rendering" (nodeSelected)="onNodeSelected($event)"></graph-data>
 
         <div class="vbox" style="flex: initial; width: 300px; margin-left: 4px;">
             <div class="panel panel-default vbox">
@@ -76,7 +77,7 @@
             </div>
 
             <!-- Slider for changing the forces -->
-            <div class="panel panel-default vbox" style="margin-top: 4px;">
+            <div class="panel panel-default" style="margin-top: 4px;">
                 <div class="panel-body table-responsive">
                     <table class="table table-condensed table-borderless">
                         <tbody>

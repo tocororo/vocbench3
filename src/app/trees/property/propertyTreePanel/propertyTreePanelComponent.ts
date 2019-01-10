@@ -1,4 +1,5 @@
 import { Component, Input, ViewChild } from "@angular/core";
+import { GraphMode } from "../../../graph/abstractGraph";
 import { GraphModalServices } from "../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
 import { SearchSettings } from "../../../models/Properties";
@@ -29,6 +30,8 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.property;
     rendering: boolean = false; //override the value in AbstractPanel
+
+    graphMode: GraphMode = GraphMode.modelOriented;
 
     constructor(private propService: PropertyServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,

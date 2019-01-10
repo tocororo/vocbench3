@@ -20,6 +20,10 @@ export abstract class ARTNode {
         return false;
     }
 
+    equals(node: ARTNode): boolean {
+        return this.getNominalValue() == node.getNominalValue();
+    }
+
     abstract getNominalValue(): string;
     abstract getShow(): string;
 

@@ -46,7 +46,7 @@ export class LinkComponent {
         if (this.link.source == this.link.target) { //loop path
             let borderDistY = GraphUtils.getNodeHeight(this.link.source.getNodeShape(this.mode)) / 2;
             let sign = this.link.offset > 0 ? 1 : -1;
-            let dy = (borderDistY+Math.abs(Constants.loopPathMultiplier*this.link.offset))*sign;
+            let dy = (borderDistY + Math.abs(Constants.loopPathMultiplier * this.link.offset)) * sign;
             path = path + " c -30 " + dy + " 20 " + dy; //control points for curve dx1 dy1 dx2 dy2 (relative to the starting point);
             path = path + " 10 " + borderDistY*sign; //endpoint of the curve
         } else {
@@ -73,7 +73,7 @@ export class LinkComponent {
         if (this.link.source == this.link.target) { //loop path
             let borderDistY = GraphUtils.getNodeHeight(this.link.source.getNodeShape(this.mode)) / 2;
             let sign = this.link.offset > 0 ? 1 : -1;
-            let dy = (borderDistY+Math.abs(Constants.loopPathMultiplier*this.link.offset))*sign;
+            let dy = (borderDistY + Math.abs(Constants.loopPathMultiplier * this.link.offset)) * sign;
             position.x = this.link.source.x;
             position.y = this.link.source.y + dy;
         } else { //"normal" path, the label is positioned in corrispondece of the control point of the curve

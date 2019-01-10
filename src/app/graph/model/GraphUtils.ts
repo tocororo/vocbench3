@@ -1,4 +1,4 @@
-import * as d3 from "d3";
+import { ARTNode, ARTURIResource } from "../../models/ARTResources";
 import { GraphMode } from "../abstractGraph";
 import { Size } from "./GraphConstants";
 import { Link } from "./Link";
@@ -131,6 +131,25 @@ export class GraphUtils {
     public static areLinksOverlapped(link1: Link, link2: Link) {
         return link1.source == link2.source && link1.target == link2.target ||
             link1.source == link2.target && link1.target == link2.source;
+    }
+
+    public static getNodeOfValue(nodes: Node[], value: ARTNode): Node {
+        for (let i = 0; i < nodes.length; i++) {
+            if (nodes[i].res.getNominalValue() == value.getNominalValue()) {
+                return nodes[i];
+            }
+        }
+        return null;
+    }
+
+    public static getLinksWithPredicate(links: Link[], value: ARTURIResource): Link[] {
+        let linksWithPred: Link[] = [];
+        for (let i = 0; i < links.length; i++) {
+            if (links[i].predicate.getNominalValue() == value.getNominalValue()) {
+                linksWithPred.push(links[i]);
+            }
+        }
+        return linksWithPred;
     }
 
 }

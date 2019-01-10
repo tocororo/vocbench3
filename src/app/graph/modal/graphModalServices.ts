@@ -4,11 +4,12 @@ import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResourceUtils } from '../../models/ARTResources';
 import { GraphBinding, GraphResultBindings } from '../../models/Sparql';
 import { ResourcesServices } from '../../services/resourcesServices';
+import { GraphMode } from '../abstractGraph';
 import { D3Service } from '../d3/d3Services';
 import { ForceDirectedGraph } from '../model/ForceDirectedGraph';
+import { GraphUtils } from '../model/GraphUtils';
 import { Link } from '../model/Link';
 import { Node } from '../model/Node';
-import { GraphMode } from '../abstractGraph';
 import { GraphModal, GraphModalData } from './graphModal';
 
 @Injectable()
@@ -25,8 +26,8 @@ export class GraphModalServices {
             let pred: ARTURIResource = <ARTURIResource>this.convertBindingToValue(binding.pred);
             let obj: ARTNode = this.convertBindingToValue(binding.obj);
 
-            let nodeSubj: Node = this.getNodeOfValue(nodes, subj);
-            let nodeObj: Node = this.getNodeOfValue(nodes, obj);
+            let nodeSubj: Node = GraphUtils.getNodeOfValue(nodes, subj);
+            let nodeObj: Node = GraphUtils.getNodeOfValue(nodes, obj);
             if (nodeSubj == null) {
                 nodeSubj = new Node(subj);
                 nodes.push(nodeSubj);
@@ -53,10 +54,10 @@ export class GraphModalServices {
         this.resourceService.getResourcesInfo(annotatedRes).subscribe(
             resources => {
                 resources.forEach(r => {
-                    this.getLinksWithPredicate(links, r).forEach(l => {
+                    GraphUtils.getLinksWithPredicate(links, r).forEach(l => {
                         l.predicate = r;
                     })
-                    let n = this.getNodeOfValue(nodes, r);
+                    let n = GraphUtils.getNodeOfValue(nodes, r);
                     if (n != null) {
                         n.res = r;
                     }
@@ -81,27 +82,22 @@ export class GraphModalServices {
             return new ARTLiteral(binding.value, binding.datatype, binding["xml:lang"]);
         }
     }
-    private getNodeOfValue(nodes: Node[], value: ARTNode): Node {
-        for (let i = 0; i < nodes.length; i++) {
-            if (nodes[i].res.getNominalValue() == value.getNominalValue()) {
-                return nodes[i];
-            }
-        }
-        return null;
-    }
-    private getLinksWithPredicate(links: Link[], value: ARTURIResource): Link[] {
-        let linksWithPred: Link[] = [];
-        for (let i = 0; i < links.length; i++) {
-            if (links[i].predicate.getNominalValue() == value.getNominalValue()) {
-                linksWithPred.push(links[i]);
-            }
-        }
-        return linksWithPred;
+
+    openDataGraph(resource: ARTURIResource) {
+        let rootNode: Node = new Node(resource);
+        rootNode.openBy.push(rootNode); //add itseld to the openBy list, so it cannot be close in case of loop.
+        let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph([rootNode], []);
+        var modalData = new GraphModalData(graph, GraphMode.dataOriented);
+        const builder = new BSModalContextBuilder<GraphModalData>(
+            modalData, undefined, GraphModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
+        return this.modal.open(GraphModal, overlayConfig).result;
     }
 
-    openExplorationGraph(resource: ARTURIResource, mode: GraphMode) {
-        let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph([new Node(resource)], []);
-        var modalData = new GraphModalData(graph, mode);
+    openModelGraph() {
+        let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph([], []);
+        var modalData = new GraphModalData(graph, GraphMode.modelOriented);
         const builder = new BSModalContextBuilder<GraphModalData>(
             modalData, undefined, GraphModalData
         );

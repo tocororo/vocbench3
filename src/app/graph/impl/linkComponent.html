@@ -1,8 +1,4 @@
 <svg:defs>
-    <!-- <svg:marker [attr.id]="'arrow'+link.index" [attr.class]="'arrow '+arrowClass" viewBox="0 -5 10 10" refX="8" refY="0"
-        markerWidth="4" markerHeight="4" orient="auto">
-        <svg:path d="M1,0 L1,-4 L9,0 L1,4 L1,-4 L1,0"></path>
-    </svg:marker> -->
     <svg:marker [attr.id]="'arrow'+link.index" [attr.class]="'arrow '+arrowClass" viewBox="0 -5 10 10" refX="8" refY="0"
         markerWidth="7" markerHeight="7" orient="auto">
         <svg:path d="M1,0 L1,-4 L9,0 L1,4 L1,-4 L1,0"></path>
@@ -10,15 +6,10 @@
 </svg:defs>
 
 
-<!-- <svg:path [attr.class]="'link '+linkClass" [attr.marker-end]="'url(#arrow' + link.index + ')'" [attr.d]="computePath()"> -->
 <svg:path [attr.class]="'link'" [attr.marker-end]="'url(#arrow' + link.index + ')'" [attr.d]="computePath()">
     <svg:title *ngIf="link.predicate">{{link.predicate.toNT()}}</svg:title>
 </svg:path>
 
-
-<!-- <svg:g *ngIf="showLabel && link.predicate" [attr.transform]="getLabelTransform()">
-    <svg:text text-anchor="middle">{{link.predicate.getShow()}}</svg:text>
-</svg:g> -->
 <svg:g *ngIf="link.predicate" [attr.transform]="getLabelTransform()" style="font-size: 9px;">
     <svg:rect [attr.x]="-getLabelRectWidth()/2" y="-4" [attr.width]="getLabelRectWidth()" height="8" fill="#ddd"></svg:rect>
     <svg:text #textEl style="visibility: hidden">{{link.predicate.getShow()}}</svg:text>

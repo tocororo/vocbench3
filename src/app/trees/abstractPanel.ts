@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { GraphModalServices } from "../graph/modal/graphModalServices";
 import { GraphMode } from "../graph/abstractGraph";
+import { GraphModalServices } from "../graph/modal/graphModalServices";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
 import { CustomFormsServices } from "../services/customFormsServices";
 import { ResourcesServices } from "../services/resourcesServices";
@@ -39,8 +39,7 @@ export abstract class AbstractPanel {
     eventSubscriptions: any[] = [];
     selectedNode: ARTURIResource = null;
 
-    // abstract graphMode: GraphMode;
-    graphMode: GraphMode = GraphMode.modelOriented; //at the moment, set the default to data oriented and override it in concept and individuals panel. Restore the abstract later
+    graphMode: GraphMode = GraphMode.dataOriented; //at the moment, set the default to data oriented and override it in class and property panel
 
     /**
      * CONSTRUCTOR
@@ -90,7 +89,11 @@ export abstract class AbstractPanel {
     }
 
     protected openGraph() {
-        this.graphModals.openExplorationGraph(this.selectedNode, this.graphMode);
+        if (this.graphMode == GraphMode.dataOriented) {
+            this.graphModals.openDataGraph(this.selectedNode);
+        } else {
+            this.graphModals.openModelGraph();
+        }
     }
 
     //the following determine if the create/delete buttons are disabled in the UI. They could be overriden in the extending components
@@ -111,7 +114,21 @@ export abstract class AbstractPanel {
     }
 
     isOpenGraphEnabled(): boolean {
-        return this.selectedNode && this.isContextDataPanel() && this.vbProp.getExperimentalFeaturesEnabled();
+        if (!this.vbProp.getExperimentalFeaturesEnabled()) {
+            return false;
+        }
+        if (this.graphMode == GraphMode.dataOriented) {
+            return this.selectedNode != null;
+        } else {
+            return true;
+        }
+    }
+    getOpenGraphLabel(): string {
+        if (this.graphMode == GraphMode.dataOriented) {
+            return "Show graph rooted on selected node";
+        } else {
+            return "Show model graph";
+        }
     }
 
     isContextDataPanel(): boolean {

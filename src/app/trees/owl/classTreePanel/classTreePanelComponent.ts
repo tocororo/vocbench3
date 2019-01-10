@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { GraphMode } from "../../../graph/abstractGraph";
 import { GraphModalServices } from "../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
 import { SearchSettings } from "../../../models/Properties";
@@ -32,6 +33,8 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.cls;
     rendering: boolean = false; //override the value in AbstractPanel
+
+    graphMode: GraphMode = GraphMode.modelOriented;
 
     private filterEnabled: boolean;
     private creatingClassType: ARTURIResource = OWL.class;

@@ -21,9 +21,6 @@ export class ForceDirectedGraph {
     }
 
     public initSimulation(options: GraphOptions) {
-        if (!options || !options.width || !options.height) {
-            throw new Error('missing options when initializing simulation');
-        }
         this.options = options;
 
         //Creating the simulation
@@ -46,7 +43,7 @@ export class ForceDirectedGraph {
         this.update();
     }
 
-    private update() {
+    public update() {
         this.initNodes();
         this.initLinks();
         this.updateForces();
@@ -82,11 +79,14 @@ export class ForceDirectedGraph {
          * so they will be rendered with different x,y coordinates (not overlapping each other).
          */
         if (this.links.length > 0 && this.links[0].predicate != null) {
+            //resets all the offsets: useful since once the links are changed, some links could be no more overlapped
+            this.links.forEach(l => l.offset = 0);
+
             let yetOverlapped: Link[] = []; //links already considered among the overlapped
             for (let i = 0; i < this.links.length; i++) {
                 let link1: Link = this.links[i];
-                if (yetOverlapped.indexOf(link1) != -1) continue;
-                let overlappingLinks: Link[] = []; //links overlapping link1
+                if (yetOverlapped.indexOf(link1) != -1) continue; //link already considered as overlapped
+                let overlappingLinks: Link[] = []; //collects links overlapping link1
                 for (let j = i+1; j < this.links.length; j++) {
                     let link2: Link = this.links[j];
                     if (GraphUtils.areLinksOverlapped(link1, link2)) {
@@ -104,7 +104,7 @@ export class ForceDirectedGraph {
                     /**
                      * changes the 0 offset if
                      * - loop links (offset is used as multiplier, avoids multiplication for 0),
-                     * - odd number of links ("balances" the distribution of the links)
+                     * - even number of links ("balances" the distribution of the links)
                      */
                     if (overlappingLinks[0].source == overlappingLinks[0].target || overlappingLinks.length % 2 == 0) {
                         overlappingLinks.forEach(l => {
@@ -113,14 +113,20 @@ export class ForceDirectedGraph {
                             }
                         })
                     }
+                    //changes the sign of the offset if the link is overlapped but the source and target are swapped
+                    for (let i = 1; i < overlappingLinks.length; i++) {
+                        if (overlappingLinks[i].source != overlappingLinks[0].source) { //swapped => change the offset sign
+                            overlappingLinks[i].offset = -overlappingLinks[i].offset;
+                        }
+                    }
+                } else if (link1.source == link1.target) { //no overlapping, but loop link
+                    link1.offset = -1; //change the offset in order to avoid multiplication by 0 when computing the control point of the path
                 }
             }
         }
         let linkForce: d3.ForceLink<{}, Link> = this.simulation.force('link');
         linkForce.links(this.links);
     }
-
-
 
     public addChildren(node: Node, children: Node[]) {
         //Add childrens to the nodes array
@@ -156,6 +162,8 @@ export class ForceDirectedGraph {
             } else {
                 link.target = targetNode;
             }
+            //add the source node to the openBy list of the target
+            link.target.openBy.push(link.source);
 
             this.links.push(link);
         });
@@ -227,15 +235,15 @@ export class ForceDirectedGraph {
         if (linksFromNode.length > 0) {
             //removes links with the node as source
             linksFromNode.forEach(l => {
+                //remove the source node from the openBy list
+                l.target.openBy.splice(l.target.openBy.indexOf(l.source), 1);
+                //remove the link
                 this.links.splice(this.links.indexOf(l), 1);
-                //add the target to the array of node to close in turn, only if it is not pointed by any other link (multiple parent)
-                if (this.getLinksTo(l.target).length == 0) {
-                    recursivelyClosingNodes.push(l.target);
+                //if now the openBy list is empty, it means that the node would be dangling, then...
+                if (l.target.openBy.length == 0) {
+                    this.nodes.splice(this.nodes.indexOf(l.target), 1); //remove the node
+                    recursivelyClosingNodes.push(l.target); //add to the list of nodes to recursively close
                 }
-            })
-            //removes from nodes array the target nodes of the removed links
-            recursivelyClosingNodes.forEach(n => {
-                this.nodes.splice(this.nodes.indexOf(n), 1);
             })
             //call recursively the deletion of the subtree for the deleted node)
             recursivelyClosingNodes.forEach(n => {

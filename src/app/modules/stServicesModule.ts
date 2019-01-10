@@ -12,6 +12,7 @@ import { DatasetMetadataServices } from "../services/datasetMetadataServices";
 import { DatatypesServices } from '../services/datatypesServices';
 import { ExportServices } from "../services/exportServices";
 import { ExtensionsServices } from "../services/extensionsServices";
+import { GraphServices } from '../services/graphServices';
 import { HistoryServices } from "../services/historyServices";
 import { IcvServices } from "../services/icvServices";
 import { IndividualsServices } from "../services/individualsServices";
@@ -59,6 +60,7 @@ import { VersionsServices } from "../services/versionsServices";
         DatasetMetadataServices,
         ExportServices,
         ExtensionsServices,
+        GraphServices,
         HistoryServices,
         IcvServices,
         IndividualsServices,

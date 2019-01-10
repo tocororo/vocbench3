@@ -75,7 +75,7 @@
                 <li *ngIf="isOpenGraphEnabled()">
                     <a (click)="openGraph()">
                         <img src="../../../../assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
-                        See graph rooted on selected node
+                        {{getOpenGraphLabel()}}
                     </a>
                 </li>
             </ul>

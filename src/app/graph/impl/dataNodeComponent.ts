@@ -5,13 +5,13 @@ import { GraphMode } from '../abstractGraph';
 import { AbstractGraphNode } from '../abstractGraphNode';
 
 @Component({
-    selector: '[nodeData]',
-    templateUrl: "./nodeDataComponent.html",
+    selector: '[dataNode]',
+    templateUrl: "./dataNodeComponent.html",
     styleUrls: ['../graph.css']
 })
-export class NodeDataComponent extends AbstractGraphNode {
+export class DataNodeComponent extends AbstractGraphNode {
 
-    @Input() nodeData: Node;
+    @Input() dataNode: Node;
 
     graphMode = GraphMode.dataOriented;
 
@@ -22,7 +22,7 @@ export class NodeDataComponent extends AbstractGraphNode {
     private stripeHeight: number; //height (in px) of the top stripe
 
     ngOnInit() {
-        this.node = this.nodeData;
+        this.node = this.dataNode;
         this.initNode();
         this.initMeasures();
     }

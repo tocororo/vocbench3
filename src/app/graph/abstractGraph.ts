@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output } from "@angular/core";
 import { D3Service } from "./d3/d3Services";
-import { ForceDirectedGraph, GraphOptions, GraphForces } from "./model/ForceDirectedGraph";
+import { ForceDirectedGraph, GraphForces, GraphOptions } from "./model/ForceDirectedGraph";
 import { Node } from "./model/Node";
 
 @Component({
@@ -8,13 +8,12 @@ import { Node } from "./model/Node";
 })
 export abstract class AbstractGraph {
     @Input() graph: ForceDirectedGraph;
-    @Input() mode: GraphMode;
     @Input() rendering: boolean;
     @Output() nodeSelected = new EventEmitter<Node>();
 
     private initialized: boolean = false; //true once the graph will be initialized (useful in order to not render the graph view until then)
-
-    // protected graph: ForceDirectedGraph;
+    
+    protected abstract mode: GraphMode;
     protected options: GraphOptions = new GraphOptions(800, 400); //initial w & h (will be updated later)
 
     constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef) { }
