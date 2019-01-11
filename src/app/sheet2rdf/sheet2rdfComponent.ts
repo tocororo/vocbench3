@@ -284,8 +284,13 @@ export class Sheet2RdfComponent {
     private invokeGetTriplesPreview() {
         this.s2rdfService.savePearl(this.pearl).subscribe(
             stResp => {
+                this.totalTriples = 0;
+                this.truncatedTriples = 0;
+                this.triplesPreview = null;
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.s2rdfService.getTriplesPreview(this.maxSizePreviews).subscribe(
                     triplesPreview => {
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.totalTriples = triplesPreview.total;
                         this.truncatedTriples = triplesPreview.returned;
                         this.triplesPreview = triplesPreview.triples;
