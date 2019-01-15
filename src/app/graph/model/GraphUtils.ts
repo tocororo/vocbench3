@@ -1,6 +1,4 @@
 import { ARTNode, ARTURIResource } from "../../models/ARTResources";
-import { GraphMode } from "../abstractGraph";
-import { Size } from "./GraphConstants";
 import { Link } from "./Link";
 import { Node, NodeShape } from "./Node";
 
@@ -31,8 +29,8 @@ export class GraphUtils {
     /**
      * Returns the coordinates (x, y) of the intersection point between the link line and the border of the target node
      */
-    public static getIntersectionPoint(link: Link, graphMode: GraphMode) {
-        let targetShape: NodeShape = link.target.getNodeShape(graphMode);
+    public static getIntersectionPoint(link: Link) {
+        let targetShape: NodeShape = link.target.getNodeShape();
         if (targetShape == NodeShape.rect || targetShape == NodeShape.circle || targetShape == NodeShape.square || targetShape == NodeShape.octagon || targetShape == NodeShape.label) {
             let dx: number = link.target.x - link.source.x;
             let dy: number = link.target.y - link.source.y;
@@ -43,7 +41,7 @@ export class GraphUtils {
                 return {x: link.source.x, y: link.source.y};
             }
 
-            let innerDistance = this.distanceToBorder(dx, dy, targetShape);
+            let innerDistance = this.distanceToBorder(dx, dy, link.target);
 
             let ratio = (length - innerDistance) / length;
 
@@ -62,20 +60,11 @@ export class GraphUtils {
      * @param dy 
      * @param nodeShape 
      */
-    private static distanceToBorder(dx: number, dy: number, nodeShape: NodeShape) {
+    private static distanceToBorder(dx: number, dy: number, node: Node) {
+        let nodeShape: NodeShape = node.getNodeShape();
         if (nodeShape == NodeShape.rect || nodeShape == NodeShape.square || nodeShape == NodeShape.octagon || nodeShape == NodeShape.label) {
-            let width = Size.Rectangle.base;
-            let height = Size.Rectangle.height;
-            if (nodeShape == NodeShape.square) {
-                width = height = Size.Square.side;
-            } else if (nodeShape == NodeShape.octagon) {
-                width = Size.Octagon.base;
-                height = Size.Octagon.height;
-            } else if (nodeShape == NodeShape.label) {
-                width = Size.Label.base;
-                height = Size.Label.height;
-            }
-
+            let width = node.getNodeMeaseure().width;
+            let height = node.getNodeMeaseure().height;
             let innerDistance;
             let m_link = Math.abs(dy / dx);
             let m_rect = height / width;
@@ -91,35 +80,7 @@ export class GraphUtils {
             }
             return innerDistance;
         } else if (nodeShape == NodeShape.circle) {
-            return Size.Circle.radius;
-        }
-    }
-
-    public static getNodeHeight(nodeShape: NodeShape) {
-        if (nodeShape == NodeShape.circle) {
-            return Size.Circle.radius * 2;
-        } else if (nodeShape == NodeShape.label) {
-            return Size.Label.height;
-        } else if (nodeShape == NodeShape.octagon) {
-            return Size.Octagon.height;
-        } else if (nodeShape == NodeShape.rect) {
-            return Size.Rectangle.height;
-        } else if (nodeShape == NodeShape.square) {
-            return Size.Square.side;
-        }
-    }
-
-    public static getNodeWidth(nodeShape: NodeShape) {
-        if (nodeShape == NodeShape.circle) {
-            return Size.Circle.radius * 2;
-        } else if (nodeShape == NodeShape.label) {
-            return Size.Label.base;
-        } else if (nodeShape == NodeShape.octagon) {
-            return Size.Octagon.base;
-        } else if (nodeShape == NodeShape.rect) {
-            return Size.Rectangle.base;
-        } else if (nodeShape == NodeShape.square) {
-            return Size.Square.side;
+            return node.getNodeMeaseure().radius;
         }
     }
 

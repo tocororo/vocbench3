@@ -30,7 +30,7 @@ export class ForceDirectedGraph {
             // Creating the force simulation and defining the charges
             this.simulation = d3.forceSimulation();
             //init forces
-            this.simulation.force("center", d3.forceCenter(this.options.width / 2, this.options.height / 2))
+            this.simulation.force("center", d3.forceCenter(this.options.width / 2, this.options.height / 2));
             this.simulation.force("charge", d3.forceManyBody());
             this.simulation.force("collide", d3.forceCollide());
             this.simulation.force('link', d3.forceLink());
@@ -52,8 +52,9 @@ export class ForceDirectedGraph {
     public updateForces() {
         let chargeForce: d3.ForceManyBody<{}> = this.simulation.force('charge'); //repulsion (if strength negative), attraction (if positive) among nodes
         chargeForce
-            .strength(this.options.forces.charge.strength) 
-            // .distanceMin(this.options.forces.charge.distanceMin)
+            // .strength(this.options.forces.charge.strength) 
+            .strength((node: Node) => this.getCharge(node, this.links)) 
+            .distanceMin(this.options.forces.charge.distanceMin)
             // .distanceMax(this.options.forces.charge.distanceMax);
         
         let collideForce: d3.ForceCollide<{}> = this.simulation.force('collide'); //avoid collision between nodes in the given radius
@@ -67,6 +68,14 @@ export class ForceDirectedGraph {
             .distance(this.options.forces.link.distance);
 
         this.simulation.alpha(0.5).restart();
+    }
+    private getCharge(node: Node, links: Link[]): number {
+        let charge = 0;
+        links.forEach(l => {
+            if (l.source == node) charge++;
+            if (l.target == node) charge++;
+        });
+        return charge*-50;
     }
 
     private initNodes() {
@@ -278,17 +287,19 @@ export class GraphForces {
     link: ForceLink;
     constructor() {
         this.charge = {
-            strength: -50,
-            // distanceMin: 1,
+            strength: -100, //strength of attraction (if positive) or repulsion (if negative)
+            distanceMin: 50, //min distance between nodes
             // distanceMax: 2000
         };
         this.collide = {
-            strength: 1,
-            radius: Size.Circle.radius
+            strength: 1, //strength of rejection between nodes
+            radius: Size.Circle.radius + 5 //radius in which avoid collision between node (default: circle radius with a padding)
         };
         this.link = {
-            strength: 0.2,
-            distance: 200
+            strength: 1, //strength with which the links maintain the given distance
+            distance: 250 //distance of the links
+            // strength: 0.3, //strength with which the links maintain the given distance
+            // distance: 200 //distance of the links
         };
     }
 }

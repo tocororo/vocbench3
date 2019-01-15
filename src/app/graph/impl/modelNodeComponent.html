@@ -2,16 +2,16 @@
     <svg:g (click)="onClick()" (dblclick)="onDblClick()" style="cursor: pointer;">
 
         <ng-template [ngIf]="node.res.isResource()">
-            <svg:circle *ngIf="nodeShape=='circle'" [attr.class]="'graphNode '+nodeClass" cx="0" cy="0" [attr.r]="circleRadius">
+            <svg:circle *ngIf="nodeShape=='circle'" [attr.class]="'graphNode '+nodeClass" cx="0" cy="0" [attr.r]="measures.radius">
             </svg:circle> 
     
             <svg:rect *ngIf="nodeShape=='rect'" [attr.fill]="isObjectProperty ? 'url(#'+nodeClass+'Gradient)' : ''"
                 [attr.class]="'graphNode ' + (!isObjectProperty ? nodeClass : '')" [attr.ngClass]="{ deprecated : deprecated }"
-                rx="5" ry="5" [attr.x]="-rectBase/2" [attr.y]="-rectHeight/2" [attr.width]="rectBase" [attr.height]="rectHeight">
+                rx="5" ry="5" [attr.x]="-measures.width/2" [attr.y]="-measures.height/2" [attr.width]="measures.width" [attr.height]="measures.height">
             </svg:rect>
             
             <svg:rect *ngIf="nodeShape=='square'" [attr.class]="'graphNode '+nodeClass" rx="5" ry="5" 
-                [attr.x]="-squareSide/2" [attr.y]="-squareSide/2" [attr.width]="squareSide" [attr.height]="squareSide">
+                [attr.x]="-measures.width/2" [attr.y]="-measures.height/2" [attr.width]="measures.width" [attr.height]="measures.height">
             </svg:rect>
             
             <polygon *ngIf="nodeShape=='octagon'" [attr.points]="octagonPoints" [attr.class]="'graphNode '+nodeClass"/>
@@ -22,7 +22,8 @@
         </ng-template>
 
         <ng-template [ngIf]="!node.res.isResource()">
-            <svg:rect class="graphNode literal" [attr.x]="-rectBase/2" [attr.y]="-rectHeight/2" [attr.width]="rectBase" [attr.height]="rectHeight">
+            <svg:rect class="graphNode literal" [attr.x]="-measures.width/2" [attr.y]="-measures.height/2" 
+                [attr.width]="measures.width" [attr.height]="measures.height">
             </svg:rect>
         </ng-template>
     

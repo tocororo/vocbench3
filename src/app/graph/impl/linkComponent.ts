@@ -44,13 +44,13 @@ export class LinkComponent {
     private computePath() {
         let path: string = "M" + this.link.source.x + " " + this.link.source.y; //path start
         if (this.link.source == this.link.target) { //loop path
-            let borderDistY = GraphUtils.getNodeHeight(this.link.source.getNodeShape(this.mode)) / 2;
+            let borderDistY = this.link.source.getNodeHeight() / 2;
             let sign = this.link.offset > 0 ? 1 : -1;
             let dy = (borderDistY + Math.abs(Constants.loopPathMultiplier * this.link.offset)) * sign;
             path = path + " c -30 " + dy + " 20 " + dy; //control points for curve dx1 dy1 dx2 dy2 (relative to the starting point);
             path = path + " 10 " + borderDistY*sign; //endpoint of the curve
         } else {
-            let endpoint = GraphUtils.getIntersectionPoint(this.link, this.mode);
+            let endpoint = GraphUtils.getIntersectionPoint(this.link);
             if (this.link.offset != 0) { //in case the offset, compute the control point for the Quadratic Bezier curve
                 let center = GraphUtils.computeCenter(this.link.source, this.link.target);
                 let normal = GraphUtils.calculateNormalVector(this.link.source, this.link.target, Constants.normalVectorMultiplier*this.link.offset);
@@ -71,7 +71,7 @@ export class LinkComponent {
     private getLabelPosition() {
         let position: { x: number, y: number } = { x: 0, y: 0 };
         if (this.link.source == this.link.target) { //loop path
-            let borderDistY = GraphUtils.getNodeHeight(this.link.source.getNodeShape(this.mode)) / 2;
+            let borderDistY = this.link.source.getNodeHeight() / 2;
             let sign = this.link.offset > 0 ? 1 : -1;
             let dy = (borderDistY + Math.abs(Constants.loopPathMultiplier * this.link.offset)) * sign;
             position.x = this.link.source.x;

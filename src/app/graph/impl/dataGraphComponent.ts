@@ -7,6 +7,7 @@ import { AbstractGraph, GraphMode } from "../abstractGraph";
 import { ResViewPartition } from "../../models/ResourceView";
 import { Deserializer } from "../../utils/Deserializer";
 import { Link } from "../model/Link";
+import { DataNode } from "../model/DataNode";
 
 @Component({
     selector: 'graph-data',
@@ -53,7 +54,7 @@ export class DataGraphComponent extends AbstractGraph {
                             let pred: ARTURIResource = pol.getPredicate();
                             let objs: ARTNode[] = pol.getObjects();
                             objs.forEach(o => {
-                                links.push(new Link(node, new Node(o), pred));
+                                links.push(new Link(node, new DataNode(o), pred));
                             });
                         });
                     }

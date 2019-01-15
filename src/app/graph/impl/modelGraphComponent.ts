@@ -8,6 +8,7 @@ import { ARTURIResource, ResourceUtils, ARTNode } from "../../models/ARTResource
 import { GraphUtils } from "../model/GraphUtils";
 import { Link } from "../model/Link";
 import { OWL, RDFS } from "../../models/Vocabulary";
+import { ModelNode } from "../model/ModelNode";
 
 @Component({
     selector: 'graph-model',
@@ -83,17 +84,17 @@ export class ModelGraphComponent extends AbstractGraph {
                                     }
                                 });
                                 if (nodeDomain == null) { //Thing node never initialized for the linked resource (range) => initialize it
-                                    nodeDomain = new Node(pdr.domain);
+                                    nodeDomain = new ModelNode(pdr.domain);
                                     nodes.push(nodeDomain);
                                     thingNodes.push({ thingNode: nodeDomain, linkedRes: pdr.range })
                                 }
                             } else if (pdr.domain.equals(RDFS.literal)) {
-                                nodeDomain = new Node(pdr.domain);
+                                nodeDomain = new ModelNode(pdr.domain);
                                 nodes.push(nodeDomain);
                             } else { //other cases
                                 nodeDomain = GraphUtils.getNodeOfValue(nodes, pdr.domain); //try to retrieve the same node (if already initialized)
                                 if (nodeDomain == null) { //if never initialized, initialize it now
-                                    nodeDomain = new Node(pdr.domain);
+                                    nodeDomain = new ModelNode(pdr.domain);
                                     nodes.push(nodeDomain);
                                 }
                             }
@@ -109,17 +110,17 @@ export class ModelGraphComponent extends AbstractGraph {
                                     }
                                 });
                                 if (nodeRange == null) { //Thing node never initialized for the linked resource (domain) => initialize it
-                                    nodeRange = new Node(pdr.range);
+                                    nodeRange = new ModelNode(pdr.range);
                                     nodes.push(nodeRange);
                                     thingNodes.push({ thingNode: nodeRange, linkedRes: pdr.domain })
                                 }
                             } else if (pdr.range.equals(RDFS.literal)) {
-                                nodeRange = new Node(pdr.range);
+                                nodeRange = new ModelNode(pdr.range);
                                 nodes.push(nodeRange);
                             } else { //other cases
                                 nodeRange = GraphUtils.getNodeOfValue(nodes, pdr.range); //try to retrieve the same node (if already initialized)
                                 if (nodeRange == null) { //if never initialized, initialize it now
-                                    nodeRange = new Node(pdr.range);
+                                    nodeRange = new ModelNode(pdr.range);
                                     nodes.push(nodeRange);
                                 }
                             }

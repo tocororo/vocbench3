@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
 import { ARTNode, RDFResourceRolesEnum, ResAttribute, ResourceUtils } from '../models/ARTResources';
 import { GraphMode } from './abstractGraph';
 import { GraphUtils } from './model/GraphUtils';
-import { Node } from './model/Node';
+import { Node, NodeMeasure } from './model/Node';
 
 @Component({})
 export abstract class AbstractGraphNode {
@@ -16,12 +16,14 @@ export abstract class AbstractGraphNode {
     protected abstract graphMode: GraphMode;
 
     protected node: Node;
+    protected measures: NodeMeasure;
 
     private nodeClass: string;
     private deprecated: boolean = false;
 
     protected initNode() {
         this.initNodeStyle();
+        this.measures = this.node.getNodeMeaseure();
     }
 
     private getRendering(): string {
@@ -33,7 +35,7 @@ export abstract class AbstractGraphNode {
         let truncatedText = text;
         if (this.textElement != null) {
             let textElementWidth = this.textElement.nativeElement.clientWidth;
-            let nodeWidth = GraphUtils.getNodeWidth(this.node.getNodeShape(this.graphMode)) - 4; //subtract 4 as padding
+            let nodeWidth = this.node.getNodeWidth() - 4; //subtract 4 as padding
             if (textElementWidth > nodeWidth) {
                 let ratio = textElementWidth / nodeWidth;
                 let truncateAt = Math.floor(truncatedText.length / ratio);

@@ -14,17 +14,17 @@
                 </linearGradient>
             </defs>
 
-            <svg:rect class="graphNode" rx="5" ry="5" [attr.x]="-rectBase/2" [attr.y]="-rectHeight/2" 
-                [attr.width]="rectBase" [attr.height]="rectHeight" [attr.fill]="'url(#gradient'+node.index+')'">
+            <svg:rect class="graphNode" rx="5" ry="5" [attr.x]="-measures.width/2" [attr.y]="-measures.height/2" 
+                [attr.width]="measures.width" [attr.height]="measures.height" [attr.fill]="'url(#gradient'+node.index+')'">
             </svg:rect>
 
-            <svg:text [attr.x]="-rectBase/2+3" [attr.y]="-rectHeight/2+3" dominant-baseline="hanging">
+            <svg:text [attr.x]="-measures.width/2+3" [attr.y]="-measures.height/2+3" dominant-baseline="hanging">
                 <!-- :Class name -->
                 <!-- <svg:title>{{getRendering()}}</svg:title> -->
             </svg:text>
 
             <svg:text #textEl style="visibility: hidden">{{getRendering()}}</svg:text>
-            <svg:text [attr.x]="-rectBase/2+3" [attr.y]="-rectHeight/2+stripeHeight+5" dominant-baseline="hanging">
+            <svg:text [attr.x]="-measures.width/2+3" [attr.y]="-measures.height/2+stripeHeight+5" dominant-baseline="hanging">
                 {{getRenderingNormalized()}}
                 <svg:title>{{getRendering()}}</svg:title>
             </svg:text>
@@ -32,8 +32,8 @@
 
         <!-- For literal no top stripe -->
         <ng-template [ngIf]="!node.res.isResource()">
-            <svg:rect class="graphNode literal" [attr.x]="-rectBase/2" [attr.y]="-rectHeight/2" 
-                [attr.width]="rectBase" [attr.height]="rectHeight">
+            <svg:rect class="graphNode literal" [attr.x]="-measures.width/2" [attr.y]="-measures.height/2" 
+                [attr.width]="measures.width" [attr.height]="measures.height">
             </svg:rect>
 
             <svg:text #textEl style="visibility: hidden">{{getRendering()}}</svg:text>
@@ -44,7 +44,7 @@
         </ng-template>
             
         <svg:text *ngIf="deprecated" class="deprecated" fill="#8e4a4c" dominant-baseline="hanging"
-            [attr.transform]="'translate('+(rectBase/2-10)+', -'+(rectHeight/2-4)+')'">D</svg:text>
+            [attr.transform]="'translate('+(measures.width/2-10)+', -'+(measures.height/2-4)+')'">D</svg:text>
         
     </svg:g>
 </svg:g>

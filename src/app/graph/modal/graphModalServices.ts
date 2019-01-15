@@ -11,6 +11,7 @@ import { GraphUtils } from '../model/GraphUtils';
 import { Link } from '../model/Link';
 import { Node } from '../model/Node';
 import { GraphModal, GraphModalData } from './graphModal';
+import { DataNode } from '../model/DataNode';
 
 @Injectable()
 export class GraphModalServices {
@@ -29,11 +30,11 @@ export class GraphModalServices {
             let nodeSubj: Node = GraphUtils.getNodeOfValue(nodes, subj);
             let nodeObj: Node = GraphUtils.getNodeOfValue(nodes, obj);
             if (nodeSubj == null) {
-                nodeSubj = new Node(subj);
+                nodeSubj = new DataNode(subj);
                 nodes.push(nodeSubj);
             }
             if (nodeObj == null) {
-                nodeObj = new Node(obj);
+                nodeObj = new DataNode(obj);
                 nodes.push(nodeObj);
             }
             links.push(new Link(nodeSubj, nodeObj, pred));
@@ -84,7 +85,7 @@ export class GraphModalServices {
     }
 
     openDataGraph(resource: ARTURIResource) {
-        let rootNode: Node = new Node(resource);
+        let rootNode: Node = new DataNode(resource);
         rootNode.openBy.push(rootNode); //add itseld to the openBy list, so it cannot be close in case of loop.
         let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph([rootNode], []);
         var modalData = new GraphModalData(graph, GraphMode.dataOriented);

@@ -17,10 +17,7 @@ export class NodeModelComponent extends AbstractGraphNode {
     graphMode = GraphMode.modelOriented;
 
     private nodeShape: NodeShape;
-    private squareSide: number = Size.Square.side;
-    private rectHeight: number = Size.Rectangle.height;
-    private rectBase: number = Size.Rectangle.base;
-    private circleRadius: number = Size.Circle.radius;
+
     private octagonPoints: string = 
         (-Size.Octagon.base / 2 + Size.Octagon.cut) + " " + (-Size.Octagon.height / 2) + " , " +
         (Size.Octagon.base / 2 - Size.Octagon.cut) + " " + (-Size.Octagon.height / 2) + " , " +
@@ -42,8 +39,7 @@ export class NodeModelComponent extends AbstractGraphNode {
     ngOnInit() {
         this.node = this.modelNode;
         this.initNode();
-        this.nodeShape = this.node.getNodeShape(GraphMode.modelOriented);
-
+        this.nodeShape = this.node.getNodeShape();
         this.isObjectProperty = this.node.res.getRole() == RDFResourceRolesEnum.objectProperty;
     }
 

@@ -1,8 +1,6 @@
-import { ARTNode, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { Size } from "./GraphConstants";
-import { GraphMode } from "../abstractGraph";
+import { ARTNode } from "../../models/ARTResources";
 
-export class Node implements d3.SimulationNodeDatum {
+export abstract class Node implements d3.SimulationNodeDatum {
     
     index?: number;
     x?: number;
@@ -16,52 +14,48 @@ export class Node implements d3.SimulationNodeDatum {
     openBy: Node[]; //list of nodes that have opened the current one (useful for handling the node closing)
     fixed: boolean = false;
 
-    private shape: NodeShape;
+    protected shape: NodeShape;
+    protected measures: NodeMeasure;
     
     constructor(res: ARTNode) {
         this.res = res;
         this.openBy = [];
     }
 
-    getNodeShape(graphMode: GraphMode): NodeShape {
+    getNodeShape(): NodeShape {
         if (this.shape == null) { //initialize only if not yet done
-            if (graphMode == GraphMode.dataOriented) {
-                this.shape = NodeShape.rect;
-            } else {
-                this.shape = NodeShape.circle;
-                if (this.res.isResource()) {
-                    let role: RDFResourceRolesEnum = this.res.getRole();
-                    if (role == RDFResourceRolesEnum.annotationProperty ||
-                        role == RDFResourceRolesEnum.datatypeProperty ||
-                        role == RDFResourceRolesEnum.objectProperty ||
-                        role == RDFResourceRolesEnum.ontologyProperty ||
-                        role == RDFResourceRolesEnum.property
-                    ) {
-                        this.shape = NodeShape.rect;
-                    } else if (
-                        role == RDFResourceRolesEnum.conceptScheme ||
-                        role == RDFResourceRolesEnum.skosCollection ||
-                        role == RDFResourceRolesEnum.skosOrderedCollection
-                    ) {
-                        this.shape = NodeShape.square;
-                    } else if (
-                        role == RDFResourceRolesEnum.individual ||
-                        role == RDFResourceRolesEnum.limeLexicon ||
-                        role == RDFResourceRolesEnum.ontolexForm ||
-                        role == RDFResourceRolesEnum.ontolexLexicalEntry ||
-                        role == RDFResourceRolesEnum.ontolexLexicalSense
-                    ) {
-                        this.shape = NodeShape.octagon;
-                    } else if (role == RDFResourceRolesEnum.xLabel) {
-                        this.shape = NodeShape.label;
-                    }
-                } else { //literal
-                    this.shape = NodeShape.rect;
-                }
-            }
+            this.initNodeShape();
         }
         return this.shape;
     }
+
+    getNodeMeaseure(): NodeMeasure {
+        if (this.measures == null) {
+            this.initNodeMeasure();
+        }
+        return this.measures;
+    }
+
+    getNodeWidth(): number {
+        let shape = this.getNodeShape();
+        if (shape == NodeShape.circle) {
+            return this.getNodeMeaseure().radius * 2;
+        } else {
+            return this.getNodeMeaseure().width;
+        }
+    }
+
+    getNodeHeight(): number {
+        let shape = this.getNodeShape();
+        if (shape == NodeShape.circle) {
+            return this.getNodeMeaseure().radius * 2;
+        } else {
+            return this.getNodeMeaseure().height;
+        }
+    }
+
+    protected abstract initNodeShape(): void;
+    protected abstract initNodeMeasure(): void;
 
 }
 
@@ -71,4 +65,10 @@ export enum NodeShape {
     label = "label",
     rect = "rect",
     square = "square"
+}
+
+export class NodeMeasure {
+    width?: number; //for all shapes but circle
+    height?: number; //for all shapes but circle
+    radius?: number; //only for circle
 }
