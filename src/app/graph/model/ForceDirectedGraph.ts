@@ -11,13 +11,15 @@ export class ForceDirectedGraph {
     public simulation: d3.Simulation<any, any>;
 
     public options: GraphOptions;
+    public dynamic: boolean = true;
 
     public nodes: Node[] = [];
     public links: Link[] = [];
 
-    constructor(nodes: Node[], links: Link[]) {
+    constructor(nodes: Node[], links: Link[], dynamic: boolean) {
         this.nodes = nodes;
         this.links = links;
+        this.dynamic = dynamic;
     }
 
     public initSimulation(options: GraphOptions) {

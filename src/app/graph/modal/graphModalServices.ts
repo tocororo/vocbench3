@@ -63,7 +63,7 @@ export class GraphModalServices {
                         n.res = r;
                     }
                 })
-                let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph(nodes, links);
+                let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph(nodes, links, false);
                 var modalData = new GraphModalData(graph, GraphMode.dataOriented);
                 const builder = new BSModalContextBuilder<GraphModalData>(
                     modalData, undefined, GraphModalData

@@ -65,6 +65,7 @@ export class DataGraphComponent extends AbstractGraph {
     }
 
     protected onNodeDblClicked(node: Node) {
+        if (!this.graph.dynamic) return; //if graph is not dynamic, do nothing
         if (this.graph.hasOutgoingLink(node)) {
             this.graph.closeNode(node);
         } else {

@@ -37,9 +37,11 @@ export class D3Service {
      * Gets an instance of the ForceDirectedGraph with the given nodes and links
      * @param nodes 
      * @param links 
+     * @param dynamic tells if the graph is dynamic, if double click expands/collapses nodes
      */
-    getForceDirectedGraph(nodes: Node[], links: Link[]) {
-        let graph = new ForceDirectedGraph(nodes, links);
+    getForceDirectedGraph(nodes: Node[], links: Link[], dynamic?: boolean) {
+        if (dynamic == null) dynamic = true;
+        let graph = new ForceDirectedGraph(nodes, links, dynamic);
         return graph;
     }
 
