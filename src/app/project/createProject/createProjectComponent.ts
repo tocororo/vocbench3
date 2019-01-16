@@ -1,10 +1,13 @@
 import { Component, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
+import { DatasetCatalogModalReturnData } from "../../config/dataManagement/datasetCatalog/datasetCatalogModal";
 import { ARTURIResource, ResourceUtils } from "../../models/ARTResources";
 import { ConfigurableExtensionFactory, ExtensionPointID, Plugin, PluginSpecification, Settings } from "../../models/Plugins";
-import { BackendTypesEnum, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
-import { DCT, OWL, OntoLex, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
+import { BackendTypesEnum, PreloadedDataSummary, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
+import { RDFFormat } from "../../models/RDFFormat";
+import { DCT, OntoLex, OWL, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { ExtensionsServices } from "../../services/extensionsServices";
+import { InputOutputServices } from "../../services/inputOutputServices";
 import { PluginsServices } from "../../services/pluginsServices";
 import { ProjectServices } from "../../services/projectServices";
 import { UIUtils } from "../../utils/UIUtils";
@@ -37,7 +40,7 @@ export class CreateProjectComponent {
         { value: new ARTURIResource(SKOS.uri), label: "SKOS" },
         { value: new ARTURIResource(OntoLex.uri), label: "OntoLex" }
     ];
-    private ontoModelType: ARTURIResource = this.ontoModelList[0].value;
+    private ontoModelType: ARTURIResource = this.ontoModelList[1].value; //default OWL
 
     private lexicalModelList = [
         { value: new ARTURIResource(RDFS.uri), label: "RDFS" },
@@ -46,6 +49,21 @@ export class CreateProjectComponent {
         { value: new ARTURIResource(OntoLex.uri), label: "OntoLex" }
     ];
     private lexicalModelType: ARTURIResource = this.lexicalModelList[0].value;
+
+    //preload
+    private readonly preloadOptNone: PreloadOpt = PreloadOpt.NONE;
+    private readonly preloadOptFromLocalFile: PreloadOpt = PreloadOpt.FROM_LOCAL_FILE;
+    private readonly preloadOptFromURI: PreloadOpt = PreloadOpt.FROM_URI;
+    private readonly preloadOptFromDatasetCatalog: PreloadOpt = PreloadOpt.FROM_DATASET_CATALOG;
+    private preloadOptList: PreloadOpt[] = [this.preloadOptNone, this.preloadOptFromLocalFile, this.preloadOptFromURI, this.preloadOptFromDatasetCatalog];
+    private selectedPreloadOpt: PreloadOpt = this.preloadOptList[0];
+    private preloadFile: File;
+    private inputFormats: RDFFormat[];
+    private selectedInputFormat: RDFFormat;
+    private filePickerAccept: string;
+    private preloadUri: string;
+    private preloadCatalog: string; //id-title of the datasetCatalog
+    private preloadedData: { summary: PreloadedDataSummary, option: PreloadOpt};
     
     private history: boolean = false;
     private validation: boolean = false;
@@ -105,7 +123,7 @@ export class CreateProjectComponent {
     private modifiedProp: string = DCT.modified.getURI();
 
     constructor(private projectService: ProjectServices, private pluginService: PluginsServices, private extensionService: ExtensionsServices,
-        private router: Router, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
+        private inOutService: InputOutputServices, private router: Router, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
     }
 
     ngOnInit() {
@@ -163,6 +181,102 @@ export class CreateProjectComponent {
             this.supportRepoId = this.projectName.trim().replace(new RegExp(" ", 'g'), "_") + "_support";
         }
     }
+
+    //========= PRELOAD HANDLERS - BEGIN ==================
+
+    private onPreloadChange() {
+        // if (this.selectedPreloadOpt == PreloadOpt.FROM_DATASET_CATALOG) {
+        //     this.preloadFromDatasetCatalog();
+        // } else
+        if (this.selectedPreloadOpt == PreloadOpt.FROM_LOCAL_FILE) {
+            if (this.inputFormats == null) {
+                this.initDataFormats();
+            }
+        }
+    }
+
+    private preloadFromFileChanged(file: File) {
+        this.preloadFile = file;
+        this.inOutService.getParserFormatForFileName(this.preloadFile.name).subscribe(
+            format => {
+                if (format != null) {
+                    for (var i = 0; i < this.inputFormats.length; i++) {
+                        if (this.inputFormats[i].name == format) {
+                            this.selectedInputFormat = this.inputFormats[i];
+                        }
+                    }
+                }
+            }
+        );
+    }
+
+    private preloadFromFile() {
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        this.projectService.preloadDataFromFile(this.preloadFile, this.selectedInputFormat.name).subscribe(
+            (summary: PreloadedDataSummary) => {
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                this.preloadedDataHandler(summary);
+            }
+        );
+    }
+
+    private initDataFormats() {
+        this.inOutService.getInputRDFFormats().subscribe(
+            formats => {
+                this.inputFormats = formats;
+                let extList: string[] = [];
+                //set rdf/xml format as default
+                let rdfIdx: number = 0;
+                for (var i = 0; i < this.inputFormats.length; i++) {
+                    extList.push("."+this.inputFormats[i].defaultFileExtension);
+                    if (this.inputFormats[i].name == "RDF/XML") {
+                        rdfIdx = i;
+                    }
+                }
+                this.selectedInputFormat = this.inputFormats[rdfIdx];
+                //remove duplicated extensions
+                extList = extList.filter((item: string, pos: number) => {
+                    return extList.indexOf(item) == pos;
+                });
+                this.filePickerAccept = extList.join(",");
+            }
+        )
+    }
+
+    private preloadFromUri() {
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        this.projectService.preloadDataFromURL(this.preloadUri).subscribe(
+            (summary: PreloadedDataSummary) => {
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                this.preloadedDataHandler(summary);
+            }
+        );
+    }
+
+    private preloadFromDatasetCatalog() {
+        this.sharedModals.datasetCatalog().then(
+            (data: DatasetCatalogModalReturnData) => {
+                this.preloadCatalog = data.dataset.id + " - " + data.dataset.getPreferredTitle().getValue() + " @" + data.dataset.getPreferredTitle().getLang();
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+                this.projectService.preloadDataFromCatalog(data.connectorId, data.dataset.id).subscribe(
+                    (summary: PreloadedDataSummary) => {
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                        this.preloadedDataHandler(summary);
+                    }
+                );
+            },
+            () => {}
+        );
+    }
+
+    private preloadedDataHandler(summary: PreloadedDataSummary) {
+        this.preloadedData = {
+            summary: summary,
+            option: this.selectedPreloadOpt
+        }
+    }
+
+    //========= PRELOAD HANDLERS - END ==================
 
     /**
      * When user paste a uri update baseUriPrefix and baseUriSuffix
@@ -500,4 +614,11 @@ export class CreateProjectComponent {
         );
     }
 
+}
+
+enum PreloadOpt {
+    NONE = "Do not preload any data",
+    FROM_LOCAL_FILE = "Preload from local file",
+    FROM_URI = "Preload from URI",
+    FROM_DATASET_CATALOG = "Preload from Dataset Catalog"
 }

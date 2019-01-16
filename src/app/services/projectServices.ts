@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from '../utils/VBContext';
-import { Project, AccessLevel, LockLevel, RepositoryAccess, BackendTypesEnum, RepositorySummary } from '../models/Project';
+import { Project, AccessLevel, LockLevel, RepositoryAccess, BackendTypesEnum, RepositorySummary, PreloadedDataSummary } from '../models/Project';
 import { ARTURIResource } from '../models/ARTResources';
 import { PluginSpecification } from '../models/Plugins';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
@@ -415,6 +415,48 @@ export class ProjectServices {
             params.newPassword = newPassword;
         }
         return this.httpMgr.doPost(this.serviceName, "batchModifyRepostoryAccessCredentials", params);
+    }
+
+    /**
+     * 
+     * @param preloadedData 
+     * @param preloadedDataFormat 
+     */
+    preloadDataFromFile(preloadedData: File, preloadedDataFormat: string): Observable<PreloadedDataSummary> {
+        console.log("[ProjectServices] preloadDataFromFile");
+        let params: any = {
+            preloadedData: preloadedData,
+            preloadedDataFormat: preloadedDataFormat,
+        };
+        return this.httpMgr.uploadFile(this.serviceName, "preloadDataFromFile", params);
+    }
+
+    /**
+     * 
+     * @param preloadedDataURL 
+     * @param preloadedDataFormat 
+     */
+    preloadDataFromURL(preloadedDataURL: string, preloadedDataFormat?: string): Observable<PreloadedDataSummary> {
+        console.log("[ProjectServices] preloadDataFromURL");
+        let params: any = {
+            preloadedDataURL: preloadedDataURL,
+            preloadedDataFormat: preloadedDataFormat,
+        };
+        return this.httpMgr.doPost(this.serviceName, "preloadDataFromURL", params);
+    }
+
+    /**
+     * 
+     * @param connectorId 
+     * @param datasetId 
+     */
+    preloadDataFromCatalog(connectorId: string, datasetId: string): Observable<PreloadedDataSummary> {
+        console.log("[ProjectServices] preloadDataFromCatalog");
+        let params: any = {
+            connectorId: connectorId,
+            datasetId: datasetId,
+        };
+        return this.httpMgr.doPost(this.serviceName, "preloadDataFromCatalog", params);
     }
 
 }

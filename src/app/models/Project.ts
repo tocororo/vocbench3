@@ -1,4 +1,4 @@
-import { RDFS, OWL, SKOS, SKOSXL, OntoLex } from "./Vocabulary";
+import { OntoLex, OWL, RDFS, SKOS, SKOSXL } from "./Vocabulary";
 
 export class Project {
     private name: string;
@@ -210,4 +210,12 @@ export class ProjectTableColumnStruct {
     public name: string;
     public show: boolean;
     public mandatory?: boolean;
+}
+
+export class PreloadedDataSummary {
+    public baseURI?: string;
+	public model?: string;
+	public lexicalizationModel?: string;
+	public preloadedDataFile: string;
+	public preloadedDataFormat: string;
 }

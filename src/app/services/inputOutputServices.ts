@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { TransitiveImportMethodAllowance } from "../models/Metadata";
+import { PluginSpecification } from '../models/Plugins';
 import { DataFormat, RDFFormat } from "../models/RDFFormat";
 import { HttpManager } from "../utils/HttpManager";
 import { VBEventHandler } from "../utils/VBEventHandler";
-import { PluginSpecification } from '../models/Plugins';
 
 @Injectable()
 export class InputOutputServices {
@@ -96,7 +96,7 @@ export class InputOutputServices {
      * @param extensionID 
      */
     getSupportedFormats(extensionID: string): Observable<DataFormat[]> {
-        console.log("[ExportServices] getSupportedFormats");
+        console.log("[InputOutputServices] getSupportedFormats");
         var params = {
             extensionID: extensionID
         };
@@ -109,6 +109,38 @@ export class InputOutputServices {
                 //sort by name
                 formats.sort(
                     function(a: DataFormat, b: DataFormat) {
+                        if (a.name < b.name) return -1;
+                        if (a.name > b.name) return 1;
+                        return 0;
+                    }
+                );
+                return formats;
+            }
+        );
+    }
+
+    /**
+     * 
+     */
+    getInputRDFFormats(): Observable<RDFFormat[]> {
+        console.log("[InputOutputServices] getInputRDFFormats");
+        var params = {};
+        return this.httpMgr.doGet(this.serviceName, "getInputRDFFormats", params).map(
+            stResp => {
+                var formats: RDFFormat[] = [];
+                for (var i = 0; i < stResp.length; i++) {
+                    let name = stResp[i].name;
+                    let charset = stResp[i].charset;
+                    let fileExtensions = stResp[i].fileExtensions;
+                    let standardURI = stResp[i].standardURI;
+                    let mimetypes = stResp[i].mimetypes;
+                    let defaultMIMEType = stResp[i].defaultMIMEType;
+                    let defaultFileExtension = stResp[i].defaultFileExtension;
+                    formats.push(new RDFFormat(name, charset, fileExtensions, standardURI, mimetypes, defaultMIMEType, defaultFileExtension));
+                }
+                //sort by name
+                formats.sort(
+                    function(a: RDFFormat, b: RDFFormat) {
                         if (a.name < b.name) return -1;
                         if (a.name > b.name) return 1;
                         return 0;

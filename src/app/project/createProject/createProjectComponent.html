@@ -1,10 +1,10 @@
 <div class="vbox">
-    
+
     <div class="panel panel-default vbox">
         <div class="panel-heading">
             <label>Create project:</label>
         </div>
-        
+
         <div class="panel-body scrollableContainer">
 
             <form class="form-horizontal">
@@ -15,6 +15,50 @@
                             placeholder="Project name" (ngModelChange)="onProjectNameChange()" sanitized>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-1">Optional data preloading:</label>
+                    <div class="col-sm-5">
+                        <select class="form-control input-sm" [(ngModel)]="selectedPreloadOpt" (ngModelChange)="onPreloadChange()" name="preload">
+                            <option *ngFor="let p of preloadOptList">{{p}}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="selectedPreloadOpt != preloadOptNone" class="col-sm-6">
+                        <div class="hbox" style="align-items: center">
+                            <div *ngIf="selectedPreloadOpt == preloadOptFromLocalFile" class="hbox" style="align-items: center">
+                                <file-picker (fileChanged)="preloadFromFileChanged($event)" [file]="preloadFile" [accept]="filePickerAccept"></file-picker>
+                                <label style="margin-left: 15px;">Format:</label>
+                                <select class="form-control input-sm" style="margin-left: 5px; width: initial" [(ngModel)]="selectedInputFormat" name="inputFormat">
+                                    <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
+                                </select>
+                                <button class="btn btn-sm btn-default" (click)="preloadFromFile()" [disabled]="!preloadFile" style="margin-left: 10px;">Load</button>
+                            </div>
+
+                            <div *ngIf="selectedPreloadOpt == preloadOptFromURI" class="input-group input-group-sm" style="flex: 1;">
+                                <input type="text" class="form-control" [(ngModel)]="preloadUri" name="preloadFromUri">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" (click)="preloadFromUri()" [disabled]="!preloadUri || preloadUri.trim() == ''">Load</button>
+                                </div>
+                            </div>
+
+                            <div *ngIf="selectedPreloadOpt == preloadOptFromDatasetCatalog" class="input-group input-group-sm" style="flex: 1;">
+                                <input type="text" class="form-control" [(ngModel)]="preloadCatalog" name="preloadFromCatalog" readonly>
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" (click)="preloadFromDatasetCatalog()">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div style="margin-left: 8px; font-size: 15px;">
+                                <span *ngIf="preloadedData?.option != selectedPreloadOpt" class="glyphicon glyphicon-warning-sign" title="Data not loaded"></span>
+                                <span *ngIf="preloadedData?.option == selectedPreloadOpt" class="glyphicon glyphicon-ok-circle" title="Data loaded correctly"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                </div>
+
                 <div class="form-group">
                     <label class="control-label col-sm-1">Base URI:</label>
                     <div class="col-sm-11">
@@ -108,7 +152,7 @@
                                     <label>Configuration</label>
                                 </div>
                                 <div class="col-sm-5">
-                                    <extension-configurator #dataRepoConfigurator *ngIf="dataRepoExtensions" 
+                                    <extension-configurator #dataRepoConfigurator *ngIf="dataRepoExtensions"
                                         [extensions]="dataRepoExtensions" [storeable]="false"
                                         (extensionUpdated)="selectedDataRepoExtension = $event"
                                         (configurationUpdated)="selectedDataRepoConfig = $event">
@@ -149,7 +193,7 @@
                                     <label>Configuration</label>
                                 </div>
                                 <div class="col-sm-5">
-                                    <extension-configurator #supportRepoConfigurator *ngIf="supportRepoExtensions" 
+                                    <extension-configurator #supportRepoConfigurator *ngIf="supportRepoExtensions"
                                         [extensions]="supportRepoExtensions" [storeable]="false" [disabled]="!(history || validation)"
                                         (extensionUpdated)="selectedSupportRepoExtension = $event"
                                         (configurationUpdated)="selectedSupportRepoConfig = $event">
@@ -170,7 +214,7 @@
                         </div>
 
                     </form>
-                    
+
                 </div>
             </div>
 
@@ -302,11 +346,11 @@
             </div>
 
         </div>
-        
+
         <div class="panel-footer">
             <button type="submit" class="btn btn-default btn-sm pull-right" (click)="createtNew()">Create</button>
             <span class="clearfix"></span> <!--To fix UI bug-->
         </div>
     </div>
-    
+
 </div>

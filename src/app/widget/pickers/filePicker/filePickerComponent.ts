@@ -13,11 +13,9 @@ export class FilePickerComponent {
     @Input() size: string;
     @Input() accept: string;
     @Input() placeholder: string = "Select a file...";
+    @Input() file: File; //in case the file is already known when the component is initialized
     
     @Output() fileChanged = new EventEmitter<File>();
-    
-    private file: File;
-    private fileName: string;
     
     private btnClassPrefix: string = "btn btn-default btn-file btn-";
     private btnClass: string = this.btnClassPrefix + "sm";
@@ -38,7 +36,6 @@ export class FilePickerComponent {
     
     private fileChangeEvent(file: File) {
         this.file = file;
-        this.fileName = file.name;
         this.fileChanged.emit(file);
     }
 

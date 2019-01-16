@@ -24,6 +24,7 @@ import { VBProperties } from "../utils/VBProperties";
 import { AdministrationModule } from "./administrationModule";
 import { CollaborationModule } from './collaborationModule';
 import { CustomFormModule } from "./customFormModule";
+import { DatasetCatalogModule } from './datasetCatalogModule';
 import { GraphModule } from './graphModule';
 import { HistoryValidationModule } from "./historyValidationModule";
 import { ICVModule } from "./icvModule";
@@ -46,7 +47,7 @@ import { VBModalModule } from "./vbModalModule";
             FormsModule, //check if this is still necessary when declarated component are reduced in favor of more imported modules
 
             SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule, GraphModule,
-            ProjectModule, UserModule, ICVModule, AdministrationModule, CustomFormModule, MetadataModule,
+            ProjectModule, UserModule, ICVModule, AdministrationModule, CustomFormModule, MetadataModule, DatasetCatalogModule,
             HistoryValidationModule, PreferencesModule, Sheet2RdfModule, SparqlModule, CollaborationModule,
 
             STServicesModule,

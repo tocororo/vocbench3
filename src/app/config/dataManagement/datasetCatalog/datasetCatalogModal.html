@@ -1,0 +1,94 @@
+<div class="modal-header">
+    <h3 class="modal-title">Dataset Catalog</h3>
+</div>
+<div class="modal-body vbox blockingDivHost" style="height: 75vh;">
+
+        <table class="table table-condensed table-borderless">
+            <colgroup>
+                <col style="width: 1%">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td nowrap><label>Catalog:</label></td>
+                    <td>
+                        <select class="form-control input-sm" [(ngModel)]="selectedExtension" (ngModelChange)="onExtensionChange()">
+                            <option *ngFor="let ext of extensions" [title]="ext.description" [ngValue]="ext">{{ext.name}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap><label>Search:</label></td>
+                    <td>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" [(ngModel)]="query" (keydown)="onKeydown($event)" [disabled]="!selectedExtension">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" (click)="searchDataset()" [disabled]="!selectedExtension">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="hbox" style="margin-top: 4px;">
+            <div class="panel panel-default vbox" style="flex: 1;">
+                <div class="panel-heading">
+                    <label>Search results:</label>
+                </div>
+                <div class="panel-body vbox scrollableContainer">
+                    <div *ngFor="let d of searchDatasetResult?.content">
+                        <div class="listItem searchDatasetResult" [ngClass]="{active: d == selectedDataset}" (click)="selectDataset(d)">
+                            <div style="font-size: 13px">
+                                <label>{{d.id}}</label>
+                                <span> - {{d.getPreferredTitle().getValue()}} <span style="color: green">@{{d.getPreferredTitle().getLang()}}</span></span>
+                            </div>
+                            <a *ngIf="d.ontologyIRI" [href]="d.ontologyIRI.getURI()" target="_blank" style="color: gray; align-self: start">{{d.ontologyIRI.getURI()}}</a>
+                            <div *ngIf="d.descriptions.length > 0">
+                                <div style="height: 1px; margin: 2px 0; overflow: hidden; background-color: #e5e5e5;"></div>
+                                <span style="font-size: 12px">{{d.getPreferredDescription().toNT()}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div *ngIf="searchDatasetResult" class="hbox pull-right" style="align-items: center;">
+                        <span style="margin-right: 4px;">{{searchDatasetResult.totalResults}} results</span>
+                        <div class="btn-group btn-group-xs">
+                            <button class="btn btn-default" title="Previous page" (click)="prevPage()" [disabled]="page==0">
+                                <span class="glyphicon glyphicon-triangle-left"></span>
+                            </button>
+                            <button class="btn btn-default" style="cursor: auto" disabled>
+                                <span>{{page+1}} of {{totPage}}</span>
+                            </button>
+                            <button class="btn btn-default" title="Next page" (click)="nextPage()" [disabled]="searchDatasetResult.tail">
+                                <span class="glyphicon glyphicon-triangle-right"></span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            <dataset-description *ngIf="selectedDatasetDescription" [dataset]="selectedDatasetDescription" [extension]="selectedExtension"
+                style="margin-left: 4px;">
+            </dataset-description>
+
+        </div>
+
+
+        <div #blockingDiv class="blockingDiv" style="display:none">
+            <div class="loadingDiv">
+                <div>
+                    <p>Loading...</p><img src="../../../../assets/images/loading.gif" />
+                </div>
+            </div>
+        </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedDatasetDescription">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

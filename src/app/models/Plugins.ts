@@ -197,6 +197,7 @@ export class PluginSpecification {
 
 export class ExtensionPointID {
     public static COLLABORATION_BACKEND_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.collaboration.CollaborationBackend";
+    public static DATASET_CATALOG_CONNECTOR_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.datasetcatalog.DatasetCatalogConnector";
     public static DATASET_METADATA_EXPORTER_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.datasetmetadata.DatasetMetadataExporter";
     // public static DEPLOYER_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.deployer.Deployer"; //use repository/stream sourced deployer
     // public static LOADER_ID: string = "it.uniroma2.art.semanticturkey.extension.extpts.loader.Loader"; //use repository/stream targeting loader
