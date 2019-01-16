@@ -117,7 +117,11 @@ export class ForceDirectedGraph {
                 } else {
                     let shift = Math.floor(group.length / 2);
                     for (let i = 0; i < group.length; i++) { //links overlapped, but with source and target swapped have inverted sign
-                        group[i].offset = i - shift;
+                        let offset = i - shift;
+                        if (offset == 0) {
+                            offset = group.length - shift;
+                        }
+                        group[i].offset = offset;
                     }
                 }
             });
