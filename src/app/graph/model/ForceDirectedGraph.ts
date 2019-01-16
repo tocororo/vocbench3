@@ -93,50 +93,86 @@ export class ForceDirectedGraph {
             //resets all the offsets: useful since once the links are changed, some links could be no more overlapped
             this.links.forEach(l => l.offset = 0);
 
-            let yetOverlapped: Link[] = []; //links already considered among the overlapped
-            for (let i = 0; i < this.links.length; i++) {
-                let link1: Link = this.links[i];
-                if (yetOverlapped.indexOf(link1) != -1) continue; //link already considered as overlapped
-                let overlappingLinks: Link[] = []; //collects links overlapping link1
-                for (let j = i+1; j < this.links.length; j++) {
-                    let link2: Link = this.links[j];
-                    if (GraphUtils.areLinksOverlapped(link1, link2)) {
-                        yetOverlapped.push(link2);
-                        overlappingLinks.push(link2);
+            //set offset for overlapping links (offsets are balanced around the 0, e.g. if 5 links => -2,-1,0,1,2)
+            let overlappingLinkGroups = this.getOverlappingLinkGroups();
+            overlappingLinkGroups.forEach(group => {
+                let shift = Math.floor(group.length / 2);
+                for (let i = 0; i < group.length; i++) {
+                    let offset = i - shift;
+                    if (offset == 0 && group.length % 2 == 0) { //changes the 0 offset in case the overlapping links are even
+                        offset = group.length - shift;
+                    }
+                    if (group[i].source != group[0].source) {
+                        offset = -offset; //links overlapped, but with source and target swapped have inverted sign
+                    }
+                    group[i].offset = offset;
+                }
+            });
+
+            //set offsets for loops
+            let loopingLinkGroups = this.getLoopingLinkGroups();
+            loopingLinkGroups.forEach(group => {
+                if (group.length == 1) {
+                    group[0].offset = -1; //offset -1 in order to avoid multiplication by 0 when computing the control point of the loop
+                } else {
+                    let shift = Math.floor(group.length / 2);
+                    for (let i = 0; i < group.length; i++) { //links overlapped, but with source and target swapped have inverted sign
+                        group[i].offset = i - shift;
                     }
                 }
-                if (overlappingLinks.length > 0) { //there are links overlapping link1
-                    yetOverlapped.push(link1);
-                    overlappingLinks.push(link1);
-                    let shift = Math.floor(overlappingLinks.length / 2);
-                    for (let j = 0; j < overlappingLinks.length; j++) {
-                        overlappingLinks[j].offset = j-shift;
-                    }
-                    /**
-                     * changes the 0 offset if
-                     * - loop links (offset is used as multiplier, avoids multiplication for 0),
-                     * - even number of links ("balances" the distribution of the links)
-                     */
-                    if (overlappingLinks[0].source == overlappingLinks[0].target || overlappingLinks.length % 2 == 0) {
-                        overlappingLinks.forEach(l => {
-                            if (l.offset == 0) {
-                                l.offset = overlappingLinks.length - shift;
-                            }
-                        })
-                    }
-                    //changes the sign of the offset if the link is overlapped but the source and target are swapped
-                    for (let i = 1; i < overlappingLinks.length; i++) {
-                        if (overlappingLinks[i].source != overlappingLinks[0].source) { //swapped => change the offset sign
-                            overlappingLinks[i].offset = -overlappingLinks[i].offset;
-                        }
-                    }
-                } else if (link1.source == link1.target) { //no overlapping, but loop link
-                    link1.offset = -1; //change the offset in order to avoid multiplication by 0 when computing the control point of the path
-                }
-            }
+            });
         }
         let linkForce: d3.ForceLink<{}, Link> = this.simulation.force('link');
         linkForce.links(this.links);
+    }
+
+    private getOverlappingLinkGroups(): Link[][] {
+        let linkGroups: Link[][] = [];
+        let yetInOverlapping: Link[] = []; //links already considered among the overlapped, useful in order to avoid duplicated links
+        for (let i = 0; i < this.links.length; i++) {
+            let overlappingGroup: Link[] = [];
+            let link1: Link = this.links[i];
+            if (link1.source == link1.target) continue; //if loop, ignore it
+            if (yetInOverlapping.indexOf(link1) != -1) continue; //link already considered as overlapped, so ignore it
+            //starting from the following link, looks for overlapping links
+            for (let j = i+1; j < this.links.length; j++) {
+                let link2: Link = this.links[j];
+                if (GraphUtils.areLinksOverlapped(link1, link2)) {
+                    overlappingGroup.push(link2);
+                    yetInOverlapping.push(link2);
+                }
+            }
+            if (overlappingGroup.length > 0) {
+                overlappingGroup.push(link1);
+                yetInOverlapping.push(link1);
+                linkGroups.push(overlappingGroup);
+            }
+        }
+        return linkGroups;
+    }
+
+    private getLoopingLinkGroups(): Link[][] {
+        let linkGroups: Link[][] = [];
+        let yetInLooping: Link[] = []; //links already considered among the looping, useful in order to avoid duplicated links
+        for (let i = 0; i < this.links.length; i++) {
+            let loopingGroup: Link[] = [];
+            let link1: Link = this.links[i];
+            if (link1.source != link1.target) continue; //if not a loop, ignore it
+            if (yetInLooping.indexOf(link1) != -1) continue; //link already considered as looping, so ignore it
+
+            loopingGroup.push(link1);
+            yetInLooping.push(link1);
+            //starting from the following link, looks for overlapping links
+            for (let j = i+1; j < this.links.length; j++) {
+                let link2: Link = this.links[j];
+                if (GraphUtils.areLinksOverlapped(link1, link2)) {
+                    loopingGroup.push(link2);
+                    yetInLooping.push(link2);
+                }
+            }
+            linkGroups.push(loopingGroup);
+        }
+        return linkGroups;
     }
 
     public addChildren(node: Node, children: Node[]) {
