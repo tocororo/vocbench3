@@ -2,6 +2,7 @@ import { Component, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { DatasetCatalogModalReturnData } from "../../config/dataManagement/datasetCatalog/datasetCatalogModal";
 import { ARTURIResource, ResourceUtils } from "../../models/ARTResources";
+import { TransitiveImportMethodAllowance } from "../../models/Metadata";
 import { ConfigurableExtensionFactory, ExtensionPointID, Plugin, PluginSpecification, Settings } from "../../models/Plugins";
 import { BackendTypesEnum, PreloadedDataSummary, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
 import { RDFFormat } from "../../models/RDFFormat";
@@ -44,6 +45,15 @@ export class CreateProjectComponent {
     private preloadUri: string;
     private preloadCatalog: string; //id-title of the datasetCatalog
     private preloadedData: { summary: PreloadedDataSummary, option: PreloadOpt};
+
+    private importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
+        { allowance: TransitiveImportMethodAllowance.nowhere, show: "Do not resolve" },
+        { allowance: TransitiveImportMethodAllowance.web, show: "Resolve from web" },
+        { allowance: TransitiveImportMethodAllowance.webFallbackToMirror, show: "Resolve from web with fallback to Ontology Mirror" },
+        { allowance: TransitiveImportMethodAllowance.mirror, show: "Resolve from Ontology Mirror" },
+        { allowance: TransitiveImportMethodAllowance.mirrorFallbackToWeb, show: "Resolve from Ontology Mirror with fallback to Web" }
+    ];
+    private selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[0].allowance;
 
     //baseURI
     private baseUriPrefixList: string[] = ["http://", "https://"];
@@ -677,6 +687,19 @@ export class CreateProjectComponent {
             modificationProp = new ARTURIResource(this.modifiedProp);
         }
 
+        let preloadedDataFileName: string;
+        let preloadedDataFormat: string;
+        let transitiveImportAllowance: TransitiveImportMethodAllowance;
+        if (this.preloadedData) {
+            preloadedDataFileName = this.preloadedData.summary.preloadedDataFile;
+            if (this.preloadedData.option == PreloadOpt.FROM_LOCAL_FILE) {
+                preloadedDataFormat = this.selectedInputFormat.name
+            } else {
+                preloadedDataFormat = this.preloadedData.summary.preloadedDataFormat
+            }
+            transitiveImportAllowance = this.selectedImportAllowance;
+        }
+
         /**
          * Execute request
          */
@@ -687,7 +710,8 @@ export class CreateProjectComponent {
             coreRepoSailConfigurerSpecification, coreRepoBackendType,
             supportRepoSailConfigurerSpecification, supportRepoBackendType,
             uriGeneratorSpecification, renderingEngineSpecification,
-            creationProp, modificationProp).subscribe(
+            creationProp, modificationProp,
+            preloadedDataFileName, preloadedDataFormat, transitiveImportAllowance).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.basicModals.alert("Create project", "Project created successfully").then(

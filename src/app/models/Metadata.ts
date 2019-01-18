@@ -32,7 +32,8 @@ export enum TransitiveImportMethodAllowance {
     web = "web",
     webFallbackToMirror = "webFallbackToMirror",
     mirrorFallbackToWeb = "mirrorFallbackToWeb",
-    mirror = "mirror"
+    mirror = "mirror",
+    nowhere = "nowhere"
 }
 
 export class DatasetMetadata {

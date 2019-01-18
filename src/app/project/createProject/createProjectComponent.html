@@ -18,12 +18,12 @@
 
                 <div class="form-group">
                     <label class="control-label col-sm-1">Optional data preloading:</label>
-                    <div class="col-sm-5">
+                    <div class="col-sm-3">
                         <select class="form-control input-sm" [(ngModel)]="selectedPreloadOpt" (ngModelChange)="onPreloadChange()" name="preload">
                             <option *ngFor="let p of preloadOptList">{{p}}</option>
                         </select>
                     </div>
-                    <div *ngIf="selectedPreloadOpt != preloadOptNone" class="col-sm-6">
+                    <div *ngIf="selectedPreloadOpt != preloadOptNone" class="col-sm-5">
                         <div class="hbox" style="align-items: center">
                             <div *ngIf="selectedPreloadOpt == preloadOptFromLocalFile" class="hbox" style="align-items: center">
                                 <file-picker (fileChanged)="preloadFromFileChanged($event)" [file]="preloadFile" [accept]="filePickerAccept"></file-picker>
@@ -31,13 +31,13 @@
                                 <select class="form-control input-sm" style="margin-left: 5px; width: initial" [(ngModel)]="selectedInputFormat" name="inputFormat">
                                     <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
                                 </select>
-                                <button class="btn btn-sm btn-default" (click)="preloadFromFile()" [disabled]="!preloadFile" style="margin-left: 10px;">Load</button>
+                                <button class="btn btn-sm btn-default" (click)="preloadFromFile()" [disabled]="!preloadFile" style="margin-left: 10px;">Preload</button>
                             </div>
 
                             <div *ngIf="selectedPreloadOpt == preloadOptFromURI" class="input-group input-group-sm" style="flex: 1;">
                                 <input type="text" class="form-control" [(ngModel)]="preloadUri" name="preloadFromUri">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-default" (click)="preloadFromUri()" [disabled]="!preloadUri || preloadUri.trim() == ''">Load</button>
+                                    <button class="btn btn-default" (click)="preloadFromUri()" [disabled]="!preloadUri || preloadUri.trim() == ''">Preload</button>
                                 </div>
                             </div>
 
@@ -54,9 +54,15 @@
                                 <span *ngIf="preloadedData?.option == selectedPreloadOpt" class="glyphicon glyphicon-ok-circle" title="Data loaded correctly"></span>
                             </div>
                         </div>
-
                     </div>
-
+                    <div *ngIf="selectedPreloadOpt != preloadOptNone" class="col-sm-3">
+                        <div class="hbox" style="align-items: center;">
+                            <label>Transitive imports:</label>
+                            <select class="form-control input-sm" style="margin-left: 5px;" [(ngModel)]="selectedImportAllowance" name="importAllowance">
+                                <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.show}}</option>
+                            </select>                    
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -76,7 +82,8 @@
                                 <input type="text" class="form-control" name="baseURI" [(ngModel)]="baseUriSuffix" (paste)="onBaseUriPaste($event)" [readonly]="baseUriLocked">
                             </div>
                             <div *ngIf="preloadedData" style="margin-left: 4px;">
-                                <button *ngIf="baseUriForced" class="btn btn-sm btn-default" [ngClass]="{ active : baseUriLocked }" (click)="baseUriLocked = !baseUriLocked">
+                                <button *ngIf="baseUriForced" class="btn btn-sm btn-default" [ngClass]="{ active : baseUriLocked }" (click)="baseUriLocked = !baseUriLocked"
+                                    title="This selection has been automatically determined on the basis of the preloaded data; modify it only if you know what you are doing">
                                     <span class="glyphicon glyphicon-lock"></span>
                                 </button>
                                 <span *ngIf="!baseUriForced" class="glyphicon glyphicon-warning-sign" title="Preload operation could not determine the baseURI. Please provide it manually"></span>
@@ -92,7 +99,8 @@
                                 <option *ngFor="let om of ontoModelList" [ngValue]="om.value">{{om.label}}</option>
                             </select>
                             <div *ngIf="preloadedData" style="margin-left: 4px;">
-                                <button *ngIf="ontoModelForced" class="btn btn-sm btn-default" [ngClass]="{ active : ontoModelLocked }" (click)="ontoModelLocked = !ontoModelLocked">
+                                <button *ngIf="ontoModelForced" class="btn btn-sm btn-default" [ngClass]="{ active : ontoModelLocked }" (click)="ontoModelLocked = !ontoModelLocked"
+                                    title="This selection has been automatically determined on the basis of the preloaded data; modify it only if you know what you are doing">
                                     <span class="glyphicon glyphicon-lock"></span>
                                 </button>
                                 <span *ngIf="!ontoModelForced" class="glyphicon glyphicon-warning-sign" title="Preload operation could not determine the model. Please provide it manually"></span>
@@ -106,7 +114,8 @@
                                 <option *ngFor="let lm of lexicalModelList" [ngValue]="lm.value">{{lm.label}}</option>
                             </select>
                             <div *ngIf="preloadedData" style="margin-left: 4px;">
-                                <button *ngIf="lexicalModelForced" class="btn btn-sm btn-default" [ngClass]="{ active : lexicalModelLocked }" (click)="lexicalModelLocked = !lexicalModelLocked">
+                                <button *ngIf="lexicalModelForced" class="btn btn-sm btn-default" [ngClass]="{ active : lexicalModelLocked }" (click)="lexicalModelLocked = !lexicalModelLocked"
+                                    title="This selection has been automatically determined on the basis of the preloaded data; modify it only if you know what you are doing">
                                     <span class="glyphicon glyphicon-lock"></span>
                                 </button>
                                 <span *ngIf="!lexicalModelForced" class="glyphicon glyphicon-warning-sign" title="Preload operation could not determine the lexical model. Please provide it manually"></span>

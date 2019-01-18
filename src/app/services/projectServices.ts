@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { ARTURIResource } from '../models/ARTResources';
+import { TransitiveImportMethodAllowance } from '../models/Metadata';
+import { PluginSpecification } from '../models/Plugins';
+import { AccessLevel, BackendTypesEnum, LockLevel, PreloadedDataSummary, Project, RepositoryAccess, RepositorySummary } from '../models/Project';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from '../utils/VBContext';
-import { Project, AccessLevel, LockLevel, RepositoryAccess, BackendTypesEnum, RepositorySummary, PreloadedDataSummary } from '../models/Project';
-import { ARTURIResource } from '../models/ARTResources';
-import { PluginSpecification } from '../models/Plugins';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
 
 @Injectable()
@@ -129,7 +130,8 @@ export class ProjectServices {
         coreRepoSailConfigurerSpecification?: PluginSpecification, coreBackendType?: BackendTypesEnum,
         supportRepoSailConfigurerSpecification?: PluginSpecification, supportBackendType?: BackendTypesEnum,
         uriGeneratorSpecification?: PluginSpecification, renderingEngineSpecification?: PluginSpecification,
-        creationDateProperty?: ARTURIResource, modificationDateProperty?: ARTURIResource) {
+        creationDateProperty?: ARTURIResource, modificationDateProperty?: ARTURIResource,
+        preloadedDataFileName?: string, preloadedDataFormat?: string, transitiveImportAllowance?: TransitiveImportMethodAllowance) {
         
         console.log("[ProjectServices] createProject");
         var params: any = {
@@ -142,32 +144,20 @@ export class ProjectServices {
             validationEnabled: validationEnabled,
             repositoryAccess: repositoryAccess.stringify(),
             coreRepoID: coreRepoID,
-            supportRepoID: supportRepoID
+            supportRepoID: supportRepoID,
+
+            coreRepoSailConfigurerSpecification: (coreRepoSailConfigurerSpecification) ? JSON.stringify(coreRepoSailConfigurerSpecification) : null,
+            coreBackendType: coreBackendType,
+            supportRepoSailConfigurerSpecification: (supportRepoSailConfigurerSpecification) ? JSON.stringify(supportRepoSailConfigurerSpecification) : null,
+            supportBackendType: supportBackendType,
+            uriGeneratorSpecification: (uriGeneratorSpecification) ? JSON.stringify(uriGeneratorSpecification) : null,
+            renderingEngineSpecification: (renderingEngineSpecification) ? JSON.stringify(renderingEngineSpecification) : null,
+            creationDateProperty: creationDateProperty,
+            modificationDateProperty: modificationDateProperty,
+            preloadedDataFileName: preloadedDataFileName,
+            preloadedDataFormat: preloadedDataFormat,
+            transitiveImportAllowance: transitiveImportAllowance
         };
-        if (coreRepoSailConfigurerSpecification != undefined) {
-            params.coreRepoSailConfigurerSpecification = JSON.stringify(coreRepoSailConfigurerSpecification);
-        }
-        if (coreBackendType != undefined) {
-            params.coreBackendType = coreBackendType;
-        }
-        if (supportRepoSailConfigurerSpecification != undefined) {
-            params.supportRepoSailConfigurerSpecification = JSON.stringify(supportRepoSailConfigurerSpecification);
-        }
-        if (supportBackendType != undefined) {
-            params.supportBackendType = supportBackendType;
-        }
-        if (uriGeneratorSpecification != undefined) {
-            params.uriGeneratorSpecification = JSON.stringify(uriGeneratorSpecification);
-        }
-        if (renderingEngineSpecification != undefined) {
-            params.renderingEngineSpecification = JSON.stringify(renderingEngineSpecification);
-        }
-        if (creationDateProperty != undefined) {
-            params.creationDateProperty = creationDateProperty;
-        }
-        if (modificationDateProperty != undefined) {
-            params.modificationDateProperty = modificationDateProperty;
-        }
         var options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 

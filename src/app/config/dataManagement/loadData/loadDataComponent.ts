@@ -31,6 +31,7 @@ export class LoadDataComponent {
     private fileToUpload: File;
 
     private importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
+        { allowance: TransitiveImportMethodAllowance.nowhere, show: "Do not resolve" },
         { allowance: TransitiveImportMethodAllowance.web, show: "From Web" },
         { allowance: TransitiveImportMethodAllowance.webFallbackToMirror, show: "From Web with fallback to Ontology Mirror" },
         { allowance: TransitiveImportMethodAllowance.mirror, show: "From Ontology Mirror" },
