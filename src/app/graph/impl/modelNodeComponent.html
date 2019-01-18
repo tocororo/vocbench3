@@ -2,27 +2,28 @@
     <svg:g (click)="onClick()" (dblclick)="onDblClick()" style="cursor: pointer;">
 
         <ng-template [ngIf]="node.res.isResource()">
-            <svg:circle *ngIf="nodeShape=='circle'" [attr.class]="'graphNode '+nodeClass" cx="0" cy="0" [attr.r]="measures.radius">
+            <svg:circle *ngIf="nodeShape=='circle'" [attr.class]="'graphNode '+nodeClass" [ngClass]="{ graphNodeSelected: selected }"
+                cx="0" cy="0" [attr.r]="measures.radius">
             </svg:circle> 
     
-            <svg:rect *ngIf="nodeShape=='rect'" [attr.fill]="isObjectProperty ? 'url(#'+nodeClass+'Gradient)' : ''"
-                [attr.class]="'graphNode ' + (!isObjectProperty ? nodeClass : '')" [attr.ngClass]="{ deprecated : deprecated }"
+            <svg:rect *ngIf="nodeShape=='rect'" [attr.class]="'graphNode ' + (!isObjectProperty ? nodeClass : '')" [ngClass]="{ graphNodeSelected: selected }"
+                [attr.fill]="isObjectProperty ? 'url(#'+nodeClass+'Gradient)' : ''"
                 rx="5" ry="5" [attr.x]="-measures.width/2" [attr.y]="-measures.height/2" [attr.width]="measures.width" [attr.height]="measures.height">
             </svg:rect>
             
-            <svg:rect *ngIf="nodeShape=='square'" [attr.class]="'graphNode '+nodeClass" rx="5" ry="5" 
+            <svg:rect *ngIf="nodeShape=='square'" [attr.class]="'graphNode '+nodeClass" [ngClass]="{ graphNodeSelected: selected }" rx="5" ry="5" 
                 [attr.x]="-measures.width/2" [attr.y]="-measures.height/2" [attr.width]="measures.width" [attr.height]="measures.height">
             </svg:rect>
             
-            <polygon *ngIf="nodeShape=='octagon'" [attr.points]="octagonPoints" [attr.class]="'graphNode '+nodeClass"/>
+            <polygon *ngIf="nodeShape=='octagon'" [attr.points]="octagonPoints" [attr.class]="'graphNode '+nodeClass" [ngClass]="{ graphNodeSelected: selected }"/>
     
-            <polygon *ngIf="nodeShape=='label'" [attr.points]="labelPoints" stroke-linejoin="round" [attr.class]="'graphNode '+nodeClass"/>
+            <polygon *ngIf="nodeShape=='label'" [attr.points]="labelPoints" stroke-linejoin="round" [attr.class]="'graphNode '+nodeClass" [ngClass]="{ graphNodeSelected: selected }"/>
             
             <svg:text *ngIf="deprecated" class="deprecated" style="font-size: 18px;" fill="#8e4a4c" [attr.transform]="'translate(-6, 6)'">D</svg:text>
         </ng-template>
 
         <ng-template [ngIf]="!node.res.isResource()">
-            <svg:rect class="graphNode literal" [attr.x]="-measures.width/2" [attr.y]="-measures.height/2" 
+            <svg:rect class="graphNode literal" [ngClass]="{ graphNodeSelected: selected }" [attr.x]="-measures.width/2" [attr.y]="-measures.height/2" 
                 [attr.width]="measures.width" [attr.height]="measures.height">
             </svg:rect>
         </ng-template>

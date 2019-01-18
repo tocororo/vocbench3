@@ -22,9 +22,11 @@
     </defs>
 
     <svg:g *ngIf="initialized" [zoomableOf]="svg">
-        <svg:g *ngFor="let link of graph.links" [link]="link" [mode]="mode"></svg:g>
+        <svg:g *ngFor="let link of graph.links" [id]="'link' + link.index" [link]="link" [selected]="selectedElement == link" (linkClicked)="onLinkClicked($event)"></svg:g>
+        <svg:use *ngIf="linkAhead" [attr.xlink:href]="'#link' + linkAhead.index"></svg:use>
+        
         <svg:g *ngFor="let node of graph.nodes" [modelNode]="node" (nodeClicked)="onNodeClicked($event)" (nodeDblClicked)="onNodeDblClicked($event)"
-            [draggableNode]="node" [draggableInGraph]="graph" [rendering]="rendering">
+            [draggableNode]="node" [draggableInGraph]="graph" [rendering]="rendering" [selected]="selectedElement == node">
         </svg:g>
     </svg:g>
 </svg:svg>

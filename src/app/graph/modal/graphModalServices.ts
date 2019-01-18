@@ -48,15 +48,15 @@ export class GraphModalServices {
             }
         });
         links.forEach(l => {
-            if (!ResourceUtils.containsNode(annotatedRes, l.predicate)) {
-                annotatedRes.push(l.predicate);
+            if (!ResourceUtils.containsNode(annotatedRes, l.res)) {
+                annotatedRes.push(l.res);
             }
         })
         this.resourceService.getResourcesInfo(annotatedRes).subscribe(
             resources => {
                 resources.forEach(r => {
                     GraphUtils.getLinksWithPredicate(links, r).forEach(l => {
-                        l.predicate = r;
+                        l.res = r;
                     })
                     let n = GraphUtils.getNodeOfValue(nodes, r);
                     if (n != null) {

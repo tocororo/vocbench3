@@ -5,6 +5,7 @@ import { GraphMode } from "./abstractGraph";
 import { DataGraphComponent } from "./impl/dataGraphComponent";
 import { ModelGraphComponent } from "./impl/modelGraphComponent";
 import { ForceDirectedGraph, GraphForces } from "./model/ForceDirectedGraph";
+import { Link } from "./model/Link";
 import { Node } from "./model/Node";
 
 @Component({
@@ -19,7 +20,7 @@ export class GraphPanel {
     @ViewChild(DataGraphComponent) viewChildDataGraph: DataGraphComponent;
     @ViewChild(ModelGraphComponent) viewChildModelGraph: ModelGraphComponent;
 
-    private selectedNode: Node;
+    private selectedElement: Node | Link;
     private forces: GraphForces = new GraphForces();
 
     constructor(private sharedModals: SharedModalServices) { }
@@ -32,15 +33,20 @@ export class GraphPanel {
         }
     }
 
+    private isSelectedElementNode() {
+        return (this.selectedElement != null && this.selectedElement instanceof Node);
+    }
+
     private showResourceView() {
-        this.sharedModals.openResourceView(<ARTResource>this.selectedNode.res, false);
+        this.sharedModals.openResourceView(<ARTResource>this.selectedElement.res, false);
     }
 
     private fixNode() {
-        this.selectedNode.fixed = !this.selectedNode.fixed;
-        if (!this.selectedNode.fixed) {
-            this.selectedNode.fx = null;
-            this.selectedNode.fy = null;
+        let selectedNode = <Node>this.selectedElement;
+        selectedNode.fixed = !selectedNode.fixed;
+        if (!selectedNode.fixed) {
+            selectedNode.fx = null;
+            selectedNode.fy = null;
         }
     }
     private fixAll() {
@@ -58,7 +64,7 @@ export class GraphPanel {
         });
     }
 
-    private onNodeSelected(node: Node) {
-        this.selectedNode = node;
+    private onElementSelected(element: Node | Link) {
+        this.selectedElement = element;
     }
 }

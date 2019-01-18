@@ -89,7 +89,7 @@ export class ForceDirectedGraph {
          * Here I collect links with the same source-target and set an offset for them,
          * so they will be rendered with different x,y coordinates (not overlapping each other).
          */
-        if (this.links.length > 0 && this.links[0].predicate != null) {
+        if (this.links.length > 0 && this.links[0].res != null) {
             //resets all the offsets: useful since once the links are changed, some links could be no more overlapped
             this.links.forEach(l => l.offset = 0);
 
@@ -115,11 +115,12 @@ export class ForceDirectedGraph {
                 if (group.length == 1) {
                     group[0].offset = -1; //offset -1 in order to avoid multiplication by 0 when computing the control point of the loop
                 } else {
-                    let shift = Math.floor(group.length / 2);
-                    for (let i = 0; i < group.length; i++) { //links overlapped, but with source and target swapped have inverted sign
-                        let offset = i - shift;
-                        if (offset == 0) {
-                            offset = group.length - shift;
+                    for (let i = 0, x = group.length-1; i < group.length; i++, x--) {
+                        let offset: number; //-1, 1, -2, 2, -3, 3, ...
+                        if (x % 2 == 0) { //even index
+                            offset = -x/2 - 1;
+                        } else { //odd index
+                            offset = x/2 + 0.5;
                         }
                         group[i].offset = offset;
                     }

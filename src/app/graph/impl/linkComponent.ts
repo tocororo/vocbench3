@@ -1,6 +1,5 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { RDFResourceRolesEnum } from '../../models/ARTResources';
-import { GraphMode } from '../abstractGraph';
 import { Constants } from '../model/GraphConstants';
 import { GraphUtils } from '../model/GraphUtils';
 import { Link } from '../model/Link';
@@ -11,30 +10,27 @@ import { Link } from '../model/Link';
     styleUrls: ['../graph.css']
 })
 export class LinkComponent {
+    @Output() linkClicked: EventEmitter<Link> = new EventEmitter<Link>();
     @Input('link') link: Link;
-    @Input() mode: GraphMode;
+    @Input() selected: boolean = false;
 
     @ViewChild('textEl') textElement: ElementRef;
 
     private linkClass: string = "";
     private arrowClass: string = "";
-    private dashed: boolean = false;
 
-    private showLabel: boolean = false;
+    // private hover: boolean = false;
 
     ngOnInit() {
         this.initLinkStyle();
     }
 
     private initLinkStyle() {
-        if (this.link.predicate != null) {
+        if (this.link.res != null) {
             //distinguish the type or predicate
-            let role: RDFResourceRolesEnum = this.link.predicate.getRole();
+            let role: RDFResourceRolesEnum = this.link.res.getRole();
             this.linkClass = role+"Link";
             this.arrowClass = role+"Arrow";
-            if (role == RDFResourceRolesEnum.objectProperty) {
-                this.dashed = true;
-            }
         }
     }
 
@@ -96,6 +92,12 @@ export class LinkComponent {
             return this.textElement.nativeElement.clientWidth + padding*2;
         }
         return padding*2;
+    }
+
+    private onClick() {
+        if (this.link.res != null) {
+            this.linkClicked.emit(this.link);
+        }
     }
 
 }

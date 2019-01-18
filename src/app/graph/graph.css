@@ -14,6 +14,11 @@
     stroke-width: 2px;
 }
 
+.graphNodeSelected {
+    stroke: red !important;
+    stroke-width: 2px;
+}
+
 /* If node has children to expand */
 .parentNode {
     stroke-width: 5px;
@@ -104,6 +109,10 @@
     stroke: #000;
     stroke-width: 2px;
     fill: none;
+}
+
+.linkSelected {
+    stroke: red !important;
 }
 
 .annotationPropertyLink { stroke: #ffad00 !important; }

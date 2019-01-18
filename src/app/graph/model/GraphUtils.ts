@@ -106,7 +106,7 @@ export class GraphUtils {
     public static getLinksWithPredicate(links: Link[], value: ARTURIResource): Link[] {
         let linksWithPred: Link[] = [];
         for (let i = 0; i < links.length; i++) {
-            if (links[i].predicate.getNominalValue() == value.getNominalValue()) {
+            if (links[i].res.getNominalValue() == value.getNominalValue()) {
                 linksWithPred.push(links[i]);
             }
         }

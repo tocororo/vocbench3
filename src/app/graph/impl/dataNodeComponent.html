@@ -14,7 +14,8 @@
                 </linearGradient>
             </defs>
 
-            <svg:rect class="graphNode" rx="5" ry="5" [attr.x]="-measures.width/2" [attr.y]="-measures.height/2" 
+            <svg:rect class="graphNode" [ngClass]="{ graphNodeSelected: selected }"
+                rx="5" ry="5" [attr.x]="-measures.width/2" [attr.y]="-measures.height/2" 
                 [attr.width]="measures.width" [attr.height]="measures.height" [attr.fill]="'url(#gradient'+node.index+')'">
             </svg:rect>
 
@@ -32,8 +33,8 @@
 
         <!-- For literal no top stripe -->
         <ng-template [ngIf]="!node.res.isResource()">
-            <svg:rect class="graphNode literal" [attr.x]="-measures.width/2" [attr.y]="-measures.height/2" 
-                [attr.width]="measures.width" [attr.height]="measures.height">
+            <svg:rect class="graphNode literal" [ngClass]="{ graphNodeSelected: selected }"
+                [attr.x]="-measures.width/2" [attr.y]="-measures.height/2" [attr.width]="measures.width" [attr.height]="measures.height">
             </svg:rect>
 
             <svg:text #textEl style="visibility: hidden">{{getRendering()}}</svg:text>

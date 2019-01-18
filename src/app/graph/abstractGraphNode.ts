@@ -10,6 +10,7 @@ export abstract class AbstractGraphNode {
     @ViewChild('textEl') textElement: ElementRef;
 
     @Input() rendering: boolean = true;
+    @Input() selected: boolean = false;
     @Output() nodeClicked: EventEmitter<Node> = new EventEmitter<Node>();
     @Output() nodeDblClicked: EventEmitter<Node> = new EventEmitter<Node>();
 
