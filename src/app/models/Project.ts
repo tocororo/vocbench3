@@ -1,3 +1,4 @@
+import { ARTURIResource, ResourceUtils } from "./ARTResources";
 import { OntoLex, OWL, RDFS, SKOS, SKOSXL } from "./Vocabulary";
 
 export class Project {
@@ -12,17 +13,17 @@ export class Project {
     private open: boolean;
     private repositoryLocation: { location: "remote" | "local", serverURL?: string };
     private status: { status: string, message?: string };
-    
+
     constructor(name?: string) {
         if (name != undefined) {
-            this.name = name;       
+            this.name = name;
         }
     }
-    
+
     public setName(name: string) {
         this.name = name;
     }
-    
+
     public getName(): string {
         return this.name;
     }
@@ -30,7 +31,7 @@ export class Project {
     public setBaseURI(baseURI: string) {
         this.baseURI = baseURI;
     }
-    
+
     public getBaseURI(): string {
         return this.baseURI;
     }
@@ -38,15 +39,15 @@ export class Project {
     public setDefaultNamespace(defaultNamespace: string) {
         this.defaultNamespace = defaultNamespace;
     }
-    
+
     public getDefaultNamespace(): string {
         return this.defaultNamespace;
     }
-    
+
     public setAccessible(accessible: boolean) {
         this.accessible = accessible;
     }
-    
+
     public isAccessible(): boolean {
         return this.accessible;
     }
@@ -54,7 +55,7 @@ export class Project {
     public setHistoryEnabled(historyEnabled: boolean) {
         this.historyEnabled = historyEnabled;
     }
-    
+
     public isHistoryEnabled(): boolean {
         return this.historyEnabled;
     }
@@ -62,11 +63,11 @@ export class Project {
     public setValidationEnabled(validationEnabled: boolean) {
         this.validationEnabled = validationEnabled;
     }
-    
+
     public isValidationEnabled(): boolean {
         return this.validationEnabled;
     }
-    
+
     public setModelType(modelType: string) {
         this.model = modelType;
     }
@@ -100,7 +101,7 @@ export class Project {
             return "OntoLex";
         }
     }
-    
+
     public setOpen(open: boolean) {
         this.open = open;
     }
@@ -117,14 +118,14 @@ export class Project {
     public isRepositoryRemote(): boolean {
         return this.repositoryLocation.location == "remote";
     }
-    
-    public setStatus(status:  { status: string, message?: string }) {
+
+    public setStatus(status: { status: string, message?: string }) {
         this.status = status;
     }
-    public getStatus():  { status: string, message?: string } {
+    public getStatus(): { status: string, message?: string } {
         return this.status;
     }
-    
+
 }
 
 export enum ProjectTypesEnum {
@@ -154,9 +155,9 @@ export class RepositorySummary {
     public description: string;
     public remoteRepoSummary: {
         serverURL: string;
-		repositoryId: string;
-		username: string;
-		password: string;
+        repositoryId: string;
+        username: string;
+        password: string;
     }
 }
 
@@ -214,8 +215,25 @@ export class ProjectTableColumnStruct {
 
 export class PreloadedDataSummary {
     public baseURI?: string;
-	public model?: string;
-	public lexicalizationModel?: string;
-	public preloadedDataFile: string;
-	public preloadedDataFormat: string;
+    public model?: ARTURIResource;
+    public lexicalizationModel?: ARTURIResource;
+    public preloadedDataFile: string;
+    public preloadedDataFormat: string;
+    public warnings: PreloadWarning[];
+
+    public static parse(json: any): PreloadedDataSummary {
+        return {
+            baseURI: json.baseURI,
+            model: (json.model != null) ? ResourceUtils.parseURI(json.model) : null,
+            lexicalizationModel: (json.lexicalizationModel != null) ? ResourceUtils.parseURI(json.lexicalizationModel) : null,
+            preloadedDataFile: json.preloadedDataFile,
+            preloadedDataFormat: json.preloadedDataFormat,
+            warnings: json.warnings
+        }
+    }
+}
+
+export class PreloadWarning {
+    public '@type': string;
+    public message: string;
 }

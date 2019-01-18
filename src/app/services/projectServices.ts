@@ -428,7 +428,11 @@ export class ProjectServices {
             preloadedData: preloadedData,
             preloadedDataFormat: preloadedDataFormat,
         };
-        return this.httpMgr.uploadFile(this.serviceName, "preloadDataFromFile", params);
+        return this.httpMgr.uploadFile(this.serviceName, "preloadDataFromFile", params).map(
+            stResp => {
+                return PreloadedDataSummary.parse(stResp);
+            }
+        );
     }
 
     /**
@@ -442,7 +446,11 @@ export class ProjectServices {
             preloadedDataURL: preloadedDataURL,
             preloadedDataFormat: preloadedDataFormat,
         };
-        return this.httpMgr.doPost(this.serviceName, "preloadDataFromURL", params);
+        return this.httpMgr.doPost(this.serviceName, "preloadDataFromURL", params).map(
+            stResp => {
+                return PreloadedDataSummary.parse(stResp);
+            }
+        );
     }
 
     /**
@@ -456,7 +464,11 @@ export class ProjectServices {
             connectorId: connectorId,
             datasetId: datasetId,
         };
-        return this.httpMgr.doPost(this.serviceName, "preloadDataFromCatalog", params);
+        return this.httpMgr.doPost(this.serviceName, "preloadDataFromCatalog", params).map(
+            stResp => {
+                return PreloadedDataSummary.parse(stResp);
+            }
+        );
     }
 
 }

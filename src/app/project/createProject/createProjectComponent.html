@@ -56,38 +56,62 @@
                         </div>
 
                     </div>
-                    
+
                 </div>
 
                 <div class="form-group">
                     <label class="control-label col-sm-1">Base URI:</label>
                     <div class="col-sm-11">
-                        <div class="input-group input-group-sm">
-                            <div class="input-group-btn">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                    <span style="margin-left: 5px;">{{baseUriPrefix}}</span>
-                                </button>
-                                <ul class="dropdown-menu" style="min-width: 70px;">
-                                    <li *ngFor="let pref of baseUriPrefixList"><a (click)="baseUriPrefix = pref">{{pref}}</a></li>
-                                </ul>
+                        <div class="hbox" style="align-items: center">
+                            <div class="input-group input-group-sm" style="width: 100%">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" [disabled]="baseUriLocked">
+                                        <span class="caret"></span>
+                                        <span style="margin-left: 5px;">{{baseUriPrefix}}</span>
+                                    </button>
+                                    <ul class="dropdown-menu" style="min-width: 70px;">
+                                        <li *ngFor="let pref of baseUriPrefixList"><a (click)="baseUriPrefix = pref">{{pref}}</a></li>
+                                    </ul>
+                                </div>
+                                <input type="text" class="form-control" name="baseURI" [(ngModel)]="baseUriSuffix" (paste)="onBaseUriPaste($event)" [readonly]="baseUriLocked">
                             </div>
-                            <input type="text" class="form-control" name="baseURI" [(ngModel)]="baseUriSuffix" (paste)="onBaseUriPaste($event)">
+                            <div *ngIf="preloadedData" style="margin-left: 4px;">
+                                <button *ngIf="baseUriForced" class="btn btn-sm btn-default" [ngClass]="{ active : baseUriLocked }" (click)="baseUriLocked = !baseUriLocked">
+                                    <span class="glyphicon glyphicon-lock"></span>
+                                </button>
+                                <span *ngIf="!baseUriForced" class="glyphicon glyphicon-warning-sign" title="Preload operation could not determine the baseURI. Please provide it manually"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-1">Model:</label>
                     <div class="col-sm-3">
-                        <select class="form-control input-sm" [(ngModel)]="ontoModelType" (ngModelChange)="onOntoModelChanged()" name="ontoModelType">
-                            <option *ngFor="let om of ontoModelList" [ngValue]="om.value">{{om.label}}</option>
-                        </select>
+                        <div class="hbox" style="align-items: center">
+                            <select class="form-control input-sm" [(ngModel)]="ontoModelType" (ngModelChange)="onOntoModelChanged()" name="ontoModelType" [disabled]="ontoModelLocked">
+                                <option *ngFor="let om of ontoModelList" [ngValue]="om.value">{{om.label}}</option>
+                            </select>
+                            <div *ngIf="preloadedData" style="margin-left: 4px;">
+                                <button *ngIf="ontoModelForced" class="btn btn-sm btn-default" [ngClass]="{ active : ontoModelLocked }" (click)="ontoModelLocked = !ontoModelLocked">
+                                    <span class="glyphicon glyphicon-lock"></span>
+                                </button>
+                                <span *ngIf="!ontoModelForced" class="glyphicon glyphicon-warning-sign" title="Preload operation could not determine the model. Please provide it manually"></span>
+                            </div>
+                        </div>
                     </div>
                     <label class="control-label col-sm-1">Lexicalization:</label>
                     <div class="col-sm-3">
-                        <select class="form-control input-sm" [(ngModel)]="lexicalModelType" name="lexicalModelType" [disabled]="isOntoModelOntolex()">
-                            <option *ngFor="let lm of lexicalModelList" [ngValue]="lm.value">{{lm.label}}</option>
-                        </select>
+                        <div class="hbox" style="align-items: center">
+                            <select class="form-control input-sm" [(ngModel)]="lexicalModelType" name="lexicalModelType" [disabled]="isOntoModelOntolex() || lexicalModelLocked">
+                                <option *ngFor="let lm of lexicalModelList" [ngValue]="lm.value">{{lm.label}}</option>
+                            </select>
+                            <div *ngIf="preloadedData" style="margin-left: 4px;">
+                                <button *ngIf="lexicalModelForced" class="btn btn-sm btn-default" [ngClass]="{ active : lexicalModelLocked }" (click)="lexicalModelLocked = !lexicalModelLocked">
+                                    <span class="glyphicon glyphicon-lock"></span>
+                                </button>
+                                <span *ngIf="!lexicalModelForced" class="glyphicon glyphicon-warning-sign" title="Preload operation could not determine the lexical model. Please provide it manually"></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-sm-4 text-center">
                         <div class="checkbox-inline">

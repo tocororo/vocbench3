@@ -30,26 +30,6 @@ export class CreateProjectComponent {
      */
     private projectName: string;
 
-    private baseUriPrefixList: string[] = ["http://", "https://"];
-    private baseUriPrefix: string = this.baseUriPrefixList[0];
-    private baseUriSuffix: string;;
-
-    private ontoModelList = [
-        { value: new ARTURIResource(RDFS.uri), label: "RDFS" },
-        { value: new ARTURIResource(OWL.uri), label: "OWL" },
-        { value: new ARTURIResource(SKOS.uri), label: "SKOS" },
-        { value: new ARTURIResource(OntoLex.uri), label: "OntoLex" }
-    ];
-    private ontoModelType: ARTURIResource = this.ontoModelList[1].value; //default OWL
-
-    private lexicalModelList = [
-        { value: new ARTURIResource(RDFS.uri), label: "RDFS" },
-        { value: new ARTURIResource(SKOS.uri), label: "SKOS" },
-        { value: new ARTURIResource(SKOSXL.uri), label: "SKOSXL" },
-        { value: new ARTURIResource(OntoLex.uri), label: "OntoLex" }
-    ];
-    private lexicalModelType: ARTURIResource = this.lexicalModelList[0].value;
-
     //preload
     private readonly preloadOptNone: PreloadOpt = PreloadOpt.NONE;
     private readonly preloadOptFromLocalFile: PreloadOpt = PreloadOpt.FROM_LOCAL_FILE;
@@ -64,10 +44,42 @@ export class CreateProjectComponent {
     private preloadUri: string;
     private preloadCatalog: string; //id-title of the datasetCatalog
     private preloadedData: { summary: PreloadedDataSummary, option: PreloadOpt};
-    
+
+    //baseURI
+    private baseUriPrefixList: string[] = ["http://", "https://"];
+    private baseUriPrefix: string = this.baseUriPrefixList[0];
+    private baseUriSuffix: string;
+    private baseUriForced: boolean = false;
+    private baseUriLocked: boolean = false;
+
+    //onto/lexical models
+    private ontoModelList = [
+        { value: new ARTURIResource(RDFS.uri), label: "RDFS" },
+        { value: new ARTURIResource(OWL.uri), label: "OWL" },
+        { value: new ARTURIResource(SKOS.uri), label: "SKOS" },
+        { value: new ARTURIResource(OntoLex.uri), label: "OntoLex" }
+    ];
+    private ontoModelType: ARTURIResource = this.ontoModelList[1].value; //default OWL
+    private ontoModelForced: boolean = false;
+    private ontoModelLocked: boolean = false;
+
+    private lexicalModelList = [
+        { value: new ARTURIResource(RDFS.uri), label: "RDFS" },
+        { value: new ARTURIResource(SKOS.uri), label: "SKOS" },
+        { value: new ARTURIResource(SKOSXL.uri), label: "SKOSXL" },
+        { value: new ARTURIResource(OntoLex.uri), label: "OntoLex" }
+    ];
+    private lexicalModelType: ARTURIResource = this.lexicalModelList[0].value;
+    private lexicalModelForced: boolean = false;
+    private lexicalModelLocked: boolean = false;
+
+    //history/validation
     private history: boolean = false;
     private validation: boolean = false;
 
+    /**
+     * DATA STORE
+     */
     private repositoryAccessList: RepositoryAccessType[] = [
         RepositoryAccessType.CreateLocal, RepositoryAccessType.CreateRemote, RepositoryAccessType.AccessExistingRemote
     ]
@@ -182,12 +194,23 @@ export class CreateProjectComponent {
         }
     }
 
-    //========= PRELOAD HANDLERS - BEGIN ==================
+    /** =============================================================
+     * =================== PRELOAD HANDLERS ==========================
+     * ============================================================= */
 
     private onPreloadChange() {
-        // if (this.selectedPreloadOpt == PreloadOpt.FROM_DATASET_CATALOG) {
-        //     this.preloadFromDatasetCatalog();
-        // } else
+        //reset preload info
+        this.baseUriForced = false;
+        this.baseUriLocked = false;
+        this.ontoModelForced = false;
+        this.ontoModelLocked = false;
+        this.lexicalModelForced = false;
+        this.lexicalModelLocked = false;
+        this.preloadFile = null;
+        this.preloadUri = null;
+        this.preloadCatalog = null;
+        this.preloadedData = null;
+
         if (this.selectedPreloadOpt == PreloadOpt.FROM_LOCAL_FILE) {
             if (this.inputFormats == null) {
                 this.initDataFormats();
@@ -215,7 +238,7 @@ export class CreateProjectComponent {
         this.projectService.preloadDataFromFile(this.preloadFile, this.selectedInputFormat.name).subscribe(
             (summary: PreloadedDataSummary) => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.preloadedDataHandler(summary);
+                this.preloadedResponseDataHandler(summary);
             }
         );
     }
@@ -248,7 +271,7 @@ export class CreateProjectComponent {
         this.projectService.preloadDataFromURL(this.preloadUri).subscribe(
             (summary: PreloadedDataSummary) => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.preloadedDataHandler(summary);
+                this.preloadedResponseDataHandler(summary);
             }
         );
     }
@@ -261,7 +284,7 @@ export class CreateProjectComponent {
                 this.projectService.preloadDataFromCatalog(data.connectorId, data.dataset.id).subscribe(
                     (summary: PreloadedDataSummary) => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.preloadedDataHandler(summary);
+                        this.preloadedResponseDataHandler(summary);
                     }
                 );
             },
@@ -269,42 +292,96 @@ export class CreateProjectComponent {
         );
     }
 
-    private preloadedDataHandler(summary: PreloadedDataSummary) {
+    private preloadedResponseDataHandler(summary: PreloadedDataSummary) {
+        if (summary.warnings.length > 0) {
+            let message: string = "";
+            summary.warnings.forEach(w => {
+                message += w.message+"\n";
+            })
+            this.basicModals.alert("Prelad data", message, "warning");
+        }
         this.preloadedData = {
             summary: summary,
             option: this.selectedPreloadOpt
         }
+        if (summary.baseURI != null) {
+            this.forceBaseURI(summary.baseURI);
+            this.baseUriForced = true;
+            this.baseUriLocked = true;
+        }
+        if (summary.model != null) {
+            this.forceOntoModel(summary.model.getURI());
+            this.ontoModelForced = true;
+            this.ontoModelLocked = true;
+        }
+        if (summary.lexicalizationModel != null) {
+            this.forceLexicalModel(summary.lexicalizationModel.getURI());
+            this.lexicalModelForced = true;
+            this.lexicalModelLocked = true;
+        }
     }
 
-    //========= PRELOAD HANDLERS - END ==================
+    //================ PRELOAD HANDLERS - END =======================
+
+    /** =============================================================
+     * =================== BASEURI HANDLERS ==========================
+     * ============================================================= */
 
     /**
      * When user paste a uri update baseUriPrefix and baseUriSuffix
      * @param event
      */
     private onBaseUriPaste(event: ClipboardEvent) {
-        var pastedText = event.clipboardData.getData("text/plain");
+        let pastedText = event.clipboardData.getData("text/plain");
+        this.forceBaseURI(pastedText, event);
+    }
+
+    /**
+     * Forces the given baseURI. This method is useful in case of pasted baseURI (event is provided),
+     * or in case of baseURI obtained after a data preload
+     */
+    private forceBaseURI(baseURI: string, event?: ClipboardEvent) {
         for (var i = 0; i < this.baseUriPrefixList.length; i++) {
             let pref = this.baseUriPrefixList[i];
-            if (pastedText.startsWith(pref)) {
+            if (baseURI.startsWith(pref)) {
                 this.baseUriPrefix = pref;
-                this.baseUriSuffix = pastedText.substring(this.baseUriPrefix.length);
-                event.preventDefault();
+                this.baseUriSuffix = baseURI.substring(this.baseUriPrefix.length);
+                if (event) event.preventDefault();
                 break;
             }
         }
     }
 
+    //=============== BASEURI HANDLERS - END ========================
+
+    /** =============================================================
+     * =================== MODELS HANDLERS ==========================
+     * ============================================================= */
+
     private onOntoModelChanged() {
         if (this.ontoModelType.getURI() == OntoLex.uri) {
-            this.lexicalModelList.forEach(
-                (model) => {
-                    if (model.value.getURI() == OntoLex.uri) {
-                        this.lexicalModelType =  model.value;
-                    }
-                }
-            );
+            this.forceLexicalModel(OntoLex.uri);
         }
+    }
+
+    private forceOntoModel(ontoModelUri: string) {
+        console.log("forcing ontoModel", ontoModelUri);
+        this.ontoModelList.forEach(ontoModel => {
+                if (ontoModel.value.getURI() == ontoModelUri) {
+                    this.ontoModelType =  ontoModel.value;
+                }
+            }
+        );
+    }
+
+    private forceLexicalModel(lexicalModelUri: string) {
+        console.log("forcing lexicalModelUri", lexicalModelUri);
+        this.lexicalModelList.forEach(lexModel => {
+                if (lexModel.value.getURI() == lexicalModelUri) {
+                    this.lexicalModelType =  lexModel.value;
+                }
+            }
+        );
     }
 
     /**
@@ -314,9 +391,11 @@ export class CreateProjectComponent {
         return this.ontoModelType.getURI() == OntoLex.uri;
     }
 
-    /**
-     * DATA STORE MANAGEMENT (REPOSITORY ACCESS)
-     */
+    //================= MODELS HANDLERS - END =======================
+
+    /** =============================================================
+     * ========= DATA STORE MANAGEMENT (REPOSITORY ACCESS) ==========
+     * ============================================================= */
 
     /**
      * Tells if the selected RepositoryAccess is remote.
@@ -364,6 +443,12 @@ export class CreateProjectComponent {
             }
         );
     }
+
+    //=============== DATA STORE MANAGEMENT - END ===================
+
+    /** =============================================================
+     * ===================== OPTIONAL SETTINGS  =====================
+     * ============================================================= */
 
     /**
      * URI GENERATOR PLUGIN
@@ -459,7 +544,8 @@ export class CreateProjectComponent {
         }
     }
 
-    //------------------------------------
+    //================ OPTIONAL SETTINGS - END =====================
+
 
     private createtNew() {
 
