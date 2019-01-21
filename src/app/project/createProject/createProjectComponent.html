@@ -110,7 +110,7 @@
                     <label class="control-label col-sm-1">Lexicalization:</label>
                     <div class="col-sm-3">
                         <div class="hbox" style="align-items: center">
-                            <select class="form-control input-sm" [(ngModel)]="lexicalModelType" name="lexicalModelType" [disabled]="isOntoModelOntolex() || lexicalModelLocked">
+                            <select class="form-control input-sm" [(ngModel)]="lexicalModelType" name="lexicalModelType" [disabled]="(isOntoModelOntolex() && !lexicalModelForced) || lexicalModelLocked">
                                 <option *ngFor="let lm of lexicalModelList" [ngValue]="lm.value">{{lm.label}}</option>
                             </select>
                             <div *ngIf="preloadedData" style="margin-left: 4px;">

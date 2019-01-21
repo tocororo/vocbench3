@@ -369,7 +369,7 @@ export class CreateProjectComponent {
      * ============================================================= */
 
     private onOntoModelChanged() {
-        if (this.ontoModelType.getURI() == OntoLex.uri) {
+        if (this.ontoModelType.getURI() == OntoLex.uri && !this.lexicalModelForced) {
             this.forceLexicalModel(OntoLex.uri);
         }
     }
