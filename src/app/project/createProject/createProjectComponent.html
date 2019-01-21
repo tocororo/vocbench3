@@ -27,7 +27,7 @@
                         <div class="hbox" style="align-items: center">
                             <div *ngIf="selectedPreloadOpt == preloadOptFromLocalFile" class="hbox" style="align-items: center">
                                 <file-picker (fileChanged)="preloadFromFileChanged($event)" [file]="preloadFile" [accept]="filePickerAccept"></file-picker>
-                                <label style="margin-left: 15px;">Format:</label>
+                                <label style="margin-left: 8px;">Format:</label>
                                 <select class="form-control input-sm" style="margin-left: 5px; width: initial" [(ngModel)]="selectedInputFormat" name="inputFormat">
                                     <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
                                 </select>

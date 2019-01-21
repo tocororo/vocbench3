@@ -564,6 +564,13 @@ export class CreateProjectComponent {
             this.basicModals.alert("Create project", "Project name is missing or not valid", "warning");
             return;
         }
+
+        //check preloading data
+        if (this.selectedPreloadOpt != this.preloadOptNone && this.preloadedData == null) {
+            this.basicModals.alert("Create project", "No data preloaded. Please, load data or select '" + this.preloadOptNone + "' if you don't want to preload any.", "warning");
+            return
+        }
+
         //check baseURI
         if (!this.baseUriSuffix || this.baseUriSuffix.trim() == "") {
             this.basicModals.alert("Create project", "BaseURI is missing or not valid", "warning");
