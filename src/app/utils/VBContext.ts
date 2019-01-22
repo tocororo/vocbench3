@@ -1,15 +1,13 @@
-import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
-import { Project } from '../models/Project';
 import { VersionInfo } from '../models/History';
 import { PrefixMapping } from '../models/Metadata';
-import { User, ProjectUserBinding } from '../models/User';
+import { Project } from '../models/Project';
+import { ProjectUserBinding, User } from '../models/User';
 import { UIUtils } from "./UIUtils";
-import { Cookie } from "./Cookie";
 
 class ProjectContext {
     private project: Project;
-    private defaultNamespace: string;
     private prefixMappings: PrefixMapping[];
+    private ctxVersion: VersionInfo; // version used
 
     setProject(project: Project) { this.project = project; }
     getProject(): Project { return this.project; }
@@ -17,17 +15,19 @@ class ProjectContext {
     setPrefixMappings(mappings: PrefixMapping[]) { this.prefixMappings = mappings; }
     getPrefixMappings(): PrefixMapping[] { return this.prefixMappings; }
 
+    setContextVersion(version: VersionInfo) { this.ctxVersion = version; }
+    getContextVersion(): VersionInfo { return this.ctxVersion; }
+
     reset() {
         this.project = null;
-        this.defaultNamespace = null;
         this.prefixMappings = null;
+        this.ctxVersion = null;
     }
 }
 
 export class VBContext {
 
     private static workingProjectCtx: ProjectContext = new ProjectContext();
-    private static ctxVersion: VersionInfo; // version used
     private static projectChanged: boolean;
     private static loggedUser: User;
     private static puBinging: ProjectUserBinding;
@@ -36,6 +36,8 @@ export class VBContext {
      * Methods for managing context project (project that is set as ctx_project requests parameter)
      */
     static setWorkingProject(project: Project) {
+        this.workingProjectCtx.reset();
+        this.puBinging = null;
         this.workingProjectCtx.setProject(project);
     }
     static getWorkingProject(): Project {
@@ -51,13 +53,13 @@ export class VBContext {
      * Methods for managing context version (version that is set as ctx_version requests parameter)
      */
     static setContextVersion(version: VersionInfo) {
-        this.ctxVersion = version;
+        this.workingProjectCtx.setContextVersion(version);
     }
     static getContextVersion(): VersionInfo {
-        return this.ctxVersion;
+        return this.workingProjectCtx.getContextVersion();
     }
     static removeContextVersion() {
-        this.ctxVersion = null;
+        this.workingProjectCtx.setContextVersion(null);
     }
 
     /**
@@ -109,8 +111,6 @@ export class VBContext {
      */
     static resetContext() {
         this.workingProjectCtx.reset();
-        // this.ctxProject = null;
-        // this.sessionToken = null;
         this.loggedUser = null;
         this.puBinging = null;
     }

@@ -1,13 +1,12 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { Component } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
-import { DumpCreationModal, DumpCreationModalData } from "./dumpCreationModal";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { RepositoryStatus, VersionInfo } from '../../../models/History';
 import { VersionsServices } from "../../../services/versionsServices";
-import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
-import { VBContext } from '../../../utils/VBContext';
 import { UIUtils } from '../../../utils/UIUtils';
-import { RepositoryAccess, RepositoryAccessType } from '../../../models/Project';
-import { VersionInfo, RepositoryStatus } from '../../../models/History';
+import { VBContext } from '../../../utils/VBContext';
+import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
+import { DumpCreationModal, DumpCreationModalData } from "./dumpCreationModal";
 
 @Component({
     selector: "versioning-component",

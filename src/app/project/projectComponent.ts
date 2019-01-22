@@ -1,24 +1,22 @@
-import { Component, OnInit, OnDestroy, ElementRef } from "@angular/core";
+import { Component, ElementRef, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { Observable } from 'rxjs/Observable';
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
-import { AbstractProjectComponent } from "./abstractProjectComponent";
-import { ProjectPropertiesModal, ProjectPropertiesModalData } from "./projectPropertiesModal";
-import { RemoteRepoModalData, RemoteRepoModal } from "./remoteRepoModal";
-import { ProjectACLModal } from "./projectACL/projectACLModal";
-import { ProjectTableConfigModal } from "./projectTableConfig/projectTableConfigModal";
-import { ProjectServices } from "../services/projectServices";
-import { MetadataServices } from "../services/metadataServices";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { Project, ProjectTableColumnStruct } from '../models/Project';
 import { AdministrationServices } from "../services/administrationServices";
+import { MetadataServices } from "../services/metadataServices";
+import { ProjectServices } from "../services/projectServices";
+import { UserServices } from "../services/userServices";
+import { UIUtils } from "../utils/UIUtils";
+import { VBCollaboration } from '../utils/VBCollaboration';
 import { VBContext } from '../utils/VBContext';
 import { VBProperties } from '../utils/VBProperties';
-import { VBCollaboration } from '../utils/VBCollaboration';
-import { UIUtils } from "../utils/UIUtils";
-import { Cookie } from "../utils/Cookie";
-import { Project, ProjectTypesEnum, ProjectTableColumnStruct } from '../models/Project';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { UserServices } from "../services/userServices";
+import { AbstractProjectComponent } from "./abstractProjectComponent";
+import { ProjectACLModal } from "./projectACL/projectACLModal";
+import { ProjectPropertiesModal, ProjectPropertiesModalData } from "./projectPropertiesModal";
+import { ProjectTableConfigModal } from "./projectTableConfig/projectTableConfigModal";
+import { RemoteRepoModal, RemoteRepoModalData } from "./remoteRepoModal";
 
 @Component({
     selector: "project-component",
