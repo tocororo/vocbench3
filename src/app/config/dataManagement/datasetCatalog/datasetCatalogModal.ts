@@ -114,7 +114,7 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
         event.preventDefault();
         let returnData: DatasetCatalogModalReturnData = {
             connectorId: this.selectedExtension.id,
-            dataset: this.selectedDataset
+            dataset: this.selectedDatasetDescription
         }
         this.dialog.close(returnData);
     }
@@ -127,5 +127,5 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
 
 export class DatasetCatalogModalReturnData {
     connectorId: string;
-    dataset: DatasetSearchResult;
+    dataset: DatasetDescription;
 }

@@ -161,7 +161,7 @@ export class ProjectServices {
         var options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.ProjectAccessException'] 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.ProjectAccessException', 'org.eclipse.rdf4j.repository.RepositoryException'] 
             } 
         });
         return this.httpMgr.doPost(this.serviceName, "createProject", params, options);
@@ -323,7 +323,7 @@ export class ProjectServices {
      * @param basicModals 
      */
     public handleMissingChangetrackierSailError(error: Error, basicModals: BasicModalServices) {
-        if (error.name.endsWith("ProjectAccessException")) {
+        if (error.name.endsWith("ProjectAccessException") || error.name.endsWith("RepositoryException")) {
             if (error.message.includes("Unsupported Sail type: http://semanticturkey.uniroma2.it/sail/changetracker")) {
                 let message = "The changetracker sail, required for history and validation, " + 
                     "is reported to be missing from the triple store; please contact the administrator in order to " + 

@@ -10,6 +10,7 @@ import { NewDatasetVersionModal } from '../config/dataManagement/metadata/metada
 import { NewEmbeddedLexicalizationModal } from '../config/dataManagement/metadata/metadataRegistry/newEmbeddedLexicalizationModal';
 import { metadataRouting } from "../config/dataManagement/metadata/metadataRoutes";
 import { MetadataVocabulariesComponent } from "../config/dataManagement/metadata/metadataVocabularies/metadataVocabulariesComponent";
+import { ImportFromDatasetCatalogModal } from '../config/dataManagement/metadata/namespacesAndImports/importFromDatasetCatalogModal';
 import { ImportOntologyModal } from '../config/dataManagement/metadata/namespacesAndImports/importOntologyModal';
 import { ImportTreeComponent } from '../config/dataManagement/metadata/namespacesAndImports/importTree/importTreeComponent';
 import { ImportTreeNodeComponent } from '../config/dataManagement/metadata/namespacesAndImports/importTree/importTreeNode';
@@ -28,13 +29,13 @@ import { SharedModule } from './sharedModule';
         MetadataRegistryComponent, DatasetMetadataComponent, LexicalizationSetMetadataComponent,
         ImportTreeComponent, ImportTreeNodeComponent,
         //modals
-        ImportOntologyModal, PrefixNamespaceModal, OntologyMirrorModal, NewCatalogRecordModal,
+        ImportOntologyModal, ImportFromDatasetCatalogModal, PrefixNamespaceModal, OntologyMirrorModal, NewCatalogRecordModal,
         NewDatasetVersionModal, NewEmbeddedLexicalizationModal
     ],
     exports: [],
     providers: [],
     entryComponents: [
-        ImportOntologyModal, PrefixNamespaceModal, OntologyMirrorModal, NewCatalogRecordModal, 
+        ImportOntologyModal, ImportFromDatasetCatalogModal, PrefixNamespaceModal, OntologyMirrorModal, NewCatalogRecordModal, 
         NewDatasetVersionModal, NewEmbeddedLexicalizationModal
     ]
 })

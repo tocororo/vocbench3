@@ -81,19 +81,18 @@ export class DatasetCatalogsServices {
                 resp.descriptions.forEach((d: string) => {
                     descriptions.push(ResourceUtils.parseLiteral(d));
                 });
-                let description: DatasetDescription = {
-                    dataDump: resp.dataDump,
-                    datasetPage: resp.datasetPage,
-                    descriptions: descriptions,
-                    facets: resp.facets,
-                    id: resp.id,
-                    lexicalizationModel: resp.lexicalizationModel,
-                    model: resp.model,
-                    ontologyIRI: (resp.ontologyIRI != null) ? ResourceUtils.parseURI(resp.ontologyIRI) : null,
-                    sparqlEndpoint: resp.sparqlEndpoint,
-                    titles: titles,
-                    uriPrefix: resp.uriPrefix
-                };
+                let description: DatasetDescription = new DatasetDescription(resp.id);
+                description.dataDump = resp.dataDump;
+                description.datasetPage = resp.datasetPage;
+                description.descriptions = descriptions;
+                description.facets = resp.facets;
+                description.id = resp.id;
+                description.lexicalizationModel = resp.lexicalizationModel;
+                description.model = resp.model;
+                description.ontologyIRI = (resp.ontologyIRI != null) ? ResourceUtils.parseURI(resp.ontologyIRI) : null;
+                description.sparqlEndpoint = resp.sparqlEndpoint;
+                description.titles = titles;
+                description.uriPrefix = resp.uriPrefix;
                 return description;
             }
         );

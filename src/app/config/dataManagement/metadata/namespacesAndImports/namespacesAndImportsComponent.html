@@ -89,23 +89,16 @@
         <div class="panel panel-default vbox" style="margin-top: 5px;">
             <div class="panel-heading">
                 <label style="flex: 1">Imports:</label>
-                <div class="dropdown pull-right">
+                <div class="dropdown">
                     <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown" [disabled]="!isAddImportAuthorized()">
                         Add import from <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a (click)="importFromWeb()">
-                            <span class="glyphicon glyphicon-globe"></span> Web
-                        </a></li>
-                        <li><a (click)="importFromWebToMirror()">
-                            <span class="glyphicon glyphicon-import"></span> Web to mirror
-                        </a></li>
-                        <li><a (click)="importFromLocalFile()">
-                            <span class="glyphicon glyphicon-open"></span> Local file
-                        </a></li>
-                        <li><a (click)="importFromOntologyMirror()">
-                            <span class="glyphicon glyphicon-export"></span> Ontology mirror
-                        </a></li>
+                        <li><a (click)="importFromWeb()">Web</a></li>
+                        <li><a (click)="importFromWebToMirror()">Web to mirror</a></li>
+                        <li><a (click)="importFromLocalFile()">Local file</a></li>
+                        <li><a (click)="importFromOntologyMirror()">Ontology mirror</a></li>
+                        <li><a (click)="importFromDatasetCatalog()">Dataset Catalog</a></li>
                     </ul>
                 </div>
                 <button class="btn btn-default btn-xs" (click)="openOntologyMirror()" style="margin-left: 4px;">

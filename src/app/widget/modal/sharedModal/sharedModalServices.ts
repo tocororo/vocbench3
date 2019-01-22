@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { DatasetCatalogModal, DatasetCatalogModalData } from '../../../config/dataManagement/datasetCatalog/datasetCatalogModal';
+import { ImportFromDatasetCatalogModal, ImportFromDatasetCatalogModalData } from '../../../config/dataManagement/metadata/namespacesAndImports/importFromDatasetCatalogModal';
 import { ImportOntologyModal, ImportOntologyModalData } from '../../../config/dataManagement/metadata/namespacesAndImports/importOntologyModal';
 import { ARTResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDFCapabilityType } from "../../../models/Coda";
@@ -172,6 +173,19 @@ export class SharedModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ImportOntologyModal, overlayConfig).result;
+    }
+
+    /**
+     * 
+     * @param title 
+     */
+    importFromDatasetCatalog(title: string) {
+        var modalData = new ImportFromDatasetCatalogModalData(title);
+        const builder = new BSModalContextBuilder<ImportFromDatasetCatalogModalData>(
+            modalData, undefined, ImportFromDatasetCatalogModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        return this.modal.open(ImportFromDatasetCatalogModal, overlayConfig).result;
     }
 
     /**

@@ -116,26 +116,11 @@ export class ConnectorsID {
     public static LODCloudConnector_ID: string = "it.uniroma2.art.semanticturkey.extension.impl.metadatarepository.lodcloud.LODCloudConnector"
 }
 
-export class DatasetDescription {
+export abstract class AbstractDataset {
     id: string;
     ontologyIRI: ARTURIResource; //or ARTURI?
     datasetPage: string;
     titles: ARTLiteral[];
-    descriptions: ARTLiteral[];
-    facets: DatasetSearchFacets;
-    uriPrefix: string;
-    dataDump: string;
-    sparqlEndpoint: string;
-    model: string;
-    lexicalizationModel: string;
-}
-
-export class DatasetSearchResult {
-    id: string;
-	ontologyIRI: ARTURIResource;
-	datasetPage: string;
-	score: number;
-	titles: ARTLiteral[];
     descriptions: ARTLiteral[];
     facets: DatasetSearchFacets;
 
@@ -179,6 +164,18 @@ export class DatasetSearchResult {
         }
         return this.prefDescription;
     }
+}
+
+export class DatasetDescription extends AbstractDataset {
+    uriPrefix: string;
+    dataDump: string;
+    sparqlEndpoint: string;
+    model: string;
+    lexicalizationModel: string;
+}
+
+export class DatasetSearchResult extends AbstractDataset {
+	score: number;
 }
 
 export class SearchResultsPage<T> {

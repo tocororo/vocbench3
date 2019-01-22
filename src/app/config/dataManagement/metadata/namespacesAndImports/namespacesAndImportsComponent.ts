@@ -10,6 +10,7 @@ import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator
 import { UIUtils } from "../../../../utils/UIUtils";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../../widget/modal/sharedModal/sharedModalServices";
+import { ImportFromDatasetCatalogModalReturnData } from "./importFromDatasetCatalogModal";
 import { OntologyMirrorModal } from "./ontologyMirrorModal";
 import { PrefixNamespaceModal, PrefixNamespaceModalData } from "./prefixNamespaceModal";
 
@@ -385,7 +386,29 @@ export class NamespacesAndImportsComponent {
                 )
             },
             () => { }
-        )
+        );
+    }
+
+    /**
+     * Opens a modal to import an ontology from the dataset catalog. This uses the addFromWeb import.
+     * Once done refreshes the imports list and the namespace prefix mapping
+     */
+    private importFromDatasetCatalog() {
+        this.sharedModals.importFromDatasetCatalog("Import from Dataset Catalog").then(
+            (data: ImportFromDatasetCatalogModalReturnData) => {
+                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+                this.metadataService.addFromWeb(data.ontologyIRI, data.transitiveImportAllowance, data.dataDump, data.rdfFormat).subscribe(
+                    stResp => {
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                        //Refreshes the imports and the namespace prefix mapping
+                        this.refreshImports();
+                        this.refreshNSPrefixMappings();
+                        this.refreshBaseUriResView();
+                    }
+                );
+            },
+            () => {}
+        );
     }
 
     /**

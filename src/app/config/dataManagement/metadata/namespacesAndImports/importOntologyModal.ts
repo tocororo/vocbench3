@@ -45,10 +45,10 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
 
     private importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
         { allowance: TransitiveImportMethodAllowance.nowhere, show: "Do not resolve" },
-        { allowance: TransitiveImportMethodAllowance.web, show: "From web" },
-        { allowance: TransitiveImportMethodAllowance.webFallbackToMirror, show: "From web with fallback to Ontology Mirror" },
-        { allowance: TransitiveImportMethodAllowance.mirror, show: "From Ontology Mirror" },
-        { allowance: TransitiveImportMethodAllowance.mirrorFallbackToWeb, show: "From Ontology Mirror with fallback to Web" }
+        { allowance: TransitiveImportMethodAllowance.web, show: "Resolve from web" },
+        { allowance: TransitiveImportMethodAllowance.webFallbackToMirror, show: "Resolve from web with fallback to Ontology Mirror" },
+        { allowance: TransitiveImportMethodAllowance.mirror, show: "Resolve from Ontology Mirror" },
+        { allowance: TransitiveImportMethodAllowance.mirrorFallbackToWeb, show: "Resolve from Ontology Mirror with fallback to Web" }
     ];
     private selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[0].allowance;
 

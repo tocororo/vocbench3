@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
+import { ImportFromDatasetCatalogModalReturnData } from "../../../config/dataManagement/metadata/namespacesAndImports/importFromDatasetCatalogModal";
 import { ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { ImportType } from "../../../models/Metadata";
 import { ResViewPartition } from "../../../models/ResourceView";
@@ -8,7 +9,6 @@ import { CustomFormsServices } from "../../../services/customFormsServices";
 import { MetadataServices } from "../../../services/metadataServices";
 import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
-import { UIUtils } from "../../../utils/UIUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
@@ -57,10 +57,8 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
     private importFromWeb() {
         this.sharedModals.importOntology("Import from web", ImportType.fromWeb).then(
             (data: any) => {
-                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.update.emit();
                     }
                 )
@@ -76,10 +74,8 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
     private importFromWebToMirror() {
         this.sharedModals.importOntology("Import from web to mirror", ImportType.fromWebToMirror).then(
             (data: any) => {
-                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWebToMirror(data.baseURI, data.mirrorFile, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.update.emit();
                     }
                 )
@@ -95,10 +91,8 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
     private importFromLocalFile() {
         this.sharedModals.importOntology("Import from local file", ImportType.fromLocalFile).then(
             (data: any) => {
-                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromLocalFile(data.baseURI, data.localFile, data.mirrorFile, data.transitiveImportAllowance).subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.update.emit();
                     }
                 )
@@ -114,15 +108,30 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
     private importFromOntologyMirror() {
         this.sharedModals.importOntology("Import from ontology mirror", ImportType.fromOntologyMirror).then(
             (data: any) => {
-                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromMirror(data.mirror.baseURI, data.mirror.file, data.transitiveImportAllowance).subscribe(
                     stResp => {
-                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.update.emit();
                     }
                 )
             },
             () => { }
+        );
+    }
+
+    /**
+     * Opens a modal to import an ontology from the dataset catalog. This uses the addFromWeb import.
+     * Once done refreshes the imports list and the namespace prefix mapping
+     */
+    private importFromDatasetCatalog() {
+        this.sharedModals.importFromDatasetCatalog("Import from Dataset Catalog").then(
+            (data: ImportFromDatasetCatalogModalReturnData) => {
+                this.metadataService.addFromWeb(data.ontologyIRI, data.transitiveImportAllowance, data.dataDump, data.rdfFormat).subscribe(
+                    stResp => {
+                        this.update.emit();
+                    }
+                );
+            },
+            () => {}
         );
     }
 
