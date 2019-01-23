@@ -6,6 +6,9 @@
             <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering=!rendering">
                 <span class="glyphicon glyphicon-font"></span>
             </button>
+            <button class="btn btn-default btn-xs" (click)="snapshot()" title="Export a snapshot of the graph (.svg)">
+                <span class="glyphicon glyphicon-camera"></span>
+            </button>
         </div>
     </div>
     <div class="panel-body hbox">
@@ -104,7 +107,7 @@
                                         min="0" max="2000" step="1" [title]="forces.charge.distanceMax">
                                 </td>
                             </tr>
-                            
+
                             <tr><td colspan="2" class="text-center"><label>Collide</label></td></tr>
                             <tr>
                                 <td>Strength:</td>

@@ -1,5 +1,6 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import { ARTResource } from "../models/ARTResources";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { GraphMode } from "./abstractGraph";
 import { DataGraphComponent } from "./impl/dataGraphComponent";
@@ -23,7 +24,7 @@ export class GraphPanel {
     private selectedElement: Node | Link;
     private forces: GraphForces = new GraphForces();
 
-    constructor(private sharedModals: SharedModalServices) { }
+    constructor(private sharedModals: SharedModalServices, private basicModals: BasicModalServices) { }
 
     private onForceChange() {
         if (this.mode == GraphMode.dataOriented) {
@@ -66,5 +67,16 @@ export class GraphPanel {
 
     private onElementSelected(element: Node | Link) {
         this.selectedElement = element;
+    }
+
+
+    private snapshot() {
+        let exportUrl;
+        if (this.mode == GraphMode.dataOriented) {
+            exportUrl = this.viewChildDataGraph.getExportUrl();
+        } else {
+            exportUrl = this.viewChildModelGraph.getExportUrl();
+        }
+        this.basicModals.downloadLink("Export Graph SVG", null, exportUrl, "graph.svg");
     }
 }

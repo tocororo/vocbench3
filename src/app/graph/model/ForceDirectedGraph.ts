@@ -57,7 +57,7 @@ export class ForceDirectedGraph {
             // .strength(this.options.forces.charge.strength) 
             .strength((node: Node) => this.getCharge(node, this.links)) 
             .distanceMin(this.options.forces.charge.distanceMin)
-            // .distanceMax(this.options.forces.charge.distanceMax);
+            .distanceMax(this.options.forces.charge.distanceMax);
         
         let collideForce: d3.ForceCollide<{}> = this.simulation.force('collide'); //avoid collision between nodes in the given radius
         collideForce
@@ -332,7 +332,7 @@ export class GraphForces {
         this.charge = {
             strength: -100, //strength of attraction (if positive) or repulsion (if negative)
             distanceMin: 50, //min distance between nodes
-            // distanceMax: 2000
+            distanceMax: 800
         };
         this.collide = {
             strength: 1, //strength of rejection between nodes
@@ -341,8 +341,6 @@ export class GraphForces {
         this.link = {
             strength: 1, //strength with which the links maintain the given distance
             distance: 250 //distance of the links
-            // strength: 0.3, //strength with which the links maintain the given distance
-            // distance: 200 //distance of the links
         };
     }
 }

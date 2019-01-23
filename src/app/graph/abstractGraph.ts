@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { D3Service } from "./d3/d3Services";
 import { ForceDirectedGraph, GraphForces, GraphOptions } from "./model/ForceDirectedGraph";
-import { Node } from "./model/Node";
 import { Link } from "./model/Link";
+import { Node } from "./model/Node";
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -11,6 +11,8 @@ export abstract class AbstractGraph {
     @Input() graph: ForceDirectedGraph;
     @Input() rendering: boolean;
     @Output() elementSelected = new EventEmitter<Node|Link>();
+
+    @ViewChild('svg') public svgElement: ElementRef;
 
     private selectedElement: Link | Node;
     private linkAhead: Link; //link selected to bring ahead the other
@@ -61,9 +63,74 @@ export abstract class AbstractGraph {
         this.graph.updateForces();
     }
 
+    public getExportUrl(): string {
+        let svgDom: HTMLElement = this.svgElement.nativeElement; 
+        let clonedSvg: HTMLElement = <HTMLElement>svgDom.cloneNode(true);
+
+        ExportGraphUtils.processDom(clonedSvg, svgDom);
+
+        let serializer = new XMLSerializer();
+        let source = serializer.serializeToString(clonedSvg);
+        source = '<?xml version="1.0" standalone="no"?>\r\n' + source;//add xml declaration
+        source = source.replace(/<!--[\s\S]*?-->/g, "");//remove comments
+        
+        var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source); //convert svg source to URI data scheme.
+        return url;
+    }
+
 }
 
 export enum GraphMode {
     dataOriented = "dataOriented",
     modelOriented = "modelOriented"
+}
+
+
+class ExportGraphUtils {
+
+    private static svgElementToProcess: string[] = ["svg", "path", "rect", "circle", "stop", "text"];
+    private static relevantStyleForElement: { [tag: string]: string[] } = {
+        svg: ["background-color", "width", "height"],
+        path: ["fill", "stroke", "stroke-width"],
+        rect: ["fill", "stroke", "stroke-width"],
+        circle: ["fill", "stroke", "stroke-width"],
+        stop: ["stop-color"],
+        text: ["font", "stroke", "stroke-width"]
+    };
+    
+    public static processDom(targetEl: HTMLElement, sourceEl: HTMLElement) {
+        if (this.svgElementToProcess.indexOf(targetEl.tagName) != -1) { //if the element is one of the processingTagNames
+            this.copyStyleAsInline(targetEl, sourceEl); //compy the computed style of the source as inline style in the target
+        }
+        this.removeNgAttributes(targetEl);
+        let targetChildren: HTMLCollection = targetEl.children;
+        let sourceChildren: HTMLCollection = sourceEl.children;
+        for (var i = 0; i < targetChildren.length; i++) {
+            let targetChildEl: HTMLElement = <HTMLElement>targetChildren.item(i);
+            let sourceChildEl: HTMLElement = <HTMLElement>sourceChildren.item(i);
+            this.processDom(targetChildEl, sourceChildEl);
+        }
+    }
+
+    private static copyStyleAsInline(targetEl: HTMLElement, sourceEl: HTMLElement) {
+        let sourceElComputedStyle: CSSStyleDeclaration = getComputedStyle(sourceEl); //for the the computed style
+        let stylesForElement = this.relevantStyleForElement[sourceEl.tagName];
+        stylesForElement.forEach(stylePropName => {
+            let stylePropValue = sourceElComputedStyle.getPropertyValue(stylePropName); //get only the relevant css properties
+            if (stylePropValue) {
+                targetEl.style[stylePropName] = stylePropValue; //and set inline
+            }
+        });
+    }
+
+    private static removeNgAttributes(el: HTMLElement) {
+        let attrs: NamedNodeMap = el.attributes;
+        for (let i = attrs.length-1; i >= 0; i--) {
+            let attr = attrs.item(i).name;
+            if (attr.startsWith("_ng") || attr.startsWith("ng-")) {
+                el.removeAttribute(attr);
+            }
+        }
+    }
+
 }
