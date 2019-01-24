@@ -97,14 +97,18 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     getPredicateToEnrich(): Observable<ARTURIResource> {
         return this.ensureInitializedRootProperties().flatMap(
             res => {
-                return Observable.fromPromise(
-                    this.browsingModals.browsePropertyTree("Select a property", this.rootProperties).then(
-                        (selectedProp: any) => {
-                            return selectedProp;
-                        },
-                        () => { }
-                    )
-                );
+                if (this.rootProperties.length == 1) { //just one property => return it
+                    return Observable.of(this.rootProperties[0]);
+                } else { //multiple properties => ask user to select
+                    return Observable.fromPromise(
+                        this.browsingModals.browsePropertyTree("Select a property", this.rootProperties).then(
+                            (selectedProp: any) => {
+                                return selectedProp;
+                            },
+                            () => { }
+                        )
+                    );
+                }
             }
         );
     }
