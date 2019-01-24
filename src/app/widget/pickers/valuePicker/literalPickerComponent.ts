@@ -58,7 +58,7 @@ export class LiteralPickerComponent {
 
     private createLiteral(type: RDFTypesEnum) {
         if (type == RDFTypesEnum.typedLiteral) {
-            this.creationModals.newTypedLiteral("Create typed literal", this.datatypes).then(
+            this.creationModals.newTypedLiteral("Create typed literal", null, this.datatypes).then(
                 (value: ARTLiteral) => {
                     this.literal = value;
                     this.literalNT = this.literal.toNT();

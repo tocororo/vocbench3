@@ -14,11 +14,12 @@ import { DatatypesServices } from "../../services/datatypesServices";
 export class TypedLiteralInputComponent implements ControlValueAccessor {
 
     @Input() allowedDatatypes: ARTURIResource[]; //the datatypes allowed by the component
+    @Input('datatype') inputDatatype: ARTURIResource; //the selected datatype. If provided as input, force the default
     @Output() datatypeChange: EventEmitter<ARTURIResource> = new EventEmitter();
     @Output() langChange: EventEmitter<string> = new EventEmitter();
 
     private datatypeList: ARTURIResource[];
-    private datatype: ARTURIResource;
+    private selectedDatatype: ARTURIResource;
 
     private lang: string; //optional, used only if datatype is xsd:string or rdfs:langString
 
@@ -32,35 +33,55 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
     ngOnInit() {
         this.datatypeService.getDatatypes().subscribe(
             datatypes => {
+                /**
+                 * init datatype list
+                 */
+                //sort
                 datatypes.sort((dt1: ARTURIResource, dt2: ARTURIResource) => {
                     return dt1.getShow().localeCompare(dt2.getShow());
                 });
                 this.datatypeList = datatypes;
-
-                //re-initialize allowedDatatypes in case its sole element is rdfs:Literal
-                if (this.allowedDatatypes != undefined && this.allowedDatatypes[0].getURI() == RDFS.literal.getURI()) {
-                    this.allowedDatatypes = undefined; //so it allows all the datatypes
-                }
-                //initialize default datatype...
-                if (this.allowedDatatypes == undefined) {//...to xsd:string if no allowedDatatypes is specified
-                    this.datatype = this.datatypeList[ResourceUtils.indexOfNode(this.datatypeList, XmlSchema.string)];
-                } else {
-                    //check if in allowedDatatypes there is some datatype not foreseen by datatypeList. In case, add it to datatypeList
-                    this.allowedDatatypes.forEach(dt => { 
-                        if (ResourceUtils.indexOfNode(this.datatypeList, dt) == -1) {
-                            this.datatypeList.push(dt);
+                //filter out not allowed datatypes
+                if (this.allowedDatatypes != undefined) {
+                    if (this.allowedDatatypes[0].equals(RDFS.literal)) {
+                        //if allowedDatatypes contains only rdfs:Literal => allow every datatype
+                    } else { //otherwise filter out
+                        for (let i = this.datatypeList.length-1; i >= 0; i--) {
+                            //if datatype is not allowed (not among the allowed) remove it
+                            if (ResourceUtils.indexOfNode(this.allowedDatatypes, this.datatypeList[i]) == -1) {
+                                this.datatypeList.splice(i, 1);
+                            }
                         }
-                    });
-                    //...to xsd:string if it is among the allowedDatatype
-                    if (this.allowedDatatypes.findIndex(dt => dt.getURI() == XmlSchema.string.getURI()) != -1) {
-                        this.datatype = this.datatypeList[ResourceUtils.indexOfNode(this.datatypeList, XmlSchema.string)];
-                    } else {//...to the first datatype in datatypeList that is in allowedDatatypes
-                        this.datatype = this.datatypeList[this.datatypeList.findIndex(dt => dt.getURI() == this.allowedDatatypes[0].getURI())];
                     }
+                }
+
+                /**
+                 * Init selected datatype
+                 */
+                if (this.inputDatatype != null) {
+                    this.initDatatype(this.inputDatatype);
+                }
+                if (this.selectedDatatype == null) { //datatype null (not provided as @Input or the input not found among the available)
+                    this.initDatatype(XmlSchema.string); //set xsd:string as default
+                }
+                if (this.selectedDatatype == null) { //if still null => set the first
+                    this.selectedDatatype = this.datatypeList[0];
                 }
                 this.onDatatypeChange();
             }
         );
+    }
+
+    /**
+     * Set the provided datatype as selected in the list. If not found select xml:string as default.
+     * If neither xml:string is found, set the first
+     * @param datatype 
+     */
+    private initDatatype(datatype: ARTURIResource) {
+        let idx = ResourceUtils.indexOfNode(this.datatypeList, datatype);
+        if (idx != -1) { //datatype found in datatype list => select it
+            this.selectedDatatype = this.datatypeList[idx];
+        }
     }
 
 
@@ -69,68 +90,55 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
      * (e.g. boolean admits only true and false, time admits values like hh:mm:ss, ...)
      */
     private isDatatypeBound(): boolean {
-        if (this.datatype) {
+        if (this.selectedDatatype) {
             return (
-                this.datatype.getURI() == XmlSchema.boolean.getURI() || this.datatype.getURI() == XmlSchema.date.getURI() ||
-                this.datatype.getURI() == XmlSchema.dateTime.getURI() || this.datatype.getURI() == XmlSchema.time.getURI()
+                this.selectedDatatype.equals(XmlSchema.boolean) || this.selectedDatatype.equals(XmlSchema.date) ||
+                this.selectedDatatype.equals(XmlSchema.dateTime) || this.selectedDatatype.equals(XmlSchema.time)
             );
         } else {
             return false;
-        }
-        
-    }
-
-    /**
-     * Tells if the given datatype is allowed in the current typed literal creation
-     * Useful to enable/disable the selection of the <option> in the <select> of the datatypes
-     */
-    private isDatatypeAllowed(datatype: ARTURIResource): boolean {
-        if (this.allowedDatatypes == undefined) {
-            return true; //if no allowedDatatypes array is provided, then all datatypes are allowed
-        } else {
-            return this.allowedDatatypes.findIndex(dt => dt.getURI() == datatype.getURI()) != -1;
         }
     }
 
     private onDatatypeChange() {
         this.updateInputConfiguration();
-        this.datatypeChange.emit(this.datatype);
+        this.datatypeChange.emit(this.selectedDatatype);
         this.stringValue = null;
         this.onValueChanged();
     }
 
     private updateInputConfiguration() {
         this.numericInput = (
-            this.datatype.getURI() == XmlSchema.byte.getURI() ||
-            this.datatype.getURI() == XmlSchema.decimal.getURI() ||
-            this.datatype.getURI() == XmlSchema.double.getURI() ||
-            this.datatype.getURI() == XmlSchema.float.getURI() ||
-            this.datatype.getURI() == XmlSchema.int.getURI() ||
-            this.datatype.getURI() == XmlSchema.integer.getURI() ||
-            this.datatype.getURI() == XmlSchema.long.getURI() ||
-            this.datatype.getURI() == XmlSchema.negativeInteger.getURI() ||
-            this.datatype.getURI() == XmlSchema.nonNegativeInteger.getURI() ||
-            this.datatype.getURI() == XmlSchema.nonPositiveInteger.getURI() ||
-            this.datatype.getURI() == XmlSchema.positiveInteger.getURI() ||
-            this.datatype.getURI() == XmlSchema.short.getURI() ||
-            this.datatype.getURI() == XmlSchema.unsignedByte.getURI() ||
-            this.datatype.getURI() == XmlSchema.unsignedInt.getURI() ||
-            this.datatype.getURI() == XmlSchema.unsignedLong.getURI() ||
-            this.datatype.getURI() == XmlSchema.unsignedShort.getURI()
+            this.selectedDatatype.equals(XmlSchema.byte) ||
+            this.selectedDatatype.equals(XmlSchema.decimal) ||
+            this.selectedDatatype.equals(XmlSchema.double) ||
+            this.selectedDatatype.equals(XmlSchema.float) ||
+            this.selectedDatatype.equals(XmlSchema.int) ||
+            this.selectedDatatype.equals(XmlSchema.integer) ||
+            this.selectedDatatype.equals(XmlSchema.long) ||
+            this.selectedDatatype.equals(XmlSchema.negativeInteger) ||
+            this.selectedDatatype.equals(XmlSchema.nonNegativeInteger) ||
+            this.selectedDatatype.equals(XmlSchema.nonPositiveInteger) ||
+            this.selectedDatatype.equals(XmlSchema.positiveInteger) ||
+            this.selectedDatatype.equals(XmlSchema.short) ||
+            this.selectedDatatype.equals(XmlSchema.unsignedByte) ||
+            this.selectedDatatype.equals(XmlSchema.unsignedInt) ||
+            this.selectedDatatype.equals(XmlSchema.unsignedLong) ||
+            this.selectedDatatype.equals(XmlSchema.unsignedShort)
         );
         //sign
         if (
-            this.datatype.getURI() == XmlSchema.nonNegativeInteger.getURI() ||
-            this.datatype.getURI() == XmlSchema.positiveInteger.getURI() ||
-            this.datatype.getURI() == XmlSchema.unsignedByte.getURI() ||
-            this.datatype.getURI() == XmlSchema.unsignedInt.getURI() ||
-            this.datatype.getURI() == XmlSchema.unsignedLong.getURI() ||
-            this.datatype.getURI() == XmlSchema.unsignedShort.getURI()
+            this.selectedDatatype.equals(XmlSchema.nonNegativeInteger) ||
+            this.selectedDatatype.equals(XmlSchema.positiveInteger) ||
+            this.selectedDatatype.equals(XmlSchema.unsignedByte) ||
+            this.selectedDatatype.equals(XmlSchema.unsignedInt) ||
+            this.selectedDatatype.equals(XmlSchema.unsignedLong) ||
+            this.selectedDatatype.equals(XmlSchema.unsignedShort)
         ) {
             this.inputNumberSign = "positive";
         } else if (
-            this.datatype.getURI() == XmlSchema.negativeInteger.getURI() ||
-            this.datatype.getURI() == XmlSchema.nonPositiveInteger.getURI()
+            this.selectedDatatype.equals(XmlSchema.negativeInteger) ||
+            this.selectedDatatype.equals(XmlSchema.nonPositiveInteger)
         ) {
             this.inputNumberSign = "negative";
         } else {
@@ -147,10 +155,10 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
         if (this.stringValue == null) {
             this.propagateChange(null);    
         } else {
-            if (this.datatype.getURI() != RDF.langString.getURI()) {
+            if (this.selectedDatatype.getURI() != RDF.langString.getURI()) {
                 this.lang = null;
             }
-            this.propagateChange(new ARTLiteral(this.stringValue+"", this.datatype.getURI(), this.lang));
+            this.propagateChange(new ARTLiteral(this.stringValue+"", this.selectedDatatype.getURI(), this.lang));
         }
     }
 
@@ -165,14 +173,14 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
             if (dt != null) {
                 this.datatypeList.forEach(el => {
                     if (el.getURI() == dt)  {
-                        this.datatype = el;
+                        this.selectedDatatype = el;
                     }
                 });
             }
             this.lang = obj.getLang();
         } else {
             this.stringValue = null;
-            this.datatype = null;
+            this.selectedDatatype = null;
             this.lang = null;
         }
     }

@@ -188,7 +188,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
      * Opens a newTypedLiteral modal to enrich the predicate with a typed literal value 
      */
     private enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[]) {
-        this.creationModals.newTypedLiteral("Add " + predicate.getShow(), allowedDatatypes, dataRanges).then(
+        this.creationModals.newTypedLiteral("Add " + predicate.getShow(), predicate, allowedDatatypes, dataRanges).then(
             (literal: ARTLiteral) => {
                 this.addPartitionAware(this.resource, predicate, literal);
             },

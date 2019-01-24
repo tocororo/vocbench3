@@ -9,7 +9,7 @@
     </div>
     
     <div *ngIf="selectedAspectSelector == typedLiteralAspectSelector">
-        <typed-literal-input [allowedDatatypes]="context.allowedDatatypes" [(ngModel)]="value" (datatypeChange)="onDatatypeChange($event)">
+        <typed-literal-input [allowedDatatypes]="context.allowedDatatypes" [datatype]="datatype" [(ngModel)]="value" (datatypeChange)="onDatatypeChange($event)">
         </typed-literal-input>
 
         <div *ngIf="notValidatableType" class="alert alert-warning" style="margin-top: 6px;">

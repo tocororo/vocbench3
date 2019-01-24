@@ -2,17 +2,20 @@ import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTLiteral, ARTURIResource, ResourceUtils } from "../../../../models/ARTResources";
-import { XmlSchema, RDF } from "../../../../models/Vocabulary";
+import { XmlSchema, RDF, RDFS } from "../../../../models/Vocabulary";
 import { VBContext } from "../../../../utils/VBContext";
 
 export class NewTypedLiteralModalData extends BSModalContext {
 
     /**
+     * @param predicate the (optional) predicate that is going to enrich with the typed literal
      * @param allowedDatatypes array of datatype URIs of the allowed datatypes in the typed literal creation.
      * If null all the datatypes are allowed
+     * @param dataRanges if provided, tells which values can be created/chosed (e.g. xml:string ["male", "female"])
      */
     constructor(
         public title: string = 'Create new label',
+        public predicate: ARTURIResource,
         public allowedDatatypes: Array<ARTURIResource>,
         public dataRanges: Array<ARTLiteral[]>
     ) {
@@ -59,6 +62,11 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
             this.selectedAspectSelector = this.typedLiteralAspectSelector;
         }
 
+        //in modal is used to enrich rdfs:comment, set rdf:langString as default
+        if (this.context.predicate != null && this.context.predicate.equals(RDFS.comment)) {
+            this.datatype = RDF.langString;
+        }
+
     }
 
     private getDataRangePreview(dataRange: ARTLiteral[]): string {
@@ -79,8 +87,8 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
 
     private isInputValid(): boolean {
         var valid: boolean = false;
-        if (this.value != undefined) {
-            if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
+        if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
+            if (this.value != undefined) {
                 let dt = this.value.getDatatype();
                 let stringValue: any = this.value.getValue();
                 if (dt == XmlSchema.byte.getURI()) {
@@ -118,10 +126,10 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
                 } else { //every other datatype doesn't require validation
                     valid = true;
                 }
-            } else if (this.selectedAspectSelector == this.dataRangeAspectSelector) {
-                if (this.selectedDrValue != null) {
-                    valid = true;
-                }
+            }
+        } else if (this.selectedAspectSelector == this.dataRangeAspectSelector) {
+            if (this.selectedDrValue != null) {
+                valid = true;
             }
         }
         return valid;

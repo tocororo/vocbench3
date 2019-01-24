@@ -1,5 +1,6 @@
 import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
-import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
+import { RDFS } from "../../../models/Vocabulary";
 import { PropertyServices } from "../../../services/propertyServices";
 import { SearchServices } from "../../../services/searchServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
@@ -71,6 +72,16 @@ export class PropertyTreeComponent extends AbstractTree {
         } else if (this.resource) {
             this.propertyService.getRelevantPropertiesForResource(this.resource).subscribe(
                 relevantProps => {
+                    //add (hardcode) rdfs:comment if not present
+                    let commentFound: boolean = false;
+                    relevantProps.forEach(p => {
+                        if (p.equals(RDFS.comment)) {
+                            commentFound = true;
+                        }
+                    })
+                    if (!commentFound) {
+                        relevantProps.push(RDFS.comment);
+                    }
                     this.propertyService.getPropertiesInfo(relevantProps).subscribe(
                         props => {
                             ResourceUtils.sortResources(props, orderAttribute);
