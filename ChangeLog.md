@@ -4,12 +4,19 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 5.0.0-beta.1 (dd-MM-yyyy)
+# 5.0.0-beta.1 (dd-01-2019)
   * Enabled multiselection in trees and lists when adding a value to a property.
-  * Changed dynamic settings on vbconfig.js.
-  * Updated e-mail configuration, now it is possible to use, beside SSL, TLS or no cryptographic protocol at all;
-    Added possibility to test the e-mail configuration. 
+  * Enabled multivalue creation when enriching a property with a plain literal value.
+  * Implemented the mass assignment of concepts to a scheme.
+  * Implemented a basic Graph visualization of resources, ontology model and SPARQL graph-query results (available only if Experimental Features are enabled).
+  * Implemented DatasetCatalog management and its usage in project creation (for preloading data) and data import.
+  * Enabled both of "Edit" and "Edit literal content" actions for literal values in ResourceView.
   * Fixed bug in the Validation tab, where the optional time lower bound was always ignored.
+  * Improved the messages in the error dialogs.
+  * Updated e-mail configuration, now it is possible to use, beside SSL, TLS or no cryptographic protocol at all;
+    Added possibility to test the e-mail configuration.
+  * Changed dynamic settings on vbconfig.js.
+  * Minor improvements/changes to UI.
   * Bugfixes.
 
 # 4.0.2 (27-07-2018)
