@@ -10,7 +10,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Implemented the mass assignment of concepts to a scheme.
   * Implemented a basic Graph visualization of resources, ontology model and SPARQL graph-query results (available only if Experimental Features are enabled).
   * Implemented DatasetCatalog management and its usage in project creation (for preloading data) and data import.
-  * Enabled both of "Edit" and "Edit literal content" actions for literal values in ResourceView.
+  * Enabled both "Edit" and "Edit literal content" actions for literal values in ResourceView.
   * Fixed bug in the Validation tab, where the optional time lower bound was always ignored.
   * Improved the messages in the error dialogs.
   * Updated e-mail configuration, now it is possible to use, beside SSL, TLS or no cryptographic protocol at all;

@@ -43,7 +43,7 @@ export class ImportFromDatasetCatalogModal implements ModalComponent<ImportFromD
         { allowance: TransitiveImportMethodAllowance.mirror, show: "Resolve from Ontology Mirror" },
         { allowance: TransitiveImportMethodAllowance.mirrorFallbackToWeb, show: "Resolve from Ontology Mirror with fallback to Web" }
     ];
-    private selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[0].allowance;
+    private selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[1].allowance;
 
     constructor(public dialog: DialogRef<ImportFromDatasetCatalogModalData>, public modal: Modal, public basicModals: BasicModalServices,
         public ontoMgrService: OntoManagerServices, public inOutService: InputOutputServices) {

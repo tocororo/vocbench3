@@ -53,7 +53,7 @@ export class CreateProjectComponent {
         { allowance: TransitiveImportMethodAllowance.mirror, show: "Resolve from Ontology Mirror" },
         { allowance: TransitiveImportMethodAllowance.mirrorFallbackToWeb, show: "Resolve from Ontology Mirror with fallback to Web" }
     ];
-    private selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[0].allowance;
+    private selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[1].allowance;
 
     //baseURI
     private baseUriPrefixList: string[] = ["http://", "https://"];

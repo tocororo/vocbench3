@@ -37,7 +37,7 @@ export class LoadDataComponent {
         { allowance: TransitiveImportMethodAllowance.mirror, show: "From Ontology Mirror" },
         { allowance: TransitiveImportMethodAllowance.mirrorFallbackToWeb, show: "From Ontology Mirror with fallback to Web" }
     ];
-    private selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[0].allowance;
+    private selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[1].allowance;
 
     private validateImplicitly: boolean = false;
 
