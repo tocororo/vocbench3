@@ -80,6 +80,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                 //init the scheme list if the concept tree allows dynamic change of scheme
                 this.skosService.getAllSchemes().subscribe(
                     schemes => {
+                        ResourceUtils.sortResources(schemes, this.rendering ? SortAttribute.show : SortAttribute.value);
                         this.schemeList = schemes;
                     }
                 );

@@ -87,18 +87,20 @@ By default *VocBench3* dynamically resolves the IP address of the *SemanticTurke
 In case you have installed VocBench in a different container or in a dedicated server you might have to change the following configuration.
 ```
 /**
- * IP address/logical host name of the machine which hosts SemanticTurkey.
- * By default it is resolved dynamically by using the same address of the *VocBench* host machine,
- * (if VocBench3 and SemanticTurkey are running on the same machine this can be left commented),
- * if you want to change the address you must uncomment the line and edit the value.
+ * IP address/logical host name of the machine hosting Semantic Turkey.
+ * By default (variable left unspecified) the host is resolved dynamically by using the same address of the 
+ * machine hosting VocBench.
+ * Thus if VocBench3 and Semantic Turkey are running on the same machine this variable can be left commented,
+ * otherwise uncomment the line and edit the value.
  */
 // var st_host = "127.0.0.1";
 
 /**
- * Port where SemanticTurkey server is listening.
- * By default it is resolved dynamically by using the same port of the *VocBench* host machine,
- * (if VocBench3 and SemanticTurkey are running on the same container this can be left commented),
- * if you want to change the port you must uncomment the line and edit the value.
+ * Port of the container hosting Semantic Turkey.
+ * By default (variable left unspecified) the port is resolved dynamically by using the same port of the 
+ * container hosting VocBench.
+ * Thus if VocBench3 and Semantic Turkey are running on the same container this variable can be left commented,
+ * otherwise uncomment the line and edit the value.
  */
 // var st_port = "1979";
 ```
