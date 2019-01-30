@@ -4,7 +4,7 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 5.0.0-beta.1 (dd-01-2019)
+# 5.0.0 (30-01-2019)
   * Enabled multiselection in trees and lists when adding a value to a property.
   * Enabled multivalue creation when enriching a property with a plain literal value.
   * Implemented the mass assignment of concepts to a scheme.
