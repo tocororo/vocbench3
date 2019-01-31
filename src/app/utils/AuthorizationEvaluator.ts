@@ -243,7 +243,7 @@ export class AuthorizationEvaluator {
         [Actions.SKOS_ADD_BROADER_CONCEPT] : 'auth(rdf(concept, taxonomy), "C").', 
         [Actions.SKOS_ADD_CONCEPT_TO_SCHEME] : 'auth(rdf(concept, schemes), "C").', 
         [Actions.SKOS_ADD_LEXICALIZATION] : 'auth(rdf(concept, schemes), "C").',
-        [Actions.SKOS_ADD_MULTIPLE_TO_SCHEME] : 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "C").',
+        [Actions.SKOS_ADD_MULTIPLE_TO_SCHEME] : 'auth(rdf(concept, schemes), "C").',
         [Actions.SKOS_ADD_TO_COLLECTION] : 'auth(rdf(skosCollection), "U").', //TODO is it ok? or add values (skosCollection, values)
         [Actions.SKOS_ADD_TOP_CONCEPT] : 'auth(rdf(concept, schemes), "C").',
         [Actions.SKOS_CREATE_COLLECTION] : 'auth(rdf(skosCollection), "C").', 
