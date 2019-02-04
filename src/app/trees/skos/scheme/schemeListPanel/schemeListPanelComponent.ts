@@ -148,10 +148,9 @@ export class SchemeListPanelComponent extends AbstractPanel {
                 this.skosService.addMultipleConceptsToScheme(this.selectedNode).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        //in case the target scheme is active
-                        if (this.vbProp.isActiveScheme(this.selectedNode)) {
-                            //emit schemeChangedEvent so that the concept tree refreshes
-                            this.eventHandler.schemeChangedEvent.emit(this.vbProp.getActiveSchemes());
+                        if (this.vbProp.isActiveScheme(this.selectedNode)) { //in case the target scheme is active
+                            //emit refreshTreeEvent so that the concept tree refreshes
+                            this.eventHandler.refreshTreeListEvent.emit([RDFResourceRolesEnum.concept]);
                         }
                     }
                 );

@@ -24,7 +24,7 @@
                     <span class="glyphicon glyphicon-unchecked" style="width: 16px;"></span>
                 </button>
             </div>
-            <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering=!rendering">
+            <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering=!rendering" [ngClass]="{ active: rendering }">
                 <span class="glyphicon glyphicon-font"></span>
             </button>
             <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">

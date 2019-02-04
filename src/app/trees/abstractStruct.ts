@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Subscriber } from "rxjs";
-import { ARTURIResource, ResAttribute, ResourceUtils } from "../models/ARTResources";
+import { ARTURIResource, ResAttribute, ResourceUtils, RDFResourceRolesEnum } from "../models/ARTResources";
 import { TreeListContext } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
 
@@ -21,6 +21,8 @@ export abstract class AbstractStruct {
      * ATTRIBUTES
      */
 
+    abstract structRole: RDFResourceRolesEnum; //declare the type of resources in the panel
+
     eventSubscriptions: Subscriber<any>[] = [];
     selectedNode: ARTURIResource;
     checkedNodes: ARTURIResource[] = [];
@@ -32,6 +34,9 @@ export abstract class AbstractStruct {
     constructor(eventHandler: VBEventHandler) {
         this.eventHandler = eventHandler;
         this.eventSubscriptions.push(eventHandler.refreshDataBroadcastEvent.subscribe(() => this.init()));
+        this.eventSubscriptions.push(eventHandler.refreshTreeListEvent.subscribe((roles: RDFResourceRolesEnum[]) => {
+                if (roles.indexOf(this.structRole) != -1) this.init()
+        }));
     }
 
     /**

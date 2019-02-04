@@ -23,6 +23,8 @@ export class ClassTreeComponent extends AbstractTree {
     //ClassTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ClassTreeNodeComponent) viewChildrenNode: QueryList<ClassTreeNodeComponent>;
 
+    structRole = RDFResourceRolesEnum.cls;
+
     private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initTree when the view is not initialized
 
     constructor(private clsService: ClassesServices, private searchService: SearchServices, private vbProp: VBProperties,

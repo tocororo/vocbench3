@@ -20,12 +20,13 @@ import { ConceptTreeNodeComponent } from "./conceptTreeNodeComponent";
 export class ConceptTreeComponent extends AbstractTree {
 
     @Input() schemes: ARTURIResource[];
-    // @Input() schemeChangeable: boolean = false;//if true, on top of tree there is a menu that allows to change scheme dynamically
     @Output() conceptRemovedFromScheme = new EventEmitter<ARTURIResource>();//used to report a concept removed from a scheme
     //only when the scheme is the one used in the current concept tree
 
     //ConceptTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
+
+    structRole = RDFResourceRolesEnum.concept;
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private vbProp: VBProperties,
         eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {

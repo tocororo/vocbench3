@@ -1,5 +1,5 @@
 import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
-import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { SemanticTurkey } from "../../../models/Vocabulary";
 import { ClassesServices } from "../../../services/classesServices";
 import { SearchServices } from "../../../services/searchServices";
@@ -27,6 +27,8 @@ export class InstanceListComponent extends AbstractList {
     private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initList when the view is not initialized
 
     private instanceLimit: number = 10000;
+
+    structRole = RDFResourceRolesEnum.individual;
 
     list: ARTURIResource[] = [];
 

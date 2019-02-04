@@ -1,5 +1,5 @@
 import { Component, QueryList, ViewChildren } from "@angular/core";
-import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { SearchServices } from "../../../../services/searchServices";
@@ -20,6 +20,8 @@ import { LexiconListNodeComponent } from "./lexiconListNodeComponent";
 export class LexiconListComponent extends AbstractList {
 
     @ViewChildren(LexiconListNodeComponent) viewChildrenNode: QueryList<LexiconListNodeComponent>;
+
+    structRole = RDFResourceRolesEnum.limeLexicon;
 
     list: ARTURIResource[];
 

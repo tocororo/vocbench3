@@ -1,5 +1,5 @@
 import { Component, Input, QueryList, ViewChildren } from "@angular/core";
-import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { SemanticTurkey } from "../../../models/Vocabulary";
 import { DatatypesServices } from "../../../services/datatypesServices";
 import { SearchServices } from "../../../services/searchServices";
@@ -22,6 +22,8 @@ export class DatatypeListComponent extends AbstractList {
     @Input() full: boolean = false; //if true show all the datatypes (also the owl2 that are not declared as rdfs:Datatype)
 
     @ViewChildren(DatatypeListNodeComponent) viewChildrenNode: QueryList<DatatypeListNodeComponent>;
+
+    structRole = RDFResourceRolesEnum.dataRange;
 
     list: ARTURIResource[];
 

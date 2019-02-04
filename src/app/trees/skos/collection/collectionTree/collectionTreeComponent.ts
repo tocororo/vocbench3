@@ -20,6 +20,8 @@ export class CollectionTreeComponent extends AbstractTree {
     //CollectionTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
 
+    structRole = RDFResourceRolesEnum.skosCollection;
+
     constructor(private skosService: SkosServices, private searchService: SearchServices, 
         eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
 

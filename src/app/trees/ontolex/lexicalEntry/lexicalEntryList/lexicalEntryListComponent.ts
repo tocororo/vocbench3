@@ -1,5 +1,5 @@
 import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
-import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { LexEntryVisualizationMode } from "../../../../models/Properties";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
@@ -24,6 +24,8 @@ export class LexicalEntryListComponent extends AbstractList {
 
     @Input() index: string; //initial letter of the entries to show
     @Input() lexicon: ARTURIResource;
+
+    structRole = RDFResourceRolesEnum.ontolexLexicalEntry;
 
     constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private vbProp: VBProperties,
         private basicModals: BasicModalServices, eventHandler: VBEventHandler) {

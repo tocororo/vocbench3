@@ -35,7 +35,7 @@ export abstract class AbstractGraphNode {
         let text = this.getRendering();
         let truncatedText = text;
         if (this.textElement != null) {
-            let textElementWidth = this.textElement.nativeElement.clientWidth;
+            let textElementWidth = this.textElement.nativeElement.getBoundingClientRect().width;
             let nodeWidth = this.node.getNodeWidth() - 4; //subtract 4 as padding
             if (textElementWidth > nodeWidth) {
                 let ratio = textElementWidth / nodeWidth;

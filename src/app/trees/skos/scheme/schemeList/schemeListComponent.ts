@@ -1,5 +1,5 @@
 import { Component, QueryList, ViewChildren } from "@angular/core";
-import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
+import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
@@ -20,6 +20,8 @@ import { SchemeListNodeComponent } from "./schemeListNodeComponent";
 export class SchemeListComponent extends AbstractList {
 
     @ViewChildren(SchemeListNodeComponent) viewChildrenNode: QueryList<SchemeListNodeComponent>;
+
+    structRole = RDFResourceRolesEnum.conceptScheme;
 
     list: SchemeListItem[];
 

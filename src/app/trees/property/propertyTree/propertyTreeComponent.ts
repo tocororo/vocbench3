@@ -24,6 +24,8 @@ export class PropertyTreeComponent extends AbstractTree {
     //PropertyTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(PropertyTreeNodeComponent) viewChildrenNode: QueryList<PropertyTreeNodeComponent>;
 
+    structRole = RDFResourceRolesEnum.property;
+
     constructor(private propertyService: PropertyServices, private searchService: SearchServices,
         eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         

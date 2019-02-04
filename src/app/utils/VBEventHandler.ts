@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { ARTResource, ARTURIResource } from '../models/ARTResources';
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { ResourceViewMode } from '../models/Properties';
 import { VBContext } from '../utils/VBContext';
 
@@ -74,6 +74,7 @@ export class VBEventHandler {
     //MISC EVENTS 
     //data loaded/imported/removed/refactored => trees/lists need to be resfreshed
     public refreshDataBroadcastEvent: EventEmitter<any> = new VBEventEmitter("refreshDataBroadcastEvent", true);
+    public refreshTreeListEvent: EventEmitter<RDFResourceRolesEnum[]> = new VBEventEmitter("refreshTreeEvent");
 
     /**
      * user changes resourceViewMode preference => resource view panel need to be updated
