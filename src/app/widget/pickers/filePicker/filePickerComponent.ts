@@ -35,8 +35,10 @@ export class FilePickerComponent {
     }
     
     private fileChangeEvent(file: File) {
-        this.file = file;
-        this.fileChanged.emit(file);
+        if (file != null) {
+            this.file = file;
+            this.fileChanged.emit(file);
+        }
     }
 
 }

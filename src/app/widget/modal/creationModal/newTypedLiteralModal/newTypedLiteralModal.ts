@@ -17,7 +17,8 @@ export class NewTypedLiteralModalData extends BSModalContext {
         public title: string = 'Create new label',
         public predicate: ARTURIResource,
         public allowedDatatypes: Array<ARTURIResource>,
-        public dataRanges: Array<ARTLiteral[]>
+        public dataRanges: Array<ARTLiteral[]>,
+        public multivalue: boolean = false
     ) {
         super();
     }
@@ -43,7 +44,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
     private selectedDataRange: ARTLiteral[]; //selected list of dataranges among which chose one
     private selectedDrValue: ARTLiteral; //Value selected among those available in the selectedDataRange
 
-    private submitted: boolean = false;
+    private values: ARTLiteral[] = [];
 
     constructor(public dialog: DialogRef<NewTypedLiteralModalData>) {
         this.context = dialog.context;
@@ -66,7 +67,30 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
         if (this.context.predicate != null && this.context.predicate.equals(RDFS.comment)) {
             this.datatype = RDF.langString;
         }
+    }
 
+    private addValue() {
+        if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
+            this.values.push(this.value);
+            this.value = null;
+        } else { //selected dataRangeAspectSelector
+            this.values.push(this.selectedDrValue);
+            this.selectedDrValue = null;
+        }
+    }
+
+    private isAddValueEnabled() {
+        return (
+            this.isInputValid() && 
+            (
+                (this.selectedAspectSelector == this.typedLiteralAspectSelector && !ResourceUtils.containsNode(this.values, this.value)) ||
+                (this.selectedAspectSelector == this.dataRangeAspectSelector && !ResourceUtils.containsNode(this.values, this.selectedDrValue))
+            )
+        )
+    }
+
+    private removeValue(value: ARTLiteral) {
+        this.values.splice(this.values.indexOf(value), 1);
     }
 
     private getDataRangePreview(dataRange: ARTLiteral[]): string {
@@ -163,16 +187,45 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
         );
     }
 
+    /**
+     * Determines if the Ok button is enabled.
+     * Ok is enabled in case multiple values are added or if a single value is valid
+     */
+    private isOkEnabled(): boolean {
+        return this.values.length > 0 || this.isInputValid();
+    }
+
+    private isOkWarningActive(): boolean {
+        return (
+            this.values.length > 0 && (
+                (this.selectedAspectSelector == this.typedLiteralAspectSelector && this.value != null) ||
+                (this.selectedAspectSelector == this.dataRangeAspectSelector && this.selectedDrValue != null)
+            )
+        );
+    }
+
     ok(event: Event) {
-        this.submitted = true;
-        if (this.isInputValid()) {
+        let literals: ARTLiteral[];
+        if (this.context.multivalue) {
+            if (this.values.length > 0) { //there are multiple values
+                literals = this.values;
+            } else { //no multiple values => return the input value
+                if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
+                    literals = [this.value];
+                } else { //selected dataRangeAspectSelector
+                    literals = [this.selectedDrValue];
+                }
+            }
+        } else {
             if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
-                this.dialog.close(this.value);
-            } else if (this.selectedAspectSelector == this.dataRangeAspectSelector) {
-                this.dialog.close(this.selectedDrValue);
+                literals = [this.value];
+            } else { //selected dataRangeAspectSelector
+                literals = [this.selectedDrValue];
             }
         }
+        this.dialog.close(literals);
     }
+    
 
     cancel() {
         this.dialog.dismiss();

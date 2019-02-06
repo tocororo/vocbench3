@@ -154,8 +154,8 @@ export class CreationModalServices {
      * @param dataRanges if provided, tells which values can be created/chosed (e.g. xml:string ["male", "female"])
      * @return if the modal closes with ok returns a promise containing an ARTLiteral
      */
-    newTypedLiteral(title: string, predicate?: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[]) {
-        var modalData = new NewTypedLiteralModalData(title, predicate, allowedDatatypes, dataRanges);
+    newTypedLiteral(title: string, predicate?: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[], multivalue?: boolean) {
+        var modalData = new NewTypedLiteralModalData(title, predicate, allowedDatatypes, dataRanges, multivalue);
         const builder = new BSModalContextBuilder<NewTypedLiteralModalData>(
             modalData, undefined, NewTypedLiteralModalData
         );

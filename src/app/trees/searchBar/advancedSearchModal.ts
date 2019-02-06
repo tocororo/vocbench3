@@ -217,8 +217,8 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
             );
         } else if (type == RDFTypesEnum.typedLiteral) {
             this.creationModals.newTypedLiteral("Create typed literal").then(
-                (value: ARTLiteral) => {
-                    group.second.push(value);
+                (values: ARTLiteral[]) => {
+                    group.second.push(values[0]);
                 },
                 () => {}
             );

@@ -146,8 +146,8 @@ export class EditableResourceComponent {
 								if (this.ranges.rangeCollection.dataRanges != null || this.ranges.rangeCollection.resources != null) {
 									this.creationModals.newTypedLiteral("Edit " + this.predicate.getShow(), this.predicate,
 										this.ranges.rangeCollection.resources, this.ranges.rangeCollection.dataRanges).then(
-										newValue => {
-											this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
+										(literals: ARTLiteral[]) => {
+											this.applyUpdate(this.subject, this.predicate, this.resource, literals[0]);
 										},
 										() => { }
 									);

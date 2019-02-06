@@ -195,9 +195,16 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
      * Opens a newTypedLiteral modal to enrich the predicate with a typed literal value 
      */
     private enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[]) {
-        this.creationModals.newTypedLiteral("Add " + predicate.getShow(), predicate, allowedDatatypes, dataRanges).then(
-            (literal: ARTLiteral) => {
-                this.addPartitionAware(this.resource, predicate, literal);
+        this.creationModals.newTypedLiteral("Add " + predicate.getShow(), predicate, allowedDatatypes, dataRanges, true).then(
+            (literals: ARTLiteral[]) => {
+                let addFunctions: MultiAddFunction[] = [];
+                literals.forEach((l: ARTLiteral) => {
+                    addFunctions.push({
+                        function: this.resourcesService.addValue(<ARTURIResource>this.resource, predicate, l),
+                        value: l
+                    });
+                });
+                this.addMultiple(addFunctions);
             },
             () => { }
         );

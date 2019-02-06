@@ -180,8 +180,9 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
             this.lang = obj.getLang();
         } else {
             this.stringValue = null;
-            this.selectedDatatype = null;
-            this.lang = null;
+            //the following two lines have been commented in order to avoid to "reset" also the lang or the datatype in case of the bound value is null
+            // this.selectedDatatype = null;
+            // this.lang = null;
         }
     }
     /**
