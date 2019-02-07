@@ -312,9 +312,9 @@ export class EditableResourceComponent {
 	 * "Replace with existing resource" menu item
 	 */
 	private replace() {
-		this.rvModalService.addPropertyValue("Replace", this.subject, this.predicate, false).then(
+		this.rvModalService.addPropertyValue("Replace", this.subject, this.predicate, false, false).then(
 			(data: any) => {
-				this.applyUpdate(this.subject, this.predicate, this.resource, data.value);
+				this.applyUpdate(this.subject, this.predicate, this.resource, data.value[0]);
 			},
 			() => { }
 		)
