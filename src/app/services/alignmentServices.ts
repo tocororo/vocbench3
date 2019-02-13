@@ -270,7 +270,7 @@ export class AlignmentServices {
      * @param mappingProperty the new mappingProperty of the alignment
      * @return a cell resulting from the action
      */
-    changeMappingProperty(entity1: ARTURIResource, entity2: ARTURIResource, mappingProperty: string) {
+    changeMappingProperty(entity1: ARTURIResource, entity2: ARTURIResource, mappingProperty: ARTURIResource) {
         console.log("[AlignmentServices] changeMappingProperty");
         var params = {
             entity1: entity1,

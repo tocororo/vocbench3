@@ -329,7 +329,7 @@ export class AlignmentValidationComponent {
     private changeMappingProperty(cell: AlignmentCell, property: ARTURIResource) {
         //change property only if the user choses a property different from the current.
         if (property.getURI() != cell.getMappingProperty().getURI()) {
-            this.alignmentService.changeMappingProperty(cell.getEntity1(), cell.getEntity2(), property.getURI()).subscribe(
+            this.alignmentService.changeMappingProperty(cell.getEntity1(), cell.getEntity2(), property).subscribe(
                 resultCell => {//replace the alignment cell with the new one
                     this.alignmentCellList[this.getIndexOfCell(cell)] = resultCell;
                 }
