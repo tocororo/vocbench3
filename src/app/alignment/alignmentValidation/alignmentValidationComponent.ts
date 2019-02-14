@@ -226,7 +226,7 @@ export class AlignmentValidationComponent {
                             this.alignmentService.acceptAlignment(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), data.property, data.setAsDefault).subscribe(
                                 resultCell => {
                                     //replace the accepted alignment cell with the returned one
-                                    this.alignmentCellList[this.getIndexOfCell(cell)] = resultCell;
+                                    this.replaceAlignmentCell(resultCell);
                                 }
                             )
                         },
@@ -295,7 +295,7 @@ export class AlignmentValidationComponent {
                 (confirm: any) => {
                     this.alignmentService.changeRelation(cell.getEntity1(), cell.getEntity2(), relation).subscribe(
                         resultCell => {//replace the alignment cell with the new one
-                            this.alignmentCellList[this.getIndexOfCell(cell)] = resultCell;
+                            this.replaceAlignmentCell(resultCell);
                         }
                     )
                 },
@@ -331,10 +331,26 @@ export class AlignmentValidationComponent {
         if (property.getURI() != cell.getMappingProperty().getURI()) {
             this.alignmentService.changeMappingProperty(cell.getEntity1(), cell.getEntity2(), property).subscribe(
                 resultCell => {//replace the alignment cell with the new one
-                    this.alignmentCellList[this.getIndexOfCell(cell)] = resultCell;
+                    this.replaceAlignmentCell(resultCell);
                 }
             );
         }
+    }
+
+    /**
+     * Replace an alignment cell returned after an update with the existing one into the alignmentCellList array.
+     * It avoids to replace it simply with cell=newCell since this would require to invoce again a getResourcesInfo on
+     * the entities envolved. So, this method replaces all the attributes execpt entity1 and entity2
+     * @param alignmentCell 
+     */
+    private replaceAlignmentCell(alignmentCell: AlignmentCell) {
+        let cellToReplace: AlignmentCell = this.alignmentCellList[this.getIndexOfCell(alignmentCell)];
+        cellToReplace.setComment(alignmentCell.getComment());
+        cellToReplace.setMappingProperty(alignmentCell.getMappingProperty());
+        cellToReplace.setMeasure(alignmentCell.getMeasure());
+        cellToReplace.setRelation(alignmentCell.getRelation());
+        cellToReplace.setStatus(alignmentCell.getStatus());
+        cellToReplace.setSuggestedMappingProperties(alignmentCell.getSuggestedMappingProperties());
     }
 
     /**

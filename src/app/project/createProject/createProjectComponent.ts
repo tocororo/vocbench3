@@ -308,7 +308,7 @@ export class CreateProjectComponent {
             summary.warnings.forEach(w => {
                 message += w.message+"\n";
             })
-            this.basicModals.alert("Prelad data", message, "warning");
+            this.basicModals.alert("Preload data", message, "warning");
         }
         this.preloadedData = {
             summary: summary,
