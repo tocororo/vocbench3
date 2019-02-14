@@ -27,7 +27,6 @@ export class SearchServices {
      */
     searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, useURI: boolean, useNotes: boolean,
         searchMode: SearchMode, langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[]): Observable<ARTURIResource[]> {
-        console.log("[SearchServices] searchResource");
         var params: any = {
             searchString: searchString,
             rolesArray: rolesArray,
@@ -65,7 +64,6 @@ export class SearchServices {
      */
     searchInstancesOfClass(cls: ARTURIResource, searchString: string, useLocalName: boolean, useURI: boolean, useNotes: boolean,
         searchMode: SearchMode, langs?: string[], includeLocales?: boolean): Observable<ARTURIResource[]> {
-        console.log("[SearchServices] searchInstancesOfClass");
         var params: any = {
             cls: cls,
             searchString: searchString,
@@ -102,7 +100,6 @@ export class SearchServices {
     searchLexicalEntry(searchString: string, useLocalName: boolean, useURI: boolean, useNotes: boolean, searchMode: SearchMode, 
         lexicons?: ARTURIResource[], langs?: string[], includeLocales?: boolean): Observable<ARTURIResource[]> {
 
-        console.log("[SearchServices] searchLexicalEntry");
         var params: any = {
             searchString: searchString,
             useLocalName: useLocalName,
@@ -135,7 +132,6 @@ export class SearchServices {
      * @return an array of resources
      */
     getPathFromRoot(resource: ARTURIResource, role: string, schemes?: ARTURIResource[], root?: ARTURIResource) {
-        console.log("[SearchServices] getPathFromRoot");
         var params: any = {
             role: role,
             resourceURI: resource
@@ -172,7 +168,6 @@ export class SearchServices {
      */
     searchStringList(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: SearchMode, 
             langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[], cls?: ARTURIResource): Observable<string[]> {
-        console.log("[SearchServices] searchStringList");
         var params: any = {
             searchString: searchString,
             rolesArray: rolesArray,
@@ -213,7 +208,6 @@ export class SearchServices {
         ingoingLinks?: { first: ARTURIResource, second: ARTNode[] }[], outgoingLinks?: { first: ARTURIResource, second: ARTNode[] }[],
         outgoingSearch?: { predicate: ARTURIResource, searchString: string, mode: SearchMode }[]): Observable<ARTResource[]> {
 
-        console.log("[SearchServices] advancedSearch");
         var params: any = {
             statusFilter: statusFilter
         };
@@ -301,7 +295,6 @@ export class SearchServices {
      * @param searchParameterizationReference 
      */
     getCustomSearchForm(searchParameterizationReference: string): Observable<Settings> {
-        console.log("[SearchServices] getCustomSearchForm");
         var params: any = {
             searchParameterizationReference: searchParameterizationReference
         };
@@ -313,7 +306,6 @@ export class SearchServices {
     }
 
     customSearch(searchParameterizationReference: string, boundValues: Map<string, ARTNode>): Observable<ARTResource[]> {
-        console.log("[SearchServices] customSearch");
         var params: any = {
             searchParameterizationReference: searchParameterizationReference,
             boundValues: boundValues

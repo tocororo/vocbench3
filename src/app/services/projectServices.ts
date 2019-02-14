@@ -26,7 +26,6 @@ export class ProjectServices {
      * @return an array of Project
      */
     listProjects(consumer?: Project, userDependent?: boolean, onlyOpen?: boolean) {
-        console.log("[ProjectServices] listProjects");
         var params: any = {
             consumer: "SYSTEM"
         };
@@ -74,7 +73,6 @@ export class ProjectServices {
      * @param project the project to disconnect
      */
     disconnectFromProject(project: Project) {
-        console.log("[ProjectServices] disconnectFromProject");
 
         //if the closing project is the working, remove it from context
         //this could be a temporary warkaround to avoid the problem described here https://art-uniroma2.atlassian.net/browse/ST-289
@@ -99,7 +97,6 @@ export class ProjectServices {
      * @param project the project to access
      */
     accessProject(project: Project) {
-        console.log("[ProjectServices] accessProject");
         var params = {
             consumer: "SYSTEM",
             projectName: project.getName(),
@@ -133,7 +130,6 @@ export class ProjectServices {
         creationDateProperty?: ARTURIResource, modificationDateProperty?: ARTURIResource,
         preloadedDataFileName?: string, preloadedDataFormat?: string, transitiveImportAllowance?: TransitiveImportMethodAllowance) {
         
-        console.log("[ProjectServices] createProject");
         var params: any = {
             consumer: "SYSTEM",
             projectName: projectName,
@@ -172,7 +168,6 @@ export class ProjectServices {
      * @param project the project to delete
      */
     deleteProject(project: Project) {
-        console.log("[ProjectServices] deleteProject");
         var params = {
             consumer: "SYSTEM",
             projectName: project.getName(),
@@ -186,7 +181,6 @@ export class ProjectServices {
      * @param projectFile the archieve of the project to import
      */
     importProject(projectName: string, projectFile: File) {
-        console.log("[ProjectServices] importProject");
         var data = {
             newProjectName: projectName,
             importPackage: projectFile
@@ -199,7 +193,6 @@ export class ProjectServices {
      * @param project the project to export
      */
     exportProject(project: Project) {
-        console.log("[ProjectServices] exportProject");
         var params = {
             projectName: project.getName()
         };
@@ -211,7 +204,6 @@ export class ProjectServices {
      * @param project 
      */
     getProjectPropertyMap(project: Project): Observable<{name: string, value: string}[]> {
-        console.log("[ProjectServices] getProjectPropertyMap");
         var params = {
             projectName: project.getName()
         };
@@ -231,7 +223,6 @@ export class ProjectServices {
     }
 
     getAccessStatusMap(): Observable<{name: string, consumers: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel}[], lock: any}[]> {
-        console.log("[ProjectServices] getAccessStatusMap");
         var params = { };
         return this.httpMgr.doGet(this.serviceName, "getAccessStatusMap", params).map(
             stResp => {
@@ -291,7 +282,6 @@ export class ProjectServices {
      * @param accessLevel
      */
     updateAccessLevel(project: Project, consumer: Project, accessLevel?: AccessLevel) {
-        console.log("[ProjectServices] updateAccessLevel");
         var params: any = {
             projectName: project.getName(),
             consumerName: consumer.getName(),
@@ -308,7 +298,6 @@ export class ProjectServices {
      * @param accessLevel 
      */
     updateLockLevel(project: Project, lockLevel: LockLevel) {
-        console.log("[ProjectServices] updateLockLevel");
         var params = {
             projectName: project.getName(),
             lockLevel: lockLevel,
@@ -344,7 +333,6 @@ export class ProjectServices {
      * @param excludeLocal 
      */
     getRepositories(project: Project, excludeLocal?: boolean): Observable<RepositorySummary[]> {
-        console.log("[ProjectServices] getRepositories");
         var params: any = {
             projectName: project.getName()
         };
@@ -362,7 +350,6 @@ export class ProjectServices {
      * @param newPassword 
      */
     modifyRepositoryAccessCredentials(project: Project, repositoryID: string, newUsername?: string, newPassword?: string) {
-        console.log("[ProjectServices] modifyRepositoryAccessCredentials");
         var params: any = {
             projectName: project.getName(),
             repositoryID: repositoryID,
@@ -387,7 +374,6 @@ export class ProjectServices {
      */
     batchModifyRepostoryAccessCredentials(project: Project, serverURL: string, matchUsername?: boolean, 
         currentUsername?: string, newUsername?: string, newPassword?: string) {
-        console.log("[ProjectServices] batchModifyRepostoryAccessCredentials");
         var params: any = {
             projectName: project.getName(),
             serverURL: serverURL,
@@ -413,7 +399,6 @@ export class ProjectServices {
      * @param preloadedDataFormat 
      */
     preloadDataFromFile(preloadedData: File, preloadedDataFormat: string): Observable<PreloadedDataSummary> {
-        console.log("[ProjectServices] preloadDataFromFile");
         let params: any = {
             preloadedData: preloadedData,
             preloadedDataFormat: preloadedDataFormat,
@@ -431,7 +416,6 @@ export class ProjectServices {
      * @param preloadedDataFormat 
      */
     preloadDataFromURL(preloadedDataURL: string, preloadedDataFormat?: string): Observable<PreloadedDataSummary> {
-        console.log("[ProjectServices] preloadDataFromURL");
         let params: any = {
             preloadedDataURL: preloadedDataURL,
             preloadedDataFormat: preloadedDataFormat,
@@ -449,7 +433,6 @@ export class ProjectServices {
      * @param datasetId 
      */
     preloadDataFromCatalog(connectorId: string, datasetId: string): Observable<PreloadedDataSummary> {
-        console.log("[ProjectServices] preloadDataFromCatalog");
         let params: any = {
             connectorId: connectorId,
             datasetId: datasetId,

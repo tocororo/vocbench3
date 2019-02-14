@@ -11,7 +11,6 @@ export class ExtensionsServices {
     constructor(private httpMgr: HttpManager) { }
 
     getExtensionPoints(scopes?: Scope) {
-        console.log("[ExtensionsServices] getExtensionPoints");
         var params: any = {};
         if (scopes != null) {
             params.scopes = scopes;
@@ -20,7 +19,6 @@ export class ExtensionsServices {
     }
 
     getExtensionPoint(identifier: string) {
-        console.log("[ExtensionsServices] getExtensionPoint");
         var params: any = {
             identifier: identifier
         };
@@ -28,7 +26,6 @@ export class ExtensionsServices {
     }
 
     getExtensions(extensionPointID: string): Observable<ExtensionFactory[]> {
-        console.log("[ExtensionsServices] getExtensions");
         var params: any = {
             extensionPointID: extensionPointID
         };

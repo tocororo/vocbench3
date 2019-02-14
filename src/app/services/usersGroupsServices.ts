@@ -16,7 +16,6 @@ export class UsersGroupsServices {
      * 
      */
     listGroups(): Observable<UsersGroup[]> {
-        console.log("[UsersGroupServices] listGroups");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listGroups", params).map(
             resp => {
@@ -39,7 +38,6 @@ export class UsersGroupsServices {
      * @param groupIri 
      */
     getGroup(groupIri: ARTURIResource): Observable<UsersGroup> {
-        console.log("[UsersGroupServices] getGroup");
         var params: any = {
             groupIri: groupIri
         };
@@ -59,7 +57,6 @@ export class UsersGroupsServices {
      * @param logoUrl 
      */
     createGroup(shortName: string, fullName?: string, description?: string, webPage?: string, logoUrl?: string, iri?: string): Observable<UsersGroup> {
-        console.log("[UsersGroupServices] createGroup");
         var params: any = {
             shortName: shortName
         };
@@ -88,7 +85,6 @@ export class UsersGroupsServices {
      * @param shortName 
      */
     updateGroupShortName(groupIri: ARTURIResource, shortName: string): Observable<UsersGroup> {
-        console.log("[UsersGroupServices] updateGroupShortName");
         var params: any = {
             groupIri: groupIri,
             shortName: shortName
@@ -106,7 +102,6 @@ export class UsersGroupsServices {
      * @param fullName 
      */
     updateGroupFullName(groupIri: ARTURIResource, fullName: string): Observable<UsersGroup> {
-        console.log("[UsersGroupServices] updateGroupFullName");
         var params: any = {
             groupIri: groupIri,
             fullName: fullName
@@ -124,7 +119,6 @@ export class UsersGroupsServices {
      * @param description 
      */
     updateGroupDescription(groupIri: ARTURIResource, description: string): Observable<UsersGroup> {
-        console.log("[UsersGroupServices] updateGroupDescription");
         var params: any = {
             groupIri: groupIri,
             description: description
@@ -142,7 +136,6 @@ export class UsersGroupsServices {
      * @param webPage 
      */
     updateGroupWebPage(groupIri: ARTURIResource, webPage: string): Observable<UsersGroup> {
-        console.log("[UsersGroupServices] updateGroupWebPage");
         var params: any = {
             groupIri: groupIri,
             webPage: webPage
@@ -160,7 +153,6 @@ export class UsersGroupsServices {
      * @param logoUrl 
      */
     updateGroupLogoUrl(groupIri: ARTURIResource, logoUrl: string): Observable<UsersGroup> {
-        console.log("[UsersGroupServices] updateGroupLogoUrl");
         var params: any = {
             groupIri: groupIri,
             logoUrl: logoUrl
@@ -177,7 +169,6 @@ export class UsersGroupsServices {
      * @param groupName 
      */
     deleteGroup(groupIri: ARTURIResource) {
-        console.log("[UsersGroupServices] deleteGroup");
         var params: any = {
             groupIri: groupIri
         };
@@ -191,7 +182,6 @@ export class UsersGroupsServices {
      * @param groupName
      */
     assignGroupToUser(projectName: string, email: string, groupIri: ARTURIResource) {
-        console.log("[UsersGroupServices] assignGroupToUser");
         var params: any = {
             projectName: projectName,
             email: email,
@@ -208,7 +198,6 @@ export class UsersGroupsServices {
      * @param limitations
      */
     setGroupLimitationsToUser(projectName: string, email: string, groupIri: ARTURIResource, limitations: boolean) {
-        console.log("[UsersGroupServices] setGroupLimitationsToUser");
         var params: any = {
             projectName: projectName,
             email: email,
@@ -224,7 +213,6 @@ export class UsersGroupsServices {
      * @param email
      */
     removeGroupFromUser(projectName: string, email: string) {
-        console.log("[UsersGroupServices] removeGroupFromUser");
         var params: any = {
             projectName: projectName,
             email: email
@@ -239,7 +227,6 @@ export class UsersGroupsServices {
      * @param scheme 
      */
     addOwnedSchemeToGroup(projectName: string, groupIri: ARTURIResource, scheme: ARTURIResource) {
-        console.log("[UsersGroupServices] addOwnedSchemeToGroup");
         var params: any = {
             projectName: projectName,
             groupIri: groupIri,
@@ -255,7 +242,6 @@ export class UsersGroupsServices {
      * @param scheme 
      */
     removeOwnedSchemeFromGroup(projectName: string, groupIri: ARTURIResource, scheme: ARTURIResource) {
-        console.log("[UsersGroupServices] removeOwnedSchemeFromGroup");
         var params: any = {
             projectName: projectName,
             groupIri: groupIri,
@@ -270,7 +256,6 @@ export class UsersGroupsServices {
      * @param groupIri 
      */
     getProjectGroupBinding(projectName: string, groupIri: ARTURIResource): Observable<ProjectGroupBinding> {
-        console.log("[UsersGroupServices] getProjectGroupBinding");
         var params: any = {
             projectName: projectName,
             groupIri: groupIri

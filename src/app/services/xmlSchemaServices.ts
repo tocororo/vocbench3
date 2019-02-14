@@ -20,7 +20,6 @@ export class XmlSchemaServices {
      * @return formatted dateTime
      */
     formatDateTime(year: number, month: number, day: number, hour: number, minute: number, second: number, offset?: string) {
-        console.log("[XmlSchemaServices] formatDateTime");
         var params: any = {
             year : year,
             month : month,
@@ -47,7 +46,6 @@ export class XmlSchemaServices {
      * @return formatted date
      */
     formatDate(year: number, month: number, day: number) {
-        console.log("[XmlSchemaServices] formatDate");
         var params: any = {
             year : year,
             month : month,
@@ -68,7 +66,6 @@ export class XmlSchemaServices {
      * @return formatted time
      */
     formatTime(hour: number, minute: number, second: number) {
-        console.log("[XmlSchemaServices] formatTime");
         var params: any = {
             hour : hour,
             minute : minute,

@@ -14,7 +14,6 @@ export class ServicesServices {
      * Returns a list of extension path (e.g. "it.uniroma2.art.semanticturkey/st-core-services")
      */
     getExtensionPaths(): Observable<string[]> {
-        console.log("[ServicesServices] getExtensionPaths");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getExtensionPaths", params);
     }
@@ -24,7 +23,6 @@ export class ServicesServices {
      * @param extensionPath 
      */
     getServiceClasses(extensionPath: string): Observable<string[]> {
-        console.log("[ServicesServices] getServiceClasses");
         var params: any = {
             extensionPath: extensionPath
         };
@@ -48,7 +46,6 @@ export class ServicesServices {
      * @param serviceClass 
      */
     getServiceOperations(extensionPath: string, serviceClass: string): Observable<string[]> {
-        console.log("[ServicesServices] getServiceOperations");
         var params: any = {
             extensionPath: extensionPath,
             serviceClass: serviceClass

@@ -27,7 +27,6 @@ export class InputOutputServices {
      */
     loadRDF(baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, inputFile?: File, format?: string, 
         loaderSpec?: PluginSpecification, rdfLifterSpec?: PluginSpecification, transformationPipeline?: string, validateImplicitly?: boolean) {
-        console.log("[InputOutputServices] loadRDF");
         var data: any = {
             baseURI: baseURI,
             transitiveImportAllowance: transitiveImportAllowance,
@@ -63,7 +62,6 @@ export class InputOutputServices {
      * @param fileName 
      */
     getParserFormatForFileName(fileName: string) {
-        console.log("[InputOutputServices] getParserFormatForFileName");
         var params: any = {
             fileName: fileName
         }
@@ -75,7 +73,6 @@ export class InputOutputServices {
      * @param fileName 
      */
     getWriterFormatForFileName(fileName: string) {
-        console.log("[InputOutputServices] getWriterFormatForFileName");
         var params: any = {
             fileName: fileName
         }
@@ -86,7 +83,6 @@ export class InputOutputServices {
      * Deletes all the data of the current project model
      */
     clearData() {
-        console.log("[InputOutputServices] clearData");
         var params: any = {};
         return this.httpMgr.doPost(this.serviceName, "clearData", params);
     }
@@ -96,7 +92,6 @@ export class InputOutputServices {
      * @param extensionID 
      */
     getSupportedFormats(extensionID: string): Observable<DataFormat[]> {
-        console.log("[InputOutputServices] getSupportedFormats");
         var params = {
             extensionID: extensionID
         };
@@ -123,7 +118,6 @@ export class InputOutputServices {
      * 
      */
     getInputRDFFormats(): Observable<RDFFormat[]> {
-        console.log("[InputOutputServices] getInputRDFFormats");
         var params = {};
         return this.httpMgr.doGet(this.serviceName, "getInputRDFFormats", params).map(
             stResp => {

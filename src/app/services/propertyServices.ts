@@ -20,7 +20,6 @@ export class PropertyServices {
      * @return an array of Properties
      */
     getTopProperties(): Observable<ARTURIResource[]> {
-        console.log("[PropertyServices] getTopProperties");
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getTopProperties", params).map(
             stResp => {
@@ -34,7 +33,6 @@ export class PropertyServices {
      * @return an array of Properties
      */
     getTopRDFProperties(): Observable<ARTURIResource[]> {
-        console.log("[PropertyServices] getTopRDFProperties");
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getTopRDFProperties", params).map(
             stResp => {
@@ -48,7 +46,6 @@ export class PropertyServices {
      * @return an array of Properties
      */
     getTopObjectProperties(): Observable<ARTURIResource[]> {
-        console.log("[PropertyServices] getTopObjectProperties");
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getTopObjectProperties", params).map(
             stResp => {
@@ -62,7 +59,6 @@ export class PropertyServices {
      * @return an array of Properties
      */
     getTopDatatypeProperties(): Observable<ARTURIResource[]> {
-        console.log("[PropertyServices] getTopDatatypeProperties");
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getTopDatatypeProperties", params).map(
             stResp => {
@@ -76,7 +72,6 @@ export class PropertyServices {
      * @return an array of Properties
      */
     getTopAnnotationProperties(): Observable<ARTURIResource[]> {
-        console.log("[PropertyServices] getTopAnnotationProperties");
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getTopAnnotationProperties", params).map(
             stResp => {
@@ -90,7 +85,6 @@ export class PropertyServices {
      * @return an array of Properties
      */
     getTopOntologyProperties(): Observable<ARTURIResource[]> {
-        console.log("[PropertyServices] getTopOntologyProperties");
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getTopOntologyProperties", params).map(
             stResp => {
@@ -105,7 +99,6 @@ export class PropertyServices {
      * @return an array of subProperties
      */
     getSubProperties(property: ARTURIResource): Observable<ARTURIResource[]> {
-        console.log("[PropertyServices] getSubProperties");
         var params: any = {
             superProperty: property
         };
@@ -122,7 +115,6 @@ export class PropertyServices {
      * @param properties
      */
     getPropertiesInfo(properties: ARTURIResource[]): Observable<ARTURIResource[]> {
-        console.log("[PropertyServices] getPropertiesInfo");
         var params: any = {
             propList: properties
         };
@@ -140,7 +132,6 @@ export class PropertyServices {
      * @param resource service returns properties that have as domain the type of this resource 
      */
     getRelevantPropertiesForResource(resource: ARTResource): Observable<ARTURIResource[]> {
-        console.log("[PropertyServices] getRelevantPropertiesForResource");
         var params: any = {
             res: resource
         };
@@ -165,7 +156,6 @@ export class PropertyServices {
      * - formCollection, an optional FormCollection object only if the property has form collection associated
      */
     getRange(property: ARTURIResource): Observable<RangeResponse> {
-        console.log("[PropertyServices] getRange");
         var params: any = {
             property: property,
         };
@@ -245,7 +235,6 @@ export class PropertyServices {
      */
     createProperty(propertyType: ARTURIResource, newProperty: ARTURIResource, superProperty?: ARTURIResource, 
             customFormValue?: CustomFormValue) {
-        console.log("[PropertyServices] createProperty");
         var params: any = {
             propertyType: propertyType,
             newProperty: newProperty
@@ -282,7 +271,6 @@ export class PropertyServices {
      * @param property 
      */
     deleteProperty(property: ARTURIResource) {
-        console.log("[PropertyServices] deleteProperty");
         var params: any = {
             property: property
         };
@@ -301,7 +289,6 @@ export class PropertyServices {
      * @param superProperty the superProperty to add
      */
     addSuperProperty(property: ARTURIResource, superProperty: ARTURIResource, linkingPredicate?: ARTURIResource, inverse?: boolean) {
-        console.log("[PropertyServices] addSuperProperty");
         var params: any = {
             property: property,
             superProperty: superProperty,
@@ -331,7 +318,6 @@ export class PropertyServices {
      * @param superProperty the superProperty to remove
      */
     removeSuperProperty(property: ARTURIResource, superProperty: ARTURIResource, linkingPredicate?: ARTURIResource) {
-        console.log("[PropertyServices] removeSuperProperty");
         var params: any = {
             property: property,
             superProperty: superProperty,
@@ -351,7 +337,6 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     addEquivalentProperty(property: ARTURIResource, equivalentProperty: ARTURIResource, linkingPredicate?: ARTURIResource, inverse?: boolean) {
-        console.log("[PropertyServices] addEquivalentProperty");
         var params: any = {
             property: property,
             equivalentProperty: equivalentProperty,
@@ -372,7 +357,6 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     removeEquivalentProperty(property: ARTURIResource, equivalentProperty: ARTURIResource, linkingPredicate?: ARTURIResource) {
-        console.log("[PropertyServices] removeEquivalentProperty");
         var params: any = {
             property: property,
             equivalentProperty: equivalentProperty,
@@ -390,7 +374,6 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     addPropertyDisjointWith(property: ARTURIResource, disjointProperty: ARTURIResource, linkingPredicate?: ARTURIResource, inverse?: boolean) {
-        console.log("[PropertyServices] addPropertyDisjointWith");
         var params: any = {
             property: property,
             disjointProperty: disjointProperty,
@@ -411,7 +394,6 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     removePropertyDisjointWith(property: ARTURIResource, disjointProperty: ARTURIResource, linkingPredicate?: ARTURIResource) {
-        console.log("[PropertyServices] removePropertyDisjointWith");
         var params: any = {
             property: property,
             disjointProperty: disjointProperty,
@@ -429,7 +411,6 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     addInverseProperty(property: ARTURIResource, inverseProperty: ARTURIResource, linkingPredicate?: ARTURIResource, inverse?: boolean) {
-        console.log("[PropertyServices] addInverseProperty");
         var params: any = {
             property: property,
             inverseProperty: inverseProperty,
@@ -450,7 +431,6 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     removeInverseProperty(property: ARTURIResource, inverseProperty: ARTURIResource, linkingPredicate?: ARTURIResource) {
-        console.log("[PropertyServices] removeInverseProperty");
         var params: any = {
             property: property,
             inverseProperty: inverseProperty,
@@ -467,7 +447,6 @@ export class PropertyServices {
      * @param domain the domain class of the property
      */
     addPropertyDomain(property: ARTURIResource, domain: ARTURIResource) {
-        console.log("[PropertyServices] addPropertyDomain");
         var params: any = {
             property: property,
             domain: domain
@@ -481,7 +460,6 @@ export class PropertyServices {
      * @param domain the domain class of the property
      */
     removePropertyDomain(property: ARTURIResource, domain: ARTResource) {
-        console.log("[PropertyServices] removePropertyDomain");
         var params: any = {
             property: property,
             domain: domain,
@@ -495,7 +473,6 @@ export class PropertyServices {
      * @param range the range class of the property
      */
     addPropertyRange(property: ARTURIResource, range: ARTURIResource) {
-        console.log("[PropertyServices] addPropertyRange");
         var params: any = {
             property: property,
             range: range
@@ -509,7 +486,6 @@ export class PropertyServices {
      * @param range the range class of the property
      */
     removePropertyRange(property: ARTURIResource, range: ARTResource) {
-        console.log("[PropertyServices] removePropertyRange");
         var params: any = {
             property: property,
             range: range,
@@ -524,7 +500,6 @@ export class PropertyServices {
      * @param predicate (optional subproperty of rdfs:range)
      */
     setDataRange(property: ARTURIResource, literals: ARTLiteral[], predicate?: ARTURIResource) {
-        console.log("[PropertyServices] setDataRange");
         var params: any = {
             property: property,
             literals: literals,
@@ -541,7 +516,6 @@ export class PropertyServices {
      * @param datarange 
      */
     removeDataranges(property: ARTURIResource, datarange: ARTBNode) {
-        console.log("[PropertyServices] removeDataranges");
         var params: any = {
             property: property,
             datarange: datarange,
@@ -555,7 +529,6 @@ export class PropertyServices {
      * @param literals 
      */
     updateDataranges(datarange: ARTBNode, literals: ARTLiteral[]) {
-        console.log("[PropertyServices] updateDataranges");
         var params: any = {
             datarange: datarange,
             literals: literals,
@@ -568,7 +541,6 @@ export class PropertyServices {
      * @param datarange 
      */
     getDatarangeLiterals(datarange: ARTBNode): Observable<ARTLiteral[]> {
-        console.log("[PropertyServices] getDatarangeLiterals");
         var params: any = {
             datarange: datarange
         };
@@ -584,7 +556,6 @@ export class PropertyServices {
      * @param properties 
      */
     getInverseProperties(properties: ARTURIResource[]) {
-        console.log("[PropertyServices] getInverseProperties");
         var params: any = {
             properties: properties
         };
@@ -602,7 +573,6 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     addPropertyChainAxiom(property: ARTURIResource, chainedProperties: string, linkingPredicate?: ARTURIResource) {
-        console.log("[PropertyServices] addPropertyChainAxiom");
         var params: any = {
             property: property,
             chainedProperties: chainedProperties,
@@ -620,7 +590,6 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     removePropertyChainAxiom(property: ARTURIResource, chain: ARTResource, linkingPredicate?: ARTURIResource) {
-        console.log("[PropertyServices] removePropertyChainAxiom");
         var params: any = {
             property: property,
             chain: chain,
@@ -639,7 +608,6 @@ export class PropertyServices {
      * @param linkingPredicate 
      */
     updatePropertyChainAxiom(property: ARTURIResource, replacedChain: ARTResource, chainedProperties: string, linkingPredicate?: ARTURIResource) {
-        console.log("[PropertyServices] updatePropertyChainAxiom");
         var params: any = {
             property: property,
             replacedChain: replacedChain,

@@ -21,7 +21,6 @@ export class HistoryServices {
      */
     getCommitSummary(operationFilter?: ARTURIResource[], performerFilter?: ARTURIResource[], validatorFilter?: ARTURIResource[],
         timeLowerBound?: string, timeUpperBound?: string, limit?: number) {
-        console.log("[HistoryServices] getCommitSummary");
         var params: any = {
             operationFilter: operationFilter,
             performerFilter: performerFilter,
@@ -51,7 +50,6 @@ export class HistoryServices {
     getCommits(tipRevisionNumber: number, operationFilter?: ARTURIResource[], performerFilter?: ARTURIResource[], validatorFilter?: ARTURIResource[],
             timeLowerBound?: string, timeUpperBound?: string, operationSorting?: SortingDirection, timeSorting?: SortingDirection, 
             page?: number, limit?: number): Observable<CommitInfo[]> {
-        console.log("[HistoryServices] getCommits");
         var params: any = {
             tipRevisionNumber: tipRevisionNumber,
 
@@ -122,7 +120,6 @@ export class HistoryServices {
      * @param commit 
      */
     getCommitDelta(commit: ARTURIResource): Observable<CommitDelta> {
-        console.log("[HistoryServices] getCommitDelta");
         var params: any = {
             commit: commit
         };

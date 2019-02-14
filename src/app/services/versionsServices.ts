@@ -17,7 +17,6 @@ export class VersionsServices {
      * Gets the available versions for the current project
      */
     getVersions(): Observable<VersionInfo[]> {
-        console.log("[VersionsServices] getVersions");
         var params: any = {
             setRepositoryStatus: true
         };
@@ -54,7 +53,6 @@ export class VersionsServices {
     createVersionDump(versionId: string, repositoryAccess?: RepositoryAccess, repositoryId?: string,
         repoConfigurerSpecification?: PluginSpecification, backendType?: BackendTypesEnum) {
 
-        console.log("[VersionsServices] createVersionDump");
         var params: any = {
             versionId: versionId
         };
@@ -78,7 +76,6 @@ export class VersionsServices {
      * @param versionId 
      */
     closeVersion(versionId: string) {
-        console.log("[VersionsServices] closeVersion");
         var params: any = {
             versionId: versionId
         };

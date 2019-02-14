@@ -17,7 +17,6 @@ export class IndividualsServices {
      * @param individual
      */
     getNamedTypes(individual: ARTResource): Observable<ARTURIResource[]> {
-        console.log("[IndividualsServices] getNamedTypes");
         var params: any = {
             individual: individual
         };
@@ -35,7 +34,6 @@ export class IndividualsServices {
      * @param type the type to add to the individual
      */
     addType(individual: ARTResource, type: ARTResource) {
-        console.log("[IndividualsServices] addType");
         var params: any = {
             individual: individual,
             type: type,
@@ -55,7 +53,6 @@ export class IndividualsServices {
      * @param type type to remove 
      */
     removeType(individual: ARTURIResource, type: ARTResource) {
-        console.log("[IndividualsServices] removeType");
         var params: any = {
             individual: individual,
             type: type,

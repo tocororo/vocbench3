@@ -20,7 +20,6 @@ export class RefactorServices {
      * Refactors SKOS data (labels and notes) into SKOSXL
      */
     SKOStoSKOSXL(reifyNotes: boolean) {
-        console.log("[RefactorServices] SKOStoSKOSXL");
         var params: any = {
             reifyNotes: reifyNotes
         };
@@ -35,7 +34,6 @@ export class RefactorServices {
      * Refactors SKOSXL data (labels and notes) into SKOS
      */
     SKOSXLtoSKOS(flattenNotes: boolean) {
-        console.log("[RefactorServices] SKOSXLtoSKOS");
         var params: any = {
             flattenNotes: flattenNotes
         };
@@ -53,7 +51,6 @@ export class RefactorServices {
      * @return the resource with the changed URI
      */
     changeResourceURI(oldResource: ARTURIResource, newResource: ARTURIResource) {
-        console.log("[RefactorServices] changeResourceURI");
         var params: any = {
             oldResource: oldResource,
             newResource: newResource
@@ -82,7 +79,6 @@ export class RefactorServices {
      * If not provided the service replace the default baseURI of the repository
      */
     replaceBaseURI(targetBaseURI: string, sourceBaseURI?: string) {
-        console.log("[RefactorServices] replaceBaseURI");
         var params: any = {
             targetBaseURI: new ARTURIResource(targetBaseURI)
         }
@@ -102,7 +98,6 @@ export class RefactorServices {
     }
 
     migrateDefaultGraphToBaseURIGraph(clearDestinationGraph?: boolean) {
-        console.log("[RefactorServices] migrateDefaultGraphToBaseURIGraph");
         var params: any = {}
         if (clearDestinationGraph != undefined) {
             params.clearDestinationGraph = clearDestinationGraph;
@@ -126,7 +121,6 @@ export class RefactorServices {
         newConcept?: ARTURIResource, broaderConcept?: ARTURIResource, 
 		customFormValue?: CustomFormValue) {
 
-        console.log("[RefactorServices] spawnNewConceptFromLabel");
         var params: any = {
             xLabel: xLabel,
             conceptSchemes: conceptSchemes,
@@ -176,7 +170,6 @@ export class RefactorServices {
      */
     moveXLabelToResource(sourceResource: ARTResource, predicate: ARTURIResource, xLabel: ARTResource, 
         targetResource: ARTResource, force?: boolean) {
-        console.log("[RefactorServices] moveXLabelToResource");
         var params: any = {
             sourceResource: sourceResource,
             predicate: predicate,

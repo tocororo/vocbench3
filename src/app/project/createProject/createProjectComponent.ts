@@ -375,7 +375,6 @@ export class CreateProjectComponent {
     }
 
     private forceOntoModel(ontoModelUri: string) {
-        console.log("forcing ontoModel", ontoModelUri);
         this.ontoModelList.forEach(ontoModel => {
                 if (ontoModel.value.getURI() == ontoModelUri) {
                     this.ontoModelType =  ontoModel.value;
@@ -385,7 +384,6 @@ export class CreateProjectComponent {
     }
 
     private forceLexicalModel(lexicalModelUri: string) {
-        console.log("forcing lexicalModelUri", lexicalModelUri);
         this.lexicalModelList.forEach(lexModel => {
                 if (lexModel.value.getURI() == lexicalModelUri) {
                     this.lexicalModelType =  lexModel.value;

@@ -15,7 +15,6 @@ export class ManchesterServices {
      * @param manchExpr manchester expression to check
      */
     checkExpression(manchExpr: string) {
-        console.log("[ManchesterServices] checkExpression");
         var params = {
             manchExpr: manchExpr
         };
@@ -29,7 +28,6 @@ export class ManchesterServices {
      * @param manchExpr manchester expression used to create restriction
      */
     createRestriction(cls: ARTURIResource, predicate: ARTURIResource, manchExpr: string) {
-        console.log("[ManchesterServices] createRestriction");
         var params = {
             classIri: cls,
             exprType: predicate,
@@ -45,7 +43,6 @@ export class ManchesterServices {
      * @param manchExpr manchester expression to check
      */
     removeExpression(cls: ARTURIResource, predicate: ARTURIResource, bnode: ARTNode) {
-        console.log("[ManchesterServices] removeExpression");
         var params = {
             classIri: cls,
             exprType: predicate,
@@ -60,7 +57,6 @@ export class ManchesterServices {
      * @param bnode bnode that represents the restriction
      */
     updateExpression(newManchExpr: string, bnode: ARTBNode) {
-        console.log("[ManchesterServices] updateExpression");
         var params = {
             newManchExpr: newManchExpr,
             bnode: bnode
@@ -69,7 +65,6 @@ export class ManchesterServices {
     }
 
     isClassAxiom(bnode: ARTBNode): Observable<boolean> {
-        console.log("[ManchesterServices] isClassAxiom");
         var params = {
             bnode: bnode
         };

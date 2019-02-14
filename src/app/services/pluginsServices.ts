@@ -15,7 +15,6 @@ export class PluginsServices {
      * @param extensionPoint the id of the requested extensionPoint
      */
     getAvailablePlugins(extensionPoint: string): Observable<Plugin[]> {
-        console.log("[PluginsServices] getAvailablePlugins");
         var params = {
             extensionPoint: extensionPoint
         };
@@ -47,7 +46,6 @@ export class PluginsServices {
      * @param factoryID the factory class of the plugin
      */
     getPluginConfigurations(factoryID: string): Observable<{factoryID: string, configurations: Settings[]}> {
-        console.log("[PluginsServices] getPluginConfigurations");
         var params = {
             factoryID: factoryID
         };

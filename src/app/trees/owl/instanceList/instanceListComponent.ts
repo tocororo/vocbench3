@@ -1,12 +1,13 @@
 import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
-import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute, RDFResourceRolesEnum } from "../../../models/ARTResources";
+import { Observable } from "rxjs";
+import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
 import { SemanticTurkey } from "../../../models/Vocabulary";
 import { ClassesServices } from "../../../services/classesServices";
-import { SearchServices } from "../../../services/searchServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { AbstractList } from "../../abstractList";
 import { InstanceListNodeComponent } from "./instanceListNodeComponent";
@@ -32,8 +33,7 @@ export class InstanceListComponent extends AbstractList {
 
     list: ARTURIResource[] = [];
 
-    constructor(private clsService: ClassesServices, private searchService: SearchServices, private basicModals: BasicModalServices, 
-        eventHandler: VBEventHandler) {
+    constructor(private clsService: ClassesServices, private basicModals: BasicModalServices, private vbProp: VBProperties, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
             (data: any) => { 
@@ -55,21 +55,24 @@ export class InstanceListComponent extends AbstractList {
         //viewInitialized needed to prevent the initialization of the list before view is initialized
         if (this.viewInitialized) {
             if (changes['cls'] && changes['cls'].currentValue) {
-                let numInst: number = this.cls.getAdditionalProperty(ResAttribute.NUM_INST);
-                if (this.cls.getAdditionalProperty(ResAttribute.NUM_INST) > this.instanceLimit) {
-                    this.basicModals.confirm("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
-                        + ") has too many instances (" + numInst + "). Retrieving them all could be a very long process "
-                        + "and it may slow down the server. Do you want to continue anyway?", "warning").then(
-                        (confirm: any) => {
+                this.getNumberOfInstances(this.cls).subscribe(
+                    numInst => {
+                        if (numInst > this.instanceLimit) {
+                            this.basicModals.confirm("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
+                                + ") has too many instances (" + numInst + "). Retrieving them all could be a very long process "
+                                + "and it may slow down the server. Do you want to continue anyway?", "warning").then(
+                                (confirm: any) => {
+                                    this.init();
+                                },
+                                (cancel: any) =>  {
+                                    this.list = [];
+                                }
+                            );
+                        } else {
                             this.init();
-                        },
-                        (cancel: any) =>  {
-                            this.list = [];
                         }
-                    );
-                } else {
-                    this.init();
-                }
+                    }
+                );
             }
         }
     }
@@ -149,6 +152,19 @@ export class InstanceListComponent extends AbstractList {
                 }
             }
         );
+    }
+
+    /**
+     * Returns the number of instances of the given class. Useful when the user select a class in order to check if there 
+     * are too many instances.
+     * @param cls 
+     */
+    private getNumberOfInstances(cls: ARTURIResource): Observable<number> {
+        if (this.vbProp.getShowInstancesNumber()) { //if num inst are already computed when building the tree...
+            return Observable.of(this.cls.getAdditionalProperty(ResAttribute.NUM_INST));
+        } else { //otherwise call a service
+            return this.clsService.getNumberOfInstances(cls);
+        }
     }
 
     //EVENT LISTENERS

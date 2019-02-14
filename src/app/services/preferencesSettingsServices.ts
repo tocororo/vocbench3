@@ -18,7 +18,6 @@ export class PreferencesSettingsServices {
      * @param level tells at which level to set the property
      */
     setLanguages(languages: string[]) {
-        console.log("[PreferencesServices] setLanguages");
         var params = {
             languages: languages
         };
@@ -30,7 +29,6 @@ export class PreferencesSettingsServices {
      * @param show 
      */
     setShowFlags(show: boolean) {
-        console.log("[PreferencesServices] setShowFlags");
         var params = {
             show: show
         };
@@ -42,7 +40,6 @@ export class PreferencesSettingsServices {
      * @param show 
      */
     setShowInstancesNumb(show: boolean) {
-        console.log("[PreferencesServices] setShowInstancesNumb");
         var params = {
             show: show
         };
@@ -54,7 +51,6 @@ export class PreferencesSettingsServices {
      * @param scheme s
      */
     setActiveSchemes(schemes?: ARTURIResource[]) {
-        console.log("[PreferencesServices] setActiveSchemes");
         var params: any = {}
         if (schemes != null) {
             params.schemes = schemes;
@@ -67,7 +63,6 @@ export class PreferencesSettingsServices {
      * @param themeId 
      */
     setProjectTheme(themeId: number) {
-        console.log("[PreferencesServices] setProjectTheme");
         var params: any = {
             themeId: themeId
         }
@@ -79,7 +74,6 @@ export class PreferencesSettingsServices {
      * @param projectName 
      */
     getActiveSchemes(projectName: string): Observable<ARTURIResource[]> {
-        console.log("[PreferencesServices] getActiveSchemes");
         var params: any = {
             projectName: projectName
         }
@@ -98,7 +92,6 @@ export class PreferencesSettingsServices {
      * Gets the preferences of the currently logged user for the currently open project
      */
     getPUSettings(properties: string[], pluginID?: string) {
-        console.log("[PreferencesServices] getPUSettings");
         var params: any = {
             properties: properties
         };
@@ -114,7 +107,6 @@ export class PreferencesSettingsServices {
      * @param value 
      */
     setPUSetting(property: string, value?: string, pluginID?: string) {
-        console.log("[PreferencesServices] setPUSetting");
         var params: any = {
             property: property,
         };
@@ -131,7 +123,6 @@ export class PreferencesSettingsServices {
      * Gets the preferences of the currently logged user for the currently open project
      */
     getPGSettings(properties: string[], groupIri: ARTURIResource, project?: Project, pluginID?: string) {
-        console.log("[PreferencesServices] getPGSettings");
         var params: any = {
             properties: properties,
             groupIri: groupIri
@@ -151,7 +142,6 @@ export class PreferencesSettingsServices {
      * @param value 
      */
     setPGSetting(property: string, groupIri: ARTURIResource, value?: string, project?: Project, pluginID?: string) {
-        console.log("[PreferencesServices] setPGSetting");
         var params: any = {
             property: property,
             groupIri: groupIri
@@ -174,7 +164,6 @@ export class PreferencesSettingsServices {
      * @param project 
      */
     getProjectSettings(properties: string[], project?: Project) {
-        console.log("[PreferencesServices] getProjectSettings");
         var params: any = {
             properties: properties
         };
@@ -189,7 +178,6 @@ export class PreferencesSettingsServices {
      * @param project 
      */
     setProjectSetting(property: string, value?: string, project?: Project) {
-        console.log("[PreferencesServices] setProjectSetting");
         var params: any = {
             property: property,
         };
@@ -207,7 +195,6 @@ export class PreferencesSettingsServices {
      * @param properties 
      */
     getDefaultProjectSettings(properties: string[]) {
-        console.log("[PreferencesServices] getDefaultProjectSettings");
         var params = {
             properties: properties
         };
@@ -218,7 +205,6 @@ export class PreferencesSettingsServices {
      * Gets the project settings needed during system startup
      */
     getStartupSystemSettings() {
-        console.log("[PreferencesServices] getStartupSystemSettings");
         var params = {};
         return this.httpMgr.doGet(this.serviceName, "getStartupSystemSettings", params);
     }
@@ -229,7 +215,6 @@ export class PreferencesSettingsServices {
      * @param value 
      */
     setSystemSetting(property: string, value?: string) {
-        console.log("[PreferencesServices] setSystemSetting");
         var params: any = {
             property: property,
         };
@@ -244,7 +229,6 @@ export class PreferencesSettingsServices {
      * @param properties 
      */
     getSystemSettings(properties: string[]) {
-        console.log("[PreferencesServices] getSystemSettings");
         var params = {
             properties: properties
         };

@@ -15,7 +15,6 @@ export class DatasetMetadataServices {
      * @param outputFormat
      */
     export(exporterSpecification: PluginSpecification, outputFormat?: RDFFormat) {
-        console.log("[DatasetMetadataExportServices] export");
         var params = {
             exporterSpecification: JSON.stringify(exporterSpecification),
             outputFormat: outputFormat.name

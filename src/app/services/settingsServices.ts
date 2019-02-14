@@ -15,7 +15,6 @@ export class SettingsServices {
      * @param componentID 
      */
     getSettingsScopes(componentID: string) {
-        console.log("[SettingsServices] getSettingsScopes");
         var params = {
             componentID: componentID
         };
@@ -28,7 +27,6 @@ export class SettingsServices {
      * @param scope 
      */
     getSettings(componentID: string, scope: Scope): Observable<Settings> {
-        console.log("[SettingsServices] getSettings");
         var params = {
             componentID: componentID,
             scope: scope
@@ -47,7 +45,6 @@ export class SettingsServices {
      * @param settings 
      */
     storeSettings(componentID: string, scope: Scope, settings: any) {
-        console.log("[SettingsServices] storeSettings");
         var params = {
             componentID: componentID,
             scope: scope,

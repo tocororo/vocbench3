@@ -11,7 +11,6 @@ export class ConfigurationsServices {
     constructor(private httpMgr: HttpManager) { }
 
     getConfigurationManager(componentID: string): Observable<ConfigurationManager> {
-        console.log("[ConfigurationsServices] getConfigurationManager");
         var params = {
             componentID: componentID
         };
@@ -19,13 +18,11 @@ export class ConfigurationsServices {
     }
 
     getConfigurationManagers(): Observable<ConfigurationManager[]> {
-        console.log("[ConfigurationsServices] getConfigurationManagers");
         var params = {};
         return this.httpMgr.doGet(this.serviceName, "getConfigurationManagers", params);
     }
 
     getConfiguration(componentID: string, relativeReference: string): Observable<Configuration> {
-        console.log("[ConfigurationsServices] getConfiguration");
         var params = {
             componentID: componentID,
             relativeReference: relativeReference
@@ -38,7 +35,6 @@ export class ConfigurationsServices {
     }
 
     getConfigurationReferences(componentID: string): Observable<Reference[]> {
-        console.log("[ConfigurationsServices] getConfiguration");
         var params = {
             componentID: componentID,
         };
@@ -54,7 +50,6 @@ export class ConfigurationsServices {
     }
 
     storeConfiguration(componentID: string, relativeReference: string, configuration: { [key: string]: any }) {
-        console.log("[ConfigurationsServices] storeConfiguration");
         var params = {
             componentID: componentID,
             relativeReference: relativeReference,
@@ -64,7 +59,6 @@ export class ConfigurationsServices {
     }
 
     deleteConfiguration(componentID: string, relativeReference: string) {
-        console.log("[ConfigurationsServices] deleteConfiguration");
         var params = {
             componentID: componentID,
             relativeReference: relativeReference

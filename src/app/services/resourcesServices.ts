@@ -22,7 +22,6 @@ export class ResourcesServices {
      * @param newValue
      */
     updateTriple(subject: ARTResource, property: ARTURIResource, value: ARTNode, newValue: ARTNode) {
-        console.log("[ResourcesServices] updateTriple");
         var params: any = {
             subject: subject,
             property: property,
@@ -49,7 +48,6 @@ export class ResourcesServices {
      * @param value
      */
     removeValue(subject: ARTResource, property: ARTURIResource, value: ARTNode) {
-        console.log("[ResourcesServices] removeValue");
         var params: any = {
             subject: subject,
             property: property,
@@ -63,7 +61,6 @@ export class ResourcesServices {
      * @param resource
      */
     setDeprecated(resource: ARTResource) {
-        console.log("[ResourcesServices] setDeprecated");
         var params: any = {
             resource: resource,
         };
@@ -82,7 +79,6 @@ export class ResourcesServices {
      * @param value 
      */
     addValue(subject: ARTResource, property: ARTURIResource, value: ARTNode | CustomFormValue) {
-        console.log("[ResourcesServices] addValue");
         var params: any = {
             subject: subject,
             property: property,
@@ -96,7 +92,6 @@ export class ResourcesServices {
      * @param resource 
      */
     getResourceDescription(resource: ARTResource): Observable<ARTResource> {
-        console.log("[ResourcesServices] getResourceDescription");
         var params: any = {
             resource: resource
         };
@@ -112,7 +107,6 @@ export class ResourcesServices {
      * @param resources 
      */
     getResourcesInfo(resources: ARTURIResource[]): Observable<ARTURIResource[]> {
-        console.log("[ResourcesServices] getResourcesInfo");
         var params: any = {
             resources: resources
         };
@@ -128,7 +122,6 @@ export class ResourcesServices {
      * @param resource
      */
     getResourcePosition(resource: ARTURIResource): Observable<ResourcePosition> {
-        console.log("[ResourcesServices] getResourcePosition");
         var params: any = {
             resource: resource
         };

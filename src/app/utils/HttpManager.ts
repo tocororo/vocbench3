@@ -67,8 +67,6 @@ export class HttpManager {
         url += this.getParametersForUrl(params);
         url += this.getContextParametersForUrl(options);
 
-        console.log("[GET]: " + url);
-
         var headers = new Headers();
         headers.append('Accept', STResponseUtils.ContentType.applicationJson);
         var requestOptions = new RequestOptions({ headers: headers, withCredentials: true });
@@ -105,8 +103,6 @@ export class HttpManager {
 
         //add ctx parameters
         url += this.getContextParametersForUrl(options);
-
-        console.log("[POST]: " + url);
 
         //prepare POST data
         var postData: any = this.getPostData(params);
@@ -149,8 +145,6 @@ export class HttpManager {
 
         //add ctx parameters
         url += this.getContextParametersForUrl(options);
-
-        console.log("[POST]: " + url);
 
         //prepare form data
         var formData = new FormData();
@@ -197,7 +191,6 @@ export class HttpManager {
             //add ctx parameters
             url += this.getContextParametersForUrl(options);
 
-            console.log("[POST]: " + url);
             //prepare POST data
             var postData: any = this.getPostData(params);
             var headers = new Headers();
@@ -218,8 +211,6 @@ export class HttpManager {
             //add parameters
             url += this.getParametersForUrl(params);
             url += this.getContextParametersForUrl(options);
-
-            console.log("[GET]: " + url);
 
             var requestOptions = new RequestOptions({
                 headers: new Headers(),

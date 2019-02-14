@@ -21,7 +21,6 @@ export class UserServices {
      * Throw exception if no user is register at all (in this case the response of getUser() is empty).
      */
     getUser(): Observable<User> {
-        console.log("[UserServices] getUser");
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getUser", params).map(
             stResp => {
@@ -42,7 +41,6 @@ export class UserServices {
      * Lists all the registered users
      */
     listUsers(): Observable<User[]> {
-        console.log("[UserServices] listUsers");
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "listUsers", params).map(
             stResp => {
@@ -59,7 +57,6 @@ export class UserServices {
      * Lists all the online users
      */
     listOnlineUsers(): Observable<User[]> {
-        console.log("[UserServices] listOnlineUsers");
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "listOnlineUsers", params).map(
             stResp => {
@@ -78,7 +75,6 @@ export class UserServices {
      * since the latter is accessed only by the admin that doesn't require authorization check and has no capabilities
      */
     listUserCapabilities(): Observable<string[]> {
-        console.log("[UserServices] listUserCapabilities");
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "listUserCapabilities", params).map(
             stResp => {
@@ -93,7 +89,6 @@ export class UserServices {
      * @param projectName
      */
     listUsersBoundToProject(projectName: string): Observable<User[]> {
-        console.log("[UserServices] listUsersBoundToProject");
         var params: any = {
             projectName: projectName
         }
@@ -125,7 +120,6 @@ export class UserServices {
     registerUser(email: string, password: string, givenName: string, familyName: string, iri: ARTURIResource,
         birthday: Date, gender: string, country: string, address: string, affiliation: string, url: string, avatarUrl: string,
         phone: string, languageProficiencies: string[]) {
-        console.log("[UserServices] registerUser");
         var params: any = {
             email: email,
             password: password,
@@ -171,7 +165,6 @@ export class UserServices {
      * @param givenName
      */
     updateUserGivenName(email: string, givenName: string): Observable<User> {
-        console.log("[UserServices] updateUserGivenName");
         var params: any = {
             email: email,
             givenName: givenName,
@@ -189,7 +182,6 @@ export class UserServices {
      * @param familyName
      */
     updateUserFamilyName(email: string, familyName: string): Observable<User> {
-        console.log("[UserServices] updateUserFamilyName");
         var params: any = {
             email: email,
             familyName: familyName,
@@ -207,7 +199,6 @@ export class UserServices {
      * @param givenName
      */
     updateUserEmail(email: string, newEmail: string): Observable<User> {
-        console.log("[UserServices] updateUserEmail");
         var params: any = {
             email: email,
             newEmail: newEmail,
@@ -225,7 +216,6 @@ export class UserServices {
      * @param phone if not provided, remove the info
      */
     updateUserPhone(email: string, phone?: string): Observable<User> {
-        console.log("[UserServices] updateUserPhone");
         var params: any = {
             email: email,
         }
@@ -245,7 +235,6 @@ export class UserServices {
      * @param birthday
      */
     updateUserBirthday(email: string, birthday: Date): Observable<User> {
-        console.log("[UserServices] updateUserBirthday");
         var params: any = {
             email: email,
             birthday: birthday,
@@ -263,7 +252,6 @@ export class UserServices {
      * @param gender if not provided remove the info
      */
     updateUserGender(email: string, gender?: string): Observable<User> {
-        console.log("[UserServices] updateUserGender");
         var params: any = {
             email: email,
         }
@@ -283,7 +271,6 @@ export class UserServices {
      * @param country
      */
     updateUserCountry(email: string, country: string): Observable<User> {
-        console.log("[UserServices] updateUserCountry");
         var params: any = {
             email: email,
             country: country,
@@ -301,7 +288,6 @@ export class UserServices {
      * @param address if not provided removes the info
      */
     updateUserAddress(email: string, address?: string): Observable<User> {
-        console.log("[UserServices] updateUserAddress");
         var params: any = {
             email: email,
         }
@@ -321,7 +307,6 @@ export class UserServices {
      * @param affiliation if not provided removes the info
      */
     updateUserAffiliation(email: string, affiliation?: string): Observable<User> {
-        console.log("[UserServices] updateUserAffiliation");
         var params: any = {
             email: email,
         }
@@ -341,7 +326,6 @@ export class UserServices {
      * @param url if not provided removes the info
      */
     updateUserUrl(email: string, url?: string): Observable<User> {
-        console.log("[UserServices] updateUserUrl");
         var params: any = {
             email: email,
         }
@@ -361,7 +345,6 @@ export class UserServices {
      * @param avatarUrl if not provided removes the info
      */
     updateUserAvatarUrl(email: string, avatarUrl?: string): Observable<User> {
-        console.log("[UserServices] updateUserAvatarUrl");
         var params: any = {
             email: email,
         }
@@ -381,7 +364,6 @@ export class UserServices {
      * @param url
      */
     updateUserLanguageProficiencies(email: string, languageProficiencies: string[]): Observable<User> {
-        console.log("[UserServices] updateUserLanguageProficiencies");
         var params: any = {
             email: email,
             languageProficiencies: languageProficiencies,
@@ -399,7 +381,6 @@ export class UserServices {
      * @param enabled true enables the user, false disables the user
      */
     enableUser(email: string, enabled: boolean): Observable<User> {
-        console.log("[UserServices] enableUser");
         var params: any = {
             email: email,
             enabled: enabled,
@@ -416,7 +397,6 @@ export class UserServices {
      * @param email
      */
     deleteUser(email: string) {
-        console.log("[UserServices] deleteUser");
         var params: any = {
             email: email
         }
@@ -430,7 +410,6 @@ export class UserServices {
      * @param newPassword 
      */
     changePassword(email: string, oldPassword: string, newPassword: string) {
-        console.log("[UserServices] changePassword");
         var params: any = {
             email: email,
             oldPassword: oldPassword,
@@ -444,7 +423,6 @@ export class UserServices {
      * @param email 
      */
     forgotPassword(email: string) {
-        console.log("[UserServices] forgotPassword");
         var params: any = {
             email: email,
             vbHostAddress: location.protocol+"//"+location.hostname+((location.port !="") ? ":"+location.port : "")+location.pathname
@@ -459,7 +437,6 @@ export class UserServices {
      * @param token 
      */
     resetPassword(email: string, token: string) {
-        console.log("[UserServices] resetPassword");
         var params: any = {
             email: email,
             token: token

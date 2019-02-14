@@ -21,7 +21,6 @@ export class SparqlServices {
      */
     evaluateQuery(query: string, includeInferred?: boolean, ql?: "SPARQL" | "SERQL", bindings?: Map<string, ARTNode>, maxExecTime?: number,
             defaultGraphs?: ARTURIResource[], namedGraphs?: ARTURIResource[]) {
-        console.log("[SparqlServices] evaluateQuery");
         var params: any = {
             query: query,
         };
@@ -61,7 +60,6 @@ export class SparqlServices {
     executeUpdate(query: string, includeInferred?: boolean, ql?: "SPARQL" | "SERQL", bindings?: Map<string, ARTNode>, maxExecTime?: number,
             defaultGraphs?: ARTURIResource[], namedGraphs?: ARTURIResource[], 
             defaultInsertGraph?: ARTURIResource, defaultRemoveGraphs?: ARTURIResource[]) {
-        console.log("[SparqlServices] executeUpdate");
         var params: any = {
             query: query,
         };
@@ -106,7 +104,6 @@ export class SparqlServices {
     exportGraphQueryResultAsRdf(query: string, format: RDFFormat, includeInferred?: boolean, 
             filteringPipeline?: string, ql?: "SPARQL" | "SERQL", bindings?: any, maxExecTime?: number, 
             defaultGraphs?: ARTURIResource[], namedGraphs?: ARTURIResource[]) {
-        console.log("[SparqlServices] exportGraphQueryResultAsRdf");
         var params: any = {
             query: query,
             outputFormat: format.name
@@ -148,7 +145,6 @@ export class SparqlServices {
      */
     exportQueryResultAsSpreadsheet(query: string, format: "xlsx" | "ods", includeInferred?: boolean, ql?: "SPARQL" | "SERQL",
             bindings?: any, maxExecTime?: number, defaultGraphs?: ARTURIResource[], namedGraphs?: ARTURIResource[]) {
-        console.log("[SparqlServices] exportQueryResultAsSpreadsheet");
         var params: any = {
             query: query,
             format: format

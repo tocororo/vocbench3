@@ -17,7 +17,6 @@ export class CollaborationServices {
      */
     getCollaborationSystemStatus(): 
         Observable<{ backendId: string, enabled: boolean, linked: boolean, projSettingsConfigured: boolean, userSettingsConfigured: boolean }> {
-        console.log("[CollaborationServices] getCollaborationSystemStatus");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getCollaborationSystemStatus", params);
     }
@@ -27,7 +26,6 @@ export class CollaborationServices {
      * @param backendId
      */
     getProjectSettings(backendId: string): Observable<Settings> {
-        console.log("[CollaborationServices] getProjectSettings");
         var params: any = {
             backendId: backendId,
         };
@@ -43,7 +41,6 @@ export class CollaborationServices {
      * @param backendId
      */
     getProjectPreferences(backendId: string): Observable<Settings> {
-        console.log("[CollaborationServices] getProjectPreferences");
         var params: any = {
             backendId: backendId,
         };
@@ -59,7 +56,6 @@ export class CollaborationServices {
      * @param backendId 
      */
     activateCollaboratioOnProject(backendId: string) {
-        console.log("[CollaborationServices] activateCollaboratioOnProject");
         var params: any = {
             backendId: backendId
         };
@@ -72,7 +68,6 @@ export class CollaborationServices {
      * @param currentUserPreferences 
      */
     addPreferencesForCurrentUser(backendId: string, currentUserPreferences: any) {
-        console.log("[CollaborationServices] addPreferencesForCurrentUser");
         var params: any = {
             backendId: backendId,
             currentUserPreferences: JSON.stringify(currentUserPreferences)
@@ -84,7 +79,6 @@ export class CollaborationServices {
      * 
      */
     getIssueCreationForm(): Observable<Settings> {
-        console.log("[CollaborationServices] getIssueCreationForm");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getIssueCreationForm", params).map(
             stResp => {
@@ -99,7 +93,6 @@ export class CollaborationServices {
      * @param issueCreationForm a map key-value
      */
     createIssue(resource: ARTURIResource, issueCreationForm: any) {
-        console.log("[CollaborationServices] createIssue");
         var params: any = {
             resource: resource,
             issueCreationForm: JSON.stringify(issueCreationForm)
@@ -114,7 +107,6 @@ export class CollaborationServices {
      * @param projectId 
      */
     assignProject(projectJson: any) {
-        console.log("[CollaborationServices] assignProject");
         var params: any = {
             projectJson: JSON.stringify(projectJson)
         };
@@ -127,7 +119,6 @@ export class CollaborationServices {
      * @param projectKey 
      */
     createProject(projectJson: any) {
-        console.log("[CollaborationServices] createProject");
         var params: any = {
             projectJson: JSON.stringify(projectJson)
         };
@@ -140,7 +131,6 @@ export class CollaborationServices {
      * @param resource 
      */
     assignResourceToIssue(issue: string, resource: ARTURIResource) {
-        console.log("[CollaborationServices] assignResourceToIssue");
         var params: any = {
             issue: issue,
             resource: resource
@@ -153,7 +143,6 @@ export class CollaborationServices {
      * @param resource 
      */
     listIssuesAssignedToResource(resource: ARTURIResource): Observable<Issue[]> {
-        console.log("[CollaborationServices] listIssuesAssignedToResource");
         var params: any = {
             resource: resource
         };
@@ -179,7 +168,6 @@ export class CollaborationServices {
      * 
      */
     listProjects(): Observable<{ headers: string[], projects: any[] }> {
-        console.log("[CollaborationServices] listProjects");
         var params: any = {};
         var options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
@@ -197,7 +185,6 @@ export class CollaborationServices {
      * 
      */
     listIssues(pageOffset: number): Observable<IssuesStruct> {
-        console.log("[CollaborationServices] listIssues");
         var params: any = {
             pageOffset: pageOffset
         };

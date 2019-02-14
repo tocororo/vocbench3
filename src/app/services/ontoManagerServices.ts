@@ -17,7 +17,6 @@ export class OntoManagerServices {
      * "namespace" (the namespace of the ontology)
      */
     getOntologyMirror(): Observable<{ file: string, baseURI: string }[]> {
-        console.log("[OntoManagerServices] getOntologyMirror");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getOntologyMirror", params).map(
             stResp => {
@@ -37,7 +36,6 @@ export class OntoManagerServices {
      * @param fileName name of the mirror file cached on server
      */
     deleteOntologyMirrorEntry(baseURI: string, cacheFileName: string) {
-        console.log("[OntoManagerServices] deleteOntologyMirrorEntry");
         var params: any = {
             baseURI: baseURI,
             cacheFileName: cacheFileName
@@ -60,7 +58,6 @@ export class OntoManagerServices {
      */
     updateOntologyMirrorEntry(updateType: "updateFromBaseURI" | "updateFromAlternativeURL" | "updateFromFile",
             baseURI: string, mirrorFileName: string, alternativeURL?: string, inputFile?: File) {
-        console.log("[OntoManagerServices] updateOntologyMirrorEntry");
         var params: any = {
             updateType: updateType,
             baseURI: baseURI,

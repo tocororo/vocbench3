@@ -14,7 +14,6 @@ export class CODAServices {
      * Returns a list of ConverterContractDescription
      */
     listConverterContracts(): Observable<ConverterContractDescription[]> {
-        console.log("[CODAServices] listConverterContracts");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listConverterContracts", params).map(
             stResp => {

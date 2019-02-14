@@ -22,7 +22,6 @@ export class ValidationServices {
      */
     getStagedCommitSummary(operationFilter?: ARTURIResource[], performerFilter?: ARTURIResource[], timeLowerBound?: string,
         timeUpperBound?: string, limit?: number) {
-        console.log("[ValidationServices] getStagedCommitSummary");
         var params: any = {
             operationFilter: operationFilter,
             performerFilter: performerFilter,
@@ -49,7 +48,6 @@ export class ValidationServices {
      */
     getCommits(operationFilter?: ARTURIResource[], performerFilter?: ARTURIResource[], timeUpperBound?: string, timeLowerBound?: string,
             operationSorting?: SortingDirection, timeSorting?: SortingDirection, page?: number, limit?: number): Observable<CommitInfo[]> {
-        console.log("[ValidationServices] getCommits");
         var params: any = {
             operationFilter: operationFilter,
             performerFilter: performerFilter,
@@ -118,7 +116,6 @@ export class ValidationServices {
      * @param validatableCommit 
      */
     accept(validatableCommit: ARTURIResource) {
-        console.log("[ValidationServices] accept");
         var params: any = {
             validatableCommit: validatableCommit
         };
@@ -130,7 +127,6 @@ export class ValidationServices {
      * @param validatableCommit 
      */
     reject(validatableCommit: ARTURIResource) {
-        console.log("[ValidationServices] reject");
         var params: any = {
             validatableCommit: validatableCommit
         };

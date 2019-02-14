@@ -18,7 +18,6 @@ export class AuthServices {
      * Logs in and registers the logged user in the VBContext
      */
     login(email: string, password: string, rememberMe: boolean): Observable<User> {
-        console.log("[AuthServices] login");
         var params: any = {
             email: email,
             password: password,
@@ -39,7 +38,6 @@ export class AuthServices {
      * Logs out and removes the logged user from the VBContext
      */
     logout() {
-        console.log("[AuthServices] logout");
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "logout", params).map(
             stResp => {

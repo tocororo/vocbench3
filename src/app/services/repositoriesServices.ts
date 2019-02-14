@@ -14,7 +14,6 @@ export class RepositoriesServices {
      * Updates the value of a triple replacing the old value with the new one
      */
     getRemoteRepositories(serverURL: string, username?: string, password?: string): Observable<Repository[]> {
-        console.log("[RepositoriesServices] getRemoteRepositories");
         var params: any = {
             serverURL: serverURL
         };

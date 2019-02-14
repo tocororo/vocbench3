@@ -16,7 +16,6 @@ export class ResourceViewServices {
      * @param resource
      */
     getResourceView(resource: ARTResource, includeInferred?: boolean, resourcePosition?: string) {
-        console.log("[resourceViewServices] getResourceView");
         var params: any = {
             resource: resource,
         };
@@ -40,7 +39,6 @@ export class ResourceViewServices {
      * @param resourcePosition ????
      */
     getLexicalizationProperties(resource: ARTResource, resourcePosition?: string): Observable<ARTURIResource[]> {
-        console.log("[resourceViewServices] getLexicalizationProperties");
         var params: any = {
             resource: resource,
         };

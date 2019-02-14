@@ -11,7 +11,6 @@ export class GraphServices {
     constructor(private httpMgr: HttpManager) { }
 
     getGraphModel() {
-        console.log("[GraphServices] getGraphModel");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getGraphModel", params);
     }

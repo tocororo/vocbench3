@@ -20,7 +20,6 @@ export class ClassesServices {
      * @param classList
      */
     getClassesInfo(classList: ARTURIResource[]): Observable<ARTURIResource[]> {
-        console.log("[ClassesServices] getClassesInfo");
         var params: any = {
             classList: classList
         };
@@ -36,7 +35,6 @@ export class ClassesServices {
      * @param superClass class of which retrieve its subClasses
 	 */
     getSubClasses(superClass: ARTURIResource, numInst: boolean): Observable<ARTURIResource[]> {
-        console.log("[ClassesServices] getSubClasses");
         var params: any = {
             superClass: superClass,
             numInst: numInst
@@ -53,7 +51,6 @@ export class ClassesServices {
 	 * @param cls
      */
     getInstances(cls: ARTURIResource): Observable<ARTURIResource[]> {
-        console.log("[ClassesServices] getInstances");
         var params: any = {
             cls: cls
         };
@@ -66,6 +63,17 @@ export class ClassesServices {
     }
 
     /**
+     * 
+     * @param cls 
+     */
+    getNumberOfInstances(cls: ARTURIResource): Observable<number> {
+        var params: any = {
+            cls: cls
+        };
+        return this.httpMgr.doGet(this.serviceName, "getNumberOfInstances", params);
+    }
+
+    /**
      * Creates a new class
      * @param newClass 
      * @param superClass 
@@ -73,7 +81,6 @@ export class ClassesServices {
      * @param customFormValue custom form that set additional info to the concept
      */
     createClass(newClass: ARTURIResource, superClass: ARTURIResource, classType?: ARTURIResource, customFormValue?: CustomFormValue) {
-        console.log("[ClassesServices] createClass");
         var params: any = {
             newClass: newClass,
             superClass: superClass
@@ -107,7 +114,6 @@ export class ClassesServices {
      * @param cls 
      */
     deleteClass(cls: ARTURIResource) {
-        console.log("[ClassesServices] deleteClass");
         var params: any = {
             cls: cls
         };
@@ -126,7 +132,6 @@ export class ClassesServices {
      * @param customFormValue custom form that set additional info to the concept
      */
     createInstance(newInstance: ARTURIResource, cls: ARTURIResource, customFormValue?: CustomFormValue) {
-        console.log("[ClassesServices] createInstance");
         var params: any = {
             newInstance: newInstance,
             cls: cls
@@ -158,7 +163,6 @@ export class ClassesServices {
      * @param cls the type of the instance. This parameter is not necessary for the request, but is needed for the event
      */
     deleteInstance(instance: ARTResource, cls: ARTURIResource) {
-        console.log("[ClassesServices] deleteInstance");
         var params: any = {
             instance: instance
         };
@@ -177,7 +181,6 @@ export class ClassesServices {
      * @param supercls class to add as superClass
      */
     addSuperCls(cls: ARTURIResource, supercls: ARTURIResource) {
-        console.log("[ClassesServices] addSuperCls");
         var params: any = {
             cls: cls,
             supercls: supercls,
@@ -198,7 +201,6 @@ export class ClassesServices {
      * @param superClass superClass to be removed
      */
     removeSuperCls(cls: ARTURIResource, supercls: ARTURIResource) {
-        console.log("[ClassesServices] removeSuperCls");
         var params: any = {
             cls: cls,
             supercls: supercls,
@@ -217,7 +219,6 @@ export class ClassesServices {
      * @param clsDescriptions collection of ARTResource that contains classes (ARTResource) or expression (ARTBNode)
      */
     addIntersectionOf(cls: ARTURIResource, collectionNode: ARTResource[]) {
-        console.log("[ClassesServices] addIntersectionOf");
         var collNodeArray = new Array<string>();
         for (var i=0; i<collectionNode.length; i++) {
             if (collectionNode[i] instanceof ARTBNode) {
@@ -242,7 +243,6 @@ export class ClassesServices {
      * @param collectionNode the node representing the intersectionOf expression
      */
     removeIntersectionOf(cls: ARTURIResource, collectionBNode: ARTNode) {
-        console.log("[ClassesServices] removeIntersectionOf");
         var params: any = {
             cls: cls,
             collectionBNode: collectionBNode,
@@ -256,7 +256,6 @@ export class ClassesServices {
      * @param collectionNode collection of ARTResource that contains classes (ARTResource) or expression (ARTBNode)
      */
     addUnionOf(cls: ARTURIResource, collectionNode: ARTResource[]) {
-        console.log("[ClassesServices] addUnionOf");
         var collNodeArray = new Array<string>();
         for (var i=0; i<collectionNode.length; i++) {
             if (collectionNode[i] instanceof ARTBNode) {
@@ -281,7 +280,6 @@ export class ClassesServices {
      * @param collectionNode the node representing the unionOf expression
      */
     removeUnionOf(cls: ARTURIResource, collectionBNode: ARTBNode) {
-        console.log("[ClassesServices] removeUnionOf");
         var params: any = {
             cls: cls,
             collectionBNode: collectionBNode,
@@ -295,7 +293,6 @@ export class ClassesServices {
      * @param individuals collection of individuals
      */
     addOneOf(cls: ARTURIResource, individuals: ARTURIResource[]) {
-        console.log("[ClassesServices] addOneOf");
         var params: any = {
             cls: cls,
             individuals: individuals,
@@ -309,7 +306,6 @@ export class ClassesServices {
      * @param collectionNode the node representing the oneOf expression
      */
     removeOneOf(cls: ARTURIResource, collectionBNode: ARTBNode) {
-        console.log("[ClassesServices] removeOneOf");
         var params: any = {
             cls: cls,
             collectionBNode: collectionBNode,

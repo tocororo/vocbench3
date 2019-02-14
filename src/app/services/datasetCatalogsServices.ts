@@ -20,7 +20,6 @@ export class DatasetCatalogsServices {
      * @param page 
      */
     searchDataset(connectorId: string, query: string, facets: DatasetSearchFacets, page: number): Observable<SearchResultsPage<DatasetSearchResult>>{
-        console.log("[DatasetCatalogsServices] searchDataset");
         var params: any = {
             connectorId: connectorId,
             query: query,
@@ -66,7 +65,6 @@ export class DatasetCatalogsServices {
      * @param datasetId 
      */
     describeDataset(connectorId: string, datasetId: string): Observable<DatasetDescription> {
-        console.log("[DatasetCatalogsServices] describeDataset");
         var params: any = {
             connectorId: connectorId,
             datasetId: datasetId

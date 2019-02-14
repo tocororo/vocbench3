@@ -22,7 +22,6 @@ export class MetadataServices {
      * "prefix" the prefix
      */
     getNamespaceMappings(): Observable<PrefixMapping[]> {
-        console.log("[MetadataServices] getNamespaceMappings");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getNamespaceMappings", params).map(
             stResp => {
@@ -47,7 +46,6 @@ export class MetadataServices {
      * @param namespace
      */
     setNSPrefixMapping(prefix: string, namespace: string) {
-        console.log("[MetadataServices] setNSPrefixMapping");
         var params = {
             prefix: prefix,
             namespace: namespace
@@ -60,7 +58,6 @@ export class MetadataServices {
      * @param namespace
      */
     removeNSPrefixMapping(namespace: string) {
-        console.log("[MetadataServices] removeNSPrefixMapping");
         var params = {
             namespace: namespace
         };
@@ -73,7 +70,6 @@ export class MetadataServices {
      * @param namespace
      */
     changeNSPrefixMapping(prefix: string, namespace: string) {
-        console.log("[MetadataServices] changeNSPrefixMapping");
         var params = {
             prefix: prefix,
             namespace: namespace
@@ -89,7 +85,6 @@ export class MetadataServices {
      * "imports": array of recursive imports
      */
     getImports(): Observable<OntologyImport[]> {
-        console.log("[MetadataServices] getImports");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getImports", params).map(
             stResp => {
@@ -120,7 +115,6 @@ export class MetadataServices {
      * @param baseURI the baseURI that identifies the imported ontology
      */
     removeImport(baseURI: string) {
-        console.log("[MetadataServices] removeImport");
         var params: any = {
             baseURI: baseURI
         };
@@ -139,7 +133,6 @@ export class MetadataServices {
      * @param rdfFormat force the format to read the ontology file to import
      */
     addFromWeb(baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, altURL?: string, rdfFormat?: RDFFormat) {
-        console.log("[MetadataServices] addFromWeb");
         var params: any = {
             baseURI: baseURI,
             transitiveImportAllowance: transitiveImportAllowance
@@ -166,7 +159,6 @@ export class MetadataServices {
      * @param rdfFormat force the format to read the ontology file to import
      */
     addFromWebToMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance, altURL?: string, rdfFormat?: RDFFormat) {
-        console.log("[MetadataServices] addFromWebToMirror");
         var params: any = {
             baseURI: baseURI,
             mirrorFile: mirrorFile,
@@ -194,7 +186,6 @@ export class MetadataServices {
     * @param transitiveImportAllowance available values 'web' | 'webFallbackToMirror' | 'mirrorFallbackToWeb' | 'mirror'
     */
     addFromLocalFile(baseURI: string, localFile: File, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance) {
-        console.log("[MetadataServices] addFromLocalFile");
         var data = {
             baseURI: baseURI,
             localFile: localFile,
@@ -216,7 +207,6 @@ export class MetadataServices {
      * @param transitiveImportAllowance available values 'web' | 'webFallbackToMirror' | 'mirrorFallbackToWeb' | 'mirror'
      */
     addFromMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance) {
-        console.log("[MetadataServices] addFromMirror");
         var params = {
             baseURI: baseURI,
             mirrorFile: mirrorFile,
@@ -238,7 +228,6 @@ export class MetadataServices {
      * @param transitiveImportAllowance 
      */
     getFromLocalFile(baseURI: string, localFile: File, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance) {
-        console.log("[MetadataServices] getFromLocalFile");
         var data = {
             baseURI: baseURI,
             localFile: localFile,
@@ -260,7 +249,6 @@ export class MetadataServices {
      * @param altURL 
      */
     downloadFromWeb(baseURI: string, transitiveImportAllowance: TransitiveImportMethodAllowance, altURL?: string, rdfFormat?: RDFFormat) {
-        console.log("[MetadataServices] downloadFromWeb");
         var params: any = {
             baseURI: baseURI,
             transitiveImportAllowance: transitiveImportAllowance
@@ -288,7 +276,6 @@ export class MetadataServices {
      */
     downloadFromWebToMirror(baseURI: string, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance,
         altURL?: string, rdfFormat?: RDFFormat) {
-        console.log("[MetadataServices] downloadFromWebToMirror");
         var params: any = {
             baseURI: baseURI,
             mirrorFile: mirrorFile,
@@ -312,7 +299,6 @@ export class MetadataServices {
      * Returns the default namespace of the currently open project
      */
     getDefaultNamespace(): Observable<string> {
-        console.log("[MetadataServices] getDefaultNamespace");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getDefaultNamespace", params);
     }
@@ -322,7 +308,6 @@ export class MetadataServices {
      * @param namespace
      */
     setDefaultNamespace(namespace: string) {
-        console.log("[MetadataServices] setDefaultNamespace");
         var params = {
             namespace: namespace
         };
@@ -338,7 +323,6 @@ export class MetadataServices {
      * Returns the baseURI of the currently open project
      */
     getBaseURI(): Observable<string> {
-        console.log("[MetadataServices] getBaseURI");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getBaseURI", params);
     }
@@ -347,7 +331,6 @@ export class MetadataServices {
      * Returns the URI obtained expanding the given qname
      */
     expandQName(qname: string): Observable<string> {
-        console.log("[MetadataServices] expandQName");
         var params: any = {
             qname: qname
         };

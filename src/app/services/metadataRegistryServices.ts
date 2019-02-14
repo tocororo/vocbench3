@@ -22,7 +22,6 @@ export class MetadataRegistryServices {
      * @return the IRI of the dcat:CatalogRecord created for it
      */
     addDataset(uriSpace: string, dataset?: ARTURIResource, title?: string, sparqlEndpoint?: ARTURIResource, dereferenceable?: boolean) {
-        console.log("[MetadataRegistryServices] addDatasetMetadata");
         var params: any = {
             uriSpace: uriSpace
         }
@@ -48,7 +47,6 @@ export class MetadataRegistryServices {
      * @param dataset if not passed, a local IRI is created
      */
     addDatasetVersion(catalogRecord: ARTURIResource, versionInfo: string, dataset?: ARTURIResource) {
-        console.log("[MetadataRegistryServices] addDatasetVersion");
         var params: any = {
             catalogRecord: catalogRecord,
             versionInfo: versionInfo
@@ -75,7 +73,6 @@ export class MetadataRegistryServices {
     addEmbeddedLexicalizationSet(dataset: ARTURIResource, lexicalizationModel: ARTURIResource, language: string, 
         lexicalizationSet?: ARTURIResource, lexiconDataset?: ARTURIResource, references?: number, lexicalEntries?: number, 
         lexicalizations?: number, percentage?: number, avgNumOfLexicalizations?: number) {
-        console.log("[MetadataRegistryServices] addEmbeddedLexicalizationSet");
         var params: any = {
             dataset: dataset,
             lexicalizationModel: lexicalizationModel,
@@ -110,7 +107,6 @@ export class MetadataRegistryServices {
      * @param lexicalizationSet 
      */
     deleteEmbeddedLexicalizationSet(lexicalizationSet: ARTURIResource) {
-        console.log("[MetadataRegistryServices] deleteEmbeddedLexicalizationSet");
         var params: any = {
             lexicalizationSet: lexicalizationSet
         }
@@ -122,7 +118,6 @@ export class MetadataRegistryServices {
      * @param dataset 
      */
     getEmbeddedLexicalizationSets(dataset: ARTURIResource): Observable<LexicalizationSetMetadata[]> {
-        console.log("[MetadataRegistryServices] getEmbeddedLexicalizationSets");
         var params: any = {
             dataset: dataset
         }
@@ -135,7 +130,6 @@ export class MetadataRegistryServices {
      * @param title 
      */
     setTitle(dataset: ARTURIResource, title?: string) {
-        console.log("[MetadataRegistryServices] setTitle");
         var params: any = {
             dataset: dataset,
         }
@@ -153,7 +147,6 @@ export class MetadataRegistryServices {
      * @param value 
      */
     setDereferenciability(dataset: ARTURIResource, value?: boolean) {
-        console.log("[MetadataRegistryServices] setDereferenciability");
         var params: any = {
             dataset: dataset,
         }
@@ -169,7 +162,6 @@ export class MetadataRegistryServices {
      * @param endpoint If null the endpoint is left unspecified
      */
     setSPARQLEndpoint(dataset: ARTURIResource, endpoint?: ARTURIResource) {
-        console.log("[MetadataRegistryServices] setSPARQLEndpoint");
         var params: any = {
             dataset: dataset,
         }
@@ -185,7 +177,6 @@ export class MetadataRegistryServices {
      * @param limitation 
      */
     setSPARQLEndpointLimitation(endpoint: ARTURIResource, limitation?: ARTURIResource) {
-        console.log("[MetadataRegistryServices] setSPARQLEndpointLimitation");
         var params: any = {
             endpoint: endpoint,
         }
@@ -201,7 +192,6 @@ export class MetadataRegistryServices {
      * @param limitation 
      */
     removeSPARQLEndpointLimitation(endpoint: ARTURIResource, limitation?: ARTURIResource) {
-        console.log("[MetadataRegistryServices] removeSPARQLEndpointLimitation");
         var params: any = {
             endpoint: endpoint,
         }
@@ -216,7 +206,6 @@ export class MetadataRegistryServices {
      * @param catalogRecord 
      */
     deleteCatalogRecord(catalogRecord: ARTURIResource) {
-        console.log("[MetadataRegistryServices] deleteCatalogRecord");
         var params: any = {
             catalogRecord: catalogRecord,
         }
@@ -228,7 +217,6 @@ export class MetadataRegistryServices {
      * @param dataset 
      */
     deleteDatasetVersion(dataset: ARTURIResource) {
-        console.log("[MetadataRegistryServices] deleteDatasetVersion");
         var params: any = {
             dataset: dataset,
         }
@@ -239,7 +227,6 @@ export class MetadataRegistryServices {
      * Returns the catalog records
      */
     getCatalogRecords(): Observable<CatalogRecord[]> {
-        console.log("[MetadataRegistryServices] getCatalogRecords");
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getCatalogRecords", params).map(
             stResp => {
@@ -257,7 +244,6 @@ export class MetadataRegistryServices {
      * @param dataset 
      */
     getDatasetMetadata(dataset: ARTURIResource): Observable<DatasetMetadata> {
-        console.log("[MetadataRegistryServices] getDatasetMetadata");
         var params: any = {
             dataset: dataset
         }
@@ -274,7 +260,6 @@ export class MetadataRegistryServices {
      * @param dataset 
      */
     assessLexicalizationModel(dataset: ARTURIResource) {
-        console.log("[MetadataRegistryServices] assessLexicalizationModel");
         var params: any = {
             dataset: dataset,
         }
@@ -286,7 +271,6 @@ export class MetadataRegistryServices {
      * @param iri 
      */
     findDataset(iri: ARTURIResource): Observable<ResourcePosition> {
-        console.log("[MetadataRegistryServices] findDataset");
         var params: any = {
             iri: iri,
         }
@@ -303,7 +287,6 @@ export class MetadataRegistryServices {
      * @param iri 
      */
     discoverDataset(iri: ARTURIResource): Observable<ARTURIResource> {
-        console.log("[MetadataRegistryServices] discoverDataset");
         var params: any = {
             iri: iri,
         }

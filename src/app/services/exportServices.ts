@@ -17,7 +17,6 @@ export class ExportServices {
      * Returns the list of named graphs
      */
     getNamedGraphs(): Observable<ARTURIResource[]> {
-        console.log("[ExportServices] getNamedGraphs");
         var params = {};
         return this.httpMgr.doGet(this.serviceName, "getNamedGraphs", params).map(
             stResp => {
@@ -30,7 +29,6 @@ export class ExportServices {
      * Returns the list of available output formats
      */
     getOutputFormats(): Observable<RDFFormat[]> {
-        console.log("[ExportServices] getOutputFormats");
         var params = {};
         return this.httpMgr.doGet(this.serviceName, "getOutputFormats", params).map(
             stResp => {
@@ -63,7 +61,6 @@ export class ExportServices {
      * @param reformattingExporterID 
      */
     getExportFormats(reformattingExporterID: string): Observable<DataFormat[]> {
-        console.log("[ExportServices] getExportFormats");
         var params = {
             reformattingExporterID: reformattingExporterID
         };
@@ -104,7 +101,6 @@ export class ExportServices {
      */
     export(graphs: ARTURIResource[], filteringPipeline: string, reformattingExporterSpec?: PluginSpecification, 
         deployerSpec?: PluginSpecification, includeInferred?: boolean, outputFormat?: string, force?: boolean): Observable<Blob | any> {
-        console.log("[ExportServices] export");
         var params: any = {
             graphs: graphs,
             filteringPipeline: filteringPipeline,

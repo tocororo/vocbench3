@@ -16,7 +16,6 @@ export class MapleServices {
      * @param resourcePosition 
      */
     profileMediationProblem(resourcePosition: ResourcePosition) {
-        console.log("[MapleServices] profileMediationProblem");
         var params = {
             resourcePosition: resourcePosition.serialize()
         };
@@ -30,7 +29,6 @@ export class MapleServices {
      * @param targetPosition 
      */
     profileSingleResourceMatchProblem(sourceResource: ARTURIResource, targetPosition: ResourcePosition) {
-        console.log("[MapleServices] profileSingleResourceMatchProblem");
         var params = {
             sourceResource: sourceResource,
             targetPosition: targetPosition.serialize()
@@ -43,7 +41,6 @@ export class MapleServices {
      * Profiles the current project and stores its LIME metadata
      */
     profileProject() {
-        console.log("[MapleServices] profileProject");
         var params = {};
         return this.httpMgr.doPost(this.serviceName, "profileProject", params);
     }
@@ -52,7 +49,6 @@ export class MapleServices {
      * Determines whether LIME metadata for the current project are available
      */
     checkProjectMetadataAvailability(): Observable<boolean> {
-        console.log("[MapleServices] checkProjectMetadataAvailability");
         var params = {};
         return this.httpMgr.doGet(this.serviceName, "checkProjectMetadataAvailability", params);
     }

@@ -24,7 +24,6 @@ export class AlignmentServices {
 	 * @return a collection of properties
      */
     getMappingProperties(resource: ARTResource, allMappingProps: boolean) {
-        console.log("[AlignmentServices] getMappingProperties");
         var params: any = {
             resource: resource,
             allMappingProps: allMappingProps
@@ -46,7 +45,6 @@ export class AlignmentServices {
      * @param targetResource the resource (of an external project) to align
      */
     addAlignment(sourceResource: ARTResource, predicate: ARTURIResource, targetResource: ARTResource) {
-        console.log("[AlignmentServices] addAlignment");
         var params: any = {
             sourceResource: sourceResource,
             predicate: predicate,
@@ -63,7 +61,6 @@ export class AlignmentServices {
      * @return return an object with "onto1" and "onto2", namely the baseURI of the two aligned ontologies
      */
     loadAlignment(file: File): Observable<{onto1: string, onto2: string, unknownRelations: string[]}> {
-        console.log("[AlignmentServices] loadAlignment");
         var data = {
             inputFile: file
         }
@@ -90,7 +87,6 @@ export class AlignmentServices {
      * @return returns an object containing "cells" (an array of AlignmentCell), "page" and "totPage"
      */
     listCells(pageIdx?: number, range?: number): Observable<{page: number, totPage: number, cells: AlignmentCell[]}> {
-        console.log("[AlignmentServices] listCells");
         var params: any = {};
         if (pageIdx != undefined && range != undefined) {
             params.pageIdx = pageIdx,
@@ -124,7 +120,6 @@ export class AlignmentServices {
      * @return a cell resulting from the action
      */
     acceptAlignment(entity1: ARTURIResource, entity2: ARTURIResource, relation: string, forcedProperty?: ARTURIResource, setAsDefault?: boolean) {
-        console.log("[AlignmentServices] acceptAlignment");
         var params: any = {
             entity1: entity1,
             entity2: entity2,
@@ -148,7 +143,6 @@ export class AlignmentServices {
      * @return all cells resulting from the action
      */
     acceptAllAlignment() {
-        console.log("[AlignmentServices] acceptAllAlignment");
         var params = {};
         return this.httpMgr.doGet(this.serviceName, "acceptAllAlignment", params).map(
             stResp => {
@@ -167,7 +161,6 @@ export class AlignmentServices {
      * @return all cells resulting from the action
      */
     acceptAllAbove(threshold: number) {
-        console.log("[AlignmentServices] acceptAllAbove");
         var params = {
             threshold: threshold
         };
@@ -190,7 +183,6 @@ export class AlignmentServices {
      * @return a cell resulting from the action
      */
     rejectAlignment(entity1: ARTURIResource, entity2: ARTURIResource, relation: string) {
-        console.log("[AlignmentServices] acceptAlignment");
         var params = {
             entity1: entity1,
             entity2: entity2,
@@ -208,7 +200,6 @@ export class AlignmentServices {
      * @return all cells resulting from the action
      */
     rejectAllAlignment() {
-        console.log("[AlignmentServices] rejectAllAlignment");
         var params = {};
         return this.httpMgr.doGet(this.serviceName, "rejectAllAlignment", params).map(
             stResp => {
@@ -227,7 +218,6 @@ export class AlignmentServices {
      * @return all cells resulting from the action
      */
     rejectAllUnder(threshold: number) {
-        console.log("[AlignmentServices] rejectAllUnder");
         var params = {
             threshold: threshold
         };
@@ -250,7 +240,6 @@ export class AlignmentServices {
      * @return a cell resulting from the action 
      */
     changeRelation(entity1: ARTURIResource, entity2: ARTURIResource, relation: string) {
-        console.log("[AlignmentServices] changeRelation");
         var params = {
             entity1: entity1,
             entity2: entity2,
@@ -271,7 +260,6 @@ export class AlignmentServices {
      * @return a cell resulting from the action
      */
     changeMappingProperty(entity1: ARTURIResource, entity2: ARTURIResource, mappingProperty: ARTURIResource) {
-        console.log("[AlignmentServices] changeMappingProperty");
         var params = {
             entity1: entity1,
             entity2: entity2,
@@ -292,7 +280,6 @@ export class AlignmentServices {
      * representing a report of the changes.
      */
     applyValidation(deleteRejected: boolean) {
-        console.log("[AlignmentServices] applyValidation");
         var params = {
             deleteRejected: deleteRejected
         };
@@ -320,7 +307,6 @@ export class AlignmentServices {
      * @return collection of ARTURIResource representing suggested mapping property
      */
     getSuggestedProperties(entity: ARTURIResource, relation: string) {
-        console.log("[AlignmentServices] getSuggestedProperties");
         var params = {
             entity: entity,
             relation: relation
@@ -336,7 +322,6 @@ export class AlignmentServices {
      * Exports the alignment at the current status.
      */
     exportAlignment() {
-        console.log("[AlignmentServices] exportAlignment");
         var params = {};
         return this.httpMgr.downloadFile(this.serviceName, "exportAlignment", params);
     }
@@ -345,7 +330,6 @@ export class AlignmentServices {
      * Tells to the server that the sessione is closed and the alignment files can be deleted
      */
     closeSession() {
-        console.log("[AlignmentServices] closeSession");
         var params = {};
         return this.httpMgr.doGet(this.serviceName, "closeSession", params).map(
             stResp => {
@@ -399,7 +383,6 @@ export class AlignmentServices {
     searchResources(inputRes: ARTURIResource, resourcePosition: string, rolesArray: RDFResourceRolesEnum[], 
         langToLexModel?: Map<string, ARTURIResource>, searchModeList?: SearchMode[]): Observable<ARTURIResource[]> {
 
-        console.log("[AlignmentServices] searchResources");
         var params: any = {
             inputRes: inputRes,
             resourcePosition: resourcePosition,

@@ -17,7 +17,6 @@ export class AdministrationServices {
      * Gets the administration config: a map with key value of configuration parameters
      */
     getAdministrationConfig() {
-        console.log("[AdministrationServices] getAdministrationConfig");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getAdministrationConfig", params);
     }
@@ -27,7 +26,6 @@ export class AdministrationServices {
      * @param adminEmailAddress 
      */
     updateAdministrator(adminEmailAddress: string) {
-        console.log("[AdministrationServices] updateAdministrator");
         var params: any = {
             adminEmailAddress: adminEmailAddress,
         }
@@ -45,7 +43,6 @@ export class AdministrationServices {
      */
     updateEmailConfig(mailSmtpHost: string, mailSmtpPort: string, mailSmtpAuth: boolean, mailSmtpSsl: boolean, mailSmtpTls: boolean,
         mailFromAddress: string, mailFromAlias: string, mailFromPassword?: string) {
-        console.log("[AdministrationServices] updateEmailConfig");
         var params: any = {
             mailSmtpHost: mailSmtpHost,
             mailSmtpPort: mailSmtpPort,
@@ -66,7 +63,6 @@ export class AdministrationServices {
      * @param mailTo 
      */
     testEmailConfig(mailTo: string) {
-        console.log("[AdministrationServices] testEmailConfig");
         var params: any = {
             mailTo: mailTo
         }
@@ -83,7 +79,6 @@ export class AdministrationServices {
      * @param role
      */
     getProjectUserBinding(projectName: string, email: string): Observable<ProjectUserBinding> {
-        console.log("[AdministrationServices] getProjectUserBinding");
         var params: any = {
             projectName: projectName,
             email: email
@@ -106,7 +101,6 @@ export class AdministrationServices {
      * @param roles
      */
     addRolesToUser(projectName: string, email: string, roles: string[]) {
-        console.log("[AdministrationServices] addRolesToUser");
         var params: any = {
             projectName: projectName,
             email: email,
@@ -122,7 +116,6 @@ export class AdministrationServices {
      * @param role
      */
     removeRoleFromUser(projectName: string, email: string, role: string) {
-        console.log("[AdministrationServices] removeRoleFromUser");
         var params: any = {
             projectName: projectName,
             email: email,
@@ -138,7 +131,6 @@ export class AdministrationServices {
      * @param role
      */
     removeUserFromProject(projectName: string, email: string) {
-        console.log("[AdministrationServices] removeUserFromProject");
         var params: any = {
             projectName: projectName,
             email: email
@@ -153,7 +145,6 @@ export class AdministrationServices {
      * @param language
      */
     updateLanguagesOfUserInProject(projectName: string, email: string, languages: string[]) {
-        console.log("[AdministrationServices] updateLanguagesOfUserInProject");
         var params: any = {
             projectName: projectName,
             email: email,
@@ -169,7 +160,6 @@ export class AdministrationServices {
      * @param projectName if not provided returns the roles at system level
      */
     listRoles(project?: Project): Observable<Role[]> {
-        console.log("[AdministrationServices] listRoles");
         var params: any = {};
         if (project != null) {
             params.projectName = project.getName();
@@ -192,7 +182,6 @@ export class AdministrationServices {
      * @param roleName
      */
     createRole(roleName: string) {
-        console.log("[AdministrationServices] createRole");
         var params: any = {
             roleName: roleName
         };
@@ -204,7 +193,6 @@ export class AdministrationServices {
      * @param roleName
      */
     cloneRole(sourceRoleName: string, targetRoleName: string) {
-        console.log("[AdministrationServices] cloneRole");
         var params: any = {
             sourceRoleName: sourceRoleName,
             targetRoleName: targetRoleName
@@ -217,7 +205,6 @@ export class AdministrationServices {
      * @param roleName
      */
     deleteRole(roleName: string) {
-        console.log("[AdministrationServices] deleteRole");
         var params: any = {
             roleName: roleName
         };
@@ -229,7 +216,6 @@ export class AdministrationServices {
      * @param roleName 
      */
     exportRole(roleName: string) {
-        console.log("[AdministrationServices] exportRole");
         var params: any = {
             roleName: roleName
         };
@@ -242,7 +228,6 @@ export class AdministrationServices {
      * @param newRoleName name of the new role (Optional, if not provided the name will be inferred from the input file)
      */
     importRole(inputFile: File, newRoleName?: string) {
-        console.log("[AdministrationServices] importCustomForm");
         var data: any = {
             inputFile: inputFile
         };
@@ -257,7 +242,6 @@ export class AdministrationServices {
      * @param projectName if not provided returns the roles at system level
      */
     listCapabilities(role: Role, project?: Project): Observable<string[]> {
-        console.log("[AdministrationServices] listCapabilities");
         var params: any = {
             role: role.getName()
         };
@@ -273,7 +257,6 @@ export class AdministrationServices {
      * @param capability
      */
     addCapabilityToRole(role: string, capability: string) {
-        console.log("[AdministrationServices] addCapabilityToRole");
         var params: any = {
             role: role,
             capability: capability
@@ -287,7 +270,6 @@ export class AdministrationServices {
      * @param capability
      */
     removeCapabilityFromRole(role: string, capability: string) {
-        console.log("[AdministrationServices] removeCapabilityFromRole");
         var params: any = {
             role: role,
             capability: capability
@@ -301,7 +283,6 @@ export class AdministrationServices {
      * @param capability
      */
     updateCapabilityForRole(role: string, oldCapability: string, newCapability: string) {
-        console.log("[AdministrationServices] updateCapabilityForRole");
         var params: any = {
             role: role,
             oldCapability: oldCapability,

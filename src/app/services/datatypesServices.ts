@@ -17,7 +17,6 @@ export class DatatypesServices {
      * 
      */
     getDatatypes(): Observable<ARTURIResource[]> {
-        console.log("[DatatypesServices] getDatatypes");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getDatatypes", params).map(
             stResp => {
@@ -30,7 +29,6 @@ export class DatatypesServices {
      * 
      */
     getOWL2DatatypeMap(): Observable<ARTURIResource[]> {
-        console.log("[DatatypesServices] getOWL2DatatypeMap");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getOWL2DatatypeMap", params).map(
             stResp => {
@@ -40,7 +38,6 @@ export class DatatypesServices {
     }
 
     getDeclaredDatatypes():  Observable<ARTURIResource[]> {
-        console.log("[DatatypesServices] getDeclaredDatatypes");
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getDeclaredDatatypes", params).map(
             stResp => {
@@ -54,7 +51,6 @@ export class DatatypesServices {
      * @param newDatatype 
      */
     createDatatype(newDatatype: ARTURIResource): Observable<ARTURIResource> {
-        console.log("[DatatypesServices] createDatatype");
         var params: any = {
             newDatatype: newDatatype
         };
@@ -80,7 +76,6 @@ export class DatatypesServices {
      * @param datatype 
      */
     deleteDatatype(datatype: ARTURIResource) {
-        console.log("[DatatypesServices] deleteDatatype");
         var params: any = {
             datatype: datatype
         };

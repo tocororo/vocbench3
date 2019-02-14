@@ -19,7 +19,6 @@ export class SkosxlServices {
      * @param lang
      */
     getPrefLabel(concept: ARTURIResource, lang: string) {
-        console.log("[SkosxlServices] getPrefLabel");
         var params: any = {
             concept: concept,
             lang: lang
@@ -41,7 +40,6 @@ export class SkosxlServices {
      */
     setPrefLabel(concept: ARTURIResource, literal: ARTLiteral, labelCls?: ARTURIResource, checkExistingAltLabel?: boolean, 
             mode: string = RDFTypesEnum.uri) {
-        console.log("[SkosxlServices] setPrefLabel");
         var params: any = {
             concept: concept,
             literal: literal,
@@ -68,7 +66,6 @@ export class SkosxlServices {
      * @param xlabel label to remove
      */
     removePrefLabel(concept: ARTURIResource, xlabel: ARTResource) {
-        console.log("[SkosxlServices] removePrefLabel");
         var params: any = {
             concept: concept,
             xlabel: xlabel,
@@ -82,7 +79,6 @@ export class SkosxlServices {
      * @param lang
      */
     getAltLabels(concept: ARTURIResource, lang: string) {
-        console.log("[SkosxlServices] getAltLabels");
         var params: any = {
             concept: concept,
             lang: lang,
@@ -102,7 +98,6 @@ export class SkosxlServices {
      * @param mode available values: uri or bnode
      */
     addAltLabel(concept: ARTURIResource, literal: ARTLiteral, labelCls?: ARTURIResource, mode: string = RDFTypesEnum.uri) {
-        console.log("[SkosxlServices] addAltLabel");
         var params: any = {
             concept: concept,
             literal: literal,
@@ -120,7 +115,6 @@ export class SkosxlServices {
      * @param xlabel label to remove
      */
     removeAltLabel(concept: ARTURIResource, xlabel: ARTResource) {
-        console.log("[SkosxlServices] removeAltLabel");
         var params: any = {
             concept: concept,
             xlabel: xlabel,
@@ -136,7 +130,6 @@ export class SkosxlServices {
      * @param mode available values: uri or bnode
      */
     addHiddenLabel(concept: ARTURIResource, literal: ARTLiteral, labelCls?: ARTURIResource, mode: string = RDFTypesEnum.uri) {
-        console.log("[SkosxlServices] addHiddenLabel");
         var params: any = {
             concept: concept,
             literal: literal,
@@ -154,7 +147,6 @@ export class SkosxlServices {
      * @param xlabel label to remove
      */
     removeHiddenLabel(concept: ARTURIResource, xlabel: ARTResource) {
-        console.log("[SkosxlServices] removeHiddenLabel");
         var params: any = {
             concept: concept,
             xlabel: xlabel,
@@ -169,7 +161,6 @@ export class SkosxlServices {
      * @param lang
      */
     changeLabelInfo(xlabel: ARTResource, literal: ARTLiteral) {
-        console.log("[SkosxlServices] changeLabelInfo");
         var params: any = {
             xlabel: xlabel,
             literal: literal,
@@ -183,7 +174,6 @@ export class SkosxlServices {
      * @param xLabel
      */
     prefToAtlLabel(concept: ARTURIResource, xLabel: ARTResource) {
-        console.log("[SkosxlServices] prefToAtlLabel");
         var params: any = {
             concept: concept,
             xlabelURI: xLabel
@@ -197,7 +187,6 @@ export class SkosxlServices {
      * @param xLabel
      */
     altToPrefLabel(concept: ARTURIResource, xLabel: ARTResource) {
-        console.log("[SkosxlServices] altToPrefLabel");
         var params: any = {
             concept: concept,
             xlabelURI: xLabel
