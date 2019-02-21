@@ -10,7 +10,9 @@ import { ClassesServices } from "../../../services/classesServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { SearchServices } from "../../../services/searchServices";
+import { RoleActionResolver } from "../../../utils/RoleActionResolver";
 import { UIUtils } from "../../../utils/UIUtils";
+import { VBActionFunctionCtx } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
@@ -41,11 +43,13 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
 
     constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties, private modal: Modal) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
+        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, private modal: Modal) {
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver);
     }
 
     ngOnInit() {
+        super.ngOnInit();
+
         this.filterEnabled = this.vbProp.getClassTreePreferences().filterEnabled;
         if (VBContext.getWorkingProject().getModelType() == RDFS.uri) {
             this.creatingClassType = RDFS.class;
@@ -54,38 +58,42 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
 
     //Top Bar commands handlers
 
-    createRoot() {
-        this.creationModals.newResourceCf("Create a new class", this.creatingClassType).then(
-            (data: any) => {
-                let superClass: ARTURIResource = OWL.thing;
-                if (data.cls.getURI() == RDFS.class.getURI()) {
-                    superClass = RDFS.resource;
-                }
-                this.classesService.createClass(data.uriResource, superClass, data.cls, data.cfValue).subscribe();
-            },
-            () => {}
-        );
+    getActionContext(): VBActionFunctionCtx {
+        let actionCtx: VBActionFunctionCtx = { metaClass: this.creatingClassType, loadingDivRef: this.viewChildTree.blockDivElement }
+        return actionCtx;
     }
 
-    createChild() {
-        this.creationModals.newResourceCf("Create a subClass of " + this.selectedNode.getShow(), this.creatingClassType).then(
-            (data: any) => {
-                this.classesService.createClass(data.uriResource, this.selectedNode, data.cls, data.cfValue).subscribe();
-            },
-            () => {}
-        );
-    }
+    // createRoot() {
+    //     this.creationModals.newResourceCf("Create a new class", this.creatingClassType).then(
+    //         (data: any) => {
+    //             let superClass: ARTURIResource = OWL.thing;
+    //             if (data.cls.getURI() == RDFS.class.getURI()) {
+    //                 superClass = RDFS.resource;
+    //             }
+    //             this.classesService.createClass(data.uriResource, superClass, data.cls, data.cfValue).subscribe();
+    //         },
+    //         () => {}
+    //     );
+    // }
 
-    delete() {
-        UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);;
-        this.classesService.deleteClass(this.selectedNode).subscribe(
-            stResp => {
-                this.nodeDeleted.emit(this.selectedNode);
-                this.selectedNode = null;
-                UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-            }
-        );
-    }
+    // createChild() {
+    //     this.creationModals.newResourceCf("Create a subClass of " + this.selectedNode.getShow(), this.creatingClassType).then(
+    //         (data: any) => {
+    //             this.classesService.createClass(data.uriResource, this.selectedNode, data.cls, data.cfValue).subscribe();
+    //         },
+    //         () => {}
+    //     );
+    // }
+
+    // delete() {
+    //     UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);;
+    //     this.classesService.deleteClass(this.selectedNode).subscribe(
+    //         stResp => {
+    //             this.selectedNode = null;
+    //             UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
+    //         }
+    //     );
+    // }
 
     refresh() {
         this.viewChildTree.init();

@@ -4,6 +4,7 @@ import { ClassesServices } from "../../../services/classesServices";
 import { SearchServices } from "../../../services/searchServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../utils/UIUtils";
+import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -41,7 +42,7 @@ export class ClassTreeComponent extends AbstractTree {
     }
 
     initImpl() {
-        if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_GET_CLASS_TAXONOMY)) {
+        if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesGetClassTaxonomy)) {
             return;
         }
         

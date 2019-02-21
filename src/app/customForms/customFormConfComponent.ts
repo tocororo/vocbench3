@@ -1,16 +1,17 @@
 import { Component } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
-import { CustomFormsServices } from "../services/customFormsServices";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { FormCollMappingModal } from "./customFormConfigModals/formCollMappingModal"
-import { FormCollEditorModal, FormCollEditorModalData } from "./customFormConfigModals/formCollEditorModal"
-import { CustomFormEditorModal, CustomFormEditorModalData } from "./customFormConfigModals/customFormEditorModal"
-import { ImportCfModal, ImportCfModalData } from "./customFormConfigModals/importCfModal"
-import { BrokenCFStructReportModal } from "./customFormConfigModals/brokenCFStructReportModal"
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from "../models/ARTResources";
-import { FormCollectionMapping, CustomForm, CustomFormLevel, FormCollection } from "../models/CustomForms";
+import { CustomForm, CustomFormLevel, FormCollection, FormCollectionMapping } from "../models/CustomForms";
+import { CustomFormsServices } from "../services/customFormsServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "../utils/VBActions";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { BrokenCFStructReportModal } from "./customFormConfigModals/brokenCFStructReportModal";
+import { CustomFormEditorModal, CustomFormEditorModalData } from "./customFormConfigModals/customFormEditorModal";
+import { FormCollEditorModal, FormCollEditorModalData } from "./customFormConfigModals/formCollEditorModal";
+import { FormCollMappingModal } from "./customFormConfigModals/formCollMappingModal";
+import { ImportCfModal, ImportCfModalData } from "./customFormConfigModals/importCfModal";
 
 @Component({
     selector: "custom-form-conf-component",
@@ -346,33 +347,33 @@ export class CustomFormConfigComponent {
 
     //Authorization handlers
     private isCreateMappingAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_CREATE_FORM_MAPPING);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormCreateFormMapping);
     }
     private isDeleteMappingAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_DELETE_FORM_MAPPING);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormDeleteFormMapping);
     }
     private isUpdateMappingAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_UPDATE_FORM_MAPPING);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormUpdateFormMapping);
     }
 
     private isCreateFormAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_CREATE_FORM);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormCreateForm);
     }
     private isDeleteFormAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_DELETE_FORM);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormDeleteForm);
     }
     private isUpdateFormAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_UPDATE_FORM);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormUpdateForm);
     }
 
     private isCreateCollectionAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_CREATE_COLLECTION);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormCreateCollection);
     }
     private isDeleteCollectionAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_DELETE_COLLECTION);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormDeleteCollection);
     }
     private isUpdateCollectionAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_UPDATE_COLLECTION);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormUpdateCollection);
     }
 
 }

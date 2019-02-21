@@ -1,14 +1,16 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import { GraphMode } from "../../../graph/abstractGraph";
 import { GraphModalServices } from "../../../graph/modal/graphModalServices";
-import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
 import { SearchSettings } from "../../../models/Properties";
 import { OWL, RDF } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { SearchServices } from "../../../services/searchServices";
+import { RoleActionResolver } from "../../../utils/RoleActionResolver";
 import { UIUtils } from "../../../utils/UIUtils";
+import { VBActionFunctionCtx } from "../../../utils/VBActions";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -35,44 +37,50 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
 
     constructor(private propService: PropertyServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
+        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver) {
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver);
     }
 
-    createRoot(role: RDFResourceRolesEnum) {
-        let propertyType: ARTURIResource = this.convertRoleToClass(role);
-        this.creationModals.newResourceCf("Create a new " + propertyType.getShow(), propertyType, false).then(
-            (data: any) => {
-                this.propService.createProperty(data.cls, data.uriResource, null, data.cfValue).subscribe();
-            },
-            () => {}
-        );
+
+    getActionContext(role?: RDFResourceRolesEnum): VBActionFunctionCtx {
+        let metaClass: ARTURIResource = role ? this.convertRoleToClass(role) : this.convertRoleToClass(this.selectedNode.getRole());
+        let actionCtx: VBActionFunctionCtx = { metaClass: metaClass, loadingDivRef: this.viewChildTree.blockDivElement }
+        return actionCtx;
     }
 
-    createChild() {
-        let parentRole: RDFResourceRolesEnum = this.selectedNode.getRole();
-        let propertyType: ARTURIResource = this.convertRoleToClass(parentRole);
-        this.creationModals.newResourceCf("Create subProperty of " + this.selectedNode.getShow(), propertyType, false).then(
-            (data: any) => {
-                this.propService.createProperty(data.cls, data.uriResource, this.selectedNode, data.cfValue).subscribe();
-            },
-            () => {}
-        );
-    }
+    // createRoot(role: RDFResourceRolesEnum) {
+    //     let propertyType: ARTURIResource = this.convertRoleToClass(role);
+    //     this.creationModals.newResourceCf("Create a new " + propertyType.getShow(), propertyType, false).then(
+    //         (data: any) => {
+    //             this.propService.createProperty(data.cls, data.uriResource, null, data.cfValue).subscribe();
+    //         },
+    //         () => {}
+    //     );
+    // }
 
-    delete() {
-        if (this.selectedNode.getAdditionalProperty(ResAttribute.MORE)) {
-            this.basicModals.alert("Operation denied", "Cannot delete " + this.selectedNode.getURI() + 
-                " since it has subProperty(ies). Please delete the subProperty(ies) and retry", "warning");
-            return;
-        }
-        this.propService.deleteProperty(this.selectedNode).subscribe(
-            stResp => {
-                this.nodeDeleted.emit(this.selectedNode);
-                this.selectedNode = null;
-            }
-        )
-    }
+    // createChild() {
+    //     let parentRole: RDFResourceRolesEnum = this.selectedNode.getRole();
+    //     let propertyType: ARTURIResource = this.convertRoleToClass(parentRole);
+    //     this.creationModals.newResourceCf("Create subProperty of " + this.selectedNode.getShow(), propertyType, false).then(
+    //         (data: any) => {
+    //             this.propService.createProperty(data.cls, data.uriResource, this.selectedNode, data.cfValue).subscribe();
+    //         },
+    //         () => {}
+    //     );
+    // }
+
+    // delete() {
+    //     if (this.selectedNode.getAdditionalProperty(ResAttribute.MORE)) {
+    //         this.basicModals.alert("Operation denied", "Cannot delete " + this.selectedNode.getURI() + 
+    //             " since it has subProperty(ies). Please delete the subProperty(ies) and retry", "warning");
+    //         return;
+    //     }
+    //     this.propService.deleteProperty(this.selectedNode).subscribe(
+    //         stResp => {
+    //             this.selectedNode = null;
+    //         }
+    //     )
+    // }
 
     refresh() {
         this.viewChildTree.init();
@@ -116,20 +124,21 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
         this.viewChildTree.openTreeAt(resource);
     }
 
+    //I don't know why, if I move this in ResourceUtils I get a strange error
     private convertRoleToClass(role: RDFResourceRolesEnum): ARTURIResource {
-        let propertyType: ARTURIResource;
+        let roleClass: ARTURIResource;
         if (role == RDFResourceRolesEnum.property) {
-            propertyType = RDF.property;
+            roleClass = RDF.property;
         } else if (role == RDFResourceRolesEnum.datatypeProperty) {
-            propertyType = OWL.datatypeProperty;
+            roleClass = OWL.datatypeProperty;
         } else if (role == RDFResourceRolesEnum.objectProperty) {
-            propertyType = OWL.objectProperty;
+            roleClass = OWL.objectProperty;
         } else if (role == RDFResourceRolesEnum.annotationProperty) {
-            propertyType = OWL.annotationProperty;
+            roleClass = OWL.annotationProperty;
         } else if (role == RDFResourceRolesEnum.ontologyProperty) {
-            propertyType = OWL.ontologyProperty;
+            roleClass = OWL.ontologyProperty;
         }
-        return propertyType;
+        return roleClass;
     }
 
 }

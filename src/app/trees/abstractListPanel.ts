@@ -1,5 +1,5 @@
 import { GraphModalServices } from "../graph/modal/graphModalServices";
-import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { CustomFormsServices } from "../services/customFormsServices";
 import { ResourcesServices } from "../services/resourcesServices";
 import { ActionDescription, RoleActionResolver } from "../utils/RoleActionResolver";
@@ -8,7 +8,7 @@ import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { AbstractPanel } from "./abstractPanel";
 
-export abstract class AbstractTreePanel extends AbstractPanel {
+export abstract class AbstractListPanel extends AbstractPanel {
 
     /**
      * VIEWCHILD, INPUTS / OUTPUTS
@@ -17,8 +17,6 @@ export abstract class AbstractTreePanel extends AbstractPanel {
     /**
      * ATTRIBUTES
      */
-
-    
 
     /**
      * CONSTRUCTOR
@@ -32,14 +30,7 @@ export abstract class AbstractTreePanel extends AbstractPanel {
      * METHODS
      */
 
-    // abstract createRoot(role?: RDFResourceRolesEnum): void;
-    // abstract createChild(role?: RDFResourceRolesEnum): void;
-
     executeAction(act: ActionDescription, role?: RDFResourceRolesEnum) {
-        if (act.conditions.pre.selectionRequired && !act.conditions.pre.allowedWithChild && this.selectedNode.getAdditionalProperty(ResAttribute.MORE)) {
-            this.basicModals.alert("Operation denied", "The operation cannot be done on node with children. Please delete the children nodes and then retry", "warning");
-            return;
-        }
         act.function(this.getActionContext(role), this.selectedNode).subscribe(
             done => {
                 if (act.conditions.post.deselectOnComplete) {
@@ -50,12 +41,6 @@ export abstract class AbstractTreePanel extends AbstractPanel {
         );
     }
 
-
-    abstract openTreeAt(node: ARTURIResource): void;
-
-    //the following determines if the create button is disabled in the UI. It could be overriden in the extending components
-    // isCreateChildDisabled(): boolean {
-    //     return (!this.selectedNode || this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
-    // }
-
+    abstract openAt(node: ARTURIResource): void;
+    
 }

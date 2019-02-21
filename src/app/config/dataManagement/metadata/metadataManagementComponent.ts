@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator"
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "../../../utils/VBActions";
 
 @Component({
     selector: "metadata-management-component",
@@ -12,13 +13,13 @@ export class MetadataManagementComponent {
 
     private isMetadataVocAuthorized(): boolean {
         return (
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.DATASET_METADATA_EXPORT) &&
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.DATASET_METADATA_GET_METADATA)
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.datasetMetadataExport) &&
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.datasetMetadataGetMetadata)
         );
     }
 
     private isMetadataRegistryAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_REGISTRY_READ);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryRead);
     }
 
 }

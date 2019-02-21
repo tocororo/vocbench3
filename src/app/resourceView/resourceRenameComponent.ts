@@ -1,9 +1,9 @@
-import { Component, Input, ViewChild, ElementRef, SimpleChanges } from "@angular/core";
-import { Modal } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input, SimpleChanges, ViewChild } from "@angular/core";
 import { ARTResource, ARTURIResource, ResAttribute, ResourceUtils } from "../models/ARTResources";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { RefactorServices } from "../services/refactorServices";
-import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator"
+import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "../utils/VBActions";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "resource-rename",
@@ -41,7 +41,7 @@ export class ResourceRenameComponent {
             }
             //rename disabled if resource is not explicit || resView is readOnly || user has not the authorization || resource is to validate
             this.renameDisabled = (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || 
-                !AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_CHANGE_RESOURCE_URI, this.resource) ||
+                !AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorChangeResourceUri, this.resource) ||
 			    ResourceUtils.isReourceInStaging(this.resource));
         }
     }

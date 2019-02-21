@@ -1,9 +1,10 @@
 import { Component } from "@angular/core";
+import { SKOSXL } from "../../../models/Vocabulary";
 import { RefactorServices } from "../../../services/refactorServices";
-import { VBContext } from "../../../utils/VBContext";
-import { UIUtils } from "../../../utils/UIUtils";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
-import { SKOS, SKOSXL } from "../../../models/Vocabulary";
+import { UIUtils } from "../../../utils/UIUtils";
+import { VBActionsEnum } from "../../../utils/VBActions";
+import { VBContext } from "../../../utils/VBContext";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 
 @Component({
@@ -80,13 +81,13 @@ export class RefactorComponent {
 
     //Authorizations
     private isMigrateAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_MIGRATE_TO_BASEURI_GRAPH);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorMigrateToBaseUriGraph);
     }
     private isSkosToSkosxlAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_SKOS_TO_SKOSXL);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSkosToSkosxl);
     }
     private isSkoxlToSkosAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_SKOSXL_TO_SKOS);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSkosxlToSkos);
     }
 
 }

@@ -8,6 +8,7 @@ import { ExtensionsServices } from "../../../services/extensionsServices";
 import { InputOutputServices } from "../../../services/inputOutputServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../utils/UIUtils";
+import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
 import { ExtensionConfiguratorComponent } from "../../../widget/extensionConfigurator/extensionConfiguratorComponent";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -371,7 +372,7 @@ export class LoadDataComponent {
     }
 
     private isValidationAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.VALIDATION);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.validation);
     }
 
     private isDataValid(): boolean {

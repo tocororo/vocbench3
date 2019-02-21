@@ -4,6 +4,7 @@ import { ClassIndividualPanelSearchMode, SearchSettings } from "../../../models/
 import { IndividualsServices } from "../../../services/individualsServices";
 import { SearchServices } from "../../../services/searchServices";
 import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
+import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { ClassTreePanelComponent } from "../classTreePanel/classTreePanelComponent";
@@ -30,8 +31,6 @@ export class ClassIndividualTreePanelComponent {
     @Input() context: TreeListContext;
     @Output() classSelected = new EventEmitter<ARTURIResource>();
     @Output() instanceSelected = new EventEmitter<ARTURIResource>();
-    @Output() classDeleted = new EventEmitter<ARTURIResource>();
-    @Output() instanceDeleted = new EventEmitter<ARTURIResource>();
     @Output('advancedSearch') advancedSearchEvent: EventEmitter<ARTResource> = new EventEmitter();
 
     @ViewChild('blockDivClsIndList') public blockDivElement: ElementRef;
@@ -49,8 +48,20 @@ export class ClassIndividualTreePanelComponent {
 
     private rolesForSearch: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual];
 
+    private eventSubscriptions: any[] = [];
+
     constructor(private individualService: IndividualsServices, private searchService: SearchServices,
-        private basicModals: BasicModalServices, private vbProp: VBProperties) { }
+        private basicModals: BasicModalServices, private vbProp: VBProperties, private eventHandler: VBEventHandler) {
+
+        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
+            (deletedRes: ARTURIResource) => this.onClassDeleted(deletedRes)));
+        this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
+            (data: { instance: ARTURIResource, cls: ARTURIResource }) => this.onInstanceDeleted(data.instance)));
+    }
+
+    ngOnDestroy() {
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    }
 
     private doSearch(searchedText: string) {
         let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
@@ -104,7 +115,7 @@ export class ClassIndividualTreePanelComponent {
                 types => {
                     this.viewChildTree.openTreeAt(types[0]);
                     //center instanceList to the individual
-                    this.viewChildInstanceList.selectSearchedInstance(types[0], resource);
+                    this.viewChildInstanceList.openAt(resource);
                 }
             )
         }
@@ -137,13 +148,15 @@ export class ClassIndividualTreePanelComponent {
     }
 
     private onClassDeleted(cls: ARTURIResource) {
-        this.classDeleted.emit(cls);
-        this.selectedClass = null;
+        if (this.selectedClass.equals(cls)) {
+            this.selectedClass = null;
+        }
     }
 
     private onInstanceDeleted(instance: ARTURIResource) {
-        this.instanceDeleted.emit(instance);
-        this.selectedInstance = null;
+        if (this.selectedInstance.equals(instance)) {
+            this.selectedInstance = null;
+        }
     }
 
     /**

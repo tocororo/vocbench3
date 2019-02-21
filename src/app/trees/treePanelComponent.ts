@@ -3,19 +3,20 @@ import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { OntoLex, SKOS } from "../models/Vocabulary";
-import { ClassIndividualTreePanelComponent } from "./owl/classIndividualTreePanel/classIndividualTreePanelComponent";
-import { PropertyTreePanelComponent } from "./property/propertyTreePanel/propertyTreePanelComponent";
-import { CollectionTreePanelComponent } from "./skos/collection/collectionTreePanel/collectionTreePanelComponent";
-import { ConceptTreePanelComponent } from "./skos/concept/conceptTreePanel/conceptTreePanelComponent";
-import { SchemeListPanelComponent } from "./skos/scheme/schemeListPanel/schemeListPanelComponent";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { TreeListContext } from "../utils/UIUtils";
+import { VBActionsEnum } from "../utils/VBActions";
 import { VBContext } from "../utils/VBContext";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { LexicalEntryListPanelComponent } from "./ontolex/lexicalEntry/lexicalEntryListPanel/lexicalEntryListPanelComponent";
 import { LexiconListPanelComponent } from "./ontolex/lexicon/lexiconListPanel/lexiconListPanelComponent";
+import { ClassIndividualTreePanelComponent } from "./owl/classIndividualTreePanel/classIndividualTreePanelComponent";
 import { DatatypeListPanelComponent } from "./owl/datatypeListPanel/datatypeListPanelComponent";
+import { PropertyTreePanelComponent } from "./property/propertyTreePanel/propertyTreePanelComponent";
+import { CollectionTreePanelComponent } from "./skos/collection/collectionTreePanel/collectionTreePanelComponent";
+import { ConceptTreePanelComponent } from "./skos/concept/conceptTreePanel/conceptTreePanelComponent";
+import { SchemeListPanelComponent } from "./skos/scheme/schemeListPanel/schemeListPanelComponent";
 import { TreeListSettingsModal } from "./treeListSettingsModal";
 
 @Component({
@@ -24,7 +25,6 @@ import { TreeListSettingsModal } from "./treeListSettingsModal";
 })
 export class TreePanelComponent {
     @Output() nodeSelected = new EventEmitter<ARTResource>();
-    @Output() nodeDeleted = new EventEmitter<ARTResource>();
 
     @ViewChild(ConceptTreePanelComponent) viewChildConceptPanel: ConceptTreePanelComponent;
     @ViewChild(CollectionTreePanelComponent) viewChildCollectionPanel: CollectionTreePanelComponent;
@@ -96,10 +96,6 @@ export class TreePanelComponent {
         this.nodeSelected.emit(node);
     }
 
-    private onNodeDeleted(node: ARTResource) {
-        this.nodeDeleted.emit(node);
-    }
-
     public syncResource(resource: ARTResource) {
         let resRole: RDFResourceRolesEnum = resource.getRole();
         //sync the resource in the tree/list only if the resource has the same role of the tree/list currently active
@@ -147,28 +143,28 @@ export class TreePanelComponent {
     }
 
     private isClassAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_GET_CLASS_TAXONOMY);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesGetClassTaxonomy);
     }
     private isConceptAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_CONCEPT_TAXONOMY);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetConceptTaxonomy);
     }
     private isSchemeAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_SCHEMES);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetSchemes);
     }
     private isCollectionAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_COLLECTION_TAXONOMY);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetCollectionTaxonomy);
     }
     private isPropertyAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_GET_PROPERTY_TAXONOMY);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesGetPropertyTaxonomy);
     }
     private isLexiconAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_GET_LEXICON);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexGetLexicon);
     }
     private isLexicalEntryAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONTOLEX_GET_LEXICAL_ENTRY);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexGetLexicalEntry);
     }
     private isDataRangeAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.DATATYPES_GET_DATATYPES);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.datatypesGetDatatype);
     }
 
     //Focus the panel and select the searched resource after an advanced search

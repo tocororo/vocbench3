@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { Project } from "../../models/Project";
 import { ProjectServices } from "../../services/projectServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
 
 @Component({
@@ -34,8 +35,8 @@ export class ProjectsAdministrationComponent {
             );
         }
         //project manager can manage only the current project
-        else if (AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_PROJECT_MANAGEMENT) &&
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_ROLE_MANAGEMENT)) { 
+        else if (AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationProjectManagement) &&
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserRoleManagement)) { 
             this.selectedProject = VBContext.getWorkingProject();
         }
         if (this.isProjUserManagementAuthorized()) {
@@ -55,15 +56,15 @@ export class ProjectsAdministrationComponent {
 
     private isProjUserManagementAuthorized(): boolean {
         return (
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_ROLE_MANAGEMENT) &&
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_GROUP_MANAGEMENT)
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserRoleManagement) &&
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserGroupManagement)
         );
     }
     private isProjGroupManagementAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_GROUP_MANAGEMENT);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserGroupManagement);
     }
     private isProjSettingsAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_PROJECT_MANAGEMENT);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationProjectManagement);
     }
 
 }

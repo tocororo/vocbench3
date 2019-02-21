@@ -1,7 +1,7 @@
 <div class="hbox">
 
     <div #treePanel class="vbox" [ngStyle]="{ 'flex': treePanelFlex }">
-        <tree-panel (nodeSelected)="onNodeSelected($event)" (nodeDeleted)="onNodeDeleted($event)"></tree-panel>
+        <tree-panel (nodeSelected)="onNodeSelected($event)"></tree-panel>
     </div>
 
     <ng-template [ngIf]="resViewPanelFlex > 0">

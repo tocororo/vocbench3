@@ -1,17 +1,18 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
-import { ProjectListModal } from '../../project/projectListModal';
-import { Project, ProjectTypesEnum } from "../../models/Project";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { VersionInfo } from "../../models/History";
+import { Project } from "../../models/Project";
+import { ProjectListModal } from '../../project/projectListModal';
 import { InputOutputServices } from "../../services/inputOutputServices";
-import { ProjectServices } from "../../services/projectServices";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { VBContext } from "../../utils/VBContext";
+import { ProjectServices } from "../../services/projectServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../utils/UIUtils";
+import { VBActionsEnum } from "../../utils/VBActions";
+import { VBContext } from "../../utils/VBContext";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "config-bar",
@@ -49,16 +50,16 @@ export class ConfigBarComponent {
     }
 
     private isLoadDataAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.INPUT_OUTPUT_LOAD_DATA);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.inputOutputLoadData);
     }
     private isExportDataAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.EXPORT_EXPORT);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.exportExport);
     }
     private isClearDataAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.INPUT_OUTPUT_CLEAR_DATA);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.inputOutputClearData);
     }
     private isVersioningAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.VERSIONS_GET_VERSIONS);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.versionsGetVersions);
     }
 
     /**

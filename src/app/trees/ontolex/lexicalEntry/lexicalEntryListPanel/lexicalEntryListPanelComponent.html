@@ -2,15 +2,21 @@
     <!-- Commands -->
     <div class="panel-heading">
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
-            <button class="btn btn-default" title="Create Lexical Entry" (click)="create()" [disabled]="isCreateDisabled()">
-                <img src="../../../../../assets/images/icons/actions/lexEntry_create.png" class="panelButtonImg"/>
+            <!-- <button class="btn btn-default" title="Create Lexical Entry" (click)="create()" [disabled]="isCreateDisabled()">
+                <img src="../../../../../assets/images/icons/actions/ontolexLexicalEntry_create.png" class="panelButtonImg"/>
             </button>
             <ng-template [ngIf]="deletable">
                 <button class="btn btn-default" title="Delete Lexical Entry" (click)="delete()" [disabled]="isDeleteDisabled()">
-                    <img src="../../../../../assets/images/icons/actions/lexEntry_delete.png" class="panelButtonImg"/>
+                    <img src="../../../../../assets/images/icons/actions/ontolexLexicalEntry_delete.png" class="panelButtonImg"/>
                 </button>
                 <button class="btn btn-default" title="Deprecate Lexical Entry" (click)="deprecate()" [disabled]="isDeprecateDisabled()">
-                    <img src="../../../../../assets/images/icons/actions/lexEntry_deprecate.png" class="panelButtonImg"/>
+                    <img src="../../../../../assets/images/icons/actions/ontolexLexicalEntry_deprecate.png" class="panelButtonImg"/>
+                </button>
+            </ng-template> -->
+
+            <ng-template ngFor let-action [ngForOf]="panelActions">
+                <button *ngIf="isActionVisible(action)" class="btn btn-default" [title]="action.title" (click)="executeAction(action)" [disabled]="isActionDisabled(action)">
+                    <img [src]="action.icon" class="panelButtonImg"/>
                 </button>
             </ng-template>
         </div>

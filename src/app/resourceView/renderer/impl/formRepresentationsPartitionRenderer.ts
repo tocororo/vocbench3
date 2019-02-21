@@ -24,7 +24,7 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
     rootProperty: ARTURIResource = OntoLex.representation;
     label = "Form Representations";
     addBtnImgTitle = "Add a representation";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/propDatatype_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/datatypeProperty_create.png");
 
     private lexiconLang: string; //cache the language of the lexicon
 

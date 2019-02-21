@@ -11,12 +11,13 @@ import { AlignmentServices } from "../../services/alignmentServices";
 import { MapleServices } from "../../services/mapleServices";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
 import { ProjectServices } from "../../services/projectServices";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { HttpServiceContext } from "../../utils/HttpManager";
 import { UIUtils } from "../../utils/UIUtils";
+import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AssistedSearchResultModal, AssistedSearchResultModalData } from "./assistedSearchResultModal";
-import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 
 export class AssistedSearchModalData extends BSModalContext {
     constructor(public resource: ARTURIResource) {
@@ -291,7 +292,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
      * Remote Assisted-search requires to initialize the catalog records, so it needs that the user has the required capabilities
      */
     private isRemoteAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_REGISTRY_READ);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryRead);
     }
 
     ok(event: Event) {

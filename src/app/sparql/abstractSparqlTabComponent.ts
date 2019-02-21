@@ -13,6 +13,7 @@ import { SearchServices } from "../services/searchServices";
 import { SparqlServices } from "../services/sparqlServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { UIUtils } from "../utils/UIUtils";
+import { VBActionsEnum } from "../utils/VBActions";
 import { VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
@@ -96,7 +97,7 @@ export abstract class AbstractSparqlTabComponent {
 
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         if (this.queryMode == QueryMode.query) {
-            if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SPARQL_EVALUATE_QUERY)) {
+            if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.sparqlEvaluateQuery)) {
                 this.basicModals.alert("Operation denied", "You are not authorized to perform SPARQL query");
                 return;
             }
@@ -106,7 +107,7 @@ export abstract class AbstractSparqlTabComponent {
                 }
             );
         } else { //queryMode "update"
-            if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SPARQL_EXECUTE_UPDATE)) {
+            if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.sparqlExecuteUpdate)) {
                 this.basicModals.alert("Operation denied", "You are not authorized to perform SPARQL update");
                 return;
             }

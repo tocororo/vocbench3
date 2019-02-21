@@ -4,6 +4,7 @@ import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../../utils/UIUtils";
+import { VBActionsEnum } from "../../../../utils/VBActions";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../../widget/modal/sharedModal/sharedModalServices";
@@ -42,7 +43,7 @@ export class CollectionTreeComponent extends AbstractTree {
     }
 
     initImpl() {
-        if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_COLLECTION_TAXONOMY)) {
+        if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetCollectionTaxonomy)) {
             return;
         }
 

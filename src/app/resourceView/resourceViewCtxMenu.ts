@@ -1,14 +1,15 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ResourceAlignmentModal, ResourceAlignmentModalData } from "../alignment/resourceAlignment/resourceAlignmentModal";
+import { ARTResource, ARTURIResource, ResAttribute, ResourceUtils } from "../models/ARTResources";
+import { SKOS } from "../models/Vocabulary";
 import { AlignmentServices } from "../services/alignmentServices";
 import { RefactorServices } from "../services/refactorServices";
 import { ResourcesServices } from "../services/resourcesServices";
-import { ResourceAlignmentModal, ResourceAlignmentModalData } from "../alignment/resourceAlignment/resourceAlignmentModal"
-import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
-import { ARTResource, ARTURIResource, ResAttribute, ResourceUtils } from "../models/ARTResources";
-import { SKOS } from "../models/Vocabulary";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "../utils/VBActions";
+import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
 
 @Component({
     selector: "res-view-menu",
@@ -86,19 +87,19 @@ export class ResourceViewContextMenu {
     private isSetDeprecatedDisabled(): boolean {
         return (
             (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) || 
-            !AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_SET_DEPRECATED, this.resource)
+            !AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesSetDeprecated, this.resource)
         );
     }
     private isAlignDisabled(): boolean {
         return (
             (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) || 
-		    !AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ALIGNMENT_ADD_ALIGNMENT, this.resource)
+		    !AuthorizationEvaluator.isAuthorized(VBActionsEnum.alignmentAddAlignment, this.resource)
         );
 	}
 	private isSpawnFromLabelDisabled(): boolean {
         return (
             !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || 
-		    !AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_SPAWN_NEW_CONCEPT_FROM_LABEL)
+		    !AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSpawnNewConceptFromLabel)
         );
 	}
 

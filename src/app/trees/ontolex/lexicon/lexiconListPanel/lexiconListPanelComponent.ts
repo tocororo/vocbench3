@@ -2,16 +2,18 @@ import { Component, Input, ViewChild } from "@angular/core";
 import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { SearchSettings } from "../../../../models/Properties";
+import { Lime } from "../../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
+import { RoleActionResolver } from "../../../../utils/RoleActionResolver";
+import { VBActionFunctionCtx } from "../../../../utils/VBActions";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from '../../../../utils/VBProperties';
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
-import { NewLexiconCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/ontolex/newLexiconCfModal";
-import { AbstractPanel } from "../../../abstractPanel";
+import { AbstractListPanel } from "../../../abstractListPanel";
 import { LexiconListComponent } from "../lexiconList/lexiconListComponent";
 
 @Component({
@@ -19,7 +21,7 @@ import { LexiconListComponent } from "../lexiconList/lexiconListComponent";
     templateUrl: "./lexiconListPanelComponent.html",
     host: { class: "vbox" }
 })
-export class LexiconListPanelComponent extends AbstractPanel {
+export class LexiconListPanelComponent extends AbstractListPanel {
     @Input() hideSearch: boolean = false; //if true hide the search bar
     @ViewChild(LexiconListComponent) viewChildList: LexiconListComponent;
 
@@ -27,28 +29,31 @@ export class LexiconListPanelComponent extends AbstractPanel {
 
     constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
-        
+        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver) {
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver);
     }
 
-    private create() {
-        this.creationModals.newLexiconCf("Create new lime:Lexicon").then(
-            (res: NewLexiconCfModalReturnData) => {
-                this.ontolexService.createLexicon(res.language, res.uriResource, res.title, res.cfValue).subscribe();
-            },
-            () => { }
-        );
+    getActionContext(): VBActionFunctionCtx {
+        let actionCtx: VBActionFunctionCtx = { metaClass: Lime.lexicon, loadingDivRef: this.viewChildList.blockDivElement };
+        return actionCtx;
     }
 
-    delete() {
-        this.ontolexService.deleteLexicon(this.selectedNode).subscribe(
-            stResp => {
-                this.nodeDeleted.emit(this.selectedNode);
-                this.selectedNode = null;
-            }
-        );
-    }
+    // private create() {
+    //     this.creationModals.newLexiconCf("Create new lime:Lexicon").then(
+    //         (res: NewLexiconCfModalReturnData) => {
+    //             this.ontolexService.createLexicon(res.language, res.uriResource, res.title, res.cfValue).subscribe();
+    //         },
+    //         () => { }
+    //     );
+    // }
+
+    // delete() {
+    //     this.ontolexService.deleteLexicon(this.selectedNode).subscribe(
+    //         stResp => {
+    //             this.selectedNode = null;
+    //         }
+    //     );
+    // }
 
     doSearch(searchedText: string) {
         let searchSettings: SearchSettings = this.vbProp.getSearchSettings();

@@ -1,10 +1,11 @@
 import { Component, QueryList, ViewChildren } from "@angular/core";
-import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute, RDFResourceRolesEnum } from "../../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../../utils/UIUtils";
+import { VBActionsEnum } from "../../../../utils/VBActions";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from "../../../../utils/VBProperties";
@@ -39,7 +40,7 @@ export class SchemeListComponent extends AbstractList {
     }
 
     ngOnInit() {
-        if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_SCHEMES)) {
+        if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetSchemes)) {
             return;
         }
         this.init();

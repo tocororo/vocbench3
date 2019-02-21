@@ -2,9 +2,9 @@
     <!-- Commands -->
     <div class="panel-heading">
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
-            <div class="btn-group btn-group-xs" role="group">
+            <!-- <div class="btn-group btn-group-xs" role="group">
                 <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" title="Create Property" [disabled]="isCreateDisabled()">
-                    <img src="../../../../assets/images/icons/actions/prop_create.png" class="panelButtonImg"/>
+                    <img src="../../../../assets/images/icons/actions/property_create.png" class="panelButtonImg"/>
                 </button>
                 <ul class="dropdown-menu">
                     <li>
@@ -35,15 +35,48 @@
                 </ul>
             </div>
             <button class="btn btn-default" title="Create SubProperty" (click)="createChild()" [disabled]="isCreateChildDisabled()">
-                <img src="../../../../assets/images/icons/actions/prop_addSubProperty.png" class="panelButtonImg"/>
+                <img src="../../../../assets/images/icons/actions/property_addChild.png" class="panelButtonImg"/>
             </button>
             <ng-template [ngIf]="deletable">
                 <button class="btn btn-default" title="Delete Property" (click)="delete()" [disabled]="isDeleteDisabled()">
-                    <img src="../../../../assets/images/icons/actions/prop_delete.png" class="panelButtonImg"/>
+                    <img src="../../../../assets/images/icons/actions/property_delete.png" class="panelButtonImg"/>
                 </button>
                 <button class="btn btn-default" title="Deprecate Property" (click)="deprecate()" [disabled]="isDeprecateDisabled()">
-                    <img src="../../../../assets/images/icons/actions/prop_deprecate.png" class="panelButtonImg"/>
+                    <img src="../../../../assets/images/icons/actions/property_deprecate.png" class="panelButtonImg"/>
                 </button>
+            </ng-template> -->
+
+            <!-- <ng-template ngFor let-action [ngForOf]="panelActions">
+                <button *ngIf="isActionVisible(action)" class="btn btn-default" [title]="action.title" (click)="executeAction(action)" [disabled]="isActionDisabled(action)">
+                    <img [src]="action.icon" class="panelButtonImg"/>
+                </button>
+            </ng-template> -->
+
+            <ng-template ngFor let-action [ngForOf]="panelActions">
+                <ng-template [ngIf]="isActionVisible(action)">
+                    <!-- Simple button -->
+                    <button *ngIf="!action.subRoles" class="btn btn-default" [title]="action.title" (click)="executeAction(action)" [disabled]="isActionDisabled(action)">
+                        <img [src]="action.icon" class="panelButtonImg"/>
+                    </button>
+                    <!-- Dropdown button -->
+                    <ng-template [ngIf]="action.subRoles" >
+                        <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" [title]="action.title" [disabled]="isActionDisabled(action)">
+                            <img [src]="action.icon" class="panelButtonImg"/>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a (click)="executeAction(action, action.role)">
+                                    {{action.role}}
+                                </a>
+                            </li>
+                            <li *ngFor="let role of action.subRoles">
+                                <a (click)="executeAction(action, role)">
+                                    {{role}}
+                                </a>
+                            </li>
+                        </ul>
+                    </ng-template>
+                </ng-template>
             </ng-template>
         </div>
 

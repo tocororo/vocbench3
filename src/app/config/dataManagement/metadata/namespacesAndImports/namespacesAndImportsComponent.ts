@@ -8,6 +8,7 @@ import { MetadataServices } from "../../../../services/metadataServices";
 import { RefactorServices } from "../../../../services/refactorServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../../utils/UIUtils";
+import { VBActionsEnum } from "../../../../utils/VBActions";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../../widget/modal/sharedModal/sharedModalServices";
 import { ImportFromDatasetCatalogModalReturnData } from "./importFromDatasetCatalogModal";
@@ -459,21 +460,21 @@ export class NamespacesAndImportsComponent {
     //Authorizations
 
     private isAddNsPrefixMappingAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_SET_NS_PREFIX_MAPPING);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataSetNsPrefixMapping);
     }
     private isRemoveNsPrefixMappingAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_REMOVE_NS_PREFIX_MAPPING);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRemoveNsPrefixMapping);
     }
     private isChangeNsPrefixMappingAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_CHANGE_NS_PREFIX_MAPPING);   
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataChangeNsPrefixMapping);   
     }
     private isBaseuriNsEditAuthorized(): boolean {
         return (
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_SET_DEFAULT_NS) &&
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_REPLACE_BASEURI));
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataSetDefaultNs) &&
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorReplaceBaseUri));
     }
     private isAddImportAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_ADD_IMPORT);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataAddImport);
     }
 
 }

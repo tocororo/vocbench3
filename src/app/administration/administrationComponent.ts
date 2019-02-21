@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { Router } from '@angular/router';
 import { VBContext } from "../utils/VBContext";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "../utils/VBActions";
 
 @Component({
     selector: "admin-component",
@@ -38,14 +39,14 @@ export class AdministrationComponent {
     }
 
     private isRoleManagementAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_ROLE_MANAGEMENT);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationRoleManagement);
     }
 
     private isProjManagementAuthorized(): boolean {
         return (
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_PROJECT_MANAGEMENT) ||
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_ROLE_MANAGEMENT) ||
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_GROUP_MANAGEMENT)
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationProjectManagement) ||
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserRoleManagement) ||
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserGroupManagement)
         );
     }
 

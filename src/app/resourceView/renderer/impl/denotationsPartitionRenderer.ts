@@ -32,7 +32,7 @@ export class DenotationsPartitionRenderer extends PartitionRenderSingleRoot {
     rootProperty: ARTURIResource = OntoLex.denotes;
     label = "Denotations";
     addBtnImgTitle = "Add denotation";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/propObject_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/objectProperty_create.png");
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 

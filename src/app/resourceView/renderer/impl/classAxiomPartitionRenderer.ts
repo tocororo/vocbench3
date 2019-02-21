@@ -29,7 +29,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
         OWL.complementOf, OWL.intersectionOf, OWL.unionOf, OWL.oneOf];
     label = "Class axioms";
     addBtnImgTitle = "Add a class axiom";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/class_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/cls_create.png");
 
     constructor(resourcesService: ResourcesServices, cfService: CustomFormsServices, 
         basicModals: BasicModalServices, resViewModals: ResViewModalServices,

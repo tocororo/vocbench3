@@ -5,6 +5,7 @@ import { SemanticTurkey } from "../../../models/Vocabulary";
 import { ClassesServices } from "../../../services/classesServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../utils/UIUtils";
+import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
@@ -83,7 +84,7 @@ export class InstanceListComponent extends AbstractList {
     }
 
     initImpl() {
-        if (!AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_GET_INSTANCES)) {
+        if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesGetInstances)) {
             return;
         }
 
@@ -102,7 +103,7 @@ export class InstanceListComponent extends AbstractList {
                             !this.pendingSearchCls //null if already checked that the pendingSearchCls is the current (see selectSearchedInstance)
                         )
                     ) {
-                        this.selectSearchedInstance(this.cls, this.pendingSearchRes);
+                        this.openListAt(this.pendingSearchRes);
                     }
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 }
@@ -117,21 +118,6 @@ export class InstanceListComponent extends AbstractList {
         this.selectedNode = node;
         this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
         this.nodeSelected.emit(node);
-    }
-
-    /**
-     * cls is useful when the instance list is inside the classTreePanel and so this component need to 
-     * be in sync with the class selected in the tree
-     */
-    public selectSearchedInstance(cls: ARTURIResource, instance: ARTURIResource) {
-        //In the tree, input cls has still not been bound or not changed (cls has been bound previously with a different type) 
-        if (this.cls == undefined || cls.getURI() != this.cls.getURI()) {//save the pending search
-            this.pendingSearchCls = cls;
-            this.pendingSearchRes = instance;
-        } else if (this.cls.getURI() == cls.getURI()) { //Input cls has already bound and it is the type of the searched instance
-            this.pendingSearchCls = null;
-            this.openListAt(instance);
-        }
     }
 
     openListAt(node: ARTURIResource) {

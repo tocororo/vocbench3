@@ -32,7 +32,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
         SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel, OntoLex.isDenotedBy];
     label = "Lexicalizations";
     addBtnImgTitle = "Add a lexicalization";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/propAnnotation_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/annotationProperty_create.png");
 
     private predicateOrder: string[] = [
         SKOSXL.prefLabel.getURI(), SKOSXL.altLabel.getURI(), SKOSXL.hiddenLabel.getURI(),

@@ -27,7 +27,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
     membersProperty = SKOS.member;
     label = "Members";
     addBtnImgTitle = "Add member";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/collection_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/skosCollection_create.png");
 
     private selectedMember: ARTResource;
 

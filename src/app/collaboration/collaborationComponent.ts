@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CollaborationServices } from "../services/collaborationServices";
 import { ResourcesServices } from '../services/resourcesServices';
 import { AuthorizationEvaluator } from '../utils/AuthorizationEvaluator';
+import { VBActionsEnum } from '../utils/VBActions';
 import { VBCollaboration } from '../utils/VBCollaboration';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
@@ -39,6 +40,10 @@ export class CollaborationComponent {
 
     ngOnInit() {
         this.initIssueList();
+    }
+
+    ngOnDestroy() {
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
 
     private initIssueList() {
@@ -99,7 +104,7 @@ export class CollaborationComponent {
     }
 
     private isCollProjManagementAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.COLLABORATION);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.collaboration);
     }
 
     private onCollaborationSystemStatusChange() {

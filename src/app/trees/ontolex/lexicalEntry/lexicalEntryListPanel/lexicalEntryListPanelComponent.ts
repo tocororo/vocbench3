@@ -11,6 +11,7 @@ import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices"
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { RoleActionResolver, ActionDescription } from "../../../../utils/RoleActionResolver";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from '../../../../utils/VBProperties';
@@ -20,13 +21,15 @@ import { NewResourceWithLiteralCfModalReturnData } from "../../../../widget/moda
 import { AbstractPanel } from "../../../abstractPanel";
 import { LexicalEntryListComponent } from "../lexicalEntryList/lexicalEntryListComponent";
 import { LexicalEntryListSettingsModal } from "./lexicalEntryListSettingsModal";
+import { VBActionFunctionCtx } from "../../../../utils/VBActions";
+import { AbstractListPanel } from "../../../abstractListPanel";
 
 @Component({
     selector: "lexical-entry-list-panel",
     templateUrl: "./lexicalEntryListPanelComponent.html",
     host: { class: "vbox" }
 })
-export class LexicalEntryListPanelComponent extends AbstractPanel {
+export class LexicalEntryListPanelComponent extends AbstractListPanel {
     @Input() hideSearch: boolean = false; //if true hide the search bar
     @Input() lexicon: ARTURIResource;
     @Input() lexiconChangeable: boolean = false; //if true, above the tree is shown a menu to select a lexicon
@@ -56,8 +59,8 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
 
     constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         private modal: Modal, cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices,
-        graphModals: GraphModalServices, eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
+        graphModals: GraphModalServices, eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver) {
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver);
 
         this.eventSubscriptions.push(eventHandler.lexiconChangedEvent.subscribe(
             (lexicon: ARTURIResource) => this.onLexiconChanged(lexicon)));
@@ -106,24 +109,37 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
         }
     }
 
-    private create() {
-        this.creationModals.newResourceWithLiteralCf("Create new ontolex:LexicalEntry", OntoLex.lexicalEntry, true, "Canonical Form",
-            this.lexiconLang, { constrain: true, locale: true }).then(
-            (data: NewResourceWithLiteralCfModalReturnData) => {
-                this.ontolexService.createLexicalEntry(data.literal, this.workingLexicon, data.uriResource, data.cls, data.cfValue).subscribe();
-            },
-            () => { }
-        );
+    getActionContext(): VBActionFunctionCtx {
+        let actionCtx: VBActionFunctionCtx = { 
+            metaClass: OntoLex.lexicalEntry, loadingDivRef: this.viewChildList.blockDivElement, 
+            lexicon: { res: this.workingLexicon, lang: this.lexiconLang }
+        };
+        return actionCtx;
     }
 
-    delete() {
-        this.ontolexService.deleteLexicalEntry(this.selectedNode).subscribe(
-            stResp => {
-                this.nodeDeleted.emit(this.selectedNode);
-                this.selectedNode = null;
-            }
-        );
+    //@Override
+    isActionDisabled(action: ActionDescription) {
+        //In addition to the cross-panel conditions, in this case the actions are disabled if the panel is in no-scheme mode
+        return super.isActionDisabled(action) || !this.workingLexicon
     }
+
+    // private create() {
+    //     this.creationModals.newResourceWithLiteralCf("Create new ontolex:LexicalEntry", OntoLex.lexicalEntry, true, "Canonical Form",
+    //         this.lexiconLang, { constrain: true, locale: true }).then(
+    //         (data: NewResourceWithLiteralCfModalReturnData) => {
+    //             this.ontolexService.createLexicalEntry(data.literal, this.workingLexicon, data.uriResource, data.cls, data.cfValue).subscribe();
+    //         },
+    //         () => { }
+    //     );
+    // }
+
+    // delete() {
+    //     this.ontolexService.deleteLexicalEntry(this.selectedNode).subscribe(
+    //         stResp => {
+    //             this.selectedNode = null;
+    //         }
+    //     );
+    // }
 
     doSearch(searchedText: string) {
         this.lastSearch = searchedText;
@@ -261,9 +277,9 @@ export class LexicalEntryListPanelComponent extends AbstractPanel {
 
 
     //@Override
-    isCreateDisabled(): boolean {
-        return (!this.workingLexicon || this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
-    }
+    // isCreateDisabled(): boolean {
+    //     return (!this.workingLexicon || this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
+    // }
 
     private settings() {
         const builder = new BSModalContextBuilder<any>();

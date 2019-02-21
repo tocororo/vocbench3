@@ -2,11 +2,11 @@
     <!-- Commands -->
     <div class="panel-heading">  
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
-            <button class="btn btn-default" title="Create topConcept" (click)="createRoot()" [disabled]="isCreateDisabled()">
+            <!-- <button class="btn btn-default" title="Create topConcept" (click)="createRoot()" [disabled]="isCreateDisabled()">
                 <img src="../../../../../assets/images/icons/actions/concept_create.png" class="panelButtonImg"/>
             </button>
             <button class="btn btn-default" title="Add narrower" (click)="createChild()" [disabled]="isCreateChildDisabled()">
-                <img src="../../../../../assets/images/icons/actions/concept_addNarrower.png" class="panelButtonImg"/>
+                <img src="../../../../../assets/images/icons/actions/concept_addChild.png" class="panelButtonImg"/>
             </button>
             <ng-template [ngIf]="deletable">
                 <button class="btn btn-default" title="Delete Concept" (click)="delete()" [disabled]="isDeleteDisabled()">
@@ -14,6 +14,12 @@
                 </button>
                 <button class="btn btn-default" title="Deprecate Concept" (click)="deprecate()" [disabled]="isDeprecateDisabled()">
                     <img src="../../../../../assets/images/icons/actions/concept_deprecate.png" class="panelButtonImg"/>
+                </button>
+            </ng-template> -->
+
+            <ng-template ngFor let-action [ngForOf]="panelActions">
+                <button *ngIf="isActionVisible(action)" class="btn btn-default" [title]="action.title" (click)="executeAction(action)" [disabled]="isActionDisabled(action)">
+                    <img [src]="action.icon" class="panelButtonImg"/>
                 </button>
             </ng-template>
         </div>

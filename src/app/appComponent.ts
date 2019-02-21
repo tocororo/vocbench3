@@ -1,13 +1,12 @@
 import { Component } from "@angular/core";
+import '../assets/styles/style.css';
 import { Project } from "./models/Project";
-import { Properties } from "./models/Properties";
-import { SKOS, OWL, RDFS, OntoLex } from "./models/Vocabulary";
-import { Language, Languages } from "./models/LanguagesCountries";
+import { OntoLex, OWL, RDFS, SKOS } from "./models/Vocabulary";
+import { AuthorizationEvaluator } from "./utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "./utils/VBActions";
 import { VBContext } from "./utils/VBContext";
 import { VBProperties } from "./utils/VBProperties";
-import { AuthorizationEvaluator } from "./utils/AuthorizationEvaluator";
 
-import '../assets/styles/style.css';
 
 @Component({
     selector: "app",
@@ -71,8 +70,8 @@ export class AppComponent {
 
     private isSparqlAuthorized() {
         return ( //authorized if one of update or query is authorized
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SPARQL_EVALUATE_QUERY) ||
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SPARQL_EXECUTE_UPDATE)
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.sparqlEvaluateQuery) ||
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.sparqlExecuteUpdate)
         );
     }
     
@@ -80,48 +79,48 @@ export class AppComponent {
         let modelType: string = VBContext.getWorkingProject().getModelType();
         if (modelType == SKOS.uri || modelType == OntoLex.uri) {
             return (
-                AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_CONCEPT_TAXONOMY) ||
-                AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_COLLECTION_TAXONOMY) ||
-                AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SKOS_GET_SCHEMES) ||
-                AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_GET_CLASS_TAXONOMY) ||
-                AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_GET_PROPERTY_TAXONOMY)
+                AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetConceptTaxonomy) ||
+                AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetCollectionTaxonomy) ||
+                AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetSchemes) ||
+                AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesGetClassTaxonomy) ||
+                AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesGetPropertyTaxonomy)
             );
         } else if (modelType == OWL.uri || modelType == RDFS.uri) {
             return (
-                AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CLASSES_GET_CLASS_TAXONOMY) ||
-                AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.PROPERTIES_GET_PROPERTY_TAXONOMY)
+                AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesGetClassTaxonomy) ||
+                AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesGetPropertyTaxonomy)
             );
         }
     }
 
     private isHistoryAuthorized() {
         return (
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.HISTORY) &&
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.history) &&
             VBContext.getContextVersion() == null
         );
     }
     
     private isValidationAuthorized() {
         return (
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.VALIDATION) &&
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.validation) &&
             VBContext.getContextVersion() == null
         );
     }
     
     private isCustomFormAuthorized() {
         return (
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_GET_FORM_MAPPINGS) &&
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_GET_COLLECTIONS) &&
-            AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.CUSTOM_FORMS_GET_FORMS)
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormGetFormMappings) &&
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormGetCollections) &&
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormGetForms)
         );
     }
     
     private isAlignValidationAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ALIGNMENT_LOAD_ALIGNMENT);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.alignmentLoadAlignment);
     }
 
     private isSheet2RdfAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.SHEET_2_RDF);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.sheet2Rdf);
     }
 
     private isCollaborationAuthorized() {

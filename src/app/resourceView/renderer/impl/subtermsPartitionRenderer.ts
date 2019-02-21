@@ -24,7 +24,7 @@ export class SubtermsPartitionRenderer extends PartitionRenderSingleRoot {
     rootProperty: ARTURIResource = Decomp.subterm;
     label = "Subterms";
     addBtnImgTitle = "Add a Subterm";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/propObject_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/objectProperty_create.png");
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

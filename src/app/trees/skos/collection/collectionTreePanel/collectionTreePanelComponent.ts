@@ -7,12 +7,13 @@ import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
+import { RoleActionResolver } from "../../../../utils/RoleActionResolver";
 import { UIUtils } from "../../../../utils/UIUtils";
+import { VBActionFunctionCtx } from "../../../../utils/VBActions";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
-import { NewResourceWithLiteralCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal";
 import { AbstractTreePanel } from "../../../abstractTreePanel";
 import { CollectionTreeComponent } from "../collectionTree/collectionTreeComponent";
 
@@ -30,140 +31,105 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
+        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver) {
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver);
     }
 
     //top bar commands handlers
 
-    createRoot(role: RDFResourceRolesEnum) {
-        let collectionType: ARTURIResource;
-        if (role == RDFResourceRolesEnum.skosCollection) {
-            collectionType = SKOS.collection;
-        } else if (role == RDFResourceRolesEnum.skosOrderedCollection) {
-            collectionType = SKOS.orderedCollection;
-        }
-        this.createCollection(collectionType);
+    getActionContext(role?: RDFResourceRolesEnum): VBActionFunctionCtx {
+        let metaClass: ARTURIResource = role ? this.convertRoleToClass(role) : this.convertRoleToClass(this.selectedNode.getRole());
+        let actionCtx: VBActionFunctionCtx = { metaClass: metaClass, loadingDivRef: this.viewChildTree.blockDivElement }
+        return actionCtx;
     }
 
-    createChild(role: RDFResourceRolesEnum) {
-        let collectionType: ARTURIResource;
-        if (role == RDFResourceRolesEnum.skosCollection) {
-            collectionType = SKOS.collection;
-        } else if (role == RDFResourceRolesEnum.skosOrderedCollection) {
-            collectionType = SKOS.orderedCollection;
-        }
-        this.createNestedCollection(collectionType);
-    }
 
-    private createCollection(collectionType: ARTURIResource) {
-        this.creationModals.newResourceWithLiteralCf("Create new " + collectionType.getShow(), collectionType, true).then(
-            (data: NewResourceWithLiteralCfModalReturnData) => {
-                UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                if (collectionType.getURI() == SKOS.collection.getURI()) {
-                    this.skosService.createCollection(SKOS.collection, data.literal, data.uriResource, null, data.cls, data.cfValue).subscribe(
-                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                        (err: Error) => {
-                            if (err.name.endsWith('PrefAltLabelClashException')) {
-                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-                                    confirm => {
-                                        this.skosService.createCollection(SKOS.collection, data.literal, data.uriResource, null, data.cls, data.cfValue, false).subscribe(
-                                            stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                                        );
-                                    },
-                                    () => {}
-                                );
-                            }
-                        }
-                    );
-                } else if (collectionType.getURI() == SKOS.orderedCollection.getURI()) {
-                    this.skosService.createCollection(SKOS.orderedCollection, data.literal, data.uriResource, null, data.cls, data.cfValue).subscribe(
-                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                        (err: Error) => {
-                            if (err.name.endsWith('PrefAltLabelClashException')) {
-                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-                                    confirm => {
-                                        this.skosService.createCollection(SKOS.orderedCollection, data.literal, data.uriResource, null, data.cls, data.cfValue, false).subscribe(
-                                            stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                                        );
-                                    },
-                                    () => {}
-                                );
-                            }
-                        }
-                    );
-                }
-            },
-            () => { }
-        );
-    }
+    // createRoot(role: RDFResourceRolesEnum) {
+    //     let collectionType: ARTURIResource;
+    //     if (role == RDFResourceRolesEnum.skosCollection) {
+    //         collectionType = SKOS.collection;
+    //     } else if (role == RDFResourceRolesEnum.skosOrderedCollection) {
+    //         collectionType = SKOS.orderedCollection;
+    //     }
+    //     this.createCollection(collectionType);
+    // }
 
-    private createNestedCollection(collectionType: ARTURIResource) {
-         this.creationModals.newResourceWithLiteralCf("Create a nested" + collectionType.getShow(), collectionType, true).then(
-            (data: NewResourceWithLiteralCfModalReturnData) => {
-                UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                if (collectionType.getURI() == SKOS.collection.getURI()) {
-                    this.skosService.createCollection(
-                            SKOS.collection, data.literal, data.uriResource, this.selectedNode, data.cls, data.cfValue).subscribe(
-                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                        (err: Error) => {
-                            if (err.name.endsWith('PrefAltLabelClashException')) {
-                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-                                    confirm => {
-                                        this.skosService.createCollection(SKOS.collection, data.literal, data.uriResource, this.selectedNode, data.cls, data.cfValue, false).subscribe(
-                                            stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                                        );
-                                    },
-                                    () => {}
-                                );
-                            }
-                        }
-                    );
-                } else if (collectionType.getURI() == SKOS.orderedCollection.getURI()) {
-                    this.skosService.createCollection(
-                            SKOS.orderedCollection, data.literal, data.uriResource, this.selectedNode, data.cls, data.cfValue).subscribe(
-                        stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                        (err: Error) => {
-                            if (err.name.endsWith('PrefAltLabelClashException')) {
-                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-                                    confirm => {
-                                        this.skosService.createCollection(SKOS.orderedCollection, data.literal, data.uriResource, this.selectedNode, data.cls, data.cfValue, false).subscribe(
-                                            stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-                                        );
-                                    }, 
-                                    () => {}
-                                );
-                            }
-                        }
-                    );
-                }
-            },
-            () => { }
-        );
-    }
+    // createChild(role: RDFResourceRolesEnum) {
+    //     let collectionType: ARTURIResource;
+    //     if (role == RDFResourceRolesEnum.skosCollection) {
+    //         collectionType = SKOS.collection;
+    //     } else if (role == RDFResourceRolesEnum.skosOrderedCollection) {
+    //         collectionType = SKOS.orderedCollection;
+    //     }
+    //     this.createNestedCollection(collectionType);
+    // }
 
-    delete() {
-        UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-        if (this.selectedNode.getRole() == RDFResourceRolesEnum.skosCollection) {
-            this.skosService.deleteCollection(this.selectedNode).subscribe(
-                stResp => {
-                    this.nodeDeleted.emit(this.selectedNode);
-                    this.selectedNode = null;
-                    UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                },
-                err => { UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement); }
-            );
-        } else { //skosOrderedCollection
-            this.skosService.deleteOrderedCollection(this.selectedNode).subscribe(
-                stResp => {
-                    this.nodeDeleted.emit(this.selectedNode);
-                    this.selectedNode = null;
-                    UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-                },
-                err => { UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement); }
-            );
-        }
-    }
+    // private createCollection(collectionType: ARTURIResource) {
+    //     this.creationModals.newResourceWithLiteralCf("Create new " + collectionType.getShow(), collectionType, true).then(
+    //         (data: NewResourceWithLiteralCfModalReturnData) => {
+    //             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
+    //             this.skosService.createCollection(collectionType, data.literal, data.uriResource, null, data.cls, data.cfValue).subscribe(
+    //                 stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+    //                 (err: Error) => {
+    //                     if (err.name.endsWith('PrefAltLabelClashException')) {
+    //                         this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+    //                             confirm => {
+    //                                 this.skosService.createCollection(collectionType, data.literal, data.uriResource, null, data.cls, data.cfValue, false).subscribe(
+    //                                     stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+    //                                 );
+    //                             },
+    //                             () => {}
+    //                         );
+    //                     }
+    //                 }
+    //             );
+    //         },
+    //         () => { }
+    //     );
+    // }
+
+    // private createNestedCollection(collectionType: ARTURIResource) {
+    //      this.creationModals.newResourceWithLiteralCf("Create a nested" + collectionType.getShow(), collectionType, true).then(
+    //         (data: NewResourceWithLiteralCfModalReturnData) => {
+    //             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
+    //                 this.skosService.createCollection(collectionType, data.literal, data.uriResource, this.selectedNode, data.cls, data.cfValue).subscribe(
+    //                     stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+    //                     (err: Error) => {
+    //                         if (err.name.endsWith('PrefAltLabelClashException')) {
+    //                             this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+    //                                 confirm => {
+    //                                     this.skosService.createCollection(collectionType, data.literal, data.uriResource, this.selectedNode, data.cls, data.cfValue, false).subscribe(
+    //                                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
+    //                                     );
+    //                                 },
+    //                                 () => {}
+    //                             );
+    //                         }
+    //                     }
+    //                 );
+    //         },
+    //         () => { }
+    //     );
+    // }
+
+    // delete() {
+    //     UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
+    //     if (this.selectedNode.getRole() == RDFResourceRolesEnum.skosCollection) {
+    //         this.skosService.deleteCollection(this.selectedNode).subscribe(
+    //             stResp => {
+    //                 this.selectedNode = null;
+    //                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
+    //             }
+    //         );
+    //     } else { //skosOrderedCollection
+    //         this.skosService.deleteOrderedCollection(this.selectedNode).subscribe(
+    //             stResp => {
+    //                 this.selectedNode = null;
+    //                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
+    //             }
+    //         );
+    //     }
+    // }
 
     refresh() {
         this.viewChildTree.init();
@@ -205,6 +171,17 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
 
     openTreeAt(resource: ARTURIResource) {
         this.viewChildTree.openTreeAt(resource);
+    }
+
+    //I don't know why, if I move this in ResourceUtils I get a strange error
+    private convertRoleToClass(role: RDFResourceRolesEnum): ARTURIResource {
+        let roleClass: ARTURIResource;
+        if (role == RDFResourceRolesEnum.skosCollection) {
+            roleClass = SKOS.collection;
+        } else if (role == RDFResourceRolesEnum.skosOrderedCollection) {
+            roleClass = SKOS.orderedCollection;
+        }
+        return roleClass;
     }
 
 }

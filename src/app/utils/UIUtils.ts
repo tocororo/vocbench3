@@ -1,6 +1,7 @@
 import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
 import { OWL, RDF, XmlSchema } from "../models/Vocabulary";
 import { VBContext } from "./VBContext";
+import { ResAction } from "./RoleActionResolver";
 
 
 export class UIUtils {
@@ -391,32 +392,8 @@ export class UIUtils {
         }
     }
 
-    /**
-     * Available values for action are: "create" and "delete"
-     */
-    static getActionPropImageSrc(rdfResource: ARTURIResource, action: string): string {
-        var imgSrc: string;
-        var role: RDFResourceRolesEnum = rdfResource.getRole();
-        if (role == RDFResourceRolesEnum.cls) {
-            imgSrc = require("../../assets/images/icons/actions/class_" + action + ".png");
-        } else if (role == RDFResourceRolesEnum.concept) {
-            imgSrc = require("../../assets/images/icons/actions/concept_" + action + ".png");
-        } else if (role == RDFResourceRolesEnum.individual) {
-            imgSrc = require("../../assets/images/icons/actions/individual_" + action + ".png");
-        } else if (role == RDFResourceRolesEnum.conceptScheme) {
-            imgSrc = require("../../assets/images/icons/actions/conceptScheme_" + action + ".png");
-        } else if (role.indexOf(RDFResourceRolesEnum.objectProperty) != -1) {
-            imgSrc = require("../../assets/images/icons/actions/propObject_" + action + ".png");
-        } else if (role.indexOf(RDFResourceRolesEnum.datatypeProperty) != -1) {
-            imgSrc = require("../../assets/images/icons/actions/propDatatype_" + action + ".png");
-        } else if (role.indexOf(RDFResourceRolesEnum.annotationProperty) != -1) {
-            imgSrc = require("../../assets/images/icons/actions/propAnnotation_" + action + ".png");
-        } else if (role.indexOf(RDFResourceRolesEnum.ontologyProperty) != -1) {
-            imgSrc = require("../../assets/images/icons/actions/propOntology_" + action + ".png");
-        } else if (role.indexOf(RDFResourceRolesEnum.property) != -1) {
-            imgSrc = require("../../assets/images/icons/actions/prop_" + action + ".png");
-        }
-        return imgSrc;
+    static getActionImageSrc(role: RDFResourceRolesEnum, action: ResAction): string {
+        return require("../../assets/images/icons/actions/" + role + "_" + action + ".png");
     }
 
     static getFlagImgSrc(langTag: string): string {

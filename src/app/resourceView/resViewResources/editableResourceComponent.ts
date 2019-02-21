@@ -1,21 +1,19 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import {
-	ARTNode, ARTResource, ARTBNode, ARTURIResource, ARTLiteral, ResAttribute,
-	RDFTypesEnum, RDFResourceRolesEnum, ResourceUtils
-} from "../../models/ARTResources";
-import { SKOSXL, SKOS, RDFS, SemanticTurkey } from "../../models/Vocabulary";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute, ResourceUtils } from "../../models/ARTResources";
 import { ResViewPartition } from "../../models/ResourceView";
-import { ResourcesServices } from "../../services/resourcesServices";
-import { PropertyServices } from "../../services/propertyServices";
+import { RDFS, SemanticTurkey, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { ManchesterServices } from "../../services/manchesterServices";
+import { PropertyServices } from "../../services/propertyServices";
 import { RefactorServices } from "../../services/refactorServices";
+import { ResourcesServices } from "../../services/resourcesServices";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "../../utils/VBActions";
+import { VBContext } from "../../utils/VBContext";
+import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { VBContext } from "../../utils/VBContext";
-import { VBProperties } from "../../utils/VBProperties";
-import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 
 @Component({
 	selector: "editable-resource",
@@ -402,13 +400,13 @@ export class EditableResourceComponent {
 		return AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.subject);
 	}
 	private isSpawnFromLabelAuthorized(): boolean {
-		return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_SPAWN_NEW_CONCEPT_FROM_LABEL);
+		return AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSpawnNewConceptFromLabel);
 	}
 	private isMoveLabelAuthorized(): boolean {
-		return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.REFACTOR_MOVE_XLABEL_TO_RESOURCE);
+		return AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorMoveXLabelToResource);
 	}
 	private isAssertAuthorized(): boolean {
-		return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.RESOURCES_ADD_VALUE, this.subject);
+		return AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.subject);
 	}
 
 }

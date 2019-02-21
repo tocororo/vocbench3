@@ -5,6 +5,7 @@ import { ImportType, OntologyImport } from "../../../../../models/Metadata";
 import { MetadataServices } from "../../../../../services/metadataServices";
 import { AuthorizationEvaluator } from "../../../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../../../utils/UIUtils";
+import { VBActionsEnum } from "../../../../../utils/VBActions";
 import { ImportOntologyModal, ImportOntologyModalData } from "../importOntologyModal";
 
 @Component({
@@ -99,7 +100,7 @@ export class ImportTreeNodeComponent {
     }
 
     private isDeleteImportAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_REMOVE_IMPORT);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRemoveImport);
     }
 
 }

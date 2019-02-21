@@ -27,7 +27,7 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
     rootProperty: ARTURIResource = OWL.inverseOf;
     label = "Property facets";
     addBtnImgTitle = "Add a inverse property";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/prop_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/property_create.png");
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

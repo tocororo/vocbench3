@@ -25,7 +25,7 @@ export class TypesPartitionRenderer extends PartitionRenderSingleRoot {
     rootProperty: ARTURIResource = RDF.type;
     label = "Types";
     addBtnImgTitle = "Add a type";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/class_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/cls_create.png");
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 

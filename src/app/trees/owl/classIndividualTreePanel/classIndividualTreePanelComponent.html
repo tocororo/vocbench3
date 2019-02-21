@@ -1,11 +1,11 @@
-<class-tree-panel #clsPanel [ngStyle]="{ 'flex': classPanelFlex }" (nodeSelected)="onClassSelected($event)" (nodeDeleted)="onClassDeleted($event)"
+<class-tree-panel #clsPanel [ngStyle]="{ 'flex': classPanelFlex }" (nodeSelected)="onClassSelected($event)"
     [hideSearch]="true" [context]="context" [readonly]="readonly">
 </class-tree-panel>
 
 <div class="sliderY" (mousedown)="onMousedown($event);"></div>
 
 <instance-list-panel #instPanel [ngStyle]="{ 'flex': instancePanelFlex }" [cls]="selectedClass" (nodeSelected)="onInstanceSelected($event)" 
-    (nodeDeleted)="onInstanceDeleted($event)" [hideSearch]="true" [context]="context" [readonly]="readonly">
+    [hideSearch]="true" [context]="context" [readonly]="readonly">
 </instance-list-panel>
 
 <search-bar (search)="doSearch($event)" (advancedSearch)="advancedSearch($event)" [roles]="rolesForSearch" 

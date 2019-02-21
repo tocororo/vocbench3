@@ -1,11 +1,13 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { GraphMode } from "../graph/abstractGraph";
 import { GraphModalServices } from "../graph/modal/graphModalServices";
-import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { CustomFormsServices } from "../services/customFormsServices";
 import { ResourcesServices } from "../services/resourcesServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
+import { ActionDescription, RoleActionResolver } from "../utils/RoleActionResolver";
 import { TreeListContext } from "../utils/UIUtils";
+import { VBActionFunctionCtx } from "../utils/VBActions";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -23,7 +25,6 @@ export abstract class AbstractPanel {
     @Input() allowMultiselection: boolean = false; //if true allow the possibility to enable the multiselection in the contained tree/list
     @Input() context: TreeListContext; //useful in some scenarios (ex. scheme list to show/hide the checkboxes, concept and class panel to show/hide configuration button)
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
-    @Output() nodeDeleted = new EventEmitter<ARTURIResource>();
     @Output() nodeChecked = new EventEmitter<ARTURIResource[]>();
     @Output() multiselectionStatus = new EventEmitter<boolean>(); //emitted when the multiselection changes status (activated/deactivated)
     @Output('advancedSearch') advancedSearchEvent: EventEmitter<ARTResource> = new EventEmitter();
@@ -33,11 +34,14 @@ export abstract class AbstractPanel {
      */
 
     abstract panelRole: RDFResourceRolesEnum; //declare the type of resources in the panel
+
     rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
     multiselection: boolean = false; //if true enabled the selection of multiple resources via checkboxes
     showDeprecated: boolean = true;
     eventSubscriptions: any[] = [];
     selectedNode: ARTURIResource = null;
+
+    panelActions: ActionDescription[];
 
     graphMode: GraphMode = GraphMode.dataOriented; //at the moment, set the default to data oriented and override it in class and property panel
 
@@ -50,14 +54,16 @@ export abstract class AbstractPanel {
     protected graphModals: GraphModalServices;
     protected eventHandler: VBEventHandler;
     protected vbProp: VBProperties;
+    protected actionResolver: RoleActionResolver
     constructor(cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties) {
+        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver) {
         this.cfService = cfService;
         this.resourceService = resourceService;
         this.basicModals = basicModals;
         this.graphModals = graphModals;
         this.eventHandler = eventHandler;
         this.vbProp = vbProp;
+        this.actionResolver = actionResolver;
 
         this.eventSubscriptions.push(eventHandler.showDeprecatedChangedEvent.subscribe(
             (showDeprecated: boolean) => this.showDeprecated = showDeprecated));
@@ -69,6 +75,7 @@ export abstract class AbstractPanel {
 
     ngOnInit() {
         this.showDeprecated = this.vbProp.getShowDeprecated();
+        this.panelActions = this.actionResolver.getActionsForRole(this.panelRole);
     }
 
     ngOnDestroy() {
@@ -77,10 +84,39 @@ export abstract class AbstractPanel {
 
     //actions
     abstract refresh(): void;
-    abstract delete(): void;
 
-    private deprecate() {
-        this.resourceService.setDeprecated(this.selectedNode).subscribe();
+    /**
+     * returns the action context to be used during the execution of the action
+     */
+    abstract getActionContext(role?: RDFResourceRolesEnum): VBActionFunctionCtx; 
+    /**
+     * Executes an action
+     * @param act 
+     */
+    abstract executeAction(act: ActionDescription, role?: RDFResourceRolesEnum): void;
+
+    /**
+     * An action is visible in the buttons group (that is in turn visible only if the panel is editable) if:
+     * - it creates a resource (edit type C)
+     * - it deletes a resource and the panel instance allows deletion (deletable true)
+     */
+    isActionVisible(action: ActionDescription) {
+        return action.editType == "C" || (action.editType == "D" && this.deletable);
+    }
+
+    /**
+     * An action is disabled if:
+     * - the panel instance is readonly
+     * - the action is not authorized (user capabilities don't satisfy the required authorization)
+     * - a selection of a resource is required but a resource is not selected
+     */
+    isActionDisabled(action: ActionDescription) {
+        return (
+            this.readonly ||
+            !AuthorizationEvaluator.isAuthorized(action.id, this.selectedNode) || 
+            action.conditions.pre.selectionRequired && !this.selectedNode
+        )
+
     }
 
     private toggleMultiselection() {
@@ -96,25 +132,33 @@ export abstract class AbstractPanel {
         }
     }
 
+    // abstract delete(): void;
+    // private deprecate() {
+    //     this.resourceService.setDeprecated(this.selectedNode).subscribe();
+    // }
+    
     //the following determine if the create/delete buttons are disabled in the UI. They could be overriden in the extending components
-    isCreateDisabled(): boolean {
-        return (this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
-    }
-    isDeleteDisabled(): boolean {
-        return (
-            !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly ||
-            !AuthorizationEvaluator.Tree.isDeleteAuthorized(this.panelRole)
-        );
-    }
-    isDeprecateDisabled(): boolean {
-        return (
-            !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly ||
-            !AuthorizationEvaluator.Tree.isDeprecateAuthorized(this.selectedNode)
-        );
-    }
+    // isCreateDisabled(): boolean {
+    //     return (this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
+    // }
+    // isDeleteDisabled(): boolean {
+    //     return (
+    //         !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly ||
+    //         !AuthorizationEvaluator.Tree.isDeleteAuthorized(this.panelRole)
+    //     );
+    // }
+    // isDeprecateDisabled(): boolean {
+    //     return (
+    //         !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly ||
+    //         !AuthorizationEvaluator.Tree.isDeprecateAuthorized(this.selectedNode)
+    //     );
+    // }
 
     isOpenGraphEnabled(): boolean {
         if (!this.vbProp.getExperimentalFeaturesEnabled()) {
+            return false;
+        }
+        if (this.context != TreeListContext.dataPanel) {
             return false;
         }
         if (this.graphMode == GraphMode.dataOriented) {

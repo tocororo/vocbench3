@@ -17,6 +17,7 @@ import { DataComponent } from "../data/dataComponent";
 import { HomeComponent } from "../homeComponent";
 import { GUARD_PROVIDERS } from "../utils/CanActivateGuards";
 import { HttpManager } from "../utils/HttpManager";
+import { RoleActionResolver } from '../utils/RoleActionResolver';
 import { UserResolver } from "../utils/UserResolver";
 import { VBCollaboration } from '../utils/VBCollaboration';
 import { VBEventHandler } from "../utils/VBEventHandler";
@@ -56,7 +57,7 @@ import { VBModalModule } from "./vbModalModule";
       ],
       //services with application scope
       providers: [
-            HttpManager, VBEventHandler, VBProperties, VBCollaboration, GUARD_PROVIDERS, UserResolver,
+            HttpManager, VBEventHandler, VBProperties, VBCollaboration, GUARD_PROVIDERS, UserResolver, RoleActionResolver,
             { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
       ],
       declarations: [

@@ -24,7 +24,7 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
     rootProperty: ARTURIResource = RDFS.range;
     label = "Ranges";
     addBtnImgTitle = "Add a range";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/class_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/cls_create.png");
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

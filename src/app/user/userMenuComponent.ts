@@ -3,6 +3,7 @@ import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { User } from "../models/User";
 import { AuthServices } from "../services/authServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "../utils/VBActions";
 import { VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -58,10 +59,10 @@ export class UserMenuComponent {
         return (
             VBContext.getLoggedUser().isAdmin() ||
             this.isProjectOpen() && (
-                AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_ROLE_MANAGEMENT) ||
+                AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationRoleManagement) ||
                 (
-                    AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_PROJECT_MANAGEMENT) &&
-                    AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_ROLE_MANAGEMENT)
+                    AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationProjectManagement) &&
+                    AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserRoleManagement)
                 )
             )
         );

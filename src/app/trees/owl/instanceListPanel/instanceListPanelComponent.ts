@@ -1,18 +1,18 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import { GraphModalServices } from "../../../graph/modal/graphModalServices";
-import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
 import { SearchSettings } from "../../../models/Properties";
 import { ClassesServices } from "../../../services/classesServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { SearchServices } from "../../../services/searchServices";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
-import { UIUtils } from "../../../utils/UIUtils";
+import { ActionDescription, RoleActionResolver } from "../../../utils/RoleActionResolver";
+import { VBActionFunctionCtx } from "../../../utils/VBActions";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
-import { AbstractPanel } from "../../abstractPanel";
+import { AbstractListPanel } from "../../abstractListPanel";
 import { InstanceListComponent } from "../instanceList/instanceListComponent";
 
 @Component({
@@ -20,7 +20,7 @@ import { InstanceListComponent } from "../instanceList/instanceListComponent";
     templateUrl: "./instanceListPanelComponent.html",
     host: { class: "vbox" }
 })
-export class InstanceListPanelComponent extends AbstractPanel {
+export class InstanceListPanelComponent extends AbstractListPanel {
     @Input() hideSearch: boolean = false; //if true hide the search bar
     @Input() cls: ARTURIResource; //class of the instances
 
@@ -31,42 +31,52 @@ export class InstanceListPanelComponent extends AbstractPanel {
 
     constructor(private classesService: ClassesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
+        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver) {
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver);
+    }
+
+    getActionContext(): VBActionFunctionCtx {
+        let actionCtx: VBActionFunctionCtx = { metaClass: this.cls, loadingDivRef: this.viewChildInstanceList.blockDivElement }
+        return actionCtx;
     }
 
     //@Override
-    isCreateDisabled(): boolean {
-        return (!this.cls || this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
-    }
-    //@Override
-    isDeleteDisabled(): boolean {
-        return (
-            !this.cls || !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) || 
-            this.readonly || !AuthorizationEvaluator.Tree.isDeleteAuthorized(this.panelRole)
-        );
+    isActionDisabled(action: ActionDescription) {
+        //In addition to the cross-panel conditions, in this case the actions are disabled if the panel has no input cls
+        return super.isActionDisabled(action) || !this.cls
     }
 
-    private create() {
-        this.creationModals.newResourceCf("Create a new instance of " + this.cls.getShow(), this.cls, false).then(
-            (data: any) => {
-                this.classesService.createInstance(data.uriResource, this.cls, data.cfValue).subscribe();
-            },
-            () => {}
-        );
-    }
+    // //@Override
+    // isCreateDisabled(): boolean {
+    //     return (!this.cls || this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
+    // }
+    // //@Override
+    // isDeleteDisabled(): boolean {
+    //     return (
+    //         !this.cls || !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) || 
+    //         this.readonly || !AuthorizationEvaluator.Tree.isDeleteAuthorized(this.panelRole)
+    //     );
+    // }
 
-    delete() {
-        UIUtils.startLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
-        this.classesService.deleteInstance(this.selectedNode, this.cls).subscribe(
-            stResp => {
-                this.nodeDeleted.emit(this.selectedNode);
-                this.selectedNode = null;
-                UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
-            },
-            err => { UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement); }
-        )
-    }
+    // private create() {
+    //     this.creationModals.newResourceCf("Create a new instance of " + this.cls.getShow(), this.cls, false).then(
+    //         (data: any) => {
+    //             this.classesService.createInstance(data.uriResource, this.cls, data.cfValue).subscribe();
+    //         },
+    //         () => {}
+    //     );
+    // }
+
+    // delete() {
+    //     UIUtils.startLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
+    //     this.classesService.deleteInstance(this.selectedNode, this.cls).subscribe(
+    //         stResp => {
+    //             this.selectedNode = null;
+    //             UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
+    //         },
+    //         err => { UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement); }
+    //     )
+    // }
 
     refresh() {
         this.viewChildInstanceList.init();
@@ -89,12 +99,12 @@ export class InstanceListPanelComponent extends AbstractPanel {
                     this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                 } else { //1 or more results
                     if (searchResult.length == 1) {
-                        this.selectSearchedInstance(this.cls, searchResult[0]);
+                        this.openAt(searchResult[0]);
                     } else { //multiple results, ask the user which one select
                         ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
                         this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
                             (selectedResource: any) => {
-                                this.selectSearchedInstance(this.cls, selectedResource);
+                                this.openAt(selectedResource);
                             },
                             () => { }
                         );
@@ -105,8 +115,8 @@ export class InstanceListPanelComponent extends AbstractPanel {
     }
 
     //this is public so it can be invoked from classIndividualTreePanelComponent
-    selectSearchedInstance(cls: ARTURIResource, instance: ARTURIResource) {
-        this.viewChildInstanceList.selectSearchedInstance(cls, instance);
+    openAt(instance: ARTURIResource) {
+        this.viewChildInstanceList.openListAt(instance);
     }
 
 }

@@ -29,7 +29,7 @@ export class PropertyChainRenderer extends PartitionRenderSingleRoot {
     rootProperty: ARTURIResource = OWL.propertyChainAxiom;
     label = "Property chain axioms";
     addBtnImgTitle = "Add a property chain axion";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/prop_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/property_create.png");
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

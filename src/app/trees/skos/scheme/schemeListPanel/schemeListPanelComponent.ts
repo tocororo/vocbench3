@@ -7,14 +7,15 @@ import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
+import { RoleActionResolver } from "../../../../utils/RoleActionResolver";
 import { UIUtils } from "../../../../utils/UIUtils";
+import { VBActionFunctionCtx } from "../../../../utils/VBActions";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from '../../../../utils/VBProperties';
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
-import { NewResourceWithLiteralCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal";
-import { AbstractPanel } from "../../../abstractPanel";
+import { AbstractListPanel } from "../../../abstractListPanel";
 import { SchemeListComponent } from "../schemeList/schemeListComponent";
 
 @Component({
@@ -22,7 +23,7 @@ import { SchemeListComponent } from "../schemeList/schemeListComponent";
     templateUrl: "./schemeListPanelComponent.html",
     host: { class: "vbox" }
 })
-export class SchemeListPanelComponent extends AbstractPanel {
+export class SchemeListPanelComponent extends AbstractListPanel {
 
     @ViewChild(SchemeListComponent) viewChildList: SchemeListComponent;
 
@@ -32,66 +33,72 @@ export class SchemeListPanelComponent extends AbstractPanel {
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
+        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver) {
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver);
     }
-
+    
     ngOnInit() {
         super.ngOnInit();
         this.modelType = VBContext.getWorkingProject().getModelType();
     }
 
-    private create() {
+
+    getActionContext(): VBActionFunctionCtx {
         let metaClass: ARTURIResource = this.modelType == OntoLex.uri ? OntoLex.conceptSet : SKOS.conceptScheme;
-
-        this.creationModals.newResourceWithLiteralCf("Create new " + metaClass.getShow(), metaClass, true).then(
-            (data: NewResourceWithLiteralCfModalReturnData) => {
-                this.skosService.createConceptScheme(data.literal, data.uriResource, data.cls, data.cfValue).subscribe(
-                    newScheme => { },
-                    (err: Error) => {
-                        if (err.name.endsWith('PrefAltLabelClashException')) {
-                            this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-                                confirm => {
-                                    this.skosService.createConceptScheme(data.literal, data.uriResource, data.cls, data.cfValue, false).subscribe(
-                                        newScheme => { }
-                                    );
-                                },
-                                () => {}
-                            );
-                        }
-                    }
-                );
-            },
-            () => { }
-        );
+        let actionCtx: VBActionFunctionCtx = { metaClass: metaClass, loadingDivRef: this.viewChildList.blockDivElement }
+        return actionCtx;
     }
 
-    delete() {
-        this.skosService.isSchemeEmpty(this.selectedNode).subscribe(
-            empty => {
-                if (empty) {
-                    this.deleteSelectedScheme();
-                } else {
-                    this.basicModals.confirm("Delete scheme", "The scheme is not empty. Deleting it will produce dangling concepts."
-                        + " Are you sure to continue?", "warning").then(
-                        (confirm: any) => {
-                            this.deleteSelectedScheme();
-                        },
-                        (reject: any) => {}
-                    );
-                }
-            }
-        )
-    }
+    // private create() {
+    //     let metaClass: ARTURIResource = this.modelType == OntoLex.uri ? OntoLex.conceptSet : SKOS.conceptScheme;
 
-    private deleteSelectedScheme() {
-        this.skosService.deleteConceptScheme(this.selectedNode).subscribe(
-            stResp => {
-                this.nodeDeleted.emit(this.selectedNode);
-                this.selectedNode = null;
-            }
-        );
-    }
+    //     this.creationModals.newResourceWithLiteralCf("Create new " + metaClass.getShow(), metaClass, true).then(
+    //         (data: NewResourceWithLiteralCfModalReturnData) => {
+    //             this.skosService.createConceptScheme(data.literal, data.uriResource, data.cls, data.cfValue).subscribe(
+    //                 newScheme => { },
+    //                 (err: Error) => {
+    //                     if (err.name.endsWith('PrefAltLabelClashException')) {
+    //                         this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+    //                             confirm => {
+    //                                 this.skosService.createConceptScheme(data.literal, data.uriResource, data.cls, data.cfValue, false).subscribe(
+    //                                     newScheme => { }
+    //                                 );
+    //                             },
+    //                             () => {}
+    //                         );
+    //                     }
+    //                 }
+    //             );
+    //         },
+    //         () => { }
+    //     );
+    // }
+
+    // delete() {
+    //     this.skosService.isSchemeEmpty(this.selectedNode).subscribe(
+    //         empty => {
+    //             if (empty) {
+    //                 this.deleteSelectedScheme();
+    //             } else {
+    //                 this.basicModals.confirm("Delete scheme", "The scheme is not empty. Deleting it will produce dangling concepts."
+    //                     + " Are you sure to continue?", "warning").then(
+    //                     (confirm: any) => {
+    //                         this.deleteSelectedScheme();
+    //                     },
+    //                     (reject: any) => {}
+    //                 );
+    //             }
+    //         }
+    //     )
+    // }
+
+    // private deleteSelectedScheme() {
+    //     this.skosService.deleteConceptScheme(this.selectedNode).subscribe(
+    //         stResp => {
+    //             this.selectedNode = null;
+    //         }
+    //     );
+    // }
 
     doSearch(searchedText: string) {
         let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
@@ -123,7 +130,7 @@ export class SchemeListPanelComponent extends AbstractPanel {
         );
     }
 
-    public openAt(node: ARTURIResource) {
+    openAt(node: ARTURIResource) {
         this.viewChildList.openListAt(node);
     }
 

@@ -1,7 +1,7 @@
-import { Component, Input, Output, ViewChild, QueryList, ElementRef, EventEmitter } from "@angular/core";
-import { AbstractNode } from "./abstractNode";
-import { ARTResource, ARTURIResource, ARTNode, ResAttribute } from "../models/ARTResources";
+import { Component, ElementRef, ViewChild } from "@angular/core";
+import { ResAttribute } from "../models/ARTResources";
 import { VBEventHandler } from "../utils/VBEventHandler";
+import { AbstractNode } from "./abstractNode";
 
 @Component({
     selector: "list-node",

@@ -7,12 +7,13 @@ import { CustomFormsServices } from "../../../services/customFormsServices";
 import { DatatypesServices } from "../../../services/datatypesServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { SearchServices } from "../../../services/searchServices";
-import { UIUtils } from "../../../utils/UIUtils";
+import { RoleActionResolver } from "../../../utils/RoleActionResolver";
+import { VBActionFunctionCtx } from "../../../utils/VBActions";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
-import { AbstractPanel } from "../../abstractPanel";
+import { AbstractListPanel } from "../../abstractListPanel";
 import { DatatypeListComponent } from "../datatypeList/datatypeListComponent";
 
 @Component({
@@ -20,7 +21,7 @@ import { DatatypeListComponent } from "../datatypeList/datatypeListComponent";
     templateUrl: "./datatypeListPanelComponent.html",
     host: { class: "vbox" }
 })
-export class DatatypeListPanelComponent extends AbstractPanel {
+export class DatatypeListPanelComponent extends AbstractListPanel {
 
     @Input() full: boolean = false; //if true show all the datatypes (also the owl2 that are not declared as rdfs:Datatype)
 
@@ -31,29 +32,33 @@ export class DatatypeListPanelComponent extends AbstractPanel {
 
     constructor(private datatypeService: DatatypesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp);
+        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver) {
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver);
     }
 
-    private create() {
-        this.creationModals.newResourceCf("Create a new datatype", RDFS.datatype, false).then(
-            (data: any) => {
-                this.datatypeService.createDatatype(data.uriResource).subscribe();
-            },
-            () => {}
-        );
+    getActionContext(): VBActionFunctionCtx {
+        let actionCtx: VBActionFunctionCtx = { metaClass: RDFS.datatype, loadingDivRef: this.viewChildList.blockDivElement }
+        return actionCtx;
     }
 
-    delete() {
-        UIUtils.startLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
-        this.datatypeService.deleteDatatype(this.selectedNode).subscribe(
-            stResp => {
-                this.nodeDeleted.emit(this.selectedNode);
-                this.selectedNode = null;
-                UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
-            }
-        )
-    }
+    // private create() {
+    //     this.creationModals.newResourceCf("Create a new datatype", RDFS.datatype, false).then(
+    //         (data: any) => {
+    //             this.datatypeService.createDatatype(data.uriResource).subscribe();
+    //         },
+    //         () => {}
+    //     );
+    // }
+
+    // delete() {
+    //     UIUtils.startLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
+    //     this.datatypeService.deleteDatatype(this.selectedNode).subscribe(
+    //         stResp => {
+    //             this.selectedNode = null;
+    //             UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
+    //         }
+    //     )
+    // }
 
     refresh() {
         this.viewChildList.init();

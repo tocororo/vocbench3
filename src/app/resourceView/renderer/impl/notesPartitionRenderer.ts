@@ -31,7 +31,7 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
     rootProperty: ARTURIResource = SKOS.note;
     label = "Notes";
     addBtnImgTitle = "Add a note";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/propAnnotation_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/annotationProperty_create.png");
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

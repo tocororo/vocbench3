@@ -23,7 +23,7 @@ export class DisjointPropertiesPartitionRenderer extends PartitionRenderSingleRo
     rootProperty: ARTURIResource = OWL.propertyDisjointWith;
     label = "Disjoint properties";
     addBtnImgTitle = "Add a disjoint property";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/prop_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/property_create.png");
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

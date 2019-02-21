@@ -7,6 +7,7 @@ import { CatalogRecord, DatasetMetadata, LexicalizationSetMetadata } from "../..
 import { MetadataRegistryServices } from "../../../../services/metadataRegistryServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../../utils/UIUtils";
+import { VBActionsEnum } from "../../../../utils/VBActions";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { NewCatalogRecordModal, NewCatalogRecordModalData } from "./newCatalogRecordModal";
 import { NewDatasetVersionModal, NewDatasetVersionModalData } from "./newDatasetVersionModal";
@@ -216,20 +217,20 @@ export class MetadataRegistryComponent {
     //Authorizations
 
     private isAddDatasetAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_REGISTRY_CREATE);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryCreate);
     }
     private isRemoveDatasetAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_REGISTRY_DELETE);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryDelete);
     }
     private isEditDatasetAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_REGISTRY_UPDATE);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryUpdate);
     }
 
     private isAddEmbeddedLexicalizationSetAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_REGISTRY_CREATE);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryCreate);
     }
     private isRemoveEmbeddedLexicalizationSetAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.METADATA_REGISTRY_DELETE);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryDelete);
     }
     
 

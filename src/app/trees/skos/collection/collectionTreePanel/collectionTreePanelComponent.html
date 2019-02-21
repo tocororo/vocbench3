@@ -2,9 +2,9 @@
     <!-- Commands -->
     <div class="panel-heading">  
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
-            <div class="btn-group btn-group-xs" role="group" title="Create Collection">
+            <!-- <div class="btn-group btn-group-xs" role="group" title="Create Collection">
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" [disabled]="isCreateDisabled()">
-                    <img src="../../../../../assets/images/icons/actions/collection_create.png" class="panelButtonImg"/>
+                    <img src="../../../../../assets/images/icons/actions/skosCollection_create.png" class="panelButtonImg"/>
                 </button>
                 <ul class="dropdown-menu">
                     <li><a (click)="createRoot('skosCollection')">Collection</a></li>
@@ -14,7 +14,7 @@
             <div class="btn-group btn-group-xs" role="group" >
                 <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Create a nested Collection" 
                     [disabled]="isCreateChildDisabled()">
-                    <img src="../../../../../assets/images/icons/actions/collection_addNested.png" class="panelButtonImg"/>
+                    <img src="../../../../../assets/images/icons/actions/skosCollection_addChild.png" class="panelButtonImg"/>
                 </button>
                 <ul class="dropdown-menu">
                     <li><a (click)="createChild('skosCollection')">Collection</a></li>
@@ -23,11 +23,38 @@
             </div>
             <ng-template [ngIf]="deletable">
                 <button class="btn btn-default" title="Delete Collection" (click)="delete()" [disabled]="isDeleteDisabled()">
-                    <img src="../../../../../assets/images/icons/actions/collection_delete.png" class="panelButtonImg"/>
+                    <img src="../../../../../assets/images/icons/actions/skosCollection_delete.png" class="panelButtonImg"/>
                 </button>
                 <button class="btn btn-default" title="Deprecate Collection" (click)="deprecate()" [disabled]="isDeprecateDisabled()">
-                    <img src="../../../../../assets/images/icons/actions/collection_deprecate.png" class="panelButtonImg"/>
+                    <img src="../../../../../assets/images/icons/actions/skosCollection_deprecate.png" class="panelButtonImg"/>
                 </button>
+            </ng-template> -->
+
+            <ng-template ngFor let-action [ngForOf]="panelActions">
+                <ng-template [ngIf]="isActionVisible(action)">
+                    <!-- Simple button -->
+                    <button *ngIf="!action.subRoles" class="btn btn-default" [title]="action.title" (click)="executeAction(action)" [disabled]="isActionDisabled(action)">
+                        <img [src]="action.icon" class="panelButtonImg"/>
+                    </button>
+                    <!-- Dropdown button -->
+                    <div *ngIf="action.subRoles" class="btn-group btn-group-xs" role="group">
+                        <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" [title]="action.title" [disabled]="isActionDisabled(action)">
+                            <img [src]="action.icon" class="panelButtonImg"/>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a (click)="executeAction(action, action.role)">
+                                    {{action.role}}
+                                </a>
+                            </li>
+                            <li *ngFor="let role of action.subRoles">
+                                <a (click)="executeAction(action, role)">
+                                    {{role}}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </ng-template>
             </ng-template>
         </div>
         <div style="flex: 1;"></div>

@@ -9,6 +9,7 @@ import { PreferencesSettingsServices } from "../../services/preferencesSettingsS
 import { UserServices } from "../../services/userServices";
 import { UsersGroupsServices } from "../../services/usersGroupsServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { UserProjBindingModal, UserProjBindingModalData } from "./userProjBindingModal";
@@ -394,10 +395,10 @@ export class ProjectUsersManagerComponent {
     }
 
     private isRoleManagementAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_GROUP_MANAGEMENT);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserRoleManagement);
     }
     private isGroupManagementAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ADMINISTRATION_USER_GROUP_MANAGEMENT);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserGroupManagement);
     }
 
 }

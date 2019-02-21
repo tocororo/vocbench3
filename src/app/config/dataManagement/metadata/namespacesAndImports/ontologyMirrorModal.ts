@@ -4,6 +4,7 @@ import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { OntoManagerServices } from "../../../../services/ontoManagerServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../../utils/UIUtils";
+import { VBActionsEnum } from "../../../../utils/VBActions";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 
 @Component({
@@ -112,10 +113,10 @@ export class OntologyMirrorModal implements ModalComponent<BSModalContext> {
 
 
     private isUpdateMirrorAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONT_MANAGER_UPDATE_ONTOLOGY_MIRROR);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontManagerUpdateOntologyMirror);
     }
     private isDeleteMirrorAuthorized(): boolean {
-        return AuthorizationEvaluator.isAuthorized(AuthorizationEvaluator.Actions.ONT_MANAGER_DELETE_ONTOLOGY_MIRROR);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontManagerDeleteOntologyMirror);
     }
 
 }

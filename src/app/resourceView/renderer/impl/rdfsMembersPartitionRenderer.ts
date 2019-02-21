@@ -25,7 +25,7 @@ export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
     rootProperty: ARTURIResource = RDFS.member;
     label = "RDFS members";
     addBtnImgTitle = "Add member";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/prop_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/property_create.png");
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 

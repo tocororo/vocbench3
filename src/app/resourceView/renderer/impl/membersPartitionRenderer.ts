@@ -25,7 +25,7 @@ export class MembersPartitionRenderer extends PartitionRenderSingleRoot {
     rootProperty = SKOS.member;
     label = "Members";
     addBtnImgTitle = "Add member";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/collection_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/skosCollection_create.png");
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,

@@ -1,7 +1,8 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { ARTResource } from "../models/ARTResources";
+import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { ResourceViewPanelComponent } from "../resourceView/resourceViewPanel/resourceViewPanelComponent";
 import { TreePanelComponent } from "../trees/treePanelComponent";
+import { VBEventHandler } from "../utils/VBEventHandler";
 
 @Component({
     selector: "data-component",
@@ -21,6 +22,33 @@ export class DataComponent {
     //{ read: ElementRef } to specify to get the element instead of the component (see https://stackoverflow.com/q/45921819/5805661)
     @ViewChild('treePanel') private treePanelRef: ElementRef; 
     @ViewChild('resViewPanel',  { read: ElementRef }) private resViewPanelRef: ElementRef;
+
+    private eventSubscriptions: any[] = [];
+
+    constructor(private eventHandler: VBEventHandler) {
+        this.eventSubscriptions.push(eventHandler.datatypeDeletedEvent.subscribe(
+            (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
+        this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
+            (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
+        this.eventSubscriptions.push(eventHandler.collectionDeletedEvent.subscribe(
+            (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
+        this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
+            (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
+        this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
+            (data: { instance: ARTURIResource, cls: ARTURIResource }) => this.onNodeDeleted(data.instance)));
+        this.eventSubscriptions.push(eventHandler.lexicalEntryDeletedEvent.subscribe(
+            (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
+        this.eventSubscriptions.push(eventHandler.lexiconDeletedEvent.subscribe(
+            (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
+        this.eventSubscriptions.push(eventHandler.propertyDeletedEvent.subscribe(
+            (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
+        this.eventSubscriptions.push(eventHandler.schemeDeletedEvent.subscribe(
+            (deletedRes: ARTURIResource) => this.onNodeDeleted(deletedRes)));
+    }
+
+    ngOnDestroy() {
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    }
 
     private onNodeSelected(node: ARTResource) {
         if (node == null) return;

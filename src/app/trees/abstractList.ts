@@ -1,8 +1,8 @@
-import { Component, Input, Output, ViewChild, ElementRef, EventEmitter, QueryList } from "@angular/core";
-import { AbstractStruct } from "./abstractStruct";
-import { AbstractListNode } from "./abstractListNode";
-import { ARTURIResource, ResAttribute } from "../models/ARTResources";
+import { Component, ElementRef, QueryList, ViewChild } from "@angular/core";
+import { ARTURIResource } from "../models/ARTResources";
 import { VBEventHandler } from "../utils/VBEventHandler";
+import { AbstractListNode } from "./abstractListNode";
+import { AbstractStruct } from "./abstractStruct";
 
 @Component({
     selector: "list",

@@ -25,7 +25,7 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
     knownProperties: ARTURIResource[] = this.rootProperties;
     label = "Lexical forms";
     addBtnImgTitle = "Add a lexical form";
-    addBtnImgSrc = require("../../../../assets/images/icons/actions/propObject_create.png");
+    addBtnImgSrc = require("../../../../assets/images/icons/actions/objectProperty_create.png");
 
     private lexiconLang: string; //cache the language of the lexicon
 
