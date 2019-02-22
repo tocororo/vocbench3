@@ -6,6 +6,8 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 5.0.1-beta.1 (dd-MM-yyyy)
   * Enabled multivalue creation when enriching a property with a typed literal value.
+  * Added the "Copy value to other locales" action to the language-tagged values in the "Lexicalizations", "Notes" and "Other properties" ResourceView partitions.
+    This action is available only if exist locales for the language of the value.
   * Fixed a bug that prevented to change the mapping property in the alignment validation.
 
 # 5.0.0 (30-01-2019)
