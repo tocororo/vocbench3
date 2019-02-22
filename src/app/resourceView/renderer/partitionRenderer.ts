@@ -5,6 +5,7 @@ import { AddAction, ResViewPartition, ResViewUtils } from "../../models/Resource
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { HttpServiceContext } from "../../utils/HttpManager";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowseExternalResourceModalReturnData } from "../resViewModals/browseExternalResourceModal";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
@@ -127,27 +128,22 @@ export abstract class PartitionRenderer {
     protected addMultiple(addFunctions: MultiAddFunction[], errorHandler?: (errors: MultiAddError[]) => void, errors?: MultiAddError[]) {
         if (errors == null) errors = [];
 
+        HttpServiceContext.disableErrorInterception(); //temporarly disable the error interceptor
+
         if (addFunctions.length == 0) { //no more function to call
             //handle the errors, if any, if an handler is defined
             if (errors.length > 0) {
                 if (errorHandler != null) {
                     errorHandler(errors);
                 } else {
-                    let message: string;
-                    let details: string;
                     if (errors.length == 1) {
-                        message = "The addition of " + errors[0].value.toNT() + " has failed due to the following reason:\n" +  errors[0].error.name + 
-                            ((errors[0].error.message != null) ? ":\n" + errors[0].error.message : "");
-                        details = errors[0].error.stack;
+                        this.handleSingleMultiAddError(errors[0]);
                     } else {
-                        message = "The addition of the following values have failed:"
-                        errors.forEach((e: MultiAddError) => {
-                            message += "\n\n" + e.value.toNT() + "\nReason:\n" + e.error.name + ((e.error.message != null) ? ":\n" + e.error.message : "");
-                        })
+                        this.handleMultipleMultiAddError(errors);
                     }
-                    this.basicModals.alert("Error", message, "error", details);
                 }
             }
+            HttpServiceContext.enableErrorInterception(); //re-enable the error interceptor
             this.update.emit();
         } else {
             addFunctions[0].function.subscribe(
@@ -162,6 +158,20 @@ export abstract class PartitionRenderer {
                 }
             );
         }
+    }
+
+    protected handleSingleMultiAddError(error: MultiAddError) {
+        let message = "The addition of " + error.value.toNT() + " has failed due to the following reason:\n" +  error.error.name + 
+                ((error.error.message != null) ? ":\n" + error.error.message : "");
+        let details = error.error.stack;
+        this.basicModals.alert("Error", message, "error", details);
+    }
+    protected handleMultipleMultiAddError(errors: MultiAddError[]) {
+        let message = "The addition of the following values have failed:"
+        errors.forEach((e: MultiAddError) => {
+            message += "\n\n" + e.value.toNT() + "\nReason:\n" + e.error.name + ((e.error.message != null) ? ":\n" + e.error.message : "");
+        });
+        this.basicModals.alert("Error", message, "error");
     }
 
     private isAddManuallyAllowed() {

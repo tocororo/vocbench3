@@ -32,6 +32,11 @@
                     <a (click)="moveLabelToConcept()">Move xLabel to another concept</a>
                 </li>
             </ng-template>
+
+            <li *ngIf="copyLocalesAction.available" [ngClass]="{ disabled: !isCopyLocalesAuthorized() }">
+                <a (click)="copyLocales()">Copy value to other locales</a>
+            </li>
+
             <li *ngIf="isInferred && partition != 'lexicalizations'" [ngClass]="{ disabled: !isAssertAuthorized() }">
                 <a (click)="assertInferred()">Assert inferred statement</a>
             </li>

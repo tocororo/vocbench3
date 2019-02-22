@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute, ResourceUtils } from "../../models/ARTResources";
+import { Language } from "../../models/LanguagesCountries";
 import { AddAction, ResViewPartition, ResViewUtils } from "../../models/ResourceView";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 
@@ -22,6 +23,7 @@ export class PredicateObjectsRenderer {
     @Output() remove: EventEmitter<ARTNode> = new EventEmitter<ARTResource>(); //if the event doesn't contain the node, it means "delete all"
     @Output() edit: EventEmitter<ARTNode> = new EventEmitter<ARTResource>(); //require the parent partition renderer to edit the value
     @Output() update = new EventEmitter();
+    @Output('copyLocale') copyLocaleOutput = new EventEmitter<{ value: ARTNode, locales: Language[] }>(); //forward the event copyLocale from editable-resource
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
 
     /**
@@ -100,6 +102,15 @@ export class PredicateObjectsRenderer {
             this.dblclickObj.emit(<ARTResource>obj);
         }
     }
+    /**
+     * 
+     * @param languages 
+     * @param obj 
+     */
+    private copyLocales(locales: Language[], obj: ARTNode) {
+        this.copyLocaleOutput.emit({ value: obj, locales: locales });
+    }
+
     /**
      * Tells if the given object need to be rendered as reifiedResource or as simple rdfResource.
      * A resource should be rendered as reifiedResource if the predicate has custom range and the object

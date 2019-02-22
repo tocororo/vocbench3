@@ -39,11 +39,7 @@ export class LangPickerComponent implements ControlValueAccessor {
         this.languageList = []; //intersection between language available in project and language assigned to user.
         var projectLangs: Language[] = this.properties.getProjectLanguages();
         var userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
-        for (var i = 0; i < projectLangs.length; i++) {
-            if (userAssignedLangs.indexOf(projectLangs[i].tag) != -1) {
-                this.languageList.push(projectLangs[i]);
-            }
-        }
+        this.languageList = projectLangs.filter((l: Language) => { return userAssignedLangs.indexOf(l.tag) != -1 });
     }
 
     ngAfterViewInit() {

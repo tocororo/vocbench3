@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { ARTLiteral, ARTNode, ARTURIResource } from "../../../models/ARTResources";
+import { Language } from "../../../models/LanguagesCountries";
 import { ResViewPartition } from "../../../models/ResourceView";
 import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
@@ -69,13 +70,11 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
                                         },
                                         () => {}
                                     );
+                                } else {
+                                    this.handleSingleMultiAddError(errors[0]);
                                 }
                             } else {
-                                let message = "The addition of the following values have failed:"
-                                errors.forEach((e: MultiAddError) => {
-                                    message += "\n\n" + e.value.toNT() + "\nReason:\n" + e.error.name + ((e.error.message != null) ? ":\n" + e.error.message : "");
-                                });
-                                this.basicModals.alert("Error", message, "error");
+                                this.handleMultipleMultiAddError(errors);
                             }
                         }
                     } else if (predicate.getURI() == SKOSXL.altLabel.getURI()) {
@@ -127,13 +126,11 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
                                         },
                                         () => {}
                                     );
+                                } else {
+                                    this.handleSingleMultiAddError(errors[0]);
                                 }
                             } else {
-                                let message = "The addition of the following values have failed:"
-                                errors.forEach((e: MultiAddError) => {
-                                    message += "\n\n" + e.value.toNT() + "\nReason:\n" + e.error.name + ((e.error.message != null) ? ":\n" + e.error.message : "");
-                                });
-                                this.basicModals.alert("Error", message, "error");
+                                this.handleMultipleMultiAddError(errors);
                             }
                         }
                     } else if (predicate.getURI() == SKOS.altLabel.getURI()) {
@@ -194,6 +191,20 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
         return this.resourcesService.removeValue(this.resource, predicate, object);
+    }
+
+    private copyLocaleHandler(predicate: ARTURIResource, eventData: { value: ARTNode, locales: Language[] }) {
+        let addFunctions: MultiAddFunction[] = [];
+        //this function is the handler of an event invoked in properties only when the value is a plain literal, so the cast is safe
+        let value: ARTLiteral = <ARTLiteral>eventData.value;
+        eventData.locales.forEach(l => {
+            let newValue: ARTLiteral = new ARTLiteral(value.getValue(), null, l.tag);
+            addFunctions.push({ 
+                function: this.resourcesService.addValue(<ARTURIResource>this.resource, predicate, newValue), 
+                value: newValue 
+            });
+        })
+        this.addMultiple(addFunctions);
     }
 
 }

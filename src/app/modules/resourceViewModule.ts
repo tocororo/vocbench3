@@ -42,6 +42,7 @@ import { AddPropertyValueModal } from '../resourceView/resViewModals/addProperty
 import { BrowseExternalResourceModal } from '../resourceView/resViewModals/browseExternalResourceModal';
 import { ClassListCreatorModal } from '../resourceView/resViewModals/classListCreatorModal';
 import { ConstituentListCreatorModal } from '../resourceView/resViewModals/constituentListCreatorModal';
+import { CopyLocalesModal } from '../resourceView/resViewModals/copyLocalesModal';
 import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
 import { DataRangeEditorModal } from '../resourceView/resViewModals/dataRangeEditorModal';
 import { InstanceListCreatorModal } from '../resourceView/resViewModals/instanceListCreatorModal';
@@ -100,6 +101,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         BrowseExternalResourceModal,
         ClassListCreatorModal,
         ConstituentListCreatorModal,
+        CopyLocalesModal,
         DataRangeEditorModal,
         DataRangeEditor,
         InstanceListCreatorModal,
@@ -117,6 +119,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         BrowseExternalResourceModal,
         ClassListCreatorModal,
         ConstituentListCreatorModal,
+        CopyLocalesModal,
         DataRangeEditorModal,
         DataRangeEditor,
         InstanceListCreatorModal,

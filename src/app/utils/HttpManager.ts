@@ -426,23 +426,25 @@ export class HttpManager {
             this.basicModals.alert("Error", errorMsg, "error", err._body);
         } else if (err instanceof Error) { //err is already an Error (parsed and thrown in handleOkOrErrorResponse or arrayBufferRespHandler)
             error = err;
-            if (errorAlertOpt.show) { //if the alert should be shown
-                if (errorAlertOpt.exceptionsToSkip == null || errorAlertOpt.exceptionsToSkip.indexOf(error.name) == -1) {
-                    let errorMsg = error.message != null ? error.message : "Unknown response from the server";
-                    let errorDetails = error.stack ? error.stack : error.name;
-                    this.basicModals.alert("Error", errorMsg, "error", errorDetails);
-                }
-            }
-        }
-        //if the previous checks are skipped, it means that the server responded with a 200 that contains a description of an excpetion
-        //(needed? maybe the following is already handled by (err instanceof Error) condition)
-        else if (errorAlertOpt.show) { //if the alert should be shown
-            error = (<Error>err);
-            if (errorAlertOpt.exceptionsToSkip == null || errorAlertOpt.exceptionsToSkip.indexOf(error.name) == -1) {
+            if (errorAlertOpt.show && 
+                (errorAlertOpt.exceptionsToSkip == null || errorAlertOpt.exceptionsToSkip.indexOf(error.name) == -1) &&
+                HttpServiceContext.isErrorInterceptionEnabled()
+            ) { //if the alert should be shown
                 let errorMsg = error.message != null ? error.message : "Unknown response from the server";
                 let errorDetails = error.stack ? error.stack : error.name;
                 this.basicModals.alert("Error", errorMsg, "error", errorDetails);
             }
+        }
+        //if the previous checks are skipped, it means that the server responded with a 200 that contains a description of an excpetion
+        //(needed? maybe the following is already handled by (err instanceof Error) condition)
+        else if (errorAlertOpt.show && 
+            (errorAlertOpt.exceptionsToSkip == null || errorAlertOpt.exceptionsToSkip.indexOf(error.name) == -1) &&
+            HttpServiceContext.isErrorInterceptionEnabled()
+        ) { //if the alert should be shown
+            error = (<Error>err);
+            let errorMsg = error.message != null ? error.message : "Unknown response from the server";
+            let errorDetails = error.stack ? error.stack : error.name;
+            this.basicModals.alert("Error", errorMsg, "error", errorDetails);
         }
         UIUtils.stopAllLoadingDiv();
         return Observable.throw(error);
@@ -455,6 +457,9 @@ export class HttpServiceContext {
     private static ctxConsumer: Project; //consumer project temporarly used in some scenarios (e.g. service invoked in group management)
     private static ctxVersion: VersionInfo; //version temporarly used in some scenarios (e.g. versioning res view)
     private static sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
+    
+    //if true, the errors thrown by the service calls are intercepted and a modal is shown. Useful to set to false during multiple additions.
+    private static interceptError: boolean = true;
 
     /**
      * Methods for managing a contextual project (project temporarly used in some scenarios)
@@ -523,11 +528,27 @@ export class HttpServiceContext {
         this.sessionToken = null;
     }
 
+    /**
+     * Disable/enable error interception. In multiple addition is useful to disable temporarly the error interception,
+     * in order to avoid to show multiple error modals that report the errors. It is better instead to collect
+     * all the error and show just a unique report.
+     */
+    static isErrorInterceptionEnabled(): boolean {
+        return this.interceptError;
+    }
+    static enableErrorInterception() {
+        this.interceptError = true;
+    }
+    static disableErrorInterception() {
+        this.interceptError = false;
+    }
+
     static resetContext() {
         this.ctxProject = null;
         this.ctxConsumer = null;
         this.ctxVersion = null;
         this.sessionToken = null;
+        this.interceptError = true;
     }
 }
 

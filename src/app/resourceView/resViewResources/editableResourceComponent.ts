@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute, ResourceUtils } from "../../models/ARTResources";
+import { Language, Languages } from "../../models/LanguagesCountries";
 import { ResViewPartition } from "../../models/ResourceView";
 import { RDFS, SemanticTurkey, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { ManchesterServices } from "../../services/manchesterServices";
@@ -30,6 +31,7 @@ export class EditableResourceComponent {
 	@Output('delete') deleteOutput = new EventEmitter();
 	@Output() update = new EventEmitter();
 	@Output('edit') editOutput = new EventEmitter(); //fire a request for the renderer to edit the value
+	@Output('copyLocale') copyLocaleOutput = new EventEmitter<Language[]>(); //fire a request for the renderer to copy the value to different locales
 	@Output() dblClick = new EventEmitter();
 
 	//useful to perform a check on the type of the edited value.
@@ -51,6 +53,9 @@ export class EditableResourceComponent {
 	private isInferred: boolean = false;
 	private isXLabelMenuItemAvailable: boolean = false;
 	private isReplaceMenuItemAvailable: boolean = true;
+	// private isCopyLocalesMenuItemAvailable: boolean = false;
+	private copyLocalesAction: { available: boolean, locales: Language[] } = { available: false, locales: [] };
+	
 	private editInProgress: boolean = false;
 	private editLiteralInProgress: boolean = false;
 	private resourceStringValuePristine: string;
@@ -106,6 +111,32 @@ export class EditableResourceComponent {
 			this.readonly || 
 			ResourceUtils.isReourceInStaging(this.resource)
 		);
+
+		/**
+		 * Copy to locales option is available only in lexicalizations, notes and properties partitions
+		 * (currenlty only for simplicity, I will see later if it can be enabled also in other partitions) if:
+		 * - in lexicalizations if the value is a plain literal or an xlabel with a language
+		 * - in notes if the value is a plain literal with a language
+		 * - in proeprties if the value is a plain literal with a language
+		 */
+		if (
+			this.resource.getAdditionalProperty(ResAttribute.LANG) != null && (
+				(this.partition == ResViewPartition.properties && this.editActionScenario == EditActionScenarioEnum.plainLiteral) || //plain in notes
+				(this.partition == ResViewPartition.notes && this.editActionScenario == EditActionScenarioEnum.plainLiteral) || //plain in notes
+				(this.partition == ResViewPartition.lexicalizations && //plain or xlabel in lexicalizations
+					(this.editActionScenario == EditActionScenarioEnum.plainLiteral || this.editActionScenario == EditActionScenarioEnum.xLabel)
+				)
+		)) {
+			let projectLangs: Language[] = this.vbProp.getProjectLanguages();
+			let userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
+			let intersection: Language[] = projectLangs.filter((l: Language) => { return userAssignedLangs.indexOf(l.tag) != -1 });
+			let locales = Languages.getLocales(intersection, this.resource.getAdditionalProperty(ResAttribute.LANG));
+			this.copyLocalesAction = {
+				available: locales.length > 0,
+				locales: locales
+			}
+		}
+		
 	}
 
 	//======== "edit" HANDLER ========
@@ -304,11 +335,8 @@ export class EditableResourceComponent {
 		this.editLiteralInProgress = false;
 	}
 
-	//================================
+	//====== "Replace with existing resource" HANDLER =====
 
-	/**
-	 * "Replace with existing resource" menu item
-	 */
 	private replace() {
 		this.rvModalService.addPropertyValue("Replace", this.subject, this.predicate, false, false).then(
 			(data: any) => {
@@ -318,7 +346,7 @@ export class EditableResourceComponent {
 		)
 	}
 
-	//====== "Spawn new concept from this xLabel" HANDLER
+	//====== "Spawn new concept from this xLabel" HANDLER =====
 
 	private spawnNewConceptWithLabel() {
 		//here I can cast resource since this method is called only on object with role "xLabel" that are ARTResource
@@ -335,6 +363,8 @@ export class EditableResourceComponent {
 			() => { }
 		);
 	}
+
+	//====== "Move xLabel to another concept" HANDLER =====
 
 	private moveLabelToConcept() {
 		this.browsingModals.browsePropertyTree("Select a lexicalization predicate", [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel]).then(
@@ -368,7 +398,7 @@ export class EditableResourceComponent {
 		)
 	}
 
-	//====== Assert inferred statement =============
+	//====== "Assert inferred statement" HANDLER =====
 
 	private assertInferred() {
 		this.resourcesService.addValue(this.subject, this.predicate, this.resource).subscribe(
@@ -378,12 +408,24 @@ export class EditableResourceComponent {
 		)
 	}
 
-	/**
-	 * "Delete" menu item
-	 */
+	//====== "Copy value to other locales" HANDLER =====
+	
+	private copyLocales() {
+		this.rvModalService.copyLocale(this.resource, this.copyLocalesAction.locales).then(
+			locales => {
+				this.copyLocaleOutput.emit(locales);
+			},
+			() => {}
+		)
+	}
+
+	//====== "Delete" HANDLER =====
+	
 	private delete() {
 		this.deleteOutput.emit();
 	}
+
+	//==============================
 
 	private resourceDblClick() {
 		if (this.resource.isResource()) {
@@ -407,6 +449,9 @@ export class EditableResourceComponent {
 	}
 	private isAssertAuthorized(): boolean {
 		return AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.subject);
+	}
+	private isCopyLocalesAuthorized(): boolean {
+		return AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.subject)
 	}
 
 }

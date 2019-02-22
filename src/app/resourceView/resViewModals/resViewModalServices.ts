@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { CustomFormModal, CustomFormModalData } from "../../customForms/customForm/customFormModal";
-import { ARTBNode, ARTResource, ARTURIResource } from '../../models/ARTResources';
+import { ARTBNode, ARTNode, ARTResource, ARTURIResource } from '../../models/ARTResources';
+import { Language } from '../../models/LanguagesCountries';
 import { AddManuallyValueData, AddManuallyValueModal } from "./addManuallyValueModal";
 import { AddPropertyValueModal, AddPropertyValueModalData } from "./addPropertyValueModal";
 import { BrowseExternalResourceModal, BrowseExternalResourceModalData } from './browseExternalResourceModal';
 import { ClassListCreatorModal, ClassListCreatorModalData } from "./classListCreatorModal";
 import { ConstituentListCreatorModal, ConstituentListCreatorModalData } from './constituentListCreatorModal';
+import { CopyLocalesModal, CopyLocalesModalData } from './copyLocalesModal';
 import { DataRangeEditorModal, DataRangeEditorModalData } from "./dataRangeEditorModal";
 import { InstanceListCreatorModal, InstanceListCreatorModalData } from "./instanceListCreatorModal";
 import { PropertyChainCreatorModal, PropertyChainCreatorModalData } from './propertyChainCreatorModal';
@@ -170,6 +172,20 @@ export class ResViewModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(BrowseExternalResourceModal, overlayConfig).result;
+    }
+
+    /**
+     * 
+     * @param value 
+     * @param locales 
+     */
+    copyLocale(value: ARTNode, locales: Language[]) {
+        var modalData = new CopyLocalesModalData(value, locales);
+        const builder = new BSModalContextBuilder<CopyLocalesModalData>(
+            modalData, undefined, CopyLocalesModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        return this.modal.open(CopyLocalesModal, overlayConfig).result;
     }
 
 }

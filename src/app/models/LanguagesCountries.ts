@@ -65,6 +65,26 @@ export class Languages {
         return false;
     }
 
+    /**
+     * If the given language tag (lang) is a locale, returns the other locales and the "main" language (e.g. en-GB -> [en, en-US]).
+     * Otherwise, if the given tag is a language, returns all the locales (e.g. en -> [en-GB, en-US])
+     * @param languages 
+     * @param lang 
+     */
+    static getLocales(languages: Language[], lang: string): Language[] {
+        let locales: Language[] = [];
+        let localePrefix: string = lang;
+        if (lang.indexOf("-") != -1) { //lang is a locale
+            localePrefix = lang.substring(0, lang.indexOf("-"));
+        }
+        languages.forEach(l => {
+            if (l.tag.startsWith(localePrefix) && l.tag != lang) {
+                locales.push(l);
+            }
+        });
+        return locales;
+    }
+
     static indexOf(languages: Language[], lang: Language): number {
         for (var i = 0; i < languages.length; i++) {
             if (languages[i].tag == lang.tag) {
