@@ -23,7 +23,6 @@ export class SchemesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.schemes;
     rootProperty: ARTURIResource = SKOS.inScheme;
-    label = "Schemes";
     addBtnImgTitle = "Add to a ConceptScheme";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/conceptScheme_create.png");
 

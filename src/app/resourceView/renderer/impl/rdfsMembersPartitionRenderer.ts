@@ -23,7 +23,6 @@ export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.rdfsMembers;
     rootProperty: ARTURIResource = RDFS.member;
-    label = "RDFS members";
     addBtnImgTitle = "Add member";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/property_create.png");
 

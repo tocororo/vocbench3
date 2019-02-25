@@ -27,7 +27,6 @@ export class PropertyChainRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.subPropertyChains;
     rootProperty: ARTURIResource = OWL.propertyChainAxiom;
-    label = "Property chain axioms";
     addBtnImgTitle = "Add a property chain axion";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/property_create.png");
 

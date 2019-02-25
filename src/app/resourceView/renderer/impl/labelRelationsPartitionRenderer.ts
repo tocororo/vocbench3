@@ -21,7 +21,6 @@ export class LabelRelationsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.labelRelations;
     rootProperty: ARTURIResource = SKOSXL.labelRelation;
-    label = "Label relations";
     addBtnImgTitle = "Add a label relation";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/objectProperty_create.png");
 

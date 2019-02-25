@@ -22,7 +22,6 @@ export class ConstituentsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.constituents;
     rootProperty: ARTURIResource = Decomp.constituent;
-    label = "Constituents";
     addBtnImgTitle = "Add constituent";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/objectProperty_create.png");
 

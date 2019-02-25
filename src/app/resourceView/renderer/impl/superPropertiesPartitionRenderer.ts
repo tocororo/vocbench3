@@ -23,7 +23,6 @@ export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot 
 
     partition = ResViewPartition.superproperties;
     rootProperty: ARTURIResource = RDFS.subPropertyOf;
-    label = "Superproperties";
     addBtnImgTitle = "Add a superproperty";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/property_create.png");
 

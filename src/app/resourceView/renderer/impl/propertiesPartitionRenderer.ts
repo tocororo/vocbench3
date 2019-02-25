@@ -25,7 +25,6 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.properties;
     rootProperty: ARTURIResource = null; //there is no root property for this partition
-    label = "Other properties";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/property_create.png");
     addBtnImgTitle = "Add a property value";
 
@@ -36,6 +35,7 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     ngOnInit() {
+        super.ngOnInit();
         this.partitionCollapsed = (this.predicateObjectList.length > 5);
     }
 

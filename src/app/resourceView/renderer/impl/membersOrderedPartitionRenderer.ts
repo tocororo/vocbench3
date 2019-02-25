@@ -25,7 +25,6 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
     addManuallyAllowed: boolean = false;
     rootProperty = SKOS.memberList;
     membersProperty = SKOS.member;
-    label = "Members";
     addBtnImgTitle = "Add member";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/skosCollection_create.png");
 

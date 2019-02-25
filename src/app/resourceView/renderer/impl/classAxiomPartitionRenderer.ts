@@ -27,7 +27,6 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
     knownProperties: ARTURIResource[] = [
         RDFS.subClassOf, OWL.equivalentClass, OWL.disjointWith,
         OWL.complementOf, OWL.intersectionOf, OWL.unionOf, OWL.oneOf];
-    label = "Class axioms";
     addBtnImgTitle = "Add a class axiom";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/cls_create.png");
 

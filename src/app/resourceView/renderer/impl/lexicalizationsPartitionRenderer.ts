@@ -31,7 +31,6 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     knownProperties: ARTURIResource[] = [
         RDFS.label, SKOS.prefLabel, SKOS.altLabel, SKOS.hiddenLabel,
         SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel, OntoLex.isDenotedBy];
-    label = "Lexicalizations";
     addBtnImgTitle = "Add a lexicalization";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/annotationProperty_create.png");
 

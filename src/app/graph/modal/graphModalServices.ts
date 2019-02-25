@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResourceUtils } from '../../models/ARTResources';
+import { ARTBNode, ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResourceUtils } from '../../models/ARTResources';
 import { GraphBinding, GraphResultBindings } from '../../models/Sparql';
 import { ResourcesServices } from '../../services/resourcesServices';
 import { GraphMode } from '../abstractGraph';
 import { D3Service } from '../d3/d3Services';
+import { DataNode } from '../model/DataNode';
 import { ForceDirectedGraph } from '../model/ForceDirectedGraph';
 import { GraphUtils } from '../model/GraphUtils';
 import { Link } from '../model/Link';
 import { Node } from '../model/Node';
 import { GraphModal, GraphModalData } from './graphModal';
-import { DataNode } from '../model/DataNode';
+import { LinksFilterModal, LinksFilterModalData } from './linksFilterModal';
 
 @Injectable()
 export class GraphModalServices {
@@ -104,6 +105,16 @@ export class GraphModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
         return this.modal.open(GraphModal, overlayConfig).result;
+    }
+
+    filterLinks(predObjListMap: { [partition: string]: ARTPredicateObjects[] }) {
+        var modalData = new LinksFilterModalData(predObjListMap);
+        const builder = new BSModalContextBuilder<LinksFilterModalData>(
+            modalData, undefined, LinksFilterModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        return this.modal.open(LinksFilterModal, overlayConfig).result;
+
     }
 
 }

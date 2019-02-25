@@ -21,7 +21,6 @@ export class DisjointPropertiesPartitionRenderer extends PartitionRenderSingleRo
 
     partition = ResViewPartition.disjointProperties;
     rootProperty: ARTURIResource = OWL.propertyDisjointWith;
-    label = "Disjoint properties";
     addBtnImgTitle = "Add a disjoint property";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/property_create.png");
 

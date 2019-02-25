@@ -22,7 +22,6 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.ranges;
     rootProperty: ARTURIResource = RDFS.range;
-    label = "Ranges";
     addBtnImgTitle = "Add a range";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/cls_create.png");
 

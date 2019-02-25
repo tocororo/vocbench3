@@ -29,7 +29,6 @@ export class LexicalSensesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.lexicalSenses;
     rootProperty: ARTURIResource = OntoLex.sense;
-    label = "Lexical Senses";
     addBtnImgTitle = "Add lexical sense";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/objectProperty_create.png");
 

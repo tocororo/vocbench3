@@ -27,7 +27,6 @@ export class EquivalentPropertiesPartitionRenderer extends PartitionRenderSingle
 
     partition = ResViewPartition.equivalentProperties;
     rootProperty: ARTURIResource = OWL.equivalentProperty;
-    label = "Equivalent properties";
     addBtnImgTitle = "Add an equivalent property";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/property_create.png");
 

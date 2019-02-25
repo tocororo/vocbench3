@@ -13,6 +13,7 @@ import { NodeModelComponent } from '../graph/impl/modelNodeComponent';
 import { GraphModal } from "../graph/modal/graphModal";
 import { GraphModalServices } from '../graph/modal/graphModalServices';
 import { SharedModule } from './sharedModule';
+import { LinksFilterModal } from '../graph/modal/linksFilterModal';
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule],
@@ -20,12 +21,12 @@ import { SharedModule } from './sharedModule';
         LinkComponent, NodeModelComponent, DataNodeComponent, DraggableDirective, ZoomableDirective,
         GraphPanel, ModelGraphComponent, DataGraphComponent,
         //modals
-        GraphModal
+        GraphModal, LinksFilterModal
     ],
     exports: [],
     providers: [ D3Service, GraphModalServices ],
     entryComponents: [
-        GraphModal
+        GraphModal, LinksFilterModal
     ]
 })
 export class GraphModule { }

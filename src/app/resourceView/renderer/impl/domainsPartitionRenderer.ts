@@ -22,7 +22,6 @@ export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.domains;
     rootProperty: ARTURIResource = RDFS.domain;
-    label = "Domains";
     addBtnImgTitle = "Add a domain";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/cls_create.png");
 

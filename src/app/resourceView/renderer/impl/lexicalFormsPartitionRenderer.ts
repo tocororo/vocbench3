@@ -23,7 +23,6 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
     partition = ResViewPartition.lexicalForms;
     rootProperties: ARTURIResource[] = [OntoLex.otherForm, OntoLex.canonicalForm];
     knownProperties: ARTURIResource[] = this.rootProperties;
-    label = "Lexical forms";
     addBtnImgTitle = "Add a lexical form";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/objectProperty_create.png");
 

@@ -24,7 +24,6 @@ export class EvokedLexicalConceptsPartitionRenderer extends PartitionRenderSingl
 
     partition = ResViewPartition.evokedLexicalConcepts;
     rootProperty: ARTURIResource = OntoLex.evokes;
-    label = "Evoked Lexical Concepts";
     addBtnImgTitle = "Add evoked lexical concept";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/objectProperty_create.png");
 

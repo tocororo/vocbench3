@@ -23,7 +23,6 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.broaders;
     rootProperty: ARTURIResource = SKOS.broader;
-    label = "Broaders";
     addBtnImgTitle = "Add broader";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/concept_create.png");
 

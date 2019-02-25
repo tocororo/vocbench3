@@ -23,7 +23,6 @@ export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.topconceptof;
     rootProperty: ARTURIResource = SKOS.topConceptOf;
-    label = "Top Concept of";
     addBtnImgTitle = "Add to a skos:ConceptScheme as topConcept";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/conceptScheme_create.png");
 

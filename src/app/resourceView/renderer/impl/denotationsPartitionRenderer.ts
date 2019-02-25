@@ -30,7 +30,6 @@ export class DenotationsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.denotations;
     rootProperty: ARTURIResource = OntoLex.denotes;
-    label = "Denotations";
     addBtnImgTitle = "Add denotation";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/objectProperty_create.png");
 

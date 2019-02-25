@@ -23,7 +23,6 @@ export class TypesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.types;
     rootProperty: ARTURIResource = RDF.type;
-    label = "Types";
     addBtnImgTitle = "Add a type";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/cls_create.png");
 

@@ -30,7 +30,6 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.imports;
     rootProperty: ARTURIResource = OWL.imports;
-    label = "Imports";
     addBtnImgTitle = "Add import";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/ontologyProperty_create.png");
 

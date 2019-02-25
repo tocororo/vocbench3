@@ -19,7 +19,6 @@ export class FormBasedPreviewRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.formBasedPreview;
     rootProperty: ARTURIResource = null;
-    label = "Custom Form Preview";
     addBtnImgTitle = "";
     addBtnImgSrc: any = null; //do not show the add icon
 

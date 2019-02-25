@@ -22,7 +22,6 @@ export class SubtermsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.subterms;
     rootProperty: ARTURIResource = Decomp.subterm;
-    label = "Subterms";
     addBtnImgTitle = "Add a Subterm";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/objectProperty_create.png");
 

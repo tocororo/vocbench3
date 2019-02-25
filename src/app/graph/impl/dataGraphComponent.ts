@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef } from "@angular/core";
-import { ARTURIResource, ARTPredicateObjects, ARTNode, RDFResourceRolesEnum, ARTResource } from "../../models/ARTResources";
-import { ResourceViewServices } from "../../services/resourceViewServices";
-import { D3Service } from "../d3/d3Services";
-import { Node } from "../model/Node";
-import { AbstractGraph, GraphMode } from "../abstractGraph";
+import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResourceUtils } from "../../models/ARTResources";
 import { ResViewPartition } from "../../models/ResourceView";
+import { ResourceViewServices } from "../../services/resourceViewServices";
 import { Deserializer } from "../../utils/Deserializer";
-import { Link } from "../model/Link";
+import { AbstractGraph, GraphMode } from "../abstractGraph";
+import { D3Service } from "../d3/d3Services";
+import { GraphModalServices } from "../modal/graphModalServices";
 import { DataNode } from "../model/DataNode";
+import { Link } from "../model/Link";
+import { Node } from "../model/Node";
 
 @Component({
     selector: 'graph-data',
@@ -18,6 +19,8 @@ import { DataNode } from "../model/DataNode";
 export class DataGraphComponent extends AbstractGraph {
 
     protected mode = GraphMode.dataOriented;
+
+    private linkLimit: number = 50;
 
     private rvPartitions: ResViewPartition[] = [
         ResViewPartition.broaders, ResViewPartition.classaxioms, ResViewPartition.constituents, ResViewPartition.denotations,
@@ -31,7 +34,7 @@ export class DataGraphComponent extends AbstractGraph {
     ]
 
     constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef,
-        private resViewService: ResourceViewServices) {
+        private resViewService: ResourceViewServices, private graphModals: GraphModalServices) {
         super(d3Service, elementRef, ref);
     }
 
@@ -42,7 +45,7 @@ export class DataGraphComponent extends AbstractGraph {
 
         this.resViewService.getResourceView(<ARTResource>node.res).subscribe(
             rv => {
-                let links: Link[] = [];
+                let predObjListMap: { [partition: string]: ARTPredicateObjects[] } = {};
                 this.rvPartitions.forEach(partition => {
                     let partitionJson = rv[partition];
                     if (partition == ResViewPartition.facets && partitionJson != null) {
@@ -50,16 +53,48 @@ export class DataGraphComponent extends AbstractGraph {
                     }
                     if (partitionJson != null) {
                         let poList: ARTPredicateObjects[] = Deserializer.createPredicateObjectsList(partitionJson);
-                        poList.forEach(pol => {
+                        predObjListMap[partition] = poList;
+                    }
+                });
+                //count number of objects
+                let linkCount: number = 0;
+                for (let partition in predObjListMap) {
+                    predObjListMap[partition].forEach(pol => { //for each pol of a partition
+                        linkCount += pol.getObjects().length; //a link for each object (subject ---predicate---> object)
+                    });
+                }
+
+                if (linkCount > this.linkLimit) {
+                    this.graphModals.filterLinks(predObjListMap).then(
+                        (visiblePreds: ARTURIResource[]) => {
+                            let links: Link[] = [];
+                            for (let partition in predObjListMap) {
+                                predObjListMap[partition].forEach(pol => { //for each pol of a partition
+                                    let pred: ARTURIResource = pol.getPredicate();
+                                    if (ResourceUtils.containsNode(visiblePreds, pred)) {
+                                        let objs: ARTNode[] = pol.getObjects();
+                                        objs.forEach(o => { //for each object/value
+                                            links.push(new Link(node, new DataNode(o), pred));
+                                        });
+                                    }
+                                });
+                            }
+                            this.graph.appendLinks(node, links);
+                        },
+                        cancel => {}
+                    );
+                } else {
+                    let links: Link[] = [];
+                    for (let partition in predObjListMap) {
+                        predObjListMap[partition].forEach(pol => { //for each pol of a partition
                             let pred: ARTURIResource = pol.getPredicate();
                             let objs: ARTNode[] = pol.getObjects();
-                            objs.forEach(o => {
+                            objs.forEach(o => { //for each object/value
                                 links.push(new Link(node, new DataNode(o), pred));
                             });
                         });
                     }
-                });
-                this.graph.appendLinks(node, links);
+                }
             }
         );
     }

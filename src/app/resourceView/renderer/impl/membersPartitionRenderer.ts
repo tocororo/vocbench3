@@ -23,7 +23,6 @@ export class MembersPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.members;
     rootProperty = SKOS.member;
-    label = "Members";
     addBtnImgTitle = "Add member";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/skosCollection_create.png");
 

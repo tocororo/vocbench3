@@ -22,7 +22,6 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
 
     partition = ResViewPartition.formRepresentations;
     rootProperty: ARTURIResource = OntoLex.representation;
-    label = "Form Representations";
     addBtnImgTitle = "Add a representation";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/datatypeProperty_create.png");
 
