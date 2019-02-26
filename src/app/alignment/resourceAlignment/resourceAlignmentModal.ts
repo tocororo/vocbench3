@@ -1,13 +1,12 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent, OverlayConfig } from 'ngx-modialog';
 import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource, ResourceUtils } from "../../models/ARTResources";
+import { ARTURIResource } from "../../models/ARTResources";
 import { BrowseExternalResourceModalReturnData } from "../../resourceView/resViewModals/browseExternalResourceModal";
 import { ResViewModalServices } from "../../resourceView/resViewModals/resViewModalServices";
 import { AlignmentServices } from "../../services/alignmentServices";
 import { MapleServices } from "../../services/mapleServices";
-import { UIUtils } from "../../utils/UIUtils";
-import { VBContext } from "../../utils/VBContext";
+import { ResourceUtils } from "../../utils/ResourceUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AssistedSearchModal, AssistedSearchModalData } from "./assistedSearchModal";
 

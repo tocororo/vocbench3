@@ -1,12 +1,13 @@
 import { Component, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource, ResourceUtils } from "../../../../models/ARTResources";
+import { ARTURIResource } from "../../../../models/ARTResources";
 import { ImportType, OntologyImport, PrefixMapping } from "../../../../models/Metadata";
 import { ResourceViewComponent } from "../../../../resourceView/resourceViewComponent";
 import { MetadataServices } from "../../../../services/metadataServices";
 import { RefactorServices } from "../../../../services/refactorServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../../utils/VBActions";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";

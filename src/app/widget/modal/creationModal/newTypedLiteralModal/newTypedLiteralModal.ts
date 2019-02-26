@@ -1,8 +1,9 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTLiteral, ARTURIResource, ResourceUtils } from "../../../../models/ARTResources";
-import { XmlSchema, RDF, RDFS } from "../../../../models/Vocabulary";
+import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources";
+import { RDF, RDFS, XmlSchema } from "../../../../models/Vocabulary";
+import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import { VBContext } from "../../../../utils/VBContext";
 
 export class NewTypedLiteralModalData extends BSModalContext {

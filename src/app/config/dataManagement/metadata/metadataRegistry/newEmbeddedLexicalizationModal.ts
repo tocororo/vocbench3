@@ -1,9 +1,10 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { ARTURIResource, ResourceUtils } from "../../../../models/ARTResources";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource } from "../../../../models/ARTResources";
+import { OntoLex, RDFS, SKOS, SKOSXL } from "../../../../models/Vocabulary";
 import { MetadataRegistryServices } from "../../../../services/metadataRegistryServices";
-import { RDF, RDFS, SKOS, SKOSXL, OntoLex } from "../../../../models/Vocabulary";
+import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 
 export class NewEmbeddedLexicalizationModalData extends BSModalContext {

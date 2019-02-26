@@ -1,6 +1,6 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../models/ARTResources";
+import { ARTURIResource } from "../../models/ARTResources";
 import { Project } from "../../models/Project";
 import { Properties } from "../../models/Properties";
 import { UsersGroup } from "../../models/User";
@@ -10,6 +10,7 @@ import { PropertyServices } from "../../services/propertyServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { UsersGroupsServices } from "../../services/usersGroupsServices";
 import { HttpServiceContext } from "../../utils/HttpManager";
+import { ResourceUtils } from "../../utils/ResourceUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 

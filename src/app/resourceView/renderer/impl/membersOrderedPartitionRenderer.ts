@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResAttribute, ResourceUtils } from "../../../models/ARTResources";
+import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
 import { SKOS } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
@@ -8,6 +8,7 @@ import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { SkosServices } from "../../../services/skosServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { ResourceUtils } from "../../../utils/ResourceUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
@@ -152,7 +153,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
 
     private isDeleteDisabled() {
         return (
-            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) ||
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStaging(this.resource)) ||
             this.readonly || !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.resource)
         );
     }

@@ -3,26 +3,24 @@ import { OverlayConfig } from "ngx-modialog";
 import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
 import { Observable } from "rxjs/Observable";
 import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
-import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { LexEntryVisualizationMode, SearchSettings } from "../../../../models/Properties";
 import { OntoLex } from "../../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
-import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
-import { RoleActionResolver, ActionDescription } from "../../../../utils/RoleActionResolver";
+import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
+import { ActionDescription, RoleActionResolver } from "../../../../utils/RoleActionResolver";
 import { UIUtils } from "../../../../utils/UIUtils";
+import { VBActionFunctionCtx } from "../../../../utils/VBActions";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from '../../../../utils/VBProperties';
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
-import { NewResourceWithLiteralCfModalReturnData } from "../../../../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal";
-import { AbstractPanel } from "../../../abstractPanel";
+import { AbstractListPanel } from "../../../abstractListPanel";
 import { LexicalEntryListComponent } from "../lexicalEntryList/lexicalEntryListComponent";
 import { LexicalEntryListSettingsModal } from "./lexicalEntryListSettingsModal";
-import { VBActionFunctionCtx } from "../../../../utils/VBActions";
-import { AbstractListPanel } from "../../../abstractListPanel";
 
 @Component({
     selector: "lexical-entry-list-panel",

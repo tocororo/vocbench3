@@ -1,7 +1,8 @@
 import { Component, ElementRef, Input, SimpleChanges, ViewChild } from "@angular/core";
-import { ARTResource, ARTURIResource, ResAttribute, ResourceUtils } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { RefactorServices } from "../services/refactorServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
+import { ResourceUtils } from "../utils/ResourceUtils";
 import { VBActionsEnum } from "../utils/VBActions";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
@@ -18,7 +19,7 @@ export class ResourceRenameComponent {
     @ViewChild('totalrenameinput') totalRenameInput: ElementRef;
 
     private renameDisabled: boolean = true;
- 
+
     private localName: string;
     private pristineNamespace: string;
     private pristineLocalName: string;
@@ -40,9 +41,9 @@ export class ResourceRenameComponent {
                 this.localName = (<ARTURIResource>this.resource).getLocalName();
             }
             //rename disabled if resource is not explicit || resView is readOnly || user has not the authorization || resource is to validate
-            this.renameDisabled = (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly || 
+            this.renameDisabled = (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly ||
                 !AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorChangeResourceUri, this.resource) ||
-			    ResourceUtils.isReourceInStaging(this.resource));
+                ResourceUtils.isResourceInStaging(this.resource));
         }
     }
 

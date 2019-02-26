@@ -1,6 +1,7 @@
 import { Component, QueryList, ViewChildren } from "@angular/core";
-import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { PropertyServices } from "../../../services/propertyServices";
+import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";

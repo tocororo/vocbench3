@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Subscriber } from "rxjs";
-import { ARTURIResource, ResAttribute, ResourceUtils, RDFResourceRolesEnum } from "../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
+import { ResourceUtils } from "../utils/ResourceUtils";
 import { TreeListContext } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
 

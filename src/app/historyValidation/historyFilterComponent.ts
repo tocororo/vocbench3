@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource, ResourceUtils } from "../models/ARTResources";
+import { ARTURIResource } from "../models/ARTResources";
 import { User } from "../models/User";
+import { ResourceUtils } from "../utils/ResourceUtils";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { OperationSelectModal } from "./operationSelectModal";

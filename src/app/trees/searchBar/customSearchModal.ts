@@ -1,13 +1,14 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTNode, ResourceUtils, SortAttribute } from "../../models/ARTResources";
+import { ARTNode } from "../../models/ARTResources";
 import { Configuration, ConfigurationComponents, ConfigurationProperty } from "../../models/Configuration";
 import { SettingsProp } from "../../models/Plugins";
-import { VariableBindings, BindingTypeEnum } from "../../models/Sparql";
+import { BindingTypeEnum, VariableBindings } from "../../models/Sparql";
 import { ConfigurationsServices } from "../../services/configurationsServices";
 import { SearchServices } from "../../services/searchServices";
 import { YasguiComponent } from "../../sparql/yasguiComponent";
+import { ResourceUtils, SortAttribute } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 

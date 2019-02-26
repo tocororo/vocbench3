@@ -1,17 +1,18 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResourceUtils } from "../models/ARTResources";
+import { Observable } from "rxjs";
+import { ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum } from "../models/ARTResources";
 import { ConverterContractDescription, ConverterUtils, RDFCapabilityType, XRole } from "../models/Coda";
 import { HeaderStruct } from "../models/Sheet2RDF";
 import { RDFS } from "../models/Vocabulary";
+import { DatatypesServices } from "../services/datatypesServices";
 import { PropertyServices, RangeType } from "../services/propertyServices";
 import { Sheet2RDFServices } from "../services/sheet2rdfServices";
+import { ResourceUtils } from "../utils/ResourceUtils";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
-import { DatatypesServices } from "../services/datatypesServices";
-import { Observable } from "rxjs";
 
 export class HeaderEditorModalData extends BSModalContext {
     /**

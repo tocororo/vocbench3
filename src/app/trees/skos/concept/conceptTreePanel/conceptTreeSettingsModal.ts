@@ -1,13 +1,14 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../../../models/ARTResources";
+import { ARTURIResource } from "../../../../models/ARTResources";
 import { ConceptTreePreference, ConceptTreeVisualizationMode, Properties } from "../../../../models/Properties";
 import { UsersGroup } from "../../../../models/User";
 import { SKOS } from "../../../../models/Vocabulary";
 import { PreferencesSettingsServices } from "../../../../services/preferencesSettingsServices";
 import { PropertyServices } from "../../../../services/propertyServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
+import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";

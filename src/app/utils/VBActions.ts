@@ -652,7 +652,7 @@ export class VBActionFunctions {
 
     private skosCreateSubCollection = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
         return Observable.create((observer: Observer<void>) => {
-            this.creationModals.newResourceWithLiteralCf("Create a nested" + ctx.metaClass.getShow(), ctx.metaClass, true).then(
+            this.creationModals.newResourceWithLiteralCf("Create a nested " + ctx.metaClass.getShow(), ctx.metaClass, true).then(
                 (data: NewResourceWithLiteralCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                         this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, parent, data.cls, data.cfValue).subscribe(

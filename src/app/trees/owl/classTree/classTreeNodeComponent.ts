@@ -1,8 +1,9 @@
 import { Component, Input, QueryList, ViewChildren } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { ARTURIResource, ResAttribute, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { OWL, RDFS } from "../../../models/Vocabulary";
 import { ClassesServices } from "../../../services/classesServices";
+import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { TreeListContext } from "../../../utils/UIUtils";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";

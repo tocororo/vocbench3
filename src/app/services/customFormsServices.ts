@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
+import { BrokenCFStructure, CustomForm, CustomFormLevel, CustomFormType, FormCollection, FormCollectionMapping, FormField, FormFieldType } from "../models/CustomForms";
 import { Deserializer } from "../utils/Deserializer";
-import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResourceUtils, RDFResourceRolesEnum, SortAttribute } from "../models/ARTResources";
-import { FormCollectionMapping, FormCollection, CustomForm, CustomFormType, FormField, BrokenCFStructure,
-    FormFieldType, CustomFormLevel } from "../models/CustomForms";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { ResourceUtils, SortAttribute } from '../utils/ResourceUtils';
 
 @Injectable()
 export class CustomFormsServices {

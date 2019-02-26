@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { ARTBNode, ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResourceUtils } from '../../models/ARTResources';
+import { ARTBNode, ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource } from '../../models/ARTResources';
 import { GraphBinding, GraphResultBindings } from '../../models/Sparql';
 import { ResourcesServices } from '../../services/resourcesServices';
+import { ResourceUtils } from '../../utils/ResourceUtils';
 import { GraphMode } from '../abstractGraph';
 import { D3Service } from '../d3/d3Services';
 import { DataNode } from '../model/DataNode';

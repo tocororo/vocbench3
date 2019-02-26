@@ -1,11 +1,12 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import { GraphModalServices } from "../../../graph/modal/graphModalServices";
-import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { SearchSettings } from "../../../models/Properties";
 import { ClassesServices } from "../../../services/classesServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { SearchServices } from "../../../services/searchServices";
+import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { ActionDescription, RoleActionResolver } from "../../../utils/RoleActionResolver";
 import { VBActionFunctionCtx } from "../../../utils/VBActions";
 import { VBEventHandler } from "../../../utils/VBEventHandler";

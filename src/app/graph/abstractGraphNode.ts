@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { ARTNode, RDFResourceRolesEnum, ResAttribute, ResourceUtils } from '../models/ARTResources';
+import { ARTNode, RDFResourceRolesEnum, ResAttribute } from '../models/ARTResources';
+import { ResourceUtils } from '../utils/ResourceUtils';
 import { GraphMode } from './abstractGraph';
-import { GraphUtils } from './model/GraphUtils';
 import { Node, NodeMeasure } from './model/Node';
 
 @Component({})

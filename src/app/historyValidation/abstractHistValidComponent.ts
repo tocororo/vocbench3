@@ -1,9 +1,10 @@
 import { Component } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { ARTResource, ARTURIResource, ResourceUtils } from "../models/ARTResources";
+import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { CommitInfo, SortingDirection } from "../models/History";
 import { User } from "../models/User";
+import { ResourceUtils } from "../utils/ResourceUtils";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { CommitDeltaModal, CommitDeltaModalData } from "./commitDeltaModal";
 import { OperationParamsModal, OperationParamsModalData } from "./operationParamsModal";

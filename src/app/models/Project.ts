@@ -1,4 +1,5 @@
-import { ARTURIResource, ResourceUtils } from "./ARTResources";
+import { ResourceUtils } from "../utils/ResourceUtils";
+import { ARTURIResource } from "./ARTResources";
 import { OntoLex, OWL, RDFS, SKOS, SKOSXL } from "./Vocabulary";
 
 export class Project {

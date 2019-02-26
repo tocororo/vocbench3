@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef } from "@angular/core";
-import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResourceUtils } from "../../models/ARTResources";
+import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { ResViewPartition } from "../../models/ResourceView";
 import { ResourceViewServices } from "../../services/resourceViewServices";
 import { Deserializer } from "../../utils/Deserializer";
+import { ResourceUtils } from "../../utils/ResourceUtils";
 import { AbstractGraph, GraphMode } from "../abstractGraph";
 import { D3Service } from "../d3/d3Services";
 import { GraphModalServices } from "../modal/graphModalServices";

@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute, ResourceUtils } from "../../models/ARTResources";
+import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { Language } from "../../models/LanguagesCountries";
 import { AddAction, ResViewPartition, ResViewUtils } from "../../models/ResourceView";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { ResourceUtils } from "../../utils/ResourceUtils";
 
 @Component({
     selector: "pred-obj-renderer",
@@ -129,15 +130,29 @@ export class PredicateObjectsRenderer {
      * Determines if the add button is disabled
      */
     private isAddDisabled() {
+        /**
+         * Add disabled if one of them is true
+         * - resource is not explicit (e.g. imported or inferred) but not in staging add at the same time (addition in staging add is allowed)
+         * - ResView is working in readonly mode
+         * - user not authorized
+         */
         return (
-            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) ||
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource)) ||
             this.readonly || !AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.resource)
         );
     }
 
     private isDeleteDisabled() {
+        /**
+         * Delete disabled if one of them is true
+         * - resource is not explicit (e.g. imported, inferred, in staging)
+         * - resource is in a staging status (staging-add or staging-remove)
+         * - ResView is working in readonly mode
+         * - user not authorized
+         */
         return (
-            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) ||
+            !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
+            ResourceUtils.isResourceInStaging(this.resource) ||
             this.readonly || !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.resource)
         );
     }

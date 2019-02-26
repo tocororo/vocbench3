@@ -1,8 +1,9 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { ARTURIResource, ResourceUtils } from "../../../../models/ARTResources";
+import { ARTURIResource } from "../../../../models/ARTResources";
 import { DatasetMetadata, LexicalizationSetMetadata } from "../../../../models/Metadata";
 import { OntoLex, RDFS, SKOS, SKOSXL } from "../../../../models/Vocabulary";
 import { MetadataRegistryServices } from "../../../../services/metadataRegistryServices";
+import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 
 @Component({

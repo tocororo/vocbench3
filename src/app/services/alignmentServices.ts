@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { AlignmentCell } from "../alignment/alignmentValidation/AlignmentCell";
-import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { SearchMode } from '../models/Properties';
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, HttpServiceContext } from "../utils/HttpManager";
+import { ResourceUtils, SortAttribute } from '../utils/ResourceUtils';
 
 @Injectable()
 export class AlignmentServices {

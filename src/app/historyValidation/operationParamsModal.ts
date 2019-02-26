@@ -1,8 +1,9 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTResource } from "../models/ARTResources";
 import { CommitInfo } from "../models/History";
-import { ARTResource, ResourceUtils } from "../models/ARTResources";
+import { ResourceUtils } from "../utils/ResourceUtils";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
 export class OperationParamsModalData extends BSModalContext {

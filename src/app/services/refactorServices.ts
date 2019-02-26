@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
-import { Deserializer } from "../utils/Deserializer";
-import { VBEventHandler } from "../utils/VBEventHandler";
-import { VBContext } from "../utils/VBContext";
-import { VBProperties } from "../utils/VBProperties";
-import { ARTURIResource, ARTResource, ResourceUtils, ResAttribute } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
 import { ResourcesServices } from "../services/resourcesServices";
+import { Deserializer } from "../utils/Deserializer";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { VBContext } from "../utils/VBContext";
+import { VBEventHandler } from "../utils/VBEventHandler";
+import { VBProperties } from "../utils/VBProperties";
 
 @Injectable()
 export class RefactorServices {

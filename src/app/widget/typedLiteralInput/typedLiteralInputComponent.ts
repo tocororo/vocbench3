@@ -1,8 +1,9 @@
 import { Component, EventEmitter, forwardRef, Input, Output } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ARTLiteral, ARTURIResource, ResourceUtils } from "../../models/ARTResources";
+import { ARTLiteral, ARTURIResource } from "../../models/ARTResources";
 import { RDF, RDFS, XmlSchema } from "../../models/Vocabulary";
 import { DatatypesServices } from "../../services/datatypesServices";
+import { ResourceUtils } from "../../utils/ResourceUtils";
 
 @Component({
     selector: "typed-literal-input",

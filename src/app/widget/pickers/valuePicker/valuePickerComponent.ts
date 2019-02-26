@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
-import { ARTNode, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ARTLiteral, ResourceUtils } from '../../../models/ARTResources';
+import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum } from '../../../models/ARTResources';
 import { ResourcesServices } from '../../../services/resourcesServices';
+import { ResourceUtils } from '../../../utils/ResourceUtils';
 import { VBProperties } from '../../../utils/VBProperties';
 import { BrowsingModalServices } from '../../modal/browsingModal/browsingModalServices';
 

@@ -1,10 +1,10 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { Observable } from 'rxjs/Observable';
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource } from "../../models/ARTResources";
+import { CustomForm, EditorMode, FormCollection } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
-import { FormCollection, CustomForm, CustomFormLevel, EditorMode } from "../../models/CustomForms";
-import { ARTURIResource, ResourceUtils } from "../../models/ARTResources";
+import { ResourceUtils } from "../../utils/ResourceUtils";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 
 export class FormCollEditorModalData extends BSModalContext {

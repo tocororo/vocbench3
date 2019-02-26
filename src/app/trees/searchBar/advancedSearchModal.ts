@@ -1,10 +1,11 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTLiteral, ARTNode, ARTURIResource, RDFTypesEnum, ResourceUtils, SortAttribute } from "../../models/ARTResources";
+import { ARTLiteral, ARTNode, ARTURIResource, RDFTypesEnum } from "../../models/ARTResources";
 import { SearchMode, SearchSettings, StatusFilter } from "../../models/Properties";
 import { OntoLex, SKOS } from "../../models/Vocabulary";
 import { SearchServices } from "../../services/searchServices";
+import { ResourceUtils, SortAttribute } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";

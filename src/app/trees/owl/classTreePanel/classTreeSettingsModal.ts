@@ -1,12 +1,13 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { ClassTreePreference } from "../../../models/Properties";
 import { OWL, RDFS } from "../../../models/Vocabulary";
 import { ClassesServices } from "../../../services/classesServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { Cookie } from "../../../utils/Cookie";
+import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { VBContext } from "../../../utils/VBContext";
 import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -116,7 +117,6 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
             this.clsService.getSubClasses(this.selectedFilteredClass, false).subscribe(
                 classes => {
                     ResourceUtils.sortResources(classes, SortAttribute.show);
-                    let projBaseURI: string = VBContext.getWorkingProject().getBaseURI();
                     let clsTreePref: ClassTreePreference = this.vbProp.getClassTreePreferences();
                     let filteredSubClssPref = clsTreePref.filterMap[this.selectedFilteredClass.getURI()];
     

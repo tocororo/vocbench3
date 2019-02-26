@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ARTLiteral } from '../models/ARTResources';
 import { DatasetDescription, DatasetSearchFacets, DatasetSearchResult, SearchResultsPage } from '../models/Metadata';
 import { HttpManager } from "../utils/HttpManager";
-import { ARTLiteral, ResourceUtils } from '../models/ARTResources';
-import { resolvePtr } from 'dns';
+import { ResourceUtils } from '../utils/ResourceUtils';
 
 @Injectable()
 export class DatasetCatalogsServices {

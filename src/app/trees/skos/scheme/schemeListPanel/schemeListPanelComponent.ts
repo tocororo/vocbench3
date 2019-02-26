@@ -1,12 +1,12 @@
 import { Component, ViewChild } from "@angular/core";
 import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
-import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { SearchSettings } from "../../../../models/Properties";
-import { OntoLex, SKOS } from "../../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
+import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { RoleActionResolver } from "../../../../utils/RoleActionResolver";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBActionFunctionCtx } from "../../../../utils/VBActions";
@@ -44,7 +44,7 @@ export class SchemeListPanelComponent extends AbstractListPanel {
 
 
     getActionContext(): VBActionFunctionCtx {
-        let metaClass: ARTURIResource = this.modelType == OntoLex.uri ? OntoLex.conceptSet : SKOS.conceptScheme;
+        let metaClass: ARTURIResource = ResourceUtils.convertRoleToClass(this.panelRole, this.modelType);
         let actionCtx: VBActionFunctionCtx = { metaClass: metaClass, loadingDivRef: this.viewChildList.blockDivElement }
         return actionCtx;
     }

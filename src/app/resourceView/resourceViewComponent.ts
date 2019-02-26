@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { CollaborationModalServices } from "../collaboration/collaborationModalService";
-import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, LocalResourcePosition, RDFResourceRolesEnum, RemoteResourcePosition, ResAttribute, ResourcePosition, ResourceUtils, SortAttribute } from "../models/ARTResources";
+import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, LocalResourcePosition, RDFResourceRolesEnum, RemoteResourcePosition, ResAttribute, ResourcePosition } from "../models/ARTResources";
 import { Issue } from "../models/Collaboration";
 import { VersionInfo } from "../models/History";
 import { PropertyFacet, ResViewPartition } from "../models/ResourceView";
@@ -11,6 +11,7 @@ import { ResourceViewServices } from "../services/resourceViewServices";
 import { VersionsServices } from "../services/versionsServices";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpServiceContext } from "../utils/HttpManager";
+import { ResourceUtils, SortAttribute } from "../utils/ResourceUtils";
 import { UIUtils } from "../utils/UIUtils";
 import { VBCollaboration } from "../utils/VBCollaboration";
 import { VBContext } from "../utils/VBContext";

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute, ResourceUtils } from "../../models/ARTResources";
+import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute } from "../../models/ARTResources";
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { ResViewPartition } from "../../models/ResourceView";
 import { RDFS, SemanticTurkey, SKOS, SKOSXL } from "../../models/Vocabulary";
@@ -8,6 +8,7 @@ import { PropertyServices } from "../../services/propertyServices";
 import { RefactorServices } from "../../services/refactorServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
@@ -109,7 +110,7 @@ export class EditableResourceComponent {
 			(!this.isInferred && !inMainGraph) || //neither in the main graph nor in inference graph
 			// (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT)) || 
 			this.readonly || 
-			ResourceUtils.isReourceInStaging(this.resource)
+			ResourceUtils.isResourceInStaging(this.resource)
 		);
 
 		/**

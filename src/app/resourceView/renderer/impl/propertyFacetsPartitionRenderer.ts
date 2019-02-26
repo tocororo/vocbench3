@@ -1,12 +1,13 @@
 import { Component, Input } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { ARTNode, ARTURIResource, ResAttribute, ResourceUtils } from "../../../models/ARTResources";
+import { ARTNode, ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { PropertyFacet, PropertyFacetsEnum, ResViewPartition } from "../../../models/ResourceView";
 import { OWL, RDF } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { ResourceUtils } from "../../../utils/ResourceUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
@@ -101,7 +102,7 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
     private isChangeFacetDisabled(facet: PropertyFacet) {
         return (
             !facet.explicit ||
-            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) ||
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource)) ||
             this.readonly || !AuthorizationEvaluator.ResourceView.isEditAuthorized(this.partition, this.resource)
         );
     }

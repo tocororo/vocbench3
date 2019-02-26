@@ -1,14 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef } from "@angular/core";
+import { ARTNode, ARTURIResource } from "../../models/ARTResources";
+import { OWL, RDFS } from "../../models/Vocabulary";
 import { GraphServices } from "../../services/graphServices";
+import { ResourcesServices } from "../../services/resourcesServices";
+import { ResourceUtils } from "../../utils/ResourceUtils";
 import { AbstractGraph, GraphMode } from "../abstractGraph";
 import { D3Service } from "../d3/d3Services";
-import { Node } from "../model/Node";
-import { ResourcesServices } from "../../services/resourcesServices";
-import { ARTURIResource, ResourceUtils, ARTNode } from "../../models/ARTResources";
 import { GraphUtils } from "../model/GraphUtils";
 import { Link } from "../model/Link";
-import { OWL, RDFS } from "../../models/Vocabulary";
 import { ModelNode } from "../model/ModelNode";
+import { Node } from "../model/Node";
 
 @Component({
     selector: 'graph-model',

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResAttribute, ResourceUtils } from "../models/ARTResources";
+import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { CustomForm, CustomFormValue, FormCollection } from "../models/CustomForms";
 import { RDFS } from "../models/Vocabulary";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager } from "../utils/HttpManager";
+import { ResourceUtils } from '../utils/ResourceUtils';
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { ResourcesServices } from "./resourcesServices";
 

@@ -1,8 +1,9 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { ARTURIResource } from "../../../../../models/ARTResources";
 import { SkosServices } from "../../../../../services/skosServices";
-import { BrowsingModalServices } from "../../../../../widget/modal/browsingModal/browsingModalServices";
+import { ResourceUtils } from "../../../../../utils/ResourceUtils";
 import { VBProperties } from "../../../../../utils/VBProperties";
-import { ARTURIResource, ResourceUtils, ResAttribute } from "../../../../../models/ARTResources";
+import { BrowsingModalServices } from "../../../../../widget/modal/browsingModal/browsingModalServices";
 
 @Component({
     selector: "scheme-selection",

@@ -1,6 +1,7 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceUtils } from "../../models/ARTResources";
+import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../models/ARTResources";
 import { SemanticTurkey } from "../../models/Vocabulary";
+import { ResourceUtils } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBProperties } from "../../utils/VBProperties";
 
@@ -49,17 +50,12 @@ export class RdfResourceComponent {
 	 * Initializes the class of the resource text: green if the resource is in the staging-add-graph, red if it's in the staging-remove-graph
 	 */
 	private initRenderingClass() {
-		let graphs: ARTURIResource[] = this.resource.getGraphs();
-		for (var i = 0; i < graphs.length; i++) {
-			if (graphs[i].getURI().startsWith(SemanticTurkey.stagingAddGraph)) {
-				this.renderingClass = "stagingAdd";
-				break;
-			} else if (graphs[i].getURI().startsWith(SemanticTurkey.stagingRemoveGraph)) {
-				this.renderingClass = "stagingRemove";
-				break;
-			} else {
-				this.renderingClass = "";
-			}
+		if (ResourceUtils.isResourceInStagingAdd(this.resource)) {
+			this.renderingClass = "stagingAdd";
+		} else if (ResourceUtils.isResourceInStagingRemove(this.resource)) {
+			this.renderingClass = "stagingRemove";
+		} else {
+			this.renderingClass = "";
 		}
 	}
 

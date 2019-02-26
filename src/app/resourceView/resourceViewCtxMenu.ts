@@ -2,12 +2,13 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ResourceAlignmentModal, ResourceAlignmentModalData } from "../alignment/resourceAlignment/resourceAlignmentModal";
-import { ARTResource, ARTURIResource, ResAttribute, ResourceUtils } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { SKOS } from "../models/Vocabulary";
 import { AlignmentServices } from "../services/alignmentServices";
 import { RefactorServices } from "../services/refactorServices";
 import { ResourcesServices } from "../services/resourcesServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
+import { ResourceUtils } from "../utils/ResourceUtils";
 import { VBActionsEnum } from "../utils/VBActions";
 import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
 
@@ -86,13 +87,13 @@ export class ResourceViewContextMenu {
     //menu items authorization
     private isSetDeprecatedDisabled(): boolean {
         return (
-            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) || 
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource)) || 
             !AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesSetDeprecated, this.resource)
         );
     }
     private isAlignDisabled(): boolean {
         return (
-            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isReourceInStaging(this.resource)) || 
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource)) || 
 		    !AuthorizationEvaluator.isAuthorized(VBActionsEnum.alignmentAddAlignment, this.resource)
         );
 	}

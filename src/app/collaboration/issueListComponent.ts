@@ -1,8 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { ARTURIResource, ResourceUtils } from '../models/ARTResources';
+import { ARTURIResource } from '../models/ARTResources';
 import { Issue, IssuesListCtx, IssuesStruct } from '../models/Collaboration';
 import { CollaborationServices } from "../services/collaborationServices";
 import { ResourcesServices } from '../services/resourcesServices';
+import { ResourceUtils } from '../utils/ResourceUtils';
 import { UIUtils } from '../utils/UIUtils';
 import { VBCollaboration } from '../utils/VBCollaboration';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';

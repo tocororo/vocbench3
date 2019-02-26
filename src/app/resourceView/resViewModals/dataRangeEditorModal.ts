@@ -1,8 +1,9 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTBNode, ARTLiteral } from '../../models/ARTResources';
 import { PropertyServices } from '../../services/propertyServices';
-import { ARTBNode, ARTLiteral, ResourceUtils } from '../../models/ARTResources';
+import { ResourceUtils } from "../../utils/ResourceUtils";
 
 export class DataRangeEditorModalData extends BSModalContext {
     constructor(public datarangeNode: ARTBNode) {

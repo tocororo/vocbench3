@@ -1,12 +1,12 @@
 import { Component, ViewChild } from "@angular/core";
 import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
-import { ARTURIResource, RDFResourceRolesEnum, ResourceUtils, SortAttribute } from "../../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { SearchSettings } from "../../../../models/Properties";
-import { SKOS } from "../../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
+import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { RoleActionResolver } from "../../../../utils/RoleActionResolver";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBActionFunctionCtx } from "../../../../utils/VBActions";
@@ -38,7 +38,7 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
     //top bar commands handlers
 
     getActionContext(role?: RDFResourceRolesEnum): VBActionFunctionCtx {
-        let metaClass: ARTURIResource = role ? this.convertRoleToClass(role) : this.convertRoleToClass(this.selectedNode.getRole());
+        let metaClass: ARTURIResource = role ? ResourceUtils.convertRoleToClass(role) : ResourceUtils.convertRoleToClass(this.selectedNode.getRole())
         let actionCtx: VBActionFunctionCtx = { metaClass: metaClass, loadingDivRef: this.viewChildTree.blockDivElement }
         return actionCtx;
     }
@@ -171,17 +171,6 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
 
     openTreeAt(resource: ARTURIResource) {
         this.viewChildTree.openTreeAt(resource);
-    }
-
-    //I don't know why, if I move this in ResourceUtils I get a strange error
-    private convertRoleToClass(role: RDFResourceRolesEnum): ARTURIResource {
-        let roleClass: ARTURIResource;
-        if (role == RDFResourceRolesEnum.skosCollection) {
-            roleClass = SKOS.collection;
-        } else if (role == RDFResourceRolesEnum.skosOrderedCollection) {
-            roleClass = SKOS.orderedCollection;
-        }
-        return roleClass;
     }
 
 }

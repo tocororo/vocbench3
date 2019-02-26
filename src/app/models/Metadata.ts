@@ -1,4 +1,5 @@
-import { ResourceUtils, ARTLiteral, ARTURIResource } from "./ARTResources";
+import { ResourceUtils } from "../utils/ResourceUtils";
+import { ARTLiteral, ARTURIResource } from "./ARTResources";
 
 export class PrefixMapping {
     public prefix: string;

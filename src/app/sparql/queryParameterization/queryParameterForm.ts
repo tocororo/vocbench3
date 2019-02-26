@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { OverlayConfig } from "ngx-modialog";
 import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
-import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from "../../models/ARTResources";
+import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { BindingTypeEnum, VariableBindings } from "../../models/Sparql";
+import { ResourceUtils } from "../../utils/ResourceUtils";
 import { QueryParameterizerModal, QueryParameterizerModalData } from "./queryParameterizerModal";
 
 @Component({

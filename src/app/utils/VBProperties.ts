@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResourceUtils } from '../models/ARTResources';
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
 import { ProjectTableColumnStruct } from '../models/Project';
@@ -11,6 +11,7 @@ import { Cookie } from '../utils/Cookie';
 import { UIUtils } from '../utils/UIUtils';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
+import { ResourceUtils } from './ResourceUtils';
 import { VBContext } from './VBContext';
 
 @Injectable()
