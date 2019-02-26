@@ -374,7 +374,18 @@ export abstract class AbstractSparqlTabComponent {
     }
 
     private openGraph() {
-        this.graphModals.openGraphQuertyResult(<GraphResultBindings[]>this.queryResult);
+        if (this.queryResult.length > 100) { //limit of triples
+            this.basicModals.confirm("Graph view", "Attention: The graph you are trying to show will have a large amount of nodes and links. " + 
+                "It could be really confused and not much readable. Do you want to show it anyway?", "warning").then(
+                confirm => {
+                    this.graphModals.openGraphQuertyResult(<GraphResultBindings[]>this.queryResult);
+                },
+                cancel => {}
+            )
+        } else {
+            this.graphModals.openGraphQuertyResult(<GraphResultBindings[]>this.queryResult);
+        }
+        
     }
 
     //LOAD/SAVE/PARAMETERIZE QUERY

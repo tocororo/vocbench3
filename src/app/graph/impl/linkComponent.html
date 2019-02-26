@@ -7,11 +7,11 @@
 
 
 <svg:path [attr.class]="'link'" [ngClass]="{ linkSelected: selected }" style="cursor: pointer;"
-    [attr.marker-end]="'url(#arrow' + link.index + ')'" [attr.d]="computePath()"  (click)="onClick()">
+    [attr.marker-end]="'url(#arrow' + link.index + ')'" [attr.d]="computePath()"  (click)="onClick($event)">
     <svg:title *ngIf="link.res">{{link.res.toNT()}}</svg:title>
 </svg:path>
 
-<svg:g *ngIf="link.res" [attr.transform]="getLabelTransform()" style="font-size: 9px; cursor: pointer;" (click)="onClick()">
+<svg:g *ngIf="link.res" [attr.transform]="getLabelTransform()" style="font-size: 9px; cursor: pointer;" (click)="onClick($event)">
     <svg:rect [ngClass]="{ linkSelected: selected }" [attr.x]="-getLabelRectWidth()/2" y="-4" [attr.width]="getLabelRectWidth()" height="8" fill="#ddd"></svg:rect>
     <svg:text #textEl style="visibility: hidden">{{link.res.getShow()}}</svg:text>
     <svg:text text-anchor="middle" dominant-baseline="central">{{link.res.getShow()}}</svg:text>

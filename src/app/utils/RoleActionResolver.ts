@@ -201,7 +201,7 @@ export class RoleActionResolver {
             roles: [RDFResourceRolesEnum.skosCollection],
             subRoles: [RDFResourceRolesEnum.skosOrderedCollection],
             conditions: { pre: { selectionRequired: true, allowedWithChild: true }, post: {} },
-            title: "Create subCollection",
+            title: "Create nested collection",
             resAction: ResAction.addChild,
             editType: "C"
         },

@@ -1,4 +1,4 @@
-<svg:svg #svg class="graphContainer">
+<svg:svg #svg class="graphContainer" (click)="onBackgroundClicked()">
     <svg:g *ngIf="initialized" [zoomableOf]="svg">
         <svg:g *ngFor="let link of graph.links" [link]="link" (linkClicked)="onLinkClicked($event)" [selected]="selectedElement == link"></svg:g>
         <svg:use *ngIf="linkAhead" [attr.xlink:href]="'#link' + linkAhead.index"></svg:use>

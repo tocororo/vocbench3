@@ -94,7 +94,8 @@ export class LinkComponent {
         return padding*2;
     }
 
-    private onClick() {
+    private onClick(event: Event) {
+        event.stopPropagation(); //avoid propagation since click event is handled also in the svg container div
         if (this.link.res != null) {
             this.linkClicked.emit(this.link);
         }

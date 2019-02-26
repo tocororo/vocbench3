@@ -58,6 +58,12 @@ export abstract class AbstractGraph {
         this.elementSelected.emit(this.selectedElement);
     };
 
+    protected onBackgroundClicked() {
+        this.selectedElement = null;
+        this.linkAhead = null;
+        this.elementSelected.emit(this.selectedElement);
+    }
+
     public updateForces(forces: GraphForces) {
         this.graph.options.forces = forces;
         this.graph.updateForces();

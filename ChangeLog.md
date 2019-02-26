@@ -9,6 +9,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Added the "Copy value to other locales" action to the language-tagged values in the "Lexicalizations", "Notes" and "Other properties" ResourceView partitions.
     This action is available only if exist locales for the language of the value.
   * Fixed a bug that prevented to change the mapping property in the alignment validation.
+  * Fixed conditions for enabling or disabling the add and delete operations in the ResourceView.
 
 # 5.0.0 (30-01-2019)
   * Enabled multiselection in trees and lists when adding a value to a property.
