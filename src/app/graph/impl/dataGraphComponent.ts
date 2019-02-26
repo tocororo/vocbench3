@@ -94,6 +94,7 @@ export class DataGraphComponent extends AbstractGraph {
                             });
                         });
                     }
+                    this.graph.appendLinks(node, links);
                 }
             }
         );
