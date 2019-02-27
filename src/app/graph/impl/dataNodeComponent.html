@@ -21,13 +21,13 @@
 
             <svg:text [attr.x]="-measures.width/2+3" [attr.y]="-measures.height/2+3" dominant-baseline="hanging">
                 <!-- :Class name -->
-                <!-- <svg:title>{{getRendering()}}</svg:title> -->
+                <!-- <svg:title>{{show}}</svg:title> -->
             </svg:text>
 
-            <svg:text #textEl style="visibility: hidden">{{getRendering()}}</svg:text>
+            <svg:text #textEl style="visibility: hidden">{{show}}</svg:text>
             <svg:text [attr.x]="-measures.width/2+3" [attr.y]="-measures.height/2+stripeHeight+5" dominant-baseline="hanging">
-                {{getRenderingNormalized()}}
-                <svg:title>{{getRendering()}}</svg:title>
+                {{normalizedShow}}
+                <svg:title>{{show}}</svg:title>
             </svg:text>
         </ng-template>
 
@@ -37,10 +37,10 @@
                 [attr.x]="-measures.width/2" [attr.y]="-measures.height/2" [attr.width]="measures.width" [attr.height]="measures.height">
             </svg:rect>
 
-            <svg:text #textEl style="visibility: hidden">{{getRendering()}}</svg:text>
+            <svg:text #textEl style="visibility: hidden">{{show}}</svg:text>
             <svg:text text-anchor="middle" dominant-baseline="central">
-                {{getRenderingNormalized()}}
-                <svg:title>{{getRendering()}}</svg:title>
+                {{normalizedShow}}
+                <svg:title>{{show}}</svg:title>
             </svg:text>
         </ng-template>
             

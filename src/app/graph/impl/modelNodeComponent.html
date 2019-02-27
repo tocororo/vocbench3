@@ -29,10 +29,10 @@
         </ng-template>
     
     
-        <svg:text #textEl style="visibility: hidden">{{getRendering()}}</svg:text>
+        <svg:text #textEl style="visibility: hidden">{{show}}</svg:text>
         <svg:text text-anchor="middle" dominant-baseline="central">
-            {{getRenderingNormalized()}}
-            <svg:title>{{getRendering()}}</svg:title>
+            {{normalizedShow}}
+            <svg:title>{{show}}</svg:title>
         </svg:text>
         
         <svg:title>{{node.res.toNT()}}</svg:title>

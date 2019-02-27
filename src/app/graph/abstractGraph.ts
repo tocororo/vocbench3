@@ -1,12 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { D3Service } from "./d3/d3Services";
 import { ForceDirectedGraph, GraphForces, GraphOptions } from "./model/ForceDirectedGraph";
 import { Link } from "./model/Link";
 import { Node } from "./model/Node";
 
-@Component({
-    changeDetection: ChangeDetectionStrategy.OnPush,
-})
 export abstract class AbstractGraph {
     @Input() graph: ForceDirectedGraph;
     @Input() rendering: boolean;

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { RDFResourceRolesEnum } from '../../models/ARTResources';
 import { GraphMode } from '../abstractGraph';
 import { AbstractGraphNode } from '../abstractGraphNode';
@@ -35,6 +35,10 @@ export class NodeModelComponent extends AbstractGraphNode {
         (-Size.Label.base / 2) + " " + (Size.Label.height / 2);
 
     private isObjectProperty: boolean;
+
+    constructor(protected changeDetectorRef: ChangeDetectorRef) {
+        super(changeDetectorRef);
+    }
 
     ngOnInit() {
         this.node = this.modelNode;

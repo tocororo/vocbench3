@@ -1,10 +1,9 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { ARTNode, RDFResourceRolesEnum, ResAttribute } from '../models/ARTResources';
 import { ResourceUtils } from '../utils/ResourceUtils';
 import { GraphMode } from './abstractGraph';
 import { Node, NodeMeasure } from './model/Node';
 
-@Component({})
 export abstract class AbstractGraphNode {
 
     @ViewChild('textEl') textElement: ElementRef;
@@ -22,32 +21,56 @@ export abstract class AbstractGraphNode {
     private nodeClass: string;
     private deprecated: boolean = false;
 
+    private normalizedShow: string;
+    private show: string;
+
+
+    /**
+     * Graph implementations use the ChangeDetectionStrategy.OnPush,
+     * it means that the change detection is fired only when the reference of the objects is completely replaced.
+     * Here I inject the ChangeDetectorRef in order to force the change detection when objects (show and normalizedShow)
+     * are not replaced but simply changed.
+     */
+    protected changeDetectorRef: ChangeDetectorRef
+    constructor(changeDetectorRef: ChangeDetectorRef) {
+        this.changeDetectorRef = changeDetectorRef;
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['rendering'] && !changes['rendering'].firstChange) {
+            this.updateShow();
+        }
+    }
+
+    ngAfterViewInit() {
+        this.updateShow();
+    }
+
     protected initNode() {
         this.initNodeStyle();
         this.measures = this.node.getNodeMeaseure();
     }
 
-    private getRendering(): string {
-        return ResourceUtils.getRendering(this.node.res, this.rendering);
-    }
+    private updateShow() {
+        this.show = ResourceUtils.getRendering(this.node.res, this.rendering);
+        this.changeDetectorRef.detectChanges(); //fire change detection in order to update the textEl that contains "show"
 
-    private getRenderingNormalized() {
-        let text = this.getRendering();
-        let truncatedText = text;
+        this.normalizedShow = this.show;
         if (this.textElement != null) {
-            let textElementWidth = this.textElement.nativeElement.getBoundingClientRect().width;
+            let textElementWidth = this.textElement.nativeElement.getBBox().width;
             let nodeWidth = this.node.getNodeWidth() - 4; //subtract 4 as padding
             if (textElementWidth > nodeWidth) {
                 let ratio = textElementWidth / nodeWidth;
-                let truncateAt = Math.floor(truncatedText.length / ratio);
-                truncatedText = truncatedText.substring(0, truncateAt);
+                let truncateAt = Math.floor(this.normalizedShow.length / ratio);
+                this.normalizedShow = this.normalizedShow.substring(0, truncateAt);
             }
-            if (text.length > truncatedText.length) {
-                truncatedText = text.substring(0, truncatedText.length - 3) + "...";
+            if (this.show.length > this.normalizedShow.length) {
+                this.normalizedShow = this.show.substring(0, this.normalizedShow.length - 3) + "...";
             }
         }
-        return truncatedText;
+        this.changeDetectorRef.detectChanges(); //fire change detection in order to update the normalizedShow in the view
     }
+
 
     private initNodeStyle() {
         let res: ARTNode = this.node.res;
