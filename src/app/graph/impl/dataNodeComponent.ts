@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { GraphMode } from '../abstractGraph';
 import { AbstractGraphNode } from '../abstractGraphNode';
 import { Node } from '../model/Node';
@@ -16,6 +16,10 @@ export class DataNodeComponent extends AbstractGraphNode {
 
     private stripePercentage: number; //percentage of the rect height to dedicate to the top stripe
     private stripeHeight: number; //height (in px) of the top stripe
+
+    constructor(protected changeDetectorRef: ChangeDetectorRef) {
+        super(changeDetectorRef);
+    }
 
     ngOnInit() {
         this.node = this.dataNode;

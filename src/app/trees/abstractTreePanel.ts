@@ -36,7 +36,7 @@ export abstract class AbstractTreePanel extends AbstractPanel {
     // abstract createChild(role?: RDFResourceRolesEnum): void;
 
     executeAction(act: ActionDescription, role?: RDFResourceRolesEnum) {
-        if (act.conditions.pre.selectionRequired && !act.conditions.pre.allowedWithChild && this.selectedNode.getAdditionalProperty(ResAttribute.MORE)) {
+        if (act.conditions.pre.selectionRequired && act.conditions.pre.childlessRequired && this.selectedNode.getAdditionalProperty(ResAttribute.MORE)) {
             this.basicModals.alert("Operation denied", "The operation cannot be done on node with children. Please delete the children nodes and then retry", "warning");
             return;
         }
