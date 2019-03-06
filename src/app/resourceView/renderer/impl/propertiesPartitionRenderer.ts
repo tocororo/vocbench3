@@ -24,7 +24,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.properties;
-    rootProperty: ARTURIResource = null; //there is no root property for this partition
     addBtnImgSrc = require("../../../../assets/images/icons/actions/property_create.png");
     addBtnImgTitle = "Add a property value";
 

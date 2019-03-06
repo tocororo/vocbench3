@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { ARTNode, ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { RDFS } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -11,9 +10,9 @@ import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
+import { RdfsMembersModalReturnData } from "../../resViewModals/rdfsMembersModal";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
-import { RdfsMembersModalReturnData } from "../../resViewModals/rdfsMembersModal";
 
 @Component({
     selector: "rdfs-members-renderer",
@@ -22,7 +21,6 @@ import { RdfsMembersModalReturnData } from "../../resViewModals/rdfsMembersModal
 export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.rdfsMembers;
-    rootProperty: ARTURIResource = RDFS.member;
     addBtnImgTitle = "Add member";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/property_create.png");
 
@@ -30,6 +28,10 @@ export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
         resViewModals: ResViewModalServices, private skosService: SkosServices, private eventHandler: VBEventHandler) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {

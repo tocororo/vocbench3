@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { SKOSXL } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -20,7 +19,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class LabelRelationsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.labelRelations;
-    rootProperty: ARTURIResource = SKOSXL.labelRelation;
     addBtnImgTitle = "Add a label relation";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/objectProperty_create.png");
 
@@ -28,6 +26,10 @@ export class LabelRelationsPartitionRenderer extends PartitionRenderSingleRoot {
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
         resViewModals: ResViewModalServices) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {

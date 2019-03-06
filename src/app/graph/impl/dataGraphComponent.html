@@ -1,10 +1,22 @@
-<svg:svg #svg class="graphContainer" (click)="onBackgroundClicked()">
-    <svg:g *ngIf="initialized" [zoomableOf]="svg">
-        <svg:g *ngFor="let link of graph.links" [link]="link" (linkClicked)="onLinkClicked($event)" [selected]="selectedElement == link"></svg:g>
-        <svg:use *ngIf="linkAhead" [attr.xlink:href]="'#link' + linkAhead.index"></svg:use>
+<div class="vbox blockingDivHost">
 
-        <svg:g *ngFor="let node of graph.nodes" [dataNode]="node" (nodeClicked)="onNodeClicked($event)" (nodeDblClicked)="onNodeDblClicked($event)"
-            [draggableNode]="node" [draggableInGraph]="graph" [rendering]="rendering" [selected]="selectedElement == node">
+    <svg:svg #svg class="graphContainer" (click)="onBackgroundClicked()">
+        <svg:g *ngIf="initialized" [zoomableOf]="svg">
+            <svg:g *ngFor="let link of graph.links" [id]="'link' + link.index" [link]="link" (linkClicked)="onLinkClicked($event)" [selected]="selectedElement == link"></svg:g>
+            <svg:use *ngIf="linkAhead" [attr.xlink:href]="'#link' + linkAhead.index"></svg:use>
+
+            <svg:g *ngFor="let node of graph.nodes" [dataNode]="node" (nodeClicked)="onNodeClicked($event)" (nodeDblClicked)="onNodeDblClicked($event)"
+                [draggableNode]="node" [draggableInGraph]="graph" [rendering]="rendering" [selected]="selectedElement == node">
+            </svg:g>
         </svg:g>
-    </svg:g>
-</svg:svg>
+    </svg:svg>
+
+    <div #blockingDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+
+</div>

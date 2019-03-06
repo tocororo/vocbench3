@@ -10,6 +10,7 @@ export abstract class AbstractGraph {
     @Output() elementSelected = new EventEmitter<Node|Link>();
 
     @ViewChild('svg') public svgElement: ElementRef;
+    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
 
     private selectedElement: Link | Node;
     private linkAhead: Link; //link selected to bring ahead the other

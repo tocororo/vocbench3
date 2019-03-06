@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { ARTBNode, ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { RDFS } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ManchesterServices } from "../../../services/manchesterServices";
 import { PropertyServices } from "../../../services/propertyServices";
@@ -21,7 +20,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.domains;
-    rootProperty: ARTURIResource = RDFS.domain;
     addBtnImgTitle = "Add a domain";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/cls_create.png");
 
@@ -29,6 +27,10 @@ export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
         resViewModals: ResViewModalServices, private manchService: ManchesterServices) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {

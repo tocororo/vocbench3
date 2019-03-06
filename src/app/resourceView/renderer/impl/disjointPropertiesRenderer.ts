@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { OWL } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -20,7 +19,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class DisjointPropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.disjointProperties;
-    rootProperty: ARTURIResource = OWL.propertyDisjointWith;
     addBtnImgTitle = "Add a disjoint property";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/property_create.png");
 
@@ -28,6 +26,10 @@ export class DisjointPropertiesPartitionRenderer extends PartitionRenderSingleRo
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
         resViewModals: ResViewModalServices) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {

@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { ARTNode, ARTResource, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { OntoLex } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { OntoLexLemonServices } from "../../../services/ontoLexLemonServices";
 import { PropertyServices } from "../../../services/propertyServices";
@@ -28,7 +27,6 @@ export class DenotationsPartitionRenderer extends PartitionRenderSingleRoot {
     // @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
 
     partition = ResViewPartition.denotations;
-    rootProperty: ARTURIResource = OntoLex.denotes;
     addBtnImgTitle = "Add denotation";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/objectProperty_create.png");
 
@@ -36,6 +34,10 @@ export class DenotationsPartitionRenderer extends PartitionRenderSingleRoot {
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
         resViewModals: ResViewModalServices, private ontolexService: OntoLexLemonServices) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {

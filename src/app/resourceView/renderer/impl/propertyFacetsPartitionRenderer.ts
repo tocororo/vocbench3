@@ -25,7 +25,6 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
     @Input('facets') facets: PropertyFacet[];
 
     partition = ResViewPartition.facets;
-    rootProperty: ARTURIResource = OWL.inverseOf;
     addBtnImgTitle = "Add a inverse property";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/property_create.png");
 
@@ -33,6 +32,10 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
         resViewModals: ResViewModalServices) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {

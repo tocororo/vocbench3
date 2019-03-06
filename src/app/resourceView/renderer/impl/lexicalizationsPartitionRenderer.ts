@@ -27,10 +27,6 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
 
     partition = ResViewPartition.lexicalizations;
     addManuallyAllowed: boolean = false;
-    rootProperties: ARTURIResource[] = []; //lexicalization properties are not known at priori
-    knownProperties: ARTURIResource[] = [
-        RDFS.label, SKOS.prefLabel, SKOS.altLabel, SKOS.hiddenLabel,
-        SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel, OntoLex.isDenotedBy];
     addBtnImgTitle = "Add a lexicalization";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/annotationProperty_create.png");
 
@@ -46,6 +42,10 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
         private resViewService: ResourceViewServices, private ontolexService: OntoLexLemonServices,
         private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices) {
         super(resourcesService, cfService, basicModals, resViewModals);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
     }
 
     ngOnChanges(changes: SimpleChanges) {

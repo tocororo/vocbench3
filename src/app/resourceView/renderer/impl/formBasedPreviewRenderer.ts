@@ -1,15 +1,15 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
-import { ARTURIResource, ARTNode } from "../../../models/ARTResources";
+import { ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { PropertyServices } from "../../../services/propertyServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
+import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
-import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
     selector: "form-based-preview-renderer",
@@ -18,7 +18,6 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 export class FormBasedPreviewRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.formBasedPreview;
-    rootProperty: ARTURIResource = null;
     addBtnImgTitle = "";
     addBtnImgSrc: any = null; //do not show the add icon
 
@@ -26,6 +25,10 @@ export class FormBasedPreviewRenderer extends PartitionRenderSingleRoot {
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
         resViewModals: ResViewModalServices) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
     }
 
     /**

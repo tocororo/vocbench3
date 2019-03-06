@@ -4,7 +4,6 @@ import { ImportFromDatasetCatalogModalReturnData } from "../../../config/dataMan
 import { ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { ImportType } from "../../../models/Metadata";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { OWL } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { MetadataServices } from "../../../services/metadataServices";
 import { PropertyServices } from "../../../services/propertyServices";
@@ -22,14 +21,7 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 })
 export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from partitionRendererSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTURIResource> = new EventEmitter<ARTURIResource>();
-
     partition = ResViewPartition.imports;
-    rootProperty: ARTURIResource = OWL.imports;
     addBtnImgTitle = "Add import";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/ontologyProperty_create.png");
 
@@ -37,6 +29,10 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
         resViewModals: ResViewModalServices, private metadataService: MetadataServices, private sharedModals: SharedModalServices) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
     }
 
     /**

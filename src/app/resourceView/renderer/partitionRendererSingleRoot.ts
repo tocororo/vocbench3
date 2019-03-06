@@ -11,6 +11,7 @@ import { CreationModalServices } from "../../widget/modal/creationModal/creation
 import { AddPropertyValueModalReturnData } from "../resViewModals/addPropertyValueModal";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { MultiAddFunction, PartitionRenderer } from "./partitionRenderer";
+import { ResViewUtils } from "../../models/ResourceView";
 
 @Component({
     selector: "partition-renderer-single",
@@ -21,7 +22,6 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
     protected propService: PropertyServices;
     protected browsingModals: BrowsingModalServices;
     protected creationModals: CreationModalServices;
-    
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, 
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
         resViewModalService: ResViewModalServices) {
@@ -38,11 +38,16 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
     /**
      * Root property described in the partition
      */
-    abstract rootProperty: ARTURIResource;
+    protected rootProperty: ARTURIResource;
 
     /**
      * METHODS
      */
+
+    ngOnInit() {
+        super.ngOnInit();
+        this.rootProperty = ResViewUtils.getPartitionRootProperties(this.partition)[0];
+    }
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
         return Observable.of(this.rootProperty);

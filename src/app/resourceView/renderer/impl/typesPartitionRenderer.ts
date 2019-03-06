@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { ARTNode, ARTResource, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { RDF } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { IndividualsServices } from "../../../services/individualsServices";
 import { PropertyServices } from "../../../services/propertyServices";
@@ -12,8 +11,8 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { MultiAddFunction } from "../partitionRenderer";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
     selector: "types-renderer",
@@ -22,7 +21,6 @@ import { MultiAddFunction } from "../partitionRenderer";
 export class TypesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.types;
-    rootProperty: ARTURIResource = RDF.type;
     addBtnImgTitle = "Add a type";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/cls_create.png");
 
@@ -30,6 +28,10 @@ export class TypesPartitionRenderer extends PartitionRenderSingleRoot {
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
         resViewModals: ResViewModalServices, private individualService: IndividualsServices, private eventHandler: VBEventHandler) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {

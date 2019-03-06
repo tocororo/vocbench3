@@ -5,6 +5,7 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { CustomFormsServices } from "../../services/customFormsServices";
+import { ResViewUtils } from "../../models/ResourceView";
 
 @Component({
     selector: "partition-renderer-multi",
@@ -27,16 +28,22 @@ export abstract class PartitionRendererMultiRoot extends PartitionRenderer  {
      * (those properties that has no super properties among the known properties) not all the known properties
      * (e.g. rdfs:label, skos(xl):pref/alt/hiddenLabel for lexicalizations partition)
      */
-    abstract rootProperties: ARTURIResource[];
+    protected rootProperties: ARTURIResource[];
     /**
      * Properties described in the partition for which exists dedicated add/remove services
      * (e.g. rdfs:label, skos(xl):pref/alt/hiddenLabel for lexicalizations partition)
      */
-    abstract knownProperties: ARTURIResource[];
+    protected knownProperties: ARTURIResource[];
 
     /**
      * METHODS
      */
+
+    ngOnInit() {
+        super.ngOnInit();
+        this.rootProperties = ResViewUtils.getPartitionRootProperties(this.partition);
+        this.knownProperties = ResViewUtils.getPartitionKnownProperties(this.partition);
+    }
 
     //used in removePredicateObject to know if the removing object is about a well known property
     isKnownProperty(predicate: ARTURIResource): boolean {

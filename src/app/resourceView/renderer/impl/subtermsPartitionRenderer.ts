@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { Decomp } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { OntoLexLemonServices } from "../../../services/ontoLexLemonServices";
 import { PropertyServices } from "../../../services/propertyServices";
@@ -21,7 +20,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class SubtermsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.subterms;
-    rootProperty: ARTURIResource = Decomp.subterm;
     addBtnImgTitle = "Add a Subterm";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/objectProperty_create.png");
 
@@ -29,6 +27,10 @@ export class SubtermsPartitionRenderer extends PartitionRenderSingleRoot {
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
         resViewModals: ResViewModalServices, private ontolexService: OntoLexLemonServices) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
     }
 
     //add as top concept

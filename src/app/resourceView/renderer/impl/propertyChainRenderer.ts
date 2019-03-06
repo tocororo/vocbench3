@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { ARTBNode, ARTNode, ARTResource, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { OWL } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -19,14 +18,7 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 })
 export class PropertyChainRenderer extends PartitionRenderSingleRoot {
 
-    //inherited from PartitionRenderSingleRoot
-    // @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
-    // @Input() resource:ARTURIResource;
-    // @Output() update = new EventEmitter();//something changed in this partition. Tells to ResView to update
-    // @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
-
     partition = ResViewPartition.subPropertyChains;
-    rootProperty: ARTURIResource = OWL.propertyChainAxiom;
     addBtnImgTitle = "Add a property chain axion";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/property_create.png");
 
@@ -34,6 +26,10 @@ export class PropertyChainRenderer extends PartitionRenderSingleRoot {
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
         resViewModals: ResViewModalServices) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {

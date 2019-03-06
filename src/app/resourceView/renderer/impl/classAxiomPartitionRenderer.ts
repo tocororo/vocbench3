@@ -21,12 +21,6 @@ import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
 export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMultiRoot {
 
     partition = ResViewPartition.classaxioms;
-    rootProperties: ARTURIResource[] = [
-        RDFS.subClassOf, OWL.equivalentClass, OWL.disjointWith,
-        OWL.complementOf, OWL.intersectionOf, OWL.unionOf, OWL.oneOf];
-    knownProperties: ARTURIResource[] = [
-        RDFS.subClassOf, OWL.equivalentClass, OWL.disjointWith,
-        OWL.complementOf, OWL.intersectionOf, OWL.unionOf, OWL.oneOf];
     addBtnImgTitle = "Add a class axiom";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/cls_create.png");
 
@@ -35,6 +29,10 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
         private clsService: ClassesServices, private manchService: ManchesterServices,  
         private propService: PropertyServices, private browsingModals: BrowsingModalServices) {
         super(resourcesService, cfService, basicModals, resViewModals);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
     }
 
     /**

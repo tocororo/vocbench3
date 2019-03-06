@@ -4,6 +4,7 @@ import { OWL, RDFS } from "../../models/Vocabulary";
 import { GraphServices } from "../../services/graphServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
+import { UIUtils } from "../../utils/UIUtils";
 import { AbstractGraph, GraphMode } from "../abstractGraph";
 import { D3Service } from "../d3/d3Services";
 import { GraphUtils } from "../model/GraphUtils";
@@ -27,6 +28,8 @@ export class ModelGraphComponent extends AbstractGraph {
     }
 
     ngOnInit() {
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
+
         this.graphService.getGraphModel().subscribe(
             (model: { property: string, domain: string, range: string }[]) => {
                 let resUris: string[] = [];
@@ -132,6 +135,8 @@ export class ModelGraphComponent extends AbstractGraph {
                         this.graph.nodes = nodes;
                         this.graph.links = links;
                         this.graph.update();
+
+                        UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                     }
                 );
 

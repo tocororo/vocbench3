@@ -24,7 +24,6 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.membersOrdered;
     addManuallyAllowed: boolean = false;
-    rootProperty = SKOS.memberList;
     membersProperty = SKOS.member;
     addBtnImgTitle = "Add member";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/skosCollection_create.png");
@@ -35,6 +34,10 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
         resViewModals: ResViewModalServices, private skosService: SkosServices) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
     }
 
     private selectMember(member: ARTResource) {

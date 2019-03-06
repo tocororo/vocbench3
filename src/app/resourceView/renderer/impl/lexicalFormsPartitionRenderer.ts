@@ -1,18 +1,17 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
-import { ARTResource, ARTURIResource, ARTNode, RDFTypesEnum, ResAttribute } from "../../../models/ARTResources";
-import { OntoLex } from "../../../models/Vocabulary";
+import { ARTNode, ARTResource, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { PropertyServices } from "../../../services/propertyServices";
+import { OntoLex } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { OntoLexLemonServices } from "../../../services/ontoLexLemonServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
-import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { NewResourceWithLiteralCfModalReturnData } from "../../../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal";
+import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
+import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
 
 @Component({
     selector: "lexical-forms-renderer",
@@ -21,8 +20,6 @@ import { NewResourceWithLiteralCfModalReturnData } from "../../../widget/modal/c
 export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
 
     partition = ResViewPartition.lexicalForms;
-    rootProperties: ARTURIResource[] = [OntoLex.otherForm, OntoLex.canonicalForm];
-    knownProperties: ARTURIResource[] = this.rootProperties;
     addBtnImgTitle = "Add a lexical form";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/objectProperty_create.png");
 
@@ -32,6 +29,10 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
         basicModals: BasicModalServices, resViewModals: ResViewModalServices, private creationModals: CreationModalServices,
         private ontolexService: OntoLexLemonServices, private browsingModals: BrowsingModalServices) {
         super(resourcesService, cfService, basicModals, resViewModals);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {

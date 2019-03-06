@@ -2,7 +2,6 @@ import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { SKOS } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -22,7 +21,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.broaders;
-    rootProperty: ARTURIResource = SKOS.broader;
     addBtnImgTitle = "Add broader";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/concept_create.png");
 
@@ -30,6 +28,10 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
         resViewModals: ResViewModalServices, private skosService: SkosServices, private eventHandler: VBEventHandler) {
         super(propService, resourcesService, cfService, basicModals, browsingModals, creationModal, resViewModals);
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
