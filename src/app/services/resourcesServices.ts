@@ -107,8 +107,9 @@ export class ResourcesServices {
      * @param resources 
      */
     getResourcesInfo(resources: ARTURIResource[]): Observable<ARTURIResource[]> {
+        let resourcesIri: string[] = resources.map(r => r.toNT());
         var params: any = {
-            resources: resources
+            resources: JSON.stringify(resourcesIri)
         };
         return this.httpMgr.doPost(this.serviceName, "getResourcesInfo", params).map(
             stResp => {
