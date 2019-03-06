@@ -58,7 +58,7 @@
                                 <td><label>Label:</label></td>
                                 <td>{{selectedElement?.res.getShow()}}</td>
                             </tr>
-                            <tr>
+                            <tr *ngIf="selectedElement?.res.isResource()">
                                 <td><label>Role:</label></td>
                                 <td>{{selectedElement?.res.getRole()}}</td>
                             </tr>
