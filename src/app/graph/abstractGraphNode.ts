@@ -15,7 +15,7 @@ export abstract class AbstractGraphNode {
 
     protected abstract graphMode: GraphMode;
 
-    protected node: Node;
+    abstract node: Node; //in the implementations this should be a @Input() which differs only for the bindingPropertyName
     protected measures: NodeMeasure;
 
     private nodeClass: string;

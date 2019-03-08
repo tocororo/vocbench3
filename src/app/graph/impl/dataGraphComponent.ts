@@ -12,7 +12,7 @@ import { Link } from "../model/Link";
 import { Node } from "../model/Node";
 
 @Component({
-    selector: 'graph-data',
+    selector: 'data-graph',
     templateUrl: "./dataGraphComponent.html",
     changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['../graph.css']

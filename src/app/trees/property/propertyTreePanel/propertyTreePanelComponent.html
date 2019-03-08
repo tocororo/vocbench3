@@ -59,7 +59,7 @@
                         <img [src]="action.icon" class="panelButtonImg"/>
                     </button>
                     <!-- Dropdown button -->
-                    <ng-template [ngIf]="action.subRoles" >
+                    <div *ngIf="action.subRoles" class="btn-group btn-group-xs" role="group">
                         <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" [title]="action.title" [disabled]="isActionDisabled(action)">
                             <img [src]="action.icon" class="panelButtonImg"/>
                         </button>
@@ -75,7 +75,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </ng-template>
+                    </div>
                 </ng-template>
             </ng-template>
         </div>

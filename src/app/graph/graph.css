@@ -115,6 +115,10 @@
     stroke: red !important;
 }
 
+.linkDotted {
+    stroke-dasharray: 3
+}
+
 .annotationPropertyLink { stroke: #ffad00 !important; }
 .datatypePropertyLink { stroke: #329973 !important; }
 .objectPropertyLink { stroke: #336699 !important; }

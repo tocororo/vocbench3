@@ -439,9 +439,10 @@ sparql-component .CodeMirror { height: 35vh !important }
 /* To hide fullscreen button when yasqe is in readonly mode */
 .yasqe-hide-btns .yasqe_buttons { display: none; }
 
-/* Btn groups in panel heading (usually button for tree/list managment) */
-.panel-heading .btn-group-xs>.btn {
-    padding: 1px 3px;
+/* Reduce lateral margin of the buttons that contain img in btn-group in panel heading (usually button for tree/list managment) */
+.panel-heading .btn-group-xs>.btn>img {
+    margin-left: -2px;
+    margin-right: -2px;
 }
 
 /* Button to add/remove elements in ResourceView partitions */

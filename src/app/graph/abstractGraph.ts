@@ -80,6 +80,26 @@ export abstract class AbstractGraph {
         
         var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source); //convert svg source to URI data scheme.
         return url;
+
+
+        // let svgDom: HTMLElement = this.svgElement.nativeElement; 
+        // let clonedSvg: HTMLElement = <HTMLElement>svgDom.cloneNode(true);
+
+        // ExportGraphUtils.processDom(clonedSvg, svgDom);
+
+        // let serializer = new XMLSerializer();
+        // let source = serializer.serializeToString(clonedSvg);
+        // source = source.replace(/<!--[\s\S]*?-->/g, "");//remove comments
+
+        // let img = new Image();
+        // img.src = 'data:image/svg+xml;base64,' + window.btoa(source);
+
+        // var canvas = document.createElement("canvas");
+        // document.body.appendChild(canvas);
+        // canvas.getContext("2d").drawImage(img, 0, 0);
+
+        // var url = canvas.toDataURL("image/png");
+        // return url;
     }
 
 }

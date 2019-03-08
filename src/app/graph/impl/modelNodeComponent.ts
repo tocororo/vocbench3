@@ -12,7 +12,7 @@ import { Node, NodeShape } from '../model/Node';
 })
 export class NodeModelComponent extends AbstractGraphNode {
 
-    @Input() modelNode: Node;
+    @Input('modelNode') node: Node;
 
     graphMode = GraphMode.modelOriented;
 
@@ -41,7 +41,6 @@ export class NodeModelComponent extends AbstractGraphNode {
     }
 
     ngOnInit() {
-        this.node = this.modelNode;
         this.initNode();
         this.nodeShape = this.node.getNodeShape();
         this.isObjectProperty = this.node.res.getRole() == RDFResourceRolesEnum.objectProperty;

@@ -10,7 +10,7 @@ import { Node } from '../model/Node';
 })
 export class DataNodeComponent extends AbstractGraphNode {
 
-    @Input() dataNode: Node;
+    @Input('dataNode') node: Node;
 
     graphMode = GraphMode.dataOriented;
 
@@ -22,7 +22,6 @@ export class DataNodeComponent extends AbstractGraphNode {
     }
 
     ngOnInit() {
-        this.node = this.dataNode;
         this.initNode();
         this.initMeasures();
     }

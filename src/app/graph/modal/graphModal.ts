@@ -21,14 +21,8 @@ export class GraphModalData extends BSModalContext {
 export class GraphModal implements ModalComponent<GraphModalData> {
     context: GraphModalData;
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
-
     constructor(public dialog: DialogRef<GraphModalData>) {
         this.context = dialog.context;
-    }
-
-    ngOnInit() {
-        // UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
     }
 
     ok(event: Event) {

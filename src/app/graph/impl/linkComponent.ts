@@ -16,7 +16,7 @@ export class LinkComponent {
 
     @ViewChild('textEl') textElement: ElementRef;
 
-    private linkClass: string = "";
+    private linkClass: string = "link";
     private arrowClass: string = "";
 
     // private hover: boolean = false;
@@ -29,8 +29,10 @@ export class LinkComponent {
         if (this.link.res != null) {
             //distinguish the type or predicate
             let role: RDFResourceRolesEnum = this.link.res.getRole();
-            this.linkClass = role+"Link";
             this.arrowClass = role+"Arrow";
+        }
+        if (this.link.classAxiom) {
+            this.linkClass += " linkDotted";
         }
     }
 

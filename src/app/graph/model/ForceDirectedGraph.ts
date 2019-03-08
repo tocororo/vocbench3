@@ -1,6 +1,7 @@
 import { EventEmitter } from "@angular/core";
 import * as d3 from "d3";
-import { ARTNode } from "../../models/ARTResources";
+import { line } from "d3";
+import { ARTNode, ARTURIResource } from "../../models/ARTResources";
 import { Size } from "./GraphConstants";
 import { GraphUtils } from "./GraphUtils";
 import { Link } from "./Link";
@@ -131,6 +132,12 @@ export class ForceDirectedGraph {
         linkForce.links(this.links);
     }
 
+    /**
+     * Returns a list of overlapping links (list of links list). 
+     * Overlapping links are those links that connect the same source to the same target or viceversa (A->B or B->A).
+     * This methods is useful in order to set an offset to links that connect the same nodes and to avoid that
+     * multiple svg path are overlapped (and so indistinguishable)
+     */
     private getOverlappingLinkGroups(): Link[][] {
         let linkGroups: Link[][] = [];
         let yetInOverlapping: Link[] = []; //links already considered among the overlapped, useful in order to avoid duplicated links
@@ -156,6 +163,12 @@ export class ForceDirectedGraph {
         return linkGroups;
     }
 
+    /**
+     * Returns a list of looping links (list of links list). 
+     * Looping links are those links where source and target are the same node (A->A)
+     * This methods is useful in order to set an offset to links that create a loop and to avoid
+     * multiple svg path are overlapped (and so indistinguishable)
+     */
     private getLoopingLinkGroups(): Link[][] {
         let linkGroups: Link[][] = [];
         let yetInLooping: Link[] = []; //links already considered among the looping, useful in order to avoid duplicated links
@@ -248,12 +261,28 @@ export class ForceDirectedGraph {
      * Returns the Node contained in the nodes array for the given resource. Null if the resource has no related Node
      * @param res 
      */
-    private getNode(res: ARTNode) {
+    public getNode(res: ARTNode) {
         for (let i = 0; i < this.nodes.length; i++) {
             if (this.nodes[i].res.getNominalValue() == res.getNominalValue()) {
                 return this.nodes[i];
             }
         }
+        return null;
+    }
+
+    /**
+     * Returns the link representing the given triple
+     * @param source 
+     * @param property 
+     * @param target 
+     */
+    public getLink(source: ARTNode, property: ARTURIResource, target: ARTNode): Link {
+        for (let i = 0; i < this.links.length; i++) {
+            let l = this.links[i];
+            if (l.source.res.equals(source) && l.target.res.equals(target) && l.res.equals(property)) {
+                return l;
+            }
+        };
         return null;
     }
 

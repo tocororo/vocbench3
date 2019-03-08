@@ -6,7 +6,7 @@
 </svg:defs>
 
 
-<svg:path [attr.class]="'link'" [ngClass]="{ linkSelected: selected }" style="cursor: pointer;"
+<svg:path [attr.class]="linkClass" [ngClass]="{ 'linkSelected': selected }" style="cursor: pointer;"
     [attr.marker-end]="'url(#arrow' + link.index + ')'" [attr.d]="computePath()"  (click)="onClick($event)">
     <svg:title *ngIf="link.res">{{link.res.toNT()}}</svg:title>
 </svg:path>

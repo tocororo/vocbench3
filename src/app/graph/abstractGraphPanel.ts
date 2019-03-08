@@ -1,37 +1,28 @@
-import { Component, Input, ViewChild } from "@angular/core";
+import { Input } from "@angular/core";
 import { ARTResource } from "../models/ARTResources";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
-import { GraphMode } from "./abstractGraph";
-import { DataGraphComponent } from "./impl/dataGraphComponent";
-import { ModelGraphComponent } from "./impl/modelGraphComponent";
+import { AbstractGraph } from "./abstractGraph";
 import { ForceDirectedGraph, GraphForces } from "./model/ForceDirectedGraph";
 import { Link } from "./model/Link";
 import { Node } from "./model/Node";
 
-@Component({
-    selector: 'graph-panel',
-    templateUrl: "./graphPanel.html"
-})
-export class GraphPanel {
+export abstract class AbstractGraphPanel {
     @Input() graph: ForceDirectedGraph;
-    @Input() mode: GraphMode;
     @Input() rendering: boolean = true;
 
-    @ViewChild(DataGraphComponent) viewChildDataGraph: DataGraphComponent;
-    @ViewChild(ModelGraphComponent) viewChildModelGraph: ModelGraphComponent;
+    abstract viewChildGraph: AbstractGraph;
 
     private selectedElement: Node | Link;
-    private forces: GraphForces = new GraphForces();
+    // private forces: GraphForces = new GraphForces();
+    private forces: GraphForces;
 
-    constructor(private sharedModals: SharedModalServices, private basicModals: BasicModalServices) { }
+    constructor(private sharedModals: SharedModalServices, private basicModals: BasicModalServices) {
+        this.forces = new GraphForces();
+    }
 
     private onForceChange() {
-        if (this.mode == GraphMode.dataOriented) {
-            this.viewChildDataGraph.updateForces(this.forces);
-        } else {
-            this.viewChildModelGraph.updateForces(this.forces);
-        }
+        this.viewChildGraph.updateForces(this.forces);
     }
 
     private isSelectedElementNode() {
@@ -69,14 +60,9 @@ export class GraphPanel {
         this.selectedElement = element;
     }
 
-
     private snapshot() {
-        let exportUrl;
-        if (this.mode == GraphMode.dataOriented) {
-            exportUrl = this.viewChildDataGraph.getExportUrl();
-        } else {
-            exportUrl = this.viewChildModelGraph.getExportUrl();
-        }
+        let exportUrl = this.viewChildGraph.getExportUrl();
         this.basicModals.downloadLink("Export Graph SVG", null, exportUrl, "graph.svg");
     }
+
 }
