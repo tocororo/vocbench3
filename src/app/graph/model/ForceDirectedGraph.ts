@@ -192,24 +192,6 @@ export class ForceDirectedGraph {
         return linkGroups;
     }
 
-    public addChildren(node: Node, children: Node[]) {
-        //Add childrens to the nodes array
-        children.forEach(n => {
-            //add children to the nodes array only if it is not already in
-            if (this.getNode(n.res) == null) {
-                n.x = node.x; //set the same x and y of the parent
-                n.y = node.y;
-                this.nodes.push(n);
-            }
-        });
-        //add the links with node as source and children as targets
-        children.forEach(n => {
-            this.links.push(new Link(node, this.getNode(n.res)));
-        });
-        this.update();
-    }
-
-
     /**
      * Returns true if the given node has outgoing, namely if there are links with that node as source
      * @param node 
@@ -232,6 +214,7 @@ export class ForceDirectedGraph {
      * @param res 
      */
     public getNode(res: ARTNode) {
+        if (res.isLiteral()) return null; //literal node should never be reused, return null
         for (let i = 0; i < this.nodes.length; i++) {
             if (this.nodes[i].res.getNominalValue() == res.getNominalValue()) {
                 return this.nodes[i];

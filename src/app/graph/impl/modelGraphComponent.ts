@@ -69,12 +69,12 @@ export class ModelGraphComponent extends AbstractGraph {
          * there will be multiple owl:Thing nodes. The same Thing node must be reused only when it is linked to the same
          * source/target node (obviously by a different link/predicate)
          */
-        let thingNodes: { thingNode: Node, linkedRes: ARTURIResource }[] = [];
+        let thingNodes: { thingNode: ModelNode, linkedRes: ARTURIResource }[] = [];
 
         //set the nodes and the links according the model
         graphModel.forEach(record => {
             //SOURCE
-            let nodeSource: Node;
+            let nodeSource: ModelNode;
             //special cases: owl:Thing (one node for each linked res) and rdfs:Literal (different node each time)
             if (record.source.equals(OWL.thing)) {
                 //checks if a Thing node has been already initialized for the linked resource (target)
@@ -92,7 +92,7 @@ export class ModelGraphComponent extends AbstractGraph {
                 nodeSource = new ModelNode(record.source);
                 nodes.push(nodeSource);
             } else { //other cases
-                nodeSource = GraphUtils.getNodeOfValue(nodes, record.source); //try to retrieve the same node (if already initialized)
+                nodeSource = <ModelNode>GraphUtils.getNodeOfValue(nodes, record.source); //try to retrieve the same node (if already initialized)
                 if (nodeSource == null) { //if never initialized, initialize it now
                     nodeSource = new ModelNode(record.source);
                     nodes.push(nodeSource);
@@ -100,7 +100,7 @@ export class ModelGraphComponent extends AbstractGraph {
             }
 
             //TARGET
-            let nodeTarget: Node;
+            let nodeTarget: ModelNode;
             //special cases: owl:Thing (one node for each linked res) and rdfs:Literal (different node each time)
             if (record.target.equals(OWL.thing)) {
                 //checks if a Thing node has been already initialized for the linked resource (source)
@@ -118,7 +118,7 @@ export class ModelGraphComponent extends AbstractGraph {
                 nodeTarget = new ModelNode(record.target);
                 nodes.push(nodeTarget);
             } else { //other cases
-                nodeTarget = GraphUtils.getNodeOfValue(nodes, record.target); //try to retrieve the same node (if already initialized)
+                nodeTarget = <ModelNode>GraphUtils.getNodeOfValue(nodes, record.target); //try to retrieve the same node (if already initialized)
                 if (nodeTarget == null) { //if never initialized, initialize it now
                     nodeTarget = new ModelNode(record.target);
                     nodes.push(nodeTarget);
@@ -161,15 +161,15 @@ export class ModelGraphComponent extends AbstractGraph {
             links.forEach(l => {
                 this.graph.links.push(l);
                 //update source and target nodes
-                let sourceNode = this.graph.getNode(l.source.res);
+                let sourceNode = <ModelNode>this.graph.getNode(l.source.res);
                 if (sourceNode == null) { //not in the graph
-                    sourceNode = l.source;
+                    sourceNode = <ModelNode>l.source;
                     this.graph.nodes.push(sourceNode);
                 }
                 
-                let targetNode = this.graph.getNode(l.target.res);
+                let targetNode = <ModelNode>this.graph.getNode(l.target.res);
                 if (targetNode == null) { //not in the graph
-                    targetNode = l.target;
+                    targetNode = <ModelNode>l.target;
                     this.graph.nodes.push(targetNode);
                 }
 
@@ -183,8 +183,8 @@ export class ModelGraphComponent extends AbstractGraph {
                 this.graph.links.splice(this.graph.links.indexOf(removingLink), 1);
 
                 //remove eventual pending nodes
-                let sourceNode = this.graph.getNode(removingLink.source.res);
-                let targetNode = this.graph.getNode(removingLink.target.res);
+                let sourceNode = <ModelNode>this.graph.getNode(removingLink.source.res);
+                let targetNode = <ModelNode>this.graph.getNode(removingLink.target.res);
                 sourceNode.removeOutgoingNode(targetNode);
                 targetNode.removeIncomingNode(sourceNode);
 

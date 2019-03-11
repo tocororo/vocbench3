@@ -4,9 +4,14 @@ import { Size } from "./GraphConstants";
 import { Node, NodeShape } from "./Node";
 
 export class ModelNode extends Node {
+
+    incomingNodes: Node[];
+    outgoingNodes: Node[];
     
     constructor(res: ARTNode) {
         super(res);
+        this.incomingNodes = [];
+        this.outgoingNodes = [];
     }
 
     initNodeShape() {
@@ -74,6 +79,23 @@ export class ModelNode extends Node {
             this.measures = { width: Size.Octagon.base, height: Size.Octagon.height }
         }
 
+    }
+
+    removeIncomingNode(node: Node) {
+        for (let i = this.incomingNodes.length-1; i >= 0; i--) {
+            if (this.incomingNodes[i].res.equals(node.res)) {
+                this.incomingNodes.splice(i, 1);
+                return; //stop looping: the same node could be multiple time as outgoing via different relation
+            }
+        }
+    }
+    removeOutgoingNode(node: Node) {
+        for (let i = this.outgoingNodes.length-1; i >= 0; i--) {
+            if (this.outgoingNodes[i].res.equals(node.res)) {
+                this.outgoingNodes.splice(i, 1);
+                return; //stop looping: the same node could be multiple time as outgoing via different relation
+            }
+        }
     }
     
 

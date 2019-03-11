@@ -80,7 +80,6 @@ export class DataGraphComponent extends AbstractGraph {
                                     }
                                 });
                             }
-                            // this.graph.appendLinks(node, links);
                             this.appendLinks(node, links);
                         },
                         cancel => {}
@@ -96,7 +95,6 @@ export class DataGraphComponent extends AbstractGraph {
                             });
                         });
                     }
-                    // this.graph.appendLinks(node, links);
                     this.appendLinks(node, links);
                 }
             }
@@ -121,9 +119,8 @@ export class DataGraphComponent extends AbstractGraph {
             } else { //otherwise replaces the target node in the link with the one already existing in the graph
                 link.target = targetNode;
             }
-            //add the sourceNode to the incomingNodes of targetNode, targetNode to the outgoingNodes of sourceNode
-            sourceNode.outgoingNodes.push(targetNode);
-            targetNode.incomingNodes.push(sourceNode);
+            //add the sourceNode to the openBy nodes of targetNode
+            (<DataNode>targetNode).openBy.push(sourceNode);
 
             this.graph.links.push(link);
         });
@@ -147,13 +144,13 @@ export class DataGraphComponent extends AbstractGraph {
         if (linksFromNode.length > 0) {
             //removes links with the node as source
             linksFromNode.forEach(l => {
-                //remove the source node from the incomingNodes of the target and the target from the outgoing of the source
-                l.target.removeIncomingNode(l.source);
-                l.source.removeOutgoingNode(l.target);
+                //remove the source node from the openBy nodes of the target
+                let targetDataNode = <DataNode>l.target;
+                targetDataNode.removeOpenByNode(l.source);
                 //remove the link
                 this.graph.links.splice(this.graph.links.indexOf(l), 1);
-                //if now the incomingNodes list of the target is empty, it means that the node would be detached from the graph
-                if (l.target.incomingNodes.length == 0) {
+                //if now the openBy list of the target is empty, it means that the node would be detached from the graph
+                if (targetDataNode.isPending()) {
                     this.graph.nodes.splice(this.graph.nodes.indexOf(l.target), 1); //remove the node from the graph
                     recursivelyClosingNodes.push(l.target); //add to the list of nodes to recursively close
                 }
@@ -166,12 +163,9 @@ export class DataGraphComponent extends AbstractGraph {
     }
 
 
-
-
-    protected onNodeDblClicked(node: Node) {
+    protected onNodeDblClicked(node: DataNode) {
         if (!this.graph.dynamic) return; //if graph is not dynamic, do nothing
         if (this.graph.hasOutgoingLink(node)) {
-            // this.graph.closeNode(node);
             this.closeNode(node);
         } else {
             this.expandNode(node);
