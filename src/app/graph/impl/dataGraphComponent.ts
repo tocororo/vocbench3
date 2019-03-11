@@ -39,7 +39,7 @@ export class DataGraphComponent extends AbstractGraph {
         super(d3Service, elementRef, ref);
     }
 
-    protected expandNode(node: Node) {
+    private expandNode(node: Node) {
         if (!node.res.isResource()) {
             return;
         }
@@ -80,7 +80,8 @@ export class DataGraphComponent extends AbstractGraph {
                                     }
                                 });
                             }
-                            this.graph.appendLinks(node, links);
+                            // this.graph.appendLinks(node, links);
+                            this.appendLinks(node, links);
                         },
                         cancel => {}
                     );
@@ -95,16 +96,83 @@ export class DataGraphComponent extends AbstractGraph {
                             });
                         });
                     }
-                    this.graph.appendLinks(node, links);
+                    // this.graph.appendLinks(node, links);
+                    this.appendLinks(node, links);
                 }
             }
         );
     }
 
+    /**
+     * Append the links to the given node. If the target of the links doesn't exist yet, it is created.
+     * @param sourceNode 
+     * @param links 
+     */
+    private appendLinks(sourceNode: Node, links: Link[]) {
+        links.forEach(link => {
+            let targetNode = this.graph.getNode(link.target.res);
+            //add the target node to the nodes array only if it is not already in (it prevents the creation of multiple nodes for the same resource)
+            if (targetNode == null) {
+                targetNode = link.target;
+                //set the same x and y of the parent
+                targetNode.x = sourceNode.x;
+                targetNode.y = sourceNode.y;
+                this.graph.nodes.push(link.target)
+            } else { //otherwise replaces the target node in the link with the one already existing in the graph
+                link.target = targetNode;
+            }
+            //add the sourceNode to the incomingNodes of targetNode, targetNode to the outgoingNodes of sourceNode
+            sourceNode.outgoingNodes.push(targetNode);
+            targetNode.incomingNodes.push(sourceNode);
+
+            this.graph.links.push(link);
+        });
+
+        this.graph.update();
+    }
+
+
+    private closeNode(node: Node) {
+        this.deleteSubtree(node);
+        this.graph.update();
+    }
+
+    /**
+     * Delete the subtree rooted on the given node. Useful when closing a node.
+     * @param node 
+     */
+    private deleteSubtree(node: Node) {
+        let recursivelyClosingNodes: Node[] = []; //nodes target in the removed links that needs to be closed in turn
+        let linksFromNode: Link[] = this.graph.getLinksFrom(node);
+        if (linksFromNode.length > 0) {
+            //removes links with the node as source
+            linksFromNode.forEach(l => {
+                //remove the source node from the incomingNodes of the target and the target from the outgoing of the source
+                l.target.removeIncomingNode(l.source);
+                l.source.removeOutgoingNode(l.target);
+                //remove the link
+                this.graph.links.splice(this.graph.links.indexOf(l), 1);
+                //if now the incomingNodes list of the target is empty, it means that the node would be detached from the graph
+                if (l.target.incomingNodes.length == 0) {
+                    this.graph.nodes.splice(this.graph.nodes.indexOf(l.target), 1); //remove the node from the graph
+                    recursivelyClosingNodes.push(l.target); //add to the list of nodes to recursively close
+                }
+            })
+            //call recursively the deletion of the subtree for the deleted node)
+            recursivelyClosingNodes.forEach(n => {
+                this.deleteSubtree(n);
+            });
+        }
+    }
+
+
+
+
     protected onNodeDblClicked(node: Node) {
         if (!this.graph.dynamic) return; //if graph is not dynamic, do nothing
         if (this.graph.hasOutgoingLink(node)) {
-            this.graph.closeNode(node);
+            // this.graph.closeNode(node);
+            this.closeNode(node);
         } else {
             this.expandNode(node);
         }

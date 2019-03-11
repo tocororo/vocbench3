@@ -88,7 +88,7 @@ export class GraphModalServices {
 
     openDataGraph(resource: ARTURIResource) {
         let rootNode: Node = new DataNode(resource);
-        rootNode.openBy.push(rootNode); //add itseld to the openBy list, so it cannot be close in case of loop.
+        rootNode.incomingNodes.push(rootNode); //add itseld to the incomingNodes list, so it cannot be close in case of loop.
         let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph([rootNode], []);
         var modalData = new GraphModalData(graph, GraphMode.dataOriented);
         const builder = new BSModalContextBuilder<GraphModalData>(

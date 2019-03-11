@@ -1,6 +1,5 @@
 import { EventEmitter } from "@angular/core";
 import * as d3 from "d3";
-import { line } from "d3";
 import { ARTNode, ARTURIResource } from "../../models/ARTResources";
 import { Size } from "./GraphConstants";
 import { GraphUtils } from "./GraphUtils";
@@ -12,7 +11,7 @@ export class ForceDirectedGraph {
     public simulation: d3.Simulation<any, any>;
 
     public options: GraphOptions;
-    public dynamic: boolean = true;
+    public dynamic: boolean = true; //useful to know if the graph should react to double click on nodes (e.g. graph for graph query result is not dynamic)
 
     public nodes: Node[] = [];
     public links: Link[] = [];
@@ -210,35 +209,6 @@ export class ForceDirectedGraph {
         this.update();
     }
 
-    /**
-     * Append the links to the given nodes. If the target of the links doesn't exist yet, it is created.
-     * @param sourceNode 
-     * @param links 
-     */
-    public appendLinks(sourceNode: Node, links: Link[]) {
-        links.forEach(link => {
-            let targetNode = this.getNode(link.target.res);
-            //add linkedNodes to the nodes array only if it is not already in
-            if (targetNode == null) {
-                //set the same x and y of the parent
-                link.target.x = sourceNode.x;
-                link.target.y = sourceNode.y;
-                this.nodes.push(link.target);
-            } else {
-                link.target = targetNode;
-            }
-            //add the source node to the openBy list of the target
-            link.target.openBy.push(link.source);
-
-            this.links.push(link);
-        });
-        this.update();
-    }
-
-    public closeNode(node: Node) {
-        this.deleteSubtree(node);
-        this.update();
-    }
 
     /**
      * Returns true if the given node has outgoing, namely if there are links with that node as source
@@ -286,53 +256,25 @@ export class ForceDirectedGraph {
         return null;
     }
 
-    private getLinksFrom(node: Node) {
+    public getLinksFrom(node: Node) {
         let links: Link[] = [];
         this.links.forEach(l => {
-            if (l.source.res.getNominalValue() == node.res.getNominalValue()) {
+            if (l.source.res.equals(node.res)) {
                 links.push(l);
             }
         });
         return links;
     }
 
-    private getLinksTo(node: Node) {
+    public getLinksTo(node: Node) {
         let links: Link[] = [];
         this.links.forEach(l => {
-            if (l.target.res.getNominalValue() == node.res.getNominalValue()) {
+            if (l.target.res.equals(node.res)) {
                 links.push(l);
             }
         });
         return links;
     }
-
-    /**
-     * Delete the subtree rooted on the given node.
-     * @param node 
-     */
-    private deleteSubtree(node: Node) {
-        let recursivelyClosingNodes: Node[] = []; //nodes target in the removed links that needs to be closed in turn
-        let linksFromNode: Link[] = this.getLinksFrom(node);
-        if (linksFromNode.length > 0) {
-            //removes links with the node as source
-            linksFromNode.forEach(l => {
-                //remove the source node from the openBy list
-                l.target.openBy.splice(l.target.openBy.indexOf(l.source), 1);
-                //remove the link
-                this.links.splice(this.links.indexOf(l), 1);
-                //if now the openBy list is empty, it means that the node would be dangling, then...
-                if (l.target.openBy.length == 0) {
-                    this.nodes.splice(this.nodes.indexOf(l.target), 1); //remove the node
-                    recursivelyClosingNodes.push(l.target); //add to the list of nodes to recursively close
-                }
-            })
-            //call recursively the deletion of the subtree for the deleted node)
-            recursivelyClosingNodes.forEach(n => {
-                this.deleteSubtree(n);
-            });
-        }
-    }
-
 
 }
 

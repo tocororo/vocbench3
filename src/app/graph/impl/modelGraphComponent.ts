@@ -159,19 +159,16 @@ export class ModelGraphComponent extends AbstractGraph {
         if (updatedFilter.show) { //from hide to show
             //add the links to the graph
             links.forEach(l => {
-                console.log("add link", l.source.res.getShow(), l.res.getShow(), l.target.res.getShow())
                 this.graph.links.push(l);
                 //update source and target nodes
                 let sourceNode = this.graph.getNode(l.source.res);
                 if (sourceNode == null) { //not in the graph
-                    console.log("source not in graph, adding", l.source.res.getShow());
                     sourceNode = l.source;
                     this.graph.nodes.push(sourceNode);
                 }
                 
                 let targetNode = this.graph.getNode(l.target.res);
                 if (targetNode == null) { //not in the graph
-                    console.log("target not in graph, adding", l.target.res.getShow());
                     targetNode = l.target;
                     this.graph.nodes.push(targetNode);
                 }
@@ -182,7 +179,6 @@ export class ModelGraphComponent extends AbstractGraph {
         } else { //from show to hide
             //remove the links from the graph
             links.forEach(l => {
-                console.log("remove link", l.source.res.getShow(), l.res.getShow(), l.target.res.getShow())
                 let removingLink = this.graph.getLink(l.source.res, l.res, l.target.res);
                 this.graph.links.splice(this.graph.links.indexOf(removingLink), 1);
 
@@ -193,11 +189,9 @@ export class ModelGraphComponent extends AbstractGraph {
                 targetNode.removeIncomingNode(sourceNode);
 
                 if (sourceNode.incomingNodes.length == 0 && sourceNode.outgoingNodes.length == 0) {
-                    console.log("remove node", sourceNode.res.getShow())
                     this.graph.nodes.splice(this.graph.nodes.indexOf(sourceNode), 1);
                 }
                 if (targetNode.incomingNodes.length == 0 && targetNode.outgoingNodes.length == 0) {
-                    console.log("remove node", targetNode.res.getShow())
                     this.graph.nodes.splice(this.graph.nodes.indexOf(targetNode), 1);
                 }
             });

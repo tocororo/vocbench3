@@ -11,7 +11,6 @@ export abstract class Node implements d3.SimulationNodeDatum {
     fy?: number | null;
 
     res: ARTNode;
-    openBy: Node[]; //list of nodes that have opened the current one (useful for handling the node closing)
     fixed: boolean = false;
 
     incomingNodes: Node[];
@@ -22,8 +21,6 @@ export abstract class Node implements d3.SimulationNodeDatum {
     
     constructor(res: ARTNode) {
         this.res = res;
-        this.openBy = [];
-
         this.incomingNodes = [];
         this.outgoingNodes = [];
     }
