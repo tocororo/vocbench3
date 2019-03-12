@@ -1,9 +1,6 @@
 import { Component } from "@angular/core";
-import { UIUtils } from "../../utils/UIUtils";
-import { VBProperties } from "../../utils/VBProperties";
 import { Language } from "../../models/LanguagesCountries";
-import { Properties } from "../../models/Properties";
-import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
+import { VBProperties } from "../../utils/VBProperties";
 
 @Component({
     selector: "lang-rendering-pref",
@@ -16,7 +13,7 @@ export class LanguageRenderingComponent {
     private renderingLanguages: LanguageItem[] = [];
     private activeLangs: number = 0;
 
-    constructor(private properties: VBProperties, private prefSettingService: PreferencesSettingsServices) { }
+    constructor(private properties: VBProperties) { }
 
     ngOnInit() {
         var projectLanguages: Language[] = this.properties.getProjectLanguages();
@@ -88,19 +85,14 @@ export class LanguageRenderingComponent {
             return 0;
         });
 
-        for (var i = 0; i <activeLangs.length; i++) {
-            preferenceLangs.push(activeLangs[i].lang.tag);
-        }
-        //no language checked
-        if (preferenceLangs.length == 0) {
+        if (activeLangs.length == 0) { //no language checked
             preferenceLangs = ["*"];
+        } else {
+            activeLangs.forEach(l => {
+                preferenceLangs.push(l.lang.tag);
+            })
         }
-        // console.log("updating pref", preferenceLangs);
-        this.prefSettingService.setLanguages(preferenceLangs).subscribe(
-            stResp => {
-                this.properties.setLanguagesPreference(preferenceLangs);
-            }
-        )
+        this.properties.setLanguagesPreference(preferenceLangs);
     }
     
     private changePositionOrder() {

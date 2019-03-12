@@ -1,0 +1,42 @@
+<div class="subPanel">
+    <div class="subPanel-heading">
+        <label style="flex: 1">Resource view mode:</label>
+    </div>
+    <div class="subPanel-body">
+        <div class="hbox">
+            <div class="vbox" style="margin-right: 8px;">
+                <select class="form-control input-sm" style="margin-bottom: 5px;" [(ngModel)]="resViewMode" (ngModelChange)="onResViewModeChanged()">
+                    <option value="splitted">Splitted</option>
+                    <option value="tabbed">Tabbed</option>
+                </select>
+                <div class="alert alert-info" role="alert">
+                    <span *ngIf="resViewMode == 'tabbed'">
+                        The Resource View is shown in a tab and multiple Resource View can be open in different tabs.
+                    </span>
+                    <span *ngIf="resViewMode == 'splitted'">
+                        The Resource View panel is splitted in two: on the left there is a main Resource View which describes
+                        (and is synched with) the resource selected in the tree/list; on the right there is an optional
+                        secondary Resource View which describes a resource selected (double click) from the main Resource View.
+                    </span>
+                </div>
+                <div *ngIf="resViewMode == 'tabbed'">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" [(ngModel)]="resViewTabSync" (ngModelChange)="onTabSyncChange()">
+                            Keep selected tab synchronized with tree/list
+                            <span class="glyphicon glyphicon-exclamation-sign"
+                                title="It is recommended to disable this option. The synchronization between tabs and tree/list could slow down the navigation of the ResourceView tabbed panel.">
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+            <div>
+                <img *ngIf="resViewMode == 'tabbed'" src="../../assets/images/res_view_tabbed.jpg">
+                <img *ngIf="resViewMode == 'splitted'" src="../../assets/images/res_view_splitted.jpg">
+            </div>
+        </div>
+            
+    </div>
+</div>

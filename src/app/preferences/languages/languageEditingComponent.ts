@@ -1,10 +1,7 @@
 import { Component } from "@angular/core";
-import { UIUtils } from "../../utils/UIUtils";
-import { VBProperties } from "../../utils/VBProperties";
-import { VBContext } from "../../utils/VBContext";
 import { Language, Languages } from "../../models/LanguagesCountries";
-import { Properties } from "../../models/Properties";
-import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
+import { VBContext } from "../../utils/VBContext";
+import { VBProperties } from "../../utils/VBProperties";
 
 
 @Component({
@@ -16,7 +13,7 @@ export class LanguageEditingComponent {
     private languages: Language[] = [];
     private editingLang: Language;
 
-    constructor(private properties: VBProperties, private prefSettingService: PreferencesSettingsServices) { }
+    constructor(private properties: VBProperties) { }
 
     ngOnInit() {
         var userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();

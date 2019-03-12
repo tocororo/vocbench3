@@ -1,23 +1,29 @@
 <div class="subPanel vbox">
     <div class="subPanel-heading">
-        <label style="flex: 1">Rendering Languages:</label>
+        <label style="flex: 1">Value-filter Languages:</label>
         <span *ngIf="getActiveLanguageItems().length == 0" class="greyText" style="margin-right: 5px;">
             <span class="glyphicon glyphicon-warning-sign"></span>
             No language selected implicitly means all languages
         </span>
-        <div class="btn-group btn-group-xs">
-            <button class="btn btn-default" (click)="changeAllLangStatus(true)" title="Check all">
-                <span class="glyphicon glyphicon-check"></span>
-            </button>
-            <button class="btn btn-default" (click)="changeAllLangStatus(false)" title="Uncheck all">
-                <span class="glyphicon glyphicon-unchecked"></span>
+        <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" (click)="changeAllLangStatus(true)" title="Check all">
+                    <span class="glyphicon glyphicon-check"></span>
+                </button>
+                <button class="btn btn-default" (click)="changeAllLangStatus(false)" title="Uncheck all">
+                    <span class="glyphicon glyphicon-unchecked"></span>
+                </button>
+            </div>
+            <button class="btn btn-xs btn-default" (click)="toggleFilter()" title="Enable filter" [ngClass]="{ active: filterEnabled }">
+                <span class="glyphicon glyphicon-filter"></span>
             </button>
         </div>
     </div>
     <div class="subPanel-body vbox">
 
         <div class="alert alert-info" role="alert" style="margin-bottom: 5px;">
-            Select the languages (and their order) used for rendering the resources
+            Select the languages that will be shown when filtering literal values in resource descriptions.
+            Toggle the filter in order to hide the values with the unselected languages.
         </div>
         
         <div class="table-responsive">
@@ -25,20 +31,11 @@
                 <colgroup>
                     <col style="width: 1%">
                     <col style="width: 1%">
-                    <col style="width: 1%">
                     <col>
                 </colgroup>
                 <thead>
                     <tr>
                         <th class="text-center" style="padding: 0px 8px;">Active</th>
-                        <th class="text-center" style="padding: 0px 8px;" nowrap>
-                            Position
-                            <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="changePositionOrder()">
-                                <span class="glyphicon glyphicon-sort-by-order" *ngSwitchCase="'position_ascending'" ></span>
-                                <span class="glyphicon glyphicon-sort-by-order-alt" *ngSwitchCase="'position_descending'"></span>
-                                <span class="glyphicon glyphicon-sort" *ngSwitchDefault></span>
-                            </button>
-                        </th>
                         <th class="text-center" style="padding: 0px 8px;" nowrap>
                             ISO code
                             <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="changeIsocodeOrder()">
@@ -58,13 +55,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let l of renderingLanguages">
+                    <tr *ngFor="let l of filterLanguages">
                         <td class="text-center">
                             <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.active" (ngModelChange)="onActiveChange(l)">
-                        </td>
-                        <td>
-                            <input #pos type="number" style="width: 100%; text-align: right" [ngModel]="l.position" [disabled]="!l.active"
-                                (input)="onPositionChange(l, pos.value);" onkeydown="return false" min="1" [max]="countActiveLangs()">
                         </td>
                         <td class="text-center" nowrap>{{l.lang.tag}}</td>
                         <td class="text-center">

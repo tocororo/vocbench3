@@ -2,7 +2,6 @@ import { Component, ViewChild } from "@angular/core";
 import { GraphClassAxiomFilter } from "../../models/Graphs";
 import { OWL, RDFS } from "../../models/Vocabulary";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractGraphPanel } from "../abstractGraphPanel";
 import { ModelGraphComponent } from "./modelGraphComponent";
 
@@ -21,8 +20,8 @@ export class ModelGraphPanel extends AbstractGraphPanel {
         { property: RDFS.subClassOf, show: true }
     ];
     
-    constructor(sharedModals: SharedModalServices, basicModals: BasicModalServices) {
-        super(sharedModals, basicModals);
+    constructor(basicModals: BasicModalServices) {
+        super(basicModals);
     }
 
     private onFilterChange(filter: GraphClassAxiomFilter) {

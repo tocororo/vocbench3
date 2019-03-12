@@ -11,6 +11,9 @@
                     <button class="btn btn-default" [ngClass]="{active: activePanel == 'editing'}" (click)="activePanel = 'editing'">
                         Editing
                     </button>
+                    <button class="btn btn-default" [ngClass]="{active: activePanel == 'valuefilter'}" (click)="activePanel = 'valuefilter'">
+                        Value-filter
+                    </button>
                 </div>
             </div>
         </div>
@@ -18,5 +21,6 @@
     <div class="subPanel-body vbox">
         <lang-rendering-pref *ngIf="activePanel == 'rendering'" class="vbox"></lang-rendering-pref>
         <lang-editing-pref *ngIf="activePanel == 'editing'" class="vbox"></lang-editing-pref>
+        <lang-value-filter-pref *ngIf="activePanel == 'valuefilter'" class="vbox"></lang-value-filter-pref>
     </div>
 </div>

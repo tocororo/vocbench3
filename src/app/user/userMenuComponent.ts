@@ -69,7 +69,13 @@ export class UserMenuComponent {
     }
 
     private initBackgroundImgSrc() {
-        this.userAvatarUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.currentUser.getAvatarUrl());
+        let avatarUrl = this.currentUser.getAvatarUrl();
+        if (avatarUrl != null) {
+            this.userAvatarUrl = this.sanitizer.bypassSecurityTrustResourceUrl(avatarUrl);
+        } else {
+            this.setFallbackImage();
+        }
+        
     }
 
     private setFallbackImage() {

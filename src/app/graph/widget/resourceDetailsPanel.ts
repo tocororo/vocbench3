@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { ARTNode } from '../../models/ARTResources';
+import { ARTNode, ARTResource } from '../../models/ARTResources';
+import { SharedModalServices } from '../../widget/modal/sharedModal/sharedModalServices';
 
 @Component({
     selector: 'resource-details-panel',
@@ -9,6 +10,10 @@ export class ResourceDetailsPanel {
 
     @Input() resource: ARTNode;
 
-    constructor() { }
+    constructor(private sharedModals: SharedModalServices) { }
+
+    private showResourceView() {
+        this.sharedModals.openResourceView(<ARTResource>this.resource, false);
+    }
 
 }

@@ -4,7 +4,7 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ART
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
 import { ProjectTableColumnStruct } from '../models/Project';
-import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, Properties, ResourceViewMode, SearchMode, SearchSettings } from '../models/Properties';
+import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, ValueFilterLanguages, LexEntryVisualizationMode, LexicalEntryListPreference, Properties, ResourceViewMode, SearchMode, SearchSettings } from '../models/Properties';
 import { OWL, RDFS, SKOS } from '../models/Vocabulary';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { Cookie } from '../utils/Cookie';
@@ -21,6 +21,7 @@ export class VBProperties {
     private projectLanguagesPreference: string[] = []; //languages that user has assigned for project (and ordered according his preferences)
 
     private editingLanguage: string; //default editing language
+    private filterValueLang: ValueFilterLanguages; //languages visible in resource description (e.g. in ResourceView, Graph,...)
 
     private activeSchemes: ARTURIResource[] = [];
     private activeLexicon: ARTURIResource;
@@ -76,7 +77,7 @@ export class VBProperties {
             Properties.pref_concept_tree_base_broader_prop, Properties.pref_concept_tree_broader_props, Properties.pref_concept_tree_narrower_props,
             Properties.pref_concept_tree_include_subprops, Properties.pref_concept_tree_sync_inverse, Properties.pref_concept_tree_visualization,
             Properties.pref_lex_entry_list_visualization, Properties.pref_lex_entry_list_index_lenght,
-            Properties.pref_editing_language
+            Properties.pref_editing_language, Properties.pref_filter_value_languages
         ];
         this.prefService.getPUSettings(properties).subscribe(
             prefs => {
@@ -108,7 +109,15 @@ export class VBProperties {
                 this.projectThemeId = prefs[Properties.pref_project_theme];
                 UIUtils.changeNavbarTheme(this.projectThemeId);
 
+                //languages 
                 this.editingLanguage = prefs[Properties.pref_editing_language];
+
+                let filterValueLangPref = prefs[Properties.pref_filter_value_languages];
+                if (filterValueLangPref == null) {
+                    this.filterValueLang = { languages: ["*"], enabled: false }; //default
+                } else {
+                    this.filterValueLang = JSON.parse(filterValueLangPref);
+                }
 
                 //cls tree preferences
                 this.classTreePreferences = { 
@@ -254,6 +263,7 @@ export class VBProperties {
         return this.projectLanguagesPreference;
     }
     setLanguagesPreference(languages: string[]) {
+        this.prefService.setLanguages(languages).subscribe();
         this.projectLanguagesPreference = languages;
     }
 
@@ -263,6 +273,14 @@ export class VBProperties {
     setEditingLanguage(lang: string) {
         this.prefService.setPUSetting(Properties.pref_editing_language, lang).subscribe();
         this.editingLanguage = lang;
+    }
+
+    getValueFilterLanguages(): ValueFilterLanguages {
+        return this.filterValueLang;
+    }
+    setValueFilterLanguages(filter: ValueFilterLanguages) {
+        this.prefService.setPUSetting(Properties.pref_filter_value_languages, JSON.stringify(filter)).subscribe();
+        this.filterValueLang = filter;
     }
 
     //class tree settings

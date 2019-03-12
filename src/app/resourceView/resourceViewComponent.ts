@@ -47,6 +47,8 @@ export class ResourceViewComponent {
 
     private rendering: boolean = true; //tells if the resource shown inside the partitions should be rendered
 
+    private valueFilterLangEnabled: boolean;
+
     private unknownHost: boolean = false; //tells if the resource view of the current resource failed to be fetched due to a UnknownHostException
     private unexistingResource: boolean = false; //tells if the requested resource does not exist (empty description)
 
@@ -104,13 +106,15 @@ export class ResourceViewComponent {
             (resource: ARTResource) => this.onResourceDeprecated(resource)
         ));
         this.eventSubscriptions.push(eventHandler.collaborationSystemStatusChanged.subscribe(
-            (data: any) => this.onCollaborationSystemStatusChange()
+            () => this.onCollaborationSystemStatusChange()
         ));
     }
 
     ngOnChanges(changes: SimpleChanges) {
         this.showInferred = this.vbProp.getInferenceInResourceView();
         this.rendering = this.vbProp.getRenderingInResourceView();
+        this.valueFilterLangEnabled = this.vbProp.getValueFilterLanguages().enabled;
+
         if (changes['resource'] && changes['resource'].currentValue) {
             //if not the first change, avoid to refresh res view if resource is not changed
             if (!changes['resource'].firstChange) { 
@@ -243,119 +247,119 @@ export class ResourceViewComponent {
         var broadersPartition: any = this.resViewResponse[ResViewPartition.broaders];
         if (broadersPartition != null) {
             this.broadersColl = Deserializer.createPredicateObjectsList(broadersPartition);
-            this.filterInferredFromPredObjList(this.broadersColl);
+            this.filterPredObjList(this.broadersColl);
             this.sortObjects(this.broadersColl);
         }
 
         var classAxiomsPartition: any = this.resViewResponse[ResViewPartition.classaxioms];
         if (classAxiomsPartition != null) {
             this.classAxiomColl = Deserializer.createPredicateObjectsList(classAxiomsPartition);
-            this.filterInferredFromPredObjList(this.classAxiomColl);
+            this.filterPredObjList(this.classAxiomColl);
             this.sortObjects(this.classAxiomColl);
         }
 
         var constituentsPartition: any = this.resViewResponse[ResViewPartition.constituents];
         if (constituentsPartition != null) {
             this.constituentsColl = Deserializer.createPredicateObjectsList(constituentsPartition);
-            this.filterInferredFromPredObjList(this.constituentsColl);
+            this.filterPredObjList(this.constituentsColl);
             // this.sortObjects(this.constituentsColl); ordered server-side
         }
 
         var denotationsPartition: any = this.resViewResponse[ResViewPartition.denotations];
         if (denotationsPartition != null) {
             this.denotationsColl = Deserializer.createPredicateObjectsList(denotationsPartition);
-            this.filterInferredFromPredObjList(this.denotationsColl);
+            this.filterPredObjList(this.denotationsColl);
             this.sortObjects(this.denotationsColl);
         }
 
         var disjointPropertiesPartition: any = this.resViewResponse[ResViewPartition.disjointProperties];
         if (disjointPropertiesPartition != null) {
             this.disjointPropertiesColl = Deserializer.createPredicateObjectsList(disjointPropertiesPartition);
-            this.filterInferredFromPredObjList(this.disjointPropertiesColl);
+            this.filterPredObjList(this.disjointPropertiesColl);
             this.sortObjects(this.disjointPropertiesColl);
         }
 
         var domainsPartition: any = this.resViewResponse[ResViewPartition.domains];
         if (domainsPartition != null) {
             this.domainsColl = Deserializer.createPredicateObjectsList(domainsPartition);
-            this.filterInferredFromPredObjList(this.domainsColl);
+            this.filterPredObjList(this.domainsColl);
             this.sortObjects(this.domainsColl);
         }
 
         var equivalentPropertiesPartition: any = this.resViewResponse[ResViewPartition.equivalentProperties];
         if (equivalentPropertiesPartition != null) {
             this.equivalentPropertiesColl = Deserializer.createPredicateObjectsList(equivalentPropertiesPartition);
-            this.filterInferredFromPredObjList(this.equivalentPropertiesColl);
+            this.filterPredObjList(this.equivalentPropertiesColl);
             this.sortObjects(this.equivalentPropertiesColl);
         }
 
         var evokedLexicalConceptsPartition: any = this.resViewResponse[ResViewPartition.evokedLexicalConcepts];
         if (evokedLexicalConceptsPartition != null) {
             this.evokedLexicalConceptsColl = Deserializer.createPredicateObjectsList(evokedLexicalConceptsPartition);
-            this.filterInferredFromPredObjList(this.evokedLexicalConceptsColl);
+            this.filterPredObjList(this.evokedLexicalConceptsColl);
             this.sortObjects(this.evokedLexicalConceptsColl);
         }
 
         var facetsPartition: any = this.resViewResponse[ResViewPartition.facets];
         if (facetsPartition != null) {
             this.parseFacetsPartition(facetsPartition);
-            this.filterInferredFromPredObjList(this.inverseofColl);
+            this.filterPredObjList(this.inverseofColl);
             this.sortObjects(this.inverseofColl);
         }
 
         var formBasedPreviewPartition: any = this.resViewResponse[ResViewPartition.formBasedPreview];
         if (formBasedPreviewPartition != null) {
             this.formBasedPreviewColl = Deserializer.createPredicateObjectsList(formBasedPreviewPartition);
-            this.filterInferredFromPredObjList(this.formBasedPreviewColl);
+            this.filterPredObjList(this.formBasedPreviewColl);
             this.sortObjects(this.formBasedPreviewColl);
         }
 
         var formRepresentationsPartition: any = this.resViewResponse[ResViewPartition.formRepresentations];
         if (formRepresentationsPartition != null) {
             this.formRepresentationsColl = Deserializer.createPredicateObjectsList(formRepresentationsPartition);
-            this.filterInferredFromPredObjList(this.formRepresentationsColl);
+            this.filterPredObjList(this.formRepresentationsColl);
             this.sortObjects(this.formRepresentationsColl);
         }
 
         var importsPartition: any = this.resViewResponse[ResViewPartition.imports];
         if (importsPartition != null) {
             this.importsColl = Deserializer.createPredicateObjectsList(importsPartition);
-            this.filterInferredFromPredObjList(this.importsColl);
+            this.filterPredObjList(this.importsColl);
             this.sortObjects(this.importsColl);
         }
 
         var labelRelationsPartition: any = this.resViewResponse[ResViewPartition.labelRelations];
         if (labelRelationsPartition != null) {
             this.labelRelationsColl = Deserializer.createPredicateObjectsList(labelRelationsPartition);
-            this.filterInferredFromPredObjList(this.labelRelationsColl);
+            this.filterPredObjList(this.labelRelationsColl);
             this.sortObjects(this.labelRelationsColl);
         }
 
         var lexicalizationsPartition: any = this.resViewResponse[ResViewPartition.lexicalizations];
         if (lexicalizationsPartition != null) {
             this.lexicalizationsColl = Deserializer.createPredicateObjectsList(lexicalizationsPartition);
-            this.filterInferredFromPredObjList(this.lexicalizationsColl);
+            this.filterPredObjList(this.lexicalizationsColl);
             //do not sort (the sort is performed in the partition according the language)
         }
 
         var lexicalFormsPartition: any = this.resViewResponse[ResViewPartition.lexicalForms];
         if (lexicalFormsPartition != null) {
             this.lexicalFormsColl = Deserializer.createPredicateObjectsList(lexicalFormsPartition);
-            this.filterInferredFromPredObjList(this.lexicalFormsColl);
+            this.filterPredObjList(this.lexicalFormsColl);
             this.sortObjects(this.lexicalFormsColl);
         }
 
         var lexicalSensesPartition: any = this.resViewResponse[ResViewPartition.lexicalSenses];
         if (lexicalFormsPartition != null) {
             this.lexicalSensesColl = Deserializer.createPredicateObjectsList(lexicalSensesPartition);
-            this.filterInferredFromPredObjList(this.lexicalSensesColl);
+            this.filterPredObjList(this.lexicalSensesColl);
             this.sortObjects(this.lexicalSensesColl);
         }
 
         var membersPartition: any = this.resViewResponse[ResViewPartition.members];
         if (membersPartition != null) {
             this.membersColl = Deserializer.createPredicateObjectsList(membersPartition);
-            this.filterInferredFromPredObjList(this.membersColl);
+            this.filterPredObjList(this.membersColl);
             this.sortObjects(this.membersColl);
         }
 
@@ -374,75 +378,75 @@ export class ResourceViewComponent {
                     }
                 }
             }
-            this.filterInferredFromPredObjList(this.membersOrderedColl);
+            this.filterPredObjList(this.membersOrderedColl);
             this.sortObjects(this.membersOrderedColl);
         }
 
         var notesPartition: any = this.resViewResponse[ResViewPartition.notes];
         if (notesPartition != null) {
             this.notesColl = Deserializer.createPredicateObjectsList(notesPartition);
-            this.filterInferredFromPredObjList(this.notesColl);
+            this.filterPredObjList(this.notesColl);
             this.sortObjects(this.notesColl);
         }
 
         var propertiesPartition: any = this.resViewResponse[ResViewPartition.properties];
         this.propertiesColl = Deserializer.createPredicateObjectsList(propertiesPartition);
-        this.filterInferredFromPredObjList(this.propertiesColl);
+        this.filterPredObjList(this.propertiesColl);
         this.sortObjects(this.propertiesColl);
 
         var rangesPartition: any = this.resViewResponse[ResViewPartition.ranges];
         if (rangesPartition != null) {
             this.rangesColl = Deserializer.createPredicateObjectsList(rangesPartition);
-            this.filterInferredFromPredObjList(this.rangesColl);
+            this.filterPredObjList(this.rangesColl);
             this.sortObjects(this.rangesColl);
         }
 
         var rdfsMembersPartition: any = this.resViewResponse[ResViewPartition.rdfsMembers];
         if (rdfsMembersPartition != null) {
             this.rdfsMembersColl = Deserializer.createPredicateObjectsList(rdfsMembersPartition);
-            this.filterInferredFromPredObjList(this.rdfsMembersColl);
+            this.filterPredObjList(this.rdfsMembersColl);
             // this.sortObjects(this.rdfsMembersColl); ordered server-side
         }
 
         var schemesPartition: any = this.resViewResponse[ResViewPartition.schemes];
         if (schemesPartition != null) {
             this.schemesColl = Deserializer.createPredicateObjectsList(schemesPartition);
-            this.filterInferredFromPredObjList(this.schemesColl);
+            this.filterPredObjList(this.schemesColl);
             this.sortObjects(this.schemesColl);
         }
 
         var subPropertyChainsPartition: any = this.resViewResponse[ResViewPartition.subPropertyChains];
         if (subPropertyChainsPartition != null) {
             this.subPropertyChainsColl = Deserializer.createPredicateObjectsList(subPropertyChainsPartition);
-            this.filterInferredFromPredObjList(this.subPropertyChainsColl);
+            this.filterPredObjList(this.subPropertyChainsColl);
             this.sortObjects(this.subPropertyChainsColl);
         }
 
         var subtermsPartition: any = this.resViewResponse[ResViewPartition.subterms];
         if (subtermsPartition != null) {
             this.subtermsColl = Deserializer.createPredicateObjectsList(subtermsPartition);
-            this.filterInferredFromPredObjList(this.subtermsColl);
+            this.filterPredObjList(this.subtermsColl);
             this.sortObjects(this.subtermsColl);
         }
 
         var superPropertiesPartition: any = this.resViewResponse[ResViewPartition.superproperties];
         if (superPropertiesPartition != null) {
             this.superpropertiesColl = Deserializer.createPredicateObjectsList(superPropertiesPartition);
-            this.filterInferredFromPredObjList(this.superpropertiesColl);
+            this.filterPredObjList(this.superpropertiesColl);
             this.sortObjects(this.superpropertiesColl);
         }
 
         var topConceptOfPartition: any = this.resViewResponse[ResViewPartition.topconceptof];
         if (topConceptOfPartition != null) {
             this.topconceptofColl = Deserializer.createPredicateObjectsList(topConceptOfPartition);
-            this.filterInferredFromPredObjList(this.topconceptofColl);
+            this.filterPredObjList(this.topconceptofColl);
             this.sortObjects(this.topconceptofColl);
         }
 
         var typesPartition: any = this.resViewResponse[ResViewPartition.types];
         if (typesPartition != null) {
             this.typesColl = Deserializer.createPredicateObjectsList(typesPartition);
-            this.filterInferredFromPredObjList(this.typesColl);
+            this.filterPredObjList(this.typesColl);
             this.sortObjects(this.typesColl);
         }
 
@@ -485,6 +489,11 @@ export class ResourceViewComponent {
         }
     }
 
+    private filterPredObjList(predObjList: ARTPredicateObjects[]) {
+        this.filterInferredFromPredObjList(predObjList);
+        this.filterValueLanguageFromPrefObjList(predObjList);
+    }
+
     /**
      * Based on the showInferred param, filter out or let pass inferred information in a predicate-objects list
      */
@@ -495,6 +504,30 @@ export class ResourceViewComponent {
                 for (var j = 0; j < objList.length; j++) {
                     let objGraphs: ARTURIResource[] = objList[j].getGraphs();
                     if (ResourceUtils.containsNode(objGraphs, new ARTURIResource(SemanticTurkey.inferenceGraph))) {
+                        objList.splice(j, 1);
+                        j--;
+                    }
+                }
+                //after filtering the objects list, if the predicate has no more objects, remove it from predObjList
+                if (objList.length == 0) {
+                    predObjList.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+    }
+
+    private filterValueLanguageFromPrefObjList(predObjList: ARTPredicateObjects[]) {
+        //even if already initialized, get each time the value of valueFilterLangEnabled in order to detect eventual changes of the pref
+        this.valueFilterLangEnabled = this.vbProp.getValueFilterLanguages().enabled;
+        if (this.valueFilterLangEnabled) {
+            let valueFilterLanguages = this.vbProp.getValueFilterLanguages().languages;
+            for (var i = 0; i < predObjList.length; i++) {
+                var objList: ARTNode[] = predObjList[i].getObjects();
+                for (var j = 0; j < objList.length; j++) {
+                    let lang = objList[j].getAdditionalProperty(ResAttribute.LANG);
+                    //remove the object if it has a language not in the languages list of the filter
+                    if (lang != null && valueFilterLanguages.indexOf(lang) == -1) {
                         objList.splice(j, 1);
                         j--;
                     }
@@ -545,13 +578,27 @@ export class ResourceViewComponent {
         if (!this.showInferredPristine) { //resource view has been initialized with showInferred to false, so repeat the request
             this.buildResourceView(this.resource);
         } else { //resource view has been initialized with showInferred to true, so there's no need to repeat the request
+            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             this.fillPartitions();
+            UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
         }
     }
 
     private switchRendering() {
         this.rendering = !this.rendering;
         this.vbProp.setRenderingInResourceView(this.rendering);
+    }
+
+    private switchValueFilterLang() {
+        this.valueFilterLangEnabled = !this.valueFilterLangEnabled;
+        //update the preference
+        let valueFilterLangPref = this.vbProp.getValueFilterLanguages();
+        valueFilterLangPref.enabled = this.valueFilterLangEnabled;
+        this.vbProp.setValueFilterLanguages(valueFilterLangPref);
+        //update the RV
+        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+        this.fillPartitions();
+        UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
     }
 
     private listVersions() {
@@ -580,7 +627,7 @@ export class ResourceViewComponent {
     }
     
     private openSettings() {
-        this.resViewModals.editSettings();
+        this.resViewModals.editSettings()
     }
 
     // COLLABORATION SYSTEM HANDLERS

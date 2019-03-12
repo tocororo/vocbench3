@@ -2,6 +2,7 @@ export class Properties {
 
     static pref_languages: string = "languages";
     static pref_editing_language: string = "editing_language";
+    static pref_filter_value_languages: string = "filter_value_languages";
     static pref_active_schemes: string = "active_schemes";
     static pref_active_lexicon: string = "active_lexicon";
     static pref_show_flags: string = "show_flags";
@@ -100,4 +101,9 @@ export class LexicalEntryListPreference {
 export enum LexEntryVisualizationMode {
     searchBased = "searchBased",
     indexBased = "indexBased"
+}
+
+export class ValueFilterLanguages {
+    languages: string[];
+    enabled: boolean;
 }

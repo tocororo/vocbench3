@@ -71,10 +71,7 @@ export class VBEventHandler {
     public datatypeCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("datatypeCreatedEvent");
     public datatypeDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("datatypeDeletedEvent");
 
-    //MISC EVENTS 
-    //data loaded/imported/removed/refactored => trees/lists need to be resfreshed
-    public refreshDataBroadcastEvent: EventEmitter<any> = new VBEventEmitter("refreshDataBroadcastEvent", true);
-    public refreshTreeListEvent: EventEmitter<RDFResourceRolesEnum[]> = new VBEventEmitter("refreshTreeEvent");
+    //PREFERENCES EVENTS
 
     /**
      * user changes resourceViewMode preference => resource view panel need to be updated
@@ -83,14 +80,19 @@ export class VBEventHandler {
     public resViewModeChangedEvent: EventEmitter<{ mode: ResourceViewMode, fromVbPref: boolean }> = new VBEventEmitter("resViewModeChangedEvent");
     public resViewTabSyncChangedEvent: EventEmitter<boolean> = new VBEventEmitter("resViewTabSyncChangedEvent");
 
+    public showDeprecatedChangedEvent: EventEmitter<boolean> = new VBEventEmitter("showDeprecatedChangedEvent");
+
+    public searchPrefsUpdatedEvent: EventEmitter<any> = new VBEventEmitter("searchPrefsUpdatedEvent");
+
+    //MISC EVENTS 
+    //data loaded/imported/removed/refactored => trees/lists need to be resfreshed
+    public refreshDataBroadcastEvent: EventEmitter<any> = new VBEventEmitter("refreshDataBroadcastEvent", true);
+    public refreshTreeListEvent: EventEmitter<RDFResourceRolesEnum[]> = new VBEventEmitter("refreshTreeEvent");
+
     public resourceRenamedEvent: EventEmitter<{ oldResource: ARTResource, newResource: ARTResource }> = new VBEventEmitter("resourceRenamedEvent");
     public resourceDeprecatedEvent: EventEmitter<ARTResource> = new VBEventEmitter<ARTResource>("resourceDeprecatedEvent");
 
-    public showDeprecatedChangedEvent: EventEmitter<boolean> = new VBEventEmitter("showDeprecatedChangedEvent");
-
     public collaborationSystemStatusChanged: EventEmitter<any> = new VBEventEmitter("collaborationSystemStatusChanged");
-
-    public searchPrefsUpdatedEvent: EventEmitter<any> = new VBEventEmitter("searchPrefsUpdatedEvent");
 
     constructor() { }
 

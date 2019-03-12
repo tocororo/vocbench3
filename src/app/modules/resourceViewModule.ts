@@ -52,13 +52,14 @@ import { ResViewModalServices } from '../resourceView/resViewModals/resViewModal
 import { ResViewSettingsModal } from '../resourceView/resViewModals/resViewSettingsModal';
 import { EditableResourceComponent } from '../resourceView/resViewResources/editableResourceComponent';
 import { ReifiedResourceComponent } from '../resourceView/resViewResources/reifiedResourceComponent';
+import { PreferencesModule } from './preferencesModule';
 import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from "./treeAndListModule";
 
 @NgModule({
     imports: [
         CommonModule, FormsModule,
-        SharedModule, TreeAndListModule
+        SharedModule, TreeAndListModule, PreferencesModule
     ],
     declarations: [
         ResourceViewComponent, ResourceViewPanelComponent, ResourceViewModal,

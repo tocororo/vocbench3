@@ -1,7 +1,5 @@
 import { Input } from "@angular/core";
-import { ARTResource } from "../models/ARTResources";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { AbstractGraph } from "./abstractGraph";
 import { ForceDirectedGraph, GraphForces } from "./model/ForceDirectedGraph";
 import { Link } from "./model/Link";
@@ -17,7 +15,7 @@ export abstract class AbstractGraphPanel {
     // private forces: GraphForces = new GraphForces();
     private forces: GraphForces;
 
-    constructor(private sharedModals: SharedModalServices, private basicModals: BasicModalServices) {
+    constructor(private basicModals: BasicModalServices) {
         this.forces = new GraphForces();
     }
 
@@ -27,10 +25,6 @@ export abstract class AbstractGraphPanel {
 
     private isSelectedElementNode() {
         return (this.selectedElement != null && this.selectedElement instanceof Node);
-    }
-
-    private showResourceView() {
-        this.sharedModals.openResourceView(<ARTResource>this.selectedElement.res, false);
     }
 
     private fixNode() {

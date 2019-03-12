@@ -1,10 +1,6 @@
 import { Component } from "@angular/core";
-import { UIUtils, Theme } from "../utils/UIUtils";
-import { VBEventHandler } from "../utils/VBEventHandler";
+import { Theme, UIUtils } from "../utils/UIUtils";
 import { VBProperties } from "../utils/VBProperties";
-import { Language } from "../models/LanguagesCountries";
-import { Properties, ResourceViewMode } from "../models/Properties";
-import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
 
 @Component({
     selector: "vb-preferences-component",
@@ -13,14 +9,12 @@ import { PreferencesSettingsServices } from "../services/preferencesSettingsServ
 })
 export class VocbenchPreferencesComponent {
 
-    private resViewMode: ResourceViewMode;
-    private resViewTabSync: boolean;
     private showFlags: boolean;
     private showInstNumb: boolean;
     private themes: Theme[] = UIUtils.themes;
     private selectedTheme: Theme = this.themes[0];
 
-    constructor(private properties: VBProperties, private prefSettingService: PreferencesSettingsServices, private eventHandler: VBEventHandler) { }
+    constructor(private properties: VBProperties) { }
 
     ngOnInit() {
         //no need to call the service to get the following preferences, since they are already initialized when user accessed the project
@@ -30,22 +24,6 @@ export class VocbenchPreferencesComponent {
         this.themes.forEach(t => {
             if (t.id == projThemePref) { this.selectedTheme = t; }
         });
-
-        this.resViewMode = this.properties.getResourceViewMode();
-        this.resViewTabSync = this.properties.getResourceViewTabSync();
-        var projectLanguages: Language[] = this.properties.getProjectLanguages();
-    }
-
-    //res view mode handler
-
-    private onResViewModeChanged() {
-        this.properties.setResourceViewMode(this.resViewMode);
-        this.eventHandler.resViewModeChangedEvent.emit({ mode: this.resViewMode, fromVbPref: true });
-    }
-
-    private onTabSyncChange() {
-        this.properties.setResourceViewTabSync(this.resViewTabSync);
-        this.eventHandler.resViewTabSyncChangedEvent.emit(this.resViewTabSync);
     }
 
     //show flags handlers

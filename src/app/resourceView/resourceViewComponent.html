@@ -33,30 +33,31 @@
                         </a>
                     </li>
                     <li *ngIf="issuesStruct.issues" role="separator" class="divider"></li>
-                    <li>
-                        <a (click)="createIssue()">Create issue for this resource</a>
-                    </li>
-                    <li>
-                        <a (click)="assignToIssue()">Assign this resource to existing issue</a>
-                    </li>
+                    <li><a (click)="createIssue()">Create issue for this resource</a></li>
+                    <li><a (click)="assignToIssue()">Assign this resource to existing issue</a></li>
                 </ul>
             </div>
             
-            <button class="btn btn-default btn-xs" style="margin-left: 3px;" [ngClass]="{active: showInferred}"
+            <button class="btn btn-default btn-xs" [ngClass]="{active: showInferred}" style="margin-left: 3px;"
                 title="Show/hide inferred information" (click)="switchInferred()">
                 <span *ngIf="showInferred" class="glyphicon glyphicon-eye-open"></span>
                 <span *ngIf="!showInferred" class="glyphicon glyphicon-eye-close"></span>
             </button>
-            <button class="btn btn-default btn-xs" style="margin-left: 3px;" [ngClass]="{active: rendering}"
+            <button class="btn btn-default btn-xs" [ngClass]="{active: valueFilterLangEnabled}" style="margin-left: 3px;"
+                title="Enable/disable value-filter on languages" (click)="switchValueFilterLang()">
+                <span class="glyphicon glyphicon-filter"></span>
+            </button>
+            <button class="btn btn-default btn-xs" [ngClass]="{active: rendering}" style="margin-left: 3px;"
                 title="Rendering" (click)="switchRendering()">
                 <span class="glyphicon glyphicon-font"></span>
             </button>
-            <button class="btn btn-default btn-xs" title="Refresh" (click)="buildResourceView(resource)" style="margin-left: 3px;">
+            <button class="btn btn-default btn-xs" style="margin-left: 3px;" title="Refresh" (click)="buildResourceView(resource)">
                 <span class="glyphicon glyphicon-refresh"></span>
             </button>
-            <button class="btn btn-default btn-xs" title="ResourceView settings" (click)="openSettings()" style="margin-left: 3px;">
-                    <span class="glyphicon glyphicon-cog"></span>
-                </button>
+            <button class="btn btn-default btn-xs" style="margin-left: 3px;" title="ResourceView settings" (click)="openSettings()">
+                <span class="glyphicon glyphicon-cog"></span>
+            </button>
+            
             <res-view-menu [resource]="resource" (update)="buildResourceView(resource)" [readonly]="readonly"></res-view-menu>
         </div>
     </div>
