@@ -62,6 +62,8 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
 
         this.eventSubscriptions.push(eventHandler.lexiconChangedEvent.subscribe(
             (lexicon: ARTURIResource) => this.onLexiconChanged(lexicon)));
+        this.eventSubscriptions.push(eventHandler.lexicalEntryCreatedEvent.subscribe(
+            (data: { entry: ARTURIResource, lexicon: ARTURIResource }) => this.onLexicalEntryCreated(data.lexicon, data.entry)));
     }
 
     ngOnInit() {
@@ -310,6 +312,20 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
         if (this.visualizationMode == LexEntryVisualizationMode.searchBased && this.lastSearch != null) {
             this.viewChildList.forceList([]);
             this.lastSearch = null;
+        }
+    }
+
+    private onLexicalEntryCreated(lexicon: ARTURIResource, lexEntry: ARTURIResource) {
+        if (this.visualizationMode == LexEntryVisualizationMode.indexBased) {
+            if (lexicon.equals(this.workingLexicon)) {
+                this.getSearchedEntryIndex(lexEntry).subscribe(
+                    index => {
+                        this.firstDigitIndex = index.charAt(0);
+                        this.secondDigitIndex = index.charAt(1);
+                        this.onDigitChange();
+                    }
+                );
+            }
         }
     }
 
