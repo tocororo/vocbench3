@@ -13,6 +13,7 @@ import { CustomFormsServices } from "../../services/customFormsServices";
 @Component({
     selector: "custom-form",
     templateUrl: "./customFormComponent.html",
+    host: { class: "vbox" },
     providers: [{
         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CustomForm), multi: true,
     }]

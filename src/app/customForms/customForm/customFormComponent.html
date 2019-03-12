@@ -1,84 +1,86 @@
-<table class="table table-condensed table-borderless">
-    <colgroup>
-        <col style="width: 1%;">
-        <col>
-        <col style="width: 1%;">
-    </colgroup>
-    <tbody>
-        <ng-template ngFor let-field [ngForOf]="formFields">
-            <tr *ngIf="!field.isDependency()">
-                <!--Form entry label-->
-                <td class="text-right"><label>{{field.getUserPrompt()}}:</label></td>
-                <!--Form entry field: depends on type (uri/literal) and optionally on datatype -->
-                <td>
-                    <div *ngIf="field.getType() == 'literal'">
-                        <div [ngSwitch]="field.getDatatype()">
-                            <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#string'">
-                                <textarea type="text" rows="1" class="form-control input-sm" style="resize: vertical"
-                                    [(ngModel)]="field.value" (ngModelChange)="onModelChanged()"></textarea>
-                            </div>
-                            <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#integer'">
-                                <input class="form-control input-sm" [(ngModel)]="field.value" type="number" step="1"
-                                    (ngModelChange)="onModelChanged()">
-                            </div>
-                            <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#float'">
-                                <input class="form-control input-sm" [(ngModel)]="field.value" type="number" step="any"
-                                    (ngModelChange)="onModelChanged()">
-                            </div>
-                            <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#boolean'" class="hbox">
-                                <input class="form-control input-sm" [ngModel]="field.value" style="flex: 1"
-                                    (ngModelChange)="onModelChanged()" disabled>
-                                <span class="hbox" style="align-items: center; margin-left: 10px; justify-content: center;">
-                                    <label class="radio-inline">
-                                        <input type="radio" (click)="field.value='true'" [checked]="field.value=='true'">true
-                                    </label>
-                                    <label class="radio-inline" style="margin-left: 15px;">
-                                        <input type="radio" (click)="field.value='false'" [checked]="field.value=='false'">false
-                                    </label>
-                                </span>
-                            </div>
-                            <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#date'" class="hbox">
-                                <input class="form-control input-sm" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
-                                <input class="form-control input-sm" style="margin-left: 10px;" type="date" [(ngModel)]="field.value"> 
-                            </div>
-                            <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#time'" class="hbox">
-                                <input class="form-control input-sm" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
-                                <input class="form-control input-sm" style="margin-left: 10px;" type="time" [(ngModel)]="field.value"
-                                    (ngModelChange)="onModelChanged()">
-                            </div>
-                            <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#datetime'" class="hbox">
-                                <input class="form-control input-sm" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
-                                <input class="form-control input-sm" style="margin-left: 10px;" type="datetime-local"
-                                    [(ngModel)]="field.value" (ngModelChange)="onModelChanged()">
-                            </div>
-                            <div *ngSwitchDefault class="hbox" style="align-items: center;">
-                                <textarea type="text" rows="1" class="form-control input-sm" style="resize: vertical"
-                                    [(ngModel)]="field.value" (ngModelChange)="onModelChanged()"
-                                    (input)="onEntryValueChange($event.target.value, field)"></textarea>
+<div class="table-responsive">
+    <table class="table table-condensed table-borderless">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+            <col style="width: 1%;">
+        </colgroup>
+        <tbody>
+            <ng-template ngFor let-field [ngForOf]="formFields">
+                <tr *ngIf="!field.isDependency()">
+                    <!--Form entry label-->
+                    <td class="text-right"><label>{{field.getUserPrompt()}}:</label></td>
+                    <!--Form entry field: depends on type (uri/literal) and optionally on datatype -->
+                    <td>
+                        <div *ngIf="field.getType() == 'literal'">
+                            <div [ngSwitch]="field.getDatatype()">
+                                <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#string'">
+                                    <textarea type="text" rows="1" class="form-control input-sm" style="resize: vertical"
+                                        [(ngModel)]="field.value" (ngModelChange)="onModelChanged()"></textarea>
+                                </div>
+                                <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#integer'">
+                                    <input class="form-control input-sm" [(ngModel)]="field.value" type="number" step="1"
+                                        (ngModelChange)="onModelChanged()">
+                                </div>
+                                <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#float'">
+                                    <input class="form-control input-sm" [(ngModel)]="field.value" type="number" step="any"
+                                        (ngModelChange)="onModelChanged()">
+                                </div>
+                                <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#boolean'" class="hbox">
+                                    <input class="form-control input-sm" [ngModel]="field.value" style="flex: 1"
+                                        (ngModelChange)="onModelChanged()" disabled>
+                                    <span class="hbox" style="align-items: center; margin-left: 10px; justify-content: center;">
+                                        <label class="radio-inline">
+                                            <input type="radio" (click)="field.value='true'" [checked]="field.value=='true'">true
+                                        </label>
+                                        <label class="radio-inline" style="margin-left: 15px;">
+                                            <input type="radio" (click)="field.value='false'" [checked]="field.value=='false'">false
+                                        </label>
+                                    </span>
+                                </div>
+                                <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#date'" class="hbox">
+                                    <input class="form-control input-sm" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
+                                    <input class="form-control input-sm" style="margin-left: 10px;" type="date" [(ngModel)]="field.value"> 
+                                </div>
+                                <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#time'" class="hbox">
+                                    <input class="form-control input-sm" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
+                                    <input class="form-control input-sm" style="margin-left: 10px;" type="time" [(ngModel)]="field.value"
+                                        (ngModelChange)="onModelChanged()">
+                                </div>
+                                <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#datetime'" class="hbox">
+                                    <input class="form-control input-sm" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
+                                    <input class="form-control input-sm" style="margin-left: 10px;" type="datetime-local"
+                                        [(ngModel)]="field.value" (ngModelChange)="onModelChanged()">
+                                </div>
+                                <div *ngSwitchDefault class="hbox" style="align-items: center;">
+                                    <textarea type="text" rows="1" class="form-control input-sm" style="resize: vertical"
+                                        [(ngModel)]="field.value" (ngModelChange)="onModelChanged()"
+                                        (input)="onEntryValueChange($event.target.value, field)"></textarea>
 
-                                <span *ngIf="field.getLang()" style="margin-left: 4px;">
-                                    <lang-picker size="sm" [ngModel]="field.getLang()" disabled="true">
-                                    </lang-picker>
-                                </span>
-                                <span *ngIf="field.getConverter() == 'http://art.uniroma2.it/coda/contracts/langString' 
-                                        && field.getConverterArg()" style="margin-left: 4px;">
-                                    <lang-picker size="sm" [ngModel]="field.getConverterArg().value"
-                                        (ngModelChange)="onConverterLangChange($event, field.getConverterArg())">
-                                    </lang-picker>
-                                </span>
+                                    <span *ngIf="field.getLang()" style="margin-left: 4px;">
+                                        <lang-picker size="sm" [ngModel]="field.getLang()" disabled="true">
+                                        </lang-picker>
+                                    </span>
+                                    <span *ngIf="field.getConverter() == 'http://art.uniroma2.it/coda/contracts/langString' 
+                                            && field.getConverterArg()" style="margin-left: 4px;">
+                                        <lang-picker size="sm" [ngModel]="field.getConverterArg().value"
+                                            (ngModelChange)="onConverterLangChange($event, field.getConverterArg())">
+                                        </lang-picker>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div *ngIf="field.getType() == 'uri'">
-                        <resource-picker [roles]="resPickerRoles" (resourceChanged)="updateIRIField($event, field)" [editable]="true">
-                        </resource-picker>
-                    </div>
-                </td>
-                <!--Mandatory/Optional-->
-                <td>
-                    <span *ngIf="field.isMandatory()" title="Mandatory field">*</span>
-                </td>
-            </tr>
-        </ng-template>
-    </tbody>
-</table>
+                        <div *ngIf="field.getType() == 'uri'">
+                            <resource-picker [roles]="resPickerRoles" (resourceChanged)="updateIRIField($event, field)" [editable]="true">
+                            </resource-picker>
+                        </div>
+                    </td>
+                    <!--Mandatory/Optional-->
+                    <td>
+                        <span *ngIf="field.isMandatory()" title="Mandatory field">*</span>
+                    </td>
+                </tr>
+            </ng-template>
+        </tbody>
+    </table>
+</div>

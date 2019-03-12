@@ -8,47 +8,44 @@
         </span>
     </div>
 </div>
-<div class="modal-body">
-    <div class="vbox" (keydown)="onKeydown($event)">
+<div class="modal-body vbox" (keydown)="onKeydown($event)">
 
-        <table class="table table-condensed table-borderless">
-            <colgroup>
-                <col style="width: 1%;">
-                <col>
-            </colgroup>
-            <tbody>
-                <tr>
-                    <td class="text-right"><label>Title:</label></td>
-                    <td>
-                        <div class="hbox" style="align-items: center;">
-                            <input #toFocus type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" [(ngModel)]="title">
-                            <lang-picker [(ngModel)]="title_lang"></lang-picker>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-right"><label>Language:</label></td>
-                    <td>
-                        <lang-picker [(ngModel)]="lang"></lang-picker>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-right"><label>URI:</label></td>
-                    <td>
-                        <editable-ns-input [(ngModel)]="uri" placeholder="Leave empty in order to autogenerate a random URI">
-                        </editable-ns-input>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <table class="table table-condensed table-borderless">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td class="text-right"><label>Title:</label></td>
+                <td>
+                    <div class="hbox" style="align-items: center;">
+                        <input #toFocus type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" [(ngModel)]="title">
+                        <lang-picker [(ngModel)]="title_lang"></lang-picker>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right"><label>Language:</label></td>
+                <td>
+                    <lang-picker [(ngModel)]="lang"></lang-picker>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right"><label>URI:</label></td>
+                <td>
+                    <editable-ns-input [(ngModel)]="uri" placeholder="Leave empty in order to autogenerate a random URI">
+                    </editable-ns-input>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-        <custom-form *ngIf="customFormId" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
-            [(ngModel)]="formFields"></custom-form>
+    <custom-form *ngIf="customFormId" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
+        [(ngModel)]="formFields"></custom-form>
 
-        <div *ngIf="!title_lang && viewInitialized" class="alert alert-danger" style="margin-top: 5px;">
-            You cannot create resources. You have no language assigned for the current project.
-        </div>
-
+    <div *ngIf="!title_lang && viewInitialized" class="alert alert-danger" style="margin-top: 5px;">
+        You cannot create resources. You have no language assigned for the current project.
     </div>
 
 </div>

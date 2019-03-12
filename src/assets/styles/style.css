@@ -748,3 +748,27 @@ input[type="radio"], input[type="checkbox"] {
         max-width:1600px;
     }
 }
+
+/* 
+The following two rules ensure that the dialog fill at max 90% of the video height.
+In order to let the content of the modal fill the available space (independently from its content),
+set height: 100vh to the .modal-body element (it will never reach 100vh given the max-height: 90vh if the .modal-content)
+*/
+.modal-content {
+    max-height: 95vh;
+    display: flex !important;
+    flex-flow: column;
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+}
+.modal-content > * {
+    display: flex;
+    flex-flow: column;
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+}
+.modal-dialog {
+    margin: 15px auto;
+}

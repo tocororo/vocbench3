@@ -8,60 +8,57 @@
         </span>
     </div>
 </div>
-<div class="modal-body">
-    <div class="vbox" (keydown)="onKeydown($event)">
+<div class="modal-body vbox" (keydown)="onKeydown($event)">
 
-        <table class="table table-condensed table-borderless">
-            <colgroup>
-                <col style="width: 1%;">
-                <col>
-            </colgroup>
-            <tbody>
-                <tr *ngIf="linkToReference; else linkToLexEntry">
-                    <td class="text-right"><label>Reference:</label></td>
+    <table class="table table-condensed table-borderless">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+        </colgroup>
+        <tbody>
+            <tr *ngIf="linkToReference; else linkToLexEntry">
+                <td class="text-right"><label>Reference:</label></td>
+                <td>
+                    <resource-picker [roles]="pickerRoles" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
+                </td>
+            </tr>
+            <ng-template #linkToLexEntry>
+                <tr>
+                    <td class="text-right" nowrap><label>Lexical Entry:</label></td>
                     <td>
-                        <resource-picker [roles]="pickerRoles" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
+                        <resource-picker [roles]="['ontolexLexicalEntry']" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
                     </td>
                 </tr>
-                <ng-template #linkToLexEntry>
-                    <tr>
-                        <td class="text-right" nowrap><label>Lexical Entry:</label></td>
-                        <td>
-                            <resource-picker [roles]="['ontolexLexicalEntry']" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
-                        </td>
-                    </tr>
-                </ng-template>
+            </ng-template>
 
-                <tr *ngIf="createSense; else createPlain">
+            <tr *ngIf="createSense; else createPlain">
+                <td></td>
+                <td>
+                    <div class="checkbox" style="margin-bottom: 0px;">
+                        <label>
+                            <input type="checkbox" [(ngModel)]="createPlainCheck">Create Plain
+                        </label>
+                    </div>
+                </td>
+            </tr>
+            <ng-template #createPlain>
+                <tr>
                     <td></td>
                     <td>
                         <div class="checkbox" style="margin-bottom: 0px;">
                             <label>
-                                <input type="checkbox" [(ngModel)]="createPlainCheck">Create Plain
+                                <input type="checkbox" [(ngModel)]="createSenseCheck">Create Sense
                             </label>
                         </div>
                     </td>
                 </tr>
-                <ng-template #createPlain>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <div class="checkbox" style="margin-bottom: 0px;">
-                                <label>
-                                    <input type="checkbox" [(ngModel)]="createSenseCheck">Create Sense
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                </ng-template>
+            </ng-template>
 
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 
-        <custom-form *ngIf="customFormId && createSense" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
-            [(ngModel)]="formFields"></custom-form>
-
-    </div>
+    <custom-form *ngIf="customFormId && createSense" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
+        [(ngModel)]="formFields"></custom-form>
 
 </div>
 <div class="modal-footer">

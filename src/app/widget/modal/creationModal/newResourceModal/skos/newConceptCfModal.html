@@ -13,45 +13,42 @@
         </span>
     </div>
 </div>
-<div class="modal-body">
-    <div class="vbox" (keydown)="onKeydown($event)">
+<div class="modal-body vbox" (keydown)="onKeydown($event)">
 
-        <table class="table table-condensed table-borderless">
-            <colgroup>
-                <col style="width: 1%;">
-                <col>
-            </colgroup>
-            <tbody>
-                <tr>
-                    <td class="text-right"><label>Label:</label></td>
-                    <td>
-                        <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                            <input #toFocus type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" name="label" [(ngModel)]="label">
-                            <lang-picker [(ngModel)]="lang"></lang-picker>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-right"><label>URI:</label></td>
-                    <td>
-                        <editable-ns-input [(ngModel)]="uri" placeholder="Leave empty in order to autogenerate a random URI">
-                        </editable-ns-input>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <table class="table table-condensed table-borderless">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td class="text-right"><label>Label:</label></td>
+                <td>
+                    <div class="hbox" style="align-items: center; margin-bottom: 4px;">
+                        <input #toFocus type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" name="label" [(ngModel)]="label">
+                        <lang-picker [(ngModel)]="lang"></lang-picker>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right"><label>URI:</label></td>
+                <td>
+                    <editable-ns-input [(ngModel)]="uri" placeholder="Leave empty in order to autogenerate a random URI">
+                    </editable-ns-input>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-        <div class="vbox" style="max-height: 20vh; margin-top: 2px;">
-            <scheme-selection (update)="onSchemesChanged($event)" [concept]="context.broader" [schemes]="context.schemes"></scheme-selection>
-        </div>
+    <div class="vbox" style="max-height: 20vh; margin-top: 2px;">
+        <scheme-selection (update)="onSchemesChanged($event)" [concept]="context.broader" [schemes]="context.schemes"></scheme-selection>
+    </div>
 
-        <custom-form *ngIf="customFormId" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
-            [(ngModel)]="formFields"></custom-form>
+    <custom-form *ngIf="customFormId" [cfId]="customFormId" style="border-top:1px solid #ddd; margin-top: 5px;" 
+        [(ngModel)]="formFields"></custom-form>
 
-        <div *ngIf="!lang && viewInitialized" class="alert alert-danger" style="margin-top: 5px;">
-            You cannot create resources. You have no language assigned for the current project.
-        </div>
-
+    <div *ngIf="!lang && viewInitialized" class="alert alert-danger" style="margin-top: 5px;">
+        You cannot create resources. You have no language assigned for the current project.
     </div>
 
 </div>

@@ -1,7 +1,7 @@
 <div class="modal-header">
     <h3 class="modal-title text-info">Export as RDF</h3>
 </div>
-<div class="modal-body vbox" style="max-height: 70vh;">
+<div class="modal-body vbox">
     
     <select class="form-control input-sm" [(ngModel)]="selectedExportFormat" name="format">
         <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>

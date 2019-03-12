@@ -38,7 +38,7 @@ export class CustomFormConfigComponent {
 
     private showBrokenCFS() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
         return this.modal.open(BrokenCFStructReportModal, overlayConfig)
     }
 
