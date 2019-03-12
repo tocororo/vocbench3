@@ -3,11 +3,14 @@
         <label></label>
         <span style="flex: 1;"></span>
         <div class="btn-toolbar" role="toolbar">
-            <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering=!rendering" [ngClass]="{ active: rendering }">
+            <button class="btn btn-default btn-xs" (click)="rendering=!rendering" title="Rendering"  [ngClass]="{ active: rendering }">
                 <span class="glyphicon glyphicon-font"></span>
             </button>
             <button class="btn btn-default btn-xs" (click)="snapshot()" title="Export a snapshot of the graph (.svg)">
                 <span class="glyphicon glyphicon-camera"></span>
+            </button>
+            <button class="btn btn-default btn-xs" (click)="openSettings()" title="Settings">
+                <span class="glyphicon glyphicon-cog"></span>
             </button>
         </div>
     </div>

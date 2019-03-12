@@ -3,10 +3,10 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 
 @Component({
-    selector: "res-view-settings-modal",
-    templateUrl: "./resViewSettingsModal.html",
+    selector: "data-graph-settings-modal",
+    templateUrl: "./dataGraphSettingsModal.html",
 })
-export class ResViewSettingsModal implements ModalComponent<BSModalContext> {
+export class DataGraphSettingsModal implements ModalComponent<BSModalContext> {
     context: BSModalContext;
 
     constructor(public dialog: DialogRef<BSModalContext>) {

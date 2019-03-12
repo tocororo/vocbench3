@@ -11,26 +11,28 @@ import { LinkComponent } from '../graph/impl/linkComponent';
 import { ModelGraphComponent } from '../graph/impl/modelGraphComponent';
 import { ModelGraphPanel } from '../graph/impl/modelGraphPanel';
 import { NodeModelComponent } from '../graph/impl/modelNodeComponent';
+import { DataGraphSettingsModal } from '../graph/modal/dataGraphSettingsModal';
 import { GraphModal } from "../graph/modal/graphModal";
 import { GraphModalServices } from '../graph/modal/graphModalServices';
 import { LinksFilterModal } from '../graph/modal/linksFilterModal';
 import { ForceControlPanel } from '../graph/widget/forceControlPanel';
 import { ResourceDetailsPanel } from '../graph/widget/resourceDetailsPanel';
+import { PreferencesModule } from './preferencesModule';
 import { SharedModule } from './sharedModule';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedModule],
+    imports: [CommonModule, FormsModule, SharedModule, PreferencesModule],
     declarations: [
         LinkComponent, NodeModelComponent, DataNodeComponent, DraggableDirective, ZoomableDirective,
         ModelGraphPanel, DataGraphPanel, ModelGraphComponent, DataGraphComponent,
         ForceControlPanel, ResourceDetailsPanel,
         //modals
-        GraphModal, LinksFilterModal
+        GraphModal, LinksFilterModal, DataGraphSettingsModal
     ],
     exports: [],
     providers: [ D3Service, GraphModalServices ],
     entryComponents: [
-        GraphModal, LinksFilterModal
+        GraphModal, LinksFilterModal, DataGraphSettingsModal
     ]
 })
 export class GraphModule { }

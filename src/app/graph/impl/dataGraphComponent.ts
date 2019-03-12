@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef } from "@angular/core";
-import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource } from "../../models/ARTResources";
+import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { ResViewPartition } from "../../models/ResourceView";
 import { ResourceViewServices } from "../../services/resourceViewServices";
 import { Deserializer } from "../../utils/Deserializer";
 import { ResourceUtils } from "../../utils/ResourceUtils";
+import { VBProperties } from "../../utils/VBProperties";
 import { AbstractGraph, GraphMode } from "../abstractGraph";
 import { D3Service } from "../d3/d3Services";
 import { GraphModalServices } from "../modal/graphModalServices";
@@ -35,7 +36,7 @@ export class DataGraphComponent extends AbstractGraph {
     ]
 
     constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef,
-        private resViewService: ResourceViewServices, private graphModals: GraphModalServices) {
+        private resViewService: ResourceViewServices, private graphModals: GraphModalServices, private vbProp: VBProperties) {
         super(d3Service, elementRef, ref);
     }
 
@@ -57,6 +58,11 @@ export class DataGraphComponent extends AbstractGraph {
                         predObjListMap[partition] = poList;
                     }
                 });
+
+                for (let partition in predObjListMap) {
+                    this.filterValueLanguageFromPrefObjList(predObjListMap[partition]);
+                }
+
                 //count number of objects
                 let linkCount: number = 0;
                 for (let partition in predObjListMap) {
@@ -162,6 +168,28 @@ export class DataGraphComponent extends AbstractGraph {
         }
     }
 
+    private filterValueLanguageFromPrefObjList(predObjList: ARTPredicateObjects[]) {
+        let valueFilterLangEnabled = this.vbProp.getValueFilterLanguages().enabled;
+        if (valueFilterLangEnabled) {
+            let valueFilterLanguages = this.vbProp.getValueFilterLanguages().languages;
+            for (var i = 0; i < predObjList.length; i++) {
+                var objList: ARTNode[] = predObjList[i].getObjects();
+                for (var j = 0; j < objList.length; j++) {
+                    let lang = objList[j].getAdditionalProperty(ResAttribute.LANG);
+                    //remove the object if it has a language not in the languages list of the filter
+                    if (lang != null && valueFilterLanguages.indexOf(lang) == -1) {
+                        objList.splice(j, 1);
+                        j--;
+                    }
+                }
+                //after filtering the objects list, if the predicate has no more objects, remove it from predObjList
+                if (objList.length == 0) {
+                    predObjList.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+    }
 
     protected onNodeDblClicked(node: DataNode) {
         if (!this.graph.dynamic) return; //if graph is not dynamic, do nothing
