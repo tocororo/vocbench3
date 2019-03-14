@@ -4,7 +4,7 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ART
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
 import { ProjectTableColumnStruct } from '../models/Project';
-import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, ValueFilterLanguages, LexEntryVisualizationMode, LexicalEntryListPreference, Properties, ResourceViewMode, SearchMode, SearchSettings } from '../models/Properties';
+import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, Properties, ResourceViewMode, ResViewPartitionFilterPreference, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
 import { OWL, RDFS, SKOS } from '../models/Vocabulary';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { Cookie } from '../utils/Cookie';
@@ -32,6 +32,8 @@ export class VBProperties {
     private classTreePreferences: ClassTreePreference;
     private conceptTreePreferences: ConceptTreePreference;
     private lexEntryListPreferences: LexicalEntryListPreference;
+
+    private resViewPartitionFilter: ResViewPartitionFilterPreference;
 
     private searchSettings: SearchSettings = {
         stringMatchMode: SearchMode.contains,
@@ -77,7 +79,8 @@ export class VBProperties {
             Properties.pref_concept_tree_base_broader_prop, Properties.pref_concept_tree_broader_props, Properties.pref_concept_tree_narrower_props,
             Properties.pref_concept_tree_include_subprops, Properties.pref_concept_tree_sync_inverse, Properties.pref_concept_tree_visualization,
             Properties.pref_lex_entry_list_visualization, Properties.pref_lex_entry_list_index_lenght,
-            Properties.pref_editing_language, Properties.pref_filter_value_languages
+            Properties.pref_editing_language, Properties.pref_filter_value_languages,
+            Properties.pref_res_view_partition_filter
         ];
         this.prefService.getPUSettings(properties).subscribe(
             prefs => {
@@ -117,6 +120,14 @@ export class VBProperties {
                     this.filterValueLang = { languages: ["*"], enabled: false }; //default
                 } else {
                     this.filterValueLang = JSON.parse(filterValueLangPref);
+                }
+
+                //res view partition
+                let rvPartitionFilterPref = prefs[Properties.pref_res_view_partition_filter];
+                if (rvPartitionFilterPref != null) {
+                    this.resViewPartitionFilter = JSON.parse(rvPartitionFilterPref);
+                } else {
+                    this.resViewPartitionFilter = {};
                 }
 
                 //cls tree preferences
@@ -348,6 +359,15 @@ export class VBProperties {
     setLexicalEntryListIndexLenght(lenght: number) {
         this.prefService.setPUSetting(Properties.pref_lex_entry_list_index_lenght, lenght+"").subscribe();
         this.lexEntryListPreferences.indexLength = lenght;
+    }
+
+    //ResView partition filter
+    getResourceViewPartitionsFilter(): ResViewPartitionFilterPreference {
+        return this.resViewPartitionFilter;
+    }
+    setResourceViewPartitionFilter(pref: ResViewPartitionFilterPreference) {
+        this.prefService.setPUSetting(Properties.pref_res_view_partition_filter, JSON.stringify(pref)).subscribe();
+        this.resViewPartitionFilter = pref;
     }
 
 

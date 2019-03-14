@@ -82,15 +82,7 @@ export class ResViewUtils {
     ];
 
     public static getResourceViewPartitionLabel(partition: ResViewPartition): string {
-        if (
-            partition == ResViewPartition.broaders || partition == ResViewPartition.constituents || partition == ResViewPartition.denotations ||
-            partition == ResViewPartition.domains || partition == ResViewPartition.imports || partition == ResViewPartition.lexicalizations || 
-            partition == ResViewPartition.members || partition == ResViewPartition.notes || partition == ResViewPartition.ranges || 
-            partition == ResViewPartition.schemes || partition == ResViewPartition.subterms || partition == ResViewPartition.superproperties || 
-            partition == ResViewPartition.types
-        ) {
-            return partition.charAt(0).toUpperCase() + partition.slice(1);;
-        } else if (partition == ResViewPartition.classaxioms) {
+        if (partition == ResViewPartition.classaxioms) {
             return "Class axioms";
         } else if (partition == ResViewPartition.disjointProperties) {
             return "Disjoint properties";
@@ -120,6 +112,13 @@ export class ResViewUtils {
             return "Property chain axioms";
         } else if (partition == ResViewPartition.topconceptof) {
             return "Top Concept of";
+        } else {
+            //partition == ResViewPartition.broaders || partition == ResViewPartition.constituents || partition == ResViewPartition.denotations ||
+            //partition == ResViewPartition.domains || partition == ResViewPartition.imports || partition == ResViewPartition.lexicalizations || 
+            //partition == ResViewPartition.members || partition == ResViewPartition.notes || partition == ResViewPartition.ranges || 
+            //partition == ResViewPartition.schemes || partition == ResViewPartition.subterms || partition == ResViewPartition.superproperties || 
+            //partition == ResViewPartition.types
+            return partition.charAt(0).toUpperCase() + partition.slice(1);
         }
     }
 

@@ -1,3 +1,5 @@
+import { ResViewPartition } from "./ResourceView";
+
 export class Properties {
 
     static pref_languages: string = "languages";
@@ -26,6 +28,8 @@ export class Properties {
 
     static pref_lex_entry_list_visualization: string = "lex_entry_list_visualization";
     static pref_lex_entry_list_index_lenght: string = "lex_entry_list_index_lenght";
+
+    static pref_res_view_partition_filter: string = "res_view_partition_filter";
 
     static setting_languages: string = "languages";
     static setting_remote_configs = "remote_configs";
@@ -106,4 +110,8 @@ export enum LexEntryVisualizationMode {
 export class ValueFilterLanguages {
     languages: string[];
     enabled: boolean;
+}
+
+export class ResViewPartitionFilterPreference {
+    [role: string]: ResViewPartition[]; //role is a RDFResourceRoleEnum, values are only the hidden partitions
 }

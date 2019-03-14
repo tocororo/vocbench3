@@ -326,6 +326,16 @@ export class ResourceUtils {
         return roleClass;
     }
 
+    static getResourceRoleLabel(role: RDFResourceRolesEnum): string {
+        if (role == RDFResourceRolesEnum.cls) {
+            return "Class";
+        } else if (role == RDFResourceRolesEnum.xLabel) {
+            return "Skosxl Label";
+        } else {
+            return role.charAt(0).toUpperCase() + role.slice(1);
+        }
+    }
+
 }
 
 

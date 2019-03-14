@@ -47,8 +47,14 @@ export class DataGraphComponent extends AbstractGraph {
 
         this.resViewService.getResourceView(<ARTResource>node.res).subscribe(
             rv => {
+                let filteredPartitions: ResViewPartition[] = this.vbProp.getResourceViewPartitionsFilter()[node.res.getRole()];
+
                 let predObjListMap: { [partition: string]: ARTPredicateObjects[] } = {};
                 this.rvPartitions.forEach(partition => {
+                    if (filteredPartitions != null && filteredPartitions.indexOf(partition) != -1) {
+                        return; //if the current partition is among the partitions filtered for the resource role => skip the parsing
+                    }
+
                     let partitionJson = rv[partition];
                     if (partition == ResViewPartition.facets && partitionJson != null) {
                         partitionJson = partitionJson.inverseOf;

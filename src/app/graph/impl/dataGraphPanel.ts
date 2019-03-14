@@ -20,7 +20,7 @@ export class DataGraphPanel extends AbstractGraphPanel {
 
     openSettings() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
         return this.modal.open(DataGraphSettingsModal, overlayConfig).result;
     }
 
