@@ -193,19 +193,6 @@ export class ForceDirectedGraph {
     }
 
     /**
-     * Returns true if the given node has outgoing, namely if there are links with that node as source
-     * @param node 
-     */
-    public hasOutgoingLink(node: Node): boolean {
-        for (let i = 0; i < this.links.length; i++) {
-            if (this.links[i].source.res.getNominalValue() == node.res.getNominalValue()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Utils
      */
 

@@ -5,8 +5,12 @@ import { Node, NodeShape } from "./Node";
 
 export class ModelNode extends Node {
 
-    incomingNodes: Node[];
-    outgoingNodes: Node[];
+    /**
+     * Both the following list are updated when adding or removing a link where source or target node is the current one.
+     * This list are useful in order to know whenever a node is pending after the removal of a link
+     */
+    incomingNodes: Node[]; //list of node linked to this by an incoming link
+    outgoingNodes: Node[]; //list of node linked to this by an outgoing link
     
     constructor(res: ARTNode) {
         super(res);
@@ -82,20 +86,10 @@ export class ModelNode extends Node {
     }
 
     removeIncomingNode(node: Node) {
-        for (let i = this.incomingNodes.length-1; i >= 0; i--) {
-            if (this.incomingNodes[i].res.equals(node.res)) {
-                this.incomingNodes.splice(i, 1);
-                return; //stop looping: the same node could be multiple time as outgoing via different relation
-            }
-        }
+        this.incomingNodes.splice(this.incomingNodes.indexOf(node), 1);
     }
     removeOutgoingNode(node: Node) {
-        for (let i = this.outgoingNodes.length-1; i >= 0; i--) {
-            if (this.outgoingNodes[i].res.equals(node.res)) {
-                this.outgoingNodes.splice(i, 1);
-                return; //stop looping: the same node could be multiple time as outgoing via different relation
-            }
-        }
+        this.outgoingNodes.splice(this.outgoingNodes.indexOf(node), 1);
     }
     
 

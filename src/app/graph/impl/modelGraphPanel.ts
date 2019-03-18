@@ -25,7 +25,7 @@ export class ModelGraphPanel extends AbstractGraphPanel {
     }
 
     private onFilterChange(filter: GraphClassAxiomFilter) {
-        this.viewChildGraph.updateGraphFilter(filter);
+        this.viewChildGraph.applyFilter(filter);
     }
 
 }

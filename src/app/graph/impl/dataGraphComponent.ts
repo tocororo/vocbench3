@@ -40,7 +40,7 @@ export class DataGraphComponent extends AbstractGraph {
         super(d3Service, elementRef, ref);
     }
 
-    private expandNode(node: Node) {
+    protected expandNode(node: Node) {
         if (!node.res.isResource()) {
             return;
         }
@@ -113,6 +113,11 @@ export class DataGraphComponent extends AbstractGraph {
         );
     }
 
+    protected closeNode(node: Node) {
+        this.deleteSubtree(node);
+        this.graph.update();
+    }
+
     /**
      * Append the links to the given node. If the target of the links doesn't exist yet, it is created.
      * @param sourceNode 
@@ -140,11 +145,6 @@ export class DataGraphComponent extends AbstractGraph {
         this.graph.update();
     }
 
-
-    private closeNode(node: Node) {
-        this.deleteSubtree(node);
-        this.graph.update();
-    }
 
     /**
      * Delete the subtree rooted on the given node. Useful when closing a node.
@@ -199,10 +199,12 @@ export class DataGraphComponent extends AbstractGraph {
 
     protected onNodeDblClicked(node: DataNode) {
         if (!this.graph.dynamic) return; //if graph is not dynamic, do nothing
-        if (this.graph.hasOutgoingLink(node)) {
+        if (node.open) {
             this.closeNode(node);
+            node.open = false;
         } else {
             this.expandNode(node);
+            node.open = true;
         }
     }
 

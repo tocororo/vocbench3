@@ -17,42 +17,56 @@ export class GraphServices {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getGraphModel", params).flatMap(
             (plainModel: PlainGraphModelRecord[]) => {
-                let resURIs: string[] = [];
-                //collecting IRIs
-                plainModel.forEach(record => {
-                    if (resURIs.indexOf(record.source) == -1) {
-                        resURIs.push(record.source);
-                    }
-                    if (resURIs.indexOf(record.link) == -1) {
-                        resURIs.push(record.link);
-                    }
-                    if (resURIs.indexOf(record.target) == -1) {
-                        resURIs.push(record.target);
-                    }
-                });
-
-                let unannotatedIRIs: ARTURIResource[] = [];
-                resURIs.forEach(i => {
-                    unannotatedIRIs.push(new ARTURIResource(i));
-                });
-
-                return this.resourceService.getResourcesInfo(unannotatedIRIs).map(
-                    (annotatedIRIs: ARTURIResource[]) => {
-                        let annotatedModel: GraphModelRecord[] = [];
-                        plainModel.forEach(record => {
-                            annotatedModel.push({
-                                source: annotatedIRIs[ResourceUtils.indexOfNode(annotatedIRIs, new ARTURIResource(record.source))],
-                                link: annotatedIRIs[ResourceUtils.indexOfNode(annotatedIRIs, new ARTURIResource(record.link))],
-                                target: annotatedIRIs[ResourceUtils.indexOfNode(annotatedIRIs, new ARTURIResource(record.target))],
-                                classAxiom: record.classAxiom
-                            });
-                        });
-                        return annotatedModel;
-                    }
-                );
-
+                return this.enrichGraphModelRecords(plainModel);
             }
         )
+    }
+
+    expandGraphModelNode(resource: ARTURIResource): Observable<GraphModelRecord[]> {
+        var params: any = {
+            resource: resource
+        };
+        return this.httpMgr.doGet(this.serviceName, "expandGraphModelNode", params).flatMap(
+            (plainModel: PlainGraphModelRecord[]) => {
+                return this.enrichGraphModelRecords(plainModel);
+            }
+        );
+    }
+
+    private enrichGraphModelRecords(plainModel: PlainGraphModelRecord[]) {
+        let resURIs: string[] = [];
+        //collecting IRIs
+        plainModel.forEach(record => {
+            if (resURIs.indexOf(record.source) == -1) {
+                resURIs.push(record.source);
+            }
+            if (resURIs.indexOf(record.link) == -1) {
+                resURIs.push(record.link);
+            }
+            if (resURIs.indexOf(record.target) == -1) {
+                resURIs.push(record.target);
+            }
+        });
+
+        let unannotatedIRIs: ARTURIResource[] = [];
+        resURIs.forEach(i => {
+            unannotatedIRIs.push(new ARTURIResource(i));
+        });
+
+        return this.resourceService.getResourcesInfo(unannotatedIRIs).map(
+            (annotatedIRIs: ARTURIResource[]) => {
+                let annotatedModel: GraphModelRecord[] = [];
+                plainModel.forEach(record => {
+                    annotatedModel.push({
+                        source: annotatedIRIs[ResourceUtils.indexOfNode(annotatedIRIs, new ARTURIResource(record.source))],
+                        link: annotatedIRIs[ResourceUtils.indexOfNode(annotatedIRIs, new ARTURIResource(record.link))],
+                        target: annotatedIRIs[ResourceUtils.indexOfNode(annotatedIRIs, new ARTURIResource(record.target))],
+                        classAxiom: record.classAxiom
+                    });
+                });
+                return annotatedModel;
+            }
+        );
     }
 
 }

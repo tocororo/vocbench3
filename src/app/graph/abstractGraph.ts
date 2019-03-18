@@ -46,6 +46,10 @@ export abstract class AbstractGraph {
 
     protected abstract onNodeDblClicked(node: Node): void;
 
+    protected abstract expandNode(node: Node): void;
+
+    protected abstract closeNode(node: Node): void;
+
     protected onLinkClicked(link: Link) {
         if (link == this.selectedElement) {
             this.selectedElement = null;

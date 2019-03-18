@@ -4,8 +4,6 @@ import { Node, NodeShape } from "./Node";
 
 export class DataNode extends Node {
 
-    root: boolean = false; //true only for the root node when exploring the data-oriented graph
-
     //list of nodes that opened the current. Useful to determine whenever delete the current node from the graph when it is closing other nodes
     openBy: Node[]; 
     

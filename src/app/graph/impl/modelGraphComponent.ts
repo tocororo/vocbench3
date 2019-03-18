@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input } from "@angular/core";
-import { ARTURIResource } from "../../models/ARTResources";
+import { ARTNode, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { GraphClassAxiomFilter, GraphModelRecord } from "../../models/Graphs";
 import { OWL, RDFS } from "../../models/Vocabulary";
 import { GraphServices } from "../../services/graphServices";
 import { UIUtils } from "../../utils/UIUtils";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AbstractGraph, GraphMode } from "../abstractGraph";
 import { D3Service } from "../d3/d3Services";
-import { GraphUtils } from "../model/GraphUtils";
 import { Link } from "../model/Link";
 import { ModelNode } from "../model/ModelNode";
 import { Node } from "../model/Node";
@@ -23,205 +23,351 @@ export class ModelGraphComponent extends AbstractGraph {
 
     protected mode = GraphMode.modelOriented;
 
-    private filtersDelta: Map<string, Link[]>; //map the property of the filter with the links involved by the filter
+    /**
+     * Model-oriented graph could be very expansive: an ontology could have a lot of properties and a lot of classes to be shown.
+     * In order to prevent to work with a massive graph, it is available an alternative way to explore the model-oriented graph:
+     * the incremental exploration. This consists in initialize the graph with a single root node (similar to the data-oriented)
+     * and expanding the nodes according the policy adopted in the model-oriented graph, namely linking each node (class) with the
+     * classes for which exists a range-property-domain relation or a classA-classAxiomRelation-classB relation.
+     *
+     * The following attribute is useful in order to tell if the incremental exploration is adopted.
+     * It is initialize to true only if, during the initialization of this component, the provided graph has a (root) node provided.
+     */
+    private incrementalExploration: boolean = false;
 
-    constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef, private graphService: GraphServices) {
+    private filtersDeltaMap: Map<ARTURIResource, Link[]> = new Map(); //map the property of the filter with the links (only those in the graph visible) involved by the filter
+
+    private linkLimit: number = 100; //in "normal" exploration mode, if the number of relations exceed this limit, suggest to work with the incremental mode
+
+    /**
+     * A lot of nodes might be linked with owl:Thing (as generic domain or range of properties which have no D/R defined).
+     * In order to avoid too much cahos around the owl:Thing node and to distribute better the nodes, there will be multiple owl:Thing nodes.
+     * The same Thing node must be reused only when it is linked to the same source/target node (obviously by a different link/predicate).
+     */
+    private thingNodesMap: { thingNode: ModelNode, linkedRes: ARTNode }[] = [];
+
+    constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef, private graphService: GraphServices,
+        private basicModals: BasicModalServices) {
         super(d3Service, elementRef, ref);
     }
 
     ngOnInit() {
-        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
+        if (this.graph.nodes.length == 0) { //model graph works in "global" mode, so initialize the entire model
+            UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
+            this.graphService.getGraphModel().subscribe(
+                (graphModel: GraphModelRecord[]) => {
+                    UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
 
-        this.graphService.getGraphModel().subscribe(
-            (graphModel: GraphModelRecord[]) => {
-                let workingGraph: GraphStruct = this.convertModelToGraph(graphModel);
-                this.filtersDelta = new Map();
-                this.filters.forEach(f => {
-                    this.filtersDelta.set(f.property.getURI(), this.getLinksDeltaForProperty(workingGraph, f.property))
-                });
+                    let links: Link[] = this.convertModelToLinks(graphModel);
 
-                this.graph.nodes = workingGraph.nodes;
-                this.graph.links = workingGraph.links;
-
-                this.filters.forEach(f => {
-                    if (!f.show) { //apply the filter only for the filter disabled in order to hide the filtered links and nodes
-                        this.applyFilters(f);
+                    if (links.length > this.linkLimit) {
+                        this.basicModals.confirm("Graph", "The graph you're trying to show has an high number of relations (" + links.length + "). " +
+                            "A performance decrease could be experienced with a growing amount of visual elements in the graph. " +
+                            "Do you want to show the graph anyway?\n\n" +
+                            "Alternatively it is available an 'incremental' explorable model-oriented graph " +
+                            "(from the Class-tree: select a resource, then from the contextual menu 'Show model graph rooted on the selected node').",
+                            "warning"
+                        ).then(
+                            confirm => {
+                                this.initGlabalModelGraph(links);
+                            },
+                            cancel => {}
+                        )
+                    } else {
+                        this.initGlabalModelGraph(links);
                     }
-                });
-
-                this.graph.update();
-
-                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-            }
-        )
+                }
+            );
+        } else { //model graph contains already a root node, so works in "incremental" mode
+            this.incrementalExploration = true;
+        }
     }
 
-    /**
-     * Converts the GraphModelRecord(s) returned by getGraphModel() service into a list of nodes and links
-     */
-    private convertModelToGraph(graphModel: GraphModelRecord[]): GraphStruct {
-        //creates nodes and links
-        let nodes: Node[] = [];
-        let links: Link[] = [];
-        /**
-         * A lot of nodes might be linked with owl:Thing (as generic domain or range of properties which have no D/R defined).
-         * In order to avoid too much cahos around the owl:Thing node and to distribute better the nodes,
-         * there will be multiple owl:Thing nodes. The same Thing node must be reused only when it is linked to the same
-         * source/target node (obviously by a different link/predicate)
-         */
-        let thingNodes: { thingNode: ModelNode, linkedRes: ARTURIResource }[] = [];
+    /* ============== GLOBAL GRAPH MODEL ============== */
 
-        //set the nodes and the links according the model
-        graphModel.forEach(record => {
-            //SOURCE
-            let nodeSource: ModelNode;
-            //special cases: owl:Thing (one node for each linked res) and rdfs:Literal (different node each time)
-            if (record.source.equals(OWL.thing)) {
-                //checks if a Thing node has been already initialized for the linked resource (target)
-                thingNodes.forEach(n => {
-                    if (n.linkedRes.equals(record.target)) {
-                        nodeSource = n.thingNode;
-                    }
-                });
-                if (nodeSource == null) { //Thing node never initialized for the linked resource (target) => initialize it
-                    nodeSource = new ModelNode(record.source);
-                    nodes.push(nodeSource);
-                    thingNodes.push({ thingNode: nodeSource, linkedRes: record.target })
-                }
-            } else if (record.source.equals(RDFS.literal)) {
-                nodeSource = new ModelNode(record.source);
-                nodes.push(nodeSource);
-            } else { //other cases
-                nodeSource = <ModelNode>GraphUtils.getNodeOfValue(nodes, record.source); //try to retrieve the same node (if already initialized)
-                if (nodeSource == null) { //if never initialized, initialize it now
-                    nodeSource = new ModelNode(record.source);
-                    nodes.push(nodeSource);
-                }
-            }
-
-            //TARGET
-            let nodeTarget: ModelNode;
-            //special cases: owl:Thing (one node for each linked res) and rdfs:Literal (different node each time)
-            if (record.target.equals(OWL.thing)) {
-                //checks if a Thing node has been already initialized for the linked resource (source)
-                thingNodes.forEach(n => {
-                    if (n.linkedRes.equals(record.source)) {
-                        nodeTarget = n.thingNode;
-                    }
-                });
-                if (nodeTarget == null) { //Thing node never initialized for the linked resource (source) => initialize it
-                    nodeTarget = new ModelNode(record.target);
-                    nodes.push(nodeTarget);
-                    thingNodes.push({ thingNode: nodeTarget, linkedRes: record.source })
-                }
-            } else if (record.target.equals(RDFS.literal)) {
-                nodeTarget = new ModelNode(record.target);
-                nodes.push(nodeTarget);
-            } else { //other cases
-                nodeTarget = <ModelNode>GraphUtils.getNodeOfValue(nodes, record.target); //try to retrieve the same node (if already initialized)
-                if (nodeTarget == null) { //if never initialized, initialize it now
-                    nodeTarget = new ModelNode(record.target);
-                    nodes.push(nodeTarget);
-                }
-            }
-
-            nodeSource.outgoingNodes.push(nodeTarget);
-            nodeTarget.incomingNodes.push(nodeSource);
-
-            links.push(new Link(nodeSource, nodeTarget, record.link, record.classAxiom));
+    private initGlabalModelGraph(links: Link[]) {
+        //initialize the filter delta map for the entire graph
+        this.filters.forEach(f => {
+            this.filtersDeltaMap.set(f.property, this.getLinksDeltaForProperty(links, f.property))
         });
+        //append all the links of the graph
+        this.appendLinks(links);
+        //then apply the filter by filtering out all the links envolevd by the filters with show=false
+        this.filters.forEach(f => {
+            if (!f.show) { //apply the filter only for the filter disabled in order to hide the filtered links and nodes
+                this.applyFilter(f);
+            }
+        });
+        this.graph.update();
+    }
 
-        return { nodes: nodes, links: links };
+    /* ============== INCREMENTAL GRAPH MODEL ============== */
+
+    protected expandNode(node: Node) {
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
+        this.graphService.expandGraphModelNode(<ARTURIResource>node.res).subscribe(
+            (graphModel: GraphModelRecord[]) => {
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
+
+                let links: Link[] = this.convertModelToLinks(graphModel);
+                links.forEach(l => {
+                    l.openBy.push(node);
+                })
+                //add all the links, independently from the filters
+                let addedLinks = this.appendLinks(links);
+
+                //now update the filters delta map adding eventual new links
+                this.filters.forEach(f => {
+                    let delta = this.filtersDeltaMap.get(f.property);
+                    if (delta == null) { //delta for the property never initialized
+                        delta = [];
+                        this.filtersDeltaMap.set(f.property, delta);
+                    }
+
+                    let deltaOfAddedLinks = this.getLinksDeltaForProperty(addedLinks, f.property);
+                    deltaOfAddedLinks.forEach(l => {
+                        delta.push(l);
+                    })
+                });
+                
+                //then now I should apply the filter
+                this.filters.forEach(f => {
+                    if (!f.show) { //apply the filter only for the filter disabled in order to hide the filtered links and nodes
+                        this.applyFilter(f);
+                    }
+                });
+
+            }
+        );
+    }
+
+    protected closeNode(node: Node) {
+        //collects links from and to the node to close
+        let linksToRemove: Link[] = this.graph.getLinksFrom(node);
+        this.graph.getLinksTo(node).forEach(l => {
+            //add only if not already in (if there are loops, the same link will be returned by getLinksFrom and getLinksTo)
+            if (linksToRemove.indexOf(l) == -1) {
+                linksToRemove.push(l);
+            }
+        })
+        //remove the current node from the list of nodes that generated the link
+        linksToRemove.forEach(l => {
+            let idx = l.openBy.indexOf(node);
+            l.openBy.splice(idx, 1);
+        });
+        //filter out the link that was generated by the expansion of other nodes too
+        for (let i = linksToRemove.length-1; i >= 0; i--) {
+            if (linksToRemove[i].openBy.length > 0) {
+                linksToRemove.splice(i, 1);
+            }
+        }
+
+        this.removeLinks(linksToRemove);
+        //now update the filters delta map removing the closed node from the delta-links and eventually remove the links with empty openBy
+        this.filters.forEach(f => {
+            let delta = this.filtersDeltaMap.get(f.property);
+            for (let i = delta.length-1; i >= 0; i--) {
+                let idx = delta[i].openBy.indexOf(node); //look for the closed node in the openBy list of the delta-links
+                if (idx != -1) { //found => remove the node from the openBy of the delta-link
+                    delta[i].openBy.splice(idx, 1);
+                    if (delta[i].openBy.length == 0) { //if delta link has no more node in openBy list => links has no more node that opened it
+                        delta.splice(i, 1); //then remove the link from the delta
+                    }
+                }
+            }
+        });
+    }
+
+    /* ============== BOTH MODELS ============== */
+
+    private appendLinks(links: Link[]): Link[] {
+        let addedLinks: Link[] = [];
+        links.forEach(l => {
+            //if the link is already in the graph, update the openBy list and skip the add
+            let linkInGraph = this.graph.getLink(l.source.res, l.res, l.target.res);
+            if (linkInGraph != null) {
+                linkInGraph.openBy.push(...l.openBy);
+                return;
+            }
+
+            this.graph.links.push(l); //add the link to the graph
+            addedLinks.push(l)
+
+            //update source and target nodes
+            let sourceNode = this.getExistingNode(l.source.res, l.target.res);
+            if (sourceNode == null) { //not in the graph
+                sourceNode = <ModelNode>l.source;
+                this.graph.nodes.push(sourceNode);
+            } else { //yet in the graph => update the node in the link
+                l.source = sourceNode;
+            }
+            let targetNode = this.getExistingNode(l.target.res, l.source.res);
+            if (targetNode == null) { //not in the graph
+                targetNode = <ModelNode>l.target;
+                this.graph.nodes.push(targetNode);
+            } else { //yet in the graph => update the node in the link
+                l.target = targetNode;
+            }
+            sourceNode.outgoingNodes.push(targetNode); 
+            targetNode.incomingNodes.push(sourceNode);
+        });
+        this.graph.update();
+
+        return addedLinks;
+    }
+
+
+    private removeLinks(links: Link[]): Link[] {
+        let removedLinks: Link[] = [];
+        links.forEach(l => {
+            //remove the link
+            let removingLink = this.graph.getLink(l.source.res, l.res, l.target.res);
+
+            /**
+             * removeLinks is invoked by applyFilter in order to remove/filter-out the links with the hidden properties.
+             * If a property was already hidden, the removeLinks is invoked on a set of delta-links already not in the graph,
+             * so removingLink here would be null. In this case, skip the removing of the link
+             */
+            if (removingLink == null) return;
+            
+            this.graph.links.splice(this.graph.links.indexOf(removingLink), 1);
+            removedLinks.push(removingLink);
+            //remove eventual pending nodes
+            let sourceNode = <ModelNode>removingLink.source;
+            let targetNode = <ModelNode>removingLink.target;
+            sourceNode.removeOutgoingNode(targetNode);
+            targetNode.removeIncomingNode(sourceNode);
+            if (!sourceNode.root && sourceNode.incomingNodes.length == 0 && sourceNode.outgoingNodes.length == 0) {
+                this.graph.nodes.splice(this.graph.nodes.indexOf(sourceNode), 1);
+                //if removed node is owl:Thing, remove it also from the thingNodesMap
+                if (sourceNode.res.equals(OWL.thing)) {
+                    this.removeThingNodeFromMap(sourceNode);
+                }
+            }
+            if (!targetNode.root && targetNode.incomingNodes.length == 0 && targetNode.outgoingNodes.length == 0) {
+                this.graph.nodes.splice(this.graph.nodes.indexOf(targetNode), 1);
+                //if removed node is owl:Thing, remove it also from the thingNodesMap
+                if (targetNode.res.equals(OWL.thing)) {
+                    this.removeThingNodeFromMap(targetNode);
+                }
+            }
+        });
+        this.graph.update();
+
+        return removedLinks;
+    }
+
+    /* ================= FILTERS AND LINKS DELTA HANDLERS ================== */
+    
+    /**
+     * Adds or Removes links and nodes according to the "show" of the given filter
+     * 
+     * This method is public in order to allow the container panel to force the graph update when the filters change.
+     * I cannot exploit the ngOnChanges() method since it doesn't detect changes when the content of the 'filters' @Input() changes
+     * (the content changes but the reference to the object is still the same)
+     * 
+     * @param updatedFilter
+     */
+    public applyFilter(updatedFilter: GraphClassAxiomFilter) {
+        let links = this.filtersDeltaMap.get(updatedFilter.property);
+        if (links == null || links.length == 0) return; //no delta links for the given filter property
+        if (updatedFilter.show) { //from hide to show
+            //add the links to the graph
+            this.appendLinks(links);
+        } else { //from show to hide
+            //remove the links from the graph
+            this.removeLinks(links);
+        }
     }
 
     /**
      * Returns the links with the given property. This method is useful during the initialization of the filtersDelta
      * structure, useful to show/hide of links and nodes when changing the filters
-     * @param graph 
-     * @param property 
+     * @param graph
+     * @param property
      */
-    private getLinksDeltaForProperty(graph: GraphStruct, property: ARTURIResource) {
-        let links: Link[] = [];
-        graph.links.forEach(l => {
+    private getLinksDeltaForProperty(links: Link[], property: ARTURIResource) {
+        let delta: Link[] = [];
+        links.forEach(l => {
             if (l.res.equals(property)) {
-                links.push(l);
+                delta.push(l);
             }
+        });
+        return delta;
+    }
+
+    /**
+     * Converts the GraphModelRecord(s) (returned by getGraphModel() and expandGraphModelNode() services) into a list of nodes and links
+     */
+    private convertModelToLinks(graphModel: GraphModelRecord[]): Link[] {
+        let links: Link[] = [];
+        //set the nodes and the links according the model
+        graphModel.forEach(record => {
+            let nodeSource: ModelNode = new ModelNode(record.source);
+            let nodeTarget: ModelNode = new ModelNode(record.target);
+            links.push(new Link(nodeSource, nodeTarget, record.link, record.classAxiom));
         });
         return links;
     }
 
+
+    /* ================== UTILS ================== */
+
     /**
-     * Adds or Removes links and nodes according to the "show" of the given filter
-     * @param updatedFilter 
+     * Returns the node in the graph for the given resource.
+     * If the node is rdfs:Literal return null, since node describing this resource cannot be reused.
+     * If the node is owl:Thing looks into the thingNodesMap if there is an owl:Thing node already used for the relatedRes.
+     * In case returns it, otherwise creates a new one, update the map and returns it.
      */
-    private applyFilters(updatedFilter: GraphClassAxiomFilter) {
-        let links = this.filtersDelta.get(updatedFilter.property.getURI());
-        if (updatedFilter.show) { //from hide to show
-            //add the links to the graph
-            links.forEach(l => {
-                this.graph.links.push(l);
-                //update source and target nodes
-                let sourceNode = <ModelNode>this.graph.getNode(l.source.res);
-                if (sourceNode == null) { //not in the graph
-                    sourceNode = <ModelNode>l.source;
-                    this.graph.nodes.push(sourceNode);
-                }
-                
-                let targetNode = <ModelNode>this.graph.getNode(l.target.res);
-                if (targetNode == null) { //not in the graph
-                    targetNode = <ModelNode>l.target;
-                    this.graph.nodes.push(targetNode);
-                }
-
-                sourceNode.outgoingNodes.push(targetNode);
-                targetNode.incomingNodes.push(sourceNode);
-            });
-        } else { //from show to hide
-            //remove the links from the graph
-            links.forEach(l => {
-                let removingLink = this.graph.getLink(l.source.res, l.res, l.target.res);
-                this.graph.links.splice(this.graph.links.indexOf(removingLink), 1);
-
-                //remove eventual pending nodes
-                let sourceNode = <ModelNode>this.graph.getNode(removingLink.source.res);
-                let targetNode = <ModelNode>this.graph.getNode(removingLink.target.res);
-                sourceNode.removeOutgoingNode(targetNode);
-                targetNode.removeIncomingNode(sourceNode);
-
-                if (sourceNode.incomingNodes.length == 0 && sourceNode.outgoingNodes.length == 0) {
-                    this.graph.nodes.splice(this.graph.nodes.indexOf(sourceNode), 1);
-                }
-                if (targetNode.incomingNodes.length == 0 && targetNode.outgoingNodes.length == 0) {
-                    this.graph.nodes.splice(this.graph.nodes.indexOf(targetNode), 1);
+    private getExistingNode(resource: ARTNode, relatedRes: ARTNode): ModelNode {
+        if (resource.equals(RDFS.literal)) {
+            return null;
+        } else if (resource.equals(OWL.thing)) {
+            let thingNode: ModelNode;
+            this.thingNodesMap.forEach(tnm => {
+                if (tnm.linkedRes.equals(relatedRes)) { //a Thing node linked with relatedRes was already created => reuse it
+                    thingNode = tnm.thingNode;
                 }
             });
+            if (thingNode == null) { //a Thing node linked with relatedRes was not already created => create it, add to the graph and update map
+                thingNode = new ModelNode(resource);
+                this.graph.nodes.push(thingNode);
+                this.thingNodesMap.push({ thingNode: thingNode, linkedRes: relatedRes })
+            }
+            return thingNode;
+        } else {
+            return <ModelNode>this.graph.getNode(resource);
         }
     }
 
     /**
-     * This method allows the container panel to force the graph update when the filters change.
-     * I cannot exploit the ngOnChanges() method since it doesn't detect changes when the content of the 'filters' @Input() changes
-     * (the content changes but the reference to the object is still the same)
+     * Update the thingNodesMap by removing the entry when an owl:Thing node has been removed from the graph
      */
-    public updateGraphFilter(filter: GraphClassAxiomFilter) {
-        this.applyFilters(filter);
-        this.graph.update();
-    }
-
-
-    protected expandNode(node: Node) {
-        if (!node.res.isResource()) {
-            return;
+    private removeThingNodeFromMap(thingNode: ModelNode) {
+        for (let i = 0;  i < this.thingNodesMap.length; i++) {
+            if (this.thingNodesMap[i].thingNode == thingNode) {
+                this.thingNodesMap.splice(i, 1);
+                return;
+            }
         }
     }
+
+    /* ================== EVENT HANDLER ================== */
 
     protected onNodeDblClicked(node: Node) {
-        return
+        if (this.incrementalExploration) {
+            //literal nodes or not explici nodes (owl:Thing, or other imported classes) are not expandable/closable
+            if (!node.res.isResource() || !node.res.getAdditionalProperty(ResAttribute.EXPLICIT)) {
+                return;
+            }
+            if (node.open) {
+                this.closeNode(node);
+                node.open = false;
+            } else {
+                this.expandNode(node);
+                node.open = true;
+            }
+        }
     }
 
-}
-
-class GraphStruct {
-    nodes: Node[];
-    links: Link[];
 }

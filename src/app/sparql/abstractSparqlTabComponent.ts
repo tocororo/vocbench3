@@ -358,12 +358,18 @@ export abstract class AbstractSparqlTabComponent {
     private sortResult(header: string) {
         if (this.sortOrder == header + this.asc_Order) { //from ascending to descending (alphabetical) order
             this.queryResult.sort((binding1: any, binding2: any) => {
-                return -binding1[header].value.localeCompare(binding2[header].value);
+                //support variables v1 and v2 in order to preved error if binding is not defined
+                let v1 = binding1[header] ? binding1[header].value : "";
+                let v2 = binding2[header] ? binding2[header].value : "";
+                return -v1.localeCompare(v2);
             });
             this.sortOrder = header + this.desc_Order;
         } else {
             this.queryResult.sort((binding1: any, binding2: any) => { //from descending to ascending (alphabetical) order
-                return binding1[header].value.localeCompare(binding2[header].value);
+                //support variables v1 and v2 in order to preved error if binding is not defined
+                let v1 = binding1[header] ? binding1[header].value : "";
+                let v2 = binding2[header] ? binding2[header].value : "";
+                return v1.localeCompare(v2);
             });
             this.sortOrder = header + this.asc_Order;
         }

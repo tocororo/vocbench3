@@ -3,7 +3,7 @@ import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { GraphMode } from "../../../graph/abstractGraph";
 import { GraphModalServices } from "../../../graph/modal/graphModalServices";
-import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { SearchSettings } from "../../../models/Properties";
 import { OWL, RDFS } from "../../../models/Vocabulary";
 import { ClassesServices } from "../../../services/classesServices";
@@ -139,6 +139,15 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
         this.viewChildTree.openTreeAt(cls);
     }
 
+
+    private isOpenIncrementalGraphEnabled() {
+        return this.isOpenGraphEnabled() && this.selectedNode != null && this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT);
+    }
+
+    private openIncrementalGraph() {
+        this.graphModals.openModelGraph(this.selectedNode);
+    }
+
     private settings() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
@@ -152,5 +161,5 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
             }
         );
     }
-
+    
 }

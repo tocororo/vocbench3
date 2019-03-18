@@ -11,6 +11,9 @@ export abstract class Node implements d3.SimulationNodeDatum {
     fy?: number | null;
 
     res: ARTNode;
+
+    open: boolean = false;
+    root: boolean = false; //true only for the root node when exploring the data-oriented graph or the model-oriente in incremental-mode
     fixed: boolean = false;
 
     protected shape: NodeShape;
@@ -50,6 +53,13 @@ export abstract class Node implements d3.SimulationNodeDatum {
         } else {
             return this.getNodeMeaseure().height;
         }
+    }
+
+    /**
+     * Returns the show of the resource in the node.
+     */
+    getShow(): string {
+        return this.res.getShow();
     }
 
     protected abstract initNodeShape(): void;

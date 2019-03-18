@@ -14,6 +14,7 @@ import { Link } from '../model/Link';
 import { Node } from '../model/Node';
 import { GraphModal, GraphModalData } from './graphModal';
 import { LinksFilterModal, LinksFilterModalData } from './linksFilterModal';
+import { ModelNode } from '../model/ModelNode';
 
 @Injectable()
 export class GraphModalServices {
@@ -98,8 +99,19 @@ export class GraphModalServices {
         return this.modal.open(GraphModal, overlayConfig).result;
     }
 
-    openModelGraph() {
-        let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph([], []);
+    /**
+     * Open a model-oriented graph. If a resource is provided, the exploration in incremental, otherwise the graph
+     * will show the entire model-graph
+     * @param resource 
+     */
+    openModelGraph(resource?: ARTURIResource) {
+        let nodes: Node[] = [];
+        if (resource != null) {
+            let rootNode: ModelNode = new ModelNode(resource);
+            rootNode.root = true; //so it cannot be close in case of loop.
+            nodes.push(rootNode);
+        }
+        let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph(nodes, []);
         var modalData = new GraphModalData(graph, GraphMode.modelOriented);
         const builder = new BSModalContextBuilder<GraphModalData>(
             modalData, undefined, GraphModalData
