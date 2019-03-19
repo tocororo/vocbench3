@@ -4,6 +4,7 @@ import { OWL, RDFS } from "../../models/Vocabulary";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AbstractGraphPanel } from "../abstractGraphPanel";
 import { ModelGraphComponent } from "./modelGraphComponent";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 
 @Component({
     selector: 'model-graph-panel',
@@ -20,12 +21,22 @@ export class ModelGraphPanel extends AbstractGraphPanel {
         { property: RDFS.subClassOf, show: true }
     ];
     
-    constructor(basicModals: BasicModalServices) {
+    constructor(basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) {
         super(basicModals);
     }
 
     private onFilterChange(filter: GraphClassAxiomFilter) {
         this.viewChildGraph.applyFilter(filter);
+    }
+
+    private add() {
+        this.browsingModals.browseClassTree("Add resource").then(
+            cls => {
+                console.log("adding", cls);
+                this.viewChildGraph.add(cls);
+            },
+            () => {}
+        )
     }
 
 }

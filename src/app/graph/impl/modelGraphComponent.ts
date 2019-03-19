@@ -35,7 +35,7 @@ export class ModelGraphComponent extends AbstractGraph {
      */
     private incrementalExploration: boolean = false;
 
-    private filtersDeltaMap: Map<ARTURIResource, Link[]> = new Map(); //map the property of the filter with the links (only those in the graph visible) involved by the filter
+    private filtersDeltaMap: {[prop: string]: Link[]} = {}; //map the property of the filter with the links (only those in the graph visible) involved by the filter
 
     private linkLimit: number = 100; //in "normal" exploration mode, if the number of relations exceed this limit, suggest to work with the incremental mode
 
@@ -52,6 +52,11 @@ export class ModelGraphComponent extends AbstractGraph {
     }
 
     ngOnInit() {
+        //init an empty filtersDeltaMap
+        this.filters.forEach(f => {
+            this.filtersDeltaMap[f.property.getURI()] = [];
+        })
+
         if (this.graph.nodes.length == 0) { //model graph works in "global" mode, so initialize the entire model
             UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
             this.graphService.getGraphModel().subscribe(
@@ -83,22 +88,18 @@ export class ModelGraphComponent extends AbstractGraph {
         }
     }
 
+    /* ============== ACTIONS ============== */
+
+    add(cls: ARTURIResource) {
+        let node: Node = new ModelNode(cls);
+        this.graph.nodes.push(node);
+        this.graph.update();
+    }
+
     /* ============== GLOBAL GRAPH MODEL ============== */
 
     private initGlabalModelGraph(links: Link[]) {
-        //initialize the filter delta map for the entire graph
-        this.filters.forEach(f => {
-            this.filtersDeltaMap.set(f.property, this.getLinksDeltaForProperty(links, f.property))
-        });
-        //append all the links of the graph
         this.appendLinks(links);
-        //then apply the filter by filtering out all the links envolevd by the filters with show=false
-        this.filters.forEach(f => {
-            if (!f.show) { //apply the filter only for the filter disabled in order to hide the filtered links and nodes
-                this.applyFilter(f);
-            }
-        });
-        this.graph.update();
     }
 
     /* ============== INCREMENTAL GRAPH MODEL ============== */
@@ -112,31 +113,9 @@ export class ModelGraphComponent extends AbstractGraph {
                 let links: Link[] = this.convertModelToLinks(graphModel);
                 links.forEach(l => {
                     l.openBy.push(node);
-                })
-                //add all the links, independently from the filters
-                let addedLinks = this.appendLinks(links);
-
-                //now update the filters delta map adding eventual new links
-                this.filters.forEach(f => {
-                    let delta = this.filtersDeltaMap.get(f.property);
-                    if (delta == null) { //delta for the property never initialized
-                        delta = [];
-                        this.filtersDeltaMap.set(f.property, delta);
-                    }
-
-                    let deltaOfAddedLinks = this.getLinksDeltaForProperty(addedLinks, f.property);
-                    deltaOfAddedLinks.forEach(l => {
-                        delta.push(l);
-                    })
-                });
-                
-                //then now I should apply the filter
-                this.filters.forEach(f => {
-                    if (!f.show) { //apply the filter only for the filter disabled in order to hide the filtered links and nodes
-                        this.applyFilter(f);
-                    }
                 });
 
+                this.appendLinks(links);
             }
         );
     }
@@ -165,7 +144,7 @@ export class ModelGraphComponent extends AbstractGraph {
         this.removeLinks(linksToRemove);
         //now update the filters delta map removing the closed node from the delta-links and eventually remove the links with empty openBy
         this.filters.forEach(f => {
-            let delta = this.filtersDeltaMap.get(f.property);
+            let delta = this.filtersDeltaMap[f.property.getURI()];
             for (let i = delta.length-1; i >= 0; i--) {
                 let idx = delta[i].openBy.indexOf(node); //look for the closed node in the openBy list of the delta-links
                 if (idx != -1) { //found => remove the node from the openBy of the delta-link
@@ -180,58 +159,61 @@ export class ModelGraphComponent extends AbstractGraph {
 
     /* ============== BOTH MODELS ============== */
 
-    private appendLinks(links: Link[]): Link[] {
-        let addedLinks: Link[] = [];
+    /**
+     * Appends the provided links to the graph (except the filtered ones) and keeps updated the delta filter map
+     */
+    private appendLinks(links: Link[]) {
         links.forEach(l => {
             //if the link is already in the graph, update the openBy list and skip the add
             let linkInGraph = this.graph.getLink(l.source.res, l.res, l.target.res);
             if (linkInGraph != null) {
                 linkInGraph.openBy.push(...l.openBy);
-                return;
-            }
-
-            this.graph.links.push(l); //add the link to the graph
-            addedLinks.push(l)
-
-            //update source and target nodes
-            let sourceNode = this.getExistingNode(l.source.res, l.target.res);
-            if (sourceNode == null) { //not in the graph
-                sourceNode = <ModelNode>l.source;
-                this.graph.nodes.push(sourceNode);
-            } else { //yet in the graph => update the node in the link
+            } else { //link does not exist in graph => use it
+                //update the source and target nodes of the link with the same nodes retrieved from the graph
+                let sourceNode = this.retrieveOrCreateNode(l.source.res, l.target.res);
                 l.source = sourceNode;
-            }
-            let targetNode = this.getExistingNode(l.target.res, l.source.res);
-            if (targetNode == null) { //not in the graph
-                targetNode = <ModelNode>l.target;
-                this.graph.nodes.push(targetNode);
-            } else { //yet in the graph => update the node in the link
+                let targetNode = this.retrieveOrCreateNode(l.target.res, l.source.res);
                 l.target = targetNode;
+
+                //update the filter map
+                let show = true;
+                this.filters.forEach(f => {
+                    if (f.property.equals(l.res)) { //link is about a filtered relation
+                        let delta = this.filtersDeltaMap[l.res.getURI()]; //here l.res is for sure a filter property since show is false only in that case
+                        let alreadyInDelta = false;
+                        delta.forEach(dl => {
+                            if (dl.source == l.source && dl.res.equals(l.res) && dl.target == l.target) {
+                                alreadyInDelta = true;
+                            }
+                        })
+                        if (!alreadyInDelta) {
+                            delta.push(l);
+                        }
+                        //check also if link should be shown according the filter
+                        if (!f.show) { 
+                            show = false;
+                        }
+                    }
+                });
+
+                if (show) {
+                    //update the incoming-outgoing nodes of both source and target
+                    sourceNode.outgoingNodes.push(targetNode); 
+                    targetNode.incomingNodes.push(sourceNode);
+                    //add the link to the graph
+                    this.graph.links.push(l); 
+                }
             }
-            sourceNode.outgoingNodes.push(targetNode); 
-            targetNode.incomingNodes.push(sourceNode);
         });
         this.graph.update();
-
-        return addedLinks;
     }
 
 
-    private removeLinks(links: Link[]): Link[] {
-        let removedLinks: Link[] = [];
+    private removeLinks(links: Link[]) {
         links.forEach(l => {
             //remove the link
             let removingLink = this.graph.getLink(l.source.res, l.res, l.target.res);
-
-            /**
-             * removeLinks is invoked by applyFilter in order to remove/filter-out the links with the hidden properties.
-             * If a property was already hidden, the removeLinks is invoked on a set of delta-links already not in the graph,
-             * so removingLink here would be null. In this case, skip the removing of the link
-             */
-            if (removingLink == null) return;
-            
             this.graph.links.splice(this.graph.links.indexOf(removingLink), 1);
-            removedLinks.push(removingLink);
             //remove eventual pending nodes
             let sourceNode = <ModelNode>removingLink.source;
             let targetNode = <ModelNode>removingLink.target;
@@ -253,8 +235,6 @@ export class ModelGraphComponent extends AbstractGraph {
             }
         });
         this.graph.update();
-
-        return removedLinks;
     }
 
     /* ================= FILTERS AND LINKS DELTA HANDLERS ================== */
@@ -269,8 +249,8 @@ export class ModelGraphComponent extends AbstractGraph {
      * @param updatedFilter
      */
     public applyFilter(updatedFilter: GraphClassAxiomFilter) {
-        let links = this.filtersDeltaMap.get(updatedFilter.property);
-        if (links == null || links.length == 0) return; //no delta links for the given filter property
+        let links = this.filtersDeltaMap[updatedFilter.property.getURI()];
+        if (links.length == 0) return; //no delta links for the given filter property
         if (updatedFilter.show) { //from hide to show
             //add the links to the graph
             this.appendLinks(links);
@@ -314,30 +294,35 @@ export class ModelGraphComponent extends AbstractGraph {
     /* ================== UTILS ================== */
 
     /**
-     * Returns the node in the graph for the given resource.
-     * If the node is rdfs:Literal return null, since node describing this resource cannot be reused.
-     * If the node is owl:Thing looks into the thingNodesMap if there is an owl:Thing node already used for the relatedRes.
+     * Returns the node, for the given resource, retrieved from the graph. If it doesn't yet exist, creates a new one and returns it.
+     * If the node is rdfs:Literal creates a new one each time, since node describing this resource cannot be reused.
+     * If the node is owl:Thing looks into the thingNodesMap far an owl:Thing node already used for the relatedRes.
      * In case returns it, otherwise creates a new one, update the map and returns it.
      */
-    private getExistingNode(resource: ARTNode, relatedRes: ARTNode): ModelNode {
-        if (resource.equals(RDFS.literal)) {
-            return null;
-        } else if (resource.equals(OWL.thing)) {
-            let thingNode: ModelNode;
+    private retrieveOrCreateNode(resource: ARTNode, relatedRes: ARTNode): ModelNode {
+        let graphNode: ModelNode;
+        if (resource.equals(RDFS.literal)) { //rdfs:Literal node must not be reused => create a new one each time
+            graphNode = new ModelNode(resource);
+            this.graph.nodes.push(graphNode);
+        } else if (resource.equals(OWL.thing)) { //owl:Thing node can be reused only if linked with the same resource
             this.thingNodesMap.forEach(tnm => {
                 if (tnm.linkedRes.equals(relatedRes)) { //a Thing node linked with relatedRes was already created => reuse it
-                    thingNode = tnm.thingNode;
+                    graphNode = tnm.thingNode;
                 }
             });
-            if (thingNode == null) { //a Thing node linked with relatedRes was not already created => create it, add to the graph and update map
-                thingNode = new ModelNode(resource);
-                this.graph.nodes.push(thingNode);
-                this.thingNodesMap.push({ thingNode: thingNode, linkedRes: relatedRes })
+            if (graphNode == null) { //a Thing node linked with relatedRes was not already created => create it, add to the graph and update map
+                graphNode = new ModelNode(resource);
+                this.graph.nodes.push(graphNode);
+                this.thingNodesMap.push({ thingNode: graphNode, linkedRes: relatedRes })
             }
-            return thingNode;
         } else {
-            return <ModelNode>this.graph.getNode(resource);
+            graphNode = <ModelNode>this.graph.getNode(resource);
+            if (graphNode == null) { //node for the given resource not yet created => create it and add to the graph
+                graphNode = new ModelNode(resource);
+                this.graph.nodes.push(graphNode);
+            }
         }
+        return graphNode;
     }
 
     /**
