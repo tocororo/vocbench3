@@ -5,6 +5,7 @@ import { ResourceViewServices } from "../../services/resourceViewServices";
 import { Deserializer } from "../../utils/Deserializer";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBProperties } from "../../utils/VBProperties";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AbstractGraph, GraphMode } from "../abstractGraph";
 import { D3Service } from "../d3/d3Services";
 import { GraphModalServices } from "../modal/graphModalServices";
@@ -35,9 +36,21 @@ export class DataGraphComponent extends AbstractGraph {
         ResViewPartition.types
     ]
 
-    constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef,
+    constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef, protected basicModals: BasicModalServices,
         private resViewService: ResourceViewServices, private graphModals: GraphModalServices, private vbProp: VBProperties) {
-        super(d3Service, elementRef, ref);
+        super(d3Service, elementRef, ref, basicModals);
+    }
+
+    addNode(res: ARTURIResource) {
+        if (this.graph.getNode(res)) {
+            this.basicModals.alert("Add node", "Cannot add a new node for " + res.getShow() + " since a node for the same resource already exists", "warning");
+            return;
+        }
+
+        let node: DataNode = new DataNode(res);
+        node.root = true; //so it cannot be close in case of loop.
+        this.graph.nodes.push(node);
+        this.graph.update();
     }
 
     protected expandNode(node: Node) {

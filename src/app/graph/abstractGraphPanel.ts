@@ -1,5 +1,6 @@
 import { Input } from "@angular/core";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingModalServices";
 import { AbstractGraph } from "./abstractGraph";
 import { ForceDirectedGraph, GraphForces } from "./model/ForceDirectedGraph";
 import { Link } from "./model/Link";
@@ -12,12 +13,17 @@ export abstract class AbstractGraphPanel {
     abstract viewChildGraph: AbstractGraph;
 
     private selectedElement: Node | Link;
-    // private forces: GraphForces = new GraphForces();
     private forces: GraphForces;
 
-    constructor(private basicModals: BasicModalServices) {
+    protected basicModals: BasicModalServices
+    protected browsingModals: BrowsingModalServices;
+    constructor(basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
+        this.basicModals = basicModals;
+        this.browsingModals = browsingModals;
         this.forces = new GraphForces();
     }
+
+    abstract addNode(): void;
 
     private onForceChange() {
         this.viewChildGraph.updateForces(this.forces);

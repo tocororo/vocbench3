@@ -75,7 +75,7 @@ export abstract class AbstractGraphNode {
     private initNodeStyle() {
         let res: ARTNode = this.node.res;
 
-        if (this.node.res.isURIResource()) {
+        if (this.node.res.isResource()) {
             let role: RDFResourceRolesEnum = res.getRole();
             let explicit: boolean = res.getAdditionalProperty(ResAttribute.EXPLICIT) || res.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
             this.deprecated = res.getAdditionalProperty(ResAttribute.DEPRECATED);
@@ -123,8 +123,6 @@ export abstract class AbstractGraphNode {
             } else { //none of the above (maybe mention?)
                 this.nodeClass = "unkwnownNode";
             }
-        } else if (res.isBNode()) {
-            this.nodeClass = "bnode";
         }
     }
 

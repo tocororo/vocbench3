@@ -1,10 +1,11 @@
 import { Component, ViewChild } from "@angular/core";
+import { ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { GraphClassAxiomFilter } from "../../models/Graphs";
 import { OWL, RDFS } from "../../models/Vocabulary";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { AbstractGraphPanel } from "../abstractGraphPanel";
 import { ModelGraphComponent } from "./modelGraphComponent";
-import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 
 @Component({
     selector: 'model-graph-panel',
@@ -21,19 +22,23 @@ export class ModelGraphPanel extends AbstractGraphPanel {
         { property: RDFS.subClassOf, show: true }
     ];
     
-    constructor(basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) {
-        super(basicModals);
+    constructor(basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
+        super(basicModals, browsingModals);
     }
 
     private onFilterChange(filter: GraphClassAxiomFilter) {
         this.viewChildGraph.applyFilter(filter);
     }
 
-    private add() {
-        this.browsingModals.browseClassTree("Add resource").then(
-            cls => {
-                console.log("adding", cls);
-                this.viewChildGraph.add(cls);
+    addNode() {
+        this.browsingModals.browseClassTree("Add node").then(
+            (cls: ARTURIResource) => {
+                if (!cls.getAdditionalProperty(ResAttribute.EXPLICIT)) {
+                    this.basicModals.alert("Add node", "Cannot add a new node for " + cls.getShow() + 
+                        ". In the model-oriented graph you can only add resources locally defined.", "warning");
+                    return;
+                }
+                this.viewChildGraph.addNode(cls);
             },
             () => {}
         )

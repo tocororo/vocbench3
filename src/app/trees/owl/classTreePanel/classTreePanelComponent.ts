@@ -37,8 +37,6 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.cls;
     rendering: boolean = false; //override the value in AbstractPanel
 
-    graphMode: GraphMode = GraphMode.modelOriented;
-
     private filterEnabled: boolean;
     private creatingClassType: ARTURIResource = OWL.class;
 
@@ -140,12 +138,12 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     }
 
 
-    private isOpenIncrementalGraphEnabled() {
-        return this.isOpenGraphEnabled() && this.selectedNode != null && this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT);
+    private isOpenIncrementalModelGraphEnabled() {
+        return this.isOpenGraphEnabled(GraphMode.modelOriented) && this.selectedNode != null && this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT);
     }
 
     private openIncrementalGraph() {
-        this.graphModals.openModelGraph(this.selectedNode);
+        this.graphModals.openModelGraph(this.selectedNode, this.rendering);
     }
 
     private settings() {

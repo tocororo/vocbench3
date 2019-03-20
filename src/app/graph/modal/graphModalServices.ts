@@ -67,7 +67,7 @@ export class GraphModalServices {
                     }
                 })
                 let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph(nodes, links, false);
-                var modalData = new GraphModalData(graph, GraphMode.dataOriented);
+                var modalData = new GraphModalData(graph, GraphMode.dataOriented, true);
                 const builder = new BSModalContextBuilder<GraphModalData>(
                     modalData, undefined, GraphModalData
                 );
@@ -87,11 +87,11 @@ export class GraphModalServices {
         }
     }
 
-    openDataGraph(resource: ARTURIResource) {
+    openDataGraph(resource: ARTResource, rendering: boolean) {
         let rootNode: DataNode = new DataNode(resource);
         rootNode.root = true; //so it cannot be close in case of loop.
         let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph([rootNode], []);
-        var modalData = new GraphModalData(graph, GraphMode.dataOriented);
+        var modalData = new GraphModalData(graph, GraphMode.dataOriented, rendering, resource.getRole());
         const builder = new BSModalContextBuilder<GraphModalData>(
             modalData, undefined, GraphModalData
         );
@@ -102,9 +102,9 @@ export class GraphModalServices {
     /**
      * Open a model-oriented graph. If a resource is provided, the exploration in incremental, otherwise the graph
      * will show the entire model-graph
-     * @param resource 
+     * @param resource
      */
-    openModelGraph(resource?: ARTURIResource) {
+    openModelGraph(resource: ARTURIResource, rendering: boolean) {
         let nodes: Node[] = [];
         if (resource != null) {
             let rootNode: ModelNode = new ModelNode(resource);
@@ -112,7 +112,7 @@ export class GraphModalServices {
             nodes.push(rootNode);
         }
         let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph(nodes, []);
-        var modalData = new GraphModalData(graph, GraphMode.modelOriented);
+        var modalData = new GraphModalData(graph, GraphMode.modelOriented, rendering);
         const builder = new BSModalContextBuilder<GraphModalData>(
             modalData, undefined, GraphModalData
         );

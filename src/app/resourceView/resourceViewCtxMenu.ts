@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ResourceAlignmentModal, ResourceAlignmentModalData } from "../alignment/resourceAlignment/resourceAlignmentModal";
+import { GraphModalServices } from "../graph/modal/graphModalServices";
 import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { SKOS } from "../models/Vocabulary";
 import { AlignmentServices } from "../services/alignmentServices";
@@ -10,6 +11,7 @@ import { ResourcesServices } from "../services/resourcesServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { ResourceUtils } from "../utils/ResourceUtils";
 import { VBActionsEnum } from "../utils/VBActions";
+import { VBProperties } from "../utils/VBProperties";
 import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
 
 @Component({
@@ -20,10 +22,12 @@ export class ResourceViewContextMenu {
 
     @Input() resource: ARTResource;
     @Input() readonly: boolean;
+    @Input() rendering: boolean;
     @Output() update = new EventEmitter();
 
-    constructor(private alignServices: AlignmentServices, private refactorService: RefactorServices,
-        private resourcesService: ResourcesServices, private creationModals: CreationModalServices, private modal: Modal) { }
+    constructor(private alignServices: AlignmentServices, private refactorService: RefactorServices, private resourcesService: ResourcesServices,
+        private creationModals: CreationModalServices, private graphModals: GraphModalServices, private modal: Modal,
+        private vbProp: VBProperties) { }
 
     private alignResource() {
         this.openAlignmentModal().then(
@@ -82,6 +86,15 @@ export class ResourceViewContextMenu {
                 // this.update.emit();
             }
         );
+    }
+
+
+    private isOpenDataGraphEnabled(): boolean {
+        return this.vbProp.getExperimentalFeaturesEnabled();
+    }
+
+    private openDataGraph() {
+        this.graphModals.openDataGraph(this.resource, this.rendering);
     }
 
     //menu items authorization

@@ -27,6 +27,7 @@ import { ClassIndividualTreeModal } from "../widget/modal/browsingModal/classInd
 import { ClassTreeModal } from '../widget/modal/browsingModal/classTreeModal/classTreeModal';
 import { CollectionTreeModal } from '../widget/modal/browsingModal/collectionTreeModal/collectionTreeModal';
 import { ConceptTreeModal } from '../widget/modal/browsingModal/conceptTreeModal/conceptTreeModal';
+import { DatatypeListModal } from '../widget/modal/browsingModal/datatypeListModal/datatypeListModal';
 import { InstanceListModal } from '../widget/modal/browsingModal/instanceListModal/instanceListModal';
 import { LexicalEntryListModal } from '../widget/modal/browsingModal/lexicalEntryListModal/lexicalEntryListModal';
 import { LexiconListModal } from '../widget/modal/browsingModal/lexiconListModal/lexiconListModal';
@@ -76,6 +77,7 @@ import { UserModule } from "./userModule";
         ConfirmModal,
         ConverterPickerModal,
         CustomFormSelectionModal,
+        DatatypeListModal,
         DownloadModal,
         DumpCreationModal,
         EditableNsInput,
@@ -141,6 +143,7 @@ import { UserModule } from "./userModule";
         ConfirmModal,
         ConverterPickerModal,
         CustomFormSelectionModal,
+        DatatypeListModal,
         DownloadModal,
         DumpCreationModal,
         FilePickerModal,

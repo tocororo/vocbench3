@@ -63,16 +63,22 @@
                     </a>
                 </li>
                 <ng-template [ngIf]="isOpenGraphEnabled()">
-                    <li>
-                        <a (click)="openGraph()">
+                    <li *ngIf="isOpenGraphEnabled('modelOriented')">
+                        <a (click)="openModelGraph()">
                             <img src="../../../../assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
-                            {{getOpenGraphLabel()}}
+                            Show model-oriented graph
                         </a>
                     </li>
-                    <li *ngIf="isOpenIncrementalGraphEnabled()">
+                    <li *ngIf="isOpenIncrementalModelGraphEnabled()">
                         <a (click)="openIncrementalGraph()">
                             <img src="../../../../assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
-                            Show model graph rooted on the selected node
+                            Show model-oriented graph rooted on the selected node
+                        </a>
+                    </li>
+                    <li *ngIf="isOpenGraphEnabled('dataOriented')">
+                        <a (click)="openDataGraph()">
+                            <img src="../../../../assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
+                            Show data-oriented graph
                         </a>
                     </li>
                 </ng-template>

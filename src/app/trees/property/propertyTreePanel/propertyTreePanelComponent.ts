@@ -34,8 +34,6 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.property;
     rendering: boolean = false; //override the value in AbstractPanel
 
-    graphMode: GraphMode = GraphMode.modelOriented;
-
     constructor(private propService: PropertyServices, private searchService: SearchServices, private creationModals: CreationModalServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver) {

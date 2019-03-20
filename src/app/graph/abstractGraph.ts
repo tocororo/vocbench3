@@ -1,4 +1,6 @@
 import { ChangeDetectorRef, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { ARTURIResource } from "../models/ARTResources";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { D3Service } from "./d3/d3Services";
 import { ForceDirectedGraph, GraphForces, GraphOptions } from "./model/ForceDirectedGraph";
 import { Link } from "./model/Link";
@@ -12,15 +14,15 @@ export abstract class AbstractGraph {
     @ViewChild('svg') public svgElement: ElementRef;
     @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
 
-    private selectedElement: Link | Node;
-    private linkAhead: Link; //link selected to bring ahead the other
+    protected selectedElement: Link | Node;
+    protected linkAhead: Link; //link selected to bring ahead the other
 
     private initialized: boolean = false; //true once the graph will be initialized (useful in order to not render the graph view until then)
     
     protected abstract mode: GraphMode;
     protected options: GraphOptions = new GraphOptions(800, 400); //initial w & h (will be updated later)
 
-    constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef) { }
+    constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef, protected basicModals: BasicModalServices) { }
 
     //In ngAfterViewInit instead of ngOnInit since I need offsetWidth and offsetHeight that are fixed only once the view is initialized
     ngAfterViewInit() {
@@ -45,6 +47,8 @@ export abstract class AbstractGraph {
     };
 
     protected abstract onNodeDblClicked(node: Node): void;
+
+    protected abstract addNode(res: ARTURIResource): void;
 
     protected abstract expandNode(node: Node): void;
 

@@ -6,11 +6,12 @@ import { ClassIndividualTreeModal, ClassIndividualTreeModalData } from "./classI
 import { ClassTreeModal, ClassTreeModalData } from "./classTreeModal/classTreeModal";
 import { CollectionTreeModal, CollectionTreeModalData } from "./collectionTreeModal/collectionTreeModal";
 import { ConceptTreeModal, ConceptTreeModalData } from "./conceptTreeModal/conceptTreeModal";
+import { DatatypeListModal, DatatypeListModalData } from './datatypeListModal/datatypeListModal';
 import { InstanceListModal, InstanceListModalData } from "./instanceListModal/instanceListModal";
-import { PropertyTreeModal, PropertyTreeModalData } from "./propertyTreeModal/propertyTreeModal";
-import { SchemeListModal, SchemeListModalData } from "./schemeListModal/schemeListModal";
 import { LexicalEntryListModal, LexicalEntryListModalData } from './lexicalEntryListModal/lexicalEntryListModal';
 import { LexiconListModal, LexiconListModalData } from './lexiconListModal/lexiconListModal';
+import { PropertyTreeModal, PropertyTreeModalData } from "./propertyTreeModal/propertyTreeModal";
+import { SchemeListModal, SchemeListModalData } from "./schemeListModal/schemeListModal";
 
 /**
  * Service to open browsing modals, namely the modal that contains trees (concept, class, property) or list (instances).
@@ -151,6 +152,20 @@ export class BrowsingModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(LexiconListModal, overlayConfig).result;
+    }
+
+    /**
+     * Opens a modal to browse the datatype list
+     * @param title the title of the modal
+     * @return if the modal closes with ok returns a promise containing the selected datatype
+     */
+    browseDatatypeList(title: string) {
+        var modalData = new DatatypeListModalData(title);
+        const builder = new BSModalContextBuilder<DatatypeListModalData>(
+            modalData, undefined, DatatypeListModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        return this.modal.open(DatatypeListModal, overlayConfig).result;
     }
 
 }

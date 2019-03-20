@@ -43,8 +43,6 @@ export abstract class AbstractPanel {
 
     panelActions: ActionDescription[];
 
-    graphMode: GraphMode = GraphMode.dataOriented; //at the moment, set the default to data oriented and override it in class and property panel
-
     /**
      * CONSTRUCTOR
      */
@@ -124,12 +122,12 @@ export abstract class AbstractPanel {
         this.multiselectionStatus.emit(this.multiselection);
     }
 
-    protected openGraph() {
-        if (this.graphMode == GraphMode.dataOriented) {
-            this.graphModals.openDataGraph(this.selectedNode);
-        } else {
-            this.graphModals.openModelGraph();
-        }
+    protected openDataGraph() {
+        this.graphModals.openDataGraph(this.selectedNode, this.rendering);
+    }
+    
+    protected openModelGraph() {
+        this.graphModals.openModelGraph(null, this.rendering);
     }
 
     // abstract delete(): void;
@@ -154,24 +152,28 @@ export abstract class AbstractPanel {
     //     );
     // }
 
-    isOpenGraphEnabled(): boolean {
+    /**
+     * Open data/model-oriented graph is available only if:
+     * - experimental features are enabled
+     * - the panel is in the data page panel
+     * - there is a selected node (in case of graph mode data-oriented)
+     * @param graphMode 
+     */
+    isOpenGraphEnabled(graphMode?: GraphMode): boolean {
         if (!this.vbProp.getExperimentalFeaturesEnabled()) {
             return false;
         }
         if (this.context != TreeListContext.dataPanel) {
             return false;
         }
-        if (this.graphMode == GraphMode.dataOriented) {
-            return this.selectedNode != null;
+        if (graphMode == null) { //no graph mode provided => tells if at least one of the two mode is available
+            return this.isOpenGraphEnabled(GraphMode.dataOriented) || this.isOpenGraphEnabled(GraphMode.modelOriented);
         } else {
-            return true;
-        }
-    }
-    getOpenGraphLabel(): string {
-        if (this.graphMode == GraphMode.dataOriented) {
-            return "Show graph rooted on selected node";
-        } else {
-            return "Show model graph";
+            if (graphMode == GraphMode.dataOriented) {
+                return this.selectedNode != null;
+            } else { //model oriented
+                return true;
+            }    
         }
     }
 

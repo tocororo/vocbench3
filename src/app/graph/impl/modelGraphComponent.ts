@@ -47,8 +47,8 @@ export class ModelGraphComponent extends AbstractGraph {
     private thingNodesMap: { thingNode: ModelNode, linkedRes: ARTNode }[] = [];
 
     constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef, private graphService: GraphServices,
-        private basicModals: BasicModalServices) {
-        super(d3Service, elementRef, ref);
+        protected basicModals: BasicModalServices) {
+        super(d3Service, elementRef, ref, basicModals);
     }
 
     ngOnInit() {
@@ -90,10 +90,51 @@ export class ModelGraphComponent extends AbstractGraph {
 
     /* ============== ACTIONS ============== */
 
-    add(cls: ARTURIResource) {
-        let node: Node = new ModelNode(cls);
-        this.graph.nodes.push(node);
-        this.graph.update();
+    addNode(res: ARTURIResource) {
+        if (this.graph.getNode(res)) {
+            this.basicModals.alert("Add node", "Cannot add a new node for " + res.getShow() + " since a node for the same resource already exists", "warning");
+            return;
+        }
+        let node: Node = new ModelNode(res);
+        node.root = true;
+        // this.graph.nodes.push(node);
+        // this.graph.update();
+
+        /**
+         * I don't like the "automatic linking" of the new added node, it creates confusion, the user couldn't know which 
+         * node has been already open and which node has still to be open
+         */
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
+        this.graphService.expandGraphModelNode(res).subscribe(
+            (graphModel: GraphModelRecord[]) => {
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
+
+                let appendingLinks: Link[] = [];
+
+                let links: Link[] = this.convertModelToLinks(graphModel);
+                //looks for link with existing nodes
+                links.forEach(l => {
+                    let linkedRes: ARTURIResource; //resource linked with the one to open
+                    if (l.source.res.equals(res)) {
+                        linkedRes = <ARTURIResource>l.target.res;
+                    } else {
+                        linkedRes = <ARTURIResource>l.source.res;
+                    }
+                    if (this.graph.getNode(linkedRes) != null) {
+                        appendingLinks.push(l);
+                    }
+                });
+
+                //NOTE: I don't add the node to the openBy list of the appendingLinks, since it will be added whenever the node will be effectively open 
+                // appendingLinks.forEach(l => {
+                //     l.openBy.push(node);
+                // });
+
+                this.graph.nodes.push(node); //add the node (even if it would be added by appendLink, but doing this, it will use the current one with root at true)
+                this.appendLinks(appendingLinks);
+                
+            }
+        );
     }
 
     /* ============== GLOBAL GRAPH MODEL ============== */
@@ -208,12 +249,12 @@ export class ModelGraphComponent extends AbstractGraph {
         this.graph.update();
     }
 
-
     private removeLinks(links: Link[]) {
         links.forEach(l => {
             //remove the link
             let removingLink = this.graph.getLink(l.source.res, l.res, l.target.res);
             this.graph.links.splice(this.graph.links.indexOf(removingLink), 1);
+            this.onElementRemoved(removingLink);
             //remove eventual pending nodes
             let sourceNode = <ModelNode>removingLink.source;
             let targetNode = <ModelNode>removingLink.target;
@@ -221,6 +262,7 @@ export class ModelGraphComponent extends AbstractGraph {
             targetNode.removeIncomingNode(sourceNode);
             if (!sourceNode.root && sourceNode.incomingNodes.length == 0 && sourceNode.outgoingNodes.length == 0) {
                 this.graph.nodes.splice(this.graph.nodes.indexOf(sourceNode), 1);
+                this.onElementRemoved(sourceNode);
                 //if removed node is owl:Thing, remove it also from the thingNodesMap
                 if (sourceNode.res.equals(OWL.thing)) {
                     this.removeThingNodeFromMap(sourceNode);
@@ -228,6 +270,7 @@ export class ModelGraphComponent extends AbstractGraph {
             }
             if (!targetNode.root && targetNode.incomingNodes.length == 0 && targetNode.outgoingNodes.length == 0) {
                 this.graph.nodes.splice(this.graph.nodes.indexOf(targetNode), 1);
+                this.onElementRemoved(targetNode);
                 //if removed node is owl:Thing, remove it also from the thingNodesMap
                 if (targetNode.res.equals(OWL.thing)) {
                     this.removeThingNodeFromMap(targetNode);
@@ -355,4 +398,13 @@ export class ModelGraphComponent extends AbstractGraph {
         }
     }
 
+    private onElementRemoved(element: Node | Link) {
+        if (element == this.selectedElement) {
+            this.selectedElement = null;
+            if (element instanceof Link) {
+                this.linkAhead = null;
+            }
+            this.elementSelected.emit(this.selectedElement);
+        }
+    }
 }

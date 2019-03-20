@@ -40,7 +40,8 @@
 
         <div class="dropdown pull-right">
             <!-- Disabled when all the options are not available -->
-            <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" [disabled]="!allowMultiselection && !isOpenGraphEnabled() && !isAddAllConceptsEnabled()">
+            <button class="dropdown-toggle transparentBtn" data-toggle="dropdown"
+                [disabled]="!allowMultiselection && !isOpenGraphEnabled('dataOriented') && !isAddAllConceptsEnabled()">
                 <span>&#9662;</span>
             </button>
             <ul class="dropdown-menu">
@@ -59,10 +60,10 @@
                         Add all concepts to the selected scheme
                     </a>
                 </li>
-                <li *ngIf="isOpenGraphEnabled()">
-                    <a (click)="openGraph()">
+                <li *ngIf="isOpenGraphEnabled('dataOriented')">
+                    <a (click)="openDataGraph()">
                         <img src="../../../../../assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
-                        {{getOpenGraphLabel()}}
+                        Show data-oriented graph
                     </a>
                 </li>
             </ul>
