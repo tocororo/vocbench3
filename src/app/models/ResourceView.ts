@@ -81,6 +81,37 @@ export class ResViewUtils {
         ResViewPartition.types
     ];
 
+    public static orderedResourceViewPartitions: ResViewPartition[] = [
+        ResViewPartition.types,
+        ResViewPartition.classaxioms,
+        ResViewPartition.topconceptof,
+        ResViewPartition.schemes,
+        ResViewPartition.broaders,
+        ResViewPartition.superproperties,
+        ResViewPartition.equivalentProperties,
+        ResViewPartition.disjointProperties,
+        ResViewPartition.subPropertyChains,
+        ResViewPartition.subterms,
+        ResViewPartition.domains,
+        ResViewPartition.ranges,
+        ResViewPartition.facets,
+        ResViewPartition.lexicalizations,
+        ResViewPartition.lexicalForms,
+        ResViewPartition.lexicalSenses,
+        ResViewPartition.denotations,
+        ResViewPartition.evokedLexicalConcepts,
+        ResViewPartition.notes,
+        ResViewPartition.members,
+        ResViewPartition.membersOrdered,
+        ResViewPartition.labelRelations,
+        ResViewPartition.formRepresentations,
+        ResViewPartition.formBasedPreview,
+        ResViewPartition.imports,
+        ResViewPartition.constituents,
+        ResViewPartition.rdfsMembers,
+        ResViewPartition.properties
+    ]
+
     public static getResourceViewPartitionLabel(partition: ResViewPartition): string {
         if (partition == ResViewPartition.classaxioms) {
             return "Class axioms";

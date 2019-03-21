@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef } from "@angular/core";
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
-import { ResViewPartition } from "../../models/ResourceView";
+import { ResViewPartition, ResViewUtils } from "../../models/ResourceView";
 import { ResourceViewServices } from "../../services/resourceViewServices";
 import { Deserializer } from "../../utils/Deserializer";
 import { ResourceUtils } from "../../utils/ResourceUtils";
@@ -25,20 +25,15 @@ export class DataGraphComponent extends AbstractGraph {
 
     private linkLimit: number = 50;
 
-    private rvPartitions: ResViewPartition[] = [
-        ResViewPartition.broaders, ResViewPartition.classaxioms, ResViewPartition.constituents, ResViewPartition.denotations,
-        ResViewPartition.disjointProperties, ResViewPartition.domains, ResViewPartition.equivalentProperties, 
-        ResViewPartition.evokedLexicalConcepts, ResViewPartition.facets, ResViewPartition.formBasedPreview,
-        ResViewPartition.formRepresentations, ResViewPartition.imports, ResViewPartition.labelRelations, ResViewPartition.lexicalForms,
-        ResViewPartition.lexicalSenses, ResViewPartition.lexicalizations, ResViewPartition.members, ResViewPartition.membersOrdered,
-        ResViewPartition.notes, ResViewPartition.properties, ResViewPartition.ranges, ResViewPartition.rdfsMembers, ResViewPartition.schemes,
-        ResViewPartition.subPropertyChains, ResViewPartition.subterms, ResViewPartition.superproperties, ResViewPartition.topconceptof,
-        ResViewPartition.types
-    ]
+    private rvPartitions: ResViewPartition[] = ResViewUtils.orderedResourceViewPartitions;
 
     constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef, protected basicModals: BasicModalServices,
         private resViewService: ResourceViewServices, private graphModals: GraphModalServices, private vbProp: VBProperties) {
         super(d3Service, elementRef, ref, basicModals);
+    }
+
+    ngOnInit() {
+        this.expandNode(this.graph.nodes[0], true);
     }
 
     addNode(res: ARTURIResource) {
@@ -48,12 +43,12 @@ export class DataGraphComponent extends AbstractGraph {
         }
 
         let node: DataNode = new DataNode(res);
-        node.root = true; //so it cannot be close in case of loop.
+        node.root = true;
         this.graph.nodes.push(node);
-        this.graph.update();
+        this.expandNode(node, true);
     }
 
-    protected expandNode(node: Node) {
+    protected expandNode(node: Node, selectOnComplete?: boolean) {
         if (!node.res.isResource()) {
             return;
         }
@@ -61,15 +56,15 @@ export class DataGraphComponent extends AbstractGraph {
         this.resViewService.getResourceView(<ARTResource>node.res).subscribe(
             rv => {
                 let filteredPartitions: ResViewPartition[] = this.vbProp.getResourceViewPartitionsFilter()[node.res.getRole()];
-
+                //create the predicate-object lists for each partition (skip the filtered partition)
                 let predObjListMap: { [partition: string]: ARTPredicateObjects[] } = {};
                 this.rvPartitions.forEach(partition => {
                     if (filteredPartitions != null && filteredPartitions.indexOf(partition) != -1) {
                         return; //if the current partition is among the partitions filtered for the resource role => skip the parsing
                     }
-
+                    //parse partition
                     let partitionJson = rv[partition];
-                    if (partition == ResViewPartition.facets && partitionJson != null) {
+                    if (partition == ResViewPartition.facets && partitionJson != null) { //dedicated handler for facets partition
                         partitionJson = partitionJson.inverseOf;
                     }
                     if (partitionJson != null) {
@@ -77,11 +72,10 @@ export class DataGraphComponent extends AbstractGraph {
                         predObjListMap[partition] = poList;
                     }
                 });
-
+                //filter the objects according the filter-value languages
                 for (let partition in predObjListMap) {
                     this.filterValueLanguageFromPrefObjList(predObjListMap[partition]);
                 }
-
                 //count number of objects
                 let linkCount: number = 0;
                 for (let partition in predObjListMap) {
@@ -89,46 +83,34 @@ export class DataGraphComponent extends AbstractGraph {
                         linkCount += pol.getObjects().length; //a link for each object (subject ---predicate---> object)
                     });
                 }
-
+                //check if the relations that it is going to add are too much
                 if (linkCount > this.linkLimit) {
                     this.graphModals.filterLinks(predObjListMap).then(
-                        (visiblePreds: ARTURIResource[]) => {
-                            let links: Link[] = [];
-                            for (let partition in predObjListMap) {
-                                predObjListMap[partition].forEach(pol => { //for each pol of a partition
-                                    let pred: ARTURIResource = pol.getPredicate();
-                                    if (ResourceUtils.containsNode(visiblePreds, pred)) {
-                                        let objs: ARTNode[] = pol.getObjects();
-                                        objs.forEach(o => { //for each object/value
-                                            links.push(new Link(node, new DataNode(o), pred));
-                                        });
-                                    }
-                                });
-                            }
+                        (predicatesToHide: ARTURIResource[]) => {
+                            let links: Link[] = this.convertPredObjListMapToLinks(node, predObjListMap, predicatesToHide);
                             this.appendLinks(node, links);
+                            if (selectOnComplete) {
+                                this.onNodeClicked(node);
+                            }
                         },
-                        cancel => {}
+                        () => {}
                     );
                 } else {
-                    let links: Link[] = [];
-                    for (let partition in predObjListMap) {
-                        predObjListMap[partition].forEach(pol => { //for each pol of a partition
-                            let pred: ARTURIResource = pol.getPredicate();
-                            let objs: ARTNode[] = pol.getObjects();
-                            objs.forEach(o => { //for each object/value
-                                links.push(new Link(node, new DataNode(o), pred));
-                            });
-                        });
-                    }
+                    let links: Link[] = this.convertPredObjListMapToLinks(node, predObjListMap, []);
                     this.appendLinks(node, links);
+                    if (selectOnComplete) {
+                        this.onNodeClicked(node);
+                    }
                 }
             }
         );
+        node.open = true;
     }
 
     protected closeNode(node: Node) {
         this.deleteSubtree(node);
         this.graph.update();
+        node.open = false;
     }
 
     /**
@@ -187,6 +169,35 @@ export class DataGraphComponent extends AbstractGraph {
         }
     }
 
+    /* ================== UTILS ================== */
+
+    /**
+     * Converts the map between partitions and predicate-objects lists to a list of links.
+     * Filters the convertion according the list of predicates to hide
+     * @param sourceNode source node of the links
+     * @param predObjListMap 
+     * @param predicatesToHide 
+     */
+    private convertPredObjListMapToLinks(sourceNode: Node, predObjListMap: { [partition: string]: ARTPredicateObjects[] }, predicatesToHide: ARTURIResource[]): Link[] {
+        let links: Link[] = [];
+        for (let partition in predObjListMap) {
+            predObjListMap[partition].forEach(pol => { //for each pol of a partition
+                let pred: ARTURIResource = pol.getPredicate();
+                if (!ResourceUtils.containsNode(predicatesToHide, pred)) {
+                    let objs: ARTNode[] = pol.getObjects();
+                    objs.forEach(o => { //for each object/value
+                        links.push(new Link(sourceNode, new DataNode(o), pred));
+                    });
+                }
+            });
+        }
+        return links;
+    }
+
+    /**
+     * Filters the objects list according the value-filter languages
+     * @param predObjList 
+     */
     private filterValueLanguageFromPrefObjList(predObjList: ARTPredicateObjects[]) {
         let valueFilterLangEnabled = this.vbProp.getValueFilterLanguages().enabled;
         if (valueFilterLangEnabled) {
@@ -210,14 +221,15 @@ export class DataGraphComponent extends AbstractGraph {
         }
     }
 
+
+    /* ================== EVENT HANDLER ================== */
+
     protected onNodeDblClicked(node: DataNode) {
         if (!this.graph.dynamic) return; //if graph is not dynamic, do nothing
         if (node.open) {
             this.closeNode(node);
-            node.open = false;
         } else {
             this.expandNode(node);
-            node.open = true;
         }
     }
 

@@ -95,14 +95,6 @@ export class ResViewPartitionFilter {
     }
 
     /**
-     * 
-     */
-    private initRolePartitionStructure() {
-        // 
-        
-    }
-
-    /**
      * Convert the preference to a RolePartitionStruct list.
      * The preference is an object that lists the hidden partitions for each roles.
      * RolePartitionStruct contains also other info, such as the role or partition "show" and the "checked" boolean when a partition is visible
@@ -116,7 +108,7 @@ export class ResViewPartitionFilter {
             let partitions: ResViewPartition[] = this.rolePartitionMap[role];
             partitions.forEach(p => {
                 //partition visible if the role has no filtered-partition listed, or the partition for the role is not present among the filtered
-                let showPartition: boolean = pref[role] == null || !pref[role][p]
+                let showPartition: boolean = pref[role] == null || pref[role].indexOf(p) == -1;
                 partitionsStructs.push({ 
                     id: p,
                     show: ResViewUtils.getResourceViewPartitionLabel(p),

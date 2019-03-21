@@ -67,15 +67,15 @@ export class LinksFilterModal implements ModalComponent<LinksFilterModalData> {
     }
 
     ok(event: Event) {
-        let visiblePredicates: ARTURIResource[] = [];
+        let predicatesToHide: ARTURIResource[] = [];
         this.filters.forEach(f => {
             f.predicates.forEach(p => {
-                if (p.checked) visiblePredicates.push(p.res);
+                if (!p.checked) predicatesToHide.push(p.res);
             });
         });
         event.stopPropagation();
         event.preventDefault();
-        this.dialog.close(visiblePredicates);
+        this.dialog.close(predicatesToHide);
     }
 
     cancel() {

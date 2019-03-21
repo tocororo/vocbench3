@@ -50,7 +50,7 @@ export abstract class AbstractGraph {
 
     protected abstract addNode(res: ARTURIResource): void;
 
-    protected abstract expandNode(node: Node): void;
+    protected abstract expandNode(node: Node, selectOnComplete?: boolean): void;
 
     protected abstract closeNode(node: Node): void;
 
