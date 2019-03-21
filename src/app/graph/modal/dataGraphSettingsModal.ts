@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { VBProperties } from "../../utils/VBProperties";
 
 @Component({
     selector: "data-graph-settings-modal",
@@ -9,11 +10,18 @@ import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 export class DataGraphSettingsModal implements ModalComponent<BSModalContext> {
     context: BSModalContext;
 
-    constructor(public dialog: DialogRef<BSModalContext>) {
+    private hideLiteralNodes: boolean;
+
+    constructor(public dialog: DialogRef<BSModalContext>, private vbProp: VBProperties) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
+        this.hideLiteralNodes = this.vbProp.getHideLiteralGraphNodes();
+    }
+
+    private onHideLiteralChange() {
+        this.vbProp.setHideLiteralGraphNodes(this.hideLiteralNodes);
     }
 
     ok(event: Event) {

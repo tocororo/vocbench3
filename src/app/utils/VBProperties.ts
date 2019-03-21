@@ -33,7 +33,9 @@ export class VBProperties {
     private conceptTreePreferences: ConceptTreePreference;
     private lexEntryListPreferences: LexicalEntryListPreference;
 
+    //graph preferences
     private resViewPartitionFilter: ResViewPartitionFilterPreference;
+    private hideLiteralGraphNodes: boolean = false;
 
     private searchSettings: SearchSettings = {
         stringMatchMode: SearchMode.contains,
@@ -80,7 +82,7 @@ export class VBProperties {
             Properties.pref_concept_tree_include_subprops, Properties.pref_concept_tree_sync_inverse, Properties.pref_concept_tree_visualization,
             Properties.pref_lex_entry_list_visualization, Properties.pref_lex_entry_list_index_lenght,
             Properties.pref_editing_language, Properties.pref_filter_value_languages,
-            Properties.pref_res_view_partition_filter
+            Properties.pref_res_view_partition_filter, Properties.pref_hide_literal_graph_nodes
         ];
         this.prefService.getPUSettings(properties).subscribe(
             prefs => {
@@ -122,13 +124,15 @@ export class VBProperties {
                     this.filterValueLang = JSON.parse(filterValueLangPref);
                 }
 
-                //res view partition
+                //graph preferences
                 let rvPartitionFilterPref = prefs[Properties.pref_res_view_partition_filter];
                 if (rvPartitionFilterPref != null) {
                     this.resViewPartitionFilter = JSON.parse(rvPartitionFilterPref);
                 } else {
                     this.resViewPartitionFilter = {};
                 }
+
+                this.hideLiteralGraphNodes = prefs[Properties.pref_hide_literal_graph_nodes] == "true";
 
                 //cls tree preferences
                 this.classTreePreferences = { 
@@ -361,13 +365,21 @@ export class VBProperties {
         this.lexEntryListPreferences.indexLength = lenght;
     }
 
-    //ResView partition filter
+    //Graph settings
     getResourceViewPartitionsFilter(): ResViewPartitionFilterPreference {
         return this.resViewPartitionFilter;
     }
     setResourceViewPartitionFilter(pref: ResViewPartitionFilterPreference) {
         this.prefService.setPUSetting(Properties.pref_res_view_partition_filter, JSON.stringify(pref)).subscribe();
         this.resViewPartitionFilter = pref;
+    }
+
+    getHideLiteralGraphNodes(): boolean {
+        return this.hideLiteralGraphNodes;
+    }
+    setHideLiteralGraphNodes(show: boolean) {
+        this.hideLiteralGraphNodes = show;
+        this.prefService.setPUSetting(Properties.pref_hide_literal_graph_nodes, show+"").subscribe();
     }
 
 

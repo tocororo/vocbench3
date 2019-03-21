@@ -30,6 +30,7 @@ export class Properties {
     static pref_lex_entry_list_index_lenght: string = "lex_entry_list_index_lenght";
 
     static pref_res_view_partition_filter: string = "res_view_partition_filter";
+    static pref_hide_literal_graph_nodes: string = "hide_literal_graph_nodes";
 
     static setting_languages: string = "languages";
     static setting_remote_configs = "remote_configs";

@@ -179,6 +179,7 @@ export class DataGraphComponent extends AbstractGraph {
      * @param predicatesToHide 
      */
     private convertPredObjListMapToLinks(sourceNode: Node, predObjListMap: { [partition: string]: ARTPredicateObjects[] }, predicatesToHide: ARTURIResource[]): Link[] {
+        let hideLiteralNodes: boolean = this.vbProp.getHideLiteralGraphNodes();
         let links: Link[] = [];
         for (let partition in predObjListMap) {
             predObjListMap[partition].forEach(pol => { //for each pol of a partition
@@ -186,6 +187,9 @@ export class DataGraphComponent extends AbstractGraph {
                 if (!ResourceUtils.containsNode(predicatesToHide, pred)) {
                     let objs: ARTNode[] = pol.getObjects();
                     objs.forEach(o => { //for each object/value
+                        if (hideLiteralNodes && o.isLiteral()) {
+                            return; //if the literal should be hidden and the object is literal, skip the link
+                        }
                         links.push(new Link(sourceNode, new DataNode(o), pred));
                     });
                 }

@@ -2,8 +2,24 @@
     <h3 class="modal-title">Data-Oriented Graph settings</h3>
 </div>
 <div class="modal-body hbox">
-    <lang-value-filter-pref class="vbox"></lang-value-filter-pref>
+
+    <div class="vbox">
+        <lang-value-filter-pref class="vbox"></lang-value-filter-pref>
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="checkbox-inline">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="hideLiteralNodes" (ngModelChange)="onHideLiteralChange()">Hide literal nodes
+                    </label>
+                    <span class="glyphicon glyphicon-info-sign" title="If checked, all the literal nodes will be hidden in the graph"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <rv-partition-filter class="vbox" style="margin-left: 4px;"></rv-partition-filter>
+
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>

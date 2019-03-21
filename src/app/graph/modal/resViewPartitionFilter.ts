@@ -4,6 +4,7 @@ import { ResViewPartitionFilterPreference } from "../../models/Properties";
 import { ResViewPartition, ResViewUtils } from "../../models/ResourceView";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBProperties } from "../../utils/VBProperties";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "rv-partition-filter",
@@ -76,7 +77,7 @@ export class ResViewPartitionFilter {
     private selectedRolePartitionsStruct: RolePartitionsStruct;
     private selectedPartition: PartitionStruct;
 
-    constructor(private vbProp: VBProperties) {}
+    constructor(private vbProp: VBProperties, private basicModals: BasicModalServices) {}
 
     ngOnInit() {
         /**
@@ -173,6 +174,23 @@ export class ResViewPartitionFilter {
             });
         });
         this.updatePref();
+    }
+
+    /**
+     * Restore to visible all the partitions for all the roles
+     */
+    private reset() {
+        this.basicModals.confirm("Reset filter", "The partition filter will be reset for all the available roles. Are you sure?", "warning").then(
+            confirm => {
+                this.rolePartitionsStructs.forEach(rps => {
+                    rps.partitions.forEach(p => {
+                        p.checked = true;
+                    });
+                })
+                this.updatePref();
+            },
+            () => {}
+        );
     }
 
     private updatePref() {
