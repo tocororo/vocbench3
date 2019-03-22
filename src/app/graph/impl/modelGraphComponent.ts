@@ -57,7 +57,7 @@ export class ModelGraphComponent extends AbstractGraph {
             this.filtersDeltaMap[f.property.getURI()] = [];
         })
 
-        if (this.graph.nodes.length == 0) { //model graph works in "global" mode, so initialize the entire model
+        if (this.graph.getNodes().length == 0) { //model graph works in "global" mode, so initialize the entire model
             UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
             this.graphService.getGraphModel().subscribe(
                 (graphModel: GraphModelRecord[]) => {
@@ -85,7 +85,7 @@ export class ModelGraphComponent extends AbstractGraph {
             );
         } else { //model graph contains already a root node, so works in "incremental" mode
             this.incrementalExploration = true;
-            this.expandNode(this.graph.nodes[0], true);
+            this.expandNode(this.graph.getNodes()[0], true);
         }
     }
 
@@ -99,7 +99,7 @@ export class ModelGraphComponent extends AbstractGraph {
         //add the node to the graph
         let node: Node = new ModelNode(res);
         node.root = true;
-        this.graph.nodes.push(node);
+        this.graph.addNode(node);
         this.graph.update();
         //expand and select the node
         this.expandNode(node, true);
@@ -216,7 +216,7 @@ export class ModelGraphComponent extends AbstractGraph {
                     (<ModelNode>sourceNode).outgoingNodes.push(targetNode); 
                     (<ModelNode>targetNode).incomingNodes.push(sourceNode);
                     //add the link to the graph
-                    this.graph.links.push(l); 
+                    this.graph.addLink(l); 
                 }
             }
         });
@@ -227,7 +227,7 @@ export class ModelGraphComponent extends AbstractGraph {
         links.forEach(l => {
             //remove the link
             let removingLink = this.graph.getLink(l.source.res, l.res, l.target.res);
-            this.graph.links.splice(this.graph.links.indexOf(removingLink), 1);
+            this.graph.removeLink(removingLink);
             this.onElementRemoved(removingLink);
             //remove eventual pending nodes
             let sourceNode = <ModelNode>removingLink.source;
@@ -235,7 +235,7 @@ export class ModelGraphComponent extends AbstractGraph {
             sourceNode.removeOutgoingNode(targetNode);
             targetNode.removeIncomingNode(sourceNode);
             if (!sourceNode.root && sourceNode.incomingNodes.length == 0 && sourceNode.outgoingNodes.length == 0) {
-                this.graph.nodes.splice(this.graph.nodes.indexOf(sourceNode), 1);
+                this.graph.removeNode(sourceNode);
                 this.onElementRemoved(sourceNode);
                 //if removed node is owl:Thing, remove it also from the thingNodesMap
                 if (sourceNode.res.equals(OWL.thing)) {
@@ -243,7 +243,7 @@ export class ModelGraphComponent extends AbstractGraph {
                 }
             }
             if (!targetNode.root && targetNode.incomingNodes.length == 0 && targetNode.outgoingNodes.length == 0) {
-                this.graph.nodes.splice(this.graph.nodes.indexOf(targetNode), 1);
+                this.graph.removeNode(targetNode);
                 this.onElementRemoved(targetNode);
                 //if removed node is owl:Thing, remove it also from the thingNodesMap
                 if (targetNode.res.equals(OWL.thing)) {
@@ -320,7 +320,7 @@ export class ModelGraphComponent extends AbstractGraph {
         let graphNode: ModelNode;
         if (node.res.equals(RDFS.literal)) { //rdfs:Literal node must not be reused => create a new one each time
             graphNode = node;
-            this.graph.nodes.push(graphNode);
+            this.graph.addNode(graphNode);
         } else if (node.res.equals(OWL.thing)) { //owl:Thing node can be reused only if linked with the same resource
             this.thingNodesMap.forEach(tnm => {
                 if (tnm.linkedRes.equals(relatedRes)) { //a Thing node linked with relatedRes was already created => reuse it
@@ -329,14 +329,14 @@ export class ModelGraphComponent extends AbstractGraph {
             });
             if (graphNode == null) { //a Thing node linked with relatedRes was not already created => create it, add to the graph and update map
                 graphNode = node;
-                this.graph.nodes.push(graphNode);
+                this.graph.addNode(graphNode);
                 this.thingNodesMap.push({ thingNode: graphNode, linkedRes: relatedRes })
             }
         } else {
             graphNode = <ModelNode>this.graph.getNode(node.res);
             if (graphNode == null) { //node for the given resource not yet created => create it and add to the graph
                 graphNode = node;
-                this.graph.nodes.push(graphNode);
+                this.graph.addNode(graphNode);
             }
         }
         return graphNode;

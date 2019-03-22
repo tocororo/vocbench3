@@ -1,9 +1,14 @@
 <div class="panel panel-default vbox">
     <div class="panel-heading">
         <div class="btn-toolbar" role="toolbar">
-            <button class="btn btn-xs btn-default" (click)="addNode()" title="Add another node">
+            <button class="btn btn-xs btn-default" (click)="addNode()" title="Add a new node">
                 <span class="glyphicon glyphicon-plus"></span>
             </button>
+
+            <div *ngIf="isExpandEnabled()" class="btn-group btn-group-xs">
+                <button class="btn btn-default" (click)="expandSubResources()" title="Expand sub-resources">Sub</button>
+                <button class="btn btn-default" (click)="expandSuperResources()" title="Expand super-resources">Super</button>
+            </div>
         </div>
         <span style="flex: 1;"></span>
         <div class="btn-toolbar" role="toolbar">

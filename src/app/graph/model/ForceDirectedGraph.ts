@@ -13,8 +13,8 @@ export class ForceDirectedGraph {
     public options: GraphOptions;
     public dynamic: boolean = true; //useful to know if the graph should react to double click on nodes (e.g. graph for graph query result is not dynamic)
 
-    public nodes: Node[] = [];
-    public links: Link[] = [];
+    private nodes: Node[] = [];
+    private links: Link[] = [];
 
     constructor(nodes: Node[], links: Link[], dynamic: boolean) {
         this.nodes = nodes;
@@ -193,8 +193,12 @@ export class ForceDirectedGraph {
     }
 
     /**
-     * Utils
+     * SETTER GETTER
      */
+
+    public getNodes(): Node[] {
+        return this.nodes;
+    }
 
     /**
      * Returns the Node contained in the nodes array for the given resource. Null if the resource has no related Node
@@ -208,6 +212,22 @@ export class ForceDirectedGraph {
             }
         }
         return null;
+    }
+
+    public addNode(node: Node) {
+        this.nodes.push(node);
+    }
+    public removeNode(node: Node): boolean {
+        let idx = this.nodes.indexOf(node);
+        if (idx != -1) {
+            this.nodes.splice(idx, 1);
+            return true;
+        }
+        return false;
+    }
+
+    public getLinks(): Link[] {
+        return this.links;
     }
 
     /**
@@ -244,6 +264,18 @@ export class ForceDirectedGraph {
             }
         });
         return links;
+    }
+
+    public addLink(link: Link) {
+        this.links.push(link);
+    }
+    public removeLink(link: Link): boolean {
+        let idx = this.links.indexOf(link);
+        if (idx != -1) {
+            this.links.splice(idx, 1);
+            return true;
+        }
+        return false;
     }
 
 }

@@ -12,7 +12,7 @@ export abstract class AbstractGraphPanel {
 
     abstract viewChildGraph: AbstractGraph;
 
-    private selectedElement: Node | Link;
+    protected selectedElement: Node | Link;
     private forces: GraphForces;
 
     protected basicModals: BasicModalServices
@@ -42,14 +42,14 @@ export abstract class AbstractGraphPanel {
         }
     }
     private fixAll() {
-        this.graph.nodes.forEach(n => {
+        this.graph.getNodes().forEach(n => {
             n.fixed = true;
             n.fx = n.x;
             n.fy = n.y;
         });
     }
     private unfixAll() {
-        this.graph.nodes.forEach(n => {
+        this.graph.getNodes().forEach(n => {
             n.fixed = false;
             n.fx = null;
             n.fy = null;

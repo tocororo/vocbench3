@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef } from "@angular/core";
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
+import { GraphModelRecord } from "../../models/Graphs";
 import { ResViewPartition, ResViewUtils } from "../../models/ResourceView";
+import { GraphServices } from "../../services/graphServices";
 import { ResourceViewServices } from "../../services/resourceViewServices";
 import { Deserializer } from "../../utils/Deserializer";
 import { ResourceUtils } from "../../utils/ResourceUtils";
@@ -28,12 +30,12 @@ export class DataGraphComponent extends AbstractGraph {
     private rvPartitions: ResViewPartition[] = ResViewUtils.orderedResourceViewPartitions;
 
     constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef, protected basicModals: BasicModalServices,
-        private resViewService: ResourceViewServices, private graphModals: GraphModalServices, private vbProp: VBProperties) {
+        private resViewService: ResourceViewServices, private graphService: GraphServices, private graphModals: GraphModalServices, private vbProp: VBProperties) {
         super(d3Service, elementRef, ref, basicModals);
     }
 
     ngOnInit() {
-        this.expandNode(this.graph.nodes[0], true);
+        this.expandNode(this.graph.getNodes()[0], true);
     }
 
     addNode(res: ARTURIResource) {
@@ -44,8 +46,26 @@ export class DataGraphComponent extends AbstractGraph {
 
         let node: DataNode = new DataNode(res);
         node.root = true;
-        this.graph.nodes.push(node);
+        this.graph.addNode(node);
         this.expandNode(node, true);
+    }
+
+    expandSub() {
+        this.graphService.expandSubResources(<ARTURIResource>this.selectedElement.res).subscribe(
+            (graphModel: GraphModelRecord[]) => {
+                let links: Link[] = this.convertModelToLinks(graphModel);
+                this.appendLinks(<Node>this.selectedElement, links);
+            }
+        );
+    }
+
+    expandSuper() {
+        this.graphService.expandSuperResources(<ARTURIResource>this.selectedElement.res).subscribe(
+            (graphModel: GraphModelRecord[]) => {
+                let links: Link[] = this.convertModelToLinks(graphModel);
+                this.appendLinks(<Node>this.selectedElement, links);
+            }
+        );
     }
 
     protected expandNode(node: Node, selectOnComplete?: boolean) {
@@ -109,32 +129,34 @@ export class DataGraphComponent extends AbstractGraph {
 
     protected closeNode(node: Node) {
         this.deleteSubtree(node);
+        
+        let sourceDataNode = <DataNode>node;
+        if (sourceDataNode.isPending()) {
+            this.graph.removeNode(sourceDataNode); //remove the node from the graph
+        }
+
         this.graph.update();
         node.open = false;
     }
 
-    /**
-     * Append the links to the given node. If the target of the links doesn't exist yet, it is created.
-     * @param sourceNode 
-     * @param links 
-     */
-    private appendLinks(sourceNode: Node, links: Link[]) {
-        links.forEach(link => {
-            let targetNode = this.graph.getNode(link.target.res);
-            //add the target node to the nodes array only if it is not already in (it prevents the creation of multiple nodes for the same resource)
-            if (targetNode == null) {
-                targetNode = link.target;
-                //set the same x and y of the parent
-                targetNode.x = sourceNode.x;
-                targetNode.y = sourceNode.y;
-                this.graph.nodes.push(link.target)
-            } else { //otherwise replaces the target node in the link with the one already existing in the graph
-                link.target = targetNode;
-            }
-            //add the sourceNode to the openBy nodes of targetNode
-            (<DataNode>targetNode).openBy.push(sourceNode);
+    
+    private appendLinks(expandedNode: Node, links: Link[]) {
+        links.forEach(l => {
 
-            this.graph.links.push(link);
+            if (this.graph.getLink(l.source.res, l.res, l.target.res) != null) {
+                return;
+            }
+
+            let sourceNode = this.retrieveNode(l.source);
+            l.source = sourceNode;
+            let targetNode = this.retrieveNode(l.target);
+            l.target = targetNode;
+
+            if (expandedNode == sourceNode) {
+                (<DataNode>targetNode).openBy.push(expandedNode);
+            }
+
+            this.graph.addLink(l);
         });
 
         this.graph.update();
@@ -155,11 +177,11 @@ export class DataGraphComponent extends AbstractGraph {
                 let targetDataNode = <DataNode>l.target;
                 targetDataNode.removeOpenByNode(l.source);
                 //remove the link
-                this.graph.links.splice(this.graph.links.indexOf(l), 1);
+                this.graph.removeLink(l);
                 //if now the openBy list of the target is empty, it means that the node would be detached from the graph
                 if (targetDataNode.isPending()) {
-                    this.graph.nodes.splice(this.graph.nodes.indexOf(l.target), 1); //remove the node from the graph
-                    recursivelyClosingNodes.push(l.target); //add to the list of nodes to recursively close
+                    this.graph.removeNode(targetDataNode); //remove the node from the graph
+                    recursivelyClosingNodes.push(targetDataNode); //add to the list of nodes to recursively close
                 }
             })
             //call recursively the deletion of the subtree for the deleted node)
@@ -199,6 +221,20 @@ export class DataGraphComponent extends AbstractGraph {
     }
 
     /**
+     * Converts the GraphModelRecord(s) (returned by getGraphModel() and expandGraphModelNode() services) into a list of nodes and links
+     */
+    private convertModelToLinks(graphModel: GraphModelRecord[]): Link[] {
+        let links: Link[] = [];
+        //set the nodes and the links according the model
+        graphModel.forEach(record => {
+            let nodeSource: DataNode = new DataNode(record.source);
+            let nodeTarget: DataNode = new DataNode(record.target);
+            links.push(new Link(nodeSource, nodeTarget, record.link, record.classAxiom));
+        });
+        return links;
+    }
+
+    /**
      * Filters the objects list according the value-filter languages
      * @param predObjList 
      */
@@ -223,6 +259,16 @@ export class DataGraphComponent extends AbstractGraph {
                 }
             }
         }
+    }
+
+    private retrieveNode(node: Node): Node {
+        let graphNode: Node;
+        graphNode = <Node>this.graph.getNode(node.res);
+        if (graphNode == null) { //node for the given resource not yet created => create it and add to the graph
+            graphNode = node;
+            this.graph.addNode(graphNode);
+        }
+        return graphNode;
     }
 
 

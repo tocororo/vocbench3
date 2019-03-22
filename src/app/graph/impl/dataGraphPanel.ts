@@ -8,6 +8,7 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { AbstractGraphPanel } from "../abstractGraphPanel";
 import { DataGraphSettingsModal } from "../modal/dataGraphSettingsModal";
+import { Node } from "../model/Node";
 import { DataGraphComponent } from "./dataGraphComponent";
 
 @Component({
@@ -56,6 +57,25 @@ export class DataGraphPanel extends AbstractGraphPanel {
             },
             () => {}
         );
+    }
+
+    isExpandEnabled(): boolean {
+        return (
+            this.selectedElement != null && this.selectedElement instanceof Node && this.selectedElement.res.isURIResource() &&
+            (
+                this.selectedElement.res.getRole() == RDFResourceRolesEnum.cls ||
+                this.selectedElement.res.getRole() == RDFResourceRolesEnum.concept ||
+                this.selectedElement.res.getRole() == RDFResourceRolesEnum.skosCollection ||
+                ResourceUtils.roleSubsumes(RDFResourceRolesEnum.property, this.selectedElement.res.getRole())
+            )
+        )
+    }
+
+    expandSubResources() {
+        this.viewChildGraph.expandSub();
+    }
+    expandSuperResources() {
+        this.viewChildGraph.expandSuper();
     }
 
 }

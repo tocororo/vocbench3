@@ -33,7 +33,31 @@ export class GraphServices {
         );
     }
 
-    private enrichGraphModelRecords(plainModel: PlainGraphModelRecord[]) {
+    expandSubResources(resource: ARTURIResource): Observable<GraphModelRecord[]> {
+        var params: any = {
+            resource: resource,
+            role: resource.getRole()
+        };
+        return this.httpMgr.doGet(this.serviceName, "expandSubResources", params).flatMap(
+            (plainModel: PlainGraphModelRecord[]) => {
+                return this.enrichGraphModelRecords(plainModel);
+            }
+        );
+    }
+
+    expandSuperResources(resource: ARTURIResource): Observable<GraphModelRecord[]> {
+        var params: any = {
+            resource: resource,
+            role: resource.getRole()
+        };
+        return this.httpMgr.doGet(this.serviceName, "expandSuperResources", params).flatMap(
+            (plainModel: PlainGraphModelRecord[]) => {
+                return this.enrichGraphModelRecords(plainModel);
+            }
+        );
+    }
+
+    private enrichGraphModelRecords(plainModel: PlainGraphModelRecord[]): Observable<GraphModelRecord[]> {
         let resURIs: string[] = [];
         //collecting IRIs
         plainModel.forEach(record => {
@@ -52,6 +76,10 @@ export class GraphServices {
         resURIs.forEach(i => {
             unannotatedIRIs.push(new ARTURIResource(i));
         });
+
+        if (unannotatedIRIs.length == 0) {
+            return Observable.of([]);
+        }
 
         return this.resourceService.getResourcesInfo(unannotatedIRIs).map(
             (annotatedIRIs: ARTURIResource[]) => {
