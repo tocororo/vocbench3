@@ -157,6 +157,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
             searchSettings.stringMatchMode, [this.workingLexicon], searchLangs, includeLocales).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
+                ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
                 if (this.visualizationMode == LexEntryVisualizationMode.indexBased) {
                     if (searchResult.length == 0) {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
@@ -164,7 +165,6 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                         if (searchResult.length == 1) {
                             this.selectSearchedResource(searchResult[0]);
                         } else { //multiple results, ask the user which one select
-                            ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
                             this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
                                 (selectedResource: any) => {
                                     this.selectSearchedResource(selectedResource);

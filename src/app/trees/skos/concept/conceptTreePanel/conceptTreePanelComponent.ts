@@ -260,6 +260,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, searchingScheme).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
+                ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
                 if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {
                     if (searchResult.length == 0) {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
@@ -267,7 +268,6 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                         if (searchResult.length == 1) {
                             this.selectSearchedResource(searchResult[0]);
                         } else { //multiple results, ask the user which one select
-                            ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
                             this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
                                 (selectedResource: any) => {
                                     this.selectSearchedResource(selectedResource);
