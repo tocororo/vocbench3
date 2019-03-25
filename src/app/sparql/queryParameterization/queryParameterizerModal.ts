@@ -117,7 +117,7 @@ export class QueryParameterizerModal implements ModalComponent<QueryParameterize
                 }
             }
         } else { //create mode
-            this.initDatatypes().subscribe()
+            this.initDatatypes().subscribe();
         }
     }
 
@@ -142,6 +142,10 @@ export class QueryParameterizerModal implements ModalComponent<QueryParameterize
 
     private removeBinding(binding: BindingStruct) {
         this.bindings.splice(this.bindings.indexOf(binding), 1);
+    }
+
+    private onBindingTypeChange() {
+        this.initDatatypes().subscribe();
     }
 
     private setAssignemntValue(binding: BindingStruct, type: RDFTypesEnum) {

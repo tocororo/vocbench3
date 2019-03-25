@@ -36,7 +36,7 @@
                         <td><input class="form-control input-sm" [(ngModel)]="b.displayName"></td>
                         <td><textarea class="form-control input-sm" style="resize: vertical" rows="1" [(ngModel)]="b.description"></textarea></td>
                         <td>
-                            <select class="form-control input-sm" [(ngModel)]="b.bindingType">
+                            <select class="form-control input-sm" [(ngModel)]="b.bindingType" (ngModelChange)="onBindingTypeChange()">
                                 <option *ngFor="let t of bindingTypes" [ngValue]="t">{{t.show}}</option>
                             </select>
                         </td>
