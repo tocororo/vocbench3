@@ -116,10 +116,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
     public expandPath(path: ARTURIResource[]) {
         if (path.length == 0) { //this is the last node of the path. Focus it in the tree
             this.treeNodeElement.nativeElement.scrollIntoView({block: 'end', behavior: 'smooth'});
-            //not sure if it has to be selected (this method could be used in some scenarios where there's no need to select the node)
-            if (!this.node.getAdditionalProperty(ResAttribute.SELECTED)) { //select the searched node only if is not yet selected
-                this.selectNode();
-            }
+            this.selectNode();
         } else {
             if (!this.open) { //if node is close, expand itself
                 this.expandNode().subscribe(
