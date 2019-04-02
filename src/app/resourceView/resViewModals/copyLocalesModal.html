@@ -1,7 +1,7 @@
 <div class="modal-header">
     <h3 class="modal-title">Copy value to locales</h3>
 </div>
-<div class="modal-body vbox" style="max-height:70vh;">
+<div class="modal-body vbox">
 
     <div style="padding: 6px;">
         <label>Value to copy:</label>
@@ -12,7 +12,7 @@
         <div class="panel-heading">
             <label>Target languages:</label>
         </div>
-        <div class="panel-body">
+        <div class="panel-body scrollableContainer">
             <div *ngFor="let l of locales" class="listNodeItem">
                 <input type="checkbox" style="margin-right: 5px;" [(ngModel)]="l.checked">
                 <lang-item [language]="l.locale" showTag="true"></lang-item>

@@ -1,9 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource, ResAttribute } from '../../models/ARTResources';
-import { Decomp } from "../../models/Vocabulary";
-import { OntoLexLemonServices } from "../../services/ontoLexLemonServices";
+import { UIUtils } from "../../utils/UIUtils";
 
 export class ConstituentListCreatorModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title') {
@@ -27,8 +26,12 @@ export class ConstituentListCreatorModal implements ModalComponent<ConstituentLi
 
     private ordered: boolean = true;
 
-    constructor(public dialog: DialogRef<ConstituentListCreatorModalData>, private ontolexService: OntoLexLemonServices) {
+    constructor(public dialog: DialogRef<ConstituentListCreatorModalData>, private elementRef: ElementRef) {
         this.context = dialog.context;
+    }
+
+    ngAfterViewInit() {
+        UIUtils.setFullSizeModal(this.elementRef);
     }
 
     private addConstituentToList() {

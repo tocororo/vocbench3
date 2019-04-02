@@ -1,7 +1,8 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
+import { UIUtils } from "../../utils/UIUtils";
 import { GraphMode } from "../abstractGraph";
 import { ForceDirectedGraph } from "../model/ForceDirectedGraph";
 
@@ -23,8 +24,12 @@ export class GraphModalData extends BSModalContext {
 export class GraphModal implements ModalComponent<GraphModalData> {
     context: GraphModalData;
 
-    constructor(public dialog: DialogRef<GraphModalData>) {
+    constructor(public dialog: DialogRef<GraphModalData>, private elementRef: ElementRef) {
         this.context = dialog.context;
+    }
+
+    ngAfterViewInit() {
+        UIUtils.setFullSizeModal(this.elementRef);
     }
 
     ok(event: Event) {

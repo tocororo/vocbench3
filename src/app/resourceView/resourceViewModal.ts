@@ -1,7 +1,8 @@
-import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTResource } from '../models/ARTResources';
+import { UIUtils } from "../utils/UIUtils";
 
 export class ResourceViewModalData extends BSModalContext {
     constructor(public resource: ARTResource, public readonly: boolean = true) {
@@ -16,8 +17,12 @@ export class ResourceViewModalData extends BSModalContext {
 export class ResourceViewModal implements ModalComponent<ResourceViewModalData> {
     context: ResourceViewModalData;
 
-    constructor(public dialog: DialogRef<ResourceViewModalData>) {
+    constructor(public dialog: DialogRef<ResourceViewModalData>, private elementRef: ElementRef) {
         this.context = dialog.context;
+    }
+
+    ngAfterViewInit() {
+        UIUtils.setFullSizeModal(this.elementRef);
     }
 
     ok(event: Event) {

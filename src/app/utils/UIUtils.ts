@@ -2,6 +2,7 @@ import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum, ResAttribute
 import { OWL, RDF, XmlSchema } from "../models/Vocabulary";
 import { VBContext } from "./VBContext";
 import { ResAction } from "./RoleActionResolver";
+import { ElementRef } from "@angular/core";
 
 
 export class UIUtils {
@@ -495,6 +496,16 @@ export class UIUtils {
             }
             
         }
+    }
+
+    /**
+     * This method is needed in order to face cross-browser compatibility with full size modals (modals that stretch to fill up to 95vh).
+     * Note: This method must be called only after the view is initialized, so preferrable in ngAfterViewInit()
+     * @param elementRef 
+     */
+    public static setFullSizeModal(elementRef: ElementRef) {
+        let modalContentElement: HTMLElement = elementRef.nativeElement.parentElement;
+        modalContentElement.style.setProperty("flex", "1");
     }
 
 }

@@ -1,7 +1,8 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "ngx-modialog";
-import {ARTURIResource, ResAttribute} from '../../models/ARTResources';
+import { Component, ElementRef } from "@angular/core";
+import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource, ResAttribute } from '../../models/ARTResources';
+import { UIUtils } from "../../utils/UIUtils";
 
 export class InstanceListCreatorModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title') {
@@ -24,8 +25,12 @@ export class InstanceListCreatorModal implements ModalComponent<InstanceListCrea
     
     private duplicateInstance: ARTURIResource; //instance tried to add to the instanceList but already there 
     
-    constructor(public dialog: DialogRef<InstanceListCreatorModalData>) {
+    constructor(public dialog: DialogRef<InstanceListCreatorModalData>, private elementRef: ElementRef) {
         this.context = dialog.context;
+    }
+
+    ngAfterViewInit() {
+        UIUtils.setFullSizeModal(this.elementRef);
     }
     
     /**

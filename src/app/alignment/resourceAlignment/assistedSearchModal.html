@@ -1,133 +1,125 @@
-<div class="blockingDivHost">
-    <div class="modal-header">
-        <div class="hbox" style="align-items: center">
-            <h3 class="modal-title" style="flex: 1">Assisted search</h3>
-            <div class="btn-group btn-group-sm pull-right" style="margin-bottom: 5px; align-self: flex-end;">
-                <button class="btn btn-default" [ngClass]="{ active : targetPosition == p }" (click)="changeTargetPosition('local')">Local</button>
-                <button class="btn btn-default" [ngClass]="{ active : targetPosition == p }" (click)="changeTargetPosition('remote')" [disabled]="!isRemoteAuthorized()">Remote</button>
-            </div>
+<div class="modal-header">
+    <div class="hbox" style="align-items: center">
+        <h3 class="modal-title" style="flex: 1">Assisted search</h3>
+        <div class="btn-group btn-group-sm pull-right" style="margin-bottom: 5px; align-self: flex-end;">
+            <button class="btn btn-default" [ngClass]="{ active : targetPosition == p }" (click)="changeTargetPosition('local')">Local</button>
+            <button class="btn btn-default" [ngClass]="{ active : targetPosition == p }" (click)="changeTargetPosition('remote')" [disabled]="!isRemoteAuthorized()">Remote</button>
         </div>
     </div>
-    <div class="modal-body vbox scrollableContainer">
+</div>
+<div class="modal-body vbox scrollableContainer blockingDivHost">
 
-        <ng-template [ngIf]="targetPosition == 'local'">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <label>Projects</label>
-                </div>
-                <div class="panel-body vbox scrollableContainer" style="max-height: 150px;">
-                    <div *ngFor="let p of projectList">
-                        <div class="listItem" [ngClass]="{ active : p == selectedProject }" (click)="selectProject(p)">
-                            {{p.getName()}}
-                        </div>
+    <ng-template [ngIf]="targetPosition == 'local'">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <label>Projects</label>
+            </div>
+            <div class="panel-body vbox scrollableContainer" style="max-height: 150px;">
+                <div *ngFor="let p of projectList">
+                    <div class="listItem" [ngClass]="{ active : p == selectedProject }" (click)="selectProject(p)">
+                        {{p.getName()}}
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div *ngIf="selectedProject" style="margin-top: 4px;">
-                <div *ngIf="!isProjectMetadataAvailable(); else mediationBlock" class="alert alert-warning">
-                    VoID/LIME Metadata not available for local project '{{selectedProject.getName()}}'.
-                    Click <a (click)="generateProjectMetadata()" style="cursor: pointer">here</a> to generate it.
-                </div>
+        <div *ngIf="selectedProject" style="margin-top: 4px;">
+            <div *ngIf="!isProjectMetadataAvailable(); else mediationBlock" class="alert alert-warning">
+                VoID/LIME Metadata not available for local project '{{selectedProject.getName()}}'.
+                Click <a (click)="generateProjectMetadata()" style="cursor: pointer">here</a> to generate it.
             </div>
-        </ng-template>
+        </div>
+    </ng-template>
 
-        
-        <ng-template [ngIf]="targetPosition == 'remote'">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <label style="flex: 1;">Remote datasets</label>
-                    <button class="btn btn-default btn-xs" (click)="addRemoteDataset()" title="Add Remote Dataset">
-                        <span class="glyphicon glyphicon-plus"></span>
-                    </button>
-                </div>
-                <div class="panel-body vbox scrollableContainer" style="max-height: 150px;">
-                    <div *ngFor="let d of remoteDatasets">
-                        <div class="listItem" [ngClass]="{ active : d == selectedDataset }" (click)="selectDataset(d)" [title]="d.identity">
-                            <span><label *ngIf="d.title">{{d.title}}:</label> {{d.uriSpace}}</span>
-                        </div>
+    
+    <ng-template [ngIf]="targetPosition == 'remote'">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <label style="flex: 1;">Remote datasets</label>
+                <button class="btn btn-default btn-xs" (click)="addRemoteDataset()" title="Add Remote Dataset">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </div>
+            <div class="panel-body vbox scrollableContainer" style="max-height: 150px;">
+                <div *ngFor="let d of remoteDatasets">
+                    <div class="listItem" [ngClass]="{ active : d == selectedDataset }" (click)="selectDataset(d)" [title]="d.identity">
+                        <span><label *ngIf="d.title">{{d.title}}:</label> {{d.uriSpace}}</span>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div *ngIf="selectedDataset" style="margin-top: 4px;">
-                <div *ngIf="!isDatasetMetadataAvailable(); else mediationBlock" class="alert alert-warning">
-                    VoID/LIME Metadata not available for remote dataset '{{selectedDataset.uriSpace}}'.
-                    You need to generate/add 'Embedded Lexicalization Sets' from the Metadata Registry management in order to exploit this feature.
+        <div *ngIf="selectedDataset" style="margin-top: 4px;">
+            <div *ngIf="!isDatasetMetadataAvailable(); else mediationBlock" class="alert alert-warning">
+                VoID/LIME Metadata not available for remote dataset '{{selectedDataset.uriSpace}}'.
+                You need to generate/add 'Embedded Lexicalization Sets' from the Metadata Registry management in order to exploit this feature.
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #mediationBlock>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div style="flex: 1;">
+                    <label style="margin-right: 4px;">Paired Lexicalization Sets</label>
+                    <span class="glyphicon glyphicon-info-sign" title="Lexicalization sets shared between the source resource and the target project/dataset."></span>
+                </div>
+                <button *ngIf="targetPosition == 'local'" class="btn btn-xs btn-default" (click)="refreshTargetMetadata()" title="Refresh metadata of the target project">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                </button>
+            </div>
+            <div class="panel-body scrollableContainer" style="max-height: 150px;">
+                <table class="table table-condensed table-hoverable">
+                    <thead>
+                        <tr>
+                            <th>Lang</th>
+                            <th class="text-center" title="Percentage of resources that have a lexicalization in the given language">%</th>
+                            <th class="text-center" title="Average number of lexicalizations">Avg</th>
+                            <th class="text-center" title="Lexicalization Model">LexModel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let ls of pairedLexicalizationSets; let index = index">
+                            <td>
+                                <div class="checkbox" style="margin: 0px;">
+                                    <label>
+                                        <input type="checkbox" [(ngModel)]="languagesToCheck[index].checked">
+                                        {{languagesToCheck[index].lang}}
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <span *ngIf="ls.percentage">{{ls.percentage*100}}</span>
+                            </td>
+                            <td class="text-center">{{ls.avgNumOfLexicalizations}}</td>
+                            <td class="text-center">{{getLexModelDisplayName(ls.lexicalizationModel)}}</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel panel-default" style="margin-top: 4px;">
+            <div class="panel-heading">
+                <span style="flex: 1">
+                    <label style="margin-right: 4px;">Search mode</label>
+                    <span class="glyphicon glyphicon-info-sign" title="String match modes on which the lexicalizations comparison is based on."></span>
+                </span>
+                <span *ngIf="getCheckedSearchMode().length == 0" class="greyText">
+                    <span class="glyphicon glyphicon-warning-sign"></span>
+                    If none is selected, 'Fuzzy' and 'Contains' are used by default
+                </span>
+            </div>
+            <div class="panel-body">
+                <div *ngFor="let sm of searchModes" class="checkbox" style="margin: 5px 0px 0px">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="sm.checked">{{sm.show}}
+                    </label>
                 </div>
             </div>
-        </ng-template>
-
-        <ng-template #mediationBlock>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div style="flex: 1;">
-                        <label style="margin-right: 4px;">Paired Lexicalization Sets</label>
-                        <span class="glyphicon glyphicon-info-sign" title="Lexicalization sets shared between the source resource and the target project/dataset."></span>
-                    </div>
-                    <button *ngIf="targetPosition == 'local'" class="btn btn-xs btn-default" (click)="refreshTargetMetadata()" title="Refresh metadata of the target project">
-                        <span class="glyphicon glyphicon-refresh"></span>
-                    </button>
-                </div>
-                <div class="panel-body scrollableContainer" style="max-height: 150px;">
-                    <table class="table table-condensed table-hoverable">
-                        <thead>
-                            <tr>
-                                <th>Lang</th>
-                                <th class="text-center" title="Percentage of resources that have a lexicalization in the given language">%</th>
-                                <th class="text-center" title="Average number of lexicalizations">Avg</th>
-                                <th class="text-center" title="Lexicalization Model">LexModel</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let ls of pairedLexicalizationSets; let index = index">
-                                <td>
-                                    <div class="checkbox" style="margin: 0px;">
-                                        <label>
-                                            <input type="checkbox" [(ngModel)]="languagesToCheck[index].checked">
-                                            {{languagesToCheck[index].lang}}
-                                        </label>
-                                    </div>
-                                </td>
-                                <td class="text-center">
-                                    <span *ngIf="ls.percentage">{{ls.percentage*100}}</span>
-                                </td>
-                                <td class="text-center">{{ls.avgNumOfLexicalizations}}</td>
-                                <td class="text-center">{{getLexModelDisplayName(ls.lexicalizationModel)}}</td>
-                            </tr>
-                            
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="panel panel-default" style="margin-top: 4px;">
-                <div class="panel-heading">
-                    <span style="flex: 1">
-                        <label style="margin-right: 4px;">Search mode</label>
-                        <span class="glyphicon glyphicon-info-sign" title="String match modes on which the lexicalizations comparison is based on."></span>
-                    </span>
-                    <span *ngIf="getCheckedSearchMode().length == 0" class="greyText">
-                        <span class="glyphicon glyphicon-warning-sign"></span>
-                        If none is selected, 'Fuzzy' and 'Contains' are used by default
-                    </span>
-                </div>
-                <div class="panel-body">
-                    <div *ngFor="let sm of searchModes" class="checkbox" style="margin: 5px 0px 0px">
-                        <label>
-                            <input type="checkbox" [(ngModel)]="sm.checked">{{sm.show}}
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </ng-template>
-
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkClickable()">Ok</button>
-        <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
-    </div>
-
+        </div>
+    </ng-template>
 
     <div #blockingDiv class="blockingDiv" style="display:none">
         <div class="loadingDiv">
@@ -137,4 +129,8 @@
         </div>
     </div>
 
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkClickable()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
 </div>

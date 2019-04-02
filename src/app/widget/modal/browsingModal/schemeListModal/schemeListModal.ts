@@ -1,7 +1,8 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "ngx-modialog";
-import {ARTURIResource} from '../../../../models/ARTResources';
+import { Component, ElementRef } from "@angular/core";
+import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource } from '../../../../models/ARTResources';
+import { UIUtils } from "../../../../utils/UIUtils";
 
 export class SchemeListModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title') {
@@ -18,8 +19,12 @@ export class SchemeListModal implements ModalComponent<SchemeListModalData> {
     
     private selectedScheme: ARTURIResource;
     
-    constructor(public dialog: DialogRef<SchemeListModalData>) {
+    constructor(public dialog: DialogRef<SchemeListModalData>, private elementRef: ElementRef) {
         this.context = dialog.context;
+    }
+
+    ngAfterViewInit() {
+        UIUtils.setFullSizeModal(this.elementRef);
     }
     
     ok(event: Event) {

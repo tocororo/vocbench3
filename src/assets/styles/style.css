@@ -750,23 +750,20 @@ input[type="radio"], input[type="checkbox"] {
 }
 
 /* 
-The following rules ensure that the dialog fill at max 90% of the video height.
-In order to let the content of the modal fill the available space (independently from its content),
-set height: 100vh to the .modal-body element (it will never reach 100vh given the max-height: 90vh if the .modal-content)
+The following rules ensure that the dialogs fill (at max) up to 95% of the video height (95vh).
+In order to let the content of the modal fill the available space (independently from its content), invoke UIUtils.setFullSizeModal()
 */
 bs-modal-container {
     display: flex !important;
-    flex-direction: column
-}
-.modal-dialog {
-    display: flex;
-    flex: 1;
+    flex-flow: column;
+    min-height: 0;
+    min-width: 0;
 }
 .modal-content {
     max-height: 95vh;
     display: flex !important;
     flex-flow: column;
-    flex: 1;
+    /* flex: 1; */
     min-height: 0;
     min-width: 0;
 }
@@ -779,4 +776,9 @@ bs-modal-container {
 }
 .modal-dialog {
     margin: 15px auto;
+    display: flex !important;
+    flex-flow: column;
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
 }

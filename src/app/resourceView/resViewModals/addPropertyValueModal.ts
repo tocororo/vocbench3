@@ -1,11 +1,11 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTLiteral, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from '../../models/ARTResources';
 import { OWL, RDF, RDFS, SKOS, SKOSXL } from '../../models/Vocabulary';
 import { ManchesterServices } from "../../services/manchesterServices";
 import { PropertyServices, RangeType } from "../../services/propertyServices";
-import { TreeListContext } from "../../utils/UIUtils";
+import { UIUtils } from "../../utils/UIUtils";
 import { VBProperties } from '../../utils/VBProperties';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { BrowsingModalServices } from '../../widget/modal/browsingModal/browsingModalServices';
@@ -96,7 +96,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private datarange: ARTLiteral[];
 
     constructor(public dialog: DialogRef<AddPropertyValueModalData>, public manchService: ManchesterServices, private propService: PropertyServices, 
-        private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private preferences: VBProperties) {
+        private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private preferences: VBProperties, private elementRef: ElementRef) {
         this.context = dialog.context;
     }
 
@@ -105,6 +105,10 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         this.enrichingProperty = this.rootProperty;
 
         this.updateRange(this.rootProperty);
+    }
+
+    ngAfterViewInit() {
+        UIUtils.setFullSizeModal(this.elementRef)
     }
 
     private changeProperty() {

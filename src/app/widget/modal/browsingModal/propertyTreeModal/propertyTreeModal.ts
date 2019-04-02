@@ -1,7 +1,8 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "ngx-modialog";
-import {ARTURIResource} from '../../../../models/ARTResources';
+import { Component, ElementRef } from "@angular/core";
+import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource } from '../../../../models/ARTResources';
+import { UIUtils } from "../../../../utils/UIUtils";
 
 export class PropertyTreeModalData extends BSModalContext {
     /**
@@ -30,12 +31,16 @@ export class PropertyTreeModal implements ModalComponent<PropertyTreeModalData> 
 
     private showAll: boolean = false;
     
-    constructor(public dialog: DialogRef<PropertyTreeModalData>) {
+    constructor(public dialog: DialogRef<PropertyTreeModalData>, private elementRef: ElementRef) {
         this.context = dialog.context;
     }
     
     ngOnInit() {
         this.domainRes = this.context.resource;
+    }
+
+    ngAfterViewInit() {
+        UIUtils.setFullSizeModal(this.elementRef);
     }
     
     private onPropertySelected(property: ARTURIResource) {

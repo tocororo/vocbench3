@@ -1,8 +1,9 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTBNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from '../../models/ARTResources';
 import { ResourceUtils } from "../../utils/ResourceUtils";
+import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { BrowsingModalServices } from '../../widget/modal/browsingModal/browsingModalServices';
@@ -41,8 +42,8 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
 
     private readonly inversePrefix: string = "INVERSE ";
 
-    constructor(public dialog: DialogRef<PropertyChainCreatorModalData>, private browsingModals: BrowsingModalServices, 
-        private basicModals: BasicModalServices) {
+    constructor(public dialog: DialogRef<PropertyChainCreatorModalData>, private elementRef: ElementRef,
+        private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
@@ -71,6 +72,10 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
                 this.propChain.push({ property: property, inverse: inverse });
             });
         }
+    }
+
+    ngAfterViewInit() {
+        UIUtils.setFullSizeModal(this.elementRef);
     }
 
     private changeProperty() {

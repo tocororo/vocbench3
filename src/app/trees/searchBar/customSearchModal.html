@@ -1,34 +1,28 @@
-<div class="blockingDivHost">
-    <div class="modal-header">
-        <div class="hbox" style="align-items: center">
-            <h3 class="modal-title" style="flex: 1">Custom search</h3>
-            <button class="btn btn-default btn-xs" [ngClass]="{active: detailsOn}" title="Show/hide SPARQL details about the custom search" (click)="detailsOn = !detailsOn">
-                Details
-                <span *ngIf="detailsOn" class="glyphicon glyphicon-eye-open"></span>
-                <span *ngIf="!detailsOn" class="glyphicon glyphicon-eye-close"></span>
-            </button>
-        </div>
+<div class="modal-header">
+    <div class="hbox" style="align-items: center">
+        <h3 class="modal-title" style="flex: 1">Custom search</h3>
+        <button class="btn btn-default btn-xs" [ngClass]="{active: detailsOn}" title="Show/hide SPARQL details about the custom search" (click)="detailsOn = !detailsOn">
+            Details
+            <span *ngIf="detailsOn" class="glyphicon glyphicon-eye-open"></span>
+            <span *ngIf="!detailsOn" class="glyphicon glyphicon-eye-close"></span>
+        </button>
     </div>
-    <div class="modal-body scrollableContainer">
+</div>
+<div class="modal-body blockingDivHost scrollableContainer">
 
-        <div *ngIf="description" class="alert alert-info" style="margin-bottom: 4px;">
-            {{description}}
-        </div>
-
-        <div *ngIf="staticParameterization && !detailsOn" class="alert alert-warning" style="margin-bottom: 4px;">
-            This search has no parameters so can only be run as is.
-        </div>
-
-        <query-param-form [bindings]="parameterization" (update)="onVarBindingsUpdate($event)" [configurable]="false" 
-            [mode]="detailsOn ? 'sparql' : 'search'"></query-param-form>
-
-        <yasgui *ngIf="detailsOn" [query]="query" [readonly]="true" [hideButtons]="true"></yasgui>
-
+    <div *ngIf="description" class="alert alert-info" style="margin-bottom: 4px;">
+        {{description}}
     </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
-        <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+
+    <div *ngIf="staticParameterization && !detailsOn" class="alert alert-warning" style="margin-bottom: 4px;">
+        This search has no parameters so can only be run as is.
     </div>
+
+    <query-param-form [bindings]="parameterization" (update)="onVarBindingsUpdate($event)" [configurable]="false" 
+        [mode]="detailsOn ? 'sparql' : 'search'"></query-param-form>
+
+    <yasgui *ngIf="detailsOn" [query]="query" [readonly]="true" [hideButtons]="true"></yasgui>
+
 
     <div #blockingDiv class="blockingDiv" style="display:none">
         <div class="loadingDiv">
@@ -37,4 +31,11 @@
             </div>
         </div>
     </div>
+
 </div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>
+
+    

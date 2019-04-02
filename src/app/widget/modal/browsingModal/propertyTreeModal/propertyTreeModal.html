@@ -1,7 +1,7 @@
 <div class="modal-header">
     <h3 class="modal-title">{{context.title}}</h3>
 </div>
-<div class="modal-body vbox" style="height:70vh;">
+<div class="modal-body vbox">
     <div *ngIf="context.resource" class="checkbox-inline" style="margin-bottom: 5px;">
         <label>
             <input type="checkbox" [(ngModel)]="showAll" (ngModelChange)="onShowAllChanged()">Show all properties

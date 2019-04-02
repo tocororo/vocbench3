@@ -1,8 +1,9 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef } from "@angular/core";
 import { DialogRef, ModalComponent, OverlayConfig } from "ngx-modialog";
 import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from '../../../../models/ARTResources';
 import { ResourcesServices } from "../../../../services/resourcesServices";
+import { UIUtils } from "../../../../utils/UIUtils";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { LexiconListModal, LexiconListModalData } from "../lexiconListModal/lexiconListModal";
 
@@ -33,7 +34,7 @@ export class LexicalEntryListModal implements ModalComponent<LexicalEntryListMod
     private multiselection: boolean = false;
 
     constructor(public dialog: DialogRef<LexicalEntryListModalData>, private modal: Modal, private resourceService: ResourcesServices,
-        private vbProp: VBProperties) {
+        private vbProp: VBProperties, private elementRef: ElementRef) {
         this.context = dialog.context;
     }
 
@@ -49,6 +50,10 @@ export class LexicalEntryListModal implements ModalComponent<LexicalEntryListMod
                 )
             }
         }
+    }
+
+    ngAfterViewInit() {
+        UIUtils.setFullSizeModal(this.elementRef);
     }
 
     private onLexiconSelected(entry: ARTURIResource) {

@@ -1,9 +1,10 @@
-import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { ARTResource, ARTURIResource, ARTBNode, ResAttribute, RDFResourceRolesEnum } from '../../models/ARTResources';
-import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTBNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from '../../models/ARTResources';
 import { ManchesterServices } from "../../services/manchesterServices";
+import { UIUtils } from "../../utils/UIUtils";
+import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 
 export class ClassListCreatorModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title') {
@@ -26,8 +27,12 @@ export class ClassListCreatorModal implements ModalComponent<ClassListCreatorMod
     private duplicateResource: ARTResource; //resource tried to add to the classList but already there 
 
     constructor(public dialog: DialogRef<ClassListCreatorModalData>, public manchService: ManchesterServices,
-        private basicModals: BasicModalServices) {
+        private basicModals: BasicModalServices, private elementRef: ElementRef) {
         this.context = dialog.context;
+    }
+
+    ngAfterViewInit() {
+        UIUtils.setFullSizeModal(this.elementRef);
     }
 
     /**
