@@ -23,7 +23,7 @@
                     <td nowrap>{{c.getRDFCapability()}}
                         <span *ngIf="c.getRDFCapability() == 'typedLiteral'" class="glyphicon glyphicon-info-sign" [title]="c.getDatatypes()"></span>
                     </td>
-                    <td>{{c.getURI()}}</td>
+                    <td [title]="c.getURI()">{{c.getQName()}}</td>
                 </tr>
             </tbody>
         </table>

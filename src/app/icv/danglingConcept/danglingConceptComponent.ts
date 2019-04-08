@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { ARTURIResource } from "../../models/ARTResources";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
+import { ResourceUtils, SortAttribute } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
@@ -26,6 +27,7 @@ export class DanglingConceptComponent {
         this.skosService.getAllSchemes().subscribe(
             schemeList => {
                 this.schemeList = schemeList;
+                ResourceUtils.sortResources(this.schemeList, SortAttribute.show);
                 var activeSchemes: ARTURIResource[] = this.preferences.getActiveSchemes();
                 var currentScheme: ARTURIResource;
                 if (activeSchemes.length > 0) {

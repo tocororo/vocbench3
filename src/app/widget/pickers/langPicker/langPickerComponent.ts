@@ -18,6 +18,7 @@ export class LangPickerComponent implements ControlValueAccessor {
     @Input() locale: boolean = false; //if true, allow the selection of also the locale of this.lang (compatibly with the user assigned langugages)
     @Input() size: string = "sm";
     @Input() disabled: boolean = false;
+    @Input() readonly: boolean = false;
 
     private selectClass: string = "form-control input-";
     private languageList: Language[] = [];

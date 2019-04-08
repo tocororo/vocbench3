@@ -24,6 +24,9 @@ export class ConverterContractDescription {
     public getURI(): string {
         return this.uri;
     }
+    public getQName(): string {
+        return this.uri.replace(ConverterContractDescription.NAMESPACE, ConverterContractDescription.PREFIX+":");
+    }
     public getName(): string {
         return this.name;
     }
