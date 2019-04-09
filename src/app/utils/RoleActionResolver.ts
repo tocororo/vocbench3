@@ -29,7 +29,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.classesCreateClass,
             roles: [RDFResourceRolesEnum.cls],
-            conditions: { pre: { selectionRequired: false, childlessRequired: false }, post: { deselectOnComplete: false } },
+            conditions: { pre: { selectionRequired: false, childlessRequired: false, explicitRequired: false }, post: { deselectOnComplete: false } },
             title: "Create class",
             resAction: ResAction.create,
             editType: "C"
@@ -37,7 +37,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.classesCreateSubClass,
             roles: [RDFResourceRolesEnum.cls],
-            conditions: { pre: { selectionRequired: true, childlessRequired: false }, post: { deselectOnComplete: false } },
+            conditions: { pre: { selectionRequired: true, childlessRequired: false, explicitRequired: false }, post: { deselectOnComplete: false } },
             title: "Create subClass",
             resAction: ResAction.addChild,
             editType: "C"
@@ -45,7 +45,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.classesDeleteClass,
             roles: [RDFResourceRolesEnum.cls],
-            conditions: { pre: { selectionRequired: true, childlessRequired: true }, post: { deselectOnComplete: true } },
+            conditions: { pre: { selectionRequired: true, childlessRequired: true, explicitRequired: true }, post: { deselectOnComplete: true } },
             title: "Delete class",
             resAction: ResAction.delete,
             editType: "D"
@@ -54,7 +54,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.skosCreateTopConcept,
             roles: [RDFResourceRolesEnum.concept],
-            conditions: { pre: { selectionRequired: false, childlessRequired: false }, post: { deselectOnComplete: false } },
+            conditions: { pre: { selectionRequired: false, childlessRequired: false, explicitRequired: false }, post: { deselectOnComplete: false } },
             title: "Create concept",
             resAction: ResAction.create,
             editType: "C",
@@ -62,7 +62,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.skosCreateNarrowerConcept,
             roles: [RDFResourceRolesEnum.concept],
-            conditions: { pre: { selectionRequired: true, childlessRequired: false }, post: { deselectOnComplete: false } },
+            conditions: { pre: { selectionRequired: true, childlessRequired: false, explicitRequired: false }, post: { deselectOnComplete: false } },
             title: "Create narrower concept",
             resAction: ResAction.addChild,
             editType: "C"
@@ -70,7 +70,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.skosDeleteConcept,
             roles: [RDFResourceRolesEnum.concept],
-            conditions: { pre: { selectionRequired: true, childlessRequired: true }, post: { deselectOnComplete: true } },
+            conditions: { pre: { selectionRequired: true, childlessRequired: true, explicitRequired: true }, post: { deselectOnComplete: true } },
             title: "Delete concept",
             resAction: ResAction.delete,
             editType: "D"
@@ -79,7 +79,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.skosCreateScheme,
             roles: [RDFResourceRolesEnum.conceptScheme],
-            conditions: { pre: { selectionRequired: false, childlessRequired: false }, post: { deselectOnComplete: false } },
+            conditions: { pre: { selectionRequired: false, childlessRequired: false, explicitRequired: false }, post: { deselectOnComplete: false } },
             title: "Create scheme",
             resAction: ResAction.create,
             editType: "C",
@@ -87,7 +87,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.skosDeleteScheme,
             roles: [RDFResourceRolesEnum.conceptScheme],
-            conditions: { pre: { selectionRequired: true, childlessRequired: true }, post: { deselectOnComplete: true } },
+            conditions: { pre: { selectionRequired: true, childlessRequired: true, explicitRequired: true }, post: { deselectOnComplete: true } },
             title: "Delete scheme",
             resAction: ResAction.delete,
             editType: "D"
@@ -96,7 +96,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.datatypesCreateDatatype,
             roles: [RDFResourceRolesEnum.dataRange],
-            conditions: { pre: { selectionRequired: false, childlessRequired: false }, post: { deselectOnComplete: false } },
+            conditions: { pre: { selectionRequired: false, childlessRequired: false, explicitRequired: false }, post: { deselectOnComplete: false } },
             title: "Create datatype",
             resAction: ResAction.create,
             editType: "C",
@@ -104,7 +104,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.datatypesDeleteDatatype,
             roles: [RDFResourceRolesEnum.dataRange],
-            conditions: { pre: { selectionRequired: true, childlessRequired: true }, post: { deselectOnComplete: true } },
+            conditions: { pre: { selectionRequired: true, childlessRequired: true, explicitRequired: true }, post: { deselectOnComplete: true } },
             title: "Delete datatype",
             resAction: ResAction.delete,
             editType: "D"
@@ -113,7 +113,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.classesCreateIndividual,
             roles: [RDFResourceRolesEnum.individual],
-            conditions: { pre: { selectionRequired: false, childlessRequired: false }, post: { deselectOnComplete: false } },
+            conditions: { pre: { selectionRequired: false, childlessRequired: false, explicitRequired: false }, post: { deselectOnComplete: false } },
             title: "Create instance",
             resAction: ResAction.create,
             editType: "C",
@@ -121,7 +121,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.classesDeleteIndividual,
             roles: [RDFResourceRolesEnum.individual],
-            conditions: { pre: { selectionRequired: true, childlessRequired: true }, post: { deselectOnComplete: true } },
+            conditions: { pre: { selectionRequired: true, childlessRequired: true, explicitRequired: true }, post: { deselectOnComplete: true } },
             title: "Delete instance",
             resAction: ResAction.delete,
             editType: "D"
@@ -130,7 +130,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.ontolexCreateLexicon,
             roles: [RDFResourceRolesEnum.limeLexicon],
-            conditions: { pre: { selectionRequired: false, childlessRequired: false }, post: { deselectOnComplete: false } },
+            conditions: { pre: { selectionRequired: false, childlessRequired: false, explicitRequired: false }, post: { deselectOnComplete: false } },
             title: "Create lexicon",
             resAction: ResAction.create,
             editType: "C",
@@ -138,7 +138,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.ontolexDeleteLexicon,
             roles: [RDFResourceRolesEnum.limeLexicon],
-            conditions: { pre: { selectionRequired: true, childlessRequired: true }, post: { deselectOnComplete: true } },
+            conditions: { pre: { selectionRequired: true, childlessRequired: true, explicitRequired: true }, post: { deselectOnComplete: true } },
             title: "Delete lexicon",
             resAction: ResAction.delete,
             editType: "D"
@@ -147,7 +147,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.ontolexCreateLexicalEntry,
             roles: [RDFResourceRolesEnum.ontolexLexicalEntry],
-            conditions: { pre: { selectionRequired: false, childlessRequired: false }, post: { deselectOnComplete: false } },
+            conditions: { pre: { selectionRequired: false, childlessRequired: false, explicitRequired: false }, post: { deselectOnComplete: false } },
             title: "Create lexical entry",
             resAction: ResAction.create,
             editType: "C",
@@ -155,7 +155,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.ontolexDeleteLexicalEntry,
             roles: [RDFResourceRolesEnum.ontolexLexicalEntry],
-            conditions: { pre: { selectionRequired: true, childlessRequired: true }, post: { deselectOnComplete: true } },
+            conditions: { pre: { selectionRequired: true, childlessRequired: true, explicitRequired: true }, post: { deselectOnComplete: true } },
             title: "Delete lexical entry",
             resAction: ResAction.delete,
             editType: "D"
@@ -165,7 +165,7 @@ export class RoleActionResolver {
             actionId: VBActionsEnum.propertiesCreateProperty,
             roles: [RDFResourceRolesEnum.property],
             subRoles: [RDFResourceRolesEnum.annotationProperty, RDFResourceRolesEnum.datatypeProperty, RDFResourceRolesEnum.objectProperty, RDFResourceRolesEnum.ontologyProperty],
-            conditions: { pre: { selectionRequired: false, childlessRequired: false }, post: { deselectOnComplete: false } },
+            conditions: { pre: { selectionRequired: false, childlessRequired: false, explicitRequired: false }, post: { deselectOnComplete: false } },
             title: "Create property",
             resAction: ResAction.create,
             editType: "C"
@@ -173,7 +173,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.propertiesCreateSubProperty,
             roles: [RDFResourceRolesEnum.property],
-            conditions: { pre: { selectionRequired: true, childlessRequired: false }, post: {} },
+            conditions: { pre: { selectionRequired: true, childlessRequired: false, explicitRequired: false }, post: {} },
             title: "Create subProperty",
             resAction: ResAction.addChild,
             editType: "C"
@@ -181,7 +181,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.propertiesDeleteProperty,
             roles: [RDFResourceRolesEnum.property],
-            conditions: { pre: { selectionRequired: true, childlessRequired: true }, post: { deselectOnComplete: true } },
+            conditions: { pre: { selectionRequired: true, childlessRequired: true, explicitRequired: true }, post: { deselectOnComplete: true } },
             title: "Delete property",
             resAction: ResAction.delete,
             editType: "D"
@@ -191,7 +191,7 @@ export class RoleActionResolver {
             actionId: VBActionsEnum.skosCreateCollection,
             roles: [RDFResourceRolesEnum.skosCollection],
             subRoles: [RDFResourceRolesEnum.skosOrderedCollection],
-            conditions: { pre: { selectionRequired: false, childlessRequired: false }, post: { deselectOnComplete: false } },
+            conditions: { pre: { selectionRequired: false, childlessRequired: false, explicitRequired: false }, post: { deselectOnComplete: false } },
             title: "Create collection",
             resAction: ResAction.create,
             editType: "C"
@@ -200,7 +200,7 @@ export class RoleActionResolver {
             actionId: VBActionsEnum.skosCreateSubCollection,
             roles: [RDFResourceRolesEnum.skosCollection],
             subRoles: [RDFResourceRolesEnum.skosOrderedCollection],
-            conditions: { pre: { selectionRequired: true, childlessRequired: false }, post: { deselectOnComplete: false } },
+            conditions: { pre: { selectionRequired: true, childlessRequired: false, explicitRequired: false }, post: { deselectOnComplete: false } },
             title: "Create nested collection",
             resAction: ResAction.addChild,
             editType: "C"
@@ -208,7 +208,7 @@ export class RoleActionResolver {
         {
             actionId: VBActionsEnum.skosDeleteCollection,
             roles: [RDFResourceRolesEnum.skosCollection],
-            conditions: { pre: { selectionRequired: true, childlessRequired: true }, post: { deselectOnComplete: true } },
+            conditions: { pre: { selectionRequired: true, childlessRequired: true, explicitRequired: true }, post: { deselectOnComplete: true } },
             title: "Delete collection",
             resAction: ResAction.delete,
             editType: "D"
@@ -220,7 +220,7 @@ export class RoleActionResolver {
                 RDFResourceRolesEnum.dataRange, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.limeLexicon, 
                 RDFResourceRolesEnum.limeLexicon, RDFResourceRolesEnum.ontolexLexicalEntry, RDFResourceRolesEnum.property,
                 RDFResourceRolesEnum.skosCollection],
-            conditions: { pre: { selectionRequired: true, childlessRequired: false }, post: { deselectOnComplete: false } },
+            conditions: { pre: { selectionRequired: true, childlessRequired: false, explicitRequired: true }, post: { deselectOnComplete: false } },
             title: "Deprecate",
             resAction: ResAction.deprecate,
             editType: "D"
@@ -290,6 +290,7 @@ export class ActionConditions {
     pre: {
         selectionRequired?: boolean; //if true, the action requires a resource to be selected
         childlessRequired?: boolean; //if true, the action requires that the selected resource (if any) must have no child resources
+        explicitRequired?: boolean; //if true, the action requires that the selected resource (if any) must be explicit (defined in the main graph, not in staging)
     };
     post: {
         deselectOnComplete?: boolean; //tells if the selected resource (if required is true) should be deselected once the action is done

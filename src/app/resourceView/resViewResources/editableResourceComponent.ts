@@ -102,15 +102,15 @@ export class EditableResourceComponent {
 			(this.partition != ResViewPartition.subPropertyChains && this.partition != ResViewPartition.classaxioms && this.resource.isResource())
 		);
 
-		this.isInferred = ResourceUtils.containsNode(this.resource.getGraphs(), new ARTURIResource(SemanticTurkey.inferenceGraph));
+		this.isInferred = ResourceUtils.containsNode(this.resource.getTripleGraphs(), new ARTURIResource(SemanticTurkey.inferenceGraph));
 
-		let inMainGraph: boolean = ResourceUtils.containsNode(this.resource.getGraphs(), new ARTURIResource(VBContext.getWorkingProject().getBaseURI()));
+		let inMainGraph: boolean = ResourceUtils.containsNode(this.resource.getTripleGraphs(), new ARTURIResource(VBContext.getWorkingProject().getBaseURI()));
 
 		this.editMenuDisabled = (
 			(!this.isInferred && !inMainGraph) || //neither in the main graph nor in inference graph
 			// (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT)) || 
 			this.readonly || 
-			ResourceUtils.isResourceInStaging(this.resource)
+			ResourceUtils.isTripleInStaging(this.resource)
 		);
 
 		/**

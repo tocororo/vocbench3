@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { GraphMode } from "../graph/abstractGraph";
 import { GraphModalServices } from "../graph/modal/graphModalServices";
-import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
 import { CustomFormsServices } from "../services/customFormsServices";
 import { ResourcesServices } from "../services/resourcesServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
@@ -106,13 +106,17 @@ export abstract class AbstractPanel {
      * An action is disabled if:
      * - the panel instance is readonly
      * - the action is not authorized (user capabilities don't satisfy the required authorization)
-     * - a selection of a resource is required but a resource is not selected
+     * - a selection of a resource is required but
+     *      - a resource is not selected
+     *      - a resource is selected but it is required to be explicit and it is not
      */
     isActionDisabled(action: ActionDescription) {
         return (
             this.readonly ||
             !AuthorizationEvaluator.isAuthorized(action.id, this.selectedNode) || 
-            action.conditions.pre.selectionRequired && !this.selectedNode
+            action.conditions.pre.selectionRequired && (
+                !this.selectedNode || (action.conditions.pre.explicitRequired && !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT))
+            )
         )
 
     }

@@ -156,7 +156,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
 
     private isDeleteDisabled() {
         return (
-            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStaging(this.resource)) ||
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isTripleInStaging(this.resource)) ||
             this.readonly || !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.resource)
         );
     }

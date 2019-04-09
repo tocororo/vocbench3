@@ -271,6 +271,13 @@ export abstract class PartitionRenderer {
                 let objList: ARTNode[] = this.predicateObjectList[i].getObjects();
                 for (var j = 0; j < objList.length; j++) {
                     let object = objList[j];
+                    /**
+                     * Prevent removing a triple in staging. Theoretically, it should not be allowed to execute a "Remove all values"
+                     * if in the pred-obj list there is a triple in the staging graph. Anyway, since the check could be (currently)
+                     * too expensive, the operation is allowed but it simply prevents from removing the staging triples.
+                     */
+                    if (ResourceUtils.isTripleInStaging(object)) continue;
+                    
                     removeFnArray.push(this.getRemoveFunction(predicate, object));
                 }
             }
@@ -306,6 +313,7 @@ export abstract class PartitionRenderer {
      * @param removeFnArray 
      */
     protected removeAllRicursively(removeFnArray: any[]) {
+        if (removeFnArray.length == 0) return;
         removeFnArray[0].subscribe(
             (stResp: any) => {
                 removeFnArray.shift();

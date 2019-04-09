@@ -132,7 +132,6 @@ rdf-resource {
 rdf-resource > .rdfResourceIcon {
     width: 16px;
     height: 16px;
-    margin-right: 5px;
 }
 /* Ellipsis of the content of a rdf-resource in a button, in a navigation tab (ResView tabs), and in a panel-heading (heading of ResView) */
 button > rdf-resource > span, .nav-tabs rdf-resource > span, .panel-heading rdf-resource > span {
@@ -141,14 +140,31 @@ button > rdf-resource > span, .nav-tabs rdf-resource > span, .panel-heading rdf-
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-
-.stagingAdd {
-    color: green; font-style: italic;
+rdf-resource > .rdfResourceText {
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+    margin-left: 2px;
+    margin-right: 6px;
 }
-
-.stagingRemove {
+.proposedAddRes {
+    background-color: #dff0d8;
+    color: #3c763d;
+    border-color: #d6e9c6 !important;
+}
+.proposedRemoveRes {
+    background-color: #f2dede;
+    color: #a94442;
+    border-color: #ebccd1 !important;
+}
+.proposedAddTriple {
+    color: green;
+    font-style: italic;
+}
+.proposedRemoveTriple {
     color: darkred;
-    text-decoration: line-through; 
+    text-decoration: line-through;
 }
 
 .flagIcon {

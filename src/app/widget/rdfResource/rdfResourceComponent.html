@@ -11,7 +11,7 @@
         </ng-template>
     </ng-template>
 </div>
-<span [title]="resource.toNT()" [class]="renderingClass" style="margin-right: 6px;">
+<span [title]="resource.toNT()" [class]="'rdfResourceText' + renderingClass">
     <ng-template [ngIf]="literalWithLink">
         <ng-template ngFor let-s [ngForOf]="splittedLiteral" let-even="even">
             <span *ngIf="even">{{s}}</span>

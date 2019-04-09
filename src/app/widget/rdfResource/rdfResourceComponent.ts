@@ -1,6 +1,5 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../models/ARTResources";
-import { SemanticTurkey } from "../../models/Vocabulary";
+import { ARTLiteral, ARTNode, ARTResource, RDFResourceRolesEnum, ResAttribute } from "../../models/ARTResources";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBProperties } from "../../utils/VBProperties";
@@ -51,11 +50,14 @@ export class RdfResourceComponent {
 	 */
 	private initRenderingClass() {
 		if (ResourceUtils.isResourceInStagingAdd(this.resource)) {
-			this.renderingClass = "stagingAdd";
+			this.renderingClass += " proposedAddRes";
 		} else if (ResourceUtils.isResourceInStagingRemove(this.resource)) {
-			this.renderingClass = "stagingRemove";
-		} else {
-			this.renderingClass = "";
+			this.renderingClass += " proposedRemoveRes";
+		}
+		if (ResourceUtils.isTripleInStagingAdd(this.resource)) {
+			this.renderingClass += " proposedAddTriple";
+		} else if (ResourceUtils.isTripleInStagingRemove(this.resource)) {
+			this.renderingClass += " proposedRemoveTriple";
 		}
 	}
 

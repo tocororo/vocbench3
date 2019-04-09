@@ -1,6 +1,7 @@
 export abstract class ARTNode {
 
-    protected graphs: ARTURIResource[] = [];
+    protected graphs: ARTURIResource[] = []; //graphs where the resource is defined
+    protected tripleGraphs: ARTURIResource[] = []; //graphs where the triple (which the resource respresents the object) is defined
     protected role: RDFResourceRolesEnum = RDFResourceRolesEnum.mention; //default, so node without role are considered mention
 
     constructor() { };
@@ -44,6 +45,27 @@ export abstract class ARTNode {
     }
     getGraphs(): ARTURIResource[] {
         return this.graphs;
+    }
+
+    setTripleGraphs(graphs: ARTURIResource[]) {
+        this.tripleGraphs = graphs;
+    }
+    addTripleGraphs(graphs: ARTURIResource[]) {
+        for (var i = 0; i < graphs.length; i++) {
+            this.addTripleGraph(graphs[i]);
+        }
+    }
+    addTripleGraph(graph: ARTURIResource) {
+        for (var i = 0; i < this.tripleGraphs.length; i++) {
+            if (graph.getURI() == this.tripleGraphs[i].getURI()) {
+                return; //graph is already in graphs array => do not add the graph
+            }
+        }
+        //graphToAdd not found in graphs array => add it
+        this.tripleGraphs.push(graph);
+    }
+    getTripleGraphs(): ARTURIResource[] {
+        return this.tripleGraphs;
     }
 
     setRole(role: RDFResourceRolesEnum) {

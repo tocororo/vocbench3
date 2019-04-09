@@ -502,7 +502,7 @@ export class ResourceViewComponent {
             for (var i = 0; i < predObjList.length; i++) {
                 var objList: ARTNode[] = predObjList[i].getObjects();
                 for (var j = 0; j < objList.length; j++) {
-                    let objGraphs: ARTURIResource[] = objList[j].getGraphs();
+                    let objGraphs: ARTURIResource[] = objList[j].getTripleGraphs();
                     if (ResourceUtils.containsNode(objGraphs, new ARTURIResource(SemanticTurkey.inferenceGraph))) {
                         objList.splice(j, 1);
                         j--;

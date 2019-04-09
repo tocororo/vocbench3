@@ -258,6 +258,32 @@ export class ResourceUtils {
     }
 
     /**
+     * Returns true if the triple (which the resource respresents the object) is in the staging (add or remove) graph, false otherwise
+     * @param resource 
+     */
+    static isTripleInStaging(resource: ARTNode): boolean {
+        return this.isTripleInStagingAdd(resource) || this.isTripleInStagingRemove(resource);
+    }
+    static isTripleInStagingAdd(resource: ARTNode): boolean {
+        let graphs: ARTURIResource[] = resource.getTripleGraphs();
+        for (var i = 0; i < graphs.length; i++) {
+            if (graphs[i].getURI().startsWith(SemanticTurkey.stagingAddGraph)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    static isTripleInStagingRemove(resource: ARTNode): boolean {
+        let graphs: ARTURIResource[] = resource.getTripleGraphs();
+        for (var i = 0; i < graphs.length; i++) {
+            if (graphs[i].getURI().startsWith(SemanticTurkey.stagingRemoveGraph)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Taken from it.uniroma2.art.semanticturkey.data.role.RDFResourceRoles
      * @param subsumer 
      * @param subsumee 

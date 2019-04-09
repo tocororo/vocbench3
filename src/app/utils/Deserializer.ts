@@ -77,11 +77,9 @@ export class Deserializer {
         var graphsAttr: string = resJson[ResAttribute.GRAPHS];
         if (graphsAttr != undefined) {
             let splittedGraph: string[] = graphsAttr.split(",");
-            let graphs: ARTURIResource[] = []
             for (var i = 0; i < splittedGraph.length; i++) {
-                graphs.push(new ARTURIResource(splittedGraph[i].trim()));
+                node.addTripleGraph(new ARTURIResource(splittedGraph[i].trim()));
             }
-            node.setGraphs(graphs);
         }
         var members: any[] = resJson[ResAttribute.MEMBERS];
         if (members != undefined) {
@@ -108,13 +106,12 @@ export class Deserializer {
         }
         var nature: string = resJson[ResAttribute.NATURE];
         if (nature != undefined && nature != "") {
-            let natureRole: RDFResourceRolesEnum;
-            let natureDeprecated: boolean = false;
             let splitted: string[] = nature.split("|_|");
             for (var i = 0; i < splitted.length; i++) {
                 let roleGraphDeprecated: string[] = splitted[i].split(",");
                 node.setRole(<RDFResourceRolesEnum>roleGraphDeprecated[0]); //in this way I set the last role encountered in the nature
                 node.addGraph(new ARTURIResource(roleGraphDeprecated[1]));
+                //I set the last deprecated encountered but it doesn't matter since the deprecated value is the same in all the role-graph-deprecated triples
                 node.setAdditionalProperty(ResAttribute.DEPRECATED, roleGraphDeprecated[2] == "true");
             }
             
