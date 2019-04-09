@@ -151,6 +151,8 @@ export class UIUtils {
 
     private static mentionImgSrc = require("../../assets/images/icons/res/mention.png"); 
 
+    private static untypedIndividualImgSrc = require("../../assets/images/icons/res/untyped_individual.png"); 
+
     static getImageSrc(rdfResource: ARTNode): string {
         var imgSrc: string;
         if (rdfResource.isResource()) {
@@ -240,16 +242,17 @@ export class UIUtils {
                 }
             } else if (role == RDFResourceRolesEnum.mention) {
                 imgSrc = this.mentionImgSrc;
-                // if role is not defined and rdfResource is a URIRes which baseURI is not the project baseURI
-                if (rdfResource instanceof ARTURIResource && !rdfResource.getURI().startsWith(VBContext.getWorkingProject().getBaseURI())) {
-                    imgSrc = this.mentionImgSrc; //it is a mention
-                } else { 
-                    //else it could be a custom form preview. If it has a langTag, it's preferrable to render it with flag
-                    if (rdfResource.getAdditionalProperty(ResAttribute.LANG) != null) {
-                        imgSrc = this.getFlagImgSrc(rdfResource.getAdditionalProperty(ResAttribute.LANG));
-                    } else { //else set individual image as default
-                        imgSrc = this.individualImgSrc;
-                    }
+                /**
+                 * If the role is mention, it means that the serialized resource has no nature.
+                 * In this case the resource is not necessary a mention, in fact:
+                 * - it is a untyped individual in case the resource is a local IRI
+                 * - it could be a custom form preview, so check if it has a language
+                 */
+                if (rdfResource instanceof ARTURIResource && rdfResource.getURI().startsWith(VBContext.getWorkingProject().getBaseURI())) { 
+                    imgSrc = this.untypedIndividualImgSrc; //local IRI => untyped individual
+                }
+                if (rdfResource.getAdditionalProperty(ResAttribute.LANG) != null) { //has a language => use the flag icon
+                    imgSrc = this.getFlagImgSrc(rdfResource.getAdditionalProperty(ResAttribute.LANG));
                 }
             } else if (role == RDFResourceRolesEnum.objectProperty) {
                 imgSrc = this.propObjectImgSrc;
