@@ -1,0 +1,80 @@
+<div class="modal-header">
+        <h3 class="modal-title">Subject Header editor</h3>
+    </div>
+    <div class="modal-body vbox">
+
+        <table class="table table-condensed table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td class="text-right">
+                        <label style="white-space: nowrap;">
+                            Header: <span class="glyphicon glyphicon-info-sign" title="Set the header used for the creation of the subject"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <select class="form-control input-sm" [(ngModel)]="selectedHeader">
+                            <option *ngFor="let h of context.headers" [ngValue]="h">{{h.name}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right" nowrap><label>PEARL feature:</label></td>
+                    <td>
+                        <input type="text" class="form-control input-sm" [ngModel]="selectedHeader?.pearlFeature" readonly>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right" nowrap>
+                        <label>
+                            Node ID: <span class="glyphicon glyphicon-info-sign" title="This value is readonly, 'subject' is a reserved keywork for the subject node"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control input-sm" [ngModel]="context.subjectHeader.node.nodeId" readonly>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="text-right"><label>Type:</label></td>
+                    <td>
+                        <div class="hbox" style="align-items: center;">
+                            <div class="input-group input-group-sm" style="flex: 1;">
+                                <div class="form-control" style="opacity: 1; background-color: #eee;">
+                                    <rdf-resource *ngIf="type" [resource]="type"></rdf-resource>
+                                </div>
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" (click)="changeType()" [disabled]="!assertType">
+                                        <img src="../../../assets/images/icons/res/class.png">
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="checkbox-inline" style="margin-left: 4px;">
+                                <label>
+                                    <input type="checkbox" [(ngModel)]="assertType">
+                                    Assert type
+                                </label>
+                                <span class="glyphicon glyphicon-info-sign"
+                                    title="Check this option in order to assert a class membership for the subject node">
+                                </span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <converter-config [converter]="selectedConverter" [memoize]="memoize" [rangeType]="'resource'" style="margin-top: 4px;" (update)="onConverterUpdate($event)">
+            <div class="alert alert-info">
+                <p>Select the converter you want to use for the generation of the subject node</p>
+            </div>
+        </converter-config>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+        <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    </div>

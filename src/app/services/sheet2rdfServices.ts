@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { ARTURIResource, RDFTypesEnum } from "../models/ARTResources";
 import { RDFCapabilityType, XRole } from "../models/Coda";
 import { RDFFormat } from "../models/RDFFormat";
-import { HeaderStruct, TableRow, TriplePreview } from "../models/Sheet2RDF";
+import { SimpleHeader, TableRow, TriplePreview, GraphApplication, NodeConversion, SubjectHeader, Sheet2RdfDeserializer } from "../models/Sheet2RDF";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, HttpServiceContext } from "../utils/HttpManager";
 
@@ -28,98 +28,106 @@ export class Sheet2RDFServices {
     /**
      * Returns the header structures of the uploaded spreadsheet
      */
-    getHeaders(): Observable<HeaderStruct[]> {
+    getHeaders(): Observable<{subject: SubjectHeader, headers: SimpleHeader[]}> {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getHeaders", params).map(
             stResp => {
-                let headers: HeaderStruct[] = [];                
-                for (var i = 0; i < stResp.length; i++) {
-                    headers.push(this.parseHeaderStruct(stResp[i]));
+                let subject: SubjectHeader = Sheet2RdfDeserializer.parseSubjectHeader(stResp.subject);
+
+                let headers: SimpleHeader[] = [];
+                let headersJson = stResp.headers;
+                for (var i = 0; i < headersJson.length; i++) {
+                    headers.push(Sheet2RdfDeserializer.parseSimpleHeader(headersJson[i]));
                 }
-                return headers;
+
+                return { subject: subject, headers: headers };
             }
         );
     }
 
-    getHeaderFromId(headerId: string): Observable<HeaderStruct> {
+    getHeaderFromId(headerId: string): Observable<SimpleHeader> {
         var params: any = {
             headerId: headerId
         };
         return this.httpMgr.doGet(this.serviceName, "getHeaderFromId", params).map(
             stResp => {
-                return this.parseHeaderStruct(stResp);
+                return Sheet2RdfDeserializer.parseSimpleHeader(stResp);
             }
         );
     }
 
-    private parseHeaderStruct(json: any): HeaderStruct {
-        let h: HeaderStruct = {
-            id: json.id,
-            name: json.name,
-            resource: (json.resource) ? Deserializer.createURI(json.resource) : null,
-            converter: {
-                uri: json.converter.uri,
-                type: json.converter.type,
-                xRole: json.converter.xRole,
-                memoize: json.converter.memoize
-            },
-            isMultiple: json.isMultiple,
-
-            range: {
-                type: json.range.type,
-                resource: (json.range.resource) ? Deserializer.createURI(json.range.resource) : null,
-                lang: json.range.lang
-            }
-        }
-        return h;
-    }
-
-    updateHeader(headerId: string, headerResource: ARTURIResource, rangeType?: RDFTypesEnum, rangeClass?: ARTURIResource,
-        lang?: string, rangeDatatype?: ARTURIResource, converterMention?: string, converterType?: RDFCapabilityType, converterXRole?: XRole, 
-        memoize?: boolean, applyToAll?: boolean) {
-        var params: any = {
+    addGraphApplicationToHeader(headerId: string, property: ARTURIResource, nodeId: string, type?: ARTURIResource) {
+        let params: any = {
             headerId: headerId,
-            headerResource: headerResource
+            property: property,
+            nodeId: nodeId,
+            type: type
         };
-        if (rangeType != null) {
-            params.rangeType = rangeType;
-        }
-        if (rangeClass != null) {
-            params.rangeClass = rangeClass;
-        }
-        if (lang != null) {
-            params.lang = lang;
-        }
-        if (rangeDatatype != null) {
-            params.rangeDatatype = rangeDatatype;
-        }
-        if (converterMention != null && converterType != null) {
-            params.converterMention = converterMention;
-            params.converterType = converterType;
-            params.memoize = memoize;
-            if (converterXRole != null) {
-                params.converterXRole = converterXRole;
-            }
-        }
-        if (applyToAll != null) {
-            params.applyToAll = applyToAll;
-        }
-        return this.httpMgr.doPost(this.serviceName, "updateHeader", params);
+        return this.httpMgr.doPost(this.serviceName, "addGraphApplicationToHeader", params);
     }
 
-    listConverters(rangeType: string, datatype?: ARTURIResource): Observable<any> {
-        var params: any = {};
-        if (rangeType != null) {
-            params.rangeType = rangeType;
-        }
-        if (datatype != null) {
-            params.datatype = datatype;
-        }
-        return this.httpMgr.doGet(this.serviceName, "listConverters", params).map(
-            stResp => {
-                return stResp;
-            }
-        );
+    updateGraphApplication(headerId: string, graphId: string, property: ARTURIResource, nodeId: string, type?: ARTURIResource) {
+        let params: any = {
+            headerId: headerId,
+            graphId: graphId,
+            property: property,
+            nodeId: nodeId,
+            type: type
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateGraphApplication", params);
+    }
+
+    removeGraphApplicationFromHeader(headerId: string, graphId: string) {
+        let params: any = {
+            headerId: headerId,
+            graphId: graphId
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeGraphApplicationFromHeader", params);
+    }
+
+    isNodeIdAlreadyUsed(nodeId: string): Observable<boolean> {
+        let params: any = {
+            nodeId: nodeId
+        };
+        return this.httpMgr.doGet(this.serviceName, "isNodeIdAlreadyUsed", params);
+    }
+
+    addNodeToHeader(headerId: string, nodeId: string, converterCapability: RDFCapabilityType, 
+        converterContract: string, converterDatatype?: ARTURIResource, converterLanguage?: string, 
+        converterParams?: {[key: string]: string}, converterXRole?: XRole, memoize?: boolean) {
+        let params: any = {
+            headerId: headerId,
+            nodeId: nodeId,
+            converterCapability: converterCapability,
+            converterContract: converterContract,
+            converterDatatype: converterDatatype,
+            converterLanguage: converterLanguage,
+            converterParams: (converterParams != null) ? JSON.stringify(converterParams) : null,
+            converterXRole: converterXRole,
+            memoize: memoize
+        };
+        return this.httpMgr.doPost(this.serviceName, "addNodeToHeader", params);
+    }
+
+    removeNodeFromHeader(headerId: string, nodeId: string) {
+        let params: any = {
+            headerId: headerId,
+            nodeId: nodeId
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeNodeFromHeader", params);
+    }
+
+    updateSubjectHeader(headerId: string, converterContract: string, converterParams?: {[key: string]: string}, converterXRole?: XRole, 
+        type?: ARTURIResource, memoize?: boolean) {
+        let params: any = {
+            headerId: headerId,
+            converterContract: converterContract,
+            converterParams: (converterParams != null) ? JSON.stringify(converterParams) : null,
+            converterXRole: converterXRole,
+            type: type,
+            memoize
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateSubjectHeader", params);
     }
 
     /**

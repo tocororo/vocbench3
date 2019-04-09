@@ -1,0 +1,79 @@
+import { Component } from "@angular/core";
+import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource, RDFTypesEnum } from "../../models/ARTResources";
+import { CODAConverter, NodeConversion, SimpleHeader } from "../../models/Sheet2RDF";
+import { CODAServices } from "../../services/codaServices";
+import { RangeType } from "../../services/propertyServices";
+import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+
+export class NodeCreationModalData extends BSModalContext {
+    /**
+     * @param rangeType range type of the property chosen in the graph application. Useful to determine the compliant converters
+     * @param language the language chosen in the graph application.
+     * @param datatype datatype chosen in the graph application. Useful to determine the compliant converter
+     * @param node if provided, the modal works in edit mode on the given (existing) node
+     */
+    constructor(public header: SimpleHeader, public rangeType: RangeType, public language: string, public datatype: ARTURIResource, public node?: NodeConversion) {
+        super();
+    }
+}
+
+@Component({
+    selector: "node-creation-modal",
+    templateUrl: "./nodeCreationModal.html",
+})
+export class NodeCreationModal implements ModalComponent<NodeCreationModalData> {
+    context: NodeCreationModalData;
+
+    private nodeId: string;
+
+    private selectedConverter: CODAConverter;
+    private memoize: boolean = false;
+
+    constructor(public dialog: DialogRef<NodeCreationModalData>, private s2rdfService: Sheet2RDFServices, private codaService: CODAServices, private basicModals: BasicModalServices) {
+        this.context = dialog.context;
+    }
+
+    ngOnInit() {
+        this.nodeId = this.context.header.pearlFeature + "_node";
+    }
+
+    private onConverterUpdate(updateStatus: { converter: CODAConverter, memoize: boolean }) {
+        this.selectedConverter = updateStatus.converter;
+        this.memoize = updateStatus.memoize;
+    }
+
+
+    private isOkEnabled() {
+        return this.nodeId != null && this.nodeId.trim() != "" && this.selectedConverter != null;
+    }
+
+    ok() {
+        if (this.context.node == null) { //creation mode
+            this.s2rdfService.isNodeIdAlreadyUsed(this.nodeId).subscribe(
+                used => {
+                    if (used) {
+                        this.basicModals.alert("Node creation", "Id '" + this.nodeId + "' already used for another node", "warning");
+                        return;
+                    }
+                    let newNode: NodeConversion = { nodeId: this.nodeId, converter: this.selectedConverter, memoize: this.memoize }
+                    this.dialog.close(newNode);
+                }
+            );
+        } else { //edit mode
+
+        }
+    }
+
+    cancel() {
+        this.dialog.dismiss();
+    }
+
+}
+
+class HeaderRangeType {
+    type: RDFTypesEnum;
+    show: string;
+}

@@ -1,0 +1,43 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <label>Converter</label>
+    </div>
+    <div class="panel-body">
+
+        <ng-content></ng-content>
+        
+        <table class="table table-hoverable" style="margin-top: 4px;">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="text-center">Name</th>
+                    <th class="text-center">Description</th>
+                    <th class="text-center" nowrap>RDF Capability</th>
+                    <th class="text-center">URI</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                <tr *ngFor="let c of availableConverters" (click)="selectConverter(c)" [ngClass]="{ active: c == selectedConverter }" style="cursor: pointer;">
+                    <td>{{c.getName()}}</td>
+                    <td>{{c.getDescription()}}</td>
+                    <td nowrap>{{c.getRDFCapability()}}
+                        <span *ngIf="c.getRDFCapability() == 'typedLiteral'" class="glyphicon glyphicon-info-sign" [title]="c.getDatatypes()"></span>
+                    </td>
+                    <td [title]="c.getURI()">{{c.getQName()}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="isConverterRandom()" class="panel-footer">
+        <div class="checkbox-inline">
+            <label>
+                <input type="checkbox" [(ngModel)]="memoize" (ngModelChange)="onMemoizeChange()">Memoize
+            </label>
+            <span class="glyphicon glyphicon-info-sign" title="Apply the memoization: given the same input, the converter will generate the same output">
+            </span>
+        </div>
+    </div>
+</div>

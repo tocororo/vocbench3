@@ -23,6 +23,10 @@
                         <span *ngIf="truncatedRows != totalRows" style="margin-left: 5px;">(Rows: {{truncatedRows}} out of {{totalRows}})</span>
                     </span>
 
+                    <button class="btn btn-default btn-xs" style="margin-right: 4px;" (click)="editSubjectHeader()" title="Edit subject header" [disabled]="!tablePreview">
+                        Subject mapping
+                    </button>
+
                     <button class="btn btn-default btn-xs" (click)="generatePearl()" title="Generate Pearl" [disabled]="!tablePreview">
                         <span class="glyphicon glyphicon-play"></span>
                     </button>
@@ -31,11 +35,12 @@
                     <table class="table scrollableContainer">
                         <tbody>
                             <tr>
-                                <td *ngFor="let h of headers; first as isFirst" class="columnHeader">
-                                    <span [ngClass]="getHeaderCssClass(h)">
+                                <td *ngFor="let h of headers" class="columnHeader">
+                                    <span *ngIf="h.id==subjectHeader.id" class="label label-success" style="padding: 0px 2px" title="Subject">S</span>
+                                    <span [ngClass]="getHeaderCssClass(h)" style="font-weight: bold;">
                                         {{h.name}}
                                     </span>
-                                    <button class="btn btn-xs btn-default" style="padding: 0px 3px;" title="Edit header" (click)="editHeader(h, isFirst)">
+                                    <button class="btn btn-xs btn-default" style="padding: 0px 3px;" title="Edit header" (click)="editHeader(h)">
                                         <span class="glyphicon glyphicon-edit"></span>
                                     </button>
                                 </td>
@@ -54,9 +59,10 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a>
-                                    <div><span class="glyphicon glyphicon-stop unknownHeader"></span> Header with unknown or not valid associated property</div>
-                                    <div><span class="glyphicon glyphicon-stop propertyHeader"></span> Header with valid associated property</div>
-                                    <div><span class="glyphicon glyphicon-stop subjectHeader"></span> Subject header</div>
+                                    <div><span class="glyphicon glyphicon-stop configuredHeader"></span> Header with at least a valid configuration</div>
+                                    <div><span class="glyphicon glyphicon-stop incompleteHeader"></span> Header with incomplete configuration</div>
+                                    <div><span class="glyphicon glyphicon-stop unconfiguredHeader"></span> Header not configured</div>
+                                    <div><span class="label label-success" style="padding: 0px 2px">S</span> Header used for mapping the subject</div>
                                 </a>
                             </li>
                         </ul>

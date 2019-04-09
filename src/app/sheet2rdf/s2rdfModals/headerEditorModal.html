@@ -1,0 +1,119 @@
+<div class="modal-header">
+    <h3 class="modal-title">Header editor</h3>
+</div>
+<div class="modal-body vbox">
+
+    <table class="table table-condensed table-borderless">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td class="text-right"><label>Header:</label></td>
+                <td>
+                    <input type="text" class="form-control input-sm" [ngModel]="header?.name" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-right" nowrap><label>PEARL feature:</label></td>
+                <td>
+                    <input type="text" class="form-control input-sm" [ngModel]="header?.pearlFeature" readonly>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <div class="panel panel-default vbox" style="margin-top: 4px; min-height: 100px">
+        <div class="panel-heading">
+            <label style="flex: 1">
+                Nodes
+                <span class="glyphicon glyphicon-info-sign" title="List of nodes generated from the current header"></span>
+            </label>
+            <div class="btn-toolbar" role="toolbar">
+                <button class="btn btn-xs btn-default" (click)="removeNode()" [disabled]="!selectedNode">
+                    <span class="glyphicon glyphicon-minus"></span>
+                </button>
+            </div>
+        </div>
+        <div class="panel-body vbox table-responsive">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Node ID</th>
+                        <th>Converter type</th>
+                        <th>Converter URI</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let n of header?.nodes" (click)="selectNode(n)" [ngClass]="{ active : n == selectedNode }">
+                        <td>{{n.nodeId}}</td>
+                        <td>{{n.converter?.capability}}</td>
+                        <td>{{n.converter?.contract}}</td>
+                        <td>
+                            <span *ngIf="n.converter?.language; else dtBlock">
+                                <label style="white-space: pre">Lang: </label>{{n.converter.language}}
+                            </span>
+                            <span #dtBlock *ngIf="n.converter?.datatype">
+                                <label style="white-space: pre">Datatype: </label>{{getDatatypeShow(n.converter.datatype)}}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel panel-default vbox" style="margin-top: 4px; min-height: 100px">
+        <div class="panel-heading">
+            <label style="flex: 1">
+                Graph applications
+                <span class="glyphicon glyphicon-info-sign" title="List of applications of the nodes defined in the 'Nodes' panel"></span>
+            </label>
+            <div class="btn-toolbar" role="toolbar">
+                <button class="btn btn-xs btn-default" (click)="editGraph()" [disabled]="!selectedGraph">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+                <div class="btn-group btn-group-xs">
+                    <div class="btn-group btn-group-xs" role="group">
+                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a (click)="addSimpleGraphApplication()">Add simple graph application</a></li>
+                            <li><a (click)="addAdvancedGraphApplication()">Add advanced graph application</a></li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-default" (click)="removeGraph()" [disabled]="!selectedGraph">
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body vbox table-responsive" style="min-height: 80px">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Node ID</th>
+                        <th>Property</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let g of header?.graph" (click)="selectGraph(g)" [ngClass]="{ active : g == selectedGraph }">
+                        <td>{{g.nodeId}}</td>
+                        <td><rdf-resource *ngIf="g.property" [resource]="g.property"></rdf-resource></td>
+                        <td><rdf-resource *ngIf="g.type" [resource]="g.type"></rdf-resource></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+</div>

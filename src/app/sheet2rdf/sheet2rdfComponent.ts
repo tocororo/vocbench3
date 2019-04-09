@@ -1,20 +1,21 @@
-import { Component, ViewChild, ElementRef, HostListener } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, HostListener, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
-import { HeaderEditorModal, HeaderEditorModalData } from "./headerEditorModal";
-import { Sheet2RDFServices } from "../services/sheet2rdfServices";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource } from "../models/ARTResources";
+import { RDFFormat } from "../models/RDFFormat";
+import { SimpleHeader, SubjectHeader, TableRow, TriplePreview, GraphApplication } from "../models/Sheet2RDF";
+import { SKOS } from "../models/Vocabulary";
 import { ExportServices } from "../services/exportServices";
+import { Sheet2RDFServices } from "../services/sheet2rdfServices";
+import { HttpServiceContext } from "../utils/HttpManager";
+import { UIUtils } from "../utils/UIUtils";
+import { VBContext } from "../utils/VBContext";
+import { VBProperties } from "../utils/VBProperties";
+import { CodemirrorComponent } from "../widget/codemirror/codemirrorComponent";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
-import { CodemirrorComponent } from "../widget/codemirror/codemirrorComponent";
-import { ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
-import { HeaderStruct, TableRow, TableCell, TriplePreview } from "../models/Sheet2RDF";
-import { RDFFormat } from "../models/RDFFormat";
-import { SKOS } from "../models/Vocabulary";
-import { HttpServiceContext } from "../utils/HttpManager";
-import { VBProperties } from "../utils/VBProperties";
-import { VBContext } from "../utils/VBContext";
-import { UIUtils } from "../utils/UIUtils";
+import { HeaderEditorModal, HeaderEditorModalData } from "./s2rdfModals/headerEditorModal";
+import { SubjectHeaderEditorModalData, SubjectHeaderEditorModal } from "./s2rdfModals/subjectHeaderEditorModal";
 
 
 @Component({
@@ -49,9 +50,9 @@ import { UIUtils } from "../utils/UIUtils";
         .oddTablePreviewRow {
             background-color: #eee;
         }
-        .propertyHeader { color: green; font-weight: bold; }
-        .subjectHeader { color: blue; font-weight: bold; }
-        .unknownHeader { color: red; font-weight: bold; }
+        .configuredHeader { color: green; }
+        .unconfiguredHeader { color: gray; }
+        .incompleteHeader { color: red; }
     `]
 })
 export class Sheet2RdfComponent {
@@ -91,7 +92,8 @@ export class Sheet2RdfComponent {
     private maxSizePreviews: number = 20;
     private truncatedRows: number;
     private totalRows: number;
-    private headers: HeaderStruct[];
+    private headers: SimpleHeader[];
+    private subjectHeader: SubjectHeader;
     private tablePreview: TableRow[];
     private selectedTablePreviewRow: TableRow;
 
@@ -126,8 +128,9 @@ export class Sheet2RdfComponent {
 
     private initHeaders() {
         this.s2rdfService.getHeaders().subscribe(
-            (headers: HeaderStruct[]) => {
-                this.headers = headers;
+            (headers: { subject: SubjectHeader, headers: SimpleHeader[] }) => {
+                this.subjectHeader = headers.subject;
+                this.headers = headers.headers;
             }
         );
     }
@@ -150,25 +153,55 @@ export class Sheet2RdfComponent {
         this.loadSpreadsheet();
     }
 
-    private getHeaderCssClass(header: HeaderStruct) {
-        let cssClass: string = "unknownHeader";
-        if (header.resource) {
-            if (header.resource.getRole() == RDFResourceRolesEnum.cls) {
-                cssClass = "subjectHeader"; 
-            } else if (header.resource.getRole() == RDFResourceRolesEnum.property) {
-                cssClass = "propertyHeader";
-            }
+    private getHeaderCssClass(header: SimpleHeader) {
+        /**
+         * configuredHeader: if there is at least one graph application which its node is defined (converter assigned)
+         * unconfiguredHeader: there is no node definition neither graph application for the header
+         * incompleteHeader: only one between nodes and graph not defined, or graph application whith node not defined
+         */
+        if (header.graph.length == 0 && header.nodes.length == 0) {
+            return "unconfiguredHeader";
         }
-        return cssClass;
+        if (header.graph.length > 0 && header.nodes.length > 0) {
+            for (let i = 0; i < header.graph.length; i++) {
+                let g: GraphApplication = header.graph[i];
+                if (g.property != null) {
+                    //property assigned, now check for the node
+                    for (let j = 0; j < header.nodes.length; j++) {
+                        if (header.nodes[j].nodeId == g.nodeId && header.nodes[j].converter != null) {
+                            return "configuredHeader";
+                        }
+                        g.nodeId;
+                    }
+                }
+            }
+            return "incompleteHeader";
+        } else { //graph and node are not both empty neither both not-empty, so the configuration of the header is incomplete
+            return "incompleteHeader";
+        }
     }
 
-    private editHeader(header: HeaderStruct, first: boolean) {
-        var modalData = new HeaderEditorModalData(header.id, first);
+    private editHeader(header: SimpleHeader) {
+        var modalData = new HeaderEditorModalData(header.id);
         const builder = new BSModalContextBuilder<HeaderEditorModalData>(
             modalData, undefined, HeaderEditorModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         this.modal.open(HeaderEditorModal, overlayConfig).result.then(
+            () => { //closed with the "ok" button, so changes performed => update header
+                this.initHeaders();
+            },
+            () => {}
+        );
+    }
+
+    private editSubjectHeader() {
+        var modalData = new SubjectHeaderEditorModalData(this.headers, this.subjectHeader);
+        const builder = new BSModalContextBuilder<SubjectHeaderEditorModalData>(
+            modalData, undefined, SubjectHeaderEditorModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        this.modal.open(SubjectHeaderEditorModal, overlayConfig).result.then(
             () => { //closed with the "ok" button, so changes performed => update header
                 this.initHeaders();
             },
@@ -274,7 +307,7 @@ export class Sheet2RdfComponent {
 
     private generateTriples() {
         if (this.pearlValidation != null && !this.pearlValidation.valid) {
-            this.basicModals.alert("Invalid pearl code", "Pearl code contains error.", "warning");
+            this.basicModals.alert("Invalid pearl code", "Pearl code contains errors.", "warning");
             return;
         } else {
             this.invokeGetTriplesPreview();
