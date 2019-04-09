@@ -8,8 +8,15 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Enabled multivalue creation when enriching a property with a typed literal value.
   * Added the "Copy value to other locales" action to the language-tagged values in the "Lexicalizations", "Notes" and "Other properties" ResourceView partitions.
     This action is available only if exist locales for the language of the value.
+  * Improved graph-view and implemented new features, exploration modes, filters and operations on nodes.
+  * Renewed Sheet2RDF.
+  * Added a preference for selecting a list of languages to be shown on the resource description (used in ResourceView and Graph-view)
+  * Updated the alphabetic index of the lexical entry list when a new LexicalEntry is created.
+  * Enabled the dynamic resolution of the protocol in vbconfig.js
   * Fixed a bug that prevented to change the mapping property in the alignment validation.
   * Fixed conditions for enabling or disabling the add and delete operations in the ResourceView.
+  * Minor improvements/changes/bugfixes to UI.
+  * Bugfixes.
 
 # 5.0.0 (30-01-2019)
   * Enabled multiselection in trees and lists when adding a value to a property.

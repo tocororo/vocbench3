@@ -26,6 +26,8 @@
 var st_path;
 
 /**
- * Protocol - either http or https
+ * Protocol - either http or https.
+ * By default (variable left unspecified) the protocol is resolved dynamically by using the same one of the
+ * container hosting VocBench.
  */
-var st_protocol = "http";
+// var st_protocol = "http";

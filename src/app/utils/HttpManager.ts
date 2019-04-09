@@ -15,7 +15,6 @@ import { BasicModalServices } from "../widget/modal/basicModal/basicModalService
 @Injectable()
 export class HttpManager {
 
-    private protocol: string;
     private serverhost: string;
     //services url parts
     private serverpath: string = "semanticturkey";
@@ -30,14 +29,16 @@ export class HttpManager {
     constructor(private http: Http, private router: Router, private basicModals: BasicModalServices) {
         require('file-loader?name=[name].[ext]!../../vbconfig.js'); //this makes webpack copy vbconfig.js to dist folder during the build
 
-        this.serverhost = window['st_protocol'] + "://"; //protocol (http/https)
+        let st_protocol: string = window['st_protocol']; //protocol (http/https)
+        let protocol: string = st_protocol ? st_protocol : location.protocol;
+        this.serverhost = protocol + "//";
 
         let st_host: string = window['st_host'];
-        st_host ? this.serverhost += st_host : this.serverhost += location.hostname;
+        let host: string = st_host ? st_host : location.hostname;
+        this.serverhost += host;
 
-        let port: string;
         let st_port: string = window['st_port'];
-        st_port ? port = st_port : port = location.port;
+        let port: string = st_port ? st_port : location.port;
         this.serverhost += ":" + port;
 
         let st_path: string = window['st_path']; //url path (optional)
