@@ -111,11 +111,17 @@ export abstract class AbstractPanel {
      *      - a resource is selected but it is required to be explicit and it is not
      */
     isActionDisabled(action: ActionDescription) {
+        /**
+         * Below distinguish the check on the authorization between the case when selection is not required and when it is required.
+         * This is necessary in order to avoid to invoke isAuthorized with a null selectedNode when it is required instead
+         */
         return (
             this.readonly ||
-            !AuthorizationEvaluator.isAuthorized(action.id, this.selectedNode) || 
+            !action.conditions.pre.selectionRequired && !AuthorizationEvaluator.isAuthorized(action.id) ||
             action.conditions.pre.selectionRequired && (
-                !this.selectedNode || (action.conditions.pre.explicitRequired && !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT))
+                !this.selectedNode || 
+                (action.conditions.pre.explicitRequired && !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT)) ||
+                !AuthorizationEvaluator.isAuthorized(action.id, this.selectedNode)
             )
         )
 

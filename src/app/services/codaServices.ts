@@ -35,6 +35,12 @@ export class CODAServices {
 
                         signatures.push(new SignatureDescription(signatureObj.returnType, signatureObj.featurePathRequiredLevel, parameters));
                     }
+                    //sort signatures according the parameters length
+                    signatures.sort((s1: SignatureDescription, s2: SignatureDescription) => {
+                        if (s1.getParameters().length < s2.getParameters().length) return -1;
+                        if (s1.getParameters().length > s2.getParameters().length) return 1;
+                        return 0;
+                    });
                     
                     let converter: ConverterContractDescription = new ConverterContractDescription(
                         converterObj.uri, converterObj.name, converterObj.description,
