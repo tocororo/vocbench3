@@ -86,7 +86,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
             if (this.availableNodes[0].converter.language != null) {
                 this.language = this.availableNodes[0].converter.language;
             } else if (this.availableNodes[0].converter.datatype != null) {
-                this.datatype = new ARTURIResource(this.availableNodes[0].converter.datatype);
+                this.selectDatatype(new ARTURIResource(this.availableNodes[0].converter.datatype));
             }
         }
 
@@ -124,12 +124,13 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
      *  if provided it is usefult to restore the status stored in the server-side model
      */
     updateHeaderPropertyRange() {
-        //reset range, resource type and assertable types
+        //reset range, resource type, assertable types, datatypes
         this.rangeCollection = [];
         this.rangeTypes = [this.resourceRangeType, this.plainLiteralRangeType, this.typedLiteralRangeType];
-        // this.selectedRangeType = this.rangeTypes[0];
+        this.selectedRangeType = null;
         this.assertableTypes = [];
         this.assertedType = null;
+        this.datatypeList = [];
         //update range type, class, ...
         this.propService.getRange(this.property).subscribe(
             range => {
@@ -139,6 +140,9 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                             this.selectedRangeType = t;
                         }
                     });
+                    if (this.selectedRangeType != null && this.selectedRangeType.type == RangeType.typedLiteral) {
+                        this.initDatatypes().subscribe();
+                    }
                 }
                 this.rangeTypeChangeable = range.ranges.type == RangeType.undetermined;
                 //if a collection of admitted range classes is provided
@@ -153,28 +157,33 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                             this.rangeTypes = [this.plainLiteralRangeType, this.typedLiteralRangeType];
                         }
                     }
-
-                    this.annotateResources(rangeColl).subscribe(
-                        () => {
-                            this.rangeCollection.push(...rangeColl);
-                            this.assertableTypes.push(...rangeColl);
-
-                            //if the modal is editing a graph application, try to restore the asserted type
-                            if (this.context.graphApplication != null) {
-                                let type = this.context.graphApplication.type;
-                                if (type != null) {
-                                    this.assertType = true;
-                                    let typeIdx = ResourceUtils.indexOfNode(this.assertableTypes, type);
-                                    if (typeIdx != -1) { //type already in the assertableTypes list
-                                        this.assertedType = this.assertableTypes[typeIdx];
-                                    } else { //type not in the assertableTypes list (probably the user added it manually)
-                                        this.assertableTypes.push(type);
-                                        this.assertedType = this.assertableTypes[this.assertableTypes.length-1];
+                    //selected range type typedLiteral => rangeCollection contains the admitted datatype, so limit it
+                    if (this.selectedRangeType != null && this.selectedRangeType.type == RangeType.typedLiteral) {
+                        this.limitDatatypes(rangeColl);
+                    } else {
+                        this.annotateResources(rangeColl).subscribe(
+                            () => {
+                                this.rangeCollection.push(...rangeColl);
+                                this.assertableTypes.push(...rangeColl);
+    
+                                //if the modal is editing a graph application, try to restore the asserted type
+                                if (this.context.graphApplication != null) {
+                                    let type = this.context.graphApplication.type;
+                                    if (type != null) {
+                                        this.assertType = true;
+                                        let typeIdx = ResourceUtils.indexOfNode(this.assertableTypes, type);
+                                        if (typeIdx != -1) { //type already in the assertableTypes list
+                                            this.assertedType = this.assertableTypes[typeIdx];
+                                        } else { //type not in the assertableTypes list (probably the user added it manually)
+                                            this.assertableTypes.push(type);
+                                            this.assertedType = this.assertableTypes[this.assertableTypes.length-1];
+                                        }
                                     }
                                 }
                             }
-                        }
-                    );
+                        );
+                    }
+                    
                 }
 
                 // try to restore the model about the node
@@ -190,8 +199,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                     if (this.selectedNode.converter != null) {
                         if (this.selectedNode.converter.datatype != null) {
                             this.forceRangeType(RangeType.typedLiteral);
-                            this.datatype = new ARTURIResource(this.selectedNode.converter.datatype);
-                            this.initDatatypeList();
+                            this.selectDatatype(new ARTURIResource(this.selectedNode.converter.datatype));
                         } else if (this.selectedNode.converter.language != null) {
                             this.forceRangeType(RangeType.plainLiteral);
                             this.language = this.selectedNode.converter.language;
@@ -205,9 +213,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
 
     private onRangeTypeChange() {
         if (this.selectedRangeType.type == RangeType.typedLiteral) {
-            if (this.datatypeList.length == 0) { //if datatype list is empty => initialize it
-                this.initDatatypeList();
-            }
+            this.initDatatypes().subscribe();
         }
     }
 
@@ -234,22 +240,45 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
         );
     }
 
-    private initDatatypeList() {
-        if (this.datatypeList.length == 0) {
-            this.datatypeService.getDatatypes().subscribe(
+    /**
+     * Select the given datatype
+     * @param datatype 
+     */
+    private selectDatatype(datatype: ARTURIResource) {
+        this.initDatatypes().subscribe(
+            () => {
+                this.datatypeList.forEach(dt => {
+                    if (dt.getURI() == datatype.getURI()) {
+                        this.datatype = dt;
+                    }
+                });
+            }
+        )
+    }
+    /**
+     * Filter the datatype list to the only allowed values
+     * @param allowedDatatypes 
+     */
+    private limitDatatypes(allowedDatatypes: ARTURIResource[]) {
+        if (allowedDatatypes.length > 0) {
+            this.initDatatypes().subscribe(
+                () => {
+                    this.datatypeList = this.datatypeList.filter(dt => ResourceUtils.containsNode(allowedDatatypes, dt));
+                }
+            )
+        }
+    }
+
+    private initDatatypes(): Observable<any> {
+        if (this.datatypeList.length == 0) { //init datatypes if not yet initialized (empty list)
+            return this.datatypeService.getDatatypes().map(
                 datatypes => {
                     ResourceUtils.sortResources(datatypes, SortAttribute.show);
                     this.datatypeList = datatypes;
-                    //init the selected datatype if provided
-                    if (this.datatype != null) {
-                        this.datatypeList.forEach(dt => {
-                            if (dt.getURI() == this.datatype.getURI()) {
-                                this.datatype = dt;
-                            }
-                        });
-                    }
                 }
             );
+        } else {
+            return Observable.of();
         }
     }
 
