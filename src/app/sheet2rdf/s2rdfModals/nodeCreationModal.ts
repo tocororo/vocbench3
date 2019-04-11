@@ -45,9 +45,26 @@ export class NodeCreationModal implements ModalComponent<NodeCreationModalData> 
         this.memoize = updateStatus.memoize;
     }
 
-
+    /**
+     * Ok is enabled if
+     * - node id is provided (and it is valid)
+     * - converter is selected
+     * - all the parameters (if any) of the converter signature are provided
+     */
     private isOkEnabled() {
-        return this.nodeId != null && this.nodeId.trim() != "" && this.selectedConverter != null;
+        let isSignatureOk: boolean = true;
+        if (this.selectedConverter != null) {
+            for (let key in this.selectedConverter.params) {
+                if (this.selectedConverter.params[key] == null || this.selectedConverter.params[key].trim() == "") {
+                    isSignatureOk = false;
+                }
+            }
+        }
+        return (
+            this.nodeId != null && this.nodeId.trim() != "" &&
+            this.selectedConverter != null &&
+            isSignatureOk
+        );
     }
 
     ok() {

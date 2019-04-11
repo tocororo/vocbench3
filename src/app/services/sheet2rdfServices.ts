@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { ARTURIResource, RDFTypesEnum } from "../models/ARTResources";
+import { ARTURIResource } from "../models/ARTResources";
 import { RDFCapabilityType, XRole } from "../models/Coda";
 import { RDFFormat } from "../models/RDFFormat";
-import { SimpleHeader, TableRow, TriplePreview, GraphApplication, NodeConversion, SubjectHeader, Sheet2RdfDeserializer } from "../models/Sheet2RDF";
-import { Deserializer } from "../utils/Deserializer";
+import { Sheet2RdfDeserializer, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
 import { HttpManager, HttpServiceContext } from "../utils/HttpManager";
 
 @Injectable()

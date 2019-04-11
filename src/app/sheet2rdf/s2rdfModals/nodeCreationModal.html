@@ -25,12 +25,12 @@
     </table>
 
     <converter-config [rangeType]="context.rangeType" [language]="context.language" [datatype]="context.datatype" style="margin-top: 4px;" (update)="onConverterUpdate($event)">
-        <div class="alert alert-info">
+        <!-- <div class="alert alert-info">
             <p>
                 Select the converter you want to use. Below are listed all the converters compliant with the range type ({{context.rangeType}}) 
                 <span *ngIf="context.rangeType == 'typedLiteral'"> and the datatype </span> chosen previously.
             </p>
-        </div>
+        </div> -->
     </converter-config>
 
 </div>

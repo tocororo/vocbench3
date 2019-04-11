@@ -2,11 +2,11 @@
     <div class="panel-heading">
         <label>Converter</label>
     </div>
-    <div class="panel-body">
+    <div class="panel-body scrollableContainer">
 
         <ng-content></ng-content>
         
-        <table class="table table-hoverable" style="margin-top: 4px;">
+        <table class="table table-condensed table-hoverable" style="margin-top: 4px;">
             <colgroup>
                 <col style="width: 1%;">
                 <col>
@@ -30,6 +30,56 @@
                 </tr>
             </tbody>
         </table>
+
+
+        <div *ngIf="selectedConverter" class="groupPanel vbox" style="margin-top: 12px;">
+            <div class="groupPanel-heading">
+                <span style="flex: 1">
+                    <label class="groupPanel-heading-content">Converter parameterization:</label>
+                </span>
+            </div>
+            <div class="groupPanel-body hbox">
+                <div class="subPanel" style="flex: 1;">
+                    <div class="subPanel-heading">
+                        <label>Signature</label>
+                    </div>
+                    <div class="subPanel-body">
+                        <div *ngFor="let s of availableSignatures" class="listItem" (click)="selectSignature(s)" [ngClass]="{ active: s == selectedSignature }">
+                            <span>{{getSignatureShow(s)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="signatureParams?.length > 0" class="subPanel" style="flex: 3; margin-left: 4px;">
+                    <div class="subPanel-heading">
+                        <label>Params</label>
+                    </div>
+                    <div class="subPanel-body">
+                        <table class="table table-condensed table-borderless">
+                            <colgroup>
+                                <col style="width: 1%;">
+                                <col>
+                            </colgroup>
+                            <tbody>
+                                <tr *ngFor="let p of signatureParams">
+                                    <td><label>{{p.name}}</label></td>
+                                    <td>
+                                        <div *ngIf="p.name == 'xRole'; else otherParamElseBlock" class="hbox">
+                                            <select [(ngModel)]="p.value" class="form-control input-sm" (ngModelChange)="onSignatureParamChange()">
+                                                <option *ngFor="let r of xRoles">{{r}}</option>
+                                            </select>
+                                        </div>
+                                        <ng-template #otherParamElseBlock>
+                                            <input class="form-control input-sm" [(ngModel)]="p.value" (ngModelChange)="onSignatureParamChange()">
+                                        </ng-template>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <div *ngIf="isConverterRandom()" class="panel-footer">
         <div class="checkbox-inline">

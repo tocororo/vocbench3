@@ -67,12 +67,34 @@ export class SubjectHeaderEditorModal implements ModalComponent<SubjectHeaderEdi
         this.memoize = updateStatus.memoize;
     }
 
+    /**
+     * Ok is enabled if
+     * - header to use as subject is selected
+     * - type assertion is true and a type is selected
+     * - converter is selected
+     * - all the parameters (if any) of the converter signature are provided
+     */
     private isOkEnabled() {
-        return this.selectedHeader != null && (!this.assertType || this.type) && this.selectedConverter != null;
+        let isSignatureOk: boolean = true;
+        if (this.selectedConverter != null) {
+            for (let key in this.selectedConverter.params) {
+                if (this.selectedConverter.params[key] == null || this.selectedConverter.params[key].trim() == "") {
+                    isSignatureOk = false;
+                }
+            }
+        }
+        
+        return (
+            this.selectedHeader != null && 
+            (!this.assertType || this.type) &&
+            this.selectedConverter != null &&
+            isSignatureOk
+        );
     }
 
     ok() {
-        this.s2rdfService.updateSubjectHeader(this.selectedHeader.id, this.selectedConverter.contract, {}, null, this.type, this.memoize).subscribe(
+        this.s2rdfService.updateSubjectHeader(this.selectedHeader.id, this.selectedConverter.contract, this.selectedConverter.params, 
+            this.selectedConverter.xRole, this.type, this.memoize).subscribe(
             resp => {
                 this.dialog.close();
             }
