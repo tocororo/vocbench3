@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { ARTURIResource } from "../models/ARTResources";
-import { RDFCapabilityType, XRole } from "../models/Coda";
+import { ARTResource, ARTURIResource } from "../models/ARTResources";
+import { RDFCapabilityType } from "../models/Coda";
 import { RDFFormat } from "../models/RDFFormat";
 import { Sheet2RdfDeserializer, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
 import { HttpManager, HttpServiceContext } from "../utils/HttpManager";
@@ -93,7 +93,7 @@ export class Sheet2RDFServices {
 
     addNodeToHeader(headerId: string, nodeId: string, converterCapability: RDFCapabilityType, 
         converterContract: string, converterDatatype?: ARTURIResource, converterLanguage?: string, 
-        converterParams?: {[key: string]: string}, converterXRole?: XRole, memoize?: boolean) {
+        converterParams?: {[key: string]: any}, memoize?: boolean) {
         let params: any = {
             headerId: headerId,
             nodeId: nodeId,
@@ -101,8 +101,7 @@ export class Sheet2RDFServices {
             converterContract: converterContract,
             converterDatatype: converterDatatype,
             converterLanguage: converterLanguage,
-            converterParams: (converterParams != null) ? JSON.stringify(converterParams) : null,
-            converterXRole: converterXRole,
+            converterParams: (converterParams != null) ? this.getMapSerialization(converterParams) : null,
             memoize: memoize
         };
         return this.httpMgr.doPost(this.serviceName, "addNodeToHeader", params);
@@ -116,13 +115,19 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "removeNodeFromHeader", params);
     }
 
-    updateSubjectHeader(headerId: string, converterContract: string, converterParams?: {[key: string]: string}, converterXRole?: XRole, 
-        type?: ARTURIResource, memoize?: boolean) {
+    updateSubjectHeader(headerId: string, converterContract: string, converterParams?: {[key: string]: any}, type?: ARTURIResource, memoize?: boolean) {
+        // converterParams = {
+        //     xRole: "concept",
+        //     list: ["nodoId", new ARTURIResource("http://base#list")],
+        //     args: {
+        //         plainKey: "string_value",
+        //         valueKey: new ARTURIResource("http://base#map")
+        //     }
+        // }
         let params: any = {
             headerId: headerId,
             converterContract: converterContract,
-            converterParams: (converterParams != null) ? JSON.stringify(converterParams) : null,
-            converterXRole: converterXRole,
+            converterParams: (converterParams != null) ? this.getMapSerialization(converterParams) : null,
             type: type,
             memoize
         };
@@ -231,6 +236,32 @@ export class Sheet2RDFServices {
                 return stResp;
             }
         );
+    }
+
+
+    private getMapSerialization(map: {[key:string]: any}): string {
+        let mapSerialized: { [key: string]: string } = {};
+        for (let paramName in map) {
+            let paramValue = map[paramName];
+            if (paramValue instanceof ARTResource) {
+                paramValue = paramValue.toNT();
+            } else if (Array.isArray(paramValue)) { //array
+                let serializedArray: string[] = [];
+                paramValue.forEach(v => {
+                    if (v instanceof ARTResource) {
+                        serializedArray.push(v.toNT());
+                    } else { //plain string
+                        serializedArray.push(v);
+                    }
+                })
+                paramValue = JSON.stringify(serializedArray);
+            } else if (typeof paramValue == "object") { //object => map
+                paramValue = this.getMapSerialization(paramValue);
+            }
+            //other cases (e.g. param value is already a string) do nothing
+            mapSerialized[paramName] = paramValue;
+        }
+        return JSON.stringify(mapSerialized);
     }
 
 }

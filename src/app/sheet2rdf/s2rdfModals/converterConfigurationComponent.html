@@ -63,14 +63,24 @@
                                 <tr *ngFor="let p of signatureParams">
                                     <td><label>{{p.name}}</label></td>
                                     <td>
-                                        <div *ngIf="p.name == 'xRole'; else otherParamElseBlock" class="hbox">
-                                            <select [(ngModel)]="p.value" class="form-control input-sm" (ngModelChange)="onSignatureParamChange()">
-                                                <option *ngFor="let r of xRoles">{{r}}</option>
-                                            </select>
+                                        <ng-container *ngIf="p.type == 'java.lang.String'">
+                                            <div *ngIf="p.name == 'xRole'; else genericStringParamElseBlock" class="hbox">
+                                                <select [(ngModel)]="p.value" class="form-control input-sm" (ngModelChange)="onSignatureParamChange()">
+                                                    <option *ngFor="let r of xRoles">{{r}}</option>
+                                                </select>
+                                            </div>
+                                            <ng-template #genericStringParamElseBlock>
+                                                <input class="form-control input-sm" [(ngModel)]="p.value" (ngModelChange)="onSignatureParamChange()">
+                                            </ng-template>
+                                        </ng-container>
+                                        <div *ngIf="p.type == 'java.util.Map<java.lang.String, org.eclipse.rdf4j.model.Value>'" class="hbox">
+                                            <!-- TODO -->
+                                            <!-- <input class="form-control input-sm" [(ngModel)]="p.value" (ngModelChange)="onSignatureParamChange()"> -->
                                         </div>
-                                        <ng-template #otherParamElseBlock>
-                                            <input class="form-control input-sm" [(ngModel)]="p.value" (ngModelChange)="onSignatureParamChange()">
-                                        </ng-template>
+                                        <div *ngIf="p.type == 'org.eclipse.rdf4j.model.Value[]'" class="hbox">
+                                            <!-- TODO -->
+                                            <!-- <input class="form-control input-sm" [(ngModel)]="p.value" (ngModelChange)="onSignatureParamChange()"> -->
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>

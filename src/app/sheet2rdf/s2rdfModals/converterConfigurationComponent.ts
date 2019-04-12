@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ARTURIResource } from "../../models/ARTResources";
-import { ConverterContractDescription, ParameterDescription, RDFCapabilityType, SignatureDescription, XRole } from "../../models/Coda";
+import { ARTLiteral, ARTURIResource } from "../../models/ARTResources";
+import { ConverterContractDescription, RDFCapabilityType, SignatureDescription, XRole } from "../../models/Coda";
 import { CODAConverter } from "../../models/Sheet2RDF";
 import { CODAServices } from "../../services/codaServices";
 import { RangeType } from "../../services/propertyServices";
@@ -24,7 +24,7 @@ export class ConverterConfigurationComponent {
 
     private availableSignatures: SignatureDescription[];
     private selectedSignature: SignatureDescription;
-    private signatureParams: { name: string, value: any, type: string }[];
+    private signatureParams: SignatureParam[];
 
     private xRoles: string[] = [XRole.concept, XRole.conceptScheme, XRole.skosCollection, XRole.xLabel, XRole.xNote];
     
@@ -69,9 +69,6 @@ export class ConverterConfigurationComponent {
                         //compare the names of the params
                         let signatureParams: string[] = s.getParameters().map(p => p.getName());
                         let converterParams: string[] = Object.keys(this.converter.params);
-                        if (this.converter.xRole != null) {
-                            converterParams.push(this.converter.xRole);
-                        }
                         signatureParams.sort();
                         converterParams.sort();
                         if (signatureParams.length == converterParams.length) {
@@ -84,7 +81,7 @@ export class ConverterConfigurationComponent {
                             this.selectSignature(s);
                             //now restore the values
                             for (let paramName in this.converter.params) {
-                                this.signatureParams[paramName] = this.converter.params[paramName];
+                                this.signatureParams.find(p => p.name == paramName).value = this.converter.params[paramName];
                             }
                         }
                     });
@@ -98,7 +95,7 @@ export class ConverterConfigurationComponent {
         if (this.selectedConverter == converter) {
             this.selectedConverter = null;
             this.availableSignatures = null;
-            this.selectSignature = null;
+            this.selectedSignature = null;
         } else {
             this.selectedConverter = converter;
             /**
@@ -128,16 +125,15 @@ export class ConverterConfigurationComponent {
         this.emitStatusUpdate();
     }
 
+    /**
+     * ========== Signature customization ==========
+     */
+
     private getSignatureShow(signature: SignatureDescription): string {
         if (signature.getParameters().length == 0) {
             return "No params";
         } else {
-            let show: string = "";
-            signature.getParameters().forEach(p => {
-                show += p.getName() + ", ";
-            });
-            show = show.substring(0, show.length-2); //removes the trailing ", "
-            return show;
+            return signature.getParameters().map(p => p.getName()).join(", ");
         }
     }
 
@@ -154,34 +150,33 @@ export class ConverterConfigurationComponent {
         this.emitStatusUpdate();
     }
 
+    /**
+     * ========== ========== ========== ==========
+     */
 
     private emitStatusUpdate() {
-        let params: { [key: string]: string } = {};
-        let xRole: string;
+        let params: { [key: string]: any } = {};
         this.signatureParams.forEach(p => {
-            /**
-             * The following is a (temporarly) workaround in order to "emit" an incomplete configuration when the xRole is not set.
-             * The component that uses the converter-config, should control that the provided converter configuration is ok.
-             * This check is performed simply by verifying that all the parameters in the returned converter.params are not null.
-             * If the xRole is provided separately, it is excluded from the check (I cannot neither check it separately,
-             * because from the parent component I don't know whether the chosen converter requires the xRole).
-             * So, as a workaround, if the xRole is set, it is passed separately, otherwise, if not set, it is set as null parameter in the
-             * params object (and thus the configuration results incomplete).
-             * I should work on a better solution.
-             */
-            if (p.name == "xRole" && p.value != null) {
-                xRole = p.value;
-            } else {
-                params[p.name] = p.value;
+            let value;
+            if (p.type == "java.lang.String") {
+                value = p.value;
+            } else if (p.type == "org.eclipse.rdf4j.model.Value") {
+                if (p.value != null && p.value.trim() != "") {
+                    value = new ARTLiteral(p.value);
+                }
+            } else if (p.type == "java.util.Map<java.lang.String, org.eclipse.rdf4j.model.Value>") {
+                value = null; //TODO
+            } else if (p.type == "org.eclipse.rdf4j.model.Value[]") {
+                value = null; //TODO
             }
+            params[p.name] = value;
         });
         let c: CODAConverter = {
             capability: (this.rangeType == RangeType.resource) ? RDFCapabilityType.uri : RDFCapabilityType.literal,
             contract: this.selectedConverter.getURI(),
             language: this.language,
             datatype: (this.datatype != null) ? this.datatype.getURI() : null,
-            params: params,
-            xRole: <XRole>xRole
+            params: params
         }
         let status: UpdateStatus = { converter: c, memoize: this.isConverterRandom() ? this.memoize : false };
         // console.log("emitting status", status);
@@ -193,4 +188,10 @@ export class ConverterConfigurationComponent {
 class UpdateStatus {
     converter: CODAConverter;
     memoize: boolean;
+}
+
+class SignatureParam { 
+    name: string;
+    value: any;
+    type: string;
 }

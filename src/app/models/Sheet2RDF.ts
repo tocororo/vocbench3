@@ -37,7 +37,6 @@ export class CODAConverter {
     public datatype: string;
     public language: string;
     public params: { [key: string]: string };
-    public xRole: XRole;
 }
 
 export class TableContent {

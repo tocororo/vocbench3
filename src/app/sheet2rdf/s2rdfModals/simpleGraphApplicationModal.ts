@@ -309,7 +309,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
             } else { //not the default converter
                 s += "(";
                 s += n.converter.contract.replace(ConverterContractDescription.NAMESPACE, ConverterContractDescription.PREFIX + ":");
-                if (n.converter.xRole != null || JSON.stringify(n.converter.params) != "{}") { //if xRole or other params specified
+                if (JSON.stringify(n.converter.params) != "{}") { //if params specified
                     s += "(...)";
                 }
                 s += ")";
@@ -402,7 +402,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
             }
             this.s2rdfService.addNodeToHeader(this.context.header.id, this.selectedNode.nodeId, this.selectedNode.converter.capability,
                 this.selectedNode.converter.contract, dtParam, this.selectedNode.converter.language, this.selectedNode.converter.params,
-                this.selectedNode.converter.xRole, this.selectedNode.memoize).subscribe(
+                this.selectedNode.memoize).subscribe(
                 resp => {
                     this.createOrUpdateGraphApplication();
                 }
