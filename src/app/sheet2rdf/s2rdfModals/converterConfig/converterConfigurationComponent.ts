@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ARTLiteral, ARTURIResource } from "../../models/ARTResources";
-import { ConverterContractDescription, RDFCapabilityType, SignatureDescription, XRole } from "../../models/Coda";
-import { CODAConverter } from "../../models/Sheet2RDF";
-import { CODAServices } from "../../services/codaServices";
-import { RangeType } from "../../services/propertyServices";
+import { ARTLiteral, ARTURIResource } from "../../../models/ARTResources";
+import { ConverterContractDescription, RDFCapabilityType, SignatureDescription, XRole } from "../../../models/Coda";
+import { CODAConverter } from "../../../models/Sheet2RDF";
+import { CODAServices } from "../../../services/codaServices";
+import { RangeType } from "../../../services/propertyServices";
 
 
 @Component({
@@ -34,7 +34,7 @@ export class ConverterConfigurationComponent {
         this.codaService.listConverterContracts().subscribe(
             converters => {
                 converters.forEach(c => {
-                    //check converter capability compatibility
+                    // check converter capability compatibility
                     let capability: RDFCapabilityType = c.getRDFCapability();
                     if (this.rangeType == RangeType.resource) {
                         if (capability == RDFCapabilityType.node || capability == RDFCapabilityType.uri) {
@@ -85,7 +85,6 @@ export class ConverterConfigurationComponent {
                             }
                         }
                     });
-
                 }
             }
         );
@@ -97,6 +96,7 @@ export class ConverterConfigurationComponent {
             this.availableSignatures = null;
             this.selectedSignature = null;
         } else {
+            console.log("select converter", converter);
             this.selectedConverter = converter;
             /**
              * Consider as available signatures, only those which the return type is compliant with the range type required:
@@ -138,11 +138,22 @@ export class ConverterConfigurationComponent {
     }
 
     private selectSignature(signature: SignatureDescription) {
+        console.log("selecting signature", signature);
         this.selectedSignature = signature;
         this.signatureParams = [];
         this.selectedSignature.getParameters().forEach(p => {
             this.signatureParams.push({ name: p.getName(), value: null, type: p.getType() });
         });
+        this.emitStatusUpdate();
+    }
+
+    private onMapParamChange(value: {[key: string]:any}, p: SignatureParam) {
+        p.value = value;
+        this.emitStatusUpdate();
+    }
+
+    private onListParamChange(value: any[], p: SignatureParam) {
+        p.value = value;
         this.emitStatusUpdate();
     }
 
@@ -165,9 +176,9 @@ export class ConverterConfigurationComponent {
                     value = new ARTLiteral(p.value);
                 }
             } else if (p.type == "java.util.Map<java.lang.String, org.eclipse.rdf4j.model.Value>") {
-                value = null; //TODO
+                value = p.value;
             } else if (p.type == "org.eclipse.rdf4j.model.Value[]") {
-                value = null; //TODO
+                value = p.value;
             }
             params[p.name] = value;
         });

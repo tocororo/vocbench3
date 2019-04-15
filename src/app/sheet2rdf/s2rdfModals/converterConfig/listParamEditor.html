@@ -1,0 +1,29 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <table class="table table-condensed table-borderless">
+            <colgroup>
+                <col>
+                <col style="width: 1%">
+                <col style="width: 1%">
+            </colgroup>
+            <tbody>
+                <tr *ngFor="let v of list; let index = index; let last = last; trackBy: trackByIndex">
+                    <td>
+                        <textarea type="text" rows="1" class="form-control input-xs" style="resize: vertical" [(ngModel)]="list[index]" (ngModelChange)="onModelChange()">
+                        </textarea>
+                    </td>
+                    <td>
+                        <button *ngIf="list.length > 1" class="btn btn-xs btn-default" (click)="delete(index)">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </td>
+                    <td>
+                        <button *ngIf="last" class="btn btn-xs btn-default" (click)="add()">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
