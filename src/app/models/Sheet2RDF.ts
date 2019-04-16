@@ -1,12 +1,13 @@
-import { ARTURIResource, RDFTypesEnum } from "./ARTResources";
 import { Deserializer } from "../utils/Deserializer";
-import { RDFCapabilityType, XRole } from "./Coda";
+import { ARTURIResource } from "./ARTResources";
+import { RDFCapabilityType } from "./Coda";
 
 export class SimpleHeader {
     public id: string;
     public name: string;
     public pearlFeature: string;
     public isMultiple: boolean;
+    public ignore: boolean;
 
     public nodes: NodeConversion[];
     public graph: GraphApplication[];
@@ -96,6 +97,7 @@ export class Sheet2RdfDeserializer {
             name: json.name,
             pearlFeature: json.pearlFeature,
             isMultiple: json.isMultiple,
+            ignore: json.ignore,
             nodes: nodes,
             graph: graph
         }

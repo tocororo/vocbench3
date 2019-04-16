@@ -50,7 +50,8 @@ import { SubjectHeaderEditorModal, SubjectHeaderEditorModalData } from "./s2rdfM
             background-color: #eee;
         }
         .configuredHeader { color: green; }
-        .unconfiguredHeader { color: gray; }
+        .ignoredHeader { color: gray; }
+        .unconfiguredHeader { color: black; }
         .incompleteHeader { color: red; }
     `]
 })
@@ -179,6 +180,9 @@ export class Sheet2RdfComponent {
          * unconfiguredHeader: there is no node definition neither graph application for the header
          * incompleteHeader: only one between nodes and graph not defined, or graph application whith node not defined
          */
+        if (header.ignore) {
+            return "ignoredHeader";
+        }
         if (header.graph.length == 0 && header.nodes.length == 0) {
             return "unconfiguredHeader";
         }

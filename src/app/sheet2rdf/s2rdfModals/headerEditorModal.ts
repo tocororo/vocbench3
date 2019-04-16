@@ -27,6 +27,9 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     context: HeaderEditorModalData;
 
     private header: SimpleHeader;
+
+    private pristineIgnore: boolean;
+    private ignoreInitialized: boolean = false;
     
     private selectedNode: NodeConversion;
     private selectedGraph: GraphApplication;
@@ -45,11 +48,24 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         this.s2rdfService.getHeaderFromId(this.context.headerId).subscribe(
             header => {
                 this.header = header;
+                if (!this.ignoreInitialized) {
+                    this.pristineIgnore = this.header.ignore;
+                    this.ignoreInitialized = true;
+                }
             }
         );
     }
 
+    private onIgnoreChange() {
+        if (this.header.ignore) {
+            this.selectedNode = null;
+            this.selectedGraph = null;
+        }
+    }
+
     private selectNode(node: NodeConversion) {
+        if (this.header.ignore) return;
+
         if (this.selectedNode == node) {
             this.selectedNode = null;
         } else {
@@ -98,6 +114,8 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     }
 
     private selectGraph(graph: GraphApplication) {
+        if (this.header.ignore) return;
+
         if (this.selectedGraph == graph) {
             this.selectedGraph = null;
         } else {
@@ -146,6 +164,10 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     }
 
     ok() {
+        //if ignore has changed, inform the server
+        if (this.header.ignore != this.pristineIgnore) {
+            this.s2rdfService.ignoreHeader(this.header.id, this.header.ignore).subscribe();
+        }
         this.dialog.close();
     }
 

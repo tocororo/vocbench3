@@ -56,6 +56,14 @@ export class Sheet2RDFServices {
         );
     }
 
+    ignoreHeader(headerId: string, ignore: boolean) {
+        var params: any = {
+            headerId: headerId,
+            ignore: ignore
+        };
+        return this.httpMgr.doPost(this.serviceName, "ignoreHeader", params);
+    }
+
     addGraphApplicationToHeader(headerId: string, property: ARTURIResource, nodeId: string, type?: ARTURIResource) {
         let params: any = {
             headerId: headerId,
@@ -117,14 +125,6 @@ export class Sheet2RDFServices {
     }
 
     updateSubjectHeader(headerId: string, converterContract: string, converterParams?: {[key: string]: any}, type?: ARTURIResource, memoize?: boolean) {
-        // converterParams = {
-        //     xRole: "concept",
-        //     list: ["nodoId", new ARTURIResource("http://base#list")],
-        //     args: {
-        //         plainKey: "string_value",
-        //         valueKey: new ARTURIResource("http://base#map")
-        //     }
-        // }
         let params: any = {
             headerId: headerId,
             converterContract: converterContract,

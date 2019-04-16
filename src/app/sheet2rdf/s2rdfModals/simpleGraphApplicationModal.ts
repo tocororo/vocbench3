@@ -383,7 +383,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
 
     private isOkEnabled(): boolean {
         //just check if node is compliant. Since node is provided only when property, and range type are provided, this check could be enough
-        return this.getNodeNotCompliantError() == null;
+        return this.selectedNode != null && this.getNodeNotCompliantError() == null;
     }
 
     ok() {
