@@ -112,3 +112,9 @@ export class Sheet2RdfDeserializer {
     }
 
 }
+
+export enum FsNamingStrategy {
+    columnAlphabeticIndex = "columnAlphabeticIndex",
+    columnNumericIndex = "columnNumericIndex",
+    normalizedHeaderName = "normalizedHeaderName"
+}

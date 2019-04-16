@@ -1,21 +1,20 @@
 import { Component, ElementRef, HostListener, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource } from "../models/ARTResources";
+import { Properties } from "../models/Properties";
 import { RDFFormat } from "../models/RDFFormat";
-import { SimpleHeader, SubjectHeader, TableRow, TriplePreview, GraphApplication } from "../models/Sheet2RDF";
-import { SKOS } from "../models/Vocabulary";
+import { FsNamingStrategy, GraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
 import { ExportServices } from "../services/exportServices";
+import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
 import { Sheet2RDFServices } from "../services/sheet2rdfServices";
 import { HttpServiceContext } from "../utils/HttpManager";
 import { UIUtils } from "../utils/UIUtils";
-import { VBContext } from "../utils/VBContext";
-import { VBProperties } from "../utils/VBProperties";
 import { CodemirrorComponent } from "../widget/codemirror/codemirrorComponent";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { HeaderEditorModal, HeaderEditorModalData } from "./s2rdfModals/headerEditorModal";
-import { SubjectHeaderEditorModalData, SubjectHeaderEditorModal } from "./s2rdfModals/subjectHeaderEditorModal";
+import { Sheet2RdfSettingsModal, Sheet2RdfSettingsModalData } from "./s2rdfModals/sheet2rdfSettingsModal";
+import { SubjectHeaderEditorModal, SubjectHeaderEditorModalData } from "./s2rdfModals/subjectHeaderEditorModal";
 
 
 @Component({
@@ -65,13 +64,34 @@ export class Sheet2RdfComponent {
 
     @ViewChild(CodemirrorComponent) viewChildCodemirror: CodemirrorComponent;
 
-    constructor(private s2rdfService: Sheet2RDFServices, private exportService: ExportServices, private vbProp: VBProperties,
+    //preferences
+    private useHeader: boolean = true;
+    private fsNamingStrategy: FsNamingStrategy = FsNamingStrategy.columnNumericIndex;
+
+    constructor(private s2rdfService: Sheet2RDFServices, private exportService: ExportServices, private prefService: PreferencesSettingsServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) {}
 
     ngOnInit() {
+
+        HttpServiceContext.initSessionToken();
+
         this.exportService.getOutputFormats().subscribe(
             formats => {
                 this.exportFormats = formats;
+            }
+        );
+        
+        //init settings
+        this.prefService.getPUSettings([Properties.pref_s2rdf_use_headers, Properties.pref_s2rdf_fs_naming_strategy]).subscribe(
+            prefs => {
+                let useHeaderPref: string = prefs[Properties.pref_s2rdf_use_headers];
+                if (useHeaderPref != null) {
+                    this.useHeader = useHeaderPref != "false";
+                }
+                let fsNamingStrategyPref: string = prefs[Properties.pref_s2rdf_fs_naming_strategy];
+                if (fsNamingStrategyPref != null) {
+                    this.fsNamingStrategy = <FsNamingStrategy>fsNamingStrategyPref;
+                }
             }
         );
     }
@@ -98,8 +118,8 @@ export class Sheet2RdfComponent {
     private selectedTablePreviewRow: TableRow;
 
     private loadSpreadsheet() {
-        HttpServiceContext.initSessionToken();
-        this.s2rdfService.uploadSpreadsheet(this.spreadsheetFile).subscribe(
+        // HttpServiceContext.initSessionToken();
+        this.s2rdfService.uploadSpreadsheet(this.spreadsheetFile, this.fsNamingStrategy).subscribe(
             stResp => {
                 this.resetAll();
                 this.initHeaders();
@@ -226,15 +246,7 @@ export class Sheet2RdfComponent {
     }
 
     private generatePearl() {
-        //currently consider just one scheme (the first if there are multiple scheme active)
-        let activeScheme: ARTURIResource;
-        if (VBContext.getWorkingProject().getModelType() == SKOS.uri) {
-            let schemes: ARTURIResource[] = this.vbProp.getActiveSchemes();
-            if (schemes.length > 0) {
-                activeScheme = schemes[0];
-            }
-        }
-        this.s2rdfService.getPearl(activeScheme).subscribe(
+        this.s2rdfService.getPearl().subscribe(
             pearl => {
                 this.updatePearl(pearl);
                 this.checkPearl();
@@ -367,6 +379,27 @@ export class Sheet2RdfComponent {
                 this.basicModals.downloadLink("Export triples in " + format.name, null, exportLink, "triples." + format.defaultFileExtension);
             }
         )
+    }
+
+    //======================
+
+    private settings() {
+        // var modalData = new Sheet2RdfSettingsModalData(this.useHeader, this.fsNamingStrategy);
+        var modalData = new Sheet2RdfSettingsModalData(this.fsNamingStrategy);
+        const builder = new BSModalContextBuilder<Sheet2RdfSettingsModalData>(
+            modalData, undefined, Sheet2RdfSettingsModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        this.modal.open(Sheet2RdfSettingsModal, overlayConfig).result.then(
+            // (updatedSettings: Sheet2RdfSettingsModalReturnData) => { //closed with the "ok" button, so changes performed => reload
+            //     this.useHeader = updatedSettings.useHeader;
+            //     this.fsNamingStrategy = updatedSettings.fsNamingStrategy;
+            (newFsNamingStrategy: FsNamingStrategy) => {
+                this.fsNamingStrategy = newFsNamingStrategy;
+                this.loadSpreadsheet();
+            },
+            () => {}
+        );
     }
 
 

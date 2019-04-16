@@ -96,7 +96,6 @@ export class ConverterConfigurationComponent {
             this.availableSignatures = null;
             this.selectedSignature = null;
         } else {
-            console.log("select converter", converter);
             this.selectedConverter = converter;
             /**
              * Consider as available signatures, only those which the return type is compliant with the range type required:
@@ -138,7 +137,6 @@ export class ConverterConfigurationComponent {
     }
 
     private selectSignature(signature: SignatureDescription) {
-        console.log("selecting signature", signature);
         this.selectedSignature = signature;
         this.signatureParams = [];
         this.selectedSignature.getParameters().forEach(p => {

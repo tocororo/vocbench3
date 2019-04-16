@@ -27,13 +27,8 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     context: HeaderEditorModalData;
 
     private header: SimpleHeader;
-    // private headerName: string;
-    // private pearlFeature: string;
     
-    // private nodes: NodeConversion[];
     private selectedNode: NodeConversion;
-
-    // private graph: GraphApplication[];
     private selectedGraph: GraphApplication;
 
     constructor(public dialog: DialogRef<HeaderEditorModalData>, private s2rdfService: Sheet2RDFServices, private basicModals: BasicModalServices, private modal: Modal) {

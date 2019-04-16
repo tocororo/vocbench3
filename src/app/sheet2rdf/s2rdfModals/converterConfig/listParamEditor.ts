@@ -43,7 +43,6 @@ export class ListParamEditor {
                 this.value.push(v);
             }
         })
-        console.log("emitting", this.value);
         this.valueChanged.emit(this.value);
     }
 

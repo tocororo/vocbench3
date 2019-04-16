@@ -17,9 +17,10 @@ export class Sheet2RDFServices {
      * Uploads a spreadheet
      * @param file 
      */
-    uploadSpreadsheet(file: File) {
+    uploadSpreadsheet(file: File, fsNamingStrategy?: string) {
         var data: any = {
-            file: file
+            file: file,
+            fsNamingStrategy: fsNamingStrategy
         };
         return this.httpMgr.uploadFile(this.serviceName, "uploadSpreadsheet", data);
     }
@@ -151,13 +152,9 @@ export class Sheet2RDFServices {
 
     /**
      * Lets sheet2rdf generate the pearl and returns it
-     * @param skosSchema 
      */
-    getPearl(skosSchema?: ARTURIResource): Observable<string> {
+    getPearl(): Observable<string> {
         var params: any = {};
-        if (skosSchema != null) {
-            params.skosSchema = skosSchema;
-        }
         return this.httpMgr.doGet(this.serviceName, "getPearl", params).map(
             stResp => {
                 return stResp;
