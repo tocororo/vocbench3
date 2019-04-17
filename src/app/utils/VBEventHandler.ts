@@ -91,6 +91,8 @@ export class VBEventHandler {
 
     public resourceRenamedEvent: EventEmitter<{ oldResource: ARTResource, newResource: ARTResource }> = new VBEventEmitter("resourceRenamedEvent");
     public resourceDeprecatedEvent: EventEmitter<ARTResource> = new VBEventEmitter<ARTResource>("resourceDeprecatedEvent");
+    //useful to refresh the ResourceView when a resource is updated from outside the RV
+    public resourceUpdatedEvent: EventEmitter<ARTResource> = new VBEventEmitter<ARTResource>("resourceUpdatedEvent");
 
     public collaborationSystemStatusChanged: EventEmitter<any> = new VBEventEmitter("collaborationSystemStatusChanged");
 

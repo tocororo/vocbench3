@@ -57,46 +57,46 @@
     <div class="tab-content">
         <div [ngClass]="{vbox : activeTab == 'cls'}" [hidden]="activeTab != 'cls'">
             <class-individual-tree-panel (classSelected)="onNodeSelected($event)" (instanceSelected)="onNodeSelected($event)"
-                (advancedSearch)="advancedSearch($event)" [context]="context" [readonly]="readonly">
+                (advancedSearch)="advancedSearch($event)" [allowMultiselection]="true" [context]="context" [readonly]="readonly">
             </class-individual-tree-panel>
         </div>
         <ng-template [ngIf]="isProjectSKOS() || isProjectOntolex()">
             <div [ngClass]="{vbox : activeTab == 'concept'}" [hidden]="activeTab != 'concept'">
                 <concept-tree-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)"
-                    [context]="context" [readonly]="readonly">
+                    [allowMultiselection]="true" [context]="context" [readonly]="readonly">
                 </concept-tree-panel>
             </div>
             <div [ngClass]="{vbox : activeTab == 'conceptScheme'}" [hidden]="activeTab != 'conceptScheme'">
                 <scheme-list-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)"
-                    [context]="context" [readonly]="readonly">
+                    [allowMultiselection]="true" [context]="context" [readonly]="readonly">
                 </scheme-list-panel>
             </div>
             <div [ngClass]="{vbox : activeTab == 'skosCollection'}" [hidden]="activeTab != 'skosCollection'">
                 <collection-tree-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)" 
-                    [context]="context" [readonly]="readonly">
+                    [allowMultiselection]="true" [context]="context" [readonly]="readonly">
                 </collection-tree-panel>
             </div>
         </ng-template>
         <div [ngClass]="{vbox : activeTab == 'property'}" [hidden]="activeTab != 'property'">
             <property-tree-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)" 
-                [context]="context" [readonly]="readonly">
+                [allowMultiselection]="true" [context]="context" [readonly]="readonly">
             </property-tree-panel>
         </div>
         <ng-template [ngIf]="isProjectOntolex()">
             <div [ngClass]="{vbox : activeTab == 'limeLexicon'}" [hidden]="activeTab != 'limeLexicon'">
                 <lexicon-list-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)" 
-                    [context]="context" [readonly]="readonly">
+                    [allowMultiselection]="true" [context]="context" [readonly]="readonly">
                 </lexicon-list-panel>
             </div>
             <div [ngClass]="{vbox : activeTab == 'ontolexLexicalEntry'}" [hidden]="activeTab != 'ontolexLexicalEntry'">
                 <lexical-entry-list-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)" 
-                    [context]="context" [readonly]="readonly">
+                    [allowMultiselection]="true" [context]="context" [readonly]="readonly">
                 </lexical-entry-list-panel>
             </div>
         </ng-template>
         <div [ngClass]="{vbox : activeTab == 'dataRange'}" [hidden]="activeTab != 'dataRange'">
             <datatype-list-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)" 
-                [context]="context" [readonly]="readonly">
+                [allowMultiselection]="true" [context]="context" [readonly]="readonly">
             </datatype-list-panel>
         </div>
     </div>

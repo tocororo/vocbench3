@@ -11,6 +11,7 @@ import { VBActionFunctionCtx } from "../utils/VBActions";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { MultiSubjectEnrichmentHelper } from "./multiSubjectEnrichmentHelper";
 
 @Component({})
 export abstract class AbstractPanel {
@@ -40,6 +41,7 @@ export abstract class AbstractPanel {
     showDeprecated: boolean = true;
     eventSubscriptions: any[] = [];
     selectedNode: ARTURIResource = null;
+    checkedNodes: ARTURIResource[] = [];
 
     panelActions: ActionDescription[];
 
@@ -52,9 +54,10 @@ export abstract class AbstractPanel {
     protected graphModals: GraphModalServices;
     protected eventHandler: VBEventHandler;
     protected vbProp: VBProperties;
-    protected actionResolver: RoleActionResolver
+    protected actionResolver: RoleActionResolver;
+    protected multiEnrichment: MultiSubjectEnrichmentHelper;
     constructor(cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver) {
+        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
         this.cfService = cfService;
         this.resourceService = resourceService;
         this.basicModals = basicModals;
@@ -62,6 +65,7 @@ export abstract class AbstractPanel {
         this.eventHandler = eventHandler;
         this.vbProp = vbProp;
         this.actionResolver = actionResolver;
+        this.multiEnrichment = multiEnrichment;
 
         this.eventSubscriptions.push(eventHandler.showDeprecatedChangedEvent.subscribe(
             (showDeprecated: boolean) => this.showDeprecated = showDeprecated));
@@ -140,6 +144,17 @@ export abstract class AbstractPanel {
         this.graphModals.openModelGraph(null, this.rendering);
     }
 
+    private enrichMultiSubject() {
+        this.multiEnrichment.enrichMultiSubject(this.checkedNodes);
+        // this.browsingModals.browsePropertyTree("Select a property", null, this.checkedNodes[0]).then(
+        //     selectedProp => {
+        //         console.log("enriching", selectedProp, "for nodes:", this.checkedNodes.map(n => n.getShow()).join(", "));
+        //         return selectedProp
+        //     },
+        //     () => { }
+        // )
+    }
+
     // abstract delete(): void;
     // private deprecate() {
     //     this.resourceService.setDeprecated(this.selectedNode).subscribe();
@@ -207,6 +222,7 @@ export abstract class AbstractPanel {
     }
 
     onNodeChecked(nodes: ARTURIResource[]) {
+        this.checkedNodes = nodes;
         this.nodeChecked.emit(nodes);
     }
 

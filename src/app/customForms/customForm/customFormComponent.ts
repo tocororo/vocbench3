@@ -15,10 +15,10 @@ import { CustomFormsServices } from "../../services/customFormsServices";
     templateUrl: "./customFormComponent.html",
     host: { class: "vbox" },
     providers: [{
-        provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CustomForm), multi: true,
+        provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CustomFormComponent), multi: true,
     }]
 })
-export class CustomForm implements ControlValueAccessor {
+export class CustomFormComponent implements ControlValueAccessor {
 
     @Input() cfId: string;
 

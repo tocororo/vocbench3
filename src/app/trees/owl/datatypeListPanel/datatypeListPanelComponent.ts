@@ -13,8 +13,8 @@ import { VBActionFunctionCtx } from "../../../utils/VBActions";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
-import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { AbstractListPanel } from "../../abstractListPanel";
+import { MultiSubjectEnrichmentHelper } from "../../multiSubjectEnrichmentHelper";
 import { DatatypeListComponent } from "../datatypeList/datatypeListComponent";
 
 @Component({
@@ -31,10 +31,10 @@ export class DatatypeListPanelComponent extends AbstractListPanel {
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.dataRange;
     // rendering: boolean = false; //override the value in AbstractPanel
 
-    constructor(private datatypeService: DatatypesServices, private searchService: SearchServices, private creationModals: CreationModalServices,
+    constructor(private datatypeService: DatatypesServices, private searchService: SearchServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver);
+        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
     }
 
     getActionContext(): VBActionFunctionCtx {

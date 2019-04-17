@@ -103,10 +103,13 @@ export class ResourceViewComponent {
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)
         ));
         this.eventSubscriptions.push(eventHandler.resourceDeprecatedEvent.subscribe(
-            (resource: ARTResource) => this.onResourceDeprecated(resource)
+            (resource: ARTResource) => this.onResourceUpdated(resource)
         ));
         this.eventSubscriptions.push(eventHandler.collaborationSystemStatusChanged.subscribe(
             () => this.onCollaborationSystemStatusChange()
+        ));
+        this.eventSubscriptions.push(eventHandler.resourceUpdatedEvent.subscribe(
+            (resource: ARTResource) => this.onResourceUpdated(resource)
         ));
     }
 
@@ -737,7 +740,7 @@ export class ResourceViewComponent {
         }
     }
 
-    private onResourceDeprecated(resource: ARTResource) {
+    private onResourceUpdated(resource: ARTResource) {
         if (this.resource.getNominalValue() == resource.getNominalValue()) {
             this.buildResourceView(this.resource);
         }

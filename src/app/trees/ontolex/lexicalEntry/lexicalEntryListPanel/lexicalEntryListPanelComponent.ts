@@ -17,8 +17,8 @@ import { VBActionFunctionCtx } from "../../../../utils/VBActions";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from '../../../../utils/VBProperties';
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
-import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { AbstractListPanel } from "../../../abstractListPanel";
+import { MultiSubjectEnrichmentHelper } from "../../../multiSubjectEnrichmentHelper";
 import { LexicalEntryListComponent } from "../lexicalEntryList/lexicalEntryListComponent";
 import { LexicalEntryListSettingsModal } from "./lexicalEntryListSettingsModal";
 
@@ -55,10 +55,10 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
     //for visualization searchBased
     private lastSearch: string;
 
-    constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private creationModals: CreationModalServices,
-        private modal: Modal, cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices,
-        graphModals: GraphModalServices, eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver);
+    constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private modal: Modal,
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
+        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
 
         this.eventSubscriptions.push(eventHandler.lexiconChangedEvent.subscribe(
             (lexicon: ARTURIResource) => this.onLexiconChanged(lexicon)));

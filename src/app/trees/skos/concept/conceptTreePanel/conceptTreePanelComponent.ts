@@ -19,8 +19,8 @@ import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../../widget/modal/browsingModal/browsingModalServices";
-import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { AbstractTreePanel } from "../../../abstractTreePanel";
+import { MultiSubjectEnrichmentHelper } from "../../../multiSubjectEnrichmentHelper";
 import { ConceptTreeComponent } from "../conceptTree/conceptTreeComponent";
 import { AddToSchemeModal, AddToSchemeModalData } from "./addToSchemeModal";
 import { ConceptTreeSettingsModal } from "./conceptTreeSettingsModal";
@@ -52,11 +52,10 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     //for visualization searchBased
     private lastSearch: string;
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
+    constructor(private skosService: SkosServices, private searchService: SearchServices, private browsingModals: BrowsingModalServices, private modal: Modal,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver,
-        private browsingModals: BrowsingModalServices, private modal: Modal) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver);
+        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
             (schemes: ARTURIResource[]) => this.onSchemeChanged(schemes)));

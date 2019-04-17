@@ -9,7 +9,7 @@ import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingMod
 
 import { CustomFormConfigComponent } from '../customForms/customFormConfComponent';
 import { CustomFormModal } from '../customForms/customForm/customFormModal';
-import { CustomForm } from '../customForms/customForm/customFormComponent';
+import { CustomFormComponent } from '../customForms/customForm/customFormComponent';
 import { FormCollMappingModal } from '../customForms/customFormConfigModals/formCollMappingModal';
 import { FormCollEditorModal } from '../customForms/customFormConfigModals/formCollEditorModal';
 import { CustomFormEditorModal } from '../customForms/customFormConfigModals/customFormEditorModal';
@@ -20,11 +20,11 @@ import { ImportCfModal } from '../customForms/customFormConfigModals/importCfMod
     imports: [CommonModule, FormsModule, SharedModule],
     providers: [BasicModalServices, BrowsingModalServices],
     declarations: [
-        CustomFormConfigComponent, CustomForm,
+        CustomFormConfigComponent, CustomFormComponent,
         FormCollMappingModal, FormCollEditorModal, CustomFormEditorModal,
         CustomFormModal, BrokenCFStructReportModal, ImportCfModal
     ],
-    exports: [CustomFormConfigComponent, CustomForm], //CustomForm exported since is used in vbModalModule as well in newResourceCfModal
+    exports: [CustomFormConfigComponent, CustomFormComponent], //CustomForm exported since is used in vbModalModule as well in newResourceCfModal
     entryComponents: [
         FormCollMappingModal, FormCollEditorModal, CustomFormEditorModal,
         CustomFormModal, BrokenCFStructReportModal, ImportCfModal

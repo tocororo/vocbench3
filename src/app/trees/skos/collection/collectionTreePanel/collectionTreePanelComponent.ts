@@ -13,8 +13,8 @@ import { VBActionFunctionCtx } from "../../../../utils/VBActions";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
-import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { AbstractTreePanel } from "../../../abstractTreePanel";
+import { MultiSubjectEnrichmentHelper } from "../../../multiSubjectEnrichmentHelper";
 import { CollectionTreeComponent } from "../collectionTree/collectionTreeComponent";
 
 @Component({
@@ -29,10 +29,10 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
 
     private searchInputPlaceholder: string;
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
+    constructor(private skosService: SkosServices, private searchService: SearchServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver);
+        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
     }
 
     //top bar commands handlers

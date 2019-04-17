@@ -30,6 +30,7 @@ import { InstanceListPanelComponent } from "../instanceListPanel/instanceListPan
 export class ClassIndividualTreePanelComponent {
     @Input() readonly: boolean;
     @Input() context: TreeListContext;
+    @Input() allowMultiselection: boolean = false; //if true allow the possibility to enable the multiselection in the contained tree/list
     @Output() classSelected = new EventEmitter<ARTURIResource>();
     @Output() instanceSelected = new EventEmitter<ARTURIResource>();
     @Output('advancedSearch') advancedSearchEvent: EventEmitter<ARTResource> = new EventEmitter();

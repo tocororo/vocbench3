@@ -14,8 +14,8 @@ import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from '../../../../utils/VBProperties';
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
-import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { AbstractListPanel } from "../../../abstractListPanel";
+import { MultiSubjectEnrichmentHelper } from "../../../multiSubjectEnrichmentHelper";
 import { SchemeListComponent } from "../schemeList/schemeListComponent";
 
 @Component({
@@ -31,10 +31,10 @@ export class SchemeListPanelComponent extends AbstractListPanel {
 
     private modelType: string;
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices, private creationModals: CreationModalServices,
+    constructor(private skosService: SkosServices, private searchService: SearchServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
-        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver);
+        eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
+        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
     }
     
     ngOnInit() {

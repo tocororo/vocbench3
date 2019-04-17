@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Ng2CompleterModule } from "ng2-completer";
+import { MultiSubjectEnrichmentHelper } from '../trees/multiSubjectEnrichmentHelper';
 import { LexicalEntryListComponent } from '../trees/ontolex/lexicalEntry/lexicalEntryList/lexicalEntryListComponent';
 import { LexicalEntryListNodeComponent } from '../trees/ontolex/lexicalEntry/lexicalEntryList/lexicalEntryListNodeComponent';
 import { LexicalEntryListPanelComponent } from '../trees/ontolex/lexicalEntry/lexicalEntryListPanel/lexicalEntryListPanelComponent';
@@ -73,6 +74,7 @@ import { SharedModule } from './sharedModule';
         LexicalEntryListPanelComponent, LexicalEntryListComponent, LexicalEntryListNodeComponent, LexicalSenseSelectorComponent,
         DatatypeListPanelComponent, DatatypeListComponent, DatatypeListNodeComponent
     ],
+    providers: [MultiSubjectEnrichmentHelper],
     entryComponents: [
         SearchSettingsModal, AdvancedSearchModal, CustomSearchModal, LoadCustomSearchModal,
         ClassTreeSettingsModal, ConceptTreeSettingsModal, AddToSchemeModal, LexicalEntryListSettingsModal, TreeListSettingsModal

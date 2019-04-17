@@ -35,15 +35,23 @@
                 <span>&#9662;</span>
             </button>
             <ul class="dropdown-menu">
-                <li *ngIf="allowMultiselection">
-                    <a (click)="toggleMultiselection()">
-                        <span style="flex: 1;">
-                            <span class="glyphicon glyphicon-check" style="margin-right: 4px;"></span>
-                            Multiselection
-                        </span>
-                        <span *ngIf="multiselection" class="glyphicon glyphicon-ok pull-right"></span>
-                    </a>
-                </li>
+                <ng-container *ngIf="allowMultiselection">
+                    <li>
+                        <a (click)="toggleMultiselection()">
+                            <span style="flex: 1;">
+                                <span class="glyphicon glyphicon-check" style="margin-right: 4px;"></span>
+                                Multiselection
+                            </span>
+                            <span *ngIf="multiselection" class="glyphicon glyphicon-ok pull-right"></span>
+                        </a>
+                    </li>
+                    <li *ngIf="context=='dataPanel' && multiselection" [ngClass]="{ disabled: checkedNodes.length == 0 }">
+                        <a (click)="enrichMultiSubject()">
+                            <span class="glyphicon glyphicon-check" style="margin-right: 4px; margin-left: 16px;"></span>
+                            Add a property value to selected values
+                        </a>
+                    </li>
+                </ng-container>
                 <li *ngIf="isOpenGraphEnabled('dataOriented')">
                     <a (click)="openDataGraph()">
                         <img src="../../../../assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
