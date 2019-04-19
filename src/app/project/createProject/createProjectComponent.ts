@@ -87,6 +87,7 @@ export class CreateProjectComponent {
     //history/validation
     private history: boolean = false;
     private validation: boolean = false;
+    private blacklisting: boolean = false;
 
     /**
      * DATA STORE
@@ -711,7 +712,7 @@ export class CreateProjectComponent {
          */
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.createProject(this.projectName, this.baseUriPrefix + this.baseUriSuffix,
-            this.ontoModelType, this.lexicalModelType, this.history, this.validation,
+            this.ontoModelType, this.lexicalModelType, this.history, this.validation, this.blacklisting,
             repositoryAccess, this.dataRepoId, this.supportRepoId,
             coreRepoSailConfigurerSpecification, coreRepoBackendType,
             supportRepoSailConfigurerSpecification, supportRepoBackendType,

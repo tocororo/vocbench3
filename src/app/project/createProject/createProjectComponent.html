@@ -133,10 +133,18 @@
                         </div>
                         <div class="checkbox-inline" style="margin-left: 20px;">
                             <label>
-                                <input type="checkbox" [(ngModel)]="validation" name="validation"> Validation
+                                <input type="checkbox" [(ngModel)]="validation" name="validation" (input)="blacklisting=false"> Validation
                             </label>
                             <span class="glyphicon glyphicon-info-sign"
                                 title="Enable this to keep track of change requests in order to validate them later (accepting or rejecting)">
+                            </span>
+                        </div>
+                        <div class="checkbox-inline" style="margin-left: 20px;">
+                            <label>
+                                <input type="checkbox" [(ngModel)]="blacklisting" name="blacklisting" [disabled]="!validation"> Blacklisting
+                            </label>
+                            <span class="glyphicon glyphicon-info-sign"
+                                title="Enable this to blacklist terms that have been rejected through validation">
                             </span>
                         </div>
                     </div>
