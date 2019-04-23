@@ -122,6 +122,10 @@ tree-panel, resource-list, class-individual-tree, resource-view, scheme-selectio
     display: flex;
     flex-flow: column;
 }
+/* restore the modal-body padding when scrollableContainer is applied to the same div */
+.modal-body.scrollableContainer {
+    padding: 10px;
+}
 
 rdf-resource {
     min-height: 16px;

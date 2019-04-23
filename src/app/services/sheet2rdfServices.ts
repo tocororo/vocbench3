@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { RDFCapabilityType } from "../models/Coda";
+import { PrefixMapping } from '../models/Metadata';
 import { RDFFormat } from "../models/RDFFormat";
 import { Sheet2RdfDeserializer, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
 import { HttpManager, HttpServiceContext } from "../utils/HttpManager";
@@ -64,7 +65,7 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "ignoreHeader", params);
     }
 
-    addGraphApplicationToHeader(headerId: string, property: ARTURIResource, nodeId: string, type?: ARTURIResource) {
+    addSimpleGraphApplicationToHeader(headerId: string, property: ARTURIResource, nodeId: string, type?: ARTURIResource) {
         let params: any = {
             headerId: headerId,
             property: property,
@@ -74,7 +75,16 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "addGraphApplicationToHeader", params);
     }
 
-    updateGraphApplication(headerId: string, graphId: string, property: ARTURIResource, nodeId: string, type?: ARTURIResource) {
+    addAdvancedGraphApplicationToHeader(headerId: string, graphPattern: string, nodeIds: string[]) {
+        let params: any = {
+            headerId: headerId,
+            graphPattern: graphPattern,
+            nodeIds: nodeIds
+        };
+        return this.httpMgr.doPost(this.serviceName, "addAdvancedGraphApplicationToHeader", params);
+    }
+
+    updateSimpleGraphApplication(headerId: string, graphId: string, property: ARTURIResource, nodeId: string, type?: ARTURIResource) {
         let params: any = {
             headerId: headerId,
             graphId: graphId,
@@ -82,7 +92,17 @@ export class Sheet2RDFServices {
             nodeId: nodeId,
             type: type
         };
-        return this.httpMgr.doPost(this.serviceName, "updateGraphApplication", params);
+        return this.httpMgr.doPost(this.serviceName, "updateSimpleGraphApplication", params);
+    }
+    
+    updateAdvancedGraphApplication(headerId: string, graphId: string, graphPattern: string, nodeIds: string[]) {
+        let params: any = {
+            headerId: headerId,
+            graphId: graphId,
+            graphPattern: graphPattern,
+            nodeIds: nodeIds
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateAdvancedGraphApplication", params);
     }
 
     removeGraphApplicationFromHeader(headerId: string, graphId: string) {
@@ -223,6 +243,24 @@ export class Sheet2RDFServices {
             outputFormat: outputFormat.name
         };
         return this.httpMgr.downloadFile(this.serviceName, "exportTriples", params);
+    }
+
+    getPrefixMappings() {
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "getPrefixMappings", params).map(
+            stResp => {
+                let mappings: PrefixMapping[] = [];
+                for (let i = 0; i < stResp.length; i++) {
+                    let m: PrefixMapping = {
+                        prefix: stResp[i].prefix,
+                        namespace: stResp[i].namespace,
+                        explicit: stResp[i].explicit
+                    };
+                    mappings.push(m);
+                }
+                return mappings;
+            }
+        );
     }
 
     closeSession() {

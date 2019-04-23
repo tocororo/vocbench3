@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { AdvancedGraphApplicationModal } from '../sheet2rdf/s2rdfModals/advancedGraphApplicationModal';
 import { ConverterConfigurationComponent } from '../sheet2rdf/s2rdfModals/converterConfig/converterConfigurationComponent';
 import { ListParamEditor } from '../sheet2rdf/s2rdfModals/converterConfig/listParamEditor';
 import { MapParamEditor } from '../sheet2rdf/s2rdfModals/converterConfig/mapParamEditor';
@@ -18,11 +19,15 @@ import { SharedModule } from './sharedModule';
     declarations: [
         Sheet2RdfComponent, ConverterConfigurationComponent, MapParamEditor, ListParamEditor,
         //modal
-        HeaderEditorModal, SubjectHeaderEditorModal, SimpleGraphApplicationModal, NodeCreationModal, Sheet2RdfSettingsModal
+        HeaderEditorModal, SubjectHeaderEditorModal, SimpleGraphApplicationModal, AdvancedGraphApplicationModal, NodeCreationModal, 
+        Sheet2RdfSettingsModal
     ],
     exports: [
         Sheet2RdfComponent
     ],
-    entryComponents: [HeaderEditorModal, SubjectHeaderEditorModal, SimpleGraphApplicationModal, NodeCreationModal, Sheet2RdfSettingsModal]
+    entryComponents: [
+        HeaderEditorModal, SubjectHeaderEditorModal, SimpleGraphApplicationModal, AdvancedGraphApplicationModal, NodeCreationModal,
+        Sheet2RdfSettingsModal
+    ]
 })
 export class Sheet2RdfModule { }

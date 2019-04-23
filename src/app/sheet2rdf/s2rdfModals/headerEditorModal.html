@@ -88,7 +88,7 @@
                 </button>
                 <div class="btn-group btn-group-xs">
                     <div class="btn-group btn-group-xs" role="group">
-                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" [disabled]="!selectedGraph || header?.ignore">
+                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" [disabled]="header?.ignore">
                             <span class="glyphicon glyphicon-plus"></span>
                         </button>
                         <ul class="dropdown-menu pull-right">
@@ -102,24 +102,28 @@
                 </div>
             </div>
         </div>
-        <div class="panel-body vbox table-responsive" style="min-height: 80px">
-            <table class="table table-condensed">
-                <thead>
-                    <tr>
-                        <th>Node ID</th>
-                        <th>Property</th>
-                        <th>Type</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let g of header?.graph" (click)="selectGraph(g)" [ngStyle]="{ cursor: header?.ignore ? 'not-allowed' : 'pointer' }"
-                        [ngClass]="{ active : g == selectedGraph }">
-                        <td [ngClass]="{ greyText : header?.ignore }">{{g.nodeId}}</td>
-                        <td [ngClass]="{ greyText : header?.ignore }"><rdf-resource *ngIf="g.property" [resource]="g.property"></rdf-resource></td>
-                        <td [ngClass]="{ greyText : header?.ignore }"><rdf-resource *ngIf="g.type" [resource]="g.type"></rdf-resource></td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="panel-body vbox scrollableContainer" style="min-height: 80px">
+            <div class="table-responsive">
+                <table class="table table-condensed">
+                    <colgroup>
+                        <col style="width: 1%">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let g of header?.graph" (click)="selectGraph(g)" [ngStyle]="{ cursor: header?.ignore ? 'not-allowed' : 'pointer' }"
+                            [ngClass]="{ active : g == selectedGraph }">
+                            <ng-container *ngIf="isSimpleGraphApplication(g); else advancedGraphBlock">
+                                <td [ngClass]="{ greyText : header?.ignore }" nowrap><label>Simple Graph Application:</label></td>
+                                <td [ngClass]="{ greyText : header?.ignore }"><span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">$subject {{g.property.getShow()}} ${{g.nodeId}}</span></td>
+                            </ng-container>
+                            <ng-template #advancedGraphBlock>
+                                <td [ngClass]="{ greyText : header?.ignore }" nowrap><label>Advanced Graph Application:</label></td>
+                                <td [ngClass]="{ greyText : header?.ignore }"><span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{g.pattern}}</span></td>
+                            </ng-template>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

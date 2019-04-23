@@ -11,13 +11,32 @@ export class SimpleHeader {
 
     public nodes: NodeConversion[];
     public graph: GraphApplication[];
+
+    /**
+     * Returns true if the node is used by a graph application of the given header
+     */
+    public static isNodeReferenced(header: SimpleHeader, node: NodeConversion): boolean {
+        let used: boolean = false;
+        header.graph.forEach(g => {
+            if (g instanceof SimpleGraphApplication) {
+                if (g.nodeId == node.nodeId) {
+                    used = true;
+                }
+            } else if (g instanceof AdvancedGraphApplication) {
+                if (g.nodeIds.indexOf(node.nodeId)) {
+                    used = true;
+                }
+            }
+        });
+        return used;
+    }
 }
 
 export class SubjectHeader {
     public id: string;
     public pearlFeature: string;
     public node: NodeConversion;
-    public graph: GraphApplication;
+    public graph: SimpleGraphApplication;
 }
 
 export class NodeConversion {
@@ -25,11 +44,18 @@ export class NodeConversion {
     public converter: CODAConverter;
     public memoize: boolean;
 }
-export class GraphApplication {
+
+export abstract class GraphApplication {
     public id: string;
+}
+export class SimpleGraphApplication extends GraphApplication {
     public nodeId: string;
     public property: ARTURIResource;
     public type?: ARTURIResource;
+}
+export class AdvancedGraphApplication extends GraphApplication {
+    public nodeIds: string[];
+    public pattern: string;
 }
 
 export class CODAConverter {
@@ -70,10 +96,10 @@ export class Sheet2RdfDeserializer {
 
     public static parseSubjectHeader(json: any): SubjectHeader {
         let node: NodeConversion = json.node;
-        let graph: GraphApplication;
+        let graph: SimpleGraphApplication;
         let gJson = json.graph;
         if (gJson != null) {
-            graph = this.parseGraphApplication(gJson);
+            graph = <SimpleGraphApplication>this.parseGraphApplication(gJson);
         }
 
         let h: SubjectHeader = {
@@ -105,11 +131,19 @@ export class Sheet2RdfDeserializer {
     }
 
     private static parseGraphApplication(gJson: any): GraphApplication {
-        return {
-            id: gJson.id,
-            nodeId: gJson.nodeId,
-            property: (gJson.property) ? Deserializer.createURI(gJson.property) : null,
-            type: (gJson.type) ? Deserializer.createURI(gJson.type) : null
+        if (gJson.hasOwnProperty('nodeId')) { //simple graph application
+            let g = new SimpleGraphApplication();
+            g.id = gJson.id;
+            g.nodeId = gJson.nodeId;
+            g.property = (gJson.property) ? Deserializer.createURI(gJson.property) : null;
+            g.type = (gJson.type) ? Deserializer.createURI(gJson.type) : null;
+            return g;
+        } else { //advanced graph application
+            let g = new AdvancedGraphApplication();
+            g.id = gJson.id;
+            g.nodeIds = gJson.nodeIds;
+            g.pattern = gJson.pattern;
+            return g;
         }
     }
 

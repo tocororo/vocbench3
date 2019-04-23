@@ -1,0 +1,116 @@
+<div class="modal-header">
+    <h3 class="modal-title">Advanced Graph Application</h3>
+</div>
+<div class="modal-body vbox scrollableContainer">
+    <div class="panel panel-default" style="margin-top: 4px; min-height: 100px">
+        <div class="panel-heading">
+            <label style="flex: 1">Nodes</label>
+            <div class="btn-toolbar" role="toolbar">
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-default" (click)="addNode()">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                    <button class="btn btn-default" (click)="removeNode()" [disabled]="!selectedNode || selectedNode.readonly">
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body table-responsive">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Node ID</th>
+                        <th>Converter type</th>
+                        <th>Converter URI</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let n of alreadyDefinedNodes" (click)="selectNode(n)" [ngClass]="{ active : n == selectedNode }">
+                        <td class="greyText">{{n.nodeId}}</td>
+                        <td class="greyText">{{n.converter?.capability}}</td>
+                        <td class="greyText">{{n.converter?.contract}}</td>
+                        <td class="greyText">
+                            <span *ngIf="n.converter?.language; else dtBlock">
+                                <label style="white-space: pre">Lang: </label>{{n.converter.language}}
+                            </span>
+                            <span #dtBlock *ngIf="n.converter?.datatype">
+                                <label style="white-space: pre">Datatype: </label>{{getDatatypeShow(n.converter.datatype)}}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr *ngFor="let n of newDefinedNodes" (click)="selectNode(n)" [ngClass]="{ active : n == selectedNode }">
+                        <td>{{n.nodeId}}</td>
+                        <td>{{n.converter?.capability}}</td>
+                        <td>{{n.converter?.contract}}</td>
+                        <td>
+                            <span *ngIf="n.converter?.language; else dtBlock">
+                                <label style="white-space: pre">Lang: </label>{{n.converter.language}}
+                            </span>
+                            <span #dtBlock *ngIf="n.converter?.datatype">
+                                <label style="white-space: pre">Datatype: </label>{{getDatatypeShow(n.converter.datatype)}}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel panel-default vbox" style="margin-top: 4px;">
+        <div class="panel-heading">
+            <label style="flex: 1">Graph</label>
+        </div>
+        <div class="panel-body vbox">
+
+            <div class="subPanel" style="margin-top: 4px;">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">Prefix-Namespace mappings</label>
+                    <!-- <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group btn-group-xs">
+                            <button class="btn btn-default" (click)="addPrefNs()">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                            <button class="btn btn-default" (click)="removePrefNs()">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="subPanel-body table-responsive" style="max-height: 100px;">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Prefix</th>
+                                <th>Namespace</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let m of prefixMappings" (click)="selectMapping(m)" [ngClass]="{active: m == selectedMapping, greyText: !m.explicit}">
+                                <td>{{m.prefix}}</td>
+                                <td>{{m.namespace}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subPanel vbox" style="margin-top: 4px;">
+                <div class="subPanel-heading">
+                    <label style="flex: 1">Graph pattern</label>
+                </div>
+                <div class="subPanel-body vbox">
+                    <textarea class="form-control input-sm" style="resize: vertical" rows="5" [(ngModel)]="graphPattern"></textarea>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

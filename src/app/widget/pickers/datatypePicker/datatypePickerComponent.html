@@ -1,0 +1,3 @@
+<select [(ngModel)]="datatype" (ngModelChange)="onDatatypeChange()" [class]="selectClass" [disabled]="disabled || readonly">
+    <option *ngFor="let dt of datatypeList" [ngValue]="dt" [title]="dt.toNT()">{{dt.getShow()}}</option>
+</select>

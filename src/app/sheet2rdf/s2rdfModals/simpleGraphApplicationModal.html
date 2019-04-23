@@ -43,7 +43,7 @@
             <tr>
                 <td class="text-right"><label>Range type:</label></td>
                 <td>
-                    <select class="form-control input-sm" [(ngModel)]="selectedRangeType" (ngModelChange)="onRangeTypeChange()" [disabled]="!rangeTypeChangeable">
+                    <select class="form-control input-sm" [(ngModel)]="selectedRangeType" [disabled]="!rangeTypeChangeable">
                         <option *ngFor="let rt of rangeTypes" [ngValue]="rt">{{rt.show}}</option>
                     </select>
                 </td>
@@ -84,9 +84,10 @@
             <tr *ngIf="selectedRangeType?.type == 'typedLiteral'">
                 <td class="text-right"><label>Datatype:</label></td>
                 <td>
-                    <select class="form-control input-sm" [(ngModel)]="datatype">
+                    <datatype-picker [(ngModel)]="datatype" [allowedDatatypes]="allowedDatatypes"></datatype-picker>
+                    <!-- <select class="form-control input-sm" [(ngModel)]="datatype">
                         <option *ngFor="let dt of datatypeList" [ngValue]="dt">{{dt.getShow()}}</option>
-                    </select>
+                    </select> -->
                 </td>
             </tr>
 

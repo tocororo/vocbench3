@@ -3,7 +3,7 @@ import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Properties } from "../models/Properties";
 import { RDFFormat } from "../models/RDFFormat";
-import { FsNamingStrategy, GraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
+import { FsNamingStrategy, GraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview, SimpleGraphApplication, AdvancedGraphApplication } from "../models/Sheet2RDF";
 import { ExportServices } from "../services/exportServices";
 import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
 import { Sheet2RDFServices } from "../services/sheet2rdfServices";
@@ -175,6 +175,7 @@ export class Sheet2RdfComponent {
     }
 
     private getHeaderCssClass(header: SimpleHeader) {
+        //TODO add an attribute in the Header response object to help this decision? maybe it is better than compute the class at each change detection round
         /**
          * configuredHeader: if there is at least one graph application which its node is defined (converter assigned)
          * unconfiguredHeader: there is no node definition neither graph application for the header
@@ -189,13 +190,29 @@ export class Sheet2RdfComponent {
         if (header.graph.length > 0 && header.nodes.length > 0) {
             for (let i = 0; i < header.graph.length; i++) {
                 let g: GraphApplication = header.graph[i];
-                if (g.property != null) {
-                    //property assigned, now check for the node
-                    for (let j = 0; j < header.nodes.length; j++) {
-                        if (header.nodes[j].nodeId == g.nodeId && header.nodes[j].converter != null) {
+                if (g instanceof SimpleGraphApplication) {
+                    //SimpleGraphApplication is configured if the property is assigned and if the node of the graph application is defined
+                    if (g.property != null) {
+                        //property assigned, now check for the node
+                        for (let j = 0; j < header.nodes.length; j++) {
+                            if (header.nodes[j].nodeId == g.nodeId && header.nodes[j].converter != null) {
+                                return "configuredHeader";
+                            }
+                        }
+                    }
+                } else if (g instanceof AdvancedGraphApplication) {
+                    //AdvancedGraphApplication is configured if the pattern is defined, and the referenced nodes are defined
+                    if (g.pattern != null && g.nodeIds != null && g.nodeIds.length > 0) {
+                        let allDefined: boolean = true; //if one referenced node is not defined, this is set to false
+                        for (let id of g.nodeIds) {
+                            if (header.nodes.find(n => n.nodeId == id) == null) {
+                                allDefined = false;
+                                break;
+                            }
+                        }
+                        if (allDefined) {
                             return "configuredHeader";
                         }
-                        g.nodeId;
                     }
                 }
             }
@@ -224,7 +241,7 @@ export class Sheet2RdfComponent {
         const builder = new BSModalContextBuilder<SubjectHeaderEditorModalData>(
             modalData, undefined, SubjectHeaderEditorModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
         this.modal.open(SubjectHeaderEditorModal, overlayConfig).result.then(
             () => { //closed with the "ok" button, so changes performed => update header
                 this.initHeaders();

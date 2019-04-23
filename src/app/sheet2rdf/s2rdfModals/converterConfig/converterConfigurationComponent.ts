@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ARTLiteral, ARTURIResource } from "../../../models/ARTResources";
-import { ConverterContractDescription, RDFCapabilityType, SignatureDescription, XRole } from "../../../models/Coda";
+import { ConverterContractDescription, RDFCapabilityType, SignatureDescription, XRole, ParameterDescription } from "../../../models/Coda";
 import { CODAConverter } from "../../../models/Sheet2RDF";
 import { CODAServices } from "../../../services/codaServices";
 import { RangeType } from "../../../services/propertyServices";
@@ -14,9 +14,9 @@ export class ConverterConfigurationComponent {
 
     @Input() converter: CODAConverter;
     @Input() memoize: boolean;
-    @Input() rangeType: RangeType; //the listed converters capability must be compliant with this rangeType
-    @Input() language: string;
-    @Input() datatype: ARTURIResource;
+    @Input() rangeType: RangeType; //the listed converters capability must be compliant with this rangeType (if not provided, all converter are ok)
+    @Input('language') inputLanguage: string;
+    @Input('datatype') inputDatatype: ARTURIResource;
     @Output() update: EventEmitter<UpdateStatus> = new EventEmitter();
 
     private availableConverters: ConverterContractDescription[] = [];
@@ -26,17 +26,34 @@ export class ConverterConfigurationComponent {
     private selectedSignature: SignatureDescription;
     private signatureParams: SignatureParam[];
 
+    private readonly languageLiteralAspect: string = "language";
+    private readonly datatypeLiteralAspect: string = "datatype";
+    private literalAspectOpts: string[] = ["---", this.languageLiteralAspect, this.datatypeLiteralAspect];
+    private selectedLiteralAspect: string = this.literalAspectOpts[0];
+    private language: string;
+    private datatype: ARTURIResource;
+
     private xRoles: string[] = [XRole.concept, XRole.conceptScheme, XRole.skosCollection, XRole.xLabel, XRole.xNote];
     
     constructor(private codaService: CODAServices) {}
 
     ngOnInit() {
+        this.language = this.inputLanguage;
+        this.datatype = this.inputDatatype;
+        if (this.language != null) {
+            this.selectedLiteralAspect = this.languageLiteralAspect;
+        } else if (this.datatype != null) {
+            this.selectedLiteralAspect = this.datatypeLiteralAspect;
+        }
+
         this.codaService.listConverterContracts().subscribe(
             converters => {
                 converters.forEach(c => {
                     // check converter capability compatibility
                     let capability: RDFCapabilityType = c.getRDFCapability();
-                    if (this.rangeType == RangeType.resource) {
+                    if (this.rangeType == null) {
+                        this.availableConverters.push(c);
+                    } else if (this.rangeType == RangeType.resource) {
                         if (capability == RDFCapabilityType.node || capability == RDFCapabilityType.uri) {
                             this.availableConverters.push(c);
                         }
@@ -105,7 +122,9 @@ export class ConverterConfigurationComponent {
             this.availableSignatures = [];
             this.selectedConverter.getSignatures().forEach(s => {
                 let returnType: string = s.getReturnType();
-                if (this.rangeType == RangeType.resource && (returnType.endsWith(".IRI") || returnType.endsWith(".Value"))) {
+                if (this.rangeType == null) {
+                    this.availableSignatures.push(s);
+                } else if (this.rangeType == RangeType.resource && (returnType.endsWith(".IRI") || returnType.endsWith(".Value"))) {
                     this.availableSignatures.push(s);
                 } else if ((this.rangeType == RangeType.plainLiteral || this.rangeType == RangeType.typedLiteral) && returnType.endsWith(".Literal")) {
                     this.availableSignatures.push(s);
@@ -128,12 +147,16 @@ export class ConverterConfigurationComponent {
      * ========== Signature customization ==========
      */
 
+    /**
+     * check if the selected converter is the default one and if the selected signature is the literal one
+     */
+    private showDefaultLiteralConverterOpt() {
+        return this.selectedConverter != null && this.selectedConverter.getURI() == ConverterContractDescription.NAMESPACE + "default" &&
+            this.selectedSignature != null && this.selectedSignature.getReturnType().endsWith(".Literal");
+    }
+
     private getSignatureShow(signature: SignatureDescription): string {
-        if (signature.getParameters().length == 0) {
-            return "No params";
-        } else {
-            return signature.getParameters().map(p => p.getName()).join(", ");
-        }
+        return this.selectedConverter.getSerialization(signature);
     }
 
     private selectSignature(signature: SignatureDescription) {
@@ -143,6 +166,16 @@ export class ConverterConfigurationComponent {
             this.signatureParams.push({ name: p.getName(), value: null, type: p.getType() });
         });
         this.emitStatusUpdate();
+    }
+
+    private getParameterTitle(parameter: SignatureParam): string {
+        if (parameter.type == "java.lang.String") {
+            return "String parameter";
+        } else if (parameter.type == "org.eclipse.rdf4j.model.Value[]") {
+            return "List of values. Each value can be the id of a node or an RDF value represented in NT serialization";
+        } else if (parameter.type == "java.util.Map<java.lang.String, org.eclipse.rdf4j.model.Value>") {
+            return "Key-value Map. Each value can be the id of a node or an RDF value represented in NT serialization";
+        }
     }
 
     private onMapParamChange(value: {[key: string]:any}, p: SignatureParam) {
@@ -180,11 +213,21 @@ export class ConverterConfigurationComponent {
             }
             params[p.name] = value;
         });
+        let capability = this.selectedSignature.getReturnType().endsWith(".Literal") ? RDFCapabilityType.literal : RDFCapabilityType.uri;
+        let lang: string;
+        let datatypeUri: string;
+        if (capability == RDFCapabilityType.literal && this.selectedConverter.getURI().endsWith("/default")) {
+            if (this.selectedLiteralAspect == this.languageLiteralAspect) {
+                lang = this.language;
+            } else if (this.selectedLiteralAspect == this.datatypeLiteralAspect) {
+                datatypeUri = this.datatype.getURI();
+            }
+        }
         let c: CODAConverter = {
-            capability: (this.rangeType == RangeType.resource) ? RDFCapabilityType.uri : RDFCapabilityType.literal,
+            capability: capability,
             contract: this.selectedConverter.getURI(),
-            language: this.language,
-            datatype: (this.datatype != null) ? this.datatype.getURI() : null,
+            language: lang,
+            datatype: datatypeUri,
             params: params
         }
         let status: UpdateStatus = { converter: c, memoize: this.isConverterRandom() ? this.memoize : false };

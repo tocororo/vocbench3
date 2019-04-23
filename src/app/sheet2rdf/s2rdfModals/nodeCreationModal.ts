@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Observable } from "rxjs";
 import { ARTURIResource, RDFTypesEnum } from "../../models/ARTResources";
 import { CODAConverter, NodeConversion, SimpleHeader } from "../../models/Sheet2RDF";
 import { CODAServices } from "../../services/codaServices";
@@ -10,12 +11,19 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 
 export class NodeCreationModalData extends BSModalContext {
     /**
+     * @param header header for which it is creating the node
      * @param rangeType range type of the property chosen in the graph application. Useful to determine the compliant converters
      * @param language the language chosen in the graph application.
      * @param datatype datatype chosen in the graph application. Useful to determine the compliant converter
-     * @param node if provided, the modal works in edit mode on the given (existing) node
+     * @param headerNodes nodes already defined for the header. Useful to check if the current header has already a node with the same id
      */
-    constructor(public header: SimpleHeader, public rangeType: RangeType, public language: string, public datatype: ARTURIResource, public node?: NodeConversion) {
+    constructor(
+        public header: SimpleHeader,
+        public rangeType: RangeType,
+        public language: string,
+        public datatype: ARTURIResource, 
+        public headerNodes: NodeConversion[]
+    ) {
         super();
     }
 }
@@ -37,7 +45,8 @@ export class NodeCreationModal implements ModalComponent<NodeCreationModalData> 
     }
 
     ngOnInit() {
-        this.nodeId = this.context.header.pearlFeature + "_node";
+        document.getElementById("toFocus").focus();
+        // this.nodeId = this.context.header.pearlFeature + "_node";
     }
 
     private onConverterUpdate(updateStatus: { converter: CODAConverter, memoize: boolean }) {
@@ -50,6 +59,7 @@ export class NodeCreationModal implements ModalComponent<NodeCreationModalData> 
      * - node id is provided (and it is valid)
      * - converter is selected
      * - all the parameters (if any) of the converter signature are provided
+     * - the further info of the default literal converter (if selected) are provided
      */
     private isOkEnabled() {
         let isSignatureOk: boolean = true;
@@ -92,21 +102,27 @@ export class NodeCreationModal implements ModalComponent<NodeCreationModalData> 
         );
     }
 
-    ok() {
-        if (this.context.node == null) { //creation mode
-            this.s2rdfService.isNodeIdAlreadyUsed(this.nodeId).subscribe(
-                used => {
-                    if (used) {
-                        this.basicModals.alert("Node creation", "Id '" + this.nodeId + "' already used for another node", "warning");
-                        return;
-                    }
-                    let newNode: NodeConversion = { nodeId: this.nodeId, converter: this.selectedConverter, memoize: this.memoize }
-                    this.dialog.close(newNode);
-                }
-            );
-        } else { //edit mode
-
+    private isNodeAlreadyInUse(nodeId: string): Observable<boolean> {
+        for (let n of this.context.headerNodes) {
+            if (n.nodeId == nodeId) {
+                return Observable.of(true);
+            }
         }
+        //if this code is reached, the id is not used locally in the header => check globally invoking the server
+        return this.s2rdfService.isNodeIdAlreadyUsed(nodeId);
+    }
+
+    ok() {
+        this.isNodeAlreadyInUse(this.nodeId).subscribe(
+            used => {
+                if (used) {
+                    this.basicModals.alert("Node creation", "Id '" + this.nodeId + "' is already used for another node", "warning");
+                    return;
+                }
+                let newNode: NodeConversion = { nodeId: this.nodeId, converter: this.selectedConverter, memoize: this.memoize }
+                this.dialog.close(newNode);
+            }
+        );
     }
 
     cancel() {

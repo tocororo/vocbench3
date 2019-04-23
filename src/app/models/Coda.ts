@@ -42,6 +42,22 @@ export class ConverterContractDescription {
     public getSignatures(): SignatureDescription[] {
         return this.signatures;
     }
+    /**
+     * Returns the serialization of the converter with the given signature
+     */
+    public getSerialization(signature: SignatureDescription) {
+        let serialization: string = "";
+        serialization += signature.getReturnType().endsWith(".Literal") ? "literal" : "uri";
+        if (this.uri != ConverterContractDescription.NAMESPACE + "default") { //if not the default converter, add the params
+            serialization += "(";
+            serialization += this.getQName();
+            serialization += "(";
+            serialization += signature.getParameters().map(p => p.getName()).join(", ");
+            serialization += ")";
+            serialization += ")";
+        }
+        return serialization;
+    }
 }
 
 export class ConverterUtils {

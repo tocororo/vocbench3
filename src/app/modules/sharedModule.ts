@@ -8,6 +8,7 @@ import { SanitizerDirective } from "../widget/directives/sanitizerDirective";
 import { ExtensionConfiguratorComponent } from '../widget/extensionConfigurator/extensionConfiguratorComponent';
 import { InputEditableComponent } from '../widget/inputEditable/inputEditableComponent';
 import { LanguageItemComponent } from '../widget/languageItem/languageItemComponent';
+import { DatatypePickerComponent } from '../widget/pickers/datatypePicker/datatypePickerComponent';
 import { FilePickerComponent } from '../widget/pickers/filePicker/filePickerComponent';
 import { LangPickerComponent } from '../widget/pickers/langPicker/langPickerComponent';
 import { LiteralPickerComponent } from '../widget/pickers/valuePicker/literalPickerComponent';
@@ -24,14 +25,14 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
 @NgModule({
     imports: [CommonModule, FormsModule],
     declarations: [
-        FilePickerComponent, RdfResourceComponent, LangPickerComponent, SanitizerDirective,
+        FilePickerComponent, RdfResourceComponent, LangPickerComponent, DatatypePickerComponent, SanitizerDirective,
         CodemirrorComponent, YasguiComponent, InputEditableComponent, ResourceListComponent,
         TypedLiteralInputComponent, LanguageItemComponent,
         SettingsRendererComponent, SettingsRendererPanelComponent, SettingSetRendererComponent, SettingMapRendererComponent,
         QueryParameterForm, ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent, ValuePickerComponent,
     ],
     exports: [
-        FilePickerComponent, RdfResourceComponent, SanitizerDirective, LangPickerComponent,
+        FilePickerComponent, RdfResourceComponent, SanitizerDirective, LangPickerComponent, DatatypePickerComponent,
         CodemirrorComponent, YasguiComponent, InputEditableComponent, ResourceListComponent,
         TypedLiteralInputComponent, LanguageItemComponent, 
         SettingsRendererComponent, SettingsRendererPanelComponent, SettingSetRendererComponent, SettingMapRendererComponent,

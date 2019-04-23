@@ -1,12 +1,13 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent, OverlayConfig } from "ngx-modialog";
 import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { GraphApplication, NodeConversion, SimpleHeader } from "../../models/Sheet2RDF";
+import { AdvancedGraphApplication, GraphApplication, NodeConversion, SimpleGraphApplication, SimpleHeader } from "../../models/Sheet2RDF";
 import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBContext } from "../../utils/VBContext";
-import { SimpleGraphApplicationModal, SimpleGraphApplicationModalData } from "./simpleGraphApplicationModal";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { AdvancedGraphApplicationModal, AdvancedGraphApplicationModalData } from "./advancedGraphApplicationModal";
+import { SimpleGraphApplicationModal, SimpleGraphApplicationModalData } from "./simpleGraphApplicationModal";
 
 export class HeaderEditorModalData extends BSModalContext {
     /**
@@ -76,12 +77,9 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     private removeNode() {
         let used: boolean = false;
         //check if the node is used by some graph application
-        this.header.graph.forEach(g => {
-            if (g.nodeId == this.selectedNode.nodeId) {
-                used = true;
-            }
-        });
-        if (used) { //cannot delete a node used by a graph application
+        let referenced: boolean = SimpleHeader.isNodeReferenced(this.header, this.selectedNode);
+        //TODO allow to forcing the deletion a referenced node or not allow at all? 
+        if (referenced) { //cannot delete a node used by a graph application
             this.basicModals.confirm("Delete node", "Warning: the node '" + this.selectedNode.nodeId + "' is used in one or more graph application. " +
                 "This operation will affect also the graph application. Do you want to continue?", "warning").then(
                 confirm => {
@@ -101,18 +99,6 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         );
     }
 
-    private editNode() {
-        // var modalData = new NodeCreationModalData()
-        // const builder = new BSModalContextBuilder<SimpleGraphApplicationModalData>(
-        //     modalData, undefined, HeaderEditorModalData
-        // );
-        // let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        // this.modal.open(SimpleGraphApplicationModal, overlayConfig).result.then(
-        //     () => {},
-        //     () => {}
-        // );
-    }
-
     private selectGraph(graph: GraphApplication) {
         if (this.header.ignore) return;
 
@@ -123,24 +109,42 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         }
     }
 
+    private isSimpleGraphApplication(graph: GraphApplication): boolean {
+        return graph instanceof SimpleGraphApplication;
+    }
+
     private editGraph() {
-        var modalData = new SimpleGraphApplicationModalData(this.header, this.selectedGraph);
-        const builder = new BSModalContextBuilder<SimpleGraphApplicationModalData>(
-            modalData, undefined, HeaderEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(SimpleGraphApplicationModal, overlayConfig).result.then(
-            () => {
-                this.initHeader();
-            },
-            () => {}
-        );
+        if (this.selectedGraph instanceof SimpleGraphApplication) {
+            let modalData = new SimpleGraphApplicationModalData(this.header, <SimpleGraphApplication>this.selectedGraph);
+            const builder = new BSModalContextBuilder<SimpleGraphApplicationModalData>(
+                modalData, undefined, HeaderEditorModalData
+            );
+            let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+            this.modal.open(SimpleGraphApplicationModal, overlayConfig).result.then(
+                () => {
+                    this.initHeader();
+                },
+                () => {}
+            );
+        } else { //AdvancedGraphApplication
+            let modalData = new AdvancedGraphApplicationModalData(this.header, <AdvancedGraphApplication>this.selectedGraph);
+            const builder = new BSModalContextBuilder<AdvancedGraphApplicationModalData>(
+                modalData, undefined, AdvancedGraphApplicationModalData
+            );
+            let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+            this.modal.open(AdvancedGraphApplicationModal, overlayConfig).result.then(
+                () => {
+                    this.initHeader();
+                },
+                () => {}
+            );
+        }
     }
 
     private addSimpleGraphApplication() {
         var modalData = new SimpleGraphApplicationModalData(this.header);
         const builder = new BSModalContextBuilder<SimpleGraphApplicationModalData>(
-            modalData, undefined, HeaderEditorModalData
+            modalData, undefined, SimpleGraphApplicationModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         this.modal.open(SimpleGraphApplicationModal, overlayConfig).result.then(
@@ -152,7 +156,17 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     }
 
     private addAdvancedGraphApplication() {
-
+        var modalData = new AdvancedGraphApplicationModalData(this.header);
+        const builder = new BSModalContextBuilder<AdvancedGraphApplicationModalData>(
+            modalData, undefined, AdvancedGraphApplicationModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        this.modal.open(AdvancedGraphApplicationModal, overlayConfig).result.then(
+            () => {
+                this.initHeader();
+            },
+            () => {}
+        );
     }
 
     private removeGraph() {

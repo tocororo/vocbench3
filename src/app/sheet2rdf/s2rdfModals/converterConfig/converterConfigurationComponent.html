@@ -4,8 +4,6 @@
     </div>
     <div class="panel-body scrollableContainer">
 
-        <ng-content></ng-content>
-        
         <table class="table table-condensed table-hoverable" style="margin-top: 4px;">
             <colgroup>
                 <col style="width: 1%;">
@@ -49,42 +47,67 @@
                         </div>
                     </div>
                 </div>
-                <div *ngIf="signatureParams?.length > 0" class="subPanel" style="flex: 3; margin-left: 4px;">
-                    <div class="subPanel-heading">
-                        <label>Params</label>
+                <!-- default literal converter, datatype and language choice -->
+                <div *ngIf="showDefaultLiteralConverterOpt(); else otherConvBlock" class="panel panel-default" style="flex: 3; margin-left: 4px;">
+                    <div class="panel-body hbox" style="align-items: center;">
+                        <select class="form-control input-sm" style="max-width: 150px; margin-right: 4px;" [(ngModel)]="selectedLiteralAspect"
+                            [disabled]="inputLanguage || inputDatatype">
+                            <option *ngFor="let o of literalAspectOpts">{{o}}</option>
+                        </select>
+                        <ng-container [ngSwitch]="selectedLiteralAspect">
+                            <lang-picker *ngSwitchCase="languageLiteralAspect" style="flex: 1;" [(ngModel)]="language"
+                                (ngModelChange)="onSignatureParamChange()" [readonly]="inputLanguage">
+                            </lang-picker>
+                            <datatype-picker *ngSwitchCase="datatypeLiteralAspect" style="flex: 1;" [(ngModel)]="datatype"
+                                (ngModelChange)="onSignatureParamChange()" [readonly]="inputDatatype">
+                            </datatype-picker>
+                            <input *ngSwitchDefault class="form-control input-sm" readonly>
+                        </ng-container>
                     </div>
-                    <div class="subPanel-body">
-                        <table class="table table-condensed table-borderless">
-                            <colgroup>
-                                <col style="width: 1%;">
-                                <col>
-                            </colgroup>
-                            <tbody>
-                                <tr *ngFor="let p of signatureParams">
-                                    <td nowrap><label>{{p.name}}</label></td>
-                                    <td>
-                                        <ng-container *ngIf="p.type == 'java.lang.String'">
-                                            <div *ngIf="p.name == 'xRole'; else genericStringParamElseBlock" class="hbox">
-                                                <select [(ngModel)]="p.value" class="form-control input-sm" (ngModelChange)="onSignatureParamChange()">
-                                                    <option *ngFor="let r of xRoles">{{r}}</option>
-                                                </select>
-                                            </div>
-                                            <ng-template #genericStringParamElseBlock>
-                                                <input class="form-control input-sm" [(ngModel)]="p.value" (ngModelChange)="onSignatureParamChange()">
-                                            </ng-template>
-                                        </ng-container>
-                                        <map-param-editor *ngIf="p.type == 'java.util.Map<java.lang.String, org.eclipse.rdf4j.model.Value>'" 
-                                            [value]="p.value" (valueChanged)="onMapParamChange($event, p)">
-                                        </map-param-editor>
-                                        <list-param-editor *ngIf="p.type == 'org.eclipse.rdf4j.model.Value[]'" 
-                                            [value]="p.value" (valueChanged)="onListParamChange($event, p)">
-                                        </list-param-editor>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+
                 </div>
+                <!-- other converters -->
+                <ng-template #otherConvBlock>
+                    <div *ngIf="signatureParams?.length > 0" class="subPanel" style="flex: 3; margin-left: 4px;">
+                        <div class="subPanel-heading">
+                            <label>Params</label>
+                        </div>
+                        <div class="subPanel-body">
+                            <table class="table table-condensed table-borderless">
+                                <colgroup>
+                                    <col style="width: 1%;">
+                                    <col>
+                                </colgroup>
+                                <tbody>
+                                    <tr *ngFor="let p of signatureParams">
+                                        <td nowrap>
+                                            <label>{{p.name}}</label>
+                                            <span class="glyphicon glyphicon-info-sign" [title]="getParameterTitle(p)"></span>
+                                        </td>
+                                        <td>
+                                            <ng-container *ngIf="p.type == 'java.lang.String'">
+                                                <div *ngIf="p.name == 'xRole'; else genericStringParamElseBlock" class="hbox">
+                                                    <select [(ngModel)]="p.value" class="form-control input-sm" (ngModelChange)="onSignatureParamChange()">
+                                                        <option *ngFor="let r of xRoles">{{r}}</option>
+                                                    </select>
+                                                </div>
+                                                <ng-template #genericStringParamElseBlock>
+                                                    <input class="form-control input-sm" [(ngModel)]="p.value" (ngModelChange)="onSignatureParamChange()">
+                                                </ng-template>
+                                            </ng-container>
+                                            <map-param-editor *ngIf="p.type == 'java.util.Map<java.lang.String, org.eclipse.rdf4j.model.Value>'" 
+                                                [value]="p.value" (valueChanged)="onMapParamChange($event, p)">
+                                            </map-param-editor>
+                                            <list-param-editor *ngIf="p.type == 'org.eclipse.rdf4j.model.Value[]'" 
+                                                [value]="p.value" (valueChanged)="onListParamChange($event, p)">
+                                            </list-param-editor>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </ng-template>
             </div>
         </div>
 

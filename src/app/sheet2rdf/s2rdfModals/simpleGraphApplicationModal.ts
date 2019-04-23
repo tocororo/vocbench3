@@ -4,22 +4,21 @@ import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/boot
 import { Observable } from "rxjs";
 import { ARTURIResource } from "../../models/ARTResources";
 import { ConverterContractDescription, RDFCapabilityType } from "../../models/Coda";
-import { GraphApplication, NodeConversion, SimpleHeader } from "../../models/Sheet2RDF";
+import { NodeConversion, SimpleGraphApplication, SimpleHeader } from "../../models/Sheet2RDF";
 import { RDFS } from "../../models/Vocabulary";
-import { DatatypesServices } from "../../services/datatypesServices";
 import { PropertyServices, RangeType } from "../../services/propertyServices";
 import { ResourcesServices } from "../../services/resourcesServices";
-import { ResourceUtils, SortAttribute } from "../../utils/ResourceUtils";
+import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
+import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBContext } from "../../utils/VBContext";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { NodeCreationModal, NodeCreationModalData } from "./nodeCreationModal";
-import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 
 export class SimpleGraphApplicationModalData extends BSModalContext {
     /**
      * @param graphApplication optional graph application to edit. If not provided the modal create a new graph application
      */
-    constructor(public header: SimpleHeader, public graphApplication?: GraphApplication) {
+    constructor(public header: SimpleHeader, public graphApplication?: SimpleGraphApplication) {
         super();
     }
 }
@@ -59,7 +58,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     private language: string;
     //when rangeType is 'typedLiteral', user can select the datatype to assert
     private datatype: ARTURIResource;
-    private datatypeList: ARTURIResource[] = [];
+    private allowedDatatypes: ARTURIResource[];
 
     /**
      * Node
@@ -68,7 +67,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     private selectedNode: NodeConversion;
 
     constructor(public dialog: DialogRef<SimpleGraphApplicationModalData>, private s2rdfService: Sheet2RDFServices,
-        private propService: PropertyServices, private datatypeService: DatatypesServices, private resourceService: ResourcesServices,
+        private propService: PropertyServices,  private resourceService: ResourcesServices,
         private browsingModals: BrowsingModalServices, private modal: Modal) {
         this.context = dialog.context;
     }
@@ -86,7 +85,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
             if (this.availableNodes[0].converter.language != null) {
                 this.language = this.availableNodes[0].converter.language;
             } else if (this.availableNodes[0].converter.datatype != null) {
-                this.selectDatatype(new ARTURIResource(this.availableNodes[0].converter.datatype));
+                this.datatype = new ARTURIResource(this.availableNodes[0].converter.datatype);
             }
         }
 
@@ -130,7 +129,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
         this.selectedRangeType = null;
         this.assertableTypes = [];
         this.assertedType = null;
-        this.datatypeList = [];
+        this.allowedDatatypes = [];
         //update range type, class, ...
         this.propService.getRange(this.property).subscribe(
             range => {
@@ -140,9 +139,6 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                             this.selectedRangeType = t;
                         }
                     });
-                    if (this.selectedRangeType != null && this.selectedRangeType.type == RangeType.typedLiteral) {
-                        this.initDatatypes().subscribe();
-                    }
                 }
                 this.rangeTypeChangeable = range.ranges.type == RangeType.undetermined;
                 //if a collection of admitted range classes is provided
@@ -159,13 +155,12 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                     }
                     //selected range type typedLiteral => rangeCollection contains the admitted datatype, so limit it
                     if (this.selectedRangeType != null && this.selectedRangeType.type == RangeType.typedLiteral) {
-                        this.limitDatatypes(rangeColl);
+                        this.allowedDatatypes = rangeColl;
                     } else {
                         this.annotateResources(rangeColl).subscribe(
                             () => {
                                 this.rangeCollection.push(...rangeColl);
                                 this.assertableTypes.push(...rangeColl);
-    
                                 //if the modal is editing a graph application, try to restore the asserted type
                                 if (this.context.graphApplication != null) {
                                     let type = this.context.graphApplication.type;
@@ -199,7 +194,8 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                     if (this.selectedNode.converter != null) {
                         if (this.selectedNode.converter.datatype != null) {
                             this.forceRangeType(RangeType.typedLiteral);
-                            this.selectDatatype(new ARTURIResource(this.selectedNode.converter.datatype));
+                            this.datatype = new ARTURIResource(this.selectedNode.converter.datatype);
+                            // this.selectDatatype(new ARTURIResource(this.selectedNode.converter.datatype));
                         } else if (this.selectedNode.converter.language != null) {
                             this.forceRangeType(RangeType.plainLiteral);
                             this.language = this.selectedNode.converter.language;
@@ -209,12 +205,6 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                 }
             }
         )
-    }
-
-    private onRangeTypeChange() {
-        if (this.selectedRangeType.type == RangeType.typedLiteral) {
-            this.initDatatypes().subscribe();
-        }
     }
 
     private forceRangeType(rngType: RangeType) {
@@ -240,47 +230,6 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
         );
     }
 
-    /**
-     * Select the given datatype
-     * @param datatype 
-     */
-    private selectDatatype(datatype: ARTURIResource) {
-        this.initDatatypes().subscribe(
-            () => {
-                this.datatypeList.forEach(dt => {
-                    if (dt.getURI() == datatype.getURI()) {
-                        this.datatype = dt;
-                    }
-                });
-            }
-        )
-    }
-    /**
-     * Filter the datatype list to the only allowed values
-     * @param allowedDatatypes 
-     */
-    private limitDatatypes(allowedDatatypes: ARTURIResource[]) {
-        if (allowedDatatypes.length > 0) {
-            this.initDatatypes().subscribe(
-                () => {
-                    this.datatypeList = this.datatypeList.filter(dt => ResourceUtils.containsNode(allowedDatatypes, dt));
-                }
-            )
-        }
-    }
-
-    private initDatatypes(): Observable<any> {
-        if (this.datatypeList.length == 0) { //init datatypes if not yet initialized (empty list)
-            return this.datatypeService.getDatatypes().map(
-                datatypes => {
-                    ResourceUtils.sortResources(datatypes, SortAttribute.show);
-                    this.datatypeList = datatypes;
-                }
-            );
-        } else {
-            return Observable.of();
-        }
-    }
 
     /**
      * The selection/creation of a node, is enabled only if the property is set and, if the rangeType is typedLiteral, a datatype is selected.
@@ -321,7 +270,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     private addNode() {
         let dt: ARTURIResource = (this.selectedRangeType.type == RangeType.typedLiteral) ? this.datatype : null;
         let lang: string = (this.selectedRangeType.type == RangeType.plainLiteral) ? this.language : null;
-        var modalData = new NodeCreationModalData(this.context.header, this.selectedRangeType.type, lang, dt);
+        var modalData = new NodeCreationModalData(this.context.header, this.selectedRangeType.type, lang, dt, this.availableNodes);
         const builder = new BSModalContextBuilder<NodeCreationModalData>(
             modalData, undefined, NodeCreationModalData
         );
@@ -417,19 +366,17 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
         if (this.selectedRangeType.type == RangeType.resource && this.assertType) {
             type = this.assertedType;
         }
+        let graphAppFn: Observable<any>;
         if (this.context.graphApplication == null) { //create mode
-            this.s2rdfService.addGraphApplicationToHeader(this.context.header.id, this.property, this.selectedNode.nodeId, type).subscribe(
-                resp => {
-                    this.dialog.close();
-                }
-            )
+            graphAppFn = this.s2rdfService.addSimpleGraphApplicationToHeader(this.context.header.id, this.property, this.selectedNode.nodeId, type);
         } else { //edit mode
-            this.s2rdfService.updateGraphApplication(this.context.header.id, this.context.graphApplication.id, this.property, this.selectedNode.nodeId, type).subscribe(
-                resp => {
-                    this.dialog.close();
-                }
-            )
+            graphAppFn = this.s2rdfService.updateSimpleGraphApplication(this.context.header.id, this.context.graphApplication.id, this.property, this.selectedNode.nodeId, type);
         }
+        graphAppFn.subscribe(
+            resp => {
+                this.dialog.close();
+            }
+        );
     }
 
     cancel() {
