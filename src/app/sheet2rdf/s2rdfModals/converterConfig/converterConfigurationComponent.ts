@@ -77,7 +77,7 @@ export class ConverterConfigurationComponent {
                 if (this.converter != null) {
                     //restore the selected converter
                     this.availableConverters.forEach(c => {
-                        if (c.getURI() == this.converter.contract) {
+                        if (c.getURI() == this.converter.contractUri) {
                             this.selectConverter(c);
                         }
                     });
@@ -224,10 +224,10 @@ export class ConverterConfigurationComponent {
             }
         }
         let c: CODAConverter = {
-            capability: capability,
-            contract: this.selectedConverter.getURI(),
+            type: capability,
+            contractUri: this.selectedConverter.getURI(),
             language: lang,
-            datatype: datatypeUri,
+            datatypeUri: datatypeUri,
             params: params
         }
         let status: UpdateStatus = { converter: c, memoize: this.isConverterRandom() ? this.memoize : false };

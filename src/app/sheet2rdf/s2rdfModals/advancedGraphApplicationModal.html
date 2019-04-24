@@ -1,5 +1,19 @@
 <div class="modal-header">
-    <h3 class="modal-title">Advanced Graph Application</h3>
+
+    <div class="hbox" style="align-items: center">
+        <h3 class="modal-title" style="flex: 1">Advanced Graph Application</h3>
+        <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" title="Save advanced graph application" (click)="saveGraph()">
+                    <span class="glyphicon glyphicon-floppy-save"></span>
+                </button>
+                <button class="btn btn-default" title="Load advanced graph application" (click)="loadGraph()">
+                    <span class="glyphicon glyphicon-floppy-open"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
 </div>
 <div class="modal-body vbox scrollableContainer">
     <div class="panel panel-default" style="margin-top: 4px; min-height: 100px">
@@ -29,27 +43,27 @@
                 <tbody>
                     <tr *ngFor="let n of alreadyDefinedNodes" (click)="selectNode(n)" [ngClass]="{ active : n == selectedNode }">
                         <td class="greyText">{{n.nodeId}}</td>
-                        <td class="greyText">{{n.converter?.capability}}</td>
-                        <td class="greyText">{{n.converter?.contract}}</td>
+                        <td class="greyText">{{n.converter?.type}}</td>
+                        <td class="greyText">{{n.converter?.contractUri}}</td>
                         <td class="greyText">
                             <span *ngIf="n.converter?.language; else dtBlock">
                                 <label style="white-space: pre">Lang: </label>{{n.converter.language}}
                             </span>
-                            <span #dtBlock *ngIf="n.converter?.datatype">
-                                <label style="white-space: pre">Datatype: </label>{{getDatatypeShow(n.converter.datatype)}}
+                            <span #dtBlock *ngIf="n.converter?.datatypeUri">
+                                <label style="white-space: pre">Datatype: </label>{{getDatatypeShow(n.converter.datatypeUri)}}
                             </span>
                         </td>
                     </tr>
                     <tr *ngFor="let n of newDefinedNodes" (click)="selectNode(n)" [ngClass]="{ active : n == selectedNode }">
                         <td>{{n.nodeId}}</td>
-                        <td>{{n.converter?.capability}}</td>
-                        <td>{{n.converter?.contract}}</td>
+                        <td>{{n.converter?.type}}</td>
+                        <td>{{n.converter?.contractUri}}</td>
                         <td>
                             <span *ngIf="n.converter?.language; else dtBlock">
                                 <label style="white-space: pre">Lang: </label>{{n.converter.language}}
                             </span>
-                            <span #dtBlock *ngIf="n.converter?.datatype">
-                                <label style="white-space: pre">Datatype: </label>{{getDatatypeShow(n.converter.datatype)}}
+                            <span #dtBlock *ngIf="n.converter?.datatypeUri">
+                                <label style="white-space: pre">Datatype: </label>{{getDatatypeShow(n.converter.datatypeUri)}}
                             </span>
                         </td>
                     </tr>
@@ -87,7 +101,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let m of prefixMappings" (click)="selectMapping(m)" [ngClass]="{active: m == selectedMapping, greyText: !m.explicit}">
+                            <tr *ngFor="let m of globalPrefixMappings" (click)="selectMapping(m)" [ngClass]="{active: m == selectedMapping, greyText: !m.explicit}">
                                 <td>{{m.prefix}}</td>
                                 <td>{{m.namespace}}</td>
                             </tr>

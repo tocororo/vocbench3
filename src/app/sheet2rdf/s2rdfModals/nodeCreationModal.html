@@ -1,7 +1,7 @@
 <div class="modal-header">
     <h3 class="modal-title">Node creation</h3>
 </div>
-<div class="modal-body vbox">
+<div class="modal-body vbox scrollableContainer">
 
     <table class="table table-condensed table-borderless">
         <colgroup>
@@ -16,7 +16,7 @@
         </tbody>
     </table>
 
-    <converter-config [rangeType]="context.rangeType" [language]="context.language" [datatype]="context.datatype" style="margin-top: 4px;" (update)="onConverterUpdate($event)">
+    <converter-config [rangeType]="context.rangeType" [language]="context.language" [datatype]="context.datatypeUri" style="margin-top: 4px;" (update)="onConverterUpdate($event)">
     </converter-config>
 
 </div>

@@ -75,11 +75,12 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "addGraphApplicationToHeader", params);
     }
 
-    addAdvancedGraphApplicationToHeader(headerId: string, graphPattern: string, nodeIds: string[]) {
+    addAdvancedGraphApplicationToHeader(headerId: string, graphPattern: string, nodeIds: string[], prefixMapping: {[key: string]: string}) {
         let params: any = {
             headerId: headerId,
             graphPattern: graphPattern,
-            nodeIds: nodeIds
+            nodeIds: nodeIds,
+            prefixMapping: JSON.stringify(prefixMapping)
         };
         return this.httpMgr.doPost(this.serviceName, "addAdvancedGraphApplicationToHeader", params);
     }
@@ -95,12 +96,13 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "updateSimpleGraphApplication", params);
     }
     
-    updateAdvancedGraphApplication(headerId: string, graphId: string, graphPattern: string, nodeIds: string[]) {
+    updateAdvancedGraphApplication(headerId: string, graphId: string, graphPattern: string, nodeIds: string[], prefixMapping: {[key: string]: string}) {
         let params: any = {
             headerId: headerId,
             graphId: graphId,
             graphPattern: graphPattern,
-            nodeIds: nodeIds
+            nodeIds: nodeIds,
+            prefixMapping: JSON.stringify(prefixMapping)
         };
         return this.httpMgr.doPost(this.serviceName, "updateAdvancedGraphApplication", params);
     }
@@ -121,14 +123,14 @@ export class Sheet2RDFServices {
     }
 
     addNodeToHeader(headerId: string, nodeId: string, converterCapability: RDFCapabilityType, 
-        converterContract: string, converterDatatype?: ARTURIResource, converterLanguage?: string, 
+        converterContract: string, converterDatatypeUri?: string, converterLanguage?: string, 
         converterParams?: {[key: string]: any}, memoize?: boolean) {
         let params: any = {
             headerId: headerId,
             nodeId: nodeId,
             converterCapability: converterCapability,
             converterContract: converterContract,
-            converterDatatype: converterDatatype,
+            converterDatatypeUri: converterDatatypeUri,
             converterLanguage: converterLanguage,
             converterParams: (converterParams != null) ? this.getMapSerialization(converterParams) : null,
             memoize: memoize

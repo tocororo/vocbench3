@@ -23,7 +23,7 @@ export class SimpleHeader {
                     used = true;
                 }
             } else if (g instanceof AdvancedGraphApplication) {
-                if (g.nodeIds.indexOf(node.nodeId)) {
+                if (g.nodeIds.indexOf(node.nodeId) != -1) {
                     used = true;
                 }
             }
@@ -59,11 +59,11 @@ export class AdvancedGraphApplication extends GraphApplication {
 }
 
 export class CODAConverter {
-    public capability: RDFCapabilityType;
-    public contract: string;
-    public datatype: string;
+    public type: RDFCapabilityType;
+    public contractUri: string;
+    public datatypeUri: string;
     public language: string;
-    public params: { [key: string]: string };
+    public params: { [key: string]: any };
 }
 
 export class TableContent {

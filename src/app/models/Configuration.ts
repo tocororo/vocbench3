@@ -1,6 +1,7 @@
 import { Settings, SettingsProp, Scope } from "./Plugins";
 
 export class ConfigurationComponents {
+    static ADVANCED_GRAPH_APPLICATION_STORE = "it.uniroma2.art.semanticturkey.config.sheet2rdf.AdvancedGraphApplicationStore";
     static EXPORTER: string = "it.uniroma2.art.semanticturkey.config.exporter.Exporter";
     static IMPORTER: string = "it.uniroma2.art.semanticturkey.config.importer.Importer";
     static SPARQL_PARAMETERIZATION_STORE: string = "it.uniroma2.art.semanticturkey.config.sparql.SPARQLParameterizationStore";
@@ -22,15 +23,6 @@ export class Reference {
     }
 
     public getReferenceScope(): Scope {
-        // if (this.relativeReference.startsWith("sys:")) {
-        //     return Scope.SYSTEM;
-        // } else if (this.relativeReference.startsWith("proj:")) {
-        //     return Scope.PROJECT;
-        // } else if (this.relativeReference.startsWith("usr:")) {
-        //     return Scope.USER;
-        // } else if (this.relativeReference.startsWith("pu:")) {
-        //     return Scope.PROJECT_USER;
-        // }
         return Reference.getRelativeReferenceScope(this.relativeReference);
     }
 

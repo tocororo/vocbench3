@@ -60,14 +60,14 @@
                     <tr *ngFor="let n of header?.nodes" (click)="selectNode(n)" [ngStyle]="{ cursor: header?.ignore ? 'not-allowed' : 'pointer' }"
                         [ngClass]="{ active : n == selectedNode }">
                         <td [ngClass]="{ greyText : header?.ignore }">{{n.nodeId}}</td>
-                        <td [ngClass]="{ greyText : header?.ignore }">{{n.converter?.capability}}</td>
-                        <td [ngClass]="{ greyText : header?.ignore }">{{n.converter?.contract}}</td>
+                        <td [ngClass]="{ greyText : header?.ignore }">{{n.converter?.type}}</td>
+                        <td [ngClass]="{ greyText : header?.ignore }">{{n.converter?.contractUri}}</td>
                         <td [ngClass]="{ greyText : header?.ignore }">
                             <span *ngIf="n.converter?.language; else dtBlock">
                                 <label style="white-space: pre">Lang: </label>{{n.converter.language}}
                             </span>
-                            <span #dtBlock *ngIf="n.converter?.datatype">
-                                <label style="white-space: pre">Datatype: </label>{{getDatatypeShow(n.converter.datatype)}}
+                            <span #dtBlock *ngIf="n.converter?.datatypeUri">
+                                <label style="white-space: pre">Datatype: </label>{{getDatatypeShow(n.converter.datatypeUri)}}
                             </span>
                         </td>
                     </tr>

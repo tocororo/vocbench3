@@ -97,7 +97,6 @@ export class MultiSubjectEnrichmentHelper {
                         handlingPartition = entry.partition;
                     }
                 });
-                console.log("handling partition", handlingPartition);
                 //handle the property according the partition 
                 switch (handlingPartition) {
                     case ResViewPartition.broaders:

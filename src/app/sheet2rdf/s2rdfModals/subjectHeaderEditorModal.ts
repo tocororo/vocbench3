@@ -118,7 +118,7 @@ export class SubjectHeaderEditorModal implements ModalComponent<SubjectHeaderEdi
     }
 
     ok() {
-        this.s2rdfService.updateSubjectHeader(this.selectedHeader.id, this.selectedConverter.contract, this.selectedConverter.params,
+        this.s2rdfService.updateSubjectHeader(this.selectedHeader.id, this.selectedConverter.contractUri, this.selectedConverter.params,
             this.type, this.memoize).subscribe(
             resp => {
                 this.dialog.close();
