@@ -35,60 +35,22 @@ export class Sheet2RDFServices {
         return this.httpMgr.doGet(this.serviceName, "getHeaders", params).flatMap(
             stResp => {
                 let subject: SubjectHeader = Sheet2RdfDeserializer.parseSubjectHeader(stResp.subject);
-
                 let headers: SimpleHeader[] = [];
                 let headersJson = stResp.headers;
                 for (var i = 0; i < headersJson.length; i++) {
                     headers.push(Sheet2RdfDeserializer.parseSimpleHeader(headersJson[i]));
                 }
-
-                //collect the URI resources
-                let resources: ARTURIResource[] = [];
-                if (subject.graph.property != null) {
-                    resources.push(subject.graph.property);
-                }
+                //annotate the type of the subject mapping (do not annotate the properties of the headers, they will be annotated individually when editing the single header)
                 if (subject.graph.type != null) {
-                    resources.push(subject.graph.type);
-                }
-                headers.forEach(h => {
-                    h.graph.forEach(g => {
-                        if (g instanceof SimpleGraphApplication) {
-                            if (g.property != null) {
-                                resources.push(g.property);
-                            }
-                            if (g.type != null) {
-                                resources.push(g.type);
-                            }
+                    return this.resourcesService.getResourceDescription(subject.graph.type).map(
+                        annotatedRes => {
+                            subject.graph.type = <ARTURIResource>annotatedRes;
+                            return { subject: subject, headers: headers };
                         }
-                    });
-                });
-                //annotate 
-                return this.resourcesService.getResourcesInfo(resources).map(
-                    annotatedRes => {
-                        //replaces the unannotated resources in the headers with the annotated ones
-                        annotatedRes.forEach(ar => {
-                            if (subject.graph.property != null && subject.graph.property.equals(ar)) {
-                                subject.graph.property = ar;
-                            }
-                            if (subject.graph.type != null && subject.graph.type.equals(ar)) {
-                                subject.graph.type = ar;
-                            }
-                            headers.forEach(h => {
-                                h.graph.forEach(g => {
-                                    if (g instanceof SimpleGraphApplication) {
-                                        if (g.property != null && g.property.equals(ar)) {
-                                            g.property = ar;
-                                        }
-                                        if (g.type != null && g.type.equals(ar)) {
-                                            g.type = ar;
-                                        }
-                                    }
-                                });
-                            });
-                        });
-                        return { subject: subject, headers: headers };
-                    }
-                );
+                    );
+                } else {
+                    return Observable.of({ subject: subject, headers: headers });
+                }
             }
         );
     }
@@ -100,8 +62,7 @@ export class Sheet2RDFServices {
         return this.httpMgr.doGet(this.serviceName, "getHeaderFromId", params).flatMap(
             stResp => {
                 let header: SimpleHeader = Sheet2RdfDeserializer.parseSimpleHeader(stResp);
-
-                //collect the URI resources
+                //collect the URI resources: properties and types
                 let resources: ARTURIResource[] = [];
                 header.graph.forEach(g => {
                     if (g instanceof SimpleGraphApplication) {
@@ -114,23 +75,28 @@ export class Sheet2RDFServices {
                     }
                 });
                 //replace
-                return this.resourcesService.getResourcesInfo(resources).map(
-                    annotatedRes => {
-                        annotatedRes.forEach(ar => {
-                            header.graph.forEach(g => {
-                                if (g instanceof SimpleGraphApplication) {
-                                    if (g.property != null && g.property.equals(ar)) {
-                                        g.property = ar;
+                if (resources.length > 0) {
+                    return this.resourcesService.getResourcesInfo(resources).map(
+                        annotatedRes => {
+                            annotatedRes.forEach(ar => {
+                                header.graph.forEach(g => {
+                                    if (g instanceof SimpleGraphApplication) {
+                                        if (g.property != null && g.property.equals(ar)) {
+                                            g.property = ar;
+                                        }
+                                        if (g.type != null && g.type.equals(ar)) {
+                                            g.type = ar;
+                                        }
                                     }
-                                    if (g.type != null && g.type.equals(ar)) {
-                                        g.type = ar;
-                                    }
-                                }
+                                });
                             });
-                        });
-                        return header;
-                    }
-                );
+                            return header;
+                        }
+                    );
+                } else {
+                    return Observable.of(header);
+                }
+                
             }
         );
     }
@@ -240,6 +206,13 @@ export class Sheet2RDFServices {
         return this.httpMgr.downloadFile(this.serviceName, "exportStatus", params);
     }
 
+    importStatus(statusFile: File) {
+        var data: any = {
+            statusFile: statusFile
+        };
+        return this.httpMgr.uploadFile(this.serviceName, "importStatus", data);
+    }
+
     /**
      * Returns a preview (first maxRows rows) of the spreadsheet uploaded
      * @param maxRows 
@@ -248,11 +221,7 @@ export class Sheet2RDFServices {
         var params: any = {
             maxRows: maxRows,
         };
-        return this.httpMgr.doGet(this.serviceName, "getTablePreview", params).map(
-            stResp => {
-                return stResp;
-            }
-        );
+        return this.httpMgr.doGet(this.serviceName, "getTablePreview", params);
     }
 
     /**
@@ -260,11 +229,7 @@ export class Sheet2RDFServices {
      */
     getPearl(): Observable<string> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getPearl", params).map(
-            stResp => {
-                return stResp;
-            }
-        );
+        return this.httpMgr.doGet(this.serviceName, "getPearl", params);
     }
 
     /**
@@ -294,11 +259,7 @@ export class Sheet2RDFServices {
         var data: any = {
             file: file
         };
-        return this.httpMgr.uploadFile(this.serviceName, "uploadPearl", data).map(
-            stResp => {
-                return stResp;
-            }
-        );
+        return this.httpMgr.uploadFile(this.serviceName, "uploadPearl", data);
     }
 
     /**

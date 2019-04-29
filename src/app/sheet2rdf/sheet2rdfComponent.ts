@@ -259,8 +259,12 @@ export class Sheet2RdfComponent {
         );
     }
 
-    private loadStatus() {
-        //TODO
+    private loadStatus(statusFile: File) {
+        this.s2rdfService.importStatus(statusFile).subscribe(
+            () => {
+                // this.initHeaders();
+            }
+        )
     }
 
     /* ==========================================================
