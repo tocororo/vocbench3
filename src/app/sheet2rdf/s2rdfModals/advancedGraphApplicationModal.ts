@@ -246,7 +246,6 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                     newId => {
                         if (newId != n.nodeId) { //node is different, so it was already used and it is changed.
                             let oldId = n.nodeId;
-                            console.log("replace", oldId, "with", newId);
                             replacedNodeIds.push({ old: oldId, new: newId });
                             //replace node id in the conversion
                             n.nodeId = newId; //node ID

@@ -135,8 +135,8 @@ export class Sheet2RdfDeserializer {
             let g = new SimpleGraphApplication();
             g.id = gJson.id;
             g.nodeId = gJson.nodeId;
-            g.property = (gJson.property) ? Deserializer.createURI(gJson.property) : null;
-            g.type = (gJson.type) ? Deserializer.createURI(gJson.type) : null;
+            g.property = (gJson.property) ? new ARTURIResource(gJson.property) : null;
+            g.type = (gJson.type) ? new ARTURIResource(gJson.type) : null;
             return g;
         } else { //advanced graph application
             let g = new AdvancedGraphApplication();

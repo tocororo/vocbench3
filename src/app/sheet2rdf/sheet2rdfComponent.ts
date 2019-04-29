@@ -250,6 +250,19 @@ export class Sheet2RdfComponent {
         );
     }
 
+    private exportStatus() {
+        this.s2rdfService.exportStatus().subscribe(
+            blob => {
+                var exportLink = window.URL.createObjectURL(blob);
+                this.basicModals.downloadLink("Export Mapping Status", null, exportLink, "s2rdf_status.json");
+            }
+        );
+    }
+
+    private loadStatus() {
+        //TODO
+    }
+
     /* ==========================================================
      * PEARL EDITOR HANDLERS
      * ========================================================== */

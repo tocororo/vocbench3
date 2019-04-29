@@ -27,14 +27,26 @@
                         <label>Spreadsheet preview</label>
                         <span *ngIf="truncatedRows != totalRows" style="margin-left: 5px;">(Rows: {{truncatedRows}} out of {{totalRows}})</span>
                     </span>
+                    <div class="btn-toolbar" role="toolbar">
+                        <button class="btn btn-default btn-xs" (click)="editSubjectHeader()" title="Edit subject header" [disabled]="!tablePreview">
+                            Subject mapping
+                        </button>
+    
+                        <button class="btn btn-default btn-xs" (click)="generatePearl()" title="Generate Pearl" [disabled]="!tablePreview">
+                            <span class="glyphicon glyphicon-play"></span>
+                        </button>
 
-                    <button class="btn btn-default btn-xs" style="margin-right: 4px;" (click)="editSubjectHeader()" title="Edit subject header" [disabled]="!tablePreview">
-                        Subject mapping
-                    </button>
-
-                    <button class="btn btn-default btn-xs" (click)="generatePearl()" title="Generate Pearl" [disabled]="!tablePreview">
-                        <span class="glyphicon glyphicon-play"></span>
-                    </button>
+                        <div class="btn-group btn-group-xs">
+                            <!-- Workaround to show input file as simple <button> -->
+                            <input #inputStatusFile type="file" (change)="loadStatus(inputStatusFile.files[0])" accept=".json, text/plain" style="display:none">
+                            <button class="btn btn-default" style="margin-left: -1px" (click)="inputStatusFile.click()" title="Load Mapping Status" [disabled]="!tablePreview">
+                                <span class="glyphicon glyphicon-open"></span>
+                            </button>
+                            <button class="btn btn-default" (click)="exportStatus()" title="Export Mapping Status" [disabled]="!tablePreview">
+                                <span class="glyphicon glyphicon-save"></span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="subPanel-body vbox" style="padding: 0px; background: #eee;">
                     <table class="table scrollableContainer">
