@@ -1,4 +1,4 @@
-import { ARTNode, ARTURIResource, ResAttribute, ARTLiteral, ARTBNode, RDFResourceRolesEnum } from "../models/ARTResources";
+import { ARTNode, ARTURIResource, ResAttribute, ARTLiteral, ARTBNode, RDFResourceRolesEnum, ARTResource } from "../models/ARTResources";
 import { PrefixMapping } from "../models/Metadata";
 import { SemanticTurkey, RDF, OWL, SKOS, RDFS, OntoLex, Lime, SKOSXL } from "../models/Vocabulary";
 
@@ -235,10 +235,10 @@ export class ResourceUtils {
      * Returns true if the resource is in the staging (add or remove) graph, false otherwise
      * @param resource 
      */
-    static isResourceInStaging(resource: ARTNode): boolean {
+    static isResourceInStaging(resource: ARTResource): boolean {
         return this.isResourceInStagingAdd(resource) || this.isResourceInStagingRemove(resource);
     }
-    static isResourceInStagingAdd(resource: ARTNode): boolean {
+    static isResourceInStagingAdd(resource: ARTResource): boolean {
         let graphs: ARTURIResource[] = resource.getGraphs();
         for (var i = 0; i < graphs.length; i++) {
             if (graphs[i].getURI().startsWith(SemanticTurkey.stagingAddGraph)) {
@@ -247,7 +247,7 @@ export class ResourceUtils {
         }
         return false;
     }
-    static isResourceInStagingRemove(resource: ARTNode): boolean {
+    static isResourceInStagingRemove(resource: ARTResource): boolean {
         let graphs: ARTURIResource[] = resource.getGraphs();
         for (var i = 0; i < graphs.length; i++) {
             if (graphs[i].getURI().startsWith(SemanticTurkey.stagingRemoveGraph)) {

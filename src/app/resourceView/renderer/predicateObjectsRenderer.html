@@ -4,21 +4,21 @@
         <label style="flex: 1">{{predicateObjects.getPredicate().getShow()}}</label>
         <div class="btn-group">
             <button class="btn btn-xs btn-default predObjRenderPanelBtn" style="padding: 3px 6px;" (click)="addValue()"
-                [title]="getAddPropImgTitle(predicateObjects.getPredicate())" [disabled]="isAddDisabled()">
+                [title]="getAddPropImgTitle(predicateObjects.getPredicate())" [disabled]="addDisabled">
                 <span class="glyphicon glyphicon-plus" style="font-size: 9px;"></span>
             </button>
             <button class="btn btn-xs btn-default dropdown-toggle predObjRenderPanelBtn" style="padding: 3px;" data-toggle="dropdown"
-                [disabled]="isActionMenuDisabled()">
+                [disabled]="actionMenuDisabled">
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu pull-right">
-                <li *ngIf="isAddManuallyAllowed()" [ngClass]="{ disabled: isAddDisabled() }">
+                <li *ngIf="isAddManuallyAllowed()" [ngClass]="{ disabled: addDisabled }">
                     <a (click)="addManually()">Add value manually</a>
                 </li>
-                <li *ngIf="isAddExteranlResourceAllowed()" [ngClass]="{ disabled: isAddDisabled() }">
+                <li *ngIf="isAddExteranlResourceAllowed()" [ngClass]="{ disabled: addDisabled }">
                     <a (click)="addExternalValue()">Add value from another project</a>
                 </li>
-                <li [ngClass]="{ disabled: isDeleteDisabled() }"><a (click)="removeAllValues()">Delete all values</a></li>
+                <li [ngClass]="{ disabled: deleteDisabled }"><a (click)="removeAllValues()">Delete all values</a></li>
             </ul>
         </div>
 
@@ -29,7 +29,7 @@
         <ng-template ngFor let-obj [ngForOf]="predicateObjects.getObjects()" let-i="index">
             <ng-template [ngIf]="showObject(i)"> <!-- paging filter -->
 
-                <div class="listItem">
+                <div class="listItem" [ngClass]="{ imported: obj.tripleScope == 'imported', inferred: obj.tripleScope == 'inferred'}">
                     <editable-resource *ngIf="!renderAsReified(predicateObjects.getPredicate(), obj)" style="flex: 1" [resource]="obj" [rendering]="rendering" 
                         [subject]="resource" [predicate]="predicateObjects.getPredicate()" [readonly]="readonly" [partition]="partition"
                         (dblClick)="objectDblClick($event)" (delete)="removeValue(obj)" (edit)="editValue(obj)" (update)="onObjectUpdate()"
@@ -39,7 +39,7 @@
                             [ngClass]="{ clickable: obj.isResource() }" style="flex:1"
                             (dblClick)="objectDblClick($event)"></reified-resource>
                         <button class="transparentBtn" [title]="getRemovePropImgTitle(predicateObjects.getPredicate())"
-                            (click)="removeValue(obj)" [disabled]="isDeleteDisabled()">
+                            (click)="removeValue(obj)" [disabled]="deleteDisabled">
                             <span>-</span>
                         </button>
                     </ng-template>

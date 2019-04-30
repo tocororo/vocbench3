@@ -1,4 +1,4 @@
-import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
+import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum, ResAttribute, ARTResource } from "../models/ARTResources";
 import { OWL, RDF, XmlSchema } from "../models/Vocabulary";
 import { VBContext } from "./VBContext";
 import { ResAction } from "./RoleActionResolver";
@@ -155,7 +155,7 @@ export class UIUtils {
 
     static getImageSrc(rdfResource: ARTNode): string {
         var imgSrc: string;
-        if (rdfResource.isResource()) {
+        if (rdfResource instanceof ARTResource) {
             var role: RDFResourceRolesEnum = rdfResource.getRole();
             var deprecated: boolean = rdfResource.getAdditionalProperty(ResAttribute.DEPRECATED);
             var explicit: boolean = rdfResource.getAdditionalProperty(ResAttribute.EXPLICIT) ||

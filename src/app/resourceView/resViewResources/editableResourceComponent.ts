@@ -50,11 +50,18 @@ export class EditableResourceComponent {
 
 	private editActionScenario: EditActionScenarioEnum = EditActionScenarioEnum.default;
 
+	//actions authorizations
 	private editMenuDisabled: boolean = false;
+	private editAuthorized: boolean = false;
+	private deleteAuthorized: boolean = false;
+	private spawnFromLabelAuthorized: boolean = false;
+	private moveLabelAuthorized: boolean = false;
+	private assertAuthorized: boolean = false;
+	private copyLocalesAuthorized: boolean = false;
+
 	private isInferred: boolean = false;
 	private isXLabelMenuItemAvailable: boolean = false;
 	private isReplaceMenuItemAvailable: boolean = true;
-	// private isCopyLocalesMenuItemAvailable: boolean = false;
 	private copyLocalesAction: { available: boolean, locales: Language[] } = { available: false, locales: [] };
 	
 	private editInProgress: boolean = false;
@@ -73,7 +80,7 @@ export class EditableResourceComponent {
 			this.editActionScenario = EditActionScenarioEnum.plainLiteral;
 		} else if (this.resource instanceof ARTLiteral && this.resource.getDatatype() != null) {
 			this.editActionScenario = EditActionScenarioEnum.typedLiteral;
-		} else if (this.resource.getRole() == RDFResourceRolesEnum.xLabel) {
+		} else if (this.resource instanceof ARTResource && this.resource.getRole() == RDFResourceRolesEnum.xLabel) {
 			this.editActionScenario = EditActionScenarioEnum.xLabel;
 		} else if (this.partition == ResViewPartition.subPropertyChains) {
 			this.editActionScenario = EditActionScenarioEnum.partition;
@@ -104,14 +111,20 @@ export class EditableResourceComponent {
 
 		this.isInferred = ResourceUtils.containsNode(this.resource.getTripleGraphs(), new ARTURIResource(SemanticTurkey.inferenceGraph));
 
+		//init actions authorization
 		let inMainGraph: boolean = ResourceUtils.containsNode(this.resource.getTripleGraphs(), new ARTURIResource(VBContext.getWorkingProject().getBaseURI()));
-
 		this.editMenuDisabled = (
 			(!this.isInferred && !inMainGraph) || //neither in the main graph nor in inference graph
 			// (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT)) || 
 			this.readonly || 
 			ResourceUtils.isTripleInStaging(this.resource)
 		);
+		this.editAuthorized = AuthorizationEvaluator.ResourceView.isEditAuthorized(this.partition, this.subject);
+		this.deleteAuthorized = AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.subject);
+		this.spawnFromLabelAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSpawnNewConceptFromLabel);
+		this.moveLabelAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorMoveXLabelToResource);
+		this.assertAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.subject);
+		this.copyLocalesAuthorized = AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.subject)
 
 		/**
 		 * Copy to locales option is available only in lexicalizations, notes and properties partitions
@@ -203,14 +216,14 @@ export class EditableResourceComponent {
 			if (type == RDFTypesEnum.resource) {
 				this.rangeType = RDFTypesEnum.resource;
 				// special case: if user is editing an xLabel, the widget should allow to edit the literal form, not the uri
-				if (this.resource.getRole() == RDFResourceRolesEnum.xLabel) {
+				if (this.resource instanceof ARTResource && this.resource.getRole() == RDFResourceRolesEnum.xLabel) {
 					let literalForm: ARTLiteral = new ARTLiteral(
 						this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
 					this.resourceStringValue = literalForm.toNT();
 				}
 				//special case: if user is editing a class restriction, the widget should allow to edit the manchester expression
-				else if (this.resource.isBNode()) {
-					this.manchesterService.isClassAxiom(<ARTBNode>this.resource).subscribe(
+				else if (this.resource instanceof ARTBNode) {
+					this.manchesterService.isClassAxiom(this.resource).subscribe(
 						isClassAxiom => {
 							if (isClassAxiom) {
 								this.isClassAxiom = true;
@@ -432,27 +445,6 @@ export class EditableResourceComponent {
 		if (this.resource.isResource()) {
 			this.dblClick.emit(<ARTResource>this.resource);
 		}
-	}
-
-
-	//menu item authorizations
-	private isEditAuthorized(): boolean {
-		return AuthorizationEvaluator.ResourceView.isEditAuthorized(this.partition, this.subject);
-	}
-	private isDeleteAuthorized(): boolean {
-		return AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.subject);
-	}
-	private isSpawnFromLabelAuthorized(): boolean {
-		return AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSpawnNewConceptFromLabel);
-	}
-	private isMoveLabelAuthorized(): boolean {
-		return AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorMoveXLabelToResource);
-	}
-	private isAssertAuthorized(): boolean {
-		return AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.subject);
-	}
-	private isCopyLocalesAuthorized(): boolean {
-		return AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.subject)
 	}
 
 }

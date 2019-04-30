@@ -1,4 +1,4 @@
-import { ARTNode, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { ARTNode, RDFResourceRolesEnum, ARTResource } from "../../models/ARTResources";
 import { RDFS } from "../../models/Vocabulary";
 import { Size } from "./GraphConstants";
 import { Node, NodeShape } from "./Node";
@@ -27,7 +27,7 @@ export class ModelNode extends Node {
          * rdfs:Literal: rect (different sizes)
          * xLabel: label (custom shape)
          */
-        if (this.res.isResource()) {
+        if (this.res instanceof ARTResource) {
             let role: RDFResourceRolesEnum = this.res.getRole();
             if (role == RDFResourceRolesEnum.annotationProperty ||
                 role == RDFResourceRolesEnum.datatypeProperty ||

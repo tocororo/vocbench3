@@ -1,5 +1,5 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { ARTLiteral, ARTNode, ARTResource, RDFResourceRolesEnum, ResAttribute } from "../../models/ARTResources";
+import { ARTLiteral, ARTNode, ARTResource, RDFResourceRolesEnum, ResAttribute, ResourceNature } from "../../models/ARTResources";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBProperties } from "../../utils/VBProperties";
@@ -22,6 +22,7 @@ export class RdfResourceComponent {
 	private splittedLiteral: string[]; //when literalWithLink is true, even elements are plain text, odd elements are url
 
 	private imgSrc: string; //src of the image icon
+	private natureTooltip: string;
 
 	constructor(private preferences: VBProperties) { }
 
@@ -35,6 +36,7 @@ export class RdfResourceComponent {
 			}
 			this.initLiteralWithLink();
 			this.initRenderingClass();
+			this.initNatureTooltip();
 		}
 	}
 
@@ -49,15 +51,34 @@ export class RdfResourceComponent {
 	 * Initializes the class of the resource text: green if the resource is in the staging-add-graph, red if it's in the staging-remove-graph
 	 */
 	private initRenderingClass() {
-		if (ResourceUtils.isResourceInStagingAdd(this.resource)) {
-			this.renderingClass += " proposedAddRes";
-		} else if (ResourceUtils.isResourceInStagingRemove(this.resource)) {
-			this.renderingClass += " proposedRemoveRes";
+		if (this.resource instanceof ARTResource) {
+			if (ResourceUtils.isResourceInStagingAdd(this.resource)) {
+				this.renderingClass += " proposedAddRes";
+			} else if (ResourceUtils.isResourceInStagingRemove(this.resource)) {
+				this.renderingClass += " proposedRemoveRes";
+			}
 		}
+
 		if (ResourceUtils.isTripleInStagingAdd(this.resource)) {
 			this.renderingClass += " proposedAddTriple";
 		} else if (ResourceUtils.isTripleInStagingRemove(this.resource)) {
 			this.renderingClass += " proposedRemoveTriple";
+		}
+	}
+
+	private initNatureTooltip() {
+		this.natureTooltip = null;
+		if (this.resource instanceof ARTResource) {
+			let natureList: ResourceNature[] = this.resource.getNature();
+			let natureListSerlalized: string[] = [];
+			natureList.forEach(n => {
+				let graphsToNT: string[] = [];
+				n.graphs.forEach(g => {
+					graphsToNT.push(g.toNT());
+				});
+				natureListSerlalized.push(ResourceUtils.getResourceRoleLabel(n.role) + " in: " + graphsToNT.join(", "));
+			});
+			this.natureTooltip = natureListSerlalized.join("\n\n");
 		}
 	}
 
@@ -138,7 +159,7 @@ export class RdfResourceComponent {
 					idx = urlEndIdx;
 					value = value.substring(idx);
 					//what there is between url and the end of the string
-					if (urlArray[i+1] == null && idx != value.length) { //if there is no further links but there is text after last url
+					if (urlArray[i + 1] == null && idx != value.length) { //if there is no further links but there is text after last url
 						this.splittedLiteral.push(value.substring(idx, value.length));
 					}
 				}
@@ -160,7 +181,7 @@ export class RdfResourceComponent {
 	 * Useful for flag icons since they have not the "transparent" version (as for the concept/class/property... icons)
 	 */
 	private isExplicit(): boolean {
-		return this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || 
+		return this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
 			this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
 	}
 

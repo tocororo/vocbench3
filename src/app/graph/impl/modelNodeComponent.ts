@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input } from '@angular/core';
-import { RDFResourceRolesEnum } from '../../models/ARTResources';
+import { RDFResourceRolesEnum, ARTResource } from '../../models/ARTResources';
 import { GraphMode } from '../abstractGraph';
 import { AbstractGraphNode } from '../abstractGraphNode';
 import { Size } from '../model/GraphConstants';
@@ -43,7 +43,7 @@ export class NodeModelComponent extends AbstractGraphNode {
     ngOnInit() {
         this.initNode();
         this.nodeShape = this.node.getNodeShape();
-        this.isObjectProperty = this.node.res.getRole() == RDFResourceRolesEnum.objectProperty;
+        this.isObjectProperty = this.node.res instanceof ARTResource && this.node.res.getRole() == RDFResourceRolesEnum.objectProperty;
     }
 
 }

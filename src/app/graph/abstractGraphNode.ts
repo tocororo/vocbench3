@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, SimpleChanges, ChangeDetectorRef } from '@angular/core';
-import { ARTNode, RDFResourceRolesEnum, ResAttribute } from '../models/ARTResources';
+import { ARTNode, RDFResourceRolesEnum, ResAttribute, ARTResource } from '../models/ARTResources';
 import { ResourceUtils } from '../utils/ResourceUtils';
 import { GraphMode } from './abstractGraph';
 import { Node, NodeMeasure } from './model/Node';
@@ -75,7 +75,7 @@ export abstract class AbstractGraphNode {
     private initNodeStyle() {
         let res: ARTNode = this.node.res;
 
-        if (this.node.res.isResource()) {
+        if (res instanceof ARTResource) {
             let role: RDFResourceRolesEnum = res.getRole();
             let explicit: boolean = res.getAdditionalProperty(ResAttribute.EXPLICIT) || res.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
             this.deprecated = res.getAdditionalProperty(ResAttribute.DEPRECATED);

@@ -38,10 +38,6 @@ export class Deserializer {
      * @param additionalAttr list of non common attributes to parse
      */
     private static parseNodeOptionalProperties(resJson: any, node: ARTNode, additionalAttr?: string[]) {
-        var role: RDFResourceRolesEnum = <RDFResourceRolesEnum>resJson[ResAttribute.ROLE];
-        if (role != undefined) {
-            node.setRole(role);
-        }
         var qname: string = resJson[ResAttribute.QNAME];
         if (qname != undefined) {
             node.setAdditionalProperty(ResAttribute.QNAME, qname);
@@ -104,58 +100,74 @@ export class Deserializer {
             }
             node.setAdditionalProperty(ResAttribute.SCHEMES, schemes);
         }
-        var nature: string = resJson[ResAttribute.NATURE];
-        if (nature != undefined && nature != "") {
-            let splitted: string[] = nature.split("|_|");
-            for (var i = 0; i < splitted.length; i++) {
-                let roleGraphDeprecated: string[] = splitted[i].split(",");
-                node.setRole(<RDFResourceRolesEnum>roleGraphDeprecated[0]); //in this way I set the last role encountered in the nature
-                node.addGraph(new ARTURIResource(roleGraphDeprecated[1]));
-                //I set the last deprecated encountered but it doesn't matter since the deprecated value is the same in all the role-graph-deprecated triples
-                node.setAdditionalProperty(ResAttribute.DEPRECATED, roleGraphDeprecated[2] == "true");
+
+        if (node instanceof ARTResource) {
+            var role: RDFResourceRolesEnum = <RDFResourceRolesEnum>resJson[ResAttribute.ROLE];
+            if (role != undefined) {
+                node.setRole(role);
             }
-            
-            /**
-             * if explicit is null => explicit attribute was missing => infer it from the graphs in the nature:
-             * explicit is true if the resource is defined in the main graph (but not in the remove-staging)
-             */
-            if (node.getAdditionalProperty(ResAttribute.EXPLICIT) == null) {
-                var baseURI = VBContext.getWorkingProject() ? VBContext.getWorkingProject().getBaseURI() : null;
-                let resGraphs: ARTURIResource[] = node.getGraphs();
-                let inMainGraph: boolean = false;
-                let inRemoveStagingGraph: boolean = false;
-                for (var i = 0; i < resGraphs.length; i++) {
-                    if (resGraphs[i].getURI() == baseURI) {
-                        inMainGraph = true;
-                    } else if (resGraphs[i].getURI().startsWith(SemanticTurkey.stagingRemoveGraph)) {
-                        inRemoveStagingGraph = true;
+
+            let natureAttr: string = resJson[ResAttribute.NATURE];
+            if (natureAttr != undefined && natureAttr != "") {
+                let splitted: string[] = natureAttr.split("|_|");
+                for (var i = 0; i < splitted.length; i++) {
+                    let roleGraphDeprecated: string[] = splitted[i].split(",");
+                    let roleInNature: RDFResourceRolesEnum = <RDFResourceRolesEnum>roleGraphDeprecated[0];
+                    let graphInNature: ARTURIResource = new ARTURIResource(roleGraphDeprecated[1]);
+                    node.setRole(roleInNature); //in this way I set the last role encountered in the nature
+                    node.addGraph(graphInNature);
+                    node.addNature(roleInNature, graphInNature);
+                    //I set the last deprecated encountered but it doesn't matter since the deprecated value is the same in all the role-graph-deprecated triples
+                    node.setAdditionalProperty(ResAttribute.DEPRECATED, roleGraphDeprecated[2] == "true");
+                }
+                
+                /**
+                 * if explicit is null => explicit attribute was missing => infer it from the graphs in the nature:
+                 * explicit is true if the resource is defined in the main graph (but not in the remove-staging)
+                 */
+                if (node.getAdditionalProperty(ResAttribute.EXPLICIT) == null) {
+                    var baseURI = VBContext.getWorkingProject() ? VBContext.getWorkingProject().getBaseURI() : null;
+                    let resGraphs: ARTURIResource[] = node.getGraphs();
+                    let inMainGraph: boolean = false;
+                    let inRemoveStagingGraph: boolean = false;
+                    for (var i = 0; i < resGraphs.length; i++) {
+                        if (resGraphs[i].getURI() == baseURI) {
+                            inMainGraph = true;
+                        } else if (resGraphs[i].getURI().startsWith(SemanticTurkey.stagingRemoveGraph)) {
+                            inRemoveStagingGraph = true;
+                        }
+                    }
+                    if (inMainGraph && !inRemoveStagingGraph) {
+                        node.setAdditionalProperty(ResAttribute.EXPLICIT, true);
                     }
                 }
-                if (inMainGraph && !inRemoveStagingGraph) {
-                    node.setAdditionalProperty(ResAttribute.EXPLICIT, true);
+                //if explicit is still null, set it to false
+                if (node.getAdditionalProperty(ResAttribute.EXPLICIT) == null) {
+                    node.setAdditionalProperty(ResAttribute.EXPLICIT, false);
                 }
             }
-            //if explicit is still null, set it to false
-            if (node.getAdditionalProperty(ResAttribute.EXPLICIT) == null) {
-                node.setAdditionalProperty(ResAttribute.EXPLICIT, false);
+
+            //patch to override the show of the dataRange (that could be very long) with a shorter version
+            if (node.getRole() == RDFResourceRolesEnum.dataRange) {
+                let charLimit: number = 50;
+                let dataRangeShow = node.getShow();
+                if (dataRangeShow.length > charLimit) {
+                    let shortShow: string = "";
+                    let splitted: string[] = dataRangeShow.split(",");
+                    let i = 0;
+                    while (shortShow.length < charLimit) {
+                        shortShow += splitted[i] + ",";
+                        i++;
+                    } 
+                    shortShow += " ...}";
+                    node.setAdditionalProperty(ResAttribute.SHOW, shortShow);
+                }
             }
         }
 
-        //patch to override the show of the dataRange (that could be very long) with a shorter version
-        if (node.getRole() == RDFResourceRolesEnum.dataRange) {
-            let charLimit: number = 50;
-            let dataRangeShow = node.getShow();
-            if (dataRangeShow.length > charLimit) {
-                let shortShow: string = "";
-                let splitted: string[] = dataRangeShow.split(",");
-                let i = 0;
-                while (shortShow.length < charLimit) {
-                    shortShow += splitted[i] + ",";
-                    i++;
-                } 
-                shortShow += " ...}";
-                node.setAdditionalProperty(ResAttribute.SHOW, shortShow);
-            }
+        var tripleScope: string = resJson[ResAttribute.TRIPLE_SCOPE];
+        if (tripleScope != undefined) {
+            node.setAdditionalProperty(ResAttribute.TRIPLE_SCOPE, tripleScope);
         }
 
         if (additionalAttr != undefined) {

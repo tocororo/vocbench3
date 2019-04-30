@@ -26,7 +26,6 @@ import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
 export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot {
 
     partition = ResViewPartition.lexicalizations;
-    addManuallyAllowed: boolean = false;
     addBtnImgTitle = "Add a lexicalization";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/annotationProperty_create.png");
 

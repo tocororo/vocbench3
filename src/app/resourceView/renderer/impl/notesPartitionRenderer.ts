@@ -22,7 +22,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.notes;
-    addManuallyAllowed: boolean = false;
     addBtnImgTitle = "Add a note";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/annotationProperty_create.png");
 

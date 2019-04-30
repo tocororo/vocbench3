@@ -9,7 +9,7 @@
             <label class="groupPanel-heading-content">{{label}}:</label>
         </span>
         <span class="groupPanel-heading-content groupPanel-add-btn">
-            <button class="resViewPartitionAddBtn" (click)="addHandler(null, 'default')" [title]="addBtnImgTitle" [disabled]="isAddDisabled()">
+            <button class="resViewPartitionAddBtn" (click)="addHandler(null, 'default')" [title]="addBtnImgTitle" [disabled]="addDisabled">
                 <img [src]="addBtnImgSrc"/>
             </button>
             <div *ngIf="addManuallyAllowed" class="btn-group" style="vertical-align: initial;">
@@ -17,8 +17,8 @@
                     <span class="caret" style="margin: 0px;"></span>
                 </button>
                 <ul class="dropdown-menu pull-right">
-                    <li [ngClass]="{ disabled: isAddDisabled() }"><a (click)="addManually()">Add value manually</a></li>
-                    <li *ngIf="isAddExteranlResourceAllowed()" [ngClass]="{ disabled: isAddDisabled() }">
+                    <li [ngClass]="{ disabled: addDisabled }"><a (click)="addManually()">Add value manually</a></li>
+                    <li *ngIf="isAddExteranlResourceAllowed()" [ngClass]="{ disabled: addDisabled }">
                         <a (click)="addExternalValue()">Add value from another project</a>
                     </li>
                 </ul>

@@ -1,8 +1,6 @@
 export abstract class ARTNode {
 
-    protected graphs: ARTURIResource[] = []; //graphs where the resource is defined
     protected tripleGraphs: ARTURIResource[] = []; //graphs where the triple (which the resource respresents the object) is defined
-    protected role: RDFResourceRolesEnum = RDFResourceRolesEnum.mention; //default, so node without role are considered mention
 
     constructor() { };
 
@@ -26,27 +24,6 @@ export abstract class ARTNode {
     abstract getNominalValue(): string;
     abstract getShow(): string;
 
-    setGraphs(graphs: ARTURIResource[]) {
-        this.graphs = graphs;
-    }
-    addGraphs(graphsToAdd: ARTURIResource[]) {
-        for (var i = 0; i < graphsToAdd.length; i++) {
-            this.addGraph(graphsToAdd[i]);
-        }
-    }
-    addGraph(graphToAdd: ARTURIResource) {
-        for (var i = 0; i < this.graphs.length; i++) {
-            if (graphToAdd.getURI() == this.graphs[i].getURI()) {
-                return; //graph is already in graphs array => do not add the graph
-            }
-        }
-        //graphToAdd not found in graphs array => add it
-        this.graphs.push(graphToAdd);
-    }
-    getGraphs(): ARTURIResource[] {
-        return this.graphs;
-    }
-
     setTripleGraphs(graphs: ARTURIResource[]) {
         this.tripleGraphs = graphs;
     }
@@ -68,13 +45,6 @@ export abstract class ARTNode {
         return this.tripleGraphs;
     }
 
-    setRole(role: RDFResourceRolesEnum) {
-        this.role = role;
-    }
-    getRole(): RDFResourceRolesEnum {
-        return this.role;
-    }
-
     abstract toNT(): string;
 
     setAdditionalProperty(propName: string, propValue: any): void {
@@ -93,6 +63,9 @@ export abstract class ARTNode {
 export abstract class ARTResource extends ARTNode {
 
     protected show: string;
+    protected role: RDFResourceRolesEnum = RDFResourceRolesEnum.mention; //default, so node without role are considered mention
+    protected graphs: ARTURIResource[] = []; //graphs where the resource is defined
+    protected nature: ResourceNature[] = [];
 
     constructor(show?: string, role?: RDFResourceRolesEnum) {
         super();
@@ -113,6 +86,46 @@ export abstract class ARTResource extends ARTNode {
         } else {
             return this.getNominalValue();
         }
+    }
+
+    setRole(role: RDFResourceRolesEnum) {
+        this.role = role;
+    }
+    getRole(): RDFResourceRolesEnum {
+        return this.role;
+    }
+
+    addNature(role: RDFResourceRolesEnum, graph: ARTURIResource) {
+        let n = this.nature.find(n => n.role == role);
+        if (n != null) {
+            n.graphs.push(graph);
+        } else {
+            this.nature.push({ role: role, graphs: [graph] });
+        }
+    }
+    getNature(): ResourceNature[] {
+        return this.nature;
+    }
+
+    setGraphs(graphs: ARTURIResource[]) {
+        this.graphs = graphs;
+    }
+    addGraphs(graphsToAdd: ARTURIResource[]) {
+        for (var i = 0; i < graphsToAdd.length; i++) {
+            this.addGraph(graphsToAdd[i]);
+        }
+    }
+    addGraph(graphToAdd: ARTURIResource) {
+        for (var i = 0; i < this.graphs.length; i++) {
+            if (graphToAdd.getURI() == this.graphs[i].getURI()) {
+                return; //graph is already in graphs array => do not add the graph
+            }
+        }
+        //graphToAdd not found in graphs array => add it
+        this.graphs.push(graphToAdd);
+    }
+    getGraphs(): ARTURIResource[] {
+        return this.graphs;
     }
 
     isDeprecated(): boolean {
@@ -322,6 +335,7 @@ export class ResAttribute {
     public static IN_SCHEME = "inScheme"; //used only in Skos.getSchemesMatrixPerConcept()
     public static NATURE = "nature"; //content is a triple separated by "-": <uri of class of resource> - <graph of ???> - <deprecated true/false>
     public static SCHEMES = "schemes"; //attribute of concepts in searchResource response
+    public static TRIPLE_SCOPE = "tripleScope"; //used in the object in getResourceView
 
     //never in st responses, result of nature parsing
     public static DEPRECATED = "deprecated";
@@ -437,4 +451,16 @@ export enum ResourcePositionEnum {
     local = "local",
     remote = "remote",
     unknown = "unknown"
+}
+export enum TripleScopes {
+    local = "local",
+    staged = "staged",
+    del_staged = "del_staged",
+    imported = "imported",
+    inferred = "inferred"
+}
+
+export class ResourceNature {
+    role: RDFResourceRolesEnum;
+    graphs: ARTURIResource[];
 }

@@ -23,7 +23,6 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.membersOrdered;
-    addManuallyAllowed: boolean = false;
     membersProperty = SKOS.member;
     addBtnImgTitle = "Add member";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/skosCollection_create.png");
@@ -154,11 +153,11 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
         return "Remove " + predicate.getShow();
     }
 
-    private isDeleteDisabled() {
-        return (
-            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isTripleInStaging(this.resource)) ||
-            this.readonly || !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.resource)
-        );
-    }
+    // private isDeleteDisabled() {
+    //     return (
+    //         (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isTripleInStaging(this.resource)) ||
+    //         this.readonly || !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.resource)
+    //     );
+    // }
 
 }

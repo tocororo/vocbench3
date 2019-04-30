@@ -8,20 +8,20 @@
             <label class="groupPanel-heading-content">{{label}}:</label>
         </span>
         <span *ngIf="addBtnImgSrc" class="groupPanel-heading-content groupPanel-add-btn">
-            <button class="resViewPartitionAddBtn" [title]="addBtnImgTitle" (click)="addHandler(null, 'default')" [disabled]="isAddDisabled()">
+            <button class="resViewPartitionAddBtn" [title]="addBtnImgTitle" (click)="addHandler(null, 'default')" [disabled]="addDisabled">
                 <img [src]="addBtnImgSrc"/>
             </button>
         </span>
-        <span *ngIf="isAddManuallyAllowed() || isAddExteranlResourceAllowed()" class="groupPanel-heading-content groupPanel-dropdown-btn">
+        <span *ngIf="addManuallyAllowed || addExteranlResourceAllowed" class="groupPanel-heading-content groupPanel-dropdown-btn">
             <div class="btn-group" style="vertical-align: initial;">
                 <button class="transparentBtn" style="width: 12px;" data-toggle="dropdown">
                     <span class="caret" style="margin: 0px;"></span>
                 </button>
                 <ul class="dropdown-menu pull-right">
-                    <li [ngClass]="{ disabled: isAddDisabled() }" *ngIf="isAddManuallyAllowed()">
+                    <li [ngClass]="{ disabled: addDisabled }" *ngIf="addManuallyAllowed">
                         <a (click)="addHandler(null, 'manually')">Add value manually</a>
                     </li>
-                    <li [ngClass]="{ disabled: isAddDisabled() }" *ngIf="isAddExteranlResourceAllowed()">
+                    <li [ngClass]="{ disabled: addDisabled }" *ngIf="addExteranlResourceAllowed">
                         <a (click)="addHandler(null, 'remote')">Add value from another project</a>
                     </li>
                 </ul>

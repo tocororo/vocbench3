@@ -76,11 +76,40 @@ export abstract class PartitionRenderer {
     abstract addBtnImgTitle: string;
 
     /**
+     * Action authorization
+     */
+    private addDisabled: boolean = false;
+    private addExteranlResourceAllowed: boolean = false;
+    private addManuallyAllowed: boolean = false;
+    private deleteDisabled: boolean = false;//used only for the reified-resource in imports and membersOrderer partition, since they do not uses the pred-obj-list renderer
+
+    /**
      * METHODS
      */
 
     ngOnInit() {
         this.label = ResViewUtils.getResourceViewPartitionLabel(this.partition);
+
+        /**
+         * Add is disabled if one of them is true
+         * - resource is not explicit (e.g. imported or inferred) but not in staging add at the same time (addition in staging add is allowed)
+         * - ResView is working in readonly mode
+         * - user not authorized
+         */
+        this.addDisabled = !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource) ||
+            this.readonly || !AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.resource);
+        /**
+         * Delete is disabled if one of them is true
+         * - resource is not explicit (e.g. imported, inferred, in staging)
+         * - resource is in a staging status (staging-add or staging-remove)
+         * - ResView is working in readonly mode
+         * - user not authorized
+         */
+        this.deleteDisabled = !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
+            ResourceUtils.isResourceInStaging(this.resource) ||
+            this.readonly || !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.resource);
+        this.addExteranlResourceAllowed = ResViewUtils.addExternalResourcePartition.indexOf(this.partition) != -1;
+        this.addManuallyAllowed = ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
     }
 
     /**
@@ -179,9 +208,9 @@ export abstract class PartitionRenderer {
         this.basicModals.alert("Error", message, "error");
     }
 
-    private isAddManuallyAllowed() {
-        return ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
-    }
+    // private isAddManuallyAllowed() {
+    //     return ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
+    // }
     
     /**
      * Implementation of addManually with the predicate provided
@@ -217,9 +246,9 @@ export abstract class PartitionRenderer {
         );
     }
 
-    private isAddExteranlResourceAllowed() {
-        return ResViewUtils.addExternalResourcePartition.indexOf(this.partition) != -1;
-    }
+    // private isAddExteranlResourceAllowed() {
+    //     return ResViewUtils.addExternalResourcePartition.indexOf(this.partition) != -1;
+    // }
 
     private addExternal(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.browseExternalResource("Select external resource", predicate, propChangeable).then(
@@ -360,13 +389,6 @@ export abstract class PartitionRenderer {
      */
     private renderAsReified(predicate: ARTURIResource, object: ARTNode) {
         return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
-    }
-
-    private isAddDisabled(): boolean {
-        return (
-            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource)) ||
-            this.readonly || !AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.resource)
-        );
     }
 
 }

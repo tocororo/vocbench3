@@ -7,7 +7,16 @@ import { ResourceUtils } from "../../utils/ResourceUtils";
 
 @Component({
     selector: "pred-obj-renderer",
-    templateUrl: "./predicateObjectsRenderer.html"
+    templateUrl: "./predicateObjectsRenderer.html",
+    styles: [`
+        .imported {
+            background-color: #ffffee
+        }
+        .inferred {
+            background-color: #eff0ff
+        }
+    `]
+    
 })
 export class PredicateObjectsRenderer {
 
@@ -30,6 +39,35 @@ export class PredicateObjectsRenderer {
     /**
      * ATTRIBUTES
      */
+
+    private addDisabled: boolean = false;
+    private deleteDisabled: boolean = false; //used for reified-resource
+    private actionMenuDisabled: boolean = false;
+
+    ngOnInit() {
+        /**
+         * Add is disabled if one of them is true
+         * - resource is not explicit (e.g. imported or inferred) but not in staging add at the same time (addition in staging add is allowed)
+         * - ResView is working in readonly mode
+         * - user not authorized
+         */
+        this.addDisabled = !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource) ||
+            this.readonly || !AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.resource);
+
+        /**
+         * Delete is disabled if one of them is true
+         * - resource is not explicit (e.g. imported, inferred, in staging)
+         * - resource is in a staging status (staging-add or staging-remove)
+         * - ResView is working in readonly mode
+         * - user not authorized
+         */
+        this.deleteDisabled = !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
+            ResourceUtils.isResourceInStaging(this.resource) ||
+            this.readonly || !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.resource);
+
+        //menu disabled if all of its action are disabled
+        this.actionMenuDisabled = this.addDisabled && this.deleteDisabled;
+    }
 
     /**
      * METHODS
@@ -124,42 +162,6 @@ export class PredicateObjectsRenderer {
             predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource() && 
             !object.getAdditionalProperty(ResAttribute.NOT_REIFIED)
         );
-    }
-
-    /**
-     * Determines if the add button is disabled
-     */
-    private isAddDisabled() {
-        /**
-         * Add disabled if one of them is true
-         * - resource is not explicit (e.g. imported or inferred) but not in staging add at the same time (addition in staging add is allowed)
-         * - ResView is working in readonly mode
-         * - user not authorized
-         */
-        return (
-            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource)) ||
-            this.readonly || !AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.resource)
-        );
-    }
-
-    private isDeleteDisabled() {
-        /**
-         * Delete disabled if one of them is true
-         * - resource is not explicit (e.g. imported, inferred, in staging)
-         * - resource is in a staging status (staging-add or staging-remove)
-         * - ResView is working in readonly mode
-         * - user not authorized
-         */
-        return (
-            !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
-            ResourceUtils.isResourceInStaging(this.resource) ||
-            this.readonly || !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.resource)
-        );
-    }
-
-    private isActionMenuDisabled() {
-        //menu disabled if all of its action are disabled
-        return this.isAddDisabled() && this.isDeleteDisabled();
     }
 
     // PAGING

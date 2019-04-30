@@ -1,11 +1,11 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { PartitionRenderer } from "./partitionRenderer";
-import { ARTResource, ARTURIResource, ARTNode, ARTPredicateObjects, ResAttribute } from "../../models/ARTResources";
+import { Component } from "@angular/core";
+import { ARTURIResource } from "../../models/ARTResources";
+import { ResViewUtils } from "../../models/ResourceView";
+import { CustomFormsServices } from "../../services/customFormsServices";
+import { ResourcesServices } from "../../services/resourcesServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { ResourcesServices } from "../../services/resourcesServices";
-import { CustomFormsServices } from "../../services/customFormsServices";
-import { ResViewUtils } from "../../models/ResourceView";
+import { PartitionRenderer } from "./partitionRenderer";
 
 @Component({
     selector: "partition-renderer-multi",

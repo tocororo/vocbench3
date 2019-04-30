@@ -5,42 +5,37 @@
             <span>&#9662;</span>
         </button>
         <ul class="dropdown-menu">
-            <!-- Edit menu item -->
-            <!-- <li [ngSwitch]="editActionScenario" [ngClass]="{ disabled: !isEditAuthorized() || isInferred }">
-                <a *ngSwitchCase="'xLabel'" (click)="edit()">Edit literal content</a>
-                <a *ngSwitchDefault (click)="edit()">Edit</a>
-            </li> -->
+            <!-- Edit menu items -->
 
             <li *ngIf="editActionScenario == 'xLabel' || editActionScenario == 'plainLiteral' || editActionScenario == 'typedLiteral'"
-                [ngClass]="{ disabled: !isEditAuthorized() || isInferred }">
+                [ngClass]="{ disabled: !editAuthorized || isInferred }">
                 <a (click)="editLiteral()">Edit literal content</a>
             </li>
 
-            <li *ngIf="editActionScenario != 'xLabel'" [ngClass]="{ disabled: !isEditAuthorized() || isInferred }">
+            <li *ngIf="editActionScenario != 'xLabel'" [ngClass]="{ disabled: !editAuthorized || isInferred }">
                 <a (click)="edit()">Edit</a>
             </li>
 
-
-            <li *ngIf="isReplaceMenuItemAvailable" [ngClass]="{ disabled: !isEditAuthorized() || isInferred }">
+            <li *ngIf="isReplaceMenuItemAvailable" [ngClass]="{ disabled: !editAuthorized || isInferred }">
                 <a (click)="replace()">Replace with existing resource</a>
             </li>
             <ng-template [ngIf]="isXLabelMenuItemAvailable">
-                <li [ngClass]="{ disabled: !isSpawnFromLabelAuthorized() || isInferred }">
+                <li [ngClass]="{ disabled: !spawnFromLabelAuthorized || isInferred }">
                     <a (click)="spawnNewConceptWithLabel()">Spawn new concept from this xLabel</a>
                 </li>
-                <li [ngClass]="{ disabled: !isSpawnFromLabelAuthorized() || isInferred }">
+                <li [ngClass]="{ disabled: !spawnFromLabelAuthorized || isInferred }">
                     <a (click)="moveLabelToConcept()">Move xLabel to another concept</a>
                 </li>
             </ng-template>
 
-            <li *ngIf="copyLocalesAction.available" [ngClass]="{ disabled: !isCopyLocalesAuthorized() }">
+            <li *ngIf="copyLocalesAction.available" [ngClass]="{ disabled: !copyLocalesAuthorized }">
                 <a (click)="copyLocales()">Copy value to other locales</a>
             </li>
 
-            <li *ngIf="isInferred && partition != 'lexicalizations'" [ngClass]="{ disabled: !isAssertAuthorized() }">
+            <li *ngIf="isInferred && partition != 'lexicalizations'" [ngClass]="{ disabled: !assertAuthorized }">
                 <a (click)="assertInferred()">Assert inferred statement</a>
             </li>
-            <li [ngClass]="{ disabled: !isDeleteAuthorized() || isInferred }"><a (click)="delete()">Delete</a></li>
+            <li [ngClass]="{ disabled: !deleteAuthorized || isInferred }"><a (click)="delete()">Delete</a></li>
         </ul>
     </div>
 </ng-template>

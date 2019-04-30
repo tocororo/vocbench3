@@ -61,7 +61,7 @@ export class DataGraphPanel extends AbstractGraphPanel {
 
     isExpandEnabled(): boolean {
         return (
-            this.selectedElement != null && this.selectedElement instanceof Node && this.selectedElement.res.isURIResource() &&
+            this.selectedElement != null && this.selectedElement instanceof Node && this.selectedElement.res instanceof ARTURIResource &&
             (
                 this.selectedElement.res.getRole() == RDFResourceRolesEnum.cls ||
                 this.selectedElement.res.getRole() == RDFResourceRolesEnum.concept ||
