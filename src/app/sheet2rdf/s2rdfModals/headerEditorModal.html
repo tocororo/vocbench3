@@ -103,27 +103,25 @@
             </div>
         </div>
         <div class="panel-body vbox scrollableContainer" style="min-height: 80px">
-            <div class="table-responsive">
-                <table class="table table-condensed">
-                    <colgroup>
-                        <col style="width: 1%">
-                        <col>
-                    </colgroup>
-                    <tbody>
-                        <tr *ngFor="let g of header?.graph" (click)="selectGraph(g)" [ngStyle]="{ cursor: header?.ignore ? 'not-allowed' : 'pointer' }"
-                            [ngClass]="{ active : g == selectedGraph }">
-                            <ng-container *ngIf="isSimpleGraphApplication(g); else advancedGraphBlock">
-                                <td [ngClass]="{ greyText : header?.ignore }" nowrap><label>Simple Graph Application:</label></td>
-                                <td [ngClass]="{ greyText : header?.ignore }"><span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">$subject {{g.property.getShow()}} ${{g.nodeId}}</span></td>
-                            </ng-container>
-                            <ng-template #advancedGraphBlock>
-                                <td [ngClass]="{ greyText : header?.ignore }" nowrap><label>Advanced Graph Application:</label></td>
-                                <td [ngClass]="{ greyText : header?.ignore }"><span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{g.pattern}}</span></td>
-                            </ng-template>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <table class="table table-condensed">
+                <colgroup>
+                    <col style="width: 1%">
+                    <col>
+                </colgroup>
+                <tbody>
+                    <tr *ngFor="let g of header?.graph" (click)="selectGraph(g)" [ngStyle]="{ cursor: header?.ignore ? 'not-allowed' : 'pointer' }"
+                        [ngClass]="{ active : g == selectedGraph }">
+                        <ng-container *ngIf="isSimpleGraphApplication(g); else advancedGraphBlock">
+                            <td [ngClass]="{ greyText : header?.ignore }" nowrap><label>Simple Graph Application:</label></td>
+                            <td [ngClass]="{ greyText : header?.ignore }" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0">$subject {{g.property.getShow()}} ${{g.nodeId}}</td>
+                        </ng-container>
+                        <ng-template #advancedGraphBlock>
+                            <td [ngClass]="{ greyText : header?.ignore }" nowrap><label>Advanced Graph Application:</label></td>
+                            <td [ngClass]="{ greyText : header?.ignore }" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0">{{g.pattern}}</td>
+                        </ng-template>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
