@@ -27,8 +27,6 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.skosCollection;
 
-    private searchInputPlaceholder: string;
-
     constructor(private skosService: SkosServices, private searchService: SearchServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {

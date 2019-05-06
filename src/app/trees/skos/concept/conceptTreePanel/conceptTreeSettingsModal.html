@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body vbox">
 
-    <div class="hbox" style="margin-bottom: 6px; align-items: center; justify-content: center;">
+    <div class="hbox" style="margin-bottom: 6px; align-items: center; justify-content: center; flex: initial">
         <label style="margin-right: 4px; white-space: nowrap;">Visualization mode:</label>
         <select class="form-control input-sm" [(ngModel)]="visualization">
             <option *ngFor="let vm of visualizationModes" [value]="vm.value">{{vm.label}}</option>

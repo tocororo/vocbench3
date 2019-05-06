@@ -12,7 +12,7 @@ export class RdfResourceComponent {
 	@Input() resource: ARTNode;
 	@Input() rendering: boolean = true; //if true the resource should be rendered with the show, with the qname otherwise
 
-	private renderingClass: string = "";
+	private renderingClass: string;
 
 	private resourceWithLang: boolean = false; //true if resource is a literal (or a skosxl:Label) with language
 	private langFlagAvailable: boolean = false; //true if the language has a flag icon available (used only if resourceWithLang is true)
@@ -51,6 +51,7 @@ export class RdfResourceComponent {
 	 * Initializes the class of the resource text: green if the resource is in the staging-add-graph, red if it's in the staging-remove-graph
 	 */
 	private initRenderingClass() {
+		this.renderingClass = "";
 		if (this.resource instanceof ARTResource) {
 			if (ResourceUtils.isResourceInStagingAdd(this.resource)) {
 				this.renderingClass += " proposedAddRes";
