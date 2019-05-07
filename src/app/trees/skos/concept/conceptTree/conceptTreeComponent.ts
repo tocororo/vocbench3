@@ -73,8 +73,8 @@ export class ConceptTreeComponent extends AbstractTree {
                     this.roots = topConcepts;
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
 
-                    if (this.pendingSearchRoot) {
-                        this.openRoot(this.pendingSearchPath, this.pendingSearchRoot);
+                    if (this.pendingSearchPath) {
+                        this.openRoot(this.pendingSearchPath);
                     }
                 }
             );
@@ -95,7 +95,7 @@ export class ConceptTreeComponent extends AbstractTree {
                     this.onTreeNodeNotFound(node);
                 };
                 //open tree from root to node
-                this.openRoot(path, node); 
+                this.openRoot(path); 
             }
         );
     }
@@ -105,7 +105,7 @@ export class ConceptTreeComponent extends AbstractTree {
      * @param path 
      * @param node 
      */
-    private openRoot(path: ARTURIResource[], node: ARTURIResource) {
+    private openRoot(path: ARTURIResource[]) {
         if (this.ensureRootVisibility(path[0], path)) { //if root is visible
             setTimeout(() => { //wait the the UI is updated after the (possible) update of rootLimit
                 UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);

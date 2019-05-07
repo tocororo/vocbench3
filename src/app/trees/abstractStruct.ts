@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ElementRef, ViewChild } from "@angular/core";
 import { Subscriber } from "rxjs";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
 import { ResourceUtils } from "../utils/ResourceUtils";
@@ -17,6 +17,8 @@ export abstract class AbstractStruct {
     @Input() context: TreeListContext;
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Output() nodeChecked = new EventEmitter<ARTURIResource[]>();
+
+    @ViewChild('scrollableContainer') scrollableElement: ElementRef;
 
     /**
      * ATTRIBUTES

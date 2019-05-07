@@ -19,10 +19,6 @@ export abstract class AbstractTree extends AbstractStruct {
      */
 
     @ViewChild('blockDivTree') public blockDivElement: ElementRef;//the element in the view referenced with #blockDivTree
-    @ViewChild('scrollableContainer') scrollableElement: ElementRef;
-    @Input() rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
-    @Input() showDeprecated: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
-    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
 
     /**
      * Searched resource that is waiting to be expanded/selected once the root list is initialized.
@@ -30,7 +26,6 @@ export abstract class AbstractTree extends AbstractStruct {
      * if the user activates the scheme which the concept belongs, it could be necessary to wait that the tree is initialized again 
      * (with the new scheme) and so once the roots are initialized it attempts again to expand the path to the searched concept 
      */
-    protected pendingSearchRoot: ARTURIResource;
     protected pendingSearchPath: ARTURIResource[];
 
     /**
@@ -143,15 +138,13 @@ export abstract class AbstractTree extends AbstractStruct {
                     this.rootLimit = this.rootLimit + this.increaseRate*scrollStep;
                 }
                 //if there was any pending search, reset it
-                if (this.pendingSearchPath || this.pendingSearchRoot) {
+                if (this.pendingSearchPath) {
                     this.pendingSearchPath = null;
-                    this.pendingSearchRoot = null;
                 }
                 return true;
             }
         }
         //if this code is reached, the root is not found (so probably it is waiting that the roots are initialized)
-        this.pendingSearchRoot = resource;
         this.pendingSearchPath = path;
         return false;
     }

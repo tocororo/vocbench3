@@ -11,7 +11,6 @@ import { AbstractStruct } from "./abstractStruct";
 export abstract class AbstractList extends AbstractStruct {
 
     @ViewChild('blockDivList') public blockDivElement: ElementRef; //the element in the view referenced with #blockDivList
-    @ViewChild('scrollableContainer') scrollableElement: ElementRef;
     abstract viewChildrenNode: QueryList<AbstractListNode>;
 
     protected pendingSearchRes: ARTURIResource; //searched resource that is waiting to be selected once the list is initialized
