@@ -148,18 +148,16 @@
             </div>
         </div>
 
-        <div *ngIf="getFacetsKeys().length != 0">
-            <div class="vbox scrollableContainer" style="padding: 0px; margin-left: 2px; max-width: 200px;">
-                <div *ngFor="let key of getFacetsKeys()" class="subPanel vbox">
-                    <div class="subPanel-heading"><label>{{key}}</label></div>
-                    <div class="subPanel-body scrollableContainer" style="flex: 1;">
-                        <div *ngFor="let value of dataset.facets[key]" style="margin-bottom: 3px;">
-                            <span class="label label-default" style="font-size: 11px;">{{value}}</span>
-                        </div>
+        <div *ngIf="getFacetsKeys().length != 0" class="vbox scrollableContainer" style="padding: 0px; margin-left: 2px; max-width: 200px;">
+            <div *ngFor="let key of getFacetsKeys()" class="subPanel vbox">
+                <div class="subPanel-heading"><label>{{key}}</label></div>
+                <div class="subPanel-body scrollableContainer" style="flex: 1;">
+                    <div *ngFor="let value of dataset.facets[key]" style="margin-bottom: 3px;">
+                        <span class="label label-default" style="font-size: 11px;">{{value}}</span>
                     </div>
                 </div>
             </div>
-         </div>
+        </div>
     </div>
 
 </div>
