@@ -246,9 +246,9 @@ export abstract class PartitionRenderer {
         );
     }
 
-    // private isAddExteranlResourceAllowed() {
-    //     return ResViewUtils.addExternalResourcePartition.indexOf(this.partition) != -1;
-    // }
+    private isAddExteranlResourceAllowed() {
+        return ResViewUtils.addExternalResourcePartition.indexOf(this.partition) != -1;
+    }
 
     private addExternal(predicate: ARTURIResource, propChangeable: boolean) {
         this.resViewModals.browseExternalResource("Select external resource", predicate, propChangeable).then(

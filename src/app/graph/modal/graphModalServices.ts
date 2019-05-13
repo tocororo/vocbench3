@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTBNode, ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource } from '../../models/ARTResources';
-import { GraphBinding, GraphResultBindings } from '../../models/Sparql';
+import { QueryResultBinding, GraphResultBindings } from '../../models/Sparql';
 import { ResourcesServices } from '../../services/resourcesServices';
 import { ResourceUtils } from '../../utils/ResourceUtils';
 import { GraphMode } from '../abstractGraph';
@@ -77,7 +77,7 @@ export class GraphModalServices {
         );
     }
 
-    private convertBindingToValue(binding: GraphBinding): ARTNode {
+    private convertBindingToValue(binding: QueryResultBinding): ARTNode {
         if (binding.type == "uri") {
             return new ARTURIResource(binding.value);
         } else if (binding.type == "bnode") {

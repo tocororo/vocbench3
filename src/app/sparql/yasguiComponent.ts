@@ -1,11 +1,10 @@
-import { Component, ViewChild, Input, Output, EventEmitter, ElementRef, SimpleChanges } from '@angular/core';
-import { VBContext } from '../utils/VBContext';
-import { SearchMode } from '../models/Properties';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { ARTURIResource } from '../models/ARTResources';
 import { PrefixMapping } from '../models/Metadata';
-import { MetadataServices } from '../services/metadataServices';
+import { SearchMode } from '../models/Properties';
 import { SearchServices } from '../services/searchServices';
-import * as JQueryStatic from 'jquery';
+import { VBContext } from '../utils/VBContext';
+import { QueryChangedEvent } from '../models/Sparql';
 
 // var YASQE = require('yasgui-yasqe/dist/yasqe.bundled.min');
 var YASQE = require('yasgui-yasqe/dist/yasqe.bundled');
@@ -20,7 +19,7 @@ export class YasguiComponent {
     @Input() readonly: boolean = false;
     @Input() hideButtons: boolean = false;
     //emit event containing {query: string, valid: boolean, mode: string} when it changes
-    @Output() querychange = new EventEmitter<Object>();
+    @Output() querychange = new EventEmitter<QueryChangedEvent>();
 
     @ViewChild('txtarea') textareaElement: ElementRef;
 
@@ -32,7 +31,7 @@ export class YasguiComponent {
 
     private yasqe: any;
 
-    constructor(private metadataService: MetadataServices, private searchService: SearchServices) { }
+    constructor(private searchService: SearchServices) { }
 
     ngAfterViewInit() {
         YASQE.defaults.indentUnit = 4;

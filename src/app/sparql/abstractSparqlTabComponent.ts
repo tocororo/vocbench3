@@ -6,7 +6,7 @@ import { GraphModalServices } from "../graph/modal/graphModalServices";
 import { ARTBNode, ARTResource, ARTURIResource } from "../models/ARTResources";
 import { Configuration, ConfigurationProperty } from "../models/Configuration";
 import { PrefixMapping } from "../models/Metadata";
-import { GraphResultBindings, QueryMode, ResultType } from "../models/Sparql";
+import { GraphResultBindings, QueryMode, ResultType, QueryResultBinding, QueryChangedEvent } from "../models/Sparql";
 import { ConfigurationsServices } from "../services/configurationsServices";
 import { ExportServices } from "../services/exportServices";
 import { SearchServices } from "../services/searchServices";
@@ -39,7 +39,7 @@ export abstract class AbstractSparqlTabComponent {
     private respSparqlJSON: any; //keep the "sparql" JSON object contained in the response
     private resultType: ResultType;
     private headers: string[];
-    private queryResult: any;
+    private queryResult: boolean | QueryResultBinding[];
     private queryInProgress: boolean = false;
     private queryValid: boolean = true;
     private queryTime: string;
@@ -134,8 +134,8 @@ export abstract class AbstractSparqlTabComponent {
             this.headers = stResp.sparql.head.vars;
             this.queryResult = stResp.sparql.results.bindings;
             //paging handler
-            this.resultsTotPage = Math.floor(this.queryResult.length / this.resultsLimit);
-            if (this.queryResult.length % this.resultsLimit > 0) {
+            this.resultsTotPage = Math.floor((<QueryResultBinding[]>this.queryResult).length / this.resultsLimit);
+            if ((<QueryResultBinding[]>this.queryResult).length % this.resultsLimit > 0) {
                 this.resultsTotPage++;
             }
         } else if (stResp.resultType == ResultType.boolean) {
@@ -152,7 +152,7 @@ export abstract class AbstractSparqlTabComponent {
      * valid tells wheter the query is syntactically correct
      * mode tells the query mode (query/update) 
      */
-    private onQueryChange(event: any) {
+    private onQueryChange(event: QueryChangedEvent) {
         this.query = event.query;
         this.queryValid = event.valid;
         this.queryMode = event.mode;
@@ -186,7 +186,7 @@ export abstract class AbstractSparqlTabComponent {
             serialization = serialization.slice(0, -1); //remove last separator
             serialization += "\n"; //and add new line
             //results
-            var res: Array<any> = this.queryResult;
+            var res: QueryResultBinding[] = <QueryResultBinding[]>this.queryResult;
             for (var j = 0; j < res.length; j++) {
                 for (var i = 0; i < headers.length; i++) {
                     if (res[j][headers[i]] != undefined) {
@@ -242,7 +242,7 @@ export abstract class AbstractSparqlTabComponent {
             serialization = serialization.slice(0, -1); //remove last separator
             serialization += "\n"; //and add new line
             //results
-            var res: Array<any> = this.queryResult;
+            var res: QueryResultBinding[] = <QueryResultBinding[]>this.queryResult;
             for (var j = 0; j < res.length; j++) {
                 for (var i = 0; i < headers.length; i++) {
                     if (res[j][headers[i]] != undefined) {
@@ -338,7 +338,7 @@ export abstract class AbstractSparqlTabComponent {
         }
     }
 
-    private getBindingShow(binding: any) {
+    private getBindingShow(binding: QueryResultBinding) {
         if (binding.type == "uri") {
             return "<" + binding.value + ">";
         } else if (binding.type == "bnode") {
@@ -357,7 +357,7 @@ export abstract class AbstractSparqlTabComponent {
 
     private sortResult(header: string) {
         if (this.sortOrder == header + this.asc_Order) { //from ascending to descending (alphabetical) order
-            this.queryResult.sort((binding1: any, binding2: any) => {
+            (<QueryResultBinding[]>this.queryResult).sort((binding1: QueryResultBinding, binding2: QueryResultBinding) => {
                 //support variables v1 and v2 in order to preved error if binding is not defined
                 let v1 = binding1[header] ? binding1[header].value : "";
                 let v2 = binding2[header] ? binding2[header].value : "";
@@ -365,7 +365,7 @@ export abstract class AbstractSparqlTabComponent {
             });
             this.sortOrder = header + this.desc_Order;
         } else {
-            this.queryResult.sort((binding1: any, binding2: any) => { //from descending to ascending (alphabetical) order
+            (<QueryResultBinding[]>this.queryResult).sort((binding1: QueryResultBinding, binding2: QueryResultBinding) => { //from descending to ascending (alphabetical) order
                 //support variables v1 and v2 in order to preved error if binding is not defined
                 let v1 = binding1[header] ? binding1[header].value : "";
                 let v2 = binding2[header] ? binding2[header].value : "";
@@ -376,20 +376,20 @@ export abstract class AbstractSparqlTabComponent {
     }
 
     private isOpenGraphEnabled() {
-        return this.resultType == 'graph' && this.queryResult.length > 0 && this.vbProp.getExperimentalFeaturesEnabled();
+        return this.resultType == 'graph' && (<QueryResultBinding[]>this.queryResult).length > 0 && this.vbProp.getExperimentalFeaturesEnabled();
     }
 
     private openGraph() {
-        if (this.queryResult.length > 100) { //limit of triples
+        if ((<QueryResultBinding[]>this.queryResult).length > 100) { //limit of triples
             this.basicModals.confirm("Graph view", "Attention: The graph you are trying to show will have a large amount of nodes and links. " + 
                 "It could be really confused and not much readable. Do you want to show it anyway?", "warning").then(
                 confirm => {
-                    this.graphModals.openGraphQuertyResult(<GraphResultBindings[]>this.queryResult);
+                    this.graphModals.openGraphQuertyResult(<GraphResultBindings[]><any>this.queryResult);
                 },
                 cancel => {}
             )
         } else {
-            this.graphModals.openGraphQuertyResult(<GraphResultBindings[]>this.queryResult);
+            this.graphModals.openGraphQuertyResult(<GraphResultBindings[]><any>this.queryResult);
         }
         
     }
@@ -429,7 +429,7 @@ export abstract class AbstractSparqlTabComponent {
         });
     }
 
-    private onBindingClick(binding: any) {
+    private onBindingClick(binding: QueryResultBinding) {
         if (this.isBindingResource(binding)) {
             let res: ARTResource;
             if (binding.type == "uri") {
@@ -441,7 +441,7 @@ export abstract class AbstractSparqlTabComponent {
         }
     }
 
-    private isBindingResource(binding: any): boolean {
+    private isBindingResource(binding: QueryResultBinding): boolean {
         return (binding.type == "uri" || binding.type == "bnode");
     }
 

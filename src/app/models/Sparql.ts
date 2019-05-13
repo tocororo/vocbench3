@@ -27,13 +27,19 @@ export enum QueryMode {
     update = "update"
 }
 
-export class GraphResultBindings {
-    subj: GraphBinding;
-    pred: GraphBinding;
-    obj: GraphBinding;
+export class QueryChangedEvent {
+    query: string;
+    valid: boolean;
+    mode: QueryMode;
 }
 
-export class GraphBinding {
+export class GraphResultBindings {
+    subj: QueryResultBinding;
+    pred: QueryResultBinding;
+    obj: QueryResultBinding;
+}
+
+export class QueryResultBinding {
     type: "uri" | "literal" | "bnode";
     value: string;
     datatype?: string;
