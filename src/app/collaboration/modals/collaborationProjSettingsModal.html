@@ -10,9 +10,10 @@
         <select class="form-control input-sm" [(ngModel)]="selectedExtension" (ngModelChange)="onExtensionChange()">
             <option *ngFor="let ext of extensions" [title]="ext.description" [ngValue]="ext">{{ext.name}}</option>
         </select>
+        <button *ngIf="resettable" class="btn btn-default btn-sm" style="margin-left: 4px;" (click)="reset()">Reset</button>
     </div>
 
-    <settings-renderer-panel [(ngModel)]="projSettings"></settings-renderer-panel>
+    <settings-renderer-panel *ngIf="projSettings" [(ngModel)]="projSettings"></settings-renderer-panel>
 
     <div #blockingDiv class="blockingDiv" style="display:none">
         <div class="loadingDiv">

@@ -62,6 +62,11 @@ export class CollaborationServices {
         return this.httpMgr.doPost(this.serviceName, "activateCollaboratioOnProject", params);
     }
 
+    resetCollaborationOnProject() {
+        var params: any = {};
+        return this.httpMgr.doPost(this.serviceName, "resetCollaborationOnProject", params);
+    }
+
     /**
      * 
      * @param backendId 

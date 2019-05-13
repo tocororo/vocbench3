@@ -38,7 +38,7 @@ export class VBProperties {
     private hideLiteralGraphNodes: boolean = false;
 
     private searchSettings: SearchSettings = {
-        stringMatchMode: SearchMode.contains,
+        stringMatchMode: SearchMode.startsWith,
         useLocalName: true,
         useURI: false,
         useNotes: false,

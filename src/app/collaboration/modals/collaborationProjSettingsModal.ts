@@ -1,14 +1,13 @@
-import { Component, ViewChild, ElementRef } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ExtensionFactory, ExtensionPointID, Scope, Settings } from "../../models/Plugins";
 import { CollaborationServices } from "../../services/collaborationServices";
 import { ExtensionsServices } from "../../services/extensionsServices";
 import { SettingsServices } from "../../services/settingsServices";
-import { Settings, ExtensionPointID, ExtensionFactory, Scope } from "../../models/Plugins";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { VBContext } from "../../utils/VBContext";
-import { VBCollaboration } from "../../utils/VBCollaboration";
 import { UIUtils } from "../../utils/UIUtils";
+import { VBCollaboration } from "../../utils/VBCollaboration";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "collaboration-proj-settings-modal",
@@ -24,22 +23,29 @@ export class CollaborationProjSettingsModal implements ModalComponent<BSModalCon
 
     private projSettings: Settings;
 
-    constructor(public dialog: DialogRef<BSModalContext>,
-        private extensionService: ExtensionsServices, private settingsService: SettingsServices,
-        private collaborationService: CollaborationServices, 
-        private vbColl: VBCollaboration,
-        private basicModals: BasicModalServices) {
+    private resettable: boolean = false; //true if a collaboration system was already configured => shows a reset button
+
+    constructor(public dialog: DialogRef<BSModalContext>, private extensionService: ExtensionsServices, private settingsService: SettingsServices,
+        private collaborationService: CollaborationServices, private vbColl: VBCollaboration, private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
+        this.init();
+    }
+
+    private init() {
+        this.extensions = null;
+        this.selectedExtension = null;
+        this.projSettings = null;
         this.extensionService.getExtensions(ExtensionPointID.COLLABORATION_BACKEND_ID).subscribe(
             extensions => {
                 this.extensions = extensions;
-                let backedndId = this.vbColl.getBackendId();
-                if (backedndId != null) {
+                let backendId = this.vbColl.getBackendId();
+                if (backendId != null) {
+                    this.resettable = true;
                     for (var i = 0; i < this.extensions.length; i++) {
-                        if (this.extensions[i].id == backedndId) {
+                        if (this.extensions[i].id == backendId) {
                             this.selectedExtension = this.extensions[i];
                             break;
                         }
@@ -56,6 +62,22 @@ export class CollaborationProjSettingsModal implements ModalComponent<BSModalCon
                 this.projSettings = settings;
             }
         );
+    }
+
+    private reset() {
+        this.basicModals.confirm("Reset Collaboration System", "You are going to disable the Collaboration System on the current project. Are you sure?", "warning").then(
+            () => {
+                this.collaborationService.resetCollaborationOnProject().subscribe(
+                    () => {
+                        this.vbColl.initCollaborationSystem().subscribe(
+                            () => this.dialog.close()
+                        );
+                    }
+                )
+            }, 
+            () => {}
+        )
+        
     }
 
     private onExtensionChange() {
