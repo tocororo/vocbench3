@@ -184,9 +184,28 @@ export class SearchResultsPage<T> {
 	pageSize: number;
 	page: number;
 	tail: boolean;
-	content: T[];
+    content: T[];
+    facetAggregations: FacetAggregation[];
 }
 
 export class DatasetSearchFacets {
     [key: string]: string[]
+}
+
+export class FacetAggregation {
+    name: string;
+    displayName?: string;
+    selectionMode: SelectionMode;
+    buckets: Bucket[];
+    others: boolean;
+}
+
+export enum SelectionMode {
+    disabled, single, multiple
+}
+
+export class Bucket {
+    name: string;
+    displayname?: string;
+    count: number;
 }

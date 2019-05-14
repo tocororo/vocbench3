@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { DatasetSearchFacets, DatasetSearchResult, SearchResultsPage, DatasetDescription } from "../../../models/Metadata";
+import { DatasetSearchFacets, DatasetSearchResult, SearchResultsPage, DatasetDescription, FacetAggregation, SelectionMode } from "../../../models/Metadata";
 import { ExtensionFactory, ExtensionPointID } from "../../../models/Plugins";
 import { ExtensionsServices } from "../../../services/extensionsServices";
 import { DatasetCatalogsServices } from "../../../services/datasetCatalogsServices";
@@ -37,6 +37,8 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
 
     private query: string;
     private lastQuery: string;
+    private lastSearchFacets: {[key: string]: {facetDisplayName?: string; items: {[key:string]:{itemDisplayName?: string}}}} = {};
+
     private searchDatasetResult: SearchResultsPage<DatasetSearchResult>;
     private selectedDataset: DatasetSearchResult;
     private selectedDatasetDescription: DatasetDescription;
@@ -74,11 +76,18 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
 
     private searchDataset() {
         this.lastQuery = this.query;
+        this.lastSearchFacets = {};
         this.executeSearchDataset();
     }
 
     private executeSearchDataset() {
         let facets: DatasetSearchFacets = {};
+        for (let facetName of Object.keys(this.lastSearchFacets)) {
+            let items = Object.keys(this.lastSearchFacets[facetName].items);
+            if (items.length != 0) {
+                facets[facetName] = items;
+            }
+        }
         this.metadataRepositoryService.searchDataset(this.selectedExtension.id, this.lastQuery, facets, this.page).subscribe(
             (results: SearchResultsPage<DatasetSearchResult>) => {
                 this.searchDatasetResult = results;
@@ -106,6 +115,37 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
     }
     private nextPage() {
         this.page++;
+        this.executeSearchDataset();
+    }
+
+    private toggleFacet(facetName: string, facetDisplayName: string, itemName: string, itemDisplayName: string) {
+        let searchFacet = this.lastSearchFacets[facetName]
+        if (!searchFacet) {
+            searchFacet = {
+                facetDisplayName: facetDisplayName,
+                items: {}
+            }
+            this.lastSearchFacets[facetName] = searchFacet;
+        }
+
+        let selectionMode = this.searchDatasetResult.facetAggregations.find(agg => agg.name == facetName).selectionMode;
+
+        if (selectionMode == SelectionMode.disabled) return;
+
+        if (selectionMode == SelectionMode.single) {
+            Object.keys(searchFacet.items).forEach(element => {
+                if (element != itemName) {
+                    delete searchFacet.items[element];
+                }
+            });
+        }
+
+        if (searchFacet.items[itemName]) {
+            delete searchFacet.items[itemName];
+        } else {
+            searchFacet.items[itemName] = {itemDisplayName : itemDisplayName};
+        }
+
         this.executeSearchDataset();
     }
 

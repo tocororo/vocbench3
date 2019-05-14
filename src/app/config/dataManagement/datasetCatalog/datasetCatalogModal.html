@@ -38,17 +38,29 @@
                 <div class="panel-heading">
                     <label>Search results:</label>
                 </div>
-                <div class="panel-body vbox scrollableContainer">
-                    <div *ngFor="let d of searchDatasetResult?.content">
-                        <div class="listItem searchDatasetResult" [ngClass]="{active: d == selectedDataset}" (click)="selectDataset(d)">
-                            <div style="font-size: 13px">
-                                <label>{{d.id}}</label>
-                                <span> - {{d.getPreferredTitle().getValue()}} <span style="color: green">@{{d.getPreferredTitle().getLang()}}</span></span>
+                <div class="panel-body hbox">
+                    <div class="vbox scrollableContainer">
+                        <div *ngFor="let d of searchDatasetResult?.content">
+                            <div class="listItem searchDatasetResult" [ngClass]="{active: d == selectedDataset}" (click)="selectDataset(d)">
+                                <div style="font-size: 13px">
+                                    <label>{{d.id}}</label>
+                                    <span> - {{d.getPreferredTitle().getValue()}} <span style="color: green">@{{d.getPreferredTitle().getLang()}}</span></span>
+                                </div>
+                                <a *ngIf="d.ontologyIRI" [href]="d.ontologyIRI.getURI()" target="_blank" style="color: gray; align-self: start">{{d.ontologyIRI.getURI()}}</a>
+                                <div *ngIf="d.descriptions.length > 0">
+                                    <div style="height: 1px; margin: 2px 0; overflow: hidden; background-color: #e5e5e5;"></div>
+                                    <span style="font-size: 12px">{{d.getPreferredDescription().toNT()}}</span>
+                                </div>
                             </div>
-                            <a *ngIf="d.ontologyIRI" [href]="d.ontologyIRI.getURI()" target="_blank" style="color: gray; align-self: start">{{d.ontologyIRI.getURI()}}</a>
-                            <div *ngIf="d.descriptions.length > 0">
-                                <div style="height: 1px; margin: 2px 0; overflow: hidden; background-color: #e5e5e5;"></div>
-                                <span style="font-size: 12px">{{d.getPreferredDescription().toNT()}}</span>
+                        </div>
+                    </div>
+                    <div *ngIf="searchDatasetResult?.facetAggregations" class="vbox scrollableContainer">
+                        <div *ngFor="let facetAggregation of searchDatasetResult.facetAggregations" class="subPanel">
+                            <div class="subPanel-heading"><label>{{facetAggregation.displayName||facetAggregation.name}}</label></div>
+                            <div class="subPanel-body">
+                                <div *ngFor="let bucket of facetAggregation.buckets" style="padding: 3px">
+                                    <button type="button" class="btn btn-default" [ngClass]="{active: lastSearchFacets[facetAggregation.name]?.items[bucket.name]}" (click)="toggleFacet(facetAggregation.name, facetAggregation.displayName, bucket.name, bucket.displayName)" >{{bucket.displayName||bucket.name}} <span class="badge">{{bucket.count}}</span></button>
+                                </div>
                             </div>
                         </div>
                     </div>

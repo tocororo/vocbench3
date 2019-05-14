@@ -52,7 +52,8 @@ export class DatasetCatalogsServices {
                     page: resp.page,
                     pageSize: resp.pageSize,
                     totalResults: resp.totalResults,
-                    tail: resp.tail
+                    tail: resp.tail,
+                    facetAggregations: resp.facetAggregations
                 };
                 return resPage;
             }
