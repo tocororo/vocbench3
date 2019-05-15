@@ -36,7 +36,14 @@ export abstract class AbstractListNode extends AbstractNode {
     }
 
     ensureVisible() {
-        this.listNodeElement.nativeElement.scrollIntoView({block: 'end', behavior: 'smooth'});
+        /**
+         * ensureVisible is invoked after selectNode. Since the node selection could open a res view and
+         * the res view could make reduce the size of the tree, give time to update the view
+         */
+        setTimeout(() => {
+            this.listNodeElement.nativeElement.scrollIntoView({block: 'end', behavior: 'smooth'});
+        })
+        
     }
 
 }

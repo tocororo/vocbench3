@@ -1,13 +1,12 @@
 //https://www.softwarearchitekt.at/post/2016/12/02/sticky-routes-in-angular-2-3-with-routereusestrategy.aspx
 //Nice explanation of RouteReuseStrategy: http://stackoverflow.com/a/41515648/5805661
 
-import { RouteReuseStrategy, DetachedRouteHandle, ActivatedRouteSnapshot } from "@angular/router";
 import { ComponentRef } from "@angular/core";
-import { ProjectComponent } from "../project/projectComponent";
-import { SparqlComponent } from "../sparql/sparqlComponent";
+import { ActivatedRouteSnapshot, DetachedRouteHandle, OutletContext, RouteReuseStrategy } from "@angular/router";
+import { AlignmentValidationComponent } from "../alignment/alignmentValidation/alignmentValidationComponent";
 import { DataComponent } from "../data/dataComponent";
 import { Sheet2RdfComponent } from "../sheet2rdf/sheet2rdfComponent";
-import { AlignmentValidationComponent } from "../alignment/alignmentValidation/alignmentValidationComponent";
+import { SparqlComponent } from "../sparql/sparqlComponent";
 import { VBContext } from "../utils/VBContext";
 
 // This impl. bases upon one that can be found in the router's test cases.
@@ -58,36 +57,14 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
         if (this.pathWithState.indexOf(route.routeConfig.path) != -1) {
             if (VBContext.isProjectChanged()) {
                 VBContext.setProjectChanged(false); //reset projectChanged
-                // destroy the previous stored DataComponent and SparqlComponent and remove them from the handlers map
-                if (this.handlers["Data"]) {
-                    let detachedRouteHandle = this.handlers["Data"];
-                    let componentRef: ComponentRef<DataComponent> = detachedRouteHandle['componentRef'];
-                    componentRef.destroy();
-                    delete this.handlers["Data"];
-                }
-                if (this.handlers["Sparql"]) {
-                    let detachedRouteHandle = this.handlers["Sparql"];
-                    let componentRef: ComponentRef<SparqlComponent> = detachedRouteHandle['componentRef'];
-                    componentRef.destroy();
-                    delete this.handlers["Sparql"];
-                }
-                if (this.handlers["AlignmentValidation"]) {
-                    let detachedRouteHandle = this.handlers["AlignmentValidation"];
-                    let componentRef: ComponentRef<AlignmentValidationComponent> = detachedRouteHandle['componentRef'];
-                    componentRef.destroy();
-                    delete this.handlers["AlignmentValidation"];
-                }
-                if (this.handlers["Sheet2RDF"]) {
-                    let detachedRouteHandle = this.handlers["Sheet2RDF"];
-                    let componentRef: ComponentRef<Sheet2RdfComponent> = detachedRouteHandle['componentRef'];
-                    componentRef.destroy();
-                    delete this.handlers["Sheet2RDF"];
-                }
-                //return false, so it attacches a new DataComponent
+                // destroy the previous stored routes and remove them from the handlers map
+                this.pathWithState.forEach(path => {
+                    this.destroyRouteHandle(path);
+                });
+                //return false, so it attacches new routes
                 return false;
             }
         }
-
         return !!route.routeConfig && !!this.handlers[route.routeConfig.path];
     }
 
@@ -110,6 +87,33 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
     shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
         // console.debug('CustomReuseStrategy:shouldReuseRoute', future, curr);
         return future.routeConfig === curr.routeConfig;
+    }
+
+
+
+    /**
+     * destroy the previously stored Component of the given route and remove the related DetachedRouteHandle from the storedRoutes map
+     * @param routePath 
+     */
+    private destroyRouteHandle(routePath: string): void {
+        // console.log("CustomReuseStrategy.destroyRouteHandle", routePath);
+        let detachedRouteHandle: DetachedRouteHandle = this.handlers[routePath];
+        if (detachedRouteHandle) {
+            let contexts: Map<string, OutletContext> = detachedRouteHandle['contexts'];
+            contexts.forEach((context: OutletContext, key: string) => {
+                if (context.outlet) {
+                    //deactivate the outlet
+                    context.outlet.deactivate();
+                    //destroy the contexts for all the outlets that were in the component
+                    context.children.onOutletDeactivated();
+                }
+            });
+            let componentRef: ComponentRef<any> = detachedRouteHandle['componentRef'];
+            if (componentRef) {
+                componentRef.destroy();
+            }
+            delete this.handlers[routePath];
+        }
     }
 
 }
