@@ -1,6 +1,6 @@
 <div class="rdfResourceIcon">
     <ng-template [ngIf]="imgSrc">
-        <img *ngIf="!resourceWithLang; else resWithLangBlock" [src]="imgSrc" [title]="natureTooltip">    
+        <img *ngIf="!lang; else resWithLangBlock" [src]="imgSrc" [title]="natureTooltip">    
         <ng-template #resWithLangBlock>
             <!--If flag is not available write the langTag over an empty flag-->
             <div *ngIf="!langFlagAvailable" class="flagIcon" [title]="lang">

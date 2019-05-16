@@ -354,13 +354,17 @@ export class UIUtils {
             } else { //unknown role (none of the previous roles)
                 imgSrc = this.individualImgSrc;
             }
-        } else if (rdfResource.isLiteral()) {
+        } else if (rdfResource instanceof ARTLiteral) {
             let lang: string = (<ARTLiteral>rdfResource).getLang();
             let datatype: string = (<ARTLiteral>rdfResource).getDatatype();
             if (lang != null) {
                 imgSrc = this.getFlagImgSrc(lang);
             } else if (datatype != null) {
-                imgSrc = this.getDatatypeImgSrc(datatype);
+                if (datatype == XmlSchema.language.getURI()) {
+                    imgSrc = this.getFlagImgSrc(rdfResource.getValue());
+                } else {
+                    imgSrc = this.getDatatypeImgSrc(datatype);
+                }
             }
         }
         return imgSrc;

@@ -138,7 +138,8 @@ rdf-resource > .rdfResourceIcon {
     height: 16px;
 }
 /* Ellipsis of the content of a rdf-resource in a button, in a navigation tab (ResView tabs), and in a panel-heading (heading of ResView) */
-button > rdf-resource > span, .nav-tabs rdf-resource > span, .panel-heading rdf-resource > span {
+button > rdf-resource > span, .nav-tabs rdf-resource > span,
+.panel-heading rdf-resource > span, .tile rdf-resource > span {
 	max-width: 200px;
 	overflow: hidden;
     text-overflow: ellipsis;

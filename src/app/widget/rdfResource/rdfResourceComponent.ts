@@ -1,5 +1,6 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { ARTLiteral, ARTNode, ARTResource, RDFResourceRolesEnum, ResAttribute, ResourceNature } from "../../models/ARTResources";
+import { XmlSchema } from "../../models/Vocabulary";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBProperties } from "../../utils/VBProperties";
@@ -14,9 +15,8 @@ export class RdfResourceComponent {
 
 	private renderingClass: string;
 
-	private resourceWithLang: boolean = false; //true if resource is a literal (or a skosxl:Label) with language
-	private langFlagAvailable: boolean = false; //true if the language has a flag icon available (used only if resourceWithLang is true)
-	private lang: string; //language of the resource (used only if resourceWithLang is true)
+	private lang: string; //language of the resource
+	private langFlagAvailable: boolean = false; //true if the language (if any) has a flag icon available
 
 	private literalWithLink: boolean = false; //true if the resource is a literal which contains url
 	private splittedLiteral: string[]; //when literalWithLink is true, even elements are plain text, odd elements are url
@@ -29,11 +29,12 @@ export class RdfResourceComponent {
 	ngOnChanges(changes: SimpleChanges) {
 		if (changes['resource'] && changes['resource'].currentValue) {
 			this.initImgSrc();
-			this.resourceWithLang = this.isResourceWithLang();
-			if (this.resourceWithLang) {
-				this.lang = this.getLang();
+
+			this.lang = this.initLang();
+			if (this.lang) {
 				this.langFlagAvailable = this.isLangFlagAvailable();
 			}
+
 			this.initLiteralWithLink();
 			this.initRenderingClass();
 			this.initNatureTooltip();
@@ -84,28 +85,9 @@ export class RdfResourceComponent {
 	}
 
 	/**
-	 * returns true if the current resource has language: it could be a literal with language or
-	 * a skosxl:Label with language
-	 */
-	private isResourceWithLang(): boolean {
-		var lang: string;
-		if (this.resource.isResource()) {
-			var role = (<ARTResource>this.resource).getRole();
-			if (role == RDFResourceRolesEnum.xLabel || role == RDFResourceRolesEnum.mention) {
-				//in case of CustomForm preview, the resource is a mention (doesn't have a role) but it could be have a language
-				lang = this.resource.getAdditionalProperty(ResAttribute.LANG);
-			}
-		} else if (this.resource.isLiteral()) {
-			lang = (<ARTLiteral>this.resource).getLang();
-		}
-		return (lang != undefined && lang != null && lang != "");
-	}
-
-	/**
 	 * Returns the language tag of the current resource in order to show it as title of resource icon (flag)
-	 * Note: this should be used in template only when isResourceWithLang returns true
 	 */
-	private getLang(): string {
+	private initLang(): string {
 		let lang: string = null;
 		if (this.resource.isResource()) {
 			var role = (<ARTResource>this.resource).getRole();
@@ -113,15 +95,17 @@ export class RdfResourceComponent {
 			if (role == RDFResourceRolesEnum.xLabel || role == RDFResourceRolesEnum.mention) {
 				lang = this.resource.getAdditionalProperty(ResAttribute.LANG);
 			}
-		} else if (this.resource.isLiteral()) {
-			lang = (<ARTLiteral>this.resource).getLang();
+		} else if (this.resource instanceof ARTLiteral) {
+			lang = this.resource.getLang();
+			if (this.resource.getDatatype() == XmlSchema.language.getURI()) {
+				lang = this.resource.getValue();
+			}
 		}
 		return lang;
 	}
 
 	/**
 	 * Returns true if the current resource langTag has a flag image available and the show_flag is true.
-	 * This method should be called only for resource with lang, so it should depend from isResourceWithLang
 	 */
 	private isLangFlagAvailable(): boolean {
 		if (this.preferences.getShowFlags()) {
