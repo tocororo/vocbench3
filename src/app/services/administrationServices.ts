@@ -291,4 +291,12 @@ export class AdministrationServices {
         return this.httpMgr.doPost(this.serviceName, "updateCapabilityForRole", params);
     }
 
+    isPrivacyStatementAvailable(): Observable<boolean> {
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "isPrivacyStatementAvailable", params);
+    }
+
+    downloadPrivacyStatement(): Observable<Blob> {
+        return this.httpMgr.downloadFile(this.serviceName, "downloadPrivacyStatement", {});
+    }
 }

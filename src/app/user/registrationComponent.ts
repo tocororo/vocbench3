@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { Countries } from "../models/LanguagesCountries";
-import { UserForm } from "../models/User";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ARTURIResource } from "../models/ARTResources";
+import { UserForm } from "../models/User";
+import { AdministrationServices } from "../services/administrationServices";
 import { UserServices } from "../services/userServices";
 import { UIUtils } from "../utils/UIUtils";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "registration-component",
@@ -15,14 +15,20 @@ import { UIUtils } from "../utils/UIUtils";
 export class RegistrationComponent {
 
     private firstAccess: boolean = false;
+    private privacyStatementAvailable: boolean = false;
     private userForm: UserForm;
 
-    constructor(private userService: UserServices, private basicModals: BasicModalServices,
+    constructor(private userService: UserServices, private administrationService: AdministrationServices, private basicModals: BasicModalServices,
         private router: Router, private activeRoute: ActivatedRoute) { }
 
     ngOnInit() {
-        // this.firstAccess = this.activeRoute.snapshot.data['user'] == null; //in case "resolve" is used
         this.firstAccess = this.activeRoute.snapshot.params['firstAccess'] == "1";
+
+        this.administrationService.isPrivacyStatementAvailable().subscribe(
+            available => {
+                this.privacyStatementAvailable = available;
+            }
+        )
     }
 
     private fillDefaultUser() {
@@ -90,6 +96,20 @@ export class RegistrationComponent {
                 );
             }
         );
+    }
+
+    private downloadPrivacyStatement() {
+        this.administrationService.downloadPrivacyStatement().subscribe(
+            blob => {
+                let downloadUrl = window.URL.createObjectURL(blob);
+                let downloadLink = document.createElement('a');
+                downloadLink.href = downloadUrl;
+                downloadLink.download = "privacy_statement.pdf";
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                downloadLink.remove();
+            }
+        )
     }
 
 }
