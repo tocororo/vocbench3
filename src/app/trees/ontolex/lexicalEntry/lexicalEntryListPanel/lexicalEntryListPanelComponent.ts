@@ -215,16 +215,24 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
     }
 
     public selectSearchedResource(resource: ARTURIResource) {
-        this.getSearchedEntryIndex(resource).subscribe(
-            index => {
-                this.firstDigitIndex = index.charAt(0);
-                this.secondDigitIndex = index.charAt(1);
-                this.onDigitChange();
-                setTimeout(() => {
-                    this.openAt(resource);
-                });
-            }
-        );
+        if (this.visualizationMode == LexEntryVisualizationMode.indexBased) {
+            this.getSearchedEntryIndex(resource).subscribe(
+                index => {
+                    this.firstDigitIndex = index.charAt(0);
+                    this.secondDigitIndex = index.charAt(1);
+                    this.onDigitChange();
+                    setTimeout(() => {
+                        this.openAt(resource);
+                    });
+                }
+            );
+        } else { //search based
+            this.viewChildList.forceList([resource]);
+            setTimeout(() => {
+                this.openAt(resource);
+            });
+        }
+        
     }
 
     public openAt(node: ARTURIResource) {

@@ -355,8 +355,8 @@ export class UIUtils {
                 imgSrc = this.individualImgSrc;
             }
         } else if (rdfResource instanceof ARTLiteral) {
-            let lang: string = (<ARTLiteral>rdfResource).getLang();
-            let datatype: string = (<ARTLiteral>rdfResource).getDatatype();
+            let lang: string = rdfResource.getLang();
+            let datatype: string = rdfResource.getDatatype();
             if (lang != null) {
                 imgSrc = this.getFlagImgSrc(lang);
             } else if (datatype != null) {

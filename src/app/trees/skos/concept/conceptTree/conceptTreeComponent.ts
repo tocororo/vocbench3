@@ -101,11 +101,12 @@ export class ConceptTreeComponent extends AbstractTree {
     }
 
     /**
-     * Expand the given "path" in order to reach "node" starting from the root
+     * Expand the given "path" in order to reach "node" starting from the root.
+     * This method could be invoked also from the parent panel for selecting an advanced search result in search-based mode.
      * @param path 
      * @param node 
      */
-    private openRoot(path: ARTURIResource[]) {
+    openRoot(path: ARTURIResource[]) {
         if (this.ensureRootVisibility(path[0], path)) { //if root is visible
             setTimeout(() => { //wait the the UI is updated after the (possible) update of rootLimit
                 UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);

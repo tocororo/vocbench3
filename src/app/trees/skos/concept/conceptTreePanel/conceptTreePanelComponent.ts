@@ -285,6 +285,12 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         );
     }
 
+    /**
+     * This method could be invoked by:
+     * - the current component in doSearch only in hierarchy-based mode
+     * - the parent component after an advanced search, so it should takes in account also the search-based mode
+     * @param resource 
+     */
     public selectSearchedResource(resource: ARTURIResource) {
         this.getSearchedConceptSchemes(resource).subscribe(
             schemes => {
@@ -300,7 +306,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                     }
                 }
                 if (isInActiveSchemes) {
-                    this.openTreeAt(resource);
+                    this.selectResourceVisualizationModeAware(resource);
                 } else {
                     if (schemes.length == 0) { //searched concept doesn't belong to any scheme => ask switch to no-scheme mode
                         this.basicModals.confirm("Search", "Searched concept '" + resource.getShow() + "' does not belong to any scheme. Do you want to switch to no-scheme mode?", "warning").then(
@@ -313,7 +319,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                                  */
                                 this.workingSchemes = [];
                                 setTimeout(() => {
-                                    this.openTreeAt(resource); //then open the tree on the searched resource
+                                    this.selectResourceVisualizationModeAware(resource);
                                 });
                             },
                             cancel => {}
@@ -338,7 +344,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                                          */
                                         this.workingSchemes.push(scheme);
                                         setTimeout(() => {
-                                            this.openTreeAt(resource); //then open the tree on the searched resource
+                                            this.selectResourceVisualizationModeAware(resource);
                                         });
                                     },
                                     () => {}
@@ -349,6 +355,17 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                 }
             }
         );
+    }
+
+    private selectResourceVisualizationModeAware(resource: ARTURIResource) {
+        if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {
+            this.openTreeAt(resource);
+        } else {
+            this.viewChildTree.forceList([resource]);
+            setTimeout(() => {
+                this.viewChildTree.openRoot([resource]);
+            })
+        }
     }
 
     /**
