@@ -5,6 +5,7 @@ import { User, UserStatusEnum } from "../../models/User";
 import { UserServices } from "../../services/userServices";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { ForcePasswordModal, ForcePasswordModalData } from "./forcePasswordModal";
 import { UserCreateModal, UserCreateModalData } from "./userCreateModal";
 
 @Component({
@@ -113,6 +114,20 @@ export class UsersAdministrationComponent {
             },
             () => {}
         );
+    }
+
+    private isChangePwdButtonDisabled() {
+        //admin cannot change its password
+        return VBContext.getLoggedUser().getEmail() == this.selectedUser.getEmail();
+    }
+
+    private changePassword() {
+        var modalData = new ForcePasswordModalData(this.selectedUser);
+        const builder = new BSModalContextBuilder<ForcePasswordModalData>(
+            modalData, undefined, ForcePasswordModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        return this.modal.open(ForcePasswordModal, overlayConfig).result.then();
     }
 
 }

@@ -420,6 +420,18 @@ export class UserServices {
 
     /**
      * 
+     * @param password 
+     */
+    forcePassword(email: string, password: string) {
+        var params: any = {
+            email: email,
+            password: password
+        }
+        return this.httpMgr.doPost(this.serviceName, "forcePassword", params);
+    }
+
+    /**
+     * 
      * @param email 
      */
     forgotPassword(email: string) {

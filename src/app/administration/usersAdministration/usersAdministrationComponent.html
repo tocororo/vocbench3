@@ -130,6 +130,9 @@
                     </div>
                 </div>
                 <div class="panel-footer" *ngIf="selectedUser">
+                    <button class="btn btn-default btn-xs" (click)="changePassword()" [disabled]="isChangePwdButtonDisabled()">
+                        Change password
+                    </button>
                     <button class="btn btn-default btn-xs pull-right" (click)="deleteUser()" [disabled]="isDeleteButtonDisabled()">
                         Delete
                     </button>
