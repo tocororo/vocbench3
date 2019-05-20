@@ -54,7 +54,10 @@ export class SkosxlServices {
         var options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
+                exceptionsToSkip: [
+                    'it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException',
+                    'it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException'
+                ] 
             } 
         });
         return this.httpMgr.doPost(this.serviceName, "setPrefLabel", params, options);
@@ -106,7 +109,13 @@ export class SkosxlServices {
         if (labelCls != null) {
             params.labelCls = labelCls;
         }
-        return this.httpMgr.doPost(this.serviceName, "addAltLabel", params);
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException'] 
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "addAltLabel", params, options);
     }
 
     /**
@@ -138,7 +147,13 @@ export class SkosxlServices {
         if (labelCls != null) {
             params.labelCls = labelCls;
         }
-        return this.httpMgr.doPost(this.serviceName, "addHiddenLabel", params);
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.BlacklistForbiddendException'] 
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "addHiddenLabel", params, options);
     }
 
     /**

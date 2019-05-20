@@ -29,6 +29,7 @@ import { SubtermsPartitionRenderer } from '../resourceView/renderer/impl/subterm
 import { SuperPropertiesPartitionRenderer } from '../resourceView/renderer/impl/superPropertiesPartitionRenderer';
 import { TopConceptsPartitionRenderer } from '../resourceView/renderer/impl/topConceptsPartitionRenderer';
 import { TypesPartitionRenderer } from '../resourceView/renderer/impl/typesPartitionRenderer';
+import { LexicalizationEnrichmentHelper } from '../resourceView/renderer/lexicalizationEnrichmentHelper';
 import { PredicateObjectsRenderer } from '../resourceView/renderer/predicateObjectsRenderer';
 import { ResourceRenameComponent } from '../resourceView/resourceRenameComponent';
 import { ResourceViewComponent } from '../resourceView/resourceViewComponent';
@@ -113,7 +114,7 @@ import { TreeAndListModule } from "./treeAndListModule";
     exports: [
         ResourceViewPanelComponent, ResourceViewComponent
     ],
-    providers: [ResViewModalServices],
+    providers: [ResViewModalServices, LexicalizationEnrichmentHelper],
     entryComponents: [
         AddManuallyValueModal,
         AddPropertyValueModal,

@@ -299,6 +299,11 @@ export class HttpManager {
         if (HttpServiceContext.getSessionToken() != undefined) {
             params += "ctx_token=" + encodeURIComponent(HttpServiceContext.getSessionToken()) + "&";
         }
+
+        if (HttpServiceContext.getContextForce()) {
+            params += "ctx_force=true&";
+        }
+
         return params;
     }
 
@@ -458,6 +463,7 @@ export class HttpServiceContext {
     private static ctxProject: Project; //project temporarly used in some scenarios (e.g. exploring other projects)
     private static ctxConsumer: Project; //consumer project temporarly used in some scenarios (e.g. service invoked in group management)
     private static ctxVersion: VersionInfo; //version temporarly used in some scenarios (e.g. versioning res view)
+    private static ctxForce: boolean; //true in order to force some operation (e.g. createConcept, addPrefLabel after rejection in validation)
     private static sessionToken: string; //useful to keep track of session in some tools/scenarios (es. alignment validation)
     
     //if true, the errors thrown by the service calls are intercepted and a modal is shown. Useful to set to false during multiple additions.
@@ -500,6 +506,13 @@ export class HttpServiceContext {
     }
     static removeContextVersion() {
         this.ctxVersion = null;
+    }
+
+    static setContextForce(force: boolean) {
+        this.ctxForce = force;
+    }
+    static getContextForce(): boolean {
+        return this.ctxForce;
     }
 
     /**

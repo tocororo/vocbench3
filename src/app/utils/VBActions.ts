@@ -13,6 +13,7 @@ import { CreationModalServices } from "../widget/modal/creationModal/creationMod
 import { NewLexiconCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/ontolex/newLexiconCfModal";
 import { NewResourceWithLiteralCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal";
 import { NewConceptCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal";
+import { HttpServiceContext } from "./HttpManager";
 import { UIUtils } from "./UIUtils";
 
 export enum VBActionsEnum {
@@ -311,6 +312,23 @@ export class VBActionFunctions {
                                         observer.error(null);
                                     }
                                 );
+                            } else if (err.name.endsWith('BlacklistForbiddendException')) {
+                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                    confirm => {
+                                        UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
+                                        HttpServiceContext.setContextForce(true);
+                                        this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue).subscribe(
+                                            stResp => {
+                                                UIUtils.stopLoadingDiv(ctx.loadingDivRef.nativeElement);
+                                                HttpServiceContext.setContextForce(false);
+                                                observer.next(null);
+                                            }
+                                        );
+                                    },
+                                    reject => {
+                                        observer.error(null);
+                                    }
+                                )
                             }
                         }
                     );
