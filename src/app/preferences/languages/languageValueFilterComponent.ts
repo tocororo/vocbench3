@@ -58,14 +58,9 @@ export class LanguageValueFilterComponent {
         //collect the active languages to set in the preference
         var preferenceLangs: string[] = [];
         var activeLangs: LanguageItem[] = this.getActiveLanguageItems();
-        
-        if (activeLangs.length == 0) { //no language checked
-            preferenceLangs = ["*"];
-        } else {
-            activeLangs.forEach(l => {
-                preferenceLangs.push(l.lang.tag);
-            });
-        }
+        activeLangs.forEach(l => {
+            preferenceLangs.push(l.lang.tag);
+        });
         this.vbProp.setValueFilterLanguages({ languages: preferenceLangs, enabled: this.filterEnabled });
     }
     

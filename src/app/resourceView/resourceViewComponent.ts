@@ -525,6 +525,7 @@ export class ResourceViewComponent {
         this.valueFilterLangEnabled = this.vbProp.getValueFilterLanguages().enabled;
         if (this.valueFilterLangEnabled) {
             let valueFilterLanguages = this.vbProp.getValueFilterLanguages().languages;
+            if (valueFilterLanguages.length == 0) return;
             for (var i = 0; i < predObjList.length; i++) {
                 var objList: ARTNode[] = predObjList[i].getObjects();
                 for (var j = 0; j < objList.length; j++) {

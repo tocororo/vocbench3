@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { DatasetSearchFacets, DatasetSearchResult, SearchResultsPage, DatasetDescription, FacetAggregation, SelectionMode } from "../../../models/Metadata";
+import { DatasetSearchFacets, DatasetSearchResult, SearchResultsPage, DatasetDescription, FacetAggregation, SelectionMode, Bucket } from "../../../models/Metadata";
 import { ExtensionFactory, ExtensionPointID } from "../../../models/Plugins";
 import { ExtensionsServices } from "../../../services/extensionsServices";
 import { DatasetCatalogsServices } from "../../../services/datasetCatalogsServices";
@@ -37,7 +37,7 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
 
     private query: string;
     private lastQuery: string;
-    private lastSearchFacets: {[key: string]: {facetDisplayName?: string; items: {[key:string]:{itemDisplayName?: string}}}} = {};
+    private lastSearchFacets: { [facetName: string]: { facetDisplayName?: string; items: { [itemName:string]: { itemDisplayName?: string}}}} = {};
 
     private searchDatasetResult: SearchResultsPage<DatasetSearchResult>;
     private selectedDataset: DatasetSearchResult;
@@ -118,36 +118,37 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
         this.executeSearchDataset();
     }
 
-    private toggleFacet(facetName: string, facetDisplayName: string, itemName: string, itemDisplayName: string) {
-        let searchFacet = this.lastSearchFacets[facetName]
+    private toggleFacet(facet: FacetAggregation, bucket: Bucket) {
+        let searchFacet = this.lastSearchFacets[facet.name]
         if (!searchFacet) {
             searchFacet = {
-                facetDisplayName: facetDisplayName,
+                facetDisplayName: facet.displayName,
                 items: {}
             }
-            this.lastSearchFacets[facetName] = searchFacet;
+            this.lastSearchFacets[facet.name] = searchFacet;
         }
 
-        let selectionMode = this.searchDatasetResult.facetAggregations.find(agg => agg.name == facetName).selectionMode;
+        let selectionMode = this.searchDatasetResult.facetAggregations.find(agg => agg.name == facet.name).selectionMode;
 
         if (selectionMode == SelectionMode.disabled) return;
 
         if (selectionMode == SelectionMode.single) {
             Object.keys(searchFacet.items).forEach(element => {
-                if (element != itemName) {
+                if (element != bucket.name) {
                     delete searchFacet.items[element];
                 }
             });
         }
 
-        if (searchFacet.items[itemName]) {
-            delete searchFacet.items[itemName];
+        if (searchFacet.items[bucket.name]) {
+            delete searchFacet.items[bucket.name];
         } else {
-            searchFacet.items[itemName] = {itemDisplayName : itemDisplayName};
+            searchFacet.items[bucket.name] = {itemDisplayName : bucket.displayname};
         }
 
         this.executeSearchDataset();
     }
+
 
     ok(event: Event) {
         event.stopPropagation();

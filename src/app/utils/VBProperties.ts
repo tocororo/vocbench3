@@ -119,7 +119,7 @@ export class VBProperties {
 
                 let filterValueLangPref = prefs[Properties.pref_filter_value_languages];
                 if (filterValueLangPref == null) {
-                    this.filterValueLang = { languages: ["*"], enabled: false }; //default
+                    this.filterValueLang = { languages: [], enabled: false }; //default
                 } else {
                     this.filterValueLang = JSON.parse(filterValueLangPref);
                 }
