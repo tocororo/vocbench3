@@ -291,12 +291,17 @@ export class AdministrationServices {
         return this.httpMgr.doPost(this.serviceName, "updateCapabilityForRole", params);
     }
 
-    isPrivacyStatementAvailable(): Observable<boolean> {
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "isPrivacyStatementAvailable", params);
-    }
-
-    downloadPrivacyStatement(): Observable<Blob> {
-        return this.httpMgr.downloadFile(this.serviceName, "downloadPrivacyStatement", {});
+    downloadPrivacyStatement() {
+        return this.httpMgr.downloadFile(this.serviceName, "downloadPrivacyStatement", {}).map(
+            blob => {
+                let downloadUrl = window.URL.createObjectURL(blob);
+                let downloadLink = document.createElement('a');
+                downloadLink.href = downloadUrl;
+                downloadLink.download = "privacy_statement.pdf";
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                downloadLink.remove();
+            }
+        );
     }
 }

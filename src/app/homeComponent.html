@@ -1,8 +1,8 @@
 <div class="vbox">
 
     <div class="hbox">
-        <div class="vbox" style="flex: 4">
-            <div style="font-size: 12px; padding: 6px;">
+        <div class="vbox" style="flex: 4; font-size: 12px; padding: 6px;">
+            <div style="flex: 1;">
                 <h2 style="margin-top: 10px">Welcome to VocBench</h2>
                 <p>
                     VocBench is a web-based, multilingual, collaborative development platform for managing
@@ -15,6 +15,9 @@
                     Acquisition and Management framework
                 </p>
             </div>
+            <p *ngIf="privacyStatementAvailable" style="align-self: flex-end;">
+                Please read our <a [routerLink]="" (click)="downloadPrivacyStatement()">privacy statement</a>
+            </p>
         </div>
         <div *ngIf="!isUserLogged()" style="flex: 1; padding-left: 10px; margin-bottom: 5px; border-left: 1px solid #ddd">
             <login (loggedIn)="onLogin()"></login>

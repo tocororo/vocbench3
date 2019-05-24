@@ -51,6 +51,7 @@ export class VBProperties {
     };
 
     private experimentalFeaturesEnabled: boolean = false;
+    private privacyStatementAvailable: boolean = false;
 
     private eventSubscriptions: Subscription[] = [];
 
@@ -392,6 +393,8 @@ export class VBProperties {
             stResp => {
                 //experimental_features_enabled
                 this.experimentalFeaturesEnabled = stResp[Properties.setting_experimental_features_enabled];
+                //privacy_statement_available
+                this.privacyStatementAvailable = stResp[Properties.privacy_statement_available];
                 //show_flags
                 this.showFlags = stResp[Properties.pref_show_flags];
                 //languages
@@ -414,6 +417,10 @@ export class VBProperties {
 
     getExperimentalFeaturesEnabled(): boolean {
         return this.experimentalFeaturesEnabled;
+    }
+
+    isPrivacyStatementAvailable(): boolean {
+        return this.privacyStatementAvailable;
     }
 
     initProjectSettings() {

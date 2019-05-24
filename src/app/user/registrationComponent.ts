@@ -5,6 +5,7 @@ import { UserForm } from "../models/User";
 import { AdministrationServices } from "../services/administrationServices";
 import { UserServices } from "../services/userServices";
 import { UIUtils } from "../utils/UIUtils";
+import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
 @Component({
@@ -18,17 +19,13 @@ export class RegistrationComponent {
     private privacyStatementAvailable: boolean = false;
     private userForm: UserForm;
 
-    constructor(private userService: UserServices, private administrationService: AdministrationServices, private basicModals: BasicModalServices,
+    constructor(private userService: UserServices, private administrationService: AdministrationServices, private vbProp: VBProperties,
+        private basicModals: BasicModalServices,
         private router: Router, private activeRoute: ActivatedRoute) { }
 
     ngOnInit() {
         this.firstAccess = this.activeRoute.snapshot.params['firstAccess'] == "1";
-
-        this.administrationService.isPrivacyStatementAvailable().subscribe(
-            available => {
-                this.privacyStatementAvailable = available;
-            }
-        )
+        this.privacyStatementAvailable = this.vbProp.isPrivacyStatementAvailable();
     }
 
     private fillDefaultUser() {
@@ -99,17 +96,7 @@ export class RegistrationComponent {
     }
 
     private downloadPrivacyStatement() {
-        this.administrationService.downloadPrivacyStatement().subscribe(
-            blob => {
-                let downloadUrl = window.URL.createObjectURL(blob);
-                let downloadLink = document.createElement('a');
-                downloadLink.href = downloadUrl;
-                downloadLink.download = "privacy_statement.pdf";
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                downloadLink.remove();
-            }
-        )
+        this.administrationService.downloadPrivacyStatement().subscribe();
     }
 
 }

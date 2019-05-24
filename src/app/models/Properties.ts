@@ -39,6 +39,8 @@ export class Properties {
     static setting_remote_configs = "remote_configs";
     static setting_experimental_features_enabled = "experimental_features_enabled";
 
+    static privacy_statement_available = "privacy_statement_available"
+
 }
 
 export enum ResourceViewMode {

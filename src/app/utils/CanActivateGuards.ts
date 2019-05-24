@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, CanDeactivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { CanActivate, CanDeactivate, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { DialogRef } from "ngx-modialog";
-import { Modal } from 'ngx-modialog/plugins/bootstrap';
-import { VBContext } from './VBContext';
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { UserServices } from '../services/userServices';
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { VBContext } from './VBContext';
 
 /**
  * Guard that prevents accessing page to not logged user

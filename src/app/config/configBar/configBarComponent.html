@@ -1,20 +1,31 @@
 <div class="container-fluid">
     
     <div class="dropdown pull-left">
-        <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown">
+        <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" (click)="onAboutMenuOpen()">
             About VocBench
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li><a href="http://vocbench.uniroma2.it/" target="_blank">
-                <span class="glyphicon glyphicon-globe" style="margin-right: 5px"></span>VocBench website
-            </a></li>
-            <li><a href="http://vocbench.uniroma2.it/aboutus/" target="_blank">
-                <span class="glyphicon glyphicon-comment" style="margin-right: 5px"></span>Contact us
-            </a></li>
-            <li><a href="http://vocbench.uniroma2.it/support/" target="_blank">
-                <span class="glyphicon glyphicon-question-sign" style="margin-right: 5px"></span>Support
-            </a></li>
+            <li>
+                <a href="http://vocbench.uniroma2.it/" target="_blank">
+                    <span class="glyphicon glyphicon-globe" style="margin-right: 5px"></span>VocBench website
+                </a>
+            </li>
+            <li>
+                <a href="http://vocbench.uniroma2.it/aboutus/" target="_blank">
+                    <span class="glyphicon glyphicon-comment" style="margin-right: 5px"></span>Contact us
+                </a>
+            </li>
+            <li>
+                <a href="http://vocbench.uniroma2.it/support/" target="_blank">
+                    <span class="glyphicon glyphicon-question-sign" style="margin-right: 5px"></span>Support
+                </a>
+            </li>
+            <li *ngIf="privacyStatementAvailable">
+                <a (click)="downloadPrivacyStatement()">
+                    <span class="glyphicon glyphicon-download-alt" style="margin-right: 5px"></span>Privacy statement
+                </a>
+            </li>
         </ul>
     </div>
     

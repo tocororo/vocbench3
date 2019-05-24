@@ -1,11 +1,12 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
-import { ProjectListModal } from './project/projectListModal';
-import { VBContext } from "./utils/VBContext";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { User } from "./models/User";
-import { Languages, Language } from "./models/LanguagesCountries";
+import { ProjectListModal } from './project/projectListModal';
+import { AdministrationServices } from "./services/administrationServices";
+import { VBContext } from "./utils/VBContext";
+import { VBProperties } from "./utils/VBProperties";
 
 @Component({
     selector: "home-component",
@@ -14,7 +15,13 @@ import { Languages, Language } from "./models/LanguagesCountries";
 })
 export class HomeComponent {
 
-    constructor(private router: Router, private modal: Modal) { }
+    private privacyStatementAvailable: boolean = false;
+
+    constructor(private router: Router, private modal: Modal, private administrationService: AdministrationServices, private vbProp: VBProperties) { }
+
+    ngOnInit() {
+        this.privacyStatementAvailable = this.vbProp.isPrivacyStatementAvailable();
+    }
 
     private isUserLogged(): boolean {
         return VBContext.isLoggedIn();
@@ -29,6 +36,10 @@ export class HomeComponent {
             let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
             this.modal.open(ProjectListModal, overlayConfig);
         }
+    }
+
+    private downloadPrivacyStatement() {
+        this.administrationService.downloadPrivacyStatement().subscribe();
     }
 
 }

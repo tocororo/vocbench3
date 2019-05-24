@@ -5,6 +5,7 @@ import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { VersionInfo } from "../../models/History";
 import { Project } from "../../models/Project";
 import { ProjectListModal } from '../../project/projectListModal';
+import { AdministrationServices } from "../../services/administrationServices";
 import { InputOutputServices } from "../../services/inputOutputServices";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 import { ProjectServices } from "../../services/projectServices";
@@ -12,6 +13,7 @@ import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
+import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
@@ -22,8 +24,10 @@ export class ConfigBarComponent {
 
     private currentProject: Project;
 
-    constructor(private inOutService: InputOutputServices, private projectService: ProjectServices, 
-        private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices, 
+    private privacyStatementAvailable: boolean = false;
+
+    constructor(private inOutService: InputOutputServices, private projectService: ProjectServices, private prefService: PreferencesSettingsServices,
+        private administrationService: AdministrationServices, private vbProp: VBProperties, private basicModals: BasicModalServices,
         private router: Router, private modal: Modal) {
     }
 
@@ -102,6 +106,18 @@ export class ConfigBarComponent {
             },
             () => { }
         );
+    }
+
+    /**
+     * Initializes privacyStatementAvailable. This methods is invoked each time the "About VocBench" menu is open.
+     * This is necessary since if privacyStatementAvailable is initialized in ngOnInit(), the system setting migth still not retrieved
+     * (in AppComponent.ngOnInit())
+     */
+    private onAboutMenuOpen() {
+        this.privacyStatementAvailable = this.vbProp.isPrivacyStatementAvailable();
+    }
+    private downloadPrivacyStatement() {
+        this.administrationService.downloadPrivacyStatement().subscribe();
     }
 
 }
