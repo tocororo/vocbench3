@@ -781,10 +781,8 @@ bs-modal-container {
     min-width: 0;
 }
 .modal-content {
-    max-height: 95vh;
     display: flex !important;
     flex-flow: column;
-    /* flex: 1; */
     min-height: 0;
     min-width: 0;
 }

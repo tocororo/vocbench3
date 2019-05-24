@@ -185,9 +185,6 @@ export abstract class AbstractPanel {
      * @param graphMode 
      */
     isOpenGraphEnabled(graphMode?: GraphMode): boolean {
-        if (!this.vbProp.getExperimentalFeaturesEnabled()) {
-            return false;
-        }
         if (this.context != TreeListContext.dataPanel) {
             return false;
         }

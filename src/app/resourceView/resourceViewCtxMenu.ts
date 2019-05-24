@@ -85,7 +85,8 @@ export class ResourceViewContextMenu {
 
 
     private isOpenDataGraphEnabled(): boolean {
-        return this.vbProp.getExperimentalFeaturesEnabled();
+        // return this.vbProp.getExperimentalFeaturesEnabled();
+        return true;
     }
 
     private openDataGraph() {

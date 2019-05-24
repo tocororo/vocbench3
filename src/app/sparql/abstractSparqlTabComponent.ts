@@ -376,7 +376,7 @@ export abstract class AbstractSparqlTabComponent {
     }
 
     private isOpenGraphEnabled() {
-        return this.resultType == 'graph' && (<QueryResultBinding[]>this.queryResult).length > 0 && this.vbProp.getExperimentalFeaturesEnabled();
+        return this.resultType == 'graph' && (<QueryResultBinding[]>this.queryResult).length > 0;
     }
 
     private openGraph() {

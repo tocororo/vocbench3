@@ -145,12 +145,12 @@ export class LanguageRenderingComponent {
         if (this.sortOrder == SortOrder.LANGUAGE_ASCENDING) {
             this.sortOrder = SortOrder.LANGUAGE_DESCENDING;
             this.renderingLanguages.sort((l1: LanguageItem, l2: LanguageItem) => {
-                return -l1.lang.tag.localeCompare(l2.lang.name);
+                return -l1.lang.name.localeCompare(l2.lang.name);
             });
         } else { //in case is positionDescending or any other order active
             this.sortOrder = SortOrder.LANGUAGE_ASCENDING;
             this.renderingLanguages.sort((l1: LanguageItem, l2: LanguageItem) => {
-                return l1.lang.tag.localeCompare(l2.lang.name);
+                return l1.lang.name.localeCompare(l2.lang.name);
             });
         }
     }

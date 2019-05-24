@@ -4,7 +4,8 @@ import { SharedModalServices } from '../../widget/modal/sharedModal/sharedModalS
 
 @Component({
     selector: 'resource-details-panel',
-    templateUrl: './resourceDetailsPanel.html'
+    templateUrl: './resourceDetailsPanel.html',
+    host: { class: "vbox" }
 })
 export class ResourceDetailsPanel {
 
