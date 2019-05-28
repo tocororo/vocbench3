@@ -31,6 +31,7 @@ export class ValidationComponent extends AbstractHistValidComponent {
 
     init() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        this.page = 0;
         this.commits = [];
         this.validationService.getStagedCommitSummary(this.operations, this.getPerformersIRI(), this.getFormattedFromTime(), this.getFormattedToTime(), this.limit).subscribe(
             stResp => {

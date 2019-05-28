@@ -21,6 +21,7 @@ export class HistoryComponent extends AbstractHistValidComponent {
 
     init() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        this.page = 0;
         this.commits = [];
         this.historyService.getCommitSummary(this.operations, this.getPerformersIRI(), null, this.getFormattedFromTime(), this.getFormattedToTime(), this.limit).subscribe(
             stResp => {
