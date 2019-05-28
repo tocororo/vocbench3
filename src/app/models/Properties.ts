@@ -1,5 +1,7 @@
 import { ResViewPartition } from "./ResourceView";
 import { SKOS } from "./Vocabulary";
+import { ARTURIResource } from "./ARTResources";
+import { Language } from "./LanguagesCountries";
 
 export class Properties {
 
@@ -121,4 +123,46 @@ export class ValueFilterLanguages {
 
 export class ResViewPartitionFilterPreference {
     [role: string]: ResViewPartition[]; //role is a RDFResourceRoleEnum, values are only the hidden partitions
+}
+
+/**
+ * Class that represents the user settings (preferences) of a Project 
+ */
+export class ProjectPreferences {
+    projectLanguagesPreference: string[] = []; //languages that user has assigned for project (and ordered according his preferences)
+
+    editingLanguage: string; //default editing language
+    filterValueLang: ValueFilterLanguages; //languages visible in resource description (e.g. in ResourceView, Graph,...)
+
+    activeSchemes: ARTURIResource[] = [];
+    activeLexicon: ARTURIResource;
+    showFlags: boolean = true;
+    showInstancesNumber: boolean = true;
+    projectThemeId: number = null;
+
+    classTreePreferences: ClassTreePreference;
+    conceptTreePreferences: ConceptTreePreference;
+    lexEntryListPreferences: LexicalEntryListPreference;
+
+    //graph preferences
+    resViewPartitionFilter: ResViewPartitionFilterPreference;
+    hideLiteralGraphNodes: boolean = true;
+
+    searchSettings: SearchSettings;
+}
+
+/**
+ * Class that represents the settings of a project (user indipendent)
+ */
+export class ProjectSettings {
+    projectLanguagesSetting: Language[] = []; //all available languages in a project (settings)
+}
+
+/**
+ * Class that represents the global application settings
+ */
+export class SystemSettings {
+    experimentalFeaturesEnabled: boolean;
+    privacyStatementAvailable: boolean;
+    showFlags: boolean;
 }

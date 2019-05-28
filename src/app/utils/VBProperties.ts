@@ -4,15 +4,15 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ART
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
 import { ProjectTableColumnStruct } from '../models/Project';
-import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, Properties, ResourceViewMode, ResViewPartitionFilterPreference, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
+import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, ResViewPartitionFilterPreference, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
-import { OWL, RDFS, SKOS } from '../models/Vocabulary';
+import { OWL, RDFS } from '../models/Vocabulary';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { Cookie } from '../utils/Cookie';
 import { UIUtils } from '../utils/UIUtils';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
-import { ProjectPreferences, ProjectSettings, VBContext } from './VBContext';
+import { VBContext } from './VBContext';
 
 @Injectable()
 export class VBProperties {
@@ -51,7 +51,7 @@ export class VBProperties {
         ];
         this.prefService.getPUSettings(properties).subscribe(
             prefs => {
-                let projectSettings: ProjectPreferences = VBContext.getWorkingProjectCtx().getProjectPreferences();
+                let projectPreferences: ProjectPreferences = VBContext.getWorkingProjectCtx().getProjectPreferences();
 
                 let activeSchemes: ARTURIResource[] = [];
                 let activeSchemesPref: string = prefs[Properties.pref_active_schemes];
@@ -61,52 +61,52 @@ export class VBProperties {
                         activeSchemes.push(new ARTURIResource(skSplitted[i], null, RDFResourceRolesEnum.conceptScheme));
                     }
                 }
-                projectSettings.activeSchemes = activeSchemes;
+                projectPreferences.activeSchemes = activeSchemes;
 
                 let activeLexicon: ARTURIResource;
                 let activeLexiconPref: string = prefs[Properties.pref_active_lexicon];
                 if (activeLexiconPref != null) {
                     activeLexicon = new ARTURIResource(activeLexiconPref, null, RDFResourceRolesEnum.limeLexicon);
                 }
-                projectSettings.activeLexicon = activeLexicon;
+                projectPreferences.activeLexicon = activeLexicon;
 
-                projectSettings.showFlags = prefs[Properties.pref_show_flags] == "true"
+                projectPreferences.showFlags = prefs[Properties.pref_show_flags] == "true"
 
                 let showInstPref: string = prefs[Properties.pref_show_instances_number];
                 if (showInstPref != null) {
-                    projectSettings.showInstancesNumber = showInstPref == "true";
+                    projectPreferences.showInstancesNumber = showInstPref == "true";
                 } else { //if not specified, true for RDFS and OWL projects, false otherwise
                     let modelType: string = VBContext.getWorkingProject().getModelType();
-                    projectSettings.showInstancesNumber = modelType == RDFS.uri || modelType == OWL.uri;
+                    projectPreferences.showInstancesNumber = modelType == RDFS.uri || modelType == OWL.uri;
                 }
 
                 let projectThemeId = prefs[Properties.pref_project_theme];
-                projectSettings.projectThemeId = projectThemeId;
+                projectPreferences.projectThemeId = projectThemeId;
                 UIUtils.changeNavbarTheme(projectThemeId);
 
                 //languages 
-                projectSettings.editingLanguage = prefs[Properties.pref_editing_language];
+                projectPreferences.editingLanguage = prefs[Properties.pref_editing_language];
 
                 let filterValueLangPref = prefs[Properties.pref_filter_value_languages];
                 if (filterValueLangPref == null) {
-                    projectSettings.filterValueLang = { languages: [], enabled: false }; //default
+                    projectPreferences.filterValueLang = { languages: [], enabled: false }; //default
                 } else {
-                    projectSettings.filterValueLang = JSON.parse(filterValueLangPref);
+                    projectPreferences.filterValueLang = JSON.parse(filterValueLangPref);
                 }
 
                 //graph preferences
                 let rvPartitionFilterPref = prefs[Properties.pref_res_view_partition_filter];
                 if (rvPartitionFilterPref != null) {
-                    projectSettings.resViewPartitionFilter = JSON.parse(rvPartitionFilterPref);
+                    projectPreferences.resViewPartitionFilter = JSON.parse(rvPartitionFilterPref);
                 } else {
                     let resViewPartitionFilter: ResViewPartitionFilterPreference = {};
                     for (let role in RDFResourceRolesEnum) {
                         resViewPartitionFilter[role] = [ResViewPartition.lexicalizations];
                     }
-                    projectSettings.resViewPartitionFilter = resViewPartitionFilter;
+                    projectPreferences.resViewPartitionFilter = resViewPartitionFilter;
                 }
 
-                projectSettings.hideLiteralGraphNodes = prefs[Properties.pref_hide_literal_graph_nodes] != "false";
+                projectPreferences.hideLiteralGraphNodes = prefs[Properties.pref_hide_literal_graph_nodes] != "false";
 
 
                 //cls tree preferences
@@ -124,7 +124,7 @@ export class VBProperties {
                 if (classTreeRootPref != null) {
                     classTreePreferences.rootClassUri = classTreeRootPref;
                 }
-                projectSettings.classTreePreferences = classTreePreferences;
+                projectPreferences.classTreePreferences = classTreePreferences;
 
 
                 //concept tree preferences
@@ -148,7 +148,7 @@ export class VBProperties {
                 conceptTreePreferences.includeSubProps = prefs[Properties.pref_concept_tree_include_subprops] != "false";
                 conceptTreePreferences.syncInverse = prefs[Properties.pref_concept_tree_sync_inverse] != "false";
 
-                projectSettings.conceptTreePreferences = conceptTreePreferences;
+                projectPreferences.conceptTreePreferences = conceptTreePreferences;
 
 
                 //lexical entry list preferences
@@ -161,7 +161,7 @@ export class VBProperties {
                 if (lexEntryListIndexLenghtPref == "2") {
                     lexEntryListPreferences.indexLength = 2;
                 }
-                projectSettings.lexEntryListPreferences = lexEntryListPreferences;
+                projectPreferences.lexEntryListPreferences = lexEntryListPreferences;
 
                 //search settings
                 let searchSettings: SearchSettings = new SearchSettings();
@@ -175,7 +175,7 @@ export class VBProperties {
                 searchSettings.includeLocales = prefs[Properties.pref_search_include_locales] == "true";
                 searchSettings.useAutocompletion = prefs[Properties.pref_search_use_autocomplete] == "true";
 
-                projectSettings.searchSettings = searchSettings;
+                projectPreferences.searchSettings = searchSettings;
 
 
                 this.initSearchSettingsCookie(); //other settings stored in cookies
@@ -378,10 +378,6 @@ export class VBProperties {
                 }
             }
         );
-    }
-
-    setProjectLanguages(languages: Language[]) {
-        VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting = languages;
     }
 
     

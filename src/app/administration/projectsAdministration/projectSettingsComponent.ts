@@ -115,7 +115,7 @@ export class ProjectSettingsComponent {
             this.noLangActive = false;
             this.prefSetService.setProjectSetting(Properties.setting_languages, JSON.stringify(activeLangs), this.project).subscribe(
                 stResp => {
-                    this.vbProperties.setProjectLanguages(activeLangs);
+                    VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting = activeLangs;
                 }
             );
         }
