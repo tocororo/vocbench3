@@ -67,26 +67,26 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         this.visualizationMode = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.visualization;
         this.modelType = VBContext.getWorkingProject().getModelType();
             
+        //Initialize working schemes
         if (this.schemes === undefined) { //if @Input is not provided at all, get the scheme from the preferences
             this.workingSchemes = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
         } else { //if @Input schemes is provided (it could be null => no scheme-mode), initialize the tree with this scheme
-            if (this.schemeChangeable) {
-                if (this.schemes.length > 0) {
-                    this.selectedSchemeUri = this.schemes[0].getURI();
-                    this.workingSchemes = [this.schemes[0]];
-                } else { //no scheme mode
-                    this.selectedSchemeUri = "---"; //no scheme
-                    this.workingSchemes = [];
+            this.workingSchemes = this.schemes;
+        }
+
+        if (this.schemeChangeable) {
+            //init the scheme list if the concept tree allows dynamic change of scheme
+            this.skosService.getAllSchemes().subscribe(
+                schemes => {
+                    ResourceUtils.sortResources(schemes, this.rendering ? SortAttribute.show : SortAttribute.value);
+                    this.schemeList = schemes;
                 }
-                //init the scheme list if the concept tree allows dynamic change of scheme
-                this.skosService.getAllSchemes().subscribe(
-                    schemes => {
-                        ResourceUtils.sortResources(schemes, this.rendering ? SortAttribute.show : SortAttribute.value);
-                        this.schemeList = schemes;
-                    }
-                );
-            } else {
-                this.workingSchemes = this.schemes;
+            );
+            if (this.workingSchemes.length > 0) { //multiple schemes not allowed when schemeChangeable true => select the first
+                this.selectedSchemeUri = this.workingSchemes[0].getURI();
+                this.workingSchemes = [this.workingSchemes[0]];
+            } else { //no scheme mode
+                this.selectedSchemeUri = "---"; //no scheme
             }
         }
     }
