@@ -4,12 +4,12 @@ import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResourc
 import { SearchSettings } from "../../../models/Properties";
 import { RDFS } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
-import { DatatypesServices } from "../../../services/datatypesServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { SearchServices } from "../../../services/searchServices";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { RoleActionResolver } from "../../../utils/RoleActionResolver";
 import { VBActionFunctionCtx } from "../../../utils/VBActions";
+import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -31,7 +31,7 @@ export class DatatypeListPanelComponent extends AbstractListPanel {
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.dataRange;
     // rendering: boolean = false; //override the value in AbstractPanel
 
-    constructor(private datatypeService: DatatypesServices, private searchService: SearchServices,
+    constructor(private searchService: SearchServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
         super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
@@ -68,7 +68,7 @@ export class DatatypeListPanelComponent extends AbstractListPanel {
     //search handlers
 
     doSearch(searchedText: string) {
-        let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
         if (searchSettings.restrictLang) {

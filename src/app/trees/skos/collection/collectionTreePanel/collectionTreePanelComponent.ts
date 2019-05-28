@@ -5,11 +5,11 @@ import { SearchSettings } from "../../../../models/Properties";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
-import { SkosServices } from "../../../../services/skosServices";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { RoleActionResolver } from "../../../../utils/RoleActionResolver";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBActionFunctionCtx } from "../../../../utils/VBActions";
+import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
@@ -27,7 +27,7 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.skosCollection;
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices,
+    constructor(private searchService: SearchServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
         super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
@@ -136,7 +136,7 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
     //search handlers
 
     doSearch(searchedText: string) {
-        let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
         if (searchSettings.restrictLang) {

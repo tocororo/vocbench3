@@ -1,12 +1,12 @@
 import { Component } from "@angular/core";
-import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { SKOSXL } from "../../models/Vocabulary";
-import { VBProperties } from "../../utils/VBProperties";
-import { UIUtils } from "../../utils/UIUtils";
-import { IcvServices } from "../../services/icvServices";
 import { ClassesServices } from "../../services/classesServices";
+import { IcvServices } from "../../services/icvServices";
+import { UIUtils } from "../../utils/UIUtils";
+import { VBContext } from "../../utils/VBContext";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 
 @Component({
     selector: "dangling-label-component",
@@ -18,7 +18,7 @@ export class DanglingXLabelComponent {
     private brokenLabelList: Array<ARTResource>;
 
     constructor(private icvService: IcvServices, private classesService: ClassesServices,
-        private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private preferences: VBProperties) { }
+        private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) { }
 
     /**
      * Run the check
@@ -54,7 +54,8 @@ export class DanglingXLabelComponent {
         var predOpts = [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel];
         this.basicModals.selectResource("Set skosxl:Label as", null, predOpts).then(
             (selectedPred: any) => {
-                this.browsingModals.browseConceptTree("Assign xLabel to concept", this.preferences.getActiveSchemes(), true).then(
+                let activeSchemes: ARTURIResource[] = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
+                this.browsingModals.browseConceptTree("Assign xLabel to concept", activeSchemes, true).then(
                     (concept: any) => {
                         var xlabelPred: ARTURIResource;
                         this.icvService.setDanglingXLabel(concept, selectedPred, xlabel).subscribe(

@@ -37,7 +37,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
     }
 
     ngOnInit() {
-        let clsTreePref: ClassTreePreference = this.vbProp.getClassTreePreferences();
+        let clsTreePref: ClassTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences;
         this.pristineClassPref = JSON.parse(JSON.stringify(clsTreePref));
         this.filterEnabled = clsTreePref.filterEnabled;
         this.resourceService.getResourceDescription(new ARTURIResource(clsTreePref.rootClassUri)).subscribe(
@@ -117,7 +117,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
             this.clsService.getSubClasses(this.selectedFilteredClass, false).subscribe(
                 classes => {
                     ResourceUtils.sortResources(classes, SortAttribute.show);
-                    let clsTreePref: ClassTreePreference = this.vbProp.getClassTreePreferences();
+                    let clsTreePref: ClassTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences;
                     let filteredSubClssPref = clsTreePref.filterMap[this.selectedFilteredClass.getURI()];
     
                     filterMapEntry.subClasses = [];
@@ -193,7 +193,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
             let filteredSubClasses: string[] = [];
             if (f.subClasses == null) {
                 //subClasses in filterMapRes not yet initialized => get it from the preference
-                filteredSubClasses = this.vbProp.getClassTreePreferences().filterMap[f.cls.getURI()];
+                filteredSubClasses = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filterMap[f.cls.getURI()];
             } else {
                 for (var i = 0; i < f.subClasses.length; i++) {
                     if (!f.subClasses[i].checked) {

@@ -6,7 +6,6 @@ import { GraphModalServices } from "../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { SearchSettings } from "../../../models/Properties";
 import { OWL, RDFS } from "../../../models/Vocabulary";
-import { ClassesServices } from "../../../services/classesServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { SearchServices } from "../../../services/searchServices";
@@ -40,7 +39,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     private filterEnabled: boolean;
     private creatingClassType: ARTURIResource = OWL.class;
 
-    constructor(private classesService: ClassesServices, private searchService: SearchServices, private modal: Modal,
+    constructor(private searchService: SearchServices, private modal: Modal,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
         super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
@@ -49,7 +48,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     ngOnInit() {
         super.ngOnInit();
 
-        this.filterEnabled = this.vbProp.getClassTreePreferences().filterEnabled;
+        this.filterEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filterEnabled;
         if (VBContext.getWorkingProject().getModelType() == RDFS.uri) {
             this.creatingClassType = RDFS.class;
         }
@@ -101,7 +100,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     //search handlers
 
     doSearch(searchedText: string) {
-        let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
         if (searchSettings.restrictLang) {
@@ -151,11 +150,11 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ClassTreeSettingsModal, overlayConfig).result.then(
             changesDone => {
-                this.filterEnabled = this.vbProp.getClassTreePreferences().filterEnabled;
+                this.filterEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filterEnabled;
                 this.refresh();
             },
             () => {
-                this.filterEnabled = this.vbProp.getClassTreePreferences().filterEnabled;
+                this.filterEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filterEnabled;
             }
         );
     }

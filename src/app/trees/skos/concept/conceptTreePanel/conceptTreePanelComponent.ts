@@ -64,11 +64,11 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     ngOnInit() {
         super.ngOnInit();
 
-        this.visualizationMode = this.vbProp.getConceptTreePreferences().visualization;
+        this.visualizationMode = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.visualization;
         this.modelType = VBContext.getWorkingProject().getModelType();
             
         if (this.schemes === undefined) { //if @Input is not provided at all, get the scheme from the preferences
-            this.workingSchemes = this.vbProp.getActiveSchemes();
+            this.workingSchemes = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
         } else { //if @Input schemes is provided (it could be null => no scheme-mode), initialize the tree with this scheme
             if (this.schemeChangeable) {
                 if (this.schemes.length > 0) {
@@ -238,7 +238,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     doSearch(searchedText: string) {
         this.lastSearch = searchedText;
 
-        let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
         if (searchSettings.restrictLang) {
@@ -390,7 +390,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ConceptTreeSettingsModal, overlayConfig).result.then(
             changesDone => {
-                this.visualizationMode = this.vbProp.getConceptTreePreferences().visualization;
+                this.visualizationMode = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.visualization;
                 if (this.visualizationMode == ConceptTreeVisualizationMode.searchBased) {
                     this.viewChildTree.forceList([]);
                     this.lastSearch = null;

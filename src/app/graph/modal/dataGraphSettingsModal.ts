@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 
 @Component({
@@ -17,7 +18,7 @@ export class DataGraphSettingsModal implements ModalComponent<BSModalContext> {
     }
 
     ngOnInit() {
-        this.hideLiteralNodes = this.vbProp.getHideLiteralGraphNodes();
+        this.hideLiteralNodes = VBContext.getWorkingProjectCtx().getProjectPreferences().hideLiteralGraphNodes;
     }
 
     private onHideLiteralChange() {

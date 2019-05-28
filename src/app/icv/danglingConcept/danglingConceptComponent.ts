@@ -4,7 +4,7 @@ import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
 import { ResourceUtils, SortAttribute } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
-import { VBProperties } from "../../utils/VBProperties";
+import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
@@ -20,7 +20,7 @@ export class DanglingConceptComponent {
     private selectedScheme: ARTURIResource;
     private brokenConceptList: Array<ARTURIResource>;
 
-    constructor(private icvService: IcvServices, private skosService: SkosServices, private preferences: VBProperties,
+    constructor(private icvService: IcvServices, private skosService: SkosServices,
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
@@ -28,7 +28,7 @@ export class DanglingConceptComponent {
             schemeList => {
                 this.schemeList = schemeList;
                 ResourceUtils.sortResources(this.schemeList, SortAttribute.show);
-                var activeSchemes: ARTURIResource[] = this.preferences.getActiveSchemes();
+                var activeSchemes: ARTURIResource[] = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
                 var currentScheme: ARTURIResource;
                 if (activeSchemes.length > 0) {
                     currentScheme = activeSchemes[0];

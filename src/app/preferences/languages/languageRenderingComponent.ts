@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Language } from "../../models/LanguagesCountries";
+import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 
 @Component({
@@ -16,8 +17,8 @@ export class LanguageRenderingComponent {
     constructor(private properties: VBProperties) { }
 
     ngOnInit() {
-        var projectLanguages: Language[] = this.properties.getProjectLanguages();
-        let renderingLanguages: string[] = this.properties.getLanguagesPreference();
+        var projectLanguages: Language[] = VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting;
+        let renderingLanguages: string[] = VBContext.getWorkingProjectCtx().getProjectPreferences().projectLanguagesPreference;
         if (renderingLanguages.length == 1 && renderingLanguages[0] == "*") { //"*" stands for all languages
             //set as selected renderingLangs all the available langs
             for (var i = 0; i < projectLanguages.length; i++) {

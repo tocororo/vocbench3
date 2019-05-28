@@ -6,8 +6,8 @@ import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
+import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTree } from "../../abstractTree";
@@ -29,7 +29,7 @@ export class ClassTreeComponent extends AbstractTree {
 
     private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initTree when the view is not initialized
 
-    constructor(private clsService: ClassesServices, private searchService: SearchServices, private vbProp: VBProperties,
+    constructor(private clsService: ClassesServices, private searchService: SearchServices,
         eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         super(eventHandler, basicModals, sharedModals);
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
@@ -49,7 +49,7 @@ export class ClassTreeComponent extends AbstractTree {
         
         let clsTreeRoots: ARTURIResource[] = this.rootClasses;
         if (clsTreeRoots == undefined || clsTreeRoots.length == 0) {
-            clsTreeRoots = [new ARTURIResource(this.vbProp.getClassTreePreferences().rootClassUri)];
+            clsTreeRoots = [new ARTURIResource(VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.rootClassUri)];
         }
 
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement)
@@ -67,7 +67,7 @@ export class ClassTreeComponent extends AbstractTree {
     openTreeAt(node: ARTURIResource) {
         let rootForPath: ARTURIResource;
         if (this.rootClasses == undefined || this.rootClasses.length == 0) {
-            rootForPath = new ARTURIResource(this.vbProp.getClassTreePreferences().rootClassUri);
+            rootForPath = new ARTURIResource(VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.rootClassUri);
         } else if (this.rootClasses != undefined && this.rootClasses.length == 1) {
             rootForPath = this.rootClasses[0];
         }

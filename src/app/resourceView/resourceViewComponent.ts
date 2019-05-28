@@ -116,7 +116,7 @@ export class ResourceViewComponent {
     ngOnChanges(changes: SimpleChanges) {
         this.showInferred = this.vbProp.getInferenceInResourceView();
         this.rendering = this.vbProp.getRenderingInResourceView();
-        this.valueFilterLangEnabled = this.vbProp.getValueFilterLanguages().enabled;
+        this.valueFilterLangEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang.enabled;
 
         if (changes['resource'] && changes['resource'].currentValue) {
             //if not the first change, avoid to refresh res view if resource is not changed
@@ -522,9 +522,9 @@ export class ResourceViewComponent {
 
     private filterValueLanguageFromPrefObjList(predObjList: ARTPredicateObjects[]) {
         //even if already initialized, get each time the value of valueFilterLangEnabled in order to detect eventual changes of the pref
-        this.valueFilterLangEnabled = this.vbProp.getValueFilterLanguages().enabled;
+        this.valueFilterLangEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang.enabled;
         if (this.valueFilterLangEnabled) {
-            let valueFilterLanguages = this.vbProp.getValueFilterLanguages().languages;
+            let valueFilterLanguages = VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang.languages;
             if (valueFilterLanguages.length == 0) return;
             for (var i = 0; i < predObjList.length; i++) {
                 var objList: ARTNode[] = predObjList[i].getObjects();
@@ -596,7 +596,7 @@ export class ResourceViewComponent {
     private switchValueFilterLang() {
         this.valueFilterLangEnabled = !this.valueFilterLangEnabled;
         //update the preference
-        let valueFilterLangPref = this.vbProp.getValueFilterLanguages();
+        let valueFilterLangPref = VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang;
         valueFilterLangPref.enabled = this.valueFilterLangEnabled;
         this.vbProp.setValueFilterLanguages(valueFilterLangPref);
         //update the RV

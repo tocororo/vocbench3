@@ -6,7 +6,7 @@ import { GraphServices } from "../../services/graphServices";
 import { ResourceViewServices } from "../../services/resourceViewServices";
 import { Deserializer } from "../../utils/Deserializer";
 import { ResourceUtils } from "../../utils/ResourceUtils";
-import { VBProperties } from "../../utils/VBProperties";
+import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AbstractGraph, GraphMode } from "../abstractGraph";
 import { D3Service } from "../d3/d3Services";
@@ -30,7 +30,7 @@ export class DataGraphComponent extends AbstractGraph {
     private rvPartitions: ResViewPartition[] = ResViewUtils.orderedResourceViewPartitions;
 
     constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef, protected basicModals: BasicModalServices,
-        private resViewService: ResourceViewServices, private graphService: GraphServices, private graphModals: GraphModalServices, private vbProp: VBProperties) {
+        private resViewService: ResourceViewServices, private graphService: GraphServices, private graphModals: GraphModalServices) {
         super(d3Service, elementRef, ref, basicModals);
     }
 
@@ -75,7 +75,7 @@ export class DataGraphComponent extends AbstractGraph {
 
         this.resViewService.getResourceView(<ARTResource>node.res).subscribe(
             rv => {
-                let filteredPartitions: ResViewPartition[] = this.vbProp.getResourceViewPartitionsFilter()[(<ARTResource>node.res).getRole()];
+                let filteredPartitions: ResViewPartition[] = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter[(<ARTResource>node.res).getRole()];
                 //create the predicate-object lists for each partition (skip the filtered partition)
                 let predObjListMap: { [partition: string]: ARTPredicateObjects[] } = {};
                 this.rvPartitions.forEach(partition => {
@@ -201,7 +201,7 @@ export class DataGraphComponent extends AbstractGraph {
      * @param predicatesToHide 
      */
     private convertPredObjListMapToLinks(sourceNode: Node, predObjListMap: { [partition: string]: ARTPredicateObjects[] }, predicatesToHide: ARTURIResource[]): Link[] {
-        let hideLiteralNodes: boolean = this.vbProp.getHideLiteralGraphNodes();
+        let hideLiteralNodes: boolean = VBContext.getWorkingProjectCtx().getProjectPreferences().hideLiteralGraphNodes;
         let links: Link[] = [];
         for (let partition in predObjListMap) {
             predObjListMap[partition].forEach(pol => { //for each pol of a partition
@@ -239,9 +239,9 @@ export class DataGraphComponent extends AbstractGraph {
      * @param predObjList 
      */
     private filterValueLanguageFromPrefObjList(predObjList: ARTPredicateObjects[]) {
-        let valueFilterLangEnabled = this.vbProp.getValueFilterLanguages().enabled;
+        let valueFilterLangEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang.enabled;
         if (valueFilterLangEnabled) {
-            let valueFilterLanguages = this.vbProp.getValueFilterLanguages().languages;
+            let valueFilterLanguages = VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang.languages;
             for (var i = 0; i < predObjList.length; i++) {
                 var objList: ARTNode[] = predObjList[i].getObjects();
                 for (var j = 0; j < objList.length; j++) {

@@ -5,6 +5,7 @@ import { IndividualsServices } from "../../../services/individualsServices";
 import { SearchServices } from "../../../services/searchServices";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
+import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -53,7 +54,7 @@ export class ClassIndividualTreePanelComponent {
     private eventSubscriptions: any[] = [];
 
     constructor(private individualService: IndividualsServices, private searchService: SearchServices,
-        private basicModals: BasicModalServices, private vbProp: VBProperties, private eventHandler: VBEventHandler) {
+        private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
 
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
             (deletedRes: ARTURIResource) => this.onClassDeleted(deletedRes)));
@@ -66,7 +67,7 @@ export class ClassIndividualTreePanelComponent {
     }
 
     private doSearch(searchedText: string) {
-        let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
         let searchRoles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual];
         if (searchSettings.classIndividualSearchMode == ClassIndividualPanelSearchMode.onlyInstances) {
             searchRoles = [RDFResourceRolesEnum.individual];

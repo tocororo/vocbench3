@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { LexEntryVisualizationMode, LexicalEntryListPreference } from "../../../../models/Properties";
+import { VBContext } from "../../../../utils/VBContext";
 import { VBProperties } from "../../../../utils/VBProperties";
 
 @Component({
@@ -27,7 +28,7 @@ export class LexicalEntryListSettingsModal implements ModalComponent<BSModalCont
     }
 
     ngOnInit() {
-        let lexEntryPref: LexicalEntryListPreference = this.vbProp.getLexicalEntryListPreferences();
+        let lexEntryPref: LexicalEntryListPreference = VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences;
         this.pristineLexEntryPref = JSON.parse(JSON.stringify(lexEntryPref));
         this.visualization = lexEntryPref.visualization;
         this.indexLenght = lexEntryPref.indexLength;

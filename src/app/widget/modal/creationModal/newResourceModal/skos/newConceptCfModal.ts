@@ -1,15 +1,15 @@
-import { Component, ViewChild, ElementRef } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal"
-import { CustomFormsServices } from "../../../../../services/customFormsServices"
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources";
+import { CustomFormValue } from "../../../../../models/CustomForms";
+import { SKOS } from "../../../../../models/Vocabulary";
+import { CustomFormsServices } from "../../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../../services/resourcesServices";
-import { BasicModalServices } from "../../../basicModal/basicModalServices"
-import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices"
-import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources"
-import { CustomFormValue } from "../../../../../models/CustomForms"
-import { SKOS } from "../../../../../models/Vocabulary"
-import { VBProperties } from "../../../../../utils/VBProperties";
+import { VBContext } from "../../../../../utils/VBContext";
+import { BasicModalServices } from "../../../basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
+import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
 
 export class NewConceptCfModalData extends BSModalContext {
     constructor(
@@ -43,7 +43,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
     private uri: string;
     private schemes: ARTURIResource[];
 
-    constructor(public dialog: DialogRef<NewConceptCfModalData>, private vbProp: VBProperties, private resourceService: ResourcesServices,
+    constructor(public dialog: DialogRef<NewConceptCfModalData>, private resourceService: ResourcesServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         super(cfService, basicModals, browsingModals);
         this.context = dialog.context;
@@ -55,7 +55,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
         this.selectCustomForm();
 
         if (this.context.broader) {
-            let broaderPropUri = this.vbProp.getConceptTreePreferences().baseBroaderUri;
+            let broaderPropUri = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.baseBroaderUri;
             if (broaderPropUri != SKOS.broader.getURI()) {
                 this.resourceService.getResourceDescription(new ARTURIResource(broaderPropUri)).subscribe(
                     res => {

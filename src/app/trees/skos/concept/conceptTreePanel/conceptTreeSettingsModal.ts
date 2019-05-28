@@ -43,13 +43,12 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
     private userGroupBaseBroaderProp: string;
 
     constructor(public dialog: DialogRef<BSModalContext>, private resourceService: ResourcesServices, private propService: PropertyServices,
-        private prefService: PreferencesSettingsServices, private vbProp: VBProperties, 
-        private basicModals: BasicModalServices , private browsingModals: BrowsingModalServices) {
+        private prefService: PreferencesSettingsServices, private vbProp: VBProperties, private browsingModals: BrowsingModalServices) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
-        let conceptTreePref: ConceptTreePreference = this.vbProp.getConceptTreePreferences();
+        let conceptTreePref: ConceptTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
         this.pristineConcPref = JSON.parse(JSON.stringify(conceptTreePref));
         
         this.baseBroaderProp = conceptTreePref.baseBroaderUri;

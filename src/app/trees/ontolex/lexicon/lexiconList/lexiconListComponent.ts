@@ -2,7 +2,6 @@ import { Component, QueryList, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../../models/ARTResources";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
-import { SearchServices } from "../../../../services/searchServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { UIUtils } from "../../../../utils/UIUtils";
@@ -10,7 +9,6 @@ import { VBActionsEnum } from "../../../../utils/VBActions";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from "../../../../utils/VBProperties";
-import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { AbstractList } from "../../../abstractList";
 import { LexiconListNodeComponent } from "./lexiconListNodeComponent";
 
@@ -29,8 +27,7 @@ export class LexiconListComponent extends AbstractList {
 
     private activeLexicon: ARTURIResource;
 
-    constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private vbProp: VBProperties,
-        private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+    constructor(private ontolexService: OntoLexLemonServices, private vbProp: VBProperties, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.lexiconCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
         this.eventSubscriptions.push(eventHandler.lexiconDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
@@ -54,7 +51,8 @@ export class LexiconListComponent extends AbstractList {
                 ResourceUtils.sortResources(lexicons, this.rendering ? SortAttribute.show : SortAttribute.value);
 
                 for (var i = 0; i < lexicons.length; i++) {
-                    if (this.vbProp.isActiveLexicon(lexicons[i])) {
+                    let activeLexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
+                    if (activeLexicon != null && lexicons[i].equals(activeLexicon)) {
                         this.activeLexicon = lexicons[i];
                         break;
                     }

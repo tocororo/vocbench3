@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Theme, UIUtils } from "../utils/UIUtils";
+import { VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
 
 @Component({
@@ -19,8 +20,8 @@ export class VocbenchPreferencesComponent {
     ngOnInit() {
         //no need to call the service to get the following preferences, since they are already initialized when user accessed the project
         this.showFlags = this.properties.getShowFlags()
-        this.showInstNumb = this.properties.getShowInstancesNumber();
-        let projThemePref = this.properties.getProjectTheme();
+        this.showInstNumb = VBContext.getWorkingProjectCtx().getProjectPreferences().showInstancesNumber;
+        let projThemePref = VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId;
         this.themes.forEach(t => {
             if (t.id == projThemePref) { this.selectedTheme = t; }
         });

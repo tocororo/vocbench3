@@ -3,11 +3,9 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from "../../../../models/ARTResources";
 import { ConceptTreePreference } from "../../../../models/Properties";
-import { PreferencesSettingsServices } from "../../../../services/preferencesSettingsServices";
 import { SkosServices } from "../../../../services/skosServices";
 import { UIUtils } from "../../../../utils/UIUtils";
-import { VBProperties } from "../../../../utils/VBProperties";
-import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
+import { VBContext } from "../../../../utils/VBContext";
 
 export class AddToSchemeModalData extends BSModalContext {
     constructor(
@@ -33,9 +31,7 @@ export class AddToSchemeModal implements ModalComponent<AddToSchemeModalData> {
     private schemeList: { scheme: ARTURIResource, checked: boolean }[] =[];
     private collapsed: boolean = true;
 
-    constructor(public dialog: DialogRef<AddToSchemeModalData>, private skosService: SkosServices,
-        private prefService: PreferencesSettingsServices, private vbProp: VBProperties, 
-        private basicModals: BasicModalServices) {
+    constructor(public dialog: DialogRef<AddToSchemeModalData>, private skosService: SkosServices) {
         this.context = dialog.context;
     }
 
@@ -62,7 +58,7 @@ export class AddToSchemeModal implements ModalComponent<AddToSchemeModalData> {
     }
 
     ok(event: Event) {
-        let prefs: ConceptTreePreference = this.vbProp.getConceptTreePreferences();
+        let prefs: ConceptTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
         let broaderProps: ARTURIResource[] = [];
         prefs.broaderProps.forEach((prop: string) => broaderProps.push(new ARTURIResource(prop)));
         let narrowerProps: ARTURIResource[] = [];

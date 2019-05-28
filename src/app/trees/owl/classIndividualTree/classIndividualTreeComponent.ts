@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { SKOS } from '../../../models/Vocabulary';
-import { VBProperties } from '../../../utils/VBProperties';
+import { VBContext } from "../../../utils/VBContext";
 
 @Component({
     selector: "class-individual-tree",
@@ -24,11 +24,11 @@ export class ClassIndividualTreeComponent {
     private currentSchemes: ARTURIResource[];//the scheme selecte in the concept tree (only if selected class is skos:Concept)
     private selectedInstance: ARTURIResource; //the instance (or concept) selected in the instance list (or concept tree)
 
-    constructor(private preferences: VBProperties) { }
+    constructor() { }
 
     ngOnInit() {
         if (this.schemes === undefined) { //if @Input scheme is not provided at all, get it from project preference
-            this.currentSchemes = this.preferences.getActiveSchemes();
+            this.currentSchemes = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
         } else { //if @Input scheme is provided (it could be null => no scheme-mode), initialize the tree with this scheme
             this.currentSchemes = this.schemes;
         }

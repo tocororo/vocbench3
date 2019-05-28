@@ -1,9 +1,7 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { ARTURIResource, RDFResourceRolesEnum } from '../../../models/ARTResources';
 import { OntoLex, SKOS } from '../../../models/Vocabulary';
-import { ResourcesServices } from '../../../services/resourcesServices';
 import { VBContext } from '../../../utils/VBContext';
-import { VBProperties } from '../../../utils/VBProperties';
 import { BasicModalServices } from '../../modal/basicModal/basicModalServices';
 import { BrowsingModalServices } from '../../modal/browsingModal/browsingModalServices';
 
@@ -21,8 +19,7 @@ export class ResourcePickerComponent {
 
     private resourceIRI: string;
 
-    constructor(private resourceService: ResourcesServices, private browsingModals: BrowsingModalServices,
-        private basicModals: BasicModalServices, private vbProp: VBProperties) { }
+    constructor(private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.init();
@@ -103,7 +100,8 @@ export class ResourcePickerComponent {
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.concept) {
-            this.browsingModals.browseConceptTree("Select a Concept", this.vbProp.getActiveSchemes(), true).then(
+            let activeSchemes: ARTURIResource[] = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
+            this.browsingModals.browseConceptTree("Select a Concept", activeSchemes, true).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
@@ -131,7 +129,8 @@ export class ResourcePickerComponent {
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.ontolexLexicalEntry) {
-            this.browsingModals.browseLexicalEntryList("Select a LexicalEntry", this.vbProp.getActiveLexicon(), true, true).then(
+            let activeLexicon: ARTURIResource = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
+            this.browsingModals.browseLexicalEntryList("Select a LexicalEntry", activeLexicon, true, true).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },

@@ -5,53 +5,17 @@ import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
 import { ProjectTableColumnStruct } from '../models/Project';
 import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, Properties, ResourceViewMode, ResViewPartitionFilterPreference, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
+import { ResViewPartition } from '../models/ResourceView';
 import { OWL, RDFS, SKOS } from '../models/Vocabulary';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { Cookie } from '../utils/Cookie';
 import { UIUtils } from '../utils/UIUtils';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
-import { ResourceUtils } from './ResourceUtils';
-import { VBContext } from './VBContext';
+import { ProjectPreferences, ProjectSettings, VBContext } from './VBContext';
 
 @Injectable()
 export class VBProperties {
-
-    private projectLanguagesSetting: Language[] = []; //all available languages in a project (settings)
-    private projectLanguagesPreference: string[] = []; //languages that user has assigned for project (and ordered according his preferences)
-
-    private editingLanguage: string; //default editing language
-    private filterValueLang: ValueFilterLanguages; //languages visible in resource description (e.g. in ResourceView, Graph,...)
-
-    private activeSchemes: ARTURIResource[] = [];
-    private activeLexicon: ARTURIResource;
-    private showFlags: boolean = true;
-    private showInstancesNumber: boolean = true;
-    private projectThemeId: number = null;
-
-    private classTreePreferences: ClassTreePreference;
-    private conceptTreePreferences: ConceptTreePreference;
-    private lexEntryListPreferences: LexicalEntryListPreference;
-
-    //graph preferences
-    private resViewPartitionFilter: ResViewPartitionFilterPreference;
-    private hideLiteralGraphNodes: boolean = false;
-
-    private searchSettings: SearchSettings = {
-        stringMatchMode: SearchMode.startsWith,
-        useLocalName: true,
-        useURI: false,
-        useNotes: false,
-        restrictLang: false,
-        includeLocales: false,
-        languages: [],
-        useAutocompletion: false,
-        restrictActiveScheme: true,
-        classIndividualSearchMode: ClassIndividualPanelSearchMode.all
-    };
-
-    private experimentalFeaturesEnabled: boolean = false;
-    private privacyStatementAvailable: boolean = false;
 
     private eventSubscriptions: Subscription[] = [];
 
@@ -87,122 +51,132 @@ export class VBProperties {
         ];
         this.prefService.getPUSettings(properties).subscribe(
             prefs => {
-                this.activeSchemes = [];
+                let projectSettings: ProjectPreferences = VBContext.getWorkingProjectCtx().getProjectPreferences();
+
+                let activeSchemes: ARTURIResource[] = [];
                 let activeSchemesPref: string = prefs[Properties.pref_active_schemes];
                 if (activeSchemesPref != null) {
                     let skSplitted: string[] = activeSchemesPref.split(",");
                     for (var i = 0; i < skSplitted.length; i++) {
-                        this.activeSchemes.push(new ARTURIResource(skSplitted[i], null, RDFResourceRolesEnum.conceptScheme));
+                        activeSchemes.push(new ARTURIResource(skSplitted[i], null, RDFResourceRolesEnum.conceptScheme));
                     }
                 }
+                projectSettings.activeSchemes = activeSchemes;
 
-                this.activeLexicon = null;
+                let activeLexicon: ARTURIResource;
                 let activeLexiconPref: string = prefs[Properties.pref_active_lexicon];
                 if (activeLexiconPref != null) {
-                    this.activeLexicon = new ARTURIResource(activeLexiconPref, null, RDFResourceRolesEnum.limeLexicon);
+                    activeLexicon = new ARTURIResource(activeLexiconPref, null, RDFResourceRolesEnum.limeLexicon);
                 }
+                projectSettings.activeLexicon = activeLexicon;
 
-                this.showFlags = prefs[Properties.pref_show_flags] == "true";
+                projectSettings.showFlags = prefs[Properties.pref_show_flags] == "true"
 
                 let showInstPref: string = prefs[Properties.pref_show_instances_number];
                 if (showInstPref != null) {
-                    this.showInstancesNumber = showInstPref == "true";
+                    projectSettings.showInstancesNumber = showInstPref == "true";
                 } else { //if not specified, true for RDFS and OWL projects, false otherwise
                     let modelType: string = VBContext.getWorkingProject().getModelType();
-                    this.showInstancesNumber = modelType == RDFS.uri || modelType == OWL.uri;
+                    projectSettings.showInstancesNumber = modelType == RDFS.uri || modelType == OWL.uri;
                 }
 
-                this.projectThemeId = prefs[Properties.pref_project_theme];
-                UIUtils.changeNavbarTheme(this.projectThemeId);
+                let projectThemeId = prefs[Properties.pref_project_theme];
+                projectSettings.projectThemeId = projectThemeId;
+                UIUtils.changeNavbarTheme(projectThemeId);
 
                 //languages 
-                this.editingLanguage = prefs[Properties.pref_editing_language];
+                projectSettings.editingLanguage = prefs[Properties.pref_editing_language];
 
                 let filterValueLangPref = prefs[Properties.pref_filter_value_languages];
                 if (filterValueLangPref == null) {
-                    this.filterValueLang = { languages: [], enabled: false }; //default
+                    projectSettings.filterValueLang = { languages: [], enabled: false }; //default
                 } else {
-                    this.filterValueLang = JSON.parse(filterValueLangPref);
+                    projectSettings.filterValueLang = JSON.parse(filterValueLangPref);
                 }
 
                 //graph preferences
                 let rvPartitionFilterPref = prefs[Properties.pref_res_view_partition_filter];
                 if (rvPartitionFilterPref != null) {
-                    this.resViewPartitionFilter = JSON.parse(rvPartitionFilterPref);
+                    projectSettings.resViewPartitionFilter = JSON.parse(rvPartitionFilterPref);
                 } else {
-                    this.resViewPartitionFilter = {};
+                    let resViewPartitionFilter: ResViewPartitionFilterPreference = {};
+                    for (let role in RDFResourceRolesEnum) {
+                        resViewPartitionFilter[role] = [ResViewPartition.lexicalizations];
+                    }
+                    projectSettings.resViewPartitionFilter = resViewPartitionFilter;
                 }
 
-                this.hideLiteralGraphNodes = prefs[Properties.pref_hide_literal_graph_nodes] == "true";
+                projectSettings.hideLiteralGraphNodes = prefs[Properties.pref_hide_literal_graph_nodes] != "false";
+
 
                 //cls tree preferences
-                this.classTreePreferences = { 
+                let classTreePreferences: ClassTreePreference = { 
                     rootClassUri: (VBContext.getWorkingProject().getModelType() == RDFS.uri) ? RDFS.resource.getURI() : OWL.thing.getURI(),
                     filterMap: {}, 
                     filterEnabled: true 
                 };
                 let classTreeFilterMapPref: any = JSON.parse(prefs[Properties.pref_class_tree_filter_map]);
                 if (classTreeFilterMapPref != null) {
-                    this.classTreePreferences.filterMap = classTreeFilterMapPref;
+                    classTreePreferences.filterMap = classTreeFilterMapPref;
                 }
-                this.classTreePreferences.filterEnabled = prefs[Properties.pref_class_tree_filter_enabled] != "false";
+                classTreePreferences.filterEnabled = prefs[Properties.pref_class_tree_filter_enabled] != "false";
                 let classTreeRootPref: string = prefs[Properties.pref_class_tree_root];
                 if (classTreeRootPref != null) {
-                    this.classTreePreferences.rootClassUri = classTreeRootPref;
+                    classTreePreferences.rootClassUri = classTreeRootPref;
                 }
+                projectSettings.classTreePreferences = classTreePreferences;
+
 
                 //concept tree preferences
-                this.conceptTreePreferences = {
-                    baseBroaderUri: SKOS.broader.getURI(),
-                    broaderProps: [],
-                    narrowerProps: [],
-                    includeSubProps: true,
-                    syncInverse: true,
-                    visualization: ConceptTreeVisualizationMode.hierarchyBased
-                }
+                let conceptTreePreferences: ConceptTreePreference = new ConceptTreePreference();
                 let conceptTreeBaseBroaderPropPref: string = prefs[Properties.pref_concept_tree_base_broader_prop];
                 if (conceptTreeBaseBroaderPropPref != null) {
-                    this.conceptTreePreferences.baseBroaderUri = conceptTreeBaseBroaderPropPref;
+                    conceptTreePreferences.baseBroaderUri = conceptTreeBaseBroaderPropPref;
                 }
                 let conceptTreeBroaderPropsPref: string = prefs[Properties.pref_concept_tree_broader_props];
                 if (conceptTreeBroaderPropsPref != null) {
-                    this.conceptTreePreferences.broaderProps = conceptTreeBroaderPropsPref.split(",");
+                    conceptTreePreferences.broaderProps = conceptTreeBroaderPropsPref.split(",");
                 }
                 let conceptTreeNarrowerPropsPref: string = prefs[Properties.pref_concept_tree_narrower_props];
                 if (conceptTreeNarrowerPropsPref != null) {
-                    this.conceptTreePreferences.narrowerProps = conceptTreeNarrowerPropsPref.split(",");
+                    conceptTreePreferences.narrowerProps = conceptTreeNarrowerPropsPref.split(",");
                 }
                 let conceptTreeVisualizationPref: string = prefs[Properties.pref_concept_tree_visualization];
                 if (conceptTreeVisualizationPref != null && conceptTreeVisualizationPref == ConceptTreeVisualizationMode.searchBased) {
-                    this.conceptTreePreferences.visualization = conceptTreeVisualizationPref;
+                    conceptTreePreferences.visualization = conceptTreeVisualizationPref;
                 }
-                this.conceptTreePreferences.includeSubProps = prefs[Properties.pref_concept_tree_include_subprops] != "false";
-                this.conceptTreePreferences.syncInverse = prefs[Properties.pref_concept_tree_sync_inverse] != "false";
+                conceptTreePreferences.includeSubProps = prefs[Properties.pref_concept_tree_include_subprops] != "false";
+                conceptTreePreferences.syncInverse = prefs[Properties.pref_concept_tree_sync_inverse] != "false";
+
+                projectSettings.conceptTreePreferences = conceptTreePreferences;
+
 
                 //lexical entry list preferences
-                this.lexEntryListPreferences = {
-                    visualization: LexEntryVisualizationMode.indexBased,
-                    indexLength: 1
-                }
+                let lexEntryListPreferences: LexicalEntryListPreference = new LexicalEntryListPreference();
                 let lexEntryListVisualizationPref: string = prefs[Properties.pref_lex_entry_list_visualization];
                 if (lexEntryListVisualizationPref != null && lexEntryListVisualizationPref == LexEntryVisualizationMode.searchBased) {
-                    this.lexEntryListPreferences.visualization = lexEntryListVisualizationPref;
+                    lexEntryListPreferences.visualization = lexEntryListVisualizationPref;
                 }
                 let lexEntryListIndexLenghtPref: string = prefs[Properties.pref_lex_entry_list_index_lenght];
                 if (lexEntryListIndexLenghtPref == "2") {
-                    this.lexEntryListPreferences.indexLength = 2;
+                    lexEntryListPreferences.indexLength = 2;
                 }
+                projectSettings.lexEntryListPreferences = lexEntryListPreferences;
 
                 //search settings
+                let searchSettings: SearchSettings = new SearchSettings();
                 let searchLangsPref = prefs[Properties.pref_search_languages];
                 if (searchLangsPref == null) {
-                    this.searchSettings.languages = [];
+                    searchSettings.languages = [];
                 } else {
-                    this.searchSettings.languages = JSON.parse(searchLangsPref);
+                    searchSettings.languages = JSON.parse(searchLangsPref);
                 }
-                this.searchSettings.restrictLang = prefs[Properties.pref_search_restrict_lang] == "true";
-                this.searchSettings.includeLocales = prefs[Properties.pref_search_include_locales] == "true";
-                this.searchSettings.useAutocompletion = prefs[Properties.pref_search_use_autocomplete] == "true";
+                searchSettings.restrictLang = prefs[Properties.pref_search_restrict_lang] == "true";
+                searchSettings.includeLocales = prefs[Properties.pref_search_include_locales] == "true";
+                searchSettings.useAutocompletion = prefs[Properties.pref_search_use_autocomplete] == "true";
+
+                projectSettings.searchSettings = searchSettings;
+
 
                 this.initSearchSettingsCookie(); //other settings stored in cookies
             }
@@ -211,118 +185,90 @@ export class VBProperties {
         // this is called separately since requires the pluginId parameter
         this.prefService.getPUSettings([Properties.pref_languages], ExtensionPointID.RENDERING_ENGINE_ID).subscribe(
             prefs => {
-                this.projectLanguagesPreference = prefs[Properties.pref_languages].split(",");
+                VBContext.getWorkingProjectCtx().getProjectPreferences().projectLanguagesPreference = prefs[Properties.pref_languages].split(",");
             }
         );
     }
 
-    getActiveSchemes(): ARTURIResource[] {
-        return this.activeSchemes;
-    }
     setActiveSchemes(schemes: ARTURIResource[]) {
         if (schemes == null) {
-            this.activeSchemes = [];
+            VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes = [];
         } else {
-            this.activeSchemes = schemes;
+            VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes = schemes;
         }
-        this.prefService.setActiveSchemes(this.activeSchemes).subscribe(
+        this.prefService.setActiveSchemes(schemes).subscribe(
             stResp => {
-                this.eventHandler.schemeChangedEvent.emit(this.activeSchemes);
+                this.eventHandler.schemeChangedEvent.emit(schemes);
             }
         );
-    }
-    isActiveScheme(scheme: ARTURIResource): boolean {
-        return ResourceUtils.containsNode(this.activeSchemes, scheme);
     }
 
-    getActiveLexicon(): ARTURIResource {
-        return this.activeLexicon;
-    }
     setActiveLexicon(lexicon: ARTURIResource) {
-        this.activeLexicon = lexicon;
-        this.prefService.setPUSetting(Properties.pref_active_lexicon, this.activeLexicon.getURI()).subscribe(
+        VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon = lexicon;
+        this.prefService.setPUSetting(Properties.pref_active_lexicon, lexicon.getURI()).subscribe(
             stResp => {
-                this.eventHandler.lexiconChangedEvent.emit(this.activeLexicon);
+                this.eventHandler.lexiconChangedEvent.emit(lexicon);
             }
         );
-    }
-    isActiveLexicon(lexicon: ARTURIResource): boolean {
-        return this.activeLexicon != null && this.activeLexicon.getURI() == lexicon.getURI();
     }
 
     getShowFlags(): boolean {
-        return this.showFlags;
+        if (VBContext.getWorkingProjectCtx() != null) {
+            return VBContext.getWorkingProjectCtx().getProjectPreferences().showFlags;
+        } else {
+            return VBContext.getSystemSettings().showFlags;
+        }
     }
     setShowFlags(show: boolean) {
-        this.showFlags = show;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().showFlags = show;
+        this.eventHandler.showFlagChangedEvent.emit(show);
         this.prefService.setShowFlags(show).subscribe();
     }
 
-    getShowInstancesNumber(): boolean {
-        return this.showInstancesNumber;
-    }
     setShowInstancesNumber(show: boolean) {
-        this.showInstancesNumber = show;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().showInstancesNumber = show;
         this.prefService.setShowInstancesNumb(show).subscribe();
     }
 
-    getProjectTheme(): number {
-        return this.projectThemeId;
-    }
     setProjectTheme(theme: number) {
-        this.projectThemeId = theme;
-        UIUtils.changeNavbarTheme(this.projectThemeId);
+        VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId = theme;
+        UIUtils.changeNavbarTheme(theme);
         this.prefService.setProjectTheme(theme).subscribe();
     }
 
-    getLanguagesPreference(): string[] {
-        return this.projectLanguagesPreference;
-    }
     setLanguagesPreference(languages: string[]) {
         this.prefService.setLanguages(languages).subscribe();
-        this.projectLanguagesPreference = languages;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().projectLanguagesPreference = languages;
     }
 
-    getEditingLanguage(): string {
-        return this.editingLanguage;
-    }
     setEditingLanguage(lang: string) {
         this.prefService.setPUSetting(Properties.pref_editing_language, lang).subscribe();
-        this.editingLanguage = lang;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().editingLanguage = lang;
     }
 
-    getValueFilterLanguages(): ValueFilterLanguages {
-        return this.filterValueLang;
-    }
     setValueFilterLanguages(filter: ValueFilterLanguages) {
         this.prefService.setPUSetting(Properties.pref_filter_value_languages, JSON.stringify(filter)).subscribe();
-        this.filterValueLang = filter;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang = filter;
     }
 
     //class tree settings
-    getClassTreePreferences(): ClassTreePreference {
-        return this.classTreePreferences;
-    }
     setClassTreeFilterMap(filterMap: { [key: string]: string[] }) {
         this.prefService.setPUSetting(Properties.pref_class_tree_filter_map, JSON.stringify(filterMap)).subscribe();
-        this.classTreePreferences.filterMap = filterMap;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filterMap = filterMap;
     }
     setClassTreeFilterEnabled(enabled: boolean) {
         this.prefService.setPUSetting(Properties.pref_class_tree_filter_enabled, enabled+"").subscribe();
-        this.classTreePreferences.filterEnabled = enabled;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filterEnabled = enabled;
     }
     setClassTreeRoot(rootUri: string) {
         this.prefService.setPUSetting(Properties.pref_class_tree_root, rootUri).subscribe();
-        this.classTreePreferences.rootClassUri = rootUri;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.rootClassUri = rootUri;
     }
 
     //concept tree settings
-    getConceptTreePreferences(): ConceptTreePreference {
-        return this.conceptTreePreferences;
-    }
     setConceptTreeBaseBroaderProp(propUri: string) {
         this.prefService.setPUSetting(Properties.pref_concept_tree_base_broader_prop, propUri).subscribe();
-        this.conceptTreePreferences.baseBroaderUri = propUri;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.baseBroaderUri = propUri;
     }
     setConceptTreeBroaderProps(props: string[]) {
         let prefValue: string;
@@ -330,7 +276,7 @@ export class VBProperties {
             prefValue = props.join(",")
         }
         this.prefService.setPUSetting(Properties.pref_concept_tree_broader_props, prefValue).subscribe();
-        this.conceptTreePreferences.broaderProps = props;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.broaderProps = props;
     }
     setConceptTreeNarrowerProps(props: string[]) {
         let prefValue: string;
@@ -338,48 +284,38 @@ export class VBProperties {
             prefValue = props.join(",")
         }
         this.prefService.setPUSetting(Properties.pref_concept_tree_narrower_props, prefValue).subscribe();
-        this.conceptTreePreferences.narrowerProps = props;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.narrowerProps = props;
     }
     setConceptTreeIncludeSubProps(include: boolean) {
         this.prefService.setPUSetting(Properties.pref_concept_tree_include_subprops, include+"").subscribe();
-        this.conceptTreePreferences.includeSubProps = include;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.includeSubProps = include;
     }
     setConceptTreeSyncInverse(sync: boolean) {
         this.prefService.setPUSetting(Properties.pref_concept_tree_sync_inverse, sync+"").subscribe();
-        this.conceptTreePreferences.syncInverse = sync;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.syncInverse = sync;
     }
     setConceptTreeVisualization(mode: ConceptTreeVisualizationMode) {
         this.prefService.setPUSetting(Properties.pref_concept_tree_visualization, mode).subscribe();
-        this.conceptTreePreferences.visualization = mode;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.visualization = mode;
     }
 
     //lex entry list settings
-    getLexicalEntryListPreferences(): LexicalEntryListPreference {
-        return this.lexEntryListPreferences;
-    }
     setLexicalEntryListVisualization(mode: LexEntryVisualizationMode) {
         this.prefService.setPUSetting(Properties.pref_lex_entry_list_visualization, mode).subscribe();
-        this.lexEntryListPreferences.visualization = mode;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences.visualization = mode;
     }
     setLexicalEntryListIndexLenght(lenght: number) {
         this.prefService.setPUSetting(Properties.pref_lex_entry_list_index_lenght, lenght+"").subscribe();
-        this.lexEntryListPreferences.indexLength = lenght;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences.indexLength = lenght;
     }
 
     //Graph settings
-    getResourceViewPartitionsFilter(): ResViewPartitionFilterPreference {
-        return this.resViewPartitionFilter;
-    }
     setResourceViewPartitionFilter(pref: ResViewPartitionFilterPreference) {
         this.prefService.setPUSetting(Properties.pref_res_view_partition_filter, JSON.stringify(pref)).subscribe();
-        this.resViewPartitionFilter = pref;
-    }
-
-    getHideLiteralGraphNodes(): boolean {
-        return this.hideLiteralGraphNodes;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter = pref;
     }
     setHideLiteralGraphNodes(show: boolean) {
-        this.hideLiteralGraphNodes = show;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().hideLiteralGraphNodes = show;
         this.prefService.setPUSetting(Properties.pref_hide_literal_graph_nodes, show+"").subscribe();
     }
 
@@ -392,11 +328,11 @@ export class VBProperties {
         this.prefService.getStartupSystemSettings().subscribe(
             stResp => {
                 //experimental_features_enabled
-                this.experimentalFeaturesEnabled = stResp[Properties.setting_experimental_features_enabled];
+                VBContext.getSystemSettings().experimentalFeaturesEnabled = stResp[Properties.setting_experimental_features_enabled]
                 //privacy_statement_available
-                this.privacyStatementAvailable = stResp[Properties.privacy_statement_available];
+                VBContext.getSystemSettings().privacyStatementAvailable = stResp[Properties.privacy_statement_available]
                 //show_flags
-                this.showFlags = stResp[Properties.pref_show_flags];
+                VBContext.getSystemSettings().showFlags = stResp[Properties.pref_show_flags];
                 //languages
                 try {
                     var systemLanguages = <Language[]>JSON.parse(stResp[Properties.setting_languages]);
@@ -412,29 +348,30 @@ export class VBProperties {
 
     setExperimentalFeaturesEnabled(enabled: boolean) {
         this.prefService.setSystemSetting(Properties.setting_experimental_features_enabled, enabled+"").subscribe();
-        this.experimentalFeaturesEnabled = enabled;
+        VBContext.getSystemSettings().experimentalFeaturesEnabled = enabled;
     }
 
     getExperimentalFeaturesEnabled(): boolean {
-        return this.experimentalFeaturesEnabled;
+        return VBContext.getSystemSettings().experimentalFeaturesEnabled;
     }
 
     isPrivacyStatementAvailable(): boolean {
-        return this.privacyStatementAvailable;
+        return VBContext.getSystemSettings().privacyStatementAvailable;
     }
 
     initProjectSettings() {
         var properties: string[] = [Properties.setting_languages];
         this.prefService.getProjectSettings(properties).subscribe(
             settings => {
+                let projectSettings: ProjectSettings = VBContext.getWorkingProjectCtx().getProjectSettings();
                 var langsValue: string = settings[Properties.setting_languages];
                 try {
-                    this.projectLanguagesSetting = <Language[]>JSON.parse(langsValue);
-                    Languages.sortLanguages(this.projectLanguagesSetting);
+                    projectSettings.projectLanguagesSetting = <Language[]>JSON.parse(langsValue);
+                    Languages.sortLanguages(projectSettings.projectLanguagesSetting);
                 } catch (err) {
                     this.basicModals.alert("Error", "Project setting initialization has encountered a problem during parsing " +
                         "languages settings. Default languages will be set for this project.", "error");
-                    this.projectLanguagesSetting = [
+                    projectSettings.projectLanguagesSetting = [
                         { name: "German" , tag: "de" }, { name: "English" , tag: "en" }, { name: "Spanish" , tag: "es" },
                         { name: "French" , tag: "fr" }, { name: "Italian" , tag: "it" }
                     ];
@@ -443,14 +380,8 @@ export class VBProperties {
         );
     }
 
-    /**
-     * Returns the language available in the project
-     */
-    getProjectLanguages(): Language[] {
-        return this.projectLanguagesSetting;
-    }
     setProjectLanguages(languages: Language[]) {
-        this.projectLanguagesSetting = languages;
+        VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting = languages;
     }
 
     
@@ -532,56 +463,57 @@ export class VBProperties {
         return cookieValue != "false"; //default true
     }
 
+    
     initSearchSettingsCookie() {
+        let projectSettings: ProjectPreferences = VBContext.getWorkingProjectCtx().getProjectPreferences();
         let searchModeCookie: string = Cookie.getCookie(Cookie.SEARCH_STRING_MATCH_MODE);
         if (searchModeCookie != null) {
-            this.searchSettings.stringMatchMode = <SearchMode>searchModeCookie;
+            projectSettings.searchSettings.stringMatchMode = <SearchMode>searchModeCookie;
         }
         let useUriCookie: string = Cookie.getCookie(Cookie.SEARCH_USE_URI);
         if (useUriCookie != null) {
-            this.searchSettings.useURI = useUriCookie == "true";
+            projectSettings.searchSettings.useURI = useUriCookie == "true";
         }
         let useLocalNameCookie: string = Cookie.getCookie(Cookie.SEARCH_USE_LOCAL_NAME);
         if (useLocalNameCookie != null) {
-            this.searchSettings.useLocalName = useLocalNameCookie == "true";
+            projectSettings.searchSettings.useLocalName = useLocalNameCookie == "true";
         }
         let useNotesCookie: string = Cookie.getCookie(Cookie.SEARCH_USE_NOTES);
         if (useNotesCookie != null) {
-            this.searchSettings.useNotes = useNotesCookie == "true";
+            projectSettings.searchSettings.useNotes = useNotesCookie == "true";
         }
         let restrictSchemesCookie: string = Cookie.getCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION);
         if (restrictSchemesCookie != null) {
-            this.searchSettings.restrictActiveScheme = restrictSchemesCookie == "true";
+            projectSettings.searchSettings.restrictActiveScheme = restrictSchemesCookie == "true";
         }
         let clsIndPanelSearchModeCookie: string = Cookie.getCookie(Cookie.SEARCH_CLS_IND_PANEL);
         if (clsIndPanelSearchModeCookie != null) {
-            this.searchSettings.classIndividualSearchMode = <ClassIndividualPanelSearchMode>clsIndPanelSearchModeCookie;
+            projectSettings.searchSettings.classIndividualSearchMode = <ClassIndividualPanelSearchMode>clsIndPanelSearchModeCookie;
         }
     }
 
-    getSearchSettings(): SearchSettings {
-        return this.searchSettings;
-    }
     setSearchSettings(settings: SearchSettings) {
+        let projectSettings: ProjectPreferences = VBContext.getWorkingProjectCtx().getProjectPreferences();
+
         Cookie.setCookie(Cookie.SEARCH_STRING_MATCH_MODE, settings.stringMatchMode, 365*10);
         Cookie.setCookie(Cookie.SEARCH_USE_URI, settings.useURI+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_USE_LOCAL_NAME, settings.useLocalName+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_USE_NOTES, settings.useNotes+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION, settings.restrictActiveScheme+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_CLS_IND_PANEL, settings.classIndividualSearchMode, 365*10);
-        if (this.searchSettings.languages != settings.languages) {
+        if (projectSettings.searchSettings.languages != settings.languages) {
             this.prefService.setPUSetting(Properties.pref_search_languages, JSON.stringify(settings.languages)).subscribe();
         }
-        if (this.searchSettings.restrictLang != settings.restrictLang) {
+        if (projectSettings.searchSettings.restrictLang != settings.restrictLang) {
             this.prefService.setPUSetting(Properties.pref_search_restrict_lang, settings.restrictLang+"").subscribe();
         }
-        if (this.searchSettings.includeLocales != settings.includeLocales) {
+        if (projectSettings.searchSettings.includeLocales != settings.includeLocales) {
             this.prefService.setPUSetting(Properties.pref_search_include_locales, settings.includeLocales+"").subscribe();
         }
-        if (this.searchSettings.useAutocompletion != settings.useAutocompletion) {
+        if (projectSettings.searchSettings.useAutocompletion != settings.useAutocompletion) {
             this.prefService.setPUSetting(Properties.pref_search_use_autocomplete, settings.useAutocompletion+"").subscribe();
         }
-        this.searchSettings = settings;
+        projectSettings.searchSettings = settings;
         this.eventHandler.searchPrefsUpdatedEvent.emit();
     }
 
@@ -645,10 +577,11 @@ export class VBProperties {
      * @param newResource 
      */
     private onResourceRenamed(oldResource: ARTResource, newResource: ARTResource) {
-        for (var i = 0; i < this.activeSchemes.length; i++) {
-            if (this.activeSchemes[i].getNominalValue() == oldResource.getNominalValue()) {
-                this.activeSchemes[i].setURI(newResource.getNominalValue());
-                this.setActiveSchemes(this.activeSchemes);
+        let activeSchemes: ARTURIResource[] = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
+        for (var i = 0; i < activeSchemes.length; i++) {
+            if (activeSchemes[i].getNominalValue() == oldResource.getNominalValue()) {
+                activeSchemes[i].setURI(newResource.getNominalValue());
+                this.setActiveSchemes(activeSchemes);
                 break;
             }
         }

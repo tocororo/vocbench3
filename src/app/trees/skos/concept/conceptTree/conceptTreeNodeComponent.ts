@@ -3,8 +3,8 @@ import { ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
 import { ConceptTreePreference } from "../../../../models/Properties";
 import { SkosServices } from "../../../../services/skosServices";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
+import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTreeNode } from "../../../abstractTreeNode";
@@ -20,7 +20,7 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
     //ConceptTreeNodeComponent children of this Component (useful to open tree for the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
 
-    constructor(private skosService: SkosServices, private vbProp: VBProperties, eventHandler: VBEventHandler,
+    constructor(private skosService: SkosServices, eventHandler: VBEventHandler,
         basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         super(eventHandler, basicModals, sharedModals);
         this.eventSubscriptions.push(eventHandler.conceptDeletedEvent.subscribe(
@@ -42,7 +42,7 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
     }
 
     expandNodeImpl() {
-        let prefs: ConceptTreePreference = this.vbProp.getConceptTreePreferences();
+        let prefs: ConceptTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
         let broaderProps: ARTURIResource[] = [];
         prefs.broaderProps.forEach((prop: string) => broaderProps.push(new ARTURIResource(prop)));
         let narrowerProps: ARTURIResource[] = [];

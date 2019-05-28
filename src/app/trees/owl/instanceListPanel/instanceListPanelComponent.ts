@@ -9,6 +9,7 @@ import { SearchServices } from "../../../services/searchServices";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { ActionDescription, RoleActionResolver } from "../../../utils/RoleActionResolver";
 import { VBActionFunctionCtx } from "../../../utils/VBActions";
+import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -30,7 +31,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
     rendering: boolean = false; //override the value in AbstractPanel
 
-    constructor(private classesService: ClassesServices, private searchService: SearchServices,
+    constructor(private searchService: SearchServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
         super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
@@ -86,7 +87,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
     //search handlers
 
     doSearch(searchedText: string) {
-        let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
         if (searchSettings.restrictLang) {

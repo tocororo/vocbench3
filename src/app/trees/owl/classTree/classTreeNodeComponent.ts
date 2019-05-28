@@ -5,8 +5,8 @@ import { OWL, RDFS } from "../../../models/Vocabulary";
 import { ClassesServices } from "../../../services/classesServices";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { TreeListContext } from "../../../utils/UIUtils";
+import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTreeNode } from "../../abstractTreeNode";
@@ -25,7 +25,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
 
     private showInstanceNumber: boolean = false;
 
-    constructor(private clsService: ClassesServices, private pref: VBProperties, eventHandler: VBEventHandler,
+    constructor(private clsService: ClassesServices, eventHandler: VBEventHandler,
         basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         super(eventHandler, basicModals, sharedModals);
         this.eventSubscriptions.push(eventHandler.subClassCreatedEvent.subscribe(
@@ -54,7 +54,8 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
 
     ngOnInit() {
         //show instance number only if enabled in the preferences and if the node belongs to a tree in TreePanelComponent
-        this.showInstanceNumber = this.pref.getShowInstancesNumber() && (this.context == TreeListContext.dataPanel || this.context == TreeListContext.clsIndTree);
+        this.showInstanceNumber = VBContext.getWorkingProjectCtx().getProjectPreferences().showInstancesNumber && 
+            (this.context == TreeListContext.dataPanel || this.context == TreeListContext.clsIndTree);
         //expand immediately the node if it is a root and if it is owl:Thing or rdfs:Resource
         if ((this.node.getURI() == OWL.thing.getURI() || this.node.getURI() == RDFS.resource.getURI()) && 
             this.root && this.node.getAdditionalProperty(ResAttribute.MORE) == "1") {
@@ -82,12 +83,11 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
      * @param subClass 
      */
     private filterOutRootSubClass(subClass: ARTURIResource): boolean {
-        let classTreePref = this.pref.getClassTreePreferences();
+        let classTreePref = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences;
         if (this.filterEnabled) {
             return classTreePref.filterMap[this.node.getURI()] != null && 
                 classTreePref.filterMap[this.node.getURI()].indexOf(subClass.getURI()) != -1;
         }
-            
     }
 
     /**
@@ -96,7 +96,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     private showExpandCollapseForClassFilter(): boolean {
         let more: boolean = this.node.getAdditionalProperty(ResAttribute.MORE);
         if (more) {
-            let classTreePref = this.pref.getClassTreePreferences();
+            let classTreePref = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences;
             //if subClass filter is enabled and there is a filter for the children of the given node
             if (this.filterEnabled && classTreePref.filterMap[this.node.getURI()] != null) {
                 if (this.children.length > 0) {

@@ -8,7 +8,6 @@ import { SearchServices } from "../../services/searchServices";
 import { ResourceUtils, SortAttribute } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
-import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
@@ -63,14 +62,14 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
     private outgoingLinksValue: { first: ARTURIResource, second: ARTNode[] }[] = [];
     private outgoingLinksFreeText: { predicate: ARTURIResource, searchString: string, mode: SearchMode }[] = [];
 
-    constructor(public dialog: DialogRef<BSModalContext>, private searchService: SearchServices, private vbProp: VBProperties,
+    constructor(public dialog: DialogRef<BSModalContext>, private searchService: SearchServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private browsingModals: BrowsingModalServices,
         private creationModals: CreationModalServices) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
-        let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
         this.useLocalName = searchSettings.useLocalName;
         this.useURI = searchSettings.useURI;
         this.useNotes = searchSettings.useNotes;
@@ -246,7 +245,7 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
      * ===================== */
 
     private addOutgoingGroupFreeText() {
-        this.outgoingLinksFreeText.push({ predicate: null, searchString: null, mode: this.vbProp.getSearchSettings().stringMatchMode });
+        this.outgoingLinksFreeText.push({ predicate: null, searchString: null, mode: VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings.stringMatchMode });
     }
 
     private deleteOutgoingGroupFreeText(index: number) {

@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Language } from "../../models/LanguagesCountries";
+import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 
 
@@ -17,9 +18,9 @@ export class LanguageValueFilterComponent {
     constructor(private vbProp: VBProperties) { }
 
     ngOnInit() {
-        let projectLanguages: Language[] = this.vbProp.getProjectLanguages();
+        let projectLanguages: Language[] = VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting;
 
-        let preferenceLangs: string[] = this.vbProp.getValueFilterLanguages().languages;
+        let preferenceLangs: string[] = VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang.languages;
 
         if (preferenceLangs.length == 1 && preferenceLangs[0] == "*") { //"*" stands for all languages
             //set as active all the available langs
@@ -39,7 +40,7 @@ export class LanguageValueFilterComponent {
             }
         }
 
-        this.filterEnabled = this.vbProp.getValueFilterLanguages().enabled;
+        this.filterEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang.enabled;
     }
 
     private toggleFilter() {

@@ -7,8 +7,8 @@ import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../../utils/VBActions";
+import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { VBProperties } from "../../../../utils/VBProperties";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTree } from "../../../abstractTree";
@@ -30,7 +30,7 @@ export class ConceptTreeComponent extends AbstractTree {
 
     structRole = RDFResourceRolesEnum.concept;
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices, private vbProp: VBProperties,
+    constructor(private skosService: SkosServices, private searchService: SearchServices,
         eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         super(eventHandler, basicModals, sharedModals);
         this.eventSubscriptions.push(eventHandler.topConceptCreatedEvent.subscribe(
@@ -57,13 +57,13 @@ export class ConceptTreeComponent extends AbstractTree {
             return;
         }
 
-        if (this.vbProp.getConceptTreePreferences().visualization == ConceptTreeVisualizationMode.hierarchyBased) {
-            let prefs: ConceptTreePreference = this.vbProp.getConceptTreePreferences();
+        let conceptTreePreference: ConceptTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
+        if (conceptTreePreference.visualization == ConceptTreeVisualizationMode.hierarchyBased) {
             let broaderProps: ARTURIResource[] = [];
-            prefs.broaderProps.forEach((prop: string) => broaderProps.push(new ARTURIResource(prop)));
+            conceptTreePreference.broaderProps.forEach((prop: string) => broaderProps.push(new ARTURIResource(prop)));
             let narrowerProps: ARTURIResource[] = [];
-            prefs.narrowerProps.forEach((prop: string) => narrowerProps.push(new ARTURIResource(prop)));
-            let includeSubProps: boolean = prefs.includeSubProps;
+            conceptTreePreference.narrowerProps.forEach((prop: string) => narrowerProps.push(new ARTURIResource(prop)));
+            let includeSubProps: boolean = conceptTreePreference.includeSubProps;
 
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             this.skosService.getTopConcepts(this.schemes, broaderProps, narrowerProps, includeSubProps).subscribe( //new service (whithout lang param)
@@ -78,7 +78,7 @@ export class ConceptTreeComponent extends AbstractTree {
                     }
                 }
             );
-        } else if (this.vbProp.getConceptTreePreferences().visualization == ConceptTreeVisualizationMode.searchBased) {
+        } else if (conceptTreePreference.visualization == ConceptTreeVisualizationMode.searchBased) {
             //don't do nothing
         }
     }

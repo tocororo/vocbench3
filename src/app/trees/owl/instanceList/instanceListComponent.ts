@@ -9,7 +9,6 @@ import { UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { AbstractList } from "../../abstractList";
 import { InstanceListNodeComponent } from "./instanceListNodeComponent";
@@ -35,7 +34,7 @@ export class InstanceListComponent extends AbstractList {
 
     list: ARTURIResource[] = [];
 
-    constructor(private clsService: ClassesServices, private basicModals: BasicModalServices, private vbProp: VBProperties, eventHandler: VBEventHandler) {
+    constructor(private clsService: ClassesServices, private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
             (data: any) => { 
@@ -147,7 +146,7 @@ export class InstanceListComponent extends AbstractList {
      * @param cls 
      */
     private getNumberOfInstances(cls: ARTURIResource): Observable<number> {
-        if (this.vbProp.getShowInstancesNumber()) { //if num inst are already computed when building the tree...
+        if (VBContext.getWorkingProjectCtx().getProjectPreferences().showInstancesNumber) { //if num inst are already computed when building the tree...
             return Observable.of(this.cls.getAdditionalProperty(ResAttribute.NUM_INST));
         } else { //otherwise call a service
             return this.clsService.getNumberOfInstances(cls);

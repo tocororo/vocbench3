@@ -10,6 +10,7 @@ import { SearchServices } from "../../../../services/searchServices";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { RoleActionResolver } from "../../../../utils/RoleActionResolver";
 import { VBActionFunctionCtx } from "../../../../utils/VBActions";
+import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from '../../../../utils/VBProperties';
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
@@ -28,7 +29,7 @@ export class LexiconListPanelComponent extends AbstractListPanel {
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.limeLexicon;
 
-    constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices,
+    constructor(private searchService: SearchServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
         super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
@@ -57,7 +58,7 @@ export class LexiconListPanelComponent extends AbstractListPanel {
     // }
 
     doSearch(searchedText: string) {
-        let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
         if (searchSettings.restrictLang) {

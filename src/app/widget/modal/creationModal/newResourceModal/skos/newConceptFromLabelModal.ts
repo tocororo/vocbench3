@@ -5,7 +5,7 @@ import { ARTResource, ARTURIResource } from "../../../../../models/ARTResources"
 import { CustomFormValue } from "../../../../../models/CustomForms";
 import { CustomFormsServices } from "../../../../../services/customFormsServices";
 import { SkosServices } from "../../../../../services/skosServices";
-import { VBProperties } from "../../../../../utils/VBProperties";
+import { VBContext } from "../../../../../utils/VBContext";
 import { BasicModalServices } from "../../../basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
 import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
@@ -44,7 +44,7 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
 
     private schemes: ARTURIResource[];
 
-    constructor(public dialog: DialogRef<NewConceptFromLabelModalData>, private skosService: SkosServices, private vbProp: VBProperties,
+    constructor(public dialog: DialogRef<NewConceptFromLabelModalData>, private skosService: SkosServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         super(cfService, basicModals, browsingModals)
         this.context = dialog.context;
@@ -132,7 +132,8 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
      * When selected a sibling, check if it has multiple broaders
      */
     private updateBroaderOfSibling() {
-        this.skosService.getBroaderConcepts(this.sibling, this.vbProp.getActiveSchemes()).subscribe(
+        let activeSchemes: ARTURIResource[] = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
+        this.skosService.getBroaderConcepts(this.sibling, activeSchemes).subscribe(
             broaders => {
                 if (broaders.length == 0) { //sibling is top concept
                     this.multipleSiblingBroaders = false;

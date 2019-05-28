@@ -82,6 +82,8 @@ export class VBEventHandler {
 
     public showDeprecatedChangedEvent: EventEmitter<boolean> = new VBEventEmitter("showDeprecatedChangedEvent");
 
+    public showFlagChangedEvent: EventEmitter<boolean> = new VBEventEmitter("showFlagChangedEvent");
+
     public searchPrefsUpdatedEvent: EventEmitter<any> = new VBEventEmitter("searchPrefsUpdatedEvent");
 
     //MISC EVENTS 

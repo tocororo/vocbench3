@@ -38,7 +38,7 @@ export class LangPickerComponent implements ControlValueAccessor {
 
         //Init languages list considering only languages assigned to user and allowed in project
         this.languageList = []; //intersection between language available in project and language assigned to user.
-        var projectLangs: Language[] = this.properties.getProjectLanguages();
+        var projectLangs: Language[] = VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting;
         var userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
         this.languageList = projectLangs.filter((l: Language) => { return userAssignedLangs.indexOf(l.tag) != -1 });
     }
@@ -49,7 +49,7 @@ export class LangPickerComponent implements ControlValueAccessor {
             if (this.languageList.length > 0) { 
                 if (this.language == undefined) { //no language specified as @Input
                     //set the default editing language
-                    let editingLang = this.properties.getEditingLanguage();
+                    let editingLang = VBContext.getWorkingProjectCtx().getProjectPreferences().editingLanguage;
                     for (var j = 0; j < this.languageList.length; j++) {
                         if (this.languageList[j].tag == editingLang) {
                             this.language = this.languageList[j].tag;

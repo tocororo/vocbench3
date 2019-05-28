@@ -1,9 +1,8 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BasicModalServices } from "../../basicModal/basicModalServices";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { Language, Languages } from "../../../../models/LanguagesCountries";
-import { VBProperties } from "../../../../utils/VBProperties";
+import { VBContext } from "../../../../utils/VBContext";
 
 export class LanguageSelectorModalData extends BSModalContext {
     /**
@@ -24,7 +23,7 @@ export class LanguageSelectorModal implements ModalComponent<LanguageSelectorMod
 
     private languageItems: LanguageItem[];
 
-    constructor(public dialog: DialogRef<LanguageSelectorModalData>, private vbProp: VBProperties, private basicModals: BasicModalServices) {
+    constructor(public dialog: DialogRef<LanguageSelectorModalData>) {
         this.context = dialog.context;
     }
 
@@ -32,7 +31,7 @@ export class LanguageSelectorModal implements ModalComponent<LanguageSelectorMod
         let languages: Language[];
         this.languageItems = [];
         if (this.context.projectAware) {
-            languages = this.vbProp.getProjectLanguages();
+            languages = VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting;
         } else {
             languages = Languages.getSystemLanguages();
         }

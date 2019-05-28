@@ -1,7 +1,6 @@
 import { Component, QueryList, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../../models/ARTResources";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
-import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
@@ -10,7 +9,6 @@ import { VBActionsEnum } from "../../../../utils/VBActions";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from "../../../../utils/VBProperties";
-import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { AbstractList } from "../../../abstractList";
 import { SchemeListNodeComponent } from "./schemeListNodeComponent";
 
@@ -27,8 +25,7 @@ export class SchemeListComponent extends AbstractList {
 
     list: SchemeListItem[];
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices, private vbProp: VBProperties,
-        private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+    constructor(private skosService: SkosServices, private vbProp: VBProperties, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.schemeCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
         this.eventSubscriptions.push(eventHandler.schemeDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
@@ -55,7 +52,7 @@ export class SchemeListComponent extends AbstractList {
                 ResourceUtils.sortResources(schemes, this.rendering ? SortAttribute.show : SortAttribute.value);
 
                 for (var i = 0; i < schemes.length; i++) {
-                    let active: boolean = this.vbProp.isActiveScheme(schemes[i]);
+                    let active: boolean = ResourceUtils.containsNode(VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes, schemes[i]);
                     this.list.push({ checked: active, scheme: schemes[i] });
                 }
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
@@ -84,7 +81,7 @@ export class SchemeListComponent extends AbstractList {
             }
         }
         //update the activeSchemes if the deleted was active
-        if (this.vbProp.isActiveScheme(this.selectedNode)) {
+        if (ResourceUtils.containsNode(VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes, this.selectedNode)) {
             this.updateActiveSchemesPref();
         }
         this.selectedNode = null;

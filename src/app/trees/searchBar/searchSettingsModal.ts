@@ -1,10 +1,11 @@
-import { Component, Input } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { VBProperties } from "../../utils/VBProperties";
-import { SearchMode, SearchSettings, ClassIndividualPanelSearchMode } from "../../models/Properties";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
+import { ClassIndividualPanelSearchMode, SearchMode, SearchSettings } from "../../models/Properties";
+import { VBContext } from "../../utils/VBContext";
+import { VBProperties } from "../../utils/VBProperties";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
 export class SearchSettingsModalData extends BSModalContext {
     constructor(public roles: RDFResourceRolesEnum[]) {
@@ -70,7 +71,7 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
         this.settingsForClassPanel = (this.context.roles != null && this.context.roles.indexOf(RDFResourceRolesEnum.cls) != -1 && 
             this.context.roles.indexOf(RDFResourceRolesEnum.individual) != -1);
 
-        this.settings = this.vbProp.getSearchSettings();
+        this.settings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
         this.activeStringMatchMode = this.settings.stringMatchMode;
         this.useURI = this.settings.useURI;
         this.useLocalName = this.settings.useLocalName;

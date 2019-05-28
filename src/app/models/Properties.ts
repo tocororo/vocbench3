@@ -1,4 +1,5 @@
 import { ResViewPartition } from "./ResourceView";
+import { SKOS } from "./Vocabulary";
 
 export class Properties {
 
@@ -49,16 +50,16 @@ export enum ResourceViewMode {
 }
 
 export class SearchSettings {
-    public stringMatchMode: SearchMode;
-    public useURI: boolean;
-    public useLocalName: boolean;
-    public useNotes: boolean;
-    public restrictLang: boolean;
-    public languages: string[];
-    public includeLocales: boolean;
-    public useAutocompletion: boolean;
-    public restrictActiveScheme: boolean;
-    public classIndividualSearchMode: ClassIndividualPanelSearchMode;
+    stringMatchMode: SearchMode = SearchMode.startsWith;
+    useURI: boolean = false;
+    useLocalName: boolean = true;
+    useNotes: boolean = false;
+    restrictLang: boolean = false;
+    languages: string[] = [];
+    includeLocales: boolean = false;
+    useAutocompletion: boolean = false;
+    restrictActiveScheme: boolean = true;
+    classIndividualSearchMode: ClassIndividualPanelSearchMode = ClassIndividualPanelSearchMode.all;
 }
 
 export enum SearchMode {
@@ -90,12 +91,12 @@ export class ClassTreePreference {
 }
 
 export class ConceptTreePreference {
-    baseBroaderUri: string;
-    broaderProps: string[];
-    narrowerProps: string[];
-    includeSubProps: boolean; //tells if the hierarchy should consider
-    syncInverse: boolean; //tells if the narrower/broader properties should be synced with their inverse
-    visualization: ConceptTreeVisualizationMode;
+    baseBroaderUri: string = SKOS.broader.getURI();
+    broaderProps: string[] = [];
+    narrowerProps: string[] = [];
+    includeSubProps: boolean = true; //tells if the hierarchy should consider
+    syncInverse: boolean = true; //tells if the narrower/broader properties should be synced with their inverse
+    visualization: ConceptTreeVisualizationMode = ConceptTreeVisualizationMode.hierarchyBased;
 }
 
 export enum ConceptTreeVisualizationMode {
@@ -104,8 +105,8 @@ export enum ConceptTreeVisualizationMode {
 }
 
 export class LexicalEntryListPreference {
-    visualization: LexEntryVisualizationMode;
-    indexLength: number;
+    visualization: LexEntryVisualizationMode = LexEntryVisualizationMode.indexBased;
+    indexLength: number = 1;
 }
 
 export enum LexEntryVisualizationMode {

@@ -101,7 +101,7 @@ export class SchemeListPanelComponent extends AbstractListPanel {
     // }
 
     doSearch(searchedText: string) {
-        let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
         if (searchSettings.restrictLang) {
@@ -155,8 +155,8 @@ export class SchemeListPanelComponent extends AbstractListPanel {
                 this.skosService.addMultipleConceptsToScheme(this.selectedNode).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        if (this.vbProp.isActiveScheme(this.selectedNode)) { //in case the target scheme is active
-                            //emit refreshTreeEvent so that the concept tree refreshes
+                        if (ResourceUtils.containsNode(VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes, this.selectedNode)) {
+                            //in case the target scheme is active emit refreshTreeEvent so that the concept tree refreshes
                             this.eventHandler.refreshTreeListEvent.emit([RDFResourceRolesEnum.concept]);
                         }
                     }

@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/
 import { ARTURIResource } from "../../../../../models/ARTResources";
 import { SkosServices } from "../../../../../services/skosServices";
 import { ResourceUtils } from "../../../../../utils/ResourceUtils";
-import { VBProperties } from "../../../../../utils/VBProperties";
+import { VBContext } from "../../../../../utils/VBContext";
 import { BrowsingModalServices } from "../../../../../widget/modal/browsingModal/browsingModalServices";
 
 @Component({
@@ -21,7 +21,7 @@ export class SchemeSelectionComponent {
     private schemeList: ARTURIResource[] = [];
     private selectedScheme: ARTURIResource;
 
-    constructor(private skosService: SkosServices, private preferences: VBProperties, private browsingModals: BrowsingModalServices) {}
+    constructor(private skosService: SkosServices, private browsingModals: BrowsingModalServices) {}
 
     ngOnInit() {
         // this.initSchemeList(); //init in ngOnChanges
@@ -37,7 +37,7 @@ export class SchemeSelectionComponent {
             this.skosService.getAllSchemes().subscribe(
                 schemes => {
                     if (this.schemes == null) {
-                        this.schemes = this.preferences.getActiveSchemes();
+                        this.schemes = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
                     }
                     for (var i = 0; i < this.schemes.length; i++) {
                         for (var j = 0; j < schemes.length; j++) {

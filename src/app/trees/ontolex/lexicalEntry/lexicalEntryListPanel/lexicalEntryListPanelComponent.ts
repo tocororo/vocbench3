@@ -4,7 +4,7 @@ import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
 import { Observable } from "rxjs/Observable";
 import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
-import { LexEntryVisualizationMode, SearchSettings } from "../../../../models/Properties";
+import { LexEntryVisualizationMode, LexicalEntryListPreference, SearchSettings } from "../../../../models/Properties";
 import { OntoLex } from "../../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
@@ -14,6 +14,7 @@ import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { ActionDescription, RoleActionResolver } from "../../../../utils/RoleActionResolver";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBActionFunctionCtx } from "../../../../utils/VBActions";
+import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { VBProperties } from '../../../../utils/VBProperties';
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
@@ -76,7 +77,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
          */
         let activeLexicon: ARTURIResource; 
         if (this.lexicon == undefined) { //if @Input is not provided, get the lexicon from the preferences
-            activeLexicon = this.vbProp.getActiveLexicon();
+            activeLexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
         } else { //if @Input lexicon is provided, initialize the tree with this lexicon
             activeLexicon = this.lexicon;
         }
@@ -94,8 +95,8 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
             this.initLexiconLang();
         }
 
-        this.visualizationMode = this.vbProp.getLexicalEntryListPreferences().visualization;
-        this.indexLenght = this.vbProp.getLexicalEntryListPreferences().indexLength;
+        this.visualizationMode = VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences.visualization;
+        this.indexLenght = VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences.indexLength;
         this.onDigitChange();
     }
 
@@ -144,7 +145,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
     doSearch(searchedText: string) {
         this.lastSearch = searchedText;
 
-        let searchSettings: SearchSettings = this.vbProp.getSearchSettings();
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
         if (searchSettings.restrictLang) {
@@ -294,12 +295,13 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(LexicalEntryListSettingsModal, overlayConfig).result.then(
             changesDone => {
-                this.visualizationMode = this.vbProp.getLexicalEntryListPreferences().visualization;
+                let lexEntryListPref: LexicalEntryListPreference = VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences;
+                this.visualizationMode = lexEntryListPref.visualization;
                 if (this.visualizationMode == LexEntryVisualizationMode.searchBased) {
                     this.viewChildList.forceList([]);
                     this.lastSearch = null;
                 } else {
-                    this.indexLenght = this.vbProp.getLexicalEntryListPreferences().indexLength;
+                    this.indexLenght = lexEntryListPref.indexLength;
                     this.onDigitChange();
                     this.refresh();
                 }

@@ -19,7 +19,7 @@ export class LanguageEditingComponent {
         var userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
         this.languages = Languages.fromTagsToLanguages(userAssignedLangs);
 
-        let editingLangTag = this.properties.getEditingLanguage();
+        let editingLangTag = VBContext.getWorkingProjectCtx().getProjectPreferences().editingLanguage;
         
         for (var i = 0; i < this.languages.length; i++) {
             if (this.languages[i].tag == editingLangTag) {

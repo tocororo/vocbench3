@@ -4,7 +4,7 @@ import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugi
 import { ARTURIResource } from '../../../../models/ARTResources';
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { UIUtils } from "../../../../utils/UIUtils";
-import { VBProperties } from "../../../../utils/VBProperties";
+import { VBContext } from "../../../../utils/VBContext";
 import { LexiconListModal, LexiconListModalData } from "../lexiconListModal/lexiconListModal";
 
 export class LexicalEntryListModalData extends BSModalContext {
@@ -34,14 +34,14 @@ export class LexicalEntryListModal implements ModalComponent<LexicalEntryListMod
     private multiselection: boolean = false;
 
     constructor(public dialog: DialogRef<LexicalEntryListModalData>, private modal: Modal, private resourceService: ResourcesServices,
-        private vbProp: VBProperties, private elementRef: ElementRef) {
+        private elementRef: ElementRef) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
         this.activeLexicon = this.context.lexicon;
         if (this.activeLexicon == null) { //if no lexicon has been "forced", set the current active lexicon
-            let activeLexiconProp = this.vbProp.getActiveLexicon();
+            let activeLexiconProp = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
             if (activeLexiconProp != null) {
                 this.resourceService.getResourceDescription(activeLexiconProp).subscribe(
                     lex => {

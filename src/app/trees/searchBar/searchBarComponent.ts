@@ -1,20 +1,19 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { CompleterService } from 'ng2-completer';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Subscription } from "rxjs/Subscription";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { SearchMode, SearchSettings } from "../../models/Properties";
 import { SearchServices } from "../../services/searchServices";
-import { LoadCustomSearchModal } from "./loadCustomSearchModal";
 import { TreeListContext } from "../../utils/UIUtils";
+import { VBContext } from "../../utils/VBContext";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { AdvancedSearchModal } from "./advancedSearchModal";
 import { CustomCompleterData } from "./customCompleterData";
 import { CustomSearchModal, CustomSearchModalData } from "./customSearchModal";
+import { LoadCustomSearchModal } from "./loadCustomSearchModal";
 import { SearchSettingsModal, SearchSettingsModalData } from './searchSettingsModal';
 
 @Component({
@@ -47,8 +46,7 @@ export class SearchBarComponent {
     private eventSubscriptions: Subscription[] = [];
 
     constructor(private searchService: SearchServices, private modal: Modal, private vbProperties: VBProperties,
-        private eventHandler: VBEventHandler, private completerService: CompleterService, 
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
+        private eventHandler: VBEventHandler, private basicModals: BasicModalServices) {
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
             (schemes: ARTURIResource[]) => this.setSchemeInCompleter()));
@@ -57,7 +55,7 @@ export class SearchBarComponent {
     }
 
     ngOnInit() {
-        this.searchSettings = this.vbProperties.getSearchSettings();
+        this.searchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
         this.completerDatasource = new CustomCompleterData(this.searchService, this.roles, this.searchSettings);
         this.setSchemeInCompleter();
     }
@@ -142,7 +140,8 @@ export class SearchBarComponent {
 
     private setSchemeInCompleter() {
         if (this.roles.indexOf(RDFResourceRolesEnum.concept) != -1) {
-            this.completerDatasource.setConceptSchemes(this.vbProperties.getActiveSchemes());
+            let activeSchemes: ARTURIResource[] = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
+            this.completerDatasource.setConceptSchemes(activeSchemes);
         }
     }
 
@@ -150,7 +149,7 @@ export class SearchBarComponent {
      * When the search settings is updated, updates the setting of the bar and the settings for the autocompleter
      */
     private updateSearchSettings() {
-        this.searchSettings = this.vbProperties.getSearchSettings();
+        this.searchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
         this.completerDatasource.updateSearchSettings(this.searchSettings);
     }
 

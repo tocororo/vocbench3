@@ -5,6 +5,7 @@ import { ResViewPartition, ResViewUtils } from "../../models/ResourceView";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { VBContext } from "../../utils/VBContext";
 
 @Component({
     selector: "rv-partition-filter",
@@ -91,7 +92,7 @@ export class ResViewPartitionFilter {
             }
         }
 
-        this.convertPrefToRolePartitionsStruct(this.vbProp.getResourceViewPartitionsFilter());
+        this.convertPrefToRolePartitionsStruct(VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter);
         this.selectedRolePartitionsStruct = this.rolePartitionsStructs[0];
     }
 

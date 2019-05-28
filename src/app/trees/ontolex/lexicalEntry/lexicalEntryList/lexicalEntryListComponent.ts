@@ -3,15 +3,12 @@ import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../../
 import { LexEntryVisualizationMode } from "../../../../models/Properties";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
-import { SearchServices } from "../../../../services/searchServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../../utils/VBActions";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { VBProperties } from "../../../../utils/VBProperties";
-import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { AbstractList } from "../../../abstractList";
 import { LexicalEntryListNodeComponent } from "./lexicalEntryListNodeComponent";
 
@@ -29,8 +26,7 @@ export class LexicalEntryListComponent extends AbstractList {
 
     structRole = RDFResourceRolesEnum.ontolexLexicalEntry;
 
-    constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private vbProp: VBProperties,
-        private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+    constructor(private ontolexService: OntoLexLemonServices, eventHandler: VBEventHandler) {
         super(eventHandler);
         
         this.eventSubscriptions.push(eventHandler.lexicalEntryCreatedEvent.subscribe(
@@ -58,7 +54,8 @@ export class LexicalEntryListComponent extends AbstractList {
 
     initImpl() {
         if (this.lexicon != undefined) {
-            if (this.vbProp.getLexicalEntryListPreferences().visualization == LexEntryVisualizationMode.indexBased && this.index != undefined) {
+            let visualization: LexEntryVisualizationMode = VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences.visualization;
+            if (visualization == LexEntryVisualizationMode.indexBased && this.index != undefined) {
                 this.list = [];
                 UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
                 this.ontolexService.getLexicalEntriesByAlphabeticIndex(this.index, this.lexicon).subscribe(
@@ -74,7 +71,7 @@ export class LexicalEntryListComponent extends AbstractList {
 
                     }
                 );
-            } else if (this.vbProp.getLexicalEntryListPreferences().visualization == LexEntryVisualizationMode.searchBased) {
+            } else if (visualization == LexEntryVisualizationMode.searchBased) {
                 //don't do nothing
             }
         }
@@ -86,7 +83,7 @@ export class LexicalEntryListComponent extends AbstractList {
     }
 
     onListNodeCreated(node: ARTURIResource) {
-        if (this.vbProp.getLexicalEntryListPreferences().visualization = LexEntryVisualizationMode.indexBased) {
+        if (VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences.visualization = LexEntryVisualizationMode.indexBased) {
             if (node.getShow().toLocaleLowerCase().startsWith(this.index.toLocaleLowerCase())) {
                 this.list.unshift(node);
             }
