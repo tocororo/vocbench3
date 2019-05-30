@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { AlignmentCell, AlignmentOverview } from '../../models/Alignment';
@@ -11,21 +11,20 @@ import { HttpServiceContext } from "../../utils/HttpManager";
 import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { MappingPropertySelectionModal, MappingPropertySelectionModalData } from "./alignmentValidationModals/mappingPropertySelectionModal";
-import { ValidationReportModal, ValidationReportModalData } from "./alignmentValidationModals/validationReportModal";
-import { ValidationSettingsModal } from "./alignmentValidationModals/validationSettingsModal";
+import { MappingPropertySelectionModal, MappingPropertySelectionModalData } from '../alignmentValidation/alignmentValidationModals/mappingPropertySelectionModal';
+import { ValidationReportModal, ValidationReportModalData } from '../alignmentValidation/alignmentValidationModals/validationReportModal';
+import { ValidationSettingsModal } from '../alignmentValidation/alignmentValidationModals/validationSettingsModal';
 
 @Component({
-    selector: 'alignment-validation-component',
-    templateUrl: './alignmentValidationComponent.html',
-    host: { class: "pageComponent" }
+    selector: 'alignment-management',
+    templateUrl: './alignmentManagementComponent.html',
+    host: { class: "vbox" }
 })
-export class AlignmentValidationComponent {
+export class AlignmentManagementComponent {
 
-    private alignmentFile: File;
+    @Input() overview: AlignmentOverview;
+
     private alignmentCellList: Array<AlignmentCell> = [];
-    private sourceBaseURI: string;
-    private targetBaseURI: string;
 
     //for pagination
     private page: number = 0;
@@ -82,42 +81,12 @@ export class AlignmentValidationComponent {
         }
     }
 
-    //use HostListener instead of ngOnDestroy since this component is reused and so it is never destroyed
-    @HostListener('window:beforeunload', [ '$event' ])
-    beforeUnloadHandler(event: Event) {
-        // close session server side
-        this.alignmentService.closeSession().subscribe();
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['overview'] && changes['overview'].currentValue) {
+            this.updateAlignmentCells();
+        }
     }
 
-    /**
-     * Updates the file to load when user change file on from filepicker
-     */
-    private fileChangeEvent(file: File) {
-        this.alignmentFile = file;
-    }
-
-    /**
-     * Loads the alignment file and the mapping cells
-     */
-    private loadAlignment() {
-        HttpServiceContext.initSessionToken();
-        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.alignmentService.loadAlignment(this.alignmentFile).subscribe(
-            (overview: AlignmentOverview) => {
-                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.sourceBaseURI = overview.onto1;
-                this.targetBaseURI = overview.onto2;
-                for (var i = 0; i < overview.unknownRelations.length; i++) {
-                    this.relationSymbols.push({
-                        relation: overview.unknownRelations[i],
-                        dlSymbol: overview.unknownRelations[i],
-                        text: overview.unknownRelations[i]
-                    });
-                }
-                this.updateAlignmentCells();
-            }
-        );
-    }
 
     /**
      * Gets alignment cells so updates the tables 

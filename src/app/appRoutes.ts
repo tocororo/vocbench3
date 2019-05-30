@@ -1,27 +1,28 @@
 import { RouterModule, Routes } from '@angular/router';
-
-import { AuthGuard, AdminGuard, ProjectGuard, UnsavedChangesGuard } from "./utils/CanActivateGuards";
-import { UserResolver } from "./utils/UserResolver";
-
-import { HomeComponent } from "./homeComponent";
-import { ProjectComponent } from "./project/projectComponent";
-import { DataComponent } from "./data/dataComponent";
-import { SparqlComponent } from "./sparql/sparqlComponent";
-import { HistoryComponent } from "./historyValidation/historyComponent";
-import { ValidationComponent } from "./historyValidation/validationComponent";
 import { AlignmentValidationComponent } from "./alignment/alignmentValidation/alignmentValidationComponent";
-import { Sheet2RdfComponent } from "./sheet2rdf/sheet2rdfComponent";
+import { AlignmentValidationComponentNew } from './alignment/alignmentValidationNew/alignmentValidationComponentNew';
 import { CollaborationComponent } from './collaboration/collaborationComponent';
-import { CustomFormConfigComponent } from "./customForms/customFormConfComponent";
-import { CreateProjectComponent } from "./project/createProject/createProjectComponent";
-import { LoadDataComponent } from "./config/dataManagement/loadData/loadDataComponent";
 import { ExportDataComponent } from "./config/dataManagement/exportData/exportDataComponent";
+import { LoadDataComponent } from "./config/dataManagement/loadData/loadDataComponent";
 import { RefactorComponent } from "./config/dataManagement/refactor/refactorComponent";
 import { VersioningComponent } from "./config/dataManagement/versioning/versioningComponent";
+import { CustomFormConfigComponent } from "./customForms/customFormConfComponent";
+import { DataComponent } from "./data/dataComponent";
+import { HistoryComponent } from "./historyValidation/historyComponent";
+import { ValidationComponent } from "./historyValidation/validationComponent";
+import { HomeComponent } from "./homeComponent";
 import { VocbenchPreferencesComponent } from "./preferences/vocbenchPreferencesComponent";
-import { UserProfileComponent } from "./user/userProfileComponent";
+import { CreateProjectComponent } from "./project/createProject/createProjectComponent";
+import { ProjectComponent } from "./project/projectComponent";
+import { Sheet2RdfComponent } from "./sheet2rdf/sheet2rdfComponent";
+import { SparqlComponent } from "./sparql/sparqlComponent";
 import { RegistrationComponent } from "./user/registrationComponent";
 import { ResetPasswordComponent } from "./user/resetPasswordComponent";
+import { UserProfileComponent } from "./user/userProfileComponent";
+import { AdminGuard, AuthGuard, ProjectGuard } from "./utils/CanActivateGuards";
+import { UserResolver } from "./utils/UserResolver";
+
+
 
 export const routes: Routes = [
     { path: "", redirectTo: "/Home", pathMatch: "full" },
@@ -33,6 +34,7 @@ export const routes: Routes = [
     { path: "History", component: HistoryComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Validation", component: ValidationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard] },
+    { path: "AlignmentMaintenance", component: AlignmentValidationComponentNew, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Sheet2RDF", component: Sheet2RdfComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Collaboration", component: CollaborationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "CustomForm", component: CustomFormConfigComponent, canActivate: [AuthGuard, ProjectGuard] },

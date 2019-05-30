@@ -276,18 +276,49 @@ export class HttpManager {
      */
     private getContextParametersForUrl(options: VBRequestOptions): string {
         var params: string = "";
-        //give priority to ctx_project in HttpServiceContext over project in ctx
-        if (HttpServiceContext.getContextProject() != undefined) {
-            params += "ctx_project=" + encodeURIComponent(HttpServiceContext.getContextProject().getName()) + "&";
-            //consumer (if not specified is the currently open project)
-            if (HttpServiceContext.getConsumerProject() != undefined) {
-                params += "ctx_consumer=SYSTEM&";
-            } else {
-                params += "ctx_consumer=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
-            }
-        } else if (VBContext.getWorkingProject() != undefined) { //use the working project otherwise
-            params += "ctx_project=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
+        /**
+         * give priority to ctx_project in the following order:
+         * - VBRequestOptions.ctxProject
+         * - HttpServiceContext.ctxProject
+         * - VBContext.workingProject
+         * In case a ctxProject is provided in the VBRequestOptions or HttpServiceContext, the working project is set as consumer
+         */
+        let ctxProject: Project;
+        let ctxConsumer: Project;
+
+        if (options.ctxProject != null) { //if provided get ctxProject from VBRequestOptions
+            ctxProject = options.ctxProject;
+        } else if (HttpServiceContext.getContextProject() != null) { //otherwise get ctxProject from HttpServiceContext
+            ctxProject = HttpServiceContext.getContextProject();
         }
+        if (ctxProject != null) { //project provided in VBRequestOptions or HttpServiceContext => set also the consumer
+            if (HttpServiceContext.getConsumerProject() != null) {
+                ctxConsumer = HttpServiceContext.getConsumerProject();
+            } else {
+                ctxConsumer = VBContext.getWorkingProject();
+            }
+        } else { //project not provided in VBRequestOptions or HttpServiceContext => get it from VBContext
+            ctxProject = VBContext.getWorkingProject();
+        }
+        //concat the url parameter
+        if (ctxProject != null) {
+            params += "ctx_project=" + encodeURIComponent(ctxProject.getName()) + "&";
+        }
+        if (ctxConsumer != null) {
+            params += "ctx_consumer=" + encodeURIComponent(ctxConsumer.getName()) + "&";
+        }
+
+        // if (HttpServiceContext.getContextProject() != undefined) {
+        //     params += "ctx_project=" + encodeURIComponent(HttpServiceContext.getContextProject().getName()) + "&";
+        //     //consumer (if not specified is the currently open project)
+        //     if (HttpServiceContext.getConsumerProject() != undefined) {
+        //         params += "ctx_consumer=SYSTEM&";
+        //     } else {
+        //         params += "ctx_consumer=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
+        //     }
+        // } else if (VBContext.getWorkingProject() != undefined) { //use the working project otherwise
+        //     params += "ctx_project=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
+        // }
 
         //give priority to version in HttpServiceContext over version in ctx
         if (HttpServiceContext.getContextVersion() != undefined) {
@@ -572,9 +603,11 @@ export class HttpServiceContext {
 export class VBRequestOptions {
 
     errorAlertOpt: ErrorAlertOptions;
+    ctxProject: Project;
     
-    constructor({ errorAlertOpt }: VBRequestOptionsArgs = {}) {
+    constructor({ errorAlertOpt, ctxProject }: VBRequestOptionsArgs = {}) {
         this.errorAlertOpt = errorAlertOpt != null ? errorAlertOpt : null;
+        this.ctxProject = ctxProject != null ? ctxProject : null;
     }
 
     /**
@@ -585,7 +618,8 @@ export class VBRequestOptions {
     merge(options?: VBRequestOptions): VBRequestOptions {
         //if options is provided and its parameters is not null, override the value of the current instance
         return new VBRequestOptions({
-            errorAlertOpt: options && options.errorAlertOpt != null ? options.errorAlertOpt : this.errorAlertOpt
+            errorAlertOpt: options && options.errorAlertOpt != null ? options.errorAlertOpt : this.errorAlertOpt,
+            ctxProject: options && options.ctxProject != null ? options.ctxProject : this.ctxProject
         });
     }
 }
@@ -597,6 +631,8 @@ interface VBRequestOptionsArgs {
      * Is useful to handle the error from the component that invokes the service.
      */
     errorAlertOpt?: ErrorAlertOptions;
+
+    ctxProject?: Project;
 }
 
 class ErrorAlertOptions {

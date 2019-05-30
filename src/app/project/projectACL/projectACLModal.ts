@@ -11,8 +11,8 @@ import { AccessLevel, LockLevel } from '../../models/Project';
     templateUrl: "./projectACLModal.html",
     styles: [`
         .firstCol { min-width: 90px; max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .fixedCol { width: 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .fixedColInner { width: 30px; height: 22px; }
+        .fixedCol { max-width: 60px; width: 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .fixedColInner { min-width: 30px; width: 30px; min-height: 22px; height: 22px; }
         .disabledCell { background-color: #eee;}
         .accessed { background-color: #58fa58;}
         .locked { background-color: #fa5858;}
@@ -68,6 +68,10 @@ export class ProjectACLModal implements ModalComponent<BSModalContext> {
                     }
                     this.tableModel.push({ project: projectName, consumerACLs: aclMappings });
                 }
+
+                this.tableModel.forEach(tableEntry => {
+                    this.initClassAndTitle(tableEntry);
+                });
             }
         );
     }
@@ -95,6 +99,20 @@ export class ProjectACLModal implements ModalComponent<BSModalContext> {
         return null;
     }
 
+    private initClassAndTitle(tableEntry: { project: string, consumerACLs: ACLMapping[] }) {
+        tableEntry.consumerACLs.forEach(consumerAcl => {
+            consumerAcl['availableAccessLevel_title'] = this.initTitleAvailableAccessLevel(tableEntry.project, consumerAcl.consumer, consumerAcl.availableAccessLevel);
+            consumerAcl['acquiredAccessLevel_title'] = this.initTitleAcquiredAccessLevel(tableEntry.project, consumerAcl.consumer, consumerAcl.acquiredAccessLevel);
+            consumerAcl['availableLockLevel_title'] = this.initTitleAvailableLock(tableEntry.project, consumerAcl.availableLockLevel);
+            consumerAcl['acquiredLockLevel_title'] = this.initTitleAcquiredLock(tableEntry.project, consumerAcl.consumer, consumerAcl.acquiredLockLevel);
+            consumerAcl['availableAccessLevel_class'] = this.initCellClass(tableEntry.project, consumerAcl.consumer);
+            consumerAcl['acquiredAccessLevel_class'] = this.initCellClass(tableEntry.project, consumerAcl.consumer, true);
+            consumerAcl['availableLockLevel_class'] = this.initCellClass(tableEntry.project, consumerAcl.consumer);
+            consumerAcl['acquiredLockLevel_class'] = this.initCellClass(tableEntry.project, consumerAcl.consumer, false, true);
+        })
+        
+    }
+
     /**
      * Returns the style class to apply to a cell of the table
      * @param project
@@ -102,7 +120,7 @@ export class ProjectACLModal implements ModalComponent<BSModalContext> {
      * @param accessLevel if true the style is computed in order to be applied to the acquired access level cell
      * @param locked if true the style is computed in order to be applied to the locked cell
      */
-    private getCellClass(project: string, consumer: string, accessLevel?: boolean, locked?: boolean) {
+    private initCellClass(project: string, consumer: string, accessLevel?: boolean, locked?: boolean) {
         var cls = "text-center fixedColInner";
         if (project == consumer) {
             cls += " disabledCell";
@@ -117,7 +135,7 @@ export class ProjectACLModal implements ModalComponent<BSModalContext> {
         return cls;
     }
 
-    private getTitleAvailableAccessLevel(project: string, consumer: string, availableAccessLevel: AccessLevel) {
+    private initTitleAvailableAccessLevel(project: string, consumer: string, availableAccessLevel: AccessLevel) {
         switch (availableAccessLevel) {
             case AccessLevel.R:
                 return "Available Access Level: Project '" + project + "' grants Read access to '" + consumer + "' project";
@@ -128,7 +146,7 @@ export class ProjectACLModal implements ModalComponent<BSModalContext> {
         }
     }
 
-    private getTitleAcquiredAccessLevel(project: string, consumer: string, acquiredAccessLevel: AccessLevel) {
+    private initTitleAcquiredAccessLevel(project: string, consumer: string, acquiredAccessLevel: AccessLevel) {
         switch (acquiredAccessLevel) {
             case AccessLevel.R:
                 return "Acquired Access Level: Project '" + project + "' is accessed by '" + consumer + "' in Read level";
@@ -139,7 +157,7 @@ export class ProjectACLModal implements ModalComponent<BSModalContext> {
         }
     }
 
-    private getTitleAvailableLock(project: string, availableLockLevel: LockLevel) {
+    private initTitleAvailableLock(project: string, availableLockLevel: LockLevel) {
         switch (availableLockLevel) {
             case LockLevel.NO:
                 return "Available Lock Level: Project '" + project + "' cannot be locked by any consumer";
@@ -152,7 +170,7 @@ export class ProjectACLModal implements ModalComponent<BSModalContext> {
         }
     }
 
-    private getTitleAcquiredLock(project: string, consumer: string, availableLockLevel: LockLevel) {
+    private initTitleAcquiredLock(project: string, consumer: string, availableLockLevel: LockLevel) {
         switch (availableLockLevel) {
             case LockLevel.R:
                 return "Acquired Lock Level: Project '" + project + "'  is locked by '" + consumer + "' in Read level";

@@ -1,11 +1,9 @@
 import { VersionInfo } from '../models/History';
 import { PrefixMapping } from '../models/Metadata';
 import { Project } from '../models/Project';
+import { ProjectPreferences, ProjectSettings, SystemSettings } from '../models/Properties';
 import { ProjectUserBinding, User } from '../models/User';
 import { UIUtils } from "./UIUtils";
-import { Language } from '../models/LanguagesCountries';
-import { ValueFilterLanguages, ClassTreePreference, ConceptTreePreference, LexicalEntryListPreference, ResViewPartitionFilterPreference, SearchSettings, SearchMode, ClassIndividualPanelSearchMode, SystemSettings, ProjectSettings, ProjectPreferences } from '../models/Properties';
-import { ARTURIResource } from '../models/ARTResources';
 
 export class VBContext {
 

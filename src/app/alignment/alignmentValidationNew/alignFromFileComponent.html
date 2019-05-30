@@ -1,0 +1,28 @@
+<div class="panel panel-default">
+    <div class="panel-body" style="padding: 3px;">
+        <table class="table table-condensed table-borderless">
+            <tbody>
+
+                <tr style="margin-bottom: 4px">
+                    <td style="width: 1%" class="text-right" nowrap><label>Alignment file:</label></td>
+                    <td>
+                        <div class="hbox">
+                            <file-picker (fileChanged)="fileChangeEvent($event)" [size]="'sm'" [accept]="'application/rdf+xml'"></file-picker>
+                            <button class="btn btn-default btn-sm" style="margin-left: 4px;" (click)="loadAlignment()"
+                                [disabled]="!alignmentFile">Load</button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="width: 1%" class="text-right" nowrap><label>Source ontology baseURI:</label></td>
+                    <td><input type="text" class="form-control input-sm" [(ngModel)]="sourceBaseURI" readonly></td>
+                </tr>
+                <tr>
+                    <td class="text-right"><label>Target ontology baseURI:</label></td>
+                    <td><input type="text" class="form-control input-sm" [(ngModel)]="targetBaseURI" readonly></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { ResourcePosition, ARTURIResource } from "../models/ARTResources";
 import { HttpManager } from "../utils/HttpManager";
 import { Observable } from 'rxjs';
+import { Project } from '../models/Project';
+import { MatchingProblem, Dataset } from '../models/Maple';
 
 @Injectable()
 export class MapleServices {
@@ -34,6 +36,14 @@ export class MapleServices {
             targetPosition: targetPosition.serialize()
         };
         return this.httpMgr.doGet(this.serviceName, "profileSingleResourceMatchProblem", params);
+    }
+
+    profileMatchingProblemBetweenProjects(leftDataset: Project, rightDataset: Project): Observable<MatchingProblem> {
+        let params = {
+            leftDataset: leftDataset.getName(),
+            rightDataset: rightDataset.getName()
+        }
+        return this.httpMgr.doGet(this.serviceName, "profileMatchingProblemBetweenProjects", params);
     }
 
 

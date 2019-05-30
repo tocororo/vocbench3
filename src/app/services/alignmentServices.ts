@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { AlignmentCell } from "../alignment/alignmentValidation/AlignmentCell";
+import { AlignmentCell, AlignmentOverview } from '../models/Alignment';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { SearchMode } from '../models/Properties';
 import { Deserializer } from "../utils/Deserializer";
@@ -61,21 +61,11 @@ export class AlignmentServices {
      * @param file alignment file to upload
      * @return return an object with "onto1" and "onto2", namely the baseURI of the two aligned ontologies
      */
-    loadAlignment(file: File): Observable<{onto1: string, onto2: string, unknownRelations: string[]}> {
+    loadAlignment(file: File): Observable<AlignmentOverview> {
         var data = {
             inputFile: file
         }
-        return this.httpMgr.uploadFile(this.serviceName, "loadAlignment", data).map(
-            stResp => {
-                var onto1 = stResp.onto1;
-                var onto2 = stResp.onto2;
-                var unknownRelations: string[] = [];
-                for (var i = 0; i < stResp.unknownRelations.length; i++) {
-                    unknownRelations.push(stResp.unknownRelations[i]);
-                }
-                return { onto1: onto1, onto2: onto2, unknownRelations: unknownRelations };
-            }
-        );
+        return this.httpMgr.uploadFile(this.serviceName, "loadAlignment", data);
     }
 
     /**

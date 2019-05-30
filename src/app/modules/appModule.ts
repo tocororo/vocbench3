@@ -23,6 +23,7 @@ import { VBCollaboration } from '../utils/VBCollaboration';
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
 import { AdministrationModule } from "./administrationModule";
+import { AlignmentModule } from './alignmentModule';
 import { CollaborationModule } from './collaborationModule';
 import { CustomFormModule } from "./customFormModule";
 import { DatasetCatalogModule } from './datasetCatalogModule';
@@ -50,6 +51,7 @@ import { VBModalModule } from "./vbModalModule";
             SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule, GraphModule,
             ProjectModule, UserModule, ICVModule, AdministrationModule, CustomFormModule, MetadataModule, DatasetCatalogModule,
             HistoryValidationModule, PreferencesModule, Sheet2RdfModule, SparqlModule, CollaborationModule,
+            AlignmentModule,
 
             STServicesModule,
             appRouting,

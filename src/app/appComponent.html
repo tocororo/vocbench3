@@ -33,6 +33,7 @@
                     <ul class="dropdown-menu" style="font-size: 12px; line-height: 20px;">
                         <li><a [routerLink]="['/Icv']">Integrity Constraint Validator (ICV)</a></li>
                         <li *ngIf="isAlignValidationAuthorized()"><a [routerLink]="['/AlignmentValidation']">Alignment Validation</a></li>
+                        <li><a [routerLink]="['/AlignmentMaintenance']">NEW Alignment Validation BETA</a></li>
                         <li *ngIf="isSheet2RdfAuthorized()"><a [routerLink]="['/Sheet2RDF']">Sheet2RDF</a></li>
                         <li *ngIf="isCollaborationAuthorized()"><a [routerLink]="['/Collaboration']">Collaboration System</a></li>
                         <li *ngIf="isCustomFormAuthorized()"><a [routerLink]="['/CustomForm']">Custom Form configuration</a></li>
