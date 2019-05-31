@@ -7,7 +7,7 @@
         <span class="glyphicon glyphicon-info-sign" style="top: 0"
             title="Specifies what to do with the rejected alignment when applyng the validation to the ontology"></span>
         <label style="white-space: nowrap; margin: 0px 3px;">Rejected alignment action:</label>
-        <select class="form-control input-xs" style="display: inline-block" [(ngModel)]="rejectedAlignmentAction">
+        <select class="form-control input-sm" style="display: inline-block" [(ngModel)]="rejectedAlignmentAction">
             <option *ngFor="let opt of rejectedAlignmentOptions" [value]="opt.value">{{opt.label}}</option>
         </select>
     </div>
@@ -40,7 +40,7 @@
     
     <div class="hbox" style="align-items: center; flex: initial; margin-top: 5px">
         <label style="white-space: nowrap; margin-right: 3px;">Maximum number of alignments shown (1&#247;100):</label>
-        <input class="form-control input-xs" type="number" step="1" [(ngModel)]="maxAlignment"
+        <input class="form-control input-sm" type="number" step="1" [(ngModel)]="maxAlignment"
             [ngClass]="{submitted: submitted, 'ng-invalid': maxAlignment < 1 || maxAlignment > 100 }">
     </div>
         

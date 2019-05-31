@@ -39,7 +39,7 @@
                         </td>
                         <td style="position: relative"
                             (mouseover)="editRel.style.display='initial'" (mouseout)="editRel.style.display='none'">
-                            <div class="progress" [ngClass]="{ 'large-progress' : unknownRelation }">
+                            <div class="progress" [ngClass]="{ 'large-progress' : unknownRelation }" style="min-width: 100px;">
                                 <div class="progress-bar progress-bar-success" role="progressbar" [ngStyle]="{'width': a.getMeasure()*100+'%'}">
                                     <span class="progress-value" [title]="a.getRelation()+' ('+a.getMeasure()+')'">
                                         {{getRelationRendered(a)}}

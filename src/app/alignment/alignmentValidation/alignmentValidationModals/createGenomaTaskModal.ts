@@ -1,14 +1,14 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from 'ngx-modialog';
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { Project } from "../../models/Project";
-import { GenomaServices } from "../../services/genomaServices";
-import { MapleServices } from "../../services/mapleServices";
-import { ProjectServices } from "../../services/projectServices";
-import { HttpServiceContext } from "../../utils/HttpManager";
-import { UIUtils } from "../../utils/UIUtils";
-import { VBContext } from "../../utils/VBContext";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { Project } from "../../../models/Project";
+import { GenomaServices } from "../../../services/genomaServices";
+import { MapleServices } from "../../../services/mapleServices";
+import { ProjectServices } from "../../../services/projectServices";
+import { HttpServiceContext } from "../../../utils/HttpManager";
+import { UIUtils } from "../../../utils/UIUtils";
+import { VBContext } from "../../../utils/VBContext";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 
 export class CreateGenomaTaskModalData extends BSModalContext {
     constructor(public leftProject: Project) {
@@ -19,6 +19,7 @@ export class CreateGenomaTaskModalData extends BSModalContext {
 @Component({
     selector: "create-genoma-task-modal",
     templateUrl: "./createGenomaTaskModal.html",
+    host: { class: "blockingDivHost" }
 })
 export class CreateGenomaTaskModal implements ModalComponent<CreateGenomaTaskModalData> {
     context: CreateGenomaTaskModalData;

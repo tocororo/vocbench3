@@ -6,20 +6,14 @@
     <div class="panel-body vbox">
         <div style="display: flex; align-items: center; margin-bottom: 8px;">
             <label style="margin-right: 4px;">Source:</label>
-            <select class="form-control input-sm" [(ngModel)]="selectedSource" (ngModelChange)="onSourceChange()">
+            <select class="form-control input-sm" [(ngModel)]="selectedSource">
                 <option *ngFor="let source of alignmentSources">{{source}}</option>
             </select>
         </div>
 
-        <div *ngIf="selectedSource == sourceFile">
-            <alignment-file (alignmentLoaded)="alignmentOverview = $event"></alignment-file>
-        </div>
+        <alignment-file *ngIf="selectedSource == sourceFile"></alignment-file>
+        <alignment-genoma *ngIf="selectedSource == sourceGenoma"></alignment-genoma>
 
-        <div *ngIf="selectedSource == sourceGenoma">
-            <alignment-genoma (alignmentLoaded)="alignmentOverview = $event"></alignment-genoma>
-        </div>
-
-        <alignment-management style="margin-top: 4px;" *ngIf="alignmentOverview" [overview]="alignmentOverview"></alignment-management>
     </div>
     
 </div>

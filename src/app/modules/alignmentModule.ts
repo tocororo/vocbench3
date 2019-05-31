@@ -5,7 +5,7 @@ import { AlignFromFileComponent } from '../alignment/alignmentValidation/alignFr
 import { AlignFromGenomaComponent } from '../alignment/alignmentValidation/alignFromGenomaComponent';
 import { AlignmentManagementComponent } from '../alignment/alignmentValidation/alignmentManagementComponent';
 import { AlignmentValidationComponent } from '../alignment/alignmentValidation/alignmentValidationComponent';
-import { CreateGenomaTaskModal } from '../alignment/alignmentValidation/createGenomaTaskModal';
+import { CreateGenomaTaskModal } from '../alignment/alignmentValidation/alignmentValidationModals/createGenomaTaskModal';
 import { SharedModule } from './sharedModule';
 
 

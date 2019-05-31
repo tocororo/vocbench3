@@ -1,7 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import { AlignmentServices } from '../../services/alignmentServices';
 import { HttpServiceContext } from '../../utils/HttpManager';
-import { AlignmentOverview } from '../../models/Alignment';
 
 @Component({
     selector: 'alignment-validation-component',
@@ -15,9 +14,6 @@ export class AlignmentValidationComponent {
     private alignmentSources: string[] = [this.sourceFile, this.sourceGenoma];
     private selectedSource: string;
 
-
-    private alignmentOverview: AlignmentOverview;
-
     constructor(private alignmentService: AlignmentServices) {}
 
     ngOnInit() {
@@ -29,10 +25,6 @@ export class AlignmentValidationComponent {
     beforeUnloadHandler(event: Event) {
         // close session server side
         this.alignmentService.closeSession().subscribe();
-    }
-
-    private onSourceChange() {
-        this.alignmentOverview = null;
     }
 
 }

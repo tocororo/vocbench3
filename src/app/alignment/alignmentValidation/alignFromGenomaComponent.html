@@ -1,6 +1,6 @@
 <div class="vbox">
 
-    <div class="panel panel-default" style="min-height: 100px;">
+    <div class="panel panel-default" style="min-height: 90px;">
         <div class="panel-heading">
             <div class="hbox">
                 <label style="flex: 1;">Tasks</label>
@@ -44,7 +44,7 @@
                         <td>{{task.startTime}}</td>
                         <td>{{task.endTime}}</td>
                         <td>
-                            <button class="btn btn-xs btn-default" (click)="fetchAlignment(task)">
+                            <button class="btn btn-xs btn-default" (click)="fetchAlignment(task)" [disabled]="task.status != 'Completed'">
                                 edit alignment
                             </button>
                         </td>
@@ -53,6 +53,8 @@
             </table>
         </div>
     </div>
+
+    <alignment-management style="margin-top: 4px;" *ngIf="alignmentOverview" [overview]="alignmentOverview" [leftProject]="leftProject" [rightProject]="rightProject"></alignment-management>
 
 </div>
 

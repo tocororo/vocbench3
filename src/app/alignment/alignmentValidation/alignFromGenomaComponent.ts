@@ -5,8 +5,8 @@ import { GenomaTask } from '../../models/Genoma';
 import { Project } from "../../models/Project";
 import { GenomaServices } from '../../services/genomaServices';
 import { ProjectContext, VBContext } from '../../utils/VBContext';
-import { AbstractAlignSource } from './abstractAlignSource';
-import { CreateGenomaTaskModal, CreateGenomaTaskModalData } from './createGenomaTaskModal';
+import { AlignFromSource } from './alignFromSource';
+import { CreateGenomaTaskModal, CreateGenomaTaskModalData } from './alignmentValidationModals/createGenomaTaskModal';
 import { AlignmentOverview } from '../../models/Alignment';
 import { MapleServices } from '../../services/mapleServices';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
@@ -14,10 +14,9 @@ import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServ
 @Component({
     selector: 'alignment-genoma',
     templateUrl: './alignFromGenomaComponent.html',
+    host: { class: "vbox" }
 })
-export class AlignFromGenomaComponent extends AbstractAlignSource {
-
-    private leftProject: Project;
+export class AlignFromGenomaComponent extends AlignFromSource {
 
     private tasks: GenomaTask[] = [];
     private selectedTask: GenomaTask;
@@ -28,7 +27,7 @@ export class AlignFromGenomaComponent extends AbstractAlignSource {
 
 
     ngOnInit() {
-        this.leftProject = VBContext.getWorkingProject();
+        super.ngOnInit();
 
         this.mapleService.checkProjectMetadataAvailability().subscribe(
             available => {
@@ -82,10 +81,10 @@ export class AlignFromGenomaComponent extends AbstractAlignSource {
     }
 
     private fetchAlignment(task: GenomaTask) {
+        this.rightProject = new Project(task.rightDataset.projectName);
         this.genomaService.fetchAlignment(task.id).subscribe(
             (overview: AlignmentOverview) => {
-                this.updateRelationSymbols(overview);
-                this.alignmentLoaded.emit(overview);
+                this.alignmentOverview = overview;
             }
         );
     }

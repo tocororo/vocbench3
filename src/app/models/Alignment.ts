@@ -88,3 +88,24 @@ export class AlignmentOverview {
     onto2: string;
     unknownRelations: string[];
 }
+
+export class AlignmentRelationSymbol {
+    relation: string;
+    dlSymbol: string;
+    text: string;
+
+    static getKnownRelations(): string[] {
+        return ["=", ">", "<", "%", "HasInstance", "InstanceOf"];
+    }
+
+    static getDefaultRelations(): AlignmentRelationSymbol[] {
+        return [
+            { relation: "=", dlSymbol: "\u2261", text: "equivalent" },
+            { relation: ">", dlSymbol: "\u2292", text: "subsumes" },
+            { relation: "<", dlSymbol: "\u2291", text: "is subsumed" },
+            { relation: "%", dlSymbol: "\u22a5", text: "incompatible" },
+            { relation: "HasInstance", dlSymbol: "\u2192", text: "has instance" },
+            { relation: "InstanceOf", dlSymbol: "\u2190", text: "instance of" }
+        ];
+    }
+}

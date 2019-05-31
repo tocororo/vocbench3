@@ -1,8 +1,8 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { AlignmentCell, AlignmentOverview } from '../../models/Alignment';
-import { ARTURIResource, LocalResourcePosition } from "../../models/ARTResources";
+import { AlignmentCell, AlignmentOverview, AlignmentRelationSymbol } from '../../models/Alignment';
+import { ARTURIResource, LocalResourcePosition, ResourcePosition } from "../../models/ARTResources";
 import { Project } from "../../models/Project";
 import { AlignmentServices } from "../../services/alignmentServices";
 import { ResourcesServices } from "../../services/resourcesServices";
@@ -14,6 +14,7 @@ import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalS
 import { MappingPropertySelectionModal, MappingPropertySelectionModalData } from './alignmentValidationModals/mappingPropertySelectionModal';
 import { ValidationReportModal, ValidationReportModalData } from './alignmentValidationModals/validationReportModal';
 import { ValidationSettingsModal } from './alignmentValidationModals/validationSettingsModal';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'alignment-management',
@@ -22,7 +23,9 @@ import { ValidationSettingsModal } from './alignmentValidationModals/validationS
 })
 export class AlignmentManagementComponent {
 
-    @Input() overview: AlignmentOverview;
+    @Input() overview: AlignmentOverview; //not used, useful in order to trigger the reload of the alignment cells when it changes
+    @Input() leftProject: Project;
+    @Input() rightProject: Project;
 
     private alignmentCellList: Array<AlignmentCell> = [];
 
@@ -48,15 +51,8 @@ export class AlignmentManagementComponent {
     private rendering: boolean = false;
 
     private unknownRelation: boolean = false; //keep trace if there is some unknown relation (not a symbol, e.g. a classname)
-    private knownRelations: string[] = ["=", ">", "<", "%", "HasInstance", "InstanceOf"];
-    private relationSymbols: Array<any> = [
-        { relation: "=", dlSymbol: "\u2261", text: "equivalent" },
-        { relation: ">", dlSymbol: "\u2292", text: "subsumes" },
-        { relation: "<", dlSymbol: "\u2291", text: "is subsumed" },
-        { relation: "%", dlSymbol: "\u22a5", text: "incompatible" },
-        { relation: "HasInstance", dlSymbol: "\u2192", text: "has instance" },
-        { relation: "InstanceOf", dlSymbol: "\u2190", text: "instance of" }
-    ];
+    private knownRelations: string[] = AlignmentRelationSymbol.getKnownRelations();
+    private relationSymbols: AlignmentRelationSymbol[];
 
     constructor(private alignmentService: AlignmentServices, private resourceService: ResourcesServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
@@ -83,7 +79,20 @@ export class AlignmentManagementComponent {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['overview'] && changes['overview'].currentValue) {
+            this.relationSymbols = AlignmentRelationSymbol.getDefaultRelations();
+            this.updateRelationSymbols();
             this.updateAlignmentCells();
+            
+        }
+    }
+
+    private updateRelationSymbols() {
+        for (var i = 0; i < this.overview.unknownRelations.length; i++) {
+            this.relationSymbols.push({
+                relation: this.overview.unknownRelations[i],
+                dlSymbol: this.overview.unknownRelations[i],
+                text: this.overview.unknownRelations[i]
+            });
         }
     }
 
@@ -120,25 +129,23 @@ export class AlignmentManagementComponent {
                             for (var j = 0; j < resources.length; j++) {
                                 if (this.alignmentCellList[i].getEntity1().getURI() == resources[j].getURI()) {
                                     this.alignmentCellList[i].setEntity1(resources[j]);
-                                    break; //go to the next source entity
+                                    break; //go to the next entity
                                 }
                             }           
                         }
                     }
                 );
-                //target ontology (only if is a local project, trying to detect it by getting the position of the target entity of the first alignment)
-                this.resourceService.getResourcePosition(this.alignmentCellList[0].getEntity2()).subscribe(
-                    position => {
-                        //if target entities are from a local project, get the information of them
-                        if (position.isLocal()) {
-                            let targetProject: string = (<LocalResourcePosition>position).project;
 
+                this.detectRightProject().subscribe(
+                    () => {
+                        if (this.rightProject != null) {
+                            //collect the entities to annotate
                             let targetEntities: ARTURIResource[] = [];
                             for (var i = 0; i < this.alignmentCellList.length; i++) {
                                 targetEntities.push(this.alignmentCellList[i].getEntity2());
                             }
-
-                            HttpServiceContext.setContextProject(new Project(targetProject)); //set a temporary context project
+                            //annotate them
+                            HttpServiceContext.setContextProject(this.rightProject); //set a temporary context project
                             this.resourceService.getResourcesInfo(targetEntities).subscribe(
                                 resources => {
                                     HttpServiceContext.removeContextProject();
@@ -146,7 +153,7 @@ export class AlignmentManagementComponent {
                                         for (var j = 0; j < resources.length; j++) {
                                             if (this.alignmentCellList[i].getEntity2().getURI() == resources[j].getURI()) {
                                                 this.alignmentCellList[i].setEntity2(resources[j]);
-                                                break; //go to the next source entity
+                                                break; //go to the next entity
                                             }
                                         }           
                                     }
@@ -155,9 +162,28 @@ export class AlignmentManagementComponent {
                             );
                         }
                     }
-                )
+                );
             }
         );
+    }
+
+    /**
+     * In case the right project is not provided (generally in alignment from file), try to detect the right project
+     * by getting the resource position of the first aligned entity
+     */
+    private detectRightProject(): Observable<void> {
+        if (this.rightProject != null) { //right project provided in @Input() => do not detect it
+            return Observable.of(null);
+        } else {
+            return this.resourceService.getResourcePosition(this.alignmentCellList[0].getEntity2()).map(
+                (position: ResourcePosition) => {
+                    //if target entities are from a local project, get the information of them
+                    if (position.isLocal()) {
+                        this.rightProject = new Project((<LocalResourcePosition>position).project);
+                    }
+                }
+            );
+        }
     }
 
     /**
