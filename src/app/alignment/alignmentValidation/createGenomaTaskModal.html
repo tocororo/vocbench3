@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title" style="flex: 1">Assisted search</h3>
+    <h3 class="modal-title">Create task</h3>
 </div>
 <div class="modal-body vbox blockingDivHost">
 
@@ -8,39 +8,45 @@
             <col style="width: 1%">
             <col>
             <col style="width: 1%">
+            <col style="width: 1%">
         </colgroup>
         <tbody>
             <tr>
                 <td nowrap><label>Left project:</label></td>
-                <td><input class="form-control input-sm" [ngModel]="leftProjectStruct.context.getProject().getName()" readonly></td>
+                <td><input class="form-control input-sm" [ngModel]="leftProjectStruct.project.getName()" readonly></td>
                 <td>
-                    <button class="btn btn-sm btn-default" (click)="profileProject(leftProjectStruct)">
-                        <span *ngIf="leftProjectStruct.profileAvailable" class="glyphicon glyphicon-ok" title="Metadata profile available"></span>
-                        <span *ngIf="!leftProjectStruct.profileAvailable" class="glyphicon glyphicon-remove" title="Metadata profile not available"></span>
+                    <button class="btn btn-sm btn-default" (click)="profileProject(leftProjectStruct)" title="Profile project">
+                            <span class="glyphicon glyphicon-align-right" style="transform: rotate(90deg)"></span>
                     </button>
+                </td>
+                <td>
+                    <span *ngIf="leftProjectStruct.profileAvailable" class="glyphicon glyphicon-ok" title="Metadata profile available"></span>
+                    <span *ngIf="!leftProjectStruct.profileAvailable" class="glyphicon glyphicon-warning-sign" title="Metadata profile not available"></span>
                 </td>
             </tr>
             <tr>
                 <td nowrap><label>Right project:</label></td>
-
                 <td>
                     <select class="form-control input-sm" [(ngModel)]="selectedRightProject" (ngModelChange)="onRightProjectChange()">
                         <ng-container *ngFor="let p of projectList">
-                            <option *ngIf="p.getName() != leftProjectStruct.context.getProject().getName()" [ngValue]="p">{{p.getName()}}</option>
+                            <option *ngIf="p.getName() != leftProjectStruct.project.getName()" [ngValue]="p">{{p.getName()}}</option>
                         </ng-container>
                     </select>
                 </td>
-
                 <td>
-                    <button *ngIf="rightProjectStruct" class="btn btn-sm btn-default" (click)="profileProject(rightProjectStruct)">
+                    <button *ngIf="rightProjectStruct" class="btn btn-sm btn-default" (click)="profileProject(rightProjectStruct)" title="Profile project">
+                        <span class="glyphicon glyphicon-align-right" style="transform: rotate(90deg)"></span>
+                    </button>
+                </td>
+                <td>
+                    <ng-container *ngIf="rightProjectStruct">
                         <span *ngIf="rightProjectStruct.profileAvailable" class="glyphicon glyphicon-ok" title="Metadata profile available"></span>
                         <span *ngIf="!rightProjectStruct.profileAvailable" class="glyphicon glyphicon-remove" title="Metadata profile not available"></span>
-                    </button>
+                    </ng-container>
                 </td>
             </tr>
         </tbody>
     </table>
-
 
     <div #blockingDiv class="blockingDiv" style="display:none">
         <div class="loadingDiv">
@@ -52,6 +58,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkEnabled()">Ok</button>
     <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
 </div>

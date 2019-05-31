@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AlignFromGenomaComponent } from '../alignment/alignmentValidationNew/alignFromGenomaComponent';
-import { CreateAlignmentModal } from '../alignment/alignmentMaintenance/createAlignmentModal';
+import { AlignFromFileComponent } from '../alignment/alignmentValidation/alignFromFileComponent';
+import { AlignFromGenomaComponent } from '../alignment/alignmentValidation/alignFromGenomaComponent';
+import { AlignmentManagementComponent } from '../alignment/alignmentValidation/alignmentManagementComponent';
+import { AlignmentValidationComponent } from '../alignment/alignmentValidation/alignmentValidationComponent';
+import { CreateGenomaTaskModal } from '../alignment/alignmentValidation/createGenomaTaskModal';
 import { SharedModule } from './sharedModule';
-import { AlignmentValidationComponentNew } from '../alignment/alignmentValidationNew/alignmentValidationComponentNew';
-import { AlignFromFileComponent } from '../alignment/alignmentValidationNew/alignFromFileComponent';
-import { AlignmentManagementComponent } from '../alignment/alignmentValidationNew/alignmentManagementComponent';
 
 
 
@@ -14,17 +14,17 @@ import { AlignmentManagementComponent } from '../alignment/alignmentValidationNe
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule],
     declarations: [
-        AlignmentValidationComponentNew,
+        AlignmentValidationComponent,
         AlignFromGenomaComponent,
         AlignFromFileComponent,
         AlignmentManagementComponent,
         //modals
-        CreateAlignmentModal
+        CreateGenomaTaskModal
     ],
     exports: [AlignFromGenomaComponent],
     providers: [],
     entryComponents: [
-        CreateAlignmentModal
+        CreateGenomaTaskModal
     ]
 })
 export class AlignmentModule { }

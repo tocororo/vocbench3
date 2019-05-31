@@ -1,6 +1,5 @@
 import { RouterModule, Routes } from '@angular/router';
-import { AlignmentValidationComponent } from "./alignment/alignmentValidation/alignmentValidationComponent";
-import { AlignmentValidationComponentNew } from './alignment/alignmentValidationNew/alignmentValidationComponentNew';
+import { AlignmentValidationComponent } from './alignment/alignmentValidation/alignmentValidationComponent';
 import { CollaborationComponent } from './collaboration/collaborationComponent';
 import { ExportDataComponent } from "./config/dataManagement/exportData/exportDataComponent";
 import { LoadDataComponent } from "./config/dataManagement/loadData/loadDataComponent";
@@ -34,7 +33,6 @@ export const routes: Routes = [
     { path: "History", component: HistoryComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Validation", component: ValidationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard] },
-    { path: "AlignmentMaintenance", component: AlignmentValidationComponentNew, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Sheet2RDF", component: Sheet2RdfComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Collaboration", component: CollaborationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "CustomForm", component: CustomFormConfigComponent, canActivate: [AuthGuard, ProjectGuard] },

@@ -3,10 +3,6 @@
 
 import { ComponentRef } from "@angular/core";
 import { ActivatedRouteSnapshot, DetachedRouteHandle, OutletContext, RouteReuseStrategy } from "@angular/router";
-import { AlignmentValidationComponent } from "../alignment/alignmentValidation/alignmentValidationComponent";
-import { DataComponent } from "../data/dataComponent";
-import { Sheet2RdfComponent } from "../sheet2rdf/sheet2rdfComponent";
-import { SparqlComponent } from "../sparql/sparqlComponent";
 import { VBContext } from "../utils/VBContext";
 
 // This impl. bases upon one that can be found in the router's test cases.

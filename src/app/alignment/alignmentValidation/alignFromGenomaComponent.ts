@@ -6,7 +6,7 @@ import { Project } from "../../models/Project";
 import { GenomaServices } from '../../services/genomaServices';
 import { ProjectContext, VBContext } from '../../utils/VBContext';
 import { AbstractAlignSource } from './abstractAlignSource';
-import { CreateAlignmentModal, CreateAlignmentModalData } from '../alignmentMaintenance/createAlignmentModal';
+import { CreateGenomaTaskModal, CreateGenomaTaskModalData } from './createGenomaTaskModal';
 import { AlignmentOverview } from '../../models/Alignment';
 import { MapleServices } from '../../services/mapleServices';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
@@ -49,8 +49,6 @@ export class AlignFromGenomaComponent extends AbstractAlignSource {
                 }
             }
         )
-
-        
     }
 
     private listGenomaTask() {
@@ -70,12 +68,12 @@ export class AlignFromGenomaComponent extends AbstractAlignSource {
     }
 
     private createTask() {
-        var modalData = new CreateAlignmentModalData(this.leftProject);
-        const builder = new BSModalContextBuilder<CreateAlignmentModalData>(
-            modalData, undefined, CreateAlignmentModalData
+        var modalData = new CreateGenomaTaskModalData(this.leftProject);
+        const builder = new BSModalContextBuilder<CreateGenomaTaskModalData>(
+            modalData, undefined, CreateGenomaTaskModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(CreateAlignmentModal, overlayConfig).result.then(
+        this.modal.open(CreateGenomaTaskModal, overlayConfig).result.then(
             newTaskId => {
                 this.listGenomaTask();
             },

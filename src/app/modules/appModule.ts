@@ -5,7 +5,6 @@ import { RouteReuseStrategy, RouterModule } from "@angular/router";
 import { ModalModule } from 'ngx-modialog';
 import { BootstrapModalModule } from 'ngx-modialog/plugins/bootstrap';
 import { CustomReuseStrategy } from "../a2Customization/CustomReuseStrategy";
-import { AlignmentValidationComponent } from "../alignment/alignmentValidation/alignmentValidationComponent";
 import { AppComponent } from "../appComponent";
 import { appRouting } from '../appRoutes';
 import { ConfigBarComponent } from "../config/configBar/configBarComponent";
@@ -67,7 +66,6 @@ import { VBModalModule } from "./vbModalModule";
             ConfigBarComponent,
             HomeComponent,
             DataComponent,
-            AlignmentValidationComponent,
             LoadDataComponent,
             ExportDataComponent,
             RefactorComponent,

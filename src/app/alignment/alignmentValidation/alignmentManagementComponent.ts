@@ -11,9 +11,9 @@ import { HttpServiceContext } from "../../utils/HttpManager";
 import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { MappingPropertySelectionModal, MappingPropertySelectionModalData } from '../alignmentValidation/alignmentValidationModals/mappingPropertySelectionModal';
-import { ValidationReportModal, ValidationReportModalData } from '../alignmentValidation/alignmentValidationModals/validationReportModal';
-import { ValidationSettingsModal } from '../alignmentValidation/alignmentValidationModals/validationSettingsModal';
+import { MappingPropertySelectionModal, MappingPropertySelectionModalData } from './alignmentValidationModals/mappingPropertySelectionModal';
+import { ValidationReportModal, ValidationReportModalData } from './alignmentValidationModals/validationReportModal';
+import { ValidationSettingsModal } from './alignmentValidationModals/validationSettingsModal';
 
 @Component({
     selector: 'alignment-management',
