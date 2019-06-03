@@ -1,6 +1,7 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { Observable } from 'rxjs';
 import { AlignmentCell, AlignmentOverview, AlignmentRelationSymbol } from '../../models/Alignment';
 import { ARTURIResource, LocalResourcePosition, ResourcePosition } from "../../models/ARTResources";
 import { Project } from "../../models/Project";
@@ -14,7 +15,6 @@ import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalS
 import { MappingPropertySelectionModal, MappingPropertySelectionModalData } from './alignmentValidationModals/mappingPropertySelectionModal';
 import { ValidationReportModal, ValidationReportModalData } from './alignmentValidationModals/validationReportModal';
 import { ValidationSettingsModal } from './alignmentValidationModals/validationSettingsModal';
-import { Observable } from 'rxjs';
 
 @Component({
     selector: 'alignment-management',
@@ -48,7 +48,7 @@ export class AlignmentManagementComponent {
     private showRelationType: string; //relation, dlSymbol or text
     private confOnMeter: boolean; //tells if relation confidence should be shown on meter
     private alignmentPerPage: number; //max alignments per page
-    private rendering: boolean = false;
+    private rendering: boolean = true;
 
     private unknownRelation: boolean = false; //keep trace if there is some unknown relation (not a symbol, e.g. a classname)
     private knownRelations: string[] = AlignmentRelationSymbol.getKnownRelations();
@@ -57,32 +57,13 @@ export class AlignmentManagementComponent {
     constructor(private alignmentService: AlignmentServices, private resourceService: ResourcesServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
-    ngOnInit() {
-        //init settings (where not provided, set a default)
-        this.rejectedAlignmentAction = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION);
-        if (this.rejectedAlignmentAction == null) {
-            this.rejectedAlignmentAction = "ask";
-            Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION, this.rejectedAlignmentAction, 365*10);
-        }
-        this.showRelationType = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_RELATION_SHOW);
-        if (this.showRelationType == null) {
-            this.showRelationType = "relation";
-            Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_RELATION_SHOW, this.showRelationType, 365*10);
-        }
-        this.confOnMeter = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_SHOW_CONFIDENCE) == "true";
-        this.alignmentPerPage = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
-        if (this.alignmentPerPage == 0) {
-            this.alignmentPerPage = 15;
-            Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE, this.alignmentPerPage + "", 365*10);
-        }
-    }
 
     ngOnChanges(changes: SimpleChanges) {
+        this.initSettings();
         if (changes['overview'] && changes['overview'].currentValue) {
             this.relationSymbols = AlignmentRelationSymbol.getDefaultRelations();
             this.updateRelationSymbols();
             this.updateAlignmentCells();
-            
         }
     }
 
@@ -373,6 +354,32 @@ export class AlignmentManagementComponent {
         );
     }
 
+    private initSettings() {
+        //init settings (where not provided, set a default)
+        this.rejectedAlignmentAction = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION);
+        if (this.rejectedAlignmentAction == null) {
+            this.rejectedAlignmentAction = "ask";
+            Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION, this.rejectedAlignmentAction, 365*10);
+        }
+        this.showRelationType = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_RELATION_SHOW);
+        if (this.showRelationType == null) {
+            this.showRelationType = "relation";
+            Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_RELATION_SHOW, this.showRelationType, 365*10);
+        }
+        this.confOnMeter = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_SHOW_CONFIDENCE) == "true";
+        this.alignmentPerPage = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
+        if (this.alignmentPerPage == 0) {
+            this.alignmentPerPage = 15;
+            Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE, this.alignmentPerPage + "", 365*10);
+        }
+        this.rendering = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_RENDERING) != "false";
+    }
+
+    private toggleRendering() {
+        this.rendering = !this.rendering;
+        Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_RENDERING, this.rendering+"");
+    }
+
     private doQuickAction() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         if (this.chosenQuickAction == this.qaAcceptAll) {
@@ -490,7 +497,15 @@ export class AlignmentManagementComponent {
             c.getEntity1().getURI() == cell.getEntity1().getURI() && c.getEntity2().getURI() == cell.getEntity2().getURI());
     }
 
-    private openResView(resource: ARTURIResource) {
-        this.sharedModals.openResourceView(resource, true);
+    private openResView(resource: ARTURIResource, rightProject: boolean) {
+        if (rightProject) {
+            HttpServiceContext.setContextProject(this.rightProject);
+        }
+        this.sharedModals.openResourceView(resource, true).then(
+            () => {
+                HttpServiceContext.removeContextProject();
+            },
+            () => {}
+        );
     }
 }

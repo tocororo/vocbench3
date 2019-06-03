@@ -3,7 +3,7 @@
     <div class="panel-heading" style="display: flex;">
         <label style="flex: 1">Alignments:</label>
         <button class="btn btn-default btn-xs" style="margin-right: 4px;" [ngClass]="{active: rendering}" title="Rendering"
-            (click)="rendering = !rendering">
+            (click)="toggleRendering()">
             <span class="glyphicon glyphicon-font"></span>
         </button>
         <button class="btn btn-default btn-xs" (click)="openSettings()">
@@ -33,7 +33,7 @@
                             </span>
                         </td>
                         <td>
-                            <span class="clickable" (click)="openResView(a.getEntity2())">
+                            <span class="clickable" (click)="openResView(a.getEntity2(), true)">
                                 <rdf-resource [resource]="a.getEntity2()" [rendering]="rendering"></rdf-resource>
                             </span>
                         </td>

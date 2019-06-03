@@ -1,10 +1,10 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
+import { DialogRef, ModalComponent, OverlayConfig } from 'ngx-modialog';
 import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { OverlayConfig } from 'ngx-modialog';
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { ACLEditorModal, ACLEditorModalData } from "./aclEditorModal";
-import { ProjectServices } from "../../services/projectServices";
 import { AccessLevel, LockLevel } from '../../models/Project';
+import { ProjectServices } from "../../services/projectServices";
+import { UIUtils } from "../../utils/UIUtils";
+import { ACLEditorModal, ACLEditorModalData } from "./aclEditorModal";
 
 @Component({
     selector: "project-acl-modal",
@@ -21,6 +21,8 @@ import { AccessLevel, LockLevel } from '../../models/Project';
 export class ProjectACLModal implements ModalComponent<BSModalContext> {
     context: BSModalContext;
 
+    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+
     private statusMap: { name: string, consumers: { name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel }[], lock: any }[];
     private consumerList: string[];
 
@@ -35,8 +37,10 @@ export class ProjectACLModal implements ModalComponent<BSModalContext> {
     }
 
     private init() {
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.projectService.getAccessStatusMap().subscribe(
             statusMap => {
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 this.statusMap = statusMap;
                 this.tableModel = [];
                 let projectList: string[] = [];

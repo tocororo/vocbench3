@@ -18,7 +18,7 @@ export class ACLEditorModalData extends BSModalContext {
 export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
     context: ACLEditorModalData;
 
-    private consumers: { name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel }[];
+    private consumers: Consumer[];
     private lock: {availableLockLevel: LockLevel, lockingConsumer: string, acquiredLockLevel: LockLevel};
 
     private nullAccessLevel: AccessLevel = null;
@@ -26,6 +26,8 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
     private lockLevels: LockLevel[] = [LockLevel.R, LockLevel.W, LockLevel.NO];
 
     private update: boolean = false; //useful to tells to the calling component if this modal has updated something
+
+    private filterProject: string;
 
     constructor(public dialog: DialogRef<ACLEditorModalData>, private projectService: ProjectServices, private basicModals: BasicModalServices) {
         this.context = dialog.context;
@@ -36,7 +38,7 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
         this.lock = this.context.acl.lock;
     }
 
-    private onAccessLevelChange(consumer: { name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel }, newLevel: AccessLevel) {
+    private onAccessLevelChange(consumer: Consumer, newLevel: AccessLevel) {
         var oldLevel: AccessLevel = consumer.availableACLLevel;
 
         var message: string;
@@ -78,6 +80,10 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
             }
         );
     }
+
+    private showConsumer(consumer: Consumer): boolean {
+        return this.filterProject == null || consumer.name.toLocaleUpperCase().indexOf(this.filterProject.toLocaleUpperCase()) != -1;
+    }
     
     ok(event: Event) {
         event.stopPropagation();
@@ -85,4 +91,10 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
         this.dialog.close(this.update);
     }
 
+}
+
+class Consumer {
+    name: string;
+    availableACLLevel: AccessLevel;
+    acquiredACLLevel: AccessLevel;
 }

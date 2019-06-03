@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Modal, OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { AlignmentOverview } from '../../models/Alignment';
 import { GenomaTask } from '../../models/Genoma';
 import { Project } from "../../models/Project";
 import { GenomaServices } from '../../services/genomaServices';
-import { ProjectContext, VBContext } from '../../utils/VBContext';
+import { MapleServices } from '../../services/mapleServices';
+import { UIUtils } from '../../utils/UIUtils';
+import { ProjectContext } from '../../utils/VBContext';
+import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { AlignFromSource } from './alignFromSource';
 import { CreateGenomaTaskModal, CreateGenomaTaskModalData } from './alignmentValidationModals/createGenomaTaskModal';
-import { AlignmentOverview } from '../../models/Alignment';
-import { MapleServices } from '../../services/mapleServices';
-import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 
 @Component({
     selector: 'alignment-genoma',
@@ -17,6 +18,8 @@ import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServ
     host: { class: "vbox" }
 })
 export class AlignFromGenomaComponent extends AlignFromSource {
+
+    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
 
     private tasks: GenomaTask[] = [];
     private selectedTask: GenomaTask;
@@ -37,8 +40,10 @@ export class AlignFromGenomaComponent extends AlignFromSource {
                     this.basicModal.confirm("Unavailable metadata", "Unable to find metadata about the current project '" + 
                         this.leftProject.getName() +  "', do you want to generate them?").then(
                         confirm => {
+                            UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
                             this.mapleService.profileProject().subscribe(
                                 () => {
+                                    UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                                     this.listGenomaTask();
                                 }
                             )

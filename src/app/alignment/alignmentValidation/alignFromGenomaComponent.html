@@ -1,4 +1,4 @@
-<div class="vbox">
+<div class="vbox blockingDivHost">
 
     <div class="panel panel-default" style="min-height: 90px;">
         <div class="panel-heading">
@@ -55,6 +55,14 @@
     </div>
 
     <alignment-management style="margin-top: 4px;" *ngIf="alignmentOverview" [overview]="alignmentOverview" [leftProject]="leftProject" [rightProject]="rightProject"></alignment-management>
+
+    <div #blockingDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
 
 </div>
 

@@ -3,6 +3,11 @@
 </div>
 <div class="modal-body vbox">
 
+    <div class="input-group input-group-xs" style="margin-bottom: 4px;">
+        <input class="form-control" placeholder="Consumer Project name" [(ngModel)]="filterProject">
+        <span class="input-group-addon"><span class="glyphicon glyphicon-filter"></span></span>
+    </div>
+
     <div class="panel panel-default vbox">
         <div class="panel-heading">
             <label>Access Control List of project: {{context.acl.name}}</label>
@@ -11,15 +16,17 @@
         <div class="panel-body scrollableContainer">
             <table class="table table-condensed table-borderless">
                 <tbody>
-                    <tr *ngFor="let c of consumers">
-                        <td style="width: 1%" nowrap><label>{{c.name}}:</label></td>
-                        <td>
-                            <select class="form-control input-xs" (ngModelChange)="onAccessLevelChange(c, $event)" [(ngModel)]="c.availableACLLevel">
-                                <option [ngValue]="nullAccessLevel">---</option>
-                                <option *ngFor="let al of accessLevels" [value]="al">{{al}}</option>
-                            </select>
-                        </td>
-                    </tr>
+                    <ng-container *ngFor="let c of consumers">
+                        <tr *ngIf="showConsumer(c)">
+                            <td style="width: 1%" nowrap><label>{{c.name}}:</label></td>
+                            <td>
+                                <select class="form-control input-xs" (ngModelChange)="onAccessLevelChange(c, $event)" [(ngModel)]="c.availableACLLevel">
+                                    <option [ngValue]="nullAccessLevel">---</option>
+                                    <option *ngFor="let al of accessLevels" [value]="al">{{al}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </ng-container>
                 </tbody>
             </table>
         </div>
@@ -34,7 +41,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
 </div>
