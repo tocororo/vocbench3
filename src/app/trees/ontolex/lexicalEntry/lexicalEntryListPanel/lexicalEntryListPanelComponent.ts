@@ -206,7 +206,9 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                     this.basicModals.selectResource("Search", message, lexicons, this.rendering).then(
                         (lexicon: ARTURIResource) => {
                             this.vbProp.setActiveLexicon(lexicon); //update the active lexicon
-                            this.selectSearchedResource(resource); //then open the list on the searched resource
+                            setTimeout(() => { //wait for a change detection round, since after the setActiveLexicon, the lex entry list is reset
+                                this.selectSearchedResource(resource); //then open the list on the searched resource
+                            });
                         },
                         () => {}
                     );

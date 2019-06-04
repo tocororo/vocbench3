@@ -312,12 +312,6 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                         this.basicModals.confirm("Search", "Searched concept '" + resource.getShow() + "' does not belong to any scheme. Do you want to switch to no-scheme mode?", "warning").then(
                             confirm => {
                                 this.vbProp.setActiveSchemes([]); //update the active schemes
-                                /**
-                                 * even if workingSchemes will be updated in onSchemeChanged (once the schemeChangedEvent is emitted in
-                                 * setActiveSchemes()), I update it here so that the child ConceptTreeComponent detects the change
-                                 * of the @Input schemes and in openTreeAt() call getPathFromRoot with the updated schemes
-                                 */
-                                this.workingSchemes = [];
                                 setTimeout(() => {
                                     this.selectResourceVisualizationModeAware(resource);
                                 });
@@ -337,12 +331,6 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                                 this.basicModals.selectResource("Search", message, schemes, this.rendering).then(
                                     (scheme: ARTURIResource) => {
                                         this.vbProp.setActiveSchemes(this.workingSchemes.concat(scheme)); //update the active schemes
-                                        /**
-                                         * even if workingSchemes will be updated in onSchemeChanged (once the schemeChangedEvent is emitted in
-                                         * setActiveSchemes()), I update it here so that the child ConceptTreeComponent detects the change
-                                         * of the @Input schemes and in openTreeAt() call getPathFromRoot with the updated schemes
-                                         */
-                                        this.workingSchemes.push(scheme);
                                         setTimeout(() => {
                                             this.selectResourceVisualizationModeAware(resource);
                                         });
