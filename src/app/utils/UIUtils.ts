@@ -222,13 +222,17 @@ export class UIUtils {
                 }
             } else if (role == RDFResourceRolesEnum.individual) {
                 imgSrc = this.individualImgSrc;
-                if (!explicit) {
-                    imgSrc = this.individualImportedImgSrc;
-                    if (deprecated) {
-                        imgSrc = this.individualImportedDeprecatedImgSrc;
+                if (rdfResource.getAdditionalProperty(ResAttribute.LANG) != null) { //has a language => use the flag icon
+                    imgSrc = this.getFlagImgSrc(rdfResource.getAdditionalProperty(ResAttribute.LANG));
+                } else {
+                    if (!explicit) {
+                        imgSrc = this.individualImportedImgSrc;
+                        if (deprecated) {
+                            imgSrc = this.individualImportedDeprecatedImgSrc;
+                        }
+                    } else if (deprecated) {
+                        imgSrc = this.individualDeprecatedImgSrc;
                     }
-                } else if (deprecated) {
-                    imgSrc = this.individualDeprecatedImgSrc;
                 }
             } else if (role == RDFResourceRolesEnum.limeLexicon) {
                 imgSrc = this.lexiconImgSrc;

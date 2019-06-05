@@ -156,8 +156,9 @@ export enum RDFCapabilityType {
 }
 
 export enum RequirementLevels {
-    uri = "uri",
-    literal = "literal"
+    REQUIRED = "REQUIRED",
+    OPTIONAL = "OPTIONAL",
+    IGNORED = "IGNORED"
 }
 
 export enum XRole {

@@ -44,9 +44,28 @@
                     <div class="subPanel-body">
                         <div *ngFor="let s of availableSignatures" class="listItem" (click)="selectSignature(s)" [ngClass]="{ active: s == selectedSignature }">
                             <span>{{getSignatureShow(s)}}</span>
+                            <!-- <span *ngIf="s.getRequirementLevels() != 'IGNORED'" [title]="'Feature path ' + s.getRequirementLevels().toLocaleLowerCase()" style="margin-left: 4px; font-weight: bold;">
+                                <span class="glyphicon glyphicon-arrow-left"></span>
+                                <span style="font-size: 13px;">../</span><span *ngIf="s.getRequirementLevels() == 'OPTIONAL'">?</span>
+                            </span> -->
+                            <span *ngIf="s.getRequirementLevels() != 'IGNORED'" [title]="'Feature path ' + s.getRequirementLevels().toLocaleLowerCase()" style="margin-left: 4px; font-weight: bold;">
+                                <ng-container *ngIf="s.getRequirementLevels() == 'OPTIONAL'">
+                                    [
+                                    <span class="glyphicon glyphicon-arrow-left"></span>
+                                    <span style="font-style: italic;">F</span>
+                                    ]
+                                </ng-container>
+                                <ng-container *ngIf="s.getRequirementLevels() == 'REQUIRED'">
+                                    <span class="glyphicon glyphicon-arrow-left"></span>
+                                    <span style="font-style: italic;">F</span>
+                                </ng-container>
+                            </span>
+
                         </div>
                     </div>
                 </div>
+
+
                 <!-- default literal converter, datatype and language choice -->
                 <div *ngIf="showDefaultLiteralConverterOpt(); else otherConvBlock" class="panel panel-default" style="flex: 3; margin-left: 4px;">
                     <div class="panel-body hbox" style="align-items: center;">
@@ -68,7 +87,7 @@
                 </div>
                 <!-- other converters -->
                 <ng-template #otherConvBlock>
-                    <div *ngIf="signatureParams?.length > 0" class="subPanel" style="flex: 3; margin-left: 4px;">
+                    <div *ngIf="signatureParams?.length > 0" class="subPanel" style="flex: 2; margin-left: 4px;">
                         <div class="subPanel-heading">
                             <label>Params</label>
                         </div>

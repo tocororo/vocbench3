@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ARTLiteral, ARTURIResource } from "../../../models/ARTResources";
-import { ConverterContractDescription, RDFCapabilityType, SignatureDescription, XRole, ParameterDescription } from "../../../models/Coda";
+import { ConverterContractDescription, RDFCapabilityType, SignatureDescription, XRole, ParameterDescription, RequirementLevels } from "../../../models/Coda";
 import { CODAConverter } from "../../../models/Sheet2RDF";
 import { CODAServices } from "../../../services/codaServices";
 import { RangeType } from "../../../services/propertyServices";
@@ -108,11 +108,7 @@ export class ConverterConfigurationComponent {
     }
 
     private selectConverter(converter: ConverterContractDescription) {
-        if (this.selectedConverter == converter) {
-            this.selectedConverter = null;
-            this.availableSignatures = null;
-            this.selectedSignature = null;
-        } else {
+        if (this.selectedConverter != converter) {
             this.selectedConverter = converter;
             /**
              * Consider as available signatures, only those which the return type is compliant with the range type required:

@@ -97,12 +97,8 @@ export class RdfResourceComponent {
 	 */
     private initLang(): string {
         let lang: string = null;
-        if (this.resource.isResource()) {
-            var role = (<ARTResource>this.resource).getRole();
-            //in case of CustomForm preview, the resource is a mention (doesn't have a role) but it could be have a language
-            if (role == RDFResourceRolesEnum.xLabel || role == RDFResourceRolesEnum.mention) {
-                lang = this.resource.getAdditionalProperty(ResAttribute.LANG);
-            }
+        if (this.resource.isResource()) { //even if it is a resource, get the lang (it could be a custom form preview)
+            lang = this.resource.getAdditionalProperty(ResAttribute.LANG);
         } else if (this.resource instanceof ARTLiteral) {
             lang = this.resource.getLang();
             if (this.resource.getDatatype() == XmlSchema.language.getURI()) {

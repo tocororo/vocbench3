@@ -196,20 +196,14 @@ export class VBProperties {
         } else {
             VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes = schemes;
         }
-        this.prefService.setActiveSchemes(schemes).subscribe(
-            stResp => {
-                this.eventHandler.schemeChangedEvent.emit(schemes);
-            }
-        );
+        this.eventHandler.schemeChangedEvent.emit(schemes);
+        this.prefService.setActiveSchemes(schemes).subscribe();
     }
 
     setActiveLexicon(lexicon: ARTURIResource) {
         VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon = lexicon;
-        this.prefService.setPUSetting(Properties.pref_active_lexicon, lexicon.getURI()).subscribe(
-            stResp => {
-                this.eventHandler.lexiconChangedEvent.emit(lexicon);
-            }
-        );
+        this.eventHandler.lexiconChangedEvent.emit(lexicon);
+        this.prefService.setPUSetting(Properties.pref_active_lexicon, lexicon.getURI()).subscribe();
     }
 
     getShowFlags(): boolean {
