@@ -201,6 +201,13 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "updateSubjectHeader", params);
     }
 
+    replicateMultipleHeader(headerId: string) {
+        let params: any = {
+            headerId: headerId,
+        };
+        return this.httpMgr.doPost(this.serviceName, "replicateMultipleHeader", params);
+    }
+
     exportStatus() {
         var params: any = {};
         return this.httpMgr.downloadFile(this.serviceName, "exportStatus", params);

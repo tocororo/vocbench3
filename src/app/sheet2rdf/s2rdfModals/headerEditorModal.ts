@@ -29,11 +29,12 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
 
     private header: SimpleHeader;
 
-    private pristineIgnore: boolean;
     private ignoreInitialized: boolean = false;
     
     private selectedNode: NodeConversion;
     private selectedGraph: GraphApplication;
+
+    private changed: boolean = false; //useful to keep trace of changes in order to ask to the user if he want to replicate the changes to multiple headers
 
     constructor(public dialog: DialogRef<HeaderEditorModalData>, private s2rdfService: Sheet2RDFServices, private basicModals: BasicModalServices, private modal: Modal) {
         this.context = dialog.context;
@@ -50,7 +51,6 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
             header => {
                 this.header = header;
                 if (!this.ignoreInitialized) {
-                    this.pristineIgnore = this.header.ignore;
                     this.ignoreInitialized = true;
                 }
             }
@@ -58,10 +58,12 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     }
 
     private onIgnoreChange() {
-        if (this.header.ignore) {
-            this.selectedNode = null;
-            this.selectedGraph = null;
-        }
+        this.s2rdfService.ignoreHeader(this.header.id, this.header.ignore).subscribe(
+            () => {
+                this.initHeader();
+                this.changed = true;
+            }
+        );
     }
 
     private selectNode(node: NodeConversion) {
@@ -95,6 +97,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         this.s2rdfService.removeNodeFromHeader(this.header.id, this.selectedNode.nodeId).subscribe(
             resp => {
                 this.initHeader();
+                this.changed = true;
             }
         );
     }
@@ -123,6 +126,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
             this.modal.open(SimpleGraphApplicationModal, overlayConfig).result.then(
                 () => {
                     this.initHeader();
+                    this.changed = true;
                 },
                 () => {}
             );
@@ -135,6 +139,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
             this.modal.open(AdvancedGraphApplicationModal, overlayConfig).result.then(
                 () => {
                     this.initHeader();
+                    this.changed = true;
                 },
                 () => {}
             );
@@ -150,6 +155,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         this.modal.open(SimpleGraphApplicationModal, overlayConfig).result.then(
             () => {
                 this.initHeader();
+                this.changed = true;
             },
             () => {}
         );
@@ -164,6 +170,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         this.modal.open(AdvancedGraphApplicationModal, overlayConfig).result.then(
             () => {
                 this.initHeader();
+                this.changed = true;
             },
             () => {}
         );
@@ -173,17 +180,31 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         this.s2rdfService.removeGraphApplicationFromHeader(this.header.id, this.selectedGraph.id).subscribe(
             resp => {
                 this.initHeader();
+                this.changed = true;
             }
         )
     }
 
     ok() {
-        //if ignore has changed, inform the server
-        if (this.header.ignore != this.pristineIgnore) {
-            this.s2rdfService.ignoreHeader(this.header.id, this.header.ignore).subscribe();
+        if (this.changed && this.header.isMultiple) {
+            this.basicModals.confirm("Multiple headers", "There are multiple headers with the same name (" + this.header.name +
+                "). Do you want to apply the changes to all of them?", "warning").then(
+                confirm => {
+                    this.s2rdfService.replicateMultipleHeader(this.header.id).subscribe(
+                        () => {
+                            this.dialog.close();
+                        }
+                    )
+                },
+                () => {
+                    this.dialog.close();
+                }
+            )
+        } else {
+            this.dialog.close();
         }
-        this.dialog.close();
     }
+
 
     //UTILS
 
