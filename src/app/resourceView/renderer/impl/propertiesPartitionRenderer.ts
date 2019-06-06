@@ -14,9 +14,9 @@ import { BrowsingModalServices } from "../../../widget/modal/browsingModal/brows
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { NewXLabelModalReturnData } from "../../../widget/modal/creationModal/newResourceModal/skos/newXLabelModal";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { MultiAddError, MultiAddFunction } from "../partitionRenderer";
-import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { LexicalizationEnrichmentHelper } from "../lexicalizationEnrichmentHelper";
+import { MultiAddError, MultiAddFunction } from "../multipleAddHelper";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
     selector: "properties-renderer",

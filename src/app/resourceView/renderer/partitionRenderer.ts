@@ -5,11 +5,11 @@ import { AddAction, ResViewPartition, ResViewUtils } from "../../models/Resource
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
-import { HttpServiceContext } from "../../utils/HttpManager";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowseExternalResourceModalReturnData } from "../resViewModals/browseExternalResourceModal";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
+import { MultiAddError, MultiAddFunction, MultipleAddHelper } from "./multipleAddHelper";
 
 @Component({
     selector: "partition-renderer",
@@ -153,65 +153,16 @@ export abstract class PartitionRenderer {
      */
     abstract add(predicate: ARTURIResource, propChangeable: boolean): void;
 
-    /**
-     * Invokes an array of functions in order to add multiple values
-     * @param addFunctions array of observable to invoke with the related value that it is adding
-     * @param errorHandler handler executed in case one of the add functions fails
-     * @param errors list of the errors collected during the recursively invocation of addMultiple().
-     */
     protected addMultiple(addFunctions: MultiAddFunction[], errorHandler?: (errors: MultiAddError[]) => void, errors?: MultiAddError[]) {
-        if (errors == null) errors = [];
-
-        HttpServiceContext.disableErrorInterception(); //temporarly disable the error interceptor
-
-        if (addFunctions.length == 0) { //no more function to call
-            //handle the errors, if any, if an handler is defined
-            if (errors.length > 0) {
-                if (errorHandler != null) {
-                    errorHandler(errors);
-                } else {
-                    if (errors.length == 1) {
-                        this.handleSingleMultiAddError(errors[0]);
-                    } else {
-                        this.handleMultipleMultiAddError(errors);
-                    }
-                }
-            }
-            HttpServiceContext.enableErrorInterception(); //re-enable the error interceptor
-            this.update.emit();
-        } else {
-            addFunctions[0].function.subscribe(
-                stResp => {
-                    addFunctions.shift(); //remove the first function (the one just called) and call itself recursively
-                    this.addMultiple(addFunctions, errorHandler, errors);
-                },
-                err => {
-                    errors.push({ value: addFunctions[0].value, error: err }); //collect the value and the error catched
-                    addFunctions.shift(); //remove the first function (the one just called) and call itself recursively
-                    this.addMultiple(addFunctions, errorHandler, errors);
-                }
-            );
-        }
+        MultipleAddHelper.addMultiple(addFunctions, this.basicModals, errorHandler, errors, () => this.update.emit());
     }
-
     protected handleSingleMultiAddError(error: MultiAddError) {
-        let message = "The addition of " + error.value.toNT() + " has failed due to the following reason:\n" +  error.error.name + 
-                ((error.error.message != null) ? ":\n" + error.error.message : "");
-        let details = error.error.stack;
-        this.basicModals.alert("Error", message, "error", details);
+        MultipleAddHelper.handleSingleMultiAddError(error, this.basicModals);
     }
     protected handleMultipleMultiAddError(errors: MultiAddError[]) {
-        let message = "The addition of the following values have failed:"
-        errors.forEach((e: MultiAddError) => {
-            message += "\n\n" + e.value.toNT() + "\nReason:\n" + e.error.name + ((e.error.message != null) ? ":\n" + e.error.message : "");
-        });
-        this.basicModals.alert("Error", message, "error");
+        MultipleAddHelper.handleMultipleMultiAddError(errors, this.basicModals);
     }
 
-    // private isAddManuallyAllowed() {
-    //     return ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
-    // }
-    
     /**
      * Implementation of addManually with the predicate provided
      * @param predicate 
@@ -391,14 +342,4 @@ export abstract class PartitionRenderer {
         return (predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource());
     }
 
-}
-
-export class MultiAddFunction {
-    function: Observable<any>;
-    value: ARTNode;
-}
-
-export class MultiAddError { 
-    value: ARTNode;
-    error: Error;
 }

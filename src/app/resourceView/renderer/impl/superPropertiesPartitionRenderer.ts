@@ -11,7 +11,7 @@ import { BrowsingModalServices } from "../../../widget/modal/browsingModal/brows
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { AddPropertyValueModalReturnData } from "../../resViewModals/addPropertyValueModal";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { MultiAddFunction } from "../partitionRenderer";
+import { MultiAddFunction } from "../multipleAddHelper";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({

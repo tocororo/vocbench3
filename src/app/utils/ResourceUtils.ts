@@ -284,6 +284,14 @@ export class ResourceUtils {
     }
 
     /**
+     * Returns true if the triple (which the resource respresents the object) is in the inference graph, false otherwise
+     * @param resource 
+     */
+    static isTripleInferred(resource: ARTNode): boolean {
+        return ResourceUtils.containsNode(resource.getTripleGraphs(), new ARTURIResource(SemanticTurkey.inferenceGraph));
+    }
+
+    /**
      * Taken from it.uniroma2.art.semanticturkey.data.role.RDFResourceRoles
      * @param subsumer 
      * @param subsumee 

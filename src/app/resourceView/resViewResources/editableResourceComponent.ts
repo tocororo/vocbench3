@@ -107,7 +107,7 @@ export class EditableResourceComponent {
             (this.partition != ResViewPartition.subPropertyChains && this.partition != ResViewPartition.classaxioms && this.resource.isResource())
         );
 
-        this.isInferred = ResourceUtils.containsNode(this.resource.getTripleGraphs(), new ARTURIResource(SemanticTurkey.inferenceGraph));
+        this.isInferred = ResourceUtils.isTripleInferred(this.resource);
 
         //init actions authorization
         let inMainGraph: boolean = ResourceUtils.containsNode(this.resource.getTripleGraphs(), new ARTURIResource(VBContext.getWorkingProject().getBaseURI()));

@@ -23,11 +23,38 @@ export class ResourceViewContextMenu {
     @Input() resource: ARTResource;
     @Input() readonly: boolean;
     @Input() rendering: boolean;
+    @Input() showInferred: boolean;
     @Output() update = new EventEmitter();
+    @Output() assertInferred = new EventEmitter();
+
+    private isSetDeprecatedDisabled: boolean;
+    private isAlignDisabled: boolean;
+    private isSpawnFromLabelDisabled: boolean;
+    private isAssertInferredDisabled: boolean;
 
     constructor(private alignServices: AlignmentServices, private refactorService: RefactorServices, private resourcesService: ResourcesServices,
         private creationModals: CreationModalServices, private graphModals: GraphModalServices, private modal: Modal,
         private vbProp: VBProperties) { }
+
+    ngOnInit() {
+        //init the menu items
+        this.isSetDeprecatedDisabled = (
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource)) || 
+            !AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesSetDeprecated, this.resource)
+        );
+        this.isAlignDisabled = (
+            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource)) || 
+		    !AuthorizationEvaluator.isAuthorized(VBActionsEnum.alignmentAddAlignment, this.resource)
+        );
+        this.isSpawnFromLabelDisabled = (
+            !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || 
+		    !AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSpawnNewConceptFromLabel)
+        );
+        this.isAssertInferredDisabled = (
+            !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || 
+            !AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.resource)
+        );
+    }
 
     private alignResource() {
         this.openAlignmentModal().then(
@@ -72,6 +99,10 @@ export class ResourceViewContextMenu {
         );
     }
 
+    private assertInferredStmts() {
+        this.assertInferred.emit();
+    }
+
     /**
      * Useful to enable menu item only for URIResource
      */
@@ -92,25 +123,5 @@ export class ResourceViewContextMenu {
     private openDataGraph() {
         this.graphModals.openDataGraph(this.resource, this.rendering);
     }
-
-    //menu items authorization
-    private isSetDeprecatedDisabled(): boolean {
-        return (
-            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource)) || 
-            !AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesSetDeprecated, this.resource)
-        );
-    }
-    private isAlignDisabled(): boolean {
-        return (
-            (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource)) || 
-		    !AuthorizationEvaluator.isAuthorized(VBActionsEnum.alignmentAddAlignment, this.resource)
-        );
-	}
-	private isSpawnFromLabelDisabled(): boolean {
-        return (
-            !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || 
-		    !AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSpawnNewConceptFromLabel)
-        );
-	}
 
 }

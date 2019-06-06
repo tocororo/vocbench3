@@ -58,7 +58,8 @@
                 <span class="glyphicon glyphicon-cog"></span>
             </button>
             
-            <res-view-menu [resource]="resource" [rendering]="rendering" (update)="buildResourceView(resource)" [readonly]="readonly"></res-view-menu>
+            <res-view-menu [resource]="resource" [rendering]="rendering" [showInferred]="showInferred" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (assertInferred)="assertInferredStatements()"></res-view-menu>
         </div>
     </div>
     <div class="panel-body scrollableContainer">

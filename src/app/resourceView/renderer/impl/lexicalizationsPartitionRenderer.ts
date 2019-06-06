@@ -17,7 +17,7 @@ import { NewOntoLexicalizationCfModalReturnData } from "../../../widget/modal/cr
 import { NewXLabelModalReturnData } from "../../../widget/modal/creationModal/newResourceModal/skos/newXLabelModal";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { LexicalizationEnrichmentHelper } from "../lexicalizationEnrichmentHelper";
-import { MultiAddError, MultiAddFunction } from "../partitionRenderer";
+import { MultiAddError, MultiAddFunction } from "../multipleAddHelper";
 import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
 
 @Component({

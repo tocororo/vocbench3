@@ -7,6 +7,7 @@ import { PropertyFacet, ResViewPartition } from "../models/ResourceView";
 import { SemanticTurkey } from "../models/Vocabulary";
 import { CollaborationServices } from "../services/collaborationServices";
 import { MetadataRegistryServices } from "../services/metadataRegistryServices";
+import { ResourcesServices } from "../services/resourcesServices";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { VersionsServices } from "../services/versionsServices";
 import { Deserializer } from "../utils/Deserializer";
@@ -18,6 +19,7 @@ import { VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { MultiAddFunction, MultipleAddHelper } from "./renderer/multipleAddHelper";
 import { ResViewModalServices } from "./resViewModals/resViewModalServices";
 
 @Component({
@@ -95,7 +97,7 @@ export class ResourceViewComponent {
 
     private eventSubscriptions: any[] = [];
 
-    constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices,
+    constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices, private resourcesService: ResourcesServices,
         private collaborationService: CollaborationServices, private metadataRegistryService: MetadataRegistryServices,
         private eventHandler: VBEventHandler, private vbProp: VBProperties, private vbCollaboration: VBCollaboration,
         private basicModals: BasicModalServices, private resViewModals: ResViewModalServices, private collabModals: CollaborationModalServices) {
@@ -632,6 +634,43 @@ export class ResourceViewComponent {
     
     private openSettings() {
         this.resViewModals.editSettings()
+    }
+
+    private assertInferredStatements() {
+        let poLists: ARTPredicateObjects[][] = [
+            this.broadersColl, this.classAxiomColl, this.constituentsColl, this.denotationsColl, this.disjointPropertiesColl,
+            this.domainsColl, this.equivalentPropertiesColl, this.evokedLexicalConceptsColl, this.formBasedPreviewColl, 
+            this.formRepresentationsColl, this.importsColl, this.inverseofColl, this.labelRelationsColl, this.lexicalFormsColl,
+            // this.lexicalizationsColl, //lexicalizations not assertable
+            this.lexicalSensesColl, this.membersColl, this.membersOrderedColl, this.notesColl,
+            this.propertiesColl, this.rangesColl, this.rdfsMembersColl, this.schemesColl, this.subPropertyChainsColl,
+            this.subtermsColl, this.superpropertiesColl, this.topconceptofColl, this.typesColl
+        ];
+
+        let assertFn: MultiAddFunction[] = [];
+        poLists.forEach((poList: ARTPredicateObjects[]) => {
+            if (poList == null) return; //predicate object list null for the current resource (partition not foreseen for the resource role)
+            poList.forEach((predObjs: ARTPredicateObjects) => {
+                predObjs.getObjects().forEach((obj: ARTNode) => {
+                    if (ResourceUtils.isTripleInferred(obj)) {
+                        assertFn.push({
+                            function: this.resourcesService.addValue(this.resource, predObjs.getPredicate(), obj),
+                            value: obj
+                        });
+                    }
+                })
+            })
+        });
+        if (assertFn.length == 0) {
+            this.basicModals.alert("Assert inferred statements", "There are no inferred statements to assert", "warning");
+        } else {
+            let onComplete = () => { //when the assert of all the statements is completed, stop the loading and rebuild the ResView
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                this.buildResourceView(this.resource);
+            }
+            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+            MultipleAddHelper.addMultiple(assertFn, this.basicModals, null, null, onComplete);
+        }
     }
 
     // COLLABORATION SYSTEM HANDLERS

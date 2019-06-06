@@ -7,13 +7,11 @@ import { CustomFormsServices } from "../../../services/customFormsServices";
 import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { SkosServices } from "../../../services/skosServices";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
-import { ResourceUtils } from "../../../utils/ResourceUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { MultiAddFunction } from "../partitionRenderer";
+import { MultiAddFunction } from "../multipleAddHelper";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
