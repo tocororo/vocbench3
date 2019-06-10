@@ -34,6 +34,9 @@ export class MetadataServices {
                     };
                     mappings.push(m);
                 }
+                mappings.sort((m1: PrefixMapping, m2: PrefixMapping) => {
+                    return m1.prefix.localeCompare(m2.prefix);
+                })
                 VBContext.setPrefixMappings(mappings);
                 return mappings;
             }

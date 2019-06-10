@@ -16,7 +16,6 @@ import { ImportTreeComponent } from '../config/dataManagement/metadata/namespace
 import { ImportTreeNodeComponent } from '../config/dataManagement/metadata/namespacesAndImports/importTree/importTreeNode';
 import { NamespacesAndImportsComponent } from "../config/dataManagement/metadata/namespacesAndImports/namespacesAndImportsComponent";
 import { OntologyMirrorModal } from '../config/dataManagement/metadata/namespacesAndImports/ontologyMirrorModal';
-import { PrefixNamespaceModal } from '../config/dataManagement/metadata/namespacesAndImports/prefixNamespaceModal';
 import { ResourceViewModule } from './resourceViewModule';
 import { SharedModule } from './sharedModule';
 
@@ -29,14 +28,14 @@ import { SharedModule } from './sharedModule';
         MetadataRegistryComponent, DatasetMetadataComponent, LexicalizationSetMetadataComponent,
         ImportTreeComponent, ImportTreeNodeComponent,
         //modals
-        ImportOntologyModal, ImportFromDatasetCatalogModal, PrefixNamespaceModal, OntologyMirrorModal, NewCatalogRecordModal,
-        NewDatasetVersionModal, NewEmbeddedLexicalizationModal
+        ImportOntologyModal, ImportFromDatasetCatalogModal, OntologyMirrorModal, NewCatalogRecordModal, NewDatasetVersionModal,
+        NewEmbeddedLexicalizationModal
     ],
     exports: [],
     providers: [],
     entryComponents: [
-        ImportOntologyModal, ImportFromDatasetCatalogModal, PrefixNamespaceModal, OntologyMirrorModal, NewCatalogRecordModal, 
-        NewDatasetVersionModal, NewEmbeddedLexicalizationModal
+        ImportOntologyModal, ImportFromDatasetCatalogModal, OntologyMirrorModal, NewCatalogRecordModal,  NewDatasetVersionModal, 
+        NewEmbeddedLexicalizationModal
     ]
 })
 export class MetadataModule { }

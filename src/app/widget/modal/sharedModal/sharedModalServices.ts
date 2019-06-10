@@ -4,6 +4,7 @@ import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { DatasetCatalogModal, DatasetCatalogModalData } from '../../../config/dataManagement/datasetCatalog/datasetCatalogModal';
 import { ImportFromDatasetCatalogModal, ImportFromDatasetCatalogModalData } from '../../../config/dataManagement/metadata/namespacesAndImports/importFromDatasetCatalogModal';
 import { ImportOntologyModal, ImportOntologyModalData } from '../../../config/dataManagement/metadata/namespacesAndImports/importOntologyModal';
+import { PrefixNamespaceModal, PrefixNamespaceModalData } from '../../../config/dataManagement/metadata/namespacesAndImports/prefixNamespaceModal';
 import { ARTResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDFCapabilityType } from "../../../models/Coda";
 import { ImportType } from '../../../models/Metadata';
@@ -214,6 +215,23 @@ export class SharedModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
         return this.modal.open(DatasetCatalogModal, overlayConfig).result;
+    }
+
+    /**
+     * Opens a modal to create/edit a prefix namespace mapping.
+     * @param title the title of the modal
+     * @param prefix the prefix to change. Optional, to provide only to change a mapping.
+     * @param namespace the namespace to change. Optional, to provide only to change a mapping.
+     * @param namespaceReadonly tells if namespace value can be changed
+     * @return returns a mapping object containing "prefix" and "namespace"
+     */
+    prefixNamespace(title: string, prefix?: string, namespace?: string, namespaceReadonly?: boolean): Promise<{ prefix: string, namespace: string }> {
+        var modalData = new PrefixNamespaceModalData(title, prefix, namespace, namespaceReadonly);
+        const builder = new BSModalContextBuilder<PrefixNamespaceModalData>(
+            modalData, undefined, PrefixNamespaceModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        return this.modal.open(PrefixNamespaceModal, overlayConfig).result;
     }
 
 }

@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
 import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from "rxjs";
@@ -31,6 +31,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
     private newDefinedNodes: NodeConversion[] = []; //nodes defined contextually the graph creation/edit
     private selectedNode: NodeConversion;
 
+    @ViewChild('prefixnstable') prefixNsTableElement: ElementRef;
     private globalPrefixMappings: PrefixMapping[] = [];
     private localPrefixMappings: PrefixMapping[] = [];
     private selectedMapping: PrefixMapping;
@@ -54,8 +55,16 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
 
         if (this.context.graphApplication != null) { //edit mode => restore UI
             this.graphPattern = this.context.graphApplication.pattern;
+            for (let pref in this.context.graphApplication.prefixMapping) {
+                this.localPrefixMappings.push({ prefix: pref, namespace: this.context.graphApplication.prefixMapping[pref], explicit: true });
+                
+            }
         }
     }
+
+    /*
+     * ============== NODES ==================
+     */
 
     private selectNode(node: NodeConversion) {
         if (this.selectedNode == node) {
@@ -113,6 +122,10 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         );
     }
 
+    /*
+     * ============= PREFIX-NS =================
+     */
+
     private selectMapping(m: PrefixMapping) {
         if (!m.explicit) return;
         if (this.selectedMapping == m) {
@@ -122,44 +135,87 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         }
     }
 
+    private addMapping() {
+        this.sharedModals.prefixNamespace("Add prefix-namespace mapping").then(
+            (mapping: { prefix: string, namespace: string }) => {
+                //check if the prefix or the namespace are not already defined
+                if (
+                    this.globalPrefixMappings.some(m => m.prefix == mapping.prefix) || 
+                    this.localPrefixMappings.some(m => m.prefix == mapping.prefix)
+                ) {
+                    this.basicModals.alert("Add prefix-namespace mapping", "A mapping with prefix " + mapping.prefix + " is already defined", "warning");
+                } else if (
+                    this.globalPrefixMappings.some(m => m.namespace == mapping.namespace) || 
+                    this.localPrefixMappings.some(m => m.namespace == mapping.namespace)
+                ) {
+                    this.basicModals.alert("Add prefix-namespace mapping", "A mapping with namespace " + mapping.namespace + " is already defined", "warning");
+                } else { //not used => add it
+                    let newMapping = { prefix: mapping.prefix, namespace: mapping.namespace, explicit: true };
+                    this.localPrefixMappings.push(newMapping);
+                    setTimeout(() => {
+                        this.prefixNsTableElement.nativeElement.scrollTop = this.prefixNsTableElement.nativeElement.scrollHeight;
+                        this.selectMapping(newMapping);
+                    });
+                }
+            }
+        );
+    }
+
+    private removeMapping() {
+        this.localPrefixMappings.splice(this.localPrefixMappings.indexOf(this.selectedMapping), 1);
+    }
+    
+
+    /*
+     * ============= GRAPHS =================
+     */
+
     private isOkEnabled(): boolean {
         return (this.newDefinedNodes.length > 0 || this.alreadyDefinedNodes.length > 0) && this.graphPattern != null && this.graphPattern.trim() != "";
     }
 
-    private validatePatternMockup(): Observable<string[]> {
-        //Ideally, the server should throw an exception in case the pattern is wrong, the list of node otherwise
-        let nodes: string[] = [];
-        let nodeIdRegex: RegExp = /\$([a-zA-Z0-9_]+)/g;
-        let match = nodeIdRegex.exec(this.graphPattern);
-        while (match != null) {
-            let nodeId = match[1]; //index 0 is the whole match, index 1 is the group of the id (without the leading $)
-            if (nodes.indexOf(nodeId) == -1) {
-                nodes.push(nodeId);
-            }
-            match = nodeIdRegex.exec(this.graphPattern);
-        };
-        if (nodes.indexOf("subject") != -1) { //eventually remove the "subject" from the referenced node IDs (which is reserved)
-            nodes.splice(nodes.indexOf("subject"), 1);
-        }
-        return Observable.of(nodes);
-    }
+    private validatePattern() {
+        /**
+         * Creates a fake complete pearl rule just for pass it to the validateGraphPattern service.
+         */
+        let pearl: string = "";
+        this.globalPrefixMappings.forEach(m => {
+            pearl += "prefix " + m.prefix + ": <" + m.namespace + ">\n";
+        });
+        this.localPrefixMappings.forEach(m => {
+            pearl += "prefix " + m.prefix + ": <" + m.namespace + ">\n";
+        });
+        pearl += "rule it.uniroma2.art.FakeRule id:rule {\n";
+        pearl += "nodes = {\n";
+        pearl += "subject uri " + this.context.header.pearlFeature + "\n";
+        this.alreadyDefinedNodes.forEach(n => {
+            pearl += n.nodeId + " " + n.converter.type + " " + this.context.header.pearlFeature + " .\n";
+        });
+        this.newDefinedNodes.forEach(n => {
+            pearl += n.nodeId + " " + n.converter.type + " " + this.context.header.pearlFeature + " .\n";
+        });
+        pearl += "}\n"; //close nodes
+        pearl += "graph = {\n";
+        pearl += this.graphPattern + "\n";
+        pearl += "}\n"; //close graph
+        pearl += "}\n"; //close rule
 
-
-    private validateReferencedNodes(referencedIDs: string[]): boolean {
-        //check for referenced nodes missing in nodes list
-        for (let referencedId of referencedIDs) {
-            let referencedNode = this.newDefinedNodes.find(n => n.nodeId == referencedId);
-            if (referencedNode == null) {
-                referencedNode = this.alreadyDefinedNodes.find(n => n.nodeId == referencedId);
+        return this.s2rdfService.validateGraphPattern(pearl).map(
+            validation => {
+                if (!validation.valid) {
+                    this.basicModals.alert("Advanced Graph Application", validation.details, "warning");
+                    return validation;
+                } else {
+                    validation.usedNodes.forEach((nodeId, index, list) => {
+                        list[index] = nodeId.substring(1); //removes the leading $
+                    })
+                    if (validation.usedNodes.indexOf("subject")) {
+                        validation.usedNodes.splice(validation.usedNodes.indexOf("subject"), 1);
+                    }
+                    return validation;
+                }
             }
-
-            if (referencedNode == null) { //referenced node not found
-                this.basicModals.alert("Advanced Graph Application", "The graph pattern references to a node with id '" + referencedId 
-                    + "', but it is not defined in the nodes list", "warning");
-                return false;
-            }
-        }
-        return true;
+        );
     }
 
 
@@ -169,36 +225,49 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                 "Please, provide a list of nodes and a graph pattern.", "warning");
             return;
         }
-        this.validatePatternMockup().subscribe(
-            referencedNodeIDs => {
-                if (!this.validateReferencedNodes(referencedNodeIDs)) {
-                    return;
-                }
 
-                //collect only the node to store in the configuration, namely those nodes referenced by the graph pattern
-                let nodesToStore: NodeConversion[] = [];
-                referencedNodeIDs.forEach(nodeId => {
-                    let referencedNode = this.newDefinedNodes.find(n => n.nodeId == nodeId);
-                    if (referencedNode == null) {
-                        referencedNode = this.alreadyDefinedNodes.find(n => n.nodeId == nodeId);
-                    }
-                    nodesToStore.push(referencedNode);
-                });
-                let prefixMappingToStore: {[key:string]:string} = {}
-                this.localPrefixMappings.forEach(mapping => {
-                    prefixMappingToStore[mapping.prefix] = mapping.namespace;
-                })
-                let config: { [key: string]: any } = {
-                    graphPattern: this.graphPattern,
-                    nodes: nodesToStore,
-                    prefixMapping: prefixMappingToStore
-                };
-                this.sharedModals.storeConfiguration("Save Advanced Graph Application", ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, config).then(
-                    () => {
-                        this.basicModals.alert("Save configuration", "Configuration saved succesfully");
-                    },
-                    () => {}
-                );
+        this.validatePattern().subscribe(
+            validation => {
+                if (validation.valid) {
+                    //collect only the node to store in the configuration, namely those nodes referenced by the graph pattern
+                    let nodesToStore: NodeConversion[] = [];
+                    validation.usedNodes.forEach(nodeId => {
+                        let referencedNode = this.newDefinedNodes.find(n => n.nodeId == nodeId);
+                        if (referencedNode == null) {
+                            referencedNode = this.alreadyDefinedNodes.find(n => n.nodeId == nodeId);
+                        }
+                        nodesToStore.push(referencedNode);
+                    });
+                    let prefixMappingToStore: {[key:string]:string} = {}
+
+                    validation.usedPrefixes.forEach(prefix => {
+                        let namespace: string;
+                        this.localPrefixMappings.forEach(m => { //search first the prefix-ns mapping in those defined locally
+                            if (m.prefix == prefix) {
+                                namespace = m.namespace;
+                            }
+                        });
+                        if (namespace == null) { //if not found, search it in the global prefix-ns mapping
+                            this.globalPrefixMappings.forEach(m => {
+                                if (m.prefix == prefix) {
+                                    namespace = m.namespace;
+                                }
+                            });
+                        }
+                        prefixMappingToStore[prefix] = namespace;
+                    })
+                    let config: { [key: string]: any } = {
+                        graphPattern: this.graphPattern,
+                        nodes: nodesToStore,
+                        prefixMapping: prefixMappingToStore
+                    };
+                    this.sharedModals.storeConfiguration("Save Advanced Graph Application", ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, config).then(
+                        () => {
+                            this.basicModals.alert("Save configuration", "Configuration saved succesfully");
+                        },
+                        () => {}
+                    );
+                }
             }
         );
     }
@@ -318,51 +387,61 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
          * - add all the nodes to the header
          * - add the advancedGraphApplication to the header
          */
-        this.validatePatternMockup().subscribe(
-            referencedIDs => {
-                //if there is some node referenced but not defined, prevent confirming
-                if (!this.validateReferencedNodes(referencedIDs)) {
-                    return;
-                }
-                //above check passed, now add the new nodes to the header (prevent to add nodes again to the header in case of update)
-                let addNodeFn: Observable<any>[] = [];
-                this.newDefinedNodes.forEach(n => {
-                    addNodeFn.push(this.s2rdfService.addNodeToHeader(this.context.header.id, n.nodeId, n.converter.type,
-                        n.converter.contractUri, n.converter.datatypeUri, n.converter.language, n.converter.params, n.memoize));
-                });
+        this.validatePattern().subscribe(
+            validation => {
+                if (validation.valid) {
+                    //above check passed, now add the new nodes to the header (prevent to add nodes again to the header in case of update)
+                    let addNodeFn: Observable<any>[] = [];
+                    this.newDefinedNodes.forEach(n => {
+                        addNodeFn.push(this.s2rdfService.addNodeToHeader(this.context.header.id, n.nodeId, n.converter.type,
+                            n.converter.contractUri, n.converter.datatypeUri, n.converter.language, n.converter.params, n.memoize));
+                    });
 
-                let prefixMappingMap: {[key: string]: string} = {};
-                this.localPrefixMappings.map(p => prefixMappingMap[p.prefix] = p.namespace);
-
-                if (addNodeFn.length != 0) {
-                    Observable.forkJoin(addNodeFn).subscribe(
-                        () => { //nodes added => now add/update the graph application
-                            let graphAppFn: Observable<any>;
-                            if (this.context.graphApplication == null) { //creation mode
-                                graphAppFn = this.s2rdfService.addAdvancedGraphApplicationToHeader(
-                                    this.context.header.id, this.graphPattern, referencedIDs, prefixMappingMap);
-                            } else { //edit mode
-                                graphAppFn = this.s2rdfService.updateAdvancedGraphApplication(
-                                    this.context.header.id, this.context.graphApplication.id, this.graphPattern, referencedIDs, prefixMappingMap);
+                    let prefixMappingMap: {[key: string]: string} = {};
+                    //collect the prefixes used in the graph pattern and locally defined
+                    //(no need to check on global, since it means that the prefix-namespace is already available in the project)
+                    validation.usedPrefixes.forEach(prefix => {
+                        let namespace: string;
+                        this.localPrefixMappings.forEach(m => { //search first the prefix-ns mapping in those defined locally
+                            if (m.prefix == prefix) {
+                                namespace = m.namespace;
                             }
-                            graphAppFn.subscribe(
-                                () => { //done
-                                    this.dialog.close();
+                        });
+                        if (namespace != null) { //namespace found in the local mapping (if null => is defined in the global one)
+                            prefixMappingMap[prefix] = namespace;
+                        }
+                    });
+
+                    if (addNodeFn.length != 0) {
+                        Observable.forkJoin(addNodeFn).subscribe(
+                            () => { //nodes added => now add/update the graph application
+                                let graphAppFn: Observable<any>;
+                                if (this.context.graphApplication == null) { //creation mode
+                                    graphAppFn = this.s2rdfService.addAdvancedGraphApplicationToHeader(
+                                        this.context.header.id, this.graphPattern, validation.usedNodes, prefixMappingMap);
+                                } else { //edit mode
+                                    graphAppFn = this.s2rdfService.updateAdvancedGraphApplication(
+                                        this.context.header.id, this.context.graphApplication.id, this.graphPattern, validation.usedNodes, prefixMappingMap);
                                 }
-                            );
-                        }
-                    );
-                } else { //no node to add, simply update the graph pattern
-                    this.s2rdfService.updateAdvancedGraphApplication(
-                        this.context.header.id, this.context.graphApplication.id, this.graphPattern, referencedIDs, prefixMappingMap).subscribe(
-                        stResp => {
-                            this.dialog.close();
-                        }
-                    );
+                                graphAppFn.subscribe(
+                                    () => { //done
+                                        this.dialog.close();
+                                    }
+                                );
+                            }
+                        );
+                    } else { //no node to add, simply update the graph pattern
+                        this.s2rdfService.updateAdvancedGraphApplication(
+                            this.context.header.id, this.context.graphApplication.id, this.graphPattern, validation.usedNodes, prefixMappingMap).subscribe(
+                            stResp => {
+                                this.dialog.close();
+                            }
+                        );
+                    }
                 }
-                
             }
         );
+
     }
 
     cancel() {

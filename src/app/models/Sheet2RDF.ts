@@ -56,6 +56,7 @@ export class SimpleGraphApplication extends GraphApplication {
 export class AdvancedGraphApplication extends GraphApplication {
     public nodeIds: string[];
     public pattern: string;
+    public prefixMapping: {[prefix: string]: string};
 }
 
 export class CODAConverter {
@@ -143,6 +144,7 @@ export class Sheet2RdfDeserializer {
             g.id = gJson.id;
             g.nodeIds = gJson.nodeIds;
             g.pattern = gJson.pattern;
+            g.prefixMapping = gJson.prefixMapping;
             return g;
         }
     }

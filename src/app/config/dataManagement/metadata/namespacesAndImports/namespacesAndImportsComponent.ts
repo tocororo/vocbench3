@@ -14,7 +14,6 @@ import { BasicModalServices } from "../../../../widget/modal/basicModal/basicMod
 import { SharedModalServices } from "../../../../widget/modal/sharedModal/sharedModalServices";
 import { ImportFromDatasetCatalogModalReturnData } from "./importFromDatasetCatalogModal";
 import { OntologyMirrorModal } from "./ontologyMirrorModal";
-import { PrefixNamespaceModal, PrefixNamespaceModalData } from "./prefixNamespaceModal";
 
 @Component({
     selector: "namespaces-imports-component",
@@ -245,7 +244,7 @@ export class NamespacesAndImportsComponent {
      * Adds a new prefix namespace mapping
      */
     private addMapping() {
-        this.openMappingModal("Add prefix namespace mapping").then(
+        this.sharedModals.prefixNamespace("Add prefix namespace mapping").then(
             (mapping: any) => {
                 this.metadataService.setNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
                     stResp => {
@@ -272,7 +271,7 @@ export class NamespacesAndImportsComponent {
      * Changes the prefix of a prefix namespace mapping
      */
     private changeMapping() {
-        this.openMappingModal("Change prefix namespace mapping", this.selectedMapping.prefix, this.selectedMapping.namespace, true).then(
+        this.sharedModals.prefixNamespace("Change prefix namespace mapping", this.selectedMapping.prefix, this.selectedMapping.namespace, true).then(
             (mapping: any) => {
                 this.metadataService.changeNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
                     stResp => {
@@ -282,23 +281,6 @@ export class NamespacesAndImportsComponent {
             },
             () => { }
         )
-    }
-
-    /**
-     * Opens a modal to create/edit a prefix namespace mapping.
-     * @param title the title of the modal
-     * @param prefix the prefix to change. Optional, to provide only to change a mapping.
-     * @param namespace the namespace to change. Optional, to provide only to change a mapping.
-     * @param namespaceReadonly tells if namespace value can be changed
-     * @return returns a mapping object containing "prefix" and "namespace"
-     */
-    private openMappingModal(title: string, prefix?: string, namespace?: string, namespaceReadonly?: boolean) {
-        var modalData = new PrefixNamespaceModalData(title, prefix, namespace, namespaceReadonly);
-        const builder = new BSModalContextBuilder<PrefixNamespaceModalData>(
-            modalData, undefined, PrefixNamespaceModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(PrefixNamespaceModal, overlayConfig).result;
     }
 
     //======= IMPORTS MANAGEMENT =======

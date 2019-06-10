@@ -81,18 +81,18 @@
             <div class="subPanel" style="margin-top: 4px;">
                 <div class="subPanel-heading">
                     <label style="flex: 1">Prefix-Namespace mappings</label>
-                    <!-- <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-default" (click)="addPrefNs()">
+                            <button class="btn btn-default" (click)="addMapping()">
                                 <span class="glyphicon glyphicon-plus"></span>
                             </button>
-                            <button class="btn btn-default" (click)="removePrefNs()">
+                            <button class="btn btn-default" (click)="removeMapping()" [disabled]="!selectedMapping">
                                 <span class="glyphicon glyphicon-minus"></span>
                             </button>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
-                <div class="subPanel-body table-responsive" style="max-height: 100px;">
+                <div #prefixnstable class="subPanel-body table-responsive" style="max-height: 100px;">
                     <table class="table table-condensed">
                         <thead>
                             <tr>
@@ -101,7 +101,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let m of globalPrefixMappings" (click)="selectMapping(m)" [ngClass]="{active: m == selectedMapping, greyText: !m.explicit}">
+                            <tr *ngFor="let m of globalPrefixMappings" class="" class="greyText" style="cursor: not-allowed">
+                                <td>{{m.prefix}}</td>
+                                <td>{{m.namespace}}</td>
+                            </tr>
+                            <tr *ngFor="let m of localPrefixMappings" (click)="selectMapping(m)" style="cursor: pointer" [ngClass]="{active: m == selectedMapping}">
                                 <td>{{m.prefix}}</td>
                                 <td>{{m.namespace}}</td>
                             </tr>

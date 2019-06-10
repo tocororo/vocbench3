@@ -11,8 +11,8 @@ export class PrefixNamespaceModalData extends BSModalContext {
      */
     constructor(
         public title: string = "Modal Title",
-        public prefix: string,
-        public namespace: string,
+        public prefix: string = null,
+        public namespace: string = null,
         public namespaceReadonly: boolean = false
     ) {
         super();

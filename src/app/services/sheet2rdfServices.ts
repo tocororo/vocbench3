@@ -257,6 +257,13 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "validatePearl", params);
     }
 
+    validateGraphPattern(pearlCode: string): Observable<{valid: boolean, details: string, usedNodes: string[], usedPrefixes: string[]}> {
+        var params: any = {
+            pearlCode: pearlCode
+        };
+        return this.httpMgr.doPost(this.serviceName, "validateGraphPattern", params);
+    }
+
     /**
      * Uploads a file containing a pearl code to use.
      * Returns the pearl code.
