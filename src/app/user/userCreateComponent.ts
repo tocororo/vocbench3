@@ -1,9 +1,7 @@
 import { Component, forwardRef } from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { UserForm } from "../models/User";
-import { Countries } from "../models/LanguagesCountries";
-import { UIUtils } from "../utils/UIUtils";
-import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices"
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
     selector: "user-create",
@@ -13,10 +11,6 @@ import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServ
     }]
 })
 export class UserCreateComponent {
-
-    private countries = Countries.countryList;
-    private genders = ["Male", "Female", "Other"];
-    private selectedGender: string;
 
     private iriInfoTitle = "This will be used as user identifier inside VocBench. You can specify a personal IRI, " + 
         "or in alternative, you can use the personal URL as IRI. If you leave it empty the system will provide a default IRI to your account";
@@ -29,15 +23,6 @@ export class UserCreateComponent {
         setTimeout(() => {
             this.onModelChange();
         });
-    }
-
-    private onGenderChange() {
-        if (this.selectedGender == "Other") {
-            this.form.gender = null;
-        } else {
-            this.form.gender = this.selectedGender;
-        }
-        this.onModelChange();
     }
 
     private onUrlAsIriChange() {

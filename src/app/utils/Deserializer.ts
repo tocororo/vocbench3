@@ -1,6 +1,4 @@
-import {
-    ARTNode, ARTURIResource, ARTResource, ARTBNode, ARTLiteral, ARTPredicateObjects, ResAttribute, RDFResourceRolesEnum
-} from "../models/ARTResources";
+import { ARTBNode, ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
 import { User } from "../models/User";
 import { SemanticTurkey } from "../models/Vocabulary";
 import { VBContext } from "./VBContext";
@@ -309,17 +307,8 @@ export class Deserializer {
         user.setStatus(userJson.status);
         user.setAdmin(userJson.admin);
         user.setOnline(userJson.online);
-        if (userJson.birthday != undefined) {
-            user.setBirthday(userJson.birthday);
-        }
         if (userJson.phone != undefined) {
             user.setPhone(userJson.phone);
-        }
-        if (userJson.gender != undefined) {
-            user.setGender(userJson.gender)
-        }
-        if (userJson.country != undefined) {
-            user.setCountry(userJson.country);
         }
         if (userJson.address != undefined) {
             user.setAddress(userJson.address);

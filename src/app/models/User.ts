@@ -5,10 +5,7 @@ export class User {
     private givenName: string;
     private familyName: string
     private iri: string;
-    private birthday: Date;
     private phone: string;
-    private gender: string;
-    private country: string;
     private address: string;
     private registrationDate: Date;
     private affiliation: string;
@@ -42,36 +39,12 @@ export class User {
         return this.iri;
     }
 
-    setBirthday(birthday: Date) {
-        this.birthday = birthday;
-    }
-
-    getBirthday(): Date {
-        return this.birthday;
-    }
-
     setPhone(phone: string) {
         this.phone = phone;
     }
 
     getPhone(): string {
         return this.phone;
-    }
-
-    setGender(gender: string) {
-        this.gender = gender;
-    }
-
-    getGender(): string {
-        return this.gender;
-    }
-
-    setCountry(country: string) {
-        this.country = country;
-    }
-
-    getCountry(): string {
-        return this.country;
     }
 
     setAddress(address: string) {
@@ -324,9 +297,6 @@ export class UserForm {
     confirmedPassword: string;
     givenName: string;
     familyName: string;
-    birthday: Date;
-    gender: string;
-    country: string;
     address: string;
     phone: string;
     affiliation: string;

@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { Countries } from "../models/LanguagesCountries";
 import { User } from "../models/User";
 import { UserServices } from "../services/userServices";
 import { VBContext } from "../utils/VBContext";
@@ -16,8 +15,6 @@ import { ChangePasswordModal } from "./changePasswordModal";
 export class UserProfileComponent {
 
     private user: User;
-
-    private countries = Countries.countryList;
 
     constructor(private userService: UserServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
@@ -58,33 +55,6 @@ export class UserProfileComponent {
 
     private updatePhone(newPhone: string) {
         this.userService.updateUserPhone(this.user.getEmail(), newPhone).subscribe(
-            user => {
-                VBContext.setLoggedUser(user);
-                this.initUser();
-            }
-        )
-    }
-
-    private updateBirthday(newBirthday: Date) {
-        this.userService.updateUserBirthday(this.user.getEmail(), newBirthday).subscribe(
-            user => {
-                VBContext.setLoggedUser(user);
-                this.initUser();
-            }
-        )
-    }
-
-    private updateGender(newGender: string) {
-        this.userService.updateUserGender(this.user.getEmail(), newGender).subscribe(
-            user => {
-                VBContext.setLoggedUser(user);
-                this.initUser();
-            }
-        )
-    }
-
-    private updateCountry(newCountry: string) {
-        this.userService.updateUserCountry(this.user.getEmail(), newCountry).subscribe(
             user => {
                 VBContext.setLoggedUser(user);
                 this.initUser();

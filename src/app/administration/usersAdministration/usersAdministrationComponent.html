@@ -86,46 +86,33 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td nowrap><label>Birthday:</label></td>
-                                    <td>
-                                        <input class="form-control input-sm" [ngModel]="selectedUser.getBirthday()" readonly>
-                                    </td>
-                                    <td nowrap><label>Gender:</label></td>
-                                    <td>
-                                        <input class="form-control input-sm" [ngModel]="selectedUser.getGender()" readonly>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td nowrap><label>Country:</label></td>
-                                    <td>
-                                        <input class="form-control input-sm" [ngModel]="selectedUser.getCountry()" readonly>
-                                    </td>
-                                    <td nowrap><label>Address:</label></td>
+                                    <td nowrap><label>Office address:</label></td>
                                     <td>
                                         <input class="form-control input-sm" [ngModel]="selectedUser.getAddress()" readonly>
                                     </td>
-                                </tr>
-                                <tr>
                                     <td nowrap><label>Affiliation:</label></td>
                                     <td>
                                         <input class="form-control input-sm" [ngModel]="selectedUser.getAffiliation()" readonly>
                                     </td>
+                                </tr>
+                                <tr>
                                     <td nowrap><label>Personal Url:</label></td>
                                     <td>
                                         <input class="form-control input-sm" [ngModel]="selectedUser.getUrl()" readonly>
                                     </td>
-                                </tr>
-                                <tr>
                                     <td nowrap><label>Avatar Url:</label></td>
                                     <td><input class="form-control input-sm" [ngModel]="selectedUser.getAvatarUrl()" readonly></td>
+                                </tr>
+                                <tr>
                                     <td nowrap><label>Language proficiencies:</label></td>
                                     <td><input class="form-control input-sm" [ngModel]="selectedUser.getLanguageProficiencies()" readonly></td>
                                 </tr>
-                                <tr>
-                                    <td nowrap><label>Registration Date:</label></td>
-                                    <td><input class="form-control input-sm" [ngModel]="selectedUser.getRegistrationDate()" readonly></td>
-                                </tr>
                             </tbody>
+                            <tfoot>
+                                <tr style="padding-top: 5px;">
+                                    <td colspan="5"><label>Registered: </label> {{selectedUser.getRegistrationDate()}}</td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>

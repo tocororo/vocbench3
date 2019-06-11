@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { ARTURIResource } from "../models/ARTResources";
+import { User } from "../models/User";
+import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager } from "../utils/HttpManager";
 import { VBContext } from "../utils/VBContext";
-import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
-import { User, UserStatusEnum } from "../models/User";
-import { ARTURIResource } from "../models/ARTResources";
 
 @Injectable()
 export class UserServices {
@@ -109,52 +109,25 @@ export class UserServices {
      * @param password
      * @param givenName
      * @param familyName
-     * @param birthday
-     * @param gender
-     * @param country
      * @param address
      * @param affiliation
      * @param url
      * @param phone
      */
     registerUser(email: string, password: string, givenName: string, familyName: string, iri: ARTURIResource,
-        birthday: Date, gender: string, country: string, address: string, affiliation: string, url: string, avatarUrl: string,
-        phone: string, languageProficiencies: string[]) {
+        address: string, affiliation: string, url: string, avatarUrl: string, phone: string, languageProficiencies: string[]) {
         var params: any = {
             email: email,
             password: password,
             givenName: givenName,
-            familyName: familyName
-        }
-        if (iri != undefined) {
-            params.iri = iri;
-        }
-        if (birthday != undefined) {
-            params.birthday = birthday;
-        }
-        if (gender != undefined) {
-            params.gender = gender;
-        }
-        if (country != undefined) {
-            params.country = country;
-        }
-        if (address != undefined) {
-            params.address = address;
-        }
-        if (affiliation != undefined) {
-            params.affiliation = affiliation;
-        }
-        if (url != undefined) {
-            params.url = url;
-        }
-        if (avatarUrl != undefined) {
-            params.avatarUrl = avatarUrl;
-        }
-        if (phone != undefined) {
-            params.phone = phone;
-        }
-        if (languageProficiencies != null) {
-            params.languageProficiencies = languageProficiencies;
+            familyName: familyName,
+            iri: iri,
+            address: address,
+            affiliation: affiliation,
+            url: url,
+            avatarUrl: avatarUrl,
+            phone: phone,
+            languageProficiencies: languageProficiencies
         }
         return this.httpMgr.doPost(this.serviceName, "registerUser", params);
     }
@@ -223,59 +196,6 @@ export class UserServices {
             params.phone = phone;
         }
         return this.httpMgr.doPost(this.serviceName, "updateUserPhone", params).map(
-            stResp => {
-                return Deserializer.createUser(stResp);
-            }
-        );
-    }
-
-    /**
-     * Updates birthday of the given user. Returns the updated user.
-     * @param email email of the user to update
-     * @param birthday
-     */
-    updateUserBirthday(email: string, birthday: Date): Observable<User> {
-        var params: any = {
-            email: email,
-            birthday: birthday,
-        }
-        return this.httpMgr.doPost(this.serviceName, "updateUserBirthday", params).map(
-            stResp => {
-                return Deserializer.createUser(stResp);
-            }
-        );
-    }
-
-    /**
-     * Updates gender of the given user. Returns the updated user.
-     * @param email email of the user to update
-     * @param gender if not provided remove the info
-     */
-    updateUserGender(email: string, gender?: string): Observable<User> {
-        var params: any = {
-            email: email,
-        }
-        if (gender != null) {
-            params.gender = gender;
-        }
-        return this.httpMgr.doPost(this.serviceName, "updateUserGender", params).map(
-            stResp => {
-                return Deserializer.createUser(stResp);
-            }
-        );
-    }
-
-    /**
-     * Updates country of the given user. Returns the updated user.
-     * @param email email of the user to update
-     * @param country
-     */
-    updateUserCountry(email: string, country: string): Observable<User> {
-        var params: any = {
-            email: email,
-            country: country,
-        }
-        return this.httpMgr.doPost(this.serviceName, "updateUserCountry", params).map(
             stResp => {
                 return Deserializer.createUser(stResp);
             }

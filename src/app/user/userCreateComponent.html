@@ -55,49 +55,23 @@
                 </td>
             </tr>
             <tr>
-                <td nowrap><label>Gender:</label></td>
+                <td nowrap><label>Phone:</label></td>
                 <td>
-                    <div class="hbox">
-                        <select [(ngModel)]="selectedGender" name="selectedGender" class="form-control input-sm" 
-                            style="margin-right: 4px;" (change)="onGenderChange()">
-                            <option *ngFor="let g of genders" [value]="g">{{g}}</option>
-                        </select>
-                        <input type="text" class="form-control input-sm" [(ngModel)]="form.gender" name="gender" 
-                            [disabled]="selectedGender != 'Other'" (ngModelChange)="onModelChange()">
-                    </div>
-                </td>
-                <td nowrap><label>Birthday:</label></td>
-                <td>
-                    <input type="date" class="form-control input-sm" [(ngModel)]="form.birthday" name="birthday" placeholder="yyyy-MM-dd"
+                    <input type="text" class="form-control input-sm" [(ngModel)]="form.phone" name="phone" placeholder="phone number"
                         (ngModelChange)="onModelChange()">
                 </td>
-            </tr>
-            <tr>
-                <td nowrap><label>Country:</label></td>
-                <td>
-                    <select [(ngModel)]="form.country" name="country" class="form-control input-sm" (ngModelChange)="onModelChange()">
-                        <option *ngFor="let c of countries" [value]="c">{{c}}</option>
-                    </select>
-                </td>
-                <td nowrap><label>Address:</label></td>
+                <td nowrap><label>Office address:</label></td>
                 <td>
                     <input type="text" class="form-control input-sm" [(ngModel)]="form.address" name="address" placeholder="address"
                         (ngModelChange)="onModelChange()">
                 </td>
             </tr>
             <tr>
-                <td nowrap><label>Phone:</label></td>
-                <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="form.phone" name="phone" placeholder="phone number"
-                        (ngModelChange)="onModelChange()">
-                </td>
                 <td nowrap><label>Affiliation:</label></td>
                 <td>
                     <input type="text" class="form-control input-sm" [(ngModel)]="form.affiliation" name="affiliation" placeholder="affiliation"
                         (ngModelChange)="onModelChange()">
                 </td>
-            </tr>
-            <tr>
                 <td nowrap><label>Personal URL:</label></td>
                 <td>
                     <div class="input-group">
@@ -109,6 +83,8 @@
                         </span>
                     </div>
                 </td>
+            </tr>
+            <tr>
                 <td nowrap>
                     <label>User IRI:</label>
                     <span class="glyphicon glyphicon-info-sign" [title]="iriInfoTitle"></span>
@@ -117,15 +93,14 @@
                     <input type="text" class="form-control input-sm" [(ngModel)]="form.iri" name="iri" placeholder="iri"
                         (ngModelChange)="onUrlChange()" [disabled]="form.urlAsIri">
                 </td>
-            </tr>
-
-            <tr>
                 <td nowrap><label>Avatar URL:</label></td>
                 <td>
                     <input type="text" class="form-control input-sm" [(ngModel)]="form.avatarUrl" name="avatarUrl" placeholder="avatarUrl"
                         (ngModelChange)="onModelChange()">
                 </td>
-                <td nowrap><label>Language proficiencies:</label></td>
+            </tr>
+            <tr>
+                <td nowrap><label>Language proficiencies:</label><span style="color: red">**</span></td>
                 <td>
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" [(ngModel)]="form.languageProficiencies" name="langs"
