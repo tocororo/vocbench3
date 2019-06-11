@@ -135,8 +135,10 @@ export enum VBActionsEnum {
     //Resources
     resourcesAddValue = "resourcesAddValue",
     resourcesRemoveValue = "resourcesRemoveValue",
+    resourcesRemovePredicateObject = "resourcesRemovePredicateObject",
     resourcesSetDeprecated = "resourcesSetDeprecated",
     resourcesUpdateTriple = "resourcesUpdateTriple",
+    resourcesUpdatePredicateObject = "resourcesUpdatePredicateObject",
     //Sheet2Rdf
     sheet2Rdf = "Rdf", //generic
     //Skos

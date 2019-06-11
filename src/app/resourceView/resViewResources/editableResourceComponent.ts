@@ -52,7 +52,9 @@ export class EditableResourceComponent {
     //actions authorizations
     private editMenuDisabled: boolean = false;
     private editAuthorized: boolean = false;
+    private bulkEditAuthorized: boolean = false;
     private deleteAuthorized: boolean = false;
+    private bulkDeleteAuthorized: boolean = false;
     private spawnFromLabelAuthorized: boolean = false;
     private moveLabelAuthorized: boolean = false;
     private assertAuthorized: boolean = false;
@@ -61,9 +63,11 @@ export class EditableResourceComponent {
     private isInferred: boolean = false;
     private isXLabelMenuItemAvailable: boolean = false;
     private isReplaceMenuItemAvailable: boolean = true;
+    private isBulkActionMenuItemAvailable: boolean = true;
     private copyLocalesAction: { available: boolean, locales: Language[] } = { available: false, locales: [] };
 
     private editInProgress: boolean = false;
+    private bulkEditInProgress: boolean = false;
     private editLiteralInProgress: boolean = false;
     private resourceStringValuePristine: string;
     private resourceStringValue: string; //editable representation of the resource
@@ -96,15 +100,39 @@ export class EditableResourceComponent {
             this.resource.isResource() && (<ARTResource>this.resource).getRole() == RDFResourceRolesEnum.xLabel
         );
 
-		/**
-		 * Determines if the menu item "Replace with existing resource" should be visible.
-		 * Visible:
-		 * in classaxioms partition if object is an IRI
-		 * in any partitions (different from classaxioms and subPropertyChains) if the object is a resource
-		 */
+        /**
+         * Determines if the menu item "Replace with existing resource" should be visible.
+         * Visible:
+         * in classaxioms partition if object is an IRI
+         * in any partitions (different from classaxioms and subPropertyChains) if the object is a resource
+        */
         this.isReplaceMenuItemAvailable = (
             (this.partition == ResViewPartition.classaxioms && this.resource.isURIResource()) ||
             (this.partition != ResViewPartition.subPropertyChains && this.partition != ResViewPartition.classaxioms && this.resource.isResource())
+        );
+
+        /**
+         * Bulk edit items are available only if those partition where it's safe to update/remove directly the PO in the SPO triple
+         */
+        this.isBulkActionMenuItemAvailable = (
+            this.partition == ResViewPartition.broaders ||
+            (this.partition == ResViewPartition.classaxioms && this.resource instanceof ARTURIResource) ||
+            // this.partition == ResViewPartition.constituents ||
+            // this.partition == ResViewPartition.denotations ||
+            this.partition == ResViewPartition.disjointProperties ||
+            (this.partition == ResViewPartition.domains && this.resource instanceof ARTURIResource) ||
+            this.partition == ResViewPartition.equivalentProperties ||
+            // this.partition == ResViewPartition.evokedLexicalConcepts ||
+            this.partition == ResViewPartition.labelRelations ||
+            // this.partition == ResViewPartition.lexicalForms ||
+            // this.partition == ResViewPartition.lexicalSenses ||
+            this.partition == ResViewPartition.members ||
+            (this.partition == ResViewPartition.ranges && this.resource instanceof ARTURIResource) ||
+            this.partition == ResViewPartition.schemes ||
+            this.partition == ResViewPartition.subterms ||
+            this.partition == ResViewPartition.superproperties ||
+            this.partition == ResViewPartition.topconceptof ||
+            this.partition == ResViewPartition.types
         );
 
         this.isInferred = ResourceUtils.isTripleInferred(this.resource);
@@ -123,6 +151,9 @@ export class EditableResourceComponent {
         this.moveLabelAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorMoveXLabelToResource);
         this.assertAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.subject);
         this.copyLocalesAuthorized = AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.subject)
+        //bulk actions visible in every partition exept: subPropertyChains that 
+        this.bulkEditAuthorized = this.editAuthorized && AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdatePredicateObject);
+        this.bulkDeleteAuthorized = this.deleteAuthorized && AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemovePredicateObject);
 
 		/**
 		 * Copy to locales option is available only in lexicalizations, notes and properties partitions
@@ -207,6 +238,11 @@ export class EditableResourceComponent {
         }
     }
 
+    private bulkEdit() {
+        this.computeResourceStringValue();
+        this.bulkEditInProgress = true;
+    }
+
     private computeResourceStringValue() {
         this.resourceStringValue = this.resource.toNT();//default string value (in the follow if-else override it eventually)
         if (this.ranges != null) { //check to avoid error in case the property has custom ranges that replace the "classic" range
@@ -253,46 +289,83 @@ export class EditableResourceComponent {
                     let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, this.resource.getAdditionalProperty(ResAttribute.LANG));
                     this.applyUpdate(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
                 }
-            } else { //editInProgress
+            } else if (this.bulkEditInProgress) {
                 try {
-                    let newValue: ARTNode;
-                    //parse the string typed by the user
-                    if (this.resourceStringValue.startsWith("<") && this.resourceStringValue.endsWith(">")) { //uri
-                        newValue = ResourceUtils.parseURI(this.resourceStringValue);
-                    } else if (this.resourceStringValue.startsWith("_:")) { //bnode
-                        newValue = ResourceUtils.parseBNode(this.resourceStringValue);
-                    } else if (this.resourceStringValue.startsWith("\"")) { //literal
-                        newValue = ResourceUtils.parseLiteral(this.resourceStringValue);
-                    } else if (ResourceUtils.isQName(this.resourceStringValue, VBContext.getPrefixMappings())) { //qname
-                        newValue = ResourceUtils.parseQName(this.resourceStringValue, VBContext.getPrefixMappings());
-                    } else if (this.resource.isBNode() && this.isClassAxiom) {
-						/** If the editing resource is a bnode and if it represents class axiom,
-						 * I can assume that the user has typed a new manchester expression to represent a class axiom */
-                        this.isClassAxiom = false;
-                        this.applyManchesterUpdate(<ARTBNode>this.resource, this.resourceStringValue);
-                        return;
-                    } else {
-                        throw new Error("Not a valid N-Triples representation: " + this.resourceStringValue);
-                    }
+                    let newValue: ARTNode = this.parseEditedValue();
                     //check consistency of the new value
                     if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
                         let warningMsg = "The type of the new value is not compliant with the range of the property " + this.predicate.getShow()
                             + ". The change may cause an inconsistency. Do you want to apply the change? ";
                         this.basicModals.confirm("Warning", warningMsg, "warning").then(
-                            confirm => { this.applyUpdate(this.subject, this.predicate, this.resource, newValue); },
-                            reject => { this.editInProgress = false; }
+                            confirm => {
+                                this.resourcesService.updatePredicateObject(this.predicate, this.resource, newValue).subscribe(
+                                    stResp => this.update.emit()
+                                );
+                            },
+                            reject => { this.cancelEdit(); }
                         );
                     } else {
-                        this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
+                        this.resourcesService.updatePredicateObject(this.predicate, this.resource, newValue).subscribe(
+                            stResp => this.update.emit()
+                        );
                     }
                 } catch (err) {
                     this.basicModals.alert("Edit", err, "error");
-                    this.editInProgress = false;
+                    this.cancelEdit();
+                }
+            } else if (this.editInProgress) {
+                try {
+                    try {
+                        let newValue: ARTNode = this.parseEditedValue();
+                        //check consistency of the new value
+                        if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
+                            let warningMsg = "The type of the new value is not compliant with the range of the property " + this.predicate.getShow()
+                                + ". The change may cause an inconsistency. Do you want to apply the change?";
+                            this.basicModals.confirm("Warning", warningMsg, "warning").then(
+                                confirm => { this.applyUpdate(this.subject, this.predicate, this.resource, newValue); },
+                                reject => { this.cancelEdit(); }
+                            );
+                        } else {
+                            this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
+                        }
+                    } catch (err) { //if resourceStringValue is not a NTriple representation, check if it is a manchester expr. 
+                        if (this.resource.isBNode() && this.isClassAxiom) {
+                            /** 
+                             * If the editing resource is a bnode and if it represents class axiom,
+                             * I can assume that the user has typed a new manchester expression to represent a class axiom 
+                             * */
+                            this.isClassAxiom = false;
+                            this.applyManchesterUpdate(<ARTBNode>this.resource, this.resourceStringValue);
+                            return;
+                        } else { //if neither a manchester expression, re-throw the exception
+                            throw err;
+                        }
+                    }
+                } catch (err) {
+                    this.basicModals.alert("Edit", err, "error");
+                    this.cancelEdit();
                 }
             }
         } else {
             this.cancelEdit();
         }
+    }
+
+    private parseEditedValue(): ARTNode {
+        let newValue: ARTNode;
+        //parse the string typed by the user
+        if (this.resourceStringValue.startsWith("<") && this.resourceStringValue.endsWith(">")) { //uri
+            newValue = ResourceUtils.parseURI(this.resourceStringValue);
+        } else if (this.resourceStringValue.startsWith("_:")) { //bnode
+            newValue = ResourceUtils.parseBNode(this.resourceStringValue);
+        } else if (this.resourceStringValue.startsWith("\"")) { //literal
+            newValue = ResourceUtils.parseLiteral(this.resourceStringValue);
+        } else if (ResourceUtils.isQName(this.resourceStringValue, VBContext.getPrefixMappings())) { //qname
+            newValue = ResourceUtils.parseQName(this.resourceStringValue, VBContext.getPrefixMappings());
+        } else {
+            throw new Error("Not a valid N-Triples representation: " + this.resourceStringValue);
+        }
+        return newValue;
     }
 
     private isPropertyRangeInconsistentWithNewValue(newValue: ARTNode): boolean {
@@ -331,7 +404,7 @@ export class EditableResourceComponent {
                 if (valid) {
                     this.manchesterService.updateExpression(this.resourceStringValue, <ARTBNode>this.resource).subscribe(
                         stResp => {
-                            this.editInProgress = false;
+                            this.cancelEdit();
                             this.update.emit();
                         }
                     );
@@ -344,6 +417,7 @@ export class EditableResourceComponent {
 
     private cancelEdit() {
         this.editInProgress = false;
+        this.bulkEditInProgress = false;
         this.editLiteralInProgress = false;
     }
 
@@ -436,6 +510,14 @@ export class EditableResourceComponent {
 
     private delete() {
         this.deleteOutput.emit();
+    }
+
+    private bulkDelete() {
+        this.resourcesService.removePredicateObject(this.predicate, this.resource).subscribe(
+            stResp => {
+                this.update.emit();
+            }
+        );
     }
 
     //==============================

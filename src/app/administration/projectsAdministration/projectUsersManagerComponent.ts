@@ -129,17 +129,22 @@ export class ProjectUsersManagerComponent {
     }
 
     private removeUserFromProject() {
-        this.adminService.removeUserFromProject(this.project.getName(), this.selectedUser.getEmail()).subscribe(
-            stResp => {
-                for (var i = 0; i < this.usersBound.length; i++) {
-                    if (this.usersBound[i].getEmail() == this.selectedUser.getEmail()) {
-                        this.usersBound.splice(i, 1);
+        this.basicModals.confirm("Remove user", "You are removing the user " + this.selectedUser.getShow() + " form the project " + this.project.getName() + ". Are you sure?", "warning").then(
+            () => {
+                this.adminService.removeUserFromProject(this.project.getName(), this.selectedUser.getEmail()).subscribe(
+                    stResp => {
+                        for (var i = 0; i < this.usersBound.length; i++) {
+                            if (this.usersBound[i].getEmail() == this.selectedUser.getEmail()) {
+                                this.usersBound.splice(i, 1);
+                            }
+                        }
+                        this.puBinding.setRoles([]);
+                        this.selectedUser = null;
+                        this.selectedRole = null;
                     }
-                }
-                this.puBinding.setRoles([]);
-                this.selectedUser = null;
-                this.selectedRole = null;
-            }
+                );
+            }, 
+            () => {}
         );
     }
 

@@ -1,4 +1,4 @@
-<ng-template [ngIf]="!editInProgress && !editLiteralInProgress">
+<ng-template [ngIf]="!editInProgress && !editLiteralInProgress && !bulkEditInProgress">
     <rdf-resource [resource]="resource" [rendering]="rendering" style="flex:1" (dblclick)="resourceDblClick()"></rdf-resource>
     <div class="dropdown pull-right" title="Edit">
         <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" [disabled]="editMenuDisabled">
@@ -14,6 +14,11 @@
 
             <li *ngIf="editActionScenario != 'xLabel'" [ngClass]="{ disabled: !editAuthorized || isInferred }">
                 <a (click)="edit()">Edit</a>
+            </li>
+
+            <li *ngIf="isBulkActionMenuItemAvailable" [ngClass]="{ disabled: !bulkEditAuthorized }"
+                title="Update the value for every resource that has this predicate-value relation">
+                <a (click)="bulkEdit()">Bulk edit</a>
             </li>
 
             <li *ngIf="isReplaceMenuItemAvailable" [ngClass]="{ disabled: !editAuthorized || isInferred }">
@@ -36,11 +41,16 @@
                 <a (click)="assertInferred()">Assert inferred statement</a>
             </li>
             <li [ngClass]="{ disabled: !deleteAuthorized || isInferred }"><a (click)="delete()">Delete</a></li>
+
+            <li *ngIf="isBulkActionMenuItemAvailable" [ngClass]="{ disabled: !bulkDeleteAuthorized }" 
+                title="Delete the value for every resource that has this predicate-value relation">
+                <a (click)="bulkDelete()">Bulk delete</a>
+            </li>
         </ul>
     </div>
 </ng-template>
 
-<ng-template [ngIf]="editInProgress || editLiteralInProgress">
+<ng-template [ngIf]="editInProgress || bulkEditInProgress || editLiteralInProgress">
     <div class="input-group input-group-xs" style="flex: 1;">
         <input type="text" class="form-control" [(ngModel)]="resourceStringValue">
         <div class="input-group-btn">

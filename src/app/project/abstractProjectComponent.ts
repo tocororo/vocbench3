@@ -32,10 +32,6 @@ export abstract class AbstractProjectComponent {
         VBContext.setWorkingProject(project);
         VBContext.setProjectChanged(true);
 
-        //init the project preferences and settings for the project
-        this.vbProp.initUserProjectPreferences();
-        this.vbProp.initProjectSettings();
-        //init the Project-User binding
         let initPUBinding = this.adminService.getProjectUserBinding(project.getName(), VBContext.getLoggedUser().getEmail()).map(
             puBinding => {
                 VBContext.setProjectUserBinding(puBinding);
@@ -44,6 +40,8 @@ export abstract class AbstractProjectComponent {
         
         return Observable.forkJoin(
             initPUBinding, //init PUBinding
+            this.vbProp.initUserProjectPreferences(), //init the project preferences
+            this.vbProp.initProjectSettings(), //init the project settings
             this.vbCollaboration.initCollaborationSystem(), //init Collaboration System
             this.userService.listUserCapabilities(), //get the capabilities for the user
             this.metadataService.getNamespaceMappings() //get default namespace of the project and set it to the vbContext

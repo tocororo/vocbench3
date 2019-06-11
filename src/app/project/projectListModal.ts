@@ -56,17 +56,17 @@ export class ProjectListModal extends AbstractProjectComponent implements ModalC
     ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
-        this.accessProject(this.selectedProject).subscribe(
-            res => {
-                var currentRoute = this.router.url;
-                this.router.navigate(['/Home']).then(
-                    success => {
-                        this.router.navigate([currentRoute]);
-                    }
-                );
-            }
-        );
         this.dialog.close();
+        // var currentRoute = this.router.url;
+        this.router.navigate(['/Home']).then(
+            // success => {
+            //     this.accessProject(this.selectedProject).subscribe(
+            //         () => {
+            //             this.router.navigate([currentRoute]);
+            //         }
+            //     )
+            // }
+        );
     }
 
     cancel() {

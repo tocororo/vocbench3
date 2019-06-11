@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
@@ -36,7 +37,7 @@ export class VBProperties {
     /**
      * To call each time the user change project
      */
-    initUserProjectPreferences() {
+    initUserProjectPreferences(): Observable<any> {
         var properties: string[] = [
             Properties.pref_active_schemes, Properties.pref_active_lexicon, Properties.pref_show_flags,
             Properties.pref_show_instances_number, Properties.pref_project_theme,
@@ -49,7 +50,7 @@ export class VBProperties {
             Properties.pref_editing_language, Properties.pref_filter_value_languages,
             Properties.pref_res_view_partition_filter, Properties.pref_hide_literal_graph_nodes
         ];
-        this.prefService.getPUSettings(properties).subscribe(
+        let getPUSettingsNoPlugin = this.prefService.getPUSettings(properties).map(
             prefs => {
                 let projectPreferences: ProjectPreferences = VBContext.getWorkingProjectCtx().getProjectPreferences();
 
@@ -183,11 +184,13 @@ export class VBProperties {
         );
 
         // this is called separately since requires the pluginId parameter
-        this.prefService.getPUSettings([Properties.pref_languages], ExtensionPointID.RENDERING_ENGINE_ID).subscribe(
+        let getPUSettingsRenderingEngine = this.prefService.getPUSettings([Properties.pref_languages], ExtensionPointID.RENDERING_ENGINE_ID).map(
             prefs => {
                 VBContext.getWorkingProjectCtx().getProjectPreferences().projectLanguagesPreference = prefs[Properties.pref_languages].split(",");
             }
         );
+
+        return Observable.forkJoin(getPUSettingsNoPlugin, getPUSettingsRenderingEngine);
     }
 
     setActiveSchemes(schemes: ARTURIResource[]) {
@@ -353,9 +356,9 @@ export class VBProperties {
         return VBContext.getSystemSettings().privacyStatementAvailable;
     }
 
-    initProjectSettings() {
+    initProjectSettings(): Observable<any> {
         var properties: string[] = [Properties.setting_languages];
-        this.prefService.getProjectSettings(properties).subscribe(
+        return this.prefService.getProjectSettings(properties).map(
             settings => {
                 let projectSettings: ProjectSettings = VBContext.getWorkingProjectCtx().getProjectSettings();
                 var langsValue: string = settings[Properties.setting_languages];

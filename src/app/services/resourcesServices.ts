@@ -42,6 +42,21 @@ export class ResourcesServices {
     }
 
     /**
+     * 
+     * @param property 
+     * @param value 
+     * @param newValue 
+     */
+    updatePredicateObject(property: ARTURIResource, value: ARTNode, newValue: ARTNode) {
+        var params: any = {
+            property: property,
+            value: value,
+            newValue: newValue
+        };
+        return this.httpMgr.doPost(this.serviceName, "updatePredicateObject", params);
+    }
+
+    /**
      * Remove a triple
      * @param resource
      * @param property
@@ -54,6 +69,19 @@ export class ResourcesServices {
             value: value
         };
         return this.httpMgr.doPost(this.serviceName, "removeValue", params);
+    }
+
+    /**
+     * 
+     * @param property 
+     * @param value 
+     */
+    removePredicateObject(property: ARTURIResource, value: ARTNode) {
+        var params: any = {
+            property: property,
+            value: value,
+        };
+        return this.httpMgr.doPost(this.serviceName, "removePredicateObject", params);
     }
 
     /**
