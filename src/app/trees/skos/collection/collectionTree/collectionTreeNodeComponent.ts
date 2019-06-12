@@ -35,6 +35,10 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
             (data: any) => this.onParentRemoved(data.container, data.nested)));
     }
 
+    ngOnInit() {
+        super.ngOnInit();
+    }
+
     expandNodeImpl() {
         return this.skosService.getNestedCollections(this.node).map(
             nestedColl => {

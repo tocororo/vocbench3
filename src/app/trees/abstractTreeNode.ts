@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Output, QueryList, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Output, QueryList, ViewChild, SimpleChanges } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { SemanticTurkey } from "../models/Vocabulary";
@@ -33,6 +33,8 @@ export abstract class AbstractTreeNode extends AbstractNode {
     children: ARTURIResource[] = [];
     open: boolean = false;
 
+    showExpandCollapseBtn: boolean = false; //tells if the expand/collapse node button should be visible (it depends on more_attr and showDeprecated)
+
     /**
      * CONSTRUCTOR
      */
@@ -46,6 +48,10 @@ export abstract class AbstractTreeNode extends AbstractNode {
      * METHODS
      */
 
+    ngOnInit() {
+        this.initShowExpandCollapseBtn();
+    }
+
     ngAfterViewInit() {
         //if the resource is new (just created), make it visible in the view
         if (this.node.getAdditionalProperty(ResAttribute.NEW)) {
@@ -54,26 +60,36 @@ export abstract class AbstractTreeNode extends AbstractNode {
         }
     }
 
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['showDeprecated']) {
+            this.initShowExpandCollapseBtn();
+        }
+    }
+
     /**
-     * Tells if the expand/collapse button should be shown according to the deprecated resources filter
+     * The expand/collapse button should be visible if:
+     * the node has "more" attribute true AND
+     * - "showDeprecated" is true (all children visible)
+     * - or "showDeprecated" is false (only not-deprecated children visible) but there is at least a child not-deprecated 
      */
-    private showExpandCollapse(): boolean {
+    protected initShowExpandCollapseBtn() {
         let more: boolean = this.node.getAdditionalProperty(ResAttribute.MORE);
-        if (more) {
+        if (more) { //if the more attribute is true, doesn't implies that the button is visible, the node children could be all deprecated
             if (this.children.length > 0) {
-                let childNotDeprecated: boolean = false;
+                let childVisible: boolean = false; //true if showDeprecated true, or child not-deprecated
                 for (var i = 0; i < this.children.length; i++) {
-                    if (!this.children[i].isDeprecated()) {
-                        childNotDeprecated = true;
+                    if (this.showDeprecated || !this.children[i].isDeprecated()) {
+                        childVisible = true;
                         break;
                     }
                 }
-                return (this.showDeprecated == true || (!this.showDeprecated && childNotDeprecated));
+                //button visible if there is at least a visible child
+                this.showExpandCollapseBtn = childVisible;
             } else { //no children and "more" true means that the node has not been yet expanded, so in the doubt return true
-                return true;
+                this.showExpandCollapseBtn = true;
             }
         } else {
-            return false;
+            this.showExpandCollapseBtn = false;
         }
     }
 
@@ -86,6 +102,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
         this.nodeExpandStart.emit();
         return this.expandNodeImpl().map(
             () => {
+                this.initShowExpandCollapseBtn();
                 this.nodeExpandEnd.emit();
             }
         );

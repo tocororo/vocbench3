@@ -39,7 +39,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
     ngOnInit() {
         let clsTreePref: ClassTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences;
         this.pristineClassPref = JSON.parse(JSON.stringify(clsTreePref));
-        this.filterEnabled = clsTreePref.filterEnabled;
+        this.filterEnabled = clsTreePref.filter.enabled;
         this.resourceService.getResourceDescription(new ARTURIResource(clsTreePref.rootClassUri)).subscribe(
             res => {
                 this.rootClass = <ARTURIResource>res;
@@ -47,7 +47,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
         );
 
         let filteredClss: ARTURIResource[] = [];
-        for (var key in clsTreePref.filterMap) {
+        for (var key in clsTreePref.filter.map) {
             filteredClss.push(new ARTURIResource(key));
         }
         if (filteredClss.length > 0) {
@@ -118,7 +118,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
                 classes => {
                     ResourceUtils.sortResources(classes, SortAttribute.show);
                     let clsTreePref: ClassTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences;
-                    let filteredSubClssPref = clsTreePref.filterMap[this.selectedFilteredClass.getURI()];
+                    let filteredSubClssPref = clsTreePref.filter.map[this.selectedFilteredClass.getURI()];
     
                     filterMapEntry.subClasses = [];
     
@@ -193,7 +193,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
             let filteredSubClasses: string[] = [];
             if (f.subClasses == null) {
                 //subClasses in filterMapRes not yet initialized => get it from the preference
-                filteredSubClasses = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filterMap[f.cls.getURI()];
+                filteredSubClasses = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filter.map[f.cls.getURI()];
             } else {
                 for (var i = 0; i < f.subClasses.length; i++) {
                     if (!f.subClasses[i].checked) {
@@ -203,14 +203,13 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
             }
             filterMap[f.cls.getURI()] = filteredSubClasses;
         })
-        if (JSON.stringify(this.pristineClassPref.filterMap) != JSON.stringify(filterMap)) {
-            this.vbProp.setClassTreeFilterMap(filterMap);
+        if (
+            JSON.stringify(this.pristineClassPref.filter.map) != JSON.stringify(filterMap) ||
+            this.pristineClassPref.filter.enabled != this.filterEnabled
+        ) {
+            this.vbProp.setClassTreeFilter({ map: filterMap, enabled: this.filterEnabled })
         }
 
-        if (this.pristineClassPref.filterEnabled != this.filterEnabled) {
-            this.vbProp.setClassTreeFilterEnabled(this.filterEnabled);
-        }
-        
         if (this.pristineClassPref.rootClassUri != this.rootClass.getURI()) {
             this.vbProp.setClassTreeRoot(this.rootClass.getURI());
         }

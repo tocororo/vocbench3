@@ -1,6 +1,6 @@
 <div class="treeNode" #treeNodeElement>
 	<div class="expandCollapseBtnContainer">
-        <ng-template [ngIf]="showExpandCollapse()">
+        <ng-template [ngIf]="showExpandCollapseBtn">
             <img *ngIf="!open" src="../../../../assets/images/icons/arrow.png" class="arrow-right" (click)="expandNode().subscribe()">
             <img *ngIf="open" src="../../../../assets/images/icons/arrow.png" (click)="collapseNode()">
         </ng-template>

@@ -35,6 +35,10 @@ export class PropertyTreeNodeComponent extends AbstractTreeNode {
         ));
     }
 
+    ngOnInit() {
+        super.ngOnInit();
+    }
+
     expandNodeImpl() {
         return this.propService.getSubProperties(this.node).map(
             subProps => {

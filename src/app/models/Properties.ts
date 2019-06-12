@@ -18,9 +18,8 @@ export class Properties {
     static pref_search_include_locales: string = "search_include_locales";
     static pref_search_use_autocomplete: string = "search_use_autocomplete";
 
-    static pref_class_tree_filter_map: string = "class_tree_filter_map";
-    static pref_class_tree_filter_enabled: string = "class_tree_filter_enabled";
     static pref_class_tree_root: string = "class_tree_root";
+    static pref_class_tree_filter: string = "class_tree_filter";
 
     static pref_concept_tree_base_broader_prop: string = "concept_tree_base_broader_prop";
     static pref_concept_tree_broader_props: string = "concept_tree_broader_props";
@@ -88,8 +87,11 @@ export enum ClassIndividualPanelSearchMode {
 
 export class ClassTreePreference {
     rootClassUri: string;
-    filterMap: { [key: string]: string[] }; //map where keys are the URIs of a class and the values are the URIs of the subClasses to filter out
-    filterEnabled: boolean;
+    filter: ClassTreeFilter;
+}
+export class ClassTreeFilter {
+    enabled: boolean;
+    map:  { [key: string]: string[] }; //map where keys are the URIs of a class and the values are the URIs of the subClasses to filter out
 }
 
 export class ConceptTreePreference {

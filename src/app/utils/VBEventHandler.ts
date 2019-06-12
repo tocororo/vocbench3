@@ -47,6 +47,7 @@ export class VBEventHandler {
     public typeAddedEvent: EventEmitter<{ resource: ARTResource, type: ARTResource }> = new VBEventEmitter("typeAddedEvent");
     public superClassRemovedEvent: EventEmitter<{ superClass: ARTResource, subClass: ARTResource }> = new VBEventEmitter("superClassRemovedEvent");
     public superClassUpdatedEvent: EventEmitter<{ child: ARTURIResource, oldParent: ARTURIResource, newParent: ARTURIResource }> = new VBEventEmitter("superClassUpdatedEvent");
+    public classFilterChangedEvent: EventEmitter<any> = new VBEventEmitter("classFilterChangedEvent");
 
     //INSTANCE EVENTS
     public instanceCreatedEvent: EventEmitter<{ instance: ARTResource, cls: ARTResource }> = new VBEventEmitter("instanceCreatedEvent");

@@ -48,7 +48,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     ngOnInit() {
         super.ngOnInit();
 
-        this.filterEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filterEnabled;
+        this.filterEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filter.enabled;
         if (VBContext.getWorkingProject().getModelType() == RDFS.uri) {
             this.creatingClassType = RDFS.class;
         }
@@ -150,11 +150,11 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ClassTreeSettingsModal, overlayConfig).result.then(
             changesDone => {
-                this.filterEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filterEnabled;
+                this.filterEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filter.enabled;
                 this.refresh();
             },
             () => {
-                this.filterEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filterEnabled;
+                this.filterEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filter.enabled;
             }
         );
     }

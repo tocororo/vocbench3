@@ -41,6 +41,10 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
         ));
     }
 
+    ngOnInit() {
+        super.ngOnInit();
+    }
+
     expandNodeImpl() {
         let prefs: ConceptTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
         let broaderProps: ARTURIResource[] = [];

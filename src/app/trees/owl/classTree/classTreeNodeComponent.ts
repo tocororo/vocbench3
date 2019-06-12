@@ -1,6 +1,7 @@
 import { Component, Input, QueryList, ViewChildren } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
+import { ClassTreeFilter } from "../../../models/Properties";
 import { OWL, RDFS } from "../../../models/Vocabulary";
 import { ClassesServices } from "../../../services/classesServices";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
@@ -50,9 +51,14 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
             (data: any) => this.onInstanceDeleted(data.type)));
         this.eventSubscriptions.push(eventHandler.typeAddedEvent.subscribe(
             (data: any) => this.onInstanceCreated(data.type)));
+
+        this.eventSubscriptions.push(eventHandler.classFilterChangedEvent.subscribe(
+            () => this.initShowExpandCollapseBtn()
+        ));
     }
 
     ngOnInit() {
+        super.ngOnInit();
         //show instance number only if enabled in the preferences and if the node belongs to a tree in TreePanelComponent
         this.showInstanceNumber = VBContext.getWorkingProjectCtx().getProjectPreferences().showInstancesNumber && 
             (this.context == TreeListContext.dataPanel || this.context == TreeListContext.clsIndTree);
@@ -85,37 +91,51 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     private filterOutRootSubClass(subClass: ARTURIResource): boolean {
         let classTreePref = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences;
         if (this.filterEnabled) {
-            return classTreePref.filterMap[this.node.getURI()] != null && 
-                classTreePref.filterMap[this.node.getURI()].indexOf(subClass.getURI()) != -1;
+            return classTreePref.filter.map[this.node.getURI()] != null && 
+                classTreePref.filter.map[this.node.getURI()].indexOf(subClass.getURI()) != -1;
         }
     }
 
     /**
-     * Tells if the expand/collapse button should be shown according to the class tree filter
+     * The expand/collapse button in the class tree should be visible if:
+     * the same condition of the other trees are satisfied 
+     * (namely:
+     *      - the node has "more" attribute true AND
+     *          - "showDeprecated" is true (all children visible)
+     *          - or "showDeprecated" is false (only not-deprecated children visible) but there is at least a child not-deprecated 
+     * )
+     * but in this case it should be taken into account also the sublcass filter. So it should be checked also that there should be
+     * at least a child not filtered out (if filter is enabled) and not deprecated (if showDeprecated is false)
      */
-    private showExpandCollapseForClassFilter(): boolean {
+    //@Override
+    initShowExpandCollapseBtn() {
         let more: boolean = this.node.getAdditionalProperty(ResAttribute.MORE);
-        if (more) {
-            let classTreePref = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences;
-            //if subClass filter is enabled and there is a filter for the children of the given node
-            if (this.filterEnabled && classTreePref.filterMap[this.node.getURI()] != null) {
-                if (this.children.length > 0) {
-                    let childNotFiltered: boolean = false;
-                    for (var i = 0; i < this.children.length; i++) { //if there is at least one child not filtered out
-                        if (classTreePref.filterMap[this.node.getURI()].indexOf(this.children[i].getURI()) == -1) {
-                            return true;
-                        }
+        if (more) { //if the more attribute is true, doesn't implies that the button is visible, the node children could be all deprecated
+            if (this.children.length > 0) {
+                let classTreeFilter: ClassTreeFilter = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filter;
+                let childVisible: boolean = false;
+                /**
+                 * childVisible if: 
+                 * showDeprecated true, or child not-deprecated
+                 * AND
+                 * subClassFilter disabled or child not filtered
+                 */
+                for (var i = 0; i < this.children.length; i++) {
+                    let childFiltered: boolean = classTreeFilter.map[this.node.getURI()] != null && 
+                        classTreeFilter.map[this.node.getURI()].indexOf(this.children[i].getURI()) != -1;
+                    if ((this.showDeprecated || !this.children[i].isDeprecated()) && (!classTreeFilter.enabled || !childFiltered)) {
+                        childVisible = true;
+                        break;
                     }
-                    return false; //all children are filter out => do not show the button
-                } else { //no children and "more" true means that the node has not been yet expanded, so in the doubt return true
-                    return true;
                 }
-            } else { //class tree filter disabled
-                return true;
+                this.showExpandCollapseBtn = childVisible;
+            } else { //no children and "more" true means that the node has not been yet expanded, so in the doubt return true
+                this.showExpandCollapseBtn = true;
             }
         } else {
-            return false;
+            this.showExpandCollapseBtn = false;
         }
+
     }
 
     //EVENT LISTENERS

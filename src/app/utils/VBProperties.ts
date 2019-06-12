@@ -5,7 +5,7 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ART
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
 import { ProjectTableColumnStruct } from '../models/Project';
-import { ClassIndividualPanelSearchMode, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, ResViewPartitionFilterPreference, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
+import { ClassIndividualPanelSearchMode, ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, ResViewPartitionFilterPreference, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { OWL, RDFS } from '../models/Vocabulary';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
@@ -43,7 +43,7 @@ export class VBProperties {
             Properties.pref_show_instances_number, Properties.pref_project_theme,
             Properties.pref_search_languages, Properties.pref_search_restrict_lang, 
             Properties.pref_search_include_locales, Properties.pref_search_use_autocomplete, 
-            Properties.pref_class_tree_filter_enabled, Properties.pref_class_tree_filter_map, Properties.pref_class_tree_root,
+            Properties.pref_class_tree_filter, Properties.pref_class_tree_root,
             Properties.pref_concept_tree_base_broader_prop, Properties.pref_concept_tree_broader_props, Properties.pref_concept_tree_narrower_props,
             Properties.pref_concept_tree_include_subprops, Properties.pref_concept_tree_sync_inverse, Properties.pref_concept_tree_visualization,
             Properties.pref_lex_entry_list_visualization, Properties.pref_lex_entry_list_index_lenght,
@@ -113,14 +113,15 @@ export class VBProperties {
                 //cls tree preferences
                 let classTreePreferences: ClassTreePreference = { 
                     rootClassUri: (VBContext.getWorkingProject().getModelType() == RDFS.uri) ? RDFS.resource.getURI() : OWL.thing.getURI(),
-                    filterMap: {}, 
-                    filterEnabled: true 
+                    filter: {
+                        enabled: true,
+                        map: {}
+                    }
                 };
-                let classTreeFilterMapPref: any = JSON.parse(prefs[Properties.pref_class_tree_filter_map]);
-                if (classTreeFilterMapPref != null) {
-                    classTreePreferences.filterMap = classTreeFilterMapPref;
+                let classTreeFilterPref: any = JSON.parse(prefs[Properties.pref_class_tree_filter]);
+                if (classTreeFilterPref != null) {
+                    classTreePreferences.filter = classTreeFilterPref;
                 }
-                classTreePreferences.filterEnabled = prefs[Properties.pref_class_tree_filter_enabled] != "false";
                 let classTreeRootPref: string = prefs[Properties.pref_class_tree_root];
                 if (classTreeRootPref != null) {
                     classTreePreferences.rootClassUri = classTreeRootPref;
@@ -249,13 +250,10 @@ export class VBProperties {
     }
 
     //class tree settings
-    setClassTreeFilterMap(filterMap: { [key: string]: string[] }) {
-        this.prefService.setPUSetting(Properties.pref_class_tree_filter_map, JSON.stringify(filterMap)).subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filterMap = filterMap;
-    }
-    setClassTreeFilterEnabled(enabled: boolean) {
-        this.prefService.setPUSetting(Properties.pref_class_tree_filter_enabled, enabled+"").subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filterEnabled = enabled;
+    setClassTreeFilter(filter: ClassTreeFilter) {
+        this.prefService.setPUSetting(Properties.pref_class_tree_filter, JSON.stringify(filter)).subscribe();
+        VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filter = filter;
+        this.eventHandler.classFilterChangedEvent.emit();
     }
     setClassTreeRoot(rootUri: string) {
         this.prefService.setPUSetting(Properties.pref_class_tree_root, rootUri).subscribe();
