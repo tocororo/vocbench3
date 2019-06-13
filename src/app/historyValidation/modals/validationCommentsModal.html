@@ -1,0 +1,52 @@
+<div class="modal-header">
+    <h3 class="modal-title">
+        Validation comments
+    </h3>
+</div>
+<div class="modal-body vbox">
+
+    <div class="alert alert-warning" style="margin-bottom: 6px;">
+        For the following rejected commits it is possible to provide a comment in order to motivate the decision to reject.
+        Some rejection has no comment provided. Even if the comment is optional, it is recommended to provide it.
+        Anyway, if you don't want to provide a comment at all, you can leave empty the text field and continue.
+    </div>
+
+    <div class="scrollableContainer">
+        <table class="table table-condensed table-hoverable">
+            <colgroup>
+                <col style="width: 1%">
+                <col style="width: 1%">
+                <col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="text-center">Commit ID</th>
+                    <th class="text-center">Action</th>
+                    <th class="text-center">Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of context.commits">
+                    <td class="text-center" nowrap>
+                        <a (click)="getCommitDelta(item)" style="cursor: pointer;">{{item.commit.getLocalName()}}</a>
+                    </td>
+                    <td class="text-center" nowrap>
+                        <span *ngIf="item.operation" [title]="item.operation.getURI()">
+                            {{item.operation.getShow()}}
+                            <button class="btn btn-xs btn-default" (click)="inspectParams(commit)" title="Show parameters">
+                                <span class="glyphicon glyphicon-option-horizontal"></span>
+                            </button>
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <input class="form-control input-xs" [(ngModel)]="item.comment">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+</div>

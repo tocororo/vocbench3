@@ -6,7 +6,7 @@ import { User } from "../models/User";
 import { ResourceUtils } from "../utils/ResourceUtils";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
-import { OperationSelectModal } from "./operationSelectModal";
+import { OperationSelectModal } from "./modals/operationSelectModal";
 
 @Component({
     selector: "history-filter",

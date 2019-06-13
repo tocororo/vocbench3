@@ -10,9 +10,11 @@ export class CommitInfo {
     public startTimeLocal: string;
     public endTime: Date;
     public endTimeLocal: string;
+    public commentAllowed: boolean;
+    // public comment: string;
 
     constructor(commit: ARTURIResource, user: ARTURIResource, operation: ARTURIResource, operationParameters: ParameterInfo[],
-            startTime: Date, endTime: Date) {
+            startTime: Date, endTime: Date, commentAllowed?: boolean) {
         this.commit = commit;
         this.user = user;
 
@@ -37,6 +39,8 @@ export class CommitInfo {
         if (endTime != null) {
             this.endTimeLocal = Deserializer.parseDateTime(endTime);
         }
+
+        this.commentAllowed = commentAllowed;
     }
 }
 

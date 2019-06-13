@@ -534,6 +534,9 @@ button.resViewPartitionAddBtn:disabled  {
 .greyText {
     color: #999;
 }
+.greenText {
+    color: green;
+}
 
 /*override padding of the nav-tab links*/
 .nav-tabs-xs>li>a {

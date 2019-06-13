@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
-import { Modal } from 'ngx-modialog/plugins/bootstrap';
 import { HistoryServices } from "../services/historyServices";
 import { UIUtils } from "../utils/UIUtils";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { AbstractHistValidComponent } from "./abstractHistValidComponent";
+import { HistoryValidationModalServices } from "./modals/historyValidationModalServices";
 
 @Component({
     selector: "history-component",
@@ -15,8 +15,8 @@ export class HistoryComponent extends AbstractHistValidComponent {
     //paging
     private tipRevisionNumber: number;
 
-    constructor(private historyService: HistoryServices, sharedModals: SharedModalServices, modal: Modal) {
-        super(sharedModals, modal);
+    constructor(private historyService: HistoryServices, sharedModals: SharedModalServices, hvModals: HistoryValidationModalServices) {
+        super(sharedModals, hvModals);
     }
 
     init() {

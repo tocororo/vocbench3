@@ -52,7 +52,7 @@
                 </colgroup>
                 <thead>
                     <tr>
-                        <th class="text-center">Commit</th>
+                        <th class="text-center">Commit ID</th>
                         <th class="text-center">Action</th>
                         <th class="text-center">1st Param</th>
                         <th class="text-center" *ngIf="isLargeWidth()">2nd Param</th>
@@ -64,7 +64,7 @@
                 <tbody>
                     <tr *ngFor="let item of commits">
                         <td class="text-center" nowrap>
-                            <a (click)="getCommitDelta(item)" style="cursor: pointer;">{{item.commit.getURI()}}</a>
+                            <a (click)="getCommitDelta(item)" style="cursor: pointer;">{{item.commit.getLocalName()}}</a>
                         </td>
                         <td class="text-center">
                             <span *ngIf="item.operation" [title]="item.operation.getURI()">

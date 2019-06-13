@@ -1,13 +1,10 @@
 import { Component } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { CommitInfo, SortingDirection } from "../models/History";
 import { User } from "../models/User";
 import { ResourceUtils } from "../utils/ResourceUtils";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
-import { CommitDeltaModal, CommitDeltaModalData } from "./commitDeltaModal";
-import { OperationParamsModal, OperationParamsModalData } from "./operationParamsModal";
+import { HistoryValidationModalServices } from "./modals/historyValidationModalServices";
 
 /**
  * This abstract class is used to keep the attributes and mehtods that HistoryComponent and ValidationComponent have in common
@@ -42,7 +39,12 @@ export abstract class AbstractHistValidComponent {
 
     commits: CommitInfo[];
 
-    constructor(private sharedModals: SharedModalServices, private modal: Modal) {}
+    protected sharedModals: SharedModalServices;
+    protected hvModals: HistoryValidationModalServices;
+    constructor(sharedModals: SharedModalServices, hvModals: HistoryValidationModalServices) {
+        this.sharedModals = sharedModals;
+        this.hvModals = hvModals;
+    }
 
     ngOnInit() {
         this.init();
@@ -63,21 +65,11 @@ export abstract class AbstractHistValidComponent {
     }
 
     inspectParams(item: CommitInfo) {
-        var modalData = new OperationParamsModalData(item);
-        const builder = new BSModalContextBuilder<OperationParamsModalData>(
-            modalData, undefined, OperationParamsModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(OperationParamsModal, overlayConfig);
+        return this.hvModals.inspectParams(item);
     }
 
     getCommitDelta(item: CommitInfo) {
-        var modalData = new CommitDeltaModalData(item.commit);
-        const builder = new BSModalContextBuilder<CommitDeltaModalData>(
-            modalData, undefined, CommitDeltaModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-        return this.modal.open(CommitDeltaModal, overlayConfig);
+        return this.hvModals.getCommitDelta(item);
     }
 
     //SORT HANDLER

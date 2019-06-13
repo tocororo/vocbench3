@@ -1,15 +1,15 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-import { SharedModule } from './sharedModule';
-
+import { CommitDeltaModal } from '../historyValidation/modals/commitDeltaModal';
 import { HistoryComponent } from '../historyValidation/historyComponent';
-import { ValidationComponent } from '../historyValidation/validationComponent';
 import { HistoryFilterComponent } from '../historyValidation/historyFilterComponent';
-import { CommitDeltaModal } from '../historyValidation/commitDeltaModal';
-import { OperationParamsModal } from '../historyValidation/operationParamsModal';
-import { OperationSelectModal } from '../historyValidation/operationSelectModal';
+import { OperationParamsModal } from '../historyValidation/modals/operationParamsModal';
+import { OperationSelectModal } from '../historyValidation/modals/operationSelectModal';
+import { ValidationCommentsModal } from '../historyValidation/modals/validationCommentsModal';
+import { ValidationComponent } from '../historyValidation/validationComponent';
+import { SharedModule } from './sharedModule';
+import { HistoryValidationModalServices } from '../historyValidation/modals/historyValidationModalServices';
 
 @NgModule({
     imports: [
@@ -18,14 +18,16 @@ import { OperationSelectModal } from '../historyValidation/operationSelectModal'
     declarations: [
         HistoryComponent, ValidationComponent, HistoryFilterComponent,
         //modals
-        OperationSelectModal, CommitDeltaModal, OperationParamsModal
+        OperationSelectModal, CommitDeltaModal, OperationParamsModal, ValidationCommentsModal
     ],
     exports: [
         HistoryComponent, ValidationComponent
     ],
-    providers: [],
+    providers: [
+        HistoryValidationModalServices
+    ],
     entryComponents: [
-        OperationSelectModal, CommitDeltaModal, OperationParamsModal
+        OperationSelectModal, CommitDeltaModal, OperationParamsModal, ValidationCommentsModal
     ]
 })
 export class HistoryValidationModule { }

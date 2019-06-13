@@ -1,13 +1,13 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource } from "../models/ARTResources";
-import { CommitOperation } from "../models/History";
-import { HistoryServices } from "../services/historyServices";
-import { ResourceUtils } from "../utils/ResourceUtils";
-import { UIUtils } from "../utils/UIUtils";
-import { VBContext } from "../utils/VBContext";
-import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource } from "../../models/ARTResources";
+import { CommitOperation } from "../../models/History";
+import { HistoryServices } from "../../services/historyServices";
+import { ResourceUtils } from "../../utils/ResourceUtils";
+import { UIUtils } from "../../utils/UIUtils";
+import { VBContext } from "../../utils/VBContext";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
 export class CommitDeltaModalData extends BSModalContext {
     constructor(public commit: ARTURIResource) {

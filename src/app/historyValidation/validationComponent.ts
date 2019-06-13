@@ -1,10 +1,14 @@
 import { Component } from "@angular/core";
-import { Modal } from 'ngx-modialog/plugins/bootstrap';
+import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { CommitInfo } from "../models/History";
 import { ValidationServices } from "../services/validationServices";
 import { UIUtils } from "../utils/UIUtils";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { AbstractHistValidComponent } from "./abstractHistValidComponent";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ValidationCommentsModal, ValidationCommentsModalData } from "./modals/validationCommentsModal";
+import { OverlayConfig } from "ngx-modialog";
+import { HistoryValidationModalServices } from "./modals/historyValidationModalServices";
 
 @Component({
     selector: "validation-component",
@@ -25,8 +29,13 @@ export class ValidationComponent extends AbstractHistValidComponent {
         this.ACTION_REJECT
     ];
 
-    constructor(private validationService: ValidationServices, sharedModals: SharedModalServices, modal: Modal) {
-        super(sharedModals, modal);
+    //Attributes that extend the CommitInfo object
+    private readonly VALIDATION_ACT_ATTR: string = "validationAction";
+    private readonly COMMENT_ATTR: string = "comment";
+
+    constructor(private validationService: ValidationServices, private basicModals: BasicModalServices, private modal: Modal, 
+        sharedModals: SharedModalServices, hvModals: HistoryValidationModalServices) {
+        super(sharedModals, hvModals);
     }
 
     init() {
@@ -55,27 +64,70 @@ export class ValidationComponent extends AbstractHistValidComponent {
             this.operationSorting, this.timeSorting, this.page, this.limit).subscribe(
             commits => {
                 this.commits = commits;
-                this.commits.forEach(c => c['validationAction'] = this.ACTION_NONE);
+                this.commits.forEach(c => c[this.VALIDATION_ACT_ATTR] = this.ACTION_NONE);
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
             }
         );
     }
 
+    private editComment(commit: CommitInfo) {
+        this.basicModals.prompt("Comment", null, null, commit[this.COMMENT_ATTR]).then(
+            comment => {
+                commit[this.COMMENT_ATTR] = comment;
+            },
+            () => {}
+        )
+    }
+
     private acceptAll() {
         for (var i = 0; i < this.commits.length; i++) {
-            this.commits[i]['validationAction'] = this.ACTION_ACCEPT;
+            this.commits[i][this.VALIDATION_ACT_ATTR] = this.ACTION_ACCEPT;
         }
     }
 
     private rejectAll() {
         for (var i = 0; i < this.commits.length; i++) {
-            this.commits[i]['validationAction'] = this.ACTION_REJECT;
+            this.commits[i][this.VALIDATION_ACT_ATTR] = this.ACTION_REJECT;
         }
     }
 
     private validate() {
+        let commentableCommits: CommitInfo[] = [];
+        this.commits.forEach(c => {
+            if (c.commentAllowed && c[this.VALIDATION_ACT_ATTR] == this.ACTION_REJECT) {
+                commentableCommits.push(c);
+            }
+        });
+        let notCommentedReject: boolean = false;
+        for (let c of commentableCommits) {
+            if (c[this.COMMENT_ATTR] == null) {
+                notCommentedReject = true;
+                break;    
+            }
+        }
+        if (notCommentedReject) {
+            this.promptCommentsPreview(commentableCommits).then(
+                () => {
+                    this.validateImpl();
+                }
+            );
+        } else {
+            this.validateImpl();
+        }
+    }
+
+    private validateImpl() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.validateCommitsRecursively(this.commits.slice());
+    }
+
+    private promptCommentsPreview(commits: CommitInfo[]) {
+        var modalData = new ValidationCommentsModalData(commits);
+        const builder = new BSModalContextBuilder<ValidationCommentsModalData>(
+            modalData, undefined, ValidationCommentsModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
+        return this.modal.open(ValidationCommentsModal, overlayConfig).result;
     }
 
     /**
@@ -98,9 +150,11 @@ export class ValidationComponent extends AbstractHistValidComponent {
                 }
             }
 
-            if (olderCommit['validationAction'] == this.ACTION_ACCEPT) {
+            if (olderCommit[this.VALIDATION_ACT_ATTR] == this.ACTION_ACCEPT) {
                 validationFunctions = this.validationService.accept(olderCommit.commit);
-            } else if (olderCommit['validationAction'] == this.ACTION_REJECT) {
+            } else if (olderCommit[this.VALIDATION_ACT_ATTR] == this.ACTION_REJECT) {
+                //TODO pass also the comment wherever is allowed
+                let comment: string = olderCommit.commentAllowed ? olderCommit[this.COMMENT_ATTR] : null;
                 validationFunctions = this.validationService.reject(olderCommit.commit);
             } else {
                 commits.splice(commits.indexOf(olderCommit), 1);
