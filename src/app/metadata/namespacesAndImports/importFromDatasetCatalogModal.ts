@@ -1,12 +1,12 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent, OverlayConfig } from "ngx-modialog";
 import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { TransitiveImportMethodAllowance } from '../../../../models/Metadata';
-import { RDFFormat } from '../../../../models/RDFFormat';
-import { InputOutputServices } from "../../../../services/inputOutputServices";
-import { OntoManagerServices } from '../../../../services/ontoManagerServices';
-import { DatasetCatalogModal, DatasetCatalogModalData, DatasetCatalogModalReturnData } from "../../datasetCatalog/datasetCatalogModal";
-import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
+import { DatasetCatalogModal, DatasetCatalogModalData, DatasetCatalogModalReturnData } from "../../config/dataManagement/datasetCatalog/datasetCatalogModal";
+import { TransitiveImportMethodAllowance } from "../../models/Metadata";
+import { RDFFormat } from "../../models/RDFFormat";
+import { InputOutputServices } from "../../services/inputOutputServices";
+import { OntoManagerServices } from "../../services/ontoManagerServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 export class ImportFromDatasetCatalogModalData extends BSModalContext {
     /**

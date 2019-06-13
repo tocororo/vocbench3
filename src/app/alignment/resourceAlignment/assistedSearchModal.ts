@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, Modal, ModalComponent, OverlayConfig } from 'ngx-modialog';
 import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
-import { NewCatalogRecordModal, NewCatalogRecordModalData } from "../../config/dataManagement/metadata/metadataRegistry/newCatalogRecordModal";
+import { NewCatalogRecordModal, NewCatalogRecordModalData } from "../../metadata/metadataRegistry/newCatalogRecordModal";
 import { ARTURIResource, LocalResourcePosition, RemoteResourcePosition, ResourcePosition, ResourcePositionEnum } from "../../models/ARTResources";
 import { DatasetMetadata } from "../../models/Metadata";
 import { Project } from "../../models/Project";

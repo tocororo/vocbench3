@@ -8,7 +8,6 @@ import { AssistedSearchModal } from '../alignment/resourceAlignment/assistedSear
 import { AssistedSearchResultModal } from '../alignment/resourceAlignment/assistedSearchResultModal';
 import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceAlignmentModal';
 import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
-import { PrefixNamespaceModal } from '../config/dataManagement/metadata/namespacesAndImports/prefixNamespaceModal';
 import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreationModal";
 import { AlertCheckModal } from '../widget/modal/basicModal/alertModal/alertCheckModal';
 import { AlertModal } from '../widget/modal/basicModal/alertModal/alertModal';
@@ -62,6 +61,7 @@ import { CustomFormModule } from "./customFormModule";
 import { SharedModule } from "./sharedModule";
 import { TreeAndListModule } from "./treeAndListModule";
 import { UserModule } from "./userModule";
+import { PrefixNamespaceModal } from '../metadata/namespacesAndImports/prefixNamespaceModal';
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],

@@ -1,28 +1,25 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MetadataManagementComponent } from "../config/dataManagement/metadata/metadataManagementComponent";
-import { DatasetMetadataComponent } from "../config/dataManagement/metadata/metadataRegistry/datasetMetadataComponent";
-import { LexicalizationSetMetadataComponent } from '../config/dataManagement/metadata/metadataRegistry/lexicalizationSetMetadataComponent';
-import { MetadataRegistryComponent } from "../config/dataManagement/metadata/metadataRegistry/metadataRegistryComponent";
-import { NewCatalogRecordModal } from '../config/dataManagement/metadata/metadataRegistry/newCatalogRecordModal';
-import { NewDatasetVersionModal } from '../config/dataManagement/metadata/metadataRegistry/newDatasetVersionModal';
-import { NewEmbeddedLexicalizationModal } from '../config/dataManagement/metadata/metadataRegistry/newEmbeddedLexicalizationModal';
-import { metadataRouting } from "../config/dataManagement/metadata/metadataRoutes";
-import { MetadataVocabulariesComponent } from "../config/dataManagement/metadata/metadataVocabularies/metadataVocabulariesComponent";
-import { ImportFromDatasetCatalogModal } from '../config/dataManagement/metadata/namespacesAndImports/importFromDatasetCatalogModal';
-import { ImportOntologyModal } from '../config/dataManagement/metadata/namespacesAndImports/importOntologyModal';
-import { ImportTreeComponent } from '../config/dataManagement/metadata/namespacesAndImports/importTree/importTreeComponent';
-import { ImportTreeNodeComponent } from '../config/dataManagement/metadata/namespacesAndImports/importTree/importTreeNode';
-import { NamespacesAndImportsComponent } from "../config/dataManagement/metadata/namespacesAndImports/namespacesAndImportsComponent";
-import { OntologyMirrorModal } from '../config/dataManagement/metadata/namespacesAndImports/ontologyMirrorModal';
+import { DatasetMetadataComponent } from "../metadata/metadataRegistry/datasetMetadataComponent";
+import { LexicalizationSetMetadataComponent } from '../metadata/metadataRegistry/lexicalizationSetMetadataComponent';
+import { MetadataRegistryComponent } from "../metadata/metadataRegistry/metadataRegistryComponent";
+import { NewCatalogRecordModal } from '../metadata/metadataRegistry/newCatalogRecordModal';
+import { NewDatasetVersionModal } from '../metadata/metadataRegistry/newDatasetVersionModal';
+import { NewEmbeddedLexicalizationModal } from '../metadata/metadataRegistry/newEmbeddedLexicalizationModal';
+import { MetadataVocabulariesComponent } from "../metadata/metadataVocabularies/metadataVocabulariesComponent";
+import { ImportFromDatasetCatalogModal } from '../metadata/namespacesAndImports/importFromDatasetCatalogModal';
+import { ImportOntologyModal } from '../metadata/namespacesAndImports/importOntologyModal';
+import { ImportTreeComponent } from '../metadata/namespacesAndImports/importTree/importTreeComponent';
+import { ImportTreeNodeComponent } from '../metadata/namespacesAndImports/importTree/importTreeNode';
+import { NamespacesAndImportsComponent } from "../metadata/namespacesAndImports/namespacesAndImportsComponent";
+import { OntologyMirrorModal } from '../metadata/namespacesAndImports/ontologyMirrorModal';
 import { ResourceViewModule } from './resourceViewModule';
 import { SharedModule } from './sharedModule';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedModule, ResourceViewModule, metadataRouting],
+    imports: [CommonModule, FormsModule, SharedModule, ResourceViewModule],
     declarations: [
-        MetadataManagementComponent,
         MetadataVocabulariesComponent,
         NamespacesAndImportsComponent,
         MetadataRegistryComponent, DatasetMetadataComponent, LexicalizationSetMetadataComponent,

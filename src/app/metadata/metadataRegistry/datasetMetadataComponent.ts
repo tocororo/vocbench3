@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { ARTURIResource } from "../../../../models/ARTResources";
-import { DatasetMetadata } from "../../../../models/Metadata";
-import { SemanticTurkey } from "../../../../models/Vocabulary";
-import { MetadataRegistryServices } from "../../../../services/metadataRegistryServices";
-import { ResourceUtils } from "../../../../utils/ResourceUtils";
-import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
+import { ARTURIResource } from "../../models/ARTResources";
+import { DatasetMetadata } from "../../models/Metadata";
+import { SemanticTurkey } from "../../models/Vocabulary";
+import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
+import { ResourceUtils } from "../../utils/ResourceUtils";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "dataset-metadata",

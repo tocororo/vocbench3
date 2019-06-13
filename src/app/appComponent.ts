@@ -93,6 +93,17 @@ export class AppComponent {
         }
     }
 
+    private isMetadataVocAuthorized(): boolean {
+        return (
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.datasetMetadataExport) &&
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.datasetMetadataGetMetadata)
+        );
+    }
+
+    private isMetadataRegistryAuthorized(): boolean {
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryRead);
+    }
+
     private isHistoryAuthorized() {
         return (
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.history) &&

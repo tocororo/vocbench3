@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { ImportType, OntologyImport } from "../../../../../models/Metadata";
-import { MetadataServices } from "../../../../../services/metadataServices";
-import { AuthorizationEvaluator } from "../../../../../utils/AuthorizationEvaluator";
-import { UIUtils } from "../../../../../utils/UIUtils";
-import { VBActionsEnum } from "../../../../../utils/VBActions";
+import { ImportType, OntologyImport } from "../../../models/Metadata";
+import { MetadataServices } from "../../../services/metadataServices";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { UIUtils } from "../../../utils/UIUtils";
+import { VBActionsEnum } from "../../../utils/VBActions";
 import { ImportOntologyModal, ImportOntologyModalData } from "../importOntologyModal";
 
 @Component({

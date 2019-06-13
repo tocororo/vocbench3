@@ -1,17 +1,17 @@
 import { Component, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource } from "../../../../models/ARTResources";
-import { ImportType, OntologyImport, PrefixMapping } from "../../../../models/Metadata";
-import { ResourceViewComponent } from "../../../../resourceView/resourceViewComponent";
-import { MetadataServices } from "../../../../services/metadataServices";
-import { RefactorServices } from "../../../../services/refactorServices";
-import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
-import { ResourceUtils } from "../../../../utils/ResourceUtils";
-import { UIUtils } from "../../../../utils/UIUtils";
-import { VBActionsEnum } from "../../../../utils/VBActions";
-import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
-import { SharedModalServices } from "../../../../widget/modal/sharedModal/sharedModalServices";
+import { ARTURIResource } from "../../models/ARTResources";
+import { ImportType, OntologyImport, PrefixMapping } from "../../models/Metadata";
+import { ResourceViewComponent } from "../../resourceView/resourceViewComponent";
+import { MetadataServices } from "../../services/metadataServices";
+import { RefactorServices } from "../../services/refactorServices";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { ResourceUtils } from "../../utils/ResourceUtils";
+import { UIUtils } from "../../utils/UIUtils";
+import { VBActionsEnum } from "../../utils/VBActions";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { ImportFromDatasetCatalogModalReturnData } from "./importFromDatasetCatalogModal";
 import { OntologyMirrorModal } from "./ontologyMirrorModal";
 

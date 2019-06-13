@@ -20,6 +20,9 @@ import { ResetPasswordComponent } from "./user/resetPasswordComponent";
 import { UserProfileComponent } from "./user/userProfileComponent";
 import { AdminGuard, AuthGuard, ProjectGuard } from "./utils/CanActivateGuards";
 import { UserResolver } from "./utils/UserResolver";
+import { MetadataVocabulariesComponent } from './metadata/metadataVocabularies/metadataVocabulariesComponent';
+import { NamespacesAndImportsComponent } from './metadata/namespacesAndImports/namespacesAndImportsComponent';
+import { MetadataRegistryComponent } from './metadata/metadataRegistry/metadataRegistryComponent';
 
 
 
@@ -30,6 +33,9 @@ export const routes: Routes = [
     { path: "Projects", component: ProjectComponent, canActivate: [AdminGuard] },
     { path: "Data", component: DataComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Sparql", component: SparqlComponent, canActivate: [AuthGuard, ProjectGuard] },
+    { path: "Vocabularies", component: MetadataVocabulariesComponent, canActivate: [AuthGuard, ProjectGuard] },
+    { path: "Imports", component: NamespacesAndImportsComponent, canActivate: [AuthGuard, ProjectGuard] },
+    { path: "MetadataRegistry", component: MetadataRegistryComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "History", component: HistoryComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Validation", component: ValidationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard] },
@@ -41,7 +47,6 @@ export const routes: Routes = [
     { path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard] },
     { path: "Preferences", component: VocbenchPreferencesComponent, canActivate: [AuthGuard, ProjectGuard] },
     //lazy loading of module with child route
-    { path: "Metadata", loadChildren: "./modules/metadataModule#metadataModule", canLoad: [AuthGuard, ProjectGuard] },
     { path: "Administration", loadChildren: "./modules/administrationModule#AdministrationModule", canLoad: [AuthGuard] },
     { path: "Icv", loadChildren: "./modules/icvModule#IcvModule", canLoad: [AuthGuard, ProjectGuard] },
     // route config of config bar

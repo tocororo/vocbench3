@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { ARTURIResource } from "../../../../models/ARTResources";
-import { MetadataRegistryServices } from "../../../../services/metadataRegistryServices";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource } from "../../models/ARTResources";
+import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
 
 export class NewCatalogRecordModalData extends BSModalContext {
     constructor(public title: string) {

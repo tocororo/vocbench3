@@ -15,6 +15,16 @@
                 <li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{ disabled : !isDataAuthorized() }" routerLinkActive="active">
                     <a [routerLink]="['/Data']">Data</a>
                 </li>
+                <li *ngIf="isUserLogged() && isProjectOpen()" class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        Metadata <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" style="font-size: 12px; line-height: 20px;">
+                        <li><a [routerLink]="['/Imports']">Namespaces and Imports</a></li>
+                        <li *ngIf="isMetadataVocAuthorized()"><a [routerLink]="['/Vocabularies']">Metadata Vocabularies</a></li>
+                        <li *ngIf="isMetadataRegistryAuthorized()"><a [routerLink]="['/MetadataRegistry']">Metadata Registry</a></li>
+                    </ul>
+                </li>
 				<li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{ disabled : !isSparqlAuthorized() }" routerLinkActive="active">
                     <a [routerLink]="['/Sparql']">SPARQL</a>
                 </li>

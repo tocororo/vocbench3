@@ -1,10 +1,10 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { OntoManagerServices } from '../../../../services/ontoManagerServices';
-import { ExportServices } from '../../../../services/exportServices';
-import { RDFFormat } from '../../../../models/RDFFormat';
-import { ImportType, TransitiveImportMethodAllowance } from '../../../../models/Metadata';
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ImportType, TransitiveImportMethodAllowance } from "../../models/Metadata";
+import { RDFFormat } from "../../models/RDFFormat";
+import { ExportServices } from "../../services/exportServices";
+import { OntoManagerServices } from "../../services/ontoManagerServices";
 
 export class ImportOntologyModalData extends BSModalContext {
     /**

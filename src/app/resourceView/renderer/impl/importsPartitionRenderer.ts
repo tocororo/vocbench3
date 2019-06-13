@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { ImportFromDatasetCatalogModalReturnData } from "../../../config/dataManagement/metadata/namespacesAndImports/importFromDatasetCatalogModal";
 import { ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { ImportType } from "../../../models/Metadata";
 import { ResViewPartition } from "../../../models/ResourceView";
@@ -14,6 +13,7 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
+import { ImportFromDatasetCatalogModalReturnData } from "../../../metadata/namespacesAndImports/importFromDatasetCatalogModal";
 
 @Component({
     selector: "imports-renderer",

@@ -1,11 +1,11 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { OntoManagerServices } from "../../../../services/ontoManagerServices";
-import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
-import { UIUtils } from "../../../../utils/UIUtils";
-import { VBActionsEnum } from "../../../../utils/VBActions";
-import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
+import { OntoManagerServices } from "../../services/ontoManagerServices";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { UIUtils } from "../../utils/UIUtils";
+import { VBActionsEnum } from "../../utils/VBActions";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "onto-mirror-modal",
