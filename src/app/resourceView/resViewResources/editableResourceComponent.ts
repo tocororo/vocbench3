@@ -305,8 +305,15 @@ export class EditableResourceComponent {
                             reject => { this.cancelEdit(); }
                         );
                     } else {
-                        this.resourcesService.updatePredicateObject(this.predicate, this.resource, newValue).subscribe(
-                            stResp => this.update.emit()
+                        this.basicModals.confirm("Bulk delete", "Warning. You are updating the value for every resource that has this predicate-value relation. Are you sure?").then(
+                            () => {
+                                this.resourcesService.updatePredicateObject(this.predicate, this.resource, newValue).subscribe(
+                                    stResp => this.update.emit()
+                                );
+                            },
+                            () => {
+                                this.cancelEdit();
+                            }
                         );
                     }
                 } catch (err) {
@@ -513,10 +520,15 @@ export class EditableResourceComponent {
     }
 
     private bulkDelete() {
-        this.resourcesService.removePredicateObject(this.predicate, this.resource).subscribe(
-            stResp => {
-                this.update.emit();
-            }
+        this.basicModals.confirm("Bulk delete", "Warning. You are deleting the value for every resource that has this predicate-value relation. Are you sure?").then(
+            () => {
+                this.resourcesService.removePredicateObject(this.predicate, this.resource).subscribe(
+                    stResp => {
+                        this.update.emit();
+                    }
+                );
+            },
+            () => {}
         );
     }
 
