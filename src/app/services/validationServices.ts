@@ -102,7 +102,7 @@ export class ValidationServices {
                         endTime = new Date(endTimeJson);
                     }
                     
-                    let ca: boolean = ((Math.floor(Math.random()*100))%2==0);
+                    let ca: boolean = commitJson.commentAllowed;
                     let commit: CommitInfo = new CommitInfo(commitUri, user, operation, operationParameters, startTime, endTime, ca);
 
                     commits.push(commit);
