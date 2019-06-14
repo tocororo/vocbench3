@@ -28,7 +28,8 @@
                         <span *ngIf="truncatedRows != totalRows" style="margin-left: 5px;">(Rows: {{truncatedRows}} out of {{totalRows}})</span>
                     </span>
                     <div class="btn-toolbar" role="toolbar">
-                        <button class="btn btn-default btn-xs" (click)="editSubjectHeader()" title="Edit subject header" [disabled]="!tablePreview">
+                        <button class="btn btn-default btn-xs" [ngClass]="getSubjHeaderCssClass()" (click)="editSubjectHeader()"
+                            title="Edit subject header" [disabled]="!tablePreview">
                             Subject mapping
                         </button>
     

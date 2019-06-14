@@ -222,6 +222,18 @@ export class Sheet2RdfComponent {
         }
     }
 
+    private getSubjHeaderCssClass(): string {
+        if (this.subjectHeader != null) {
+            if (this.subjectHeader.id != null && this.subjectHeader.node.converter != null) {
+                return "configuredHeader";
+            } else {
+                return "incompleteHeader";
+            }
+        } else {
+            return null;
+        }
+    }
+
     private editHeader(header: SimpleHeader) {
         var modalData = new HeaderEditorModalData(header.id);
         const builder = new BSModalContextBuilder<HeaderEditorModalData>(
