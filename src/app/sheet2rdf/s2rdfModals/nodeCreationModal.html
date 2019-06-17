@@ -11,12 +11,13 @@
         <tbody>
             <tr>
                 <td class="text-right"><label>ID:</label></td>
-                <td><input id="toFocus" class="form-control input-sm" [(ngModel)]="nodeId" sanitized></td>
+                <td><input id="toFocus" class="form-control input-sm" [(ngModel)]="nodeId" sanitized [disabled]="context.editingNode"></td>
             </tr>
         </tbody>
     </table>
 
-    <converter-config [rangeType]="context.rangeType" [language]="context.language" [datatype]="context.datatypeUri" style="margin-top: 4px;" (update)="onConverterUpdate($event)">
+    <converter-config [converter]="context.editingNode?.converter" [rangeType]="context.constrainedRangeType" [constrainedLanguage]="context.constrainedLanguage"
+        [constainedDatatype]="context.constainedDatatype" style="margin-top: 4px;" (update)="onConverterUpdate($event)">
     </converter-config>
 
 </div>

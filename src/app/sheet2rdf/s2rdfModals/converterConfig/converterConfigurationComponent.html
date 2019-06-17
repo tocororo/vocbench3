@@ -70,15 +70,15 @@
                 <div *ngIf="showDefaultLiteralConverterOpt(); else otherConvBlock" class="panel panel-default" style="flex: 3; margin-left: 4px;">
                     <div class="panel-body hbox" style="align-items: center;">
                         <select class="form-control input-sm" style="max-width: 150px; margin-right: 4px;" [(ngModel)]="selectedLiteralAspect"
-                            [disabled]="inputLanguage || inputDatatype">
+                            [disabled]="!literalAspectChangeable">
                             <option *ngFor="let o of literalAspectOpts">{{o}}</option>
                         </select>
                         <ng-container [ngSwitch]="selectedLiteralAspect">
                             <lang-picker *ngSwitchCase="languageLiteralAspect" style="flex: 1;" [(ngModel)]="language"
-                                (ngModelChange)="onSignatureParamChange()" [readonly]="inputLanguage">
+                                (ngModelChange)="onSignatureParamChange()" [readonly]="constrainedLanguage">
                             </lang-picker>
                             <datatype-picker *ngSwitchCase="datatypeLiteralAspect" style="flex: 1;" [(ngModel)]="datatype"
-                                (ngModelChange)="onSignatureParamChange()" [readonly]="inputDatatype">
+                                (ngModelChange)="onSignatureParamChange()" [readonly]="constrainedDatatype">
                             </datatype-picker>
                             <input *ngSwitchDefault class="form-control input-sm" readonly>
                         </ng-container>

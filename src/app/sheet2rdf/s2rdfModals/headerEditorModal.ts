@@ -8,6 +8,8 @@ import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AdvancedGraphApplicationModal, AdvancedGraphApplicationModalData } from "./advancedGraphApplicationModal";
 import { SimpleGraphApplicationModal, SimpleGraphApplicationModalData } from "./simpleGraphApplicationModal";
+import { NodeCreationModalData, NodeCreationModal } from "./nodeCreationModal";
+import { RangeType } from "../../services/propertyServices";
 
 export class HeaderEditorModalData extends BSModalContext {
     /**
@@ -66,6 +68,10 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         );
     }
 
+    /*
+     * NODES
+     */
+
     private selectNode(node: NodeConversion) {
         if (this.header.ignore) return;
 
@@ -101,6 +107,53 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
             }
         );
     }
+
+    private changeUriConverter(node: NodeConversion) {
+        var modalData = new NodeCreationModalData(this.header, node, RangeType.resource, null, null, null);
+        console.log("modalData", modalData);
+        const builder = new BSModalContextBuilder<NodeCreationModalData>(
+            modalData, undefined, NodeCreationModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
+        this.modal.open(NodeCreationModal, overlayConfig).result.then(
+            (n: NodeConversion) => {
+                node.converter = n.converter;
+                this.s2rdfService.updateNodeInHeader(this.header.id, node.nodeId, node.converter.type, node.converter.contractUri, 
+                    node.converter.datatypeUri, node.converter.language, node.converter.params, node.memoize).subscribe(
+                    resp => {
+                        this.initHeader();
+                        this.changed = true;
+                    }
+                )
+            },
+            () => {}
+        );
+    }
+
+    private changeLiteralConverter(node: NodeConversion) {
+        var modalData = new NodeCreationModalData(this.header, node, RangeType.plainLiteral, null, null, null);
+        const builder = new BSModalContextBuilder<NodeCreationModalData>(
+            modalData, undefined, NodeCreationModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
+        this.modal.open(NodeCreationModal, overlayConfig).result.then(
+            (n: NodeConversion) => {
+                node.converter = n.converter;
+                this.s2rdfService.updateNodeInHeader(this.header.id, node.nodeId, node.converter.type, node.converter.contractUri, 
+                    node.converter.datatypeUri, node.converter.language, node.converter.params, node.memoize).subscribe(
+                    resp => {
+                        this.initHeader();
+                        this.changed = true;
+                    }
+                )
+            },
+            () => {}
+        );
+    }
+
+    /*
+     * GRAPH 
+     */
 
     private selectGraph(graph: GraphApplication) {
         if (this.header.ignore) return;
@@ -187,7 +240,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
 
     ok() {
         if (this.changed && this.header.isMultiple) {
-            this.basicModals.confirm("Multiple headers", "There are multiple headers with the same name (" + this.header.name +
+            this.basicModals.confirm("Multiple headers", "There are multiple headers with the same name (" + this.header.nameStruct.fullName +
                 "). Do you want to apply the changes to all of them?", "warning").then(
                 confirm => {
                     this.s2rdfService.replicateMultipleHeader(this.header.id).subscribe(

@@ -21,7 +21,7 @@
             <tr>
                 <td class="text-right"><label>Header:</label></td>
                 <td>
-                    <input type="text" class="form-control input-sm" [ngModel]="header?.name" readonly>
+                    <input type="text" class="form-control input-sm" [ngModel]="header?.nameStruct.fullName" readonly>
                 </td>
             </tr>
             <tr>
@@ -61,10 +61,18 @@
                         [ngClass]="{ active : n == selectedNode }">
                         <td [ngClass]="{ greyText : header?.ignore }">{{n.nodeId}}</td>
                         <td [ngClass]="{ greyText : header?.ignore }">{{n.converter?.type}}</td>
-                        <td [ngClass]="{ greyText : header?.ignore }">{{n.converter?.contractUri}}</td>
+                        <td [ngClass]="{ greyText : header?.ignore }">
+                            {{n.converter?.contractUri}}
+                            <button *ngIf="n.converter?.type == 'uri'" class="btn btn-xs btn-default" (click)="changeUriConverter(n)">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
                         <td [ngClass]="{ greyText : header?.ignore }">
                             <span *ngIf="n.converter?.language; else dtBlock">
                                 <label style="white-space: pre">Lang: </label>{{n.converter.language}}
+                                <button *ngIf="n.converter?.type == 'literal'" class="btn btn-xs btn-default" (click)="changeLiteralConverter(n)">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
                             </span>
                             <span #dtBlock *ngIf="n.converter?.datatypeUri">
                                 <label style="white-space: pre">Datatype: </label>{{getDatatypeShow(n.converter.datatypeUri)}}

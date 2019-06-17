@@ -4,7 +4,6 @@ import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from "rxjs";
 import { ARTURIResource, RDFTypesEnum } from "../../models/ARTResources";
 import { CODAConverter, NodeConversion, SimpleHeader } from "../../models/Sheet2RDF";
-import { CODAServices } from "../../services/codaServices";
 import { RangeType } from "../../services/propertyServices";
 import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
@@ -12,16 +11,18 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 export class NodeCreationModalData extends BSModalContext {
     /**
      * @param header header for which it is creating the node
-     * @param rangeType range type of the property chosen in the graph application. Useful to determine the compliant converters
-     * @param language the language chosen in the graph application.
-     * @param datatype datatype chosen in the graph application. Useful to determine the compliant converter
+     * @param editingNode provided if it works in edit mode
+     * @param constrainedRangeType range type of the property chosen in the graph application. Useful to determine the compliant converters
+     * @param constrainedLanguage the language chosen in the graph application.
+     * @param constainedDatatype datatype chosen in the graph application. Useful to determine the compliant converter
      * @param headerNodes nodes already defined for the header. Useful to check if the current header has already a node with the same id
      */
     constructor(
         public header: SimpleHeader,
-        public rangeType: RangeType,
-        public language: string,
-        public datatype: ARTURIResource, 
+        public editingNode: NodeConversion,
+        public constrainedRangeType: RangeType,
+        public constrainedLanguage: string,
+        public constainedDatatype: ARTURIResource, 
         public headerNodes: NodeConversion[]
     ) {
         super();
@@ -40,12 +41,16 @@ export class NodeCreationModal implements ModalComponent<NodeCreationModalData> 
     private selectedConverter: CODAConverter;
     private memoize: boolean = false;
 
-    constructor(public dialog: DialogRef<NodeCreationModalData>, private s2rdfService: Sheet2RDFServices, private codaService: CODAServices, private basicModals: BasicModalServices) {
+    constructor(public dialog: DialogRef<NodeCreationModalData>, private s2rdfService: Sheet2RDFServices, private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
         document.getElementById("toFocus").focus();
+        if (this.context.editingNode) {
+            this.nodeId = this.context.editingNode.nodeId;
+            this.selectedConverter = this.context.editingNode.converter;
+        }
         // this.nodeId = this.context.header.pearlFeature + "_node";
     }
 
@@ -103,13 +108,17 @@ export class NodeCreationModal implements ModalComponent<NodeCreationModalData> 
     }
 
     private isNodeAlreadyInUse(nodeId: string): Observable<boolean> {
-        for (let n of this.context.headerNodes) {
-            if (n.nodeId == nodeId) {
-                return Observable.of(true);
+        if (this.context.editingNode) { //in case the modal is editing a pre-existing node, skip the test and return false
+            return Observable.of(false);
+        } else {
+            for (let n of this.context.headerNodes) {
+                if (n.nodeId == nodeId) {
+                    return Observable.of(true);
+                }
             }
+            //if this code is reached, the id is not used locally in the header => check globally invoking the server
+            return this.s2rdfService.isNodeIdAlreadyUsed(nodeId);
         }
-        //if this code is reached, the id is not used locally in the header => check globally invoking the server
-        return this.s2rdfService.isNodeIdAlreadyUsed(nodeId);
     }
 
     ok() {

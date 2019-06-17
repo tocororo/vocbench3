@@ -15,8 +15,8 @@ export class ConverterConfigurationComponent {
     @Input() converter: CODAConverter;
     @Input() memoize: boolean;
     @Input() rangeType: RangeType; //the listed converters capability must be compliant with this rangeType (if not provided, all converter are ok)
-    @Input('language') inputLanguage: string;
-    @Input('datatype') inputDatatype: ARTURIResource;
+    @Input() constrainedLanguage: string;
+    @Input() constainedDatatype: ARTURIResource;
     @Output() update: EventEmitter<UpdateStatus> = new EventEmitter();
 
     private availableConverters: ConverterContractDescription[] = [];
@@ -32,18 +32,24 @@ export class ConverterConfigurationComponent {
     private selectedLiteralAspect: string = this.literalAspectOpts[0];
     private language: string;
     private datatype: ARTURIResource;
+    private literalAspectChangeable: boolean = true;
 
     private xRoles: string[] = [XRole.concept, XRole.conceptScheme, XRole.skosCollection, XRole.xLabel, XRole.xNote];
     
     constructor(private codaService: CODAServices) {}
 
     ngOnInit() {
-        this.language = this.inputLanguage;
-        this.datatype = this.inputDatatype;
+        this.language = this.constrainedLanguage;
+        if (this.language == null && this.converter != null) { //language not constrained => get the language of the input converter
+            this.language = this.converter.language;
+        }
+        this.datatype = this.constainedDatatype;
         if (this.language != null) {
             this.selectedLiteralAspect = this.languageLiteralAspect;
+            this.literalAspectChangeable = false;
         } else if (this.datatype != null) {
             this.selectedLiteralAspect = this.datatypeLiteralAspect;
+            this.literalAspectChangeable = false;
         }
 
         this.codaService.listConverterContracts().subscribe(
@@ -100,6 +106,7 @@ export class ConverterConfigurationComponent {
                             for (let paramName in this.converter.params) {
                                 this.signatureParams.find(p => p.name == paramName).value = this.converter.params[paramName];
                             }
+                            this.emitStatusUpdate();
                         }
                     });
                 }
@@ -227,7 +234,6 @@ export class ConverterConfigurationComponent {
             params: params
         }
         let status: UpdateStatus = { converter: c, memoize: this.isConverterRandom() ? this.memoize : false };
-        // console.log("emitting status", status);
         this.update.emit(status);
     }
 

@@ -12,6 +12,8 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 import { LoadConfigurationModalReturnData } from "../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { NodeCreationModal, NodeCreationModalData } from "./nodeCreationModal";
+import { ConverterContractDescription, RDFCapabilityType } from "../../models/Coda";
+import { RangeType } from "../../services/propertyServices";
 
 export class AdvancedGraphApplicationModalData extends BSModalContext {
     constructor(public header: SimpleHeader, public graphApplication?: AdvancedGraphApplication) {
@@ -75,7 +77,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
     }
 
     private addNode() {
-        var modalData = new NodeCreationModalData(this.context.header, null, null, null, this.newDefinedNodes);
+        var modalData = new NodeCreationModalData(this.context.header, null, null, null, null, this.newDefinedNodes);
         const builder = new BSModalContextBuilder<NodeCreationModalData>(
             modalData, undefined, NodeCreationModalData
         );
@@ -119,6 +121,34 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                 this.alreadyDefinedNodes.splice(this.alreadyDefinedNodes.indexOf(this.selectedNode), 1);
                 this.selectedNode = null;
             }
+        );
+    }
+
+    private changeUriConverter(node: NodeConversion) {
+        var modalData = new NodeCreationModalData(this.context.header, node, RangeType.resource, null, null, null);
+        const builder = new BSModalContextBuilder<NodeCreationModalData>(
+            modalData, undefined, NodeCreationModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
+        this.modal.open(NodeCreationModal, overlayConfig).result.then(
+            (n: NodeConversion) => {
+                node.converter = n.converter;
+            },
+            () => {}
+        );
+    }
+
+    private changeLiteralConverter(node: NodeConversion) {
+        var modalData = new NodeCreationModalData(this.context.header, node, RangeType.plainLiteral, null, null, null);
+        const builder = new BSModalContextBuilder<NodeCreationModalData>(
+            modalData, undefined, NodeCreationModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
+        this.modal.open(NodeCreationModal, overlayConfig).result.then(
+            (n: NodeConversion) => {
+                node.converter = n.converter;
+            },
+            () => {}
         );
     }
 
@@ -283,7 +313,8 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                 this.selectedMapping = null;
                 this.graphPattern = null;
                 this.setLoadedGraphApplication(data.configuration);
-            }
+            },
+            () => {}
         );
     }
 
@@ -354,6 +385,23 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                         }
                     })
                 });
+
+                /**
+                 * for each node: 
+                 * if its converter is the default literal,
+                 * if it has a language (so, the conversion serialization would be something like literal@xy)
+                 * if the header has a language in the name
+                 * => replace the converter language with the one in the header name
+                 */
+                nodesToRestore.forEach(n => {
+                    if (
+                        n.converter.contractUri == ConverterContractDescription.NAMESPACE + "default" && n.converter.type == RDFCapabilityType.literal &&
+                        n.converter.language != null && this.context.header.nameStruct.lang != null
+                    ) {
+                        n.converter.language = this.context.header.nameStruct.lang
+                    }
+                })
+
                 this.newDefinedNodes = nodesToRestore;
             }
         );

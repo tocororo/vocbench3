@@ -1,14 +1,12 @@
-import { Deserializer } from "../utils/Deserializer";
 import { ARTURIResource } from "./ARTResources";
 import { RDFCapabilityType } from "./Coda";
 
 export class SimpleHeader {
     public id: string;
-    public name: string;
+    public nameStruct: NameStruct;
     public pearlFeature: string;
     public isMultiple: boolean;
     public ignore: boolean;
-
     public nodes: NodeConversion[];
     public graph: GraphApplication[];
 
@@ -30,6 +28,13 @@ export class SimpleHeader {
         });
         return used;
     }
+}
+
+export class NameStruct {
+    fullName: string;
+    name: string;
+    lang?: string;
+    datatype?: string;
 }
 
 export class SubjectHeader {
@@ -121,7 +126,7 @@ export class Sheet2RdfDeserializer {
 
         let h: SimpleHeader = {
             id: json.id,
-            name: json.name,
+            nameStruct: json.nameStruct,
             pearlFeature: json.pearlFeature,
             isMultiple: json.isMultiple,
             ignore: json.ignore,

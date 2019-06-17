@@ -17,7 +17,7 @@
                     </td>
                     <td>
                         <select class="form-control input-sm" [(ngModel)]="selectedHeader">
-                            <option *ngFor="let h of context.headers" [ngValue]="h">{{h.name}}</option>
+                            <option *ngFor="let h of context.headers" [ngValue]="h">{{h.nameStruct.fullName}}</option>
                         </select>
                     </td>
                 </tr>

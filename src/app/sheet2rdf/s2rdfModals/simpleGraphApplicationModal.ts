@@ -270,7 +270,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     private addNode() {
         let dt: ARTURIResource = (this.selectedRangeType.type == RangeType.typedLiteral) ? this.datatype : null;
         let lang: string = (this.selectedRangeType.type == RangeType.plainLiteral) ? this.language : null;
-        var modalData = new NodeCreationModalData(this.context.header, this.selectedRangeType.type, lang, dt, this.availableNodes);
+        var modalData = new NodeCreationModalData(this.context.header, null, this.selectedRangeType.type, lang, dt, this.availableNodes);
         const builder = new BSModalContextBuilder<NodeCreationModalData>(
             modalData, undefined, NodeCreationModalData
         );

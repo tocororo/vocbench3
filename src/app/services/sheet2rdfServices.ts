@@ -182,6 +182,22 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "addNodeToHeader", params);
     }
 
+    updateNodeInHeader(headerId: string, nodeId: string, converterCapability: RDFCapabilityType, 
+        converterContract: string, converterDatatypeUri?: string, converterLanguage?: string, 
+        converterParams?: {[key: string]: any}, memoize?: boolean) {
+        let params: any = {
+            headerId: headerId,
+            nodeId: nodeId,
+            converterCapability: converterCapability,
+            converterContract: converterContract,
+            converterDatatypeUri: converterDatatypeUri,
+            converterLanguage: converterLanguage,
+            converterParams: (converterParams != null) ? this.getMapSerialization(converterParams) : null,
+            memoize: memoize
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateNodeInHeader", params);
+    }
+
     removeNodeFromHeader(headerId: string, nodeId: string) {
         let params: any = {
             headerId: headerId,
