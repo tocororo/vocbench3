@@ -153,9 +153,8 @@ export class ValidationComponent extends AbstractHistValidComponent {
             if (olderCommit[this.VALIDATION_ACT_ATTR] == this.ACTION_ACCEPT) {
                 validationFunctions = this.validationService.accept(olderCommit.commit);
             } else if (olderCommit[this.VALIDATION_ACT_ATTR] == this.ACTION_REJECT) {
-                //TODO pass also the comment wherever is allowed
                 let comment: string = olderCommit.commentAllowed ? olderCommit[this.COMMENT_ATTR] : null;
-                validationFunctions = this.validationService.reject(olderCommit.commit);
+                validationFunctions = this.validationService.reject(olderCommit.commit, comment);
             } else {
                 commits.splice(commits.indexOf(olderCommit), 1);
                 this.validateCommitsRecursively(commits);

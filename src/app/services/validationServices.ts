@@ -125,11 +125,13 @@ export class ValidationServices {
 
     /**
      * Reject the given commit
-     * @param validatableCommit 
+     * @param validatableCommit
+     * @param comment
      */
-    reject(validatableCommit: ARTURIResource) {
+    reject(validatableCommit: ARTURIResource, comment?: string) {
         var params: any = {
-            validatableCommit: validatableCommit
+            validatableCommit: validatableCommit,
+            comment: comment
         };
         return this.httpMgr.doPost(this.serviceName, "reject", params);
     }
