@@ -109,7 +109,8 @@ export class ValidationComponent extends AbstractHistValidComponent {
             this.promptCommentsPreview(commentableCommits).then(
                 () => {
                     this.validateImpl();
-                }
+                },
+                () => {}
             );
         } else {
             this.validateImpl();
