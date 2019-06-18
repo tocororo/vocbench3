@@ -61,13 +61,13 @@
                         [ngClass]="{ active : n == selectedNode }">
                         <td [ngClass]="{ greyText : header?.ignore }">{{n.nodeId}}</td>
                         <td [ngClass]="{ greyText : header?.ignore }">{{n.converter?.type}}</td>
-                        <td [ngClass]="{ greyText : header?.ignore }">
+                        <td [ngClass]="{ greyText : header?.ignore }" nowrap>
                             {{n.converter?.contractUri}}
                             <button *ngIf="n.converter?.type == 'uri'" class="btn btn-xs btn-default" (click)="changeUriConverter(n)">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>
                         </td>
-                        <td [ngClass]="{ greyText : header?.ignore }">
+                        <td [ngClass]="{ greyText : header?.ignore }" nowrap>
                             <span *ngIf="n.converter?.language; else dtBlock">
                                 <label style="white-space: pre">Lang: </label>{{n.converter.language}}
                                 <button *ngIf="n.converter?.type == 'literal'" class="btn btn-xs btn-default" (click)="changeLiteralConverter(n)">
