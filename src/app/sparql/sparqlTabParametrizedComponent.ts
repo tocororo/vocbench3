@@ -50,7 +50,8 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
     private changeStoredQuery() {
         this.sharedModals.loadConfiguration("Load SPARQL query", ConfigurationComponents.SPARQL_STORE).then(
             (data: LoadConfigurationModalReturnData) => {
-                this.storedQueryReference = data.relativeReference;
+                let relativeRef = data.reference.relativeReference;
+                this.storedQueryReference = relativeRef;
                 this.storedQueryName = this.storedQueryReference.substring(this.storedQueryReference.indexOf(":")+1);
                 this.setLoadedQueryConf(data.configuration);
                 setTimeout(() => {
@@ -63,10 +64,11 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
     loadConfiguration() {
         this.sharedModals.loadConfiguration("Load SPARQL parameterized query", ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE).then(
             (data: LoadConfigurationModalReturnData) => {
-                this.parametrizationRef = data.relativeReference;
+                let relativeRef = data.reference.relativeReference;
+                this.parametrizationRef = relativeRef;
                 this.loadParameterizedQueryConfig(data.configuration);
 
-                this.updateName.emit(data.relativeReference.substring(data.relativeReference.indexOf(":")+1));
+                this.updateName.emit(relativeRef.substring(relativeRef.indexOf(":")+1));
             },
             () => {}
         );

@@ -37,8 +37,9 @@ export class SparqlTabComponent extends AbstractSparqlTabComponent {
     loadConfiguration() {
         this.sharedModals.loadConfiguration("Load SPARQL query", ConfigurationComponents.SPARQL_STORE).then(
             (data: LoadConfigurationModalReturnData) => {
-                this.storedQueryReference = data.relativeReference;
-                this.updateName.emit(data.relativeReference.substring(data.relativeReference.indexOf(":")+1));
+                let relativeRef = data.reference.relativeReference;
+                this.storedQueryReference = relativeRef;
+                this.updateName.emit(relativeRef.substring(relativeRef.indexOf(":")+1));
                 this.setLoadedQueryConf(data.configuration);
                 this.savedStatus.emit(true);
             },

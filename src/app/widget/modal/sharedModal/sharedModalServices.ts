@@ -7,6 +7,7 @@ import { ImportOntologyModal, ImportOntologyModalData } from '../../../metadata/
 import { PrefixNamespaceModal, PrefixNamespaceModalData } from '../../../metadata/namespacesAndImports/prefixNamespaceModal';
 import { ARTResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDFCapabilityType } from "../../../models/Coda";
+import { Reference } from '../../../models/Configuration';
 import { ImportType } from '../../../models/Metadata';
 import { Settings } from "../../../models/Plugins";
 import { RemoteRepositoryAccessConfig } from "../../../models/Project";
@@ -136,10 +137,12 @@ export class SharedModalServices {
      * @param configurationComponent
      * @param selectionMode if true, the dialog allows just to select a configuration, 
      * it doesn't load the config and doesn't allow to delete them
+     * @param additionalReferences additional references not deletable. 
+     *  If one of these references is chosen, it is just returned, its configuration is not loaded
      * @return returns a LoadConfigurationModalReturnData object with configuration and relativeReference
      */
-    loadConfiguration(title: string, configurationComponent: string, selectionMode?: boolean) {
-        var modalData = new LoadConfigurationModalData(title, configurationComponent, selectionMode);
+    loadConfiguration(title: string, configurationComponent: string, selectionMode?: boolean, additionalReferences?: Reference[]) {
+        var modalData = new LoadConfigurationModalData(title, configurationComponent, selectionMode, additionalReferences);
         const builder = new BSModalContextBuilder<LoadConfigurationModalData>(
             modalData, undefined, LoadConfigurationModalData
         );

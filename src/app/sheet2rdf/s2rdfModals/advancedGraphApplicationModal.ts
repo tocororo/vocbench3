@@ -303,18 +303,31 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
     }
 
     private loadGraph() {
-        this.sharedModals.loadConfiguration("Load Advanced Graph Application", ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE).then(
-            (data: LoadConfigurationModalReturnData) => {
-                //reset the current status
-                this.newDefinedNodes = [];
-                this.alreadyDefinedNodes = [];
-                this.selectedNode = null;
-                this.localPrefixMappings = [];
-                this.selectedMapping = null;
-                this.graphPattern = null;
-                this.setLoadedGraphApplication(data.configuration);
-            },
-            () => {}
+        this.s2rdfService.getDefaultAdvancedGraphApplicationConfigurations().subscribe(
+            references => {
+                this.sharedModals.loadConfiguration("Load Advanced Graph Application", ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, false, references).then(
+                    (data: LoadConfigurationModalReturnData) => {
+                        //reset the current status
+                        this.newDefinedNodes = [];
+                        this.alreadyDefinedNodes = [];
+                        this.selectedNode = null;
+                        this.localPrefixMappings = [];
+                        this.selectedMapping = null;
+                        this.graphPattern = null;
+
+                        if (data.configuration != null) { //configuration loaded by the loadConfiguration modal
+                            this.setLoadedGraphApplication(data.configuration);
+                        } else { //configuration not loaded, it means that the user has chosen an additional configuration => handle it
+                            this.s2rdfService.getConfiguration(data.reference.identifier).subscribe(
+                                conf => {
+                                    this.setLoadedGraphApplication(conf);
+                                }
+                            )
+                        }
+                    },
+                    () => {}
+                );
+            }
         );
     }
 

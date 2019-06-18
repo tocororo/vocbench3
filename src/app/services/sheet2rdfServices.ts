@@ -7,6 +7,7 @@ import { RDFFormat } from "../models/RDFFormat";
 import { Sheet2RdfDeserializer, SimpleGraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
 import { HttpManager, HttpServiceContext } from "../utils/HttpManager";
 import { ResourcesServices } from './resourcesServices';
+import { Reference, Configuration } from '../models/Configuration';
 
 @Injectable()
 export class Sheet2RDFServices {
@@ -335,6 +336,30 @@ export class Sheet2RDFServices {
                     mappings.push(m);
                 }
                 return mappings;
+            }
+        );
+    }
+
+    getDefaultAdvancedGraphApplicationConfigurations(): Observable<Reference[]> {
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "getDefaultAdvancedGraphApplicationConfigurations", params).map(
+            stResp => {
+                let references: Reference[] = [];
+                for (var i = 0; i < stResp.length; i++) {
+                    references.push(Reference.deserialize(stResp[i]));
+                }
+                return references;
+            }
+        );
+    }
+
+    getConfiguration(identifier: string): Observable<Configuration> {
+        var params = {
+            identifier: identifier
+        };
+        return this.httpMgr.doGet(this.serviceName, "getConfiguration", params).map(
+            stResp => {
+                return Configuration.parse(stResp);
             }
         );
     }

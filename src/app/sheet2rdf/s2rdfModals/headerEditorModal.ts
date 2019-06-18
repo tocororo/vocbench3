@@ -110,7 +110,6 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
 
     private changeUriConverter(node: NodeConversion) {
         var modalData = new NodeCreationModalData(this.header, node, RangeType.resource, null, null, null);
-        console.log("modalData", modalData);
         const builder = new BSModalContextBuilder<NodeCreationModalData>(
             modalData, undefined, NodeCreationModalData
         );

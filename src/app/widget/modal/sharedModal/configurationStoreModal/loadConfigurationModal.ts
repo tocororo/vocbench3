@@ -9,12 +9,15 @@ export class LoadConfigurationModalData extends BSModalContext {
      * @param title 
      * @param configurationComponent 
      * @param selectionMode if true, the dialog allows just to select a configuration, 
-     * it doesn't load the config and doesn't allow to delete them
+     *  it doesn't load the config and doesn't allow to delete them
+     * @param additionalReferences additional references not deletable. 
+     *  If one of these references is chosen, it is just returned, its configuration is not loaded
      */
     constructor(
         public title: string, 
         public configurationComponent: string,
-        public selectionMode: boolean = false 
+        public selectionMode: boolean = false,
+        public additionalReferences: Reference[]
     ) {
         super();
     }
@@ -67,19 +70,28 @@ export class LoadConfigurationModal implements ModalComponent<LoadConfigurationM
         if (this.context.selectionMode) {
             let returnData: LoadConfigurationModalReturnData = {
                 configuration: null,
-                relativeReference: this.selectedRef.relativeReference
+                reference: this.selectedRef
             }
             this.dialog.close(returnData);
         } else {
-            this.configurationService.getConfiguration(this.context.configurationComponent, this.selectedRef.relativeReference).subscribe(
-                conf => {
-                    let returnData: LoadConfigurationModalReturnData = {
-                        configuration: conf,
-                        relativeReference: this.selectedRef.relativeReference
-                    }
-                    this.dialog.close(returnData);
+            //selected reference is from the additionals => do not load the configuration, but let handling it to the component that opened the modal
+            if (this.context.additionalReferences != null && this.context.additionalReferences.indexOf(this.selectedRef) != -1) {
+                let returnData: LoadConfigurationModalReturnData = {
+                    configuration: null,
+                    reference: this.selectedRef
                 }
-            );
+                this.dialog.close(returnData);
+            } else {
+                this.configurationService.getConfiguration(this.context.configurationComponent, this.selectedRef.relativeReference).subscribe(
+                    conf => {
+                        let returnData: LoadConfigurationModalReturnData = {
+                            configuration: conf,
+                            reference: this.selectedRef
+                        }
+                        this.dialog.close(returnData);
+                    }
+                );
+            }
         }
     }
 
@@ -92,5 +104,5 @@ export class LoadConfigurationModal implements ModalComponent<LoadConfigurationM
 
 export class LoadConfigurationModalReturnData {
     configuration: Configuration;
-    relativeReference: string;
+    reference: Reference;
 }

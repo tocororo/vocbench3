@@ -28,6 +28,12 @@
                             </button>
                         </td>
                     </tr>
+
+                    <tr *ngFor="let ref of context.additionalReferences" (click)="selectReference(ref)" [ngClass]="{active: selectedRef == ref}">
+                        <td>{{ref.identifier}}</td>
+                        <td>APPLICATION</td>
+                        <td></td>
+                    </tr>
                 </tbody>
             </table>
         </div>

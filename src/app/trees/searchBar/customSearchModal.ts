@@ -58,6 +58,11 @@ export class CustomSearchModal implements ModalComponent<CustomSearchModalData> 
                 for (var i = 0; i < properties.length; i++) {
                     if (properties[i].name == "relativeReference") {
                         let storedQueryReference: string = properties[i].value;
+                        if (storedQueryReference == null) {
+                            this.basicModals.alert("Missing SPARQL query", "The stored SPARQL query referenced by the selected custom search does not exist anymore.", "warning");
+                            this.cancel();
+                            return;
+                        }
                         //load query
                         this.configurationService.getConfiguration(ConfigurationComponents.SPARQL_STORE, storedQueryReference).subscribe(
                             (conf: Configuration) => {

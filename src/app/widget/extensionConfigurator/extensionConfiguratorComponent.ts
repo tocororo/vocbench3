@@ -105,7 +105,7 @@ export class ExtensionConfiguratorComponent {
                 this.configurationUpdated.emit(this.selectedConfiguration);
 
                 this.status = ExtensionConfigurationStatus.saved;
-                this.configStatusUpdated.emit({ status: this.status, relativeReference: config.relativeReference });
+                this.configStatusUpdated.emit({ status: this.status, relativeReference: config.reference.relativeReference });
             },
             () => {}
         );

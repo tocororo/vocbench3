@@ -3,11 +3,10 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ConfigurationComponents, Reference } from "../../models/Configuration";
 import { Scope, Settings } from "../../models/Plugins";
-import { ConfigurationsServices } from "../../services/configurationsServices";
 import { SettingsServices } from "../../services/settingsServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { LoadConfigurationModalReturnData } from "../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "load-custom-search",
@@ -24,7 +23,7 @@ export class LoadCustomSearchModal implements ModalComponent<BSModalContext> {
     private references: Reference[];
     private selectedRef: Reference;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private settingsService: SettingsServices, private configurationService: ConfigurationsServices,
+    constructor(public dialog: DialogRef<BSModalContext>, private settingsService: SettingsServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
         this.context = dialog.context;
     }
@@ -62,7 +61,7 @@ export class LoadCustomSearchModal implements ModalComponent<BSModalContext> {
     private add() {
         this.sharedModals.loadConfiguration("Select stored parameterized SPARQL query", ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, true).then(
             (data: LoadConfigurationModalReturnData) => {
-                let ref: string = data.relativeReference;
+                let ref: string = data.reference.relativeReference;
                 let alreadyIn: boolean = false;
                 this.references.forEach(r => {
                     if (r.relativeReference == ref) {
