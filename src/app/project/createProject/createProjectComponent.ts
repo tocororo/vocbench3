@@ -259,11 +259,11 @@ export class CreateProjectComponent {
         this.inOutService.getInputRDFFormats().subscribe(
             formats => {
                 this.inputFormats = formats;
-                let extList: string[] = [];
+                let extList: string[] = []; //collects the extensions of the formats in order to provide them to the file picker
                 //set rdf/xml format as default
                 let rdfIdx: number = 0;
                 for (var i = 0; i < this.inputFormats.length; i++) {
-                    extList.push("."+this.inputFormats[i].defaultFileExtension);
+                    this.inputFormats[i].fileExtensions.forEach(ext => extList.push("."+ext)); //add all the extension of the format to the extList
                     if (this.inputFormats[i].name == "RDF/XML") {
                         rdfIdx = i;
                     }

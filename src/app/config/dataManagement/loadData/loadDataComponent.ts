@@ -199,7 +199,7 @@ export class LoadDataComponent {
         this.inOutService.getSupportedFormats(this.selectedLifterExtension.id).subscribe(
             formats => {
                 this.inputFormats = formats;
-                let extList: string[] = [];
+                let extList: string[] = []; //collects the extensions of the formats in order to provide them to the file picker
                 //set rdf/xml format as default
                 let rdfIdx: number = 0;
                 for (var i = 0; i < this.inputFormats.length; i++) {
