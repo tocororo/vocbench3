@@ -10,6 +10,7 @@ import { AbstractGraphPanel } from "../abstractGraphPanel";
 import { DataGraphSettingsModal } from "../modal/dataGraphSettingsModal";
 import { Node } from "../model/Node";
 import { DataGraphComponent } from "./dataGraphComponent";
+import { DataGraphContext } from "../../models/Graphs";
 
 @Component({
     selector: 'data-graph-panel',
@@ -18,6 +19,7 @@ import { DataGraphComponent } from "./dataGraphComponent";
 export class DataGraphPanel extends AbstractGraphPanel {
 
     @Input() role: RDFResourceRolesEnum;
+    @Input() context: DataGraphContext;
     @ViewChild(DataGraphComponent) viewChildGraph: DataGraphComponent;
 
     constructor(basicModals: BasicModalServices, browsingModals: BrowsingModalServices, private modal: Modal, private individualService: IndividualsServices) {

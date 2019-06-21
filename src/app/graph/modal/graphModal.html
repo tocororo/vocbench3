@@ -5,7 +5,7 @@
 </div>
 <div class="modal-body vbox" style="min-height: 70vh;">
 
-    <data-graph-panel *ngIf="context.mode=='dataOriented'" class="vbox" [graph]="context.graph" [rendering]="context.rendering" [role]="context.role"></data-graph-panel>
+    <data-graph-panel *ngIf="context.mode=='dataOriented'" class="vbox" [graph]="context.graph" [rendering]="context.rendering" [role]="context.role" [context]="context.context"></data-graph-panel>
     <model-graph-panel *ngIf="context.mode=='modelOriented'" class="vbox" [graph]="context.graph" [rendering]="context.rendering"></model-graph-panel>
 
 </div>

@@ -1,6 +1,6 @@
 <div class="panel panel-default vbox">
     <div class="panel-heading">
-        <div class="btn-toolbar" role="toolbar">
+        <div *ngIf="context != 'sparql'" class="btn-toolbar" role="toolbar">
             <button class="btn btn-xs btn-default" (click)="addNode()" title="Add a new node">
                 <span class="glyphicon glyphicon-plus"></span>
             </button>

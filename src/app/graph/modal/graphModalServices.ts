@@ -15,6 +15,7 @@ import { Node } from '../model/Node';
 import { GraphModal, GraphModalData } from './graphModal';
 import { LinksFilterModal, LinksFilterModalData } from './linksFilterModal';
 import { ModelNode } from '../model/ModelNode';
+import { DataGraphContext } from '../../models/Graphs';
 
 @Injectable()
 export class GraphModalServices {
@@ -67,7 +68,7 @@ export class GraphModalServices {
                     }
                 })
                 let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph(nodes, links, false);
-                var modalData = new GraphModalData(graph, GraphMode.dataOriented, true);
+                var modalData = new GraphModalData(graph, GraphMode.dataOriented, true, null, DataGraphContext.sparql);
                 const builder = new BSModalContextBuilder<GraphModalData>(
                     modalData, undefined, GraphModalData
                 );
