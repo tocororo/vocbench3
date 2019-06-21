@@ -6,6 +6,7 @@ import { GraphServices } from "../../services/graphServices";
 import { ResourceViewServices } from "../../services/resourceViewServices";
 import { Deserializer } from "../../utils/Deserializer";
 import { ResourceUtils } from "../../utils/ResourceUtils";
+import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AbstractGraph, GraphMode } from "../abstractGraph";
@@ -35,7 +36,10 @@ export class DataGraphComponent extends AbstractGraph {
     }
 
     ngOnInit() {
-        this.expandNode(this.graph.getNodes()[0], true);
+        //if the graph has only one node, expand it (so avoid to expand the first nodes in case the graph is opened from a SPARQL graph query result)
+        if (this.graph.getNodes().length == 1) {
+            this.expandNode(this.graph.getNodes()[0], true);
+        }
     }
 
     addNode(res: ARTURIResource) {
@@ -51,8 +55,10 @@ export class DataGraphComponent extends AbstractGraph {
     }
 
     expandSub() {
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.graphService.expandSubResources(<ARTURIResource>this.selectedElement.res).subscribe(
             (graphModel: GraphModelRecord[]) => {
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 let links: Link[] = this.convertModelToLinks(graphModel);
                 this.appendLinks(<Node>this.selectedElement, links);
             }
@@ -60,8 +66,10 @@ export class DataGraphComponent extends AbstractGraph {
     }
 
     expandSuper() {
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.graphService.expandSuperResources(<ARTURIResource>this.selectedElement.res).subscribe(
             (graphModel: GraphModelRecord[]) => {
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 let links: Link[] = this.convertModelToLinks(graphModel);
                 this.appendLinks(<Node>this.selectedElement, links);
             }
@@ -72,9 +80,10 @@ export class DataGraphComponent extends AbstractGraph {
         if (!node.res.isResource()) {
             return;
         }
-
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.resViewService.getResourceView(<ARTResource>node.res).subscribe(
             rv => {
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 let filteredPartitions: ResViewPartition[] = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter[(<ARTResource>node.res).getRole()];
                 //create the predicate-object lists for each partition (skip the filtered partition)
                 let predObjListMap: { [partition: string]: ARTPredicateObjects[] } = {};
