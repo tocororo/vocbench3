@@ -102,8 +102,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     //@Override
     isActionDisabled(action: ActionDescription) {
-        //In addition to the cross-panel conditions, in this case the actions are disabled if the panel is in no-scheme mode
-        return super.isActionDisabled(action) || this.isNoSchemeMode()
+        //In addition to the cross-panel conditions, in this case the create actions are disabled if the panel is in no-scheme mode
+        return super.isActionDisabled(action) || (action.editType == "C" && this.isNoSchemeMode());
     }
 
     // //@Override
