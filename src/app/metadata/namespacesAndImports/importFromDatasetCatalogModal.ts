@@ -61,7 +61,7 @@ export class ImportFromDatasetCatalogModal implements ModalComponent<ImportFromD
             (data: DatasetCatalogModalReturnData) => {
                 this.preloadCatalog = data.dataset.id + " - " + data.dataset.getPreferredTitle().getValue() + " @" + data.dataset.getPreferredTitle().getLang();
                 this.ontologyIRI = (data.dataset.ontologyIRI != null) ? data.dataset.ontologyIRI.getURI() : null;
-                this.dataDump = data.dataset.dataDump;
+                this.dataDump = data.dataDump.accessURL;
                 if (this.dataDump != null) {
                     let ext: string = this.dataDump.substring(this.dataDump.lastIndexOf(".")+1);
                     this.formats.forEach(f => {
@@ -98,9 +98,6 @@ export class ImportFromDatasetCatalogModal implements ModalComponent<ImportFromD
         event.stopPropagation();
         event.preventDefault();
 
-        if (this.useDataDump) {
-
-        }
         let dataDumpPar = (this.useDataDump) ? this.dataDump : null;
         let formatPar: RDFFormat = dataDumpPar != null ? this.rdfFormat : null;
 

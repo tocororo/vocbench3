@@ -2,88 +2,6 @@
     <div class="panel-heading">
         <label>Dataset description:</label>
     </div>
-    <!-- <div class="panel-body vbox">
-
-        <div class="table-responsive">
-            <table class="table table-condensed table-borderless">
-                <tbody>
-                    <tr>
-                        <td><label>ID</label></td>
-                        <td>{{dataset.id}}</td>
-                    </tr>
-                    <tr>
-                        <td><label>Title</label></td>
-                        <td>
-                            <span *ngFor="let t of dataset.titles">{{t.getValue()}} @{{t.getLang()}}</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label>Description</label></td>
-                        <td>
-                            <span *ngFor="let d of dataset.descriptions">
-                                {{d.getValue()}} @{{d.getLang()}}
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td nowrap><label>Dataset page</label></td>
-                        <td><a [href]="dataset.datasetPage" target="_blank">{{dataset.datasetPage}}</a></td>
-                    </tr>
-                    <tr>
-                        <td nowrap><label>Ontology IRI</label></td>
-                        <td>
-                            <a *ngIf="dataset.ontologyIRI" [href]="dataset.ontologyIRI.getURI()" target="_blank">
-                                {{dataset.ontologyIRI.getURI()}}
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td nowrap><label>Data dump</label></td>
-                        <td><a [href]="dataset.dataDump" target="_blank">{{dataset.dataDump}}</a></td>
-                    </tr>
-                    <tr>
-                        <td nowrap><label>URI prefix</label></td>
-                        <td>{{dataset.uriPrefix}}</td>
-                    </tr>
-                    <tr>
-                        <td nowrap><label>SPARQL Endpoint</label></td>
-                        <td>{{dataset.sparqlEndpoint}}</td>
-                    </tr>
-                    <tr>
-                        <td><label>Model</label></td>
-                        <td>{{dataset.model}}</td>
-                    </tr>
-                    <tr>
-                        <td nowrap><label>Lexicalization Model</label></td>
-                        <td>{{dataset.lexicalizationModel}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="subPanel" style="margin-top: 2px;">
-            <div class="subPanel-heading">Facets</div>
-            <div class="subPanel-body">
-                <table class="table table-condensed table-borderless">
-                    <colgroup>
-                        <col style="width: 1%">
-                        <col>
-                    </colgroup>
-                    <tbody>
-                        <tr *ngFor="let key of getFacetsKeys()">
-                            <td><label>{{key}}</label></td>
-                            <td style="line-height: 16px; font-size: 13px;">
-                                <div *ngFor="let value of dataset.facets[key]" style="display: inline;">
-                                    <span class="label label-default">{{value}}</span>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div> -->
 
     <div class="panel-body hbox">
 
@@ -123,8 +41,12 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap><label>Data dump</label></td>
-                                <td><a [href]="dataset.dataDump" target="_blank">{{dataset.dataDump}}</a></td>
+                                <td nowrap><label>Data dumps</label></td>
+                                <td>
+                                    <div *ngFor="let dump of dataset.dataDumps">
+                                        <a [href]="dump.accessURL" target="_blank" [title]="dump.getPreferredTitle()">{{dump.accessURL}}</a>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
                                 <td nowrap><label>URI prefix</label></td>

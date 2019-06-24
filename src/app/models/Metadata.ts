@@ -117,7 +117,7 @@ export class ConnectorsID {
     public static LODCloudConnector_ID: string = "it.uniroma2.art.semanticturkey.extension.impl.metadatarepository.lodcloud.LODCloudConnector"
 }
 
-export abstract class AbstractDataset {
+export abstract class AbstractDataset implements Descriptable {
     id: string;
     ontologyIRI: ARTURIResource; //or ARTURI?
     datasetPage: string;
@@ -125,43 +125,21 @@ export abstract class AbstractDataset {
     descriptions: ARTLiteral[];
     facets: DatasetSearchFacets;
 
-    private prefTitle: ARTLiteral;
-    private prefDescription: ARTLiteral;
-
     constructor(id: string) {
         this.id = id;
     }
 
+    private prefTitle: ARTLiteral;
+    private prefDescription: ARTLiteral;
     getPreferredTitle(): ARTLiteral {
-        if (this.prefTitle != null) return this.prefTitle; //if already initialized, return it
-        //otherwise, init it
-        this.prefTitle = this.titles[0]; //set by default the first title
-        if (this.titles.length > 1) {
-            langLoop: for (let i = 0; i < navigator.languages.length; i++) { //for each language look for the title
-                for (let j = 0; j < this.titles.length; j++) {
-                    if (this.titles[j].getLang() == navigator.languages[i]) {
-                        this.prefTitle = this.titles[j];
-                        break langLoop;
-                    }
-                };
-            };
+        if (this.prefTitle == null) {
+            this.prefTitle = DescriptionHelper.computePreferredTitle(this);
         }
         return this.prefTitle;
     }
-
     getPreferredDescription(): ARTLiteral {
-        if (this.prefDescription != null) return this.prefDescription; //if already initialized, return it
-        //otherwise, init it
-        this.prefDescription = this.descriptions[0]; //set by default the first description
-        if (this.descriptions.length > 1) {
-            langLoop: for (let i = 0; i < navigator.languages.length; i++) { //for each language look for the description
-                for (let j = 0; j < this.descriptions.length; j++) {
-                    if (this.descriptions[j].getLang() == navigator.languages[i]) {
-                        this.prefDescription = this.descriptions[j];
-                        break langLoop;
-                    }
-                };
-            };
+        if (this.prefDescription == null) {
+            this.prefDescription = DescriptionHelper.computePreferredDescription(this);
         }
         return this.prefDescription;
     }
@@ -169,10 +147,55 @@ export abstract class AbstractDataset {
 
 export class DatasetDescription extends AbstractDataset {
     uriPrefix: string;
-    dataDump: string;
+    dataDumps: DownloadDescription[];
     sparqlEndpoint: string;
     model: string;
     lexicalizationModel: string;
+}
+
+export class DownloadDescription implements Descriptable {
+    constructor(accessURL: string) {
+        this.accessURL = accessURL;
+    }
+    accessURL: string;
+    descriptions?: ARTLiteral[];
+    mimeType?: string;
+    titles?: ARTLiteral[];
+
+    private prefTitle: ARTLiteral;
+    private prefDescription: ARTLiteral;
+    getPreferredTitle(): ARTLiteral {
+        if (this.prefTitle == null) {
+            this.prefTitle = DescriptionHelper.computePreferredTitle(this);
+        }
+        return this.prefTitle;
+    }
+    getPreferredDescription(): ARTLiteral {
+        if (this.prefDescription == null) {
+            this.prefDescription = DescriptionHelper.computePreferredDescription(this);
+        }
+        return this.prefDescription;
+    }
+
+    public static deserialize(descrJson: any): DownloadDescription {
+        let titles: ARTLiteral[] = [];
+        if (descrJson.titles != null) {
+            descrJson.titles.forEach((t: string) => {
+                titles.push(ResourceUtils.parseLiteral(t));
+            });
+        }
+        let descriptions: ARTLiteral[] = [];
+        if (descrJson.descriptions != null) {
+            descrJson.descriptions.forEach((d: string) => {
+                descriptions.push(ResourceUtils.parseLiteral(d));
+            });
+        }
+        let desc: DownloadDescription = new DownloadDescription(descrJson.accessURL);
+        desc.mimeType = descrJson.mimeType;
+        desc.titles = titles;
+        desc.descriptions = descriptions;
+        return desc;
+    }
 }
 
 export class DatasetSearchResult extends AbstractDataset {
@@ -208,4 +231,41 @@ export class Bucket {
     name: string;
     displayname?: string;
     count: number;
+}
+
+
+interface Descriptable {
+    titles?: ARTLiteral[];
+    descriptions?: ARTLiteral[];
+}
+
+class DescriptionHelper {
+    public static computePreferredTitle(descripted: Descriptable): ARTLiteral {
+        let prefTitle: ARTLiteral = descripted.titles[0]; //set by default the first title
+        if (descripted.titles.length > 1) {
+            langLoop: for (let i = 0; i < navigator.languages.length; i++) { //for each language look for the title
+                for (let j = 0; j < descripted.titles.length; j++) {
+                    if (descripted.titles[j].getLang() == navigator.languages[i]) {
+                        prefTitle = descripted.titles[j];
+                        break langLoop;
+                    }
+                };
+            };
+        }
+        return prefTitle;
+    }
+    public static computePreferredDescription(descripted: Descriptable): ARTLiteral {
+        let prefDescription: ARTLiteral = descripted.descriptions[0]; //set by default the first description
+        if (descripted.descriptions.length > 1) {
+            langLoop: for (let i = 0; i < navigator.languages.length; i++) { //for each language look for the description
+                for (let j = 0; j < descripted.descriptions.length; j++) {
+                    if (descripted.descriptions[j].getLang() == navigator.languages[i]) {
+                        prefDescription = descripted.descriptions[j];
+                        break langLoop;
+                    }
+                };
+            };
+        }
+        return prefDescription;
+    }
 }

@@ -1,11 +1,11 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { DatasetSearchFacets, DatasetSearchResult, SearchResultsPage, DatasetDescription, FacetAggregation, SelectionMode, Bucket } from "../../../models/Metadata";
+import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
+import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { Bucket, DatasetDescription, DatasetSearchFacets, DatasetSearchResult, DownloadDescription, FacetAggregation, SearchResultsPage, SelectionMode } from "../../../models/Metadata";
 import { ExtensionFactory, ExtensionPointID } from "../../../models/Plugins";
-import { ExtensionsServices } from "../../../services/extensionsServices";
 import { DatasetCatalogsServices } from "../../../services/datasetCatalogsServices";
-import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { ExtensionsServices } from "../../../services/extensionsServices";
+import { DataDumpSelectorModalData, DataDumpSelectorModal } from "./dataDumpSelectorModal";
 
 export class DatasetCatalogModalData extends BSModalContext {
     constructor() {
@@ -47,7 +47,7 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
     private totPage: number;
 
     constructor(public dialog: DialogRef<DatasetCatalogModalData>, private metadataRepositoryService: DatasetCatalogsServices,
-        private extensionService: ExtensionsServices, private basicModals: BasicModalServices) {
+        private extensionService: ExtensionsServices, private modal: Modal) {
         this.context = dialog.context;
     }
 
@@ -149,15 +149,47 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
         this.executeSearchDataset();
     }
 
+    private selectDataDump(): Promise<DownloadDescription> {
+        var modalData = new DataDumpSelectorModalData(
+            "The selected dataset catalog has multiple data dumps. Please select the one to use from this list.",
+            this.selectedDatasetDescription.dataDumps
+        );
+        const builder = new BSModalContextBuilder<DataDumpSelectorModalData>(
+            modalData, undefined, DataDumpSelectorModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size("lg").toJSON() };
+        return this.modal.open(DataDumpSelectorModal, overlayConfig).result;
+    }
+
 
     ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        let returnData: DatasetCatalogModalReturnData = {
-            connectorId: this.selectedExtension.id,
-            dataset: this.selectedDatasetDescription
+        if (this.selectedDatasetDescription.dataDumps.length == 0) {
+            let returnData: DatasetCatalogModalReturnData = {
+                connectorId: this.selectedExtension.id,
+                dataset: this.selectedDatasetDescription,
+                dataDump: null
+            }
+            this.dialog.close(returnData);
+        } else if (this.selectedDatasetDescription.dataDumps.length == 1) {
+            let returnData: DatasetCatalogModalReturnData = {
+                connectorId: this.selectedExtension.id,
+                dataset: this.selectedDatasetDescription,
+                dataDump: this.selectedDatasetDescription.dataDumps[0]
+            }
+            this.dialog.close(returnData);
+        } else { //multiple data dumps
+            this.selectDataDump().then(
+                dump => {
+                    let returnData: DatasetCatalogModalReturnData = {
+                        connectorId: this.selectedExtension.id,
+                        dataset: this.selectedDatasetDescription,
+                        dataDump: dump
+                    }
+                    this.dialog.close(returnData);
+                },
+                () => {}
+            );
         }
-        this.dialog.close(returnData);
     }
 
     cancel() {
@@ -169,4 +201,5 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
 export class DatasetCatalogModalReturnData {
     connectorId: string;
     dataset: DatasetDescription;
+    dataDump: DownloadDescription;
 }

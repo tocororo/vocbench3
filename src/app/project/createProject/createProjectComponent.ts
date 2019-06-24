@@ -293,12 +293,24 @@ export class CreateProjectComponent {
             (data: DatasetCatalogModalReturnData) => {
                 this.preloadCatalog = data.dataset.id + " - " + data.dataset.getPreferredTitle().getValue() + " @" + data.dataset.getPreferredTitle().getLang();
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.projectService.preloadDataFromCatalog(data.connectorId, data.dataset.id).subscribe(
-                    (summary: PreloadedDataSummary) => {
-                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.preloadedResponseDataHandler(summary);
-                    }
-                );
+
+                let datasetCatalogPreloadUri: string;
+                if (data.dataDump != null) {
+                    datasetCatalogPreloadUri = data.dataDump.accessURL;
+                } else if (data.dataset.ontologyIRI != null) {
+                    datasetCatalogPreloadUri = data.dataset.ontologyIRI.getURI();
+                }
+
+                if (datasetCatalogPreloadUri != null) {
+                    this.projectService.preloadDataFromURL(datasetCatalogPreloadUri).subscribe(
+                        (summary: PreloadedDataSummary) => {
+                            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                            this.preloadedResponseDataHandler(summary);
+                        }
+                    );
+                } else {
+                    this.basicModals.alert("Preload from Dataset Catalog", "The selected dataset doesn't have a data dump neither an ontology IRI, so cannot be used to preload data.", "warning");
+                }
             },
             () => {}
         );

@@ -1,0 +1,33 @@
+<div class="modal-header">
+    <h3 class="modal-title">Data Dumps</h3>
+</div>
+<div class="modal-body">
+
+    <div class="alert alert-info">
+        {{context.message}}
+    </div>
+
+    <table class="table table-hoverable" style="margin-top: 6px;">
+        <thead>
+            <tr>
+                <th>URL</th>
+                <th>Title</th>
+                <th>Description</th>
+                <!-- <th>MimeType</th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let d of context.dataDumps" [ngClass]="{active: d == selectedDump}" (click)="selectedDump = d">
+                <td><a [href]="d.accessURL" target="_blank">{{d.accessURL}}</a></td>
+                <td>{{d.getPreferredTitle() != null ? d.getPreferredTitle().toNT() : null }}</td>
+                <td>{{d.getPreferredDescription() != null ? d.getPreferredDescription().toNT() : null }}</td>
+                <!-- <td>{{d.mimeType}}</td> -->
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedDump">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

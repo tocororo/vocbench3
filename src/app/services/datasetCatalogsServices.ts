@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ARTLiteral } from '../models/ARTResources';
-import { DatasetDescription, DatasetSearchFacets, DatasetSearchResult, SearchResultsPage } from '../models/Metadata';
+import { DatasetDescription, DatasetSearchFacets, DatasetSearchResult, SearchResultsPage, DownloadDescription } from '../models/Metadata';
 import { HttpManager } from "../utils/HttpManager";
 import { ResourceUtils } from '../utils/ResourceUtils';
 
@@ -80,8 +80,12 @@ export class DatasetCatalogsServices {
                 resp.descriptions.forEach((d: string) => {
                     descriptions.push(ResourceUtils.parseLiteral(d));
                 });
+                let dataDumps: DownloadDescription[] = [];
+                resp.dataDumps.forEach((d: any) => {
+                    dataDumps.push(DownloadDescription.deserialize(d));
+                });
                 let description: DatasetDescription = new DatasetDescription(resp.id);
-                description.dataDump = resp.dataDump;
+                description.dataDumps = dataDumps;
                 description.datasetPage = resp.datasetPage;
                 description.descriptions = descriptions;
                 description.facets = resp.facets;
