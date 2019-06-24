@@ -117,6 +117,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         this.modal.open(NodeCreationModal, overlayConfig).result.then(
             (n: NodeConversion) => {
                 node.converter = n.converter;
+                node.memoize = n.memoize;
                 this.s2rdfService.updateNodeInHeader(this.header.id, node.nodeId, node.converter.type, node.converter.contractUri, 
                     node.converter.datatypeUri, node.converter.language, node.converter.params, node.memoize).subscribe(
                     resp => {
