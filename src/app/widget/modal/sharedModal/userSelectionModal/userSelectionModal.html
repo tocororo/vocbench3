@@ -10,7 +10,7 @@
         <div class="panel-body vbox" style="padding: 0px;">
             <div class="scrollableContainer">
                 <div *ngFor="let u of userList" class="listItem" [ngClass]="{active: u == selectedUser, disabled: !isUserSelectable(u)}" (click)="selectUser(u)">
-                    {{u.getShow()}} <span class="greyText">&nbsp;({{u.getEmail()}})</span>
+                    {{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span>
                 </div>
             </div>
         </div>

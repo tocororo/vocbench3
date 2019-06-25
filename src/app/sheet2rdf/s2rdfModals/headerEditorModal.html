@@ -59,15 +59,15 @@
                 <tbody>
                     <tr *ngFor="let n of header?.nodes" (click)="selectNode(n)" [ngStyle]="{ cursor: header?.ignore ? 'not-allowed' : 'pointer' }"
                         [ngClass]="{ active : n == selectedNode }">
-                        <td [ngClass]="{ greyText : header?.ignore }">{{n.nodeId}}</td>
-                        <td [ngClass]="{ greyText : header?.ignore }">{{n.converter?.type}}</td>
-                        <td [ngClass]="{ greyText : header?.ignore }" nowrap>
+                        <td [ngClass]="{ grayText : header?.ignore }">{{n.nodeId}}</td>
+                        <td [ngClass]="{ grayText : header?.ignore }">{{n.converter?.type}}</td>
+                        <td [ngClass]="{ grayText : header?.ignore }" nowrap>
                             {{n.converter?.contractUri}}
                             <button *ngIf="n.converter?.type == 'uri'" class="btn btn-xs btn-default" (click)="changeUriConverter(n)">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>
                         </td>
-                        <td [ngClass]="{ greyText : header?.ignore }" nowrap>
+                        <td [ngClass]="{ grayText : header?.ignore }" nowrap>
                             <span *ngIf="n.converter?.language; else dtBlock">
                                 <label style="white-space: pre">Lang: </label>{{n.converter.language}}
                                 <button *ngIf="n.converter?.type == 'literal'" class="btn btn-xs btn-default" (click)="changeLiteralConverter(n)">
@@ -120,12 +120,12 @@
                     <tr *ngFor="let g of header?.graph" (click)="selectGraph(g)" [ngStyle]="{ cursor: header?.ignore ? 'not-allowed' : 'pointer' }"
                         [ngClass]="{ active : g == selectedGraph }">
                         <ng-container *ngIf="isSimpleGraphApplication(g); else advancedGraphBlock">
-                            <td [ngClass]="{ greyText : header?.ignore }" nowrap><label>Simple Graph Application:</label></td>
-                            <td [ngClass]="{ greyText : header?.ignore }" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0">$subject {{g.property.getShow()}} ${{g.nodeId}}</td>
+                            <td [ngClass]="{ grayText : header?.ignore }" nowrap><label>Simple Graph Application:</label></td>
+                            <td [ngClass]="{ grayText : header?.ignore }" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0">$subject {{g.property.getShow()}} ${{g.nodeId}}</td>
                         </ng-container>
                         <ng-template #advancedGraphBlock>
-                            <td [ngClass]="{ greyText : header?.ignore }" nowrap><label>Advanced Graph Application:</label></td>
-                            <td [ngClass]="{ greyText : header?.ignore }" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0">{{g.pattern}}</td>
+                            <td [ngClass]="{ grayText : header?.ignore }" nowrap><label>Advanced Graph Application:</label></td>
+                            <td [ngClass]="{ grayText : header?.ignore }" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0">{{g.pattern}}</td>
                         </ng-template>
                     </tr>
                 </tbody>

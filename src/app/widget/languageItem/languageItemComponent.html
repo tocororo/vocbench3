@@ -3,8 +3,8 @@
         [ngClass]="{ disabled : disabled }">
     <span *ngIf="flagImgSrc.indexOf('unknown') != -1" class="flagIcon">
         <img [src]="flagImgSrc">
-        <span [ngClass]="{ greyText: disabled }">{{language.tag}}</span>
+        <span [ngClass]="{ grayText: disabled }">{{language.tag}}</span>
     </span>
-    <span [ngClass]="{ greyText: disabled }">{{language.name}}</span>
-    <span *ngIf="showTag" [ngClass]="{ greyText: disabled }">({{language.tag}})</span>
+    <span [ngClass]="{ grayText: disabled }">{{language.name}}</span>
+    <span *ngIf="showTag" [ngClass]="{ grayText: disabled }">({{language.tag}})</span>
 </span>    

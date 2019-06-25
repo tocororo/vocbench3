@@ -47,7 +47,7 @@
                             <table class="table table-condensed table-borderless table-hoverable">
                                 <tbody>
                                     <tr *ngFor="let cf of customFormList" (click)="selectCustomForm(cf)"
-                                        [ngClass]="{active: cf == selectedCustomForm, greyText: cf.level == 'system'}">
+                                        [ngClass]="{active: cf == selectedCustomForm, grayText: cf.level == 'system'}">
                                         <td>{{cf.id}}</td>
                                     </tr>
                                 </tbody>
@@ -91,7 +91,7 @@
                             <table class="table table-condensed table-borderless table-hoverable">
                                 <tbody>
                                     <tr *ngFor="let fc of formCollectionList" (click)="selectFormColl(fc)"
-                                        [ngClass]="{active: fc == selectedFormColl, greyText: fc.level == 'system'}">
+                                        [ngClass]="{active: fc == selectedFormColl, grayText: fc.level == 'system'}">
                                         <td>{{fc.id}}</td>
                                     </tr>
                                 </tbody>
@@ -137,7 +137,7 @@
                                 <tr *ngFor="let formCollMap of cfConfigurationMap" (click)="selectFormCollMapping(formCollMap)"
                                     [ngClass]="{active: formCollMap == selectedFormCollMapping}">
                                     <td>{{formCollMap.getResource().getURI()}}</td>
-                                    <td [ngClass]="{greyText: formCollMap.getFormCollection().getLevel() == 'system'}">
+                                    <td [ngClass]="{grayText: formCollMap.getFormCollection().getLevel() == 'system'}">
                                         {{formCollMap.getFormCollection().getId()}}
                                     </td>
                                     <td class="text-center">
@@ -155,7 +155,7 @@
         </div>
 
         <div class="panel-footer">
-            <span class="pull-right greyText" style="padding: 2px; margin: 0px 2px; border: 1px solid #ccc; border-radius: 2px; background: #fff;">
+            <span class="pull-right grayText" style="padding: 2px; margin: 0px 2px; border: 1px solid #ccc; border-radius: 2px; background: #fff;">
                 System level elements
             </span>
             <span class="pull-right"  style="padding: 2px; margin: 0px 2px; border: 1px solid #ccc; border-radius: 2px; background: #fff;">

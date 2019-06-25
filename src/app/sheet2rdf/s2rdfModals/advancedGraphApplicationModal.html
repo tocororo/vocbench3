@@ -42,10 +42,10 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let n of alreadyDefinedNodes" (click)="selectNode(n)" [ngClass]="{ active : n == selectedNode }">
-                        <td class="greyText">{{n.nodeId}}</td>
-                        <td class="greyText">{{n.converter?.type}}</td>
-                        <td class="greyText">{{n.converter?.contractUri}}</td>
-                        <td class="greyText">
+                        <td class="grayText">{{n.nodeId}}</td>
+                        <td class="grayText">{{n.converter?.type}}</td>
+                        <td class="grayText">{{n.converter?.contractUri}}</td>
+                        <td class="grayText">
                             <span *ngIf="n.converter?.language; else dtBlock">
                                 <label style="white-space: pre">Lang: </label>{{n.converter.language}}
                             </span>
@@ -110,7 +110,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let m of globalPrefixMappings" class="" class="greyText" style="cursor: not-allowed">
+                            <tr *ngFor="let m of globalPrefixMappings" class="" class="grayText" style="cursor: not-allowed">
                                 <td>{{m.prefix}}</td>
                                 <td>{{m.namespace}}</td>
                             </tr>

@@ -27,7 +27,7 @@
             </div>
             <div class="subPanel-body scrollableContainer">
                 <div *ngFor="let p of performers" class="listItem">
-                    <span style="flex: 1">{{p.getShow()}}<span class="greyText">&nbsp;({{p.getEmail()}})</span></span>
+                    <span style="flex: 1">{{p.getShow()}}<span class="grayText">&nbsp;({{p.getEmail()}})</span></span>
                     <button class="btn btn-xs btn-default" (click)="removeOperationPerformer(u)">
                         <span class="glyphicon glyphicon-minus"></span>
                     </button>

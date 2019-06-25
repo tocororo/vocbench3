@@ -36,7 +36,7 @@
                     <table class="table table-condensed table-borderless table-hoverable" style="table-layout: fixed">
                         <tbody>
                             <tr *ngFor="let cForm of forms" (click)="selectForm(cForm)"
-                                [ngClass]="{active: cForm == selectedForm, greyText: cForm.getLevel() == 'system'}">
+                                [ngClass]="{active: cForm == selectedForm, grayText: cForm.getLevel() == 'system'}">
                                 <td>{{cForm.getId()}}</td>
                             </tr>
                         </tbody>
@@ -63,7 +63,7 @@
                     <table class="table table-condensed table-borderless table-hoverable" style="table-layout: fixed">
                         <tbody>
                             <tr *ngFor="let cForm of formsAvailable" (click)="selectFormAvailable(cForm)"
-                                [ngClass]="{active: cForm == selectedFormAvailable, greyText: cForm.getLevel() == 'system'}">
+                                [ngClass]="{active: cForm == selectedFormAvailable, grayText: cForm.getLevel() == 'system'}">
                                 <td>{{cForm.getId()}}</td>
                             </tr>
                         </tbody>

@@ -29,7 +29,7 @@
                 <div class="panel-body vbox" style="padding: 0px;">
                     <div class="scrollableContainer">
                         <div *ngFor="let r of roleList" class="listItem" (click)="selectRole(r)"
-                            [ngClass]="{active: r == selectedRole, greyText: r.getLevel() == 'system'}">
+                            [ngClass]="{active: r == selectedRole, grayText: r.getLevel() == 'system'}">
                             <span>{{r.getName()}}</span>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                     <div class="scrollableContainer">
                         <ng-template [ngIf]="selectedRole">
                             <div *ngFor="let c of capabilityList" class="listItem"
-                                [ngClass]="{active: c == selectedCapability, greyText: (selectedRole && selectedRole.getLevel() == 'system')}"
+                                [ngClass]="{active: c == selectedCapability, grayText: (selectedRole && selectedRole.getLevel() == 'system')}"
                                 (click)="selectCapability(c)">
                                 {{c}}
                             </div>
