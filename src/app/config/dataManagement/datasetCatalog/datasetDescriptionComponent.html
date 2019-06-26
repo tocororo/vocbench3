@@ -44,7 +44,7 @@
                                 <td nowrap><label>Data dumps</label></td>
                                 <td>
                                     <div *ngFor="let dump of dataset.dataDumps">
-                                        <a [href]="dump.accessURL" target="_blank" [title]="dump.getPreferredTitle()">{{dump.accessURL}}</a>
+                                        <a [href]="dump.accessURL" target="_blank" [title]="dump.getPreferredTitle().toNT()">{{dump.accessURL}}</a>
                                     </div>
                                 </td>
                             </tr>

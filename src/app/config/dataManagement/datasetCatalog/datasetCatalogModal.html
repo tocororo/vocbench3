@@ -72,7 +72,7 @@
             <div class="panel-footer">
                 <div *ngIf="searchDatasetResult" class="hbox pull-right" style="align-items: center;">
                     <span style="margin-right: 4px;">{{searchDatasetResult.totalResults}} results</span>
-                    <div class="btn-group btn-group-xs">
+                    <div *ngIf="searchDatasetResult.totalResults > 0" class="btn-group btn-group-xs">
                         <button class="btn btn-default" title="Previous page" (click)="prevPage()" [disabled]="page==0">
                             <span class="glyphicon glyphicon-triangle-left"></span>
                         </button>
