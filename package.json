@@ -1,9 +1,9 @@
 {
   "name": "vocbench3",
-  "version": "6.0.0-beta.1",
+  "version": "6.0.0",
   "description": "",
   "scripts": {
-    "start": "webpack-dev-server --inline --progress --port 8080",
+    "start": "webpack-dev-server --inline --progress --port 8181",
     "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail"
   },
   "license": "BSD-3-Clause",
@@ -20,29 +20,27 @@
     "@angular/platform-browser": "5.2.9",
     "@angular/platform-browser-dynamic": "5.2.9",
     "@angular/router": "5.2.9",
-
-    "core-js": "^2.4.1",
-    "rxjs": "^5.5.0",
-    "zone.js": "^0.8.4",
-    
     "bootstrap": "3.3.7",
-    "jquery": "3.2.1",
-    "ngx-modialog": "5.0.0",
     "codemirror": "5.26.0",
-    "yasgui-yasqe": "2.11.14",
+    "core-js": "^2.6.9",
+    "d3": "5.7.0",
+    "jquery": "3.2.1",
     "jsprolog": "0.2.2",
     "ng2-completer": "1.6.3",
-    "d3": "5.7.0"
+    "ngx-modialog": "5.0.0",
+    "rxjs": "^5.5.0",
+    "yasgui-yasqe": "2.11.14",
+    "zone.js": "^0.8.4"
   },
   "devDependencies": {
     "@types/codemirror": "^0.0.41",
-    "@types/jquery": "^3.2.3",
-    "@types/node": "^6.0.45",
     "@types/d3": "5.0.1",
+    "@types/jquery": "^3.3.30",
+    "@types/node": "^6.14.6",
     "angular2-template-loader": "^0.6.0",
     "awesome-typescript-loader": "^3.0.4",
     "css-loader": "^0.26.1",
-    "extract-text-webpack-plugin": "^2.0.0-beta.5",
+    "extract-text-webpack-plugin": "^2.0.0-rc.3",
     "file-loader": "^0.9.0",
     "html-loader": "^0.4.3",
     "html-webpack-plugin": "^2.16.1",
