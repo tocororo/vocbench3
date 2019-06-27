@@ -240,7 +240,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
 
     ok() {
         if (this.changed && this.header.isMultiple) {
-            this.basicModals.confirm("Multiple headers", "There are multiple headers with the same name (" + this.header.nameStruct.fullName +
+            this.basicModals.confirm("Multiple headers", "There are multiple headers with the same name (" + this.header.nameStruct.name +
                 "). Do you want to apply the changes to all of them?", "warning").then(
                 confirm => {
                     this.s2rdfService.replicateMultipleHeader(this.header.id).subscribe(

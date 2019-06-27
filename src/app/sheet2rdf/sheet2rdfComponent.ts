@@ -132,19 +132,29 @@ export class Sheet2RdfComponent {
     private resetAll() {
         //restore initial state (in case there was a previous sheet loaded)
         //for sheet preview
+        this.resetSheetPreview();
+        // this.headers = null;
+        // this.tablePreview = null;
+        // this.truncatedRows = null;
+        // this.totalRows = null;
+        //for pearl
+        this.resetPearlEditor();
+        // this.pearl = null;
+        // this.updatePearl(this.pearl);
+        // this.pearlValidation = { valid: true, details: null };
+        //for triples preview
+        this.resetTriplePreview();
+        // this.truncatedTriples = null;
+        // this.totalTriples = null;
+        // this.triplesPreview = null;
+        // this.selectedTriplePreviewRow = null;
+    }
+
+    private resetSheetPreview() {
         this.headers = null;
         this.tablePreview = null;
         this.truncatedRows = null;
         this.totalRows = null;
-        //for pearl
-        this.pearl = "";
-        this.updatePearl(this.pearl);
-        this.pearlValidation = { valid: true, details: null };
-        //for triples preview
-        this.truncatedTriples = null;
-        this.totalTriples = null;
-        this.triplesPreview = null;
-        this.selectedTriplePreviewRow = null;
     }
 
     private initHeaders() {
@@ -288,6 +298,12 @@ export class Sheet2RdfComponent {
 
     private pearlValidationTimer: number;
 
+    private resetPearlEditor() {
+        this.pearl = "";
+        this.updatePearl(this.pearl);
+        this.pearlValidation = { valid: true, details: null };
+    }
+
     private onPearlChange(pearl: string) {
         this.pearl = pearl;
         //reset the previous timeout and set it again
@@ -300,6 +316,7 @@ export class Sheet2RdfComponent {
             pearl => {
                 this.updatePearl(pearl);
                 this.checkPearl();
+                this.triplesPreview = null;
             }
         );
     }
@@ -367,6 +384,13 @@ export class Sheet2RdfComponent {
 
     private exportFormats: RDFFormat[];
 
+    private resetTriplePreview() {
+        this.totalTriples = 0;
+        this.truncatedTriples = 0;
+        this.triplesPreview = null;
+        this.selectedTriplePreviewRow = null;
+    }
+
     private generateTriples() {
         if (this.pearlValidation != null && !this.pearlValidation.valid) {
             this.basicModals.alert("Invalid pearl code", "Pearl code contains errors.", "warning");
@@ -379,9 +403,7 @@ export class Sheet2RdfComponent {
     private invokeGetTriplesPreview() {
         this.s2rdfService.savePearl(this.pearl).subscribe(
             stResp => {
-                this.totalTriples = 0;
-                this.truncatedTriples = 0;
-                this.triplesPreview = null;
+                this.resetTriplePreview();
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.s2rdfService.getTriplesPreview(this.maxSizePreviews).subscribe(
                     triplesPreview => {
