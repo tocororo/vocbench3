@@ -9,19 +9,19 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Enabled the assignment of the same property-value to multiple resources.
   * Enabled the "bulk edit" and "bulk delete" actions for editing/removing the value of all the s-p-o statements with the same predicate-object pair.
   * Added the "Copy value to other locales" action to the language-tagged values in the "Lexicalizations", "Notes" and "Other properties" ResourceView partitions.
-    This action is available only if exist locales for the language of the value.
-  * Enabled an action in the ResourceView context-menu for asserting all the inferred statements of the described resource.
-  * Updated the visualization of triples' graph and resources' graph and nature.
+    This action is available only if locales exist for the language tagged for the value.
+  * Enabled an action in themenu of the ResourceView  for asserting all the inferred statements of the described resource.
+  * Updated the visualization of triples' graph and resources' graph and nature, differentiating the representation for triples and resources' declarationns (especially considering validation stati)
   * Fixed conditions for enabling or disabling the add and delete operations in the ResourceView.
-  * Renewed Sheet2RDF.
-  * Improved graph-view (it is no more an experimental feature) and implemented new features, exploration modes, filters and operations on nodes.
+  * Renewed Sheet2RDF with a more powerful wizard able to cover more of the expressivity of PEARL via UI
+  * Finalized graph-view (it is no more an experimental feature) and implemented new features, exploration modes, filters and operations on nodes.
   * Added a preference for selecting a list of languages to be shown on the resource description (used in ResourceView and Graph-view)
-  * Moved away the "Metadata management" entry from the "Global Data Management" dropdown menu and added the "Metadata" entry in the main navigation bar.
+  * Removed the "Metadata management" entry from the "Global Data Management" dropdown menu and added the "Metadata" entry (with the same content) in the main navigation bar.
   * Updated the alphabetic index of the lexical entry list when a new LexicalEntry is created.
   * Improved the alignment validation with the integration of Genoma.
   * Fixed a bug that prevented to change the mapping property in the alignment validation.
-  * Added the "blacklisting" feature for projects with "validation" enabled.
-  * Added a download link to the "privacy statement" (if available in Semantic Turkey).
+  * Added the "term blacklisting" feature for projects with "validation" enabled, adding all terms proposed in a rejected action to a blacklist pool
+  * Added a download link to the "privacy statement" (if deployed into the Semantic Turkey installation).
   * Changed some fields in the registration form and removed some user info.
   * Updated the description in the Welcome page.
   * Enabled the dynamic resolution of the protocol in vbconfig.js.
