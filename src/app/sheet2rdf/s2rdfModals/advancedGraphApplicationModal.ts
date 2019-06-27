@@ -309,7 +309,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                     (data: LoadConfigurationModalReturnData) => {
                         //reset the current status
                         this.newDefinedNodes = [];
-                        this.alreadyDefinedNodes = [];
+                        // this.alreadyDefinedNodes = [];
                         this.selectedNode = null;
                         this.localPrefixMappings = [];
                         this.selectedMapping = null;

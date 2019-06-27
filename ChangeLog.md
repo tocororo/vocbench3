@@ -4,20 +4,27 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 6.0.0-beta.1 (dd-MM-yyyy)
+# 6.0.0 (27-06-2019)
   * Enabled multivalue creation when enriching a property with a typed literal value.
   * Enabled the assignment of the same property-value to multiple resources.
   * Enabled the "bulk edit" and "bulk delete" actions for editing/removing the value of all the s-p-o statements with the same predicate-object pair.
   * Added the "Copy value to other locales" action to the language-tagged values in the "Lexicalizations", "Notes" and "Other properties" ResourceView partitions.
     This action is available only if exist locales for the language of the value.
+  * Enabled an action in the ResourceView context-menu for asserting all the inferred statements of the described resource.
+  * Updated the visualization of triples' graph and resources' graph and nature.
+  * Fixed conditions for enabling or disabling the add and delete operations in the ResourceView.
   * Renewed Sheet2RDF.
   * Improved graph-view (it is no more an experimental feature) and implemented new features, exploration modes, filters and operations on nodes.
   * Added a preference for selecting a list of languages to be shown on the resource description (used in ResourceView and Graph-view)
   * Moved away the "Metadata management" entry from the "Global Data Management" dropdown menu and added the "Metadata" entry in the main navigation bar.
   * Updated the alphabetic index of the lexical entry list when a new LexicalEntry is created.
-  * Enabled the dynamic resolution of the protocol in vbconfig.js
+  * Improved the alignment validation with the integration of Genoma.
   * Fixed a bug that prevented to change the mapping property in the alignment validation.
-  * Fixed conditions for enabling or disabling the add and delete operations in the ResourceView.
+  * Added the "blacklisting" feature for projects with "validation" enabled.
+  * Added a download link to the "privacy statement" (if available in Semantic Turkey).
+  * Changed some fields in the registration form and removed some user info.
+  * Updated the description in the Welcome page.
+  * Enabled the dynamic resolution of the protocol in vbconfig.js.
   * Minor improvements/changes/bugfixes to UI.
   * Bugfixes.
 
