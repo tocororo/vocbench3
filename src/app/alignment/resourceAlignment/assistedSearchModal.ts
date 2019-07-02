@@ -67,7 +67,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
 
     ngOnInit() {
         this.sourceProject = VBContext.getWorkingProject();
-        this.projectService.listProjects(this.sourceProject, true, true).subscribe(
+        this.projectService.listProjects(this.sourceProject, false, true).subscribe(
             projects => {
                 //keep only the projects different from the current
                 for (var i = 0; i < projects.length; i++) {

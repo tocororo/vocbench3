@@ -69,7 +69,7 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
             );
         }
 
-        this.projService.listProjects(VBContext.getWorkingProject(), true, true).subscribe(
+        this.projService.listProjects(VBContext.getWorkingProject(), false, true).subscribe(
             projects => {
                 //keep only the projects different from the current
                 for (var i = 0; i < projects.length; i++) {
