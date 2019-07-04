@@ -12,9 +12,10 @@ export class ResourceUtils {
     static sortResources(list: ARTNode[], attribute: SortAttribute) {
         //sort by show
         if (attribute == SortAttribute.show) {
+            let collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" });
             list.sort(
                 function (r1: ARTNode, r2: ARTNode) {
-                    return r1.getShow().toLowerCase().localeCompare(r2.getShow().toLowerCase());
+                    return collator.compare(r1.getShow().toLowerCase(), r2.getShow().toLowerCase());
                 }
             );
         }
