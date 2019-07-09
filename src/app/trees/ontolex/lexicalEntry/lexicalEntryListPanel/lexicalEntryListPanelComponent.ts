@@ -4,12 +4,14 @@ import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
 import { Observable } from "rxjs/Observable";
 import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
+import { Project } from "../../../../models/Project";
 import { LexEntryVisualizationMode, LexicalEntryListPreference, SearchSettings } from "../../../../models/Properties";
 import { OntoLex } from "../../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
+import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { ActionDescription, RoleActionResolver } from "../../../../utils/RoleActionResolver";
 import { UIUtils } from "../../../../utils/UIUtils";
@@ -62,7 +64,12 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
         super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
 
         this.eventSubscriptions.push(eventHandler.lexiconChangedEvent.subscribe(
-            (lexicon: ARTURIResource) => this.onLexiconChanged(lexicon)));
+            (data: { lexicon: ARTURIResource, project: Project }) => {
+                if (data.project.getName() == VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getName()) {
+                    this.onLexiconChanged(data.lexicon);
+                }
+            })
+        );
         this.eventSubscriptions.push(eventHandler.lexicalEntryCreatedEvent.subscribe(
             (data: { entry: ARTURIResource, lexicon: ARTURIResource }) => this.onLexicalEntryCreated(data.lexicon, data.entry)));
     }
@@ -77,13 +84,13 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
          */
         let activeLexicon: ARTURIResource; 
         if (this.lexicon == undefined) { //if @Input is not provided, get the lexicon from the preferences
-            activeLexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
+            activeLexicon = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeLexicon;
         } else { //if @Input lexicon is provided, initialize the tree with this lexicon
             activeLexicon = this.lexicon;
         }
         if (this.lexiconChangeable) {
             //init the scheme list if the concept tree allows dynamic change of scheme
-            this.ontolexService.getLexicons().subscribe(
+            this.ontolexService.getLexicons(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                 lexicons => {
                     this.lexiconList = lexicons;
                     this.workingLexicon = this.lexiconList[ResourceUtils.indexOfNode(this.lexiconList, activeLexicon)];
@@ -95,14 +102,14 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
             this.initLexiconLang();
         }
 
-        this.visualizationMode = VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences.visualization;
-        this.indexLenght = VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences.indexLength;
+        this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.visualization;
+        this.indexLenght = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.indexLength;
         this.onDigitChange();
     }
 
     private initLexiconLang() {
         if (this.workingLexicon != null) {
-            this.ontolexService.getLexiconLanguage(this.workingLexicon).subscribe(
+            this.ontolexService.getLexiconLanguage(this.workingLexicon, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                 lang => {
                     this.lexiconLang = lang;
                 }
@@ -145,7 +152,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
     doSearch(searchedText: string) {
         this.lastSearch = searchedText;
 
-        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
         if (searchSettings.restrictLang) {
@@ -155,7 +162,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
 
         UIUtils.startLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
         this.searchService.searchLexicalEntry(searchedText, searchSettings.useLocalName, searchSettings.useURI, searchSettings.useNotes,
-            searchSettings.stringMatchMode, [this.workingLexicon], searchLangs, includeLocales).subscribe(
+            searchSettings.stringMatchMode, [this.workingLexicon], searchLangs, includeLocales, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
                 ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
@@ -190,7 +197,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
      * it needs to retrieve the lexicon of the entry, select it, eventually change the index, then select the entry
      */
     public selectAdvancedSearchedResource(resource: ARTURIResource) {
-        this.ontolexService.getLexicalEntryLexicons(resource).subscribe(
+        this.ontolexService.getLexicalEntryLexicons(resource, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             lexicons => {
                 let isInActiveLexicon: boolean = ResourceUtils.containsNode(lexicons, this.workingLexicon);
                 if (isInActiveLexicon) {
@@ -205,7 +212,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                     }
                     this.basicModals.selectResource("Search", message, lexicons, this.rendering).then(
                         (lexicon: ARTURIResource) => {
-                            this.vbProp.setActiveLexicon(lexicon); //update the active lexicon
+                            this.vbProp.setActiveLexicon(VBContext.getWorkingProjectCtx(this.projectCtx), lexicon); //update the active lexicon
                             setTimeout(() => { //wait for a change detection round, since after the setActiveLexicon, the lex entry list is reset
                                 this.selectSearchedResource(resource); //then open the list on the searched resource
                             });
@@ -250,7 +257,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
         if (entry.getAdditionalProperty("index") != null) {
             return Observable.of(entry.getAdditionalProperty("index").toLocaleUpperCase());
         } else {
-            return this.ontolexService.getLexicalEntryIndex(entry).map(
+            return this.ontolexService.getLexicalEntryIndex(entry, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
                 index => {
                     return index.toLocaleUpperCase();
                 }
@@ -297,7 +304,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(LexicalEntryListSettingsModal, overlayConfig).result.then(
             changesDone => {
-                let lexEntryListPref: LexicalEntryListPreference = VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences;
+                let lexEntryListPref: LexicalEntryListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences;
                 this.visualizationMode = lexEntryListPref.visualization;
                 if (this.visualizationMode == LexEntryVisualizationMode.searchBased) {
                     this.viewChildList.forceList([]);

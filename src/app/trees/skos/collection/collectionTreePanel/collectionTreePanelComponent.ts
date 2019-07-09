@@ -5,6 +5,7 @@ import { SearchSettings } from "../../../../models/Properties";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
+import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { RoleActionResolver } from "../../../../utils/RoleActionResolver";
 import { UIUtils } from "../../../../utils/UIUtils";
@@ -145,7 +146,8 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
         }
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
         this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.skosCollection], searchSettings.useLocalName, 
-            searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
+            searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, null,
+            VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (searchResult.length == 0) {

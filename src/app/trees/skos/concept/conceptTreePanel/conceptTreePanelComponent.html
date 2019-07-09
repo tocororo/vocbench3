@@ -35,7 +35,7 @@
             <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
                 <span class="glyphicon glyphicon-refresh"></span>
             </button>
-            <button *ngIf="isContextDataPanel()" class="btn btn-default btn-xs" title="Settings" (click)="settings()">
+            <button *ngIf="isOpenSettingsAvailable()" class="btn btn-default btn-xs" title="Settings" (click)="settings()">
                 <span class="glyphicon glyphicon-cog"></span>
             </button>
         </div>
@@ -95,14 +95,14 @@
             Please use the search field to retrieve concepts
         </div>
 
-        <concept-tree [schemes]="workingSchemes" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context"
+        <concept-tree [projectCtx]="projectCtx" [schemes]="workingSchemes" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context"
             (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" (conceptRemovedFromScheme)="onConceptRemovedFromScheme($event)">
         </concept-tree>
     </div>
 
     <!-- Search -->
     <div *ngIf="!hideSearch" class="panel-footer">
-        <search-bar (search)="doSearch($event)" (advancedSearch)="advancedSearch($event)" [roles]="[panelRole]" [context]="context"></search-bar>
+        <search-bar (search)="doSearch($event)" (advancedSearch)="advancedSearch($event)" [roles]="[panelRole]" [context]="context" [projectCtx]="projectCtx"></search-bar>
     </div>
     
 </div>

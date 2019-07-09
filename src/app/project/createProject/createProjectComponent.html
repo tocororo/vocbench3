@@ -107,22 +107,51 @@
                             </div>
                         </div>
                     </div>
-                    <label class="control-label col-sm-1">Lexicalization:</label>
-                    <div class="col-sm-3">
-                        <div class="hbox" style="align-items: center">
-                            <select class="form-control input-sm" [(ngModel)]="lexicalModelType" name="lexicalModelType" [disabled]="(isOntoModelOntolex() && !lexicalModelForced) || lexicalModelLocked">
-                                <option *ngFor="let lm of lexicalModelList" [ngValue]="lm.value">{{lm.label}}</option>
-                            </select>
-                            <div *ngIf="preloadedData" style="margin-left: 4px;">
-                                <button *ngIf="lexicalModelForced" class="btn btn-sm btn-default" [ngClass]="{ active : lexicalModelLocked }" (click)="lexicalModelLocked = !lexicalModelLocked"
-                                    title="This selection has been automatically determined on the basis of the preloaded data; modify it only if you know what you are doing">
-                                    <span class="glyphicon glyphicon-lock"></span>
-                                </button>
-                                <span *ngIf="!lexicalModelForced" class="glyphicon glyphicon-warning-sign" title="Preload operation could not determine the lexical model. Please provide it manually"></span>
+                    <ng-container *ngIf="!isEdoalProject(); else edoalBlock">
+                        <label class="control-label col-sm-1">Lexicalization:</label>
+                        <div class="col-sm-4">
+                            <div class="hbox" style="align-items: center">
+                                <select class="form-control input-sm" [(ngModel)]="lexicalModelType" name="lexicalModelType" [disabled]="(isOntoModelOntolex() && !lexicalModelForced) || lexicalModelLocked">
+                                    <option *ngFor="let lm of lexicalModelList" [ngValue]="lm.value">{{lm.label}}</option>
+                                </select>
+                                <div *ngIf="preloadedData" style="margin-left: 4px;">
+                                    <button *ngIf="lexicalModelForced" class="btn btn-sm btn-default" [ngClass]="{ active : lexicalModelLocked }" (click)="lexicalModelLocked = !lexicalModelLocked"
+                                        title="This selection has been automatically determined on the basis of the preloaded data; modify it only if you know what you are doing">
+                                        <span class="glyphicon glyphicon-lock"></span>
+                                    </button>
+                                    <span *ngIf="!lexicalModelForced" class="glyphicon glyphicon-warning-sign" title="Preload operation could not determine the lexical model. Please provide it manually"></span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-4 text-center">
+                    </ng-container>
+                    <ng-template #edoalBlock>
+                        <label class="control-label col-sm-1">
+                            Left/Right:
+                            <span class="glyphicon glyphicon-info-sign" title="Due to technology limitations, the left dataset must be remote, hosted on GraphDB"></span>
+                        </label>
+                        <!-- <div class="col-sm-2">
+                            <select class="form-control input-sm" [(ngModel)]="leftProject" (ngModelChange)="updateRightProjectList()" name="leftProject">
+                                <option *ngFor="let p of leftProjectList" [ngValue]="p">{{p.getName()}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <select class="form-control input-sm" [(ngModel)]="rightProject" name="rightProject" [disabled]="!leftProject">
+                                <option *ngFor="let p of rightProjectList" [ngValue]="p">{{p.getName()}}</option>
+                            </select>
+                        </div> -->
+                        <div class="col-sm-4">
+                            <div class="hbox" style="align-items: center">
+                                <select class="form-control input-sm" [(ngModel)]="leftProject" (ngModelChange)="updateRightProjectList()" name="leftProject">
+                                    <option *ngFor="let p of leftProjectList" [ngValue]="p">{{p.getName()}}</option>
+                                </select>
+                                <span style="margin: 0px 4px; font-size: 14px;">/</span>
+                                <select class="form-control input-sm" [(ngModel)]="rightProject" name="rightProject" [disabled]="!leftProject">
+                                    <option *ngFor="let p of rightProjectList" [ngValue]="p">{{p.getName()}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <!-- <div class="col-sm-4 text-center">
                         <div class="checkbox-inline">
                             <label>
                                 <input type="checkbox" [(ngModel)]="history" name="history"> History
@@ -140,6 +169,32 @@
                             </span>
                         </div>
                         <div class="checkbox-inline" style="margin-left: 20px;">
+                            <label>
+                                <input type="checkbox" [(ngModel)]="blacklisting" name="blacklisting" [disabled]="!validation"> Blacklisting
+                            </label>
+                            <span class="glyphicon glyphicon-info-sign"
+                                title="Enable this to blacklist terms that have been rejected through validation">
+                            </span>
+                        </div>
+                    </div> -->
+                    <div class="col-sm-3 text-center">
+                        <div class="checkbox-inline">
+                            <label>
+                                <input type="checkbox" [(ngModel)]="history" name="history"> History
+                            </label>
+                            <span class="glyphicon glyphicon-info-sign"
+                                title="Enable this to keep track of the changes made on the working graph">
+                            </span>
+                        </div>
+                        <div class="checkbox-inline" style="margin-left: 12px;">
+                            <label>
+                                <input type="checkbox" [(ngModel)]="validation" name="validation" (input)="blacklisting=false"> Validation
+                            </label>
+                            <span class="glyphicon glyphicon-info-sign"
+                                title="Enable this to keep track of change requests in order to validate them later (accepting or rejecting)">
+                            </span>
+                        </div>
+                        <div class="checkbox-inline" style="margin-left: 12px;">
                             <label>
                                 <input type="checkbox" [(ngModel)]="blacklisting" name="blacklisting" [disabled]="!validation"> Blacklisting
                             </label>

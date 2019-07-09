@@ -3,12 +3,12 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
 import { ClassIndividualPanelSearchMode, SearchMode, SearchSettings } from "../../models/Properties";
-import { VBContext } from "../../utils/VBContext";
+import { ProjectContext, VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
 export class SearchSettingsModalData extends BSModalContext {
-    constructor(public roles: RDFResourceRolesEnum[]) {
+    constructor(public roles: RDFResourceRolesEnum[], public projectCtx: ProjectContext) {
         super();
     }
 }
@@ -71,7 +71,7 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
         this.settingsForClassPanel = (this.context.roles != null && this.context.roles.indexOf(RDFResourceRolesEnum.cls) != -1 && 
             this.context.roles.indexOf(RDFResourceRolesEnum.individual) != -1);
 
-        this.settings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
+        this.settings = VBContext.getWorkingProjectCtx(this.context.projectCtx).getProjectPreferences().searchSettings;
         this.activeStringMatchMode = this.settings.stringMatchMode;
         this.useURI = this.settings.useURI;
         this.useLocalName = this.settings.useLocalName;
@@ -95,18 +95,21 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
     }
 
     private updateSettings() {
-        this.vbProp.setSearchSettings({
-            stringMatchMode: this.activeStringMatchMode,
-            useURI: this.useURI,
-            useLocalName: this.useLocalName,
-            useNotes: this.useNotes,
-            restrictLang: this.restrictLang,
-            includeLocales: this.includeLocales,
-            languages: this.languages,
-            useAutocompletion: this.useAutocompletion,
-            restrictActiveScheme: this.restrictConceptSchemes,
-            classIndividualSearchMode: this.activeClsIndSearchMode
-        });
+        this.vbProp.setSearchSettings(
+            this.context.projectCtx,
+            {
+                stringMatchMode: this.activeStringMatchMode,
+                useURI: this.useURI,
+                useLocalName: this.useLocalName,
+                useNotes: this.useNotes,
+                restrictLang: this.restrictLang,
+                includeLocales: this.includeLocales,
+                languages: this.languages,
+                useAutocompletion: this.useAutocompletion,
+                restrictActiveScheme: this.restrictConceptSchemes,
+                classIndividualSearchMode: this.activeClsIndSearchMode
+            }
+        );
     }
 
     ok(event: Event) {

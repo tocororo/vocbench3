@@ -17,6 +17,7 @@ import { BasicModalServices } from "../../../../widget/modal/basicModal/basicMod
 import { AbstractListPanel } from "../../../abstractListPanel";
 import { MultiSubjectEnrichmentHelper } from "../../../multiSubjectEnrichmentHelper";
 import { SchemeListComponent } from "../schemeList/schemeListComponent";
+import { VBRequestOptions } from "../../../../utils/HttpManager";
 
 @Component({
     selector: "scheme-list-panel",
@@ -101,7 +102,7 @@ export class SchemeListPanelComponent extends AbstractListPanel {
     // }
 
     doSearch(searchedText: string) {
-        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
         if (searchSettings.restrictLang) {
@@ -109,7 +110,8 @@ export class SchemeListPanelComponent extends AbstractListPanel {
             includeLocales = searchSettings.includeLocales;
         }
         this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.conceptScheme], searchSettings.useLocalName, 
-            searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
+            searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, null,
+            VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             searchResult => {
                 if (searchResult.length == 0) {
                     this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
@@ -155,7 +157,7 @@ export class SchemeListPanelComponent extends AbstractListPanel {
                 this.skosService.addMultipleConceptsToScheme(this.selectedNode).subscribe(
                     stResp => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        if (ResourceUtils.containsNode(VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes, this.selectedNode)) {
+                        if (ResourceUtils.containsNode(VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeSchemes, this.selectedNode)) {
                             //in case the target scheme is active emit refreshTreeEvent so that the concept tree refreshes
                             this.eventHandler.refreshTreeListEvent.emit([RDFResourceRolesEnum.concept]);
                         }

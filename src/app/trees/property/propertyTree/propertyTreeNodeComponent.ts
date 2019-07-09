@@ -1,6 +1,7 @@
 import { Component, QueryList, ViewChildren } from "@angular/core";
 import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { PropertyServices } from "../../../services/propertyServices";
+import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -40,7 +41,7 @@ export class PropertyTreeNodeComponent extends AbstractTreeNode {
     }
 
     expandNodeImpl() {
-        return this.propService.getSubProperties(this.node).map(
+        return this.propService.getSubProperties(this.node, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
             subProps => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(subProps, this.rendering ? SortAttribute.show : SortAttribute.value);

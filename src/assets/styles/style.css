@@ -106,7 +106,7 @@ resource-view-splitted, resource-view-tabbed {
     flex: 1;
 }
 
-tree-panel, resource-list, class-individual-tree, resource-view, scheme-selection, data-range-editor, import-tree {
+resource-list, class-individual-tree, resource-view, scheme-selection, data-range-editor, import-tree {
     display: flex;
     flex: 1;
     min-height: 0;

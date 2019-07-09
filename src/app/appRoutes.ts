@@ -7,9 +7,13 @@ import { RefactorComponent } from "./config/dataManagement/refactor/refactorComp
 import { VersioningComponent } from "./config/dataManagement/versioning/versioningComponent";
 import { CustomFormConfigComponent } from "./customForms/customFormConfComponent";
 import { DataComponent } from "./data/dataComponent";
+import { EdoalComponent } from './edoal/edoalComponent';
 import { HistoryComponent } from "./historyValidation/historyComponent";
 import { ValidationComponent } from "./historyValidation/validationComponent";
 import { HomeComponent } from "./homeComponent";
+import { MetadataRegistryComponent } from './metadata/metadataRegistry/metadataRegistryComponent';
+import { MetadataVocabulariesComponent } from './metadata/metadataVocabularies/metadataVocabulariesComponent';
+import { NamespacesAndImportsComponent } from './metadata/namespacesAndImports/namespacesAndImportsComponent';
 import { VocbenchPreferencesComponent } from "./preferences/vocbenchPreferencesComponent";
 import { CreateProjectComponent } from "./project/createProject/createProjectComponent";
 import { ProjectComponent } from "./project/projectComponent";
@@ -20,9 +24,6 @@ import { ResetPasswordComponent } from "./user/resetPasswordComponent";
 import { UserProfileComponent } from "./user/userProfileComponent";
 import { AdminGuard, AuthGuard, ProjectGuard } from "./utils/CanActivateGuards";
 import { UserResolver } from "./utils/UserResolver";
-import { MetadataVocabulariesComponent } from './metadata/metadataVocabularies/metadataVocabulariesComponent';
-import { NamespacesAndImportsComponent } from './metadata/namespacesAndImports/namespacesAndImportsComponent';
-import { MetadataRegistryComponent } from './metadata/metadataRegistry/metadataRegistryComponent';
 
 
 
@@ -32,6 +33,7 @@ export const routes: Routes = [
     // route config of navigation bar
     { path: "Projects", component: ProjectComponent, canActivate: [AdminGuard] },
     { path: "Data", component: DataComponent, canActivate: [AuthGuard, ProjectGuard] },
+    { path: "Edoal", component: EdoalComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Sparql", component: SparqlComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Vocabularies", component: MetadataVocabulariesComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Imports", component: NamespacesAndImportsComponent, canActivate: [AuthGuard, ProjectGuard] },

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTURIResource, ResAttribute } from '../models/ARTResources';
 import { Deserializer } from '../utils/Deserializer';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { ResourcesServices } from './resourcesServices';
 
@@ -16,9 +16,9 @@ export class DatatypesServices {
     /**
      * 
      */
-    getDatatypes(): Observable<ARTURIResource[]> {
+    getDatatypes(options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getDatatypes", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getDatatypes", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -28,18 +28,18 @@ export class DatatypesServices {
     /**
      * 
      */
-    getOWL2DatatypeMap(): Observable<ARTURIResource[]> {
+    getOWL2DatatypeMap(options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getOWL2DatatypeMap", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getOWL2DatatypeMap", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
         );
     }
 
-    getDeclaredDatatypes():  Observable<ARTURIResource[]> {
+    getDeclaredDatatypes(options?: VBRequestOptions):  Observable<ARTURIResource[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getDeclaredDatatypes", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getDeclaredDatatypes", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }

@@ -4,6 +4,7 @@ import { ConceptTreePreference, ConceptTreeVisualizationMode } from "../../../..
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../../utils/VBActions";
@@ -57,7 +58,8 @@ export class ConceptTreeComponent extends AbstractTree {
             return;
         }
 
-        let conceptTreePreference: ConceptTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
+        let conceptTreePreference: ConceptTreePreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
+        
         if (conceptTreePreference.visualization == ConceptTreeVisualizationMode.hierarchyBased) {
             let broaderProps: ARTURIResource[] = [];
             conceptTreePreference.broaderProps.forEach((prop: string) => broaderProps.push(new ARTURIResource(prop)));
@@ -66,7 +68,7 @@ export class ConceptTreeComponent extends AbstractTree {
             let includeSubProps: boolean = conceptTreePreference.includeSubProps;
 
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-            this.skosService.getTopConcepts(this.schemes, broaderProps, narrowerProps, includeSubProps).subscribe( //new service (whithout lang param)
+            this.skosService.getTopConcepts(this.schemes, broaderProps, narrowerProps, includeSubProps, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe( //new service (whithout lang param)
                 topConcepts => {
                     //sort by show if rendering is active, uri otherwise
                     ResourceUtils.sortResources(topConcepts, this.rendering ? SortAttribute.show : SortAttribute.value);
@@ -89,7 +91,7 @@ export class ConceptTreeComponent extends AbstractTree {
     }
 
     openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.schemes).subscribe(
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.schemes, null, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             path => {
                 if (path.length == 0) {
                     this.onTreeNodeNotFound(node);

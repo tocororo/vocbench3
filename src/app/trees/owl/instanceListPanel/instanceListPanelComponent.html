@@ -64,7 +64,8 @@
     
     <!-- Tree -->
     <div class="panel-body vbox">
-        <instance-list [cls]="cls" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context"
+        <instance-list [cls]="cls" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated"
+            [context]="context" [projectCtx]="projectCtx"
             (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)">
         </instance-list>
     </div>

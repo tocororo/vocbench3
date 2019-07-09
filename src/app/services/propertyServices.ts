@@ -4,7 +4,7 @@ import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResAttribut
 import { CustomForm, CustomFormValue, FormCollection } from "../models/CustomForms";
 import { RDFS } from "../models/Vocabulary";
 import { Deserializer } from "../utils/Deserializer";
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { ResourceUtils } from '../utils/ResourceUtils';
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { ResourcesServices } from "./resourcesServices";
@@ -20,9 +20,9 @@ export class PropertyServices {
      * Returns a list of top properties (properties which have not a superProperty)
      * @return an array of Properties
      */
-    getTopProperties(): Observable<ARTURIResource[]> {
+    getTopProperties(options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "getTopProperties", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getTopProperties", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -33,9 +33,9 @@ export class PropertyServices {
      * Returns a list of top Rdf Properties (properties which have not a superProperty)
      * @return an array of Properties
      */
-    getTopRDFProperties(): Observable<ARTURIResource[]> {
+    getTopRDFProperties(options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "getTopRDFProperties", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getTopRDFProperties", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -46,9 +46,9 @@ export class PropertyServices {
      * Returns a list of top object properties (properties which have not a superProperty)
      * @return an array of Properties
      */
-    getTopObjectProperties(): Observable<ARTURIResource[]> {
+    getTopObjectProperties(options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "getTopObjectProperties", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getTopObjectProperties", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -59,9 +59,9 @@ export class PropertyServices {
      * Returns a list of top datatype properties (properties which have not a superProperty)
      * @return an array of Properties
      */
-    getTopDatatypeProperties(): Observable<ARTURIResource[]> {
+    getTopDatatypeProperties(options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "getTopDatatypeProperties", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getTopDatatypeProperties", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -72,9 +72,9 @@ export class PropertyServices {
      * Returns a list of top annotation properties (properties which have not a superProperty)
      * @return an array of Properties
      */
-    getTopAnnotationProperties(): Observable<ARTURIResource[]> {
+    getTopAnnotationProperties(options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "getTopAnnotationProperties", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getTopAnnotationProperties", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -85,9 +85,9 @@ export class PropertyServices {
      * Returns a list of top ontology properties (properties which have not a superProperty)
      * @return an array of Properties
      */
-    getTopOntologyProperties(): Observable<ARTURIResource[]> {
+    getTopOntologyProperties(options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "getTopOntologyProperties", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getTopOntologyProperties", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -99,11 +99,11 @@ export class PropertyServices {
      * @param property
      * @return an array of subProperties
      */
-    getSubProperties(property: ARTURIResource): Observable<ARTURIResource[]> {
+    getSubProperties(property: ARTURIResource, options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {
             superProperty: property
         };
-        return this.httpMgr.doGet(this.serviceName, "getSubProperties", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getSubProperties", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -115,11 +115,11 @@ export class PropertyServices {
 	 * (so more, role, explicit etc...)
      * @param properties
      */
-    getPropertiesInfo(properties: ARTURIResource[]): Observable<ARTURIResource[]> {
+    getPropertiesInfo(properties: ARTURIResource[], options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {
             propList: properties
         };
-        return this.httpMgr.doGet(this.serviceName, "getPropertiesInfo", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getPropertiesInfo", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -132,11 +132,11 @@ export class PropertyServices {
 	 * which is a subProperty of rdfs:label, have domain = one of the types of res, then only rdfs:label is returned)
      * @param resource service returns properties that have as domain the type of this resource 
      */
-    getRelevantPropertiesForResource(resource: ARTResource): Observable<ARTURIResource[]> {
+    getRelevantPropertiesForResource(resource: ARTResource, options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {
             res: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "getRelevantPropertiesForResource", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getRelevantPropertiesForResource", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }

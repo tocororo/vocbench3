@@ -1,9 +1,6 @@
-import { Component, Input, Output, EventEmitter, ViewChildren, ViewChild, QueryList } from "@angular/core";
-import { AbstractListNode } from "../../../abstractListNode";
-import { ARTURIResource, ARTResource, ARTLiteral, ResAttribute } from "../../../../models/ARTResources";
+import { Component } from "@angular/core";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { VBContext } from "../../../../utils/VBContext";
-import { SkosServices } from "../../../../services/skosServices";
+import { AbstractListNode } from "../../../abstractListNode";
 
 @Component({
     selector: "scheme-list-node",
@@ -11,7 +8,7 @@ import { SkosServices } from "../../../../services/skosServices";
 })
 export class SchemeListNodeComponent extends AbstractListNode {
 
-    constructor(private skosService: SkosServices, eventHandler: VBEventHandler) {
+    constructor(eventHandler: VBEventHandler) {
         super(eventHandler);
     }
 

@@ -13,7 +13,7 @@
         <button class="btn btn-default" type="button" (click)="doSearch()" [disabled]="disabled">
             <span class="glyphicon glyphicon-search"></span>
         </button>
-        <ng-template [ngIf]="context == 'dataPanel'">
+        <ng-container *ngIf="showOtherSearch()">
             <button class="btn btn-xs btn-default dropdown-toggle" style="padding-left: 2px; padding-right: 3px;" data-toggle="dropdown">
                 <span class="caret"></span>
             </button>
@@ -21,7 +21,7 @@
                 <li (click)="advancedSearch()"><a>Advanced search</a></li>
                 <li (click)="customSearch()"><a>Custom search</a></li>
             </ul>
-        </ng-template>
+        </ng-container>
     </div>
 
     <div class="btn-group btn-group-xs dropup" style="margin-left: 4px;">

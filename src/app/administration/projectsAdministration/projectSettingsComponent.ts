@@ -107,7 +107,7 @@ export class ProjectSettingsComponent {
                      * since being empty the project languages should be inherit from system setting.
                      * This operation is performed only if the current open project is the working one. */
                     if (VBContext.getWorkingProject() != null && VBContext.getWorkingProject().getName() == this.project.getName()) {
-                        this.vbProperties.initProjectSettings().subscribe();
+                        this.vbProperties.initProjectSettings(VBContext.getWorkingProjectCtx()).subscribe();
                     }
                 }
             );

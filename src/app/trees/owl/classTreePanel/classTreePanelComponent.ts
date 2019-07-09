@@ -21,6 +21,7 @@ import { AbstractTreePanel } from "../../abstractTreePanel";
 import { MultiSubjectEnrichmentHelper } from "../../multiSubjectEnrichmentHelper";
 import { ClassTreeComponent } from "../classTree/classTreeComponent";
 import { ClassTreeSettingsModal } from "./classTreeSettingsModal";
+import { VBRequestOptions } from "../../../utils/HttpManager";
 
 @Component({
     selector: "class-tree-panel",
@@ -48,7 +49,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     ngOnInit() {
         super.ngOnInit();
 
-        this.filterEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filter.enabled;
+        this.filterEnabled = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().classTreePreferences.filter.enabled;
         if (VBContext.getWorkingProject().getModelType() == RDFS.uri) {
             this.creatingClassType = RDFS.class;
         }
@@ -100,7 +101,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     //search handlers
 
     doSearch(searchedText: string) {
-        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
         if (searchSettings.restrictLang) {
@@ -109,7 +110,8 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
         }
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
         this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.cls], searchSettings.useLocalName, searchSettings.useURI,
-            searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
+            searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, null,
+            VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (searchResult.length == 0) {
@@ -150,11 +152,11 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ClassTreeSettingsModal, overlayConfig).result.then(
             changesDone => {
-                this.filterEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filter.enabled;
+                this.filterEnabled = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().classTreePreferences.filter.enabled;
                 this.refresh();
             },
             () => {
-                this.filterEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filter.enabled;
+                this.filterEnabled = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().classTreePreferences.filter.enabled;
             }
         );
     }

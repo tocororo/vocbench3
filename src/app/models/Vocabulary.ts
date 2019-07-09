@@ -258,6 +258,10 @@ export class Decomp {
     public static subterm = new ARTURIResource(Decomp.namespace + "subterm", "decomp:subterm", RDFResourceRolesEnum.objectProperty);
 }
 
+export class EDOAL {
+    public static uri = "http://ns.inria.org/edoal/1.0/";
+}
+
 export class SemanticTurkey {
     public static stagingAddGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-add-graph/";
     public static stagingRemoveGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-remove-graph/";

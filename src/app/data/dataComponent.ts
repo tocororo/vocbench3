@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { ResourceViewPanelComponent } from "../resourceView/resourceViewPanel/resourceViewPanelComponent";
-import { TreePanelComponent } from "../trees/treePanelComponent";
+import { TabsetPanelComponent } from "../trees/tabset/tabsetPanelComponent";
 import { VBEventHandler } from "../utils/VBEventHandler";
 
 @Component({
@@ -16,7 +16,7 @@ import { VBEventHandler } from "../utils/VBEventHandler";
 })
 export class DataComponent {
 
-    @ViewChild(TreePanelComponent) treePanelChild: TreePanelComponent;
+    @ViewChild(TabsetPanelComponent) treePanelChild: TabsetPanelComponent;
     @ViewChild(ResourceViewPanelComponent) resViewPanelChild: ResourceViewPanelComponent;
 
     //{ read: ElementRef } to specify to get the element instead of the component (see https://stackoverflow.com/q/45921819/5805661)

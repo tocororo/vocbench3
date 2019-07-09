@@ -4,7 +4,8 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 6.0.2-beta.1 (dd-mm-yyyy)
+# 6.1.0-beta.1 (dd-mm-yyyy)
+  * Enabled management of Edoal projects
 
 # 6.0.1 (01-07-2019)
   * Fixed a bug that prevented the users with project-manager capabilities to access the administration page.

@@ -26,6 +26,7 @@ import { AlignmentModule } from './alignmentModule';
 import { CollaborationModule } from './collaborationModule';
 import { CustomFormModule } from "./customFormModule";
 import { DatasetCatalogModule } from './datasetCatalogModule';
+import { EdoalModule } from './edoalModule';
 import { GraphModule } from './graphModule';
 import { HistoryValidationModule } from "./historyValidationModule";
 import { ICVModule } from "./icvModule";
@@ -50,7 +51,7 @@ import { VBModalModule } from "./vbModalModule";
             SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule, GraphModule,
             ProjectModule, UserModule, ICVModule, AdministrationModule, CustomFormModule, MetadataModule, DatasetCatalogModule,
             HistoryValidationModule, PreferencesModule, Sheet2RdfModule, SparqlModule, CollaborationModule,
-            AlignmentModule,
+            AlignmentModule, EdoalModule,
 
             STServicesModule,
             appRouting,

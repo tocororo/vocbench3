@@ -19,8 +19,10 @@
     <ng-template ngFor let-n [ngForOf]="children">
         <ng-template [ngIf]="!filterOutRootSubClass(n)">
             <class-tree-node *ngIf="!n.isDeprecated() || showDeprecated && n.isDeprecated()"
-                [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [filterEnabled]="filterEnabled" [context]="context"
-                (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
+                [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated"
+                [filterEnabled]="filterEnabled" [context]="context" [projectCtx]="projectCtx"
+                (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)"
+                (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
             </class-tree-node>
         </ng-template>
     </ng-template>

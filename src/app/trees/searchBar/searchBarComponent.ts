@@ -3,10 +3,11 @@ import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Subscription } from "rxjs/Subscription";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { Project } from "../../models/Project";
 import { SearchMode, SearchSettings } from "../../models/Properties";
 import { SearchServices } from "../../services/searchServices";
 import { TreeListContext } from "../../utils/UIUtils";
-import { VBContext } from "../../utils/VBContext";
+import { ProjectContext, VBContext } from "../../utils/VBContext";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
@@ -26,6 +27,7 @@ export class SearchBarComponent {
     @Input() disabled: boolean = false;
     @Input() cls: ARTURIResource; //useful where search-bar is in the instance list panel
     @Input() context: TreeListContext;
+    @Input() projectCtx: ProjectContext;
     @Output() search: EventEmitter<string> = new EventEmitter();
     @Output('advancedSearch') advancedSearchEvent: EventEmitter<ARTResource> = new EventEmitter();
 
@@ -49,15 +51,26 @@ export class SearchBarComponent {
         private eventHandler: VBEventHandler, private basicModals: BasicModalServices) {
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
-            (schemes: ARTURIResource[]) => this.setSchemeInCompleter()));
+            (data: { schemes: ARTURIResource[], project: Project }) => {
+                if (VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getName() == data.project.getName()) {
+                    this.setSchemeInCompleter(data.schemes);
+                }
+            })
+        );
         this.eventSubscriptions.push(eventHandler.searchPrefsUpdatedEvent.subscribe(
-            () => this.updateSearchSettings()));
+            (project: Project) => {
+                if (VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getName() == project.getName()) {
+                    this.updateSearchSettings();
+                }
+            })
+        );
     }
 
     ngOnInit() {
-        this.searchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
+        this.searchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
         this.completerDatasource = new CustomCompleterData(this.searchService, this.roles, this.searchSettings);
-        this.setSchemeInCompleter();
+        this.setSchemeInCompleter(VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeSchemes);
+        this.setProjectCtxInCompleter(this.projectCtx);
     }
 
     ngOnDestroy() {
@@ -91,12 +104,19 @@ export class SearchBarComponent {
     }
 
     private editSettings() {
-        var modalData = new SearchSettingsModalData(this.roles);
+        var modalData = new SearchSettingsModalData(this.roles, this.projectCtx);
         const builder = new BSModalContextBuilder<SearchSettingsModalData>(
             modalData, undefined, SearchSettingsModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(SearchSettingsModal, overlayConfig);
+    }
+
+    /**
+     * Advanced and Custom search are available only if the panel is in the data page and works on the current project, not a contextual one
+     */
+    private showOtherSearch(): boolean {
+        return this.context == TreeListContext.dataPanel && this.projectCtx == null;
     }
 
     private advancedSearch() {
@@ -135,21 +155,24 @@ export class SearchBarComponent {
     private updateSearchMode(mode: SearchMode, event: Event) {
         event.stopPropagation();
         this.searchSettings.stringMatchMode = mode;
-        this.vbProperties.setSearchSettings(this.searchSettings);
+        this.vbProperties.setSearchSettings(VBContext.getWorkingProjectCtx(this.projectCtx), this.searchSettings);
     }
 
-    private setSchemeInCompleter() {
+    private setSchemeInCompleter(schemes: ARTURIResource[]) {
         if (this.roles.indexOf(RDFResourceRolesEnum.concept) != -1) {
-            let activeSchemes: ARTURIResource[] = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
-            this.completerDatasource.setConceptSchemes(activeSchemes);
+            this.completerDatasource.setConceptSchemes(schemes);
         }
+    }
+
+    private setProjectCtxInCompleter(projectCtx: ProjectContext) {
+        this.completerDatasource.setProjectCtx(projectCtx);
     }
 
     /**
      * When the search settings is updated, updates the setting of the bar and the settings for the autocompleter
      */
     private updateSearchSettings() {
-        this.searchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
+        this.searchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
         this.completerDatasource.updateSearchSettings(this.searchSettings);
     }
 

@@ -4,7 +4,7 @@ import { ARTNode, ARTResource, ARTURIResource } from "../models/ARTResources";
 import { Settings } from '../models/Plugins';
 import { SearchMode, StatusFilter } from "../models/Properties";
 import { Deserializer } from "../utils/Deserializer";
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 
 @Injectable()
 export class SearchServices {
@@ -26,7 +26,7 @@ export class SearchServices {
      * @return an array of resources
      */
     searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, useURI: boolean, useNotes: boolean,
-        searchMode: SearchMode, langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[]): Observable<ARTURIResource[]> {
+        searchMode: SearchMode, langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[], options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {
             searchString: searchString,
             rolesArray: rolesArray,
@@ -44,7 +44,7 @@ export class SearchServices {
         if (schemes != null) {
             params.schemes = schemes;
         }
-        return this.httpMgr.doGet(this.serviceName, "searchResource", params).map(
+        return this.httpMgr.doGet(this.serviceName, "searchResource", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -63,7 +63,7 @@ export class SearchServices {
      * @return an array of resources
      */
     searchInstancesOfClass(cls: ARTURIResource, searchString: string, useLocalName: boolean, useURI: boolean, useNotes: boolean,
-        searchMode: SearchMode, langs?: string[], includeLocales?: boolean): Observable<ARTURIResource[]> {
+        searchMode: SearchMode, langs?: string[], includeLocales?: boolean, options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {
             cls: cls,
             searchString: searchString,
@@ -78,7 +78,7 @@ export class SearchServices {
         if (includeLocales != null) {
             params.includeLocales = includeLocales;
         }
-        return this.httpMgr.doGet(this.serviceName, "searchInstancesOfClass", params).map(
+        return this.httpMgr.doGet(this.serviceName, "searchInstancesOfClass", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -98,7 +98,7 @@ export class SearchServices {
      * @param includeLocales 
      */
     searchLexicalEntry(searchString: string, useLocalName: boolean, useURI: boolean, useNotes: boolean, searchMode: SearchMode, 
-        lexicons?: ARTURIResource[], langs?: string[], includeLocales?: boolean): Observable<ARTURIResource[]> {
+        lexicons?: ARTURIResource[], langs?: string[], includeLocales?: boolean, options?: VBRequestOptions): Observable<ARTURIResource[]> {
 
         var params: any = {
             searchString: searchString,
@@ -116,7 +116,7 @@ export class SearchServices {
         if (includeLocales != null) {
             params.includeLocales = includeLocales;
         }
-        return this.httpMgr.doGet(this.serviceName, "searchLexicalEntry", params).map(
+        return this.httpMgr.doGet(this.serviceName, "searchLexicalEntry", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp, ["index"]);
             }
@@ -131,7 +131,7 @@ export class SearchServices {
      * @param root the root of the class tree (optional and used only for cls)
      * @return an array of resources
      */
-    getPathFromRoot(resource: ARTURIResource, role: string, schemes?: ARTURIResource[], root?: ARTURIResource) {
+    getPathFromRoot(resource: ARTURIResource, role: string, schemes?: ARTURIResource[], root?: ARTURIResource, options?: VBRequestOptions) {
         var params: any = {
             role: role,
             resourceURI: resource
@@ -142,7 +142,7 @@ export class SearchServices {
         if (root != null) {
             params.root = root;
         }
-        return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, options).map(
             stResp => {
                 var shortestPath: ARTURIResource[] = [];
                 var paths: ARTURIResource[] = Deserializer.createURIArray(stResp);
@@ -167,7 +167,8 @@ export class SearchServices {
      * @param schemes 
      */
     searchStringList(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: SearchMode, 
-            langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[], cls?: ARTURIResource): Observable<string[]> {
+            langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[], cls?: ARTURIResource,
+            options?: VBRequestOptions): Observable<string[]> {
         var params: any = {
             searchString: searchString,
             rolesArray: rolesArray,
@@ -186,7 +187,7 @@ export class SearchServices {
         if (cls != null) {
             params.cls = cls;
         }
-        return this.httpMgr.doGet(this.serviceName, "searchStringList", params);
+        return this.httpMgr.doGet(this.serviceName, "searchStringList", params, options);
     }
 
     /**

@@ -9,7 +9,7 @@
                         <input *ngIf="context == 'dataPanel'" type="checkbox" style="margin-right: 5px;" [(ngModel)]="n.checked"
                             (ngModelChange)="updateActiveSchemesPref()">
                         <scheme-list-node [node]="n.scheme" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" 
-                            [context]="context" (nodeSelected)="selectNode(n)" (nodeChecked)="onNodeChecked($event)" style="flex:1">
+                            [context]="context" [projectCtx]="projectCtx" (nodeSelected)="selectNode(n)" (nodeChecked)="onNodeChecked($event)" style="flex:1">
                         </scheme-list-node>
                     </div>
                 </div>

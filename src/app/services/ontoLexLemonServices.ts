@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from '../utils/Deserializer';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { ARTURIResource, ARTLiteral, ResAttribute, ARTResource } from "../models/ARTResources";
@@ -55,9 +55,9 @@ export class OntoLexLemonServices {
     /**
      * Returns lexicons
      */
-    getLexicons(): Observable<ARTURIResource[]> {
+    getLexicons(options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getLexicons", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getLexicons", params, options).map(
             stResp => {
                 var lexicons = Deserializer.createURIArray(stResp);
                 return lexicons;
@@ -85,11 +85,11 @@ export class OntoLexLemonServices {
      * 
      * @param lexicon 
      */
-    getLexiconLanguage(lexicon: ARTURIResource) {
+    getLexiconLanguage(lexicon: ARTURIResource, options?: VBRequestOptions) {
         var params: any = {
             lexicon: lexicon
         };
-        return this.httpMgr.doGet(this.serviceName, "getLexiconLanguage", params);
+        return this.httpMgr.doGet(this.serviceName, "getLexiconLanguage", params, options);
     }
 
     /**
@@ -138,12 +138,12 @@ export class OntoLexLemonServices {
      * @param index 
      * @param lexicon 
      */
-    getLexicalEntriesByAlphabeticIndex(index: string, lexicon: ARTURIResource): Observable<ARTURIResource[]> {
+    getLexicalEntriesByAlphabeticIndex(index: string, lexicon: ARTURIResource, options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {
             index: index,
             lexicon: lexicon
         };
-        return this.httpMgr.doGet(this.serviceName, "getLexicalEntriesByAlphabeticIndex", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getLexicalEntriesByAlphabeticIndex", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -154,11 +154,11 @@ export class OntoLexLemonServices {
      * Returns the lexicon which the lexicalEntry belongs to
      * @param lexicalEntry 
      */
-    getLexicalEntryLexicons(lexicalEntry: ARTURIResource): Observable<ARTURIResource[]> {
+    getLexicalEntryLexicons(lexicalEntry: ARTURIResource, options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {
             lexicalEntry: lexicalEntry
         };
-        return this.httpMgr.doGet(this.serviceName, "getLexicalEntryLexicons", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getLexicalEntryLexicons", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -184,11 +184,11 @@ export class OntoLexLemonServices {
      * Returns the 2-digits index of the given lexicalEntry 
      * @param lexicalEntry 
      */
-    getLexicalEntryIndex(lexicalEntry: ARTURIResource): Observable<string> {
+    getLexicalEntryIndex(lexicalEntry: ARTURIResource, options?: VBRequestOptions): Observable<string> {
         var params: any = {
             lexicalEntry: lexicalEntry
         };
-        return this.httpMgr.doGet(this.serviceName, "getLexicalEntryIndex", params);
+        return this.httpMgr.doGet(this.serviceName, "getLexicalEntryIndex", params, options);
     }
 
     /**

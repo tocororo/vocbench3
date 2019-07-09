@@ -1,8 +1,10 @@
 import { Component, QueryList, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../../models/ARTResources";
+import { Project } from "../../../../models/Project";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../../utils/VBActions";
@@ -33,7 +35,12 @@ export class LexiconListComponent extends AbstractList {
         this.eventSubscriptions.push(eventHandler.lexiconDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
         //handler when active lexicon is changed programmatically when a searched entry belong to a non active lexicon
         this.eventSubscriptions.push(eventHandler.lexiconChangedEvent.subscribe(
-            (node: ARTURIResource) => this.activeLexicon = this.list[ResourceUtils.indexOfNode(this.list, node)]));
+            (data: { lexicon: ARTURIResource, project: Project }) => {
+                if (data.project.getName() == VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getName()) {
+                    this.activeLexicon = this.list[ResourceUtils.indexOfNode(this.list, data.lexicon)]
+                }
+            })
+        );
     }
 
     ngOnInit() {
@@ -45,13 +52,13 @@ export class LexiconListComponent extends AbstractList {
 
     initImpl() {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.ontolexService.getLexicons().subscribe(
+        this.ontolexService.getLexicons(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             lexicons => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(lexicons, this.rendering ? SortAttribute.show : SortAttribute.value);
 
                 for (var i = 0; i < lexicons.length; i++) {
-                    let activeLexicon = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
+                    let activeLexicon = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeLexicon;
                     if (activeLexicon != null && lexicons[i].equals(activeLexicon)) {
                         this.activeLexicon = lexicons[i];
                         break;
@@ -114,7 +121,7 @@ export class LexiconListComponent extends AbstractList {
     }
 
     private updateActiveLexiconPref() {
-        this.vbProp.setActiveLexicon(this.activeLexicon);
+        this.vbProp.setActiveLexicon(VBContext.getWorkingProjectCtx(this.projectCtx), this.activeLexicon);
     }
 
 

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { ARTURIResource } from "../models/ARTResources";
 import { Project } from "../models/Project";
 import { Deserializer } from "../utils/Deserializer";
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 
 @Injectable()
 export class PreferencesSettingsServices {
@@ -50,12 +50,12 @@ export class PreferencesSettingsServices {
      * Sets the default active skos concept schemes
      * @param scheme s
      */
-    setActiveSchemes(schemes?: ARTURIResource[]) {
+    setActiveSchemes(schemes?: ARTURIResource[], options?: VBRequestOptions) {
         var params: any = {}
         if (schemes != null) {
             params.schemes = schemes;
         }
-        return this.httpMgr.doPost(this.serviceName, "setActiveSchemes", params);
+        return this.httpMgr.doPost(this.serviceName, "setActiveSchemes", params, options);
     }
 
     /**
@@ -91,14 +91,14 @@ export class PreferencesSettingsServices {
     /**
      * Gets the preferences of the currently logged user for the currently open project
      */
-    getPUSettings(properties: string[], pluginID?: string) {
+    getPUSettings(properties: string[], pluginID?: string, options?: VBRequestOptions) {
         var params: any = {
             properties: properties
         };
         if (pluginID != null) {
             params.pluginID = pluginID
         }
-        return this.httpMgr.doGet(this.serviceName, "getPUSettings", params);
+        return this.httpMgr.doGet(this.serviceName, "getPUSettings", params, options);
     }
 
     /**
@@ -106,7 +106,7 @@ export class PreferencesSettingsServices {
      * @param property 
      * @param value 
      */
-    setPUSetting(property: string, value?: string, pluginID?: string) {
+    setPUSetting(property: string, value?: string, pluginID?: string, options?: VBRequestOptions) {
         var params: any = {
             property: property,
         };
@@ -116,7 +116,7 @@ export class PreferencesSettingsServices {
         if (pluginID != null) {
             params.pluginID = pluginID
         }
-        return this.httpMgr.doPost(this.serviceName, "setPUSetting", params);
+        return this.httpMgr.doPost(this.serviceName, "setPUSetting", params, options);
     }
 
     /**

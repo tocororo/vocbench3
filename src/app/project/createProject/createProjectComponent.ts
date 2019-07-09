@@ -4,9 +4,9 @@ import { DatasetCatalogModalReturnData } from "../../config/dataManagement/datas
 import { ARTURIResource } from "../../models/ARTResources";
 import { TransitiveImportMethodAllowance } from "../../models/Metadata";
 import { ConfigurableExtensionFactory, ExtensionPointID, Plugin, PluginSpecification, Settings } from "../../models/Plugins";
-import { BackendTypesEnum, PreloadedDataSummary, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
+import { BackendTypesEnum, PreloadedDataSummary, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType, Project } from "../../models/Project";
 import { RDFFormat } from "../../models/RDFFormat";
-import { DCT, OntoLex, OWL, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
+import { DCT, OntoLex, OWL, RDFS, SKOS, SKOSXL, EDOAL } from "../../models/Vocabulary";
 import { ExtensionsServices } from "../../services/extensionsServices";
 import { InputOutputServices } from "../../services/inputOutputServices";
 import { PluginsServices } from "../../services/pluginsServices";
@@ -45,7 +45,7 @@ export class CreateProjectComponent {
     private filePickerAccept: string;
     private preloadUri: string;
     private preloadCatalog: string; //id-title of the datasetCatalog
-    private preloadedData: { summary: PreloadedDataSummary, option: PreloadOpt};
+    private preloadedData: { summary: PreloadedDataSummary, option: PreloadOpt };
 
     private importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
         { allowance: TransitiveImportMethodAllowance.nowhere, show: "Do not resolve" },
@@ -68,7 +68,8 @@ export class CreateProjectComponent {
         { value: new ARTURIResource(RDFS.uri), label: "RDFS" },
         { value: new ARTURIResource(OWL.uri), label: "OWL" },
         { value: new ARTURIResource(SKOS.uri), label: "SKOS" },
-        { value: new ARTURIResource(OntoLex.uri), label: "OntoLex" }
+        { value: new ARTURIResource(OntoLex.uri), label: "OntoLex" },
+        { value: new ARTURIResource(EDOAL.uri), label: "EDOAL" }
     ];
     private ontoModelType: ARTURIResource = this.ontoModelList[1].value; //default OWL
     private ontoModelForced: boolean = false;
@@ -88,6 +89,13 @@ export class CreateProjectComponent {
     private history: boolean = false;
     private validation: boolean = false;
     private blacklisting: boolean = false;
+
+    //edoal
+    private projectList: Project[];
+    private leftProjectList: Project[];
+    private leftProject: Project;
+    private rightProjectList: Project[];
+    private rightProject: Project;
 
     /**
      * DATA STORE
@@ -193,6 +201,9 @@ export class CreateProjectComponent {
             }
         );
 
+        //init project list for EDOAL
+        this.initProjectList();
+
     }
 
     /**
@@ -263,7 +274,7 @@ export class CreateProjectComponent {
                 //set rdf/xml format as default
                 let rdfIdx: number = 0;
                 for (var i = 0; i < this.inputFormats.length; i++) {
-                    this.inputFormats[i].fileExtensions.forEach(ext => extList.push("."+ext)); //add all the extension of the format to the extList
+                    this.inputFormats[i].fileExtensions.forEach(ext => extList.push("." + ext)); //add all the extension of the format to the extList
                     if (this.inputFormats[i].name == "RDF/XML") {
                         rdfIdx = i;
                     }
@@ -312,7 +323,7 @@ export class CreateProjectComponent {
                     this.basicModals.alert("Preload from Dataset Catalog", "The selected dataset doesn't have a data dump neither an ontology IRI, so cannot be used to preload data.", "warning");
                 }
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -320,7 +331,7 @@ export class CreateProjectComponent {
         if (summary.warnings.length > 0) {
             let message: string = "";
             summary.warnings.forEach(w => {
-                message += w.message+"\n";
+                message += w.message + "\n";
             })
             this.basicModals.alert("Preload data", message, "warning");
         }
@@ -385,25 +396,29 @@ export class CreateProjectComponent {
     private onOntoModelChanged() {
         if (this.ontoModelType.getURI() == OntoLex.uri && !this.lexicalModelForced) {
             this.forceLexicalModel(OntoLex.uri);
+        } else if (this.isEdoalProject() && !this.lexicalModelForced) {
+            this.forceLexicalModel(RDFS.uri);
         }
     }
 
     private forceOntoModel(ontoModelUri: string) {
         this.ontoModelList.forEach(ontoModel => {
-                if (ontoModel.value.getURI() == ontoModelUri) {
-                    this.ontoModelType =  ontoModel.value;
-                }
+            if (ontoModel.value.getURI() == ontoModelUri) {
+                this.ontoModelType = ontoModel.value;
             }
-        );
+        });
     }
 
     private forceLexicalModel(lexicalModelUri: string) {
         this.lexicalModelList.forEach(lexModel => {
-                if (lexModel.value.getURI() == lexicalModelUri) {
-                    this.lexicalModelType =  lexModel.value;
-                }
+            if (lexModel.value.getURI() == lexicalModelUri) {
+                this.lexicalModelType = lexModel.value;
             }
-        );
+        });
+    }
+
+    private isEdoalProject(): boolean {
+        return this.ontoModelType.getURI() == EDOAL.uri;
     }
 
     /**
@@ -414,6 +429,36 @@ export class CreateProjectComponent {
     }
 
     //================= MODELS HANDLERS - END =======================
+
+    /** =============================================================
+     * ================== EDOAL PROJECTS HANDLERS ===================
+     * ============================================================= */
+
+    private initProjectList() {
+        this.projectService.listProjects().subscribe(
+            projects => {
+                this.projectList = projects;
+                //init left project list
+                this.leftProjectList = [];
+                this.projectList.forEach(p => { //consider as left datasets only the remote projects
+                    if (p.getRepositoryLocation().location == "remote") {
+                        this.leftProjectList.push(p);
+                    }
+                });
+            }
+        );
+    }
+
+    private updateRightProjectList() {
+        this.rightProjectList = [];
+        this.projectList.forEach(p => { //right dataset must be different from the left one
+            if (p.getName() != this.leftProject.getName()) {
+                this.rightProjectList.push(p);
+            }
+        });
+    }
+
+    //============= EDOAL PROJECTS HANDLERS - END ==================
 
     /** =============================================================
      * ========= DATA STORE MANAGEMENT (REPOSITORY ACCESS) ==========
@@ -431,7 +476,7 @@ export class CreateProjectComponent {
      * Tells if the selected RepositoryAccess is in create mode.
      */
     private isSelectedRepoAccessCreateMode(): boolean {
-        return (this.selectedRepositoryAccess == RepositoryAccessType.CreateLocal || 
+        return (this.selectedRepositoryAccess == RepositoryAccessType.CreateLocal ||
             this.selectedRepositoryAccess == RepositoryAccessType.CreateRemote);
     }
 
@@ -443,7 +488,7 @@ export class CreateProjectComponent {
             (config: any) => {
                 this.remoteAccessConfig = config;
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -500,7 +545,7 @@ export class CreateProjectComponent {
             (config: any) => {
                 this.selectedUriGenPluginConf.properties = (<Settings>config).properties;
             },
-            () => {}
+            () => { }
         )
     }
 
@@ -532,7 +577,7 @@ export class CreateProjectComponent {
             (config: any) => {
                 this.selectedRendEngPluginConf.properties = (<Settings>config).properties;
             },
-            () => {}
+            () => { }
         )
     }
 
@@ -589,6 +634,12 @@ export class CreateProjectComponent {
             return;
         }
 
+        //check EDOAL projects
+        if (this.isEdoalProject() && (this.leftProject == null || this.rightProject == null)) {
+            this.basicModals.alert("Create project", "Left or right dataset missing", "warning");
+            return;
+        }
+
         /**
          * Prepare repositoryAccess parameter
          */
@@ -609,13 +660,13 @@ export class CreateProjectComponent {
          */
         var coreRepoSailConfigurerSpecification: PluginSpecification
         //prepare config of core repo only if it is in creation mode
-        if (this.isSelectedRepoAccessCreateMode()) { 
+        if (this.isSelectedRepoAccessCreateMode()) {
             //check if data repository configuration needs to be configured
             if (this.selectedDataRepoConfig.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                this.basicModals.alert("Create project", "Data Repository (" + this.selectedDataRepoConfig.shortName 
+                this.basicModals.alert("Create project", "Data Repository (" + this.selectedDataRepoConfig.shortName
                     + ") requires to be configured", "warning");
-                    return;
+                return;
             }
 
             coreRepoSailConfigurerSpecification = {
@@ -633,9 +684,9 @@ export class CreateProjectComponent {
         if ((this.validation || this.history) && this.isSelectedRepoAccessCreateMode()) {
             if (this.selectedSupportRepoConfig.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                this.basicModals.alert("Create project", "History/Validation Repository (" + this.selectedSupportRepoConfig.shortName 
+                this.basicModals.alert("Create project", "History/Validation Repository (" + this.selectedSupportRepoConfig.shortName
                     + ") requires to be configured", "warning");
-                    return;
+                return;
             }
 
             supportRepoSailConfigurerSpecification = {
@@ -654,7 +705,15 @@ export class CreateProjectComponent {
                 supportRepoBackendType = this.selectedSupportRepoBackendType;
             }
         }
-        
+
+        //edoal configuration;
+        let leftDataset: string;
+        let rightDataset: string;
+        if (this.isEdoalProject()) {
+            leftDataset = this.leftProject.getName();
+            rightDataset = this.rightProject.getName();
+        }
+
         /**
          * Prepare uriGeneratorSpecification parameter
          */
@@ -663,7 +722,7 @@ export class CreateProjectComponent {
             //check if uriGenerator plugin needs to be configured
             if (this.selectedUriGenPluginConf.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                this.basicModals.alert("Create project", "UriGenerator Plugin (" + this.selectedUriGenPluginConf.shortName 
+                this.basicModals.alert("Create project", "UriGenerator Plugin (" + this.selectedUriGenPluginConf.shortName
                     + ") requires configuration", "warning");
                 return;
             }
@@ -683,7 +742,7 @@ export class CreateProjectComponent {
             //check if uriGenerator plugin needs to be configured
             if (this.selectedRendEngPluginConf.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
-                this.basicModals.alert("Create project", "Rendering Engine Plugin (" + this.selectedRendEngPluginConf.shortName 
+                this.basicModals.alert("Create project", "Rendering Engine Plugin (" + this.selectedRendEngPluginConf.shortName
                     + ") requires configuration", "warning");
                 return;
             }
@@ -728,19 +787,20 @@ export class CreateProjectComponent {
             repositoryAccess, this.dataRepoId, this.supportRepoId,
             coreRepoSailConfigurerSpecification, coreRepoBackendType,
             supportRepoSailConfigurerSpecification, supportRepoBackendType,
+            leftDataset, rightDataset,
             uriGeneratorSpecification, renderingEngineSpecification,
             creationProp, modificationProp,
             preloadedDataFileName, preloadedDataFormat, transitiveImportAllowance).subscribe(
-            stResp => {
-                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                this.basicModals.alert("Create project", "Project created successfully").then(
-                    () => this.router.navigate(['/Projects'])
-                );
-            },
-            (err: Error) => {
-                this.projectService.handleMissingChangetrackierSailError(err, this.basicModals);
-            }
-        );
+                stResp => {
+                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                    this.basicModals.alert("Create project", "Project created successfully").then(
+                        () => this.router.navigate(['/Projects'])
+                    );
+                },
+                (err: Error) => {
+                    this.projectService.handleMissingChangetrackierSailError(err, this.basicModals);
+                }
+            );
     }
 
 }

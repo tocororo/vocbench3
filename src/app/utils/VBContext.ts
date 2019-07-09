@@ -17,8 +17,16 @@ export class VBContext {
         showFlags: true
     }
 
-    static getWorkingProjectCtx(): ProjectContext {
-        return this.workingProjectCtx;
+    /**
+     * If the project context is provided, returns (uses) it, otherwise returns the 'global' project context
+     * @param projectCtx 
+     */
+    static getWorkingProjectCtx(projectCtx?: ProjectContext): ProjectContext {
+        if (projectCtx != null) {
+            return projectCtx;
+        } else {
+            return this.workingProjectCtx;
+        }
     }
 
     /**

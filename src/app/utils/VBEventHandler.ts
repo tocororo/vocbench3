@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
+import { Project } from '../models/Project';
 import { ResourceViewMode } from '../models/Properties';
 import { VBContext } from '../utils/VBContext';
 
@@ -27,7 +28,7 @@ export class VBEventHandler {
     //SCHEME EVENTS
     public schemeCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("schemeCreatedEvent");
     public schemeDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("schemeDeletedEvent");
-    public schemeChangedEvent: EventEmitter<ARTURIResource[]> = new VBEventEmitter("schemeChangedEvent");
+    public schemeChangedEvent: EventEmitter<{ schemes: ARTURIResource[], project: Project }> = new VBEventEmitter("schemeChangedEvent");
 
     //COLLECTION EVENTS
     public rootCollectionCreatedEvent: EventEmitter<ARTResource> = new VBEventEmitter<ARTURIResource>("rootCollectionCreatedEvent");
@@ -64,7 +65,7 @@ export class VBEventHandler {
     //LEXICON EVENTS
     public lexiconCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("lexiconCreatedEvent");
     public lexiconDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("lexiconDeletedEvent");
-    public lexiconChangedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("lexiconChangedEvent");
+    public lexiconChangedEvent: EventEmitter<{ lexicon: ARTURIResource, project: Project }> = new VBEventEmitter("lexiconChangedEvent");
     public lexicalEntryCreatedEvent: EventEmitter<{ entry: ARTURIResource, lexicon: ARTURIResource }> = new VBEventEmitter("lexicalEntryCreatedEvent");
     public lexicalEntryDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("lexicalEntryDeletedEvent");
 
@@ -85,7 +86,7 @@ export class VBEventHandler {
 
     public showFlagChangedEvent: EventEmitter<boolean> = new VBEventEmitter("showFlagChangedEvent");
 
-    public searchPrefsUpdatedEvent: EventEmitter<any> = new VBEventEmitter("searchPrefsUpdatedEvent");
+    public searchPrefsUpdatedEvent: EventEmitter<Project> = new VBEventEmitter("searchPrefsUpdatedEvent");
 
     //MISC EVENTS 
     //data loaded/imported/removed/refactored => trees/lists need to be resfreshed

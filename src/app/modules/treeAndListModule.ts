@@ -43,14 +43,14 @@ import { ConceptTreeSettingsModal } from '../trees/skos/concept/conceptTreePanel
 import { SchemeListComponent } from '../trees/skos/scheme/schemeList/schemeListComponent';
 import { SchemeListNodeComponent } from '../trees/skos/scheme/schemeList/schemeListNodeComponent';
 import { SchemeListPanelComponent } from '../trees/skos/scheme/schemeListPanel/schemeListPanelComponent';
-import { TreeListSettingsModal } from '../trees/treeListSettingsModal';
-import { TreePanelComponent } from '../trees/treePanelComponent';
+import { TreeListSettingsModal } from '../trees/tabset/treeListSettingsModal';
+import { TabsetPanelComponent } from '../trees/tabset/tabsetPanelComponent';
 import { SharedModule } from './sharedModule';
 
 @NgModule({
     imports: [CommonModule, FormsModule, RouterModule, SharedModule, Ng2CompleterModule], 
     declarations: [
-        TreePanelComponent, TreeListSettingsModal,
+        TabsetPanelComponent, TreeListSettingsModal,
         ConceptTreePanelComponent, ConceptTreeComponent, ConceptTreeNodeComponent, ConceptTreeSettingsModal, AddToSchemeModal,
         CollectionTreePanelComponent, CollectionTreeComponent, CollectionTreeNodeComponent,
         SchemeListPanelComponent, SchemeListComponent, SchemeListNodeComponent,
@@ -63,7 +63,7 @@ import { SharedModule } from './sharedModule';
         SearchBarComponent, SearchSettingsModal, ClassTreeSettingsModal, AdvancedSearchModal, CustomSearchModal, LoadCustomSearchModal
     ],
     exports: [
-        TreePanelComponent,
+        TabsetPanelComponent,
         ConceptTreePanelComponent, ConceptTreeComponent,
         CollectionTreePanelComponent, CollectionTreeComponent,
         SchemeListPanelComponent, SchemeListComponent,

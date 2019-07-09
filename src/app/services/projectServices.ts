@@ -25,7 +25,7 @@ export class ProjectServices {
 	 * @param onlyOpen if true, return only the open projects
      * @return an array of Project
      */
-    listProjects(consumer?: Project, userDependent?: boolean, onlyOpen?: boolean) {
+    listProjects(consumer?: Project, userDependent?: boolean, onlyOpen?: boolean): Observable<Project[]> {
         var params: any = {
             consumer: "SYSTEM"
         };
@@ -43,19 +43,7 @@ export class ProjectServices {
                 var projCollJson: any[] = stResp;
                 var projectList: Project[] = [];
                 for (var i = 0; i < projCollJson.length; i++) {
-                    var proj = new Project();
-                    proj.setName(projCollJson[i].name);
-                    proj.setBaseURI(projCollJson[i].baseURI);
-                    proj.setDefaultNamespace(projCollJson[i].defaultNamespace);
-                    proj.setAccessible(projCollJson[i].accessible);
-                    proj.setHistoryEnabled(projCollJson[i].historyEnabled);
-                    proj.setValidationEnabled(projCollJson[i].validationEnabled);
-                    proj.setModelType(projCollJson[i].model);
-                    proj.setLexicalizationModelType(projCollJson[i].lexicalizationModel);
-                    proj.setOpen(projCollJson[i].open);
-                    proj.setRepositoryLocation(projCollJson[i].repositoryLocation);
-                    proj.setStatus(projCollJson[i].status);
-                    projectList.push(proj);
+                    projectList.push(Project.deserialize(projCollJson[i]));
                 }
                 //sort by name
                 projectList.sort(
@@ -67,6 +55,21 @@ export class ProjectServices {
             }
         );
     }
+
+    getProjectInfo(projectName: string, consumer?: Project, requestedAccessLevel?: AccessLevel, requestedLockLevel?: LockLevel): Observable<Project> {
+        var params: any = {
+            projectName: projectName,
+            consumer: consumer != null ? consumer.getName() : "SYSTEM",
+            requestedAccessLevel: requestedAccessLevel,
+            requestedLockLevel: requestedLockLevel
+        }
+        return this.httpMgr.doGet(this.serviceName, "getProjectInfo", params).map(
+            stResp => {
+                return Project.deserialize(stResp);
+            }
+        );
+    }
+        
 
     /**
      * Disconnects from the given project.
@@ -126,6 +129,7 @@ export class ProjectServices {
         coreRepoID: string, supportRepoID: string,
         coreRepoSailConfigurerSpecification?: PluginSpecification, coreBackendType?: BackendTypesEnum,
         supportRepoSailConfigurerSpecification?: PluginSpecification, supportBackendType?: BackendTypesEnum,
+        leftDataset?: string, rightDataset?: string,
         uriGeneratorSpecification?: PluginSpecification, renderingEngineSpecification?: PluginSpecification,
         creationDateProperty?: ARTURIResource, modificationDateProperty?: ARTURIResource,
         preloadedDataFileName?: string, preloadedDataFormat?: string, transitiveImportAllowance?: TransitiveImportMethodAllowance) {
@@ -142,11 +146,12 @@ export class ProjectServices {
             repositoryAccess: repositoryAccess.stringify(),
             coreRepoID: coreRepoID,
             supportRepoID: supportRepoID,
-
             coreRepoSailConfigurerSpecification: (coreRepoSailConfigurerSpecification) ? JSON.stringify(coreRepoSailConfigurerSpecification) : null,
             coreBackendType: coreBackendType,
             supportRepoSailConfigurerSpecification: (supportRepoSailConfigurerSpecification) ? JSON.stringify(supportRepoSailConfigurerSpecification) : null,
             supportBackendType: supportBackendType,
+            leftDataset: leftDataset, 
+            rightDataset: rightDataset,
             uriGeneratorSpecification: (uriGeneratorSpecification) ? JSON.stringify(uriGeneratorSpecification) : null,
             renderingEngineSpecification: (renderingEngineSpecification) ? JSON.stringify(renderingEngineSpecification) : null,
             creationDateProperty: creationDateProperty,

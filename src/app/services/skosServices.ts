@@ -22,7 +22,7 @@ export class SkosServices {
      * @return an array of top concepts
      */
     getTopConcepts(schemes?: ARTURIResource[], broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], 
-        includeSubProperties?: boolean) {
+        includeSubProperties?: boolean, options?: VBRequestOptions) {
         var params: any = {};
         if (schemes != null) {
             params.schemes = schemes;
@@ -36,7 +36,7 @@ export class SkosServices {
         if (includeSubProperties != null) {
             params.includeSubProperties = includeSubProperties;
         }
-        return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -50,7 +50,7 @@ export class SkosServices {
      * @return an array of narrowers
      */
     getNarrowerConcepts(concept: ARTURIResource, schemes?: ARTURIResource[], broaderProps?: ARTURIResource[],
-        narrowerProps?: ARTURIResource[], includeSubProperties?: boolean) {
+        narrowerProps?: ARTURIResource[], includeSubProperties?: boolean, options?: VBRequestOptions) {
         var params: any = {
             concept: concept
         };
@@ -66,7 +66,7 @@ export class SkosServices {
         if (includeSubProperties != null) {
             params.includeSubProperties = includeSubProperties;
         }
-        return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -324,9 +324,9 @@ export class SkosServices {
      * Returns the list of available skos:ConceptScheme (New service)
      * @return an array of schemes
      */
-    getAllSchemes() {
+    getAllSchemes(options?: VBRequestOptions) {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getAllSchemes", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getAllSchemes", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -576,9 +576,9 @@ export class SkosServices {
     /**
      * Gets the root collections
      */
-    getRootCollections() {
+    getRootCollections(options?: VBRequestOptions) {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getRootCollections", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getRootCollections", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -589,11 +589,11 @@ export class SkosServices {
      * Get the nested collections of a container collection
      * @param container the URI of the container collection
      */
-    getNestedCollections(container: ARTResource) {
+    getNestedCollections(container: ARTResource, options?: VBRequestOptions) {
         var params: any = {
             container: container
         };
-        return this.httpMgr.doGet(this.serviceName, "getNestedCollections", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getNestedCollections", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }

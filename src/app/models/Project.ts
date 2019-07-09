@@ -1,6 +1,6 @@
 import { ResourceUtils } from "../utils/ResourceUtils";
 import { ARTURIResource } from "./ARTResources";
-import { OntoLex, OWL, RDFS, SKOS, SKOSXL } from "./Vocabulary";
+import { OntoLex, OWL, RDFS, SKOS, SKOSXL, EDOAL } from "./Vocabulary";
 
 export class Project {
     private name: string;
@@ -100,6 +100,8 @@ export class Project {
             return "SKOSXL";
         } else if (modelType == OntoLex.uri) {
             return "OntoLex";
+        } else if (modelType == EDOAL.uri) {
+            return "EDOAL";
         }
     }
 
@@ -125,6 +127,22 @@ export class Project {
     }
     public getStatus(): { status: string, message?: string } {
         return this.status;
+    }
+
+    public static deserialize(projJson: any): Project {
+        let proj = new Project();
+        proj.setName(projJson.name);
+        proj.setBaseURI(projJson.baseURI);
+        proj.setDefaultNamespace(projJson.defaultNamespace);
+        proj.setAccessible(projJson.accessible);
+        proj.setHistoryEnabled(projJson.historyEnabled);
+        proj.setValidationEnabled(projJson.validationEnabled);
+        proj.setModelType(projJson.model);
+        proj.setLexicalizationModelType(projJson.lexicalizationModel);
+        proj.setOpen(projJson.open);
+        proj.setRepositoryLocation(projJson.repositoryLocation);
+        proj.setStatus(projJson.status);
+        return proj;
     }
 
 }

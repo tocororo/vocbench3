@@ -3,6 +3,7 @@ import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResourc
 import { ClassesServices } from "../../../services/classesServices";
 import { SearchServices } from "../../../services/searchServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
@@ -49,11 +50,11 @@ export class ClassTreeComponent extends AbstractTree {
         
         let clsTreeRoots: ARTURIResource[] = this.rootClasses;
         if (clsTreeRoots == undefined || clsTreeRoots.length == 0) {
-            clsTreeRoots = [new ARTURIResource(VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.rootClassUri)];
+            clsTreeRoots = [new ARTURIResource(VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().classTreePreferences.rootClassUri)];
         }
 
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement)
-        this.clsService.getClassesInfo(clsTreeRoots).subscribe(
+        this.clsService.getClassesInfo(clsTreeRoots, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             roots => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(roots, this.rendering ? SortAttribute.show : SortAttribute.value);
@@ -67,11 +68,11 @@ export class ClassTreeComponent extends AbstractTree {
     openTreeAt(node: ARTURIResource) {
         let rootForPath: ARTURIResource;
         if (this.rootClasses == undefined || this.rootClasses.length == 0) {
-            rootForPath = new ARTURIResource(VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.rootClassUri);
+            rootForPath = new ARTURIResource(VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().classTreePreferences.rootClassUri);
         } else if (this.rootClasses != undefined && this.rootClasses.length == 1) {
             rootForPath = this.rootClasses[0];
         }
-        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.cls, null, rootForPath).subscribe(
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.cls, null, rootForPath, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             path => {
                 if (path.length == 0) {
                     this.onTreeNodeNotFound(node);

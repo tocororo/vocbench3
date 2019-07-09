@@ -4,6 +4,7 @@ import { RDFS } from "../../../models/Vocabulary";
 import { PropertyServices } from "../../../services/propertyServices";
 import { SearchServices } from "../../../services/searchServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
@@ -65,7 +66,7 @@ export class PropertyTreeComponent extends AbstractTree {
          * - no Input provided: tree roots retrieved from server without restrinction
          */
         if (this.rootProperties) {
-            this.propertyService.getPropertiesInfo(this.rootProperties).subscribe(
+            this.propertyService.getPropertiesInfo(this.rootProperties, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                 props => {
                     ResourceUtils.sortResources(props, orderAttribute);
                     this.roots = props;
@@ -74,7 +75,7 @@ export class PropertyTreeComponent extends AbstractTree {
                 err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             )
         } else if (this.resource) {
-            this.propertyService.getRelevantPropertiesForResource(this.resource).subscribe(
+            this.propertyService.getRelevantPropertiesForResource(this.resource, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                 relevantProps => {
                     //add (hardcode) rdfs:comment if not present
                     let commentFound: boolean = false;
@@ -86,7 +87,7 @@ export class PropertyTreeComponent extends AbstractTree {
                     if (!commentFound) {
                         relevantProps.push(RDFS.comment);
                     }
-                    this.propertyService.getPropertiesInfo(relevantProps).subscribe(
+                    this.propertyService.getPropertiesInfo(relevantProps, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                         props => {
                             ResourceUtils.sortResources(props, orderAttribute);
                             this.roots = props;
@@ -98,7 +99,7 @@ export class PropertyTreeComponent extends AbstractTree {
                 err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             );
         } else if (this.type == RDFResourceRolesEnum.objectProperty) {
-            this.propertyService.getTopObjectProperties().subscribe(
+            this.propertyService.getTopObjectProperties(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                 props => {
                     ResourceUtils.sortResources(props, orderAttribute);
                     this.roots = props;
@@ -107,7 +108,7 @@ export class PropertyTreeComponent extends AbstractTree {
                 err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             );
         } else if (this.type == RDFResourceRolesEnum.annotationProperty) {
-            this.propertyService.getTopAnnotationProperties().subscribe(
+            this.propertyService.getTopAnnotationProperties(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                 props => {
                     ResourceUtils.sortResources(props, orderAttribute);
                     this.roots = props;
@@ -116,7 +117,7 @@ export class PropertyTreeComponent extends AbstractTree {
                 err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             );
         } else if (this.type == RDFResourceRolesEnum.datatypeProperty) {
-            this.propertyService.getTopDatatypeProperties().subscribe(
+            this.propertyService.getTopDatatypeProperties(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                 props => {
                     ResourceUtils.sortResources(props, orderAttribute);
                     this.roots = props;
@@ -125,7 +126,7 @@ export class PropertyTreeComponent extends AbstractTree {
                 err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             );
         } else if (this.type == RDFResourceRolesEnum.ontologyProperty) {
-            this.propertyService.getTopOntologyProperties().subscribe(
+            this.propertyService.getTopOntologyProperties(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                 props => {
                     ResourceUtils.sortResources(props, orderAttribute);
                     this.roots = props;
@@ -134,7 +135,7 @@ export class PropertyTreeComponent extends AbstractTree {
                 err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             );
         } else if (this.type == RDFResourceRolesEnum.property) {
-            this.propertyService.getTopProperties().subscribe(
+            this.propertyService.getTopProperties(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                 props => {
                     ResourceUtils.sortResources(props, orderAttribute);
                     this.roots = props;
@@ -143,7 +144,7 @@ export class PropertyTreeComponent extends AbstractTree {
                 err => { UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement); }
             );
         } else {
-            this.propertyService.getTopProperties().subscribe(
+            this.propertyService.getTopProperties(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                 props => {
                     ResourceUtils.sortResources(props, orderAttribute);
                     this.roots = props;
@@ -155,7 +156,7 @@ export class PropertyTreeComponent extends AbstractTree {
     }
 
     openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.property).subscribe(
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.property, null, null, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             path => {
                 if (path.length == 0) {
                     this.onTreeNodeNotFound(node);

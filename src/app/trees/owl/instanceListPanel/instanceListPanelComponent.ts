@@ -2,7 +2,6 @@ import { Component, Input, ViewChild } from "@angular/core";
 import { GraphModalServices } from "../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { SearchSettings } from "../../../models/Properties";
-import { ClassesServices } from "../../../services/classesServices";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { SearchServices } from "../../../services/searchServices";
@@ -16,6 +15,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { AbstractListPanel } from "../../abstractListPanel";
 import { MultiSubjectEnrichmentHelper } from "../../multiSubjectEnrichmentHelper";
 import { InstanceListComponent } from "../instanceList/instanceListComponent";
+import { VBRequestOptions } from "../../../utils/HttpManager";
 
 @Component({
     selector: "instance-list-panel",
@@ -87,7 +87,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
     //search handlers
 
     doSearch(searchedText: string) {
-        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
         if (searchSettings.restrictLang) {
@@ -95,7 +95,8 @@ export class InstanceListPanelComponent extends AbstractListPanel {
             includeLocales = searchSettings.includeLocales;
         }
         this.searchService.searchInstancesOfClass(this.cls, searchedText, searchSettings.useLocalName, searchSettings.useURI,
-            searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
+            searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales,
+            VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             searchResult => {
                 if (searchResult.length == 0) {
                     this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");

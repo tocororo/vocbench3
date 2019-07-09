@@ -90,7 +90,7 @@ export class RefactorServices {
                 //if the project baseURI was replaced, update it
                 if (sourceBaseURI == null || sourceBaseURI == VBContext.getWorkingProject().getBaseURI()) {
                     VBContext.getWorkingProject().setBaseURI(targetBaseURI);
-                    this.preferences.setActiveSchemes([]);
+                    this.preferences.setActiveSchemes(VBContext.getWorkingProjectCtx(), []);
                 }
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
             }

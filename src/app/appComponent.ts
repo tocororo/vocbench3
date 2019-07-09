@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import '../assets/styles/style.css';
 import { Project } from "./models/Project";
-import { OntoLex, OWL, RDFS, SKOS } from "./models/Vocabulary";
+import { EDOAL, OntoLex, OWL, RDFS, SKOS } from "./models/Vocabulary";
 import { AuthorizationEvaluator } from "./utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "./utils/VBActions";
 import { VBContext } from "./utils/VBContext";
@@ -40,6 +40,10 @@ export class AppComponent {
      */
     private isProjectOpen(): boolean {
         return VBContext.getWorkingProject() != undefined;
+    }
+
+    private isProjectEdoal(): boolean {
+        return VBContext.getWorkingProject().getModelType() == EDOAL.uri;
     }
 
     /**
@@ -90,6 +94,9 @@ export class AppComponent {
                 AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesGetClassTaxonomy) ||
                 AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesGetPropertyTaxonomy)
             );
+        } else if (modelType == EDOAL.uri) {
+            //?????
+            return true;
         }
     }
 

@@ -11,6 +11,7 @@ import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { AbstractList } from "../../../abstractList";
 import { LexicalEntryListNodeComponent } from "./lexicalEntryListNodeComponent";
+import { VBRequestOptions } from "../../../../utils/HttpManager";
 
 @Component({
     selector: "lexical-entry-list",
@@ -54,11 +55,11 @@ export class LexicalEntryListComponent extends AbstractList {
 
     initImpl() {
         if (this.lexicon != undefined) {
-            let visualization: LexEntryVisualizationMode = VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences.visualization;
+            let visualization: LexEntryVisualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.visualization;
             if (visualization == LexEntryVisualizationMode.indexBased && this.index != undefined) {
                 this.list = [];
                 UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-                this.ontolexService.getLexicalEntriesByAlphabeticIndex(this.index, this.lexicon).subscribe(
+                this.ontolexService.getLexicalEntriesByAlphabeticIndex(this.index, this.lexicon, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                     entries => {
                         //sort by show if rendering is active, uri otherwise
                         ResourceUtils.sortResources(entries, this.rendering ? SortAttribute.show : SortAttribute.value);
@@ -83,7 +84,7 @@ export class LexicalEntryListComponent extends AbstractList {
     }
 
     onListNodeCreated(node: ARTURIResource) {
-        if (VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences.visualization = LexEntryVisualizationMode.indexBased) {
+        if (VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.visualization = LexEntryVisualizationMode.indexBased) {
             if (node.getShow().toLocaleLowerCase().startsWith(this.index.toLocaleLowerCase())) {
                 this.list.unshift(node);
             }

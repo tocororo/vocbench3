@@ -4,12 +4,14 @@ import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from "rxjs/Observable";
 import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../../models/ARTResources";
+import { Project } from "../../../../models/Project";
 import { ConceptTreeVisualizationMode, SearchSettings } from "../../../../models/Properties";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { ActionDescription, RoleActionResolver } from "../../../../utils/RoleActionResolver";
 import { UIUtils } from "../../../../utils/UIUtils";
@@ -31,6 +33,7 @@ import { ConceptTreeSettingsModal } from "./conceptTreeSettingsModal";
     host: { class: "vbox" }
 })
 export class ConceptTreePanelComponent extends AbstractTreePanel {
+
     @Input() schemes: ARTURIResource[]; //if set the concept tree is initialized with this scheme, otherwise with the scheme from VB context
     @Input() schemeChangeable: boolean = false; //if true, above the tree is shown a menu to select a scheme
     @Output() schemeChanged = new EventEmitter<ARTURIResource>();//when dynamic scheme is changed
@@ -57,26 +60,35 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
         super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
 
+        // this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
+        //     (schemes: ARTURIResource[]) => this.onSchemeChanged(schemes)));
+
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
-            (schemes: ARTURIResource[]) => this.onSchemeChanged(schemes)));
+            (data: { schemes: ARTURIResource[], project: Project }) => {
+                if (VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getName() == data.project.getName()) {
+                    this.onSchemeChanged(data.schemes);
+                }
+            })
+        );
     }
 
     ngOnInit() {
         super.ngOnInit();
 
-        this.visualizationMode = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.visualization;
+        this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences.visualization;
+
         this.modelType = VBContext.getWorkingProject().getModelType();
             
         //Initialize working schemes
         if (this.schemes === undefined) { //if @Input is not provided at all, get the scheme from the preferences
-            this.workingSchemes = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
+            this.workingSchemes = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeSchemes;
         } else { //if @Input schemes is provided (it could be null => no scheme-mode), initialize the tree with this scheme
             this.workingSchemes = this.schemes;
         }
 
         if (this.schemeChangeable) {
             //init the scheme list if the concept tree allows dynamic change of scheme
-            this.skosService.getAllSchemes().subscribe(
+            this.skosService.getAllSchemes(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                 schemes => {
                     ResourceUtils.sortResources(schemes, this.rendering ? SortAttribute.show : SortAttribute.value);
                     this.schemeList = schemes;
@@ -238,7 +250,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     doSearch(searchedText: string) {
         this.lastSearch = searchedText;
 
-        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
         if (searchSettings.restrictLang) {
@@ -255,8 +267,9 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         }
 
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-        this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], searchSettings.useLocalName, 
-            searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, searchingScheme).subscribe(
+        this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], searchSettings.useLocalName, searchSettings.useURI,
+            searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, searchingScheme, 
+            VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
@@ -311,7 +324,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                     if (schemes.length == 0) { //searched concept doesn't belong to any scheme => ask switch to no-scheme mode
                         this.basicModals.confirm("Search", "Searched concept '" + resource.getShow() + "' does not belong to any scheme. Do you want to switch to no-scheme mode?", "warning").then(
                             confirm => {
-                                this.vbProp.setActiveSchemes([]); //update the active schemes
+                                this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), []); //update the active schemes
                                 setTimeout(() => {
                                     this.selectResourceVisualizationModeAware(resource);
                                 });
@@ -330,7 +343,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                             schemes => {
                                 this.basicModals.selectResource("Search", message, schemes, this.rendering).then(
                                     (scheme: ARTURIResource) => {
-                                        this.vbProp.setActiveSchemes(this.workingSchemes.concat(scheme)); //update the active schemes
+                                        this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), this.workingSchemes.concat(scheme)); //update the active schemes
                                         setTimeout(() => {
                                             this.selectResourceVisualizationModeAware(resource);
                                         });
@@ -378,7 +391,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ConceptTreeSettingsModal, overlayConfig).result.then(
             changesDone => {
-                this.visualizationMode = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.visualization;
+                this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences.visualization;
                 if (this.visualizationMode == ConceptTreeVisualizationMode.searchBased) {
                     this.viewChildTree.forceList([]);
                     this.lastSearch = null;
@@ -391,7 +404,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     }
 
     private isAddToSchemeEnabled() {
-        return this.selectedNode != null && this.isContextDataPanel() && 
+        return this.selectedNode != null && this.isContextDataPanel() && this.editable &&
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddMultipleToScheme);
     }
     private addToScheme() {

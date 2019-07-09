@@ -17,6 +17,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { AbstractTreePanel } from "../../abstractTreePanel";
 import { MultiSubjectEnrichmentHelper } from "../../multiSubjectEnrichmentHelper";
 import { PropertyTreeComponent } from "../propertyTree/propertyTreeComponent";
+import { VBRequestOptions } from "../../../utils/HttpManager";
 
 @Component({
     selector: "property-tree-panel",
@@ -87,7 +88,7 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
     //search handlers
 
     doSearch(searchedText: string) {
-        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
         if (searchSettings.restrictLang) {
@@ -96,7 +97,8 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
         }
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
         this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.property], searchSettings.useLocalName, 
-            searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
+            searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, null,
+            VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (searchResult.length == 0) {

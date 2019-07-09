@@ -5,9 +5,11 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from 
 import { CustomFormsServices } from "../services/customFormsServices";
 import { ResourcesServices } from "../services/resourcesServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
+import { VBRequestOptions } from "../utils/HttpManager";
 import { ActionDescription, RoleActionResolver } from "../utils/RoleActionResolver";
 import { TreeListContext } from "../utils/UIUtils";
 import { VBActionFunctionCtx } from "../utils/VBActions";
+import { ProjectContext, VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -25,6 +27,7 @@ export abstract class AbstractPanel {
     @Input() readonly: boolean = false; //if true disable the buttons to edit the tree/list (useful to disable edit when exploring old version)
     @Input() allowMultiselection: boolean = false; //if true allow the possibility to enable the multiselection in the contained tree/list
     @Input() context: TreeListContext; //useful in some scenarios (ex. scheme list to show/hide the checkboxes, concept and class panel to show/hide configuration button)
+    @Input() projectCtx: ProjectContext; //useful to make the panel (the underlying tree or list) work with another project, different from the open one
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Output() nodeChecked = new EventEmitter<ARTURIResource[]>();
     @Output() multiselectionStatus = new EventEmitter<boolean>(); //emitted when the multiselection changes status (activated/deactivated)
@@ -199,8 +202,11 @@ export abstract class AbstractPanel {
         }
     }
 
-    isContextDataPanel(): boolean {
-        return this.context == TreeListContext.dataPanel;
+    /**
+     * Settings of a project are editable only if the panel is in the data page and if it is about the project opened, not a contextual project
+     */
+    isOpenSettingsAvailable(): boolean {
+        return this.projectCtx == null && this.isContextDataPanel();
     }
 
     abstract doSearch(searchedText: string): void;
@@ -221,6 +227,12 @@ export abstract class AbstractPanel {
     onNodeChecked(nodes: ARTURIResource[]) {
         this.checkedNodes = nodes;
         this.nodeChecked.emit(nodes);
+    }
+
+    //UTILS
+
+    isContextDataPanel(): boolean {
+        return this.context == TreeListContext.dataPanel;
     }
 
 }

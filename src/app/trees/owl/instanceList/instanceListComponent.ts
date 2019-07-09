@@ -4,6 +4,7 @@ import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../mod
 import { SemanticTurkey } from "../../../models/Vocabulary";
 import { ClassesServices } from "../../../services/classesServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
@@ -90,7 +91,7 @@ export class InstanceListComponent extends AbstractList {
 
         if (this.cls != undefined) {
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-            this.clsService.getInstances(this.cls).subscribe(
+            this.clsService.getInstances(this.cls, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                 instances => {
                     //sort by show if rendering is active, uri otherwise
                     ResourceUtils.sortResources(instances, this.rendering ? SortAttribute.show : SortAttribute.value);
@@ -146,10 +147,10 @@ export class InstanceListComponent extends AbstractList {
      * @param cls 
      */
     private getNumberOfInstances(cls: ARTURIResource): Observable<number> {
-        if (VBContext.getWorkingProjectCtx().getProjectPreferences().showInstancesNumber) { //if num inst are already computed when building the tree...
+        if (VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().showInstancesNumber) { //if num inst are already computed when building the tree...
             return Observable.of(this.cls.getAdditionalProperty(ResAttribute.NUM_INST));
         } else { //otherwise call a service
-            return this.clsService.getNumberOfInstances(cls);
+            return this.clsService.getNumberOfInstances(cls, VBRequestOptions.getRequestOptions(this.projectCtx));
         }
     }
 

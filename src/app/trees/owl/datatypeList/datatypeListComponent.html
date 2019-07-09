@@ -4,7 +4,7 @@
         <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
             <ng-template ngFor let-n [ngForOf]="list" let-idx="index">
                 <datatype-list-node *ngIf="idx < nodeLimit && (!n.isDeprecated() || showDeprecated && n.isDeprecated())"
-                    [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context"
+                    [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context" [projectCtx]="projectCtx"
                     (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)">
                 </datatype-list-node>
             </ng-template>

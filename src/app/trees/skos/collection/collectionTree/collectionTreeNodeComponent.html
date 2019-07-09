@@ -16,7 +16,8 @@
     <ng-template ngFor let-n [ngForOf]="children">
         <collection-tree-node *ngIf="!n.isDeprecated() || showDeprecated && n.isDeprecated()" [node]="n"
             [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated"
-            [context]="context" (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)"
+            [context]="context" [projectCtx]="projectCtx" 
+            (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)"
             (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
         </collection-tree-node>
     </ng-template>

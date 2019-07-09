@@ -1,13 +1,16 @@
+import { CompleterData, CompleterItem } from 'ng2-completer';
 import { Subject } from "rxjs/Subject";
-import { CompleterService, CompleterData, CompleterItem } from 'ng2-completer';
-import { SearchServices } from "../../services/searchServices";
-import { RDFResourceRolesEnum, ARTURIResource } from "../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { ClassIndividualPanelSearchMode, SearchSettings } from "../../models/Properties";
+import { SearchServices } from "../../services/searchServices";
+import { VBRequestOptions } from '../../utils/HttpManager';
+import { ProjectContext } from '../../utils/VBContext';
 
 export class CustomCompleterData extends Subject<CompleterItem[]> implements CompleterData {
 
     private activeSchemes: ARTURIResource[];
     private cls: ARTURIResource;
+    private projectCtx: ProjectContext;
     
     constructor(private searchService: SearchServices, private roles: RDFResourceRolesEnum[], private searchSettings: SearchSettings) {
         super();
@@ -37,7 +40,7 @@ export class CustomCompleterData extends Subject<CompleterItem[]> implements Com
             clsParam = this.cls;
         }
         this.searchService.searchStringList(term, rolesParam, this.searchSettings.useLocalName, this.searchSettings.stringMatchMode, 
-            langsParam, includeLocales, schemesParam, clsParam).map(
+            langsParam, includeLocales, schemesParam, clsParam, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
             strings => {
                 let results: CompleterItem[] = [];
                 strings.slice(0, 100).forEach(s => {
@@ -54,6 +57,10 @@ export class CustomCompleterData extends Subject<CompleterItem[]> implements Com
 
     public updateSearchSettings(searchSettings: SearchSettings) {
         this.searchSettings = searchSettings;
+    }
+
+    public setProjectCtx(projectCtx: ProjectContext) {
+        this.projectCtx = projectCtx;
     }
 
     public setConceptSchemes(schemes: ARTURIResource[]) {

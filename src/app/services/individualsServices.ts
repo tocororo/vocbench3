@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
@@ -16,11 +16,11 @@ export class IndividualsServices {
      * Returns the (explicit) named types of the given individual
      * @param individual
      */
-    getNamedTypes(individual: ARTResource): Observable<ARTURIResource[]> {
+    getNamedTypes(individual: ARTResource, options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {
             individual: individual
         };
-        return this.httpMgr.doGet(this.serviceName, "getNamedTypes", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getNamedTypes", params, options).map(
             stResp => {
                 var types = Deserializer.createURIArray(stResp);
                 return types;

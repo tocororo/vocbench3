@@ -9,7 +9,7 @@ import { ARTNode, ARTURIResource, ARTBNode, ARTLiteral } from "../models/ARTReso
 import { CustomFormValue } from "../models/CustomForms";
 import { Project } from "../models/Project";
 import { VersionInfo } from "../models/History";
-import { VBContext } from './VBContext';
+import { VBContext, ProjectContext } from './VBContext';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
 @Injectable()
@@ -622,6 +622,15 @@ export class VBRequestOptions {
             ctxProject: options && options.ctxProject != null ? options.ctxProject : this.ctxProject
         });
     }
+
+    public static getRequestOptions(projectCtx?: ProjectContext): VBRequestOptions {
+        if (projectCtx != null) {
+            return new VBRequestOptions({ ctxProject: projectCtx.getProject() });
+        } else {
+            return null;
+        }
+    }
+    
 }
 
 //inspired by angular RequestOptionsArgs

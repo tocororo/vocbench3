@@ -13,7 +13,8 @@ import { Cookie } from '../utils/Cookie';
 import { UIUtils } from '../utils/UIUtils';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
-import { VBContext } from './VBContext';
+import { VBContext, ProjectContext } from './VBContext';
+import { VBRequestOptions } from './HttpManager';
 
 @Injectable()
 export class VBProperties {
@@ -37,7 +38,7 @@ export class VBProperties {
     /**
      * To call each time the user change project
      */
-    initUserProjectPreferences(): Observable<any> {
+    initUserProjectPreferences(projectCtx: ProjectContext): Observable<any> {
         var properties: string[] = [
             Properties.pref_active_schemes, Properties.pref_active_lexicon, Properties.pref_show_flags,
             Properties.pref_show_instances_number, Properties.pref_project_theme,
@@ -50,9 +51,11 @@ export class VBProperties {
             Properties.pref_editing_language, Properties.pref_filter_value_languages,
             Properties.pref_res_view_partition_filter, Properties.pref_hide_literal_graph_nodes
         ];
-        let getPUSettingsNoPlugin = this.prefService.getPUSettings(properties).map(
+        
+        let options: VBRequestOptions = new VBRequestOptions({ ctxProject: projectCtx.getProject() });
+        let getPUSettingsNoPlugin = this.prefService.getPUSettings(properties, null, options).map(
             prefs => {
-                let projectPreferences: ProjectPreferences = VBContext.getWorkingProjectCtx().getProjectPreferences();
+                let projectPreferences: ProjectPreferences = projectCtx.getProjectPreferences();
 
                 let activeSchemes: ARTURIResource[] = [];
                 let activeSchemesPref: string = prefs[Properties.pref_active_schemes];
@@ -77,7 +80,7 @@ export class VBProperties {
                 if (showInstPref != null) {
                     projectPreferences.showInstancesNumber = showInstPref == "true";
                 } else { //if not specified, true for RDFS and OWL projects, false otherwise
-                    let modelType: string = VBContext.getWorkingProject().getModelType();
+                    let modelType: string = projectCtx.getProject().getModelType();
                     projectPreferences.showInstancesNumber = modelType == RDFS.uri || modelType == OWL.uri;
                 }
 
@@ -112,7 +115,7 @@ export class VBProperties {
 
                 //cls tree preferences
                 let classTreePreferences: ClassTreePreference = { 
-                    rootClassUri: (VBContext.getWorkingProject().getModelType() == RDFS.uri) ? RDFS.resource.getURI() : OWL.thing.getURI(),
+                    rootClassUri: (projectCtx.getProject().getModelType() == RDFS.uri) ? RDFS.resource.getURI() : OWL.thing.getURI(),
                     filter: {
                         enabled: true,
                         map: {}
@@ -180,34 +183,34 @@ export class VBProperties {
                 projectPreferences.searchSettings = searchSettings;
 
 
-                this.initSearchSettingsCookie(); //other settings stored in cookies
+                this.initSearchSettingsCookie(projectPreferences); //other settings stored in cookies
             }
         );
 
         // this is called separately since requires the pluginId parameter
-        let getPUSettingsRenderingEngine = this.prefService.getPUSettings([Properties.pref_languages], ExtensionPointID.RENDERING_ENGINE_ID).map(
+        let getPUSettingsRenderingEngine = this.prefService.getPUSettings([Properties.pref_languages], ExtensionPointID.RENDERING_ENGINE_ID, options).map(
             prefs => {
-                VBContext.getWorkingProjectCtx().getProjectPreferences().projectLanguagesPreference = prefs[Properties.pref_languages].split(",");
+                projectCtx.getProjectPreferences().projectLanguagesPreference = prefs[Properties.pref_languages].split(",");
             }
         );
 
         return Observable.forkJoin(getPUSettingsNoPlugin, getPUSettingsRenderingEngine);
     }
 
-    setActiveSchemes(schemes: ARTURIResource[]) {
+    setActiveSchemes(projectCtx: ProjectContext, schemes: ARTURIResource[]) {
         if (schemes == null) {
-            VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes = [];
+            projectCtx.getProjectPreferences().activeSchemes = [];
         } else {
-            VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes = schemes;
+            projectCtx.getProjectPreferences().activeSchemes = schemes;
         }
-        this.eventHandler.schemeChangedEvent.emit(schemes);
-        this.prefService.setActiveSchemes(schemes).subscribe();
+        this.eventHandler.schemeChangedEvent.emit({schemes: schemes, project: projectCtx.getProject() });
+        this.prefService.setActiveSchemes(schemes, new VBRequestOptions({ctxProject: projectCtx.getProject()})).subscribe();
     }
 
-    setActiveLexicon(lexicon: ARTURIResource) {
-        VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon = lexicon;
-        this.eventHandler.lexiconChangedEvent.emit(lexicon);
-        this.prefService.setPUSetting(Properties.pref_active_lexicon, lexicon.getURI()).subscribe();
+    setActiveLexicon(projectCtx: ProjectContext, lexicon: ARTURIResource) {
+        projectCtx.getProjectPreferences().activeLexicon = lexicon;
+        this.eventHandler.lexiconChangedEvent.emit({ lexicon: lexicon, project: projectCtx.getProject() });
+        this.prefService.setPUSetting(Properties.pref_active_lexicon, lexicon.getURI(), null, new VBRequestOptions({ctxProject: projectCtx.getProject()})).subscribe();
     }
 
     getShowFlags(): boolean {
@@ -354,11 +357,11 @@ export class VBProperties {
         return VBContext.getSystemSettings().privacyStatementAvailable;
     }
 
-    initProjectSettings(): Observable<any> {
+    initProjectSettings(projectCtx: ProjectContext): Observable<any> {
         var properties: string[] = [Properties.setting_languages];
-        return this.prefService.getProjectSettings(properties).map(
+        let projectSettings: ProjectSettings = projectCtx.getProjectSettings();
+        return this.prefService.getProjectSettings(properties, projectCtx.getProject()).map(
             settings => {
-                let projectSettings: ProjectSettings = VBContext.getWorkingProjectCtx().getProjectSettings();
                 var langsValue: string = settings[Properties.setting_languages];
                 try {
                     projectSettings.projectLanguagesSetting = <Language[]>JSON.parse(langsValue);
@@ -455,36 +458,35 @@ export class VBProperties {
     }
 
     
-    initSearchSettingsCookie() {
-        let projectSettings: ProjectPreferences = VBContext.getWorkingProjectCtx().getProjectPreferences();
+    private initSearchSettingsCookie(preferences: ProjectPreferences) {
         let searchModeCookie: string = Cookie.getCookie(Cookie.SEARCH_STRING_MATCH_MODE);
         if (searchModeCookie != null) {
-            projectSettings.searchSettings.stringMatchMode = <SearchMode>searchModeCookie;
+            preferences.searchSettings.stringMatchMode = <SearchMode>searchModeCookie;
         }
         let useUriCookie: string = Cookie.getCookie(Cookie.SEARCH_USE_URI);
         if (useUriCookie != null) {
-            projectSettings.searchSettings.useURI = useUriCookie == "true";
+            preferences.searchSettings.useURI = useUriCookie == "true";
         }
         let useLocalNameCookie: string = Cookie.getCookie(Cookie.SEARCH_USE_LOCAL_NAME);
         if (useLocalNameCookie != null) {
-            projectSettings.searchSettings.useLocalName = useLocalNameCookie == "true";
+            preferences.searchSettings.useLocalName = useLocalNameCookie == "true";
         }
         let useNotesCookie: string = Cookie.getCookie(Cookie.SEARCH_USE_NOTES);
         if (useNotesCookie != null) {
-            projectSettings.searchSettings.useNotes = useNotesCookie == "true";
+            preferences.searchSettings.useNotes = useNotesCookie == "true";
         }
         let restrictSchemesCookie: string = Cookie.getCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION);
         if (restrictSchemesCookie != null) {
-            projectSettings.searchSettings.restrictActiveScheme = restrictSchemesCookie == "true";
+            preferences.searchSettings.restrictActiveScheme = restrictSchemesCookie == "true";
         }
         let clsIndPanelSearchModeCookie: string = Cookie.getCookie(Cookie.SEARCH_CLS_IND_PANEL);
         if (clsIndPanelSearchModeCookie != null) {
-            projectSettings.searchSettings.classIndividualSearchMode = <ClassIndividualPanelSearchMode>clsIndPanelSearchModeCookie;
+            preferences.searchSettings.classIndividualSearchMode = <ClassIndividualPanelSearchMode>clsIndPanelSearchModeCookie;
         }
     }
 
-    setSearchSettings(settings: SearchSettings) {
-        let projectSettings: ProjectPreferences = VBContext.getWorkingProjectCtx().getProjectPreferences();
+    setSearchSettings(projectCtx: ProjectContext, settings: SearchSettings) {
+        let projectPreferences: ProjectPreferences = projectCtx.getProjectPreferences();
 
         Cookie.setCookie(Cookie.SEARCH_STRING_MATCH_MODE, settings.stringMatchMode, 365*10);
         Cookie.setCookie(Cookie.SEARCH_USE_URI, settings.useURI+"", 365*10);
@@ -492,20 +494,23 @@ export class VBProperties {
         Cookie.setCookie(Cookie.SEARCH_USE_NOTES, settings.useNotes+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION, settings.restrictActiveScheme+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_CLS_IND_PANEL, settings.classIndividualSearchMode, 365*10);
-        if (projectSettings.searchSettings.languages != settings.languages) {
-            this.prefService.setPUSetting(Properties.pref_search_languages, JSON.stringify(settings.languages)).subscribe();
+
+        let options: VBRequestOptions = new VBRequestOptions({ ctxProject: projectCtx.getProject() });
+
+        if (projectPreferences.searchSettings.languages != settings.languages) {
+            this.prefService.setPUSetting(Properties.pref_search_languages, JSON.stringify(settings.languages), null, options).subscribe();
         }
-        if (projectSettings.searchSettings.restrictLang != settings.restrictLang) {
-            this.prefService.setPUSetting(Properties.pref_search_restrict_lang, settings.restrictLang+"").subscribe();
+        if (projectPreferences.searchSettings.restrictLang != settings.restrictLang) {
+            this.prefService.setPUSetting(Properties.pref_search_restrict_lang, settings.restrictLang+"", null, options).subscribe();
         }
-        if (projectSettings.searchSettings.includeLocales != settings.includeLocales) {
-            this.prefService.setPUSetting(Properties.pref_search_include_locales, settings.includeLocales+"").subscribe();
+        if (projectPreferences.searchSettings.includeLocales != settings.includeLocales) {
+            this.prefService.setPUSetting(Properties.pref_search_include_locales, settings.includeLocales+"", null, options).subscribe();
         }
-        if (projectSettings.searchSettings.useAutocompletion != settings.useAutocompletion) {
-            this.prefService.setPUSetting(Properties.pref_search_use_autocomplete, settings.useAutocompletion+"").subscribe();
+        if (projectPreferences.searchSettings.useAutocompletion != settings.useAutocompletion) {
+            this.prefService.setPUSetting(Properties.pref_search_use_autocomplete, settings.useAutocompletion+"", null, options).subscribe();
         }
-        projectSettings.searchSettings = settings;
-        this.eventHandler.searchPrefsUpdatedEvent.emit();
+        projectPreferences.searchSettings = settings;
+        this.eventHandler.searchPrefsUpdatedEvent.emit(projectCtx.getProject());
     }
 
     
@@ -572,7 +577,7 @@ export class VBProperties {
         for (var i = 0; i < activeSchemes.length; i++) {
             if (activeSchemes[i].getNominalValue() == oldResource.getNominalValue()) {
                 activeSchemes[i].setURI(newResource.getNominalValue());
-                this.setActiveSchemes(activeSchemes);
+                this.setActiveSchemes(VBContext.getWorkingProjectCtx(), activeSchemes);
                 break;
             }
         }

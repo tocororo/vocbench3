@@ -5,6 +5,7 @@
             <ng-template ngFor let-n [ngForOf]="list" let-idx="index">
                 <lexical-entry-list-node *ngIf="idx < nodeLimit && (!n.isDeprecated() || showDeprecated && n.isDeprecated())"
                     [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated"
+                    [context]="context" [projectCtx]="projectCtx"
                     (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)">
                 </lexical-entry-list-node>
             </ng-template>

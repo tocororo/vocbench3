@@ -13,7 +13,7 @@
 <div class="subTree" *ngIf="node.getAdditionalProperty('more') == 1">
     <ng-template ngFor let-n [ngForOf]="children">
         <property-tree-node *ngIf="!n.isDeprecated() || showDeprecated && n.isDeprecated()"
-            [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context"
+            [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context" [projectCtx]="projectCtx"
             (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
         </property-tree-node>
     </ng-template>

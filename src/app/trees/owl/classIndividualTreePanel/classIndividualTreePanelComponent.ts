@@ -5,7 +5,7 @@ import { IndividualsServices } from "../../../services/individualsServices";
 import { SearchServices } from "../../../services/searchServices";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
-import { VBContext } from "../../../utils/VBContext";
+import { VBContext, ProjectContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -30,7 +30,9 @@ import { InstanceListPanelComponent } from "../instanceListPanel/instanceListPan
 })
 export class ClassIndividualTreePanelComponent {
     @Input() readonly: boolean;
+    @Input() editable: boolean;
     @Input() context: TreeListContext;
+    @Input() projectCtx: ProjectContext;
     @Input() allowMultiselection: boolean = false; //if true allow the possibility to enable the multiselection in the contained tree/list
     @Output() classSelected = new EventEmitter<ARTURIResource>();
     @Output() instanceSelected = new EventEmitter<ARTURIResource>();

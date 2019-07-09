@@ -3,6 +3,7 @@ import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTReso
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../../utils/VBActions";
@@ -49,7 +50,7 @@ export class CollectionTreeComponent extends AbstractTree {
         }
 
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.skosService.getRootCollections().subscribe( //new service
+        this.skosService.getRootCollections(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe( //new service
             rootColl => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(rootColl, this.rendering ? SortAttribute.show : SortAttribute.value);
@@ -61,7 +62,7 @@ export class CollectionTreeComponent extends AbstractTree {
     }
 
     openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.skosCollection).subscribe(
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.skosCollection, null, null, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             path => {
                 if (path.length == 0) {
                     this.onTreeNodeNotFound(node);

@@ -28,7 +28,7 @@
             <button class="btn btn-default btn-xs" title="Refresh" (click)="refresh()">
                 <span class="glyphicon glyphicon-refresh"></span>
             </button>
-            <button *ngIf="isContextDataPanel()" class="btn btn-default btn-xs" title="Settings" (click)="settings()">
+            <button *ngIf="isOpenSettingsAvailable()" class="btn btn-default btn-xs" title="Settings" (click)="settings()">
                 <span class="glyphicon glyphicon-cog"></span>
             </button>
         </div>
@@ -93,14 +93,14 @@
         </div>
 
         <lexical-entry-list [lexicon]="workingLexicon" [index]="index" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated"
-            (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)">
+            [context]="context" [projectCtx]="projectCtx" (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)">
         </lexical-entry-list>
     </div>
 
     <!-- Search -->
     <div *ngIf="!hideSearch" class="panel-footer">
         <search-bar (search)="doSearch($event)" (advancedSearch)="advancedSearch($event)" [roles]="[panelRole]" 
-            [context]="context" [disabled]="!workingLexicon">
+            [context]="context" [projectCtx]="projectCtx" [disabled]="!workingLexicon">
         </search-bar>
     </div>
     

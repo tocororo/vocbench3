@@ -16,6 +16,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { AbstractListPanel } from "../../abstractListPanel";
 import { MultiSubjectEnrichmentHelper } from "../../multiSubjectEnrichmentHelper";
 import { DatatypeListComponent } from "../datatypeList/datatypeListComponent";
+import { VBRequestOptions } from "../../../utils/HttpManager";
 
 @Component({
     selector: "datatype-list-panel",
@@ -68,7 +69,7 @@ export class DatatypeListPanelComponent extends AbstractListPanel {
     //search handlers
 
     doSearch(searchedText: string) {
-        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
+        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
         if (searchSettings.restrictLang) {
@@ -76,7 +77,8 @@ export class DatatypeListPanelComponent extends AbstractListPanel {
             includeLocales = searchSettings.includeLocales;
         }
         this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.dataRange], searchSettings.useLocalName, 
-            searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
+            searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, null,
+            VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             searchResult => {
                 if (searchResult.length == 0) {
                     this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");

@@ -1,8 +1,10 @@
 import { Component, QueryList, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../../models/ARTResources";
+import { Project } from "../../../../models/Project";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { SkosServices } from "../../../../services/skosServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../../utils/VBActions";
@@ -31,10 +33,12 @@ export class SchemeListComponent extends AbstractList {
         this.eventSubscriptions.push(eventHandler.schemeDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
         //handler when active schemes is changed programmatically when a searched concept belong to a non active scheme
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
-            (schemes: ARTURIResource[]) => {
-                this.list.forEach((s: SchemeListItem) => s.checked = ResourceUtils.containsNode(schemes, s.scheme));
-            }
-        ));
+            (data: { schemes: ARTURIResource[], project: Project }) => {
+                if (VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getName() == data.project.getName()) {
+                    this.onSchemeChanged(data.schemes);
+                }
+            })
+        );
     }
 
     ngOnInit() {
@@ -46,13 +50,13 @@ export class SchemeListComponent extends AbstractList {
 
     initImpl() {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.skosService.getAllSchemes().subscribe(
+        this.skosService.getAllSchemes(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             schemes => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(schemes, this.rendering ? SortAttribute.show : SortAttribute.value);
 
                 for (var i = 0; i < schemes.length; i++) {
-                    let active: boolean = ResourceUtils.containsNode(VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes, schemes[i]);
+                    let active: boolean = ResourceUtils.containsNode(VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeSchemes, schemes[i]);
                     this.list.push({ checked: active, scheme: schemes[i] });
                 }
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
@@ -145,7 +149,7 @@ export class SchemeListComponent extends AbstractList {
     }
 
     private updateActiveSchemesPref() {
-        this.vbProp.setActiveSchemes(this.collectCheckedSchemes());
+        this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), this.collectCheckedSchemes());
     }
 
     /**
@@ -160,6 +164,11 @@ export class SchemeListComponent extends AbstractList {
             }
         }
         return activeSchemes;
+    }
+
+
+    private onSchemeChanged(schemes: ARTURIResource[]) {
+        this.list.forEach((s: SchemeListItem) => s.checked = ResourceUtils.containsNode(schemes, s.scheme));
     }
 
 }

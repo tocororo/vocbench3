@@ -2,15 +2,13 @@ import { Component, Input, QueryList, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { SemanticTurkey } from "../../../models/Vocabulary";
 import { DatatypesServices } from "../../../services/datatypesServices";
-import { SearchServices } from "../../../services/searchServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { VBProperties } from "../../../utils/VBProperties";
-import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { AbstractList } from "../../abstractList";
 import { DatatypeListNodeComponent } from "./datatypeListNodeComponent";
 
@@ -29,8 +27,7 @@ export class DatatypeListComponent extends AbstractList {
 
     list: ARTURIResource[];
 
-    constructor(private datatypeService: DatatypesServices, private searchService: SearchServices, private vbProp: VBProperties,
-        private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+    constructor(private datatypeService: DatatypesServices, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.datatypeCreatedEvent.subscribe((node: ARTURIResource) => this.onListNodeCreated(node)));
         this.eventSubscriptions.push(eventHandler.datatypeDeletedEvent.subscribe((node: ARTURIResource) => this.onListNodeDeleted(node)));
@@ -46,13 +43,13 @@ export class DatatypeListComponent extends AbstractList {
     initImpl() {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         if (this.full) {
-            this.datatypeService.getDatatypes().subscribe(
+            this.datatypeService.getDatatypes(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                 datatypes => {
                     this.getDatatyepsRespHandler(datatypes);
                 }
             );
         } else {
-            this.datatypeService.getDeclaredDatatypes().subscribe(
+            this.datatypeService.getDeclaredDatatypes(VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                 datatypes => {
                     this.getDatatyepsRespHandler(datatypes);
                 }

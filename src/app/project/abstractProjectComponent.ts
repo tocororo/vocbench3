@@ -40,8 +40,8 @@ export abstract class AbstractProjectComponent {
         
         return Observable.forkJoin(
             initPUBinding, //init PUBinding
-            this.vbProp.initUserProjectPreferences(), //init the project preferences
-            this.vbProp.initProjectSettings(), //init the project settings
+            this.vbProp.initUserProjectPreferences(VBContext.getWorkingProjectCtx()), //init the project preferences
+            this.vbProp.initProjectSettings(VBContext.getWorkingProjectCtx()), //init the project settings
             this.vbCollaboration.initCollaborationSystem(), //init Collaboration System
             this.userService.listUserCapabilities(), //get the capabilities for the user
             this.metadataService.getNamespaceMappings() //get default namespace of the project and set it to the vbContext

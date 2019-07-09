@@ -11,6 +11,7 @@ import { CustomFormsServices } from "../services/customFormsServices";
 import { DatasetCatalogsServices } from '../services/datasetCatalogsServices';
 import { DatasetMetadataServices } from "../services/datasetMetadataServices";
 import { DatatypesServices } from '../services/datatypesServices';
+import { EdoalServices } from '../services/edoalServices';
 import { ExportServices } from "../services/exportServices";
 import { ExtensionsServices } from "../services/extensionsServices";
 import { GenomaServices } from '../services/genomaServices';
@@ -61,6 +62,7 @@ import { VersionsServices } from "../services/versionsServices";
         DatatypesServices,
         DatasetCatalogsServices,
         DatasetMetadataServices,
+        EdoalServices,
         ExportServices,
         ExtensionsServices,
         GenomaServices,

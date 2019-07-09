@@ -1,6 +1,7 @@
 import { Component, QueryList, ViewChildren } from "@angular/core";
 import { ARTResource, ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
 import { SkosServices } from "../../../../services/skosServices";
+import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
@@ -40,7 +41,7 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
     }
 
     expandNodeImpl() {
-        return this.skosService.getNestedCollections(this.node).map(
+        return this.skosService.getNestedCollections(this.node, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
             nestedColl => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(nestedColl, this.rendering ? SortAttribute.show : SortAttribute.value);

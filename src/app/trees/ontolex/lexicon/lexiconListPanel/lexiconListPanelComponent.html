@@ -64,14 +64,14 @@
     
     <!-- List -->
     <div class="panel-body vbox">
-        <lexicon-list [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context" 
+        <lexicon-list [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context" [projectCtx]="projectCtx"
             (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" >
         </lexicon-list>
     </div>
 
     <!-- Search -->
     <div *ngIf="!hideSearch" class="panel-footer">
-        <search-bar (search)="doSearch($event)" (advancedSearch)="advancedSearch($event)" [roles]="[panelRole]" [context]="context"></search-bar>
+        <search-bar (search)="doSearch($event)" (advancedSearch)="advancedSearch($event)" [roles]="[panelRole]" [context]="context" [projectCtx]="projectCtx"></search-bar>
     </div>
     
 </div>

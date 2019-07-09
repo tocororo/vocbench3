@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { Deserializer } from "../utils/Deserializer";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { ARTResource, ARTURIResource, ARTNode, ARTBNode, ResAttribute } from "../models/ARTResources";
@@ -19,11 +19,11 @@ export class ClassesServices {
 	 * (so more, role, explicit etc...)
      * @param classList
      */
-    getClassesInfo(classList: ARTURIResource[]): Observable<ARTURIResource[]> {
+    getClassesInfo(classList: ARTURIResource[], options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {
             classList: classList
         };
-        return this.httpMgr.doGet(this.serviceName, "getClassesInfo", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getClassesInfo", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -34,12 +34,12 @@ export class ClassesServices {
      * Returns a list of ARTURIResource subClasses of the given class
      * @param superClass class of which retrieve its subClasses
 	 */
-    getSubClasses(superClass: ARTURIResource, numInst: boolean): Observable<ARTURIResource[]> {
+    getSubClasses(superClass: ARTURIResource, numInst: boolean, options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {
             superClass: superClass,
             numInst: numInst
         };
-        return this.httpMgr.doGet(this.serviceName, "getSubClasses", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getSubClasses", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
             }
@@ -50,11 +50,11 @@ export class ClassesServices {
      * Returns the (explicit) instances of the class cls.
 	 * @param cls
      */
-    getInstances(cls: ARTURIResource): Observable<ARTURIResource[]> {
+    getInstances(cls: ARTURIResource, options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {
             cls: cls
         };
-        return this.httpMgr.doGet(this.serviceName, "getInstances", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getInstances", params, options).map(
             stResp => {
                 var instances = Deserializer.createURIArray(stResp);
                 return instances;
@@ -66,11 +66,11 @@ export class ClassesServices {
      * 
      * @param cls 
      */
-    getNumberOfInstances(cls: ARTURIResource): Observable<number> {
+    getNumberOfInstances(cls: ARTURIResource, options?: VBRequestOptions): Observable<number> {
         var params: any = {
             cls: cls
         };
-        return this.httpMgr.doGet(this.serviceName, "getNumberOfInstances", params);
+        return this.httpMgr.doGet(this.serviceName, "getNumberOfInstances", params, options);
     }
 
     /**

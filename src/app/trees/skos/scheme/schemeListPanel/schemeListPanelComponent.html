@@ -79,14 +79,14 @@
 
     </div>
     <div class="panel-body vbox">
-        <scheme-list [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context"
+        <scheme-list [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context" [projectCtx]="projectCtx" 
             (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)">
         </scheme-list>
     </div>
 
     <!-- search -->
     <div class="panel-footer">
-        <search-bar (search)="doSearch($event)" (advancedSearch)="advancedSearch($event)" [roles]="[panelRole]" [context]="context">
+        <search-bar (search)="doSearch($event)" (advancedSearch)="advancedSearch($event)" [roles]="[panelRole]" [context]="context" [projectCtx]="projectCtx">
         </search-bar>
     </div>
 

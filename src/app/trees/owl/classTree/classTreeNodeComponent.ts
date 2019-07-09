@@ -4,6 +4,7 @@ import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { ClassTreeFilter } from "../../../models/Properties";
 import { OWL, RDFS } from "../../../models/Vocabulary";
 import { ClassesServices } from "../../../services/classesServices";
+import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { TreeListContext } from "../../../utils/UIUtils";
 import { VBContext } from "../../../utils/VBContext";
@@ -60,7 +61,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     ngOnInit() {
         super.ngOnInit();
         //show instance number only if enabled in the preferences and if the node belongs to a tree in TreePanelComponent
-        this.showInstanceNumber = VBContext.getWorkingProjectCtx().getProjectPreferences().showInstancesNumber && 
+        this.showInstanceNumber = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().showInstancesNumber && 
             (this.context == TreeListContext.dataPanel || this.context == TreeListContext.clsIndTree);
         //expand immediately the node if it is a root and if it is owl:Thing or rdfs:Resource
         if ((this.node.getURI() == OWL.thing.getURI() || this.node.getURI() == RDFS.resource.getURI()) && 
@@ -70,7 +71,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     }
 
     expandNodeImpl(): Observable<any> {
-        return this.clsService.getSubClasses(this.node, this.showInstanceNumber).map(
+        return this.clsService.getSubClasses(this.node, this.showInstanceNumber, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
             subClasses => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(subClasses, this.rendering ? SortAttribute.show : SortAttribute.value);
@@ -89,7 +90,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
      * @param subClass 
      */
     private filterOutRootSubClass(subClass: ARTURIResource): boolean {
-        let classTreePref = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences;
+        let classTreePref = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().classTreePreferences;
         if (this.filterEnabled) {
             return classTreePref.filter.map[this.node.getURI()] != null && 
                 classTreePref.filter.map[this.node.getURI()].indexOf(subClass.getURI()) != -1;
@@ -112,7 +113,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
         let more: boolean = this.node.getAdditionalProperty(ResAttribute.MORE);
         if (more) { //if the more attribute is true, doesn't implies that the button is visible, the node children could be all deprecated
             if (this.children.length > 0) {
-                let classTreeFilter: ClassTreeFilter = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.filter;
+                let classTreeFilter: ClassTreeFilter = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().classTreePreferences.filter;
                 let childVisible: boolean = false;
                 /**
                  * childVisible if: 

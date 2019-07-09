@@ -2,6 +2,7 @@ import { Component, Input, QueryList, ViewChildren } from "@angular/core";
 import { ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
 import { ConceptTreePreference } from "../../../../models/Properties";
 import { SkosServices } from "../../../../services/skosServices";
+import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
@@ -46,14 +47,15 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
     }
 
     expandNodeImpl() {
-        let prefs: ConceptTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
+        let prefs: ConceptTreePreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
+
         let broaderProps: ARTURIResource[] = [];
         prefs.broaderProps.forEach((prop: string) => broaderProps.push(new ARTURIResource(prop)));
         let narrowerProps: ARTURIResource[] = [];
         prefs.narrowerProps.forEach((prop: string) => narrowerProps.push(new ARTURIResource(prop)));
         let includeSubProps: boolean = prefs.includeSubProps;
 
-        return this.skosService.getNarrowerConcepts(this.node, this.schemes, broaderProps, narrowerProps, includeSubProps).map(
+        return this.skosService.getNarrowerConcepts(this.node, this.schemes, broaderProps, narrowerProps, includeSubProps, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
             narrower => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(narrower, this.rendering ? SortAttribute.show : SortAttribute.value);

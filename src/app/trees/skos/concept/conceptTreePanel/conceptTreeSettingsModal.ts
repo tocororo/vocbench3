@@ -11,7 +11,6 @@ import { ResourcesServices } from "../../../../services/resourcesServices";
 import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBProperties } from "../../../../utils/VBProperties";
-import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../../widget/modal/browsingModal/browsingModalServices";
 
 @Component({

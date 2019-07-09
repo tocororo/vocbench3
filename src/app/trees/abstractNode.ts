@@ -1,7 +1,9 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { ARTURIResource, ARTResource, ResAttribute } from "../models/ARTResources";
-import { VBEventHandler } from "../utils/VBEventHandler";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
+import { VBRequestOptions } from "../utils/HttpManager";
 import { TreeListContext } from "../utils/UIUtils";
+import { ProjectContext, VBContext } from "../utils/VBContext";
+import { VBEventHandler } from "../utils/VBEventHandler";
 
 @Component({
     selector: "node",
@@ -18,6 +20,7 @@ export abstract class AbstractNode {
     @Input() multiselection: boolean; //if true enabled the selection of multiple resources via checkboxes
     @Input() showDeprecated: boolean;
     @Input() context: TreeListContext;
+    @Input() projectCtx: ProjectContext;
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Output() nodeChecked = new EventEmitter<{ node: ARTURIResource, checked: boolean }>();
 

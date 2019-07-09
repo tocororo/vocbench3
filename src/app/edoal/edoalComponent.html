@@ -1,0 +1,44 @@
+<div *ngIf="contextInitialized" class="hbox">
+
+    <tabset-panel [projectCtx]="leftProjCtx" (nodeSelected)="onLeftResourceSelected($event)" [hiddenTabs]="leftHiddenTabs" [editable]="false">
+    </tabset-panel>
+
+    <div class="vbox" style="margin: 0px 8px">
+        <table class="table">
+            <colgroup>
+                <col style="width: 50%">
+                <col style="width: 50%">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                        {{leftProjCtx.getProject().getName()}}
+                    </th>
+                    <th class="text-center">
+                        {{rightProjCtx.getProject().getName()}}
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <rdf-resource *ngIf="leftSelectedResource" style="cursor: pointer" [resource]="leftSelectedResource"
+                            (dblclick)="openResourceView(leftSelectedResource)">
+                        </rdf-resource>
+                    </td>
+                    <td>
+                        <rdf-resource *ngIf="rightSelectedResource" style="cursor: pointer" [resource]="rightSelectedResource"
+                            (dblclick)="openResourceView(rightSelectedResource)">
+                        </rdf-resource>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <tabset-panel [projectCtx]="rightProjCtx" (nodeSelected)="onRightResourceSelected($event)" [hiddenTabs]="rightHiddenTabs" [editable]="false">
+    </tabset-panel>
+
+</div>

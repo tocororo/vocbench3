@@ -5,7 +5,7 @@
         <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
             <ng-template ngFor let-r [ngForOf]="roots" let-idx="index">
                 <property-tree-node *ngIf="idx < rootLimit && (!r.isDeprecated() || showDeprecated && r.isDeprecated())" 
-                    [node]="r" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context"
+                    [node]="r" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context" [projectCtx]="projectCtx"
                     (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
                 </property-tree-node>
             </ng-template>
