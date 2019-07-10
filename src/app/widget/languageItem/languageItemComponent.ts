@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { Subscriber } from "rxjs";
+import { Subscription } from "rxjs";
 import { Language } from "../../models/LanguagesCountries";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBEventHandler } from "../../utils/VBEventHandler";
@@ -16,7 +16,7 @@ export class LanguageItemComponent {
 
     flagImgSrc: string;
 
-    eventSubscriptions: Subscriber<any>[] = [];
+    eventSubscriptions: Subscription[] = [];
 
     constructor(private preferences: VBProperties, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.showFlagChangedEvent.subscribe(

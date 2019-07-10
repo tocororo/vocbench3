@@ -1,18 +1,14 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { Observable } from 'rxjs/Observable';
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { AbstractProjectComponent } from "./abstractProjectComponent";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Project } from '../models/Project';
+import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from "../services/projectServices";
 import { UserServices } from "../services/userServices";
-import { AdministrationServices } from "../services/administrationServices";
-import { MetadataServices } from "../services/metadataServices";
-import { Project } from '../models/Project';
-import { VBContext } from '../utils/VBContext';
-import { VBProperties } from '../utils/VBProperties';
 import { VBCollaboration } from '../utils/VBCollaboration';
-import { UIUtils } from '../utils/UIUtils';
+import { VBProperties } from '../utils/VBProperties';
+import { AbstractProjectComponent } from "./abstractProjectComponent";
 
 @Component({
     selector: "project-list-modal",
@@ -24,10 +20,9 @@ export class ProjectListModal extends AbstractProjectComponent implements ModalC
     private projectList: Array<Project> = [];
     private selectedProject: Project;
 
-    constructor(public dialog: DialogRef<BSModalContext>,
-        adminService: AdministrationServices, userService: UserServices, metadataService: MetadataServices,
+    constructor(public dialog: DialogRef<BSModalContext>, userService: UserServices, metadataService: MetadataServices,
         vbCollaboration: VBCollaboration, vbProp: VBProperties, private projectService: ProjectServices, private router: Router) {
-        super(adminService, userService, metadataService, vbCollaboration, vbProp);
+        super(userService, metadataService, vbCollaboration, vbProp);
         this.context = dialog.context;
     }
 

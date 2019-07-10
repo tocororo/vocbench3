@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
+import { Subscription } from "rxjs";
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { ResourceViewPanelComponent } from "../resourceView/resourceViewPanel/resourceViewPanelComponent";
 import { TabsetPanelComponent } from "../trees/tabset/tabsetPanelComponent";
@@ -23,7 +24,7 @@ export class DataComponent {
     @ViewChild('treePanel') private treePanelRef: ElementRef; 
     @ViewChild('resViewPanel',  { read: ElementRef }) private resViewPanelRef: ElementRef;
 
-    private eventSubscriptions: any[] = [];
+    private eventSubscriptions: Subscription[] = [];
 
     constructor(private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.datatypeDeletedEvent.subscribe(

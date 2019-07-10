@@ -297,4 +297,19 @@ export class MetadataRegistryServices {
         );
     }
 
+    /**
+     * Returns metadata about the linksets sets embedded in a given dataset
+     * @param dataset 
+     * @param treshold minimum number of links (before linkset coalescing)
+     * @param coalesce whether or not merge linksets for the same pair of datasets
+     */
+    getEmbeddedLinksets(dataset: ARTURIResource, treshold?: number, coalesce?: boolean) {
+        var params: any = {
+            dataset: dataset,
+            treshold: treshold,
+            coalesce: coalesce
+        }
+        return this.httpMgr.doGet(this.serviceName, "getEmbeddedLinksets", params);
+    }
+
 }

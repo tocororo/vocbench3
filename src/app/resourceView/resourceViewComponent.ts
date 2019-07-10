@@ -1,9 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Subscription } from "rxjs";
 import { CollaborationModalServices } from "../collaboration/collaborationModalService";
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, LocalResourcePosition, RDFResourceRolesEnum, RemoteResourcePosition, ResAttribute, ResourcePosition } from "../models/ARTResources";
 import { Issue } from "../models/Collaboration";
 import { VersionInfo } from "../models/History";
-import { PropertyFacet, ResViewPartition } from "../models/ResourceView";
+import { PropertyFacet, ResourceViewCtx, ResViewPartition } from "../models/ResourceView";
 import { SemanticTurkey } from "../models/Vocabulary";
 import { CollaborationServices } from "../services/collaborationServices";
 import { MetadataRegistryServices } from "../services/metadataRegistryServices";
@@ -15,7 +16,7 @@ import { HttpServiceContext } from "../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../utils/ResourceUtils";
 import { UIUtils } from "../utils/UIUtils";
 import { VBCollaboration } from "../utils/VBCollaboration";
-import { VBContext } from "../utils/VBContext";
+import { ProjectContext, VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -35,6 +36,8 @@ export class ResourceViewComponent {
 
     @Input() resource: ARTResource;
     @Input() readonly: boolean = false;
+    @Input() context: ResourceViewCtx;
+    @Input() projectCtx: ProjectContext;
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)
 
@@ -95,7 +98,12 @@ export class ResourceViewComponent {
         btnClass: "", issues: null
     };
 
-    private eventSubscriptions: any[] = [];
+    //status for show/hide buttons in the top bar
+    private versioningAvailable: boolean = true;
+    private collaborationAvailable: boolean = true;
+    private settingsAvailable: boolean = true;
+
+    private eventSubscriptions: Subscription[] = [];
 
     constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices, private resourcesService: ResourcesServices,
         private collaborationService: CollaborationServices, private metadataRegistryService: MetadataRegistryServices,
@@ -118,7 +126,7 @@ export class ResourceViewComponent {
     ngOnChanges(changes: SimpleChanges) {
         this.showInferred = this.vbProp.getInferenceInResourceView();
         this.rendering = this.vbProp.getRenderingInResourceView();
-        this.valueFilterLangEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang.enabled;
+        this.valueFilterLangEnabled = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().filterValueLang.enabled;
 
         if (changes['resource'] && changes['resource'].currentValue) {
             //if not the first change, avoid to refresh res view if resource is not changed
@@ -184,6 +192,10 @@ export class ResourceViewComponent {
             if (this.resource instanceof ARTURIResource && this.collaborationWorking) {
                 this.initCollaboration();
             }
+
+            this.versioningAvailable = this.projectCtx == null;
+            this.collaborationAvailable = this.collaborationWorking && this.resource.isURIResource() && this.projectCtx == null;
+            this.settingsAvailable = this.context != ResourceViewCtx.modal;
         });
     }
 
@@ -524,9 +536,9 @@ export class ResourceViewComponent {
 
     private filterValueLanguageFromPrefObjList(predObjList: ARTPredicateObjects[]) {
         //even if already initialized, get each time the value of valueFilterLangEnabled in order to detect eventual changes of the pref
-        this.valueFilterLangEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang.enabled;
+        this.valueFilterLangEnabled = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().filterValueLang.enabled;
         if (this.valueFilterLangEnabled) {
-            let valueFilterLanguages = VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang.languages;
+            let valueFilterLanguages = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().filterValueLang.languages;
             if (valueFilterLanguages.length == 0) return;
             for (var i = 0; i < predObjList.length; i++) {
                 var objList: ARTNode[] = predObjList[i].getObjects();
@@ -598,7 +610,7 @@ export class ResourceViewComponent {
     private switchValueFilterLang() {
         this.valueFilterLangEnabled = !this.valueFilterLangEnabled;
         //update the preference
-        let valueFilterLangPref = VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang;
+        let valueFilterLangPref = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().filterValueLang;
         valueFilterLangPref.enabled = this.valueFilterLangEnabled;
         this.vbProp.setValueFilterLanguages(valueFilterLangPref);
         //update the RV

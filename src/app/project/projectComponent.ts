@@ -3,7 +3,6 @@ import { Router } from "@angular/router";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Project, ProjectTableColumnStruct } from '../models/Project';
-import { AdministrationServices } from "../services/administrationServices";
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from "../services/projectServices";
 import { UserServices } from "../services/userServices";
@@ -30,10 +29,10 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     private defaultColumnsOrder: string[]; //default order of the columns (contains only the columns visible according the custom configuration)
     private customColumnsOrder: string[]; //custom order of the columns
 
-    constructor(private projectService: ProjectServices, adminService: AdministrationServices, userService: UserServices,
-        metadataService: MetadataServices, vbCollaboration: VBCollaboration, vbProp: VBProperties, 
-        private router: Router, private basicModals: BasicModalServices, private modal: Modal, private elRef: ElementRef) {
-        super(adminService, userService, metadataService, vbCollaboration, vbProp);
+    constructor(private projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices,
+        vbCollaboration: VBCollaboration, vbProp: VBProperties, private router: Router, 
+        private basicModals: BasicModalServices, private modal: Modal, private elRef: ElementRef) {
+        super(userService, metadataService, vbCollaboration, vbProp);
     }
 
     ngOnInit() {

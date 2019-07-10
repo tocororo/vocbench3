@@ -8,20 +8,22 @@ import { ProjectTableColumnStruct } from '../models/Project';
 import { ClassIndividualPanelSearchMode, ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, ResViewPartitionFilterPreference, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { OWL, RDFS } from '../models/Vocabulary';
+import { AdministrationServices } from '../services/administrationServices';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { Cookie } from '../utils/Cookie';
 import { UIUtils } from '../utils/UIUtils';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
-import { VBContext, ProjectContext } from './VBContext';
 import { VBRequestOptions } from './HttpManager';
+import { ProjectContext, VBContext } from './VBContext';
 
 @Injectable()
 export class VBProperties {
 
     private eventSubscriptions: Subscription[] = [];
 
-    constructor(private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
+    constructor(private prefService: PreferencesSettingsServices, private adminService: AdministrationServices,
+        private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: { oldResource: ARTResource, newResource: ARTResource }) => this.onResourceRenamed(data.oldResource, data.newResource)
         ));
@@ -315,6 +317,18 @@ export class VBProperties {
     setHideLiteralGraphNodes(show: boolean) {
         VBContext.getWorkingProjectCtx().getProjectPreferences().hideLiteralGraphNodes = show;
         this.prefService.setPUSetting(Properties.pref_hide_literal_graph_nodes, show+"").subscribe();
+    }
+
+    /* =============================
+    =========== BINDINGS ===========
+    ============================= */
+
+    initProjectUserBindings(projectCtx: ProjectContext): Observable<void> {
+        return this.adminService.getProjectUserBinding(projectCtx.getProject().getName(), VBContext.getLoggedUser().getEmail()).map(
+            pub => {
+                projectCtx.setProjectUserBinding(pub);
+            }
+        );
     }
 
 

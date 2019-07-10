@@ -390,7 +390,40 @@ export class AlignmentServices {
                 return Deserializer.createURIArray(stResp, ["matchMode", "matchedLang"]);
             }
         );
+    }
 
+    /**
+     * Returns the number of available mappings
+     * @param targetUriPrefix 
+     * @param mappingProperties 
+     * @param expressInPages whether the count should be an absolute number or expressed as the number of pages
+     * @param pageSize if less or equal to zero, then everything goes into one page
+     */
+    getMappingCount(targetUriPrefix: string, mappingProperties?: ARTURIResource[], expressInPages?: boolean, pageSize?: number): Observable<number> {
+        let params: any = {
+            targetUriPrefix: targetUriPrefix,
+            mappingProperties: mappingProperties,
+            expressInPages: expressInPages,
+            pageSize: pageSize
+        };
+        return this.httpMgr.doGet(this.serviceName, "getMappingCount", params);
+    }
+
+    /**
+     * Returns the available mappings
+     * @param targetUriPrefix 
+     * @param page 
+     * @param pageSize 
+     * @param mappingProperties 
+     */
+    getMappings(targetUriPrefix: string, page?: number, pageSize?: number, mappingProperties?: ARTURIResource[]): Observable<ARTURIResource[]> {
+        let params: any = {
+            targetUriPrefix: targetUriPrefix,
+            page: page,
+            pageSize: pageSize,
+            mappingProperties: mappingProperties
+        };
+        return this.httpMgr.doGet(this.serviceName, "getMappings", params);
     }
 
 }

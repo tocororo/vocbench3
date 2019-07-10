@@ -13,6 +13,7 @@ import { Settings } from "../../../models/Plugins";
 import { RemoteRepositoryAccessConfig } from "../../../models/Project";
 import { User } from '../../../models/User';
 import { ResourceViewModal, ResourceViewModalData } from "../../../resourceView/resourceViewModal";
+import { ProjectContext } from '../../../utils/VBContext';
 import { LoadConfigurationModal, LoadConfigurationModalData } from "./configurationStoreModal/loadConfigurationModal";
 import { StoreConfigurationModal, StoreConfigurationModalData } from "./configurationStoreModal/storeConfigurationModal";
 import { ConverterPickerModal, ConverterPickerModalData } from "./converterPickerModal/converterPickerModal";
@@ -75,8 +76,8 @@ export class SharedModalServices {
      * Opens a resource view in a modal
      * @param resource 
      */
-    openResourceView(resource: ARTResource, readonly: boolean) {
-        var modalData = new ResourceViewModalData(resource, readonly);
+    openResourceView(resource: ARTResource, readonly: boolean, projectCtx?: ProjectContext) {
+        var modalData = new ResourceViewModalData(resource, readonly, projectCtx);
         const builder = new BSModalContextBuilder<ResourceViewModalData>(
             modalData, undefined, ResourceViewModalData
         );
@@ -89,9 +90,10 @@ export class SharedModalServices {
      * @param title
      * @param languages languages already selected
      * @param projectAware if true, allow selection only of languages available in the current project
+     * @param projectCtx allow to customize the available languages for the contextual project
      */
-    selectLanguages(title: string, languages: string[], projectAware?: boolean) {
-        var modalData = new LanguageSelectorModalData(title, languages, projectAware);
+    selectLanguages(title: string, languages: string[], projectAware?: boolean, projectCtx?: ProjectContext) {
+        var modalData = new LanguageSelectorModalData(title, languages, projectAware, projectCtx);
         const builder = new BSModalContextBuilder<LanguageSelectorModalData>(
             modalData, undefined, LanguageSelectorModalData
         );

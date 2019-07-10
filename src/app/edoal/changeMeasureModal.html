@@ -1,0 +1,14 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body">
+    <div class="hbox" style="align-items: center;">
+        <label style="margin-right: 4px;">Measure:</label>
+        <input id="toFocus" type="number" class="form-control input-sm" style="flex: 1;" [(ngModel)]="value"
+            [min]="context.min" [max]="context.max" [step]="context.step">
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

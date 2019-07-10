@@ -1,10 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
-import { Subscriber } from "rxjs";
+import { Subscription } from "rxjs";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
-import { VBRequestOptions } from "../utils/HttpManager";
 import { ResourceUtils } from "../utils/ResourceUtils";
 import { TreeListContext } from "../utils/UIUtils";
-import { ProjectContext, VBContext } from "../utils/VBContext";
+import { ProjectContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 
 @Component({
@@ -29,7 +28,7 @@ export abstract class AbstractStruct {
 
     abstract structRole: RDFResourceRolesEnum; //declare the type of resources in the panel
 
-    eventSubscriptions: Subscriber<any>[] = [];
+    eventSubscriptions: Subscription[] = [];
     selectedNode: ARTURIResource;
     checkedNodes: ARTURIResource[] = [];
 

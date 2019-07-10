@@ -1,15 +1,15 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Subscription } from "rxjs";
 import { GraphMode } from "../graph/abstractGraph";
 import { GraphModalServices } from "../graph/modal/graphModalServices";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
 import { CustomFormsServices } from "../services/customFormsServices";
 import { ResourcesServices } from "../services/resourcesServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
-import { VBRequestOptions } from "../utils/HttpManager";
 import { ActionDescription, RoleActionResolver } from "../utils/RoleActionResolver";
 import { TreeListContext } from "../utils/UIUtils";
 import { VBActionFunctionCtx } from "../utils/VBActions";
-import { ProjectContext, VBContext } from "../utils/VBContext";
+import { ProjectContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -42,7 +42,7 @@ export abstract class AbstractPanel {
     rendering: boolean = true; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
     multiselection: boolean = false; //if true enabled the selection of multiple resources via checkboxes
     showDeprecated: boolean = true;
-    eventSubscriptions: any[] = [];
+    eventSubscriptions: Subscription[] = [];
     selectedNode: ARTURIResource = null;
     checkedNodes: ARTURIResource[] = [];
 

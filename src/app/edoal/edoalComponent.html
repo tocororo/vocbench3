@@ -4,7 +4,8 @@
     </tabset-panel>
 
     <div class="vbox" style="margin: 0px 8px">
-        <table class="table">
+
+        <!-- <table class="table">
             <colgroup>
                 <col style="width: 50%">
                 <col style="width: 50%">
@@ -25,17 +26,187 @@
                 <tr>
                     <td>
                         <rdf-resource *ngIf="leftSelectedResource" style="cursor: pointer" [resource]="leftSelectedResource"
-                            (dblclick)="openResourceView(leftSelectedResource)">
+                            (dblclick)="openLeftResourceView()">
                         </rdf-resource>
                     </td>
                     <td>
                         <rdf-resource *ngIf="rightSelectedResource" style="cursor: pointer" [resource]="rightSelectedResource"
-                            (dblclick)="openResourceView(rightSelectedResource)">
+                            (dblclick)="openRightResourceView()">
                         </rdf-resource>
                     </td>
                 </tr>
+                <tr *ngIf="leftSelectedResource && rightSelectedResource">
+                    <td colspan="2">
+                        <div class="hbox" style="align-items: center">
+                            <label style="margin-right: 4px;">Relation:</label>
+                            <select class="form-control input-sm" style="margin-right: 4px;" [(ngModel)]="selectedRelation">
+                                <option *ngFor="let rel of relations" [ngValue]="rel">{{rel.relation}}</option>
+                            </select>
+                            <input class="form-control input-sm" style="margin-right: 4px;" type="number" min="0" max="1" step=".01" [(ngModel)]="measure">
+                            <button class="btn btn-sm btn-default" (click)="addCorrespondence()" [disabled]="!selectedRelation || !measure">
+                                <span class="glyphicon glyphicon-ok"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
             </tbody>
-        </table>
+        </table> -->
+
+        <div class="hbox" style="flex: initial; align-items: center;padding: 8px">
+            <div class="text-center" style="flex: 1; border-right: 1px solid black">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                <label>{{leftProjCtx.getProject().getName()}}</label>
+            </div>
+            <div class="text-center" style="flex: 1;">
+                <label>{{rightProjCtx.getProject().getName()}}</label>
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </div>
+        </div>
+
+        <div class="panel panel-default" style="margin-bottom: 4px;">
+            <div class="panel-heading">
+                <label>New alignment</label>
+            </div>
+            <div class="panel-body" style="min-height: 30px;">
+                <div class="hbox">
+                    <div style="flex: 1">
+                        <rdf-resource *ngIf="leftSelectedResource" style="cursor: pointer" [resource]="leftSelectedResource"
+                            (dblclick)="openLeftResourceView()">
+                        </rdf-resource>
+                    </div>
+                    <div style="flex: 1">
+                        <rdf-resource *ngIf="rightSelectedResource" style="cursor: pointer" [resource]="rightSelectedResource"
+                            (dblclick)="openRightResourceView()">
+                        </rdf-resource>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <div class="hbox">
+                    <div class="hbox" style="align-items: center; margin-right: 4px;">
+                        <label style="margin-right: 4px;">Relation:</label>
+                        <select class="form-control input-xs" style="margin-right: 4px;" [(ngModel)]="selectedRelation">
+                            <option *ngFor="let rel of relations" [ngValue]="rel">{{rel.relation}}</option>
+                        </select>
+                    </div>
+                    <div class="hbox" style="align-items: center; margin-right: 4px;">
+                        <label style="margin-right: 4px;">Measure:</label>
+                        <input class="form-control input-xs" style="margin-right: 4px;" type="number" min="0" max="1" step=".01" [(ngModel)]="measure">
+                    </div>
+                    <button class="btn btn-xs btn-default pull-right" (click)="addCorrespondence()"
+                        [disabled]="!leftSelectedResource || !rightSelectedResource || !selectedRelation || !measure">
+                        Create
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default vbox">
+            <div class="panel-heading">
+                <label style="flex: 1;">Alignments</label>
+                <div class="btn-toolbar">
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default" (click)="startNewCorrespondence()">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-default" (click)="deleteCorrespondece()" [disabled]="!selectedCorrespondence">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body vbox">
+
+                <!-- <div *ngIf="creatingCorrespondence" class="panel panel-default" style="margin-bottom: 4px;">
+                    <div class="panel-heading">
+                        <label style="flex: 1">New alignment</label>
+                        <button class="btn btn-xs btn-default" (click)="cancelNewCorrespondence()"><span class="glyphicon glyphicon-remove"></span></button>
+                    </div>
+                    <div class="panel-body" style="min-height: 30px;">
+                        <div class="hbox">
+                            <div style="flex: 1">
+                                <rdf-resource *ngIf="leftSelectedResource" style="cursor: pointer" [resource]="leftSelectedResource"
+                                    (dblclick)="openLeftResourceView()">
+                                </rdf-resource>
+                            </div>
+                            <div style="flex: 1">
+                                <rdf-resource *ngIf="rightSelectedResource" style="cursor: pointer" [resource]="rightSelectedResource"
+                                    (dblclick)="openRightResourceView()">
+                                </rdf-resource>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="hbox">
+                            <div class="hbox" style="align-items: center; margin-right: 4px;">
+                                <label style="margin-right: 4px;">Relation:</label>
+                                <select class="form-control input-xs" style="margin-right: 4px;" [(ngModel)]="selectedRelation">
+                                    <option *ngFor="let rel of relations" [ngValue]="rel">{{rel.relation}}</option>
+                                </select>
+                            </div>
+                            <div class="hbox" style="align-items: center; margin-right: 4px;">
+                                <label style="margin-right: 4px;">Measure:</label>
+                                <input class="form-control input-xs" style="margin-right: 4px;" type="number" min="0" max="1" step=".01" [(ngModel)]="measure">
+                            </div>
+                            <button class="btn btn-xs btn-default pull-right" (click)="addCorrespondence()"
+                                [disabled]="!leftSelectedResource || !rightSelectedResource || !selectedRelation || !measure">
+                                Create
+                            </button>
+                        </div>
+                    </div>
+                </div> -->
+
+
+                <div class="scrollableContainer">
+                    <table *ngIf="correspondences" class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Left entity</th>
+                                <th>Right entity</th>
+                                <th>Relation</th>
+                                <th>Measure</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let c of correspondences" (click)="selectCorrespondence(c)" [ngClass]="{ active: selectedCorrespondence == c }">
+                                <td>{{c.leftEntity[0].getShow()}}</td>
+                                <td>{{c.rightEntity[0].getShow()}}</td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-xs">
+                                        <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                                            {{c.relation[0].getShow()}}
+                                        </button>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li *ngFor="let rel of relations">
+                                                <a (click)="changeRelation(c, rel)">{{rel.relation}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- {{c.relation[0].getShow()}} -->
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-xs btn-default" (click)="changeMeasure(c)">{{c.measure[0].getShow()}}</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <!-- <div class="btn-group btn-group-xs pull-right">
+                    <button class="btn btn-default" title="Previous page" (click)="resultsPage=resultsPage-1" [disabled]="resultsPage==0">
+                        <span class="glyphicon glyphicon-triangle-left"></span>
+                    </button>
+                    <button class="btn btn-default" style="cursor: auto" disabled>
+                        <span>{{resultsPage+1}} of {{resultsTotPage}}</span>
+                    </button>
+                    <button class="btn btn-default" title="Next page" (click)="resultsPage=resultsPage+1" [disabled]="resultsPage>=resultsTotPage-1">
+                        <span class="glyphicon glyphicon-triangle-right"></span>
+                    </button>
+                </div> -->
+            </div>
+        </div>
+
     </div>
 
     <tabset-panel [projectCtx]="rightProjCtx" (nodeSelected)="onRightResourceSelected($event)" [hiddenTabs]="rightHiddenTabs" [editable]="false">

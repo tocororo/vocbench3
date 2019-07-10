@@ -1,13 +1,13 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { Subscription } from "rxjs";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { ClassIndividualPanelSearchMode, SearchSettings } from "../../../models/Properties";
 import { IndividualsServices } from "../../../services/individualsServices";
 import { SearchServices } from "../../../services/searchServices";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
-import { VBContext, ProjectContext } from "../../../utils/VBContext";
+import { ProjectContext, VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { ClassTreePanelComponent } from "../classTreePanel/classTreePanelComponent";
 import { InstanceListPanelComponent } from "../instanceListPanel/instanceListPanelComponent";
@@ -53,7 +53,7 @@ export class ClassIndividualTreePanelComponent {
 
     private rolesForSearch: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual];
 
-    private eventSubscriptions: any[] = [];
+    private eventSubscriptions: Subscription[] = [];
 
     constructor(private individualService: IndividualsServices, private searchService: SearchServices,
         private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {

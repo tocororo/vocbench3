@@ -85,7 +85,7 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
     }
 
     private selectRestrictionLanguages() {
-        this.sharedModals.selectLanguages("Language restrictions", this.languages, true).then(
+        this.sharedModals.selectLanguages("Language restrictions", this.languages, true, this.context.projectCtx).then(
             (langs: string[]) => {
                 this.languages = langs;
                 this.updateSettings();

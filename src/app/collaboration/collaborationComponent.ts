@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CollaborationServices } from "../services/collaborationServices";
 import { ResourcesServices } from '../services/resourcesServices';
 import { AuthorizationEvaluator } from '../utils/AuthorizationEvaluator';
@@ -20,7 +21,7 @@ export class CollaborationComponent {
     @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
     @ViewChild(IssueListComponent) viewChildList: IssueListComponent;
     
-    private eventSubscriptions: any[] = [];
+    private eventSubscriptions: Subscription[] = [];
 
     //TODO configuration only available to sys admin or users with privileges
 

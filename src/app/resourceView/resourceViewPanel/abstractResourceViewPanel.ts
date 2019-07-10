@@ -1,14 +1,14 @@
-import { Subscriber } from "rxjs";
+import { EventEmitter, Output } from "@angular/core";
+import { Subscription } from "rxjs";
 import { ARTResource } from "../../models/ARTResources";
 import { VBEventHandler } from "../../utils/VBEventHandler";
-import { Output, EventEmitter } from "@angular/core";
 
 export abstract class AbstractResourceViewPanel {
 
     //tells to the parent component that there are no more RV open
     @Output() empty: EventEmitter<any> = new EventEmitter();
 
-    eventSubscriptions: Subscriber<any>[] = [];
+    eventSubscriptions: Subscription[] = [];
 
     /**
      * CONSTRUCTOR

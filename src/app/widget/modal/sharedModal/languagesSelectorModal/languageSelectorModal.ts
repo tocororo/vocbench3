@@ -2,14 +2,14 @@ import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { Language, Languages } from "../../../../models/LanguagesCountries";
-import { VBContext } from "../../../../utils/VBContext";
+import { ProjectContext, VBContext } from "../../../../utils/VBContext";
 
 export class LanguageSelectorModalData extends BSModalContext {
     /**
      * @param languages languages selected
      * @param projectAware if true, restrict the languages only to the available in the current project
      */
-    constructor(public title: string, public languages: string[] = [], public projectAware: boolean = false) {
+    constructor(public title: string, public languages: string[] = [], public projectAware: boolean = false, public projectCtx: ProjectContext) {
         super();
     }
 }
@@ -31,7 +31,7 @@ export class LanguageSelectorModal implements ModalComponent<LanguageSelectorMod
         let languages: Language[];
         this.languageItems = [];
         if (this.context.projectAware) {
-            languages = VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting;
+            languages = VBContext.getWorkingProjectCtx(this.context.projectCtx).getProjectSettings().projectLanguagesSetting;
         } else {
             languages = Languages.getSystemLanguages();
         }

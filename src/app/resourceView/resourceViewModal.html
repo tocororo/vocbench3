@@ -1,5 +1,5 @@
 <div class="modal-body vbox">
-    <resource-view [resource]="context.resource" [readonly]="context.readonly"></resource-view>    
+    <resource-view [resource]="context.resource" [readonly]="context.readonly" [context]="resViewCtx" [projectCtx]="context.projectCtx"></resource-view>    
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>

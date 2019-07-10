@@ -11,7 +11,6 @@ import { ResourcesServices } from "../services/resourcesServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { ResourceUtils } from "../utils/ResourceUtils";
 import { VBActionsEnum } from "../utils/VBActions";
-import { VBProperties } from "../utils/VBProperties";
 import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
 
 @Component({
@@ -33,8 +32,7 @@ export class ResourceViewContextMenu {
     private isAssertInferredDisabled: boolean;
 
     constructor(private alignServices: AlignmentServices, private refactorService: RefactorServices, private resourcesService: ResourcesServices,
-        private creationModals: CreationModalServices, private graphModals: GraphModalServices, private modal: Modal,
-        private vbProp: VBProperties) { }
+        private creationModals: CreationModalServices, private graphModals: GraphModalServices, private modal: Modal) { }
 
     ngOnInit() {
         //init the menu items
@@ -116,7 +114,6 @@ export class ResourceViewContextMenu {
 
 
     private isOpenDataGraphEnabled(): boolean {
-        // return this.vbProp.getExperimentalFeaturesEnabled();
         return true;
     }
 

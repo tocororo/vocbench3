@@ -258,3 +258,8 @@ export enum AddAction {
     manually = "manually",
     remote = "remote"
 }
+
+export enum ResourceViewCtx {
+    modal = "modal",
+    data = "data"
+}

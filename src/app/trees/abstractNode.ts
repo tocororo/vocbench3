@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Subscription } from "rxjs";
 import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
-import { VBRequestOptions } from "../utils/HttpManager";
 import { TreeListContext } from "../utils/UIUtils";
-import { ProjectContext, VBContext } from "../utils/VBContext";
+import { ProjectContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 
 @Component({
@@ -24,7 +24,7 @@ export abstract class AbstractNode {
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Output() nodeChecked = new EventEmitter<{ node: ARTURIResource, checked: boolean }>();
 
-    eventSubscriptions: any[] = [];
+    eventSubscriptions: Subscription[] = [];
 
     /**
      * ATTRIBUTES

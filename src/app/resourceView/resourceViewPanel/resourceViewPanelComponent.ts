@@ -1,10 +1,11 @@
-import { Component, ViewChild, Output, EventEmitter } from "@angular/core";
-import { ResourceViewTabbedComponent } from "./resourceViewTabbedComponent";
-import { ResourceViewSplittedComponent } from "./resourceViewSplittedComponent";
+import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
+import { Subscription } from "rxjs";
 import { ARTResource } from "../../models/ARTResources";
 import { ResourceViewMode } from "../../models/Properties";
-import { VBProperties } from "../../utils/VBProperties";
 import { VBEventHandler } from "../../utils/VBEventHandler";
+import { VBProperties } from "../../utils/VBProperties";
+import { ResourceViewSplittedComponent } from "./resourceViewSplittedComponent";
+import { ResourceViewTabbedComponent } from "./resourceViewTabbedComponent";
 
 @Component({
     selector: "resource-view-panel",
@@ -20,7 +21,7 @@ export class ResourceViewPanelComponent {
 
     private resViewMode: ResourceViewMode; //"splitted" or "tabbed";
 
-    private eventSubscriptions: any[] = [];
+    private eventSubscriptions: Subscription[] = [];
 
     constructor(private eventHandler: VBEventHandler, private preferences: VBProperties) {
         this.eventHandler.resViewModeChangedEvent.subscribe(

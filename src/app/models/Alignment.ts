@@ -1,4 +1,4 @@
-import { ARTURIResource } from "./ARTResources";
+import { ARTURIResource, ARTNode, ARTResource } from "./ARTResources";
 
 export class AlignmentCell {
     private entity1: ARTURIResource;
@@ -108,4 +108,13 @@ export class AlignmentRelationSymbol {
             { relation: "InstanceOf", dlSymbol: "\u2190", text: "instance of" }
         ];
     }
+}
+
+
+export class Correspondence {
+    identity: ARTResource;
+    leftEntity: ARTNode[];
+    rightEntity: ARTNode[];
+    measure: ARTNode[];
+    relation: ARTNode[];
 }

@@ -5,7 +5,7 @@
             <resource-rename [resource]="resource" style="margin-left: 8px; flex: 1;" [readonly]="readonly" (update)="buildResourceView(resource)">
             </resource-rename>
             
-            <div class="dropdown pull-right" style="margin-left: 3px;">
+            <div *ngIf="versioningAvailable" class="dropdown pull-right" style="margin-left: 3px;">
                 <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" (click)="listVersions()" title="Change version">
                     <span class="glyphicon glyphicon-time"></span>
                 </button>
@@ -21,7 +21,7 @@
                 </ul>
             </div>
 
-            <div *ngIf="collaborationWorking && resource.isURIResource()" class="dropdown pull-right" style="margin-left: 3px;">
+            <div *ngIf="collaborationAvailable" class="dropdown pull-right" style="margin-left: 3px;">
                 <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" title="Issues">
                     <span [class]="'glyphicon glyphicon-exclamation-sign ' + issuesStruct.btnClass"></span>
                 </button>
@@ -54,7 +54,7 @@
             <button class="btn btn-default btn-xs" style="margin-left: 3px;" title="Refresh" (click)="buildResourceView(resource)">
                 <span class="glyphicon glyphicon-refresh"></span>
             </button>
-            <button class="btn btn-default btn-xs" style="margin-left: 3px;" title="ResourceView settings" (click)="openSettings()">
+            <button *ngIf="settingsAvailable" class="btn btn-default btn-xs" style="margin-left: 3px;" title="ResourceView settings" (click)="openSettings()">
                 <span class="glyphicon glyphicon-cog"></span>
             </button>
             
