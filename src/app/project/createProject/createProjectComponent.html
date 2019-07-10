@@ -129,16 +129,6 @@
                             Left/Right:
                             <span class="glyphicon glyphicon-info-sign" title="Due to technology limitations, the left dataset must be remote, hosted on GraphDB"></span>
                         </label>
-                        <!-- <div class="col-sm-2">
-                            <select class="form-control input-sm" [(ngModel)]="leftProject" (ngModelChange)="updateRightProjectList()" name="leftProject">
-                                <option *ngFor="let p of leftProjectList" [ngValue]="p">{{p.getName()}}</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-2">
-                            <select class="form-control input-sm" [(ngModel)]="rightProject" name="rightProject" [disabled]="!leftProject">
-                                <option *ngFor="let p of rightProjectList" [ngValue]="p">{{p.getName()}}</option>
-                            </select>
-                        </div> -->
                         <div class="col-sm-4">
                             <div class="hbox" style="align-items: center">
                                 <select class="form-control input-sm" [(ngModel)]="leftProject" (ngModelChange)="updateRightProjectList()" name="leftProject">
@@ -151,32 +141,6 @@
                             </div>
                         </div>
                     </ng-template>
-                    <!-- <div class="col-sm-4 text-center">
-                        <div class="checkbox-inline">
-                            <label>
-                                <input type="checkbox" [(ngModel)]="history" name="history"> History
-                            </label>
-                            <span class="glyphicon glyphicon-info-sign"
-                                title="Enable this to keep track of the changes made on the working graph">
-                            </span>
-                        </div>
-                        <div class="checkbox-inline" style="margin-left: 20px;">
-                            <label>
-                                <input type="checkbox" [(ngModel)]="validation" name="validation" (input)="blacklisting=false"> Validation
-                            </label>
-                            <span class="glyphicon glyphicon-info-sign"
-                                title="Enable this to keep track of change requests in order to validate them later (accepting or rejecting)">
-                            </span>
-                        </div>
-                        <div class="checkbox-inline" style="margin-left: 20px;">
-                            <label>
-                                <input type="checkbox" [(ngModel)]="blacklisting" name="blacklisting" [disabled]="!validation"> Blacklisting
-                            </label>
-                            <span class="glyphicon glyphicon-info-sign"
-                                title="Enable this to blacklist terms that have been rejected through validation">
-                            </span>
-                        </div>
-                    </div> -->
                     <div class="col-sm-3 text-center">
                         <div class="checkbox-inline">
                             <label>

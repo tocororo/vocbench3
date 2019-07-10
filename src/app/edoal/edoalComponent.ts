@@ -38,8 +38,6 @@ export class EdoalComponent {
     private correspondences: Correspondence[];
     private selectedCorrespondence: Correspondence;
 
-    // private creatingCorrespondence: boolean = false;
-
     private leftSelectedResource: ARTURIResource = null;
     private rightSelectedResource: ARTURIResource = null;
     private relations: AlignmentRelationSymbol[] = AlignmentRelationSymbol.getDefaultRelations();
@@ -152,13 +150,6 @@ export class EdoalComponent {
         }
     }
 
-    // private startNewCorrespondence() {
-    //     this.creatingCorrespondence = true;
-    // }
-    // private cancelNewCorrespondence() {
-    //     this.creatingCorrespondence = false;
-    // }
-
     private addCorrespondence() {
         if (this.measure < 0 || this.measure > 1) {
             this.basicModals.alert("Invalid measure", "The entered measure (" + this.measure + ") is invalid, it must be between 0 and 1.", "warning");
@@ -166,7 +157,6 @@ export class EdoalComponent {
         }
         this.edoalService.createCorrespondence(this.alignemnts[0], this.leftSelectedResource, this.rightSelectedResource, this.selectedRelation.relation, this.measure).subscribe(
             () => {
-                // this.cancelNewCorrespondence();
                 this.selectedRelation = null;
                 this.measure = 1.0;
                 this.listCorrespondences();
