@@ -27,7 +27,7 @@
             <tr>
                 <td nowrap><label>Right project:</label></td>
                 <td>
-                    <select class="form-control input-sm" [(ngModel)]="selectedRightProject" (ngModelChange)="onRightProjectChange()">
+                    <select class="form-control input-sm" [(ngModel)]="selectedRightProject" (ngModelChange)="onRightProjectChange()" [disabled]="context.rightProject">
                         <ng-container *ngFor="let p of projectList">
                             <option *ngIf="p.getName() != leftProjectStruct.project.getName()" [ngValue]="p">{{p.getName()}}</option>
                         </ng-container>

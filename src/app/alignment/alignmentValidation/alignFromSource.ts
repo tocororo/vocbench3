@@ -1,18 +1,55 @@
 import { OnInit } from "@angular/core";
+import { Observable } from "rxjs";
 import { AlignmentOverview } from "../../models/Alignment";
 import { Project } from "../../models/Project";
+import { EDOAL } from "../../models/Vocabulary";
+import { EdoalServices } from "../../services/edoalServices";
+import { ProjectServices } from "../../services/projectServices";
 import { VBContext } from "../../utils/VBContext";
 
-export class AlignFromSource implements OnInit {
+export abstract class AlignFromSource implements OnInit {
 
     alignmentOverview: AlignmentOverview;
     leftProject: Project;
     rightProject: Project;
 
-    constructor() {}
+    constructor(private edoalService: EdoalServices, private projectService: ProjectServices) {}
 
     ngOnInit() {
-        this.leftProject = VBContext.getWorkingProject();
+        if (this.isEdoalProject()) {
+            this.edoalService.getAlignedProjects().subscribe(
+                projects => {
+                    let leftProjectName: string = projects[0];
+                    let rightProjectName: string = projects[1];
+                    let initProjectsFn: Observable<void>[] = [
+                        this.projectService.getProjectInfo(leftProjectName).map(
+                            proj => {
+                                this.leftProject = proj;
+                            }
+                        ),
+                        this.projectService.getProjectInfo(rightProjectName).map(
+                            proj => {
+                                this.rightProject = proj;
+                            }
+                        )
+                    ];
+                    Observable.forkJoin(initProjectsFn).subscribe(
+                        () => {
+                            this.init();
+                        }
+                    );
+                }
+            );
+        } else {
+            this.leftProject = VBContext.getWorkingProject();
+            this.init();
+        }
     }
+
+    isEdoalProject() {
+        return VBContext.getWorkingProject().getModelType() == EDOAL.uri;
+    }
+
+    abstract init(): void;
 
 }

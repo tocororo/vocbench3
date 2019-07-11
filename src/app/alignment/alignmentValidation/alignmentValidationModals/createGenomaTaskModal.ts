@@ -11,7 +11,7 @@ import { VBContext } from "../../../utils/VBContext";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 
 export class CreateGenomaTaskModalData extends BSModalContext {
-    constructor(public leftProject: Project) {
+    constructor(public leftProject: Project, public rightProject: Project) {
         super();
     }
 }
@@ -42,6 +42,12 @@ export class CreateGenomaTaskModal implements ModalComponent<CreateGenomaTaskMod
         this.projectService.listProjects(VBContext.getWorkingProject(), false, true).subscribe(
             projects => {
                 this.projectList = projects;
+                if (this.context.rightProject != null) {
+                    this.selectedRightProject = this.projectList.find(p => p.getName() == this.context.rightProject.getName());
+                    if (this.selectedRightProject != null) {
+                        this.onRightProjectChange();
+                    }
+                }
             }
         );
         this.leftProjectStruct = new AlignedProjectStruct();

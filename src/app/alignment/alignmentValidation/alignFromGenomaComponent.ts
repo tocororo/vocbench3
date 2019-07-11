@@ -4,8 +4,11 @@ import { BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { AlignmentOverview } from '../../models/Alignment';
 import { GenomaTask } from '../../models/Genoma';
 import { Project } from "../../models/Project";
+import { EdoalServices } from '../../services/edoalServices';
 import { GenomaServices } from '../../services/genomaServices';
 import { MapleServices } from '../../services/mapleServices';
+import { ProjectServices } from '../../services/projectServices';
+import { HttpServiceContext } from '../../utils/HttpManager';
 import { UIUtils } from '../../utils/UIUtils';
 import { ProjectContext } from '../../utils/VBContext';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
@@ -21,19 +24,20 @@ export class AlignFromGenomaComponent extends AlignFromSource {
 
     @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
 
-    private tasks: GenomaTask[] = [];
+    private tasks: GenomaTask[];
     private selectedTask: GenomaTask;
 
-    constructor(private genomaService: GenomaServices, private mapleService: MapleServices, private basicModal: BasicModalServices, private modal: Modal) {
-        super();
+    constructor(edoalService: EdoalServices, projectService: ProjectServices,
+        private genomaService: GenomaServices, private mapleService: MapleServices, private basicModal: BasicModalServices, private modal: Modal) {
+        super(edoalService, projectService);
     }
 
 
-    ngOnInit() {
-        super.ngOnInit();
-
+    init() {
+        HttpServiceContext.setContextProject(this.leftProject);
         this.mapleService.checkProjectMetadataAvailability().subscribe(
             available => {
+                HttpServiceContext.removeConsumerProject();
                 if (available) {
                     this.listGenomaTask();
                 } else {
@@ -56,7 +60,10 @@ export class AlignFromGenomaComponent extends AlignFromSource {
     }
 
     private listGenomaTask() {
-        this.genomaService.listTasks(this.leftProject, true).subscribe(
+        this.tasks = null;
+        this.selectedTask = null;
+        let allowReordering: boolean = !this.isEdoalProject(); //if project is edoal, allow only task with the exact left-right datasets
+        this.genomaService.listTasks(this.leftProject, allowReordering, this.rightProject).subscribe(
             tasks => {
                 this.tasks = tasks;
             }
@@ -72,7 +79,9 @@ export class AlignFromGenomaComponent extends AlignFromSource {
     }
 
     private createTask() {
-        var modalData = new CreateGenomaTaskModalData(this.leftProject);
+        //if it is an edoal project, also the right project is forced to the one set in the edoal
+        let rightProject: Project = this.isEdoalProject() ? this.rightProject : null;
+        var modalData = new CreateGenomaTaskModalData(this.leftProject, rightProject);
         const builder = new BSModalContextBuilder<CreateGenomaTaskModalData>(
             modalData, undefined, CreateGenomaTaskModalData
         );

@@ -13,6 +13,8 @@ import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { ChangeMeasureModal, ChangeMeasureModalData } from "./changeMeasureModal";
+import { ResourcesServices } from "../services/resourcesServices";
+import { HttpServiceContext } from "../utils/HttpManager";
 
 @Component({
     selector: "edoal-component",
@@ -44,8 +46,13 @@ export class EdoalComponent {
     private selectedRelation: AlignmentRelationSymbol;
     private measure: number = 1.0;
 
-    constructor(private edoalService: EdoalServices, private projectService: ProjectServices, private vbProp: VBProperties,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) {}
+    //pagination
+    private page: number = 0;
+    private totPage: number;
+    private pageSize: number = 50;
+
+    constructor(private edoalService: EdoalServices, private projectService: ProjectServices, private resourcesService: ResourcesServices,
+        private vbProp: VBProperties, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) {}
 
     ngOnInit() {
         this.initProjects();
@@ -124,6 +131,13 @@ export class EdoalComponent {
         this.edoalService.getAlignments().subscribe(
             alignments => {
                 this.alignemnts = alignments;
+                //paging handler
+                let totCorrespondences = this.alignemnts[0].getAdditionalProperty('correspondences');
+                this.totPage = Math.floor(totCorrespondences/this.pageSize);
+                if (totCorrespondences % this.pageSize > 0){
+                    this.totPage++;
+                }
+
                 this.listCorrespondences();
             }
         )
@@ -134,10 +148,46 @@ export class EdoalComponent {
      * ====================== */
 
     private listCorrespondences() {
-        this.edoalService.getCorrespondences(this.alignemnts[0]).subscribe(
+        this.edoalService.getCorrespondences(this.alignemnts[0], this.page, this.pageSize).subscribe(
             correspondences => {
                 this.correspondences = correspondences;
+                this.renderCorrespondences();
                 this.selectedCorrespondence = null;
+            }
+        );
+    }
+
+    private renderCorrespondences() {
+        let leftEntities: ARTURIResource[] = [];
+        let rightEntities: ARTURIResource[] = [];
+        this.correspondences.forEach(c => {
+            leftEntities.push(<ARTURIResource>c.leftEntity[0]);
+            rightEntities.push(<ARTURIResource>c.rightEntity[0]);
+        });
+        HttpServiceContext.setContextProject(this.leftProjCtx.getProject());
+        this.resourcesService.getResourcesInfo(leftEntities).subscribe(
+            resources => {
+                HttpServiceContext.removeContextProject();
+                resources.forEach(r => {
+                    this.correspondences.forEach(c => {
+                        if (c.leftEntity[0].equals(r)) {
+                            c.leftEntity[0] = r;
+                        }
+                    });
+                })
+            }
+        );
+        HttpServiceContext.setContextProject(this.rightProjCtx.getProject());
+        this.resourcesService.getResourcesInfo(rightEntities).subscribe(
+            resources => {
+                HttpServiceContext.removeContextProject();
+                resources.forEach(r => {
+                    this.correspondences.forEach(c => {
+                        if (c.rightEntity[0].equals(r)) {
+                            c.rightEntity[0] = r;
+                        }
+                    });
+                })
             }
         );
     }
@@ -198,15 +248,29 @@ export class EdoalComponent {
         );
     }
 
+    /**
+     * Paging
+     */
+
+    private prevPage() {
+        this.page--;
+        this.listCorrespondences();
+    }
+
+    private nextPage() {
+        this.page++;
+        this.listCorrespondences();
+    }
+
     /** ======================
      * Tabset handlers
      * ====================== */
 
-    private openLeftResourceView() {
-        this.sharedModals.openResourceView(this.leftSelectedResource, true, this.leftProjCtx);
+    private openLeftResourceView(res: ARTURIResource) {
+        this.sharedModals.openResourceView(res, true, this.leftProjCtx);
     }
-    private openRightResourceView() {
-        this.sharedModals.openResourceView(this.rightSelectedResource, true, this.rightProjCtx);
+    private openRightResourceView(res: ARTURIResource) {
+        this.sharedModals.openResourceView(res, true, this.rightProjCtx);
     }
 
     private onLeftResourceSelected(resource: ARTURIResource) {

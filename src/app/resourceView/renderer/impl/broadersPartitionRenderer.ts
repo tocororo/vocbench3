@@ -13,6 +13,7 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { MultiAddFunction } from "../multipleAddHelper";
+import { VBContext } from "../../../utils/VBContext";
 
 @Component({
     selector: "broaders-renderer",
@@ -32,6 +33,20 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
 
     ngOnInit() {
         super.ngOnInit();
+    }
+
+    //@Override
+    getPredicateToEnrich(): Observable<ARTURIResource> {
+        let broaderPropUri = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.baseBroaderUri;
+        if (broaderPropUri != this.rootProperty.getURI()) {
+            return this.resourcesService.getResourceDescription(new ARTURIResource(broaderPropUri)).map(
+                res => {
+                    return <ARTURIResource>res;
+                }
+            );
+        } else {
+            return Observable.of(this.rootProperty);
+        }
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {

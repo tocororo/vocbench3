@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { AlignmentOverview } from '../../models/Alignment';
 import { AlignmentServices } from '../../services/alignmentServices';
+import { EdoalServices } from '../../services/edoalServices';
+import { ProjectServices } from '../../services/projectServices';
 import { UIUtils } from '../../utils/UIUtils';
 import { AlignFromSource } from './alignFromSource';
 
@@ -15,13 +17,12 @@ export class AlignFromFileComponent extends AlignFromSource {
     private sourceBaseURI: string;
     private targetBaseURI: string;
 
-    constructor(private alignmentService: AlignmentServices) {
-        super();
+    constructor(edoalService: EdoalServices, projectService: ProjectServices, private alignmentService: AlignmentServices) {
+        super(edoalService, projectService);
     }
 
-    ngOnInit() {
-        super.ngOnInit();
-    }
+
+    init() {}
 
     /**
      * Updates the file to load when user change file on from filepicker
