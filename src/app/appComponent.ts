@@ -94,10 +94,11 @@ export class AppComponent {
                 AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesGetClassTaxonomy) ||
                 AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesGetPropertyTaxonomy)
             );
-        } else if (modelType == EDOAL.uri) {
-            //?????
-            return true;
         }
+    }
+
+    private isEdoalDataAuthorized() {
+        return true; //???
     }
 
     private isMetadataVocAuthorized(): boolean {

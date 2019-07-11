@@ -144,4 +144,13 @@ export class EdoalServices {
         );
     }
 
+    createAlignment(): Observable<ARTBNode> {
+        let params: any = {}
+        return this.httpMgr.doPost(this.serviceName, "createAlignment", params).map(
+            stResp => {
+                return Deserializer.createBlankNode(stResp);
+            }
+        );
+    }
+
 }

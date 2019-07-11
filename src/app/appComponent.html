@@ -12,9 +12,11 @@
                 <li *ngIf="isUserLogged() && isUserAdmin()" routerLinkActive="active">
                     <a [routerLink]="['/Projects']">Projects</a>
                 </li>
-                <li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{ disabled : !isDataAuthorized() }" routerLinkActive="active">
-                    <a *ngIf="!isProjectEdoal()" [routerLink]="['/Data']">Data</a>
-                    <a *ngIf="isProjectEdoal()" [routerLink]="['/Edoal']">Data</a>
+                <li *ngIf="isUserLogged() && isProjectOpen() && !isProjectEdoal()" [ngClass]="{ disabled : !isDataAuthorized() }" routerLinkActive="active">
+                    <a [routerLink]="['/Data']">Data</a>
+                </li>
+                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectEdoal()" [ngClass]="{ disabled : !isEdoalDataAuthorized() }" routerLinkActive="active">
+                    <a [routerLink]="['/Edoal']">Data</a>
                 </li>
                 <li *ngIf="isUserLogged() && isProjectOpen()" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">

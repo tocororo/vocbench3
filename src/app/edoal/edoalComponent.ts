@@ -103,7 +103,7 @@ export class EdoalComponent {
                         Observable.forkJoin(...initLeftProjectCtxFn, ...initRightProjectCtxFn).subscribe(
                             () => {
                                 this.contextInitialized = true;
-                                this.initAlignments();
+                                this.listAlignments();
                             }
                         );
                     }
@@ -127,10 +127,10 @@ export class EdoalComponent {
         return hiddenTabs;
     }
 
-    private initAlignments() {
-        this.edoalService.getAlignments().subscribe(
-            alignments => {
-                this.alignemnts = alignments;
+    private listAlignments() {
+        this.ensureExistingAlignment().subscribe(
+            () => {
+                // this.alignemnts = alignemnts;
                 //paging handler
                 let totCorrespondences = this.alignemnts[0].getAdditionalProperty('correspondences');
                 this.totPage = Math.floor(totCorrespondences/this.pageSize);
@@ -139,6 +139,27 @@ export class EdoalComponent {
                 }
 
                 this.listCorrespondences();
+            }
+        )
+    }
+
+    private ensureExistingAlignment(): Observable<void> {
+        return this.edoalService.getAlignments().flatMap(
+            alignments => {
+                if (alignments.length > 0) {
+                    this.alignemnts = alignments
+                    return Observable.of(null);
+                } else {
+                    return this.edoalService.createAlignment().flatMap(
+                        alignmentNode => {
+                            return this.edoalService.getAlignments().map(
+                                alignments => {
+                                    this.alignemnts = alignments;
+                                }
+                            );
+                        }
+                    )
+                }
             }
         )
     }
@@ -164,32 +185,34 @@ export class EdoalComponent {
             leftEntities.push(<ARTURIResource>c.leftEntity[0]);
             rightEntities.push(<ARTURIResource>c.rightEntity[0]);
         });
-        HttpServiceContext.setContextProject(this.leftProjCtx.getProject());
-        this.resourcesService.getResourcesInfo(leftEntities).subscribe(
-            resources => {
-                HttpServiceContext.removeContextProject();
-                resources.forEach(r => {
-                    this.correspondences.forEach(c => {
-                        if (c.leftEntity[0].equals(r)) {
-                            c.leftEntity[0] = r;
-                        }
-                    });
-                })
-            }
-        );
-        HttpServiceContext.setContextProject(this.rightProjCtx.getProject());
-        this.resourcesService.getResourcesInfo(rightEntities).subscribe(
-            resources => {
-                HttpServiceContext.removeContextProject();
-                resources.forEach(r => {
-                    this.correspondences.forEach(c => {
-                        if (c.rightEntity[0].equals(r)) {
-                            c.rightEntity[0] = r;
-                        }
-                    });
-                })
-            }
-        );
+        if (leftEntities.length > 0 || rightEntities.length > 0) {
+            HttpServiceContext.setContextProject(this.leftProjCtx.getProject());
+            this.resourcesService.getResourcesInfo(leftEntities).subscribe(
+                resources => {
+                    HttpServiceContext.removeContextProject();
+                    resources.forEach(r => {
+                        this.correspondences.forEach(c => {
+                            if (c.leftEntity[0].equals(r)) {
+                                c.leftEntity[0] = r;
+                            }
+                        });
+                    })
+                }
+            );
+            HttpServiceContext.setContextProject(this.rightProjCtx.getProject());
+            this.resourcesService.getResourcesInfo(rightEntities).subscribe(
+                resources => {
+                    HttpServiceContext.removeContextProject();
+                    resources.forEach(r => {
+                        this.correspondences.forEach(c => {
+                            if (c.rightEntity[0].equals(r)) {
+                                c.rightEntity[0] = r;
+                            }
+                        });
+                    })
+                }
+            );
+        }
     }
 
     private selectCorrespondence(correspondece: Correspondence) {

@@ -5,53 +5,6 @@
 
     <div class="vbox" style="margin: 0px 8px">
 
-        <!-- <table class="table">
-            <colgroup>
-                <col style="width: 50%">
-                <col style="width: 50%">
-            </colgroup>
-            <thead>
-                <tr>
-                    <th class="text-center">
-                        <span class="glyphicon glyphicon-chevron-left"></span>
-                        {{leftProjCtx.getProject().getName()}}
-                    </th>
-                    <th class="text-center">
-                        {{rightProjCtx.getProject().getName()}}
-                        <span class="glyphicon glyphicon-chevron-right"></span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <rdf-resource *ngIf="leftSelectedResource" style="cursor: pointer" [resource]="leftSelectedResource"
-                            (dblclick)="openLeftResourceView()">
-                        </rdf-resource>
-                    </td>
-                    <td>
-                        <rdf-resource *ngIf="rightSelectedResource" style="cursor: pointer" [resource]="rightSelectedResource"
-                            (dblclick)="openRightResourceView()">
-                        </rdf-resource>
-                    </td>
-                </tr>
-                <tr *ngIf="leftSelectedResource && rightSelectedResource">
-                    <td colspan="2">
-                        <div class="hbox" style="align-items: center">
-                            <label style="margin-right: 4px;">Relation:</label>
-                            <select class="form-control input-sm" style="margin-right: 4px;" [(ngModel)]="selectedRelation">
-                                <option *ngFor="let rel of relations" [ngValue]="rel">{{rel.relation}}</option>
-                            </select>
-                            <input class="form-control input-sm" style="margin-right: 4px;" type="number" min="0" max="1" step=".01" [(ngModel)]="measure">
-                            <button class="btn btn-sm btn-default" (click)="addCorrespondence()" [disabled]="!selectedRelation || !measure">
-                                <span class="glyphicon glyphicon-ok"></span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table> -->
-
         <div class="hbox" style="flex: initial; align-items: center;padding: 8px">
             <div class="text-center" style="flex: 1; border-right: 1px solid black">
                 <span class="glyphicon glyphicon-chevron-left"></span>
@@ -85,8 +38,8 @@
                 <div class="hbox">
                     <div class="hbox" style="align-items: center; margin-right: 4px;">
                         <label style="margin-right: 4px;">Relation:</label>
-                        <select class="form-control input-xs" style="margin-right: 4px;" [(ngModel)]="selectedRelation">
-                            <option *ngFor="let rel of relations" [ngValue]="rel">{{rel.relation}}</option>
+                        <select class="form-control input-xs" style="margin-right: 4px;" [(ngModel)]="selectedRelation" [title]="selectedRelation.text">
+                            <option *ngFor="let rel of relations" [ngValue]="rel" [title]="rel.text">{{rel.relation}}</option>
                         </select>
                     </div>
                     <div class="hbox" style="align-items: center; margin-right: 4px;">
@@ -159,7 +112,7 @@
                     </table>
                 </div>
             </div>
-            <div class="panel-footer">
+            <div *ngIf="correspondences?.length > 0" class="panel-footer">
                 <div class="btn-group btn-group-xs pull-right">
                     <button class="btn btn-default" title="Previous page" (click)="prevPage()" [disabled]="page==0">
                         <span class="glyphicon glyphicon-triangle-left"></span>
@@ -167,7 +120,7 @@
                     <button class="btn btn-default" style="cursor: auto" disabled>
                         <span>{{page+1}} of {{totPage}}</span>
                     </button>
-                    <button class="btn btn-default" title="Next page" (click)="nextPage()" [disabled]="page==totPage-1">
+                    <button class="btn btn-default" title="Next page" (click)="nextPage()" [disabled]="page>=totPage-1">
                         <span class="glyphicon glyphicon-triangle-right"></span>
                     </button>
                 </div>
