@@ -439,7 +439,12 @@ export class CreateProjectComponent {
             projects => {
                 this.projectList = projects;
                 //init left project list
-                this.leftProjectList = this.projectList;
+                this.leftProjectList = [];
+                this.projectList.forEach(p => { //consider as left datasets only the remote projects
+                    if (p.getRepositoryLocation().location == "remote") {
+                        this.leftProjectList.push(p);
+                    }
+                });
             }
         );
     }
@@ -635,10 +640,10 @@ export class CreateProjectComponent {
                 this.basicModals.alert("Create project", "Left or right dataset missing", "warning");
                 return;
             }
-            if (this.selectedRepositoryAccess == RepositoryAccessType.CreateLocal) {
-                this.basicModals.alert("Create project", "EDOAL project can only be created/accessed on a remote triple store", "warning");
-                return;
-            }
+            // if (this.selectedRepositoryAccess == RepositoryAccessType.CreateLocal) {
+            //     this.basicModals.alert("Create project", "EDOAL project can only be created/accessed on a remote triple store", "warning");
+            //     return;
+            // }
         }
 
         /**

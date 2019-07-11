@@ -8,13 +8,13 @@ import { Project } from "../models/Project";
 import { OntoLex, OWL, RDFS, SKOS } from "../models/Vocabulary";
 import { EdoalServices } from "../services/edoalServices";
 import { ProjectServices } from "../services/projectServices";
+import { ResourcesServices } from "../services/resourcesServices";
+import { HttpServiceContext } from "../utils/HttpManager";
 import { ProjectContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { ChangeMeasureModal, ChangeMeasureModalData } from "./changeMeasureModal";
-import { ResourcesServices } from "../services/resourcesServices";
-import { HttpServiceContext } from "../utils/HttpManager";
 
 @Component({
     selector: "edoal-component",

@@ -47,6 +47,7 @@ export class MetadataRegistryComponent {
             catalogs => {
                 this.catalogs = catalogs;
                 this.selectedCatalog = null;
+                this.activeDatasetMetadata = null;
                 this.selectedVersion = null;
                 this.lexicalizationSets = [];
                 //if catalogToSelect has been provided, select it
