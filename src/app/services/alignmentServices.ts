@@ -6,6 +6,7 @@ import { SearchMode } from '../models/Properties';
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, HttpServiceContext } from "../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from '../utils/ResourceUtils';
+import { Project } from '../models/Project';
 
 @Injectable()
 export class AlignmentServices {
@@ -61,9 +62,11 @@ export class AlignmentServices {
      * @param file alignment file to upload
      * @return return an object with "onto1" and "onto2", namely the baseURI of the two aligned ontologies
      */
-    loadAlignment(file: File): Observable<AlignmentOverview> {
+    loadAlignment(file: File, leftProject?: Project, rightProject?: Project): Observable<AlignmentOverview> {
         var data = {
-            inputFile: file
+            inputFile: file,
+            leftProject: leftProject ? leftProject.getName() : null,
+            rightProject: rightProject ? rightProject.getName() : null
         }
         return this.httpMgr.uploadFile(this.serviceName, "loadAlignment", data);
     }

@@ -151,7 +151,9 @@ export class HttpManager {
         //prepare form data
         var formData = new FormData();
         for (var paramName in params) {
-            formData.append(paramName, params[paramName]);
+            if (params[paramName] != null) {
+                formData.append(paramName, params[paramName]);
+            }
         }
 
         var headers = new Headers();

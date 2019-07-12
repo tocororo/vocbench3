@@ -13,7 +13,12 @@ export abstract class AlignFromSource implements OnInit {
     leftProject: Project;
     rightProject: Project;
 
-    constructor(private edoalService: EdoalServices, private projectService: ProjectServices) {}
+    protected edoalService: EdoalServices;
+    protected projectService: ProjectServices
+    constructor(edoalService: EdoalServices, projectService: ProjectServices) {
+        this.edoalService = edoalService;
+        this.projectService = projectService;
+    }
 
     ngOnInit() {
         if (this.isEdoalProject()) {
