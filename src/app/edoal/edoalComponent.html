@@ -38,7 +38,7 @@
                 <div class="hbox">
                     <div class="hbox" style="align-items: center; margin-right: 4px;">
                         <label style="margin-right: 4px;">Relation:</label>
-                        <select class="form-control input-xs" style="margin-right: 4px;" [(ngModel)]="selectedRelation" [title]="selectedRelation.text">
+                        <select class="form-control input-xs" style="margin-right: 4px;" [(ngModel)]="selectedRelation" [title]="selectedRelation?.text">
                             <option *ngFor="let rel of relations" [ngValue]="rel" [title]="rel.text">{{rel.relation}}</option>
                         </select>
                     </div>
