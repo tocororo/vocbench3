@@ -139,7 +139,7 @@ export abstract class AbstractGraphNode {
             if (this.isSingleClick) {
                 this.nodeClicked.emit(this.node);
             }
-        }, 150)
+        }, 300)
     }
 
     private onDblClick() {

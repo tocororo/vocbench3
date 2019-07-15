@@ -43,7 +43,7 @@ export class ChangeMeasureModal implements ModalComponent<ChangeMeasureModalData
     }
 
     private isInputValid(): boolean {
-        return (this.value >= 0 && this.value <= 1);
+        return (typeof this.value == "number" && this.value >= 0 && this.value <= 1);
     }
 
 }
