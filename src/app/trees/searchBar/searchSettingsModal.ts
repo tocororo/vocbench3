@@ -96,7 +96,7 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
 
     private updateSettings() {
         this.vbProp.setSearchSettings(
-            this.context.projectCtx,
+            VBContext.getWorkingProjectCtx(this.context.projectCtx),
             {
                 stringMatchMode: this.activeStringMatchMode,
                 useURI: this.useURI,
