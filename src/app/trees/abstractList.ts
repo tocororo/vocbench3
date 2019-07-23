@@ -1,5 +1,5 @@
 import { Component, ElementRef, QueryList, ViewChild } from "@angular/core";
-import { ARTURIResource } from "../models/ARTResources";
+import { ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { AbstractListNode } from "./abstractListNode";
 import { AbstractStruct } from "./abstractStruct";
@@ -55,7 +55,24 @@ export abstract class AbstractList extends AbstractStruct {
     abstract selectNode(node: any): void;
     abstract onListNodeCreated(node: ARTURIResource): void;
     abstract onListNodeDeleted(node: ARTURIResource): void;
-    abstract openListAt(node: ARTURIResource): void;
+
+    openListAt(node: ARTURIResource) {
+        this.ensureNodeVisibility(node);
+        setTimeout( //apply timeout in order to wait that the children node is rendered (in case the openPages has been increased)
+            () => {
+                var childrenNodeComponent = this.viewChildrenNode.toArray();
+                for (var i = 0; i < childrenNodeComponent.length; i++) {
+                    if (childrenNodeComponent[i].node.getURI() == node.getURI()) {
+                        childrenNodeComponent[i].ensureVisible();
+                        if (!childrenNodeComponent[i].node.getAdditionalProperty(ResAttribute.SELECTED)) {
+                            childrenNodeComponent[i].selectNode();
+                        }
+                        break;
+                    }
+                }
+            }
+        );
+    }
 
     //Nodes limitation management
     initialNodes: number = 100;

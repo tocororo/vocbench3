@@ -468,7 +468,7 @@ export class UIUtils {
 
         for (var i = 0; i < sheets.length; i++) {
             //look for something like http://<hostname>:<port>/app.<hash>.css (hash is optional)
-            if (sheets.item(i).href.includes("app.") && sheets.item(i).href.endsWith(".css")) {
+            if (sheets.item(i).href != null && sheets.item(i).href.includes("app.") && sheets.item(i).href.endsWith(".css")) {
                 sheet = sheets.item(i);
                 break;
             }

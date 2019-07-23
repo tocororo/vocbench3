@@ -10,7 +10,8 @@ import { ProjectServices } from "../../services/projectServices";
 import { PropertyServices, RangeType } from "../../services/propertyServices";
 import { Cookie } from "../../utils/Cookie";
 import { HttpServiceContext } from "../../utils/HttpManager";
-import { VBContext } from "../../utils/VBContext";
+import { ProjectContext, VBContext } from "../../utils/VBContext";
+import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 
@@ -42,13 +43,14 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
 
     private projectList: Array<Project> = [];
     private project: Project;
+    private remoteProjCtx: ProjectContext;
     private schemes: ARTURIResource[]; //scheme to explore in case target project is skos(xl)
     private remoteResource: ARTURIResource;
 
     private activeView: RDFResourceRolesEnum;
 
     constructor(public dialog: DialogRef<BrowseExternalResourceModalData>, public projService: ProjectServices,
-        private preferenceService: PreferencesSettingsServices, private propService: PropertyServices,
+        private preferenceService: PreferencesSettingsServices, private propService: PropertyServices, private vbProp: VBProperties,
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) {
         this.context = dialog.context;
     }
@@ -106,19 +108,29 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
         HttpServiceContext.setContextProject(this.project);
         Cookie.setCookie(Cookie.ALIGNMENT_LAST_EXPLORED_PROJECT, this.project.getName());
 
-        this.activeView = null;
-        this.remoteResource = null;
+        this.remoteProjCtx = new ProjectContext(this.project);
+        let initProjectCtxFn: Observable<void>[] = [
+            this.vbProp.initProjectUserBindings(this.remoteProjCtx),
+            this.vbProp.initUserProjectPreferences(this.remoteProjCtx),
+            this.vbProp.initProjectSettings(this.remoteProjCtx)
+        ];
+        Observable.forkJoin(initProjectCtxFn).subscribe(
+            () => {
+                this.activeView = null;
+                this.remoteResource = null;
 
-        if (this.isProjectSKOS()) {
-            this.preferenceService.getActiveSchemes(this.project.getName()).subscribe(
-                schemes => {
-                    this.schemes = schemes;
+                if (this.isProjectSKOS()) {
+                    this.preferenceService.getActiveSchemes(this.project.getName()).subscribe(
+                        schemes => {
+                            this.schemes = schemes;
+                            this.restoreLastType();
+                        }
+                    );
+                } else {
                     this.restoreLastType();
                 }
-            );
-        } else {
-            this.restoreLastType();
-        }
+            }
+        );
     }
 
     private onAlignTypeChanged() {

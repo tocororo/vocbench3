@@ -130,7 +130,8 @@ export class ProjectContext { //TODO move to Project model class?
     private preferences: ProjectPreferences;
     private settings: ProjectSettings;
 
-    constructor() {
+    constructor(project?: Project) {
+        this.project = project;
         this.preferences = new ProjectPreferences();
         this.settings = new ProjectSettings();
     }

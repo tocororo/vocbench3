@@ -4,6 +4,7 @@ import { LexEntryVisualizationMode } from "../../../../models/Properties";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
+import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../../utils/VBActions";
@@ -11,7 +12,6 @@ import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { AbstractList } from "../../../abstractList";
 import { LexicalEntryListNodeComponent } from "./lexicalEntryListNodeComponent";
-import { VBRequestOptions } from "../../../../utils/HttpManager";
 
 @Component({
     selector: "lexical-entry-list",
@@ -116,24 +116,6 @@ export class LexicalEntryListComponent extends AbstractList {
         this.selectedNode = node;
         this.selectedNode.setAdditionalProperty(ResAttribute.SELECTED, true);
         this.nodeSelected.emit(node);
-    }
-
-    openListAt(node: ARTURIResource) {
-        this.ensureNodeVisibility(node);
-        setTimeout( //apply timeout in order to wait that the children node is rendered (in case the openPages has been increased)
-            () => {
-                var childrenNodeComponent = this.viewChildrenNode.toArray();
-                for (var i = 0; i < childrenNodeComponent.length; i++) {
-                    if (childrenNodeComponent[i].node.getURI() == node.getURI()) {
-                        childrenNodeComponent[i].ensureVisible();
-                        if (!childrenNodeComponent[i].node.getAdditionalProperty(ResAttribute.SELECTED)) {
-                            childrenNodeComponent[i].selectNode();
-                        }
-                        break;
-                    }
-                }
-            }
-        );
     }
 
 

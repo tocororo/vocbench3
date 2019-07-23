@@ -1,6 +1,6 @@
 <div *ngIf="contextInitialized" class="hbox">
 
-    <tabset-panel [projectCtx]="leftProjCtx" (nodeSelected)="onLeftResourceSelected($event)" [hiddenTabs]="leftHiddenTabs" [editable]="false">
+    <tabset-panel #leftTabset [projectCtx]="leftProjCtx" (nodeSelected)="onLeftResourceSelected($event)" [hiddenTabs]="leftHiddenTabs" [editable]="false">
     </tabset-panel>
 
     <div class="vbox" style="margin: 0px 8px">
@@ -58,10 +58,13 @@
             <div class="panel-heading">
                 <label style="flex: 1;">Alignments</label>
                 <div class="btn-toolbar">
-                    <button class="btn btn-xs btn-default" (click)="deleteCorrespondece()" [disabled]="!selectedCorrespondence">
+                    <button class="btn btn-xs btn-default" style="transform: rotate(90deg);" title="Sync entities" (click)="syncCorrespondece()" [disabled]="!selectedCorrespondence">
+                        <span class="glyphicon glyphicon-sort"></span>
+                    </button>
+                    <button class="btn btn-xs btn-default" (click)="deleteCorrespondece()" title="Delete alignment" [disabled]="!selectedCorrespondence">
                         <span class="glyphicon glyphicon-minus"></span>
                     </button>
-                    <button class="btn btn-xs btn-default" (click)="listCorrespondences()">
+                    <button class="btn btn-xs btn-default" (click)="listCorrespondences()" title="Refresh">
                         <span class="glyphicon glyphicon-refresh"></span>
                     </button>
                 </div>
@@ -129,7 +132,7 @@
 
     </div>
 
-    <tabset-panel [projectCtx]="rightProjCtx" (nodeSelected)="onRightResourceSelected($event)" [hiddenTabs]="rightHiddenTabs" [editable]="false">
+    <tabset-panel #rightTabset [projectCtx]="rightProjCtx" (nodeSelected)="onRightResourceSelected($event)" [hiddenTabs]="rightHiddenTabs" [editable]="false">
     </tabset-panel>
 
 </div>

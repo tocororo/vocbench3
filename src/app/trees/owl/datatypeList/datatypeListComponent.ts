@@ -96,22 +96,4 @@ export class DatatypeListComponent extends AbstractList {
         this.nodeSelected.emit(node);
     }
 
-    openListAt(node: ARTURIResource) {
-        this.ensureNodeVisibility(node);
-        setTimeout( //apply timeout in order to wait that the children node is rendered (in case the openPages has been increased)
-            () => {
-                var childrenNodeComponent = this.viewChildrenNode.toArray();
-                for (var i = 0; i < childrenNodeComponent.length; i++) {
-                    if (childrenNodeComponent[i].node.getURI() == node.getURI()) {
-                        childrenNodeComponent[i].ensureVisible();
-                        if (!childrenNodeComponent[i].node.getAdditionalProperty(ResAttribute.SELECTED)) {
-                            childrenNodeComponent[i].selectNode();
-                        }
-                        break;
-                    }
-                }
-            }
-        );
-    }
-
 }

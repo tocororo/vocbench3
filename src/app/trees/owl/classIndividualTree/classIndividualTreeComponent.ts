@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { SKOS } from '../../../models/Vocabulary';
-import { VBContext } from "../../../utils/VBContext";
+import { VBContext, ProjectContext } from "../../../utils/VBContext";
 
 @Component({
     selector: "class-individual-tree",
@@ -9,6 +9,7 @@ import { VBContext } from "../../../utils/VBContext";
 })
 export class ClassIndividualTreeComponent {
 
+    @Input() projectCtx: ProjectContext;
     @Input() roots: ARTURIResource[]; //roots of the class three
     @Input() schemes: ARTURIResource[]; //scheme to use in case the class selected is skos:Concept
     @Input() editable: boolean = true; //used only in right panel (instance/concept)
@@ -20,7 +21,7 @@ export class ClassIndividualTreeComponent {
     /*in the future I might need an Output for selected class. In case, change nodeSelected in instanceSelected and
     create classSelected Output. (Memo: nodeSelected is to maintain the same Output of the other tree components)*/
 
-    private selectedClass: ARTURIResource; //the class selected from class tree
+    private selectedClass: ARTURIResource = null; //the class selected from class tree
     private currentSchemes: ARTURIResource[];//the scheme selecte in the concept tree (only if selected class is skos:Concept)
     private selectedInstance: ARTURIResource; //the instance (or concept) selected in the instance list (or concept tree)
 
@@ -28,7 +29,7 @@ export class ClassIndividualTreeComponent {
 
     ngOnInit() {
         if (this.schemes === undefined) { //if @Input scheme is not provided at all, get it from project preference
-            this.currentSchemes = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
+            this.currentSchemes = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeSchemes;
         } else { //if @Input scheme is provided (it could be null => no scheme-mode), initialize the tree with this scheme
             this.currentSchemes = this.schemes;
         }

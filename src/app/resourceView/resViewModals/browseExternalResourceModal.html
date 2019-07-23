@@ -45,23 +45,23 @@
 
         <!-- following components allow to browse external projects classes, concepts, schemes, propertyes
         or individuals, and they are rendered based on the resource role -->
-        <class-tree-panel *ngIf="activeView=='cls'" (nodeSelected)="onResourceSelected($event)" [editable]="false">
+        <class-tree-panel *ngIf="activeView=='cls'" (nodeSelected)="onResourceSelected($event)" [editable]="false" [projectCtx]="remoteProjCtx">
         </class-tree-panel>
                 
-        <concept-tree-panel *ngIf="activeView=='concept'" [schemeChangeable]="true" [schemes]="schemes" [editable]="false"
+        <concept-tree-panel *ngIf="activeView=='concept'" [schemeChangeable]="true" [schemes]="schemes" [editable]="false" [projectCtx]="remoteProjCtx"
             (nodeSelected)="onResourceSelected($event)" (schemeChanged)="onSchemeChanged()">
         </concept-tree-panel>
                 
-        <property-tree-panel *ngIf="activeView=='property'" [editable]="false" (nodeSelected)="onResourceSelected($event)">
+        <property-tree-panel *ngIf="activeView=='property'" [editable]="false" [projectCtx]="remoteProjCtx" (nodeSelected)="onResourceSelected($event)">
         </property-tree-panel>
             
-        <scheme-list-panel *ngIf="activeView=='conceptScheme'" [editable]="false" (nodeSelected)="onResourceSelected($event)">
+        <scheme-list-panel *ngIf="activeView=='conceptScheme'" [editable]="false" [projectCtx]="remoteProjCtx" (nodeSelected)="onResourceSelected($event)">
         </scheme-list-panel>
 
-        <collection-tree-panel *ngIf="activeView=='skosCollection'"  [editable]="false" (nodeSelected)="onResourceSelected($event)">
+        <collection-tree-panel *ngIf="activeView=='skosCollection'"  [editable]="false" [projectCtx]="remoteProjCtx" (nodeSelected)="onResourceSelected($event)">
         </collection-tree-panel>
         
-        <class-individual-tree *ngIf="activeView=='individual'" [schemes]="schemes" [editable]="false" (nodeSelected)="onResourceSelected($event)">
+        <class-individual-tree *ngIf="activeView=='individual'" [schemes]="schemes" [editable]="false" [projectCtx]="remoteProjCtx" (nodeSelected)="onResourceSelected($event)">
         </class-individual-tree>
 
     </div>

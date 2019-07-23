@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 import { Modal, OverlayConfig } from "ngx-modialog";
 import { BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
 import { Observable } from "rxjs";
@@ -9,6 +9,7 @@ import { OntoLex, OWL, RDFS, SKOS } from "../models/Vocabulary";
 import { EdoalServices } from "../services/edoalServices";
 import { ProjectServices } from "../services/projectServices";
 import { ResourcesServices } from "../services/resourcesServices";
+import { TabsetPanelComponent } from "../trees/tabset/tabsetPanelComponent";
 import { HttpServiceContext } from "../utils/HttpManager";
 import { ProjectContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
@@ -22,6 +23,9 @@ import { ChangeMeasureModal, ChangeMeasureModalData } from "./changeMeasureModal
     host: { class: "pageComponent" }
 })
 export class EdoalComponent {
+
+    @ViewChild('leftTabset') leftTabset: TabsetPanelComponent;
+    @ViewChild('rightTabset') rightTabset: TabsetPanelComponent;
 
     /**
      * Projects and tabs
@@ -84,16 +88,14 @@ export class EdoalComponent {
 
                 Observable.forkJoin(describeProjFn).subscribe(
                     () => {
-                        this.leftProjCtx = new ProjectContext();
-                        this.leftProjCtx.setProject(leftProject);
+                        this.leftProjCtx = new ProjectContext(leftProject);
                         let initLeftProjectCtxFn: Observable<void>[] = [
                             this.vbProp.initProjectUserBindings(this.leftProjCtx),
                             this.vbProp.initUserProjectPreferences(this.leftProjCtx),
                             this.vbProp.initProjectSettings(this.leftProjCtx)
                         ];
 
-                        this.rightProjCtx = new ProjectContext();
-                        this.rightProjCtx.setProject(rightProject);
+                        this.rightProjCtx = new ProjectContext(rightProject);
                         let initRightProjectCtxFn: Observable<void>[] = [
                             this.vbProp.initProjectUserBindings(this.rightProjCtx),
                             this.vbProp.initUserProjectPreferences(this.rightProjCtx),
@@ -243,6 +245,11 @@ export class EdoalComponent {
                 this.listCorrespondences();
             }
         );
+    }
+
+    private syncCorrespondece() {
+        this.leftTabset.syncResource(<ARTURIResource>this.selectedCorrespondence.leftEntity[0], true);
+        this.rightTabset.syncResource(<ARTURIResource>this.selectedCorrespondence.rightEntity[0], true);
     }
 
     private changeRelation(correspondence: Correspondence, relation: AlignmentRelationSymbol) {

@@ -118,28 +118,33 @@ export class TabsetPanelComponent {
         this.nodeSelected.emit(node);
     }
 
-    public syncResource(resource: ARTResource) {
-        let resRole: RDFResourceRolesEnum = resource.getRole();
-        //sync the resource in the tree/list only if the resource has the same role of the tree/list currently active
-        if (resource.isURIResource() && this.activeTab == resRole) {
-            if (resRole == RDFResourceRolesEnum.concept) {
-                this.viewChildConceptPanel.openTreeAt(<ARTURIResource>resource);
-            } else if (resRole == RDFResourceRolesEnum.conceptScheme) {
-                this.viewChildSchemePanel.openAt(<ARTURIResource>resource);
-            } else if (resRole == RDFResourceRolesEnum.skosCollection || resRole == RDFResourceRolesEnum.skosOrderedCollection) {
-                this.viewChildCollectionPanel.openTreeAt(<ARTURIResource>resource);
-            } else if (resRole == RDFResourceRolesEnum.property || resRole == RDFResourceRolesEnum.annotationProperty || 
-                resRole == RDFResourceRolesEnum.datatypeProperty || resRole == RDFResourceRolesEnum.objectProperty ||
-                resRole == RDFResourceRolesEnum.ontologyProperty) {
-                this.viewChildPropertyPanel.openTreeAt(<ARTURIResource>resource);
-            } else if (resRole == RDFResourceRolesEnum.cls) {
-                this.viewChildClsIndPanel.openClassTreeAt(<ARTURIResource>resource);
-            } else if (resRole == RDFResourceRolesEnum.limeLexicon) {
-                this.viewChildLexiconPanel.openAt(<ARTURIResource>resource);
-            } else if (resRole == RDFResourceRolesEnum.ontolexLexicalEntry) {
-                this.viewChildLexialEntryPanel.openAt(<ARTURIResource>resource);
-            } else if (resRole == RDFResourceRolesEnum.dataRange) {
-                this.viewChildDatatypePanel.openAt(<ARTURIResource>resource);
+    public syncResource(resource: ARTResource, allowTabChange?: boolean) {
+        if (resource.isURIResource()) { //in the trees/lists are visible only IRI resources, so allow to sync only ARTURIResource
+            let resRole: RDFResourceRolesEnum = resource.getRole();
+            if (allowTabChange && this.activeTab != resRole && this.showTab(resRole)) { //if the tab needs to be changed and the target tab is visible
+                this.activeTab = resRole;
+            }
+            //sync the resource in the tree/list only if the resource has the same role of the tree/list currently active
+            if (this.activeTab == resRole) {
+                if (resRole == RDFResourceRolesEnum.concept) {
+                    this.viewChildConceptPanel.openTreeAt(<ARTURIResource>resource);
+                } else if (resRole == RDFResourceRolesEnum.conceptScheme) {
+                    this.viewChildSchemePanel.openAt(<ARTURIResource>resource);
+                } else if (resRole == RDFResourceRolesEnum.skosCollection || resRole == RDFResourceRolesEnum.skosOrderedCollection) {
+                    this.viewChildCollectionPanel.openTreeAt(<ARTURIResource>resource);
+                } else if (resRole == RDFResourceRolesEnum.property || resRole == RDFResourceRolesEnum.annotationProperty || 
+                    resRole == RDFResourceRolesEnum.datatypeProperty || resRole == RDFResourceRolesEnum.objectProperty ||
+                    resRole == RDFResourceRolesEnum.ontologyProperty) {
+                    this.viewChildPropertyPanel.openTreeAt(<ARTURIResource>resource);
+                } else if (resRole == RDFResourceRolesEnum.cls) {
+                    this.viewChildClsIndPanel.openClassTreeAt(<ARTURIResource>resource);
+                } else if (resRole == RDFResourceRolesEnum.limeLexicon) {
+                    this.viewChildLexiconPanel.openAt(<ARTURIResource>resource);
+                } else if (resRole == RDFResourceRolesEnum.ontolexLexicalEntry) {
+                    this.viewChildLexialEntryPanel.openAt(<ARTURIResource>resource);
+                } else if (resRole == RDFResourceRolesEnum.dataRange) {
+                    this.viewChildDatatypePanel.openAt(<ARTURIResource>resource);
+                }
             }
         }
     }
