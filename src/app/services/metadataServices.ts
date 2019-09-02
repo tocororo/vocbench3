@@ -141,7 +141,7 @@ export class MetadataServices {
             transitiveImportAllowance: transitiveImportAllowance
         };
         if (altURL != undefined) {
-            params.alturl = altURL;
+            params.altUrl = altURL;
         }
         if (rdfFormat != undefined) {
             params.rdfFormat = rdfFormat.name;
@@ -168,7 +168,7 @@ export class MetadataServices {
             transitiveImportAllowance: transitiveImportAllowance
         };
         if (altURL != undefined) {
-            params.alturl = altURL;
+            params.altUrl = altURL;
         }
         if (rdfFormat != undefined) {
             params.rdfFormat = rdfFormat.name;
@@ -257,7 +257,7 @@ export class MetadataServices {
             transitiveImportAllowance: transitiveImportAllowance
         };
         if (altURL != undefined) {
-            params.alturl = altURL;
+            params.altUrl = altURL;
         }
         if (rdfFormat != undefined) {
             params.rdfFormat = rdfFormat.name;
@@ -285,7 +285,7 @@ export class MetadataServices {
             transitiveImportAllowance: transitiveImportAllowance
         };
         if (altURL != undefined) {
-            params.alturl = altURL;
+            params.altUrl = altURL;
         }
         if (rdfFormat != undefined) {
             params.rdfFormat = rdfFormat.name;
