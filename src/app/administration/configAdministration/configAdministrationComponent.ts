@@ -132,7 +132,7 @@ export class ConfigAdministrationComponent {
             return;
         }
 
-        this.basicModals.prompt("Email configuration test", "Mail to", "This test will send an e-mail to the provided address in order to "
+        this.basicModals.prompt("Email configuration test", { value: "Mail to" }, "This test will send an e-mail to the provided address in order to "
             + "check the e-mail configuration", VBContext.getLoggedUser().getEmail()).then(
             mailTo => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);

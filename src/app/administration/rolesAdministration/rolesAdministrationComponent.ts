@@ -68,7 +68,7 @@ export class RolesAdministrationComponent {
     }
 
     private createRole() {
-        this.basicModals.prompt("Create role", "Role name", null, null, false, true).then(
+        this.basicModals.prompt("Create role", { value: "Role name" }, null, null, false, true).then(
             (result: any) => {
                 if (this.roleExists(result)) {
                     this.basicModals.alert("Duplicated role", "A role with the same name (" + result + ") already exists", "error");
@@ -124,7 +124,7 @@ export class RolesAdministrationComponent {
     }
 
     private cloneRole() {
-        this.basicModals.prompt("Clone role " + this.selectedRole.getName(), "Role name", null, null, false, true).then(
+        this.basicModals.prompt("Clone role " + this.selectedRole.getName(), { value: "Role name" }, null, null, false, true).then(
             (newRoleName: any) => {
                 if (this.roleExists(newRoleName)) {
                     this.basicModals.alert("Duplicated role", "A role with the same name (" + newRoleName + ") already exists", "error");

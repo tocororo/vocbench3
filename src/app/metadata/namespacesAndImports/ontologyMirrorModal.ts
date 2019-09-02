@@ -41,7 +41,7 @@ export class OntologyMirrorModal implements ModalComponent<BSModalContext> {
      * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
      */
     private updateMirrorFromWebWithUri(mirror: { file: string, baseURI: string }) {
-        this.basicModals.prompt("Update ontology mirror from web", "BaseURI").then(
+        this.basicModals.prompt("Update ontology mirror from web", { value: "BaseURI" }).then(
             (newBaseURI: any) => {
                 UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
                 this.ontoMgrService.updateOntologyMirrorEntry("updateFromBaseURI", newBaseURI, mirror.file).subscribe(
@@ -60,7 +60,7 @@ export class OntologyMirrorModal implements ModalComponent<BSModalContext> {
      * @param mirror an ontology mirror entry, an object {file: string, namespace: string}
      */
     private updateMirrorFromWebFromAltUrl(mirror: { file: string, baseURI: string }) {
-        this.basicModals.prompt("Update ontology mirror from web", "URL").then(
+        this.basicModals.prompt("Update ontology mirror from web", { value: "URL" }).then(
             (url: any) => {
                 UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
                 this.ontoMgrService.updateOntologyMirrorEntry("updateFromAlternativeURL", mirror.baseURI, mirror.file, url).subscribe(

@@ -6,7 +6,10 @@
         {{context.message}}
     </div>
     <div class="hbox" style="align-items: center;">
-        <label *ngIf="context.label" style="margin-right: 4px;">{{context.label}}:</label>
+        <div *ngIf="context.label" style="margin-right: 4px;">
+            <label>{{context.label.value}}:</label>
+            <span *ngIf="context.label.tooltip" class="glyphicon glyphicon-question-sign" [title]="context.label.tooltip"></span>
+        </div>
         <input id="toFocus" type="text" class="form-control input-sm" style="flex: 1;" [(ngModel)]="inputTxt"
             (keydown)="onKeydown($event)" [sanitized]="context.inputSanitized">
     </div>

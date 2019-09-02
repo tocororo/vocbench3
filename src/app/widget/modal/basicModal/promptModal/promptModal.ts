@@ -5,7 +5,7 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 export class PromptModalData extends BSModalContext {
     /**
      * @param title modal title
-     * @param label label of the input field
+     * @param label label of the input field and optionally a tooltip to show next to it
      * @param value the default value to show in input field
      * @param hideNo tells if the no button should be hide
      * @param inputOptional tells if the input field is optional or mandatory
@@ -13,7 +13,7 @@ export class PromptModalData extends BSModalContext {
      */
     constructor(
         public title: string = "Modal Title",
-        public label: string,
+        public label: { value: string, tooltip?: string },
         public message: string,
         public value: string,
         public hideNo: boolean = false,

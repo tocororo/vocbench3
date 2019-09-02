@@ -81,7 +81,7 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
     }
 
     private enterManually() {
-        this.basicModals.prompt("Insert value manually", "IRI").then(
+        this.basicModals.prompt("Insert value manually", { value: "IRI" }).then(
             valueIRI => {
                 if (ResourceUtils.testIRI(valueIRI)) {
                     this.alignedObject = new ARTURIResource(valueIRI);

@@ -29,14 +29,14 @@ export class BasicModalServices {
      * Opens a modal with an input text and two buttons (Ok and Cancel) with the given title and content message.
      * Returns a Promise with the result.
      * @param title the title of the modal dialog
-     * @param label the label of the input field (optional)
+     * @param label the label of the input field and optionally a tooltip to show next to it
      * @param message the message to show over the input field (optional)
      * @param value the value inserted by default in the input field
      * @param inputOptional tells if the input field is optional or mandatory (default false)
      * @param inputSanitized tells if the text in the input field should be sanitized (default false)
      * @return if the modal closes with ok returns a promise containing the input text
      */
-    prompt(title: string, label?: string, message?: string, value?: string, inputOptional?: boolean, inputSanitized?: boolean) {
+    prompt(title: string, label?: { value: string, tooltip?: string }, message?: string, value?: string, inputOptional?: boolean, inputSanitized?: boolean) {
         var modalData = new PromptModalData(title, label, message, value, false, inputOptional, inputSanitized);
         const builder = new BSModalContextBuilder<PromptModalData>(
             modalData, undefined, PromptModalData
