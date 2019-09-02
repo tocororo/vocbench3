@@ -89,8 +89,10 @@ export class MetadataRegistryComponent {
         this.basicModals.prompt("Discover Dataset", "Dataset IRI").then(
             iri => {
                 if (ResourceUtils.testIRI(iri)) {
+                    UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                     this.metadataRegistryService.discoverDataset(new ARTURIResource(iri)).subscribe(
                         stResp => {
+                            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                             this.initCatalogRecords();        
                         }
                     );
