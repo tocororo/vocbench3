@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute } from "../../models/ARTResources";
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { ResViewPartition } from "../../models/ResourceView";
-import { RDFS, SemanticTurkey, SKOS, SKOSXL } from "../../models/Vocabulary";
+import { RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { ManchesterServices } from "../../services/manchesterServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { RefactorServices } from "../../services/refactorServices";

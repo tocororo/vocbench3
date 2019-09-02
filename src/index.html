@@ -1,22 +1,31 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
-    <title>VocBench</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="./vbconfig.js"></script> 
-  </head>
+<head>
+  <title>VocBench</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="./vbconfig.js"></script>
+</head>
 
-  <body>
-    <div id="blockDivFullScreen" class="blockingDiv" style="display:none">
-      <div class="loadingDiv">
-        <div>
-          <p>Loading...</p><img src="./assets/images/loading.gif" />
-        </div>
+<body>
+  <div id="blockDivFullScreen" class="blockingDiv" style="display:none">
+    <div class="loadingDiv">
+      <div>
+        <p>Loading...</p><img src="./assets/images/loading.gif" />
       </div>
     </div>
-    <app>Loading...</app>
-  </body>
+  </div>
+
+  <app>
+    <div class="app-loading">
+      <div class="logo-container">
+        <img src="./assets/images/logos/vb_logo.png"/>
+        <span style="position: absolute">VocBench is loading, it might take a while...</span>
+      </div>
+      <div class="loader" style="position: absolute;"></div>
+    </div>
+  </app>
+</body>
 
 </html>

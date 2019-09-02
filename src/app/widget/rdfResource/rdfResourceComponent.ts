@@ -149,7 +149,7 @@ export class RdfResourceComponent {
                     value = value.substring(idx);
                     //what there is between url and the end of the string
                     if (urlArray[i + 1] == null && idx != value.length) { //if there is no further links but there is text after last url
-                        this.splittedLiteral.push(value.substring(idx, value.length));
+                        this.splittedLiteral.push(value); //push value, namely the rest of the value string
                     }
                 }
             }

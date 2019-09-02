@@ -5,6 +5,71 @@ html, body {
     margin: 0;
 }
 
+/* Splash screen style - BEGIN */
+.app-loading {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background-image: linear-gradient(to right, #1e4387, #7486ab);
+}
+.logo-container {
+    position: relative;
+    height: 300px;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.logo-container > span {
+    position: absolute;
+    color: #8b9bba;
+    font-size: 14px;
+    font-weight: bold;
+    top: 280px;
+}
+.loader, .loader:after {
+    border-radius: 50%;
+    width: 230px;
+    height: 230px;
+    font-size: 6px;
+  }
+.loader {
+    border-top: 0.01em solid #7486ab;
+    border-right: 0.6em solid #7486ab;
+    border-bottom: 1.1em solid #7486ab;
+    border-left: 1.1em solid transparent;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation: load8 2.0s infinite linear;
+    animation: load8 2.0s infinite linear;
+}
+@-webkit-keyframes load8 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes load8 {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+/* Splash screen style - END */
+
 .blockingDivHost {
     position: relative; /* to allow blockDiv with absolute position inside these divs */
 }
@@ -138,12 +203,14 @@ rdf-resource > .rdfResourceIcon {
     height: 16px;
 }
 /* Ellipsis of the content of a rdf-resource in a button, in a navigation tab (ResView tabs), and in a panel-heading (heading of ResView) */
-button > rdf-resource > span, .nav-tabs rdf-resource > span,
-.panel-heading rdf-resource > span, .tile rdf-resource > span {
+/* button > rdf-resource > span, .nav-tabs rdf-resource > span,
+.panel-heading rdf-resource > span, .tile rdf-resource > span { */
+button > rdf-resource span, .nav-tabs rdf-resource span,
+.panel-heading rdf-resource span, .tile rdf-resource span {
 	max-width: 200px;
 	overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: nowrap !important;
 }
 rdf-resource > .rdfResourceText {
     border: 1px solid transparent;

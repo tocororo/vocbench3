@@ -1,5 +1,5 @@
 <div class="rdfResourceIcon">
-    <ng-template [ngIf]="imgSrc">
+    <ng-container *ngIf="imgSrc">
         <img *ngIf="!lang; else resWithLangBlock" [src]="imgSrc" [title]="natureTooltip">    
         <ng-template #resWithLangBlock>
             <!--If flag is not available write the langTag over an empty flag-->
@@ -9,16 +9,14 @@
             </div>
             <img *ngIf="langFlagAvailable" [src]="imgSrc" [title]="lang" [ngClass]="{disabled: !isExplicit()}">
         </ng-template>
-    </ng-template>
+    </ng-container>
 </div>
 <span [title]="resource.toNT()" [class]="'rdfResourceText' + renderingClass">
-    <ng-template [ngIf]="literalWithLink">
-        <ng-template ngFor let-s [ngForOf]="splittedLiteral" let-even="even">
-            <span *ngIf="even">{{s}}</span>
+    <ng-container *ngIf="literalWithLink">
+        <ng-container *ngFor="let s of splittedLiteral; let even = even">
+            <span *ngIf="even" style="white-space: pre-wrap">{{s}}</span>
             <a *ngIf="!even" [href]="s" target="_blank">{{s}}</a>
-        </ng-template>
-    </ng-template>
-    <ng-template [ngIf]="!literalWithLink">
-        {{renderingLabel}}
-    </ng-template>
+        </ng-container>
+    </ng-container>
+    <span *ngIf="!literalWithLink" style="white-space: pre-wrap">{{renderingLabel}}</span>
 </span>

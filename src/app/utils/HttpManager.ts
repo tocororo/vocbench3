@@ -31,7 +31,7 @@ export class HttpManager {
 
         let st_protocol: string = window['st_protocol']; //protocol (http/https)
         let protocol: string = st_protocol ? st_protocol : location.protocol;
-        if (!protocol.endsWith(":")) protocol+":"; //protocol from location includes ending ":", st_protocol variable could not include ":"
+        if (!protocol.endsWith(":")) protocol += ":"; //protocol from location includes ending ":", st_protocol variable could not include ":"
         this.serverhost = protocol + "//";
 
         let st_host: string = window['st_host'];

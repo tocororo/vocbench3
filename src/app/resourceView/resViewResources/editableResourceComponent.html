@@ -52,7 +52,11 @@
 
 <ng-template [ngIf]="editInProgress || bulkEditInProgress || editLiteralInProgress">
     <div class="input-group input-group-xs" style="flex: 1;">
-        <input type="text" class="form-control" [(ngModel)]="resourceStringValue">
+        <textarea *ngIf="editLiteralInProgress; else editInProgressInput" class="form-control input-xs" style="height: initial; resize: vertical;"
+            rows="1" [(ngModel)]="resourceStringValue"></textarea>
+        <ng-template #editInProgressInput>
+            <input type="text" class="form-control" [(ngModel)]="resourceStringValue">
+        </ng-template>
         <div class="input-group-btn">
             <button class="btn btn-default" style="width:15px; padding: 0px;" (click)="confirmEdit()" placeholder="Confirm">
                 <span class="glyphicon glyphicon-ok" style="color: green"></span>
