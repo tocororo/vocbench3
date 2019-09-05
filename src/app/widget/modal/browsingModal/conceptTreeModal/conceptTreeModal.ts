@@ -3,6 +3,7 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from '../../../../models/ARTResources';
 import { UIUtils } from "../../../../utils/UIUtils";
+import { ProjectContext } from "../../../../utils/VBContext";
 
 export class ConceptTreeModalData extends BSModalContext {
     /**
@@ -13,7 +14,8 @@ export class ConceptTreeModalData extends BSModalContext {
     constructor(
         public title: string = 'Modal Title',
         public schemes: ARTURIResource[],
-        public schemeChangeable: boolean = false
+        public schemeChangeable: boolean = false,
+        public projectCtx?: ProjectContext
     ) {
         super();
     }

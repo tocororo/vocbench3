@@ -12,6 +12,7 @@ import { LexicalEntryListModal, LexicalEntryListModalData } from './lexicalEntry
 import { LexiconListModal, LexiconListModalData } from './lexiconListModal/lexiconListModal';
 import { PropertyTreeModal, PropertyTreeModalData } from "./propertyTreeModal/propertyTreeModal";
 import { SchemeListModal, SchemeListModalData } from "./schemeListModal/schemeListModal";
+import { ProjectContext } from '../../../utils/VBContext';
 
 /**
  * Service to open browsing modals, namely the modal that contains trees (concept, class, property) or list (instances).
@@ -26,8 +27,8 @@ export class BrowsingModalServices {
      * @param title the title of the modal
      * @return if the modal closes with ok returns a promise containing the selected class
      */
-    browseClassTree(title: string, roots?: ARTURIResource[]) {
-        var modalData = new ClassTreeModalData(title, roots);
+    browseClassTree(title: string, roots?: ARTURIResource[], projectCtx?: ProjectContext) {
+        var modalData = new ClassTreeModalData(title, roots, projectCtx);
         const builder = new BSModalContextBuilder<ClassTreeModalData>(
             modalData, undefined, ClassTreeModalData
         );
@@ -71,8 +72,8 @@ export class BrowsingModalServices {
      * @param schemeChangeable if true a menu is shown and the user can browse not only the selected scheme
      * @return if the modal closes with ok returns a promise containing the selected concept
      */
-    browseConceptTree(title: string, schemes?: ARTURIResource[], schemeChangeable?: boolean) {
-        var modalData = new ConceptTreeModalData(title, schemes, schemeChangeable);
+    browseConceptTree(title: string, schemes?: ARTURIResource[], schemeChangeable?: boolean, projectCtx?: ProjectContext) {
+        var modalData = new ConceptTreeModalData(title, schemes, schemeChangeable, projectCtx);
         const builder = new BSModalContextBuilder<ConceptTreeModalData>(
             modalData, undefined, ConceptTreeModalData
         );
@@ -85,8 +86,8 @@ export class BrowsingModalServices {
      * @param title the title of the modal
      * @return if the modal closes with ok returns a promise containing the selected collection
      */
-    browseCollectionTree(title: string) {
-        var modalData = new CollectionTreeModalData(title);
+    browseCollectionTree(title: string, projectCtx?: ProjectContext) {
+        var modalData = new CollectionTreeModalData(title, projectCtx);
         const builder = new BSModalContextBuilder<CollectionTreeModalData>(
             modalData, undefined, CollectionTreeModalData
         );
@@ -99,8 +100,8 @@ export class BrowsingModalServices {
      * @param title the title of the modal
      * @return if the modal closes with ok returns a promise containing the selected scheme
      */
-    browseSchemeList(title: string) {
-        var modalData = new SchemeListModalData(title);
+    browseSchemeList(title: string, projectCtx?: ProjectContext) {
+        var modalData = new SchemeListModalData(title, projectCtx);
         const builder = new BSModalContextBuilder<SchemeListModalData>(
             modalData, undefined, SchemeListModalData
         );
@@ -116,8 +117,8 @@ export class BrowsingModalServices {
      * just the properties that have as domain the type of the resource 
      * @return if the modal closes with ok returns a promise containing the selected property
      */
-    browsePropertyTree(title: string, rootProperties?: ARTURIResource[], resource?: ARTURIResource) {
-        var modalData = new PropertyTreeModalData(title, rootProperties, resource);
+    browsePropertyTree(title: string, rootProperties?: ARTURIResource[], resource?: ARTURIResource, projectCtx?: ProjectContext) {
+        var modalData = new PropertyTreeModalData(title, rootProperties, resource, projectCtx);
         const builder = new BSModalContextBuilder<PropertyTreeModalData>(
             modalData, undefined, PropertyTreeModalData
         );
@@ -145,8 +146,8 @@ export class BrowsingModalServices {
      * 
      * @param title 
      */
-    browseLexiconList(title: string) {
-        var modalData = new LexiconListModalData(title);
+    browseLexiconList(title: string, projectCtx?: ProjectContext) {
+        var modalData = new LexiconListModalData(title, projectCtx);
         const builder = new BSModalContextBuilder<LexiconListModalData>(
             modalData, undefined, LexiconListModalData
         );

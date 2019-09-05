@@ -50,7 +50,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
         super.ngOnInit();
 
         this.filterEnabled = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().classTreePreferences.filter.enabled;
-        if (VBContext.getWorkingProject().getModelType() == RDFS.uri) {
+        if (VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getModelType() == RDFS.uri) {
             this.creatingClassType = RDFS.class;
         }
     }

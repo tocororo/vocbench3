@@ -11,7 +11,8 @@ import { ResourcesServices } from "../../services/resourcesServices";
 import { UsersGroupsServices } from "../../services/usersGroupsServices";
 import { HttpServiceContext } from "../../utils/HttpManager";
 import { ResourceUtils } from "../../utils/ResourceUtils";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { ProjectContext } from "../../utils/VBContext";
+import { VBProperties } from "../../utils/VBProperties";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 
 @Component({
@@ -21,6 +22,7 @@ import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsing
 export class ProjectGroupsManagerComponent {
 
     @Input() project: Project;
+    private lastBrowsedProjectCtx: ProjectContext;
     private projectClosed: boolean;
 
     private groups: UsersGroup[]; //list of groups
@@ -39,8 +41,8 @@ export class ProjectGroupsManagerComponent {
     private selectedScheme: ARTURIResource;
 
     constructor(private groupsService: UsersGroupsServices, private prefService: PreferencesSettingsServices,
-        private resourceService: ResourcesServices, private propService: PropertyServices,
-        private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) { }
+        private resourceService: ResourcesServices, private propService: PropertyServices, private browsingModals: BrowsingModalServices,
+        private vbProp: VBProperties) { }
 
     ngOnInit() {
         this.groupsService.listGroups().subscribe(
@@ -180,13 +182,17 @@ export class ProjectGroupsManagerComponent {
 
     private changeBaseBroaderProperty() {
         this.prepareProjectAccess();
-        this.browsingModals.browsePropertyTree("Select root class", [SKOS.broader]).then(
-            (prop: ARTURIResource) => {
-                this.revokeProjectAccess();
-                this.baseBroaderProp = prop.getURI();
-                this.updateGroupSetting(Properties.pref_concept_tree_base_broader_prop, this.baseBroaderProp);
-            },
-            () => {}
+        this.prepareProjectBrowse().subscribe(
+            () => {
+                this.browsingModals.browsePropertyTree("Select root class", [SKOS.broader], null, this.lastBrowsedProjectCtx).then(
+                    (prop: ARTURIResource) => {
+                        this.revokeProjectAccess();
+                        this.baseBroaderProp = prop.getURI();
+                        this.updateGroupSetting(Properties.pref_concept_tree_base_broader_prop, this.baseBroaderProp);
+                    },
+                    () => {}
+                );
+            }
         );
     }
 
@@ -196,51 +202,59 @@ export class ProjectGroupsManagerComponent {
 
     private addBroader() {
         this.prepareProjectAccess();
-        this.browsingModals.browsePropertyTree("Select a broader property", [SKOS.broader]).then(
-            (prop: ARTURIResource) => {
-                this.revokeProjectAccess();
-                if (!ResourceUtils.containsNode(this.broaderProps, prop)) {
-                    this.broaderProps.push(prop);
-                    this.updateBroadersSetting();
-                    //if synchronization is active sync the lists
-                    if (this.syncInverse) {
-                        this.syncInverseOfBroader().subscribe(
-                            () => {
+        this.prepareProjectBrowse().subscribe(
+            () => {
+                this.browsingModals.browsePropertyTree("Select a broader property", [SKOS.broader], null, this.lastBrowsedProjectCtx).then(
+                    (prop: ARTURIResource) => {
+                        this.revokeProjectAccess();
+                        if (!ResourceUtils.containsNode(this.broaderProps, prop)) {
+                            this.broaderProps.push(prop);
+                            this.updateBroadersSetting();
+                            //if synchronization is active sync the lists
+                            if (this.syncInverse) {
+                                this.syncInverseOfBroader().subscribe(
+                                    () => {
+                                        this.updateBroadersSetting();
+                                        this.updateNarrowersSetting();
+                                    }
+                                )
+                            } else {
                                 this.updateBroadersSetting();
-                                this.updateNarrowersSetting();
                             }
-                        )
-                    } else {
-                        this.updateBroadersSetting();
-                    }
-                }
-            },
-            () => {}
-        )
+                        }
+                    },
+                    () => {}
+                )
+            }
+        );
     }
 
     private addNarrower() {
         this.prepareProjectAccess();
-        this.browsingModals.browsePropertyTree("Select a narrower property", [SKOS.narrower]).then(
-            (prop: ARTURIResource) => {
-                this.revokeProjectAccess();
-                if (!ResourceUtils.containsNode(this.narrowerProps, prop)) {
-                    this.narrowerProps.push(prop);
-                    //if synchronization is active sync the lists
-                    if (this.syncInverse) {
-                        this.syncInverseOfNarrower().subscribe(
-                            () => { 
+        this.prepareProjectBrowse().subscribe(
+            () => {
+                this.browsingModals.browsePropertyTree("Select a narrower property", [SKOS.narrower], null, this.lastBrowsedProjectCtx).then(
+                    (prop: ARTURIResource) => {
+                        this.revokeProjectAccess();
+                        if (!ResourceUtils.containsNode(this.narrowerProps, prop)) {
+                            this.narrowerProps.push(prop);
+                            //if synchronization is active sync the lists
+                            if (this.syncInverse) {
+                                this.syncInverseOfNarrower().subscribe(
+                                    () => { 
+                                        this.updateNarrowersSetting();
+                                        this.updateBroadersSetting();
+                                    }
+                                )
+                            } else {
                                 this.updateNarrowersSetting();
-                                this.updateBroadersSetting();
                             }
-                        )
-                    } else {
-                        this.updateNarrowersSetting();
-                    }
-                }
-            },
-            () => {}
-        )
+                        }
+                    },
+                    () => {}
+                )
+            }
+        );
     }
 
     private removeBroader() {
@@ -384,15 +398,19 @@ export class ProjectGroupsManagerComponent {
 
     private addScheme() {
         this.prepareProjectAccess();
-        this.browsingModals.browseSchemeList("Select a scheme").then(
-            (scheme: ARTURIResource) => {
-                this.revokeProjectAccess();
-                if (!ResourceUtils.containsNode(this.ownedSchemes, scheme)) {
-                    this.ownedSchemes.push(scheme);
-                    this.groupsService.addOwnedSchemeToGroup(this.project.getName(), this.selectedGroup.iri, scheme).subscribe();
-                }
-            },
-            () => {}
+        this.prepareProjectBrowse().subscribe(
+            () => {
+                this.browsingModals.browseSchemeList("Select a scheme", this.lastBrowsedProjectCtx).then(
+                    (scheme: ARTURIResource) => {
+                        this.revokeProjectAccess();
+                        if (!ResourceUtils.containsNode(this.ownedSchemes, scheme)) {
+                            this.ownedSchemes.push(scheme);
+                            this.groupsService.addOwnedSchemeToGroup(this.project.getName(), this.selectedGroup.iri, scheme).subscribe();
+                        }
+                    },
+                    () => {}
+                );
+            }
         );
     }
 
@@ -414,6 +432,24 @@ export class ProjectGroupsManagerComponent {
     private prepareProjectAccess() {
         HttpServiceContext.setContextProject(this.project); //set temp project
         HttpServiceContext.setConsumerProject(new Project("SYSTEM")); //set temp project
+    }
+
+    /**
+     * Initialize the project context for the project to browse.
+     */
+    private prepareProjectBrowse(): Observable<any> {
+        if (this.lastBrowsedProjectCtx != null && this.lastBrowsedProjectCtx.getProject().getName() == this.project.getName()) {
+            //project context was already initialized in a previous browsing => do not initialize it again
+            return Observable.of(null);
+        } else { //project context never initialized or initialized for a different project
+            this.lastBrowsedProjectCtx = new ProjectContext(this.project);
+            let initProjectCtxFn: Observable<void>[] = [
+                this.vbProp.initProjectUserBindings(this.lastBrowsedProjectCtx),
+                this.vbProp.initUserProjectPreferences(this.lastBrowsedProjectCtx),
+                this.vbProp.initProjectSettings(this.lastBrowsedProjectCtx)
+            ];
+            return Observable.forkJoin(initProjectCtxFn);
+        }
     }
 
     private revokeProjectAccess() {

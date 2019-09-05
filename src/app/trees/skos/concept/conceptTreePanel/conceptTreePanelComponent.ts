@@ -77,7 +77,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
         this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences.visualization;
 
-        this.modelType = VBContext.getWorkingProject().getModelType();
+        this.modelType = VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getModelType();
             
         //Initialize working schemes
         if (this.schemes === undefined) { //if @Input is not provided at all, get the scheme from the preferences

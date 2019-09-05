@@ -7,7 +7,7 @@
             <input type="checkbox" [(ngModel)]="showAll" (ngModelChange)="onShowAllChanged()">Show all properties
         </label>
     </div>
-    <property-tree-panel [editable]="false" [roots]="context.rootProperties" [resource]="domainRes"
+    <property-tree-panel [editable]="false" [roots]="context.rootProperties" [resource]="domainRes" [projectCtx]="context.projectCtx"
         (nodeSelected)="onPropertySelected($event)">
     </property-tree-panel>
 </div>

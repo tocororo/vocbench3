@@ -40,7 +40,7 @@ export class SchemeListPanelComponent extends AbstractListPanel {
     
     ngOnInit() {
         super.ngOnInit();
-        this.modelType = VBContext.getWorkingProject().getModelType();
+        this.modelType = VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getModelType();
     }
 
 

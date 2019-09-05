@@ -74,7 +74,7 @@
                                 <label style="flex: 1">Assigned Group:</label>
                                 <button *ngIf="puBinding?.getGroup()" class="btn btn-xs btn-default" [ngClass]="{ active: puBinding.isSubjectToGroupLimitations()}" (click)="changeGroupLimitations()" 
                                 title="If enabled, the user is subject to the group limitations" [disabled]="selectedUser.isAdmin()">
-                                    <span *ngIf="puBinding.isSubjectToGroupLimitations()" class="greenText" style="font-weight: bold">Restrictions</span>
+                                    <span *ngIf="puBinding.isSubjectToGroupLimitations()" class="greenText" style="font-weight: bold">Restrictions applied</span>
                                     <span *ngIf="!puBinding.isSubjectToGroupLimitations()" class="grayText">Apply restrictions</span>
                                 </button>
                             </div>
