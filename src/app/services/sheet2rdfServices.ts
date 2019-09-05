@@ -120,12 +120,13 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "addSimpleGraphApplicationToHeader", params);
     }
 
-    addAdvancedGraphApplicationToHeader(headerId: string, graphPattern: string, nodeIds: string[], prefixMapping: {[key: string]: string}) {
+    addAdvancedGraphApplicationToHeader(headerId: string, graphPattern: string, nodeIds: string[], prefixMapping: {[key: string]: string}, defaultPredicate?: ARTURIResource) {
         let params: any = {
             headerId: headerId,
             graphPattern: graphPattern,
             nodeIds: nodeIds,
-            prefixMapping: JSON.stringify(prefixMapping)
+            prefixMapping: JSON.stringify(prefixMapping),
+            defaultPredicate: defaultPredicate
         };
         return this.httpMgr.doPost(this.serviceName, "addAdvancedGraphApplicationToHeader", params);
     }

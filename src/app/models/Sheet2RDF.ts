@@ -62,6 +62,7 @@ export class AdvancedGraphApplication extends GraphApplication {
     public nodeIds: string[];
     public pattern: string;
     public prefixMapping: {[prefix: string]: string};
+    public defaultPredicate?: ARTURIResource;
 }
 
 export class CODAConverter {
@@ -150,6 +151,7 @@ export class Sheet2RdfDeserializer {
             g.nodeIds = gJson.nodeIds;
             g.pattern = gJson.pattern;
             g.prefixMapping = gJson.prefixMapping;
+            g.defaultPredicate = (gJson.defaultPredicate) ? new ARTURIResource(gJson.defaultPredicate) : null;
             return g;
         }
     }

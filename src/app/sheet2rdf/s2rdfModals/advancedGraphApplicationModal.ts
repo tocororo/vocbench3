@@ -2,9 +2,12 @@ import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
 import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from "rxjs";
+import { ARTURIResource } from "../../models/ARTResources";
+import { ConverterContractDescription, RDFCapabilityType } from "../../models/Coda";
 import { Configuration, ConfigurationComponents, ConfigurationProperty } from "../../models/Configuration";
 import { PrefixMapping } from "../../models/Metadata";
 import { AdvancedGraphApplication, NodeConversion, SimpleHeader } from "../../models/Sheet2RDF";
+import { RangeType } from "../../services/propertyServices";
 import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBContext } from "../../utils/VBContext";
@@ -12,8 +15,6 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 import { LoadConfigurationModalReturnData } from "../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { NodeCreationModal, NodeCreationModalData } from "./nodeCreationModal";
-import { ConverterContractDescription, RDFCapabilityType } from "../../models/Coda";
-import { RangeType } from "../../services/propertyServices";
 
 export class AdvancedGraphApplicationModalData extends BSModalContext {
     constructor(public header: SimpleHeader, public graphApplication?: AdvancedGraphApplication) {
@@ -28,17 +29,20 @@ export class AdvancedGraphApplicationModalData extends BSModalContext {
 export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGraphApplicationModalData> {
     context: AdvancedGraphApplicationModalData;
 
-
+    //Nodes
     private alreadyDefinedNodes: NodeConversion[] = []; //nodes already defined in the header
     private newDefinedNodes: NodeConversion[] = []; //nodes defined contextually the graph creation/edit
     private selectedNode: NodeConversion;
 
+    //Graph
     @ViewChild('prefixnstable') prefixNsTableElement: ElementRef;
     private globalPrefixMappings: PrefixMapping[] = [];
     private localPrefixMappings: PrefixMapping[] = [];
     private selectedMapping: PrefixMapping;
 
     private graphPattern: string;
+    private defaultPredicate: ARTURIResource;
+    private readonly PRED_PLACEHOLDER: string = "{{pred}}"
 
     constructor(public dialog: DialogRef<AdvancedGraphApplicationModalData>, private s2rdfService: Sheet2RDFServices, 
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) {
@@ -52,15 +56,14 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         this.s2rdfService.getPrefixMappings().subscribe(
             mapping => {
                 this.globalPrefixMappings = mapping;
+                if (this.context.graphApplication != null) { //edit mode => restore pref-ns mappings
+                    this.restorePrefixNsMappings(this.context.graphApplication.prefixMapping);
+                }
             }
         );
-
         if (this.context.graphApplication != null) { //edit mode => restore UI
             this.graphPattern = this.context.graphApplication.pattern;
-            for (let pref in this.context.graphApplication.prefixMapping) {
-                this.localPrefixMappings.push({ prefix: pref, namespace: this.context.graphApplication.prefixMapping[pref], explicit: true });
-                
-            }
+            this.defaultPredicate = this.context.graphApplication.defaultPredicate;
         }
     }
 
@@ -195,13 +198,28 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         this.localPrefixMappings.splice(this.localPrefixMappings.indexOf(this.selectedMapping), 1);
     }
     
+    /**
+     * Adds the given mappings into localPrefixMappings
+     */
+    private restorePrefixNsMappings(mappings: {[prefix: string]: string}) {
+        for (let prefix in mappings) {
+            /** 
+             * If the mappings is not already in the globalPrefixMappings, add it into the localPrefixMappings.
+             * TODO: if the mappings is not in the globalPrefixMappings, but the prefix is already in use?
+             * do not add the mapping and replace the prefix in the pattern?
+             */
+            if (!this.globalPrefixMappings.some((gp: PrefixMapping) => gp.prefix == prefix && gp.namespace == mappings[prefix])) {
+                this.localPrefixMappings.push({ prefix: prefix, namespace: mappings[prefix], explicit: true })
+            }
+        }
+    }
 
     /*
      * ============= GRAPHS =================
      */
 
-    private isOkEnabled(): boolean {
-        return (this.newDefinedNodes.length > 0 || this.alreadyDefinedNodes.length > 0) && this.graphPattern != null && this.graphPattern.trim() != "";
+    private updateDefaultPredicate(pred: ARTURIResource) {
+        this.defaultPredicate = pred;
     }
 
     private validatePattern() {
@@ -226,7 +244,11 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         });
         pearl += "}\n"; //close nodes
         pearl += "graph = {\n";
-        pearl += this.graphPattern + "\n";
+        let gp: string = this.graphPattern;
+        if (gp.includes(this.PRED_PLACEHOLDER)) {
+            gp = gp.replace(this.PRED_PLACEHOLDER, this.defaultPredicate.toNT());
+        }
+        pearl += gp + "\n";
         pearl += "}\n"; //close graph
         pearl += "}\n"; //close rule
 
@@ -287,9 +309,10 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                         prefixMappingToStore[prefix] = namespace;
                     })
                     let config: { [key: string]: any } = {
-                        graphPattern: this.graphPattern,
+                        pattern: this.graphPattern,
                         nodes: nodesToStore,
-                        prefixMapping: prefixMappingToStore
+                        prefixMapping: prefixMappingToStore,
+                        defaultPredicate: this.defaultPredicate != null ? this.defaultPredicate.toNT() : null
                     };
                     this.sharedModals.storeConfiguration("Save Advanced Graph Application", ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, config).then(
                         () => {
@@ -335,15 +358,15 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         let confProps: ConfigurationProperty[] = conf.properties;
         let nodesToRestore: NodeConversion[] = [];
         for (let i = 0; i < confProps.length; i++) {
-            if (confProps[i].name == "graphPattern") {
+            if (confProps[i].name == "pattern") {
                 this.graphPattern = confProps[i].value;
             } else if (confProps[i].name == "nodes") {
                 nodesToRestore = confProps[i].value;
             } else if (confProps[i].name == "prefixMapping") {
                 let prefMapValue: {[key: string]: string} = confProps[i].value;
-                Object.keys(prefMapValue).forEach(prefix => {
-                    this.localPrefixMappings.push({ prefix: prefix, namespace: prefMapValue[prefix], explicit: true });
-                });
+                this.restorePrefixNsMappings(prefMapValue);
+            } else if (confProps[i].name == "defaultPredicate" && confProps[i].value != null) {
+                this.defaultPredicate = new ARTURIResource(confProps[i].value);
             }
         }
         /**
@@ -439,15 +462,27 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         );
     }
 
+    private isOkEnabled(): boolean {
+        return (this.newDefinedNodes.length > 0 || this.alreadyDefinedNodes.length > 0) && this.graphPattern != null && this.graphPattern.trim() != "";
+    }
+
     ok() {
         /**
          * Steps:
-         * - validate graph pattern (passing also the prefix-ns mappings).
+         * - check if pattern contains {{pred}} placeholder, in case, check if the default predicate is provided.
+         * - validate graph pattern (passing also the prefix-ns mappings and eventually replace the {{pred}} placeholder).
          *   I expect from the response: if the pattern is ok, the list of placeholders, otherwise an error message.
          * - check if all the placeholders returned above (those used in the graph pattern) are defined in the nodes section.
          * - add all the nodes to the header
          * - add the advancedGraphApplication to the header
          */
+
+        if (this.graphPattern.includes(this.PRED_PLACEHOLDER) && this.defaultPredicate == null) {
+            this.basicModals.alert("Missing default predicate", 
+                "The graph pattern contains the {{pred}} placeholder, but a default predicate has not been provided", "warning");
+            return;
+        }
+
         this.validatePattern().subscribe(
             validation => {
                 if (validation.valid) {
@@ -479,7 +514,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                                 let graphAppFn: Observable<any>;
                                 if (this.context.graphApplication == null) { //creation mode
                                     graphAppFn = this.s2rdfService.addAdvancedGraphApplicationToHeader(
-                                        this.context.header.id, this.graphPattern, validation.usedNodes, prefixMappingMap);
+                                        this.context.header.id, this.graphPattern, validation.usedNodes, prefixMappingMap, this.defaultPredicate);
                                 } else { //edit mode
                                     graphAppFn = this.s2rdfService.updateAdvancedGraphApplication(
                                         this.context.header.id, this.context.graphApplication.id, this.graphPattern, validation.usedNodes, prefixMappingMap);

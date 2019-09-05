@@ -15,6 +15,7 @@ export class ResourcePickerComponent {
     @Input() roles: RDFResourceRolesEnum[]; //list of pickable resource roles
     @Input() disabled: boolean = false;
     @Input() editable: boolean = false; //tells if the URI can be manually edited
+    @Input() size: string = "sm"
     @Output() resourceChanged = new EventEmitter<ARTURIResource>();
 
     private resourceIRI: string;
@@ -22,6 +23,10 @@ export class ResourcePickerComponent {
     constructor(private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
+        //if the input size is not valid, set default to "sm"
+        if (this.size != "xs" && this.size != "sm" && this.size != "" && this.size != "lg") {
+            this.size = "sm";
+        }
         this.init();
     }
 

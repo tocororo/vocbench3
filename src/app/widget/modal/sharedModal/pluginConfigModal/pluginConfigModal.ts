@@ -1,8 +1,7 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { Settings, SettingsProp } from "../../../../models/Plugins";
-import { ARTURIResource } from "../../../../models/ARTResources";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Settings } from "../../../../models/Plugins";
 
 export class PluginConfigModalData extends BSModalContext {
     /**

@@ -720,6 +720,16 @@ textarea {
     overflow: auto;
 }
 
+/* class for positioning the close "x" in a multiline dismissable alert at the top right corner */
+.alert-multiline.alert-dismissible {
+    position: relative
+}
+.alert-multiline.alert-dismissible > .close {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+}
+
 /* ####################################
 ########## BOOTSTRAP OVERRIDE #########
 #####################################*/

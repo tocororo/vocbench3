@@ -133,21 +133,10 @@ export class Sheet2RdfComponent {
         //restore initial state (in case there was a previous sheet loaded)
         //for sheet preview
         this.resetSheetPreview();
-        // this.headers = null;
-        // this.tablePreview = null;
-        // this.truncatedRows = null;
-        // this.totalRows = null;
         //for pearl
         this.resetPearlEditor();
-        // this.pearl = null;
-        // this.updatePearl(this.pearl);
-        // this.pearlValidation = { valid: true, details: null };
         //for triples preview
         this.resetTriplePreview();
-        // this.truncatedTriples = null;
-        // this.totalTriples = null;
-        // this.triplesPreview = null;
-        // this.selectedTriplePreviewRow = null;
     }
 
     private resetSheetPreview() {

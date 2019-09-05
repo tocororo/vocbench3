@@ -8,16 +8,20 @@
     </div>
     <div class="panel-body" class="scrollableContainer">
 
-        <div *ngIf="settings?.htmlDescription" class="alert alert-info hbox" style="align-items: center; margin-bottom: 4px;">
-            <span class="glyphicon glyphicon-info-sign" style="margin-right: 6px;"></span>
-            <span style="flex: 1;" [innerHTML]="safeDescription"></span>
-            <button class="close" data-dismiss="alert" style="margin-left: 6px;"><span>&times;</span></button>
+        <div *ngIf="settings?.htmlDescription" class="alert alert-info alert-dismissible alert-multiline" style="margin-bottom: 4px;">
+            <div class="hbox" style="align-items: center;">
+                <span class="glyphicon glyphicon-info-sign" style="margin-right: 6px;"></span>
+                <span style="flex: 1;" [innerHTML]="safeDescription"></span>
+            </div>
+            <button class="close" data-dismiss="alert"><span>&times;</span></button>
         </div>
 
-        <div *ngIf="settings?.htmlWarning" class="alert alert-warning hbox" style="align-items: center; margin-bottom: 4px;">
-            <span class="glyphicon glyphicon-warning-sign" style="margin-right: 6px;"></span>
-            <span style="flex: 1;" [innerHTML]="safeWarning"></span>
-            <button class="close" data-dismiss="alert" style="margin-left: 6px;"><span>&times;</span></button>
+        <div *ngIf="settings?.htmlWarning" class="alert alert-warning alert-dismissible alert-multiline" style="margin-bottom: 4px;">
+            <div class="hbox" style="align-items: center;">
+                <span class="glyphicon glyphicon-warning-sign" style="margin-right: 6px;"></span>
+                <span style="flex: 1;" [innerHTML]="safeWarning"></span>
+            </div>
+            <button class="close" data-dismiss="alert"><span>&times;</span></button>
         </div>
 
         <settings-renderer [(ngModel)]="settings" (ngModelChange)="onModelChanged()"></settings-renderer>

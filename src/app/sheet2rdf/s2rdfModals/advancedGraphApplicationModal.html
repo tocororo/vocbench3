@@ -16,7 +16,7 @@
 
 </div>
 <div class="modal-body vbox scrollableContainer">
-    <div class="panel panel-default" style="margin-top: 4px; min-height: 100px">
+    <div class="panel panel-default" style="margin-top: 4px;">
         <div class="panel-heading">
             <label style="flex: 1">Nodes</label>
             <div class="btn-toolbar" role="toolbar">
@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-        <div class="panel-body table-responsive">
+        <div class="panel-body table-responsive" style="min-height: 60px; max-height: 100px;">
             <table class="table table-condensed">
                 <thead>
                     <tr>
@@ -81,7 +81,7 @@
         </div>
     </div>
 
-    <div class="panel panel-default vbox" style="margin-top: 4px;">
+    <div class="panel panel-default" style="margin-top: 4px;">
         <div class="panel-heading">
             <label style="flex: 1">Graph</label>
         </div>
@@ -101,7 +101,7 @@
                         </div>
                     </div>
                 </div>
-                <div #prefixnstable class="subPanel-body table-responsive" style="max-height: 100px;">
+                <div #prefixnstable class="subPanel-body table-responsive" style="min-height: 60px; max-height: 100px;">
                     <table class="table table-condensed">
                         <thead>
                             <tr>
@@ -128,13 +128,31 @@
                     <label style="flex: 1">Graph pattern</label>
                 </div>
                 <div class="subPanel-body vbox">
+                    <div class="alert alert-info alert-dismissible alert-multiline" style="margin-bottom: 5px;">
+                        The graph pattern must contain only node IDs defined in the above <i>Nodes</i> list.<br>
+                        It could also contains a <span style="font-family: monospace;" ngNonBindable>{{pred}}</span>
+                        placeholder that will be replaced with the predicate of the header. 
+                        In case the <span style="font-family: monospace;" ngNonBindable>{{pred}}</span> is used in the pattern,
+                        a default predicate <strong>must</strong> be provided as fallback when the header does not represent any valid predicate.
+                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                    </div>
                     <textarea class="form-control input-sm" style="resize: vertical" rows="5" [(ngModel)]="graphPattern"></textarea>
+                </div>
+                <div class="subPanel-footer">
+                    <div class="hbox" style="align-items: center">
+                        <label style="margin-right: 4px;">Default predicate:</label>
+                        <resource-picker [resource]="defaultPredicate" roles="property" size="xs"
+                            (resourceChanged)="updateDefaultPredicate($event)" style="flex: 1">
+                        </resource-picker>
+                        <span class="glyphicon glyphicon-info-sign" style="margin-left: 4px" 
+                            title="If the graph pattern contains the 'pred' placeholder this predicate is mandatory, otherwise it will be ignored">
+                        </span>
+                    </div>
                 </div>
             </div>
 
         </div>
     </div>
-
 
 </div>
 <div class="modal-footer">
