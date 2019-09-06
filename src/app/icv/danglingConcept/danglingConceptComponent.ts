@@ -4,7 +4,6 @@ import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
 import { ResourceUtils, SortAttribute } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
-import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
@@ -17,8 +16,9 @@ import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalS
 export class DanglingConceptComponent {
 
     private schemeList: Array<ARTURIResource>;
-    private selectedScheme: ARTURIResource;
+    private selectedScheme: ARTURIResource = null;
     private brokenConceptList: Array<ARTURIResource>;
+    private brokenConceptMap: BrokenConceptEntry[];
 
     constructor(private icvService: IcvServices, private skosService: SkosServices,
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices, private sharedModals: SharedModalServices) { }
@@ -28,19 +28,6 @@ export class DanglingConceptComponent {
             schemeList => {
                 this.schemeList = schemeList;
                 ResourceUtils.sortResources(this.schemeList, SortAttribute.show);
-                var activeSchemes: ARTURIResource[] = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
-                var currentScheme: ARTURIResource;
-                if (activeSchemes.length > 0) {
-                    currentScheme = activeSchemes[0];
-                }
-                if (currentScheme != null) {
-                    for (var i = 0; i < this.schemeList.length; i++) {
-                        if (this.schemeList[i].getURI() == currentScheme.getURI()) {
-                            this.selectedScheme = this.schemeList[i];
-                            break;
-                        }
-                    }
-                }
             }
         );
     }
@@ -49,20 +36,49 @@ export class DanglingConceptComponent {
      * Run the check
      */
     private runIcv() {
+        this.brokenConceptList = null;
+        this.brokenConceptMap = null;
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
-        this.icvService.listDanglingConcepts(this.selectedScheme).subscribe(
-            concept => {
-                this.brokenConceptList = concept;
-                UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"))
-            }
-        );
+        if (this.selectedScheme == null) {
+            this.icvService.listDanglingConceptsForAllSchemes().subscribe(
+                concepts => {
+                    this.brokenConceptMap = [];
+                    ResourceUtils.sortResources(concepts, SortAttribute.show); //in this way the concepts will be added to the map according show order
+                    concepts.forEach(c => {
+                        let schemeIRI: string = c.getAdditionalProperty("dangScheme");
+                        let scheme: ARTURIResource = this.schemeList.find(s => s.getURI() == schemeIRI);
+                        let brokenConceptOfScheme: BrokenConceptEntry = this.brokenConceptMap.find(e => e.scheme.equals(scheme));
+                        if (brokenConceptOfScheme == null) {
+                            brokenConceptOfScheme = { scheme: scheme, concepts: [c] }
+                            this.brokenConceptMap.push(brokenConceptOfScheme);
+                        } else {
+                            brokenConceptOfScheme.concepts.push(c);
+                        }
+                    })
+                    //sort also the schemes
+                    this.brokenConceptMap.sort(((e1: BrokenConceptEntry, e2: BrokenConceptEntry) => {
+                        return e1.scheme.getShow().localeCompare(e2.scheme.getShow());
+                    }))
+                    UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"))
+                }
+            );
+        } else {
+            this.icvService.listDanglingConcepts(this.selectedScheme).subscribe(
+                concepts => {
+                    ResourceUtils.sortResources(concepts, SortAttribute.show);
+                    this.brokenConceptList = concepts;
+                    UIUtils.stopLoadingDiv(document.getElementById("blockDivIcv"))
+                }
+            );
+        }
+        
     }
 
     /**
      * Fixes concept by setting the concept as topConceptOf the current scheme 
      */
-    private setAsTopConcept(concept: ARTURIResource) {
-        this.skosService.addTopConcept(concept, this.selectedScheme).subscribe(
+    private setAsTopConcept(concept: ARTURIResource, scheme: ARTURIResource) {
+        this.skosService.addTopConcept(concept, scheme).subscribe(
             data => {
                 this.runIcv();
             }
@@ -83,8 +99,8 @@ export class DanglingConceptComponent {
     /**
      * Fixes concept by selecting a broader concept
      */
-    private selectBroader(concept: ARTURIResource) {
-        this.browsingModals.browseConceptTree("Select a skos:broader", [this.selectedScheme], true).then(
+    private selectBroader(concept: ARTURIResource, scheme: ARTURIResource) {
+        this.browsingModals.browseConceptTree("Select a skos:broader", [scheme], true).then(
             (broader: any) => {
                 this.skosService.addBroaderConcept(concept, broader).subscribe(
                     stResp => {
@@ -115,18 +131,18 @@ export class DanglingConceptComponent {
     /**
      * Fixes concept by removing the concept from the current scheme 
      */
-    private removeFromScheme(concept: ARTURIResource) {
+    private removeFromScheme(concept: ARTURIResource, scheme: ARTURIResource) {
         this.basicModals.confirm("Remove from scheme", "Warning, if this concept has narrowers, removing the " +
             "dangling concept from the scheme may generate other dangling concepts. Are you sure to proceed?").then(
             result => {
-                this.skosService.removeConceptFromScheme(concept, this.selectedScheme).subscribe(
+                this.skosService.removeConceptFromScheme(concept, scheme).subscribe(
                     data => {
                         this.runIcv();
                     }
                 );
             },
             () => { }
-            );
+        );
     }
 
     /**
@@ -143,7 +159,7 @@ export class DanglingConceptComponent {
                 );
             },
             () => { }
-            );
+        );
     }
 
     /**
@@ -172,4 +188,10 @@ export class DanglingConceptComponent {
         this.sharedModals.openResourceView(res, false);
     }
 
+}
+
+
+class BrokenConceptEntry {
+    scheme: ARTURIResource;
+    concepts: ARTURIResource[]
 }

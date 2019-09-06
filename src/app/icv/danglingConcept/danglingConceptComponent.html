@@ -1,10 +1,12 @@
 <div class="panel panel-default vbox" style="position: relative">
     <div class="panel-heading">
         <label style="flex: 1;">Dangling concepts</label>
+        <span style="margin-right: 4px;">Scheme:</span>
         <select class="form-control input-xs" style="width: initial; margin-right: 4px;" [(ngModel)]="selectedScheme">
+            <option [ngValue]="null" style="font-style: italic">All schemes</option>
             <option *ngFor="let s of schemeList" [ngValue]="s">{{s.getShow()}}</option>
         </select>
-        <button class="btn btn-xs btn-default" (click)="runIcv()" [disabled]="!selectedScheme">Run</button>
+        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
     </div>
     <div class="panel-body vbox">
         
@@ -16,42 +18,66 @@
             </i>
         </div>
 
-        <div *ngIf="!selectedScheme" style="padding: 4px;">
-            No scheme selected. In order to run this check you need to
-            <a [routerLink]="['/Schemes']">select a skos:conceptScheme</a>
+        <div *ngIf="!brokenConceptList && !brokenConceptMap" style="padding: 4px;">
+            Press <strong>Run</strong> button to run the check.
         </div>
 
-        <ng-template [ngIf]="selectedScheme">
-            <div *ngIf="!brokenConceptList" style="padding: 4px;">
-                Press <strong>Run</strong> button to run the check.
-            </div>
-            <div *ngIf="brokenConceptList" class="scrollableContainer">
-                <table class="table table-condensed table-hoverable" style="flex: 1;">
-                    <thead>
-                        <tr>
-                            <th class="text-center">Concept</th>
-                            <th class="text-center" style="width: 1%">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let concept of brokenConceptList">
+        <div *ngIf="brokenConceptList" class="scrollableContainer">
+            <table class="table table-condensed table-hoverable" style="flex: 1;">
+                <thead>
+                    <tr>
+                        <th class="text-center">Concept</th>
+                        <th class="text-center" style="width: 1%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let concept of brokenConceptList">
+                        <td>
+                            <rdf-resource class="clickable" [resource]="concept" (click)="onResourceClick(concept)"></rdf-resource>
+                        </td>
+                        <td style="white-space: nowrap">
+                            <button class="btn btn-xs btn-default" (click)="selectBroader(concept, selectedScheme)">Select skos:broader</button>
+                            <button class="btn btn-xs btn-default" (click)="setAsTopConcept(concept, selectedScheme)">Set as skos:topConceptOf</button>
+                            <button class="btn btn-xs btn-default" (click)="removeFromScheme(concept, selectedScheme)">Remove from scheme</button>
+                            <button class="btn btn-xs btn-default" (click)="deleteConcept(concept)">Delete concept</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div *ngIf="brokenConceptMap" class="scrollableContainer">
+            <table class="table table-condensed" style="flex: 1;">
+                <thead>
+                    <tr>
+                        <th class="text-center">Scheme</th>
+                        <th class="text-center">Concept</th>
+                        <th class="text-center" style="width: 1%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let entry of brokenConceptMap">
+                        <tr *ngFor="let concept of entry.concepts; let idx = index">
+                            <td *ngIf="idx == 0" [attr.rowspan]="entry.concepts.length">
+                                <rdf-resource class="clickable" [resource]="entry.scheme" (click)="onResourceClick(entry.scheme)"></rdf-resource>
+                            </td>
                             <td>
                                 <rdf-resource class="clickable" [resource]="concept" (click)="onResourceClick(concept)"></rdf-resource>
                             </td>
                             <td style="white-space: nowrap">
-                                <button class="btn btn-xs btn-default" (click)="selectBroader(concept)">Select skos:broader</button>
-                                <button class="btn btn-xs btn-default" (click)="setAsTopConcept(concept)">Set as skos:topConceptOf</button>
-                                <button class="btn btn-xs btn-default" (click)="removeFromScheme(concept)">Remove from scheme</button>
+                                <button class="btn btn-xs btn-default" (click)="selectBroader(concept, entry.scheme)">Select skos:broader</button>
+                                <button class="btn btn-xs btn-default" (click)="setAsTopConcept(concept, entry.scheme)">Set as skos:topConceptOf</button>
+                                <button class="btn btn-xs btn-default" (click)="removeFromScheme(concept, entry.scheme)">Remove from scheme</button>
                                 <button class="btn btn-xs btn-default" (click)="deleteConcept(concept)">Delete concept</button>
                             </td>
                         </tr>
-                    </tbody>
-                </table>
-            </div>
-        </ng-template>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="panel-footer">
-        <div *ngIf="brokenConceptList && !brokenConceptList.length == 0" class="dropup pull-right">
+    <div *ngIf="brokenConceptList && !brokenConceptList.length == 0" class="panel-footer">
+        <div class="dropup pull-right">
             <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown">
                 Quick action
                 <span class="caret"></span>

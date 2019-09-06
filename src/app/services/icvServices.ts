@@ -30,6 +30,15 @@ export class IcvServices {
         );
     }
 
+    listDanglingConceptsForAllSchemes(): Observable<ARTURIResource[]> {
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "listDanglingConceptsForAllSchemes", params).map(
+            stResp => {
+                return Deserializer.createURIArray(stResp, ["dangScheme"]);
+            }
+        );
+    }
+
     /**
      * Returns a list of skos:ConceptScheme that have no top concept
      */
