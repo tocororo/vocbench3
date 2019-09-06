@@ -1,11 +1,13 @@
 import { Component, SimpleChanges } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../../models/ARTResources";
+import { CustomForm, CustomFormValue } from "../../../models/CustomForms";
 import { Language } from "../../../models/LanguagesCountries";
 import { ResViewPartition } from "../../../models/ResourceView";
 import { OntoLex, RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { OntoLexLemonServices } from "../../../services/ontoLexLemonServices";
+import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { ResourceViewServices } from "../../../services/resourceViewServices";
 import { SkosServices } from "../../../services/skosServices";
@@ -19,6 +21,7 @@ import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { LexicalizationEnrichmentHelper } from "../lexicalizationEnrichmentHelper";
 import { MultiAddError, MultiAddFunction } from "../multipleAddHelper";
 import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
+import { PropertyEnrichmentHelper, PropertyEnrichmentInfo, EnrichmentType } from "../propertyEnrichmentHelper";
 
 @Component({
     selector: "lexicalizations-renderer",
@@ -38,7 +41,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
 
     constructor(resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, resViewModals: ResViewModalServices,
-        private skosService: SkosServices, private skosxlService: SkosxlServices,
+        private skosService: SkosServices, private skosxlService: SkosxlServices, private propService: PropertyServices,
         private resViewService: ResourceViewServices, private ontolexService: OntoLexLemonServices,
         private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices,
         private lexicalizationEnrichmentHelper: LexicalizationEnrichmentHelper) {
@@ -115,18 +118,29 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     }
 
     add(predicate: ARTURIResource) {
-        if (predicate.getURI() == SKOSXL.prefLabel.getURI() || 
-            predicate.getURI() == SKOSXL.altLabel.getURI() || 
-            predicate.getURI() == SKOSXL.hiddenLabel.getURI()
-        ) { //SKOSXL
-            let prefLabelPred: boolean = predicate.getURI() == SKOSXL.prefLabel.getURI();
+        PropertyEnrichmentHelper.getPropertyEnrichmentInfo(predicate, this.propService, this.basicModals).subscribe(
+            (data: PropertyEnrichmentInfo) => {
+                if (data.type == null) { //range selection canceled
+                    return;
+                } else if (data.type == EnrichmentType.customForm) { //if a custom form has been defined, use it
+                    this.enrichWithCustomForm(predicate, data.form);
+                } else { //otherwise (default case, where type is "resource" and rangeCollection is [skosxl:Label]) use the proper enrichment service
+                    this.enrichWithLabel(predicate)
+                }
+            }
+        );
+    }
+
+    private enrichWithLabel(predicate: ARTURIResource) {
+        if (predicate.equals(SKOSXL.prefLabel) || predicate.equals(SKOSXL.altLabel) || predicate.equals(SKOSXL.hiddenLabel)) { //SKOSXL
+            let prefLabelPred: boolean = predicate.equals(SKOSXL.prefLabel);
             this.creationModals.newXLabel("Add " + predicate.getShow(), null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
                 (data: NewXLabelModalReturnData) => {
                     this.addMultipleValues(predicate, data.labels, data.cls);
                 },
                 () => {}
             );
-        } else if (predicate.getURI() == OntoLex.isDenotedBy.getURI()) {
+        } else if (predicate.equals(OntoLex.isDenotedBy)) {
             this.creationModals.newOntoLexicalizationCf("Add a lexical sense", predicate, false).then(
                 (data: NewOntoLexicalizationCfModalReturnData) => {
                     this.ontolexService.addLexicalization(data.linkedResource, this.resource, data.createPlain, data.createSense, data.cls, data.cfValue).subscribe(
@@ -146,7 +160,18 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                 () => { }
             );
         }
+    }
 
+    private enrichWithCustomForm(predicate: ARTURIResource, form: CustomForm) {
+        this.resViewModals.enrichCustomForm("Add " + predicate.getShow(), form.getId()).then(
+            (entryMap: any) => {
+                let cfValue: CustomFormValue = new CustomFormValue(form.getId(), entryMap);
+                this.resourcesService.addValue(this.resource, predicate, cfValue).subscribe(
+                    stResp => this.update.emit()
+                );
+            },
+            () => { }
+        )
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
@@ -157,21 +182,21 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
         if (this.isKnownProperty(predicate)) { //if it is removing a value about a root property, call the specific method
-            if (predicate.getURI() == SKOSXL.prefLabel.getURI()) {
+            if (predicate.equals(SKOSXL.prefLabel)) {
                 return this.skosxlService.removePrefLabel(<ARTURIResource>this.resource, <ARTResource>object);
-            } else if (predicate.getURI() == SKOSXL.altLabel.getURI()) {
+            } else if (predicate.equals(SKOSXL.altLabel)) {
                 return this.skosxlService.removeAltLabel(<ARTURIResource>this.resource, <ARTResource>object);
-            } else if (predicate.getURI() == SKOSXL.hiddenLabel.getURI()) {
+            } else if (predicate.equals(SKOSXL.hiddenLabel)) {
                 return this.skosxlService.removeHiddenLabel(<ARTURIResource>this.resource, <ARTResource>object);
-            } else if (predicate.getURI() == SKOS.prefLabel.getURI()) {
+            } else if (predicate.equals(SKOS.prefLabel)) {
                 return this.skosService.removePrefLabel(<ARTURIResource>this.resource, <ARTLiteral>object);
-            } else if (predicate.getURI() == SKOS.altLabel.getURI()) {
+            } else if (predicate.equals(SKOS.altLabel)) {
                 return this.skosService.removeAltLabel(<ARTURIResource>this.resource, <ARTLiteral>object);
-            } else if (predicate.getURI() == SKOS.hiddenLabel.getURI()) {
+            } else if (predicate.equals(SKOS.hiddenLabel)) {
                 return this.skosService.removeHiddenLabel(<ARTURIResource>this.resource, <ARTLiteral>object);
-            } else if (predicate.getURI() == RDFS.label.getURI()) {
+            } else if (predicate.equals(RDFS.label)) {
                 return this.resourcesService.removeValue(<ARTURIResource>this.resource, predicate, (<ARTLiteral>object));
-            } else if (predicate.getURI() == OntoLex.isDenotedBy.getURI()) {
+            } else if (predicate.equals(OntoLex.isDenotedBy)) {
                 return this.ontolexService.removePlainLexicalization(<ARTResource>object, this.resource);
             }
         } else {//predicate is some subProperty of a root property

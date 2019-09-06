@@ -43,7 +43,7 @@ export class PropertyEnrichmentHelper {
                 if (ranges != undefined && formCollection == undefined) {
                     //Check on the rangeType. Available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent
                     if (ranges.type == RangeType.resource) {
-                        return Observable.of({ type: EnrichmentType.resource });
+                        return Observable.of({ type: EnrichmentType.resource, rangeCollection: ranges.rangeCollection });
                     } else if (ranges.type == RangeType.plainLiteral) {
                         return Observable.of({ type: EnrichmentType.plainLiteral });
                     } else if (ranges.type == RangeType.typedLiteral) {
@@ -185,9 +185,10 @@ export class PropertyEnrichmentInfo {
     allowedDatatypes?: ARTURIResource[]; //provided optionally if type is "typedLiteral"
     dataRanges?: (ARTLiteral[])[]; //provided optionally if type is "typedLiteral"
     form?: CustomForm; //provided if type is "customForm"
+    rangeCollection?: ARTURIResource[]; //provided optionally if type is "resource"
 }
 
-enum EnrichmentType {
+export enum EnrichmentType {
     plainLiteral = "plainLiteral",
     typedLiteral = "typedLiteral",
     resource = "resource",

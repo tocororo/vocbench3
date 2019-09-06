@@ -4,7 +4,7 @@ import { ARTLiteral, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "
 import { CustomForm, CustomFormValue } from "../models/CustomForms";
 import { ResViewPartition, ResViewUtils } from "../models/ResourceView";
 import { OntoLex, OWL, RDFS, SKOS, SKOSXL } from "../models/Vocabulary";
-import { PropertyEnrichmentHelper, PropertyEnrichmentInfo } from "../resourceView/renderer/propertyEnrichmentHelper";
+import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from "../resourceView/renderer/propertyEnrichmentHelper";
 import { AddPropertyValueModalReturnData } from "../resourceView/resViewModals/addPropertyValueModal";
 import { ConstituentListCreatorModalReturnData } from "../resourceView/resViewModals/constituentListCreatorModal";
 import { PropertyListCreatorModalReturnData } from "../resourceView/resViewModals/propertyChainCreatorModal";
@@ -697,13 +697,13 @@ export class MultiSubjectEnrichmentHelper {
     private otherPropertiesHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
         PropertyEnrichmentHelper.getPropertyEnrichmentInfo(predicate, this.propService, this.basicModals).subscribe(
             (data: PropertyEnrichmentInfo) => {
-                if (data.type == "resource") {
+                if (data.type == EnrichmentType.resource) {
                     this.enrichWithResource(subjects, predicate);
-                } else if (data.type == "plainLiteral") {
+                } else if (data.type == EnrichmentType.plainLiteral) {
                     this.enrichWithPlainLiteral(subjects, predicate);
-                } else if (data.type == "typedLiteral") {
+                } else if (data.type == EnrichmentType.typedLiteral) {
                     this.enrichWithTypedLiteral(subjects, predicate, data.allowedDatatypes, data.dataRanges);
-                } else if (data.type == "customForm") {
+                } else if (data.type == EnrichmentType.customForm) {
                     this.enrichWithCustomForm(subjects, predicate, data.form);
                 }
             }

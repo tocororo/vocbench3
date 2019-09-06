@@ -13,7 +13,7 @@ import { AddPropertyValueModalReturnData } from "../resViewModals/addPropertyVal
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { MultiAddFunction } from "./multipleAddHelper";
 import { PartitionRenderer } from "./partitionRenderer";
-import { PropertyEnrichmentHelper, PropertyEnrichmentInfo } from "./propertyEnrichmentHelper";
+import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from "./propertyEnrichmentHelper";
 
 @Component({
     selector: "partition-renderer-single",
@@ -63,20 +63,20 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
     enrichProperty(predicate: ARTURIResource) {
         PropertyEnrichmentHelper.getPropertyEnrichmentInfo(predicate, this.propService, this.basicModals).subscribe(
             (data: PropertyEnrichmentInfo) => {
-                if (data.type == "resource") {
+                if (data.type == EnrichmentType.resource) {
                     this.enrichWithResource(predicate);
-                } else if (data.type == "plainLiteral") {
+                } else if (data.type == EnrichmentType.plainLiteral) {
                     this.enrichWithPlainLiteral(predicate);
-                } else if (data.type == "typedLiteral") {
+                } else if (data.type == EnrichmentType.typedLiteral) {
                     this.enrichWithTypedLiteral(predicate, data.allowedDatatypes, data.dataRanges);
-                } else if (data.type == "customForm") {
+                } else if (data.type == EnrichmentType.customForm) {
                     this.enrichWithCustomForm(predicate, data.form);
                 }
             }
         )
     }
 
-    private enrichWithCustomForm(predicate: ARTURIResource, form: CustomForm) {
+    public enrichWithCustomForm(predicate: ARTURIResource, form: CustomForm) {
         this.resViewModals.enrichCustomForm("Add " + predicate.getShow(), form.getId()).then(
             (entryMap: any) => {
                 let cfValue: CustomFormValue = new CustomFormValue(form.getId(), entryMap);

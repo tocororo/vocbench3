@@ -3,7 +3,7 @@ import { Observable } from "rxjs/Observable";
 import { ARTLiteral, ARTNode, ARTURIResource } from "../../../models/ARTResources";
 import { Language } from "../../../models/LanguagesCountries";
 import { ResViewPartition } from "../../../models/ResourceView";
-import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
+import { SKOS, SKOSXL, RDFS } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { PropertyServices, RangeResponse } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -17,6 +17,7 @@ import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { LexicalizationEnrichmentHelper } from "../lexicalizationEnrichmentHelper";
 import { MultiAddError, MultiAddFunction } from "../multipleAddHelper";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
+import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from "../propertyEnrichmentHelper";
 
 @Component({
     selector: "properties-renderer",
@@ -41,108 +42,102 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     add(predicate: ARTURIResource) {
-        //particular cases: labels
-        if (predicate.getURI() == SKOSXL.prefLabel.getURI() ||
-            predicate.getURI() == SKOSXL.altLabel.getURI() ||
-            predicate.getURI() == SKOSXL.hiddenLabel.getURI()
-        ) { //SKOSXL
-            let prefLabelPred: boolean = predicate.getURI() == SKOSXL.prefLabel.getURI();
-            this.creationModals.newXLabel("Add " + predicate.getShow(), null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
-                (data: NewXLabelModalReturnData) => {
-                    let addFunctions: MultiAddFunction[] = [];
-                    let errorHandler: (errors: MultiAddError[]) => void;
-
-                    data.labels.forEach((label: ARTLiteral) => {
-                        addFunctions.push({ 
-                            function: this.lexicalizationEnrichmentHelper.getAddLabelFn(<ARTURIResource>this.resource, predicate, label, data.cls),
-                            value: label 
-                        });
-                    });
-                    errorHandler = (errors: MultiAddError[]) => {
-                        if (errors.length == 1) { //if only one error, try to handle it
-                            let err: Error = errors[0].error;
-                            if (err.name.endsWith('PrefAltLabelClashException') || err.name.endsWith('BlacklistForbiddendException')) {
-                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-                                    confirm => {
-                                        this.lexicalizationEnrichmentHelper.getAddLabelFn(
-                                            <ARTURIResource>this.resource, predicate, <ARTLiteral>errors[0].value, data.cls, 
-                                            !err.name.endsWith('PrefAltLabelClashException'), err.name.endsWith('BlacklistForbiddendException')
-                                        ).subscribe(
-                                            stResp => this.update.emit(null)
-                                        );
-                                    },
-                                    () => {}
-                                );
-                            } else {
-                                this.handleSingleMultiAddError(errors[0]);
-                            }
-                        } else {
-                            this.handleMultipleMultiAddError(errors);
-                        }
-                    }
-                    this.addMultiple(addFunctions, errorHandler);
-                },
-                () => {}
-            );
-        } else if (
-            predicate.getURI() == SKOS.prefLabel.getURI() ||
-            predicate.getURI() == SKOS.altLabel.getURI() ||
-            predicate.getURI() == SKOS.hiddenLabel.getURI()
+        /**
+         * Lexicalization properties should not be enriched from this partition, it should be used the proper LexicalizationPartitionRenderer instead.
+         * Anyway, here the lexicalization properties are handled ad hoc and not by the enrichProperty method in order to
+         * be handled in the same way of LexicalizationPartitionRenderer
+         */
+        if (
+            predicate.equals(SKOSXL.prefLabel) || predicate.equals(SKOSXL.altLabel) || predicate.equals(SKOSXL.hiddenLabel) ||
+            predicate.equals(SKOS.prefLabel) || predicate.equals(SKOS.altLabel) || predicate.equals(SKOS.hiddenLabel) ||
+            predicate.equals(RDFS.label)
         ) {
-            let prefLabelPred: boolean = predicate.getURI() == SKOS.prefLabel.getURI();
-            this.creationModals.newPlainLiteral("Add " + predicate.getShow(), null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
-                (labels: ARTLiteral[]) => {
-                    let addFunctions: MultiAddFunction[] = [];
-                    let errorHandler: (errors: MultiAddError[]) => void;
-                    labels.forEach((label: ARTLiteral) => {
-                        addFunctions.push({ 
-                            function: this.lexicalizationEnrichmentHelper.getAddLabelFn(<ARTURIResource>this.resource, predicate, label),
-                            value: label 
-                        });
-                    });
-                    errorHandler = (errors: MultiAddError[]) => {
-                        if (errors.length == 1) { //if only one error, try to handle it
-                            let err: Error = errors[0].error;
-                            if (err.name.endsWith('PrefAltLabelClashException') || err.name.endsWith('BlacklistForbiddendException')) {
-                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-                                    confirm => {
-                                        this.lexicalizationEnrichmentHelper.getAddLabelFn(
-                                            <ARTURIResource>this.resource, predicate, <ARTLiteral>errors[0].value, null, 
-                                            !err.name.endsWith('PrefAltLabelClashException'), err.name.endsWith('BlacklistForbiddendException')
-                                        ).subscribe(
-                                            stResp => this.update.emit(null)
-                                        );
-                                    },
-                                    () => {}
-                                );
-                            } else {
-                                this.handleSingleMultiAddError(errors[0]);
-                            }
-                        } else {
-                            this.handleMultipleMultiAddError(errors);
-                        }
+            PropertyEnrichmentHelper.getPropertyEnrichmentInfo(predicate, this.propService, this.basicModals).subscribe(
+                (data: PropertyEnrichmentInfo) => {
+                    if (data.type == null) { //range selection canceled
+                        return;
+                    } else if (data.type == EnrichmentType.customForm) { //if a custom form has been defined, use it
+                        this.enrichWithCustomForm(predicate, data.form);
+                    } else { //otherwise (default case, where type is "resource" and rangeCollection is [skosxl:Label]) use the proper enrichment service
+                        this.enrichWithLabel(predicate)
                     }
-                    this.addMultiple(addFunctions, errorHandler);
-                },
-                () => { }
-            );
-        } else if (predicate.getURI() == RDFS.label.getURI()) {
-            this.creationModals.newPlainLiteral("Add " + predicate.getShow(), null, null, null, null, null, { enabled: true, allowSameLang: true }).then(
-                (labels: ARTLiteral[]) => {
-                    let addFunctions: MultiAddFunction[] = [];
-                    let errorHandler: (errors: MultiAddError[]) => void;
-                    labels.forEach((label: ARTLiteral) => {
-                        addFunctions.push({ 
-                            function: this.resourcesService.addValue(this.resource, predicate, label),
-                            value: label 
-                        });
-                    });
-                    this.addMultiple(addFunctions, errorHandler);
                 }
             );
         } else {
             this.enrichProperty(predicate);
         }
+    }
+
+    private enrichWithLabel(predicate: ARTURIResource) {
+        if (predicate.equals(SKOSXL.prefLabel) || predicate.equals(SKOSXL.altLabel) || predicate.equals(SKOSXL.hiddenLabel)) { //SKOSXL
+            let prefLabelPred: boolean = predicate.equals(SKOSXL.prefLabel);
+            this.creationModals.newXLabel("Add " + predicate.getShow(), null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
+                (data: NewXLabelModalReturnData) => {
+                    this.addMultipleLabelValues(predicate, data.labels, data.cls);
+                },
+                () => {}
+            );
+        } else { //SKOS or RDFS
+            let prefLabelPred: boolean = predicate.equals(SKOS.prefLabel);
+            this.creationModals.newPlainLiteral("Add " + predicate.getShow(), null, null, null, null, null, { enabled: true, allowSameLang: !prefLabelPred }).then(
+                (labels: ARTLiteral[]) => {
+                    this.addMultipleLabelValues(predicate, labels);
+                },
+                () => { }
+            );
+        }
+    }
+
+    /**
+     * This method is copied from the LexicalizationPartitionRenderer.
+     * It is replicated here, for the same reasons explained in this.add(), for handling the enrichment of the lexicalization properties.
+     */
+    private addMultipleLabelValues(predicate: ARTURIResource, labels: ARTLiteral[], cls?: ARTURIResource) {
+        let addFunctions: MultiAddFunction[] = [];
+        let errorHandler: (errors: MultiAddError[]) => void;
+
+        //SKOS or SKOSXL lexicalization predicates
+        if (
+            predicate.equals(SKOSXL.prefLabel) || predicate.equals(SKOSXL.altLabel) || predicate.equals(SKOSXL.hiddenLabel) ||
+            predicate.equals(SKOS.prefLabel) || predicate.equals(SKOS.altLabel) || predicate.equals(SKOS.hiddenLabel)
+        ) {
+            labels.forEach((label: ARTLiteral) => {
+                addFunctions.push({ 
+                    function: this.lexicalizationEnrichmentHelper.getAddLabelFn(<ARTURIResource>this.resource, predicate, label, cls),
+                    value: label 
+                });
+            });
+            errorHandler = (errors: MultiAddError[]) => {
+                if (errors.length == 1) { //if only one error, try to handle it
+                    let err: Error = errors[0].error;
+                    if (err.name.endsWith('PrefAltLabelClashException') || err.name.endsWith('BlacklistForbiddendException')) {
+                        this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                            confirm => {
+                                this.lexicalizationEnrichmentHelper.getAddLabelFn(
+                                    <ARTURIResource>this.resource, predicate, <ARTLiteral>errors[0].value, cls, 
+                                    !err.name.endsWith('PrefAltLabelClashException'), err.name.endsWith('BlacklistForbiddendException')
+                                ).subscribe(
+                                    stResp => this.update.emit(null)
+                                );
+                            },
+                            () => {}
+                        );
+                    } else {
+                        this.handleSingleMultiAddError(errors[0]);
+                    }
+                } else {
+                    this.handleMultipleMultiAddError(errors);
+                }
+            }
+        } else { //rdfs:label (or maybe a custom property) for which doens't exist a dedicated service
+            labels.forEach((label: ARTLiteral) => {
+                addFunctions.push({ 
+                    function: this.resourcesService.addValue(this.resource, predicate, label),
+                    value: label 
+                });
+            });
+        }
+        this.addMultiple(addFunctions, errorHandler);
     }
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
