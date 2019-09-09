@@ -49,6 +49,7 @@ export class AddPropertyValueModalData extends BSModalContext {
         public resource: ARTResource,
         public property: ARTURIResource,
         public propChangeable: boolean = true, 
+        public rootProperty: ARTURIResource,
         public allowMultiselection: boolean = true, 
     ) {
         super();
@@ -101,8 +102,8 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     }
 
     ngOnInit() {
-        this.rootProperty = this.context.property;
-        this.enrichingProperty = this.rootProperty;
+        this.rootProperty = this.context.rootProperty ? this.context.rootProperty : this.context.property;
+        this.enrichingProperty = this.context.property;
 
         this.updateRange(this.rootProperty);
     }
@@ -114,7 +115,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private changeProperty() {
         this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
             (selectedProp: any) => {
-                if (this.enrichingProperty.getURI() != selectedProp.getURI()) {
+                if (!this.enrichingProperty.equals(selectedProp)) {
                     this.enrichingProperty = selectedProp;
                     this.updateRange(this.enrichingProperty);
                 }
@@ -126,7 +127,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private updateRange(property: ARTURIResource) {
         this.updateShowAspectSelector();
         // special hard-coded cases:
-        if (this.rootProperty.getURI() == SKOS.member.getURI()) {
+        if (this.rootProperty.equals(SKOS.member)) {
             /**
              * getRange of skos:member returns range "resource" without rangeCollection classes.
              * Here I allow to select only instances of Concept or Collection
@@ -134,8 +135,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
             this.viewType = ViewType.classAndIndividual;
             this.rootsForClsIndList = [SKOS.concept, SKOS.collection];
             return;
-        } else if (this.rootProperty.getURI() == RDFS.range.getURI() && 
-                this.context.resource.getRole() == RDFResourceRolesEnum.datatypeProperty) {
+        } else if (this.rootProperty.equals(RDFS.range) && this.context.resource.getRole() == RDFResourceRolesEnum.datatypeProperty) {
             /**
              * getRange of rdfs:range returns rdfs:Class as rangeCollection, but if the resource which it is
              * going to enrich is a datatype property, the allowed range should be limited to a datatype.
@@ -164,24 +164,24 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
                     if (rangeCollection != null) {
                         if (rangeCollection.length == 1) {
                             var rangeClass: ARTURIResource = rangeCollection[0];
-                            if (rangeClass.getURI() == RDFS.class.getURI() || rangeClass.getURI() == OWL.class.getURI()) {
+                            if (rangeClass.equals(RDFS.class) || rangeClass.equals(OWL.class)) {
                                 this.viewType = ViewType.classTree;
                                 this.rootsForClsTree = null;
-                            } else if (rangeClass.getURI() == SKOS.concept.getURI()) {
+                            } else if (rangeClass.equals(SKOS.concept)) {
                                 this.schemes = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
                                 this.viewType = ViewType.conceptTree;
-                            } else if (rangeClass.getURI() == SKOS.conceptScheme.getURI()) {
+                            } else if (rangeClass.equals(SKOS.conceptScheme)) {
                                 this.viewType = ViewType.schemeList;
-                            } else if (rangeClass.getURI() == OWL.objectProperty.getURI()) {
+                            } else if (rangeClass.equals(OWL.objectProperty)) {
                                 this.viewType = ViewType.propertyTree;
                                 this.propertyType = RDFResourceRolesEnum.objectProperty;
-                            } else if (rangeClass.getURI() == RDF.property.getURI()) {
+                            } else if (rangeClass.equals(RDF.property)) {
                                 this.viewType = ViewType.propertyTree;
                                 this.propertyType = RDFResourceRolesEnum.property;
-                            } else if (rangeClass.getURI() == SKOSXL.label.getURI()) {
+                            } else if (rangeClass.equals(SKOSXL.label)) {
                                 this.viewType = ViewType.classAndIndividual;
                                 this.rootsForClsIndList = rangeCollection;
-                            } else if (rangeClass.getURI() == RDF.list.getURI()) {
+                            } else if (rangeClass.equals(RDF.list)) {
                                 this.viewType = ViewType.classAndIndividual;
                                 this.rootsForClsIndList = rangeCollection;
                             } else { //default
@@ -220,23 +220,19 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
 
         //machester expression selector
         if (//partition domains
-            this.rootProperty.getURI() == RDFS.domain.getURI() ||
+            this.rootProperty.equals(RDFS.domain) ||
             //partition ranges
-            (this.rootProperty.getURI() == RDFS.range.getURI() &&
-                this.context.resource.getRole() != RDFResourceRolesEnum.datatypeProperty) ||
+            (this.rootProperty.equals(RDFS.range) && this.context.resource.getRole() != RDFResourceRolesEnum.datatypeProperty) ||
             //partition class axiom
-            this.rootProperty.getURI() == RDFS.subClassOf.getURI() ||
-            this.rootProperty.getURI() == OWL.equivalentClass.getURI() ||
-            this.rootProperty.getURI() == OWL.complementOf.getURI() ||
-            this.rootProperty.getURI() == OWL.disjointWith.getURI()
+            this.rootProperty.equals(RDFS.subClassOf) || this.rootProperty.equals(OWL.equivalentClass) ||
+            this.rootProperty.equals(OWL.complementOf) || this.rootProperty.equals(OWL.disjointWith)
         ) {
             this.showAspectSelector = true;
             this.aspectSelectors = [this.treeListAspectSelector, this.manchExprAspectSelector];
             this.selectedAspectSelector = this.aspectSelectors[0]; //select as default tree and list selector
         }
         //datarange expression selector
-        if (this.rootProperty.getURI() == RDFS.range.getURI() && 
-            this.context.resource.getRole() == RDFResourceRolesEnum.datatypeProperty
+        if (this.rootProperty.equals(RDFS.range) && this.context.resource.getRole() == RDFResourceRolesEnum.datatypeProperty
         ) {
             this.showAspectSelector = true;
             this.aspectSelectors = [this.treeListAspectSelector, this.dataRangeAspectSelector];
@@ -244,10 +240,8 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         }
         //predicated for property relations that allows "inverse..."
         if (
-            this.rootProperty.getURI() == OWL.propertyDisjointWith.getURI() ||
-            this.rootProperty.getURI() == OWL.equivalentProperty.getURI() ||
-            this.rootProperty.getURI() == RDFS.subPropertyOf.getURI() ||
-            this.rootProperty.getURI() == OWL.inverseOf.getURI()
+            this.rootProperty.equals(OWL.propertyDisjointWith) || this.rootProperty.equals(OWL.equivalentProperty) ||
+            this.rootProperty.equals(RDFS.subPropertyOf) || this.rootProperty.equals(OWL.inverseOf)
         ) {
             this.showInversePropertyCheckbox = true;
         }

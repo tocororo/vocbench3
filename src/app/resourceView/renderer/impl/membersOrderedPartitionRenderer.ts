@@ -60,7 +60,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
      * Adds a first member to an ordered collection 
      */
     private addFirst(predicate?: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, false).then(
+        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, null, false).then(
             (data: any) => {
                 let values: ARTResource[] = data.value;
                 let addFunctions: MultiAddFunction[] = [{
@@ -77,7 +77,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
      * Adds a last member to an ordered collection 
      */
     private addLast(predicate?: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, false).then(
+        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, null, false).then(
             (data: any) => {
                 let values: ARTResource[] = data.value;
                 let addFunctions: MultiAddFunction[] = [{
@@ -94,7 +94,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
      * Adds a member in a given position to an ordered collection 
      */
     private addBefore(predicate?: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, false).then(
+        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, null, false).then(
             (data: any) => {
                 let position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue());
                 let values: ARTResource[] = data.value;
@@ -112,7 +112,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
      * Adds a member in a given position to an ordered collection 
      */
     private addAfter(predicate?: ARTURIResource) {
-        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, false).then(
+        this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, null, false).then(
             (data: any) => {
                 let position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue()) + 1;
                 let values: ARTResource[] = data.value;

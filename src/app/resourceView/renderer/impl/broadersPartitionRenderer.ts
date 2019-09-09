@@ -50,7 +50,7 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
-        this.resViewModals.addPropertyValue("Add a broader", this.resource, predicate, propChangeable).then(
+        this.resViewModals.addPropertyValue("Add a broader", this.resource, predicate, propChangeable, this.rootProperty).then(
             (data: any) => {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;

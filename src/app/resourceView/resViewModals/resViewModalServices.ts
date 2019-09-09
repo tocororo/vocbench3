@@ -81,14 +81,15 @@ export class ResViewModalServices {
      * Returns and object containing "property" and "value".
      * @param title title of the dialog
      * @param resource resource that is going to enrich with the property-value pair.
-     * @param property root property that the modal should allow to enrich
+     * @param property property that the modal should allow to enrich
      * @param propChangeable tells whether the input property can be changed exploring the properties subtree.
      *  If false, the button to change property is hidden. Default is true
+     * @param rootProperty root property that, in case propChangeable is true, the modal should show as root of the property change when changing
      * @param allowMultiselection tells whether the multiselection in the tree/list is allowed. Default is true. (some scenario may
      * require to disable the multiselection, like the addFirst/After...() in oreded collection).
      */
-    addPropertyValue(title: string, resource: ARTResource, property: ARTURIResource, propChangeable?: boolean, allowMultiselection?: boolean) {
-        var modalData = new AddPropertyValueModalData(title, resource, property, propChangeable, allowMultiselection);
+    addPropertyValue(title: string, resource: ARTResource, property: ARTURIResource, propChangeable?: boolean, rootProperty?: ARTURIResource, allowMultiselection?: boolean) {
+        var modalData = new AddPropertyValueModalData(title, resource, property, propChangeable, rootProperty, allowMultiselection);
         const builder = new BSModalContextBuilder<AddPropertyValueModalData>(
             modalData, undefined, AddPropertyValueModalData
         );
