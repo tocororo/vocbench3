@@ -12,9 +12,9 @@
                 </button>
             </div>
         </div>
-        <div class="subPanel-body vbox scrollableContainer">
+        <div class="subPanel-body vbox scrollableContainer" (keydown)="moveUser($event)">
             <div *ngFor="let u of usersBound" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
-                <span style="flex: 1">{{u.getShow()}}</span>
+                <span style="flex: 1">{{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span></span>
                 <span *ngIf="u.isAdmin()" class="badge">Admin</span>
             </div> 
         </div>

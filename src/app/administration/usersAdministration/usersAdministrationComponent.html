@@ -32,7 +32,7 @@
                     <div class="scrollableContainer">
                         <ng-template ngFor let-u [ngForOf]="users">
                             <div *ngIf="isUserVisible(u)" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
-                                <span style="flex:1">{{u.getShow()}}</span>
+                                <span style="flex: 1">{{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span></span>
                                 <span *ngIf="u.getStatus() == 'NEW'; else notNewBlock" class="glyphicon glyphicon-exclamation-sign"
                                     style="color: red" title="New registered user"></span>
                                 <ng-template #notNewBlock>

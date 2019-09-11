@@ -658,7 +658,7 @@ export class CreateProjectComponent {
         }
 
         /**
-         * Prepare coreRepoSailConfigurerSpecification parameter
+         * Prepare core repo parameters
          */
         var coreRepoSailConfigurerSpecification: PluginSpecification
         //prepare config of core repo only if it is in creation mode
@@ -679,8 +679,12 @@ export class CreateProjectComponent {
         }
 
         /**
-         * Prepare supportRepoSailConfigurerSpecification parameter
+         * Prepare support repo parameters
          */
+
+        //supportRepoId is mandatory, in this way avoid to pass it as null (possible in came the user changes the title with remote repoAccess)
+        let supportRepoIdPar = (this.supportRepoId != null) ? this.supportRepoId : this.projectName + "_support";
+
         var supportRepoSailConfigurerSpecification: PluginSpecification
         //prepare config of core repo only if it is in creation mode and one of history and validation is enabled
         if ((this.validation || this.history) && this.isSelectedRepoAccessCreateMode()) {
@@ -786,7 +790,7 @@ export class CreateProjectComponent {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.projectService.createProject(this.projectName, this.baseUriPrefix + this.baseUriSuffix,
             this.ontoModelType, this.lexicalModelType, this.history, this.validation, this.blacklisting,
-            repositoryAccess, this.dataRepoId, this.supportRepoId,
+            repositoryAccess, this.dataRepoId, supportRepoIdPar,
             coreRepoSailConfigurerSpecification, coreRepoBackendType,
             supportRepoSailConfigurerSpecification, supportRepoBackendType,
             leftDataset, rightDataset,
