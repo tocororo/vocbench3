@@ -107,6 +107,16 @@
                                     <td nowrap><label>Language proficiencies:</label></td>
                                     <td><input class="form-control input-sm" [ngModel]="selectedUser.getLanguageProficiencies()" readonly></td>
                                 </tr>
+
+                                <tr *ngFor="let i of customFieldsRowsIdx">
+                                    <td nowrap><label>{{customFields[i*2].label}} {{i*2}}:</label></td>
+                                    <td><input type="text" class="form-control input-sm" [ngModel]="selectedUser.getCustomPropertyValue(customFields[i*2].iri)" readonly></td>
+                                    <ng-container *ngIf="customFields[i*2+1]">
+                                        <td nowrap><label>{{customFields[i*2+1].label}} {{i*2+1}}:</label></td>
+                                        <td><input type="text" class="form-control input-sm" [ngModel]="selectedUser.getCustomPropertyValue(customFields[i*2+1].iri)" readonly></td>
+                                    </ng-container>
+                                </tr>
+
                             </tbody>
                             <tfoot>
                                 <tr style="padding-top: 5px;">

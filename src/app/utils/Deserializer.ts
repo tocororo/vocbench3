@@ -325,6 +325,13 @@ export class Deserializer {
         if (userJson.languageProficiencies != undefined) {
             user.setLanguageProficiencies(userJson.languageProficiencies);
         }
+        if (userJson.customProperties != undefined) {
+            let cp: { [iri: string]: string } = {};
+            userJson.customProperties.forEach((cpJson: any) => {
+                cp[cpJson.iri] = cpJson.value;
+            })
+            user.setCustomProperties(cp);
+        }
         return user;
     }
 

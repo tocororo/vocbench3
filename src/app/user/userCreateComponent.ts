@@ -1,6 +1,7 @@
 import { Component, forwardRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { UserForm } from "../models/User";
+import { UserForm, UserFormField } from "../models/User";
+import { UserServices } from "../services/userServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
@@ -16,8 +17,22 @@ export class UserCreateComponent {
         "or in alternative, you can use the personal URL as IRI. If you leave it empty the system will provide a default IRI to your account";
 
     private form: UserForm = new UserForm();
+    private customFields: UserFormField[];
+    private customFieldsRowsIdx: number[];
 
-    constructor(private sharedModals: SharedModalServices) { }
+    constructor(private userService: UserServices, private sharedModals: SharedModalServices) { }
+
+    ngOnInit() {
+        this.userService.getUserFormFields().subscribe(
+            fields => {
+                this.customFields = fields;
+                this.customFieldsRowsIdx = [];
+                for (let i = 0; i < Math.round(this.customFields.length/2); i++) {
+                    this.customFieldsRowsIdx.push(i);
+                }
+            }
+        );
+    }
 
     ngAfterViewInit() {
         setTimeout(() => {

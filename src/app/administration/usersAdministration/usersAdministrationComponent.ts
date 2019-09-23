@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { User, UserStatusEnum } from "../../models/User";
+import { User, UserFormField, UserStatusEnum } from "../../models/User";
 import { UserServices } from "../../services/userServices";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
@@ -18,6 +18,8 @@ export class UsersAdministrationComponent {
 
     private users: User[];
     private selectedUser: User;
+    private customFields: UserFormField[];
+    private customFieldsRowsIdx: number[];
 
     private showActive: boolean = true;
     private showInactive: boolean = true;
@@ -27,6 +29,15 @@ export class UsersAdministrationComponent {
 
     ngOnInit() {
         this.initUserList();
+        this.userService.getUserFormFields().subscribe(
+            fields => {
+                this.customFields = fields;
+                this.customFieldsRowsIdx = [];
+                for (let i = 0; i < Math.round(this.customFields.length/2); i++) {
+                    this.customFieldsRowsIdx.push(i);
+                }
+            }
+        );
     }
 
     private initUserList() {
@@ -35,7 +46,7 @@ export class UsersAdministrationComponent {
             users => {
                 this.users = users;
             }
-        )
+        );
     }
 
     private selectUser(user: User) {

@@ -114,6 +114,21 @@
                 </td>
             </tr>
 
+            <tr *ngFor="let i of customFieldsRowsIdx">
+                <td nowrap><label>{{customFields[i*2].label}}:</label></td>
+                <td>
+                    <input type="text" class="form-control input-sm" [(ngModel)]="form.customProperties[customFields[i*2].iri]" 
+                        [ngModelOptions]="{standalone: true}" [placeholder]="customFields[i*2].label" (ngModelChange)="onModelChange()">
+                </td>
+                <ng-container *ngIf="customFields[i*2+1]">
+                    <td nowrap><label>{{customFields[i*2+1].label}}:</label></td>
+                    <td>
+                        <input type="text" class="form-control input-sm" [(ngModel)]="form.customProperties[customFields[i*2+1].iri]" 
+                            [ngModelOptions]="{standalone: true}" [placeholder]="customFields[i*2+1].label" (ngModelChange)="onModelChange()">
+                    </td>
+                </ng-container>
+            </tr>
+
         </tbody>
     </table>
 </form>

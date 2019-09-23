@@ -71,7 +71,7 @@ export class UserCreateModal implements ModalComponent<UserCreateModalData> {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.userService.registerUser(this.userForm.email, this.userForm.password, this.userForm.givenName, this.userForm.familyName, userIri,
             this.userForm.address, this.userForm.affiliation, this.userForm.url, this.userForm.avatarUrl, this.userForm.phone,
-            this.userForm.languageProficiencies).subscribe(
+            this.userForm.languageProficiencies, this.userForm.customProperties).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.basicModals.alert("User created", "User succesfully created");

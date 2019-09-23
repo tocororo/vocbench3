@@ -304,4 +304,19 @@ export class AdministrationServices {
             }
         );
     }
+
+
+    getDataDir(): Observable<string> {
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "getDataDir", params);
+    }
+
+    setDataDir(path: string): Observable<string> {
+        var params: any = {
+            path: path
+        };
+        return this.httpMgr.doGet(this.serviceName, "setDataDir", params);
+    }
+
+
 }

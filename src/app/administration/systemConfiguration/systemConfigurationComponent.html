@@ -1,0 +1,243 @@
+<div class="panel panel-default vbox">
+
+    <div class="panel-body vbox scrollableContainer">
+
+        <!-- Administrator user and  STData directory -->
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table table-condensed table-borderless">
+                    <colgroup>
+                        <col style="width: 1%;">
+                        <col style="width: 1%;">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="glyphicon glyphicon-info-sign" title="Through this entry it is possible to hand over the role of administrator to another user (only one user can be the administrator).">
+                                </span>
+                            </td>
+                            <td nowrap>
+                                <label>Administrator account:</label>
+                            </td>
+                            <td>
+                                <select class="form-control input-sm" [(ngModel)]="adminMail" (ngModelChange)="updateAdmin()">
+                                    <option *ngFor="let u of users" [value]="u.email">{{u.givenName}} {{u.familyName}}</option>
+                                </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="glyphicon glyphicon-info-sign"
+                                    title="Provide the SemanticTurkey data folder path. This can be absolute or relative to the SemanticTurkey installation folder.">
+                                </span>
+                            </td>
+                            <td nowrap>
+                                <label>SemanticTurkey data folder:</label>
+                            </td>
+                            <td>
+                                <div class="hbox" style="align-items: center;">
+                                    <input class="form-control input-sm" style="margin-right: 4px;" [(ngModel)]="stDataFolder">
+                                    <button class="btn btn-default btn-sm" (click)="updateDataFolder()" [disabled]="stDataFolder == stDataFolderPristine">
+                                        Update
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <!-- E-mail configuration -->
+
+        <div class="panel panel-default" style="margin-top: 6px;">
+            <div class="panel-heading">
+                <label>Vocbench Email Configuration:</label>
+            </div>
+            <div class="panel-body">
+
+                <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 4px;">
+                    Here it is possible to configure the e-mail service of VocBench. This service will be used to send notifications to the
+                    system administrator and to the users
+                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                </div>
+
+                <table class="table table-condensed table-borderless">
+                    <colgroup>
+                        <col style="width: 1%;">
+                        <col style="width: 1%;">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="glyphicon glyphicon-info-sign" title="SMTP Mail Server IP/URL"></span>
+                            </td>
+                            <td nowrap>
+                                <label>Mail SMTP host:</label>
+                            </td>
+                            <td><input class="form-control input-sm" [(ngModel)]="emailConfig.mailSmtpHost"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="glyphicon glyphicon-info-sign" title="Mail Server Port"></span>
+                            </td>
+                            <td nowrap>
+                                <label>Mail SMTP port:</label>
+                            </td>
+                            <td><input class="form-control input-sm" [(ngModel)]="emailConfig.mailSmtpPort"></td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <span class="glyphicon glyphicon-info-sign" title="Cryptographic protocol"></span>
+                            </td>
+                            <td nowrap>
+                                <label>Cryptographic protocol:</label>
+                            </td>
+                            <td>
+                                <select class="form-control input-sm" [(ngModel)]="cryptoProtocol" (ngModelChange)="updateProtocol()">
+                                    <option>SSL</option>
+                                    <option>TLS</option>
+                                    <option>None</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="glyphicon glyphicon-info-sign" title="True if SMTP server requires authentication"></span>
+                            </td>
+                            <td nowrap>
+                                <label>Authentication:</label>
+                            </td>
+                            <td>
+                                <span class="hbox input-sm" style="align-items: center; justify-content: center;">
+                                    <label class="radio-inline">
+                                        <input type="radio" (click)="emailConfig.mailSmtpAuth='true'" [checked]="emailConfig.mailSmtpAuth=='true'">true
+                                    </label>
+                                    <label class="radio-inline" style="margin-left: 15px;">
+                                        <input type="radio" (click)="emailConfig.mailSmtpAuth='false'" [checked]="emailConfig.mailSmtpAuth=='false'">false
+                                    </label>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="glyphicon glyphicon-info-sign" title="Email address used to send administration emails"></span>
+                            </td>
+                            <td nowrap>
+                                <label>Mail from address:</label>
+                            </td>
+                            <td><input class="form-control input-sm" type="email" [(ngModel)]="emailConfig.mailFromAddress"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="glyphicon glyphicon-info-sign" title="Password of the above email address"></span>
+                            </td>
+                            <td nowrap>
+                                <label>Mail from password:</label>
+                            </td>
+                            <td>
+                                <input *ngIf="emailConfig.mailSmtpAuth=='false'; else authBlock" class="form-control input-sm" disabled>
+                                <ng-template #authBlock>
+                                    <div class="input-group input-group-sm">
+                                        <input *ngIf="!showPwd" type="password" class="form-control" [(ngModel)]="emailConfig.mailFromPassword">
+                                        <input *ngIf="showPwd" class="form-control" [(ngModel)]="emailConfig.mailFromPassword">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" [ngClass]="{ active : showPwd }" (click)="showPwd = !showPwd">
+                                                <span *ngIf="!showPwd" class="glyphicon glyphicon-eye-close"></span>
+                                                <span *ngIf="showPwd" class="glyphicon glyphicon-eye-open"></span>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </ng-template>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="glyphicon glyphicon-info-sign" title="Alias name shown in the administration emails"></span>
+                            </td>
+                            <td nowrap>
+                                <label>Mail from alias:</label>
+                            </td>
+                            <td><input class="form-control input-sm" [(ngModel)]="emailConfig.mailFromAlias"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel-footer" style="text-align: right;">
+                <button class="btn btn-info btn-sm" (click)="testEmailConfig()">Test</button>
+                <button type="submit" class="btn btn-default btn-sm" (click)="updateEmailConfig()" [disabled]="!isEmailConfigChanged()">Submit</button>
+            </div>
+        </div>
+
+
+        <!-- Registration form -->
+
+        <div class="panel panel-default" style="margin-top: 6px;">
+            <div class="panel-heading">
+                <label style="flex: 1;">Registration form fields:</label>
+                <div class="btn-toolbar">
+                    <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default" (click)="moveField('DOWN')" title="Move down" [disabled]="!selectedField || registrationFields.indexOf(selectedField)+1 >= registrationFields.length">
+                            <span class="glyphicon glyphicon-chevron-down"></span>
+                        </button>
+                        <button class="btn btn-default" (click)="moveField('UP')" title="Move up" [disabled]="!selectedField || registrationFields.indexOf(selectedField) == 0">
+                            <span class="glyphicon glyphicon-chevron-up"></span>
+                        </button>
+                        <button class="btn btn-default" (click)="removeField()" title="Remove" [disabled]="!selectedField">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="alert alert-info alert-dismissible alert-multiline" role="alert" style="margin-bottom: 4px;">
+                    Here it is possible to add (and reorder) up to {{fieldsIdx.length}} optional information about the user. These information will be shown
+                    in the user overview and will be also prompted as non-mandatory fields during the user creation/registration.<br>
+                    If a field is removed, any values previously stored for that field will be lost for any user.<br>
+                    If a field is renamed, any values previously stored for that field will be preserved.
+                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                </div>
+                <table *ngIf="registrationFields" class="table table-condensed table-borderless">
+                    <colgroup>
+                        <col style="width: 1%;">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let idx of fieldsIdx;" (click)="selectField(idx)" [ngClass]="{ active : selectedField && selectedField == registrationFields[idx] }">
+                            <td class="text-center" style="min-width: 30px;"><label>{{idx+1}}</label></td>
+                            <td>
+                                <input-editable [value]="registrationFields[idx]?.label" (valueEdited)="updateField(idx, $event)" [disabled]="idx >= registrationFields.length + 1"></input-editable>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <!-- Experimental feature -->
+        <!-- 
+        <span style="flex: 1"></span>
+        <div class="panel panel-default" style="margin-top: 8px;">
+            <div class="panel-body">
+                <div class="checkbox-inline">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="expFeatEnabled" (ngModelChange)="onExpFeatEnabledChanged()">
+                        Enable experimental features
+                    </label>
+                    <span class="glyphicon glyphicon-info-sign" title="Check this option in order to enable experimental (very unstable) features">
+                    </span>
+                </div>
+            </div>
+        </div>
+        -->
+
+    </div>
+
+</div>

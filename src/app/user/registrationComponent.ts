@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ARTURIResource } from "../models/ARTResources";
 import { UserForm } from "../models/User";
 import { AdministrationServices } from "../services/administrationServices";
+import { AuthServices } from "../services/authServices";
 import { UserServices } from "../services/userServices";
 import { UIUtils } from "../utils/UIUtils";
 import { VBProperties } from "../utils/VBProperties";
@@ -19,9 +20,8 @@ export class RegistrationComponent {
     private privacyStatementAvailable: boolean = false;
     private userForm: UserForm;
 
-    constructor(private userService: UserServices, private administrationService: AdministrationServices, private vbProp: VBProperties,
-        private basicModals: BasicModalServices,
-        private router: Router, private activeRoute: ActivatedRoute) { }
+    constructor(private userService: UserServices, private administrationService: AdministrationServices, private authService: AuthServices,
+        private vbProp: VBProperties, private basicModals: BasicModalServices, private router: Router, private activeRoute: ActivatedRoute) { }
 
     ngOnInit() {
         this.firstAccess = this.activeRoute.snapshot.params['firstAccess'] == "1";
@@ -75,20 +75,28 @@ export class RegistrationComponent {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.userService.registerUser(this.userForm.email, this.userForm.password, this.userForm.givenName, this.userForm.familyName, userIri,
             this.userForm.address, this.userForm.affiliation, this.userForm.url, this.userForm.avatarUrl, this.userForm.phone,
-            this.userForm.languageProficiencies).subscribe(
+            this.userForm.languageProficiencies, this.userForm.customProperties).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 var message: string;
                 if (this.firstAccess) {
                     message = "The administration account has been created. " +
-                        "It is now possible to login with the email (" + this.userForm.email + ") and the password you provided";
+                        "Now you will be automatically logged in with the email (" + this.userForm.email + ") and the password you provided";
                 } else {
                     message = "Your account has been created and is now pending activation. After the system administrator accepts your request, " +
                         "it will be possible to login with your email (" + this.userForm.email + ") and the password you provided";
                 }
                 this.basicModals.alert("Registration complete", message).then(
                     result => {
-                        this.router.navigate(['/Home']);
+                        if (this.firstAccess) {
+                            this.authService.login(this.userForm.email, this.userForm.password).subscribe(
+                                () => {
+                                    this.router.navigate(["/Sysconfig"]);
+                                }
+                            );
+                        } else {
+                            this.router.navigate(['/Home']);
+                        }
                     }
                 );
             }

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from "@angular/router";
 import { Observable } from 'rxjs/Observable';
+import { User } from "../models/User";
+import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from "../utils/VBContext";
-import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
-import { User } from "../models/User";
 
 @Injectable()
 export class AuthServices {
@@ -17,7 +17,7 @@ export class AuthServices {
     /**
      * Logs in and registers the logged user in the VBContext
      */
-    login(email: string, password: string, rememberMe: boolean): Observable<User> {
+    login(email: string, password: string, rememberMe?: boolean): Observable<User> {
         var params: any = {
             email: email,
             password: password,

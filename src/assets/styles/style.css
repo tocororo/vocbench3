@@ -720,7 +720,7 @@ textarea {
     overflow: auto;
 }
 
-/* class for positioning the close "x" in a multiline dismissable alert at the top right corner */
+/* class for positioning the close "x" in a multiline dismissible alert at the top right corner */
 .alert-multiline.alert-dismissible {
     position: relative
 }

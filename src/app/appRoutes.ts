@@ -1,4 +1,5 @@
 import { RouterModule, Routes } from '@angular/router';
+import { SystemConfigurationComponent } from './administration/systemConfiguration/systemConfigurationComponent';
 import { AlignmentValidationComponent } from './alignment/alignmentValidation/alignmentValidationComponent';
 import { CollaborationComponent } from './collaboration/collaborationComponent';
 import { ExportDataComponent } from "./config/dataManagement/exportData/exportDataComponent";
@@ -32,6 +33,7 @@ export const routes: Routes = [
     { path: "Home", component: HomeComponent, resolve: { user : UserResolver } },
     // route config of navigation bar
     { path: "Projects", component: ProjectComponent, canActivate: [AdminGuard] },
+    { path: "Projects/CreateProject", component: CreateProjectComponent, canActivate: [AdminGuard] },
     { path: "Data", component: DataComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Edoal", component: EdoalComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Sparql", component: SparqlComponent, canActivate: [AuthGuard, ProjectGuard] },
@@ -56,8 +58,7 @@ export const routes: Routes = [
     { path: "Config/ExportData", component: ExportDataComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Config/Refactor", component: RefactorComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Config/Versioning", component: VersioningComponent, canActivate: [AuthGuard, ProjectGuard] },
-    // route config for project management
-    { path: "Projects/CreateProject", component: CreateProjectComponent, canActivate: [AdminGuard] },
+    { path: "Sysconfig", component: SystemConfigurationComponent, canActivate: [AuthGuard] },
 ];
 
 /*

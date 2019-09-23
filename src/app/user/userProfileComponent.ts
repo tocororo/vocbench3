@@ -1,7 +1,8 @@
 import { Component } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { User } from "../models/User";
+import { ARTURIResource } from "../models/ARTResources";
+import { User, UserFormField } from "../models/User";
 import { UserServices } from "../services/userServices";
 import { VBContext } from "../utils/VBContext";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
@@ -15,11 +16,22 @@ import { ChangePasswordModal } from "./changePasswordModal";
 export class UserProfileComponent {
 
     private user: User;
+    private customFields: UserFormField[];
+    private customFieldsRowsIdx: number[];
 
     constructor(private userService: UserServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.initUser();
+        this.userService.getUserFormFields().subscribe(
+            fields => {
+                this.customFields = fields;
+                this.customFieldsRowsIdx = [];
+                for (let i = 0; i < Math.round(this.customFields.length/2); i++) {
+                    this.customFieldsRowsIdx.push(i);
+                }
+            }
+        );
     }
 
     initUser() {
@@ -109,6 +121,15 @@ export class UserProfileComponent {
                 );
             },
             () => {}
+        );
+    }
+
+    private updateCustomProperty(fieldIri: string, value: string) {
+        this.userService.updateUserCustomField(this.user.getEmail(), new ARTURIResource(fieldIri), value).subscribe(
+            user => {
+                VBContext.setLoggedUser(user);
+                this.initUser();
+            }
         );
     }
 

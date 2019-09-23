@@ -63,6 +63,16 @@
                             </div>
                         </td>
                     </tr>
+
+                    <tr *ngFor="let i of customFieldsRowsIdx">
+                        <td nowrap><label>{{customFields[i*2].label}}:</label></td>
+                        <td><input-editable [value]="user.getCustomPropertyValue(customFields[i*2].iri)" [allowEmpty]="true" (valueEdited)="updateCustomProperty(customFields[i*2].iri, $event)"></input-editable></td>
+                        <ng-container *ngIf="customFields[i*2+1]">
+                            <td nowrap><label>{{customFields[i*2+1].label}}:</label></td>
+                            <td><input-editable [value]="user.getCustomPropertyValue(customFields[i*2+1].iri)" [allowEmpty]="true" (valueEdited)="updateCustomProperty(customFields[i*2+1].iri, $event)"></input-editable></td>
+                        </ng-container>
+                    </tr>
+
                 </tbody>
             </table>
         </div>

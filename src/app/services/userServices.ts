@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { ARTURIResource } from "../models/ARTResources";
-import { User } from "../models/User";
+import { User, UserFormField } from "../models/User";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager } from "../utils/HttpManager";
@@ -114,8 +114,14 @@ export class UserServices {
      * @param url
      * @param phone
      */
-    registerUser(email: string, password: string, givenName: string, familyName: string, iri: ARTURIResource,
-        address: string, affiliation: string, url: string, avatarUrl: string, phone: string, languageProficiencies: string[]) {
+    registerUser(email: string, password: string, givenName: string, familyName: string, iri?: ARTURIResource,
+        address?: string, affiliation?: string, url?: string, avatarUrl?: string, phone?: string, languageProficiencies?: string[],
+        customProperties?: {[iri: string]: string}) {
+        //customProperties server side is a Map<IRI, String>, so the keys of the customProperties should be serialized as NT IRIs
+        let convertedCustomProps: {[iri: string]: string} = {};
+        for (let prop in customProperties) {
+            convertedCustomProps["<"+prop+">"] = customProperties[prop];
+        }
         var params: any = {
             email: email,
             password: password,
@@ -127,7 +133,8 @@ export class UserServices {
             url: url,
             avatarUrl: avatarUrl,
             phone: phone,
-            languageProficiencies: languageProficiencies
+            languageProficiencies: languageProficiencies,
+            customProperties: JSON.stringify(convertedCustomProps)
         }
         return this.httpMgr.doPost(this.serviceName, "registerUser", params);
     }
@@ -296,6 +303,25 @@ export class UserServices {
     }
 
     /**
+     * 
+     * @param email 
+     * @param property 
+     * @param value 
+     */
+    updateUserCustomField(email: string, property: ARTURIResource, value?: string): Observable<User> {
+        var params: any = {
+            email: email,
+            property: property,
+            value: value
+        }
+        return this.httpMgr.doPost(this.serviceName, "updateUserCustomField", params).map(
+            stResp => {
+                return Deserializer.createUser(stResp);
+            }
+        );
+    }
+
+    /**
      * Enables or disables a user
      * @param email email of the user to enable/disable
      * @param enabled true enables the user, false disables the user
@@ -375,5 +401,42 @@ export class UserServices {
         }
         return this.httpMgr.doPost(this.serviceName, "resetPassword", params);
     }
+
+
+    getUserFormFields(): Observable<UserFormField[]> {
+        var params: any = {}
+        return this.httpMgr.doGet(this.serviceName, "getUserFormFields", params);
+    }
+
+    addUserFormField(field: string) {
+        var params: any = {
+            field: field,
+        }
+        return this.httpMgr.doPost(this.serviceName, "addUserFormField", params);
+    }
+
+    swapUserFormFields(field1: ARTURIResource, field2: ARTURIResource) {
+        var params: any = {
+            field1: field1,
+            field2: field2
+        }
+        return this.httpMgr.doPost(this.serviceName, "swapUserFormFields", params);
+    }
+
+    renameUserFormField(fieldIri: ARTURIResource, newLabel: string) {
+        var params: any = {
+            fieldIri: fieldIri,
+            newLabel: newLabel
+        }
+        return this.httpMgr.doPost(this.serviceName, "renameUserFormField", params);
+    }
+
+    removeUserFormField(field: ARTURIResource) {
+        var params: any = {
+            field: field,
+        }
+        return this.httpMgr.doPost(this.serviceName, "removeUserFormField", params);
+    }
+
 
 }

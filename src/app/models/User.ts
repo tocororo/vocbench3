@@ -16,6 +16,8 @@ export class User {
     private admin: boolean = false;
     private online: boolean = false;
 
+    private customProperties: { [iri: string]: string };
+
     constructor(email: string, givenName: string, familyName: string, iri: string) {
         this.email = email;
         this.givenName = givenName;
@@ -121,6 +123,16 @@ export class User {
 
     getShow(): string {
         return this.givenName + " " + this.familyName;
+    }
+
+    setCustomProperties(customProps: { [iri: string]: string }) {
+        this.customProperties = customProps;
+    }
+    getCustomProperties(): { [iri: string]: string } {
+        return this.customProperties;
+    }
+    getCustomPropertyValue(prop: string): string {
+        return this.customProperties[prop];
     }
 }
 
@@ -305,9 +317,12 @@ export class UserForm {
     iri: string;
     urlAsIri: boolean;
     languageProficiencies: string[];
+    customProperties: { [iri: string]: string } = {};
 
     static emailRegexp = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     static iriRegexp = new RegExp("\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+    static standardFields: string[] = ["E-mail","Password","Confirm password","Given name","Family name","Phone","Office address",
+        "Affiliation","Personal URL","User IRI","Avatar URL","Language proficiencies"]
 
     constructor() { }
 
@@ -318,4 +333,9 @@ export class UserForm {
     static isIriValid(iri: string) {
         return UserForm.iriRegexp.test(iri);
     }
+}
+
+export class UserFormField {
+    iri: string;
+    label: string;
 }
