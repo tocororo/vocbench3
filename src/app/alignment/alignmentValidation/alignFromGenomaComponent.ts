@@ -94,6 +94,10 @@ export class AlignFromGenomaComponent extends AlignFromSource {
         );
     }
 
+    private deleteTask() {
+        this.genomaService.deleteTask(this.selectedTask.id).subscribe(() => {});
+    }
+
     private fetchAlignment(task: GenomaTask) {
         this.rightProject = new Project(task.rightDataset.projectName);
         this.genomaService.fetchAlignment(task.id).subscribe(

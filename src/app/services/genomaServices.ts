@@ -74,6 +74,13 @@ export class GenomaServices {
         return this.httpMgr.doPost(this.serviceName, "createTask", params);
     }
 
+    deleteTask(id: string) {
+        var params: any = {
+            id: id
+        };
+        return this.httpMgr.doPost(this.serviceName, "deleteTask", params);
+    }
+
     downloadAlignment(taskId: string): Observable<Blob> {
         var params: any = {
             taskId: taskId
