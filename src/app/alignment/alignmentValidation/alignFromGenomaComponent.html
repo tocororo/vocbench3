@@ -6,11 +6,11 @@
                 <label style="flex: 1;">Tasks</label>
                 <div class="btn-toolbar">
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-sm btn-default" (click)="deleteTask()" title="Delete Genoma task" [disabled]="!selectedTask">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </button>
                         <button class="btn btn-default" (click)="createTask()" title="Create Genoma task">
                             <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-sm btn-default" (click)="deleteTask()" title="Delete Genoma task" [disabled]="!selectedTask">
+                            <span class="glyphicon glyphicon-minus"></span>
                         </button>
                     </div>
                     <button class="btn btn-xs btn-default" (click)="listGenomaTask()" title="Refresh tasks list" [disabled]="!tasks">
