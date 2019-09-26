@@ -1,134 +1,107 @@
-<form role="form">
-    <table class="table table-condensed table-borderless">
-        <colgroup>
-            <col span="1" style="width: 10%;">
-            <col span="1" style="width: 40%;">
-            <col span="1" style="width: 10%;">
-            <col span="1" style="width: 40%;">
-        </colgroup>
-        <tbody>
-            <tr>
-                <td nowrap><label>E-mail:</label><span style="color: red">*</span></td>
-                <td colspan="3">
-                    <input type="email" class="form-control input-sm" placeholder="e-mail address" [(ngModel)]="form.email" name="email"
-                        (ngModelChange)="onModelChange()">
-                </td>
-            </tr>
-            <tr>
-                <td nowrap><label>Password:</label><span style="color: red">*</span></td>
-                <td>
-                    <div class="input-group input-group-sm">
-                        <input *ngIf="!showPwd" type="password" class="form-control" [(ngModel)]="form.password" (ngModelChange)="onModelChange()" name="password" placeholder="password">
-                        <input *ngIf="showPwd" class="form-control" [(ngModel)]="form.password" name="password" placeholder="password">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" [ngClass]="{ active : showPwd }" (mousedown)="showPwd = true" (mouseup)="showPwd = false">
-                                <span *ngIf="!showPwd" class="glyphicon glyphicon-eye-close"></span>
-                                <span *ngIf="showPwd" class="glyphicon glyphicon-eye-open"></span>
-                            </button>
-                        </span>
-                    </div>
-                </td>
-                <td nowrap><label>Confirm password:</label><span style="color: red">*</span></td>
-                <td>
-                    <div class="input-group input-group-sm">
-                        <input *ngIf="!showPwdConf" type="password" class="form-control" [ngClass]="{invalid : !isConfirmPwdOk()}" [(ngModel)]="form.confirmedPassword" (ngModelChange)="onModelChange()" name="confirmedPassword" placeholder="password">
-                        <input *ngIf="showPwdConf" class="form-control" [ngClass]="{invalid : !isConfirmPwdOk()}" [(ngModel)]="form.confirmedPassword" name="confirmedPassword" placeholder="password">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" [ngClass]="{ active : showPwdConf }" (mousedown)="showPwdConf = true" (mouseup)="showPwdConf = false">
-                                <span *ngIf="!showPwdConf" class="glyphicon glyphicon-eye-close"></span>
-                                <span *ngIf="showPwdConf" class="glyphicon glyphicon-eye-open"></span>
-                            </button>
-                        </span>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td nowrap><label>Given name:</label><span style="color: red">*</span></td>
-                <td>
-                    <input type="text" class="form-control input-sm" placeholder="given name" [(ngModel)]="form.givenName" name="givenName"
-                        (ngModelChange)="onModelChange()">
-                </td>
-                <td nowrap><label>Family name:</label><span style="color: red">*</span></td>
-                <td>
-                    <input type="text" class="form-control input-sm" placeholder="family name" [(ngModel)]="form.familyName" name="familyName"
-                        (ngModelChange)="onModelChange()">
-                </td>
-            </tr>
-            <tr>
-                <td nowrap><label>Phone:</label></td>
-                <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="form.phone" name="phone" placeholder="phone number"
-                        (ngModelChange)="onModelChange()">
-                </td>
-                <td nowrap><label>Office address:</label></td>
-                <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="form.address" name="address" placeholder="address"
-                        (ngModelChange)="onModelChange()">
-                </td>
-            </tr>
-            <tr>
-                <td nowrap><label>Affiliation:</label></td>
-                <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="form.affiliation" name="affiliation" placeholder="affiliation"
-                        (ngModelChange)="onModelChange()">
-                </td>
-                <td nowrap><label>Personal URL:</label></td>
-                <td>
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm" [(ngModel)]="form.url" name="url" placeholder="url"
-                            (ngModelChange)="onUrlChange()">
-                        <span class="input-group-addon" style="padding: 5px 10px;">
-                            <input type="checkbox" [(ngModel)]="form.urlAsIri" name="urlAsIri" title="Use URL as user IRI"
-                                (ngModelChange)="onUrlAsIriChange()">
-                        </span>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td nowrap>
-                    <label>User IRI:</label>
-                    <span class="glyphicon glyphicon-info-sign" [title]="iriInfoTitle"></span>
-                </td>
-                <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="form.iri" name="iri" placeholder="iri"
-                        (ngModelChange)="onUrlChange()" [disabled]="form.urlAsIri">
-                </td>
-                <td nowrap><label>Avatar URL:</label></td>
-                <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="form.avatarUrl" name="avatarUrl" placeholder="avatarUrl"
-                        (ngModelChange)="onModelChange()">
-                </td>
-            </tr>
-            <tr>
-                <td nowrap><label>Language proficiencies:</label><span style="color: red">**</span></td>
-                <td>
-                    <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" [(ngModel)]="form.languageProficiencies" name="langs"
-                            placeholder="Language proficiencies" readonly>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" (click)="editLanguages()" placeholder="Edit">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                            </button>
-                        </span>
-                    </div>
-                </td>
-            </tr>
+<div class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">E-mail: <span style="color: red">*</span></label>
+        <div class="col-sm-10">
+            <input type="email" class="form-control input-sm" [(ngModel)]="form.email" (ngModelChange)="onModelChange()"  placeholder="E-mail address">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Password: <span style="color: red">*</span></label>
+        <div class="col-sm-4">
+            <div class="input-group input-group-sm">
+                <input *ngIf="!showPwd" type="password" class="form-control" [(ngModel)]="form.password" (ngModelChange)="onModelChange()" placeholder="Password">
+                <input *ngIf="showPwd" class="form-control" [(ngModel)]="form.password" placeholder="password">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" [ngClass]="{ active : showPwd }" (mousedown)="showPwd = true" (mouseup)="showPwd = false">
+                        <span *ngIf="!showPwd" class="glyphicon glyphicon-eye-close"></span>
+                        <span *ngIf="showPwd" class="glyphicon glyphicon-eye-open"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <label class="col-sm-2 control-label">Confirm password: <span style="color: red">*</span></label>
+        <div class="col-sm-4">
+            <div class="input-group input-group-sm">
+                <input *ngIf="!showPwdConf" type="password" class="form-control" [ngClass]="{invalid : !isConfirmPwdOk()}" 
+                    [(ngModel)]="form.confirmedPassword" (ngModelChange)="onModelChange()" placeholder="Password">
+                <input *ngIf="showPwdConf" class="form-control" [ngClass]="{invalid : !isConfirmPwdOk()}" 
+                    [(ngModel)]="form.confirmedPassword" placeholder="Password">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" [ngClass]="{ active : showPwdConf }" (mousedown)="showPwdConf = true" (mouseup)="showPwdConf = false">
+                        <span *ngIf="!showPwdConf" class="glyphicon glyphicon-eye-close"></span>
+                        <span *ngIf="showPwdConf" class="glyphicon glyphicon-eye-open"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Given name: <span style="color: red">*</span></label>
+        <div class="col-sm-10">
+            <input class="form-control input-sm" [(ngModel)]="form.givenName" (ngModelChange)="onModelChange()"  placeholder="Given name">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Family name: <span style="color: red">*</span></label>
+        <div class="col-sm-10">
+            <input class="form-control input-sm" [(ngModel)]="form.familyName" (ngModelChange)="onModelChange()"  placeholder="Family name">
+        </div>
+    </div>
 
-            <tr *ngFor="let i of customFieldsRowsIdx">
-                <td nowrap><label>{{customFields[i*2].label}}:</label></td>
-                <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="form.customProperties[customFields[i*2].iri]" 
-                        [ngModelOptions]="{standalone: true}" [placeholder]="customFields[i*2].label" (ngModelChange)="onModelChange()">
-                </td>
-                <ng-container *ngIf="customFields[i*2+1]">
-                    <td nowrap><label>{{customFields[i*2+1].label}}:</label></td>
-                    <td>
-                        <input type="text" class="form-control input-sm" [(ngModel)]="form.customProperties[customFields[i*2+1].iri]" 
-                            [ngModelOptions]="{standalone: true}" [placeholder]="customFields[i*2+1].label" (ngModelChange)="onModelChange()">
-                    </td>
-                </ng-container>
-            </tr>
+    <!-- Optional (hidable) -->
+    <ng-container *ngFor="let f of optionalFields">
+        <div *ngIf="f.visible" class="form-group">
+            <label class="col-sm-2 control-label">{{getOptionalFieldLabel(f)}}:</label>
+            <div class="col-sm-10">
+                <input class="form-control input-sm" [(ngModel)]="f.value" (ngModelChange)="onOptionalFieldChange(f)"  [placeholder]="getOptionalFieldLabel(f)">
+            </div>
+        </div>
+    </ng-container>
 
-        </tbody>
-    </table>
-</form>
+    <!-- Custom -->
+    <div *ngFor="let f of customFields; let idx = index" class="form-group">
+        <label class="col-sm-2 control-label">{{f.label}}:</label>
+        <div class="col-sm-10">
+            <input class="form-control input-sm" [(ngModel)]="form.customProperties[f.iri]" (ngModelChange)="onModelChange()" [placeholder]="f.label">
+        </div>
+    </div>
+
+    <div style="height: 1px; margin: 0 0 7px; background-color: #e5e5e5;"></div>
+
+    <!-- Others -->
+    <div class="form-group">
+        <label class="col-sm-2 control-label">
+            User IRI:
+            <span class="glyphicon glyphicon-info-sign" [title]="iriInfoTitle"></span>
+        </label>
+        <div class="col-sm-10">
+            <input *ngIf="!personalUrlVisible" class="form-control input-sm" [(ngModel)]="form.iri" placeholder="User IRI" (ngModelChange)="onModelChange()">
+            <div *ngIf="personalUrlVisible" class="input-group">
+                <input class="form-control input-sm" [(ngModel)]="form.iri" placeholder="User IRI" (ngModelChange)="onModelChange()" [disabled]="form.urlAsIri">
+                <span class="input-group-addon" style="padding: 5px 10px;">
+                    <input type="checkbox" [(ngModel)]="form.urlAsIri" title="Use personal URL as user IRI" (ngModelChange)="onUrlAsIriChange()">
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Avatar URL:</label>
+        <div class="col-sm-10">
+            <input class="form-control input-sm" [(ngModel)]="form.avatarUrl" placeholder="Avatar URL" (ngModelChange)="onModelChange()">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Language proficiencies: <span style="color: red">**</span></label>
+        <div class="col-sm-10">
+            <div class="input-group input-group-sm">
+                <input class="form-control" [(ngModel)]="form.languageProficiencies" placeholder="Language proficiencies" readonly>
+                <span class="input-group-btn">
+                    <button class="btn btn-default" (click)="editLanguages()" placeholder="Edit">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+</div>

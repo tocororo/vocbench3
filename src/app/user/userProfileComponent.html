@@ -1,87 +1,10 @@
-<div class="vbox">
-
-    <div class="panel panel-default">
-
+<div class="container vbox" style="flex: initial">
+    <div class="panel panel-default vbox" style="flex: initial">
         <div class="panel-heading">
             <label><span class="glyphicon glyphicon-user"></span> User details</label>
         </div>
-
-        <div class="panel-body">
-            <table class="table table-condensed table-borderless">
-                <colgroup>
-                    <col span="1" style="width: 10%;">
-                    <col span="1" style="width: 40%;">
-                    <col span="1" style="width: 10%;">
-                    <col span="1" style="width: 40%;">
-                </colgroup>
-                <tbody>
-                    <tr>
-                        <td nowrap><label>Given name:</label></td>
-                        <td><input-editable [value]="user.getGivenName()" (valueEdited)="updateGivenName($event)"></input-editable></td>
-                        <td nowrap><label>Family name:</label></td>
-                        <td><input-editable [value]="user.getFamilyName()" (valueEdited)="updateFamilyName($event)"></input-editable></td>
-                    </tr>
-                    <tr>
-                        <td nowrap><label>E-mail:</label></td>
-                        <td><input-editable type="email" [value]="user.getEmail()" (valueEdited)="updateEmail($event)"></input-editable></td>
-                        <td nowrap><label>Password:</label></td>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="password" class="form-control" [ngModel]="'xxxxxxxx'" readonly>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" style="width:36px;" (click)="changePwd()" placeholder="Edit">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </button>
-                                </span>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td nowrap><label>Phone:</label></td>
-                        <td><input-editable [value]="user.getPhone()" [allowEmpty]="true" (valueEdited)="updatePhone($event)"></input-editable></td>
-                        <td nowrap><label>Office address:</label></td>
-                        <td><input-editable [value]="user.getAddress()" [allowEmpty]="true" (valueEdited)="updateAddress($event)"></input-editable></td>
-                    </tr>
-                    <tr>
-                        <td nowrap><label>Affiliation:</label></td>
-                        <td><input-editable [value]="user.getAffiliation()" [allowEmpty]="true" (valueEdited)="updateAffiliation($event)"></input-editable></td>
-                        <td nowrap><label>Personal Url:</label></td>
-                        <td><input-editable [value]="user.getUrl()" [allowEmpty]="true" (valueEdited)="updateUrl($event)"></input-editable></td>
-                    </tr>
-                    <tr>
-                        <td nowrap><label>Avatar Url:</label></td>
-                        <td><input-editable [value]="user.getAvatarUrl()" [allowEmpty]="true" (valueEdited)="updateAvatarUrl($event)"></input-editable></td>
-                        <td nowrap><label>Language proficiencies:</label></td>
-                        <td>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control" [ngModel]="user.getLanguageProficiencies()" name="langs" readonly>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" style="width:36px;" (click)="editLanguages()" placeholder="Edit">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </button>
-                                </span>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr *ngFor="let i of customFieldsRowsIdx">
-                        <td nowrap><label>{{customFields[i*2].label}}:</label></td>
-                        <td><input-editable [value]="user.getCustomPropertyValue(customFields[i*2].iri)" [allowEmpty]="true" (valueEdited)="updateCustomProperty(customFields[i*2].iri, $event)"></input-editable></td>
-                        <ng-container *ngIf="customFields[i*2+1]">
-                            <td nowrap><label>{{customFields[i*2+1].label}}:</label></td>
-                            <td><input-editable [value]="user.getCustomPropertyValue(customFields[i*2+1].iri)" [allowEmpty]="true" (valueEdited)="updateCustomProperty(customFields[i*2+1].iri, $event)"></input-editable></td>
-                        </ng-container>
-                    </tr>
-
-                </tbody>
-            </table>
+        <div class="panel-body vbox">
+            <user-details [user]="user"></user-details>
         </div>
-
-        <div class="panel-footer">
-            <label>Registered: </label> {{user.getRegistrationDate()}}
-        </div>
-
     </div>
-
-
 </div>

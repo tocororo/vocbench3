@@ -1,6 +1,6 @@
 import { Component, forwardRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { UserForm, UserFormField } from "../models/User";
+import { UserForm, UserFormCustomField, UserFormOptionalField } from "../models/User";
 import { UserServices } from "../services/userServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
@@ -13,23 +13,26 @@ import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServ
 })
 export class UserCreateComponent {
 
-    private iriInfoTitle = "This will be used as user identifier inside VocBench. You can specify a personal IRI, " + 
-        "or in alternative, you can use the personal URL as IRI. If you leave it empty the system will provide a default IRI to your account";
+    private iriInfoTitle = "This will be used as user identifier inside VocBench. You can specify a personal IRI";
+    private personalUrlVisible: boolean;
 
     private form: UserForm = new UserForm();
-    private customFields: UserFormField[];
-    private customFieldsRowsIdx: number[];
+    private optionalFields: UserFormOptionalField[];
+    private customFields: UserFormCustomField[];
 
     constructor(private userService: UserServices, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
         this.userService.getUserFormFields().subscribe(
             fields => {
-                this.customFields = fields;
-                this.customFieldsRowsIdx = [];
-                for (let i = 0; i < Math.round(this.customFields.length/2); i++) {
-                    this.customFieldsRowsIdx.push(i);
+                this.optionalFields = fields.optionalFields;
+                this.personalUrlVisible = this.optionalFields.find(f => f.iri == UserFormOptionalField.URL_IRI).visible;
+                if (this.personalUrlVisible) { //if personal URL is visible
+                    this.iriInfoTitle += ", or in alternative, you can use the personal URL as IRI";
                 }
+                this.iriInfoTitle += ". If you leave it empty the system will provide a default IRI to your account";
+
+                this.customFields = fields.customFields;
             }
         );
     }
@@ -38,6 +41,26 @@ export class UserCreateComponent {
         setTimeout(() => {
             this.onModelChange();
         });
+    }
+
+    private getOptionalFieldLabel(field: UserFormOptionalField): string {
+        return UserFormOptionalField.getOptionalFieldLabel(field);
+    }
+    private onOptionalFieldChange(field: UserFormOptionalField) {
+        if (field.iri == UserFormOptionalField.ADDRESS_IRI) {
+            this.form.address = field['value'];
+        } else if (field.iri == UserFormOptionalField.AFFILIATION_IRI) {
+            this.form.affiliation = field['value'];
+        } else if (field.iri == UserFormOptionalField.PHONE_IRI) {
+            this.form.phone = field['value'];
+        } else if (field.iri == UserFormOptionalField.URL_IRI) {
+            this.form.url = field['value'];
+            if (this.form.urlAsIri) {
+                this.form.iri = this.form.url;
+            }
+            
+        }
+        this.onModelChange();
     }
 
     private onUrlAsIriChange() {
@@ -78,6 +101,7 @@ export class UserCreateComponent {
                 this.form[key] = undefined;
             }
         }
+        // console.log("propagate", this.form);
         this.propagateChange(this.form);
     }
 

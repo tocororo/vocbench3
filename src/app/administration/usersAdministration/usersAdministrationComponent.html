@@ -61,70 +61,8 @@
                         </button>
                     </div>
                 </div>
-                <div class="panel-body" style="flex: 1;">
-                    <div *ngIf="selectedUser">
-                        <table class="table table-condensed table-borderless">
-                            <colgroup>
-                                <col style="width: 10%;">
-                                <col style="width: 40%;">
-                                <col style="width: 10%;">
-                                <col style="width: 40%;">
-                            </colgroup>
-                            <tbody>
-                                <tr>
-                                    <td nowrap><label>Given name:</label></td>
-                                    <td><input class="form-control input-sm" [ngModel]="selectedUser.getGivenName()" readonly></td>
-                                    <td nowrap><label>Family name:</label></td>
-                                    <td><input class="form-control input-sm" [ngModel]="selectedUser.getFamilyName()" readonly></td>
-                                </tr>
-                                <tr>
-                                    <td nowrap><label>E-mail:</label></td>
-                                    <td><input class="form-control input-sm" [ngModel]="selectedUser.getEmail()" readonly></td>
-                                    <td nowrap><label>Phone:</label></td>
-                                    <td>
-                                        <input class="form-control input-sm" [ngModel]="selectedUser.getPhone()" readonly>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td nowrap><label>Office address:</label></td>
-                                    <td>
-                                        <input class="form-control input-sm" [ngModel]="selectedUser.getAddress()" readonly>
-                                    </td>
-                                    <td nowrap><label>Affiliation:</label></td>
-                                    <td>
-                                        <input class="form-control input-sm" [ngModel]="selectedUser.getAffiliation()" readonly>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td nowrap><label>Personal Url:</label></td>
-                                    <td>
-                                        <input class="form-control input-sm" [ngModel]="selectedUser.getUrl()" readonly>
-                                    </td>
-                                    <td nowrap><label>Avatar Url:</label></td>
-                                    <td><input class="form-control input-sm" [ngModel]="selectedUser.getAvatarUrl()" readonly></td>
-                                </tr>
-                                <tr>
-                                    <td nowrap><label>Language proficiencies:</label></td>
-                                    <td><input class="form-control input-sm" [ngModel]="selectedUser.getLanguageProficiencies()" readonly></td>
-                                </tr>
-
-                                <tr *ngFor="let i of customFieldsRowsIdx">
-                                    <td nowrap><label>{{customFields[i*2].label}} {{i*2}}:</label></td>
-                                    <td><input type="text" class="form-control input-sm" [ngModel]="selectedUser.getCustomPropertyValue(customFields[i*2].iri)" readonly></td>
-                                    <ng-container *ngIf="customFields[i*2+1]">
-                                        <td nowrap><label>{{customFields[i*2+1].label}} {{i*2+1}}:</label></td>
-                                        <td><input type="text" class="form-control input-sm" [ngModel]="selectedUser.getCustomPropertyValue(customFields[i*2+1].iri)" readonly></td>
-                                    </ng-container>
-                                </tr>
-
-                            </tbody>
-                            <tfoot>
-                                <tr style="padding-top: 5px;">
-                                    <td colspan="5"><label>Registered: </label> {{selectedUser.getRegistrationDate()}}</td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
+                <div class="panel-body vbox">
+                    <user-details *ngIf="selectedUser" [user]="selectedUser" [readonly]="true"></user-details>
                 </div>
                 <div class="panel-footer" *ngIf="selectedUser">
                     <button class="btn btn-default btn-xs" (click)="changePassword()" [disabled]="isChangePwdButtonDisabled()">

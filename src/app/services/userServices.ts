@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { ARTURIResource } from "../models/ARTResources";
-import { User, UserFormField } from "../models/User";
+import { User, UserFormFields } from "../models/User";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager } from "../utils/HttpManager";
@@ -115,8 +115,8 @@ export class UserServices {
      * @param phone
      */
     registerUser(email: string, password: string, givenName: string, familyName: string, iri?: ARTURIResource,
-        address?: string, affiliation?: string, url?: string, avatarUrl?: string, phone?: string, languageProficiencies?: string[],
-        customProperties?: {[iri: string]: string}) {
+        address?: string, affiliation?: string, url?: string, avatarUrl?: string, phone?: string, 
+        languageProficiencies?: string[], customProperties?: {[iri: string]: string}) {
         //customProperties server side is a Map<IRI, String>, so the keys of the customProperties should be serialized as NT IRIs
         let convertedCustomProps: {[iri: string]: string} = {};
         for (let prop in customProperties) {
@@ -402,40 +402,51 @@ export class UserServices {
         return this.httpMgr.doPost(this.serviceName, "resetPassword", params);
     }
 
+    /**
+     * User Form
+     */
 
-    getUserFormFields(): Observable<UserFormField[]> {
+    getUserFormFields(): Observable<UserFormFields> {
         var params: any = {}
         return this.httpMgr.doGet(this.serviceName, "getUserFormFields", params);
     }
 
-    addUserFormField(field: string) {
+    updateUserFormOptionalFieldVisibility(field: ARTURIResource, visibility: boolean) {
+        var params: any = {
+            field: field,
+            visibility: visibility
+        }
+        return this.httpMgr.doPost(this.serviceName, "updateUserFormOptionalFieldVisibility", params);
+    }
+
+    addUserFormCustomField(field: string) {
         var params: any = {
             field: field,
         }
-        return this.httpMgr.doPost(this.serviceName, "addUserFormField", params);
+        return this.httpMgr.doPost(this.serviceName, "addUserFormCustomField", params);
     }
 
-    swapUserFormFields(field1: ARTURIResource, field2: ARTURIResource) {
+    swapUserFormCustomFields(field1: ARTURIResource, field2: ARTURIResource) {
         var params: any = {
             field1: field1,
             field2: field2
         }
-        return this.httpMgr.doPost(this.serviceName, "swapUserFormFields", params);
+        return this.httpMgr.doPost(this.serviceName, "swapUserFormCustomFields", params);
     }
 
-    renameUserFormField(fieldIri: ARTURIResource, newLabel: string) {
+    renameUserFormCustomField(fieldIri: ARTURIResource, newLabel: string) {
         var params: any = {
             fieldIri: fieldIri,
             newLabel: newLabel
         }
-        return this.httpMgr.doPost(this.serviceName, "renameUserFormField", params);
+        return this.httpMgr.doPost(this.serviceName, "renameUserFormCustomField", params);
     }
 
-    removeUserFormField(field: ARTURIResource) {
+    removeUserFormCustomField(field: ARTURIResource) {
         var params: any = {
             field: field,
         }
-        return this.httpMgr.doPost(this.serviceName, "removeUserFormField", params);
+        return this.httpMgr.doPost(this.serviceName, "removeUserFormCustomField", params);
     }
 
 

@@ -10,12 +10,26 @@ import { UserCreateComponent } from '../user/userCreateComponent';
 import { UserMenuComponent } from '../user/userMenuComponent';
 import { UserProfileComponent } from '../user/userProfileComponent';
 import { SharedModule } from './sharedModule';
+import { UserDetailsComponent } from '../user/userDetailsComponent';
 
 @NgModule({
     imports: [CommonModule, FormsModule, RouterModule, SharedModule],
-    declarations: [LoginComponent, RegistrationComponent, UserMenuComponent, UserProfileComponent,
-        UserCreateComponent, ResetPasswordComponent, ChangePasswordModal],
-    exports: [LoginComponent, UserMenuComponent, UserCreateComponent],
+    declarations: [
+        ChangePasswordModal,
+        LoginComponent,
+        RegistrationComponent,
+        ResetPasswordComponent,
+        UserCreateComponent,
+        UserDetailsComponent,
+        UserMenuComponent,
+        UserProfileComponent,
+    ],
+    exports: [
+        LoginComponent,
+        UserCreateComponent,
+        UserDetailsComponent,
+        UserMenuComponent
+    ],
     providers: [],
     entryComponents: [ChangePasswordModal]
 })

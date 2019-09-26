@@ -5,7 +5,14 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 6.1.0-beta.1 (dd-mm-yyyy)
-  * Enabled management of Edoal projects
+  * Enabled management of Edoal projects.
+  * Enabled the possibility to use CustomRange with lexicalization properties.
+  * Improved the "dangling concepts" ICV with the possibility to run the check on all the schemes.
+  * Fixed and improved the Advanced Graph Applications in Sheet2RDF.
+  * Implemented an initial system configuration page available once the first user has been registered.
+  * Enabled customization of optional user fields.
+  * Created a splash screen.
+  * Minor bugfixes and improvements.
 
 # 6.0.1 (01-07-2019)
   * Fixed a bug that prevented the users with project-manager capabilities to access the administration page.

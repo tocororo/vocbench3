@@ -61,7 +61,7 @@
             <div class="panel-body">
 
                 <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 4px;">
-                    Here it is possible to configure the e-mail service of VocBench. This service will be used to send notifications to the
+                    Configuration of the VocBench e-mail service. This service will be used to send notifications to the
                     system administrator and to the users
                     <button class="close" data-dismiss="alert"><span>&times;</span></button>
                 </div>
@@ -180,43 +180,72 @@
 
         <div class="panel panel-default" style="margin-top: 6px;">
             <div class="panel-heading">
-                <label style="flex: 1;">Registration form fields:</label>
-                <div class="btn-toolbar">
-                    <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="moveField('DOWN')" title="Move down" [disabled]="!selectedField || registrationFields.indexOf(selectedField)+1 >= registrationFields.length">
-                            <span class="glyphicon glyphicon-chevron-down"></span>
-                        </button>
-                        <button class="btn btn-default" (click)="moveField('UP')" title="Move up" [disabled]="!selectedField || registrationFields.indexOf(selectedField) == 0">
-                            <span class="glyphicon glyphicon-chevron-up"></span>
-                        </button>
-                        <button class="btn btn-default" (click)="removeField()" title="Remove" [disabled]="!selectedField">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </button>
-                    </div>
-                </div>
+                <label>Registration form fields:</label>
             </div>
             <div class="panel-body">
-                <div class="alert alert-info alert-dismissible alert-multiline" role="alert" style="margin-bottom: 4px;">
-                    Here it is possible to add (and reorder) up to {{fieldsIdx.length}} optional information about the user. These information will be shown
-                    in the user overview and will be also prompted as non-mandatory fields during the user creation/registration.<br>
-                    If a field is removed, any values previously stored for that field will be lost for any user.<br>
-                    If a field is renamed, any values previously stored for that field will be preserved.
-                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
+
+                <div class="subPanel">
+                    <div class="subPanel-heading">
+                        <label style="flex: 1;">Optional fields:</label>
+                    </div>
+                    <div class="subPanel-body">
+                        <div class="alert alert-info alert-dismissible alert-multiline" role="alert" style="margin-bottom: 4px;">
+                            Show or hide optional information about the user. These information will be shown or hidden in the user overview 
+                            and will be also prompted as non-mandatory fields during the user creation/registration.<br>
+                            <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                        </div>
+                        <div *ngFor="let f of optionalFields" class="listItem">
+                            <button class="btn btn-sm btn-default" (click)="updateOptionalFieldVisibility(f)" [ngClass]="{ active: f.visible }" style="margin-right: 4px;">
+                                <span *ngIf="f.visible" class="glyphicon glyphicon-eye-open"></span>
+                                <span *ngIf="!f.visible" class="glyphicon glyphicon-eye-close"></span>
+                            </button>
+                            <input class="form-control input-sm" [ngModel]="getOptionalFieldLabel(f)" readonly>
+                        </div>
+                    </div>
                 </div>
-                <table *ngIf="registrationFields" class="table table-condensed table-borderless">
-                    <colgroup>
-                        <col style="width: 1%;">
-                        <col>
-                    </colgroup>
-                    <tbody>
-                        <tr *ngFor="let idx of fieldsIdx;" (click)="selectField(idx)" [ngClass]="{ active : selectedField && selectedField == registrationFields[idx] }">
-                            <td class="text-center" style="min-width: 30px;"><label>{{idx+1}}</label></td>
-                            <td>
-                                <input-editable [value]="registrationFields[idx]?.label" (valueEdited)="updateField(idx, $event)" [disabled]="idx >= registrationFields.length + 1"></input-editable>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+
+                <div class="subPanel">
+                    <div class="subPanel-heading">
+                        <label style="flex: 1;">Custom fields:</label>
+                        <div class="btn-toolbar">
+                            <div class="btn-group btn-group-xs">
+                                <button class="btn btn-default" (click)="moveCustomField('DOWN')" title="Move down" [disabled]="!selectedCustomField || customFormFields.indexOf(selectedCustomField)+1 >= customFormFields.length">
+                                    <span class="glyphicon glyphicon-chevron-down"></span>
+                                </button>
+                                <button class="btn btn-default" (click)="moveCustomField('UP')" title="Move up" [disabled]="!selectedCustomField || customFormFields.indexOf(selectedCustomField) == 0">
+                                    <span class="glyphicon glyphicon-chevron-up"></span>
+                                </button>
+                                <button class="btn btn-default" (click)="removeCustomField()" title="Remove" [disabled]="!selectedCustomField">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subPanel-body">
+                        <div class="alert alert-info alert-dismissible alert-multiline" role="alert" style="margin-bottom: 4px;">
+                            Add (and reorder) up to {{fieldsIdx.length}} custom information about the user.
+                            These information will be shown in the user overview and will be also prompted as non-mandatory fields during the user creation/registration.<br>
+                            If a field is removed, any values previously stored for that field will be lost for any user.<br>
+                            If a field is renamed, any values previously stored for that field will be preserved.
+                            <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                        </div>
+                        <table *ngIf="customFormFields" class="table table-condensed table-borderless">
+                            <colgroup>
+                                <col style="width: 1%;">
+                                <col>
+                            </colgroup>
+                            <tbody>
+                                <tr *ngFor="let idx of fieldsIdx;" (click)="selectCustomField(idx)" [ngClass]="{ active : selectedCustomField && selectedCustomField == customFormFields[idx] }">
+                                    <td class="text-center" style="min-width: 30px;"><label>{{idx+1}}</label></td>
+                                    <td>
+                                        <input-editable [value]="customFormFields[idx]?.label" (valueEdited)="updateCustomField(idx, $event)" [disabled]="idx >= customFormFields.length + 1"></input-editable>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
         </div>
 

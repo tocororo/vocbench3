@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { User, UserForm, UserFormField, UserStatusEnum } from "../../models/User";
+import { User, UserForm, UserFormCustomField, UserStatusEnum, UserFormOptionalField } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
 import { AuthServices } from "../../services/authServices";
 import { UserServices } from "../../services/userServices";
@@ -46,10 +46,11 @@ export class SystemConfigurationComponent {
 
 
     /* Registration form fields */
-    private registrationFields: UserFormField[];
-    private registrationFieldsPristine: UserFormField[];
+    private optionalFields: UserFormOptionalField[];
     
-    private selectedField: UserFormField;
+    private customFormFields: UserFormCustomField[];
+    private customFormFieldsPristine: UserFormCustomField[];
+    private selectedCustomField: UserFormCustomField;
     private fieldsIdx: number[] = [0,1,2,3];
 
 
@@ -214,18 +215,33 @@ export class SystemConfigurationComponent {
     private initFields() {
         this.userService.getUserFormFields().subscribe(
             fields => {
-                this.registrationFields = fields;
-                this.registrationFieldsPristine = Object.assign({}, this.registrationFields);
-                if (this.selectedField != null) {
-                    this.selectedField = this.registrationFields.find(f => f.iri == this.selectedField.iri);
+                this.optionalFields = fields.optionalFields;
+                this.customFormFields = fields.customFields;
+                this.customFormFieldsPristine = Object.assign({}, this.customFormFields);
+                if (this.selectedCustomField != null) {
+                    this.selectedCustomField = this.customFormFields.find(f => f.iri == this.selectedCustomField.iri);
                 }
             }
         )
     }
 
-    private updateField(index: number, newValue: string) {
-        let oldField = this.registrationFields[index];
-        let duplicatedCustomField: boolean = this.registrationFields.some(f => f.label.toLocaleLowerCase() == newValue.toLocaleLowerCase());
+    private getOptionalFieldLabel(field: UserFormOptionalField): string {
+        return UserFormOptionalField.getOptionalFieldLabel(field);
+    }
+
+    private updateOptionalFieldVisibility(field: UserFormOptionalField) {
+        field.visible = !field.visible;
+        this.userService.updateUserFormOptionalFieldVisibility(new ARTURIResource(field.iri), field.visible).subscribe(
+            () => {
+                this.initFields();
+            }
+        )
+    }
+
+
+    private updateCustomField(index: number, newValue: string) {
+        let oldField = this.customFormFields[index];
+        let duplicatedCustomField: boolean = this.customFormFields.some(f => f.label.toLocaleLowerCase() == newValue.toLocaleLowerCase());
         let duplicatedStandardField: boolean = UserForm.standardFields.some(f => f.toLocaleLowerCase() == newValue.toLocaleLowerCase());
         if (duplicatedCustomField || duplicatedStandardField) {
             let message = "Field '" + newValue + "' already defined";
@@ -235,23 +251,22 @@ export class SystemConfigurationComponent {
             this.basicModals.alert("Duplicated field", message, "warning").then(
                 () => { //restore the old value
                     //temporary replace the .label at the edited index, so that the ngOnChanges will be fired in the input-edit component
-                    this.registrationFields[index] = { iri: null, label: "" };
+                    this.customFormFields[index] = { iri: null, label: "" };
                     this.initFields();
                 }
             );
         } else {
-            // this.registrationFields[index].label = newValue;
             if (oldField != null) {
-                this.userService.renameUserFormField(new ARTURIResource(oldField.iri), newValue).subscribe(
+                this.userService.renameUserFormCustomField(new ARTURIResource(oldField.iri), newValue).subscribe(
                     () => {
                         this.initFields();
                     }
                 );
             } else {
-                this.userService.addUserFormField(newValue).subscribe(
+                this.userService.addUserFormCustomField(newValue).subscribe(
                     () => {
                         this.initFields();
-                        this.selectedField = null;
+                        this.selectedCustomField = null;
                     }
                 );
             }
@@ -259,33 +274,33 @@ export class SystemConfigurationComponent {
     }
 
 
-    private selectField(idx: number) {
-        if (idx < this.registrationFields.length) {
-            this.selectedField = this.registrationFields[idx];
+    private selectCustomField(idx: number) {
+        if (idx < this.customFormFields.length) {
+            this.selectedCustomField = this.customFormFields[idx];
         }
     }
-    private removeField() {
-        this.userService.removeUserFormField(new ARTURIResource(this.selectedField.iri)).subscribe(
+    private removeCustomField() {
+        this.userService.removeUserFormCustomField(new ARTURIResource(this.selectedCustomField.iri)).subscribe(
             () => {
                 this.initFields();
-                this.selectedField = null;
+                this.selectedCustomField = null;
             }
         );
     }
-    private moveField(direction: "UP"|"DOWN") {
-        let idx = this.registrationFields.indexOf(this.selectedField);
-        let fieldIri1: ARTURIResource = new ARTURIResource(this.selectedField.iri);
+    private moveCustomField(direction: "UP"|"DOWN") {
+        let idx = this.customFormFields.indexOf(this.selectedCustomField);
+        let fieldIri1: ARTURIResource = new ARTURIResource(this.selectedCustomField.iri);
         let fieldIri2: ARTURIResource;
         if (direction == "UP" && idx > 0) {
-            fieldIri2 = new ARTURIResource(this.registrationFields[idx-1].iri);
-            this.swapFields(fieldIri1, fieldIri2);
-        } else if (direction == "DOWN" && idx < this.registrationFields.length-1) {
-            fieldIri2 = new ARTURIResource(this.registrationFields[idx+1].iri);
-            this.swapFields(fieldIri1, fieldIri2);
+            fieldIri2 = new ARTURIResource(this.customFormFields[idx-1].iri);
+            this.swapCustomFields(fieldIri1, fieldIri2);
+        } else if (direction == "DOWN" && idx < this.customFormFields.length-1) {
+            fieldIri2 = new ARTURIResource(this.customFormFields[idx+1].iri);
+            this.swapCustomFields(fieldIri1, fieldIri2);
         }
     }
-    private swapFields(field1: ARTURIResource, field2: ARTURIResource) {
-        this.userService.swapUserFormFields(field1, field2).subscribe(
+    private swapCustomFields(field1: ARTURIResource, field2: ARTURIResource) {
+        this.userService.swapUserFormCustomFields(field1, field2).subscribe(
             () => {
                 this.initFields();
             }

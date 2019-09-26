@@ -303,20 +303,27 @@ export enum RoleLevel {
 
 export class UserForm {
 
+    //mandatory
     email: string;
     username: string;
     password: string;
     confirmedPassword: string;
     givenName: string;
     familyName: string;
+
+    //optional (hidable)
     address: string;
     phone: string;
     affiliation: string;
     url: string;
+
+    //optional (always visible)
     avatarUrl: string;
     iri: string;
     urlAsIri: boolean;
     languageProficiencies: string[];
+
+    //custom
     customProperties: { [iri: string]: string } = {};
 
     static emailRegexp = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
@@ -335,7 +342,30 @@ export class UserForm {
     }
 }
 
-export class UserFormField {
+export class UserFormCustomField {
     iri: string;
     label: string;
+}
+export class UserFormOptionalField {
+    iri: string;
+    visible: boolean;
+
+    public static ADDRESS_IRI: string = "http://semanticturkey.uniroma2.it/puvoc#address";
+    public static PHONE_IRI: string = "http://xmlns.com/foaf/0.1/phone";
+    public static AFFILIATION_IRI: string = "http://www.w3.org/ns/org#memberOf";
+    public static URL_IRI: string = "http://semanticturkey.uniroma2.it/puvoc#url";
+
+    public static fieldLabelMap: {iri: string, label: string}[] = [
+        {iri: UserFormOptionalField.ADDRESS_IRI, label: "Office address"},
+        {iri: UserFormOptionalField.PHONE_IRI, label: "Phone"},
+        {iri: UserFormOptionalField.AFFILIATION_IRI, label: "Affiliation"},
+        {iri: UserFormOptionalField.URL_IRI, label: "Personal URL"}
+    ];
+    public static getOptionalFieldLabel(field: UserFormOptionalField): string {
+        return UserFormOptionalField.fieldLabelMap.find(entry => entry.iri == field.iri).label;
+    }
+}
+export class UserFormFields {
+    optionalFields: UserFormOptionalField[];
+    customFields: UserFormCustomField[];
 }

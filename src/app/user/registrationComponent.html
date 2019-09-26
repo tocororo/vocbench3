@@ -1,35 +1,31 @@
-<div class="vbox">
-    
-     <div class="panel panel-default">
-         
+<div class="container vbox" style="flex: initial">
+
+    <div class="panel panel-default vbox" style="flex: initial">
         <div class="panel-heading">
             <label><span class="glyphicon glyphicon-user"></span> User registration:</label>
         </div>
-       
-        <div class="panel-body">
+        <div class="panel-body scrollableContainer">
             <div *ngIf="privacyStatementAvailable" class="alert alert-info" style="margin-bottom: 6px;">
                 Please read our <a [routerLink]="" (click)="downloadPrivacyStatement()" style="font-weight: bold;">privacy statement</a>
             </div>
 
             <div *ngIf="firstAccess" class="alert alert-info" style="margin-bottom: 4px;">
                 VocBench found no registered user. In order to use the platform, you need to create an administrator account by entering
-                personal data and login credentials. A pre-defined user 
+                personal data and login credentials. A pre-defined user
                 (<span style="font-weight: bold;">username:</span> admin@vocbench.com, <span style="font-weight: bold;">password:</span> admin)
                 is available for letting those willing to use VocBench as a simple desktop tool skip the user creation procedure.
                 <button class="btn btn-xs btn-primary" (click)="fillDefaultUser()">Fill pre-defined user</button>
             </div>
             <user-create [(ngModel)]="userForm"></user-create>
         </div>
-        
         <div class="panel-footer">
-            <span class="pull-left">
+            <div class="pull-left">
                 <div><span style="color: red; margin-right: 2px;">* </span>Mandatory field</div>
                 <div><span style="color: red; margin-right: 2px;">** </span>Optional but highly recommended field</div>
-            </span>
+            </div>
             <button type="submit" class="btn btn-default btn-sm pull-right" (click)="submit()">Submit</button>
             <span class="clearfix"></span>
         </div>
-        
     </div>
-    
+
 </div>
