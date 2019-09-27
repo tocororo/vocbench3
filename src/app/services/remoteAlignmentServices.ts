@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTURIResource } from '../models/ARTResources';
-import { GenomaTask } from '../models/Genoma';
+import { RemoteAlignmentTask } from '../models/RemoteAlignment';
 import { MatchingProblem } from '../models/Maple';
 import { Project } from '../models/Project';
 import { HttpManager } from "../utils/HttpManager";
 import { AlignmentOverview } from '../models/Alignment';
 
 @Injectable()
-export class GenomaServices {
+export class RemoteAlignmentServices {
 
-    private serviceName = "GENOMA";
+    private serviceName = "RemoteAlignmentServices";
 
     constructor(private httpMgr: HttpManager) { }
 
-    listTasks(leftDataset: Project, allowReordering: boolean, rightDataset?: Project): Observable<GenomaTask[]> {
+    listTasks(leftDataset: Project, allowReordering: boolean, rightDataset?: Project): Observable<RemoteAlignmentTask[]> {
         var params: any = {
             leftDataset: leftDataset.getName(),
             allowReordering: allowReordering
@@ -24,9 +24,9 @@ export class GenomaServices {
         }
         return this.httpMgr.doGet(this.serviceName, "listTasks", params).map(
             stResp => {
-                let tasks: GenomaTask[] = [];
+                let tasks: RemoteAlignmentTask[] = [];
                 stResp.forEach((result: any) => {
-                    let task: GenomaTask = {
+                    let task: RemoteAlignmentTask = {
                         id: result.id,
                         leftDataset: {
                             projectName: result.leftDataset.projectName,

@@ -14,7 +14,6 @@ import { DatatypesServices } from '../services/datatypesServices';
 import { EdoalServices } from '../services/edoalServices';
 import { ExportServices } from "../services/exportServices";
 import { ExtensionsServices } from "../services/extensionsServices";
-import { GenomaServices } from '../services/genomaServices';
 import { GraphServices } from '../services/graphServices';
 import { HistoryServices } from "../services/historyServices";
 import { IcvServices } from "../services/icvServices";
@@ -31,6 +30,7 @@ import { PreferencesSettingsServices } from "../services/preferencesSettingsServ
 import { ProjectServices } from "../services/projectServices";
 import { PropertyServices } from "../services/propertyServices";
 import { RefactorServices } from "../services/refactorServices";
+import { RemoteAlignmentServices } from '../services/remoteAlignmentServices';
 import { RepositoriesServices } from "../services/repositoriesServices";
 import { ResourcesServices } from "../services/resourcesServices";
 import { ResourceViewServices } from "../services/resourceViewServices";
@@ -65,7 +65,6 @@ import { VersionsServices } from "../services/versionsServices";
         EdoalServices,
         ExportServices,
         ExtensionsServices,
-        GenomaServices,
         GraphServices,
         HistoryServices,
         IcvServices,
@@ -82,6 +81,7 @@ import { VersionsServices } from "../services/versionsServices";
         ProjectServices,
         PropertyServices,
         RefactorServices,
+        RemoteAlignmentServices,
         RepositoriesServices,
         ResourcesServices,
         ResourceViewServices,

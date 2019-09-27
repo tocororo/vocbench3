@@ -2,27 +2,27 @@ import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from 'ngx-modialog';
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { Project } from "../../../models/Project";
-import { GenomaServices } from "../../../services/genomaServices";
 import { MapleServices } from "../../../services/mapleServices";
 import { ProjectServices } from "../../../services/projectServices";
+import { RemoteAlignmentServices } from "../../../services/remoteAlignmentServices";
 import { HttpServiceContext } from "../../../utils/HttpManager";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBContext } from "../../../utils/VBContext";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 
-export class CreateGenomaTaskModalData extends BSModalContext {
+export class CreateRemoteAlignmentTaskModalData extends BSModalContext {
     constructor(public leftProject: Project, public rightProject: Project) {
         super();
     }
 }
 
 @Component({
-    selector: "create-genoma-task-modal",
-    templateUrl: "./createGenomaTaskModal.html",
+    selector: "create-alignment-task-modal",
+    templateUrl: "./createRemoteAlignmentTaskModal.html",
     host: { class: "blockingDivHost" }
 })
-export class CreateGenomaTaskModal implements ModalComponent<CreateGenomaTaskModalData> {
-    context: CreateGenomaTaskModalData;
+export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemoteAlignmentTaskModalData> {
+    context: CreateRemoteAlignmentTaskModalData;
 
     @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
 
@@ -32,8 +32,8 @@ export class CreateGenomaTaskModal implements ModalComponent<CreateGenomaTaskMod
     private leftProjectStruct: AlignedProjectStruct;
     private rightProjectStruct: AlignedProjectStruct;
 
-    constructor(public dialog: DialogRef<CreateGenomaTaskModalData>, private projectService: ProjectServices,
-        private mapleService: MapleServices, private genomaService: GenomaServices, private basicModals: BasicModalServices) {
+    constructor(public dialog: DialogRef<CreateRemoteAlignmentTaskModalData>, private projectService: ProjectServices,
+        private mapleService: MapleServices, private remoteAlignmentService: RemoteAlignmentServices, private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
@@ -107,7 +107,7 @@ export class CreateGenomaTaskModal implements ModalComponent<CreateGenomaTaskMod
     ok() {
         this.mapleService.profileMatchingProblemBetweenProjects(this.leftProjectStruct.project, this.rightProjectStruct.project).subscribe(
             matchingProblem => {
-                this.genomaService.createTask(matchingProblem).subscribe(
+                this.remoteAlignmentService.createTask(matchingProblem).subscribe(
                     taskId => {
                         this.dialog.close(taskId);
                     }

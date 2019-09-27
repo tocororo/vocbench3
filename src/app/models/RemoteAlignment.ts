@@ -1,16 +1,16 @@
 import { ARTURIResource } from "./ARTResources";
 
-export class GenomaTask {
+export class RemoteAlignmentTask {
     id: string;
-    leftDataset: GenomaDataset;
-    rightDataset: GenomaDataset;
+    leftDataset: DatasetInfo;
+    rightDataset: DatasetInfo;
     engine: string;
     status: string;
     startTime: string;
     endTime: string;
 }
 
-export class GenomaDataset {
+export class DatasetInfo {
     projectName: string;
     datasetIRI: ARTURIResource;
     baseURI: string;

@@ -2,33 +2,33 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Modal, OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { AlignmentOverview } from '../../models/Alignment';
-import { GenomaTask } from '../../models/Genoma';
 import { Project } from "../../models/Project";
+import { RemoteAlignmentTask } from '../../models/RemoteAlignment';
 import { EdoalServices } from '../../services/edoalServices';
-import { GenomaServices } from '../../services/genomaServices';
 import { MapleServices } from '../../services/mapleServices';
 import { ProjectServices } from '../../services/projectServices';
+import { RemoteAlignmentServices } from '../../services/remoteAlignmentServices';
 import { HttpServiceContext } from '../../utils/HttpManager';
 import { UIUtils } from '../../utils/UIUtils';
 import { ProjectContext } from '../../utils/VBContext';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { AlignFromSource } from './alignFromSource';
-import { CreateGenomaTaskModal, CreateGenomaTaskModalData } from './alignmentValidationModals/createGenomaTaskModal';
+import { CreateRemoteAlignmentTaskModal, CreateRemoteAlignmentTaskModalData } from './alignmentValidationModals/createRemoteAlignmentTaskModal';
 
 @Component({
-    selector: 'alignment-genoma',
-    templateUrl: './alignFromGenomaComponent.html',
+    selector: 'alignment-remote',
+    templateUrl: './alignFromRemoteSystemComponent.html',
     host: { class: "vbox" }
 })
-export class AlignFromGenomaComponent extends AlignFromSource {
+export class AlignFromRemoteSystemComponent extends AlignFromSource {
 
     @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
 
-    private tasks: GenomaTask[];
-    private selectedTask: GenomaTask;
+    private tasks: RemoteAlignmentTask[];
+    private selectedTask: RemoteAlignmentTask;
 
     constructor(edoalService: EdoalServices, projectService: ProjectServices,
-        private genomaService: GenomaServices, private mapleService: MapleServices, private basicModal: BasicModalServices, private modal: Modal) {
+        private remoteAlignmentService: RemoteAlignmentServices, private mapleService: MapleServices, private basicModal: BasicModalServices, private modal: Modal) {
         super(edoalService, projectService);
     }
 
@@ -39,7 +39,7 @@ export class AlignFromGenomaComponent extends AlignFromSource {
             available => {
                 HttpServiceContext.removeConsumerProject();
                 if (available) {
-                    this.listGenomaTask();
+                    this.listTask();
                 } else {
                     this.basicModal.confirm("Unavailable metadata", "Unable to find metadata about the current project '" + 
                         this.leftProject.getName() +  "', do you want to generate them?").then(
@@ -48,7 +48,7 @@ export class AlignFromGenomaComponent extends AlignFromSource {
                             this.mapleService.profileProject().subscribe(
                                 () => {
                                     UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                                    this.listGenomaTask();
+                                    this.listTask();
                                 }
                             )
                         },
@@ -59,18 +59,18 @@ export class AlignFromGenomaComponent extends AlignFromSource {
         )
     }
 
-    private listGenomaTask() {
+    private listTask() {
         this.tasks = null;
         this.selectedTask = null;
         let allowReordering: boolean = !this.isEdoalProject(); //if project is edoal, allow only task with the exact left-right datasets
-        this.genomaService.listTasks(this.leftProject, allowReordering, this.rightProject).subscribe(
+        this.remoteAlignmentService.listTasks(this.leftProject, allowReordering, this.rightProject).subscribe(
             tasks => {
                 this.tasks = tasks;
             }
         );
     }
 
-    private selectTask(task: GenomaTask) {
+    private selectTask(task: RemoteAlignmentTask) {
         if (this.selectedTask == task) {
             this.selectedTask = null;
         } else {
@@ -81,26 +81,26 @@ export class AlignFromGenomaComponent extends AlignFromSource {
     private createTask() {
         //if it is an edoal project, also the right project is forced to the one set in the edoal
         let rightProject: Project = this.isEdoalProject() ? this.rightProject : null;
-        var modalData = new CreateGenomaTaskModalData(this.leftProject, rightProject);
-        const builder = new BSModalContextBuilder<CreateGenomaTaskModalData>(
-            modalData, undefined, CreateGenomaTaskModalData
+        var modalData = new CreateRemoteAlignmentTaskModalData(this.leftProject, rightProject);
+        const builder = new BSModalContextBuilder<CreateRemoteAlignmentTaskModalData>(
+            modalData, undefined, CreateRemoteAlignmentTaskModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(CreateGenomaTaskModal, overlayConfig).result.then(
+        this.modal.open(CreateRemoteAlignmentTaskModal, overlayConfig).result.then(
             newTaskId => {
-                this.listGenomaTask();
+                this.listTask();
             },
             () => {}
         );
     }
 
     private deleteTask() {
-        this.genomaService.deleteTask(this.selectedTask.id).subscribe(() => {});
+        this.remoteAlignmentService.deleteTask(this.selectedTask.id).subscribe(() => {});
     }
 
-    private fetchAlignment(task: GenomaTask) {
+    private fetchAlignment(task: RemoteAlignmentTask) {
         this.rightProject = new Project(task.rightDataset.projectName);
-        this.genomaService.fetchAlignment(task.id).subscribe(
+        this.remoteAlignmentService.fetchAlignment(task.id).subscribe(
             (overview: AlignmentOverview) => {
                 this.alignmentOverview = overview;
             }

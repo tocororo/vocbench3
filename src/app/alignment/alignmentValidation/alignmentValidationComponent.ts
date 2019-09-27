@@ -10,8 +10,8 @@ import { HttpServiceContext } from '../../utils/HttpManager';
 export class AlignmentValidationComponent {
 
     private sourceFile: string = "File";
-    private sourceGenoma: string = "Genoma task";
-    private alignmentSources: string[] = [this.sourceFile, this.sourceGenoma];
+    private sourceRemoteSystem: string = "Remote Alignment System";
+    private alignmentSources: string[] = [this.sourceFile, this.sourceRemoteSystem];
     private selectedSource: string;
 
     constructor(private alignmentService: AlignmentServices) {}
