@@ -3,7 +3,6 @@ import { ConfigurationComponents } from "../../../models/Configuration";
 import { TransitiveImportMethodAllowance } from "../../../models/Metadata";
 import { ConfigurableExtensionFactory, ExtensionConfigurationStatus, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings, SettingsProp, TransformationStep } from "../../../models/Plugins";
 import { DataFormat } from "../../../models/RDFFormat";
-import { ExportServices } from "../../../services/exportServices";
 import { ExtensionsServices } from "../../../services/extensionsServices";
 import { InputOutputServices } from "../../../services/inputOutputServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
@@ -73,10 +72,10 @@ export class LoadDataComponent {
     ];
     private selectedLoader = this.loaderOptions[0];
 
-    constructor(private inOutService: InputOutputServices, private exportService: ExportServices, private extensionService: ExtensionsServices,
+    constructor(private inOutService: InputOutputServices, private extensionService: ExtensionsServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
 
-    private ngOnInit() {
+    ngOnInit() {
         this.baseURI = VBContext.getWorkingProject().getBaseURI();
         this.validateImplicitly = this.isValidationAuthorized();
 

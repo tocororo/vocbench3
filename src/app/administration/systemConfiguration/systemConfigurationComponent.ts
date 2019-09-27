@@ -1,13 +1,13 @@
 import { Component } from "@angular/core";
-import { User, UserForm, UserFormCustomField, UserStatusEnum, UserFormOptionalField } from "../../models/User";
+import { ARTURIResource } from "../../models/ARTResources";
+import { UserForm, UserFormCustomField, UserFormOptionalField } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
-import { AuthServices } from "../../services/authServices";
 import { UserServices } from "../../services/userServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { ARTURIResource } from "../../models/ARTResources";
+import { Router } from "@angular/router";
 
 @Component({
     selector: "sys-config-component",
@@ -16,12 +16,7 @@ import { ARTURIResource } from "../../models/ARTResources";
 })
 export class SystemConfigurationComponent {
 
-    /* Administrator management */
-    private adminMail: string;
-    private pristineAdminMail: string;
-
-    private users: User[];
-
+    private isInitialConfiguration: boolean; //tells if the component is shown in the initial system configuration (after 1st user registration)
 
     /* SemanticTurkeyData folder */
     private stDataFolder: string;
@@ -58,29 +53,14 @@ export class SystemConfigurationComponent {
     private expFeatEnabled: boolean = false;
 
 
-    constructor(private adminService: AdministrationServices, private userService: UserServices, private authService: AuthServices, 
-        private vbProp: VBProperties, private basicModals: BasicModalServices) {}
+    constructor(private adminService: AdministrationServices, private userService: UserServices,
+        private vbProp: VBProperties, private basicModals: BasicModalServices, private router: Router) {}
 
     ngOnInit() {
-        this.userService.listUsers().subscribe(
-            users => {
-                this.users = [];
-                users.forEach((u: User) => { //only active user can be set as admin
-                    if (u.getStatus() == UserStatusEnum.ACTIVE) {
-                        this.users.push(u);
-                    }
-                });
-            }
-        )
-        this.initAdminConfig();
+        this.isInitialConfiguration = this.router.url == "/Sysconfig";
 
+        this.initAdminConfig();
         this.initFields();
-        this.adminService.getDataDir().subscribe(
-            path => {
-                this.stDataFolder = path;
-                this.stDataFolderPristine = path;
-            }
-        )
     }
 
     private initAdminConfig() {
@@ -106,31 +86,15 @@ export class SystemConfigurationComponent {
                     this.cryptoProtocol = "TLS";
                 }
 
-                this.adminMail = conf.adminAddress;
-                this.pristineAdminMail = conf.adminAddress;
+                // this.adminMail = conf.adminAddress;
+                // this.pristineAdminMail = conf.adminAddress;
+
+                this.stDataFolder = conf.stDataDir;
+                this.stDataFolderPristine = conf.stDataDir;
+
             }
         );
         this.expFeatEnabled = this.vbProp.getExperimentalFeaturesEnabled();
-    }
-
-    /* ============================
-     * Administrator managment
-     * ============================ */
-
-    private updateAdmin() {
-        this.basicModals.confirm("Update configuration", "You are changing the administrator of Vocbench. " + 
-            "If you confirm you'll be logged out. Are you sure to continue?", "warning").then(
-            result => {
-                this.adminService.updateAdministrator(this.adminMail).subscribe(
-                    stResp => {
-                        this.authService.logout().subscribe();
-                    }
-                );
-            },
-            () => {
-                this.adminMail = this.pristineAdminMail;
-            }
-        );
     }
 
     /* ============================
@@ -314,6 +278,12 @@ export class SystemConfigurationComponent {
 
     private onExpFeatEnabledChanged() {
         this.vbProp.setExperimentalFeaturesEnabled(this.expFeatEnabled);
+    }
+
+
+
+    ok() {
+        this.router.navigate(['/Projects']);
     }
 
 }

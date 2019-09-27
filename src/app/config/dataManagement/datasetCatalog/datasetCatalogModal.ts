@@ -6,6 +6,7 @@ import { ExtensionFactory, ExtensionPointID } from "../../../models/Plugins";
 import { DatasetCatalogsServices } from "../../../services/datasetCatalogsServices";
 import { ExtensionsServices } from "../../../services/extensionsServices";
 import { DataDumpSelectorModalData, DataDumpSelectorModal } from "./dataDumpSelectorModal";
+import { UIUtils } from "../../../utils/UIUtils";
 
 export class DatasetCatalogModalData extends BSModalContext {
     constructor() {
@@ -30,7 +31,7 @@ export class DatasetCatalogModalData extends BSModalContext {
 export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalData> {
     context: DatasetCatalogModalData;
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv') private blockingDivElement: ElementRef;
 
     private extensions: ExtensionFactory[];
     private selectedExtension: ExtensionFactory;
@@ -88,8 +89,10 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
                 facets[facetName] = items;
             }
         }
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.metadataRepositoryService.searchDataset(this.selectedExtension.id, this.lastQuery, facets, this.page).subscribe(
             (results: SearchResultsPage<DatasetSearchResult>) => {
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 this.searchDatasetResult = results;
                 this.selectedDatasetDescription = null;
                 this.totPage = Math.floor(this.searchDatasetResult.totalResults/this.searchDatasetResult.pageSize);

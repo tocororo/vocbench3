@@ -23,13 +23,24 @@ export class AdministrationServices {
 
     /**
      * 
-     * @param adminEmailAddress 
+     * @param email 
      */
-    updateAdministrator(adminEmailAddress: string) {
+    setAdministrator(email: string) {
         var params: any = {
-            adminEmailAddress: adminEmailAddress,
+            email: email,
         }
-        return this.httpMgr.doPost(this.serviceName, "updateAdministrator", params);
+        return this.httpMgr.doPost(this.serviceName, "setAdministrator", params);
+    }
+
+    /**
+     * 
+     * @param email 
+     */
+    removeAdministrator(email: string) {
+        var params: any = {
+            email: email,
+        }
+        return this.httpMgr.doPost(this.serviceName, "removeAdministrator", params);
     }
 
     /**
@@ -305,11 +316,6 @@ export class AdministrationServices {
         );
     }
 
-
-    getDataDir(): Observable<string> {
-        var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getDataDir", params);
-    }
 
     setDataDir(path: string): Observable<string> {
         var params: any = {

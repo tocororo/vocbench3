@@ -33,14 +33,12 @@
                         <ng-template ngFor let-u [ngForOf]="users">
                             <div *ngIf="isUserVisible(u)" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
                                 <span style="flex: 1">{{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span></span>
-                                <span *ngIf="u.getStatus() == 'NEW'; else notNewBlock" class="glyphicon glyphicon-exclamation-sign"
-                                    style="color: red" title="New registered user"></span>
-                                <ng-template #notNewBlock>
-                                    <span *ngIf="u.isOnline()" class="glyphicon glyphicon-user"
-                                        style="color: green" title="Online"></span>
-                                    <span *ngIf="!u.isOnline()" class="glyphicon glyphicon-user"
-                                        style="color: lightgray" title="Offine"></span>
-                                </ng-template>
+                                <span *ngIf="u.isAdmin()" class="glyphicon glyphicon-wrench" style="color: gray; margin-right: 2px;" title="Administrator"></span>
+                                <span *ngIf="u.getStatus() == 'NEW'" class="glyphicon glyphicon-exclamation-sign inactive" title="New"></span>
+                                <span *ngIf="u.getStatus() == 'INACTIVE'" class="glyphicon glyphicon-ban-circle inactive" title="Inactive"></span>
+                                <span *ngIf="u.getStatus() == 'ACTIVE'" class="glyphicon glyphicon-user" 
+                                    [ngClass]="{ online: u.isOnline(), offline: !u.isOnline()}" [title]="u.isOnline() ? 'Online' : 'Offline'">
+                                </span>
                             </div>
                         </ng-template>
                     </div>
@@ -50,15 +48,22 @@
             <div class="panel panel-default vbox" style="flex: 5; margin-left: 5px;">
                 <div class="panel-heading">
                     <label style="flex: 1;">User Details:</label>
-                    <div *ngIf="selectedUser" class="btn-group btn-group-xs" role="group">
-                        <button type="button" class="btn btn-default" (click)="enableDisableUser()"
-                            [ngClass]="{'active green': isUserActive(selectedUser)}" [disabled]="isChangeStatusButtonDisabled()">
-                            Active
+                    <div *ngIf="selectedUser" class="btn-toolbar">
+                        <button type="button" class="btn btn-xs btn-default" (click)="changeAdministratorStatus()"
+                            [ngClass]="{'active online': selectedUser.isAdmin()}" [disabled]="isChangeAdminButtonDisabled()"
+                            [title]="selectedUser.isAdmin() ? 'Revoke administrator authority' : 'Grant administrator authority'">
+                            Administrator
                         </button>
-                        <button type="button" class="btn btn-default" (click)="enableDisableUser()"
-                            [ngClass]="{'active red': !isUserActive(selectedUser)}" [disabled]="isChangeStatusButtonDisabled()">
-                            Inactive
-                        </button>
+                        <div class="btn-group btn-group-xs" role="group">
+                            <button type="button" class="btn btn-default" (click)="changeUserStatus()"
+                                [ngClass]="{'active': isUserActive(selectedUser)}" style="color: green" [disabled]="isChangeStatusButtonDisabled()">
+                                Active
+                            </button>
+                            <button type="button" class="btn btn-default" (click)="changeUserStatus()"
+                                [ngClass]="{'active': !isUserActive(selectedUser)}" style="color: red" [disabled]="isChangeStatusButtonDisabled()">
+                                Inactive
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="panel-body vbox">

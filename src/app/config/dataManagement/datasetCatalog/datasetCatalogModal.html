@@ -41,7 +41,7 @@
             <div class="panel-body hbox">
                 <div class="vbox scrollableContainer">
                     <div *ngIf="searchDatasetResult?.totalResults == 0" class="searchDatasetResult">No results found</div>
-                    <ng-container *ngFor="let d of searchDatasetResult?.content">
+                    <div *ngFor="let d of searchDatasetResult?.content">
                         <div class="listItem searchDatasetResult" [ngClass]="{active: d == selectedDataset}" (click)="selectDataset(d)">
                             <div style="font-size: 13px">
                                 <label>{{d.id}}</label>
@@ -53,7 +53,7 @@
                                 <span style="font-size: 12px">{{d.getPreferredDescription().toNT()}}</span>
                             </div>
                         </div>
-                    </ng-container>
+                    </div>
                 </div>
                 <div *ngIf="searchDatasetResult?.facetAggregations" class="vbox scrollableContainer" style="flex: initial;">
                     <div *ngFor="let facetAggregation of searchDatasetResult.facetAggregations" class="subPanel">

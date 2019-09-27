@@ -5,7 +5,6 @@ import { User } from "../../models/User";
 import { AuthServices } from "../../services/authServices";
 import { UserServices } from "../../services/userServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { VBContext } from "../../utils/VBContext";
 
 export class ForcePasswordModalData extends BSModalContext {
     constructor(public user: User) {

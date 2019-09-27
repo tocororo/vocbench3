@@ -1,7 +1,8 @@
 import { Component } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { User, UserFormCustomField, UserStatusEnum, UserFormFields } from "../../models/User";
+import { User, UserFormFields, UserStatusEnum } from "../../models/User";
+import { AdministrationServices } from "../../services/administrationServices";
 import { UserServices } from "../../services/userServices";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
@@ -12,7 +13,11 @@ import { UserCreateModal, UserCreateModalData } from "./userCreateModal";
     selector: "users-admin-component",
     templateUrl: "./usersAdministrationComponent.html",
     host: { class: "pageComponent" },
-    styles: ['.green { color: green; font-weight: bold; } .red { color: red; font-weight: bold; }']
+    styles: [`
+        .online { color: green; font-weight: bold; } 
+        .inactive { color: red; font-weight: bold; }
+        .offline { color: lightgray }
+    `]
 })
 export class UsersAdministrationComponent {
 
@@ -25,7 +30,8 @@ export class UsersAdministrationComponent {
     private showInactive: boolean = true;
     private showNew: boolean = true;
 
-    constructor(private userService: UserServices, private basicModals: BasicModalServices, private modal: Modal) { }
+    constructor(private userService: UserServices, private administrationServices: AdministrationServices,
+        private basicModals: BasicModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.initUserList();
@@ -71,9 +77,12 @@ export class UsersAdministrationComponent {
      * Based on filters "enabled" "disabled" "new" tells whether the user should be visible.
      */
     private isUserVisible(user: User): boolean {
-        return ((user.getStatus() == UserStatusEnum.ACTIVE && this.showActive) ||
-            (user.getStatus() == UserStatusEnum.INACTIVE && this.showInactive) ||
-            (user.getStatus() == UserStatusEnum.NEW && this.showNew));
+        let status = user.getStatus();
+        return (
+            (this.showActive && status == UserStatusEnum.ACTIVE) ||
+            (this.showInactive && status == UserStatusEnum.INACTIVE) ||
+            (this.showNew && status == UserStatusEnum.NEW)
+        );
     }
 
     /**
@@ -87,11 +96,16 @@ export class UsersAdministrationComponent {
     }
 
     private isChangeStatusButtonDisabled() {
-        //user cannot change status of himself
-        return VBContext.getLoggedUser().getEmail() == this.selectedUser.getEmail();
+        //user cannot change status to himself or to an administrator user
+        return VBContext.getLoggedUser().getEmail() == this.selectedUser.getEmail() || this.selectedUser.isAdmin();
     }
 
-    private enableDisableUser() {
+    private changeUserStatus() {
+        if (this.selectedUser.isAdmin()) { //check performed for robustness, this should never happen since it is forbidden by the UI
+            this.basicModals.alert("Change user status", "Cannot change the status of an administrator. " + 
+                "Please revoke the administrator authority first and retry", "warning");
+            return;
+        }
         var enabled = this.selectedUser.getStatus() == UserStatusEnum.ACTIVE;
         if (enabled) {
             this.userService.enableUser(this.selectedUser.getEmail(), false).subscribe(
@@ -105,6 +119,51 @@ export class UsersAdministrationComponent {
                     this.selectedUser.setStatus(UserStatusEnum.ACTIVE);
                 }
             )
+        }
+    }
+
+    private isChangeAdminButtonDisabled() {
+        //cannot change the admin status to the same logged user and to non-active user
+        return VBContext.getLoggedUser().getEmail() == this.selectedUser.getEmail() || this.selectedUser.getStatus() != UserStatusEnum.ACTIVE;
+    }
+
+    private changeAdministratorStatus() {
+        if (this.selectedUser.isAdmin()) { //revoke administator
+            //check if there is another admin
+            let adminCount = 0;
+            this.users.forEach(u => {
+                if (u.isAdmin()) adminCount++;
+            });
+            if (adminCount < 2) {
+                this.basicModals.alert("Revoke administrator", "Cannot revoke the administrator authority to the selected user. There is only one administrator", "warning");
+                return;
+            } else {
+                this.basicModals.confirm("Revoke administrator", "You are revoking the administrator authority to " + this.selectedUser.getShow() + ". Are you sure?", "warning").then(
+                    confirm => {
+                        this.administrationServices.removeAdministrator(this.selectedUser.getEmail()).subscribe(
+                            user => {
+                                this.selectedUser.setAdmin(false);
+                            }
+                        );
+                    }, 
+                    cancel => {}
+                );
+            }
+            
+        } else { //assign administrator
+            if (this.selectedUser.getStatus() != UserStatusEnum.ACTIVE) { //only active user can be administator
+                this.basicModals.alert("Add administrator", "Cannot grant the administrator authority to a non-active user. Please, activate the user and retry", "warning");
+                return;
+            }
+            this.basicModals.confirm("Revoke administrator", "You are granting the administrator authority to " + this.selectedUser.getShow() + ". Are you sure?", "warning").then(
+                confirm => {
+                    this.administrationServices.setAdministrator(this.selectedUser.getEmail()).subscribe(
+                        user => {
+                            this.selectedUser.setAdmin(true);
+                        }
+                    );
+                }
+            );
         }
     }
 
