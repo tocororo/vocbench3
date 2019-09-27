@@ -8,7 +8,7 @@
     <div class="panel panel-default vbox">
         <div class="panel-body vbox scrollableContainer">
 
-            <!-- STData directory -->
+            <!-- Misc setting -->
             <div class="panel panel-default">
                 <div class="panel-body">
                     <table class="table table-condensed table-borderless">
@@ -31,6 +31,28 @@
                                     <div class="hbox" style="align-items: center;">
                                         <input class="form-control input-sm" style="margin-right: 4px;" [(ngModel)]="stDataFolder">
                                         <button class="btn btn-default btn-sm" (click)="updateDataFolder()" [disabled]="stDataFolder == stDataFolderPristine">
+                                            Update
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <span class="glyphicon glyphicon-info-sign"
+                                        title="Tells the threshold file size (in bytes) admitted by the preload profiler during the project creation (if unspecified, or 0, the default size is 1048576 bytes (1 megabyte).">
+                                    </span>
+                                </td>
+                                <td nowrap>
+                                    <label>Preload profiler threshold:</label>
+                                </td>
+                                <td>
+                                    <div class="hbox" style="align-items: center;">
+                                        <div class="input-group input-group-sm" style="flex: 1; margin-right: 4px;">
+                                            <input type="number" class="form-control" [(ngModel)]="profilerThreshold" min="0" step="1">
+                                            <span class="input-group-addon">bytes</span>
+                                        </div>
+                                        <button class="btn btn-default btn-sm" (click)="updateProfilerThreshold()" [disabled]="profilerThreshold == profilerThresholdPristine">
                                             Update
                                         </button>
                                     </div>

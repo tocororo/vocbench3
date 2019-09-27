@@ -321,7 +321,14 @@ export class AdministrationServices {
         var params: any = {
             path: path
         };
-        return this.httpMgr.doGet(this.serviceName, "setDataDir", params);
+        return this.httpMgr.doPost(this.serviceName, "setDataDir", params);
+    }
+
+    setPreloadProfilerThreshold(threshold: number) {
+        var params: any = {
+            threshold: threshold
+        };
+        return this.httpMgr.doPost(this.serviceName, "setPreloadProfilerThreshold", params);
     }
 
 

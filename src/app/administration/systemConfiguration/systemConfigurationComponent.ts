@@ -22,6 +22,9 @@ export class SystemConfigurationComponent {
     private stDataFolder: string;
     private stDataFolderPristine: string;
 
+    private profilerThreshold: number;
+    private profilerThresholdPristine: number;
+
 
     /* E-mail configuration */
 
@@ -86,19 +89,18 @@ export class SystemConfigurationComponent {
                     this.cryptoProtocol = "TLS";
                 }
 
-                // this.adminMail = conf.adminAddress;
-                // this.pristineAdminMail = conf.adminAddress;
-
                 this.stDataFolder = conf.stDataDir;
                 this.stDataFolderPristine = conf.stDataDir;
 
+                this.profilerThreshold = conf.preloadProfilerTreshold;
+                this.profilerThresholdPristine = conf.preloadProfilerTreshold;
             }
         );
         this.expFeatEnabled = this.vbProp.getExperimentalFeaturesEnabled();
     }
 
     /* ============================
-     * STData directory managment
+     * Misc settings management (STData directory, profiler threshold...)
      * ============================ */
 
     private updateDataFolder() {
@@ -108,6 +110,15 @@ export class SystemConfigurationComponent {
                 this.stDataFolderPristine = this.stDataFolder;
             }
         );
+    }
+
+    private updateProfilerThreshold() {
+        this.adminService.setPreloadProfilerThreshold(this.profilerThreshold).subscribe(
+            () => {
+                this.basicModals.alert("Update configuration", "Preload profiler threshold updated");
+                this.profilerThresholdPristine = this.profilerThreshold;
+            }
+        )
     }
 
     /* ============================
