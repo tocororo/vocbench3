@@ -8,32 +8,32 @@
         <div class="panel panel-default vbox" style="flex: 2;">
             <div class="panel-body vbox">
                 <div class="table-responsive" style="flex: 1;">
-                    <table class="table table-condensed table-borderless">
+                    <table class="table table-condensed">
                         <tbody>
                             <tr>
-                                <td><label>ID</label></td>
+                                <td style="vertical-align: top;"><label>ID</label></td>
                                 <td>{{dataset.id}}</td>
                             </tr>
                             <tr>
-                                <td><label>Title</label></td>
+                                <td style="vertical-align: top;"><label>Title</label></td>
                                 <td>
-                                    <span *ngFor="let t of dataset.titles">{{t.getValue()}} @{{t.getLang()}}</span>
+                                    <div *ngFor="let t of dataset.titles" style="margin-bottom: 4px;">{{t.getValue()}} @{{t.getLang()}}</div>
                                 </td>
                             </tr>
                             <tr>
-                                <td><label>Description</label></td>
+                                <td style="vertical-align: top;"><label>Description</label></td>
                                 <td>
-                                    <span *ngFor="let d of dataset.descriptions">
+                                    <div *ngFor="let d of dataset.descriptions" style="margin-bottom: 4px;">
                                         {{d.getValue()}} @{{d.getLang()}}
-                                    </span>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap><label>Dataset page</label></td>
+                                <td style="vertical-align: top;" nowrap><label>Dataset page</label></td>
                                 <td><a [href]="dataset.datasetPage" target="_blank">{{dataset.datasetPage}}</a></td>
                             </tr>
                             <tr>
-                                <td nowrap><label>Ontology IRI</label></td>
+                                <td style="vertical-align: top;" nowrap><label>Ontology IRI</label></td>
                                 <td>
                                     <a *ngIf="dataset.ontologyIRI" [href]="dataset.ontologyIRI.getURI()" target="_blank">
                                         {{dataset.ontologyIRI.getURI()}}
@@ -41,27 +41,27 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap><label>Data dumps</label></td>
+                                <td style="vertical-align: top;" nowrap><label>Data dumps</label></td>
                                 <td>
-                                    <div *ngFor="let dump of dataset.dataDumps">
+                                    <div *ngFor="let dump of dataset.dataDumps" style="margin-bottom: 4px;">
                                         <a [href]="dump.accessURL" target="_blank" [title]="dump.getPreferredTitle()?.toNT()">{{dump.accessURL}}</a>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td nowrap><label>URI prefix</label></td>
+                                <td style="vertical-align: top;" nowrap><label>URI prefix</label></td>
                                 <td>{{dataset.uriPrefix}}</td>
                             </tr>
                             <tr>
-                                <td nowrap><label>SPARQL Endpoint</label></td>
+                                <td style="vertical-align: top;" nowrap><label>SPARQL Endpoint</label></td>
                                 <td>{{dataset.sparqlEndpoint}}</td>
                             </tr>
                             <tr>
-                                <td><label>Model</label></td>
+                                <td style="vertical-align: top;"><label>Model</label></td>
                                 <td>{{dataset.model}}</td>
                             </tr>
                             <tr>
-                                <td nowrap><label>Lexicalization Model</label></td>
+                                <td style="vertical-align: top;" nowrap><label>Lexicalization Model</label></td>
                                 <td>{{dataset.lexicalizationModel}}</td>
                             </tr>
                         </tbody>
@@ -70,7 +70,7 @@
             </div>
         </div>
 
-        <div *ngIf="getFacetsKeys().length != 0" class="vbox scrollableContainer" style="padding: 0px; margin-left: 2px; max-width: 200px;">
+        <div *ngIf="getFacetsKeys().length != 0" class="vbox scrollableContainer" style="padding: 0px; margin-left: 4px; max-width: 200px;">
             <div *ngFor="let key of getFacetsKeys()" class="subPanel vbox">
                 <div class="subPanel-heading"><label>{{key}}</label></div>
                 <div class="subPanel-body scrollableContainer" style="flex: 1;">

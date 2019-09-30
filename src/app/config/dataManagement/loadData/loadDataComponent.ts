@@ -1,6 +1,6 @@
 import { Component, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { ConfigurationComponents } from "../../../models/Configuration";
-import { TransitiveImportMethodAllowance } from "../../../models/Metadata";
+import { DownloadDescription, TransitiveImportMethodAllowance } from "../../../models/Metadata";
 import { ConfigurableExtensionFactory, ExtensionConfigurationStatus, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings, SettingsProp, TransformationStep } from "../../../models/Plugins";
 import { DataFormat } from "../../../models/RDFFormat";
 import { ExtensionsServices } from "../../../services/extensionsServices";
@@ -13,6 +13,7 @@ import { ExtensionConfiguratorComponent } from "../../../widget/extensionConfigu
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { LoadConfigurationModalReturnData } from "../../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
+import { DatasetCatalogModalReturnData } from "../datasetCatalog/datasetCatalogModal";
 
 @Component({
     selector: "load-data-component",
@@ -50,7 +51,7 @@ export class LoadDataComponent {
     //loaders
     private repoTargetLoaders: ConfigurableExtensionFactory[];
     private streamTargetLoaders: ConfigurableExtensionFactory[];
-    private selectedLoaderExtension: ExtensionFactory;
+    private selectedLoaderExtension: ConfigurableExtensionFactory;
     private selectedLoaderConfig: Settings;
 
     private loaderStatus: ExtensionConfigurationStatus;
@@ -65,8 +66,13 @@ export class LoadDataComponent {
     private selectedInputFormat: DataFormat;
     private filePickerAccept: string;
 
+    //dataset catalog
+    private dataDumpUrl: string;
+
+
     private loaderOptions: { label: string, target: LoaderTarget }[] = [
         { label: "File", target: null },
+        { label: "Dataset Catalog", target: LoaderTarget.datasetCatalog },
         { label: "Triple store", target: LoaderTarget.repository },
         { label: "Custom source", target: LoaderTarget.stream }
     ];
@@ -128,6 +134,97 @@ export class LoadDataComponent {
         );
     }
 
+    /** =====================================
+     * =========== DATASET CATALOG =============
+     * =====================================*/
+
+    loadFromDatasetCatalog() {
+        this.sharedModals.datasetCatalog().then(
+            (data: DatasetCatalogModalReturnData) => {
+                let dataDump: DownloadDescription = data.dataDump;
+                this.dataDumpUrl = dataDump.accessURL;
+                let mimeType = dataDump.mimeType;
+                if (mimeType != null) {
+                    this.selectedInputFormat = this.inputFormats.find(f => f.defaultMimeType == mimeType);
+                } else {
+                    this.selectedInputFormat = null;
+                    this.inOutService.getParserFormatForFileName(this.dataDumpUrl).subscribe(
+                        format => {
+                            this.selectedInputFormat = this.inputFormats.find(f => f.name == format);
+                        }
+                    )
+                }
+                /**
+                 * When using the dataset catalog, in order to load data, it needs to use:
+                 * - the loader HTTPLoader
+                 * - the lifter RDFDeserializingLifter
+                 */
+                //force the loader to HttpLoader
+                this.selectedLoaderExtension = this.streamTargetLoaders.find(l => l.id == "it.uniroma2.art.semanticturkey.extension.impl.loader.http.HTTPLoader");
+                //set the accessURL of the dataDump as loader endpoint in the configuration
+                this.selectedLoaderConfig = this.selectedLoaderExtension.configurations.find(c => c.type == "it.uniroma2.art.semanticturkey.extension.impl.loader.http.HTTPLoaderConfiguration");
+                let endpointProp: SettingsProp = this.selectedLoaderConfig.properties.find(p => p.name == "endpoint");
+                endpointProp.value = this.dataDumpUrl;
+                //force the lifter to RDFDeserializingLifter
+                this.selectedLifterExtension = this.lifters.find(l => l.id == "it.uniroma2.art.semanticturkey.extension.impl.rdflifter.rdfdeserializer.RDFDeserializingLifter");
+            }
+        );
+    }
+
+    /** =====================================
+     * Lifter
+     * =====================================*/
+
+    private onLifterExtensionUpdated(ext: ExtensionFactory) {
+        this.selectedLifterExtension = ext;
+        //input output getSupportedFormats
+        this.inOutService.getSupportedFormats(this.selectedLifterExtension.id).subscribe(
+            formats => {
+                this.inputFormats = formats;
+                let extList: string[] = []; //collects the extensions of the formats in order to provide them to the file picker
+                //set rdf/xml format as default
+                let rdfIdx: number = 0;
+                for (var i = 0; i < this.inputFormats.length; i++) {
+                    extList.push("."+this.inputFormats[i].defaultFileExtension);
+                    if (this.inputFormats[i].name == "RDF/XML") {
+                        rdfIdx = i;
+                    }
+                }
+                this.selectedInputFormat = this.inputFormats[rdfIdx];
+                //remove duplicated extensions
+                extList = extList.filter((item: string, pos: number) => {
+                    return extList.indexOf(item) == pos;
+                });
+                this.filePickerAccept = extList.join(",");
+            }
+        )
+    }
+
+    /** =====================================
+     * Loader
+     * =====================================*/
+
+
+    /**
+     * Loader is available only when "Triple store" or "Custom source" are selected as "Load from", so when the target is
+     * repository or stream.
+     */
+    private showLoader(): boolean {
+        return this.selectedLoader.target == LoaderTarget.repository || this.selectedLoader.target == LoaderTarget.stream
+    }
+    
+    private onLoaderConfigStatusUpdated(statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
+        this.loaderStatus = statusEvent.status;
+        this.loaderRelativeRef = statusEvent.relativeReference;
+    }
+
+    private requireConfigurationLoader() {
+        if (this.selectedLoaderConfig != null) {
+            return this.selectedLoaderConfig.requireConfiguration();
+        }
+        return false;
+    }
+
 
     /** =====================================
      * =========== FILTER CHAIN =============
@@ -184,51 +281,6 @@ export class LoadDataComponent {
         var conf: Settings = filterChainEl.selectedConfiguration;
         if (conf != null && conf.requireConfiguration()) { //!= null required because selectedConfiguration could be not yet initialized
             return true;
-        }
-        return false;
-    }
-
-    /** =====================================
-     * Lifter
-     * =====================================*/
-
-    private onLifterExtensionUpdated(ext: ExtensionFactory) {
-        this.selectedLifterExtension = ext;
-        //input output getSupportedFormats
-        this.inOutService.getSupportedFormats(this.selectedLifterExtension.id).subscribe(
-            formats => {
-                this.inputFormats = formats;
-                let extList: string[] = []; //collects the extensions of the formats in order to provide them to the file picker
-                //set rdf/xml format as default
-                let rdfIdx: number = 0;
-                for (var i = 0; i < this.inputFormats.length; i++) {
-                    extList.push("."+this.inputFormats[i].defaultFileExtension);
-                    if (this.inputFormats[i].name == "RDF/XML") {
-                        rdfIdx = i;
-                    }
-                }
-                this.selectedInputFormat = this.inputFormats[rdfIdx];
-                //remove duplicated extensions
-                extList = extList.filter((item: string, pos: number) => {
-                    return extList.indexOf(item) == pos;
-                });
-                this.filePickerAccept = extList.join(",");
-            }
-        )
-    }
-
-    /** =====================================
-     * Loader
-     * =====================================*/
-    
-    private onLoaderConfigStatusUpdated(statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
-        this.loaderStatus = statusEvent.status;
-        this.loaderRelativeRef = statusEvent.relativeReference;
-    }
-
-    private requireConfigurationLoader() {
-        if (this.selectedLoaderConfig != null) {
-            return this.selectedLoaderConfig.requireConfiguration();
         }
         return false;
     }
@@ -404,8 +456,13 @@ export class LoadDataComponent {
             inputFilePar = this.fileToUpload;
         }
         
-        //formatPar and rdfLifterSpec collected only if loader target is stream (custom source) or null (load from file)
-        if (this.selectedLoader.target == null || this.selectedLoader.target == LoaderTarget.stream) {
+        /**
+         * formatPar and rdfLifterSpec collected if loader target is
+         * - stream (custom source)
+         * - null (load from file)
+         * - dataset catalog (even if for the latter is not show in the UI)
+         */
+        if (this.selectedLoader.target == null || this.selectedLoader.target == LoaderTarget.stream || this.selectedLoader.target == LoaderTarget.datasetCatalog) {
             formatPar = this.selectedInputFormat.name;
             //rdfLifterSpec
             rdfLifterSpec = {
@@ -421,7 +478,12 @@ export class LoadDataComponent {
             }
         }
 
-        //loaderSpec collected only if a loader target is specified
+        /**
+         * loaderSpec collected if loader target is: 
+         * - stream (custom source)
+         * - repository (triple store)
+         * - dataset catalog (even if for the latter is not show in the UI)
+         */
         if (this.selectedLoader.target != null) {
             loaderSpec = {
                 factoryId: this.selectedLoaderExtension.id,
@@ -487,5 +549,6 @@ class TransformerChainElement {
 
 enum LoaderTarget {
     stream = "stream",
-    repository = "repository"
+    repository = "repository",
+    datasetCatalog = "datasetCatalog" //added for load from dataset catalog
 }

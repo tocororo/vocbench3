@@ -61,7 +61,7 @@ export class InputOutputServices {
      * Tries to match the extension of a file name against the list of RDF formats that can be parsed
      * @param fileName 
      */
-    getParserFormatForFileName(fileName: string) {
+    getParserFormatForFileName(fileName: string): Observable<string> {
         var params: any = {
             fileName: fileName
         }

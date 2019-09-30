@@ -6,6 +6,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 6.1.0-beta.1 (dd-mm-yyyy)
   * Enabled management of Edoal projects.
+  * Enabled multiple administators.
   * Enabled the possibility to use CustomRange with lexicalization properties.
   * Improved the "dangling concepts" ICV with the possibility to run the check on all the schemes.
   * Fixed and improved the Advanced Graph Applications in Sheet2RDF.

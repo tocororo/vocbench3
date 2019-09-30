@@ -23,7 +23,7 @@
             </div>
             <div class="subPanel-body">
 
-                <form class="form-horizontal">
+                <div class="form-horizontal">
                     <!-- File selection available only when there is no target loader -->
                     <div class="form-group" *ngIf="!selectedLoader.target">
                         <label class="control-label col-sm-1">File:</label>
@@ -32,8 +32,29 @@
                         </div>
                     </div>
 
+                    <!-- Dataset catalog -->
+                    <div class="form-group" *ngIf="selectedLoader.target == 'datasetCatalog'">
+                        <label class="control-label col-sm-1">Data dump:</label>
+                        <div class="col-sm-5">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" [(ngModel)]="dataDumpUrl" readonly>
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" (click)="loadFromDatasetCatalog()">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <label class="control-label col-sm-1">Format:</label>
+                        <div class="col-sm-5">
+                            <select class="form-control input-sm" [(ngModel)]="selectedInputFormat">
+                                <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <!-- Loader available only When a target (repo or stream) is specified -->
-                    <div class="form-group" *ngIf="selectedLoader.target">
+                    <div class="form-group" *ngIf="showLoader()">
                         <label class="control-label col-sm-1">Loader:</label>
                         <div class="col-sm-11">
                             <ng-template [ngIf]="selectedLoader.target == 'repository'">
@@ -66,7 +87,7 @@
                         </div>
                         <label class="control-label col-sm-1">Format:</label>
                         <div class="col-sm-5">
-                            <select class="form-control input-sm" [(ngModel)]="selectedInputFormat" name="inputFormat">
+                            <select class="form-control input-sm" [(ngModel)]="selectedInputFormat">
                                 <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
                             </select>
                         </div>
@@ -75,14 +96,12 @@
                     <div class="form-group">
                         <label class="control-label col-sm-1">Base URI:</label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" name="baseURI"
-                                placeholder="http://example.baseuri.com/" [disabled]="useProjectBaseURI">
+                            <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" placeholder="http://example.baseuri.com/" [disabled]="useProjectBaseURI">
                         </div>
                         <div class="col-sm-2">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" [(ngModel)]="useProjectBaseURI" (ngModelChange)="onBaseUriChecboxChange()"
-                                        name="uriCheckbox">Use project baseURI
+                                    <input type="checkbox" [(ngModel)]="useProjectBaseURI" (ngModelChange)="onBaseUriChecboxChange()">Use project baseURI
                                 </label>
                             </div>
                         </div>
@@ -91,13 +110,13 @@
                             <span class="glyphicon glyphicon-info-sign" title="Specify the resolution source in case of transitive imports"></span>
                         </label>
                         <div class="col-sm-5">
-                            <select class="form-control input-sm" [(ngModel)]="selectedImportAllowance" name="allowance">
+                            <select class="form-control input-sm" [(ngModel)]="selectedImportAllowance">
                                 <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.show}}</option>
                             </select>
                         </div>
                     </div>
 
-                </form>
+                </div>
             </div>
         </div>
 
