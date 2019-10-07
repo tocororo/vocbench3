@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { AddAction, ResViewPartition, ResViewUtils } from "../../models/ResourceView";
@@ -89,7 +89,15 @@ export abstract class PartitionRenderer {
 
     ngOnInit() {
         this.label = ResViewUtils.getResourceViewPartitionLabel(this.partition);
+    }
 
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['resource'] || changes['readonly']) {
+            this.initActionsStatus();
+        }
+    }
+
+    initActionsStatus() {
         /**
          * Add is disabled if one of them is true
          * - resource is not explicit (e.g. imported or inferred) but not in staging add at the same time (addition in staging add is allowed)

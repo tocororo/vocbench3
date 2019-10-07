@@ -50,13 +50,13 @@ export class ClassesServices {
      * Returns the (explicit) instances of the class cls.
 	 * @param cls
      */
-    getInstances(cls: ARTURIResource, options?: VBRequestOptions): Observable<ARTURIResource[]> {
+    getInstances(cls: ARTURIResource, options?: VBRequestOptions): Observable<ARTResource[]> {
         var params: any = {
             cls: cls
         };
         return this.httpMgr.doGet(this.serviceName, "getInstances", params, options).map(
             stResp => {
-                var instances = Deserializer.createURIArray(stResp);
+                var instances = Deserializer.createResourceArray(stResp);
                 return instances;
             }
         );

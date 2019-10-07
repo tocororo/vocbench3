@@ -132,6 +132,7 @@ export abstract class ARTResource extends ARTNode {
         return this.getAdditionalProperty(ResAttribute.DEPRECATED);
     }
 
+    abstract clone(): ARTResource;
 }
 
 export class ARTURIResource extends ARTResource {

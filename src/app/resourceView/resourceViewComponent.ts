@@ -161,7 +161,7 @@ export class ResourceViewComponent {
      * Called when
      * - a resource is selected for the first time in a tree
      * - the selected resource changes (not in tab mode where every resource selected opens a new tab,
-     *   but in splitted mode when the RV is the same and simply changes the selected resource tho describe)
+     *   but in splitted mode when the RV is the same and simply changes the selected resource to describe)
      * - the resource is renamed, so it needs to refresh
      * - some partition has performed a change and emits an update event (which invokes this method, see template)
      */

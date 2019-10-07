@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, SimpleChange, SimpleChanges } from "@angular/core";
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { Language } from "../../models/LanguagesCountries";
 import { AddAction, ResViewPartition, ResViewUtils } from "../../models/ResourceView";
@@ -44,7 +44,13 @@ export class PredicateObjectsRenderer {
     private deleteDisabled: boolean = false; //used for reified-resource
     private actionMenuDisabled: boolean = false;
 
-    ngOnInit() {
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['resource'] || changes['readonly']) {
+            this.initActionsStatus();
+        }
+    }
+
+    private initActionsStatus() {
         /**
          * Add is disabled if one of them is true
          * - resource is not explicit (e.g. imported or inferred) but not in staging add at the same time (addition in staging add is allowed)

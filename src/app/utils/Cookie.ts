@@ -2,7 +2,7 @@
 // https://github.com/BCJTI/ng2-cookies
 
 export class Cookie {
-	
+
 	public static RES_VIEW_INCLUDE_INFERENCE = "resource_view.include_inference";
 	public static RES_VIEW_RENDERING = "resource_view.rendering";
 	public static RES_VIEW_MODE = "resource_view.mode";
@@ -51,7 +51,7 @@ export class Cookie {
 	 * Save the Cookie
 	 * @param  {string} name Cookie's identification
 	 * @param  {string} value Cookie's value
-	 * @param  {number} expires Cookie's expiration date in days from now. If it's undefined the cookie is a session Cookie
+	 * @param  {number} expires Cookie's expiration date in days from now. If it's undefined the cookie has a duration of 10 years
 	 * @param  {string} userIri IRI of the user useful to contextualize the cookie
 	 */
 	public static setCookie(name: string, value: string, expires?: number, userIri?: string) {
@@ -61,10 +61,11 @@ export class Cookie {
 		let myWindow: any = window;
 		let cookieStr = myWindow.escape(name) + '=' + myWindow.escape(value) + ';';
 
-		if (expires) {
-			let dtExpires = new Date(new Date().getTime() + expires * 1000 * 60 * 60 * 24);
-			cookieStr += 'expires=' + dtExpires.toUTCString() + ';';
+		if (!expires) {
+			expires = 365 * 10;
 		}
+		let dtExpires = new Date(new Date().getTime() + expires * 1000 * 60 * 60 * 24);
+		cookieStr += 'expires=' + dtExpires.toUTCString() + ';';
 		document.cookie = cookieStr;
 	}
 

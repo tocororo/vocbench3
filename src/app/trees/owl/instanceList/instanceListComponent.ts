@@ -1,6 +1,6 @@
 import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { Observable } from "rxjs";
-import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ARTResource } from "../../../models/ARTResources";
 import { SemanticTurkey } from "../../../models/Vocabulary";
 import { ClassesServices } from "../../../services/classesServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
@@ -33,7 +33,7 @@ export class InstanceListComponent extends AbstractList {
 
     structRole = RDFResourceRolesEnum.individual;
 
-    list: ARTURIResource[] = [];
+    list: ARTResource[] = [];
 
     constructor(private clsService: ClassesServices, private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
         super(eventHandler);
@@ -137,10 +137,10 @@ export class InstanceListComponent extends AbstractList {
     //EVENT LISTENERS
     onListNodeDeleted(node: ARTURIResource) {
         for (var i = 0; i < this.list.length; i++) {
-            if (this.list[i].getURI() == node.getURI()) {
+            if (this.list[i].equals(node)) {
                 if (VBContext.getWorkingProject().isValidationEnabled()) {
                     //replace the resource instead of simply change the graphs, so that the rdfResource detect the change
-                    let stagedRes: ARTURIResource = this.list[i].clone();
+                    let stagedRes: ARTResource = this.list[i].clone();
                     stagedRes.setGraphs([new ARTURIResource(SemanticTurkey.stagingRemoveGraph + VBContext.getWorkingProject().getBaseURI())]);
                     stagedRes.setAdditionalProperty(ResAttribute.EXPLICIT, false);
                     stagedRes.setAdditionalProperty(ResAttribute.SELECTED, false);
@@ -161,7 +161,7 @@ export class InstanceListComponent extends AbstractList {
         //check of cls not undefined is required if instance list has never been initialized with an @Input class
         if (this.cls && this.cls.getURI() == cls.getURI()) {
             for (var i = 0; i < this.list.length; i++) {
-                if (this.list[i].getURI() == instance.getURI()) {
+                if (this.list[i].equals(instance)) {
                     this.list.splice(i, 1);
                     break;
                 }
