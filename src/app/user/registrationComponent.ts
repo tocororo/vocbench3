@@ -80,7 +80,7 @@ export class RegistrationComponent {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 var message: string;
                 if (this.firstAccess) {
-                    message = "The administration account has been created. " +
+                    message = "The administrator account has been created. " +
                         "Now you will be automatically logged in with the email (" + this.userForm.email + ") and the password you provided";
                 } else {
                     message = "Your account has been created and is now pending activation. After the system administrator accepts your request, " +

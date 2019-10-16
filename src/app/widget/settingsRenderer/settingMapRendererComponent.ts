@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ARTURIResource, RDFResourceRolesEnum } from '../../models/ARTResources';
-import { SettingsPropType, SettingsPropTypeConstraint } from '../../models/Plugins';
+import { SettingsPropType } from '../../models/Plugins';
 
 @Component({
     selector: 'setting-map',

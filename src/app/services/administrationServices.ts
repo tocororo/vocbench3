@@ -117,7 +117,7 @@ export class AdministrationServices {
             email: email,
             roles: roles
         };
-        return this.httpMgr.doGet(this.serviceName, "addRolesToUser", params);
+        return this.httpMgr.doPost(this.serviceName, "addRolesToUser", params);
     }
 
     /**
@@ -132,7 +132,7 @@ export class AdministrationServices {
             email: email,
             role: role
         };
-        return this.httpMgr.doGet(this.serviceName, "removeRoleFromUser", params);
+        return this.httpMgr.doPost(this.serviceName, "removeRoleFromUser", params);
     }
 
     /**
@@ -146,7 +146,7 @@ export class AdministrationServices {
             projectName: projectName,
             email: email
         };
-        return this.httpMgr.doGet(this.serviceName, "removeUserFromProject", params);
+        return this.httpMgr.doPost(this.serviceName, "removeUserFromProject", params);
     }
 
     /**
@@ -196,7 +196,7 @@ export class AdministrationServices {
         var params: any = {
             roleName: roleName
         };
-        return this.httpMgr.doGet(this.serviceName, "createRole", params);
+        return this.httpMgr.doPost(this.serviceName, "createRole", params);
     }
 
     /**
@@ -208,7 +208,7 @@ export class AdministrationServices {
             sourceRoleName: sourceRoleName,
             targetRoleName: targetRoleName
         };
-        return this.httpMgr.doGet(this.serviceName, "cloneRole", params);
+        return this.httpMgr.doPost(this.serviceName, "cloneRole", params);
     }
 
     /**
@@ -219,7 +219,7 @@ export class AdministrationServices {
         var params: any = {
             roleName: roleName
         };
-        return this.httpMgr.doGet(this.serviceName, "deleteRole", params);
+        return this.httpMgr.doPost(this.serviceName, "deleteRole", params);
     }
 
     /**
@@ -285,7 +285,7 @@ export class AdministrationServices {
             role: role,
             capability: capability
         };
-        return this.httpMgr.doGet(this.serviceName, "removeCapabilityFromRole", params);
+        return this.httpMgr.doPost(this.serviceName, "removeCapabilityFromRole", params);
     }
 
     /**
