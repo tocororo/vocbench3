@@ -183,6 +183,7 @@ export class AdministrationServices {
                     var role = new Role(roleJson.name, roleJson.level);
                     roles.push(role);
                 }
+                roles.sort((r1: Role, r2: Role) => r1.getName().localeCompare(r2.getName()));
                 return roles;
             }
         );

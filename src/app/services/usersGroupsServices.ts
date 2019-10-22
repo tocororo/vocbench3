@@ -27,7 +27,7 @@ export class UsersGroupsServices {
                 groups.sort((g1: UsersGroup, g2: UsersGroup) => {
                     return g1.shortName.localeCompare(g2.shortName);
                 })
-
+                groups.sort((g1: UsersGroup, g2: UsersGroup) => g1.shortName.localeCompare(g2.shortName));
                 return groups;
             }
         );
