@@ -43,6 +43,7 @@ description:
     apiDocumentation: 'http://semanticturkey.uniroma2.it/doc/user/'
     features:
       - RDF Collaborative Editing
-    countryExtensionVersion: '0.2'
-    riuso:
-      codiceIPA: uni_rm2
+it:
+  countryExtensionVersion: '0.2'
+  riuso:
+    codiceIPA: uni_rm2
