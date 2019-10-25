@@ -37,7 +37,7 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
         HttpServiceContext.setContextProject(this.leftProject);
         this.mapleService.checkProjectMetadataAvailability().subscribe(
             available => {
-                HttpServiceContext.removeConsumerProject();
+                HttpServiceContext.removeContextProject();
                 if (available) {
                     this.listTask();
                 } else {
