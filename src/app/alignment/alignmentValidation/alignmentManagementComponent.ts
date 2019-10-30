@@ -97,54 +97,55 @@ export class AlignmentManagementComponent {
                         break;
                     }
                 }
-                //update the rendering of the entities
-                //source ontology
-                let sourceEntities: ARTURIResource[] = [];
-                for (var i = 0; i < this.alignmentCellList.length; i++) {
-                    sourceEntities.push(this.alignmentCellList[i].getEntity1());
-                }
-                this.resourceService.getResourcesInfo(sourceEntities).subscribe(
-                    resources => {
-                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        for (var i = 0; i < this.alignmentCellList.length; i++) {
-                            for (var j = 0; j < resources.length; j++) {
-                                if (this.alignmentCellList[i].getEntity1().getURI() == resources[j].getURI()) {
-                                    this.alignmentCellList[i].setEntity1(resources[j]);
-                                    break; //go to the next entity
-                                }
-                            }           
-                        }
-                    }
-                );
 
+                //update the rendering of the entities
+                let computeRenderingFn: Observable<void>[] = [];
+                //source dataset
+                computeRenderingFn.push(this.computeRendering(this.leftProject, "left"));
+                //target dataset
                 this.detectRightProject().subscribe(
                     () => {
                         if (this.rightProject != null) {
-                            //collect the entities to annotate
-                            let targetEntities: ARTURIResource[] = [];
-                            for (var i = 0; i < this.alignmentCellList.length; i++) {
-                                targetEntities.push(this.alignmentCellList[i].getEntity2());
-                            }
-                            //annotate them
-                            HttpServiceContext.setContextProject(this.rightProject); //set a temporary context project
-                            this.resourceService.getResourcesInfo(targetEntities).subscribe(
-                                resources => {
-                                    HttpServiceContext.removeContextProject();
-                                    for (var i = 0; i < this.alignmentCellList.length; i++) {
-                                        for (var j = 0; j < resources.length; j++) {
-                                            if (this.alignmentCellList[i].getEntity2().getURI() == resources[j].getURI()) {
-                                                this.alignmentCellList[i].setEntity2(resources[j]);
-                                                break; //go to the next entity
-                                            }
-                                        }           
-                                    }
-                                },
-                                () => HttpServiceContext.removeContextProject()
-                            );
+                            computeRenderingFn.push(this.computeRendering(this.rightProject, "right"));
                         }
+
+                        Observable.forkJoin(computeRenderingFn).subscribe(
+                            () => {
+                                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen)
+                            }
+                        );
                     }
                 );
+                
             }
+        );
+    }
+
+    private computeRendering(project: Project, dataset: "left" | "right"): Observable<void> {
+        //collect the entities to annotate
+        let entities: ARTURIResource[] = [];
+        this.alignmentCellList.forEach(cell => {
+            let entity: ARTURIResource = dataset == "left" ? cell.getEntity1() : cell.getEntity2();
+            entities.push(entity);
+        });
+        //annotate them
+        HttpServiceContext.setContextProject(project); //set a temporary context project
+        return this.resourceService.getResourcesInfo(entities).map(
+            renderedResources => {
+                HttpServiceContext.removeContextProject();
+                this.alignmentCellList.forEach(cell => {
+                    for (let i = 0; i < renderedResources.length; i++) {
+                        if (dataset == "left" && cell.getEntity1().getURI() == renderedResources[i].getURI()) {
+                            cell.setEntity1(renderedResources[i]);
+                            break; //go to the next entity
+                        } else if (dataset == "right" &&  cell.getEntity2().getURI() == renderedResources[i].getURI()) {
+                            cell.setEntity2(renderedResources[i]);
+                            break; //go to the next entity
+                        }
+                    }           
+                })
+            },
+            () => HttpServiceContext.removeContextProject()
         );
     }
 
