@@ -95,7 +95,10 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
     }
 
     private deleteTask() {
-        this.remoteAlignmentService.deleteTask(this.selectedTask.id).subscribe(() => {});
+        this.remoteAlignmentService.deleteTask(this.selectedTask.id).subscribe(() => {
+            this.listTask();
+            this.alignmentOverview = null;
+        });
     }
 
     private fetchAlignment(task: RemoteAlignmentTask) {
