@@ -31,6 +31,14 @@ export class ConceptTreeComponent extends AbstractTree {
 
     structRole = RDFResourceRolesEnum.concept;
 
+    /*
+     * when the tree is initialized multiple time in a short amount of time (e.g. when the scheme is changed and then immediately changed again)
+     * it might happened that the first initialization request takes more time than the last, so the response of the first is reveived after
+     * the last. In this way, the tree is initialized with the wrong response (the first instead of the last).
+     * This variable is useful in order to keep trace of the last request and to take in account only the related response ignoring the others.
+     */
+    private lastInitTimestamp: number;
+
     constructor(private skosService: SkosServices, private searchService: SearchServices,
         eventHandler: VBEventHandler, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         super(eventHandler, basicModals, sharedModals);
@@ -68,8 +76,14 @@ export class ConceptTreeComponent extends AbstractTree {
             let includeSubProps: boolean = conceptTreePreference.includeSubProps;
 
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-            this.skosService.getTopConcepts(this.schemes, broaderProps, narrowerProps, includeSubProps, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe( //new service (whithout lang param)
-                topConcepts => {
+            this.lastInitTimestamp = new Date().getTime();
+            this.skosService.getTopConcepts(this.lastInitTimestamp, this.schemes, broaderProps, narrowerProps, includeSubProps,
+                VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
+                data => {
+                    if (data.timestamp != this.lastInitTimestamp) { //the response is not about the last getTopConcepts request
+                        return; //=> ignore it
+                    }
+                    let topConcepts = data.concepts;
                     //sort by show if rendering is active, uri otherwise
                     ResourceUtils.sortResources(topConcepts, this.rendering ? SortAttribute.show : SortAttribute.value);
                     this.roots = topConcepts;

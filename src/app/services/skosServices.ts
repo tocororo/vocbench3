@@ -18,11 +18,14 @@ export class SkosServices {
 
     /**
      * Returns the topConcepts of the given scheme
+     * 
+     * Note: timestamp is used in order to handle properly the correct response in case of multiple call to this service.
+     * 
      * @param schemes
      * @return an array of top concepts
      */
-    getTopConcepts(schemes?: ARTURIResource[], broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], 
-        includeSubProperties?: boolean, options?: VBRequestOptions) {
+    getTopConcepts(timestamp: number, schemes?: ARTURIResource[], broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], 
+        includeSubProperties?: boolean, options?: VBRequestOptions): Observable<{ concepts: ARTURIResource[], timestamp: number }> {
         var params: any = {};
         if (schemes != null) {
             params.schemes = schemes;
@@ -38,7 +41,10 @@ export class SkosServices {
         }
         return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, options).map(
             stResp => {
-                return Deserializer.createURIArray(stResp);
+                return {
+                    concepts: Deserializer.createURIArray(stResp),
+                    timestamp: timestamp
+                }
             }
         );
     }
