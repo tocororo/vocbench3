@@ -89,6 +89,8 @@ export class RdfResourceComponent {
                 natureListSerlalized.push(ResourceUtils.getResourceRoleLabel(n.role) + " in: " + graphsToNT.join(", "));
             });
             this.natureTooltip = natureListSerlalized.join("\n\n");
+        } else if (this.resource instanceof ARTLiteral) { //literal
+            this.natureTooltip = this.resource.getDatatype();
         }
     }
 

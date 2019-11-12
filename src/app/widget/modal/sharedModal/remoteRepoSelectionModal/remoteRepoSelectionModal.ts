@@ -33,6 +33,9 @@ export class RemoteRepoSelectionModal implements ModalComponent<RemoteRepoSelect
             this.context.repoConfig.serverURL, this.context.repoConfig.username, this.context.repoConfig.password).subscribe(
             repositories => {
                 this.repoList = repositories;
+                this.repoList.sort((r1: Repository, r2: Repository) => {
+                    return r1.id.toLocaleLowerCase().localeCompare(r2.id.toLocaleLowerCase());
+                });
             }
         );
     }

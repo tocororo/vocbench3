@@ -11,6 +11,7 @@ import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
+import { XsdValidator } from "../../utils/XsdValidator";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
@@ -283,6 +284,11 @@ export class EditableResourceComponent {
                     this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
                 } else if (this.editActionScenario == EditActionScenarioEnum.typedLiteral) {
                     let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, (<ARTLiteral>this.resource).getDatatype(), null);
+                    if (!this.isTypedLiteralValid(newValue)) {
+                        this.basicModals.alert("Invalid value", newValue.getValue() + " is not a valid value for the given datatype: " + newValue.getDatatype(), "warning");
+                        this.cancelEdit();
+                        return;
+                    }
                     this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
                 } else if (this.editActionScenario == EditActionScenarioEnum.xLabel) {
                     let oldLitForm: ARTLiteral = new ARTLiteral(this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
@@ -305,7 +311,7 @@ export class EditableResourceComponent {
                             reject => { this.cancelEdit(); }
                         );
                     } else {
-                        this.basicModals.confirm("Bulk delete", "Warning. You are updating the value for every resource that has this predicate-value relation. Are you sure?").then(
+                        this.basicModals.confirm("Bulk edit", "Warning. You are updating the value for every resource that has this predicate-value relation. Are you sure?").then(
                             () => {
                                 this.resourcesService.updatePredicateObject(this.predicate, this.resource, newValue).subscribe(
                                     stResp => this.update.emit()
@@ -317,7 +323,7 @@ export class EditableResourceComponent {
                         );
                     }
                 } catch (err) {
-                    this.basicModals.alert("Edit", err, "error");
+                    this.basicModals.alert("Edit", err, "warning");
                     this.cancelEdit();
                 }
             } else if (this.editInProgress) {
@@ -349,7 +355,7 @@ export class EditableResourceComponent {
                         }
                     }
                 } catch (err) {
-                    this.basicModals.alert("Edit", err, "error");
+                    this.basicModals.alert("Edit", err, "warning");
                     this.cancelEdit();
                 }
             }
@@ -367,6 +373,10 @@ export class EditableResourceComponent {
             newValue = ResourceUtils.parseBNode(this.resourceStringValue);
         } else if (this.resourceStringValue.startsWith("\"")) { //literal
             newValue = ResourceUtils.parseLiteral(this.resourceStringValue);
+            let litValue: ARTLiteral = <ARTLiteral>newValue;
+            if (litValue.getDatatype() != null && !this.isTypedLiteralValid(litValue)) {
+                throw new Error(litValue.getValue() + " is not a valid value for the given datatype: " + litValue.getDatatype());
+            }
         } else if (ResourceUtils.isQName(this.resourceStringValue, VBContext.getPrefixMappings())) { //qname
             newValue = ResourceUtils.parseQName(this.resourceStringValue, VBContext.getPrefixMappings());
         } else {
@@ -416,7 +426,7 @@ export class EditableResourceComponent {
                         }
                     );
                 } else {
-                    this.basicModals.alert("Invalid Expression", "'" + expression + "' is not a valid Manchester Expression", "error");
+                    this.basicModals.alert("Invalid Expression", "'" + expression + "' is not a valid Manchester Expression", "warning");
                 }
             }
         )
@@ -426,6 +436,13 @@ export class EditableResourceComponent {
         this.editInProgress = false;
         this.bulkEditInProgress = false;
         this.editLiteralInProgress = false;
+    }
+
+    private isTypedLiteralValid(literal: ARTLiteral): boolean {
+        let dt: ARTURIResource = new ARTURIResource(literal.getDatatype());
+        let valid = XsdValidator.isValid(literal.getValue(), dt);
+        console.log(literal, "valid?", valid);
+        return valid;
     }
 
     //====== "Replace with existing resource" HANDLER =====

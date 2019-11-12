@@ -2,14 +2,8 @@
     <select class="form-control input-sm" [(ngModel)]="selectedDatatype" (ngModelChange)="onDatatypeChange()" style="margin-bottom: 6px;">
         <option *ngFor="let dt of datatypeList" [ngValue]="dt" [title]="dt.getURI()">{{dt.getShow()}}</option>
     </select>
-    <div *ngIf="numericInput; else nonNumericBlock">
-        <input *ngIf="inputNumberSign=='positive'" type="number" min="0"
-            class="form-control input-sm" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
-        <input *ngIf="inputNumberSign=='negative'" type="number" max="0"
-            class="form-control input-sm" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
-        <input *ngIf="inputNumberSign=='any'" type="number"
-            class="form-control input-sm" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
-    </div> 
+    <input *ngIf="numericInput; else nonNumericBlock" type="number" [min]="numericInputMin" [max]="numericInputMax" 
+        class="form-control input-sm" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
     <ng-template #nonNumericBlock>
         <div *ngIf="isDatatypeBound(); else nonBoundBlock">
             <div class="panel panel-default">
@@ -37,7 +31,7 @@
         </div>
         <ng-template #nonBoundBlock>
             <div *ngIf="selectedDatatype?.getURI()=='http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'; else defaultBlock"
-                class="hbox" style="align-items: center; margin-bottom: 4px;">
+                class="hbox" style="align-items: center;">
                 <textarea class="form-control input-sm" rows="1" style="flex: 1; margin-right: 4px; height: initial" [(ngModel)]="stringValue"
                     (ngModelChange)="onValueChanged()">
                 </textarea>

@@ -2,9 +2,11 @@ import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources";
-import { RDF, RDFS, XmlSchema } from "../../../../models/Vocabulary";
+import { RDF, RDFS } from "../../../../models/Vocabulary";
 import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import { VBContext } from "../../../../utils/VBContext";
+import { XsdValidator } from "../../../../utils/XsdValidator";
+import { BasicModalServices } from "../../basicModal/basicModalServices";
 
 export class NewTypedLiteralModalData extends BSModalContext {
 
@@ -47,7 +49,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
 
     private values: ARTLiteral[] = [];
 
-    constructor(public dialog: DialogRef<NewTypedLiteralModalData>) {
+    constructor(public dialog: DialogRef<NewTypedLiteralModalData>, private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
@@ -72,17 +74,26 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
 
     private addValue() {
         if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
-            this.values.push(this.value);
-            this.value = null;
+            let valueString: string = this.value.getValue();
+            if (XsdValidator.isValid(valueString, this.datatype)) {
+                this.values.push(this.value);
+                this.value = null;
+            } else {
+                this.basicModals.alert("Invalid value", "The inserted value '" + valueString + "' is not a valid " + this.datatype.getShow());
+                return;
+            }
         } else { //selected dataRangeAspectSelector
             this.values.push(this.selectedDrValue);
             this.selectedDrValue = null;
         }
     }
 
+    /**
+     * Add value enabled in case the adding value is not already been added in the values list
+     */
     private isAddValueEnabled() {
         return (
-            this.isInputValid() && 
+            this.value != null && 
             (
                 (this.selectedAspectSelector == this.typedLiteralAspectSelector && !ResourceUtils.containsNode(this.values, this.value)) ||
                 (this.selectedAspectSelector == this.dataRangeAspectSelector && !ResourceUtils.containsNode(this.values, this.selectedDrValue))
@@ -110,82 +121,9 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
         return preview;
     }
 
-    private isInputValid(): boolean {
-        var valid: boolean = false;
-        if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
-            if (this.value != undefined) {
-                let dt = this.value.getDatatype();
-                let stringValue: any = this.value.getValue();
-                if (dt == XmlSchema.byte.getURI()) {
-                    valid = new RegExp("[\-+]?[0-9]+").test(stringValue) && stringValue <= 127 && stringValue >= -128;
-                } else if (dt == XmlSchema.float.getURI()) {
-                    valid = new RegExp("^[\-\+]?[0-9]+(\.[0-9]+)?$").test(stringValue);
-                } else if (dt == XmlSchema.int.getURI()) {
-                    valid = new RegExp("[\-+]?[0-9]+").test(stringValue) && stringValue >= -2147483648 && stringValue <= 2147483647;
-                } else if (dt == XmlSchema.integer.getURI()) {
-                    valid = new RegExp("^[\-\+]?[0-9]+$").test(stringValue);
-                } else if (dt == XmlSchema.language.getURI()) {
-                    valid = new RegExp("^([a-zA-Z]{1,8})(-[a-zA-Z0-9]{1,8})*$").test(stringValue);
-                } else if (dt == XmlSchema.long.getURI()) {
-                    valid = new RegExp("[\-+]?[0-9]+").test(stringValue) && stringValue >= -9223372036854775808 && stringValue <= 9223372036854775807;
-                } else if (dt == XmlSchema.nonNegativeInteger.getURI()) {
-                    valid = new RegExp("[\-+]?[0-9]+").test(stringValue) && stringValue >= 0;
-                } else if (dt == XmlSchema.nonPositiveInteger.getURI()) {
-                    valid = new RegExp("[\-+]?[0-9]+").test(stringValue) && stringValue <= 0;
-                } else if (dt == XmlSchema.negativeInteger.getURI()) {
-                    valid = new RegExp("[\-+]?[0-9]+").test(stringValue) && stringValue <= -1;
-                } else if (dt == XmlSchema.positiveInteger.getURI()) {
-                    valid = new RegExp("[\-+]?[0-9]+").test(stringValue) && stringValue >= 1;
-                } else if (dt == XmlSchema.short.getURI()) {
-                    valid = new RegExp("[\-+]?[0-9]+").test(stringValue) && stringValue >= -32768 && stringValue <= 32767;
-                } else if (dt == XmlSchema.string.getURI()) {
-                    valid = stringValue.trim() != "";// if value is string, it's valid only if is not an empty string
-                } else if (dt == XmlSchema.unsignedByte.getURI()) {
-                    valid = new RegExp("[\-+]?[0-9]+").test(stringValue) && stringValue >= 0 && stringValue <= 255;
-                } else if (dt == XmlSchema.unsignedInt.getURI()) {
-                    valid = new RegExp("[\-+]?[0-9]+").test(stringValue) && stringValue >= 0 && stringValue <= 4294967295;
-                } else if (dt == XmlSchema.unsignedLong.getURI()) {
-                    valid = new RegExp("[\-+]?[0-9]+").test(stringValue) && stringValue >= 0 && stringValue <= 18446744073709551615;
-                } else if (dt == XmlSchema.unsignedShort.getURI()) {
-                    valid = new RegExp("[\-+]?[0-9]+").test(stringValue) && stringValue >= 0 && stringValue <= 65535;
-                } else { //every other datatype doesn't require validation
-                    valid = true;
-                }
-            }
-        } else if (this.selectedAspectSelector == this.dataRangeAspectSelector) {
-            if (this.selectedDrValue != null) {
-                valid = true;
-            }
-        }
-        return valid;
-    }
-
     private onDatatypeChange(datatype: ARTURIResource) {
         this.datatype = datatype;
-        this.notValidatableType = !(
-            this.datatype.getURI() == RDF.langString.getURI() ||
-            this.datatype.getURI() == XmlSchema.byte.getURI() ||
-            this.datatype.getURI() == XmlSchema.decimal.getURI() ||
-            this.datatype.getURI() == XmlSchema.double.getURI() ||
-            this.datatype.getURI() == XmlSchema.float.getURI() ||
-            this.datatype.getURI() == XmlSchema.int.getURI() ||
-            this.datatype.getURI() == XmlSchema.integer.getURI() ||
-            this.datatype.getURI() == XmlSchema.long.getURI() ||
-            this.datatype.getURI() == XmlSchema.negativeInteger.getURI() ||
-            this.datatype.getURI() == XmlSchema.nonNegativeInteger.getURI() ||
-            this.datatype.getURI() == XmlSchema.nonPositiveInteger.getURI() ||
-            this.datatype.getURI() == XmlSchema.positiveInteger.getURI() ||
-            this.datatype.getURI() == XmlSchema.short.getURI() ||
-            this.datatype.getURI() == XmlSchema.unsignedByte.getURI() ||
-            this.datatype.getURI() == XmlSchema.unsignedInt.getURI() ||
-            this.datatype.getURI() == XmlSchema.unsignedLong.getURI() ||
-            this.datatype.getURI() == XmlSchema.unsignedShort.getURI() ||
-            this.datatype.getURI() == XmlSchema.boolean.getURI() ||
-            this.datatype.getURI() == XmlSchema.date.getURI() ||
-            this.datatype.getURI() == XmlSchema.dateTime.getURI() ||
-            this.datatype.getURI() == XmlSchema.string.getURI() ||
-            this.datatype.getURI() == XmlSchema.time.getURI()
-        );
+        this.notValidatableType = !XsdValidator.isValidableType(datatype);
     }
 
     /**
@@ -193,7 +131,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
      * Ok is enabled in case multiple values are added or if a single value is valid
      */
     private isOkEnabled(): boolean {
-        return this.values.length > 0 || this.isInputValid();
+        return this.values.length > 0 || this.value != null;
     }
 
     private isOkWarningActive(): boolean {
@@ -208,10 +146,16 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
     ok(event: Event) {
         let literals: ARTLiteral[];
         if (this.context.multivalue) {
-            if (this.values.length > 0) { //there are multiple values
+            if (this.values.length > 0) { //there are multiple values (no need to validate since the validation has been done for each added value)
                 literals = this.values;
             } else { //no multiple values => return the input value
                 if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
+                    //first validate
+                    let valueString: string = this.value.getValue();
+                    if (!XsdValidator.isValid(valueString, this.datatype)) {
+                        this.basicModals.alert("Invalid value", "The inserted value '" + valueString + "' is not a valid " + this.datatype.getShow());
+                        return;
+                    }
                     literals = [this.value];
                 } else { //selected dataRangeAspectSelector
                     literals = [this.selectedDrValue];

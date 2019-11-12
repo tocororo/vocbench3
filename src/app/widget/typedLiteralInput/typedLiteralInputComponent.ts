@@ -4,6 +4,7 @@ import { ARTLiteral, ARTURIResource } from "../../models/ARTResources";
 import { RDF, RDFS, XmlSchema } from "../../models/Vocabulary";
 import { DatatypesServices } from "../../services/datatypesServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
+import { XsdValidator } from "../../utils/XsdValidator";
 
 @Component({
     selector: "typed-literal-input",
@@ -25,11 +26,12 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
     private lang: string; //optional, used only if datatype is xsd:string or rdfs:langString
 
     private numericInput: boolean = false;
-    private inputNumberSign: "positive" | "negative" | "any" = "any";
+    private numericInputMin: number;
+    private numericInputMax: number;
 
     private stringValue: string;
-    
-    constructor(private datatypeService: DatatypesServices) {}
+
+    constructor(private datatypeService: DatatypesServices) { }
 
     ngOnInit() {
         this.datatypeService.getDatatypes().subscribe(
@@ -47,7 +49,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
                     if (this.allowedDatatypes[0].equals(RDFS.literal)) {
                         //if allowedDatatypes contains only rdfs:Literal => allow every datatype
                     } else { //otherwise filter out
-                        for (let i = this.datatypeList.length-1; i >= 0; i--) {
+                        for (let i = this.datatypeList.length - 1; i >= 0; i--) {
                             //if datatype is not allowed (not among the allowed) remove it
                             if (ResourceUtils.indexOfNode(this.allowedDatatypes, this.datatypeList[i]) == -1) {
                                 this.datatypeList.splice(i, 1);
@@ -109,41 +111,14 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
     }
 
     private updateInputConfiguration() {
-        this.numericInput = (
-            this.selectedDatatype.equals(XmlSchema.byte) ||
-            this.selectedDatatype.equals(XmlSchema.decimal) ||
-            this.selectedDatatype.equals(XmlSchema.double) ||
-            this.selectedDatatype.equals(XmlSchema.float) ||
-            this.selectedDatatype.equals(XmlSchema.int) ||
-            this.selectedDatatype.equals(XmlSchema.integer) ||
-            this.selectedDatatype.equals(XmlSchema.long) ||
-            this.selectedDatatype.equals(XmlSchema.negativeInteger) ||
-            this.selectedDatatype.equals(XmlSchema.nonNegativeInteger) ||
-            this.selectedDatatype.equals(XmlSchema.nonPositiveInteger) ||
-            this.selectedDatatype.equals(XmlSchema.positiveInteger) ||
-            this.selectedDatatype.equals(XmlSchema.short) ||
-            this.selectedDatatype.equals(XmlSchema.unsignedByte) ||
-            this.selectedDatatype.equals(XmlSchema.unsignedInt) ||
-            this.selectedDatatype.equals(XmlSchema.unsignedLong) ||
-            this.selectedDatatype.equals(XmlSchema.unsignedShort)
-        );
-        //sign
-        if (
-            this.selectedDatatype.equals(XmlSchema.nonNegativeInteger) ||
-            this.selectedDatatype.equals(XmlSchema.positiveInteger) ||
-            this.selectedDatatype.equals(XmlSchema.unsignedByte) ||
-            this.selectedDatatype.equals(XmlSchema.unsignedInt) ||
-            this.selectedDatatype.equals(XmlSchema.unsignedLong) ||
-            this.selectedDatatype.equals(XmlSchema.unsignedShort)
-        ) {
-            this.inputNumberSign = "positive";
-        } else if (
-            this.selectedDatatype.equals(XmlSchema.negativeInteger) ||
-            this.selectedDatatype.equals(XmlSchema.nonPositiveInteger)
-        ) {
-            this.inputNumberSign = "negative";
-        } else {
-            this.inputNumberSign = "any";
+        this.numericInput = false;
+        this.numericInputMin = null;
+        this.numericInputMax = null;
+        let numericTypeConfig = XsdValidator.numericTypesMap.get(this.selectedDatatype.getURI())
+        if (numericTypeConfig != null) {
+            this.numericInput = true;
+            this.numericInputMin = numericTypeConfig.min;
+            this.numericInputMax = numericTypeConfig.max;
         }
     }
 
@@ -154,12 +129,12 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
 
     private onValueChanged() {
         if (this.stringValue == null) {
-            this.propagateChange(null);    
+            this.propagateChange(null);
         } else {
             if (this.selectedDatatype.getURI() != RDF.langString.getURI()) {
                 this.lang = null;
             }
-            this.propagateChange(new ARTLiteral(this.stringValue+"", this.selectedDatatype.getURI(), this.lang));
+            this.propagateChange(new ARTLiteral(this.stringValue + "", this.selectedDatatype.getURI(), this.lang));
         }
     }
 
@@ -173,7 +148,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
             let dt: string = obj.getDatatype();
             if (dt != null) {
                 this.datatypeList.forEach(el => {
-                    if (el.getURI() == dt)  {
+                    if (el.getURI() == dt) {
                         this.selectedDatatype = el;
                     }
                 });
