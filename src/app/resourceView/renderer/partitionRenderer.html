@@ -18,10 +18,10 @@
                     <span class="caret" style="margin: 0px;"></span>
                 </button>
                 <ul class="dropdown-menu pull-right">
-                    <li [ngClass]="{ disabled: addDisabled }" *ngIf="addManuallyAllowed">
+                    <li *ngIf="addManuallyAllowed" [ngClass]="{ disabled: addDisabled }">
                         <a (click)="addHandler(null, 'manually')">Add value manually</a>
                     </li>
-                    <li [ngClass]="{ disabled: addDisabled }" *ngIf="addExteranlResourceAllowed">
+                    <li *ngIf="addExteranlResourceAllowed" [ngClass]="{ disabled: addDisabled }">
                         <a (click)="addHandler(null, 'remote')">Add value from another project</a>
                     </li>
                 </ul>

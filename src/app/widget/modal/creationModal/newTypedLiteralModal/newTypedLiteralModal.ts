@@ -5,7 +5,7 @@ import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources";
 import { RDF, RDFS } from "../../../../models/Vocabulary";
 import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import { VBContext } from "../../../../utils/VBContext";
-import { XsdValidator } from "../../../../utils/XsdValidator";
+import { DatatypeValidator } from "../../../../utils/DatatypeValidator";
 import { BasicModalServices } from "../../basicModal/basicModalServices";
 
 export class NewTypedLiteralModalData extends BSModalContext {
@@ -49,7 +49,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
 
     private values: ARTLiteral[] = [];
 
-    constructor(public dialog: DialogRef<NewTypedLiteralModalData>, private basicModals: BasicModalServices) {
+    constructor(public dialog: DialogRef<NewTypedLiteralModalData>, private basicModals: BasicModalServices, private dtValidator: DatatypeValidator) {
         this.context = dialog.context;
     }
 
@@ -75,7 +75,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
     private addValue() {
         if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
             let valueString: string = this.value.getValue();
-            if (XsdValidator.isValid(valueString, this.datatype)) {
+            if (this.dtValidator.isValid(valueString, this.datatype)) {
                 this.values.push(this.value);
                 this.value = null;
             } else {
@@ -93,7 +93,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
      */
     private isAddValueEnabled() {
         return (
-            this.value != null && 
+            this.value != null && this.value.getValue() != "" &&
             (
                 (this.selectedAspectSelector == this.typedLiteralAspectSelector && !ResourceUtils.containsNode(this.values, this.value)) ||
                 (this.selectedAspectSelector == this.dataRangeAspectSelector && !ResourceUtils.containsNode(this.values, this.selectedDrValue))
@@ -123,7 +123,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
 
     private onDatatypeChange(datatype: ARTURIResource) {
         this.datatype = datatype;
-        this.notValidatableType = !XsdValidator.isValidableType(datatype);
+        this.notValidatableType = !this.dtValidator.isValidableType(datatype);
     }
 
     /**
@@ -131,7 +131,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
      * Ok is enabled in case multiple values are added or if a single value is valid
      */
     private isOkEnabled(): boolean {
-        return this.values.length > 0 || this.value != null;
+        return this.values.length > 0 || (this.value != null && this.value.getValue() != "");
     }
 
     private isOkWarningActive(): boolean {
@@ -152,7 +152,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
                 if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
                     //first validate
                     let valueString: string = this.value.getValue();
-                    if (!XsdValidator.isValid(valueString, this.datatype)) {
+                    if (!this.dtValidator.isValid(valueString, this.datatype)) {
                         this.basicModals.alert("Invalid value", "The inserted value '" + valueString + "' is not a valid " + this.datatype.getShow());
                         return;
                     }

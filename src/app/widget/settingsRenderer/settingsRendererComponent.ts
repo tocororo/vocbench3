@@ -15,7 +15,7 @@ export class SettingsRendererComponent {
     
     private settings: Settings;
 
-    constructor(public sanitizer: DomSanitizer) { }
+    constructor() { }
 
     private onModelChanged() {
         this.propagateChange(this.settings);

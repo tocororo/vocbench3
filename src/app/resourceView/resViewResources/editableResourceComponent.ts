@@ -11,7 +11,7 @@ import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
-import { XsdValidator } from "../../utils/XsdValidator";
+import { DatatypeValidator } from "../../utils/DatatypeValidator";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
@@ -76,7 +76,8 @@ export class EditableResourceComponent {
     constructor(private resourcesService: ResourcesServices, private propService: PropertyServices,
         private manchesterService: ManchesterServices, private refactorService: RefactorServices,
         private basicModals: BasicModalServices, private creationModals: CreationModalServices,
-        private browsingModals: BrowsingModalServices, private rvModalService: ResViewModalServices) { }
+        private browsingModals: BrowsingModalServices, private rvModalService: ResViewModalServices, 
+        private dtValidator: DatatypeValidator) { }
 
     ngOnInit() {
         if (this.resource instanceof ARTLiteral && this.resource.getDatatype() == null) {
@@ -440,8 +441,7 @@ export class EditableResourceComponent {
 
     private isTypedLiteralValid(literal: ARTLiteral): boolean {
         let dt: ARTURIResource = new ARTURIResource(literal.getDatatype());
-        let valid = XsdValidator.isValid(literal.getValue(), dt);
-        console.log(literal, "valid?", valid);
+        let valid = this.dtValidator.isValid(literal.getValue(), dt);
         return valid;
     }
 

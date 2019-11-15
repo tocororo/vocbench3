@@ -12,10 +12,10 @@
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu pull-right">
-                <li *ngIf="isAddManuallyAllowed()" [ngClass]="{ disabled: addDisabled }">
+                <li *ngIf="addManuallyAllowed" [ngClass]="{ disabled: addDisabled }">
                     <a (click)="addManually()">Add value manually</a>
                 </li>
-                <li *ngIf="isAddExteranlResourceAllowed()" [ngClass]="{ disabled: addDisabled }">
+                <li *ngIf="addExteranlResourceAllowed" [ngClass]="{ disabled: addDisabled }">
                     <a (click)="addExternalValue()">Add value from another project</a>
                 </li>
                 <li [ngClass]="{ disabled: deleteDisabled }"><a (click)="removeAllValues()">Delete all values</a></li>

@@ -15,6 +15,7 @@ import { VersioningComponent } from "../config/dataManagement/versioning/version
 import { DataComponent } from "../data/dataComponent";
 import { HomeComponent } from "../homeComponent";
 import { GUARD_PROVIDERS } from "../utils/CanActivateGuards";
+import { DatatypeValidator } from '../utils/DatatypeValidator';
 import { HttpManager } from "../utils/HttpManager";
 import { RoleActionResolver } from '../utils/RoleActionResolver';
 import { UserResolver } from "../utils/UserResolver";
@@ -59,7 +60,7 @@ import { VBModalModule } from "./vbModalModule";
       ],
       //services with application scope
       providers: [
-            HttpManager, VBEventHandler, VBProperties, VBCollaboration, GUARD_PROVIDERS, UserResolver, RoleActionResolver,
+            HttpManager, VBEventHandler, VBProperties, DatatypeValidator, VBCollaboration, GUARD_PROVIDERS, UserResolver, RoleActionResolver,
             { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
       ],
       declarations: [

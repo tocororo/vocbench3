@@ -18,7 +18,7 @@
                 </button>
                 <ul class="dropdown-menu pull-right">
                     <li [ngClass]="{ disabled: addDisabled }"><a (click)="addManually()">Add value manually</a></li>
-                    <li *ngIf="isAddExteranlResourceAllowed()" [ngClass]="{ disabled: addDisabled }">
+                    <li *ngIf="addExteranlResourceAllowed" [ngClass]="{ disabled: addDisabled }">
                         <a (click)="addExternalValue()">Add value from another project</a>
                     </li>
                 </ul>

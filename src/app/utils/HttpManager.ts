@@ -310,18 +310,6 @@ export class HttpManager {
             params += "ctx_consumer=" + encodeURIComponent(ctxConsumer.getName()) + "&";
         }
 
-        // if (HttpServiceContext.getContextProject() != undefined) {
-        //     params += "ctx_project=" + encodeURIComponent(HttpServiceContext.getContextProject().getName()) + "&";
-        //     //consumer (if not specified is the currently open project)
-        //     if (HttpServiceContext.getConsumerProject() != undefined) {
-        //         params += "ctx_consumer=SYSTEM&";
-        //     } else {
-        //         params += "ctx_consumer=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
-        //     }
-        // } else if (VBContext.getWorkingProject() != undefined) { //use the working project otherwise
-        //     params += "ctx_project=" + encodeURIComponent(VBContext.getWorkingProject().getName()) + "&";
-        // }
-
         //give priority to version in HttpServiceContext over version in ctx
         if (HttpServiceContext.getContextVersion() != undefined) {
             params += "ctx_version=" + encodeURIComponent(HttpServiceContext.getContextVersion().versionId) + "&";
@@ -445,10 +433,19 @@ export class HttpManager {
             error.message = errorMsg;
         } else if (err.status == 401 || err.status == 403) {
             error.name = "UnauthorizedRequestError";
-            error.message = err._body;
+            let errBody = err._body;
+            let errMessage: string = "Unknown error response from the server. Error status: " + err.status;
+            if (errBody instanceof ArrayBuffer) { //handle 401 or 403 response even for service invoked via downloadFile (that returns an ArrayBuffer)
+                if (err.headers.get("content-type") == "text/plain") {
+                    errMessage = String.fromCharCode.apply(String, new Uint8Array(errBody));
+                }
+            } else { //textual error body
+                errMessage = errBody;
+            }
+            error.message = errMessage;
             //handle errors in case user did a not authorized requests or is not logged in.
             //In this case the response (err) body contains an error message
-            this.basicModals.alert("Error", err._body, "error").then(
+            this.basicModals.alert("Error", errMessage, "error").then(
                 (result: any) => {
                     //in case user is not logged at all, reset context and redirect to home
                     if (err.status == 401) {

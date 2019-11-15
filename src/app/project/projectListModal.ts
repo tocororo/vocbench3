@@ -6,6 +6,7 @@ import { Project } from '../models/Project';
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from "../services/projectServices";
 import { UserServices } from "../services/userServices";
+import { DatatypeValidator } from "../utils/DatatypeValidator";
 import { VBCollaboration } from '../utils/VBCollaboration';
 import { VBProperties } from '../utils/VBProperties';
 import { AbstractProjectComponent } from "./abstractProjectComponent";
@@ -21,8 +22,9 @@ export class ProjectListModal extends AbstractProjectComponent implements ModalC
     private selectedProject: Project;
 
     constructor(public dialog: DialogRef<BSModalContext>, userService: UserServices, metadataService: MetadataServices,
-        vbCollaboration: VBCollaboration, vbProp: VBProperties, private projectService: ProjectServices, private router: Router) {
-        super(userService, metadataService, vbCollaboration, vbProp);
+        vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator,
+        private projectService: ProjectServices, private router: Router) {
+        super(userService, metadataService, vbCollaboration, vbProp, dtValidator);
         this.context = dialog.context;
     }
 

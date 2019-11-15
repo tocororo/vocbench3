@@ -1,10 +1,11 @@
 import { Component, EventEmitter, forwardRef, Input, Output } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTLiteral, ARTURIResource } from "../../models/ARTResources";
+import { ConstrainingFacets } from "../../models/Datatypes";
 import { RDF, RDFS, XmlSchema } from "../../models/Vocabulary";
 import { DatatypesServices } from "../../services/datatypesServices";
+import { DatatypeValidator } from "../../utils/DatatypeValidator";
 import { ResourceUtils } from "../../utils/ResourceUtils";
-import { XsdValidator } from "../../utils/XsdValidator";
 
 @Component({
     selector: "typed-literal-input",
@@ -31,7 +32,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
 
     private stringValue: string;
 
-    constructor(private datatypeService: DatatypesServices) { }
+    constructor(private datatypeService: DatatypesServices, private dtValidator: DatatypeValidator) { }
 
     ngOnInit() {
         this.datatypeService.getDatatypes().subscribe(
@@ -114,11 +115,26 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
         this.numericInput = false;
         this.numericInputMin = null;
         this.numericInputMax = null;
-        let numericTypeConfig = XsdValidator.numericTypesMap.get(this.selectedDatatype.getURI())
-        if (numericTypeConfig != null) {
-            this.numericInput = true;
-            this.numericInputMin = numericTypeConfig.min;
-            this.numericInputMax = numericTypeConfig.max;
+        
+        if (this.dtValidator.isNumericType(this.selectedDatatype)) {
+            this.numericInput = this.dtValidator.isNumericType(this.selectedDatatype);
+            if (this.numericInput) {
+                let facets: ConstrainingFacets = this.dtValidator.getConstrainingFacets(this.selectedDatatype);
+                if (facets != null) {
+                    if (facets.maxExclusive != null) {
+                        this.numericInputMax = facets.maxExclusive - 1;
+                    }
+                    if (facets.maxInclusive != null) {
+                        this.numericInputMax = facets.maxInclusive;
+                    }
+                    if (facets.minExclusive != null) {
+                        this.numericInputMin = facets.minExclusive + 1;
+                    }
+                    if (facets.minInclusive != null) {
+                        this.numericInputMin = facets.maxInclusive;
+                    }
+                }
+            }
         }
     }
 

@@ -6,6 +6,7 @@ import { Project, ProjectTableColumnStruct } from '../models/Project';
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from "../services/projectServices";
 import { UserServices } from "../services/userServices";
+import { DatatypeValidator } from "../utils/DatatypeValidator";
 import { UIUtils } from "../utils/UIUtils";
 import { VBCollaboration } from '../utils/VBCollaboration';
 import { VBContext } from '../utils/VBContext';
@@ -30,9 +31,9 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     private customColumnsOrder: string[]; //custom order of the columns
 
     constructor(private projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices,
-        vbCollaboration: VBCollaboration, vbProp: VBProperties, private router: Router, 
+        vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, private router: Router, 
         private basicModals: BasicModalServices, private modal: Modal, private elRef: ElementRef) {
-        super(userService, metadataService, vbCollaboration, vbProp);
+        super(userService, metadataService, vbCollaboration, vbProp, dtValidator);
     }
 
     ngOnInit() {

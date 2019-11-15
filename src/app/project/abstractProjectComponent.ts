@@ -2,6 +2,7 @@ import { Observable } from "rxjs/Observable";
 import { Project } from "../models/Project";
 import { MetadataServices } from "../services/metadataServices";
 import { UserServices } from "../services/userServices";
+import { DatatypeValidator } from "../utils/DatatypeValidator";
 import { VBCollaboration } from "../utils/VBCollaboration";
 import { VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
@@ -12,11 +13,13 @@ export abstract class AbstractProjectComponent {
     protected metadataService: MetadataServices;
     protected vbCollaboration: VBCollaboration;
     protected vbProp: VBProperties;
-    constructor(userService: UserServices, metadataService: MetadataServices, vbCollaboration: VBCollaboration, vbProp: VBProperties) {
+    protected dtValidator: DatatypeValidator;
+    constructor(userService: UserServices, metadataService: MetadataServices, vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator) {
         this.userService = userService;
         this.metadataService = metadataService;
         this.vbCollaboration = vbCollaboration;
         this.vbProp = vbProp;
+        this.dtValidator = dtValidator;
     }
 
     protected accessProject(project: Project) {
@@ -29,7 +32,8 @@ export abstract class AbstractProjectComponent {
             this.vbProp.initProjectSettings(VBContext.getWorkingProjectCtx()), //init the project settings
             this.vbCollaboration.initCollaborationSystem(), //init Collaboration System
             this.userService.listUserCapabilities(), //get the capabilities for the user
-            this.metadataService.getNamespaceMappings() //get default namespace of the project and set it to the vbContext
+            this.metadataService.getNamespaceMappings(), //get default namespace of the project and set it to the vbContext
+            this.dtValidator.initDatatypeRestrictions(), //initializes the mappings datatype-facets for the validation of typed literal
         );
     }
 

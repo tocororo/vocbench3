@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { ARTURIResource, ResAttribute } from '../models/ARTResources';
+import { ARTLiteral, ARTURIResource, ResAttribute } from '../models/ARTResources';
+import { ConstrainingFacets, DatatypeRestrictionsMap } from '../models/Datatypes';
+import { XmlSchema } from '../models/Vocabulary';
 import { Deserializer } from '../utils/Deserializer';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { ResourceUtils } from '../utils/ResourceUtils';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { ResourcesServices } from './resourcesServices';
 
@@ -87,5 +90,47 @@ export class DatatypesServices {
         );
     }
 
+    /**
+     * 
+     * @param datatype 
+     * @param pattern 
+     */
+    setDatatypePattern(datatype: ARTURIResource, pattern: ARTLiteral) {
+        var params: any = {
+            datatype: datatype,
+            pattern: pattern
+        };
+        return this.httpMgr.doPost(this.serviceName, "setDatatypePattern", params);
+    }
+
+    getDatatypeRestrictions(): Observable<DatatypeRestrictionsMap> {
+        var params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "getDatatypeRestrictions", params).map(
+            stResp => {
+                let dtRestrMap: DatatypeRestrictionsMap = new Map();
+                for (let dt in stResp) {
+                    let constraintFacets: ConstrainingFacets = {};
+                    for (let facet in stResp[dt]) {
+                        let restrValue: string = ResourceUtils.parseLiteral(stResp[dt][facet]).getValue();
+                        if (facet == XmlSchema.maxExclusive) {
+                            constraintFacets.maxExclusive = parseInt(restrValue);
+                        } else if (facet == XmlSchema.maxInclusive) {
+                            constraintFacets.maxInclusive = parseInt(restrValue);
+                        } else if (facet == XmlSchema.minExclusive) {
+                            constraintFacets.minExclusive = parseInt(restrValue);
+                        } else if (facet == XmlSchema.minInclusive) {
+                            constraintFacets.minInclusive = parseInt(restrValue);
+                        } else if (facet == XmlSchema.pattern) {
+                            constraintFacets.pattern = restrValue;
+                        }
+                    }
+                    dtRestrMap.set(dt, constraintFacets);
+                }
+                console.log("dtRestrMap", dtRestrMap);
+                return dtRestrMap;
+            }
+        );
+    }
+    
     
 }

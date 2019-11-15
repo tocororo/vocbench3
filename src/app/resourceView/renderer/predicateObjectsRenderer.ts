@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, SimpleChange, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { Language } from "../../models/LanguagesCountries";
 import { AddAction, ResViewPartition, ResViewUtils } from "../../models/ResourceView";
@@ -43,6 +43,9 @@ export class PredicateObjectsRenderer {
     private addDisabled: boolean = false;
     private deleteDisabled: boolean = false; //used for reified-resource
     private actionMenuDisabled: boolean = false;
+    
+    private addManuallyAllowed: boolean = false;
+    private addExteranlResourceAllowed: boolean = false;
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource'] || changes['readonly']) {
@@ -73,6 +76,9 @@ export class PredicateObjectsRenderer {
 
         //menu disabled if all of its action are disabled
         this.actionMenuDisabled = this.addDisabled && this.deleteDisabled;
+
+        this.addManuallyAllowed = ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
+        this.addExteranlResourceAllowed = ResViewUtils.addExternalResourcePartition.indexOf(this.partition) != -1;
     }
 
     /**
@@ -91,18 +97,13 @@ export class PredicateObjectsRenderer {
     private addValue() {
         this.add.emit(AddAction.default);
     }
-    private isAddManuallyAllowed() {
-        return ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
-    }
     private addManually() {
         this.add.emit(AddAction.manually);
     }
     private addExternalValue() {
         this.add.emit(AddAction.remote);
     }
-    private isAddExteranlResourceAllowed() {
-        return ResViewUtils.addExternalResourcePartition.indexOf(this.partition) != -1;
-    }
+    
     /**
      * Removes an object related to the given predicate.
      * This is fired when the "-" button is clicked (near an object).
