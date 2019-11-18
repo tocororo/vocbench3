@@ -1,5 +1,5 @@
 import { ARTURIResource } from "./ARTResources";
-import { XmlSchema, RDF } from "./Vocabulary";
+import { XmlSchema, RDF, OWL } from "./Vocabulary";
 
 export interface DatatypeRestrictionsMap extends Map<string, ConstrainingFacets> {} //map of datatype -> facets
 
@@ -41,6 +41,7 @@ export class DatatypeUtils {
     ]
 
     /**
+     * Standard restrictions defined by the xsd scheme
      * Useful references:
      * https://www.w3.org/TR/xmlschema11-2
      * http://www.datypic.com/sc/xsd/s-datatypes.xsd.html
@@ -48,14 +49,14 @@ export class DatatypeUtils {
      * 
      * the real pattern of xsd:Name is "\i\c*", see here https://github.com/TIBCOSoftware/genxdm/issues/69#issuecomment-125290603
      */
-    public static xsdTypeRestrictionsMap: DatatypeRestrictionsMap = new Map([
+    public static typeRestrictionsMap: DatatypeRestrictionsMap = new Map([
         [XmlSchema.anyURI.getURI(), {}],
-        [XmlSchema.base64Binary.getURI(), {}],
+        [XmlSchema.base64Binary.getURI(), { pattern: "((([A-Za-z0-9+/] ?){4})*(([A-Za-z0-9+/] ?){3}[A-Za-z0-9+/]|([A-Za-z0-9+/] ?){2}[AEIMQUYcgkosw048] ?=|[A-Za-z0-9+/] ?[AQgw] ?= ?=))?" }],
         [XmlSchema.boolean.getURI(), {}],
         [XmlSchema.byte.getURI(), { minInclusive: -128, maxInclusive: 128, pattern: "[\-+]?[0-9]+" }],
         [XmlSchema.date.getURI(), {}],
         [XmlSchema.dateTime.getURI(), {}],
-        [XmlSchema.dateTimeStamp.getURI(), {}],
+        [XmlSchema.dateTimeStamp.getURI(), { pattern: ".*(Z|(\+|-)[0-9][0-9]:[0-9][0-9])" }],
         [XmlSchema.dayTimeDuration.getURI(), {}], //unknown pattern [^YM]*(T.*)?
         [XmlSchema.decimal.getURI(), {}],
         [XmlSchema.double.getURI(), {}],
@@ -95,7 +96,16 @@ export class DatatypeUtils {
         [XmlSchema.unsignedInt.getURI(), { minInclusive: 0, maxInclusive: 4294967295, pattern: "[\-+]?[0-9]+" }],
         [XmlSchema.unsignedLong.getURI(), { minInclusive: 0, maxInclusive: 18446744073709551615, pattern: "[\-+]?[0-9]+" }],
         [XmlSchema.unsignedShort.getURI(), { minInclusive: 0, maxInclusive: 65535, pattern: "[\-+]?[0-9]+" }],
-        [XmlSchema.yearMonthDuration.getURI(), {}], //unknown pattern [^DT]*
+        [XmlSchema.yearMonthDuration.getURI(), { pattern: "-?P((([0-9]+Y)([0-9]+M)?)|([0-9]+M))" }],
+    ]);
+
+    /**
+     * Restrictions not defined explicitly in the standards, but defined accordingly their description
+     */
+    public static notStandardRestrictionsMap: DatatypeRestrictionsMap = new Map([
+        [OWL.rational.getURI(), { pattern: "[\-+]?[0-9]+(/[1-9][0-9]*)*" }], //https://www.w3.org/TR/owl2-syntax/#Real_Numbers.2C_Decimal_Numbers.2C_and_Integers
+        
+        
     ]);
 
 }

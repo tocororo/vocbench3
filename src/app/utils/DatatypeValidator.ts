@@ -49,9 +49,12 @@ export class DatatypeValidator {
      */
     public getConstrainingFacets(type: ARTURIResource): ConstrainingFacets {
         let facets: ConstrainingFacets;
-        facets = DatatypeUtils.xsdTypeRestrictionsMap.get(type.getURI());
-        if (facets == null) { //datatype not found among the xsd built-in
-            facets = this.datatypeRestrictions.get(type.getURI());
+        facets = DatatypeUtils.typeRestrictionsMap.get(type.getURI());
+        if (facets == null) { //datatype not found among the standard restrictions
+            facets = DatatypeUtils.notStandardRestrictionsMap.get(type.getURI());
+            if (facets == null) { //datatype not found also among the non-standard restrictions
+                facets = this.datatypeRestrictions.get(type.getURI());
+            }
         }
         return facets;
     }

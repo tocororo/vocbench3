@@ -14,6 +14,7 @@ import { ProjectContext } from '../../utils/VBContext';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { AlignFromSource } from './alignFromSource';
 import { CreateRemoteAlignmentTaskModal, CreateRemoteAlignmentTaskModalData } from './alignmentValidationModals/createRemoteAlignmentTaskModal';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'alignment-remote',
@@ -32,31 +33,90 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
         super(edoalService, projectService);
     }
 
-
+    /**
+     * Initializes the tasks list checking first that the two projects has been profiled
+     */
     init() {
-        HttpServiceContext.setContextProject(this.leftProject);
-        this.mapleService.checkProjectMetadataAvailability().subscribe(
-            available => {
-                HttpServiceContext.removeContextProject();
-                if (available) {
-                    this.listTask();
-                } else {
-                    this.basicModal.confirm("Unavailable metadata", "Unable to find metadata about the current project '" + 
-                        this.leftProject.getName() +  "', do you want to generate them?").then(
-                        confirm => {
-                            UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-                            this.mapleService.profileProject().subscribe(
-                                () => {
-                                    UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                                    this.listTask();
-                                }
-                            )
-                        },
-                        cancel => {}
-                    );
+        this.ensureDatasetProfiled(this.leftProject, "left").subscribe(
+            profiledLeft => {
+                if (profiledLeft) {
+                    this.ensureDatasetProfiled(this.rightProject, "right").subscribe(
+                        profiledRight => {
+                            if (profiledRight) {
+                                this.listTask();
+                            }
+                        }
+                    )
                 }
             }
         )
+    }
+
+    /**
+     * Ensure the profilation of the given project.
+     * Returns true if the project is already profiled or if the user profile it at the moment.
+     * Returns false if the project profilation is denied by the user.
+     * @param project 
+     */
+    private ensureDatasetProfiled(project: Project, datasetPosition: DatasetPosition): Observable<boolean> {
+        if (project != null) {
+            return this.checkDatasetProfiled(project).flatMap(
+                profiled => {
+                    if (profiled) {
+                        return Observable.of(true);
+                    } else {
+                        return this.profileProject(project, datasetPosition);
+                    }
+                }
+            )
+        } else { //in case of non-Edoal project, the right dataset is not given a-priori, so it could be null
+            return Observable.of(true);
+        }
+        
+    }
+
+    /**
+     * Check that the given project has been profiled.
+     * @param project 
+     */
+    private checkDatasetProfiled(project: Project): Observable<boolean> {
+        HttpServiceContext.setContextProject(project);
+        return this.mapleService.checkProjectMetadataAvailability().map(
+            available => {
+                HttpServiceContext.removeContextProject();
+                return available;
+            }
+        );
+    }
+
+    /**
+     * Profiles the project (under the user the permission).
+     * Returns true if the project has been profiled, false if the user denied the operation.
+     * 
+     * @param project 
+     */
+    private profileProject(project: Project, datasetPosition: DatasetPosition): Observable<boolean> {
+        return Observable.fromPromise(
+            this.basicModal.confirm("Unavailable metadata", "Unable to find metadata about the " + datasetPosition + 
+                " project '" + project.getName() +  "', do you want to generate them? (Required for the alignment)").then(
+                confirm => {
+                    HttpServiceContext.setContextProject(project);
+                    UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
+                    return this.mapleService.profileProject().map(
+                        () => {
+                            HttpServiceContext.removeContextProject();
+                            UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
+                            return true;
+                        }
+                    )
+                },
+                cancel => {
+                    return Observable.of(false)
+                }
+            )
+        ).flatMap(
+            profiled => profiled
+        );
     }
 
     private listTask() {
@@ -116,3 +176,5 @@ class AlignedProjectStruct {
     context: ProjectContext;
     profileAvailable: boolean = false;
 }
+
+type DatasetPosition = "left" | "right";
