@@ -18,7 +18,7 @@ export class Sheet2RdfSettingsModalData extends BSModalContext {
 
 @Component({
     selector: "s2rdf-settings-modal",
-    templateUrl: "./sheet2RdfSettingsModal.html",
+    templateUrl: "./sheet2rdfSettingsModal.html",
 })
 export class Sheet2RdfSettingsModal implements ModalComponent<Sheet2RdfSettingsModalData> {
     context: Sheet2RdfSettingsModalData;
