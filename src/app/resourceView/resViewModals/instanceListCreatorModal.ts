@@ -20,7 +20,6 @@ export class InstanceListCreatorModal implements ModalComponent<InstanceListCrea
     private selectedClass: ARTURIResource; //class selected in the class tree
     private selectedSourceInstance: ARTURIResource; //instance selected in the source instance list
     private selectedTargetInstance: ARTURIResource; //instance selected in the source instance list
-    private manchExpr: string; //manchester expression written in input field
     private instanceList: Array<ARTURIResource> = []; //instances to return
     
     private duplicateInstance: ARTURIResource; //instance tried to add to the instanceList but already there 

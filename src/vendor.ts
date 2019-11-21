@@ -23,6 +23,7 @@ import 'yasgui-yasqe/dist/yasqe.min.css';
 import 'codemirror/addon/edit/matchbrackets.js';
 import 'codemirror/addon/edit/closebrackets.js';
 import 'codemirror/addon/comment/comment.js';
+import 'codemirror/addon/mode/simple.js'; //for defineSimpleMode() in the definition of the manchester mode
 import 'codemirror/lib/codemirror.css';
 //import 'codemirror/lib/codemirror.js'; //already imported in codemirrorComponent
 

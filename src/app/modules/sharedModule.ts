@@ -3,7 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { QueryParameterForm } from '../sparql/queryParameterization/queryParameterForm';
 import { YasguiComponent } from '../sparql/yasguiComponent';
-import { CodemirrorComponent } from "../widget/codemirror/codemirrorComponent";
+import { ManchesterEditorComponent } from '../widget/codemirror/manchesterEditor/manchesterEditorComponent';
+import { PearlEditorComponent } from "../widget/codemirror/pearlEditor/pearlEditorComponent";
 import { SanitizerDirective } from "../widget/directives/sanitizerDirective";
 import { ExtensionConfiguratorComponent } from '../widget/extensionConfigurator/extensionConfiguratorComponent';
 import { InputEditableComponent } from '../widget/inputEditable/inputEditableComponent';
@@ -26,14 +27,14 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
     imports: [CommonModule, FormsModule],
     declarations: [
         FilePickerComponent, RdfResourceComponent, LangPickerComponent, DatatypePickerComponent, SanitizerDirective,
-        CodemirrorComponent, YasguiComponent, InputEditableComponent, ResourceListComponent,
+        PearlEditorComponent, ManchesterEditorComponent, YasguiComponent, InputEditableComponent, ResourceListComponent,
         TypedLiteralInputComponent, LanguageItemComponent,
         SettingsRendererComponent, SettingsRendererPanelComponent, SettingSetRendererComponent, SettingMapRendererComponent,
         QueryParameterForm, ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent, ValuePickerComponent,
     ],
     exports: [
         FilePickerComponent, RdfResourceComponent, SanitizerDirective, LangPickerComponent, DatatypePickerComponent,
-        CodemirrorComponent, YasguiComponent, InputEditableComponent, ResourceListComponent,
+        PearlEditorComponent, ManchesterEditorComponent, YasguiComponent, InputEditableComponent, ResourceListComponent,
         TypedLiteralInputComponent, LanguageItemComponent, 
         SettingsRendererComponent, SettingsRendererPanelComponent, SettingSetRendererComponent, SettingMapRendererComponent,
         QueryParameterForm, ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent, ValuePickerComponent,

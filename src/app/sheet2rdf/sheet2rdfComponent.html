@@ -116,8 +116,8 @@
                     </div>
                 </div>
                 <div class="subPanel-body hbox">
-                    <codemirror [code]="pearl" (codechange)="onPearlChange($event)" style="flex: 1;" [disabled]="!tablePreview">
-                    </codemirror>
+                    <pearl-editor [(ngModel)]="pearl" (ngModelChange)="onPearlChange()" style="flex: 1;" [disabled]="!tablePreview">
+                    </pearl-editor>
                     <button class="btn btn-default btn-xs" (click)="insertConverter()" style="align-self: flex-end; margin-left: 4px;"
                         title="Insert converter" [disabled]="!tablePreview">
                         <span class="glyphicon glyphicon-pencil"></span>

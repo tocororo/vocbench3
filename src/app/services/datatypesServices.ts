@@ -126,7 +126,6 @@ export class DatatypesServices {
                     }
                     dtRestrMap.set(dt, constraintFacets);
                 }
-                console.log("dtRestrMap", dtRestrMap);
                 return dtRestrMap;
             }
         );

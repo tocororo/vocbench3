@@ -9,6 +9,7 @@ import { AssistedSearchResultModal } from '../alignment/resourceAlignment/assist
 import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceAlignmentModal';
 import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
 import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreationModal";
+import { PrefixNamespaceModal } from '../metadata/namespacesAndImports/prefixNamespaceModal';
 import { AlertCheckModal } from '../widget/modal/basicModal/alertModal/alertCheckModal';
 import { AlertModal } from '../widget/modal/basicModal/alertModal/alertModal';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -50,6 +51,7 @@ import { StoreConfigurationModal } from '../widget/modal/sharedModal/configurati
 import { ConverterPickerModal } from '../widget/modal/sharedModal/converterPickerModal/converterPickerModal';
 import { SignaturePickerModal } from '../widget/modal/sharedModal/converterPickerModal/signaturePickerModal';
 import { LanguageSelectorModal } from "../widget/modal/sharedModal/languagesSelectorModal/languageSelectorModal";
+import { ManchesterExprModal } from '../widget/modal/sharedModal/manchesterExprModal/manchesterExprModal';
 import { PluginConfigModal } from "../widget/modal/sharedModal/pluginConfigModal/pluginConfigModal";
 import { RemoteAccessConfigEditorModal } from "../widget/modal/sharedModal/remoteAccessConfigModal/remoteAccessConfigEditorModal";
 import { RemoteAccessConfigModal } from "../widget/modal/sharedModal/remoteAccessConfigModal/remoteAccessConfigModal";
@@ -61,7 +63,6 @@ import { CustomFormModule } from "./customFormModule";
 import { SharedModule } from "./sharedModule";
 import { TreeAndListModule } from "./treeAndListModule";
 import { UserModule } from "./userModule";
-import { PrefixNamespaceModal } from '../metadata/namespacesAndImports/prefixNamespaceModal';
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
@@ -89,6 +90,7 @@ import { PrefixNamespaceModal } from '../metadata/namespacesAndImports/prefixNam
         LexicalEntryListModal,
         LexiconListModal,
         LoadConfigurationModal,
+        ManchesterExprModal,
         MappingPropertySelectionModal,
         NewConceptCfModal,
         NewConceptFromLabelModal,
@@ -155,6 +157,7 @@ import { PrefixNamespaceModal } from '../metadata/namespacesAndImports/prefixNam
         LexicalEntryListModal,
         LexiconListModal,
         LoadConfigurationModal,
+        ManchesterExprModal,
         MappingPropertySelectionModal,
         NewConceptCfModal,
         NewConceptFromLabelModal,

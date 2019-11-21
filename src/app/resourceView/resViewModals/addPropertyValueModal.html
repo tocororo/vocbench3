@@ -69,8 +69,8 @@
         </div>
     </div>
 
-    <input *ngIf="selectedAspectSelector == manchExprAspectSelector" type="text" class="form-control input-sm" style="margin-top: 5px;"
-        [(ngModel)]="manchExpr" placeholder="Manchester expression">
+    <manchester-editor *ngIf="selectedAspectSelector == manchExprAspectSelector" [(ngModel)]="manchExpr" style="flex: 1; margin-top: 5px;">
+    </manchester-editor>
 
     <data-range-editor *ngIf="selectedAspectSelector == dataRangeAspectSelector" (datarangeChange)="onDatarangeChanged($event)">
     </data-range-editor>

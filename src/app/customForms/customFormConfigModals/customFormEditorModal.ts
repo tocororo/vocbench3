@@ -5,7 +5,7 @@ import { ARTURIResource } from "../../models/ARTResources";
 import { CustomForm, CustomFormType, EditorMode } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { ResourcesServices } from "../../services/resourcesServices";
-import { CodemirrorComponent } from "../../widget/codemirror/codemirrorComponent";
+import { PearlEditorComponent } from "../../widget/codemirror/pearlEditor/pearlEditorComponent";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
@@ -29,7 +29,7 @@ export class CustomFormEditorModalData extends BSModalContext {
 export class CustomFormEditorModal implements ModalComponent<CustomFormEditorModalData> {
     context: CustomFormEditorModalData;
 
-    @ViewChild(CodemirrorComponent) viewChildCodemirror: CodemirrorComponent;
+    @ViewChild(PearlEditorComponent) viewChildCodemirror: PearlEditorComponent;
 
     private mode: EditorMode;
 

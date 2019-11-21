@@ -5,6 +5,7 @@ import { ARTBNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribu
 import { ManchesterServices } from "../../services/manchesterServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
 export class ClassListCreatorModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title') {
@@ -21,13 +22,12 @@ export class ClassListCreatorModal implements ModalComponent<ClassListCreatorMod
 
     private selectedTreeClass: ARTURIResource; //class selected in the class tree
     private selectedListElement: ARTResource; //class or expression selected in the class list
-    private manchExpr: string; //manchester expression written in input field
     private classList: Array<ARTResource> = []; //classes (ARTURIResource) or expression (ARTBNode)
 
     private duplicateResource: ARTResource; //resource tried to add to the classList but already there 
 
     constructor(public dialog: DialogRef<ClassListCreatorModalData>, public manchService: ManchesterServices,
-        private basicModals: BasicModalServices, private elementRef: ElementRef) {
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private elementRef: ElementRef) {
         this.context = dialog.context;
     }
 
@@ -58,27 +58,30 @@ export class ClassListCreatorModal implements ModalComponent<ClassListCreatorMod
      * Validates the manchester expression and then adds it to the classList
      */
     private addExpressionToList() {
-        this.manchService.checkExpression(this.manchExpr).subscribe(
-            valid => {
-                if (valid) {
-                    //check if the expression is already in the list
-                    for (var i = 0; i < this.classList.length; i++) {
-                        if (this.classList[i].getShow() == this.manchExpr) {
-                            this.duplicateResource = this.classList[i];
-                            return;
+        this.sharedModals.manchesterExpression("New manchester expression").then(
+            expr => {
+                this.manchService.checkExpression(expr).subscribe(
+                    valid => {
+                        if (valid) {
+                            //check if the expression is already in the list
+                            for (var i = 0; i < this.classList.length; i++) {
+                                if (this.classList[i].getShow() == expr) {
+                                    this.duplicateResource = this.classList[i];
+                                    return;
+                                }
+                            }
+                            //adds the expression as ARTBNode to the list 
+                            var exprCls = new ARTBNode(expr, expr, RDFResourceRolesEnum.cls);
+                            exprCls.setAdditionalProperty(ResAttribute.EXPLICIT, true);
+                            this.classList.push(exprCls);
+                            this.duplicateResource = null;
+                        } else {
+                            this.basicModals.alert("Invalid Expression", "'" + expr + "' is not a valid Manchester Expression", "error");
                         }
                     }
-                    //adds the expression as ARTBNode to the list 
-                    var exprCls = new ARTBNode(this.manchExpr, this.manchExpr, RDFResourceRolesEnum.cls);
-                    exprCls.setAdditionalProperty(ResAttribute.EXPLICIT, true);
-                    this.classList.push(exprCls);
-                    this.manchExpr = null;
-                    this.duplicateResource = null;
-                } else {
-                    this.basicModals.alert("Invalid Expression", "'" + this.manchExpr + "' is not a valid Manchester Expression", "error");
-                }
+                )
             }
-        )
+        );
     }
 
     /**

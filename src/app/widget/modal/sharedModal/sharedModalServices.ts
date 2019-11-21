@@ -18,6 +18,7 @@ import { LoadConfigurationModal, LoadConfigurationModalData } from "./configurat
 import { StoreConfigurationModal, StoreConfigurationModalData } from "./configurationStoreModal/storeConfigurationModal";
 import { ConverterPickerModal, ConverterPickerModalData } from "./converterPickerModal/converterPickerModal";
 import { LanguageSelectorModal, LanguageSelectorModalData } from "./languagesSelectorModal/languageSelectorModal";
+import { ManchesterExprModal, ManchesterExprModalData } from './manchesterExprModal/manchesterExprModal';
 import { PluginConfigModal, PluginConfigModalData } from "./pluginConfigModal/pluginConfigModal";
 import { RemoteAccessConfigModal, RemoteAccessConfigModalData } from "./remoteAccessConfigModal/remoteAccessConfigModal";
 import { RemoteRepoSelectionModal, RemoteRepoSelectionModalData } from "./remoteRepoSelectionModal/remoteRepoSelectionModal";
@@ -237,6 +238,21 @@ export class SharedModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(PrefixNamespaceModal, overlayConfig).result;
+    }
+
+    /**
+     * Opens a modal to create/edit a manchester expression
+     * @param title 
+     * @param expression 
+     * @return returns a manchester expression
+     */
+    manchesterExpression(title: string, expression?: string): Promise<string> {
+        var modalData = new ManchesterExprModalData(title, expression);
+        const builder = new BSModalContextBuilder<ManchesterExprModalData>(
+            modalData, undefined, ManchesterExprModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        return this.modal.open(ManchesterExprModal, overlayConfig).result;
     }
 
 }

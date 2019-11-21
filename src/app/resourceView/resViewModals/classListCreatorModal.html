@@ -13,6 +13,10 @@
             <button class="btn btn-default btn-sm btn-block" style="margin-bottom: 5px;" (click)="removeFromList()" [disabled]="!selectedListElement">
                 <span class="glyphicon glyphicon-chevron-left"></span>Remove
             </button>
+
+            <button class="btn btn-default btn-sm btn-block" style="margin-top: 20px;" (click)="addExpressionToList()">
+                Manchester...<span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
         </div>
 
         <div class="scrollableContainer" style="border: 1px solid #ddd">
@@ -22,13 +26,6 @@
                 </rdf-resource>
             </div>
         </div>
-    </div>
-
-    <div class="input-group" style="margin-top: 5px;">
-        <input type="text" class="form-control input-sm" [(ngModel)]="manchExpr" placeholder="Manchester expression">
-        <span class="input-group-btn">
-            <button class="btn btn-default btn-sm" (click)="addExpressionToList()">Add expression</button>
-        </span>
     </div>
 
     <div *ngIf="duplicateResource" class="alert alert-danger" style="margin-top: 4px;" role="alert">

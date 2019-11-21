@@ -3,13 +3,13 @@ import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Properties } from "../models/Properties";
 import { RDFFormat } from "../models/RDFFormat";
-import { FsNamingStrategy, GraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview, SimpleGraphApplication, AdvancedGraphApplication } from "../models/Sheet2RDF";
+import { AdvancedGraphApplication, FsNamingStrategy, GraphApplication, SimpleGraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
 import { ExportServices } from "../services/exportServices";
 import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
 import { Sheet2RDFServices } from "../services/sheet2rdfServices";
 import { HttpServiceContext } from "../utils/HttpManager";
 import { UIUtils } from "../utils/UIUtils";
-import { CodemirrorComponent } from "../widget/codemirror/codemirrorComponent";
+import { PearlEditorComponent } from "../widget/codemirror/pearlEditor/pearlEditorComponent";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { HeaderEditorModal, HeaderEditorModalData } from "./s2rdfModals/headerEditorModal";
@@ -63,7 +63,7 @@ export class Sheet2RdfComponent {
     @ViewChild('topPanel',  { read: ElementRef }) private topPanelRef: ElementRef;
     @ViewChild('triplesPanel',  { read: ElementRef }) private triplesPanelRef: ElementRef;
 
-    @ViewChild(CodemirrorComponent) viewChildCodemirror: CodemirrorComponent;
+    @ViewChild(PearlEditorComponent) viewChildCodemirror: PearlEditorComponent;
 
     //preferences
     private useHeader: boolean = true;
@@ -289,12 +289,10 @@ export class Sheet2RdfComponent {
 
     private resetPearlEditor() {
         this.pearl = "";
-        this.updatePearl(this.pearl);
         this.pearlValidation = { valid: true, details: null };
     }
 
-    private onPearlChange(pearl: string) {
-        this.pearl = pearl;
+    private onPearlChange() {
         //reset the previous timeout and set it again
         clearTimeout(this.pearlValidationTimer);
         this.pearlValidationTimer = window.setTimeout(() => { this.checkPearl() }, 1000);
@@ -303,7 +301,7 @@ export class Sheet2RdfComponent {
     private generatePearl() {
         this.s2rdfService.getPearl().subscribe(
             pearl => {
-                this.updatePearl(pearl);
+                this.pearl = pearl;
                 this.checkPearl();
                 this.triplesPreview = null;
             }
@@ -313,7 +311,7 @@ export class Sheet2RdfComponent {
     private loadPearl(pearlFile: File) {
         this.s2rdfService.uploadPearl(pearlFile).subscribe(
             pearl => {
-                this.updatePearl(pearl);
+                this.pearl = pearl;
             }
         )
     }
@@ -347,19 +345,6 @@ export class Sheet2RdfComponent {
             },
             () => {}
         )
-    }
-
-    /**
-     * Due to an issue with the codemirror component (read more in ngOnChanges of CodemirrorComponent.ts)
-     * the pearl update performed setting a value to this.pearl requires to be done by setting to undefined the value 
-     * then, after triggering a round of change detection, setting the "actual" value.
-     * @param pearl 
-     */
-    private updatePearl(pearl: string) {
-        this.pearl = undefined;
-        setTimeout(() => {
-            this.pearl = pearl;
-        });
     }
 
     /* ==========================================================
@@ -445,16 +430,12 @@ export class Sheet2RdfComponent {
     //======================
 
     private settings() {
-        // var modalData = new Sheet2RdfSettingsModalData(this.useHeader, this.fsNamingStrategy);
         var modalData = new Sheet2RdfSettingsModalData(this.fsNamingStrategy);
         const builder = new BSModalContextBuilder<Sheet2RdfSettingsModalData>(
             modalData, undefined, Sheet2RdfSettingsModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         this.modal.open(Sheet2RdfSettingsModal, overlayConfig).result.then(
-            // (updatedSettings: Sheet2RdfSettingsModalReturnData) => { //closed with the "ok" button, so changes performed => reload
-            //     this.useHeader = updatedSettings.useHeader;
-            //     this.fsNamingStrategy = updatedSettings.fsNamingStrategy;
             (newFsNamingStrategy: FsNamingStrategy) => {
                 this.fsNamingStrategy = newFsNamingStrategy;
                 this.loadSpreadsheet();

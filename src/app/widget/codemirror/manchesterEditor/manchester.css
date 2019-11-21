@@ -1,0 +1,14 @@
+/*
+Here I extended the CSS rules of the default theme in codemirror.css
+(https://codemirror.net/lib/codemirror.css) with further rules for each keyword of the manchester syntax
+*/
+
+.cm-s-default .cm-quantifier { color: #9c0cb2; font-weight: bold; } /* some, value, ... */
+.cm-s-default .cm-conjuction { color: #0c965f; font-weight: bold; } /* and, or, ... */
+.cm-s-default .cm-facet { color: #05a; } /* minLenght, pattern, ... */
+.cm-s-default .cm-builtinDatatype { color: #085; } /* integer, decimal, ... */
+.cm-s-default .cm-characteristic { color: #0075ba; font-weight: bold; } /* Functional, InverseFunctional */
+/* .cm-s-default .cm-bracket {} */ /* already available in default */
+.cm-s-default .cm-frame { color: #757575; font-weight: bold; } /* AnnotationProperty:, Class:, ... */
+.cm-s-default .cm-section { color: #001abc; font-weight: bold; } /* Annotations:, SubClassOf:, ... */
+.cm-s-default .cm-boolean { color: #219 } /* atom */
