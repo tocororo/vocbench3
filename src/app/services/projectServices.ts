@@ -131,7 +131,7 @@ export class ProjectServices {
         supportRepoSailConfigurerSpecification?: PluginSpecification, supportBackendType?: BackendTypesEnum,
         leftDataset?: string, rightDataset?: string,
         uriGeneratorSpecification?: PluginSpecification, renderingEngineSpecification?: PluginSpecification,
-        creationDateProperty?: ARTURIResource, modificationDateProperty?: ARTURIResource,
+        creationDateProperty?: ARTURIResource, modificationDateProperty?: ARTURIResource, enableSHACL?: boolean,
         preloadedDataFileName?: string, preloadedDataFormat?: string, transitiveImportAllowance?: TransitiveImportMethodAllowance) {
         
         var params: any = {
@@ -156,6 +156,7 @@ export class ProjectServices {
             renderingEngineSpecification: (renderingEngineSpecification) ? JSON.stringify(renderingEngineSpecification) : null,
             creationDateProperty: creationDateProperty,
             modificationDateProperty: modificationDateProperty,
+            enableSHACL: enableSHACL,
             preloadedDataFileName: preloadedDataFileName,
             preloadedDataFormat: preloadedDataFormat,
             transitiveImportAllowance: transitiveImportAllowance
