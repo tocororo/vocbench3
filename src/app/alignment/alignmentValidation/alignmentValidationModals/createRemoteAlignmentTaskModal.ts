@@ -63,9 +63,10 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
 
     private initProjectStruct(projStruct: AlignedProjectStruct) {
         HttpServiceContext.setContextProject(projStruct.project);
-        this.mapleService.checkProjectMetadataAvailability().subscribe(
+        this.mapleService.checkProjectMetadataAvailability().finally(
+            () => HttpServiceContext.removeContextProject()
+        ).subscribe(
             available => {
-                HttpServiceContext.removeContextProject();
                 projStruct.profileAvailable = available;
             }
         );
@@ -88,10 +89,11 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
     private profileProjectImpl(projStruct: AlignedProjectStruct) {
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         HttpServiceContext.setContextProject(projStruct.project);
-        this.mapleService.profileProject().subscribe(
+        this.mapleService.profileProject().finally(
+            () => HttpServiceContext.removeContextProject()
+        ).subscribe(
             () => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                HttpServiceContext.removeContextProject();
                 projStruct.profileAvailable = true;
             }
         );

@@ -132,7 +132,6 @@ export class AlignmentManagementComponent {
         HttpServiceContext.setContextProject(project); //set a temporary context project
         return this.resourceService.getResourcesInfo(entities).map(
             renderedResources => {
-                HttpServiceContext.removeContextProject();
                 this.alignmentCellList.forEach(cell => {
                     for (let i = 0; i < renderedResources.length; i++) {
                         if (dataset == "left" && cell.getEntity1().getURI() == renderedResources[i].getURI()) {
@@ -144,9 +143,10 @@ export class AlignmentManagementComponent {
                         }
                     }           
                 })
-            },
+            }
+        ).finally(
             () => HttpServiceContext.removeContextProject()
-        );
+        );;
     }
 
     /**

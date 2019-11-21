@@ -83,9 +83,10 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
         HttpServiceContext.setContextProject(project);
         return this.mapleService.checkProjectMetadataAvailability().map(
             available => {
-                HttpServiceContext.removeContextProject();
                 return available;
             }
+        ).finally(
+            () => HttpServiceContext.removeContextProject()
         );
     }
 
@@ -104,11 +105,12 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
                     UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
                     return this.mapleService.profileProject().map(
                         () => {
-                            HttpServiceContext.removeContextProject();
                             UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                             return true;
                         }
-                    )
+                    ).finally(
+                        () => HttpServiceContext.removeContextProject()
+                    );
                 },
                 cancel => {
                     return Observable.of(false)

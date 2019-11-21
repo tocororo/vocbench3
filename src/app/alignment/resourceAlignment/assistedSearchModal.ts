@@ -105,9 +105,10 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
 
     private refreshTargetMetadata() {
         HttpServiceContext.setContextProject(this.selectedProject);
-        this.mapleService.profileProject().subscribe(
+        this.mapleService.profileProject().finally(
+            () => HttpServiceContext.removeContextProject()
+        ).subscribe(
             resp => {
-                HttpServiceContext.removeContextProject();
                 this.profileMediation();
             }
         );
@@ -125,9 +126,10 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
         } else {
             //metadata availability has not been checked (the entry is not in the map) => check it
             HttpServiceContext.setContextProject(this.selectedProject);
-            this.mapleService.checkProjectMetadataAvailability().subscribe(
+            this.mapleService.checkProjectMetadataAvailability().finally(
+                () => HttpServiceContext.removeContextProject()
+            ).subscribe(
                 available => {
-                    HttpServiceContext.removeContextProject();
                     this.projectMetadataAvailabilityMap.set(this.selectedProject, available);
                     this.profileMediationLocalProject();
                 }
@@ -144,10 +146,11 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
     private generateProjectMetadata() {
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         HttpServiceContext.setContextProject(this.selectedProject);
-        this.mapleService.profileProject().subscribe(
+        this.mapleService.profileProject().finally(
+            () => HttpServiceContext.removeContextProject()
+        ).subscribe(
             resp => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                HttpServiceContext.removeContextProject();
                 this.projectMetadataAvailabilityMap.set(this.selectedProject, true);
                 this.profileMediation();
             }

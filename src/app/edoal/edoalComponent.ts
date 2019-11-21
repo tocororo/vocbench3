@@ -189,9 +189,11 @@ export class EdoalComponent {
         });
         if (leftEntities.length > 0 || rightEntities.length > 0) {
             HttpServiceContext.setContextProject(this.leftProjCtx.getProject());
-            this.resourcesService.getResourcesInfo(leftEntities).subscribe(
+            this.resourcesService.getResourcesInfo(leftEntities)
+            .finally(
+                () => HttpServiceContext.removeContextProject()
+            ).subscribe(
                 resources => {
-                    HttpServiceContext.removeContextProject();
                     resources.forEach(r => {
                         this.correspondences.forEach(c => {
                             if (c.leftEntity[0].equals(r)) {
@@ -202,9 +204,10 @@ export class EdoalComponent {
                 }
             );
             HttpServiceContext.setContextProject(this.rightProjCtx.getProject());
-            this.resourcesService.getResourcesInfo(rightEntities).subscribe(
+            this.resourcesService.getResourcesInfo(rightEntities).finally(
+                () => HttpServiceContext.removeContextProject()
+            ).subscribe(
                 resources => {
-                    HttpServiceContext.removeContextProject();
                     resources.forEach(r => {
                         this.correspondences.forEach(c => {
                             if (c.rightEntity[0].equals(r)) {
