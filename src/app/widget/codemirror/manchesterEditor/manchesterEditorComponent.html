@@ -1,3 +1,8 @@
-<div class="vbox" style="overflow: auto">
-    <textarea #txtarea [ngClass]="{disabled: disabled}"></textarea>
+<div class="panel panel-default vbox" style="position: relative;">
+    <div *ngIf="!codeValid" style="position: absolute; top: 12px; right: 30px; z-index: 1;" title="Invalid manchester expression">
+        <span class="glyphicon glyphicon-alert" style="color: red;"></span>
+    </div>
+    <div class="panel-body vbox" style="overflow: auto">
+        <textarea #txtarea [ngClass]="{disabled: disabled}"></textarea>
+    </div>
 </div>

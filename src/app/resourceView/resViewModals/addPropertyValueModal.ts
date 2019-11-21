@@ -3,11 +3,9 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTLiteral, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from '../../models/ARTResources';
 import { OWL, RDF, RDFS, SKOS, SKOSXL } from '../../models/Vocabulary';
-import { ManchesterServices } from "../../services/manchesterServices";
 import { PropertyServices, RangeType } from "../../services/propertyServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
-import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { BrowsingModalServices } from '../../widget/modal/browsingModal/browsingModalServices';
 
 /**
@@ -96,8 +94,8 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private inverseProp: boolean = false; //for properties selection (when viewType is propertyTree and showInversePropertyCheckbox is true)
     private datarange: ARTLiteral[];
 
-    constructor(public dialog: DialogRef<AddPropertyValueModalData>, public manchService: ManchesterServices, private propService: PropertyServices, 
-        private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private elementRef: ElementRef) {
+    constructor(public dialog: DialogRef<AddPropertyValueModalData>, private propService: PropertyServices, 
+        private browsingModals: BrowsingModalServices, private elementRef: ElementRef) {
         this.context = dialog.context;
     }
 
@@ -313,19 +311,11 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         event.stopPropagation();
         event.preventDefault();
         if (this.selectedAspectSelector == this.manchExprAspectSelector) {
-            this.manchService.checkExpression(this.manchExpr).subscribe(
-                valid => {
-                    if (valid) {
-                        let returnedData: AddPropertyValueModalReturnData = {
-                            property: this.enrichingProperty,
-                            value: this.manchExpr,
-                        }
-                        this.dialog.close(returnedData);
-                    } else {
-                        this.basicModals.alert("Invalid Expression", "'" + this.manchExpr + "' is not a valid Manchester Expression", "error");
-                    }
-                }
-            );
+            let returnedData: AddPropertyValueModalReturnData = {
+                property: this.enrichingProperty,
+                value: this.manchExpr,
+            }
+            this.dialog.close(returnedData);
         } else if (this.selectedAspectSelector == this.dataRangeAspectSelector) {
             let returnedData: AddPropertyValueModalReturnData = {
                 property: this.enrichingProperty,

@@ -1,6 +1,7 @@
 import { Component, forwardRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as CodeMirror from 'codemirror';
+import { ManchesterServices } from '../../../services/manchesterServices';
 import "./manchester";
 
 @Component({
@@ -8,7 +9,8 @@ import "./manchester";
     templateUrl: "manchesterEditorComponent.html",
     providers: [{
          provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ManchesterEditorComponent), multi: true,
-    }]
+    }],
+    host: { class: "vbox" }
 })
 
 export class ManchesterEditorComponent {
@@ -18,7 +20,10 @@ export class ManchesterEditorComponent {
 
     private cmEditor: CodeMirror.EditorFromTextArea;
 
-    constructor() { }
+    private codeValid: boolean = true;
+    private codeValidationTimer: number;
+
+    constructor(private manchesterService: ManchesterServices) { }
 
     ngAfterViewInit() {
         this.cmEditor = CodeMirror.fromTextArea(
@@ -36,7 +41,7 @@ export class ManchesterEditorComponent {
         );
 
         this.cmEditor.on('change', (cm: CodeMirror.Editor) => {
-            this.propagateChange(cm.getDoc().getValue());
+            this.onCodeChange(cm.getDoc().getValue());
         });
 
     }
@@ -45,6 +50,24 @@ export class ManchesterEditorComponent {
         if (changes['disabled'] && this.cmEditor != null) {
             this.cmEditor.setOption('readOnly', changes['disabled'].currentValue);
         }
+    }
+
+    onCodeChange(code: string) {
+        this.codeValidationTimer = window.setTimeout(() => { this.validateExpression(code) }, 1000);
+        
+    }
+
+    validateExpression(code: string) {
+        this.manchesterService.checkExpression(code).subscribe(
+            valid => {
+                this.codeValid = valid;
+                if (valid) {
+                    this.propagateChange(code);
+                } else {
+                    this.propagateChange(null); //in case invalid, propagate a null expression
+                }
+            }
+        );
     }
 
     /**
