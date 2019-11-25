@@ -22,12 +22,12 @@
     const characteristics = ["Functional", "InverseFunctional", "Reflexive", "Irreflexive", "Symmetric", "Asymmetric", "Transitive"];
     const conjuctions = ["and", "not", "that", "or"];
     const facets = ["langRange", "length", "maxLength", "minLength", "pattern", "<", "<=", ">", ">="];
-    const frames = ["AnnotationProperty", "Class", "DataProperty", "Datatype", "DifferentIndividuals", "DisjointClasses",
-        "DisjointProperties", "EquivalentClasses", "EquivalentProperties", "Individual", "ObjectProperty", "SameIndividual"];
     const quantifiers = ["some", "only", "value", "min", "max", "exactly"];
-    const sections = ["Annotations", "SubClassOf", "EquivalentTo", "DisjointWith", "DisjointUnion", "SubPropertyOf",
-        "InverseOf", "SubPropertyChain", "Domain", "Range", "Characteristics", "Types", "SameAs", "DifferentFrom",
-        "Facts", "SuperClassOf", "SuperPropertyOf", "Individuals"];
+    // const frames = ["AnnotationProperty", "Class", "DataProperty", "Datatype", "DifferentIndividuals", "DisjointClasses",
+    //     "DisjointProperties", "EquivalentClasses", "EquivalentProperties", "Individual", "ObjectProperty", "SameIndividual"];
+    // const sections = ["Annotations", "SubClassOf", "EquivalentTo", "DisjointWith", "DisjointUnion", "SubPropertyOf",
+    //     "InverseOf", "SubPropertyChain", "Domain", "Range", "Characteristics", "Types", "SameAs", "DifferentFrom",
+    //     "Facts", "SuperClassOf", "SuperPropertyOf", "Individuals"];
 
     //Regular expresions
     const booleansRegex = getRegexp(booleans, false);
@@ -35,10 +35,9 @@
     const characteristicsRegex = getRegexp(characteristics, true);
     const conjuctionsRegex = getRegexp(conjuctions, false);
     const facetsRegex = getRegexp(facets, true);
-    const framesRegex = new RegExp("(?:" + frames.join("|") + "):(\\b|\\s|$)");
     const quantifiersRegex = getRegexp(quantifiers, false);
-    const sectionsRegex = new RegExp("(?:" + sections.join("|") + "):(\\b|\\s|$)");
-
+    // const framesRegex = new RegExp("(?:" + frames.join("|") + "):(\\b|\\s|$)");
+    // const sectionsRegex = new RegExp("(?:" + sections.join("|") + "):(\\b|\\s|$)");
 
 
     CodeMirror.defineSimpleMode("manchester", {
@@ -69,17 +68,17 @@
                 token: "facet"
             },
             {
-                regex: framesRegex,
-                token: "frame"
-            },
-            {
                 regex: quantifiersRegex,
                 token: "quantifier"
             },
-            {
-                regex: sectionsRegex,
-                token: "section"
-            },
+            // {
+            //     regex: framesRegex,
+            //     token: "frame"
+            // },
+            // {
+            //     regex: sectionsRegex,
+            //     token: "section"
+            // },
             {
                 regex: /0x[a-f\d]+|[-+]?(?:\.\d+|\d+\.?\d*)(?:e[-+]?\d+)?/i,
                 token: "number"
