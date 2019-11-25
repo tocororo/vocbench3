@@ -154,6 +154,8 @@ export class CreateProjectComponent {
     private createdProp: string = DCT.created.getURI();
     private modifiedProp: string = DCT.modified.getURI();
 
+    private enableSHACL: boolean = false;
+
     constructor(private projectService: ProjectServices, private pluginService: PluginsServices, private extensionService: ExtensionsServices,
         private inOutService: InputOutputServices, private router: Router, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
     }
@@ -795,7 +797,7 @@ export class CreateProjectComponent {
             supportRepoSailConfigurerSpecification, supportRepoBackendType,
             leftDataset, rightDataset,
             uriGeneratorSpecification, renderingEngineSpecification,
-            creationProp, modificationProp,
+            creationProp, modificationProp, this.enableSHACL,
             preloadedDataFileName, preloadedDataFormat, transitiveImportAllowance).subscribe(
                 stResp => {
                     UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
