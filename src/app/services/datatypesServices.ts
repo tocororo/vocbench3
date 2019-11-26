@@ -90,19 +90,6 @@ export class DatatypesServices {
         );
     }
 
-    /**
-     * 
-     * @param datatype 
-     * @param pattern 
-     */
-    setDatatypePattern(datatype: ARTURIResource, pattern: ARTLiteral) {
-        var params: any = {
-            datatype: datatype,
-            pattern: pattern
-        };
-        return this.httpMgr.doPost(this.serviceName, "setDatatypePattern", params);
-    }
-
     getDatatypeRestrictions(): Observable<DatatypeRestrictionsMap> {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getDatatypeRestrictions", params).map(
@@ -112,15 +99,15 @@ export class DatatypesServices {
                     let constraintFacets: ConstrainingFacets = {};
                     for (let facet in stResp[dt]) {
                         let restrValue: string = ResourceUtils.parseLiteral(stResp[dt][facet]).getValue();
-                        if (facet == XmlSchema.maxExclusive) {
+                        if (facet == XmlSchema.maxExclusive.getURI()) {
                             constraintFacets.maxExclusive = parseInt(restrValue);
-                        } else if (facet == XmlSchema.maxInclusive) {
+                        } else if (facet == XmlSchema.maxInclusive.getURI()) {
                             constraintFacets.maxInclusive = parseInt(restrValue);
-                        } else if (facet == XmlSchema.minExclusive) {
+                        } else if (facet == XmlSchema.minExclusive.getURI()) {
                             constraintFacets.minExclusive = parseInt(restrValue);
-                        } else if (facet == XmlSchema.minInclusive) {
+                        } else if (facet == XmlSchema.minInclusive.getURI()) {
                             constraintFacets.minInclusive = parseInt(restrValue);
-                        } else if (facet == XmlSchema.pattern) {
+                        } else if (facet == XmlSchema.pattern.getURI()) {
                             constraintFacets.pattern = restrValue;
                         }
                     }
@@ -129,6 +116,22 @@ export class DatatypesServices {
                 return dtRestrMap;
             }
         );
+    }
+
+    setDatatypeRestriction(datatype: ARTURIResource, base: ARTURIResource, facets: {[facet: string]: string}) {
+        var params: any = {
+            datatype: datatype,
+            base: base,
+            facets: JSON.stringify(facets),
+        };
+        return this.httpMgr.doPost(this.serviceName, "setDatatypeRestriction", params);
+    }
+
+    deleteDatatypeRestriction(datatype: ARTURIResource) {
+        var params: any = {
+            datatype: datatype,
+        };
+        return this.httpMgr.doPost(this.serviceName, "deleteDatatypeRestriction", params);
     }
     
     

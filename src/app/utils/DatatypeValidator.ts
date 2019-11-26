@@ -34,7 +34,10 @@ export class DatatypeValidator {
         let facets = this.getConstrainingFacets(type);
         return (
             this.isNumericType(type) || 
-            facets != null && facets.pattern != null ||
+            facets != null && (
+                facets.pattern != null || facets.maxExclusive != null || facets.maxInclusive != null || 
+                facets.minExclusive != null || facets.minInclusive != null
+            ) ||
             DatatypeUtils.programmaticallyValidableType.some(dt => dt.equals(type))
         );
     }

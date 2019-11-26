@@ -440,6 +440,8 @@ export class UIUtils {
             datatype == XmlSchema.unsignedByte.getURI() || datatype == XmlSchema.unsignedInt.getURI() || 
             datatype == XmlSchema.unsignedLong.getURI() || datatype == XmlSchema.unsignedShort.getURI()) {
             imgSrc = require("../../assets/images/icons/res/number.png");
+        } else {
+            imgSrc = require("../../assets/images/icons/res/unknown_datatype.png");
         }
         return imgSrc;
     }

@@ -211,11 +211,11 @@ export class XmlSchema { //all resources here have role "individual" (don't know
     public static unsignedShort = new ARTURIResource(XmlSchema.namespace + "unsignedShort", "xsd:unsignedShort");
     public static yearMonthDuration = new ARTURIResource(XmlSchema.namespace + "yearMonthDuration", "xsd:yearMonthDuration");
     //attributes
-    public static maxExclusive: string = XmlSchema.namespace + "maxExclusive";
-    public static maxInclusive: string = XmlSchema.namespace + "maxInclusive";
-    public static minExclusive: string = XmlSchema.namespace + "minExclusive";
-    public static minInclusive: string = XmlSchema.namespace + "minInclusive";
-    public static pattern: string = XmlSchema.namespace + "pattern";
+    public static maxExclusive = new ARTURIResource(XmlSchema.namespace + "maxExclusive", "xsd:maxExclusive");
+    public static maxInclusive = new ARTURIResource(XmlSchema.namespace + "maxInclusive", "xsd:maxInclusive");
+    public static minExclusive = new ARTURIResource(XmlSchema.namespace + "minExclusive", "xsd:minExclusive");
+    public static minInclusive = new ARTURIResource(XmlSchema.namespace + "minInclusive", "xsd:minInclusive");
+    public static pattern = new ARTURIResource(XmlSchema.namespace + "pattern", "xsd:pattern");
 }
 
 

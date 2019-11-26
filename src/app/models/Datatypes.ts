@@ -5,6 +5,53 @@ export interface DatatypeRestrictionsMap extends Map<string, ConstrainingFacets>
 
 export class DatatypeUtils {
 
+    public static xsdBuiltInTypes: ARTURIResource[] = [
+        XmlSchema.anyURI,
+        XmlSchema.base64Binary,
+        XmlSchema.boolean,
+        XmlSchema.byte,
+        XmlSchema.date,
+        XmlSchema.dateTime,
+        XmlSchema.decimal,
+        XmlSchema.double,
+        XmlSchema.duration,
+        XmlSchema.ENTITIES,
+        XmlSchema.ENTITY,
+        XmlSchema.float,
+        XmlSchema.gDay,
+        XmlSchema.gMonth,
+        XmlSchema.gMonthDay,
+        XmlSchema.gYear,
+        XmlSchema.gYearMonth,
+        XmlSchema.hexBinary,
+        XmlSchema.ID,
+        XmlSchema.IDREF,
+        XmlSchema.IDREFS,
+        XmlSchema.int,
+        XmlSchema.integer,
+        XmlSchema.language,
+        XmlSchema.long,
+        XmlSchema.Name,
+        XmlSchema.NCName,
+        XmlSchema.negativeInteger,
+        XmlSchema.NMTOKEN,
+        XmlSchema.NMTOKENS,
+        XmlSchema.nonNegativeInteger,
+        XmlSchema.nonPositiveInteger,
+        XmlSchema.normalizedString,
+        XmlSchema.NOTATION,
+        XmlSchema.positiveInteger,
+        XmlSchema.QName,
+        XmlSchema.short,
+        XmlSchema.string,
+        XmlSchema.time,
+        XmlSchema.token,
+        XmlSchema.unsignedByte,
+        XmlSchema.unsignedInt,
+        XmlSchema.unsignedLong,
+        XmlSchema.unsignedShort,
+    ];
+
     /**
      * Datatypes defined as "numeric" in the XSD definition
      */
@@ -104,8 +151,6 @@ export class DatatypeUtils {
      */
     public static notStandardRestrictionsMap: DatatypeRestrictionsMap = new Map([
         [OWL.rational.getURI(), { pattern: "[\-+]?[0-9]+(/[1-9][0-9]*)*" }], //https://www.w3.org/TR/owl2-syntax/#Real_Numbers.2C_Decimal_Numbers.2C_and_Integers
-        
-        
     ]);
 
 }
