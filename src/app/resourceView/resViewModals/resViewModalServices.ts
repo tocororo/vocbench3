@@ -11,6 +11,7 @@ import { ClassListCreatorModal, ClassListCreatorModalData } from "./classListCre
 import { ConstituentListCreatorModal, ConstituentListCreatorModalData } from './constituentListCreatorModal';
 import { CopyLocalesModal, CopyLocalesModalData } from './copyLocalesModal';
 import { DataRangeEditorModal, DataRangeEditorModalData } from "./dataRangeEditorModal";
+import { DataTypeFacetsModal, DataTypeFacetsModalData } from './datatypeFacetsModal';
 import { InstanceListCreatorModal, InstanceListCreatorModalData } from "./instanceListCreatorModal";
 import { PropertyChainCreatorModal, PropertyChainCreatorModalData } from './propertyChainCreatorModal';
 import { RdfsMembersModal, RdfsMembersModalData } from './rdfsMembersModal';
@@ -187,6 +188,20 @@ export class ResViewModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(CopyLocalesModal, overlayConfig).result;
+    }
+
+    /**
+     * @param title 
+     * @param datatype the datatype to which add/edit the restriction
+     * @param restriction if provided, represents the restriction to edit
+     */
+    setDatatypeFacets(title: string, datatype: ARTURIResource, restriction?: ARTBNode) {
+        var modalData = new DataTypeFacetsModalData(title, datatype, restriction);
+        const builder = new BSModalContextBuilder<DataTypeFacetsModalData>(
+            modalData, undefined, DataTypeFacetsModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        return this.modal.open(DataTypeFacetsModal, overlayConfig).result;
     }
 
 }

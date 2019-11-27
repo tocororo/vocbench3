@@ -162,3 +162,8 @@ export class ConstrainingFacets {
     maxInclusive?: number;
     pattern?: string;
 }
+
+export class DatatypeRestrictionDescription {
+    base: ARTURIResource;
+    facets: ConstrainingFacets = new ConstrainingFacets();
+}

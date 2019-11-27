@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BroadersPartitionRenderer } from '../resourceView/renderer/impl/broadersPartitionRenderer';
 import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/renderer/impl/classAxiomPartitionRenderer';
 import { ConstituentsPartitionRenderer } from '../resourceView/renderer/impl/constituentsPartitionRenderer';
+import { DatatypeDefinitionPartitionRenderer } from '../resourceView/renderer/impl/datatypeDefinitionPartitionRenderer';
 import { DenotationsPartitionRenderer } from '../resourceView/renderer/impl/denotationsPartitionRenderer';
 import { DisjointPropertiesPartitionRenderer } from '../resourceView/renderer/impl/disjointPropertiesRenderer';
 import { DomainsPartitionRenderer } from '../resourceView/renderer/impl/domainsPartitionRenderer';
@@ -46,6 +47,7 @@ import { ConstituentListCreatorModal } from '../resourceView/resViewModals/const
 import { CopyLocalesModal } from '../resourceView/resViewModals/copyLocalesModal';
 import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
 import { DataRangeEditorModal } from '../resourceView/resViewModals/dataRangeEditorModal';
+import { DataTypeFacetsModal } from '../resourceView/resViewModals/datatypeFacetsModal';
 import { InstanceListCreatorModal } from '../resourceView/resViewModals/instanceListCreatorModal';
 import { PropertyChainCreatorModal } from '../resourceView/resViewModals/propertyChainCreatorModal';
 import { RdfsMembersModal } from '../resourceView/resViewModals/rdfsMembersModal';
@@ -71,6 +73,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         BroadersPartitionRenderer,
         ClassAxiomPartitionPartitionRenderer, 
         ConstituentsPartitionRenderer,
+        DatatypeDefinitionPartitionRenderer,
         DenotationsPartitionRenderer,
         DisjointPropertiesPartitionRenderer,
         DomainsPartitionRenderer,
@@ -106,6 +109,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         CopyLocalesModal,
         DataRangeEditorModal,
         DataRangeEditor,
+        DataTypeFacetsModal,
         InstanceListCreatorModal,
         PropertyChainCreatorModal,
         RdfsMembersModal,
@@ -119,6 +123,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         AddManuallyValueModal,
         AddPropertyValueModal,
         BrowseExternalResourceModal,
+        DataTypeFacetsModal,
         ClassListCreatorModal,
         ConstituentListCreatorModal,
         CopyLocalesModal,

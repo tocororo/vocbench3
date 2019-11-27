@@ -311,6 +311,9 @@ export abstract class PartitionRenderer {
     }
 
     /**
+     * Customizes the behaviour to the edit action (fired from the editable-resource).
+     * Note: in order to trigger this method, in the EditableResourceComponent it is necessary to change the
+     * editActionScenario to "partition" in order to deletage the handling to the related partition
      * @param predicate 
      * @param object 
      */

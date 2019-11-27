@@ -66,6 +66,7 @@ export class ResourceViewComponent {
     private broadersColl: ARTPredicateObjects[] = null;
     private classAxiomColl: ARTPredicateObjects[] = null;
     private constituentsColl: ARTPredicateObjects[] = null;
+    private datatypeDefinitionColl: ARTPredicateObjects[] = null;
     private denotationsColl: ARTPredicateObjects[] = null;
     private disjointPropertiesColl: ARTPredicateObjects[] = null;
     private domainsColl: ARTPredicateObjects[] = null;
@@ -208,6 +209,7 @@ export class ResourceViewComponent {
         this.broadersColl = null;
         this.classAxiomColl = null;
         this.constituentsColl = null;
+        this.datatypeDefinitionColl = null;
         this.denotationsColl = null;
         this.disjointPropertiesColl = null;
         this.domainsColl = null;
@@ -281,6 +283,13 @@ export class ResourceViewComponent {
             this.filterPredObjList(this.constituentsColl);
             // this.sortObjects(this.constituentsColl); ordered server-side
         }
+
+        var datatypeDefinitionPartition: any = this.resViewResponse[ResViewPartition.datatypeDefinitions];
+        if (datatypeDefinitionPartition != null) {
+            this.datatypeDefinitionColl = Deserializer.createPredicateObjectsList(datatypeDefinitionPartition);
+            this.filterPredObjList(this.datatypeDefinitionColl);
+            this.sortObjects(this.datatypeDefinitionColl);
+        } 
 
         var denotationsPartition: any = this.resViewResponse[ResViewPartition.denotations];
         if (denotationsPartition != null) {

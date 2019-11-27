@@ -5,6 +5,7 @@ export enum ResViewPartition {
     broaders = "broaders",
     classaxioms = "classaxioms",
     constituents = "constituents",
+    datatypeDefinitions = "datatypeDefinitions",
     denotations = "denotations",
     disjointProperties = "disjointProperties",
     domains = "domains",
@@ -81,6 +82,9 @@ export class ResViewUtils {
         ResViewPartition.types
     ];
 
+    /**
+     * The partitions ordered according how they are shown in the RV
+     */
     public static orderedResourceViewPartitions: ResViewPartition[] = [
         ResViewPartition.types,
         ResViewPartition.classaxioms,
@@ -95,6 +99,7 @@ export class ResViewUtils {
         ResViewPartition.domains,
         ResViewPartition.ranges,
         ResViewPartition.facets,
+        ResViewPartition.datatypeDefinitions,
         ResViewPartition.lexicalizations,
         ResViewPartition.lexicalForms,
         ResViewPartition.lexicalSenses,
@@ -115,6 +120,8 @@ export class ResViewUtils {
     public static getResourceViewPartitionLabel(partition: ResViewPartition): string {
         if (partition == ResViewPartition.classaxioms) {
             return "Class axioms";
+        } else if (partition == ResViewPartition.datatypeDefinitions) {
+            return "Datatype definitions";
         } else if (partition == ResViewPartition.disjointProperties) {
             return "Disjoint properties";
         } else if (partition == ResViewPartition.equivalentProperties) {
@@ -164,6 +171,8 @@ export class ResViewUtils {
             return [RDFS.subClassOf, OWL.equivalentClass, OWL.disjointWith, OWL.complementOf, OWL.intersectionOf, OWL.unionOf, OWL.oneOf];
         } else if (partition == ResViewPartition.constituents) {
             return [Decomp.constituent];
+        } else if (partition == ResViewPartition.datatypeDefinitions) {
+            return [OWL.equivalentClass]; //set, but not used
         } else if (partition == ResViewPartition.denotations) {
             return [OntoLex.denotes];
         } else if (partition == ResViewPartition.disjointProperties) {

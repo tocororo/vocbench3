@@ -8,10 +8,10 @@ import { PropertyServices } from "../../services/propertyServices";
 import { RefactorServices } from "../../services/refactorServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { DatatypeValidator } from "../../utils/DatatypeValidator";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
-import { DatatypeValidator } from "../../utils/DatatypeValidator";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
@@ -76,17 +76,24 @@ export class EditableResourceComponent {
     constructor(private resourcesService: ResourcesServices, private propService: PropertyServices,
         private manchesterService: ManchesterServices, private refactorService: RefactorServices,
         private basicModals: BasicModalServices, private creationModals: CreationModalServices,
-        private browsingModals: BrowsingModalServices, private rvModalService: ResViewModalServices, 
+        private browsingModals: BrowsingModalServices, private rvModalService: ResViewModalServices,
         private dtValidator: DatatypeValidator) { }
 
     ngOnInit() {
+        /**
+         * Initializes the editActionScenario: this tells how to handle the "edit" action.
+         * For details see the comments written to the enum definitions of the EditActionScenarioEnum.
+         */
         if (this.resource instanceof ARTLiteral && this.resource.getDatatype() == null) {
             this.editActionScenario = EditActionScenarioEnum.plainLiteral;
         } else if (this.resource instanceof ARTLiteral && this.resource.getDatatype() != null) {
             this.editActionScenario = EditActionScenarioEnum.typedLiteral;
         } else if (this.resource instanceof ARTResource && this.resource.getRole() == RDFResourceRolesEnum.xLabel) {
             this.editActionScenario = EditActionScenarioEnum.xLabel;
-        } else if (this.partition == ResViewPartition.subPropertyChains) {
+        } else if (
+            this.partition == ResViewPartition.datatypeDefinitions ||
+            this.partition == ResViewPartition.subPropertyChains
+        ) {
             this.editActionScenario = EditActionScenarioEnum.partition;
         }
 
@@ -106,11 +113,12 @@ export class EditableResourceComponent {
          * Determines if the menu item "Replace with existing resource" should be visible.
          * Visible:
          * in classaxioms partition if object is an IRI
-         * in any partitions (different from classaxioms and subPropertyChains) if the object is a resource
+         * in any partitions (except from classaxioms, datatypeFacets, subPropertyChains) if the object is a resource
         */
         this.isReplaceMenuItemAvailable = (
             (this.partition == ResViewPartition.classaxioms && this.resource.isURIResource()) ||
-            (this.partition != ResViewPartition.subPropertyChains && this.partition != ResViewPartition.classaxioms && this.resource.isResource())
+            (this.partition != ResViewPartition.subPropertyChains && this.partition != ResViewPartition.classaxioms &&
+                this.partition != ResViewPartition.datatypeDefinitions && this.resource.isResource())
         );
 
         /**
@@ -545,7 +553,7 @@ export class EditableResourceComponent {
                     }
                 );
             },
-            () => {}
+            () => { }
         );
     }
 

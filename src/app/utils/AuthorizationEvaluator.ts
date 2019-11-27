@@ -213,6 +213,7 @@ export class AuthorizationEvaluator {
                 (partition == ResViewPartition.broaders && AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddBroaderConcept)) ||
                 (partition == ResViewPartition.classaxioms && AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesCreateClassAxiom)) ||
                 (partition == ResViewPartition.constituents && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexSetLexicalEntryConstituent)) ||
+                (partition == ResViewPartition.datatypeDefinitions && AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, resource)) ||
                 (partition == ResViewPartition.denotations && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddLexicalization, resource)) ||
                 (partition == ResViewPartition.disjointProperties && AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesAddDisjointProperty)) ||
                 (partition == ResViewPartition.domains && AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesAddPropertyDomain)) ||
@@ -251,6 +252,7 @@ export class AuthorizationEvaluator {
                 (partition == ResViewPartition.broaders && AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveBroaderConcept)) ||
                 (partition == ResViewPartition.classaxioms && AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesRemoveClassAxiom)) ||
                 (partition == ResViewPartition.constituents && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexClearLexicalEntryConstituent)) ||
+                (partition == ResViewPartition.datatypeDefinitions && AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue)) ||
                 (partition == ResViewPartition.denotations && AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemovePlainLexicalization)) ||
                 (partition == ResViewPartition.disjointProperties && AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRemoveDisjointProperty)) ||
                 (partition == ResViewPartition.domains && AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRemovePropertyDomain)) ||

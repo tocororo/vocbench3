@@ -83,6 +83,7 @@ export class OWL {
     public static inverseOf = new ARTURIResource(OWL.namespace + "inverseOf", "owl:inverseOf", RDFResourceRolesEnum.property);
     public static maxCardinality = new ARTURIResource(OWL.namespace + "maxCardinality", "owl:maxCardinality", RDFResourceRolesEnum.property);
     public static minCardinality = new ARTURIResource(OWL.namespace + "minCardinality", "owl:minCardinality", RDFResourceRolesEnum.property);
+    public static onDatatype = new ARTURIResource(OWL.namespace + "onDatatype", "owl:onDatatype", RDFResourceRolesEnum.property);
     public static onProperty = new ARTURIResource(OWL.namespace + "onProperty", "owl:onProperty", RDFResourceRolesEnum.property);
     public static priorVersion = new ARTURIResource(OWL.namespace + "priorVersion", "owl:priorVersion", RDFResourceRolesEnum.ontologyProperty);
     public static propertyChainAxiom = new ARTURIResource(OWL.namespace + "propertyChainAxiom", "owl:propertyChainAxiom", RDFResourceRolesEnum.property);
@@ -90,6 +91,7 @@ export class OWL {
     public static sameAs = new ARTURIResource(OWL.namespace + "sameAs", "owl:sameAs", RDFResourceRolesEnum.property);
     public static someValuesFrom = new ARTURIResource(OWL.namespace + "someValuesFrom", "owl:someValuesFrom", RDFResourceRolesEnum.property);
     public static versionInfo = new ARTURIResource(OWL.namespace + "versionInfo", "owl:versionInfo", RDFResourceRolesEnum.annotationProperty);
+    public static withRestrictions = new ARTURIResource(OWL.namespace + "withRestrictions", "owl:withRestrictions", RDFResourceRolesEnum.property);
     //DATATYPES
     public static rational = new ARTURIResource(OWL.namespace + "rational", "owl:rational", RDFResourceRolesEnum.dataRange);
     public static real = new ARTURIResource(OWL.namespace + "real", "owl:real", RDFResourceRolesEnum.dataRange);

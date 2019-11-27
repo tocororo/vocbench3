@@ -109,6 +109,9 @@
             <property-facets-renderer *ngIf="inverseofColl && propertyFacets" [pred-obj-list]="inverseofColl" [facets]="propertyFacets"
                 [resource]="resource" [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </property-facets-renderer>
+            <datatype-definition-renderer *ngIf="datatypeDefinitionColl" [pred-obj-list]="datatypeDefinitionColl" [resource]="resource" [rendering]="rendering"
+                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            </datatype-definition-renderer>
             <lexicalizations-renderer *ngIf="lexicalizationsColl" [pred-obj-list]="lexicalizationsColl" [resource]="resource" [rendering]="rendering"
                 [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </lexicalizations-renderer>
