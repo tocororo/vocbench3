@@ -1,6 +1,6 @@
 <div class="panel panel-default">
     <div class="panel-body">
-        <typed-literal-input [(ngModel)]="value"></typed-literal-input>
+        <typed-literal-input [(ngModel)]="value" (keydown.enter)="add()"></typed-literal-input>
     </div>
 </div>
 

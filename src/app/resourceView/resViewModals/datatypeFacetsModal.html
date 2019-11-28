@@ -1,64 +1,19 @@
 <div class="modal-header">
     <h3 class="modal-title">{{context.title}}</h3>
 </div>
-<div class="modal-body">
+<div class="modal-body vbox">
 
-    <table class="table table-condensed table-borderless">
-        <colgroup>
-            <col style="width: 1%">
-            <col>
-        </colgroup>
-        <tbody>
-            <tr>
-                <td nowrap><label>Base</label></td>
-                <td>
-                    <select class="form-control input-sm" [(ngModel)]="base">
-                        <option *ngFor="let b of baseOpts" [ngValue]="b">{{b.getShow()}}</option>
-                    </select>
-                </td>
-            </tr>
-            <ng-container *ngIf="isBaseNumeric()">
-                <tr>
-                    <td nowrap><label>Min</label></td>
-                    <td>
-                        <div class="hbox">
-                            <select class="form-control input-sm" style="width: initial; margin-right: 4px;" [(ngModel)]="minIE">
-                                <option *ngFor="let ie of inclusiveExclusive">{{ie}}</option>
-                            </select>
-                            <input type="number" class="form-control input-sm" [(ngModel)]="min">
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td nowrap><label>Max</label></td>
-                    <td>
-                        <div class="hbox">
-                            <select class="form-control input-sm" style="width: initial; margin-right: 4px;" [(ngModel)]="maxIE">
-                                <option *ngFor="let ie of inclusiveExclusive">{{ie}}</option>
-                            </select>
-                            <input type="number" class="form-control input-sm"[(ngModel)]="max">
-                        </div>
-                    </td>
-                </tr>
-            </ng-container>
-            <tr>
-                <td nowrap><label>Pattern</label></td>
-                <td>
-                    <input class="form-control input-sm" [(ngModel)]="pattern">
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div style="margin-bottom: 4px;">
+        <div class="btn-group btn-group-xs pull-right">
+            <button *ngFor="let a of aspectSelectors" class="btn btn-default" [ngClass]="{active: selectedAspect == a}"
+                (click)="selectedAspect = a">{{a}}</button>
+        </div>
+    </div>
 
-    <!-- <div class="hbox">
-        <select class="form-control input-sm" [(ngModel)]="selectedFacet">
-            <option *ngFor="let f of facets" [ngValue]="f">{{f.getShow()}}</option>
-        </select>
-        <input *ngIf="!isNumericFacet(); else numericFacet" class="form-control input-sm" [(ngModel)]="value">
-        <ng-template #numericFacet>
-            <input  type="number" class="form-control input-sm" [(ngModel)]="value">
-        </ng-template>
-    </div> -->
+    
+    <datatype-facets-editor *ngIf="selectedAspect == ASPECT_FACETS" [(ngModel)]="description"></datatype-facets-editor>
+    <manchester-editor *ngIf="selectedAspect == ASPECT_MANCHESTER" [(ngModel)]="manchExpr"></manchester-editor>
+    <div *ngIf="selectedAspect == ASPECT_ENUMERATION">TODO</div>
 
 </div>
 <div class="modal-footer">

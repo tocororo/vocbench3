@@ -144,23 +144,6 @@ export class Deserializer {
                     node.setAdditionalProperty(ResAttribute.EXPLICIT, false);
                 }
             }
-
-            //patch to override the show of the dataRange (that could be very long) with a shorter version
-            if (node.getRole() == RDFResourceRolesEnum.dataRange) {
-                let charLimit: number = 50;
-                let dataRangeShow = node.getShow();
-                if (dataRangeShow.length > charLimit) {
-                    let shortShow: string = "";
-                    let splitted: string[] = dataRangeShow.split(",");
-                    let i = 0;
-                    while (shortShow.length < charLimit) {
-                        shortShow += splitted[i] + ",";
-                        i++;
-                    } 
-                    shortShow += " ...}";
-                    node.setAdditionalProperty(ResAttribute.SHOW, shortShow);
-                }
-            }
         }
 
         var tripleScope: string = resJson[ResAttribute.TRIPLE_SCOPE];

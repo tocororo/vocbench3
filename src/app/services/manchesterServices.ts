@@ -33,7 +33,7 @@ export class ManchesterServices {
             exprType: predicate,
             manchExpr: manchExpr
         };
-        return this.httpMgr.doGet(this.serviceName, "createRestriction", params);
+        return this.httpMgr.doPost(this.serviceName, "createRestriction", params);
     }
 
     /**
@@ -48,7 +48,7 @@ export class ManchesterServices {
             exprType: predicate,
             bnode: bnode
         };
-        return this.httpMgr.doGet(this.serviceName, "removeExpression", params);
+        return this.httpMgr.doPost(this.serviceName, "removeExpression", params);
     }
 
     /**
@@ -61,7 +61,7 @@ export class ManchesterServices {
             newManchExpr: newManchExpr,
             bnode: bnode
         };
-        return this.httpMgr.doGet(this.serviceName, "updateExpression", params);
+        return this.httpMgr.doPost(this.serviceName, "updateExpression", params);
     }
 
     isClassAxiom(bnode: ARTBNode): Observable<boolean> {

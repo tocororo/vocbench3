@@ -1,0 +1,46 @@
+<table class="table table-condensed table-borderless">
+    <colgroup>
+        <col style="width: 1%">
+        <col>
+    </colgroup>
+    <tbody>
+        <tr>
+            <td nowrap><label>Base</label></td>
+            <td>
+                <select class="form-control input-sm" [(ngModel)]="base" (ngModelChange)="onFacetsChange()">
+                    <option *ngFor="let b of baseOpts" [ngValue]="b">{{b.getShow()}}</option>
+                </select>
+            </td>
+        </tr>
+        <ng-container *ngIf="isBaseNumeric()">
+            <tr>
+                <td nowrap><label>Min</label></td>
+                <td>
+                    <div class="hbox">
+                        <select class="form-control input-sm" style="width: initial; margin-right: 4px;" [(ngModel)]="minIE" (ngModelChange)="onFacetsChange()">
+                            <option *ngFor="let ie of inclusiveExclusive">{{ie}}</option>
+                        </select>
+                        <input type="number" class="form-control input-sm" [(ngModel)]="min" (ngModelChange)="onFacetsChange()">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap><label>Max</label></td>
+                <td>
+                    <div class="hbox">
+                        <select class="form-control input-sm" style="width: initial; margin-right: 4px;" [(ngModel)]="maxIE" (ngModelChange)="onFacetsChange()">
+                            <option *ngFor="let ie of inclusiveExclusive">{{ie}}</option>
+                        </select>
+                        <input type="number" class="form-control input-sm"[(ngModel)]="max" (ngModelChange)="onFacetsChange()">
+                    </div>
+                </td>
+            </tr>
+        </ng-container>
+        <tr>
+            <td nowrap><label>Pattern</label></td>
+            <td>
+                <input class="form-control input-sm" [(ngModel)]="pattern" (ngModelChange)="onFacetsChange()">
+            </td>
+        </tr>
+    </tbody>
+</table>
