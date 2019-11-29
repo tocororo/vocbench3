@@ -48,7 +48,7 @@ import { CopyLocalesModal } from '../resourceView/resViewModals/copyLocalesModal
 import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
 import { DataRangeEditorModal } from '../resourceView/resViewModals/dataRangeEditorModal';
 import { DatatypeFacetsEditor } from '../resourceView/resViewModals/datatypeFacetsEditor';
-import { DataTypeFacetsModal } from '../resourceView/resViewModals/datatypeFacetsModal';
+import { DataTypeRestrictionsModal } from '../resourceView/resViewModals/datatypeRestrictionsModal';
 import { InstanceListCreatorModal } from '../resourceView/resViewModals/instanceListCreatorModal';
 import { PropertyChainCreatorModal } from '../resourceView/resViewModals/propertyChainCreatorModal';
 import { RdfsMembersModal } from '../resourceView/resViewModals/rdfsMembersModal';
@@ -110,7 +110,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         CopyLocalesModal,
         DataRangeEditorModal,
         DataRangeEditor,
-        DataTypeFacetsModal,
+        DataTypeRestrictionsModal,
         DatatypeFacetsEditor,
         InstanceListCreatorModal,
         PropertyChainCreatorModal,
@@ -125,7 +125,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         AddManuallyValueModal,
         AddPropertyValueModal,
         BrowseExternalResourceModal,
-        DataTypeFacetsModal,
+        DataTypeRestrictionsModal,
         ClassListCreatorModal,
         ConstituentListCreatorModal,
         CopyLocalesModal,

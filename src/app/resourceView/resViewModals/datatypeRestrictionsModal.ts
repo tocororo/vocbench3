@@ -7,9 +7,10 @@ import { DatatypeRestrictionDescription } from "../../models/Datatypes";
 import { XmlSchema } from "../../models/Vocabulary";
 import { DatatypesServices } from "../../services/datatypesServices";
 import { ManchesterServices } from "../../services/manchesterServices";
+import { ManchesterCtx } from "../../widget/codemirror/manchesterEditor/manchesterEditorComponent";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
-export class DataTypeFacetsModalData extends BSModalContext {
+export class DataTypeRestrictionsModalData extends BSModalContext {
     constructor(
         public title: string,
         public datatype: ARTURIResource,
@@ -20,11 +21,11 @@ export class DataTypeFacetsModalData extends BSModalContext {
 }
 
 @Component({
-    selector: "datatype-facets-modal",
-    templateUrl: "./dataTypeFacetsModal.html",
+    selector: "datatype-restrictions-modal",
+    templateUrl: "./datatypeRestrictionsModal.html",
 })
-export class DataTypeFacetsModal implements ModalComponent<DataTypeFacetsModalData> {
-    context: DataTypeFacetsModalData;
+export class DataTypeRestrictionsModal implements ModalComponent<DataTypeRestrictionsModalData> {
+    context: DataTypeRestrictionsModalData;
 
     private readonly ASPECT_FACETS: string = "Facets";
     private readonly ASPECT_MANCHESTER: string = "Manchester";
@@ -37,9 +38,11 @@ export class DataTypeFacetsModal implements ModalComponent<DataTypeFacetsModalDa
     private selectedAspect: string = this.ASPECT_FACETS;
 
     private description: DatatypeRestrictionDescription;
+
+    private manchesterCtx: ManchesterCtx = ManchesterCtx.datatype;
     private manchExpr: string;
 
-    constructor(public dialog: DialogRef<DataTypeFacetsModalData>, private datatypeService: DatatypesServices, private manchService: ManchesterServices,
+    constructor(public dialog: DialogRef<DataTypeRestrictionsModalData>, private datatypeService: DatatypesServices, private manchService: ManchesterServices,
         private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
@@ -81,8 +84,7 @@ export class DataTypeFacetsModal implements ModalComponent<DataTypeFacetsModalDa
 
     private getApplyManchesterFn(): Observable<void> {
         if (this.manchExpr != null) {
-            //set the expression for the datatype
-            // return this.manchService....
+            return this.datatypeService.setDatatypeManchesterRestriction(this.context.datatype, this.manchExpr);
         } else {
             return null;
         }

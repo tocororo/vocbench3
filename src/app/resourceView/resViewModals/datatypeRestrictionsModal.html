@@ -12,7 +12,7 @@
 
     
     <datatype-facets-editor *ngIf="selectedAspect == ASPECT_FACETS" [(ngModel)]="description"></datatype-facets-editor>
-    <manchester-editor *ngIf="selectedAspect == ASPECT_MANCHESTER" [(ngModel)]="manchExpr"></manchester-editor>
+    <manchester-editor *ngIf="selectedAspect == ASPECT_MANCHESTER" [(ngModel)]="manchExpr" [context]="manchesterCtx"></manchester-editor>
     <div *ngIf="selectedAspect == ASPECT_ENUMERATION">TODO</div>
 
 </div>

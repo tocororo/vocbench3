@@ -77,7 +77,7 @@ export class ExportResultAsRdfModal implements ModalComponent<ExportResultAsRdfM
             }
             filteringPipelineParam = JSON.stringify(filteringPipeline);
         }
-        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.sparqlService.exportGraphQueryResultAsRdf(this.context.query, this.selectedExportFormat, this.context.inferred, filteringPipelineParam).subscribe(
             blob => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);

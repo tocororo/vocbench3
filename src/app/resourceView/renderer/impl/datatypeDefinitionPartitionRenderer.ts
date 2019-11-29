@@ -43,7 +43,7 @@ export class DatatypeDefinitionPartitionRenderer extends PartitionRenderSingleRo
 
     editHandler(predicate: ARTURIResource, object: ARTNode) {
         //here I can force the cast to ARTBNode since I am sure that all the object handled in this partition are Bnode
-        this.resViewModals.setDatatypeFacets("Edit datatype facets", <ARTURIResource>this.resource, <ARTBNode>object).then(
+        this.resViewModals.setDatatypeFacets("Edit datatype restrictions", <ARTURIResource>this.resource, <ARTBNode>object).then(
             () => {
                 this.update.emit();
             },

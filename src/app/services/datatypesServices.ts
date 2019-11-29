@@ -166,5 +166,12 @@ export class DatatypesServices {
         return this.httpMgr.doPost(this.serviceName, "deleteDatatypeRestriction", params);
     }
 
+    setDatatypeManchesterRestriction(datatype: ARTURIResource, manchExpr: string) {
+        var params: any = {
+            datatype: datatype,
+            manchExpr: manchExpr,
+        };
+        return this.httpMgr.doPost(this.serviceName, "setDatatypeManchesterRestriction", params);
+    }
 
 }

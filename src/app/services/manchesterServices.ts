@@ -21,6 +21,18 @@ export class ManchesterServices {
         return this.httpMgr.doGet(this.serviceName, "checkExpression", params);
     }
 
+
+    /**
+     * returns true if the expression is compliant with the syntax of datatype restrions, false otherwise
+     * @param manchExpr 
+     */
+    checkDatatypeExpression(manchExpr: string): Observable<boolean> {
+        var params = {
+            manchExpr: manchExpr
+        };
+        return this.httpMgr.doGet(this.serviceName, "checkDatatypeExpression", params);
+    }
+
     /**
      * Creates a restriction
      * @param cls the subject class of the restriction

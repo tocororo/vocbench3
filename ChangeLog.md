@@ -4,11 +4,16 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 6.1.0-beta.1 (dd-mm-yyyy)
+# 7.0.0-beta.1 (dd-mm-yyyy)
   * Enabled management of Edoal projects.
+  * Added support for alignment generation and validation throgh an remote alignment system (Genoma)
   * Enabled multiple administators.
   * Enabled the possibility to use CustomRange with lexicalization properties.
+  * Added support for datatype definitions through enumerations, restrictions and general dataranges expressed
+    in Manchester syntax.
+  * Improved validation of typed values.
   * Improved the "dangling concepts" ICV with the possibility to run the check on all the schemes.
+  * Enabled the load data from dataset catalog
   * Fixed and improved the Advanced Graph Applications in Sheet2RDF.
   * Implemented an initial system configuration page available once the first user has been registered.
   * Enabled customization of optional user fields.

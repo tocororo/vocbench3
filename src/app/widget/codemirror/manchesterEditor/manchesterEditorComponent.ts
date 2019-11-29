@@ -1,6 +1,7 @@
 import { Component, forwardRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as CodeMirror from 'codemirror';
+import { Observable } from 'rxjs';
 import { ManchesterServices } from '../../../services/manchesterServices';
 import "./manchester";
 
@@ -14,6 +15,7 @@ import "./manchester";
 })
 
 export class ManchesterEditorComponent {
+    @Input() context: ManchesterCtx;
     @Input() disabled: boolean;
     
     @ViewChild('txtarea') textareaElement: any;
@@ -53,12 +55,19 @@ export class ManchesterEditorComponent {
     }
 
     onCodeChange(code: string) {
+        clearTimeout(this.codeValidationTimer);
         this.codeValidationTimer = window.setTimeout(() => { this.validateExpression(code) }, 1000);
         
     }
 
     validateExpression(code: string) {
-        this.manchesterService.checkExpression(code).subscribe(
+        let validationFn: Observable<boolean>;
+        if (this.context == ManchesterCtx.datatype) {
+            validationFn = this.manchesterService.checkDatatypeExpression(code);
+        } else {
+            validationFn = this.manchesterService.checkExpression(code);
+        }
+        validationFn.subscribe(
             valid => {
                 this.codeValid = valid;
                 if (valid) {
@@ -107,4 +116,11 @@ export class ManchesterEditorComponent {
     // we use it to emit changes back to the parent
     private propagateChange = (_: any) => { };
 
+}
+
+/**
+ * Useful to distringuish the context in which the editor is used and consequently which validation to apply
+ */
+export enum ManchesterCtx {
+    datatype = "datatype"
 }
