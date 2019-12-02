@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { ARTBNode, ARTURIResource, ResAttribute } from '../models/ARTResources';
-import { ConstrainingFacets, DatatypeRestrictionDescription, DatatypeRestrictionsMap } from '../models/Datatypes';
+import { ARTBNode, ARTLiteral, ARTURIResource, ResAttribute } from '../models/ARTResources';
+import { ConstrainingFacets, DatatypeFacetsDescription, DatatypeRestrictionDescription, DatatypeRestrictionsMap } from '../models/Datatypes';
 import { OWL, XmlSchema } from '../models/Vocabulary';
 import { Deserializer } from '../utils/Deserializer';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
@@ -125,45 +125,47 @@ export class DatatypesServices {
         return this.httpMgr.doGet(this.serviceName, "getRestrictionDescription", params).map(
             stResp => {
                 let description: DatatypeRestrictionDescription = new DatatypeRestrictionDescription();
-                for (let key in stResp) {
-                    let value: string = stResp[key];
-                    /**
-                     * the initial + for the min/max facets is used for converting a string to number (independently if int or float)
-                     * see https://stackoverflow.com/a/14668510/5805661
-                     */
-                    if (key == OWL.onDatatype.getURI()) {
-                        description.base = ResourceUtils.parseURI(value);
-                    } else if (key == XmlSchema.maxExclusive.getURI()) {
-                        description.facets.maxExclusive = +ResourceUtils.parseLiteral(value).getValue(); 
-                    } else if (key == XmlSchema.maxInclusive.getURI()) {
-                        description.facets.maxInclusive = +ResourceUtils.parseLiteral(value).getValue(); 
-                    } else if (key == XmlSchema.minExclusive.getURI()) {
-                        description.facets.minExclusive = +ResourceUtils.parseLiteral(value).getValue();
-                    } else if (key == XmlSchema.minInclusive.getURI()) {
-                        description.facets.minInclusive = +ResourceUtils.parseLiteral(value).getValue();
-                    } else if (key == XmlSchema.pattern.getURI()) {
-                        description.facets.pattern = ResourceUtils.parseLiteral(value).getValue();
+
+                let facetsJson = stResp.facets;
+                let enumerationsJson = stResp.enumerations;
+                if (Object.keys(facetsJson).length != 0) { //facetsJson not empty?
+                    let facetsDescription: DatatypeFacetsDescription = new DatatypeFacetsDescription();
+                    for (let key in facetsJson) {
+                        let value: string = facetsJson[key];
+                        /**
+                         * the initial + for the min/max facets is used for converting a string to number (independently if int or float)
+                         * see https://stackoverflow.com/a/14668510/5805661
+                         */
+                        if (key == OWL.onDatatype.getURI()) {
+                            facetsDescription.base = ResourceUtils.parseURI(value);
+                        } else if (key == XmlSchema.maxExclusive.getURI()) {
+                            facetsDescription.facets.maxExclusive = +ResourceUtils.parseLiteral(value).getValue(); 
+                        } else if (key == XmlSchema.maxInclusive.getURI()) {
+                            facetsDescription.facets.maxInclusive = +ResourceUtils.parseLiteral(value).getValue(); 
+                        } else if (key == XmlSchema.minExclusive.getURI()) {
+                            facetsDescription.facets.minExclusive = +ResourceUtils.parseLiteral(value).getValue();
+                        } else if (key == XmlSchema.minInclusive.getURI()) {
+                            facetsDescription.facets.minInclusive = +ResourceUtils.parseLiteral(value).getValue();
+                        } else if (key == XmlSchema.pattern.getURI()) {
+                            facetsDescription.facets.pattern = ResourceUtils.parseLiteral(value).getValue();
+                        }
                     }
+                    description.facets = facetsDescription;
+                } else if (enumerationsJson.lenght != 0) { //enumeration array not empty?
+                    description.enumerations = Deserializer.createLiteralArray(enumerationsJson);
                 }
                 return description;
             }
         );
     }
 
-    setDatatypeRestriction(datatype: ARTURIResource, base: ARTURIResource, facets: { [facet: string]: string }) {
+    setDatatypeFacetsRestriction(datatype: ARTURIResource, base: ARTURIResource, facets: { [facet: string]: string }) {
         var params: any = {
             datatype: datatype,
             base: base,
             facets: JSON.stringify(facets),
         };
-        return this.httpMgr.doPost(this.serviceName, "setDatatypeRestriction", params);
-    }
-
-    deleteDatatypeRestriction(datatype: ARTURIResource) {
-        var params: any = {
-            datatype: datatype,
-        };
-        return this.httpMgr.doPost(this.serviceName, "deleteDatatypeRestriction", params);
+        return this.httpMgr.doPost(this.serviceName, "setDatatypeFacetsRestriction", params);
     }
 
     setDatatypeManchesterRestriction(datatype: ARTURIResource, manchExpr: string) {
@@ -172,6 +174,22 @@ export class DatatypesServices {
             manchExpr: manchExpr,
         };
         return this.httpMgr.doPost(this.serviceName, "setDatatypeManchesterRestriction", params);
+    }
+
+    setDatatypeEnumerationRestrictions(datatype: ARTURIResource, literals: ARTLiteral[]) {
+        var params: any = {
+            datatype: datatype,
+            literals: literals,
+        };
+        return this.httpMgr.doPost(this.serviceName, "setDatatypeEnumerationRestrictions", params);
+    }
+
+
+    deleteDatatypeRestriction(datatype: ARTURIResource) {
+        var params: any = {
+            datatype: datatype,
+        };
+        return this.httpMgr.doPost(this.serviceName, "deleteDatatypeRestriction", params);
     }
 
 }

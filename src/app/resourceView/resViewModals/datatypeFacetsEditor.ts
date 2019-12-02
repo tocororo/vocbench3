@@ -1,7 +1,7 @@
 import { Component, forwardRef } from "@angular/core";
-import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
 import { ARTURIResource } from "../../models/ARTResources";
-import { DatatypeRestrictionDescription, DatatypeUtils } from "../../models/Datatypes";
+import { DatatypeRestrictionDescription, DatatypeUtils, DatatypeFacetsDescription } from "../../models/Datatypes";
 import { XmlSchema } from "../../models/Vocabulary";
 
 @Component({
@@ -11,7 +11,7 @@ import { XmlSchema } from "../../models/Vocabulary";
         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => DatatypeFacetsEditor), multi: true,
     }]
 })
-export class DatatypeFacetsEditor {
+export class DatatypeFacetsEditor implements ControlValueAccessor {
 
     private base: ARTURIResource = XmlSchema.string;
     private pattern: string;
@@ -32,7 +32,7 @@ export class DatatypeFacetsEditor {
     }
 
     onFacetsChange() {
-        let description: DatatypeRestrictionDescription = new DatatypeRestrictionDescription();
+        let description: DatatypeFacetsDescription = new DatatypeFacetsDescription();
         description.base = this.base;
         description.facets.pattern = this.pattern;
         if (this.isBaseNumeric()) {
@@ -59,7 +59,7 @@ export class DatatypeFacetsEditor {
     /**
      * Write a new value to the element.
      */
-    writeValue(obj: DatatypeRestrictionDescription) {
+    writeValue(obj: DatatypeFacetsDescription) {
         if (obj != null) {
             this.base = this.baseOpts.find(dt => dt.equals(obj.base));
             this.pattern = obj.facets.pattern;

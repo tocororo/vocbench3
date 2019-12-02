@@ -3,7 +3,7 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from "rxjs";
 import { ARTBNode, ARTLiteral, ARTURIResource } from "../../models/ARTResources";
-import { DatatypeRestrictionDescription } from "../../models/Datatypes";
+import { DatatypeRestrictionDescription, DatatypeFacetsDescription } from "../../models/Datatypes";
 import { XmlSchema } from "../../models/Vocabulary";
 import { DatatypesServices } from "../../services/datatypesServices";
 import { ManchesterServices } from "../../services/manchesterServices";
@@ -33,14 +33,19 @@ export class DataTypeRestrictionsModal implements ModalComponent<DataTypeRestric
     private aspectSelectors: string[] = [
         this.ASPECT_FACETS, 
         this.ASPECT_MANCHESTER, 
-        // this.ASPECT_ENUMERATION
+        this.ASPECT_ENUMERATION
     ];
     private selectedAspect: string = this.ASPECT_FACETS;
 
-    private description: DatatypeRestrictionDescription;
+    /* Facets */
+    private facetsDescription: DatatypeFacetsDescription;
 
-    private manchesterCtx: ManchesterCtx = ManchesterCtx.datatype;
+    /* manchester */
+    private manchesterCtx: ManchesterCtx;
     private manchExpr: string;
+
+    /* enumeration */
+    private literalEnumerations: ARTLiteral[] = [];
 
     constructor(public dialog: DialogRef<DataTypeRestrictionsModalData>, private datatypeService: DatatypesServices, private manchService: ManchesterServices,
         private basicModals: BasicModalServices) {
@@ -49,15 +54,27 @@ export class DataTypeRestrictionsModal implements ModalComponent<DataTypeRestric
 
     ngOnInit() {
         if (this.context.restriction != null) {
-            //init restriction description
+            //init restriction description (facets or enumerations based)
             this.datatypeService.getRestrictionDescription(this.context.restriction).subscribe(
                 (description: DatatypeRestrictionDescription) => {
-                    this.description = description;
+                    if (description.facets != null) {
+                        this.facetsDescription = description.facets;
+                        this.selectedAspect = this.ASPECT_FACETS;
+                        this.manchesterCtx = ManchesterCtx.datatypeFacets;
+                    } else if (description.enumerations != null) {
+                        this.literalEnumerations = description.enumerations;
+                        this.selectedAspect = this.ASPECT_ENUMERATION;
+                        this.manchesterCtx = ManchesterCtx.datatypeEnumeration;
+                    }
                 }
             );
             //init manchester expression
             this.manchExpr = this.context.restriction.getShow(); //the show of a restriction is already a manchester expression
         }
+    }
+
+    onEnumerationChanged(datarange: ARTLiteral[]) {
+        this.literalEnumerations = datarange;
     }
 
     ok(event: Event) {
@@ -66,6 +83,8 @@ export class DataTypeRestrictionsModal implements ModalComponent<DataTypeRestric
             actionFn = this.getApplyFacetsFn();
         } else if (this.selectedAspect == this.ASPECT_MANCHESTER) {
             actionFn = this.getApplyManchesterFn();
+        } else if (this.selectedAspect == this.ASPECT_ENUMERATION) {
+            actionFn = this.getApplyEnumerationFn();
         }
         if (actionFn != null) { //check if not null, if null something is gone wrong in the getApply... method (e.g. invalid data)
             actionFn.subscribe(
@@ -86,28 +105,38 @@ export class DataTypeRestrictionsModal implements ModalComponent<DataTypeRestric
         if (this.manchExpr != null) {
             return this.datatypeService.setDatatypeManchesterRestriction(this.context.datatype, this.manchExpr);
         } else {
+            this.basicModals.alert("Empty expression", "You have to provide a valid manchester expression.", "warning");
+            return null;
+        }
+    }
+
+    private getApplyEnumerationFn(): Observable<void> {
+        if (this.literalEnumerations != null && this.literalEnumerations.length > 0) {
+            return this.datatypeService.setDatatypeEnumerationRestrictions(this.context.datatype, this.literalEnumerations);
+        } else {
+            this.basicModals.alert("Missing values", "You have to provide at least one value.", "warning");
             return null;
         }
     }
 
     private getApplyFacetsFn(): Observable<void> {
         //check that at least one facet has been provided
-        if (this.description.facets.minExclusive == null && this.description.facets.minInclusive == null && 
-            this.description.facets.maxExclusive == null && this.description.facets.maxInclusive == null &&
-            (this.description.facets.pattern == null || this.description.facets.pattern.trim() == "")
+        if (this.facetsDescription.facets.minExclusive == null && this.facetsDescription.facets.minInclusive == null && 
+            this.facetsDescription.facets.maxExclusive == null && this.facetsDescription.facets.maxInclusive == null &&
+            (this.facetsDescription.facets.pattern == null || this.facetsDescription.facets.pattern.trim() == "")
         ) {
             this.basicModals.alert("Missing facets", "No facets has been provided. Please, fill at least one of the available facets", "warning");
             return null;
         }
 
         //check that min and max are consistent (min lower than max)
-        let min = this.description.facets.minExclusive;
+        let min = this.facetsDescription.facets.minExclusive;
         if (min == null) {
-            min = this.description.facets.minInclusive;
+            min = this.facetsDescription.facets.minInclusive;
         }
-        let max = this.description.facets.maxExclusive;
+        let max = this.facetsDescription.facets.maxExclusive;
         if (max == null) {
-            max = this.description.facets.maxInclusive;
+            max = this.facetsDescription.facets.maxInclusive;
         }
         if (min != null && max != null && min >= max) {
             this.basicModals.alert("Invalid facets", "The minimun and maximum facets are inconsistent.", "warning");
@@ -115,9 +144,9 @@ export class DataTypeRestrictionsModal implements ModalComponent<DataTypeRestric
         }
 
         //check that the given pattern is valid for a regex
-        if (this.description.facets.pattern != null) {
+        if (this.facetsDescription.facets.pattern != null) {
             try {
-                new RegExp(this.description.facets.pattern);
+                new RegExp(this.facetsDescription.facets.pattern);
             } catch (e) {
                 this.basicModals.alert("Invalid pattern", "The provided pattern is not valid", "warning");
                 return null;
@@ -125,26 +154,26 @@ export class DataTypeRestrictionsModal implements ModalComponent<DataTypeRestric
         }
 
         let facetsMap: { [facet: string]: string } = {};
-        if (this.description.facets.pattern != null && this.description.facets.pattern.trim() != "") {
-            facetsMap[XmlSchema.pattern.toNT()] = new ARTLiteral(this.description.facets.pattern + "").toNT();
+        if (this.facetsDescription.facets.pattern != null && this.facetsDescription.facets.pattern.trim() != "") {
+            facetsMap[XmlSchema.pattern.toNT()] = new ARTLiteral(this.facetsDescription.facets.pattern + "").toNT();
         }
-        if (this.description.facets.minExclusive != null) {
-            let dt: string = Number.isInteger(this.description.facets.minExclusive) ? XmlSchema.integer.getURI() : XmlSchema.decimal.getURI();
-            facetsMap[XmlSchema.minExclusive.toNT()] = new ARTLiteral(this.description.facets.minExclusive + "", dt).toNT();
+        if (this.facetsDescription.facets.minExclusive != null) {
+            let dt: string = Number.isInteger(this.facetsDescription.facets.minExclusive) ? XmlSchema.integer.getURI() : XmlSchema.decimal.getURI();
+            facetsMap[XmlSchema.minExclusive.toNT()] = new ARTLiteral(this.facetsDescription.facets.minExclusive + "", dt).toNT();
         }
-        if (this.description.facets.minInclusive != null) {
-            let dt: string = Number.isInteger(this.description.facets.minExclusive) ? XmlSchema.integer.getURI() : XmlSchema.decimal.getURI();
-            facetsMap[XmlSchema.minInclusive.toNT()] = new ARTLiteral(this.description.facets.minInclusive + "", dt).toNT();
+        if (this.facetsDescription.facets.minInclusive != null) {
+            let dt: string = Number.isInteger(this.facetsDescription.facets.minExclusive) ? XmlSchema.integer.getURI() : XmlSchema.decimal.getURI();
+            facetsMap[XmlSchema.minInclusive.toNT()] = new ARTLiteral(this.facetsDescription.facets.minInclusive + "", dt).toNT();
         }
-        if (this.description.facets.maxExclusive != null) {
-            let dt: string = Number.isInteger(this.description.facets.minExclusive) ? XmlSchema.integer.getURI() : XmlSchema.decimal.getURI();
-            facetsMap[XmlSchema.maxExclusive.toNT()] = new ARTLiteral(this.description.facets.maxExclusive + "", dt).toNT();
+        if (this.facetsDescription.facets.maxExclusive != null) {
+            let dt: string = Number.isInteger(this.facetsDescription.facets.minExclusive) ? XmlSchema.integer.getURI() : XmlSchema.decimal.getURI();
+            facetsMap[XmlSchema.maxExclusive.toNT()] = new ARTLiteral(this.facetsDescription.facets.maxExclusive + "", dt).toNT();
         }
-        if (this.description.facets.maxInclusive != null) {
-            let dt: string = Number.isInteger(this.description.facets.minExclusive) ? XmlSchema.integer.getURI() : XmlSchema.decimal.getURI();
-            facetsMap[XmlSchema.maxInclusive.toNT()] = new ARTLiteral(this.description.facets.maxInclusive + "", dt).toNT();
+        if (this.facetsDescription.facets.maxInclusive != null) {
+            let dt: string = Number.isInteger(this.facetsDescription.facets.minExclusive) ? XmlSchema.integer.getURI() : XmlSchema.decimal.getURI();
+            facetsMap[XmlSchema.maxInclusive.toNT()] = new ARTLiteral(this.facetsDescription.facets.maxInclusive + "", dt).toNT();
         }
-        return this.datatypeService.setDatatypeRestriction(this.context.datatype, this.description.base, facetsMap);
+        return this.datatypeService.setDatatypeFacetsRestriction(this.context.datatype, this.facetsDescription.base, facetsMap);
     }
 
 }

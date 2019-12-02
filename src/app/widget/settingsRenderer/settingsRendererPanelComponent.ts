@@ -1,5 +1,5 @@
-import { Component, Input, forwardRef } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, forwardRef, Input } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Scope, Settings } from '../../models/Plugins';
 
@@ -10,7 +10,7 @@ import { Scope, Settings } from '../../models/Plugins';
         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SettingsRendererPanelComponent), multi: true,
     }]
 })
-export class SettingsRendererPanelComponent {
+export class SettingsRendererPanelComponent implements ControlValueAccessor {
 
     @Input() scope: Scope;
 

@@ -1,5 +1,5 @@
 import { Component, forwardRef } from "@angular/core";
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { UserForm, UserFormCustomField, UserFormOptionalField } from "../models/User";
 import { UserServices } from "../services/userServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
@@ -11,7 +11,7 @@ import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServ
         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => UserCreateComponent), multi: true,
     }]
 })
-export class UserCreateComponent {
+export class UserCreateComponent implements ControlValueAccessor {
 
     private iriInfoTitle = "This will be used as user identifier inside VocBench. You can specify a personal IRI";
     private personalUrlVisible: boolean;

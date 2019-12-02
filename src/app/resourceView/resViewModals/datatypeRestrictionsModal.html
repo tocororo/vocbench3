@@ -11,9 +11,9 @@
     </div>
 
     
-    <datatype-facets-editor *ngIf="selectedAspect == ASPECT_FACETS" [(ngModel)]="description"></datatype-facets-editor>
+    <datatype-facets-editor *ngIf="selectedAspect == ASPECT_FACETS" [(ngModel)]="facetsDescription"></datatype-facets-editor>
     <manchester-editor *ngIf="selectedAspect == ASPECT_MANCHESTER" [(ngModel)]="manchExpr" [context]="manchesterCtx"></manchester-editor>
-    <div *ngIf="selectedAspect == ASPECT_ENUMERATION">TODO</div>
+    <data-range-editor *ngIf="selectedAspect == ASPECT_ENUMERATION" [(ngModel)]="literalEnumerations"></data-range-editor>
 
 </div>
 <div class="modal-footer">

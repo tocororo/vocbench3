@@ -1,5 +1,5 @@
 import { Component, forwardRef, Input, SimpleChanges, ViewChild } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as CodeMirror from 'codemirror';
 import { Observable } from 'rxjs';
 import { ManchesterServices } from '../../../services/manchesterServices';
@@ -14,7 +14,7 @@ import "./manchester";
     host: { class: "vbox" }
 })
 
-export class ManchesterEditorComponent {
+export class ManchesterEditorComponent implements ControlValueAccessor {
     @Input() context: ManchesterCtx;
     @Input() disabled: boolean;
     
@@ -62,8 +62,10 @@ export class ManchesterEditorComponent {
 
     validateExpression(code: string) {
         let validationFn: Observable<boolean>;
-        if (this.context == ManchesterCtx.datatype) {
+        if (this.context == ManchesterCtx.datatypeFacets) {
             validationFn = this.manchesterService.checkDatatypeExpression(code);
+        } else if (this.context == ManchesterCtx.datatypeEnumeration) {
+            validationFn = this.manchesterService.checkDatatypeExpression(code); //TODO replace with a dedicated service when available
         } else {
             validationFn = this.manchesterService.checkExpression(code);
         }
@@ -122,5 +124,7 @@ export class ManchesterEditorComponent {
  * Useful to distringuish the context in which the editor is used and consequently which validation to apply
  */
 export enum ManchesterCtx {
-    datatype = "datatype"
+    datatypeFacets = "datatypeFacets", //the manchester expression describes a datatype restriction with facets
+    datatypeEnumeration = "datatypeEnumeration", //the manchester expression describes a datatype restriction with enumerations 
+    //default case: the manchester expression describes a class axiom
 }

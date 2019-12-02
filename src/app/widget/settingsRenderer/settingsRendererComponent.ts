@@ -1,8 +1,7 @@
 import { Component, forwardRef } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ARTNode, RDFResourceRolesEnum } from '../../models/ARTResources';
 import { Settings, SettingsProp, SettingsPropTypeConstraint } from '../../models/Plugins';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { ARTURIResource, RDFResourceRolesEnum, ARTNode } from '../../models/ARTResources';
 
 @Component({
     selector: 'settings-renderer',
@@ -11,7 +10,7 @@ import { ARTURIResource, RDFResourceRolesEnum, ARTNode } from '../../models/ARTR
         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SettingsRendererComponent), multi: true,
     }]
 })
-export class SettingsRendererComponent {
+export class SettingsRendererComponent implements ControlValueAccessor {
     
     private settings: Settings;
 

@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body vbox">
     <div class="hbox">
-        <data-range-editor [datarange]="datarange" (datarangeChange)="onDatarangeChanged($event)"></data-range-editor>
+        <data-range-editor [(ngModel)]="datarange"></data-range-editor>
     </div>
 </div>
 <div class="modal-footer">

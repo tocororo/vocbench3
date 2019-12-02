@@ -1,4 +1,4 @@
-import { ARTURIResource } from "./ARTResources";
+import { ARTURIResource, ARTLiteral } from "./ARTResources";
 import { XmlSchema, RDF, OWL } from "./Vocabulary";
 
 export interface DatatypeRestrictionsMap extends Map<string, ConstrainingFacets> {} //map of datatype -> facets
@@ -164,6 +164,11 @@ export class ConstrainingFacets {
 }
 
 export class DatatypeRestrictionDescription {
+    enumerations: ARTLiteral[];
+    facets: DatatypeFacetsDescription;
+}
+
+export class DatatypeFacetsDescription {
     base: ARTURIResource;
     facets: ConstrainingFacets = new ConstrainingFacets();
 }

@@ -72,7 +72,7 @@
     <manchester-editor *ngIf="selectedAspectSelector == manchExprAspectSelector" [(ngModel)]="manchExpr" style="flex: 1; margin-top: 5px;">
     </manchester-editor>
 
-    <data-range-editor *ngIf="selectedAspectSelector == dataRangeAspectSelector" (datarangeChange)="onDatarangeChanged($event)">
+    <data-range-editor *ngIf="selectedAspectSelector == dataRangeAspectSelector" [(ngModel)]="datarange">
     </data-range-editor>
 
 </div>

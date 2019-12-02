@@ -34,10 +34,6 @@ export class DataRangeEditorModal implements ModalComponent<DataRangeEditorModal
         )
     }
 
-    onDatarangeChanged(datarange: ARTLiteral[]) {
-        this.datarange = datarange;
-    }
-
     ok(event: Event) {
         //check if the datarange list is changed
         var changed: boolean = false;

@@ -280,10 +280,6 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         this.selectedResource = null;
     }
 
-    private onDatarangeChanged(datarange: ARTLiteral[]) {
-        this.datarange = datarange;
-    }
-
     private onMultiselectionChange(multiselection: boolean) {
         this.multiselection = multiselection;
         this.inverseProp = false; //reset inverseProp flag

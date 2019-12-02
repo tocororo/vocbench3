@@ -1,5 +1,5 @@
 import { Component, forwardRef, Input, SimpleChanges, ViewChild } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as CodeMirror from 'codemirror';
 import "./pearl";
 
@@ -10,7 +10,7 @@ import "./pearl";
         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PearlEditorComponent), multi: true,
     }]
 })
-export class PearlEditorComponent {
+export class PearlEditorComponent implements ControlValueAccessor {
     @Input() disabled: boolean;
 
     @ViewChild('txtarea') textareaElement: any;
