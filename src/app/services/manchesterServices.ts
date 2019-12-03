@@ -23,7 +23,7 @@ export class ManchesterServices {
 
 
     /**
-     * returns true if the expression is compliant with the syntax of datatype restrions, false otherwise
+     * returns true if the expression is compliant with the syntax of datatype restrictions, false otherwise
      * @param manchExpr 
      */
     checkDatatypeExpression(manchExpr: string): Observable<boolean> {
@@ -31,6 +31,17 @@ export class ManchesterServices {
             manchExpr: manchExpr
         };
         return this.httpMgr.doGet(this.serviceName, "checkDatatypeExpression", params);
+    }
+
+    /**
+     * returns true if the expression is compliant with the syntax of datatype restriction enumeration-based
+     * @param manchExpr 
+     */
+    checkLiteralEnumerationExpression(manchExpr: string): Observable<boolean> {
+        var params = {
+            manchExpr: manchExpr
+        };
+        return this.httpMgr.doGet(this.serviceName, "checkLiteralEnumerationExpression", params);
     }
 
     /**

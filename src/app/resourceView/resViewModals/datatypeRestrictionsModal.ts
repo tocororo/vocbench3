@@ -3,10 +3,10 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from "rxjs";
 import { ARTBNode, ARTLiteral, ARTURIResource } from "../../models/ARTResources";
-import { DatatypeRestrictionDescription, DatatypeFacetsDescription } from "../../models/Datatypes";
+import { DatatypeRestrictionDescription, FacetsRestriction } from "../../models/Datatypes";
 import { XmlSchema } from "../../models/Vocabulary";
 import { DatatypesServices } from "../../services/datatypesServices";
-import { ManchesterServices } from "../../services/manchesterServices";
+import { DatatypeValidator } from "../../utils/DatatypeValidator";
 import { ManchesterCtx } from "../../widget/codemirror/manchesterEditor/manchesterEditorComponent";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
@@ -38,7 +38,7 @@ export class DataTypeRestrictionsModal implements ModalComponent<DataTypeRestric
     private selectedAspect: string = this.ASPECT_FACETS;
 
     /* Facets */
-    private facetsDescription: DatatypeFacetsDescription;
+    private facetsDescription: FacetsRestriction;
 
     /* manchester */
     private manchesterCtx: ManchesterCtx;
@@ -47,8 +47,8 @@ export class DataTypeRestrictionsModal implements ModalComponent<DataTypeRestric
     /* enumeration */
     private literalEnumerations: ARTLiteral[] = [];
 
-    constructor(public dialog: DialogRef<DataTypeRestrictionsModalData>, private datatypeService: DatatypesServices, private manchService: ManchesterServices,
-        private basicModals: BasicModalServices) {
+    constructor(public dialog: DialogRef<DataTypeRestrictionsModalData>, private datatypeService: DatatypesServices,
+        private basicModals: BasicModalServices, private dtValidator: DatatypeValidator) {
         this.context = dialog.context;
     }
 
@@ -89,6 +89,7 @@ export class DataTypeRestrictionsModal implements ModalComponent<DataTypeRestric
         if (actionFn != null) { //check if not null, if null something is gone wrong in the getApply... method (e.g. invalid data)
             actionFn.subscribe(
                 () => {
+                    this.dtValidator.initDatatypeRestrictions(); //restriction edited => update the in-memory restrictions
                     event.stopPropagation();
                     event.preventDefault();
                     this.dialog.close();

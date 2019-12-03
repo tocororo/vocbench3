@@ -428,7 +428,7 @@ export class EditableResourceComponent {
         this.manchesterService.checkExpression(expression).subscribe(
             valid => {
                 if (valid) {
-                    this.manchesterService.updateExpression(this.resourceStringValue, <ARTBNode>this.resource).subscribe(
+                    this.manchesterService.updateExpression(this.resourceStringValue, node).subscribe(
                         stResp => {
                             this.cancelEdit();
                             this.update.emit();
@@ -449,7 +449,7 @@ export class EditableResourceComponent {
 
     private isTypedLiteralValid(literal: ARTLiteral): boolean {
         let dt: ARTURIResource = new ARTURIResource(literal.getDatatype());
-        let valid = this.dtValidator.isValid(literal.getValue(), dt);
+        let valid = this.dtValidator.isValid(literal, dt);
         return valid;
     }
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTBNode, ARTLiteral, ARTURIResource, ResAttribute } from '../models/ARTResources';
-import { ConstrainingFacets, DatatypeFacetsDescription, DatatypeRestrictionDescription, DatatypeRestrictionsMap } from '../models/Datatypes';
+import { FacetsRestriction, DatatypeRestrictionDescription, DatatypeRestrictionsMap } from '../models/Datatypes';
 import { OWL, XmlSchema } from '../models/Vocabulary';
 import { Deserializer } from '../utils/Deserializer';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
@@ -96,22 +96,7 @@ export class DatatypesServices {
             stResp => {
                 let dtRestrMap: DatatypeRestrictionsMap = new Map();
                 for (let dt in stResp) {
-                    let constraintFacets: ConstrainingFacets = {};
-                    for (let facet in stResp[dt]) {
-                        let restrValue: string = ResourceUtils.parseLiteral(stResp[dt][facet]).getValue();
-                        if (facet == XmlSchema.maxExclusive.getURI()) {
-                            constraintFacets.maxExclusive = parseInt(restrValue);
-                        } else if (facet == XmlSchema.maxInclusive.getURI()) {
-                            constraintFacets.maxInclusive = parseInt(restrValue);
-                        } else if (facet == XmlSchema.minExclusive.getURI()) {
-                            constraintFacets.minExclusive = parseInt(restrValue);
-                        } else if (facet == XmlSchema.minInclusive.getURI()) {
-                            constraintFacets.minInclusive = parseInt(restrValue);
-                        } else if (facet == XmlSchema.pattern.getURI()) {
-                            constraintFacets.pattern = restrValue;
-                        }
-                    }
-                    dtRestrMap.set(dt, constraintFacets);
+                    dtRestrMap.set(dt, this.parseDatatypeRestrictionDescription(stResp[dt]));
                 }
                 return dtRestrMap;
             }
@@ -124,37 +109,7 @@ export class DatatypesServices {
         };
         return this.httpMgr.doGet(this.serviceName, "getRestrictionDescription", params).map(
             stResp => {
-                let description: DatatypeRestrictionDescription = new DatatypeRestrictionDescription();
-
-                let facetsJson = stResp.facets;
-                let enumerationsJson = stResp.enumerations;
-                if (Object.keys(facetsJson).length != 0) { //facetsJson not empty?
-                    let facetsDescription: DatatypeFacetsDescription = new DatatypeFacetsDescription();
-                    for (let key in facetsJson) {
-                        let value: string = facetsJson[key];
-                        /**
-                         * the initial + for the min/max facets is used for converting a string to number (independently if int or float)
-                         * see https://stackoverflow.com/a/14668510/5805661
-                         */
-                        if (key == OWL.onDatatype.getURI()) {
-                            facetsDescription.base = ResourceUtils.parseURI(value);
-                        } else if (key == XmlSchema.maxExclusive.getURI()) {
-                            facetsDescription.facets.maxExclusive = +ResourceUtils.parseLiteral(value).getValue(); 
-                        } else if (key == XmlSchema.maxInclusive.getURI()) {
-                            facetsDescription.facets.maxInclusive = +ResourceUtils.parseLiteral(value).getValue(); 
-                        } else if (key == XmlSchema.minExclusive.getURI()) {
-                            facetsDescription.facets.minExclusive = +ResourceUtils.parseLiteral(value).getValue();
-                        } else if (key == XmlSchema.minInclusive.getURI()) {
-                            facetsDescription.facets.minInclusive = +ResourceUtils.parseLiteral(value).getValue();
-                        } else if (key == XmlSchema.pattern.getURI()) {
-                            facetsDescription.facets.pattern = ResourceUtils.parseLiteral(value).getValue();
-                        }
-                    }
-                    description.facets = facetsDescription;
-                } else if (enumerationsJson.lenght != 0) { //enumeration array not empty?
-                    description.enumerations = Deserializer.createLiteralArray(enumerationsJson);
-                }
-                return description;
+                return this.parseDatatypeRestrictionDescription(stResp);
             }
         );
     }
@@ -190,6 +145,39 @@ export class DatatypesServices {
             datatype: datatype,
         };
         return this.httpMgr.doPost(this.serviceName, "deleteDatatypeRestriction", params);
+    }
+
+    private parseDatatypeRestrictionDescription(descriptionJson: any): DatatypeRestrictionDescription {
+        let description: DatatypeRestrictionDescription = new DatatypeRestrictionDescription();
+        let facetsJson = descriptionJson.facets;
+        let enumerationsJson = descriptionJson.enumerations;
+        if (Object.keys(facetsJson).length != 0) { //facetsJson not empty?
+            let facetsDescription: FacetsRestriction = new FacetsRestriction();
+            for (let key in facetsJson) {
+                let value: string = facetsJson[key];
+                /**
+                 * the initial + for the min/max facets is used for converting a string to number (independently if int or float)
+                 * see https://stackoverflow.com/a/14668510/5805661
+                 */
+                if (key == OWL.onDatatype.getURI()) {
+                    facetsDescription.base = ResourceUtils.parseURI(value);
+                } else if (key == XmlSchema.maxExclusive.getURI()) {
+                    facetsDescription.facets.maxExclusive = +ResourceUtils.parseLiteral(value).getValue(); 
+                } else if (key == XmlSchema.maxInclusive.getURI()) {
+                    facetsDescription.facets.maxInclusive = +ResourceUtils.parseLiteral(value).getValue(); 
+                } else if (key == XmlSchema.minExclusive.getURI()) {
+                    facetsDescription.facets.minExclusive = +ResourceUtils.parseLiteral(value).getValue();
+                } else if (key == XmlSchema.minInclusive.getURI()) {
+                    facetsDescription.facets.minInclusive = +ResourceUtils.parseLiteral(value).getValue();
+                } else if (key == XmlSchema.pattern.getURI()) {
+                    facetsDescription.facets.pattern = ResourceUtils.parseLiteral(value).getValue();
+                }
+            }
+            description.facets = facetsDescription;
+        } else if (enumerationsJson.lenght != 0) { //enumeration array not empty?
+            description.enumerations = Deserializer.createLiteralArray(enumerationsJson);
+        }
+        return description;
     }
 
 }

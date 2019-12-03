@@ -57,6 +57,8 @@ export enum VBActionsEnum {
     datatypesCreateDatatype = "datatypesCreateDatatype",
     datatypesDeleteDatatype = "datatypesDeleteDatatype",
     datatypesGetDatatype = "datatypesGetDatatype",
+    datatypesDeleteDatatypeRestriction = "datatypesDeleteDatatypeRestriction",
+    datatypesSetDatatypeRestriction = "setDatatypeRestriction", //generic for all the kinds of restriction
     //Export
     exportExport = "exportExport",
     //History

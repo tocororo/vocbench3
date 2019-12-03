@@ -31,7 +31,7 @@
             </option>
         </select>
         <div class="hbox" style="align-items: center; margin-top: 6px;">
-            <select class="form-control input-sm" [(ngModel)]="selectedDrValue">
+            <select class="form-control input-sm" [(ngModel)]="value">
                 <option *ngFor="let v of selectedDataRange" [ngValue]="v">{{v.toNT()}}</option>
             </select>
             <button *ngIf="context.multivalue" class="btn btn-default btn-xs" (click)="addValue()" style="margin-left: 4px; margin-bottom: 4px;" [disabled]="!isAddValueEnabled()">

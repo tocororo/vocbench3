@@ -1,7 +1,7 @@
 import { Component, EventEmitter, forwardRef, Input, Output } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTLiteral, ARTURIResource } from "../../models/ARTResources";
-import { ConstrainingFacets } from "../../models/Datatypes";
+import { ConstrainingFacets, FacetsRestriction } from "../../models/Datatypes";
 import { RDF, RDFS, XmlSchema } from "../../models/Vocabulary";
 import { DatatypesServices } from "../../services/datatypesServices";
 import { DatatypeValidator } from "../../utils/DatatypeValidator";
@@ -24,11 +24,15 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
     private datatypeList: ARTURIResource[];
     private selectedDatatype: ARTURIResource;
 
+    
     private lang: string; //optional, used only if datatype is xsd:string or rdfs:langString
 
     private numericInput: boolean = false;
     private numericInputMin: number;
     private numericInputMax: number;
+
+    private enumerations: ARTLiteral[];
+    private selectedEnumeration: ARTLiteral;
 
     private stringValue: string;
 
@@ -112,29 +116,30 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
     }
 
     private updateInputConfiguration() {
-        this.numericInput = false;
+        this.numericInput = this.dtValidator.isNumericType(this.selectedDatatype);
         this.numericInputMin = null;
         this.numericInputMax = null;
+        this.enumerations = null;
         
-        if (this.dtValidator.isNumericType(this.selectedDatatype)) {
-            this.numericInput = this.dtValidator.isNumericType(this.selectedDatatype);
+        let facets: ConstrainingFacets = this.dtValidator.getDatatypeFacets(this.selectedDatatype);
+        let enums: ARTLiteral[] = this.dtValidator.getDatatypeEnumerations(this.selectedDatatype);
+        if (facets != null) {
             if (this.numericInput) {
-                let facets: ConstrainingFacets = this.dtValidator.getConstrainingFacets(this.selectedDatatype);
-                if (facets != null) {
-                    if (facets.maxExclusive != null) {
-                        this.numericInputMax = facets.maxExclusive - 1;
-                    }
-                    if (facets.maxInclusive != null) {
-                        this.numericInputMax = facets.maxInclusive;
-                    }
-                    if (facets.minExclusive != null) {
-                        this.numericInputMin = facets.minExclusive + 1;
-                    }
-                    if (facets.minInclusive != null) {
-                        this.numericInputMin = facets.maxInclusive;
-                    }
+                if (facets.maxExclusive != null) {
+                    this.numericInputMax = facets.maxExclusive - 1;
+                }
+                if (facets.maxInclusive != null) {
+                    this.numericInputMax = facets.maxInclusive;
+                }
+                if (facets.minExclusive != null) {
+                    this.numericInputMin = facets.minExclusive + 1;
+                }
+                if (facets.minInclusive != null) {
+                    this.numericInputMin = facets.maxInclusive;
                 }
             }
+        } else if (enums != null) { //if enumeration are available
+            this.enumerations = enums;
         }
     }
 
@@ -152,6 +157,10 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
             }
             this.propagateChange(new ARTLiteral(this.stringValue + "", this.selectedDatatype.getURI(), this.lang));
         }
+    }
+
+    private onEnumerationChange() {
+        this.propagateChange(this.selectedEnumeration);
     }
 
     //---- method of ControlValueAccessor and Validator interfaces ----
@@ -172,6 +181,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
             this.lang = obj.getLang();
         } else {
             this.stringValue = null;
+            this.selectedEnumeration = null;
             //the following two lines have been commented in order to avoid to "reset" also the lang or the datatype in case of the bound value is null
             // this.selectedDatatype = null;
             // this.lang = null;

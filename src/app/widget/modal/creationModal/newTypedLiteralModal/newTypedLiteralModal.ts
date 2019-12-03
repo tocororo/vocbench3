@@ -41,11 +41,10 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
     private selectedAspectSelector: string = this.aspectSelectors[0];
 
     private datatype: ARTURIResource;
-    private value: ARTLiteral;
+    private value: ARTLiteral; //value inserted by the user or selected among the datarange
     private notValidatableType: boolean = false;
 
     private selectedDataRange: ARTLiteral[]; //selected list of dataranges among which chose one
-    private selectedDrValue: ARTLiteral; //Value selected among those available in the selectedDataRange
 
     private values: ARTLiteral[] = [];
 
@@ -74,17 +73,16 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
 
     private addValue() {
         if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
-            let valueString: string = this.value.getValue();
-            if (this.dtValidator.isValid(valueString, this.datatype)) {
+            if (this.dtValidator.isValid(this.value, this.datatype)) {
                 this.values.push(this.value);
                 this.value = null;
             } else {
-                this.basicModals.alert("Invalid value", "The inserted value '" + valueString + "' is not a valid " + this.datatype.getShow());
+                this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow());
                 return;
             }
         } else { //selected dataRangeAspectSelector
-            this.values.push(this.selectedDrValue);
-            this.selectedDrValue = null;
+            this.values.push(this.value);
+            this.value = null;
         }
     }
 
@@ -92,13 +90,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
      * Add value enabled in case the adding value is not already been added in the values list
      */
     private isAddValueEnabled() {
-        return (
-            this.value != null && this.value.getValue() != "" &&
-            (
-                (this.selectedAspectSelector == this.typedLiteralAspectSelector && !ResourceUtils.containsNode(this.values, this.value)) ||
-                (this.selectedAspectSelector == this.dataRangeAspectSelector && !ResourceUtils.containsNode(this.values, this.selectedDrValue))
-            )
-        )
+        return this.value != null && this.value.getValue() != "" && !ResourceUtils.containsNode(this.values, this.value)
     }
 
     private removeValue(value: ARTLiteral) {
@@ -134,13 +126,12 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
         return this.values.length > 0 || (this.value != null && this.value.getValue() != "");
     }
 
+    /**
+     * Determines if the warning icon is shown.
+     * The icon warns the user if there is a value typed/selected but not added in mutlivalue mode
+     */
     private isOkWarningActive(): boolean {
-        return (
-            this.values.length > 0 && (
-                (this.selectedAspectSelector == this.typedLiteralAspectSelector && this.value != null) ||
-                (this.selectedAspectSelector == this.dataRangeAspectSelector && this.selectedDrValue != null)
-            )
-        );
+        return this.values.length > 0 && this.value != null;
     }
 
     ok(event: Event) {
@@ -151,21 +142,20 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
             } else { //no multiple values => return the input value
                 if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
                     //first validate
-                    let valueString: string = this.value.getValue();
-                    if (!this.dtValidator.isValid(valueString, this.datatype)) {
-                        this.basicModals.alert("Invalid value", "The inserted value '" + valueString + "' is not a valid " + this.datatype.getShow());
+                    if (!this.dtValidator.isValid(this.value, this.datatype)) {
+                        this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow());
                         return;
                     }
                     literals = [this.value];
                 } else { //selected dataRangeAspectSelector
-                    literals = [this.selectedDrValue];
+                    literals = [this.value];
                 }
             }
         } else {
             if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
                 literals = [this.value];
             } else { //selected dataRangeAspectSelector
-                literals = [this.selectedDrValue];
+                literals = [this.value];
             }
         }
         this.dialog.close(literals);

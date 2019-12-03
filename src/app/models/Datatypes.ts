@@ -1,7 +1,7 @@
 import { ARTURIResource, ARTLiteral } from "./ARTResources";
 import { XmlSchema, RDF, OWL } from "./Vocabulary";
 
-export interface DatatypeRestrictionsMap extends Map<string, ConstrainingFacets> {} //map of datatype -> facets
+export interface DatatypeRestrictionsMap extends Map<string, DatatypeRestrictionDescription> { } //map of datatype -> restrictions
 
 export class DatatypeUtils {
 
@@ -96,7 +96,7 @@ export class DatatypeUtils {
      * 
      * the real pattern of xsd:Name is "\i\c*", see here https://github.com/TIBCOSoftware/genxdm/issues/69#issuecomment-125290603
      */
-    public static typeRestrictionsMap: DatatypeRestrictionsMap = new Map([
+    public static typeRestrictionsMap: Map<string, ConstrainingFacets> = new Map([
         [XmlSchema.anyURI.getURI(), {}],
         [XmlSchema.base64Binary.getURI(), { pattern: "((([A-Za-z0-9+/] ?){4})*(([A-Za-z0-9+/] ?){3}[A-Za-z0-9+/]|([A-Za-z0-9+/] ?){2}[AEIMQUYcgkosw048] ?=|[A-Za-z0-9+/] ?[AQgw] ?= ?=))?" }],
         [XmlSchema.boolean.getURI(), {}],
@@ -149,7 +149,7 @@ export class DatatypeUtils {
     /**
      * Restrictions not defined explicitly in the standards, but defined accordingly their description
      */
-    public static notStandardRestrictionsMap: DatatypeRestrictionsMap = new Map([
+    public static notStandardRestrictionsMap: Map<string, ConstrainingFacets> = new Map([
         [OWL.rational.getURI(), { pattern: "[\-+]?[0-9]+(/[1-9][0-9]*)*" }], //https://www.w3.org/TR/owl2-syntax/#Real_Numbers.2C_Decimal_Numbers.2C_and_Integers
     ]);
 
@@ -164,11 +164,11 @@ export class ConstrainingFacets {
 }
 
 export class DatatypeRestrictionDescription {
-    enumerations: ARTLiteral[];
-    facets: DatatypeFacetsDescription;
+    enumerations?: ARTLiteral[];
+    facets?: FacetsRestriction;
 }
 
-export class DatatypeFacetsDescription {
+export class FacetsRestriction {
     base: ARTURIResource;
     facets: ConstrainingFacets = new ConstrainingFacets();
 }

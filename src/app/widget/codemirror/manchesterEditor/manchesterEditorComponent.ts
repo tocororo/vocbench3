@@ -65,7 +65,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
         if (this.context == ManchesterCtx.datatypeFacets) {
             validationFn = this.manchesterService.checkDatatypeExpression(code);
         } else if (this.context == ManchesterCtx.datatypeEnumeration) {
-            validationFn = this.manchesterService.checkDatatypeExpression(code); //TODO replace with a dedicated service when available
+            validationFn = this.manchesterService.checkLiteralEnumerationExpression(code);
         } else {
             validationFn = this.manchesterService.checkExpression(code);
         }
