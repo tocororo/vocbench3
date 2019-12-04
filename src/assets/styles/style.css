@@ -112,6 +112,11 @@ app {
     flex-flow: column;
 }
 
+.homeLogo {
+    max-width: 60px;
+    max-height: 36px;
+}
+
 li.disabled {
     cursor: not-allowed;    
 }
@@ -497,16 +502,16 @@ input[type=number]::-webkit-outer-spin-button {
     min-width: 130px;
 }
  
-pearl-editor, manchester-editor {
+pearl-editor, manchester-editor, html-editor {
     display: flex;
     flex: 1;
 }
-pearl-editor .CodeMirror, manchester-editor .CodeMirror { 
+pearl-editor .CodeMirror, manchester-editor .CodeMirror, html-editor .CodeMirror { 
     border: 1px solid #ddd; /*Border of textare of CodeMirror (just in the editors, because in yasqe there is already)*/
     height: auto !important; 
     flex: 1;
 }
-pearl-editor .CodeMirror-scroll, manchester-editor .CodeMirror-scroll {
+pearl-editor .CodeMirror-scroll, manchester-editor .CodeMirror-scroll, html-editor .CodeMirror-scroll {
     min-height: 100px;
     margin-right: 0px;
     flex: 1;

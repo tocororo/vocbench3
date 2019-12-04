@@ -354,6 +354,8 @@ export class VBProperties {
                     this.basicModals.alert("Error", "Initialization of system languages has encountered a problem during parsing the " +
                         "'languages' property. Please, report this to the system administrator.", "error");
                 }
+                //home content
+                VBContext.getSystemSettings().homeContent = stResp[Properties.setting_home_content];
             }
         )
     }
@@ -363,8 +365,9 @@ export class VBProperties {
         VBContext.getSystemSettings().experimentalFeaturesEnabled = enabled;
     }
 
-    getExperimentalFeaturesEnabled(): boolean {
-        return VBContext.getSystemSettings().experimentalFeaturesEnabled;
+    setHomeContent(homeContent: string) {
+        this.prefService.setSystemSetting(Properties.setting_home_content, homeContent).subscribe();
+        VBContext.getSystemSettings().homeContent = homeContent;
     }
 
     isPrivacyStatementAvailable(): boolean {

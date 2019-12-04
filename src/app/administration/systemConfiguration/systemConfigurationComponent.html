@@ -255,6 +255,27 @@
                 </div>
             </div>
 
+            <!-- Home content -->
+            <div class="panel panel-default" style="margin-top: 6px;">
+                <div class="panel-heading">
+                    <label>Home page content:</label>
+                </div>
+                <div class="panel-body">
+                    <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 4px;">
+                        Here you can write HTML-formatted text content that will be shown in the home page
+                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                    </div>
+                    <div class="hbox">
+                        <html-editor [(ngModel)]="homeContent"></html-editor>
+                        <div style="flex: 1; border: 1px solid #ddd; border-radius: 4px; margin-left: 4px;" [innerHTML]="safeHomeContent"></div>
+                    </div>
+                </div>
+                <div class="panel-footer" style="text-align: right;">
+                    <button class="btn btn-info btn-sm" (click)="previewHomeContent()">Preview</button>
+                    <button type="submit" class="btn btn-default btn-sm" (click)="updateHomeContent()" [disabled]="!isHomeContentChanged()">Submit</button>
+                </div>
+            </div>
+
             <!-- Experimental feature -->
             <!-- 
             <span style="flex: 1"></span>

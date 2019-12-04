@@ -40,8 +40,10 @@ export class Properties {
     static setting_languages: string = "languages";
     static setting_remote_configs = "remote_configs";
     static setting_experimental_features_enabled = "experimental_features_enabled";
+    static setting_home_content = "home_content"
 
     static privacy_statement_available = "privacy_statement_available"
+    
 
 }
 
@@ -164,7 +166,8 @@ export class ProjectSettings {
  * Class that represents the global application settings
  */
 export class SystemSettings {
-    experimentalFeaturesEnabled: boolean;
-    privacyStatementAvailable: boolean;
-    showFlags: boolean;
+    experimentalFeaturesEnabled: boolean = false;
+    privacyStatementAvailable: boolean = false;
+    showFlags: boolean = true;
+    homeContent: string;
 }

@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
@@ -6,7 +7,6 @@ import { User } from "./models/User";
 import { ProjectListModal } from './project/projectListModal';
 import { AdministrationServices } from "./services/administrationServices";
 import { VBContext } from "./utils/VBContext";
-import { VBProperties } from "./utils/VBProperties";
 
 @Component({
     selector: "home-component",
@@ -17,10 +17,19 @@ export class HomeComponent {
 
     private privacyStatementAvailable: boolean = false;
 
-    constructor(private router: Router, private modal: Modal, private administrationService: AdministrationServices, private vbProp: VBProperties) { }
+    private safeCustomHomeContent: SafeHtml;
+
+    private safeDescription: SafeHtml;
+
+    constructor(private router: Router, private modal: Modal, private administrationService: AdministrationServices, private sanitizer: DomSanitizer) { }
 
     ngOnInit() {
-        this.privacyStatementAvailable = this.vbProp.isPrivacyStatementAvailable();
+        this.privacyStatementAvailable = VBContext.getSystemSettings().privacyStatementAvailable;
+
+        let homeContent = VBContext.getSystemSettings().homeContent;
+        if (homeContent != null) {
+            this.safeCustomHomeContent = this.sanitizer.bypassSecurityTrustHtml(homeContent);
+        }
     }
 
     private isUserLogged(): boolean {

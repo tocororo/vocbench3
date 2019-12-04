@@ -25,7 +25,8 @@ import 'codemirror/addon/edit/closebrackets.js';
 import 'codemirror/addon/comment/comment.js';
 import 'codemirror/addon/mode/simple.js'; //for defineSimpleMode() in the definition of the manchester mode
 import 'codemirror/lib/codemirror.css';
-//import 'codemirror/lib/codemirror.js'; //already imported in codemirrorComponent
+import 'codemirror/mode/xml/xml.js';
+//import 'codemirror/lib/codemirror.js'; //already imported in the components that needs CodeMirror
 
 import 'jsprolog/dist/jsprolog';
 

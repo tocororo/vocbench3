@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { QueryParameterForm } from '../sparql/queryParameterization/queryParameterForm';
 import { YasguiComponent } from '../sparql/yasguiComponent';
+import { HtmlEditorComponent } from '../widget/codemirror/htmlEditor/htmlEditorComponent';
 import { ManchesterEditorComponent } from '../widget/codemirror/manchesterEditor/manchesterEditorComponent';
 import { PearlEditorComponent } from "../widget/codemirror/pearlEditor/pearlEditorComponent";
 import { SanitizerDirective } from "../widget/directives/sanitizerDirective";
@@ -27,14 +28,14 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
     imports: [CommonModule, FormsModule],
     declarations: [
         FilePickerComponent, RdfResourceComponent, LangPickerComponent, DatatypePickerComponent, SanitizerDirective,
-        PearlEditorComponent, ManchesterEditorComponent, YasguiComponent, InputEditableComponent, ResourceListComponent,
+        PearlEditorComponent, ManchesterEditorComponent, HtmlEditorComponent, YasguiComponent, InputEditableComponent, ResourceListComponent,
         TypedLiteralInputComponent, LanguageItemComponent,
         SettingsRendererComponent, SettingsRendererPanelComponent, SettingSetRendererComponent, SettingMapRendererComponent,
         QueryParameterForm, ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent, ValuePickerComponent,
     ],
     exports: [
         FilePickerComponent, RdfResourceComponent, SanitizerDirective, LangPickerComponent, DatatypePickerComponent,
-        PearlEditorComponent, ManchesterEditorComponent, YasguiComponent, InputEditableComponent, ResourceListComponent,
+        PearlEditorComponent, ManchesterEditorComponent, HtmlEditorComponent, YasguiComponent, InputEditableComponent, ResourceListComponent,
         TypedLiteralInputComponent, LanguageItemComponent, 
         SettingsRendererComponent, SettingsRendererPanelComponent, SettingSetRendererComponent, SettingMapRendererComponent,
         QueryParameterForm, ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent, ValuePickerComponent,

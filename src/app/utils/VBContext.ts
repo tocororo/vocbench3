@@ -11,11 +11,7 @@ export class VBContext {
     private static projectChanged: boolean;
     private static loggedUser: User;
 
-    private static systemSettings: SystemSettings = {
-        experimentalFeaturesEnabled: false,
-        privacyStatementAvailable: false,
-        showFlags: true
-    }
+    private static systemSettings: SystemSettings = new SystemSettings();
 
     /**
      * If the project context is provided, returns (uses) it, otherwise returns the 'global' project context

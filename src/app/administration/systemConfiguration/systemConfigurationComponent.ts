@@ -1,4 +1,6 @@
 import { Component } from "@angular/core";
+import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import { Router } from "@angular/router";
 import { ARTURIResource } from "../../models/ARTResources";
 import { UserForm, UserFormCustomField, UserFormOptionalField } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
@@ -7,7 +9,6 @@ import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { Router } from "@angular/router";
 
 @Component({
     selector: "sys-config-component",
@@ -45,25 +46,30 @@ export class SystemConfigurationComponent {
 
     /* Registration form fields */
     private optionalFields: UserFormOptionalField[];
-    
+
     private customFormFields: UserFormCustomField[];
     private customFormFieldsPristine: UserFormCustomField[];
     private selectedCustomField: UserFormCustomField;
-    private fieldsIdx: number[] = [0,1,2,3];
+    private fieldsIdx: number[] = [0, 1, 2, 3];
 
+    /* Home content */
+    private homeContent: string;
+    private homeContentPristine: string;
+    private safeHomeContent: SafeHtml;
 
     /* Experimental features */
     private expFeatEnabled: boolean = false;
 
 
-    constructor(private adminService: AdministrationServices, private userService: UserServices,
-        private vbProp: VBProperties, private basicModals: BasicModalServices, private router: Router) {}
+    constructor(private adminService: AdministrationServices, private userService: UserServices, private vbProp: VBProperties,
+        private basicModals: BasicModalServices, public sanitizer: DomSanitizer, private router: Router) { }
 
     ngOnInit() {
         this.isInitialConfiguration = this.router.url == "/Sysconfig";
 
         this.initAdminConfig();
         this.initFields();
+        this.initHomeContent();
     }
 
     private initAdminConfig() {
@@ -96,7 +102,7 @@ export class SystemConfigurationComponent {
                 this.profilerThresholdPristine = conf.preloadProfilerTreshold;
             }
         );
-        this.expFeatEnabled = this.vbProp.getExperimentalFeaturesEnabled();
+        this.expFeatEnabled = VBContext.getSystemSettings().experimentalFeaturesEnabled;
     }
 
     /* ============================
@@ -137,19 +143,19 @@ export class SystemConfigurationComponent {
             this.emailConfig.mailSmtpStarttlsEnable = false;
         }
     }
-    
+
     private updateEmailConfig() {
         let mailFromPwd: string = null;
         if (this.emailConfig.mailSmtpAuth) {
             mailFromPwd = this.emailConfig.mailFromPassword;
         }
-        this.adminService.updateEmailConfig(this.emailConfig.mailSmtpHost, this.emailConfig.mailSmtpPort, this.emailConfig.mailSmtpAuth, 
+        this.adminService.updateEmailConfig(this.emailConfig.mailSmtpHost, this.emailConfig.mailSmtpPort, this.emailConfig.mailSmtpAuth,
             this.emailConfig.mailSmtpSslEnable, this.emailConfig.mailSmtpStarttlsEnable,
             this.emailConfig.mailFromAddress, this.emailConfig.mailFromAlias, mailFromPwd).subscribe(
-            stResp => {
-                this.initAdminConfig();
-            }
-        )
+                stResp => {
+                    this.initAdminConfig();
+                }
+            )
     }
 
     private testEmailConfig() {
@@ -160,17 +166,17 @@ export class SystemConfigurationComponent {
 
         this.basicModals.prompt("Email configuration test", { value: "Mail to" }, "This test will send an e-mail to the provided address in order to "
             + "check the e-mail configuration", VBContext.getLoggedUser().getEmail()).then(
-            mailTo => {
-                UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.adminService.testEmailConfig(mailTo).subscribe(
-                    () => {
-                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                        this.basicModals.alert("Email configuration test", "The configuration works fine. A test e-mail has been sent to " + mailTo + ".");
-                    }
-                );
-            },
-            () => {}
-        );
+                mailTo => {
+                    UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+                    this.adminService.testEmailConfig(mailTo).subscribe(
+                        () => {
+                            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                            this.basicModals.alert("Email configuration test", "The configuration works fine. A test e-mail has been sent to " + mailTo + ".");
+                        }
+                    );
+                },
+                () => { }
+            );
     }
 
     private isEmailConfigChanged(): boolean {
@@ -262,15 +268,15 @@ export class SystemConfigurationComponent {
             }
         );
     }
-    private moveCustomField(direction: "UP"|"DOWN") {
+    private moveCustomField(direction: "UP" | "DOWN") {
         let idx = this.customFormFields.indexOf(this.selectedCustomField);
         let fieldIri1: ARTURIResource = new ARTURIResource(this.selectedCustomField.iri);
         let fieldIri2: ARTURIResource;
         if (direction == "UP" && idx > 0) {
-            fieldIri2 = new ARTURIResource(this.customFormFields[idx-1].iri);
+            fieldIri2 = new ARTURIResource(this.customFormFields[idx - 1].iri);
             this.swapCustomFields(fieldIri1, fieldIri2);
-        } else if (direction == "DOWN" && idx < this.customFormFields.length-1) {
-            fieldIri2 = new ARTURIResource(this.customFormFields[idx+1].iri);
+        } else if (direction == "DOWN" && idx < this.customFormFields.length - 1) {
+            fieldIri2 = new ARTURIResource(this.customFormFields[idx + 1].iri);
             this.swapCustomFields(fieldIri1, fieldIri2);
         }
     }
@@ -282,7 +288,34 @@ export class SystemConfigurationComponent {
         );
     }
 
-    
+    /* ============================
+     * Home content
+     * ============================ */
+
+    private initHomeContent() {
+        this.homeContent = VBContext.getSystemSettings().homeContent;
+        this.homeContentPristine = this.homeContent;
+        if (this.homeContent != null) {
+            this.previewHomeContent();
+        }
+    }
+
+    private previewHomeContent() {
+        this.safeHomeContent = this.sanitizer.bypassSecurityTrustHtml(this.homeContent);
+    }
+
+    private updateHomeContent() {
+        if (this.homeContent.trim() == "") {
+            this.homeContent = null;
+        }
+        this.vbProp.setHomeContent(this.homeContent);
+        this.homeContentPristine = this.homeContent;
+    }
+
+    private isHomeContentChanged(): boolean {
+        return this.homeContent != this.homeContentPristine;
+    }
+
     /* ============================
      * Experimental feature managment
      * ============================ */
