@@ -14,7 +14,7 @@ html, body {
     align-items: center;
     justify-content: center;
     height: 100%;
-    background-image: linear-gradient(to right, #1e4387, #7486ab);
+    background-image: linear-gradient(to right, #1e4387, #00b5e9);
 }
 .logo-container {
     position: relative;
@@ -27,7 +27,7 @@ html, body {
 }
 .logo-container > span {
     position: absolute;
-    color: #8b9bba;
+    color: #fff;
     font-size: 14px;
     font-weight: bold;
     top: 280px;
@@ -39,10 +39,10 @@ html, body {
     font-size: 6px;
   }
 .loader {
-    border-top: 0.01em solid #7486ab;
-    border-right: 0.6em solid #7486ab;
-    border-bottom: 1.1em solid #7486ab;
-    border-left: 1.1em solid transparent;
+    border-top: 0.01em solid #fff;
+    border-right: 0.4em solid #fff;
+    border-bottom: 0.8em solid #fff;
+    border-left: 0.8em solid transparent;
     -webkit-transform: translateZ(0);
     -ms-transform: translateZ(0);
     transform: translateZ(0);
