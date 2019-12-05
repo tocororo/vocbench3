@@ -22,7 +22,8 @@
             </div>
 
             <div class="vbox">
-                <div *ngIf="safeCustomHomeContent" class="vbox" [innerHTML]="safeCustomHomeContent"></div>
+                <div *ngIf="safeCustomContentFromPref" class="vbox" style="flex: initial" [innerHTML]="safeCustomContentFromPref"></div>
+                <div *ngIf="safeCustomContentFromFile" class="vbox" style="flex: initial" [innerHTML]="safeCustomContentFromFile"></div>
             </div>
 
             <p *ngIf="privacyStatementAvailable" style="align-self: flex-end;">

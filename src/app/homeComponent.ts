@@ -15,11 +15,10 @@ import { VBContext } from "./utils/VBContext";
 })
 export class HomeComponent {
 
+    private safeCustomContentFromPref: SafeHtml;
+    private safeCustomContentFromFile: SafeHtml;
+
     private privacyStatementAvailable: boolean = false;
-
-    private safeCustomHomeContent: SafeHtml;
-
-    private safeDescription: SafeHtml;
 
     constructor(private router: Router, private modal: Modal, private administrationService: AdministrationServices, private sanitizer: DomSanitizer) { }
 
@@ -28,8 +27,22 @@ export class HomeComponent {
 
         let homeContent = VBContext.getSystemSettings().homeContent;
         if (homeContent != null) {
-            this.safeCustomHomeContent = this.sanitizer.bypassSecurityTrustHtml(homeContent);
+            this.safeCustomContentFromPref = this.sanitizer.bypassSecurityTrustHtml(homeContent);
         }
+
+        /**
+         * the following require() are necessary in order to trigger the rule (defined in in webpack.common.js)
+         * that matches content in assets/ext/home and to copy each file during the creation of the distribution
+         */
+        require('file-loader?name=[name].[ext]!../assets/ext/home/example.png');
+        require('file-loader?name=[name].[ext]!../assets/ext/home/custom_content.html');
+        fetch("assets/ext/home/custom_content.html").then(
+            res => res.text()
+        ).then(
+            htmlContent => {
+                this.safeCustomContentFromFile = this.sanitizer.bypassSecurityTrustHtml(htmlContent);
+            }
+        );
     }
 
     private isUserLogged(): boolean {

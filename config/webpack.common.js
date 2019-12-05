@@ -64,6 +64,7 @@ module.exports = {
             //file loader copies them in assets/images/ folder
             {
                 test: /\.(png|jpe?g|gif|svg|ico)$/,
+                exclude: helpers.root('src', 'assets', 'ext', 'home'),
                 loader: 'file-loader?name=assets/images/[name].[ext]'
             },
             //fonts files
@@ -71,6 +72,12 @@ module.exports = {
             {
                 test: /\.(woff|woff2|ttf|eot)$/,
                 loader: 'file-loader?name=assets/fonts/[name].[ext]'
+            },
+            //files about home page customization: the file-loader copies them in assets/ext/home/ folder
+            {
+                test: /\.(html|png)$/,
+                include: helpers.root('src', 'assets', 'ext', 'home'),
+                loader: 'file-loader?name=assets/ext/home/[name].[ext]'
             },
         ]
     },
@@ -112,7 +119,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: 'src/index.html',
             favicon: 'src/assets/images/logos/favicon.ico'
-        })
+        }),
 
     ]
 };
