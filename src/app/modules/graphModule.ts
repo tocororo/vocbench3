@@ -15,7 +15,6 @@ import { DataGraphSettingsModal } from '../graph/modal/dataGraphSettingsModal';
 import { GraphModal } from "../graph/modal/graphModal";
 import { GraphModalServices } from '../graph/modal/graphModalServices';
 import { LinksFilterModal } from '../graph/modal/linksFilterModal';
-import { ResViewPartitionFilter } from '../graph/modal/resViewPartitionFilter';
 import { ForceControlPanel } from '../graph/widget/forceControlPanel';
 import { ResourceDetailsPanel } from '../graph/widget/resourceDetailsPanel';
 import { PreferencesModule } from './preferencesModule';
@@ -26,7 +25,7 @@ import { SharedModule } from './sharedModule';
     declarations: [
         LinkComponent, NodeModelComponent, DataNodeComponent, DraggableDirective, ZoomableDirective,
         ModelGraphPanel, DataGraphPanel, ModelGraphComponent, DataGraphComponent,
-        ForceControlPanel, ResourceDetailsPanel, ResViewPartitionFilter,
+        ForceControlPanel, ResourceDetailsPanel,
         //modals
         GraphModal, LinksFilterModal, DataGraphSettingsModal
     ],

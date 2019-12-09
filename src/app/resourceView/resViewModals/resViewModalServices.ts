@@ -157,7 +157,7 @@ export class ResViewModalServices {
      */
     editSettings() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
         return this.modal.open(ResViewSettingsModal, overlayConfig).result;
     }
 

@@ -4,7 +4,7 @@ import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute
 import { AddAction, ResViewPartition, ResViewUtils } from "../../models/ResourceView";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { ResourcesServices } from "../../services/resourcesServices";
-import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { CRUDEnum, ResourceViewAuthEvaluator } from "../../utils/AuthorizationEvaluator";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowseExternalResourceModalReturnData } from "../resViewModals/browseExternalResourceModal";
@@ -105,7 +105,7 @@ export abstract class PartitionRenderer {
          * - user not authorized
          */
         this.addDisabled = !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource) ||
-            this.readonly || !AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.resource);
+            this.readonly || !ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.C, this.resource);
         /**
          * Delete is disabled if one of them is true
          * - resource is not explicit (e.g. imported, inferred, in staging)
@@ -115,7 +115,7 @@ export abstract class PartitionRenderer {
          */
         this.deleteDisabled = !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
             ResourceUtils.isResourceInStaging(this.resource) ||
-            this.readonly || !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.resource);
+            this.readonly || !ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.resource);
         this.addExteranlResourceAllowed = ResViewUtils.addExternalResourcePartition.indexOf(this.partition) != -1;
         this.addManuallyAllowed = ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
     }

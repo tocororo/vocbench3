@@ -84,7 +84,7 @@ export class DataGraphComponent extends AbstractGraph {
         this.resViewService.getResourceView(<ARTResource>node.res).subscribe(
             rv => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                let filteredPartitions: ResViewPartition[] = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter[(<ARTResource>node.res).getRole()];
+                let filteredPartitions: ResViewPartition[] = VBContext.getWorkingProjectCtx().getProjectPreferences().graphViewPartitionFilter[(<ARTResource>node.res).getRole()];
                 //create the predicate-object lists for each partition (skip the filtered partition)
                 let predObjListMap: { [partition: string]: ARTPredicateObjects[] } = {};
                 this.rvPartitions.forEach(partition => {

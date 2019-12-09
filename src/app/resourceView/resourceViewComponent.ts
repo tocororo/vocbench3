@@ -11,6 +11,7 @@ import { MetadataRegistryServices } from "../services/metadataRegistryServices";
 import { ResourcesServices } from "../services/resourcesServices";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { VersionsServices } from "../services/versionsServices";
+import { CRUDEnum, ResourceViewAuthEvaluator } from "../utils/AuthorizationEvaluator";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpServiceContext } from "../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../utils/ResourceUtils";
@@ -205,38 +206,6 @@ export class ResourceViewComponent {
      * in fact if the user switches on/off the inference, there's no need to perform a new request.
      */
     private fillPartitions() {
-        //reset all partitions
-        this.broadersColl = null;
-        this.classAxiomColl = null;
-        this.constituentsColl = null;
-        this.datatypeDefinitionColl = null;
-        this.denotationsColl = null;
-        this.disjointPropertiesColl = null;
-        this.domainsColl = null;
-        this.equivalentPropertiesColl = null;
-        this.evokedLexicalConceptsColl = null;
-        this.formBasedPreviewColl = null;
-        this.formRepresentationsColl = null;
-        this.importsColl = null;
-        this.inverseofColl = null;
-        this.labelRelationsColl = null;
-        this.lexicalFormsColl = null;
-        this.lexicalizationsColl = null;
-        this.lexicalSensesColl = null;
-        this.membersColl = null;
-        this.membersOrderedColl = null;
-        this.notesColl = null;
-        this.propertiesColl = null;
-        this.propertyFacets = null;
-        this.rangesColl = null;
-        this.rdfsMembersColl = null;
-        this.schemesColl = null;
-        this.subPropertyChainsColl = null;
-        this.subtermsColl = null;
-        this.superpropertiesColl = null;
-        this.topconceptofColl = null;
-        this.typesColl = null;
-
         var resourcePartition: any = this.resViewResponse.resource;
         this.resource = Deserializer.createRDFResource(resourcePartition);
 
@@ -263,218 +232,41 @@ export class ResourceViewComponent {
             );
         } //else is unknown => the UI gives the possibility to discover the dataset
 
-        var broadersPartition: any = this.resViewResponse[ResViewPartition.broaders];
-        if (broadersPartition != null) {
-            this.broadersColl = Deserializer.createPredicateObjectsList(broadersPartition);
-            this.filterPredObjList(this.broadersColl);
-            this.sortObjects(this.broadersColl);
+        //list of partition filtered out for the role of the current described resource
+        let partitionFilter: ResViewPartition[] = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter[this.resource.getRole()];
+        if (partitionFilter == null) {
+            partitionFilter = []; //to prevent error later (in partitionFilter.indexOf(partition))
         }
 
-        var classAxiomsPartition: any = this.resViewResponse[ResViewPartition.classaxioms];
-        if (classAxiomsPartition != null) {
-            this.classAxiomColl = Deserializer.createPredicateObjectsList(classAxiomsPartition);
-            this.filterPredObjList(this.classAxiomColl);
-            this.sortObjects(this.classAxiomColl);
-        }
-
-        var constituentsPartition: any = this.resViewResponse[ResViewPartition.constituents];
-        if (constituentsPartition != null) {
-            this.constituentsColl = Deserializer.createPredicateObjectsList(constituentsPartition);
-            this.filterPredObjList(this.constituentsColl);
-            // this.sortObjects(this.constituentsColl); ordered server-side
-        }
-
-        var datatypeDefinitionPartition: any = this.resViewResponse[ResViewPartition.datatypeDefinitions];
-        if (datatypeDefinitionPartition != null) {
-            this.datatypeDefinitionColl = Deserializer.createPredicateObjectsList(datatypeDefinitionPartition);
-            this.filterPredObjList(this.datatypeDefinitionColl);
-            this.sortObjects(this.datatypeDefinitionColl);
-        } 
-
-        var denotationsPartition: any = this.resViewResponse[ResViewPartition.denotations];
-        if (denotationsPartition != null) {
-            this.denotationsColl = Deserializer.createPredicateObjectsList(denotationsPartition);
-            this.filterPredObjList(this.denotationsColl);
-            this.sortObjects(this.denotationsColl);
-        }
-
-        var disjointPropertiesPartition: any = this.resViewResponse[ResViewPartition.disjointProperties];
-        if (disjointPropertiesPartition != null) {
-            this.disjointPropertiesColl = Deserializer.createPredicateObjectsList(disjointPropertiesPartition);
-            this.filterPredObjList(this.disjointPropertiesColl);
-            this.sortObjects(this.disjointPropertiesColl);
-        }
-
-        var domainsPartition: any = this.resViewResponse[ResViewPartition.domains];
-        if (domainsPartition != null) {
-            this.domainsColl = Deserializer.createPredicateObjectsList(domainsPartition);
-            this.filterPredObjList(this.domainsColl);
-            this.sortObjects(this.domainsColl);
-        }
-
-        var equivalentPropertiesPartition: any = this.resViewResponse[ResViewPartition.equivalentProperties];
-        if (equivalentPropertiesPartition != null) {
-            this.equivalentPropertiesColl = Deserializer.createPredicateObjectsList(equivalentPropertiesPartition);
-            this.filterPredObjList(this.equivalentPropertiesColl);
-            this.sortObjects(this.equivalentPropertiesColl);
-        }
-
-        var evokedLexicalConceptsPartition: any = this.resViewResponse[ResViewPartition.evokedLexicalConcepts];
-        if (evokedLexicalConceptsPartition != null) {
-            this.evokedLexicalConceptsColl = Deserializer.createPredicateObjectsList(evokedLexicalConceptsPartition);
-            this.filterPredObjList(this.evokedLexicalConceptsColl);
-            this.sortObjects(this.evokedLexicalConceptsColl);
-        }
-
-        var facetsPartition: any = this.resViewResponse[ResViewPartition.facets];
-        if (facetsPartition != null) {
-            this.parseFacetsPartition(facetsPartition);
-            this.filterPredObjList(this.inverseofColl);
-            this.sortObjects(this.inverseofColl);
-        }
-
-        var formBasedPreviewPartition: any = this.resViewResponse[ResViewPartition.formBasedPreview];
-        if (formBasedPreviewPartition != null) {
-            this.formBasedPreviewColl = Deserializer.createPredicateObjectsList(formBasedPreviewPartition);
-            this.filterPredObjList(this.formBasedPreviewColl);
-            this.sortObjects(this.formBasedPreviewColl);
-        }
-
-        var formRepresentationsPartition: any = this.resViewResponse[ResViewPartition.formRepresentations];
-        if (formRepresentationsPartition != null) {
-            this.formRepresentationsColl = Deserializer.createPredicateObjectsList(formRepresentationsPartition);
-            this.filterPredObjList(this.formRepresentationsColl);
-            this.sortObjects(this.formRepresentationsColl);
-        }
-
-        var importsPartition: any = this.resViewResponse[ResViewPartition.imports];
-        if (importsPartition != null) {
-            this.importsColl = Deserializer.createPredicateObjectsList(importsPartition);
-            this.filterPredObjList(this.importsColl);
-            this.sortObjects(this.importsColl);
-        }
-
-        var labelRelationsPartition: any = this.resViewResponse[ResViewPartition.labelRelations];
-        if (labelRelationsPartition != null) {
-            this.labelRelationsColl = Deserializer.createPredicateObjectsList(labelRelationsPartition);
-            this.filterPredObjList(this.labelRelationsColl);
-            this.sortObjects(this.labelRelationsColl);
-        }
-
-        var lexicalizationsPartition: any = this.resViewResponse[ResViewPartition.lexicalizations];
-        if (lexicalizationsPartition != null) {
-            this.lexicalizationsColl = Deserializer.createPredicateObjectsList(lexicalizationsPartition);
-            this.filterPredObjList(this.lexicalizationsColl);
-            //do not sort (the sort is performed in the partition according the language)
-        }
-
-        var lexicalFormsPartition: any = this.resViewResponse[ResViewPartition.lexicalForms];
-        if (lexicalFormsPartition != null) {
-            this.lexicalFormsColl = Deserializer.createPredicateObjectsList(lexicalFormsPartition);
-            this.filterPredObjList(this.lexicalFormsColl);
-            this.sortObjects(this.lexicalFormsColl);
-        }
-
-        var lexicalSensesPartition: any = this.resViewResponse[ResViewPartition.lexicalSenses];
-        if (lexicalFormsPartition != null) {
-            this.lexicalSensesColl = Deserializer.createPredicateObjectsList(lexicalSensesPartition);
-            this.filterPredObjList(this.lexicalSensesColl);
-            this.sortObjects(this.lexicalSensesColl);
-        }
-
-        var membersPartition: any = this.resViewResponse[ResViewPartition.members];
-        if (membersPartition != null) {
-            this.membersColl = Deserializer.createPredicateObjectsList(membersPartition);
-            this.filterPredObjList(this.membersColl);
-            this.sortObjects(this.membersColl);
-        }
-
-        var membersOrderedPartition: any = this.resViewResponse[ResViewPartition.membersOrdered];
-        if (membersOrderedPartition != null) {
-            this.membersOrderedColl = Deserializer.createPredicateObjectsList(membersOrderedPartition);
-            //response doesn't declare the "explicit" for the collection members, set the attribute based on the explicit of the collection
-            for (var i = 0; i < this.membersOrderedColl.length; i++) { //for each pred-obj-list
-                let collections = this.membersOrderedColl[i].getObjects();
-                for (var j = 0; j < collections.length; j++) { //for each collection (member list, should be just 1)
-                    if (collections[j].getAdditionalProperty(ResAttribute.EXPLICIT)) { //set member explicit only if collection is explicit
-                        let members: ARTResource[] = collections[j].getAdditionalProperty(ResAttribute.MEMBERS);
-                        for (var k = 0; k < members.length; k++) {
-                            members[k].setAdditionalProperty(ResAttribute.EXPLICIT, true);
-                        }
-                    }
-                }
-            }
-            this.filterPredObjList(this.membersOrderedColl);
-            this.sortObjects(this.membersOrderedColl);
-        }
-
-        var notesPartition: any = this.resViewResponse[ResViewPartition.notes];
-        if (notesPartition != null) {
-            this.notesColl = Deserializer.createPredicateObjectsList(notesPartition);
-            this.filterPredObjList(this.notesColl);
-            this.sortObjects(this.notesColl);
-        }
-
-        var propertiesPartition: any = this.resViewResponse[ResViewPartition.properties];
-        this.propertiesColl = Deserializer.createPredicateObjectsList(propertiesPartition);
-        this.filterPredObjList(this.propertiesColl);
-        this.sortObjects(this.propertiesColl);
-
-        var rangesPartition: any = this.resViewResponse[ResViewPartition.ranges];
-        if (rangesPartition != null) {
-            this.rangesColl = Deserializer.createPredicateObjectsList(rangesPartition);
-            this.filterPredObjList(this.rangesColl);
-            this.sortObjects(this.rangesColl);
-        }
-
-        var rdfsMembersPartition: any = this.resViewResponse[ResViewPartition.rdfsMembers];
-        if (rdfsMembersPartition != null) {
-            this.rdfsMembersColl = Deserializer.createPredicateObjectsList(rdfsMembersPartition);
-            this.filterPredObjList(this.rdfsMembersColl);
-            // this.sortObjects(this.rdfsMembersColl); ordered server-side
-        }
-
-        var schemesPartition: any = this.resViewResponse[ResViewPartition.schemes];
-        if (schemesPartition != null) {
-            this.schemesColl = Deserializer.createPredicateObjectsList(schemesPartition);
-            this.filterPredObjList(this.schemesColl);
-            this.sortObjects(this.schemesColl);
-        }
-
-        var subPropertyChainsPartition: any = this.resViewResponse[ResViewPartition.subPropertyChains];
-        if (subPropertyChainsPartition != null) {
-            this.subPropertyChainsColl = Deserializer.createPredicateObjectsList(subPropertyChainsPartition);
-            this.filterPredObjList(this.subPropertyChainsColl);
-            this.sortObjects(this.subPropertyChainsColl);
-        }
-
-        var subtermsPartition: any = this.resViewResponse[ResViewPartition.subterms];
-        if (subtermsPartition != null) {
-            this.subtermsColl = Deserializer.createPredicateObjectsList(subtermsPartition);
-            this.filterPredObjList(this.subtermsColl);
-            this.sortObjects(this.subtermsColl);
-        }
-
-        var superPropertiesPartition: any = this.resViewResponse[ResViewPartition.superproperties];
-        if (superPropertiesPartition != null) {
-            this.superpropertiesColl = Deserializer.createPredicateObjectsList(superPropertiesPartition);
-            this.filterPredObjList(this.superpropertiesColl);
-            this.sortObjects(this.superpropertiesColl);
-        }
-
-        var topConceptOfPartition: any = this.resViewResponse[ResViewPartition.topconceptof];
-        if (topConceptOfPartition != null) {
-            this.topconceptofColl = Deserializer.createPredicateObjectsList(topConceptOfPartition);
-            this.filterPredObjList(this.topconceptofColl);
-            this.sortObjects(this.topconceptofColl);
-        }
-
-        var typesPartition: any = this.resViewResponse[ResViewPartition.types];
-        if (typesPartition != null) {
-            this.typesColl = Deserializer.createPredicateObjectsList(typesPartition);
-            this.filterPredObjList(this.typesColl);
-            this.sortObjects(this.typesColl);
-        }
+        this.broadersColl = this.initPartition(ResViewPartition.broaders, partitionFilter, true);
+        this.classAxiomColl = this.initPartition(ResViewPartition.classaxioms, partitionFilter, true);
+        this.constituentsColl = this.initPartition(ResViewPartition.constituents, partitionFilter, false); //ordered server-side
+        this.datatypeDefinitionColl = this.initPartition(ResViewPartition.datatypeDefinitions, partitionFilter, true);
+        this.denotationsColl = this.initPartition(ResViewPartition.denotations, partitionFilter, true);
+        this.disjointPropertiesColl = this.initPartition(ResViewPartition.disjointProperties, partitionFilter, true);
+        this.domainsColl = this.initPartition(ResViewPartition.domains, partitionFilter, true);
+        this.equivalentPropertiesColl = this.initPartition(ResViewPartition.equivalentProperties, partitionFilter, true);
+        this.evokedLexicalConceptsColl = this.initPartition(ResViewPartition.evokedLexicalConcepts, partitionFilter, true);
+        this.inverseofColl = this.initFacetsPartition(ResViewPartition.facets, partitionFilter);//dedicated initialization
+        this.formBasedPreviewColl = this.initPartition(ResViewPartition.formBasedPreview, partitionFilter, true);
+        this.formRepresentationsColl = this.initPartition(ResViewPartition.formRepresentations, partitionFilter, true);
+        this.importsColl = this.initPartition(ResViewPartition.imports, partitionFilter, true);
+        this.labelRelationsColl = this.initPartition(ResViewPartition.labelRelations, partitionFilter, true);
+        this.lexicalizationsColl = this.initPartition(ResViewPartition.lexicalizations, partitionFilter, false); //the sort is performed in the partition according the language
+        this.lexicalFormsColl = this.initPartition(ResViewPartition.lexicalForms, partitionFilter, true);
+        this.lexicalSensesColl = this.initPartition(ResViewPartition.lexicalSenses, partitionFilter, true);
+        this.membersColl = this.initPartition(ResViewPartition.members, partitionFilter, true);
+        this.membersOrderedColl = this.initOrderedMembersPartition(ResViewPartition.membersOrdered, partitionFilter);//dedicated initialization
+        this.notesColl = this.initPartition(ResViewPartition.notes, partitionFilter, true);
+        this.propertiesColl = this.initPartition(ResViewPartition.properties, partitionFilter, true);
+        this.rangesColl = this.initPartition(ResViewPartition.ranges, partitionFilter, true);
+        this.rdfsMembersColl = this.initPartition(ResViewPartition.rdfsMembers, partitionFilter, false); //ordered server-side
+        this.schemesColl = this.initPartition(ResViewPartition.schemes, partitionFilter, true);
+        this.subtermsColl = this.initPartition(ResViewPartition.subPropertyChains, partitionFilter, true);
+        this.subPropertyChainsColl = this.initPartition(ResViewPartition.subterms, partitionFilter, true);
+        this.superpropertiesColl = this.initPartition(ResViewPartition.superproperties, partitionFilter, true);
+        this.topconceptofColl = this.initPartition(ResViewPartition.topconceptof, partitionFilter, true);
+        this.typesColl = this.initPartition(ResViewPartition.types, partitionFilter, true);
 
         if (
             //partitions of individual, so this are always returned, also when resource is not defined, I need to check also if lenght == 0
@@ -485,6 +277,7 @@ export class ResourceViewComponent {
             this.broadersColl == null &&
             this.classAxiomColl == null &&
             this.constituentsColl == null &&
+            this.datatypeDefinitionColl == null &&
             this.denotationsColl == null &&
             this.disjointPropertiesColl == null &&
             this.domainsColl == null &&
@@ -513,6 +306,106 @@ export class ResourceViewComponent {
         } else {
             this.unexistingResource = false;
         }
+    }
+
+    /**
+     * Initializes the poList of a partition:
+     * - verifies if the partition should be showed
+     * - deserializes the response
+     * - filters (eventually) the object list
+     * - sorts the object list
+     * @param partition 
+     * @param partitionFilter 
+     * @param sort 
+     */
+    private initPartition(partition: ResViewPartition, partitionFilter: ResViewPartition[], sort: boolean): ARTPredicateObjects[] {
+        let poList: ARTPredicateObjects[];
+        let partitionJson: any = this.resViewResponse[partition];
+        /**
+         * the poList is valorized only if:
+         * - the Read is authorized
+         * - the partition is not filtered (in the preference)
+         * - the partition is present in the response
+         */
+        if (
+            partitionJson != null &&
+            ResourceViewAuthEvaluator.isAuthorized(partition, CRUDEnum.R, this.resource) && 
+            partitionFilter.indexOf(partition) == -1
+        ) {
+            poList = Deserializer.createPredicateObjectsList(partitionJson);
+            this.filterPredObjList(poList);
+            if (sort) {
+                this.sortObjects(poList);
+            }
+        }
+        return poList;
+    }
+
+    /**
+     * The response of the facets partition is different from the others, so initializes it in a dedicated method.
+     * 
+     * @param partition this could be omitted since this method is used just for facets partition, 
+     *  but it is provided anyway in order to be aligned with the initPartition method
+     * @param partitionFilter 
+     */
+    private initFacetsPartition(partition: ResViewPartition, partitionFilter: ResViewPartition[]): ARTPredicateObjects[] {
+        let poList: ARTPredicateObjects[]; //poList of inverseof 
+        let facetsPartitionJson: any = this.resViewResponse[partition];
+        if (
+            facetsPartitionJson != null &&
+            ResourceViewAuthEvaluator.isAuthorized(partition, CRUDEnum.R, this.resource) && 
+            partitionFilter.indexOf(partition) == -1
+        ) {
+            // this.parseFacetsPartition(facetsPartitionJson);
+            this.propertyFacets = [];
+            for (var facetName in facetsPartitionJson) {
+                if (facetName == "inverseOf") continue;
+                this.propertyFacets.push({
+                    name: facetName,
+                    value: facetsPartitionJson[facetName].value,
+                    explicit: facetsPartitionJson[facetName].explicit
+                })
+            }
+            //parse inverseOf partition in facets
+            poList = Deserializer.createPredicateObjectsList(facetsPartitionJson.inverseOf);
+            this.filterPredObjList(poList);
+            this.sortObjects(poList);
+        }
+        return poList;
+    }
+
+    /**
+     * The response of the membersOrdered partition is slightly different from the others, so initializes it in a dedicated method.
+     * 
+     * @param partition this could be omitted since this method is used just for membersOrdered partition,
+     *  but it is provided anyway in order to be aligned with the initPartition method
+     * @param partitionFilter
+     */
+    private initOrderedMembersPartition(partition: ResViewPartition, partitionFilter: ResViewPartition[]): ARTPredicateObjects[] {
+        let poList: ARTPredicateObjects[];
+        let partitionJson: any = this.resViewResponse[partition];
+        if (
+            partitionJson != null &&
+            ResourceViewAuthEvaluator.isAuthorized(partition, CRUDEnum.R, this.resource) && 
+            partitionFilter.indexOf(ResViewPartition.membersOrdered) == -1
+        ) {
+            poList = Deserializer.createPredicateObjectsList(partitionJson);
+            //the "explicit" attribute for the collection members is not declared => set the attribute based on the explicit of the collection
+            for (var i = 0; i < poList.length; i++) { //for each pred-obj-list
+                let collections = poList[i].getObjects();
+                for (var j = 0; j < collections.length; j++) { //for each collection (member list, should be just 1)
+                    if (collections[j].getAdditionalProperty(ResAttribute.EXPLICIT)) { //set member explicit only if collection is explicit
+                        let members: ARTResource[] = collections[j].getAdditionalProperty(ResAttribute.MEMBERS);
+                        for (var k = 0; k < members.length; k++) {
+                            members[k].setAdditionalProperty(ResAttribute.EXPLICIT, true);
+                        }
+                    }
+                }
+            }
+            this.filterPredObjList(poList);
+            this.sortObjects(poList);
+        }
+        return poList;
     }
 
     private filterPredObjList(predObjList: ARTPredicateObjects[]) {
@@ -577,23 +470,6 @@ export class ResourceViewComponent {
         }
     }
 
-    /**
-     * Facets partition has a structure different from the other (object list and predicate-object list),
-     * so it requires a parser ad hoc (doesn't use the parsers in Deserializer)
-     */
-    private parseFacetsPartition(facetsPartition: any) {
-        this.propertyFacets = [];
-        for (var facetName in facetsPartition) {
-            if (facetName == "inverseOf") continue;
-            this.propertyFacets.push({
-                name: facetName,
-                value: facetsPartition[facetName].value,
-                explicit: facetsPartition[facetName].explicit
-            })
-        }
-        //parse inverseOf partition in facets
-        this.inverseofColl = Deserializer.createPredicateObjectsList(facetsPartition.inverseOf);
-    }
 
     /**
      * HEADING BUTTON HANDLERS

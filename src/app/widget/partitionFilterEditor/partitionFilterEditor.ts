@@ -1,17 +1,21 @@
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
-import { ResViewPartitionFilterPreference } from "../../models/Properties";
+import { PartitionFilterPreference } from "../../models/Properties";
 import { ResViewPartition, ResViewUtils } from "../../models/ResourceView";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBProperties } from "../../utils/VBProperties";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { BasicModalServices } from "../modal/basicModal/basicModalServices";
 import { VBContext } from "../../utils/VBContext";
 
 @Component({
-    selector: "rv-partition-filter",
-    templateUrl: "./resViewPartitionFilter.html"
+    selector: "partition-filter-editor",
+    templateUrl: "./partitionFilterEditor.html"
 })
-export class ResViewPartitionFilter {
+export class PartitionFilterEditor {
+
+    @Input() context: "Graph" | "ResourceView"; //specifies if the editor is dealing with the preference about the Graph or ResourceView
+
+    private infoMsg: string;
 
     /**
      * When will be provided, this map will be retrieved throught a service call
@@ -29,7 +33,8 @@ export class ResViewPartitionFilter {
         [RDFResourceRolesEnum.conceptScheme]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.lexicalizations,
             ResViewPartition.notes, ResViewPartition.properties],
 
-        [RDFResourceRolesEnum.dataRange]: null,
+        [RDFResourceRolesEnum.dataRange]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.datatypeDefinitions,
+            ResViewPartition.lexicalizations, ResViewPartition.properties],
 
         [RDFResourceRolesEnum.datatypeProperty]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.equivalentProperties,
             ResViewPartition.superproperties, ResViewPartition.facets, ResViewPartition.disjointProperties, ResViewPartition.domains,
@@ -92,7 +97,15 @@ export class ResViewPartitionFilter {
             }
         }
 
-        this.convertPrefToRolePartitionsStruct(VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter);
+        let pref: PartitionFilterPreference;
+        if (this.context == "Graph") {
+            this.infoMsg = "Select the partition of the resource description that will be shown when expanding a node.";
+            pref = VBContext.getWorkingProjectCtx().getProjectPreferences().graphViewPartitionFilter;
+        } else {
+            this.infoMsg = "Here you can customize the ResourceView by showing/hiding the partitions.";
+            pref = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter;
+        }
+        this.convertPrefToRolePartitionsStruct(pref);
         this.selectedRolePartitionsStruct = this.rolePartitionsStructs[0];
     }
 
@@ -102,7 +115,7 @@ export class ResViewPartitionFilter {
      * RolePartitionStruct contains also other info, such as the role or partition "show" and the "checked" boolean when a partition is visible
      * @param pref 
      */
-    private convertPrefToRolePartitionsStruct(pref: ResViewPartitionFilterPreference) {
+    private convertPrefToRolePartitionsStruct(pref: PartitionFilterPreference) {
         this.rolePartitionsStructs = [];
 
         for (let role in this.rolePartitionMap) {
@@ -195,7 +208,7 @@ export class ResViewPartitionFilter {
     }
 
     private updatePref() {
-        let pref: ResViewPartitionFilterPreference = {};
+        let pref: PartitionFilterPreference = {};
         this.rolePartitionsStructs.forEach(rps => {
             let partitionsPref: ResViewPartition[] = [];
             rps.partitions.forEach(p => {
@@ -207,7 +220,12 @@ export class ResViewPartitionFilter {
                 pref[rps.role.id+""] = partitionsPref;
             }
         });
-        this.vbProp.setResourceViewPartitionFilter(pref);
+        //
+        if (this.context == "Graph") {
+            this.vbProp.setGraphViewPartitionFilter(pref);
+        } else {
+            this.vbProp.setResourceViewPartitionFilter(pref);
+        }
     }
 
 }

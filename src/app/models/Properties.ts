@@ -31,7 +31,9 @@ export class Properties {
     static pref_lex_entry_list_visualization: string = "lex_entry_list_visualization";
     static pref_lex_entry_list_index_lenght: string = "lex_entry_list_index_lenght";
 
-    static pref_res_view_partition_filter: string = "res_view_partition_filter";
+    static pref_res_view_partition_filter: string = "rv_partition_filter";
+
+    static pref_graph_view_partition_filter: string = "graph_partition_filter";
     static pref_hide_literal_graph_nodes: string = "hide_literal_graph_nodes";
 
     static pref_s2rdf_use_headers: string = "s2rdf_use_headers";
@@ -125,7 +127,7 @@ export class ValueFilterLanguages {
     enabled: boolean;
 }
 
-export class ResViewPartitionFilterPreference {
+export class PartitionFilterPreference {
     [role: string]: ResViewPartition[]; //role is a RDFResourceRoleEnum, values are only the hidden partitions
 }
 
@@ -148,8 +150,10 @@ export class ProjectPreferences {
     conceptTreePreferences: ConceptTreePreference;
     lexEntryListPreferences: LexicalEntryListPreference;
 
+    resViewPartitionFilter: PartitionFilterPreference;
+
     //graph preferences
-    resViewPartitionFilter: ResViewPartitionFilterPreference;
+    graphViewPartitionFilter: PartitionFilterPreference;
     hideLiteralGraphNodes: boolean = true;
 
     searchSettings: SearchSettings;

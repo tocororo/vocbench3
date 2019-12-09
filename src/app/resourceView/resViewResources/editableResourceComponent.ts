@@ -7,7 +7,7 @@ import { ManchesterServices } from "../../services/manchesterServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { RefactorServices } from "../../services/refactorServices";
 import { ResourcesServices } from "../../services/resourcesServices";
-import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { AuthorizationEvaluator, CRUDEnum, ResourceViewAuthEvaluator } from "../../utils/AuthorizationEvaluator";
 import { DatatypeValidator } from "../../utils/DatatypeValidator";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
@@ -155,12 +155,12 @@ export class EditableResourceComponent {
             this.readonly ||
             ResourceUtils.isTripleInStaging(this.resource)
         );
-        this.editAuthorized = AuthorizationEvaluator.ResourceView.isEditAuthorized(this.partition, this.subject);
-        this.deleteAuthorized = AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.subject);
+        this.editAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.U, this.subject);
+        this.deleteAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.subject);
         this.spawnFromLabelAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSpawnNewConceptFromLabel);
         this.moveLabelAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorMoveXLabelToResource, this.subject);
         this.assertAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.subject);
-        this.copyLocalesAuthorized = AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.subject)
+        this.copyLocalesAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.C, this.subject);
         //bulk actions visible in every partition exept: subPropertyChains that 
         this.bulkEditAuthorized = this.editAuthorized && AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdatePredicateObject);
         this.bulkDeleteAuthorized = this.deleteAuthorized && AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemovePredicateObject);
@@ -568,10 +568,13 @@ export class EditableResourceComponent {
 }
 
 
+/**
+ * Enum that tells how to handle the "edit" action.
+ */
 enum EditActionScenarioEnum {
     xLabel = "xLabel", //edit should allow to change the literal form
     plainLiteral = "plainLiteral", //edit should allow to change the content of the literal without langTag
     typedLiteral = "typedLiteral", //edit should allow to change the content of the literal without datatype
-    partition = "partition", //edit should be handled ad hoc by the partition (an event is emitted)
+    partition = "partition", //edit should be handled ad hoc by the partition (an event is emitted) which should implements an editHandler method
     default = "default" //edit should allow to edit the NT form (iri/bnode/...)
 }

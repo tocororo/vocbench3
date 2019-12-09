@@ -5,7 +5,7 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ART
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
 import { ProjectTableColumnStruct } from '../models/Project';
-import { ClassIndividualPanelSearchMode, ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, ResViewPartitionFilterPreference, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
+import { ClassIndividualPanelSearchMode, ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, PartitionFilterPreference, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { OWL, RDFS } from '../models/Vocabulary';
 import { AdministrationServices } from '../services/administrationServices';
@@ -51,7 +51,7 @@ export class VBProperties {
             Properties.pref_concept_tree_include_subprops, Properties.pref_concept_tree_sync_inverse, Properties.pref_concept_tree_visualization,
             Properties.pref_lex_entry_list_visualization, Properties.pref_lex_entry_list_index_lenght,
             Properties.pref_editing_language, Properties.pref_filter_value_languages,
-            Properties.pref_res_view_partition_filter, Properties.pref_hide_literal_graph_nodes
+            Properties.pref_res_view_partition_filter, Properties.pref_graph_view_partition_filter, Properties.pref_hide_literal_graph_nodes
         ];
         
         let options: VBRequestOptions = new VBRequestOptions({ ctxProject: projectCtx.getProject() });
@@ -100,16 +100,27 @@ export class VBProperties {
                     projectPreferences.filterValueLang = JSON.parse(filterValueLangPref);
                 }
 
-                //graph preferences
                 let rvPartitionFilterPref = prefs[Properties.pref_res_view_partition_filter];
                 if (rvPartitionFilterPref != null) {
                     projectPreferences.resViewPartitionFilter = JSON.parse(rvPartitionFilterPref);
-                } else {
-                    let resViewPartitionFilter: ResViewPartitionFilterPreference = {};
-                    for (let role in RDFResourceRolesEnum) {
-                        resViewPartitionFilter[role] = [ResViewPartition.lexicalizations];
+                } else { //initialize with empty partition list for each role
+                    let resViewPartitionFilter: PartitionFilterPreference = {};
+                    for (let role in RDFResourceRolesEnum) { 
+                        resViewPartitionFilter[role] = [];
                     }
                     projectPreferences.resViewPartitionFilter = resViewPartitionFilter;
+                }
+
+                //graph preferences
+                let graphPartitionFilterPref = prefs[Properties.pref_graph_view_partition_filter];
+                if (graphPartitionFilterPref != null) {
+                    projectPreferences.graphViewPartitionFilter = JSON.parse(graphPartitionFilterPref);
+                } else { //initialize with the only lexicalization partition for each role
+                    let graphPartitionFilterPref: PartitionFilterPreference = {};
+                    for (let role in RDFResourceRolesEnum) { 
+                        graphPartitionFilterPref[role] = [ResViewPartition.lexicalizations];
+                    }
+                    projectPreferences.graphViewPartitionFilter = graphPartitionFilterPref;
                 }
 
                 projectPreferences.hideLiteralGraphNodes = prefs[Properties.pref_hide_literal_graph_nodes] != "false";
@@ -309,10 +320,15 @@ export class VBProperties {
         VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences.indexLength = lenght;
     }
 
-    //Graph settings
-    setResourceViewPartitionFilter(pref: ResViewPartitionFilterPreference) {
+    setResourceViewPartitionFilter(pref: PartitionFilterPreference) {
         this.prefService.setPUSetting(Properties.pref_res_view_partition_filter, JSON.stringify(pref)).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter = pref;
+    }
+
+    //Graph settings
+    setGraphViewPartitionFilter(pref: PartitionFilterPreference) {
+        this.prefService.setPUSetting(Properties.pref_graph_view_partition_filter, JSON.stringify(pref)).subscribe();
+        VBContext.getWorkingProjectCtx().getProjectPreferences().graphViewPartitionFilter = pref;
     }
     setHideLiteralGraphNodes(show: boolean) {
         VBContext.getWorkingProjectCtx().getProjectPreferences().hideLiteralGraphNodes = show;

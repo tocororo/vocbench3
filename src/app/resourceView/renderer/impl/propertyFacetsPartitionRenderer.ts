@@ -6,7 +6,7 @@ import { OWL, RDF } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { PropertyServices } from "../../../services/propertyServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
-import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
+import { CRUDEnum, ResourceViewAuthEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ResourceUtils } from "../../../utils/ResourceUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
@@ -106,7 +106,7 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
         return (
             !facet.explicit ||
             (!this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource)) ||
-            this.readonly || !AuthorizationEvaluator.ResourceView.isEditAuthorized(this.partition, this.resource)
+            this.readonly || !ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.U, this.resource)
         );
     }
 

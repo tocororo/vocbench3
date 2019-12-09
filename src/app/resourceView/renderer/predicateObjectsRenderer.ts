@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { Language } from "../../models/LanguagesCountries";
 import { AddAction, ResViewPartition, ResViewUtils } from "../../models/ResourceView";
-import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { CRUDEnum, ResourceViewAuthEvaluator } from "../../utils/AuthorizationEvaluator";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 
 @Component({
@@ -61,7 +61,7 @@ export class PredicateObjectsRenderer {
          * - user not authorized
          */
         this.addDisabled = !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource) ||
-            this.readonly || !AuthorizationEvaluator.ResourceView.isAddAuthorized(this.partition, this.resource);
+            this.readonly || !ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.C, this.resource);
 
         /**
          * Delete is disabled if one of them is true
@@ -72,7 +72,7 @@ export class PredicateObjectsRenderer {
          */
         this.deleteDisabled = !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
             ResourceUtils.isResourceInStaging(this.resource) ||
-            this.readonly || !AuthorizationEvaluator.ResourceView.isRemoveAuthorized(this.partition, this.resource);
+            this.readonly || !ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.resource);
 
         //menu disabled if all of its action are disabled
         this.actionMenuDisabled = this.addDisabled && this.deleteDisabled;

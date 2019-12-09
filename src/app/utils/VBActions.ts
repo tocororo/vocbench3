@@ -16,6 +16,12 @@ import { NewConceptCfModalReturnData } from "../widget/modal/creationModal/newRe
 import { HttpServiceContext } from "./HttpManager";
 import { UIUtils } from "./UIUtils";
 
+/**
+ * The following represents a list of action available in ST-VB.
+ * Almost all the actions have a corresponding service in ST. 
+ * Some of them instead are only "dummy" actions used for representing generic read actions for which exist 
+ * authorization checks for the UI (e.g. the generic read actions, like classesRead, ...)
+ */
 export enum VBActionsEnum {
     //Administration
     administrationProjectManagement = "administrationProjectManagement", //generic for management of project
@@ -34,6 +40,7 @@ export enum VBActionsEnum {
     classesDeleteIndividual = "classesDeleteIndividual",
     classesGetClassTaxonomy = "classesGetClassTaxonomy", //valid for getClassesInfo and getSubClasses
     classesGetInstances = "classesGetInstances",
+    classesRead = "classesRead", //action for generic read (e.g. getClassInfo)
     classesRemoveClassAxiom = "classesRemoveClassAxiom",
     //Collaboration
     collaboration = "collaboration", //generic for Collaboration (creation and assignment of CS project)
@@ -58,6 +65,7 @@ export enum VBActionsEnum {
     datatypesDeleteDatatype = "datatypesDeleteDatatype",
     datatypesGetDatatype = "datatypesGetDatatype",
     datatypesDeleteDatatypeRestriction = "datatypesDeleteDatatypeRestriction",
+    datatypesRead = "datatypesRead",
     datatypesSetDatatypeRestriction = "setDatatypeRestriction", //generic for all the kinds of restriction
     //Export
     exportExport = "exportExport",
@@ -77,6 +85,7 @@ export enum VBActionsEnum {
     //Metadata
     metadataAddImport = "metadataAddImport",
     metadataChangeNsPrefixMapping = "metadataChangeNsPrefixMapping",
+    metadataReadImport = "metadataReadImport",
     metadataRemoveImport = "metadataRemoveImport",
     metadataRemoveNsPrefixMapping = "metadataRemoveNsPrefixMapping",
     metadataSetDefaultNs = "metadataSetDefaultNs",
@@ -101,6 +110,10 @@ export enum VBActionsEnum {
     ontolexDeleteLexicon = "ontolexDeleteLexicon",
     ontolexGetLexicalEntry = "ontolexGetLexicalEntry",
     ontolexGetLexicon = "ontolexGetLexicon",
+    ontolexReadFormRepresentation = "ontolexReadFormRepresentation",
+    ontolexReadLexicaliForm = "ontolexReadLexicaliForm",
+    ontolexReadLexicalEntryConstituents = "ontolexReadLexicalEntryConstituents",
+    ontolexReadSubterm = "ontolexReadSubterm",
     ontolexRemoveFormRepresentation = "ontolexRemoveFormRepresentation",
     ontolexRemoveLexicalForm = "ontolexRemoveLexicalForm",
     ontolexRemovePlainLexicalization = "ontolexRemovePlainLexicalization",
@@ -119,13 +132,18 @@ export enum VBActionsEnum {
     propertiesCreateProperty = "propertiesCreateProperty",
     propertiesCreateSubProperty = "propertiesCreateSubProperty",
     propertiesDeleteProperty = "propertiesDeleteProperty",
+    propertiesGetDomain = "propertiesGetDomain",
     propertiesGetPropertyTaxonomy = "propertiesGetPropertyTaxonomy", //valid for getTopProperties and getSubProperties
+    propertiesGetRange = "propertiesGetRange",
+    propertiesRead = "propertiesRead", //generic read actions for properties
+    propertiesReadPropertyChainAxiom = "propertiesReadPropertyChainAxiom",
     propertiesRemoveDisjointProperty = "propertiesRemoveDisjointProperty",
     propertiesRemoveEquivalentProperty = "propertiesRemoveEquivalentProperty",
     propertiesRemovePropertyChainAxiom = "propertiesRemovePropertyChainAxiom",
     propertiesRemovePropertyDomain = "propertiesRemovePropertyDomain",
     propertiesRemovePropertyRange = "propertiesRemovePropertyRange",
     propertiesRemoveSuperProperty = "propertiesRemoveSuperProperty",
+    propertiesUpdatePropertyChainAxiom = "propertiesUpdatePropertyChainAxiom",
     //Refactor
     refactorChangeResourceUri = "refactorChangeResourceUri",
     refactorMigrateToBaseUriGraph = "refactorMigrateToBaseUriGraph",
@@ -136,6 +154,8 @@ export enum VBActionsEnum {
     refactorSpawnNewConceptFromLabel = "refactorSpawnNewConceptFromLabel",
     //Resources
     resourcesAddValue = "resourcesAddValue",
+    resourcesRead = "resourcesRead", //represents a generic action for read
+    resourcesReadLexicalizations = "resourcesReadLexicalizations", //represents a generic action for read the lexicalization of all the role
     resourcesRemoveValue = "resourcesRemoveValue",
     resourcesRemovePredicateObject = "resourcesRemovePredicateObject",
     resourcesSetDeprecated = "resourcesSetDeprecated",
@@ -161,6 +181,7 @@ export enum VBActionsEnum {
     skosGetCollectionTaxonomy = "skosGetCollectionTaxonomy",
     skosGetConceptTaxonomy = "skosGetConceptTaxonomy",
     skosGetSchemes = "skosGetSchemes",
+    skosReadSchemes = "skosReadSchemes",
     skosRemoveBroaderConcept = "skosRemoveBroaderConcept",
     skosRemoveConceptFromScheme = "skosRemoveConceptFromScheme",
     skosRemoveFromCollection = "skosRemoveFromCollection",

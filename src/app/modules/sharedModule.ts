@@ -10,6 +10,7 @@ import { SanitizerDirective } from "../widget/directives/sanitizerDirective";
 import { ExtensionConfiguratorComponent } from '../widget/extensionConfigurator/extensionConfiguratorComponent';
 import { InputEditableComponent } from '../widget/inputEditable/inputEditableComponent';
 import { LanguageItemComponent } from '../widget/languageItem/languageItemComponent';
+import { PartitionFilterEditor } from '../widget/partitionFilterEditor/partitionFilterEditor';
 import { DatatypePickerComponent } from '../widget/pickers/datatypePicker/datatypePickerComponent';
 import { FilePickerComponent } from '../widget/pickers/filePicker/filePickerComponent';
 import { LangPickerComponent } from '../widget/pickers/langPicker/langPickerComponent';
@@ -27,18 +28,54 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
 @NgModule({
     imports: [CommonModule, FormsModule],
     declarations: [
-        FilePickerComponent, RdfResourceComponent, LangPickerComponent, DatatypePickerComponent, SanitizerDirective,
-        PearlEditorComponent, ManchesterEditorComponent, HtmlEditorComponent, YasguiComponent, InputEditableComponent, ResourceListComponent,
-        TypedLiteralInputComponent, LanguageItemComponent,
-        SettingsRendererComponent, SettingsRendererPanelComponent, SettingSetRendererComponent, SettingMapRendererComponent,
-        QueryParameterForm, ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent, ValuePickerComponent,
+        DatatypePickerComponent,
+        ExtensionConfiguratorComponent,
+        FilePickerComponent,
+        HtmlEditorComponent,
+        InputEditableComponent,
+        LangPickerComponent,
+        LanguageItemComponent,
+        LiteralPickerComponent,
+        ManchesterEditorComponent,
+        PartitionFilterEditor,
+        PearlEditorComponent,
+        QueryParameterForm,
+        RdfResourceComponent,
+        ResourceListComponent,
+        ResourcePickerComponent,
+        SanitizerDirective,
+        SettingMapRendererComponent,
+        SettingSetRendererComponent,
+        SettingsRendererComponent,
+        SettingsRendererPanelComponent,
+        TypedLiteralInputComponent,
+        ValuePickerComponent,
+        YasguiComponent,
     ],
     exports: [
-        FilePickerComponent, RdfResourceComponent, SanitizerDirective, LangPickerComponent, DatatypePickerComponent,
-        PearlEditorComponent, ManchesterEditorComponent, HtmlEditorComponent, YasguiComponent, InputEditableComponent, ResourceListComponent,
-        TypedLiteralInputComponent, LanguageItemComponent, 
-        SettingsRendererComponent, SettingsRendererPanelComponent, SettingSetRendererComponent, SettingMapRendererComponent,
-        QueryParameterForm, ExtensionConfiguratorComponent, ResourcePickerComponent, LiteralPickerComponent, ValuePickerComponent,
+        FilePickerComponent,
+        RdfResourceComponent,
+        SanitizerDirective,
+        LangPickerComponent,
+        DatatypePickerComponent,
+        PearlEditorComponent,
+        ManchesterEditorComponent,
+        HtmlEditorComponent,
+        YasguiComponent,
+        InputEditableComponent,
+        ResourceListComponent,
+        TypedLiteralInputComponent,
+        LanguageItemComponent,
+        SettingsRendererComponent,
+        SettingsRendererPanelComponent,
+        SettingSetRendererComponent,
+        SettingMapRendererComponent,
+        QueryParameterForm,
+        ExtensionConfiguratorComponent,
+        ResourcePickerComponent,
+        LiteralPickerComponent,
+        ValuePickerComponent,
+        PartitionFilterEditor,
     ],
     providers: []
 })

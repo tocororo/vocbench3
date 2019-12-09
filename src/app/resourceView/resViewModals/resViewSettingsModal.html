@@ -1,9 +1,13 @@
 <div class="modal-header">
     <h3 class="modal-title">ResourceView settings</h3>
 </div>
-<div class="modal-body vbox">
-    <res-view-pref></res-view-pref>
-    <lang-value-filter-pref class="vbox"></lang-value-filter-pref>
+<div class="modal-body hbox">
+    <div class="vbox">
+        <res-view-pref></res-view-pref>
+        <lang-value-filter-pref class="vbox"></lang-value-filter-pref>
+    </div>
+    
+    <partition-filter-editor context="ResourceView" class="vbox" style="margin-left: 4px;"></partition-filter-editor>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
