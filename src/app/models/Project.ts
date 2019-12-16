@@ -147,11 +147,6 @@ export class Project {
 
 }
 
-export enum ProjectTypesEnum {
-    saveToStore = "saveToStore",
-    continuosEditing = "continuosEditing"
-}
-
 export enum BackendTypesEnum {
     graphdb_FreeSail = "graphdb:FreeSail",
     openrdf_NativeStore = "openrdf:NativeStore",
@@ -172,12 +167,13 @@ export enum LockLevel {
 export class RepositorySummary {
     public id: string;
     public description: string;
-    public remoteRepoSummary: {
-        serverURL: string;
-        repositoryId: string;
-        username: string;
-        password: string;
-    }
+    public remoteRepoSummary: RemoteRepositorySummary
+}
+export class RemoteRepositorySummary {
+    public serverURL: string;
+    public repositoryId: string;
+    public username: string;
+    public password: string;
 }
 
 export enum RepositoryAccessType {

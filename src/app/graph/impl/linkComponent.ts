@@ -91,7 +91,7 @@ export class LinkComponent {
     private getLabelRectWidth() {
         let padding = 1;
         if (this.textElement != null) {
-            return this.textElement.nativeElement.clientWidth + padding*2;
+            return this.textElement.nativeElement.getBoundingClientRect().width + padding*2;
         }
         return padding*2;
     }
