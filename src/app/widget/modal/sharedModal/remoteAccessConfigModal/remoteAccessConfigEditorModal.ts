@@ -42,11 +42,8 @@ export class RemoteAccessConfigEditorModal implements ModalComponent<BSModalCont
             }
         }
         this.savedConfigs.push(this.newConfig);
-        this.prefSettingService.setSystemSetting(Properties.setting_remote_configs, JSON.stringify(this.savedConfigs)).subscribe(
-            stResp => {
-                this.newConfig = { serverURL: null, username: null, password: null }; //reset config
-            }
-        );
+        this.updateConfigurations();
+        this.newConfig = { serverURL: null, username: null, password: null }; //reset config
     }
 
     private updateConfServerURL(conf: RemoteRepositoryAccessConfig, newValue: string) {
@@ -61,18 +58,18 @@ export class RemoteAccessConfigEditorModal implements ModalComponent<BSModalCont
         conf.password = newValue;
         this.updateConfigurations();
     }
-
     private deleteConfiguration(conf: RemoteRepositoryAccessConfig) {
         this.savedConfigs.splice(this.savedConfigs.indexOf(conf), 1);
-        if (this.savedConfigs.length == 0) {
-            this.prefSettingService.setSystemSetting(Properties.setting_remote_configs, null).subscribe();
-        } else {
-            this.updateConfigurations();
-        }
+        this.updateConfigurations();
     }
-
     private updateConfigurations() {
-        this.prefSettingService.setSystemSetting(Properties.setting_remote_configs, JSON.stringify(this.savedConfigs)).subscribe();
+        let conf: string;
+        if (this.savedConfigs.length == 0) {
+            conf = null;
+        } else {
+            conf = JSON.stringify(this.savedConfigs)
+        }
+        this.prefSettingService.setSystemSetting(Properties.setting_remote_configs, conf).subscribe();
     }
 
     ok(event: Event) {

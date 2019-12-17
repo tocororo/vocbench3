@@ -616,7 +616,7 @@ export class CreateProjectComponent {
     //================ OPTIONAL SETTINGS - END =====================
 
 
-    private createtNew() {
+    private create() {
 
         //check project name
         if (!this.projectName || this.projectName.trim() == "") {

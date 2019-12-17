@@ -1,0 +1,54 @@
+<div class="modal-header">
+    <h3 class="modal-title">Delete remote repositories</h3>
+</div>
+<div class="modal-body vbox">
+
+    <div class="alert alert-danger" style="margin-bottom: 8px;">
+        {{message}}
+    </div>
+
+    <div class="panel panel-default vbox">
+        <div class="panel-body vbox scrollableContainer">
+
+            <div *ngFor="let report of failReports" class="panel panel-default" style="margin-bottom: 10px;">
+                <div class="panel-body">
+                    <table class="table table-condensed" style="table-layout: fixed;">
+                        <colgroup>
+                            <col style="width: 90px">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td nowrap><label>Repository ID:</label></td>
+                                <td>{{report.repositoryID}}</td>
+                            </tr>
+                            <tr>
+                                <td nowrap><label>Reason:</label></td>
+                                <td>
+                                    {{report.exception.type}}:<br>
+                                    {{report.exception.message}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label>Stacktrace:</label></td>
+                                <td>
+                                    <div class="panel panel-default vbox">
+                                        <div class="panel-body">
+                                            <div class="stacktrace">{{report.exception.stacktrace}}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+</div>

@@ -1,29 +1,47 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CreateProjectComponent } from "../project/createProject/createProjectComponent";
+import { ACLEditorModal } from "../project/projectACL/aclEditorModal";
+import { ProjectACLModal } from "../project/projectACL/projectACLModal";
+import { ProjectComponent } from "../project/projectComponent";
+import { ProjectListModal } from "../project/projectListModal";
+import { ProjectPropertiesModal } from "../project/projectPropertiesModal";
+import { ProjectTableConfigModal } from "../project/projectTableConfig/projectTableConfigModal";
+import { DeleteRemoteRepoModal } from '../project/remoteRepositories/deleteRemoteRepoModal';
+import { DeleteRepositoryReportModal } from '../project/remoteRepositories/deleteRepositoryReportModal';
+import { RemoteRepoEditorModal } from "../project/remoteRepositories/remoteRepoEditorModal";
 import { SharedModule } from './sharedModule';
 
-import { ProjectComponent } from "../project/projectComponent";
-import { CreateProjectComponent } from "../project/createProject/createProjectComponent";
 
-//modals
-import { ProjectPropertiesModal } from "../project/projectPropertiesModal";
-import { ProjectACLModal } from "../project/projectACL/projectACLModal";
-import { ACLEditorModal } from "../project/projectACL/aclEditorModal";
-import { ProjectTableConfigModal } from "../project/projectTableConfig/projectTableConfigModal";
-import { ProjectListModal } from "../project/projectListModal";
-import { RemoteRepoModal } from "../project/remoteRepoModal";
 
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule],
     declarations: [
-        ProjectComponent, CreateProjectComponent,
+        CreateProjectComponent,
+        ProjectComponent,
         //modals
-        ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectTableConfigModal, ProjectListModal, RemoteRepoModal
+        ACLEditorModal, 
+        DeleteRemoteRepoModal,
+        DeleteRepositoryReportModal,
+        ProjectACLModal,
+        ProjectListModal, 
+        ProjectPropertiesModal, 
+        ProjectTableConfigModal,
+        RemoteRepoEditorModal,
     ],
     exports: [ProjectComponent],
     providers: [],
-    entryComponents: [ProjectPropertiesModal, ProjectACLModal, ACLEditorModal, ProjectTableConfigModal, ProjectListModal, RemoteRepoModal]
+    entryComponents: [
+        ACLEditorModal, 
+        DeleteRemoteRepoModal,
+        DeleteRepositoryReportModal,
+        ProjectACLModal,
+        ProjectListModal, 
+        ProjectPropertiesModal, 
+        RemoteRepoEditorModal,
+        ProjectTableConfigModal,
+    ]
 })
 export class ProjectModule { }

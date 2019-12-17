@@ -252,3 +252,9 @@ export class PreloadWarning {
     public '@type': string;
     public message: string;
 }
+
+export class ExceptionDAO {
+    public message: string;
+    public type: string;
+    public stacktrace: string;
+}

@@ -2,9 +2,11 @@ import { Component, ElementRef, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { Project, ProjectTableColumnStruct } from '../models/Project';
+import { Observable } from "rxjs";
+import { ExceptionDAO, Project, ProjectTableColumnStruct, RemoteRepositorySummary, RepositorySummary } from '../models/Project';
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from "../services/projectServices";
+import { RepositoriesServices } from "../services/repositoriesServices";
 import { UserServices } from "../services/userServices";
 import { DatatypeValidator } from "../utils/DatatypeValidator";
 import { UIUtils } from "../utils/UIUtils";
@@ -16,7 +18,9 @@ import { AbstractProjectComponent } from "./abstractProjectComponent";
 import { ProjectACLModal } from "./projectACL/projectACLModal";
 import { ProjectPropertiesModal, ProjectPropertiesModalData } from "./projectPropertiesModal";
 import { ProjectTableConfigModal } from "./projectTableConfig/projectTableConfigModal";
-import { RemoteRepoModal, RemoteRepoModalData } from "./remoteRepoModal";
+import { DeleteRemoteRepoModal, DeleteRemoteRepoModalData } from "./remoteRepositories/deleteRemoteRepoModal";
+import { DeleteRepositoryReportModal, DeleteRepositoryReportModalData } from "./remoteRepositories/deleteRepositoryReportModal";
+import { RemoteRepoEditorModal, RemoteRepoEditorModalData } from "./remoteRepositories/remoteRepoEditorModal";
 
 @Component({
     selector: "project-component",
@@ -31,8 +35,9 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     private customColumnsOrder: string[]; //custom order of the columns
 
     constructor(private projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices,
-        vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, private router: Router, 
-        private basicModals: BasicModalServices, private modal: Modal, private elRef: ElementRef) {
+        vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, 
+        private repositoriesService: RepositoriesServices, private basicModals: BasicModalServices, private modal: Modal, 
+        private router: Router, private elRef: ElementRef) {
         super(userService, metadataService, vbCollaboration, vbProp, dtValidator);
     }
 
@@ -112,20 +117,74 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
             this.basicModals.confirm("Delete project", "Attention, this operation will delete the project " +
                 this.selectedProject.getName() + ". Are you sure to proceed?", "warning").then(
                 result => {
-                    this.projectService.deleteProject(this.selectedProject).subscribe(
-                        stResp => {
-                            for (var i = 0; i < this.projectList.length; i++) { //remove project from list
-                                if (this.projectList[i].getName() == this.selectedProject.getName()) {
-                                    this.projectList.splice(i, 1);
+                    let deletingProject: Project = this.selectedProject;
+                    //retrieve the remote repositories referenced by the deleting project (this must be done before the deletion in order to prevent errors)
+                    this.projectService.getRepositories(deletingProject, true).subscribe(
+                        (repositories: RepositorySummary[]) => {
+                            this.deleteImpl().subscribe( //delete the project
+                                () => {
+                                    if (repositories.length > 0) { //if the deleted project was linked with remote repositories proceed with the deletion
+                                        this.deleteRemoteRepo(deletingProject, repositories);
+                                    }
                                 }
-                            }
-                            this.selectedProject = null;
+                            )
                         }
-                    );
+                    )
                 },
                 () => { }
             );
         }
+    }
+
+    private deleteImpl(): Observable<void> {
+        return this.projectService.deleteProject(this.selectedProject).map(
+            stResp => {
+                for (var i = 0; i < this.projectList.length; i++) { //remove project from list
+                    if (this.projectList[i].getName() == this.selectedProject.getName()) {
+                        this.projectList.splice(i, 1);
+                    }
+                }
+                this.selectedProject = null;
+            }
+        );
+    }
+
+    private deleteRemoteRepo(deletedProject: Project, repositories: RepositorySummary[]) {
+        this.selectRemoteRepoToDelete(deletedProject, repositories).subscribe( //ask to the user which repo delete
+            (deletingRepositories: RemoteRepositorySummary[]) => {
+                if (deletingRepositories.length > 0) {
+                    UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+                    this.repositoriesService.deleteRemoteRepositories(deletingRepositories).subscribe( //delete them
+                        (exceptions: ExceptionDAO[]) => {
+                            UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                            if (exceptions.some(e => e != null)) { //some deletion has failed => show the report
+                                var modalData = new DeleteRepositoryReportModalData(deletingRepositories, exceptions);
+                                const builder = new BSModalContextBuilder<DeleteRepositoryReportModalData>(
+                                    modalData, undefined, DeleteRepositoryReportModalData
+                                );
+                                let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size("lg").toJSON() };
+                                this.modal.open(DeleteRepositoryReportModal, overlayConfig);
+                            }
+                        }
+                    );
+                }
+            }
+        );
+    }
+
+    private selectRemoteRepoToDelete(project: Project, repositories: RepositorySummary[]): Observable<RemoteRepositorySummary[]> {
+        var modalData = new DeleteRemoteRepoModalData(project, repositories);
+        const builder = new BSModalContextBuilder<DeleteRemoteRepoModalData>(
+            modalData, undefined, DeleteRemoteRepoModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        return Observable.fromPromise(
+            this.modal.open(DeleteRemoteRepoModal, overlayConfig).result.then(
+                repos => {
+                    return repos;
+                }
+            )
+        );
     }
 
     /**
@@ -163,12 +222,12 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
      * Opens a modal to edit the remote repositories credentials
      */
     private editRemoteRepoCredential(project: Project) {
-        var modalData = new RemoteRepoModalData(project);
-        const builder = new BSModalContextBuilder<RemoteRepoModalData>(
-            modalData, undefined, RemoteRepoModalData
+        var modalData = new RemoteRepoEditorModalData(project);
+        const builder = new BSModalContextBuilder<RemoteRepoEditorModalData>(
+            modalData, undefined, RemoteRepoEditorModalData
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(RemoteRepoModal, overlayConfig)
+        return this.modal.open(RemoteRepoEditorModal, overlayConfig)
     }
 
     /**
