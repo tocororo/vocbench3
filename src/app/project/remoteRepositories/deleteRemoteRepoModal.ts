@@ -30,6 +30,12 @@ export class DeleteRemoteRepoModal implements ModalComponent<DeleteRemoteRepoMod
         });
     }
 
+    private checkAll(status: boolean) {
+        for (let i = 0; i < this.selectionList.length; i++) {
+            this.selectionList[i] = status;
+        }
+    }
+
     ok(event: Event) {
         let deletingRepos: RemoteRepositorySummary[] = [];
         for (let i = 0; i < this.selectionList.length; i++) {

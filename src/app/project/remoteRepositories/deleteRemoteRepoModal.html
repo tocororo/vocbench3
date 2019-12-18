@@ -1,48 +1,64 @@
 <div class="modal-header">
     <h3 class="modal-title">Delete remote repositories</h3>
 </div>
-<div class="modal-body vbox scrollableContainer">
+<div class="modal-body vbox">
 
-    <div class="alert alert-info">
+    <div class="alert alert-info" style="margin-bottom: 6px;">
         The following repositories was referenced by the deleted project ({{context.project.getName()}}). 
         Select the repositories you want to delete.
     </div>
 
-    <table class="table table-hoverable">
-        <colgroup>
-            <col style="width: 1%">
-            <col>
-            <col>
-            <col>
-        </colgroup>
-        <thead>
-            <tr>
-                <th class="text-center"></th>
-                <th class="text-center">Repository ID</th>
-                <th class="text-center">Description</th>
-                <th class="text-center">Server URL</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let r of context.repositories; let i=index">
-                <td class="text-center">
-                    <input type="checkbox" style="vertical-align: middle" [(ngModel)]="selectionList[i]">
-                </td>
-                <td class="text-center">
-                    {{r.remoteRepoSummary.repositoryId}}
-                </td>
-                <td class="text-center">
-                    {{r.description}}
-                </td>
-                <td class="text-center">
-                    {{r.remoteRepoSummary.serverURL}}
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="panel panel-default vbox">
+        <div class="panel-heading">
+            <span style="flex: 1;"></span>
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" (click)="checkAll(true)" title="Check all">
+                    <span class="glyphicon glyphicon-check"></span>
+                </button>
+                <button class="btn btn-default" (click)="checkAll(false)" title="Uncheck all">
+                    <span class="glyphicon glyphicon-unchecked"></span>
+                </button>
+            </div>
+        </div>
+        <div class="panel-body vbox scrollableContainer">
+            <table class="table table-hoverable">
+                <colgroup>
+                    <col style="width: 1%">
+                    <col>
+                    <col>
+                    <col>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th class="text-center"></th>
+                        <th class="text-center">Repository ID</th>
+                        <th class="text-center">Description</th>
+                        <th class="text-center">Server URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let r of context.repositories; let i=index">
+                        <td class="text-center">
+                            <input type="checkbox" style="vertical-align: middle" [(ngModel)]="selectionList[i]">
+                        </td>
+                        <td class="text-center">
+                            {{r.remoteRepoSummary.repositoryId}}
+                        </td>
+                        <td class="text-center">
+                            {{r.description}}
+                        </td>
+                        <td class="text-center">
+                            {{r.remoteRepoSummary.serverURL}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    
     
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
-    <!-- <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button> -->
 </div>
