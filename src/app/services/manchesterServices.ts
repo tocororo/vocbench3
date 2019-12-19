@@ -14,7 +14,7 @@ export class ManchesterServices {
      * Checks if a manchester expression in valid
      * @param manchExpr manchester expression to check
      */
-    checkExpression(manchExpr: string) {
+    checkExpression(manchExpr: string): Observable<ExpressionCheckResponse> {
         var params = {
             manchExpr: manchExpr
         };
@@ -26,7 +26,7 @@ export class ManchesterServices {
      * returns true if the expression is compliant with the syntax of datatype restrictions, false otherwise
      * @param manchExpr 
      */
-    checkDatatypeExpression(manchExpr: string): Observable<boolean> {
+    checkDatatypeExpression(manchExpr: string): Observable<ExpressionCheckResponse> {
         var params = {
             manchExpr: manchExpr
         };
@@ -37,7 +37,7 @@ export class ManchesterServices {
      * returns true if the expression is compliant with the syntax of datatype restriction enumeration-based
      * @param manchExpr 
      */
-    checkLiteralEnumerationExpression(manchExpr: string): Observable<boolean> {
+    checkLiteralEnumerationExpression(manchExpr: string): Observable<ExpressionCheckResponse> {
         var params = {
             manchExpr: manchExpr
         };
@@ -95,4 +95,9 @@ export class ManchesterServices {
     }
 
 
+}
+
+export class ExpressionCheckResponse {
+    public valid: boolean;
+    public details: string[];
 }

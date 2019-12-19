@@ -37,7 +37,7 @@ export class ManchesterExprModal implements ModalComponent<ManchesterExprModalDa
     }
 
     ok(event: Event) {
-        this.dialog.close();
+        this.dialog.close(this.expression);
     }
 
     cancel() {

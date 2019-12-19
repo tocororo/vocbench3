@@ -86,13 +86,9 @@ export class LanguageRenderingComponent {
             return 0;
         });
 
-        if (activeLangs.length == 0) { //no language checked
-            preferenceLangs = ["*"];
-        } else {
-            activeLangs.forEach(l => {
-                preferenceLangs.push(l.lang.tag);
-            })
-        }
+        activeLangs.forEach(l => {
+            preferenceLangs.push(l.lang.tag);
+        })
         this.properties.setLanguagesPreference(preferenceLangs);
     }
     

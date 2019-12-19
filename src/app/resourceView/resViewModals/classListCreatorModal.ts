@@ -2,7 +2,7 @@ import { Component, ElementRef } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTBNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from '../../models/ARTResources';
-import { ManchesterServices } from "../../services/manchesterServices";
+import { ManchesterServices, ExpressionCheckResponse } from "../../services/manchesterServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
@@ -61,8 +61,8 @@ export class ClassListCreatorModal implements ModalComponent<ClassListCreatorMod
         this.sharedModals.manchesterExpression("New manchester expression").then(
             expr => {
                 this.manchService.checkExpression(expr).subscribe(
-                    valid => {
-                        if (valid) {
+                    (checkResp: ExpressionCheckResponse) => {
+                        if (checkResp.valid) {
                             //check if the expression is already in the list
                             for (var i = 0; i < this.classList.length; i++) {
                                 if (this.classList[i].getShow() == expr) {
@@ -76,7 +76,8 @@ export class ClassListCreatorModal implements ModalComponent<ClassListCreatorMod
                             this.classList.push(exprCls);
                             this.duplicateResource = null;
                         } else {
-                            this.basicModals.alert("Invalid Expression", "'" + expr + "' is not a valid Manchester Expression", "error");
+                            let details = checkResp.details.join("\n");
+                            this.basicModals.alert("Invalid Expression", "'" + expr + "' is not a valid Manchester Expression", "error", details);
                         }
                     }
                 )

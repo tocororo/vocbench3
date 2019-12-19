@@ -236,22 +236,26 @@ export class VBProperties {
     setShowFlags(show: boolean) {
         VBContext.getWorkingProjectCtx().getProjectPreferences().showFlags = show;
         this.eventHandler.showFlagChangedEvent.emit(show);
-        this.prefService.setShowFlags(show).subscribe();
+        let value = show ? "true" : null;
+        this.prefService.setPUSetting(Properties.pref_show_flags, value).subscribe()
     }
 
     setShowInstancesNumber(show: boolean) {
         VBContext.getWorkingProjectCtx().getProjectPreferences().showInstancesNumber = show;
-        this.prefService.setShowInstancesNumb(show).subscribe();
+        let value = show ? "true" : null;
+        this.prefService.setPUSetting(Properties.pref_show_instances_number, value).subscribe()
     }
 
     setProjectTheme(theme: number) {
         VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId = theme;
         UIUtils.changeNavbarTheme(theme);
-        this.prefService.setProjectTheme(theme).subscribe();
+        let value = (theme == 0) ? null : theme+""; //theme 0 is the default one, so remove the preference
+        this.prefService.setPUSetting(Properties.pref_project_theme, value)
     }
 
     setLanguagesPreference(languages: string[]) {
-        this.prefService.setLanguages(languages).subscribe();
+        let value: string = (languages.length == 0) ? null : languages.join(",");
+        this.prefService.setPUSetting(Properties.pref_languages, value, ExtensionPointID.RENDERING_ENGINE_ID).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().projectLanguagesPreference = languages;
     }
 

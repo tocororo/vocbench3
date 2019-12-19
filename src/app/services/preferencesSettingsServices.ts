@@ -13,40 +13,6 @@ export class PreferencesSettingsServices {
     constructor(private httpMgr: HttpManager) { }
 
     /**
-     * Sets the rendering languages preference
-     * @param languages list of languages, list with just one element "*" in order to set "all languages"
-     * @param level tells at which level to set the property
-     */
-    setLanguages(languages: string[]) {
-        var params = {
-            languages: languages
-        };
-        return this.httpMgr.doPost(this.serviceName, "setLanguages", params);
-    }
-
-    /**
-     * Sets the show_flag preference
-     * @param show 
-     */
-    setShowFlags(show: boolean) {
-        var params = {
-            show: show
-        };
-        return this.httpMgr.doPost(this.serviceName, "setShowFlags", params);
-    }
-
-    /**
-     * Sets the show_instances_number preference
-     * @param show 
-     */
-    setShowInstancesNumb(show: boolean) {
-        var params = {
-            show: show
-        };
-        return this.httpMgr.doPost(this.serviceName, "setShowInstancesNumb", params);
-    }
-
-    /**
      * Sets the default active skos concept schemes
      * @param scheme s
      */
@@ -56,17 +22,6 @@ export class PreferencesSettingsServices {
             params.schemes = schemes;
         }
         return this.httpMgr.doPost(this.serviceName, "setActiveSchemes", params, options);
-    }
-
-    /**
-     * 
-     * @param themeId 
-     */
-    setProjectTheme(themeId: number) {
-        var params: any = {
-            themeId: themeId
-        }
-        return this.httpMgr.doPost(this.serviceName, "setProjectTheme", params);
     }
 
     /**

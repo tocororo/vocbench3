@@ -2,7 +2,7 @@ import { Component, forwardRef, Input, SimpleChanges, ViewChild } from '@angular
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as CodeMirror from 'codemirror';
 import { Observable } from 'rxjs';
-import { ManchesterServices } from '../../../services/manchesterServices';
+import { ManchesterServices, ExpressionCheckResponse } from '../../../services/manchesterServices';
 import "./manchester";
 
 @Component({
@@ -24,6 +24,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
 
     private codeValid: boolean = true;
     private codeValidationTimer: number;
+    private codeInvalidDetails: string;
 
     constructor(private manchesterService: ManchesterServices) { }
 
@@ -61,7 +62,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
     }
 
     validateExpression(code: string) {
-        let validationFn: Observable<boolean>;
+        let validationFn: Observable<ExpressionCheckResponse>;
         if (this.context == ManchesterCtx.datatypeFacets) {
             validationFn = this.manchesterService.checkDatatypeExpression(code);
         } else if (this.context == ManchesterCtx.datatypeEnumeration) {
@@ -70,11 +71,12 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
             validationFn = this.manchesterService.checkExpression(code);
         }
         validationFn.subscribe(
-            valid => {
-                this.codeValid = valid;
-                if (valid) {
+            (checkResp: ExpressionCheckResponse) => {
+                this.codeValid = checkResp.valid;
+                if (this.codeValid) {
                     this.propagateChange(code);
                 } else {
+                    this.codeInvalidDetails = checkResp.details.join("\n");
                     this.propagateChange(null); //in case invalid, propagate a null expression
                 }
             }

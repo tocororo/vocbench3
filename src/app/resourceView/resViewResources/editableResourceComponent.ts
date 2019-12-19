@@ -3,7 +3,7 @@ import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResource
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { ResViewPartition } from "../../models/ResourceView";
 import { RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
-import { ManchesterServices } from "../../services/manchesterServices";
+import { ManchesterServices, ExpressionCheckResponse } from "../../services/manchesterServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { RefactorServices } from "../../services/refactorServices";
 import { ResourcesServices } from "../../services/resourcesServices";
@@ -426,8 +426,8 @@ export class EditableResourceComponent {
 
     private applyManchesterUpdate(node: ARTBNode, expression: string) {
         this.manchesterService.checkExpression(expression).subscribe(
-            valid => {
-                if (valid) {
+            (checkResp: ExpressionCheckResponse) => {
+                if (checkResp.valid) {
                     this.manchesterService.updateExpression(this.resourceStringValue, node).subscribe(
                         stResp => {
                             this.cancelEdit();
@@ -435,7 +435,7 @@ export class EditableResourceComponent {
                         }
                     );
                 } else {
-                    this.basicModals.alert("Invalid Expression", "'" + expression + "' is not a valid Manchester Expression", "warning");
+                    this.basicModals.alert("Invalid Expression", "'" + expression + "' is not a valid Manchester Expression", "warning", checkResp.details.join("\n"));
                 }
             }
         )

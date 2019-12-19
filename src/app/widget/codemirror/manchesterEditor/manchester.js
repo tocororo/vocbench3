@@ -22,7 +22,7 @@
     const characteristics = ["Functional", "InverseFunctional", "Reflexive", "Irreflexive", "Symmetric", "Asymmetric", "Transitive"];
     const conjuctions = ["and", "not", "that", "or"];
     const facets = ["langRange", "length", "maxLength", "minLength", "pattern", "<", "<=", ">", ">="];
-    const quantifiers = ["some", "only", "value", "min", "max", "exactly"];
+    const quantifiers = ["some", "only", "value", "min", "max", "exactly", "self"];
     // const frames = ["AnnotationProperty", "Class", "DataProperty", "Datatype", "DifferentIndividuals", "DisjointClasses",
     //     "DisjointProperties", "EquivalentClasses", "EquivalentProperties", "Individual", "ObjectProperty", "SameIndividual"];
     // const sections = ["Annotations", "SubClassOf", "EquivalentTo", "DisjointWith", "DisjointUnion", "SubPropertyOf",
