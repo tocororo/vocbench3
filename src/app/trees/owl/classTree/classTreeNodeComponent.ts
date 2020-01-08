@@ -1,4 +1,4 @@
-import { Component, Input, QueryList, ViewChildren } from "@angular/core";
+import { Component, Input, QueryList, ViewChildren, SimpleChanges } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { ClassTreeFilter } from "../../../models/Properties";
@@ -70,12 +70,20 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
         }
     }
 
+    ngOnChanges(changes: SimpleChanges) {
+        super.ngOnChanges(changes);
+        if (changes['filterEnabled']) {
+            this.initFilter();
+        }
+    }
+
     expandNodeImpl(): Observable<any> {
         return this.clsService.getSubClasses(this.node, this.showInstanceNumber, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
             subClasses => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(subClasses, this.rendering ? SortAttribute.show : SortAttribute.value);
                 this.children = subClasses;
+                this.initFilter();
                 this.open = true;
                 if (this.children.length == 0) {
                     this.open = false;
@@ -86,15 +94,23 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     }
 
     /**
-     * Used to filter out the subclasses of a root class
-     * @param subClass 
+     * Initializes (and updates when the filter enabled changes) a "filtered" attribute in each children that tells if 
+     * the child is filtered by the class tree filter
      */
-    private filterOutRootSubClass(subClass: ARTURIResource): boolean {
+    private initFilter() {
         let classTreePref = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().classTreePreferences;
-        if (this.filterEnabled) {
-            return classTreePref.filter.map[this.node.getURI()] != null && 
-                classTreePref.filter.map[this.node.getURI()].indexOf(subClass.getURI()) != -1;
-        }
+        this.children.forEach(c => {
+            /* child filtered if:
+             * - the filter is enabled
+             * - the parent (current node) has a list of filtered children
+             * - the child is among the filtered children
+             */
+            c['filtered'] = (
+                this.filterEnabled &&
+                classTreePref.filter.map[this.node.getURI()] != null && 
+                classTreePref.filter.map[this.node.getURI()].indexOf(c.getURI()) != -1
+            )
+        });
     }
 
     /**

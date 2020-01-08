@@ -17,7 +17,7 @@
 
 <div class="subTree" *ngIf="node.getAdditionalProperty('more')==1">
     <ng-template ngFor let-n [ngForOf]="children">
-        <ng-template [ngIf]="!filterOutRootSubClass(n)">
+        <ng-template [ngIf]="!n['filtered']">
             <class-tree-node *ngIf="!n.isDeprecated() || showDeprecated && n.isDeprecated()"
                 [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated"
                 [filterEnabled]="filterEnabled" [context]="context" [projectCtx]="projectCtx"
