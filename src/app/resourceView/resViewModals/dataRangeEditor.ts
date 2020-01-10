@@ -28,6 +28,7 @@ export class DataRangeEditor implements ControlValueAccessor {
         }
         this.datarange.push(this.value);
         this.propagateChange(this.datarange);
+        this.value = null;
     }
 
     private remove(dr: ARTLiteral) {

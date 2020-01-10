@@ -13,7 +13,7 @@
     <div style="margin-bottom: 4px;">
         <div *ngIf="showAspectSelector" class="btn-group btn-group-xs pull-right">
             <button *ngFor="let selector of aspectSelectors" class="btn btn-default" [ngClass]="{active: selectedAspectSelector == selector}"
-                (click)="selectedAspectSelector = selector">{{selector}}</button>
+                (click)="selectedAspectSelector = selector">{{selector.show}}</button>
         </div>
     </div>
 

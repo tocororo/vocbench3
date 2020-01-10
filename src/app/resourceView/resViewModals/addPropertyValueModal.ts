@@ -8,30 +8,6 @@ import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
 import { BrowsingModalServices } from '../../widget/modal/browsingModal/browsingModalServices';
 
-/**
- * This modal allow the user to create a property-value relation and can be open throght a ResView partition.
- * (NOTE: this modal allow only to create a property-value relation by picking a resource/value pre-existing, this not
- * allows to create a value, indeed it is opened only from the partition that "doesn't create",
- * e.g. notes and lexicalizations allow to create, not to pick existing label or notes)
- * The property is passed to the modal by the calling partition and tells to the modal that it should allow to enrich
- * that property or its subProperties.
- * The modal is composed mainly by two section:
- * - in the top section is shown 
- *      - the enriching property and it is be possible to change exploring its property tree (opened in turn in an external modal)
- *      - optionally two button to switch (in the view in the second section) between a tree/list to select a resource or a 
- *        manchester expression input field.
- * - in the other section could be shown on of the following:
- *      - a tree (class, concept,...)
- *      - a list (scheme,...)
- *      - an input field for a manchester expression
- * Depending on the range of the enriching property
- * 
- * This modal returns an object {property, value} where value could be:
- * - resource: ARTResource
- * - manchester expression: string
- * - datarange: ARTLiteral[]
- */
-
 export class AddPropertyValueModalData extends BSModalContext {
     /**
      * @param title title of the dialog
@@ -79,11 +55,11 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private defaultRootClasses: ARTURIResource[] = [RDFS.resource];
 
     private showAspectSelector: boolean = false;
-    private treeListAspectSelector: string = "Existing Resource";
-    private manchExprAspectSelector: string = "Manchester Expression";
-    private dataRangeAspectSelector: string = "DataRange";
-    private aspectSelectors: string[];
-    private selectedAspectSelector: string = this.treeListAspectSelector;
+    private treeListAspectSelector: AspectSelector = { show: "Existing Resource", id: 0 };
+    private manchExprAspectSelector: AspectSelector = { show: "Manchester Expression", id: 1 };
+    private dataRangeAspectSelector: AspectSelector = { show: "Datarange", id: 2 };
+    private aspectSelectors: AspectSelector[];
+    private selectedAspectSelector: AspectSelector = this.treeListAspectSelector;
 
     private showInversePropertyCheckbox: boolean = false;
 
@@ -213,6 +189,12 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
      * used to tell that the inverse of the selected property should be used.
      */
     private updateShowAspectSelector() {
+        if (this.enrichingProperty.getRole() == RDFResourceRolesEnum.datatypeProperty) {
+            this.treeListAspectSelector.show = "Existing Datatype";
+        } else {
+            this.treeListAspectSelector.show = "Existing Resource";
+        }
+
         this.showAspectSelector = false;
         this.showInversePropertyCheckbox = false;
 
@@ -341,6 +323,11 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         this.dialog.dismiss();
     }
 
+}
+
+class AspectSelector {
+    show: string;
+    id: number;
 }
 
 export class AddPropertyValueModalReturnData {

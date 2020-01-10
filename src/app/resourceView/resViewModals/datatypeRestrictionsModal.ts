@@ -89,7 +89,7 @@ export class DataTypeRestrictionsModal implements ModalComponent<DataTypeRestric
         if (actionFn != null) { //check if not null, if null something is gone wrong in the getApply... method (e.g. invalid data)
             actionFn.subscribe(
                 () => {
-                    this.dtValidator.initDatatypeRestrictions(); //restriction edited => update the in-memory restrictions
+                    this.dtValidator.initDatatypeRestrictions().subscribe(); //restriction edited => update the in-memory restrictions
                     event.stopPropagation();
                     event.preventDefault();
                     this.dialog.close();

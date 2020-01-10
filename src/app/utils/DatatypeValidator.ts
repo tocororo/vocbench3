@@ -4,6 +4,15 @@ import { ARTLiteral, ARTURIResource } from "../models/ARTResources";
 import { ConstrainingFacets, DatatypeRestrictionDescription, DatatypeRestrictionsMap, DatatypeUtils } from "../models/Datatypes";
 import { DatatypesServices } from "../services/datatypesServices";
 
+/**
+ * This service provides useful method in order to manage datatype restrictions and to validate typed literal.
+ * It stored a cache of restrictions for user-defined datatypes. 
+ * In addition to NewTypedLiteralModal, this service is used in EditableResourceComponent in order to validate a typed value 
+ * during the edit of literal value and the add-manually (as required in ST-1414).
+ * Without the cache, the validation would require to invoke datatypeService.getDatatypeRestrictions() each time, so in 
+ * EditableResourceComponent (the one who handle the edit and the add-manually) the validation would be Observable-based (async) 
+ * and it would be very difficult to handle.
+ */
 @Injectable()
 export class DatatypeValidator {
 
