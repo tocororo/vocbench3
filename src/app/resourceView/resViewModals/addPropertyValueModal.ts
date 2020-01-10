@@ -189,8 +189,8 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
      * used to tell that the inverse of the selected property should be used.
      */
     private updateShowAspectSelector() {
-        if (this.enrichingProperty.getRole() == RDFResourceRolesEnum.datatypeProperty) {
-            this.treeListAspectSelector.show = "Existing Datatype";
+        if (this.context.resource.getRole() == RDFResourceRolesEnum.datatypeProperty && this.enrichingProperty.equals(RDFS.range)) {
+            this.treeListAspectSelector.show = "Existing Datatype"; //in case of setting the range of a datatype property
         } else {
             this.treeListAspectSelector.show = "Existing Resource";
         }
