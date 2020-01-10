@@ -57,7 +57,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private showAspectSelector: boolean = false;
     private treeListAspectSelector: AspectSelector = { show: "Existing Resource", id: 0 };
     private manchExprAspectSelector: AspectSelector = { show: "Manchester Expression", id: 1 };
-    private dataRangeAspectSelector: AspectSelector = { show: "Datarange", id: 2 };
+    private dataRangeAspectSelector: AspectSelector = { show: "Enumeration", id: 2 };
     private aspectSelectors: AspectSelector[];
     private selectedAspectSelector: AspectSelector = this.treeListAspectSelector;
 
