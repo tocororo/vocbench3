@@ -45,39 +45,7 @@
                 </div>
             </div>
 
-            <div class="panel panel-default vbox" style="flex: 5; margin-left: 5px;">
-                <div class="panel-heading">
-                    <label style="flex: 1;">User Details:</label>
-                    <div *ngIf="selectedUser" class="btn-toolbar">
-                        <button type="button" class="btn btn-xs btn-default" (click)="changeAdministratorStatus()"
-                            [ngClass]="{'active online': selectedUser.isAdmin()}" [disabled]="isChangeAdminButtonDisabled()"
-                            [title]="selectedUser.isAdmin() ? 'Revoke administrator authority' : 'Grant administrator authority'">
-                            Administrator
-                        </button>
-                        <div class="btn-group btn-group-xs" role="group">
-                            <button type="button" class="btn btn-default" (click)="changeUserStatus()"
-                                [ngClass]="{'active': isUserActive(selectedUser)}" style="color: green" [disabled]="isChangeStatusButtonDisabled()">
-                                Active
-                            </button>
-                            <button type="button" class="btn btn-default" (click)="changeUserStatus()"
-                                [ngClass]="{'active': !isUserActive(selectedUser)}" style="color: red" [disabled]="isChangeStatusButtonDisabled()">
-                                Inactive
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-body vbox">
-                    <user-details *ngIf="selectedUser" [user]="selectedUser" [readonly]="true"></user-details>
-                </div>
-                <div class="panel-footer" *ngIf="selectedUser">
-                    <button class="btn btn-default btn-xs" (click)="changePassword()" [disabled]="isChangePwdButtonDisabled()">
-                        Change password
-                    </button>
-                    <button class="btn btn-default btn-xs pull-right" (click)="deleteUser()" [disabled]="isDeleteButtonDisabled()">
-                        Delete
-                    </button>
-                </div>
-            </div>
+            <user-details-panel style="flex: 5; margin-left: 5px;" [user]="selectedUser" (deleted)="initUserList()"></user-details-panel>
 
          </div>
 

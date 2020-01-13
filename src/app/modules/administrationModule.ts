@@ -14,8 +14,11 @@ import { CapabilityEditorModal } from "../administration/rolesAdministration/cap
 import { ImportRoleModal } from "../administration/rolesAdministration/importRoleModal";
 import { RolesAdministrationComponent } from "../administration/rolesAdministration/rolesAdministrationComponent";
 import { SystemConfigurationComponent } from '../administration/systemConfiguration/systemConfigurationComponent';
+import { TemplateEditorModal } from '../administration/templateAdministration/templateEditorModal';
+import { TemplatesAdministrationComponent } from '../administration/templateAdministration/templatesAdministrationComponent';
 import { ForcePasswordModal } from '../administration/usersAdministration/forcePasswordModal';
 import { UserCreateModal } from "../administration/usersAdministration/userCreateModal";
+import { UserDetailsPanelComponent } from '../administration/usersAdministration/userDetailsPanelComponent';
 import { UsersAdministrationComponent } from "../administration/usersAdministration/usersAdministrationComponent";
 import { SharedModule } from './sharedModule';
 import { UserModule } from './userModule';
@@ -25,16 +28,36 @@ import { UserModule } from './userModule';
     imports: [CommonModule, FormsModule, adminRouting, SharedModule, UserModule],
     declarations: [
         AdministrationComponent,
-        UsersAdministrationComponent, RolesAdministrationComponent, GroupsAdministrationComponent,
-        ProjectsAdministrationComponent, SystemConfigurationComponent,
-        ProjectUsersManagerComponent, ProjectGroupsManagerComponent, ProjectSettingsComponent,
+        GroupsAdministrationComponent,
+        ProjectGroupsManagerComponent,
+        ProjectsAdministrationComponent,
+        ProjectSettingsComponent,
+        ProjectUsersManagerComponent,
+        RolesAdministrationComponent,
+        SystemConfigurationComponent,
+        TemplatesAdministrationComponent,
+        UsersAdministrationComponent,
+        UserDetailsPanelComponent,
         //modals
-        UserProjBindingModal, CapabilityEditorModal, ImportRoleModal, UserCreateModal, GroupEditorModal, ForcePasswordModal
+        CapabilityEditorModal,
+        ForcePasswordModal,
+        GroupEditorModal,
+        ImportRoleModal,
+        TemplateEditorModal,
+        UserCreateModal,
+        UserProjBindingModal,
     ],
     exports: [AdministrationComponent],
     providers: [],
     entryComponents: [
-        UserProjBindingModal, CapabilityEditorModal, ImportRoleModal, UserCreateModal, GroupEditorModal, ForcePasswordModal
+        CapabilityEditorModal,
+        ForcePasswordModal,
+        GroupEditorModal,
+        ImportRoleModal,
+        UserCreateModal,
+        UserProjBindingModal,
+        TemplateEditorModal,
+
     ]
 })
 export class AdministrationModule { }

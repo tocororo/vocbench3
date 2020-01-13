@@ -1,0 +1,14 @@
+<div class="subPanel vbox">
+    <div class="subPanel-heading">
+        <label>Resource View partition filter</label>
+    </div>
+    <div class="subPanel-body vbox">
+
+        <div class="alert alert-info" role="alert" style="margin-bottom: 5px;">
+            {{infoMsg}}
+        </div>
+
+        <partition-filter-editor [(ngModel)]="pref" (ngModelChange)="onFilterChange()"></partition-filter-editor>
+
+    </div>
+</div>

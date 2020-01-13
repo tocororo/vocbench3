@@ -1,21 +1,21 @@
-import { Component, Input } from "@angular/core";
+import { Component, forwardRef, Input } from "@angular/core";
+import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
 import { PartitionFilterPreference } from "../../models/Properties";
 import { ResViewPartition, ResViewUtils } from "../../models/ResourceView";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../modal/basicModal/basicModalServices";
-import { VBContext } from "../../utils/VBContext";
 
 @Component({
     selector: "partition-filter-editor",
-    templateUrl: "./partitionFilterEditor.html"
+    templateUrl: "./partitionFilterEditor.html",
+    host: { class: "vbox" },
+    providers: [{
+        provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PartitionFilterEditor), multi: true,
+    }]
 })
 export class PartitionFilterEditor {
-
-    @Input() context: "Graph" | "ResourceView"; //specifies if the editor is dealing with the preference about the Graph or ResourceView
-
-    private infoMsg: string;
 
     /**
      * When will be provided, this map will be retrieved throught a service call
@@ -44,7 +44,7 @@ export class PartitionFilterEditor {
 
         [RDFResourceRolesEnum.limeLexicon]: null,
 
-        // [RDFResourceRolesEnum.mention, null, //prevent expansion for mention?
+        // [RDFResourceRolesEnum.mention], null,
 
         [RDFResourceRolesEnum.objectProperty]: [ResViewPartition.types, ResViewPartition.formBasedPreview, ResViewPartition.equivalentProperties,
             ResViewPartition.superproperties, ResViewPartition.subPropertyChains, ResViewPartition.facets, ResViewPartition.disjointProperties,
@@ -83,7 +83,7 @@ export class PartitionFilterEditor {
     private selectedRolePartitionsStruct: RolePartitionsStruct;
     private selectedPartition: PartitionStruct;
 
-    constructor(private vbProp: VBProperties, private basicModals: BasicModalServices) {}
+    constructor(private basicModals: BasicModalServices) {}
 
     ngOnInit() {
         /**
@@ -96,17 +96,6 @@ export class PartitionFilterEditor {
                 this.rolePartitionMap[role] = this.rolePartitionMap[RDFResourceRolesEnum.individual]
             }
         }
-
-        let pref: PartitionFilterPreference;
-        if (this.context == "Graph") {
-            this.infoMsg = "Select the partition of the resource description that will be shown when expanding a node.";
-            pref = VBContext.getWorkingProjectCtx().getProjectPreferences().graphViewPartitionFilter;
-        } else {
-            this.infoMsg = "Here you can customize the ResourceView by showing/hiding the partitions.";
-            pref = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter;
-        }
-        this.convertPrefToRolePartitionsStruct(pref);
-        this.selectedRolePartitionsStruct = this.rolePartitionsStructs[0];
     }
 
     /**
@@ -115,8 +104,8 @@ export class PartitionFilterEditor {
      * RolePartitionStruct contains also other info, such as the role or partition "show" and the "checked" boolean when a partition is visible
      * @param pref 
      */
-    private convertPrefToRolePartitionsStruct(pref: PartitionFilterPreference) {
-        this.rolePartitionsStructs = [];
+    private convertPrefToRolePartitionsStruct(pref: PartitionFilterPreference): RolePartitionsStruct[] {
+        let struct: RolePartitionsStruct[] = [];
 
         for (let role in this.rolePartitionMap) {
             let partitionsStructs: PartitionStruct[] = [];
@@ -130,12 +119,12 @@ export class PartitionFilterEditor {
                     checked: showPartition
                 });
             });
-
-            this.rolePartitionsStructs.push({
+            struct.push({
                 role: { id: <RDFResourceRolesEnum>role, show: ResourceUtils.getResourceRoleLabel(<RDFResourceRolesEnum>role) },
                 partitions: partitionsStructs
             });
         }
+        return struct
     }
 
     private selectRolePartitionsStruct(rps: RolePartitionsStruct) {
@@ -163,16 +152,6 @@ export class PartitionFilterEditor {
         this.updatePref();
     }
 
-    private areAllUnchecked(rolePartitionsStruct: RolePartitionsStruct) {
-        let allUnchecked: boolean = true;
-        rolePartitionsStruct.partitions.forEach(p => {
-            if (p.checked) {
-                allUnchecked = false;
-            }
-        });
-        return allUnchecked;
-    }
-
     /**
      * Checks/Unchecks (according the check parameter) the same partition (the selected one) for all the roles.
      * The button that invokes this method should be enable only if there is a selectedPartition.
@@ -194,7 +173,7 @@ export class PartitionFilterEditor {
      * Restore to visible all the partitions for all the roles
      */
     private reset() {
-        this.basicModals.confirm("Reset filter", "The partition filter will be reset for all the available roles. Are you sure?", "warning").then(
+        this.basicModals.confirm("Reset filter", "The partitions statuses will be reset for all the available resource types. Are you sure?", "warning").then(
             confirm => {
                 this.rolePartitionsStructs.forEach(rps => {
                     rps.partitions.forEach(p => {
@@ -220,13 +199,39 @@ export class PartitionFilterEditor {
                 pref[rps.role.id+""] = partitionsPref;
             }
         });
-        //
-        if (this.context == "Graph") {
-            this.vbProp.setGraphViewPartitionFilter(pref);
-        } else {
-            this.vbProp.setResourceViewPartitionFilter(pref);
-        }
+        this.propagateChange(pref)
     }
+
+
+
+    //---- method of ControlValueAccessor and Validator interfaces ----
+    /**
+     * Write a new value to the element.
+     */
+    writeValue(obj: PartitionFilterPreference) {
+        if (obj) {
+            this.rolePartitionsStructs = this.convertPrefToRolePartitionsStruct(obj);
+        } else {
+            this.rolePartitionsStructs = this.convertPrefToRolePartitionsStruct({});
+        }
+        this.selectedRolePartitionsStruct = this.rolePartitionsStructs[0];
+    }
+    /**
+     * Set the function to be called when the control receives a change event.
+     */
+    registerOnChange(fn: any): void {
+        this.propagateChange = fn;
+    }
+    /**
+     * Set the function to be called when the control receives a touch event. Not used.
+     */
+    registerOnTouched(fn: any): void { }
+
+    //--------------------------------------------------
+
+    // the method set in registerOnChange, it is just a placeholder for a method that takes one parameter, 
+    // we use it to emit changes back to the parent
+    private propagateChange = (_: any) => { };
 
 }
 

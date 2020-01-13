@@ -1,0 +1,35 @@
+<div class="panel panel-default vbox">
+
+    <div class="panel-body hbox">
+
+        <div class="panel panel-default vbox">
+            <div class="panel-heading">
+                <label style="flex: 1;">Templates:</label>
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-default" (click)="createTemplate()" title="Create group">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                    <button class="btn btn-default" (click)="deleteTemplate()" title="Delete template" [disabled]="!selectedTemplate">
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="panel-body vbox scrollableContainer">
+                <div *ngFor="let t of templates" class="listItem" (click)="selectTemplate(t)" [ngClass]="{active: t == selectedTemplate}">
+                    <span>{{t.id}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default vbox" style="flex: 2; margin-left: 5px;">
+            <div class="panel-heading">
+                <label style="flex: 1;">Template description:</label>
+            </div>
+            <div class="panel-body vbox scrollableContainer">
+                <partition-filter-editor *ngIf="selectedTemplateFilter" [(ngModel)]="selectedTemplateFilter" (ngModelChange)="updateTemplate()"></partition-filter-editor>
+            </div>
+        </div>
+
+    </div>
+
+</div>

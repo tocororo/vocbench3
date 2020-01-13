@@ -1,65 +1,61 @@
-<div class="vbox">
+<div class="panel panel-default vbox">
 
-    <div class="panel panel-default vbox">
+    <div class="panel-body hbox">
 
-        <div class="panel-body hbox">
-
-            <div class="panel panel-default vbox">
-                <div class="panel-heading">
-                    <label style="flex: 1;">Groups:</label>
-                    <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="createGroup()" title="Create group">
-                            <span class="glyphicon glyphicon-plus"></span>
-                        </button>
-                        <button class="btn btn-default" (click)="deleteGroup()" title="Delete group" [disabled]="!selectedGroup">
-                            <span class="glyphicon glyphicon-minus"></span>
-                        </button>
-                        <button class="btn btn-default" (click)="editGroup()" title="Edit group" [disabled]="!selectedGroup">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </button>
-                    </div>
-                </div>
-                <div class="panel-body vbox scrollableContainer">
-                    <div *ngFor="let g of groupList" class="listItem" (click)="selectGroup(g)" [ngClass]="{active: g == selectedGroup}">
-                        <span>{{g.shortName}}</span>
-                    </div>
+        <div class="panel panel-default vbox">
+            <div class="panel-heading">
+                <label style="flex: 1;">Groups:</label>
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-default" (click)="createGroup()" title="Create group">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                    <button class="btn btn-default" (click)="deleteGroup()" title="Delete group" [disabled]="!selectedGroup">
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                    <button class="btn btn-default" (click)="editGroup()" title="Edit group" [disabled]="!selectedGroup">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
                 </div>
             </div>
-
-            <div class="panel panel-default vbox" style="flex: 2; margin-left: 5px;">
-                <div class="panel-heading">
-                    <label style="flex: 1;">Group description:</label>
-                </div>
-                <div class="panel-body vbox scrollableContainer">
-                    <div *ngIf="selectedGroup">
-                        <table class="table table-condensed table-borderless">
-                            <colgroup>
-                                <col style="width: 1%">
-                                <col>
-                            </colgroup>
-                            <tbody>
-                                <tr>
-                                    <td nowrap><label>Short name:</label></td>
-                                    <td><input class="form-control input-sm" [(ngModel)]="selectedGroup.shortName" readonly></td>
-                                </tr>
-                                <tr>
-                                    <td nowrap><label>Full name:</label></td>
-                                    <td><input class="form-control input-sm" [(ngModel)]="selectedGroup.fullName" readonly></td>
-                                </tr>
-                                <tr>
-                                    <td nowrap><label>Description:</label></td>
-                                    <td><textarea class="form-control input-sm" style="resize: vertical" rows="3" [(ngModel)]="selectedGroup.description" readonly></textarea></td>
-                                </tr>
-                                <tr>
-                                    <td nowrap><label>Web page:</label></td>
-                                    <td><input class="form-control input-sm" [(ngModel)]="selectedGroup.webPage" readonly></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="panel-body vbox scrollableContainer">
+                <div *ngFor="let g of groupList" class="listItem" (click)="selectGroup(g)" [ngClass]="{active: g == selectedGroup}">
+                    <span>{{g.shortName}}</span>
                 </div>
             </div>
+        </div>
 
+        <div class="panel panel-default vbox" style="flex: 2; margin-left: 5px;">
+            <div class="panel-heading">
+                <label style="flex: 1;">Group description:</label>
+            </div>
+            <div class="panel-body vbox scrollableContainer">
+                <div *ngIf="selectedGroup">
+                    <table class="table table-condensed table-borderless">
+                        <colgroup>
+                            <col style="width: 1%">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td nowrap><label>Short name:</label></td>
+                                <td><input class="form-control input-sm" [(ngModel)]="selectedGroup.shortName" readonly></td>
+                            </tr>
+                            <tr>
+                                <td nowrap><label>Full name:</label></td>
+                                <td><input class="form-control input-sm" [(ngModel)]="selectedGroup.fullName" readonly></td>
+                            </tr>
+                            <tr>
+                                <td nowrap><label>Description:</label></td>
+                                <td><textarea class="form-control input-sm" style="resize: vertical" rows="3" [(ngModel)]="selectedGroup.description" readonly></textarea></td>
+                            </tr>
+                            <tr>
+                                <td nowrap><label>Web page:</label></td>
+                                <td><input class="form-control input-sm" [(ngModel)]="selectedGroup.webPage" readonly></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
     </div>
