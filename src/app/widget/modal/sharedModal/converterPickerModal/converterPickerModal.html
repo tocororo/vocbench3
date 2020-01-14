@@ -10,16 +10,16 @@
         <table class="table table-condensed table-hoverable">
             <thead>
                 <tr>
-                    <th class="text-center">Name</th>
-                    <th class="text-center">Description</th>
-                    <th class="text-center">RDF Capability</th>
-                    <th class="text-center">URI</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th nowrap>RDF Capability</th>
+                    <th>URI</th>
                 </tr>
             </thead>
-            <tbody class="text-center">
+            <tbody>
                 <tr *ngFor="let c of converters" (click)="selectConverter(c)" [ngClass]="{active: c == selectedConverter}">
                     <td>{{c.getName()}}</td>
-                    <td>{{c.getDescription()}}</td>
+                    <td style="white-space: pre;">{{c.getDescription()}}</td>
                     <td nowrap>{{c.getRDFCapability()}}
                         <span *ngIf="c.getRDFCapability() == 'typedLiteral'" class="glyphicon glyphicon-info-sign" [title]="c.getDatatypes()"></span>
                     </td>

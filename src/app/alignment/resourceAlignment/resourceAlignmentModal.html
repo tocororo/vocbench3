@@ -19,22 +19,6 @@
                 </td>
             </tr>
             <tr>
-                <td><label>Property:</label></td>
-                <td>
-                    <select class="form-control input-sm" [(ngModel)]="mappingProperty">
-                        <option *ngFor="let p of mappingPropList" [ngValue]="p">{{p.getShow()}}</option>
-                    </select>
-                </td>
-                <td>
-                    <div class="checkbox" title="Show all mapping properties">
-                        <label style="white-space: nowrap">
-                            <input type="checkbox" [(ngModel)]="allPropCheck" (ngModelChange)="initPropList()">
-                            All prop.
-                        </label>
-                    </div>
-                </td>
-            </tr>
-            <tr>
                 <td nowrap><label>Target Resource:</label></td>
                 <td>
                     <div class="input-sm input-resource">
@@ -51,6 +35,22 @@
                             <li><a (click)="assistedSearch()">Assisted search</a></li>
                             <li><a (click)="enterManually()">Enter value manually</a></li>
                         </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Property:</label></td>
+                <td>
+                    <select class="form-control input-sm" [(ngModel)]="mappingProperty">
+                        <option *ngFor="let p of mappingPropList" [ngValue]="p">{{p.getShow()}}</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="checkbox-inline" title="Show all mapping properties">
+                        <label style="white-space: nowrap;">
+                            <input type="checkbox" [(ngModel)]="allPropCheck" (ngModelChange)="initPropList()">
+                            All prop.
+                        </label>
                     </div>
                 </td>
             </tr>
