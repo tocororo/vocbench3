@@ -59,7 +59,7 @@ export class LoadCustomSearchModal implements ModalComponent<BSModalContext> {
     }
 
     private add() {
-        this.sharedModals.loadConfiguration("Select stored parameterized SPARQL query", ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, true).then(
+        this.sharedModals.loadConfiguration("Select stored parameterized SPARQL query", ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, false, false).then(
             (data: LoadConfigurationModalReturnData) => {
                 let ref: string = data.reference.relativeReference;
                 let alreadyIn: boolean = false;

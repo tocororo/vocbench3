@@ -328,7 +328,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
     private loadGraph() {
         this.s2rdfService.getDefaultAdvancedGraphApplicationConfigurations().subscribe(
             references => {
-                this.sharedModals.loadConfiguration("Load Advanced Graph Application", ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, false, references).then(
+                this.sharedModals.loadConfiguration("Load Advanced Graph Application", ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, true, true, references).then(
                     (data: LoadConfigurationModalReturnData) => {
                         //reset the current status
                         this.newDefinedNodes = [];

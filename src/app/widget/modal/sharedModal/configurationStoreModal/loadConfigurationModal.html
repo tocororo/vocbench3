@@ -23,7 +23,7 @@
                         <td>{{ref.identifier}}</td>
                         <td>{{ref.getReferenceScope()}}</td>
                         <td>
-                            <button *ngIf="!context.selectionMode" class="btn btn-xs btn-default" (click)="deleteReference(ref)" title="Delete">
+                            <button *ngIf="context.allowDelete" class="btn btn-xs btn-default" (click)="deleteReference(ref)" title="Delete">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </button>
                         </td>

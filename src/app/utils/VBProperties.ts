@@ -105,9 +105,6 @@ export class VBProperties {
                     projectPreferences.resViewPartitionFilter = JSON.parse(rvPartitionFilterPref);
                 } else { //initialize with empty partition list for each role
                     let resViewPartitionFilter: PartitionFilterPreference = {};
-                    for (let role in RDFResourceRolesEnum) { 
-                        resViewPartitionFilter[role] = [];
-                    }
                     projectPreferences.resViewPartitionFilter = resViewPartitionFilter;
                 }
 
@@ -324,9 +321,21 @@ export class VBProperties {
         VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences.indexLength = lenght;
     }
 
+    //Res view settings
     setResourceViewPartitionFilter(pref: PartitionFilterPreference) {
-        this.prefService.setPUSetting(Properties.pref_res_view_partition_filter, JSON.stringify(pref)).subscribe();
+        let value = (Object.keys(pref).length != 0) ? JSON.stringify(pref) : null;
+        this.prefService.setPUSetting(Properties.pref_res_view_partition_filter, value).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter = pref;
+    }
+    refreshResourceViewPartitionFilter() {
+        this.prefService.getPUSettings([Properties.pref_res_view_partition_filter], null).subscribe(
+            prefs => {
+                let value = prefs[Properties.pref_res_view_partition_filter];
+                if (value != null) {
+                    VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter = JSON.parse(value);
+                }
+            }
+        );
     }
 
     //Graph settings

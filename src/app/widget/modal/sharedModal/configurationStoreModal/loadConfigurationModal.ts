@@ -8,15 +8,20 @@ export class LoadConfigurationModalData extends BSModalContext {
     /**
      * @param title 
      * @param configurationComponent 
-     * @param selectionMode if true, the dialog allows just to select a configuration, 
-     *  it doesn't load the config and doesn't allow to delete them
+     * @param allowLoad 
+     *      if true (default), the dialog loads and returns the selected configuration;
+     *      if false just returns the selected configuration without loading it.
+     * @param allowDelete
+     *      if true (default) the UI provides buttons for deleting the configuration;
+     *      if false the deletion of the configuration is disabled.
      * @param additionalReferences additional references not deletable. 
      *  If one of these references is chosen, it is just returned, its configuration is not loaded
      */
     constructor(
         public title: string, 
         public configurationComponent: string,
-        public selectionMode: boolean = false,
+        public allowLoad: boolean = true,
+        public allowDelete: boolean = true,
         public additionalReferences: Reference[]
     ) {
         super();
@@ -67,7 +72,7 @@ export class LoadConfigurationModal implements ModalComponent<LoadConfigurationM
     }
 
     ok(event: Event) {
-        if (this.context.selectionMode) {
+        if (!this.context.allowLoad) {
             let returnData: LoadConfigurationModalReturnData = {
                 configuration: null,
                 reference: this.selectedRef

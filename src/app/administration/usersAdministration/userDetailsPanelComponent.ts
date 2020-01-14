@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { User, UserFormFields, UserStatusEnum } from "../../models/User";
+import { User, UserStatusEnum } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
 import { UserServices } from "../../services/userServices";
 import { VBContext } from "../../utils/VBContext";
@@ -17,23 +17,8 @@ export class UserDetailsPanelComponent {
     @Input() user: User;
     @Output() deleted: EventEmitter<void> = new EventEmitter();
 
-    private formFields: UserFormFields;
-    private customFieldsRowsIdx: number[];
-
     constructor(private userService: UserServices, private administrationServices: AdministrationServices,
         private basicModals: BasicModalServices, private modal: Modal) { }
-
-    ngOnInit() {
-        this.userService.getUserFormFields().subscribe(
-            fields => {
-                this.formFields = fields;
-                this.customFieldsRowsIdx = [];
-                for (let i = 0; i < Math.round(this.formFields.customFields.length/2); i++) {
-                    this.customFieldsRowsIdx.push(i);
-                }
-            }
-        );
-    }
 
     private isUserActive(): boolean {
         return this.user.getStatus() == UserStatusEnum.ACTIVE;

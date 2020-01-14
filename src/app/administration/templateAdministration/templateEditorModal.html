@@ -2,18 +2,11 @@
     <h3 class="modal-title">{{context.title}}</h3>
 </div>
 <div class="modal-body vbox">
-
-    <div class="hbox" style="align-items: center; flex: initial; margin-bottom: 4px;">
-        <label>ID:</label>
-        <input class="form-control input-sm" style="margin-left: 4px;" [(ngModel)]="templateId">
-    </div>
-
     <partition-filter-editor [(ngModel)]="filter"></partition-filter-editor>
-
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!templateId">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
     <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
 </div>
 

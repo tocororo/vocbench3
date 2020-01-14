@@ -40,10 +40,6 @@
                     <div class="subPanel-body">
                         <div *ngFor="let s of availableSignatures" class="listItem" (click)="selectSignature(s)" [ngClass]="{ active: s == selectedSignature }">
                             <span>{{getSignatureShow(s)}}</span>
-                            <!-- <span *ngIf="s.getRequirementLevels() != 'IGNORED'" [title]="'Feature path ' + s.getRequirementLevels().toLocaleLowerCase()" style="margin-left: 4px; font-weight: bold;">
-                                <span class="glyphicon glyphicon-arrow-left"></span>
-                                <span style="font-size: 13px;">../</span><span *ngIf="s.getRequirementLevels() == 'OPTIONAL'">?</span>
-                            </span> -->
                             <span *ngIf="s.getRequirementLevels() != 'IGNORED'" [title]="'Feature path ' + s.getRequirementLevels().toLocaleLowerCase()" style="margin-left: 4px; font-weight: bold;">
                                 <ng-container *ngIf="s.getRequirementLevels() == 'OPTIONAL'">
                                     [

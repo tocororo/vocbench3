@@ -23,10 +23,10 @@
         <div class="subPanel-heading">
             <label>Project-User settings:</label>
         </div>
-        <div class="subPanel-body vbox">
+        <div class="subPanel-body vbox scrollableContainer">
 
             <!-- Roles -->
-            <div *ngIf="isRoleManagementAuthorized() && !isSelectedUserAdmin()" class="panel panel-default vbox" style="margin-bottom: 4px">
+            <div *ngIf="isRoleManagementAuthorized() && !isSelectedUserAdmin()" class="panel panel-default vbox" style="min-height: 100px; margin-bottom: 4px">
                 <div class="panel-body vbox">
                     <div class="hbox">
                         <div class="subPanel vbox" style="margin: 0px">
@@ -66,7 +66,7 @@
             </div>
 
             <!-- Groups -->
-            <div *ngIf="isGroupManagementAuthorized()" class="panel panel-default vbox" style="margin-bottom: 4px">
+            <div *ngIf="isGroupManagementAuthorized()" class="panel panel-default vbox" style="min-height: 100px; margin-bottom: 4px">
                 <div class="panel-body vbox">
                     <div class="hbox">
                         <div class="subPanel vbox" style="margin: 0px">
@@ -111,7 +111,7 @@
             </div>
 
             <!-- Languages -->
-            <div class="panel panel-default vbox">
+            <div class="panel panel-default vbox" style="flex: 2; min-height: 120px;">
                 <div class="panel-body vbox">
                     <div class="hbox">
                         <div class="subPanel vbox" style="margin: 0px">
