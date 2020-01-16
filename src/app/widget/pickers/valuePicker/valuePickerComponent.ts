@@ -15,6 +15,7 @@ export class ValuePickerComponent {
     @Input() roles: RDFResourceRolesEnum[]; //list of pickable resource roles
     // @Input() disabled: boolean = false;
     @Input() editable: boolean = false; //tells if the value can be manually edited (only for URI)
+    @Input() disabled: boolean = false;
     @Output() valueChanged = new EventEmitter<ARTNode>();
 
     private resTypes: { show: string, value: RDFTypesEnum }[] = [

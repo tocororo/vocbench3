@@ -11,7 +11,6 @@ import { ExtensionConfiguratorComponent } from '../widget/extensionConfigurator/
 import { InputEditableComponent } from '../widget/inputEditable/inputEditableComponent';
 import { LanguageItemComponent } from '../widget/languageItem/languageItemComponent';
 import { PartitionFilterEditor } from '../widget/partitionFilterEditor/partitionFilterEditor';
-import { PartitionFilterPanel } from '../widget/partitionFilterEditor/partitionFilterPanel';
 import { DatatypePickerComponent } from '../widget/pickers/datatypePicker/datatypePickerComponent';
 import { FilePickerComponent } from '../widget/pickers/filePicker/filePickerComponent';
 import { LangPickerComponent } from '../widget/pickers/langPicker/langPickerComponent';
@@ -39,7 +38,6 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         LiteralPickerComponent,
         ManchesterEditorComponent,
         PartitionFilterEditor,
-        PartitionFilterPanel,
         PearlEditorComponent,
         QueryParameterForm,
         RdfResourceComponent,
@@ -65,7 +63,6 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         LiteralPickerComponent,
         ManchesterEditorComponent,
         PartitionFilterEditor,
-        PartitionFilterPanel,
         PearlEditorComponent,
         QueryParameterForm,
         RdfResourceComponent,

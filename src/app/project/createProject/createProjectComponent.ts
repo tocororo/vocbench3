@@ -150,11 +150,15 @@ export class CreateProjectComponent {
     private selectedRendEngPluginConfList: Settings[]; //plugin configurations for the selected plugin
     private selectedRendEngPluginConf: Settings; //chosen configuration for the chosen rendering engine plugin
 
+    //METADATA PROP
     private useProjMetadataProp: boolean = true;
     private createdProp: string = DCT.created.getURI();
     private modifiedProp: string = DCT.modified.getURI();
 
+    //SHACL
     private enableSHACL: boolean = false;
+    private shaclSettings: Settings;
+
 
     constructor(private projectService: ProjectServices, private pluginService: PluginsServices, private extensionService: ExtensionsServices,
         private inOutService: InputOutputServices, private router: Router, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
@@ -205,6 +209,13 @@ export class CreateProjectComponent {
 
         //init project list for EDOAL
         this.initProjectList();
+
+        //init shacl settings
+        this.projectService.createEmptySHACLSettingsForm().subscribe(
+            settings => {
+                this.shaclSettings = settings;
+            }
+        )
 
     }
 
@@ -480,6 +491,15 @@ export class CreateProjectComponent {
     private isSelectedRepoAccessCreateMode(): boolean {
         return (this.selectedRepositoryAccess == RepositoryAccessType.CreateLocal ||
             this.selectedRepositoryAccess == RepositoryAccessType.CreateRemote);
+    }
+
+    /**
+     * 
+     */
+    private onRepoAccessChange() {
+        if (!this.isSelectedRepoAccessCreateMode()) { //shacl is not available when accessing an existing repository
+            this.enableSHACL = false;
+        }
     }
 
     /**
@@ -787,6 +807,20 @@ export class CreateProjectComponent {
         }
 
         /**
+         * Prepare shacl settings
+         */
+        let shaclSettingsPar: Map<string, any> = new Map();
+        if (this.enableSHACL) {
+            if (this.shaclSettings.requireConfiguration()) {
+                this.basicModals.alert("Create project", "You have enabled SHACL validation, but it requires configuration", "warning");
+                return;
+            }
+            this.shaclSettings.properties.forEach(p => {
+                shaclSettingsPar.set(p.name, p.value)
+            });
+        }
+
+        /**
          * Execute request
          */
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -797,7 +831,8 @@ export class CreateProjectComponent {
             supportRepoSailConfigurerSpecification, supportRepoBackendType,
             leftDataset, rightDataset,
             uriGeneratorSpecification, renderingEngineSpecification,
-            creationProp, modificationProp, this.enableSHACL,
+            creationProp, modificationProp, 
+            this.enableSHACL, shaclSettingsPar,
             preloadedDataFileName, preloadedDataFormat, transitiveImportAllowance).subscribe(
                 stResp => {
                     UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);

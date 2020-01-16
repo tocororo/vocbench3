@@ -1,4 +1,4 @@
-import { Component, forwardRef } from '@angular/core';
+import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTNode, RDFResourceRolesEnum } from '../../models/ARTResources';
 import { Settings, SettingsProp, SettingsPropTypeConstraint } from '../../models/Plugins';
@@ -11,6 +11,8 @@ import { Settings, SettingsProp, SettingsPropTypeConstraint } from '../../models
     }]
 })
 export class SettingsRendererComponent implements ControlValueAccessor {
+
+    @Input() disabled: boolean = false;
     
     private settings: Settings;
 

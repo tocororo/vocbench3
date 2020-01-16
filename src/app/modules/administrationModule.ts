@@ -14,8 +14,6 @@ import { CapabilityEditorModal } from "../administration/rolesAdministration/cap
 import { ImportRoleModal } from "../administration/rolesAdministration/importRoleModal";
 import { RolesAdministrationComponent } from "../administration/rolesAdministration/rolesAdministrationComponent";
 import { SystemConfigurationComponent } from '../administration/systemConfiguration/systemConfigurationComponent';
-import { TemplateEditorModal } from '../administration/templateAdministration/templateEditorModal';
-import { TemplatesAdministrationComponent } from '../administration/templateAdministration/templatesAdministrationComponent';
 import { ForcePasswordModal } from '../administration/usersAdministration/forcePasswordModal';
 import { UserCreateModal } from "../administration/usersAdministration/userCreateModal";
 import { UserDetailsPanelComponent } from '../administration/usersAdministration/userDetailsPanelComponent';
@@ -35,7 +33,6 @@ import { UserModule } from './userModule';
         ProjectUsersManagerComponent,
         RolesAdministrationComponent,
         SystemConfigurationComponent,
-        TemplatesAdministrationComponent,
         UsersAdministrationComponent,
         UserDetailsPanelComponent,
         //modals
@@ -43,7 +40,6 @@ import { UserModule } from './userModule';
         ForcePasswordModal,
         GroupEditorModal,
         ImportRoleModal,
-        TemplateEditorModal,
         UserCreateModal,
         UserProjBindingModal,
     ],
@@ -56,8 +52,6 @@ import { UserModule } from './userModule';
         ImportRoleModal,
         UserCreateModal,
         UserProjBindingModal,
-        TemplateEditorModal,
-
     ]
 })
 export class AdministrationModule { }

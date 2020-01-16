@@ -269,38 +269,37 @@ export class ResourceViewComponent {
         this.typesColl = this.initPartition(ResViewPartition.types, partitionFilter, true);
 
         if (
-            //partitions of individual, so this are always returned, also when resource is not defined, I need to check also if lenght == 0
-            (this.lexicalizationsColl == null || this.lexicalizationsColl.length == 0) &&
-            (this.propertiesColl == null || this.propertiesColl.length == 0) &&
-            (this.typesColl == null || this.typesColl.length == 0) &&
+            //these partitions are always returned, even when resource is not defined, so I need to check also if length == 0
+            (!this.resViewResponse[ResViewPartition.lexicalizations] || this.resViewResponse[ResViewPartition.lexicalizations].length == 0) &&
+            (!this.resViewResponse[ResViewPartition.properties] || this.resViewResponse[ResViewPartition.properties].length == 0) &&
+            (!this.resViewResponse[ResViewPartition.types] || this.resViewResponse[ResViewPartition.lexicalizations].length == 0) &&
             //partitions optional
-            this.broadersColl == null &&
-            this.classAxiomColl == null &&
-            this.constituentsColl == null &&
-            this.datatypeDefinitionColl == null &&
-            this.denotationsColl == null &&
-            this.disjointPropertiesColl == null &&
-            this.domainsColl == null &&
-            this.equivalentPropertiesColl == null &&
-            this.evokedLexicalConceptsColl == null &&
-            this.formBasedPreviewColl == null &&
-            this.formRepresentationsColl == null && 
-            this.importsColl == null &&
-            this.inverseofColl == null &&
-            this.labelRelationsColl == null &&
-            this.lexicalFormsColl == null &&
-            this.lexicalSensesColl == null &&
-            this.membersColl == null &&
-            this.membersOrderedColl == null &&
-            this.notesColl == null &&
-            this.propertyFacets == null &&
-            this.rangesColl == null &&
-            this.rdfsMembersColl == null &&
-            this.subPropertyChainsColl == null &&
-            this.schemesColl == null &&
-            this.subtermsColl == null &&
-            this.superpropertiesColl == null &&
-            this.topconceptofColl == null
+            !this.resViewResponse[ResViewPartition.broaders] &&
+            !this.resViewResponse[ResViewPartition.classaxioms] &&
+            !this.resViewResponse[ResViewPartition.constituents] &&
+            !this.resViewResponse[ResViewPartition.datatypeDefinitions] &&
+            !this.resViewResponse[ResViewPartition.denotations] &&
+            !this.resViewResponse[ResViewPartition.disjointProperties] &&
+            !this.resViewResponse[ResViewPartition.domains] &&
+            !this.resViewResponse[ResViewPartition.equivalentProperties] &&
+            !this.resViewResponse[ResViewPartition.evokedLexicalConcepts] &&
+            !this.resViewResponse[ResViewPartition.facets] &&
+            !this.resViewResponse[ResViewPartition.formBasedPreview] &&
+            !this.resViewResponse[ResViewPartition.formRepresentations] &&
+            !this.resViewResponse[ResViewPartition.imports] &&
+            !this.resViewResponse[ResViewPartition.labelRelations] &&
+            !this.resViewResponse[ResViewPartition.lexicalForms] &&
+            !this.resViewResponse[ResViewPartition.lexicalSenses] &&
+            !this.resViewResponse[ResViewPartition.members] &&
+            !this.resViewResponse[ResViewPartition.membersOrdered] &&
+            !this.resViewResponse[ResViewPartition.notes] &&
+            !this.resViewResponse[ResViewPartition.ranges] &&
+            !this.resViewResponse[ResViewPartition.rdfsMembers] &&
+            !this.resViewResponse[ResViewPartition.subPropertyChains] &&
+            !this.resViewResponse[ResViewPartition.schemes] &&
+            !this.resViewResponse[ResViewPartition.subterms] &&
+            !this.resViewResponse[ResViewPartition.superproperties] &&
+            !this.resViewResponse[ResViewPartition.topconceptof]
         ) {
             this.unexistingResource = true;
         } else {

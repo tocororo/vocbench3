@@ -10,27 +10,29 @@
             <td style="padding: 2px 0px;">
                 <div [ngSwitch]="types[0].name">
                     <resource-picker *ngSwitchCase="'IRI'" [resource]="value[index]" [roles]="getIRIRoleConstraints()" [editable]="true"
-                        (resourceChanged)="updateValue(index, $event)">
+                        (resourceChanged)="updateValue(index, $event)" [disabled]="disabled">
                     </resource-picker>
 
                     <resource-picker *ngSwitchCase="'Resource'" [resource]="value[index]" [roles]="getIRIRoleConstraints(p)" [editable]="true"
-                        (resourceChanged)="updateValue(index, $event)">
+                        (resourceChanged)="updateValue(index, $event)" [disabled]="disabled">
                     </resource-picker>
 
-                    <value-picker *ngSwitchCase="'RDFValue'" [value]="value[index]" [editable]="true" (valueChanged)="updateValue(index, $event)">
+                    <value-picker *ngSwitchCase="'RDFValue'" [value]="value[index]" [editable]="true" (valueChanged)="updateValue(index, $event)"
+                        [disabled]="disabled">
                     </value-picker>
 
-                    <literal-picker *ngSwitchCase="'Literal'" [literal]="value[index]" (literalChanged)="updateValue(index, $event)">
+                    <literal-picker *ngSwitchCase="'Literal'" [literal]="value[index]" (literalChanged)="updateValue(index, $event)" [disabled]="disabled">
                     </literal-picker>
 
-                    <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control input-sm" style="resize: vertical" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()">
+                    <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control input-sm" style="resize: vertical"
+                        [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
                     </textarea>
 
-                    <input *ngSwitchCase="'int'" type="number" class="form-control input-sm" step="1" [(ngModel)]="p.value">
+                    <input *ngSwitchCase="'int'" type="number" class="form-control input-sm" step="1" [(ngModel)]="p.value" [disabled]="disabled">
 
                     <div *ngSwitchDefault class="hbox" style="align-items: center; position: relative;">
                         <textarea *ngSwitchDefault type="text" rows="1" class="form-control input-sm" 
-                            style="resize: vertical;" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()">
+                            style="resize: vertical;" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
                         </textarea>
                         <span class="glyphicon glyphicon-warning-sign" style="position: absolute; top: 8px; right: 8px;"
                             [title]="'This parameter has an unknown type (' + types[0].name + '). The entered value will be interpreted as a low-level JSON value.'">
@@ -39,12 +41,12 @@
                 </div>
             </td>
             <td style="padding: 0px;">
-                <button *ngIf="value.length > 1" class="btn btn-sm btn-default" (click)="delete(index)" style="margin-left: 3px;">
+                <button *ngIf="value.length > 1" class="btn btn-sm btn-default" (click)="delete(index)" style="margin-left: 3px;" [disabled]="disabled">
                     <span class="glyphicon glyphicon-trash"></span>
                 </button>
             </td>
             <td style="padding: 0px;">
-                <button *ngIf="last" class="btn btn-sm btn-default" (click)="add(index)" style="margin-left: 3px;">
+                <button *ngIf="last" class="btn btn-sm btn-default" (click)="add(index)" style="margin-left: 3px;" [disabled]="disabled">
                     <span class="glyphicon glyphicon-plus"></span>
                 </button>
             </td>

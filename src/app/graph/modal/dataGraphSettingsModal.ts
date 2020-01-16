@@ -3,6 +3,7 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
+import { PartitionFilterPreference } from "../../models/Properties";
 
 @Component({
     selector: "data-graph-settings-modal",
@@ -11,6 +12,8 @@ import { VBProperties } from "../../utils/VBProperties";
 export class DataGraphSettingsModal implements ModalComponent<BSModalContext> {
     context: BSModalContext;
 
+    private graphFilter: PartitionFilterPreference;
+
     private hideLiteralNodes: boolean;
 
     constructor(public dialog: DialogRef<BSModalContext>, private vbProp: VBProperties) {
@@ -18,7 +21,12 @@ export class DataGraphSettingsModal implements ModalComponent<BSModalContext> {
     }
 
     ngOnInit() {
+        this.graphFilter = VBContext.getWorkingProjectCtx().getProjectPreferences().graphViewPartitionFilter;
         this.hideLiteralNodes = VBContext.getWorkingProjectCtx().getProjectPreferences().hideLiteralGraphNodes;
+    }
+
+    private updateFilter() {
+        this.vbProp.setGraphViewPartitionFilter(this.graphFilter);
     }
 
     private onHideLiteralChange() {

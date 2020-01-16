@@ -1,14 +1,15 @@
 <div class="hbox">
 
-    <select class="form-control input-sm" style="margin-right: 4px; width: initial" [(ngModel)]="selectedResType" (ngModelChange)="onTypeChange()">
+    <select class="form-control input-sm" style="margin-right: 4px; width: initial" [(ngModel)]="selectedResType" (ngModelChange)="onTypeChange()"
+        [disabled]="disabled">
         <option *ngFor="let rt of resTypes" [ngValue]="rt">{{rt.show}}</option>
     </select>
 
     <div [ngSwitch]="selectedResType.value" style="width: 100%">
-        <resource-picker *ngSwitchCase="'uri'" [resource]="value" [editable]="editable" (resourceChanged)="updateIRI($event)">
+        <resource-picker *ngSwitchCase="'uri'" [resource]="value" [editable]="editable" (resourceChanged)="updateIRI($event)" [disabled]="disabled">
         </resource-picker>
 
-        <literal-picker *ngSwitchCase="'literal'" [literal]="value" (literalChanged)="updateLiteral($event)">
+        <literal-picker *ngSwitchCase="'literal'" [literal]="value" (literalChanged)="updateLiteral($event)" [disabled]="disabled">
         </literal-picker>
     </div>
 

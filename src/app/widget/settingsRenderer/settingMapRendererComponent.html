@@ -14,21 +14,21 @@
                     <td><label>Key:</label></td>
                     <td>
                         <!-- At the moment, do not check the type of the key, consider it always as string -->
-                        <input class="form-control input-xs" [(ngModel)]="map[index].key" (ngModelChange)="onModelChange()">
+                        <input class="form-control input-xs" [(ngModel)]="map[index].key" (ngModelChange)="onModelChange()" [disabled]="disabled">
                     </td>
                     <td><label>Value:</label></td>
                     <td>
                         <!-- At the moment, do not check the type of the value, consider it always as string -->
-                        <textarea type="text" rows="1" class="form-control input-xs" style="resize: vertical" [(ngModel)]="map[index].value" (ngModelChange)="onModelChange()">
+                        <textarea type="text" rows="1" class="form-control input-xs" style="resize: vertical" [(ngModel)]="map[index].value" (ngModelChange)="onModelChange()" [disabled]="disabled">
                         </textarea>
                     </td>
                     <td>
-                        <button *ngIf="map.length > 1" class="btn btn-xs btn-default" (click)="delete(index)">
+                        <button *ngIf="map.length > 1" class="btn btn-xs btn-default" (click)="delete(index)" [disabled]="disabled">
                             <span class="glyphicon glyphicon-trash"></span>
                         </button>
                     </td>
                     <td>
-                        <button *ngIf="last" class="btn btn-xs btn-default" (click)="add(index)">
+                        <button *ngIf="last" class="btn btn-xs btn-default" (click)="add(index)" [disabled]="disabled">
                             <span class="glyphicon glyphicon-plus"></span>
                         </button>
                     </td>

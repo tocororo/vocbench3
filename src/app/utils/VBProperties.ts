@@ -340,7 +340,8 @@ export class VBProperties {
 
     //Graph settings
     setGraphViewPartitionFilter(pref: PartitionFilterPreference) {
-        this.prefService.setPUSetting(Properties.pref_graph_view_partition_filter, JSON.stringify(pref)).subscribe();
+        let value = (Object.keys(pref).length != 0) ? JSON.stringify(pref) : null;
+        this.prefService.setPUSetting(Properties.pref_graph_view_partition_filter, value).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().graphViewPartitionFilter = pref;
     }
     setHideLiteralGraphNodes(show: boolean) {

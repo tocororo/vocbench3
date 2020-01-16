@@ -173,7 +173,7 @@ export class PartitionFilterEditor {
      * Restore to visible all the partitions for all the roles
      */
     private reset() {
-        this.basicModals.confirm("Reset filter", "The partitions statuses will be reset for all the available resource types. Are you sure?", "warning").then(
+        this.basicModals.confirm("Reset filter", "All the partitions will be set visible for all the available resource types. Are you sure?", "warning").then(
             confirm => {
                 this.rolePartitionsStructs.forEach(rps => {
                     rps.partitions.forEach(p => {

@@ -60,7 +60,7 @@ export class HttpManager {
 	 *  }
      * @param options further options that overrides the default ones
      */
-    doGet(service: string, request: string, params: any, options?: VBRequestOptions) {
+    doGet(service: string, request: string, params: STRequestParams, options?: VBRequestOptions) {
         options = this.defaultRequestOptions.merge(options);
 
         var url: string = this.getRequestBaseUrl(service, request);
@@ -98,7 +98,7 @@ export class HttpManager {
 	 *  }
      * @param options further options that overrides the default ones
      */
-    doPost(service: string, request: string, params: any, options?: VBRequestOptions) {
+    doPost(service: string, request: string, params: STRequestParams, options?: VBRequestOptions) {
         options = this.defaultRequestOptions.merge(options);
 
         var url: string = this.getRequestBaseUrl(service, request);
@@ -140,7 +140,7 @@ export class HttpManager {
 	 *  }
      * @param options further options that overrides the default ones
      */
-    uploadFile(service: string, request: string, params: any, options?: VBRequestOptions) {
+    uploadFile(service: string, request: string, params: STRequestParams, options?: VBRequestOptions) {
         options = this.defaultRequestOptions.merge(options);
         
         var url: string = this.getRequestBaseUrl(service, request);
@@ -186,7 +186,7 @@ export class HttpManager {
      * @param post tells if the download is done via post-request (e.g. Export.export() service)
      * @param options further options that overrides the default ones
      */
-    downloadFile(service: string, request: string, params: any, post?: boolean, options?: VBRequestOptions): Observable<Blob> {
+    downloadFile(service: string, request: string, params: STRequestParams, post?: boolean, options?: VBRequestOptions): Observable<Blob> {
         options = this.defaultRequestOptions.merge(options);
         
         var url: string = this.getRequestBaseUrl(service, request);
@@ -338,11 +338,11 @@ export class HttpManager {
      * }
      * The value of the parameter can be a simple string or any of the ARTResource implementations
      */
-    private getParametersForUrl(params: any): string {
+    private getParametersForUrl(params: STRequestParams): string {
         return this.getPostData(params) + "&"; //differs from getPostData simply for the ending & in order to append ctx parameters
     }
 
-    private getPostData(params: any): string {
+    private getPostData(params: STRequestParams): string {
         var postData: any;
         var strBuilder: string[] = [];
         for (var paramName in params) {
@@ -647,3 +647,5 @@ class ErrorAlertOptions {
     show: boolean; //if true HttpManager show the error alert in case of error response, skip the show alert otherwise
     exceptionsToSkip?: string[]; //if provided, tells for which exceptions the alert should be skipped (useful only if show is true)
 }
+
+class STRequestParams { [key: string]: any }

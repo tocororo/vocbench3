@@ -14,6 +14,7 @@ export class Project {
     private open: boolean;
     private repositoryLocation: { location: "remote" | "local", serverURL?: string };
     private status: { status: string, message?: string };
+    private shaclEnabled: boolean;
 
     constructor(name?: string) {
         if (name != undefined) {
@@ -53,20 +54,28 @@ export class Project {
         return this.accessible;
     }
 
-    public setHistoryEnabled(historyEnabled: boolean) {
-        this.historyEnabled = historyEnabled;
+    public setHistoryEnabled(enabled: boolean) {
+        this.historyEnabled = enabled;
     }
 
     public isHistoryEnabled(): boolean {
         return this.historyEnabled;
     }
 
-    public setValidationEnabled(validationEnabled: boolean) {
-        this.validationEnabled = validationEnabled;
+    public setValidationEnabled(enabled: boolean) {
+        this.validationEnabled = enabled;
     }
 
     public isValidationEnabled(): boolean {
         return this.validationEnabled;
+    }
+
+    public setShaclEnabled(enabled: boolean) {
+        this.shaclEnabled = enabled;
+    }
+
+    public isShaclEnabled(): boolean {
+        return this.shaclEnabled;
     }
 
     public setModelType(modelType: string) {
@@ -142,6 +151,7 @@ export class Project {
         proj.setOpen(projJson.open);
         proj.setRepositoryLocation(projJson.repositoryLocation);
         proj.setStatus(projJson.status);
+        proj.setShaclEnabled(projJson.shaclEnabled);
         return proj;
     }
 

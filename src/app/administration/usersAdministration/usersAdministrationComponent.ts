@@ -109,7 +109,7 @@ export class UsersAdministrationComponent {
     }
 
     private loadTemplate() {
-        this.sharedModals.loadConfiguration("Load template", ConfigurationComponents.TEMPLATE_STORE, true, false).then(
+        this.sharedModals.loadConfiguration("Load template", ConfigurationComponents.TEMPLATE_STORE).then(
             (conf: LoadConfigurationModalReturnData) => {
                 let templateProp: SettingsProp = conf.configuration.properties.find(p => p.name == "template");
                 if (templateProp != null) {
@@ -137,8 +137,6 @@ export class UsersAdministrationComponent {
                 }
             }
         );
-        
-        
     }
 
 }

@@ -5,7 +5,18 @@
 
     <div class="hbox">
         <lang-value-filter-pref class="vbox"></lang-value-filter-pref>
-        <partition-filter-panel context="Graph" class="vbox" style="margin-left: 4px;"></partition-filter-panel>
+
+        <div class="panel panel-default vbox" style="margin-left: 4px;">
+            <div class="panel-heading">
+                <label>Graph filter</label>
+            </div>
+            <div class="panel-body vbox">
+                <div class="alert alert-info" role="alert" style="margin-bottom: 5px;">
+                    Select the partition of the resource description that will be shown when expanding a node.
+                </div>
+                <partition-filter-editor [(ngModel)]="graphFilter" (ngModelChange)="updateFilter()"></partition-filter-editor>
+            </div>
+        </div>
     </div>
     
     <div class="panel panel-default">

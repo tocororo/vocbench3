@@ -182,7 +182,8 @@
                             <label class="control-label col-sm-2">Repository Access:</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
-                                    <select class="form-control input-sm" [(ngModel)]="selectedRepositoryAccess" name="selectedRepositoryAccess">
+                                    <select class="form-control input-sm" [(ngModel)]="selectedRepositoryAccess" (ngModelChange)="onRepoAccessChange()"
+                                        name="selectedRepositoryAccess">
                                         <option *ngFor="let repoAcc of repositoryAccessList" [ngValue]="repoAcc">{{repoAcc}}</option>
                                     </select>
                                     <span class="input-group-btn">
@@ -405,13 +406,18 @@
                     <div class="subPanel">
                         <div class="subPanel-heading">
                             <label style="flex: 1;">SHACL Shape Validation</label>
-                            <div class="checkbox" style="margin: 0px">
-                                <label style="min-height: initial;">
-                                    <input type="checkbox" [(ngModel)]="enableSHACL"> Enable shape validation
+                            <div class="checkbox-inline">
+                                <label>
+                                    <input type="checkbox" [(ngModel)]="enableSHACL" [disabled]="!isSelectedRepoAccessCreateMode()">
+                                    <span *ngIf="!isSelectedRepoAccessCreateMode()" class="glyphicon glyphicon-exclamation-sign"
+                                        title="SHACL sail is only possible when creating a new repository, not when accessing an existing one.">
+                                    </span>
+                                    Enable shape validation
                                 </label>
                             </div>
                         </div>
                         <div class="subPanel-body">
+                            <settings-renderer [(ngModel)]="shaclSettings" [disabled]="!enableSHACL"></settings-renderer>
                         </div>
                     </div>
                 </div>
@@ -421,7 +427,7 @@
 
         <div class="panel-footer">
             <button type="submit" class="btn btn-default btn-sm pull-right" (click)="create()">Create</button>
-            <span class="clearfix"></span> <!--To fix UI bug-->
+            <span class="clearfix"></span>
         </div>
     </div>
 

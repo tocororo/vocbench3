@@ -178,6 +178,38 @@ export class PreferencesSettingsServices {
     }
 
     /**
+     * 
+     * @param properties 
+     * @param email 
+     * @param pluginID 
+     */
+    getPUSettingsProjectDefault(properties: string[], project: Project, pluginID?: string) {
+        let params: any = {
+            properties: properties,
+            project: project.getName(),
+            pluginID: pluginID
+        };
+        return this.httpMgr.doGet(this.serviceName, "getPUSettingsProjectDefault", params);
+    }
+
+    /**
+     * 
+     * @param property 
+     * @param email 
+     * @param value 
+     * @param pluginID 
+     */
+    setPUSettingProjectDefault(property: string, project: Project, value?: string, pluginID?: string) {
+        var params: any = {
+            property: property,
+            project: project.getName(),
+            value: value,
+            pluginID: pluginID
+        };
+        return this.httpMgr.doPost(this.serviceName, "setPUSettingProjectDefault", params);
+    }
+
+    /**
      * Gets the default project settings
      * @param properties 
      */

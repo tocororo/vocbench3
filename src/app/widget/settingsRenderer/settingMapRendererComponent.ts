@@ -9,6 +9,7 @@ export class SettingMapRendererComponent {
 
     @Input() types: SettingsPropType[]; //list of types, first is the key type, second is the value type
     @Input() value: {[key: string]:any};
+    @Input() disabled: boolean = false;
 
     @Output() valueChanged = new EventEmitter<any>();
 

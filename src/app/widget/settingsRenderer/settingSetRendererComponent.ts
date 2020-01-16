@@ -10,6 +10,7 @@ export class SettingSetRendererComponent {
 
     @Input() types: SettingsPropType[]; //list of types (actually it is handled only the first type)
     @Input() value: any[];
+    @Input() disabled: boolean = false;
 
     @Output() valueChanged = new EventEmitter<any[]>();
 

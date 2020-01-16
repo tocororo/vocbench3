@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTURIResource } from '../models/ARTResources';
 import { TransitiveImportMethodAllowance } from '../models/Metadata';
-import { PluginSpecification } from '../models/Plugins';
+import { PluginSpecification, Settings } from '../models/Plugins';
 import { AccessLevel, BackendTypesEnum, LockLevel, PreloadedDataSummary, Project, RepositoryAccess, RepositorySummary } from '../models/Project';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from '../utils/VBContext';
@@ -131,7 +131,8 @@ export class ProjectServices {
         supportRepoSailConfigurerSpecification?: PluginSpecification, supportBackendType?: BackendTypesEnum,
         leftDataset?: string, rightDataset?: string,
         uriGeneratorSpecification?: PluginSpecification, renderingEngineSpecification?: PluginSpecification,
-        creationDateProperty?: ARTURIResource, modificationDateProperty?: ARTURIResource, enableSHACL?: boolean,
+        creationDateProperty?: ARTURIResource, modificationDateProperty?: ARTURIResource, 
+        shaclEnabled?: boolean, shaclSettings?: Map<string, any>,
         preloadedDataFileName?: string, preloadedDataFormat?: string, transitiveImportAllowance?: TransitiveImportMethodAllowance) {
         
         var params: any = {
@@ -156,7 +157,8 @@ export class ProjectServices {
             renderingEngineSpecification: (renderingEngineSpecification) ? JSON.stringify(renderingEngineSpecification) : null,
             creationDateProperty: creationDateProperty,
             modificationDateProperty: modificationDateProperty,
-            enableSHACL: enableSHACL,
+            shaclEnabled: shaclEnabled,
+            shaclSettings: shaclSettings,
             preloadedDataFileName: preloadedDataFileName,
             preloadedDataFormat: preloadedDataFormat,
             transitiveImportAllowance: transitiveImportAllowance
@@ -447,6 +449,18 @@ export class ProjectServices {
         return this.httpMgr.doPost(this.serviceName, "preloadDataFromCatalog", params).map(
             stResp => {
                 return PreloadedDataSummary.parse(stResp);
+            }
+        );
+    }
+
+    /**
+     * 
+     */
+    createEmptySHACLSettingsForm(): Observable<Settings> {
+        let params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "createEmptySHACLSettingsForm", params).map(
+            stResp => {
+                return Settings.parse(stResp);
             }
         );
     }
