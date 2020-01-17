@@ -55,7 +55,7 @@ export class VBProperties {
         ];
         
         let options: VBRequestOptions = new VBRequestOptions({ ctxProject: projectCtx.getProject() });
-        let getPUSettingsNoPlugin = this.prefService.getPUSettings(properties, null, options).map(
+        let getPUSettingsNoPlugin = this.prefService.getPUSettings(properties, null, null, null, options).map(
             prefs => {
                 let projectPreferences: ProjectPreferences = projectCtx.getProjectPreferences();
 
@@ -198,7 +198,7 @@ export class VBProperties {
         );
 
         // this is called separately since requires the pluginId parameter
-        let getPUSettingsRenderingEngine = this.prefService.getPUSettings([Properties.pref_languages], ExtensionPointID.RENDERING_ENGINE_ID, options).map(
+        let getPUSettingsRenderingEngine = this.prefService.getPUSettings([Properties.pref_languages], null, null, ExtensionPointID.RENDERING_ENGINE_ID, options).map(
             prefs => {
                 projectCtx.getProjectPreferences().projectLanguagesPreference = prefs[Properties.pref_languages].split(",");
             }
@@ -220,7 +220,7 @@ export class VBProperties {
     setActiveLexicon(projectCtx: ProjectContext, lexicon: ARTURIResource) {
         projectCtx.getProjectPreferences().activeLexicon = lexicon;
         this.eventHandler.lexiconChangedEvent.emit({ lexicon: lexicon, project: projectCtx.getProject() });
-        this.prefService.setPUSetting(Properties.pref_active_lexicon, lexicon.getURI(), null, new VBRequestOptions({ctxProject: projectCtx.getProject()})).subscribe();
+        this.prefService.setPUSetting(Properties.pref_active_lexicon, lexicon.getURI(), projectCtx.getProject()).subscribe();
     }
 
     getShowFlags(): boolean {
@@ -252,7 +252,7 @@ export class VBProperties {
 
     setLanguagesPreference(languages: string[]) {
         let value: string = (languages.length == 0) ? null : languages.join(",");
-        this.prefService.setPUSetting(Properties.pref_languages, value, ExtensionPointID.RENDERING_ENGINE_ID).subscribe();
+        this.prefService.setPUSetting(Properties.pref_languages, value, null, null, ExtensionPointID.RENDERING_ENGINE_ID).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().projectLanguagesPreference = languages;
     }
 
@@ -323,12 +323,12 @@ export class VBProperties {
 
     //Res view settings
     setResourceViewPartitionFilter(pref: PartitionFilterPreference) {
-        let value = (Object.keys(pref).length != 0) ? JSON.stringify(pref) : null;
+        let value = (pref != null) ? JSON.stringify(pref) : null;
         this.prefService.setPUSetting(Properties.pref_res_view_partition_filter, value).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter = pref;
     }
-    refreshResourceViewPartitionFilter() {
-        this.prefService.getPUSettings([Properties.pref_res_view_partition_filter], null).subscribe(
+    refreshResourceViewPartitionFilter(): Observable<void> { //refreshed the cached rv partition filter
+        return this.prefService.getPUSettings([Properties.pref_res_view_partition_filter]).map(
             prefs => {
                 let value = prefs[Properties.pref_res_view_partition_filter];
                 if (value != null) {
@@ -340,7 +340,7 @@ export class VBProperties {
 
     //Graph settings
     setGraphViewPartitionFilter(pref: PartitionFilterPreference) {
-        let value = (Object.keys(pref).length != 0) ? JSON.stringify(pref) : null;
+        let value = (pref != null) ? JSON.stringify(pref) : null;
         this.prefService.setPUSetting(Properties.pref_graph_view_partition_filter, value).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().graphViewPartitionFilter = pref;
     }
@@ -542,19 +542,17 @@ export class VBProperties {
         Cookie.setCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION, settings.restrictActiveScheme+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_CLS_IND_PANEL, settings.classIndividualSearchMode, 365*10);
 
-        let options: VBRequestOptions = new VBRequestOptions({ ctxProject: projectCtx.getProject() });
-
         if (projectPreferences.searchSettings.languages != settings.languages) {
-            this.prefService.setPUSetting(Properties.pref_search_languages, JSON.stringify(settings.languages), null, options).subscribe();
+            this.prefService.setPUSetting(Properties.pref_search_languages, JSON.stringify(settings.languages), projectCtx.getProject()).subscribe();
         }
         if (projectPreferences.searchSettings.restrictLang != settings.restrictLang) {
-            this.prefService.setPUSetting(Properties.pref_search_restrict_lang, settings.restrictLang+"", null, options).subscribe();
+            this.prefService.setPUSetting(Properties.pref_search_restrict_lang, settings.restrictLang+"", projectCtx.getProject()).subscribe();
         }
         if (projectPreferences.searchSettings.includeLocales != settings.includeLocales) {
-            this.prefService.setPUSetting(Properties.pref_search_include_locales, settings.includeLocales+"", null, options).subscribe();
+            this.prefService.setPUSetting(Properties.pref_search_include_locales, settings.includeLocales+"", projectCtx.getProject()).subscribe();
         }
         if (projectPreferences.searchSettings.useAutocompletion != settings.useAutocompletion) {
-            this.prefService.setPUSetting(Properties.pref_search_use_autocomplete, settings.useAutocompletion+"", null, options).subscribe();
+            this.prefService.setPUSetting(Properties.pref_search_use_autocomplete, settings.useAutocompletion+"", projectCtx.getProject()).subscribe();
         }
         projectPreferences.searchSettings = settings;
         this.eventHandler.searchPrefsUpdatedEvent.emit(projectCtx.getProject());

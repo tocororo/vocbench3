@@ -7,6 +7,7 @@ import { PartitionFilterPreference, Properties } from "../../models/Properties";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { LoadConfigurationModalReturnData } from "../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
@@ -20,11 +21,15 @@ export class ResViewSettingsModal implements ModalComponent<BSModalContext> {
     private template: PartitionFilterPreference;
 
     constructor(public dialog: DialogRef<BSModalContext>, private vbProp: VBProperties, private prefService: PreferencesSettingsServices,
-        private sharedModals: SharedModalServices) {
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
+        this.initTemplate();
+    }
+
+    private initTemplate() {
         this.template = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter;
     }
 
@@ -40,20 +45,44 @@ export class ResViewSettingsModal implements ModalComponent<BSModalContext> {
         )
     }
 
-    // private storeTemplate() {
-    //     let config: { [key: string]: any } = {
-    //         template: this.userTemplate
-    //     }
-    //     this.sharedModals.storeConfiguration("Store template", ConfigurationComponents.TEMPLATE_STORE, config);
-    // }
+    private storeTemplate() {
+        let config: { [key: string]: any } = {
+            template: this.template
+        }
+        this.sharedModals.storeConfiguration("Store template", ConfigurationComponents.TEMPLATE_STORE, config);
+    }
 
-    private setTemplateAsUserDefault() {
-        let prefValue = (Object.keys(this.template).length != 0) ? JSON.stringify(this.template) : null;
-        this.prefService.setPUSettingUserDefault(Properties.pref_res_view_partition_filter, VBContext.getLoggedUser().getEmail(), prefValue).subscribe(
+    private setUserDefault() {
+        this.basicModals.confirm("Set as default", "You are setting the current template as default configuration for all the projects. Are you sure?",
+            "warning").then(
             () => {
-                //update the cached PU-settings
-                this.vbProp.refreshResourceViewPartitionFilter();
-            }
+                this.prefService.setPUSettingUserDefault(Properties.pref_res_view_partition_filter, VBContext.getLoggedUser().getEmail(),
+                    JSON.stringify(this.template)).subscribe();
+            },
+            () => {}
+        )
+        
+    }
+
+    /**
+     * Reset the preference to the default, namely remove set the PUSettings, so if there is a default it is retrieved through the fallback
+     */
+    private restoreDefault() {
+        this.basicModals.confirm("Restore default", "You are overriding the current template by restoring the default configuration. Are you sure?",
+            "warning").then(
+            () => {
+                this.prefService.setPUSetting(Properties.pref_res_view_partition_filter, null).subscribe(
+                    () => {
+                        //refreshes the template cached in the project preferences
+                        this.vbProp.refreshResourceViewPartitionFilter().subscribe(
+                            () => {
+                                this.initTemplate();
+                            }
+                        );
+                    }
+                );
+            },
+            () => {}
         );
     }
 

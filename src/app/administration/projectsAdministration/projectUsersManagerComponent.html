@@ -26,7 +26,7 @@
         <div class="subPanel-body vbox scrollableContainer">
 
             <!-- Roles -->
-            <div *ngIf="isRoleManagementAuthorized() && !isSelectedUserAdmin()" class="panel panel-default vbox" style="min-height: 100px; margin-bottom: 4px">
+            <div *ngIf="isRoleManagementAuthorized() && !isSelectedUserAdmin()" class="panel panel-default vbox" style="min-height: 200px;">
                 <div class="panel-body vbox">
                     <div class="hbox">
                         <div class="subPanel vbox" style="margin: 0px">
@@ -66,7 +66,7 @@
             </div>
 
             <!-- Groups -->
-            <div *ngIf="isGroupManagementAuthorized()" class="panel panel-default vbox" style="min-height: 100px; margin-bottom: 4px">
+            <div *ngIf="isGroupManagementAuthorized()" class="panel panel-default vbox" style="min-height: 120px; margin-top: 4px">
                 <div class="panel-body vbox">
                     <div class="hbox">
                         <div class="subPanel vbox" style="margin: 0px">
@@ -111,7 +111,7 @@
             </div>
 
             <!-- Languages -->
-            <div class="panel panel-default vbox" style="flex: 2; min-height: 120px;">
+            <div class="panel panel-default vbox" style="min-height: 320px; margin-top: 4px;">
                 <div class="panel-body vbox">
                     <div class="hbox">
                         <div class="subPanel vbox" style="margin: 0px">
@@ -183,6 +183,33 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Templates -->
+            <div *ngIf="isLoggedUserAdmin()" class="panel panel-default vbox" style="min-height: 420px; margin-top: 4px;">
+                <div class="panel-heading">
+                    <label style="flex: 1;">
+                        ResourceView template
+                        <span class="glyphicon glyphicon-info-sign" title="Customize the ResourceView template for the user in the given project"></span>
+                    </label>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group btn-group-xs">
+                            <button class="btn btn-default" (click)="storeTemplate()" title="Store template">
+                                <span class="glyphicon glyphicon-floppy-save"></span>
+                            </button>
+                            <button class="btn btn-default" (click)="loadTemplate()" title="Load template">
+                                <span class="glyphicon glyphicon-floppy-open"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body vbox">
+                    <div class="alert alert-info" role="alert" style="margin-bottom: 5px;">
+                        Here you can customize the ResourceView template for the user in the given project.
+                        <u>Note</u>: this is exactly the setting of the user, so by changing it you will change directly its ResourceView template.<br>
+                    </div>
+                    <partition-filter-editor [(ngModel)]="puTemplate" (ngModelChange)="updateTemplate()"></partition-filter-editor>
                 </div>
             </div>
 

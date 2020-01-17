@@ -81,7 +81,6 @@ export class PartitionFilterEditor {
 
     private rolePartitionsStructs: RolePartitionsStruct[];
     private selectedRolePartitionsStruct: RolePartitionsStruct;
-    private selectedPartition: PartitionStruct;
 
     constructor(private basicModals: BasicModalServices) {}
 
@@ -129,15 +128,6 @@ export class PartitionFilterEditor {
 
     private selectRolePartitionsStruct(rps: RolePartitionsStruct) {
         this.selectedRolePartitionsStruct = rps;
-        this.selectedPartition = null;
-    }
-
-    private selectPartition(partition: PartitionStruct) {
-        if (this.selectedPartition == partition) {
-            this.selectedPartition = null;
-        } else {
-            this.selectedPartition = partition;    
-        }
     }
 
     /**
@@ -153,14 +143,12 @@ export class PartitionFilterEditor {
     }
 
     /**
-     * Checks/Unchecks (according the check parameter) the same partition (the selected one) for all the roles.
-     * The button that invokes this method should be enable only if there is a selectedPartition.
-     * @param check 
+     * Checks/Unchecks (according the check parameter) the same partition (the provided one) for all the roles.
      */
-    private checkInAllRoles(check: boolean) {
-        let partition: ResViewPartition = this.selectedPartition.id;
+    private checkForAllRoles(partition: ResViewPartition, check: boolean) {
         this.rolePartitionsStructs.forEach(rps => {
             rps.partitions.forEach(p => {
+                console.log("partition ==? p.id", partition, p.id, (partition == p.id))
                 if (partition == p.id) {
                     p.checked = check;
                 }
@@ -173,7 +161,7 @@ export class PartitionFilterEditor {
      * Restore to visible all the partitions for all the roles
      */
     private reset() {
-        this.basicModals.confirm("Reset filter", "All the partitions will be set visible for all the available resource types. Are you sure?", "warning").then(
+        this.basicModals.confirm("Enable all", "All the partitions will be set visible for all the available resource types. Are you sure?", "warning").then(
             confirm => {
                 this.rolePartitionsStructs.forEach(rps => {
                     rps.partitions.forEach(p => {

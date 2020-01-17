@@ -133,7 +133,7 @@ export class UsersAdministrationComponent {
             () => {
                 //in case the setting has been changed for the logged user and a project is currently accessed => update its cached PU-settings
                 if (VBContext.getWorkingProject() != null && VBContext.getLoggedUser().getEmail() == this.selectedUser.getEmail()) {
-                    this.vbProp.refreshResourceViewPartitionFilter();
+                    this.vbProp.refreshResourceViewPartitionFilter().subscribe();
                 }
             }
         );

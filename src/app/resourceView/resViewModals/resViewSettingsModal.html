@@ -12,17 +12,32 @@
             <label style="flex: 1;">ResourceView template</label>
             <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group btn-group-xs">
-                    <!-- <button class="btn btn-default" (click)="storeTemplate()" title="Store template">
+                    <button class="btn btn-default" (click)="storeTemplate()" title="Store template">
                         <span class="glyphicon glyphicon-floppy-save"></span>
-                    </button> -->
-                    <button class="btn btn-default" (click)="loadTemplate()" title="Load existing template">
+                    </button>
+                    <button class="btn btn-default" (click)="loadTemplate()" title="Load template">
                         <span class="glyphicon glyphicon-floppy-open"></span>
                     </button>
                 </div>
                 <div class="btn-group btn-group-xs">
-                    <button class="btn btn-default" (click)="setTemplateAsUserDefault()" title="Set this configuration as default for all the projects">
-                        Default
-                    </button>
+                    <div class="btn-group">
+                        <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                            Defaults
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right">
+                            <li>
+                                <a (click)="setUserDefault()">
+                                    Set this configuration as default for all projects
+                                </a>
+                            </li>
+                            <li>
+                                <a (click)="restoreDefault()">
+                                    Restore the default configuration
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

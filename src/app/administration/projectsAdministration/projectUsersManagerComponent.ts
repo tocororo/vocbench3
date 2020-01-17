@@ -1,8 +1,11 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ConfigurationComponents } from "../../models/Configuration";
 import { Language, Languages } from "../../models/LanguagesCountries";
+import { SettingsProp } from "../../models/Plugins";
 import { Project } from "../../models/Project";
+import { PartitionFilterPreference, Properties } from "../../models/Properties";
 import { ProjectUserBinding, Role, User, UsersGroup } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
@@ -11,7 +14,10 @@ import { UsersGroupsServices } from "../../services/usersGroupsServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
+import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { LoadConfigurationModalReturnData } from "../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { UserProjBindingModal, UserProjBindingModalData } from "./userProjBindingModal";
 
 @Component({
@@ -39,8 +45,11 @@ export class ProjectUsersManagerComponent {
     private selectedGroup: UsersGroup;
     private selectedUserGroup: UsersGroup;
 
-    constructor(private userService: UserServices, private adminService: AdministrationServices, private groupsService: UsersGroupsServices,
-        private prefSettingsServices: PreferencesSettingsServices, private basicModals: BasicModalServices, private modal: Modal) { }
+    private puTemplate: PartitionFilterPreference;
+
+    constructor(private userService: UserServices, private adminService: AdministrationServices, private groupsService: UsersGroupsServices, 
+        private prefSettingsServices: PreferencesSettingsServices, private vbProp: VBProperties,
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
 
     ngOnChanges(changes: SimpleChanges) {
@@ -91,21 +100,39 @@ export class ProjectUsersManagerComponent {
                             "Please, report this to the system administrator.", "error");
                     }
                 }
-            )
+            );
         }
     }
 
-    //==== USER PANEL ====
+    /** ==========================
+     * USERS PANEL
+     * ========================== */
 
     private selectUser(user: User) {
-        this.selectedUser = user;
-        this.adminService.getProjectUserBinding(this.project.getName(), this.selectedUser.getEmail()).subscribe(
-            puBinding => {
-                this.puBinding = puBinding;
-                this.selectedUserRole = null;
-                this.selectedUserLang = null;
+        if (this.selectedUser != user) {
+            this.selectedUser = user;
+            //init PUBinding
+            this.adminService.getProjectUserBinding(this.project.getName(), this.selectedUser.getEmail()).subscribe(
+                puBinding => {
+                    this.puBinding = puBinding;
+                    this.selectedUserRole = null;
+                    this.selectedUserLang = null;
+                }
+            );
+            /**
+             * only if admin (required in order to allow to read/edit settings of other users) init the template setting
+             */
+            if (this.isLoggedUserAdmin()) {
+                this.prefSettingsServices.getPUSettings([Properties.pref_res_view_partition_filter], this.project, this.selectedUser).subscribe(
+                    prefs => {
+                        let value = prefs[Properties.pref_res_view_partition_filter];
+                        if (value != null) {
+                            this.puTemplate = JSON.parse(value);
+                        }
+                    }
+                )
             }
-        );
+        }
     }
 
     private addUserToProject() {
@@ -148,9 +175,11 @@ export class ProjectUsersManagerComponent {
         );
     }
 
-    //==== PROJECT-USER PROPERTIES PANEL ====
+    /** ==========================
+     * PROJECT-USER SETTINGS PANEL
+     * ========================== */
 
-    //ROLES
+    //=========== ROLES ===========
 
     private selectUserRole(role: string) {
         if (this.selectedUserRole == role) {
@@ -204,7 +233,8 @@ export class ProjectUsersManagerComponent {
         return false;
     }
 
-    //GROUPS
+    
+    //=========== GROUPS ===========
 
     private selectUserGroup(group: UsersGroup) {
         if (this.selectedUserGroup == group) {
@@ -262,7 +292,7 @@ export class ProjectUsersManagerComponent {
     }
     
    
-    //LANGUAGES
+    //=========== LANGUAGES ===========
 
     private getPULanguages(): Language[] {
         var puLanguages: Language[] = [];
@@ -389,9 +419,50 @@ export class ProjectUsersManagerComponent {
         }
     }
 
+    //=========== TEMPLATES ===========
+
+    private loadTemplate() {
+        this.sharedModals.loadConfiguration("Load template", ConfigurationComponents.TEMPLATE_STORE).then(
+            (conf: LoadConfigurationModalReturnData) => {
+                let templateProp: SettingsProp = conf.configuration.properties.find(p => p.name == "template");
+                if (templateProp != null) {
+                    this.puTemplate = templateProp.value;
+                    this.updateTemplate();
+                }
+            }
+        )
+    }
+
+    private storeTemplate() {
+        let config: { [key: string]: any } = {
+            template: this.puTemplate
+        }
+        this.sharedModals.storeConfiguration("Store template", ConfigurationComponents.TEMPLATE_STORE, config);
+    }
+
+    private updateTemplate() {
+        this.prefSettingsServices.setPUSetting(Properties.pref_res_view_partition_filter, JSON.stringify(this.puTemplate), this.project, this.selectedUser).subscribe(
+            () => {
+                //in case the setting has been changed for the logged user and the project currently accessed => update its cached PU-settings
+                if (
+                    VBContext.getWorkingProject() != null && VBContext.getWorkingProject().getName() == this.project.getName() && //current accessed project
+                    VBContext.getLoggedUser().getEmail() == this.selectedUser.getEmail() //current logged user
+                ) {
+                    this.vbProp.refreshResourceViewPartitionFilter().subscribe();
+                }
+            }
+        );
+    }
+
+
+
     //AUTH
 
-    private isSelectedUserAdmin() {
+    private isLoggedUserAdmin(): boolean {
+        return VBContext.getLoggedUser().isAdmin();
+    }
+
+    private isSelectedUserAdmin(): boolean {
         if (this.selectedUser == null) {
             return false;
         } else {

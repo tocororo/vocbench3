@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTURIResource } from "../models/ARTResources";
 import { Project } from "../models/Project";
+import { User } from '../models/User';
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { VBContext } from '../utils/VBContext';
 
 @Injectable()
 export class PreferencesSettingsServices {
@@ -46,12 +48,12 @@ export class PreferencesSettingsServices {
     /**
      * Gets the preferences of the currently logged user for the currently open project
      */
-    getPUSettings(properties: string[], pluginID?: string, options?: VBRequestOptions) {
+    getPUSettings(properties: string[], project?: Project, user?: User, pluginID?: string, options?: VBRequestOptions) {
         var params: any = {
-            properties: properties
-        };
-        if (pluginID != null) {
-            params.pluginID = pluginID
+            properties: properties,
+            projectName: project != null ? project.getName() : VBContext.getWorkingProject().getName(),
+            email: user != null ? user.getEmail() : VBContext.getLoggedUser().getEmail(),
+            pluginID: pluginID
         }
         return this.httpMgr.doGet(this.serviceName, "getPUSettings", params, options);
     }
@@ -61,16 +63,14 @@ export class PreferencesSettingsServices {
      * @param property 
      * @param value 
      */
-    setPUSetting(property: string, value?: string, pluginID?: string, options?: VBRequestOptions) {
+    setPUSetting(property: string, value?: string, project?: Project, user?: User, pluginID?: string, options?: VBRequestOptions) {
         var params: any = {
             property: property,
+            value: value,
+            projectName: project != null ? project.getName() : VBContext.getWorkingProject().getName(),
+            email: user != null ? user.getEmail() : VBContext.getLoggedUser().getEmail(),
+            pluginID: pluginID
         };
-        if (value != null) {
-            params.value = value;
-        }
-        if (pluginID != null) {
-            params.pluginID = pluginID
-        }
         return this.httpMgr.doPost(this.serviceName, "setPUSetting", params, options);
     }
 
