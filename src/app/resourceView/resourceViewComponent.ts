@@ -272,7 +272,7 @@ export class ResourceViewComponent {
             //these partitions are always returned, even when resource is not defined, so I need to check also if length == 0
             (!this.resViewResponse[ResViewPartition.lexicalizations] || this.resViewResponse[ResViewPartition.lexicalizations].length == 0) &&
             (!this.resViewResponse[ResViewPartition.properties] || this.resViewResponse[ResViewPartition.properties].length == 0) &&
-            (!this.resViewResponse[ResViewPartition.types] || this.resViewResponse[ResViewPartition.lexicalizations].length == 0) &&
+            (!this.resViewResponse[ResViewPartition.types] || this.resViewResponse[ResViewPartition.types].length == 0) &&
             //partitions optional
             !this.resViewResponse[ResViewPartition.broaders] &&
             !this.resViewResponse[ResViewPartition.classaxioms] &&
