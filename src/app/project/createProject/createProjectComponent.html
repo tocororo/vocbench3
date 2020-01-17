@@ -182,8 +182,7 @@
                             <label class="control-label col-sm-2">Repository Access:</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
-                                    <select class="form-control input-sm" [(ngModel)]="selectedRepositoryAccess" (ngModelChange)="onRepoAccessChange()"
-                                        name="selectedRepositoryAccess">
+                                    <select class="form-control input-sm" [(ngModel)]="selectedRepositoryAccess" name="selectedRepositoryAccess">
                                         <option *ngFor="let repoAcc of repositoryAccessList" [ngValue]="repoAcc">{{repoAcc}}</option>
                                     </select>
                                     <span class="input-group-btn">
@@ -300,12 +299,12 @@
                             </div>
                         </div>
                         <div class="subPanel-body">
-                            <form class="form-horizontal">
+                            <form *ngIf="!uriGenUseDefaultSetting" class="form-horizontal">
                                 <div class="form-group">
                                     <label class="control-label col-sm-1">Plugin:</label>
                                     <div class="col-sm-11">
                                         <select class="form-control input-sm" [(ngModel)]="selectedUriGenPlugin" (ngModelChange)="onUriGenPluginChanged()"
-                                            name="selectedUriGenPlugin" [disabled]="uriGenUseDefaultSetting">
+                                            name="selectedUriGenPlugin">
                                             <option *ngFor="let ugp of uriGenPluginList" [ngValue]="ugp">
                                                 {{ugp.factoryID.substring(ugp.factoryID.lastIndexOf('.')+1)}}
                                             </option>
@@ -316,14 +315,13 @@
                                     <label class="control-label col-sm-1">Configuration:</label>
                                     <div class="col-sm-11">
                                         <div class="input-group">
-                                            <select class="form-control input-sm" [(ngModel)]="selectedUriGenPluginConf" name="selectedUriGenPluginConf"
-                                                [disabled]="uriGenUseDefaultSetting">
+                                            <select class="form-control input-sm" [(ngModel)]="selectedUriGenPluginConf" name="selectedUriGenPluginConf">
                                                 <option *ngFor="let ugpConf of selectedUriGenPluginConfList" [ngValue]="ugpConf">
                                                     {{ugpConf.shortName}}
                                                 </option>
                                             </select>
                                             <span class="input-group-btn">
-                                                <button class="btn btn-default btn-sm" (click)="configureUriGenConf()" [disabled]="uriGenUseDefaultSetting">Configure</button>
+                                                <button class="btn btn-default btn-sm" (click)="configureUriGenConf()">Configure</button>
                                             </span>
                                         </div>
                                     </div>
@@ -342,7 +340,7 @@
                             </div>
                         </div>
                         <div class="subPanel-body">
-                            <form class="form-horizontal">
+                            <form *ngIf="!rendEngUseDefaultSetting" class="form-horizontal">
                                 <div class="form-group">
                                     <label class="control-label col-sm-1">Plugin:</label>
                                     <div class="col-sm-11">
@@ -384,18 +382,18 @@
                             </div>
                         </div>
                         <div class="subPanel-body">
-                            <form class="form-horizontal">
+                            <form *ngIf="useProjMetadataProp" class="form-horizontal">
                                 <div class="form-group">
                                     <label class="control-label col-sm-1">Creation date:</label>
                                     <div class="col-sm-11">
-                                        <input-editable [value]="createdProp" (valueEdited)="updateCreatedProp($event)" [disabled]="!useProjMetadataProp">
+                                        <input-editable [value]="createdProp" (valueEdited)="updateCreatedProp($event)">
                                         </input-editable>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="control-label col-sm-1">Modification date:</label>
                                     <div class="col-sm-11">
-                                        <input-editable [value]="modifiedProp" (valueEdited)="updateModifiedProp($event)" [disabled]="!useProjMetadataProp">
+                                        <input-editable [value]="modifiedProp" (valueEdited)="updateModifiedProp($event)">
                                         </input-editable>
                                     </div>
                                 </div>
@@ -408,16 +406,20 @@
                             <label style="flex: 1;">SHACL Shape Validation</label>
                             <div class="checkbox-inline">
                                 <label>
-                                    <input type="checkbox" [(ngModel)]="enableSHACL" [disabled]="!isSelectedRepoAccessCreateMode()">
-                                    <span *ngIf="!isSelectedRepoAccessCreateMode()" class="glyphicon glyphicon-exclamation-sign"
-                                        title="SHACL sail is only possible when creating a new repository, not when accessing an existing one.">
-                                    </span>
+                                    <input type="checkbox" [(ngModel)]="enableSHACL">
                                     Enable shape validation
                                 </label>
                             </div>
                         </div>
                         <div class="subPanel-body">
-                            <settings-renderer [(ngModel)]="shaclSettings" [disabled]="!enableSHACL"></settings-renderer>
+                            <ng-container *ngIf="enableSHACL">
+                                <settings-renderer *ngIf="isSelectedRepoAccessCreateMode()" [(ngModel)]="shaclSettings" [disabled]="!enableSHACL">
+                                </settings-renderer>
+                                <div *ngIf="!isSelectedRepoAccessCreateMode()" class="alert alert-warning">
+                                    <span class="glyphicon glyphicon-warning-sign"></span>
+                                    You should check that the existing repository being accessed actually supports SHACL with the desired settings.
+                                </div>
+                            </ng-container>
                         </div>
                     </div>
                 </div>

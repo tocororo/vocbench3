@@ -29,11 +29,7 @@ export class ValidationServices {
             timeUpperBound: timeUpperBound,
             limit: limit
         };
-        return this.httpMgr.doGet(this.serviceName, "getStagedCommitSummary", params).map(
-            stResp => {
-                return stResp;
-            }
-        );
+        return this.httpMgr.doGet(this.serviceName, "getStagedCommitSummary", params);
     }
 
     /**

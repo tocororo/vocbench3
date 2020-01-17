@@ -648,4 +648,4 @@ class ErrorAlertOptions {
     exceptionsToSkip?: string[]; //if provided, tells for which exceptions the alert should be skipped (useful only if show is true)
 }
 
-class STRequestParams { [key: string]: any }
+export class STRequestParams { [key: string]: any }

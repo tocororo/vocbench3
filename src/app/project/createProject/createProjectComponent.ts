@@ -494,15 +494,6 @@ export class CreateProjectComponent {
     }
 
     /**
-     * 
-     */
-    private onRepoAccessChange() {
-        if (!this.isSelectedRepoAccessCreateMode()) { //shacl is not available when accessing an existing repository
-            this.enableSHACL = false;
-        }
-    }
-
-    /**
      * Configure the selected repository access in case it is remote.
      */
     private configureRemoteRepositoryAccess() {
@@ -809,8 +800,9 @@ export class CreateProjectComponent {
         /**
          * Prepare shacl settings
          */
-        let shaclSettingsPar: Map<string, any> = new Map();
-        if (this.enableSHACL) {
+        let shaclSettingsPar: Map<string, any>;
+        if (this.enableSHACL && this.isSelectedRepoAccessCreateMode()) {
+            shaclSettingsPar = new Map();
             if (this.shaclSettings.requireConfiguration()) {
                 this.basicModals.alert("Create project", "You have enabled SHACL validation, but it requires configuration", "warning");
                 return;
