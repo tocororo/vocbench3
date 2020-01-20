@@ -161,8 +161,12 @@ export enum VBActionsEnum {
     resourcesSetDeprecated = "resourcesSetDeprecated",
     resourcesUpdateTriple = "resourcesUpdateTriple",
     resourcesUpdatePredicateObject = "resourcesUpdatePredicateObject",
+    //Shacl
+    shaclClearShapes = "shaclClearShapes",
+    shaclExportShapes = "shaclExportShapes",
+    shaclLoadShapes = "shaclLoadShapes",
     //Sheet2Rdf
-    sheet2Rdf = "Rdf", //generic
+    sheet2Rdf = "sheet2Rdf", //generic
     //Skos
     skosAddBroaderConcept = "skosAddBroaderConcept",
     skosAddConceptToScheme = "skosAddConceptToScheme",

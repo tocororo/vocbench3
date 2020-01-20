@@ -32,34 +32,52 @@
     <!--Configuration of project data, not available when there is no project accessed-->
     <div *ngIf="isUserLogged() && isProjectAccessed()" class="pull-right">
         <div class="dropdown pull-right">
-            <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown">
+            <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" (click)="onGlobalDataManagementMenuOpen()">
                 Global Data Management
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-                <li [ngClass]="{ disabled : !isLoadDataAuthorized() }">
+                <li [ngClass]="{ disabled : !loadDataAuthorized }">
                     <a [routerLink]="['/Config/LoadData']">
                         <span class="glyphicon glyphicon-open" style="margin-right: 5px"></span>Load data
                     </a>
                 </li>
-                <li [ngClass]="{ disabled : !isExportDataAuthorized() }">
+                <li [ngClass]="{ disabled : !exportDataAuthorized }">
                     <a [routerLink]="['/Config/ExportData']">
                         <span class="glyphicon glyphicon-save" style="margin-right: 5px"></span>Export data
                     </a>
                 </li>
-                <li [ngClass]="{ disabled : !isClearDataAuthorized() }">
+                <li [ngClass]="{ disabled : !clearDataAuthorized }">
                     <a (click)="clearData()">
                         <span class="glyphicon glyphicon-floppy-remove" style="margin-right: 5px"></span>Clear data
                     </a>
                 </li>
-                <li [ngClass]="{ disabled : !isVersioningAuthorized() }">
+                <li role="separator" class="divider"></li>
+                <li [ngClass]="{ disabled : !versioningAuthorized }">
                     <a [routerLink]="['/Config/Versioning']">
                         <span class="glyphicon glyphicon-time" style="margin-right: 5px"></span>Versioning
                     </a>
                 </li>
+                <li role="separator" class="divider"></li>
                 <li>
                     <a [routerLink]="['/Config/Refactor']">
                         <span class="glyphicon glyphicon-retweet" style="margin-right: 5px"></span>Refactor
+                    </a>
+                </li>
+                <li role="separator" class="divider"></li>
+                <li [ngClass]="{ disabled : !loadShapesAuthorized }">
+                    <a (click)="loadShacleShapes()">
+                        <span class="glyphicon glyphicon-open" style="margin-right: 5px"></span>Load shapes
+                    </a>
+                </li>
+                <li [ngClass]="{ disabled : !exportShapesAuthorized }">
+                    <a (click)="exportShacleShapes()">
+                        <span class="glyphicon glyphicon-save" style="margin-right: 5px"></span>Export shapes
+                    </a>
+                </li>
+                <li [ngClass]="{ disabled : !clearShapesAuthorized }">
+                    <a (click)="clearShacleShapes()">
+                        <span class="glyphicon glyphicon-floppy-remove" style="margin-right: 5px"></span>Clear shapes
                     </a>
                 </li>
             </ul>

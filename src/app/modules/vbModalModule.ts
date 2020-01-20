@@ -10,6 +10,7 @@ import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceA
 import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
 import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreationModal";
 import { PrefixNamespaceModal } from '../metadata/namespacesAndImports/prefixNamespaceModal';
+import { LoadShapesModal } from '../shacl/loadShapesModal';
 import { AlertCheckModal } from '../widget/modal/basicModal/alertModal/alertCheckModal';
 import { AlertModal } from '../widget/modal/basicModal/alertModal/alertModal';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -90,6 +91,7 @@ import { UserModule } from "./userModule";
         LexicalEntryListModal,
         LexiconListModal,
         LoadConfigurationModal,
+        LoadShapesModal,
         ManchesterExprModal,
         MappingPropertySelectionModal,
         NewConceptCfModal,
@@ -157,6 +159,7 @@ import { UserModule } from "./userModule";
         LexicalEntryListModal,
         LexiconListModal,
         LoadConfigurationModal,
+        LoadShapesModal,
         ManchesterExprModal,
         MappingPropertySelectionModal,
         NewConceptCfModal,
