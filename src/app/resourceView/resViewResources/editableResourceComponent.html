@@ -1,6 +1,14 @@
-<ng-template [ngIf]="!editInProgress && !editLiteralInProgress && !bulkEditInProgress">
-    <rdf-resource [resource]="resource" [rendering]="rendering" style="flex:1" (dblclick)="resourceDblClick()"></rdf-resource>
-    <div class="dropdown pull-right" title="Edit">
+<ng-container *ngIf="!editInProgress && !editLiteralInProgress && !bulkEditInProgress">
+
+    <rdf-resource *ngIf="!isImage" [resource]="resource" [rendering]="rendering" style="flex:1" (dblclick)="resourceDblClick()"></rdf-resource>
+    <div *ngIf="isImage" style="flex: 1;">
+        <a [href]="resource.getURI()" target="_blank">
+            <img [src]="resource.getURI()" (error)="isImage=false; hasImagePattern=false" (load)="isImage=true"
+                style="max-height: 100px; max-width: 300px;" [title]="resource.getURI()">
+        </a>
+    </div>
+    
+    <div class="dropdown pull-right" style="align-self: flex-start;" title="Edit">
         <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" [disabled]="editMenuDisabled">
             <span>&#9662;</span>
         </button>
@@ -24,14 +32,14 @@
             <li *ngIf="isReplaceMenuItemAvailable" [ngClass]="{ disabled: !editAuthorized || isInferred }">
                 <a (click)="replace()">Replace with existing resource</a>
             </li>
-            <ng-template [ngIf]="isXLabelMenuItemAvailable">
+            <ng-container *ngIf="isXLabelMenuItemAvailable">
                 <li [ngClass]="{ disabled: !spawnFromLabelAuthorized || isInferred }">
                     <a (click)="spawnNewConceptWithLabel()">Spawn new concept from this xLabel</a>
                 </li>
                 <li [ngClass]="{ disabled: !spawnFromLabelAuthorized || isInferred }">
                     <a (click)="moveLabelToConcept()">Move xLabel to another concept</a>
                 </li>
-            </ng-template>
+            </ng-container>
 
             <li *ngIf="copyLocalesAction.available" [ngClass]="{ disabled: !copyLocalesAuthorized }">
                 <a (click)="copyLocales()">Copy value to other locales</a>
@@ -48,9 +56,9 @@
             </li>
         </ul>
     </div>
-</ng-template>
+</ng-container>
 
-<ng-template [ngIf]="editInProgress || bulkEditInProgress || editLiteralInProgress">
+<ng-container *ngIf="editInProgress || bulkEditInProgress || editLiteralInProgress">
     <div class="input-group input-group-xs" style="flex: 1;">
         <textarea *ngIf="editLiteralInProgress; else editInProgressInput" class="form-control input-xs" style="height: initial; resize: vertical;"
             rows="1" [(ngModel)]="resourceStringValue"></textarea>
@@ -66,6 +74,4 @@
             </button>
         </div>
     </div>
-</ng-template>
-
-
+</ng-container>

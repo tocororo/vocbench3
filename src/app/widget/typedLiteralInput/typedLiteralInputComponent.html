@@ -41,8 +41,8 @@
             <ng-template #nonBoundBlock>
                 <div *ngIf="selectedDatatype?.getURI()=='http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'; else defaultBlock"
                     class="hbox" style="align-items: center;">
-                    <textarea class="form-control input-sm" rows="1" style="flex: 1; margin-right: 4px; height: initial" [(ngModel)]="stringValue"
-                        (ngModelChange)="onValueChanged()">
+                    <textarea class="form-control input-sm" rows="1" style="flex: 1; margin-right: 4px; height: initial; resize: vertical;"
+                        [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
                     </textarea>
                     <lang-picker [(ngModel)]="lang" (ngModelChange)="onLangChanged()"></lang-picker>
                 </div>

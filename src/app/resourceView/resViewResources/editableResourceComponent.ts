@@ -48,6 +48,9 @@ export class EditableResourceComponent {
 
     private isClassAxiom: boolean = false;
 
+    // private hasImagePattern: boolean = false;
+    private isImage: boolean = false;
+
     private editActionScenario: EditActionScenarioEnum = EditActionScenarioEnum.default;
 
     //actions authorizations
@@ -80,6 +83,14 @@ export class EditableResourceComponent {
         private dtValidator: DatatypeValidator) { }
 
     ngOnInit() {
+        //check if object is an URL of an image
+        if (this.resource instanceof ARTURIResource && this.resource.getRole() == RDFResourceRolesEnum.mention) {
+            let img = new Image();
+            img.onerror = () => this.isImage = false;
+            img.onload = () => this.isImage = true;
+            img.src = this.resource.getURI();
+        }
+
         /**
          * Initializes the editActionScenario: this tells how to handle the "edit" action.
          * For details see the comments written to the enum definitions of the EditActionScenarioEnum.

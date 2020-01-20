@@ -14,7 +14,7 @@
         <div style="flex: 1;" (keydown)="onKeydown($event)">
             <div class="hbox" style="align-items: center;">
                 <label style="width: 50px;">Value:</label>
-                <textarea id="toFocus" type="text" class="form-control input-sm" rows="1" style="flex: 1; margin-right: 4px; height: initial"
+                <textarea id="toFocus" type="text" class="form-control input-sm" rows="1" style="flex: 1; margin-right: 4px; height: initial; resize: vertical;"
                     [(ngModel)]="value" [disabled]="context.valueReadonly"></textarea>
                 <lang-picker [(ngModel)]="lang" [disabled]="context.langReadonly"></lang-picker>
             </div>
