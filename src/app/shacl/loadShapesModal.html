@@ -18,6 +18,11 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <div class="checkbox-inline pull-left">
+        <label>
+            <input type="checkbox" [(ngModel)]="clearExisting">Clear existing
+        </label>
+    </div>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!file || !selectedInputFormat">Ok</button>
     <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
 </div>

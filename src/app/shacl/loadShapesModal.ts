@@ -28,12 +28,18 @@ export class LoadShapesModal implements ModalComponent<BSModalContext> {
         this.inOutService.getInputRDFFormats().subscribe(
             formats => {
                 this.inputFormats = formats;
+                this.selectedInputFormat = this.inputFormats.find(f => f.name == "Turtle"); //init turtle
             }
         )
     }
 
     fileChangeEvent(file: File) {
         this.file = file;
+        this.inOutService.getParserFormatForFileName(this.file.name).subscribe(
+            formatName => {
+                this.selectedInputFormat = this.inputFormats.find(f => f.name == formatName);
+            }
+        )
     }
 
     ok(event: Event) {

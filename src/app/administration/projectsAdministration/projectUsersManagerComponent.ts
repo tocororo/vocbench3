@@ -109,29 +109,29 @@ export class ProjectUsersManagerComponent {
      * ========================== */
 
     private selectUser(user: User) {
-        if (this.selectedUser != user) {
-            this.selectedUser = user;
-            //init PUBinding
-            this.adminService.getProjectUserBinding(this.project.getName(), this.selectedUser.getEmail()).subscribe(
-                puBinding => {
-                    this.puBinding = puBinding;
-                    this.selectedUserRole = null;
-                    this.selectedUserLang = null;
-                }
-            );
-            /**
-             * only if admin (required in order to allow to read/edit settings of other users) init the template setting
-             */
-            if (this.isLoggedUserAdmin()) {
-                this.prefSettingsServices.getPUSettings([Properties.pref_res_view_partition_filter], this.project, this.selectedUser).subscribe(
-                    prefs => {
-                        let value = prefs[Properties.pref_res_view_partition_filter];
-                        if (value != null) {
-                            this.puTemplate = JSON.parse(value);
-                        }
-                    }
-                )
+        this.selectedUser = user;
+        //init PUBinding
+        this.adminService.getProjectUserBinding(this.project.getName(), this.selectedUser.getEmail()).subscribe(
+            puBinding => {
+                this.puBinding = puBinding;
+                this.selectedUserRole = null;
+                this.selectedUserLang = null;
             }
+        );
+        /**
+         * Init template; only if admin (required in order to allow to read/edit settings of other users)
+         */
+        if (this.isLoggedUserAdmin()) {
+            this.prefSettingsServices.getPUSettingsOfUser([Properties.pref_res_view_partition_filter], this.selectedUser, this.project).subscribe(
+                prefs => {
+                    let partitionFilter: PartitionFilterPreference;
+                    let value = prefs[Properties.pref_res_view_partition_filter];
+                    if (value != null) {
+                        partitionFilter = JSON.parse(value);
+                    }
+                    this.puTemplate = partitionFilter;
+                }
+            )
         }
     }
 
@@ -441,7 +441,7 @@ export class ProjectUsersManagerComponent {
     }
 
     private updateTemplate() {
-        this.prefSettingsServices.setPUSetting(Properties.pref_res_view_partition_filter, JSON.stringify(this.puTemplate), this.project, this.selectedUser).subscribe(
+        this.prefSettingsServices.setPUSettingOfUser(Properties.pref_res_view_partition_filter, this.selectedUser, JSON.stringify(this.puTemplate), this.project).subscribe(
             () => {
                 //in case the setting has been changed for the logged user and the project currently accessed => update its cached PU-settings
                 if (

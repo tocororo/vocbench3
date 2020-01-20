@@ -100,10 +100,12 @@ export class UsersAdministrationComponent {
     private initTemplate() {
         this.prefService.getPUSettingsUserDefault([Properties.pref_res_view_partition_filter], this.selectedUser.getEmail()).subscribe(
             prefs => {
+                let partitionFilter: PartitionFilterPreference;
                 let value = prefs[Properties.pref_res_view_partition_filter];
                 if (value != null) {
-                    this.userTemplate = JSON.parse(value);
+                    partitionFilter = JSON.parse(value);
                 }
+                this.userTemplate = partitionFilter;
             }
         )
     }

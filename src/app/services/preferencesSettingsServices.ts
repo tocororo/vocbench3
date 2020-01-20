@@ -48,14 +48,13 @@ export class PreferencesSettingsServices {
     /**
      * Gets the preferences of the currently logged user for the currently open project
      */
-    getPUSettings(properties: string[], project?: Project, user?: User, pluginID?: string, options?: VBRequestOptions) {
+    getPUSettings(properties: string[], project?: Project, pluginID?: string) {
         var params: any = {
             properties: properties,
             projectName: project != null ? project.getName() : VBContext.getWorkingProject().getName(),
-            email: user != null ? user.getEmail() : VBContext.getLoggedUser().getEmail(),
             pluginID: pluginID
         }
-        return this.httpMgr.doGet(this.serviceName, "getPUSettings", params, options);
+        return this.httpMgr.doGet(this.serviceName, "getPUSettings", params);
     }
 
     /**
@@ -63,15 +62,43 @@ export class PreferencesSettingsServices {
      * @param property 
      * @param value 
      */
-    setPUSetting(property: string, value?: string, project?: Project, user?: User, pluginID?: string, options?: VBRequestOptions) {
+    setPUSetting(property: string, value?: string, project?: Project, pluginID?: string) {
         var params: any = {
             property: property,
             value: value,
             projectName: project != null ? project.getName() : VBContext.getWorkingProject().getName(),
-            email: user != null ? user.getEmail() : VBContext.getLoggedUser().getEmail(),
             pluginID: pluginID
         };
-        return this.httpMgr.doPost(this.serviceName, "setPUSetting", params, options);
+        return this.httpMgr.doPost(this.serviceName, "setPUSetting", params);
+    }
+
+    /**
+     * Gets the preferences of the currently logged user for the currently open project
+     */
+    getPUSettingsOfUser(properties: string[], user: User, project?: Project, pluginID?: string, options?: VBRequestOptions) {
+        var params: any = {
+            properties: properties,
+            projectName: project != null ? project.getName() : VBContext.getWorkingProject().getName(),
+            email: user.getEmail(),
+            pluginID: pluginID
+        }
+        return this.httpMgr.doGet(this.serviceName, "getPUSettingsOfUser", params, options);
+    }
+
+    /**
+     * 
+     * @param property 
+     * @param value 
+     */
+    setPUSettingOfUser(property: string, user: User, value?: string, project?: Project, pluginID?: string, options?: VBRequestOptions) {
+        var params: any = {
+            property: property,
+            value: value,
+            projectName: project != null ? project.getName() : VBContext.getWorkingProject().getName(),
+            email: user.getEmail(),
+            pluginID: pluginID
+        };
+        return this.httpMgr.doPost(this.serviceName, "setPUSettingOfUser", params, options);
     }
 
     /**

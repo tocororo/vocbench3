@@ -54,8 +54,7 @@ export class VBProperties {
             Properties.pref_res_view_partition_filter, Properties.pref_graph_view_partition_filter, Properties.pref_hide_literal_graph_nodes
         ];
         
-        let options: VBRequestOptions = new VBRequestOptions({ ctxProject: projectCtx.getProject() });
-        let getPUSettingsNoPlugin = this.prefService.getPUSettings(properties, null, null, null, options).map(
+        let getPUSettingsNoPlugin = this.prefService.getPUSettings(properties, projectCtx.getProject()).map(
             prefs => {
                 let projectPreferences: ProjectPreferences = projectCtx.getProjectPreferences();
 
@@ -100,13 +99,12 @@ export class VBProperties {
                     projectPreferences.filterValueLang = JSON.parse(filterValueLangPref);
                 }
 
+                let resViewPartitionFilter: PartitionFilterPreference;
                 let rvPartitionFilterPref = prefs[Properties.pref_res_view_partition_filter];
                 if (rvPartitionFilterPref != null) {
-                    projectPreferences.resViewPartitionFilter = JSON.parse(rvPartitionFilterPref);
-                } else { //initialize with empty partition list for each role
-                    let resViewPartitionFilter: PartitionFilterPreference = {};
-                    projectPreferences.resViewPartitionFilter = resViewPartitionFilter;
+                    resViewPartitionFilter = JSON.parse(rvPartitionFilterPref);
                 }
+                projectPreferences.resViewPartitionFilter = resViewPartitionFilter;
 
                 //graph preferences
                 let graphPartitionFilterPref = prefs[Properties.pref_graph_view_partition_filter];
@@ -198,7 +196,7 @@ export class VBProperties {
         );
 
         // this is called separately since requires the pluginId parameter
-        let getPUSettingsRenderingEngine = this.prefService.getPUSettings([Properties.pref_languages], null, null, ExtensionPointID.RENDERING_ENGINE_ID, options).map(
+        let getPUSettingsRenderingEngine = this.prefService.getPUSettings([Properties.pref_languages], projectCtx.getProject(), ExtensionPointID.RENDERING_ENGINE_ID).map(
             prefs => {
                 projectCtx.getProjectPreferences().projectLanguagesPreference = prefs[Properties.pref_languages].split(",");
             }
@@ -252,7 +250,7 @@ export class VBProperties {
 
     setLanguagesPreference(languages: string[]) {
         let value: string = (languages.length == 0) ? null : languages.join(",");
-        this.prefService.setPUSetting(Properties.pref_languages, value, null, null, ExtensionPointID.RENDERING_ENGINE_ID).subscribe();
+        this.prefService.setPUSetting(Properties.pref_languages, value, null, ExtensionPointID.RENDERING_ENGINE_ID).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().projectLanguagesPreference = languages;
     }
 
@@ -331,9 +329,11 @@ export class VBProperties {
         return this.prefService.getPUSettings([Properties.pref_res_view_partition_filter]).map(
             prefs => {
                 let value = prefs[Properties.pref_res_view_partition_filter];
+                let filter: PartitionFilterPreference;
                 if (value != null) {
-                    VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter = JSON.parse(value);
+                    filter = JSON.parse(value);
                 }
+                VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter = filter;
             }
         );
     }
