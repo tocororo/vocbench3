@@ -64,22 +64,24 @@
                         <span class="glyphicon glyphicon-retweet" style="margin-right: 5px"></span>Refactor
                     </a>
                 </li>
-                <li role="separator" class="divider"></li>
-                <li [ngClass]="{ disabled : !loadShapesAuthorized }">
-                    <a (click)="loadShacleShapes()">
-                        <span class="glyphicon glyphicon-open" style="margin-right: 5px"></span>Load shapes
-                    </a>
-                </li>
-                <li [ngClass]="{ disabled : !exportShapesAuthorized }">
-                    <a (click)="exportShacleShapes()">
-                        <span class="glyphicon glyphicon-save" style="margin-right: 5px"></span>Export shapes
-                    </a>
-                </li>
-                <li [ngClass]="{ disabled : !clearShapesAuthorized }">
-                    <a (click)="clearShacleShapes()">
-                        <span class="glyphicon glyphicon-floppy-remove" style="margin-right: 5px"></span>Clear shapes
-                    </a>
-                </li>
+                <ng-container *ngIf="shaclEnabled">
+                    <li role="separator" class="divider"></li>
+                    <li [ngClass]="{ disabled : !loadShapesAuthorized }">
+                        <a (click)="loadShacleShapes()">
+                            <span class="glyphicon glyphicon-open" style="margin-right: 5px"></span>Load shapes
+                        </a>
+                    </li>
+                    <li [ngClass]="{ disabled : !exportShapesAuthorized }">
+                        <a (click)="exportShacleShapes()">
+                            <span class="glyphicon glyphicon-save" style="margin-right: 5px"></span>Export shapes
+                        </a>
+                    </li>
+                    <li [ngClass]="{ disabled : !clearShapesAuthorized }">
+                        <a (click)="clearShacleShapes()">
+                            <span class="glyphicon glyphicon-floppy-remove" style="margin-right: 5px"></span>Clear shapes
+                        </a>
+                    </li>
+                </ng-container>
             </ul>
         </div>
     </div>

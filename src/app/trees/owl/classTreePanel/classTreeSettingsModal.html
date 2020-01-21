@@ -3,11 +3,7 @@
 </div>
 <div class="modal-body vbox" style="min-height: 40vh;">
 
-    <div class="alert alert-info" style="margin-bottom: 6px;">
-        Here you can change the root class of the tree and create filters in order to filter out subClasses.
-    </div>
-
-    <div class="hbox" style="margin-bottom: 6px; align-items: center; flex: initial;">
+    <div class="hbox" style="align-items: center; flex: initial;">
         <label style="white-space: nowrap; margin-right: 4px;">
             Root class:
         </label>
@@ -17,9 +13,12 @@
         </button>
     </div>
 
-    <div class="panel panel-default vbox">
+    <div class="panel panel-default vbox" style="margin-top: 8px;">
         <div class="panel-heading">
-            <label>SubClasses filter</label>
+            <label>
+                SubClasses filter
+                <span class="glyphicon glyphicon-info-sign" title="Here you can create filters in order to hide subClasses of classes."></span>
+            </label>
             <div style="flex: 1"></div>
             <label>Enabled</label>
             <input type="checkbox" style="margin-left: 6px;" [(ngModel)]="filterEnabled" title="Enable filter">
@@ -78,6 +77,13 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div style="margin-top: 8px;">
+        <div class="checkbox-inline">
+            <label>
+                <input type="checkbox" [(ngModel)]="showInstNumb"> Show instances number
+            </label>
         </div>
     </div>
 

@@ -27,6 +27,7 @@ export class ConfigBarComponent {
     private currentProject: Project;
 
     private privacyStatementAvailable: boolean = false;
+    private shaclEnabled: boolean = false;
 
     private loadDataAuthorized: boolean;
     private exportDataAuthorized: boolean;
@@ -102,6 +103,7 @@ export class ConfigBarComponent {
      */
     private onGlobalDataManagementMenuOpen() {
         this.initAuth();
+        this.shaclEnabled = VBContext.getWorkingProject().isShaclEnabled();
     }
 
     private clearData() {

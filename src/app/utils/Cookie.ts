@@ -7,6 +7,7 @@ export class Cookie {
 	public static RES_VIEW_RENDERING = "resource_view.rendering";
 	public static RES_VIEW_MODE = "resource_view.mode";
 	public static RES_VIEW_TAB_SYNCED = "resource_view.tab_synced";
+	public static RES_VIEW_DISPLAY_IMG = "resource_view.display_img";
 
 	public static SHOW_DEPRECATED = "tree_list.show_deprecated";
 

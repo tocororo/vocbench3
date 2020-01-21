@@ -127,7 +127,7 @@ export class InstanceListComponent extends AbstractList {
      * @param cls 
      */
     private getNumberOfInstances(cls: ARTURIResource): Observable<number> {
-        if (VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().showInstancesNumber) { //if num inst are already computed when building the tree...
+        if (VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().classTreePreferences.showInstancesNumber) { //if num inst are already computed when building the tree...
             return Observable.of(this.cls.getAdditionalProperty(ResAttribute.NUM_INST));
         } else { //otherwise call a service
             return this.clsService.getNumberOfInstances(cls, VBRequestOptions.getRequestOptions(this.projectCtx));

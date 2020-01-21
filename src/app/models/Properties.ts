@@ -92,6 +92,7 @@ export enum ClassIndividualPanelSearchMode {
 export class ClassTreePreference {
     rootClassUri: string;
     filter: ClassTreeFilter;
+    showInstancesNumber: boolean
 }
 export class ClassTreeFilter {
     enabled: boolean;
@@ -143,7 +144,6 @@ export class ProjectPreferences {
     activeSchemes: ARTURIResource[] = [];
     activeLexicon: ARTURIResource;
     showFlags: boolean = true;
-    showInstancesNumber: boolean = true;
     projectThemeId: number = null;
 
     classTreePreferences: ClassTreePreference;

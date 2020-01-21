@@ -31,6 +31,8 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
     private renderingClasses: boolean = false;
     private renderingFilter: boolean = false;
 
+    private showInstNumb: boolean;
+
     constructor(public dialog: DialogRef<BSModalContext>, private clsService: ClassesServices, private resourceService: ResourcesServices, 
         private vbProp: VBProperties, private basicModals: BasicModalServices , private browsingModals: BrowsingModalServices) {
         this.context = dialog.context;
@@ -39,13 +41,16 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
     ngOnInit() {
         let clsTreePref: ClassTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences;
         this.pristineClassPref = JSON.parse(JSON.stringify(clsTreePref));
-        this.filterEnabled = clsTreePref.filter.enabled;
+
+        //init root class
         this.resourceService.getResourceDescription(new ARTURIResource(clsTreePref.rootClassUri)).subscribe(
             res => {
                 this.rootClass = <ARTURIResource>res;
             }
         );
 
+        //init filter
+        this.filterEnabled = clsTreePref.filter.enabled;
         let filteredClss: ARTURIResource[] = [];
         for (var key in clsTreePref.filter.map) {
             filteredClss.push(new ARTURIResource(key));
@@ -60,6 +65,8 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
             )
         }
         
+        //init show instances number
+        this.showInstNumb = clsTreePref.showInstancesNumber;
     }
 
     /**
@@ -203,6 +210,8 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
             }
             filterMap[f.cls.getURI()] = filteredSubClasses;
         })
+        
+        //update the settings only if changed
         if (
             JSON.stringify(this.pristineClassPref.filter.map) != JSON.stringify(filterMap) ||
             this.pristineClassPref.filter.enabled != this.filterEnabled
@@ -212,6 +221,10 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
 
         if (this.pristineClassPref.rootClassUri != this.rootClass.getURI()) {
             this.vbProp.setClassTreeRoot(this.rootClass.getURI());
+        }
+
+        if (this.pristineClassPref.showInstancesNumber != this.showInstNumb) {
+            this.vbProp.setShowInstancesNumber(this.showInstNumb);
         }
 
         //only if the root class changed close the dialog (so that the class tree refresh)

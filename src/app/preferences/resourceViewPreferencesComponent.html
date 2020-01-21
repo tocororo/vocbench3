@@ -1,42 +1,60 @@
 <div class="subPanel">
     <div class="subPanel-heading">
-        <label style="flex: 1">Resource view mode:</label>
+        <label style="flex: 1">Resource view:</label>
     </div>
     <div class="subPanel-body">
-        <div class="hbox">
-            <div class="vbox" style="margin-right: 8px;">
-                <select class="form-control input-sm" style="margin-bottom: 5px;" [(ngModel)]="resViewMode" (ngModelChange)="onResViewModeChanged()">
-                    <option value="splitted">Splitted</option>
-                    <option value="tabbed">Tabbed</option>
-                </select>
-                <div class="alert alert-info" role="alert">
-                    <span *ngIf="resViewMode == 'tabbed'">
-                        The Resource View is shown in a tab and multiple Resource View can be open in different tabs.
-                    </span>
-                    <span *ngIf="resViewMode == 'splitted'">
-                        The Resource View panel is splitted in two: on the left there is a main Resource View which describes
-                        (and is synched with) the resource selected in the tree/list; on the right there is an optional
-                        secondary Resource View which describes a resource selected (double click) from the main Resource View.
-                    </span>
-                </div>
-                <div *ngIf="resViewMode == 'tabbed'">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" [(ngModel)]="resViewTabSync" (ngModelChange)="onTabSyncChange()">
-                            Keep selected tab synchronized with tree/list
-                            <span class="glyphicon glyphicon-exclamation-sign"
-                                title="It is recommended to disable this option. The synchronization between tabs and tree/list could slow down the navigation of the ResourceView tabbed panel.">
-                            </span>
-                        </label>
+
+        <div class="panel panel-default">
+            <div class="panel-body hbox">
+                <div class="vbox" style="margin-right: 8px;">
+                    <div class="hbox" style="align-items: center;">
+                        <label>Mode:</label>
+                        <select class="form-control input-sm" style="margin-left: 4px;" [(ngModel)]="resViewMode" (ngModelChange)="onResViewModeChange()">
+                            <option value="splitted">Splitted</option>
+                            <option value="tabbed">Tabbed</option>
+                        </select>
+                    </div>
+                    <div class="alert alert-info" style="margin-top: 4px;">
+                        <span *ngIf="resViewMode == 'tabbed'">
+                            The Resource View is shown in a tab and multiple Resource View can be open in different tabs.
+                        </span>
+                        <span *ngIf="resViewMode == 'splitted'">
+                            The Resource View panel is splitted in two: on the left there is a main Resource View which describes
+                            (and is synched with) the resource selected in the tree/list; on the right there is an optional
+                            secondary Resource View which describes a resource selected (double click) from the main Resource View.
+                        </span>
+                    </div>
+                    <div *ngIf="resViewMode == 'tabbed'">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" [(ngModel)]="resViewTabSync" (ngModelChange)="onTabSyncChange()">
+                                Keep selected tab synchronized with tree/list
+                                <span class="glyphicon glyphicon-exclamation-sign"
+                                    title="It is recommended to disable this option. The synchronization between tabs and tree/list could slow down the navigation of the ResourceView tabbed panel.">
+                                </span>
+                            </label>
+                        </div>
                     </div>
                 </div>
-
-            </div>
-            <div>
-                <img *ngIf="resViewMode == 'tabbed'" src="../../assets/images/res_view_tabbed.jpg">
-                <img *ngIf="resViewMode == 'splitted'" src="../../assets/images/res_view_splitted.jpg">
+                <div>
+                    <img *ngIf="resViewMode == 'tabbed'" src="../../assets/images/res_view_tabbed.jpg" style="height: 100px;">
+                    <img *ngIf="resViewMode == 'splitted'" src="../../assets/images/res_view_splitted.jpg" style="height: 100px;">
+                </div>
             </div>
         </div>
-            
+        <div class="panel panel-default" style="padding: 4px; margin-top: 2px">
+            <div class="panel-body">
+                <div class="checkbox-inline">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="displayImg" (ngModelChange)="onDisplayImgChange()">
+                        Display images
+                        <span class="glyphicon glyphicon-info-sign"
+                            title="If enabled, URL values resolvable to images on the web will be displayed as images (preview) in the ResourceView">
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

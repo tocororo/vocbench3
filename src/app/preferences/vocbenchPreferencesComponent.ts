@@ -11,7 +11,6 @@ import { VBProperties } from "../utils/VBProperties";
 export class VocbenchPreferencesComponent {
 
     private showFlags: boolean;
-    private showInstNumb: boolean;
     private themes: Theme[] = UIUtils.themes;
     private selectedTheme: Theme = this.themes[0];
 
@@ -20,7 +19,6 @@ export class VocbenchPreferencesComponent {
     ngOnInit() {
         //no need to call the service to get the following preferences, since they are already initialized when user accessed the project
         this.showFlags = this.properties.getShowFlags()
-        this.showInstNumb = VBContext.getWorkingProjectCtx().getProjectPreferences().showInstancesNumber;
         let projThemePref = VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId;
         this.themes.forEach(t => {
             if (t.id == projThemePref) { this.selectedTheme = t; }
@@ -31,12 +29,6 @@ export class VocbenchPreferencesComponent {
 
     private onShowFlagChange() {
         this.properties.setShowFlags(this.showFlags);
-    }
-
-    //show instance number handlers
-
-    private onShowInstNumbChange() {
-        this.properties.setShowInstancesNumber(this.showInstNumb);
     }
 
     //theme handler

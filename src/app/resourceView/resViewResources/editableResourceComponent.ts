@@ -3,7 +3,7 @@ import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResource
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { ResViewPartition } from "../../models/ResourceView";
 import { RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
-import { ManchesterServices, ExpressionCheckResponse } from "../../services/manchesterServices";
+import { ExpressionCheckResponse, ManchesterServices } from "../../services/manchesterServices";
 import { PropertyServices } from "../../services/propertyServices";
 import { RefactorServices } from "../../services/refactorServices";
 import { ResourcesServices } from "../../services/resourcesServices";
@@ -12,6 +12,7 @@ import { DatatypeValidator } from "../../utils/DatatypeValidator";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
+import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
@@ -80,11 +81,11 @@ export class EditableResourceComponent {
         private manchesterService: ManchesterServices, private refactorService: RefactorServices,
         private basicModals: BasicModalServices, private creationModals: CreationModalServices,
         private browsingModals: BrowsingModalServices, private rvModalService: ResViewModalServices,
-        private dtValidator: DatatypeValidator) { }
+        private dtValidator: DatatypeValidator, private vbProp: VBProperties) { }
 
     ngOnInit() {
-        //check if object is an URL of an image
-        if (this.resource instanceof ARTURIResource && this.resource.getRole() == RDFResourceRolesEnum.mention) {
+        //check if object is an URL of an image. Only in case the settings is enabled and the value is an IRI mention
+        if (this.vbProp.getResourceViewDisplayImg() && this.resource instanceof ARTURIResource && this.resource.getRole() == RDFResourceRolesEnum.mention) {
             let img = new Image();
             img.onerror = () => this.isImage = false;
             img.onload = () => this.isImage = true;

@@ -77,14 +77,6 @@ export class VBProperties {
 
                 projectPreferences.showFlags = prefs[Properties.pref_show_flags] == "true"
 
-                let showInstPref: string = prefs[Properties.pref_show_instances_number];
-                if (showInstPref != null) {
-                    projectPreferences.showInstancesNumber = showInstPref == "true";
-                } else { //if not specified, true for RDFS and OWL projects, false otherwise
-                    let modelType: string = projectCtx.getProject().getModelType();
-                    projectPreferences.showInstancesNumber = modelType == RDFS.uri || modelType == OWL.uri;
-                }
-
                 let projectThemeId = prefs[Properties.pref_project_theme];
                 projectPreferences.projectThemeId = projectThemeId;
                 UIUtils.changeNavbarTheme(projectThemeId);
@@ -127,18 +119,28 @@ export class VBProperties {
                     filter: {
                         enabled: true,
                         map: {}
-                    }
+                    },
+                    showInstancesNumber: false
                 };
-                let classTreeFilterPref: any = JSON.parse(prefs[Properties.pref_class_tree_filter]);
+                //- subclass filter
+                let classTreeFilterPref: any = JSON.parse(prefs[Properties.pref_class_tree_filter]); 
                 if (classTreeFilterPref != null) {
                     classTreePreferences.filter = classTreeFilterPref;
                 }
-                let classTreeRootPref: string = prefs[Properties.pref_class_tree_root];
+                //- tree root
+                let classTreeRootPref: string = prefs[Properties.pref_class_tree_root]; 
                 if (classTreeRootPref != null) {
                     classTreePreferences.rootClassUri = classTreeRootPref;
                 }
                 projectPreferences.classTreePreferences = classTreePreferences;
-
+                //- show Instances number
+                let showInstPref: string = prefs[Properties.pref_show_instances_number];
+                if (showInstPref != null) {
+                    classTreePreferences.showInstancesNumber = showInstPref == "true";
+                } else { //if not specified, true for RDFS and OWL projects, false otherwise
+                    let modelType: string = projectCtx.getProject().getModelType();
+                    classTreePreferences.showInstancesNumber = modelType == RDFS.uri || modelType == OWL.uri;
+                }
 
                 //concept tree preferences
                 let conceptTreePreferences: ConceptTreePreference = new ConceptTreePreference();
@@ -235,12 +237,6 @@ export class VBProperties {
         this.prefService.setPUSetting(Properties.pref_show_flags, value).subscribe()
     }
 
-    setShowInstancesNumber(show: boolean) {
-        VBContext.getWorkingProjectCtx().getProjectPreferences().showInstancesNumber = show;
-        let value = show ? "true" : null;
-        this.prefService.setPUSetting(Properties.pref_show_instances_number, value).subscribe()
-    }
-
     setProjectTheme(theme: number) {
         VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId = theme;
         UIUtils.changeNavbarTheme(theme);
@@ -273,6 +269,11 @@ export class VBProperties {
     setClassTreeRoot(rootUri: string) {
         this.prefService.setPUSetting(Properties.pref_class_tree_root, rootUri).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.rootClassUri = rootUri;
+    }
+    setShowInstancesNumber(show: boolean) {
+        VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences.showInstancesNumber = show;
+        let value = show ? "true" : null;
+        this.prefService.setPUSetting(Properties.pref_show_instances_number, value).subscribe()
     }
 
     //concept tree settings
@@ -431,41 +432,32 @@ export class VBProperties {
     ============================= */
 
     /**
-     * Sets the preference to show or hide the inferred information in resource view
+     * ResView Inference
      */
     setInferenceInResourceView(showInferred: boolean) {
         Cookie.setCookie(Cookie.RES_VIEW_INCLUDE_INFERENCE, showInferred + "", 365*10);
     }
-    /**
-     * Gets the preference to show or hide the inferred information in resource view
-     */
     getInferenceInResourceView(): boolean {
         return Cookie.getCookie(Cookie.RES_VIEW_INCLUDE_INFERENCE) == "true";
     }
 
     /**
-     * Sets the preference to show the URI or the rendering of resources in resource view
+     * ResView Rendering
      */
     setRenderingInResourceView(rendering: boolean) {
         Cookie.setCookie(Cookie.RES_VIEW_RENDERING, rendering + "", 365*10);
     }
-    /**
-     * Gets the preference to show the URI or the rendering of resources in resource view
-     */
     getRenderingInResourceView(): boolean {
         let cookieValue: string = Cookie.getCookie(Cookie.RES_VIEW_RENDERING);
         return (cookieValue == null || cookieValue == "true"); //default true, so true if cookie is not defined
     }
 
     /**
-     * Sets the preference about the resource view mode
+     * ResView mode
      */
     setResourceViewMode(mode: ResourceViewMode) {
         Cookie.setCookie(Cookie.RES_VIEW_MODE, mode, 365*10);
     }
-    /**
-     * Gets the preference about the resource view mode
-     */
     getResourceViewMode(): ResourceViewMode {
         let mode: ResourceViewMode = <ResourceViewMode>Cookie.getCookie(Cookie.RES_VIEW_MODE);
         if (mode != ResourceViewMode.splitted && mode != ResourceViewMode.tabbed) {
@@ -475,30 +467,32 @@ export class VBProperties {
         return mode;
     }
     /**
-     * Sets the preference to keep in sync the tree/list with the resource in the tab
-     * @param sync
+     * ResView Tab sync
      */
     setResourceViewTabSync(sync: boolean) {
         Cookie.setCookie(Cookie.RES_VIEW_TAB_SYNCED, sync + "", 365*10);
     }
-    /**
-     * Gets the preference to keep in sync the tree/list with the resource in the tab
-     */
     getResourceViewTabSync(): boolean {
         let cookieValue: string = Cookie.getCookie(Cookie.RES_VIEW_TAB_SYNCED);
         return cookieValue == "true";
     }
 
     /**
-     * Sets the preference to show the deprecated resources in the trees/lists
-     * @param showDeprecated 
+     * ResView display img
+     */
+    setResourceViewDisplayImg(display: boolean) {
+        Cookie.setCookie(Cookie.RES_VIEW_DISPLAY_IMG, display + "");
+    }
+    getResourceViewDisplayImg(): boolean {
+        return Cookie.getCookie(Cookie.RES_VIEW_DISPLAY_IMG) == "true";
+    }
+
+    /**
+     * Tree/list Show deprecated
      */
     setShowDeprecated(showDeprecated: boolean) {
         Cookie.setCookie(Cookie.SHOW_DEPRECATED, showDeprecated + "", 365*10);
     }
-    /**
-     * Gets the preference to show the deprecated resources in the trees/lists
-     */
     getShowDeprecated(): boolean {
         let cookieValue: string = Cookie.getCookie(Cookie.SHOW_DEPRECATED);
         return cookieValue != "false"; //default true

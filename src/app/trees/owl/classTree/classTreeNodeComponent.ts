@@ -61,7 +61,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     ngOnInit() {
         super.ngOnInit();
         //show instance number only if enabled in the preferences and if the node belongs to a tree in TreePanelComponent
-        this.showInstanceNumber = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().showInstancesNumber && 
+        this.showInstanceNumber = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().classTreePreferences.showInstancesNumber && 
             (this.context == TreeListContext.dataPanel || this.context == TreeListContext.clsIndTree);
         //expand immediately the node if it is a root and if it is owl:Thing or rdfs:Resource
         if ((this.node.getURI() == OWL.thing.getURI() || this.node.getURI() == RDFS.resource.getURI()) && 
