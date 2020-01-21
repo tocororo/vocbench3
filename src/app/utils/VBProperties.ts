@@ -91,7 +91,7 @@ export class VBProperties {
                     projectPreferences.filterValueLang = JSON.parse(filterValueLangPref);
                 }
 
-                let resViewPartitionFilter: PartitionFilterPreference;
+                let resViewPartitionFilter: PartitionFilterPreference = {};
                 let rvPartitionFilterPref = prefs[Properties.pref_res_view_partition_filter];
                 if (rvPartitionFilterPref != null) {
                     resViewPartitionFilter = JSON.parse(rvPartitionFilterPref);

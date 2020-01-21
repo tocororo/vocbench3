@@ -38,7 +38,9 @@ export class ResourceViewTabbedComponent extends AbstractResourceViewPanel {
 
     deleteResource(resource: ARTResource) {
         let tab = this.getTabWithResource(resource);
-        this.closeTab(tab);
+        if (tab != null) {
+            this.closeTab(tab);
+        }
     }
 
     /**

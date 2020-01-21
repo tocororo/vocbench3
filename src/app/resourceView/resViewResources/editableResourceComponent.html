@@ -1,12 +1,9 @@
 <ng-container *ngIf="!editInProgress && !editLiteralInProgress && !bulkEditInProgress">
 
     <rdf-resource *ngIf="!isImage" [resource]="resource" [rendering]="rendering" style="flex:1" (dblclick)="resourceDblClick()"></rdf-resource>
-    <div *ngIf="isImage" style="flex: 1;">
-        <a [href]="resource.getURI()" target="_blank">
-            <img [src]="resource.getURI()" (error)="isImage=false; hasImagePattern=false" (load)="isImage=true"
-                style="max-height: 100px; max-width: 300px;" [title]="resource.getURI()">
-        </a>
-    </div>
+    <a *ngIf="isImage" [href]="resource.getURI()" target="_blank" style="flex: 1;">
+        <img [src]="resource.getURI()" (error)="isImage=false" style="max-height: 100px; max-width: 300px;" [title]="resource.getURI()">
+    </a>
     
     <div class="dropdown pull-right" style="align-self: flex-start;" title="Edit">
         <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" [disabled]="editMenuDisabled">

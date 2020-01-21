@@ -86,10 +86,13 @@ export class EditableResourceComponent {
     ngOnInit() {
         //check if object is an URL of an image. Only in case the settings is enabled and the value is an IRI mention
         if (this.vbProp.getResourceViewDisplayImg() && this.resource instanceof ARTURIResource && this.resource.getRole() == RDFResourceRolesEnum.mention) {
-            let img = new Image();
-            img.onerror = () => this.isImage = false;
-            img.onload = () => this.isImage = true;
-            img.src = this.resource.getURI();
+            let url = new URL(this.resource.getURI());
+            if ((/\.(gif|jpg|jpeg|tiff|png)$/i).test(url.pathname)) {
+                let img = new Image();
+                img.onerror = () => this.isImage = false;
+                img.onload = () => this.isImage = true;
+                img.src = this.resource.getURI();
+            }
         }
 
         /**
