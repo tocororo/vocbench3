@@ -31,12 +31,12 @@ export class ResourcesServices {
         return this.httpMgr.doPost(this.serviceName, "updateTriple", params).map(
             stResp => {
                 if (property.getURI() == RDFS.subClassOf.getURI()) {
-                    this.eventHandler.superClassUpdatedEvent.emit({child: <ARTURIResource>subject, oldParent: <ARTURIResource>value, newParent: <ARTURIResource>newValue});
+                    this.eventHandler.superClassUpdatedEvent.emit({ child: <ARTURIResource>subject, oldParent: <ARTURIResource>value, newParent: <ARTURIResource>newValue });
                 } else if (property.getURI() == RDFS.subPropertyOf.getURI()) {
-                    this.eventHandler.superPropertyUpdatedEvent.emit({child: <ARTURIResource>subject, oldParent: <ARTURIResource>value, newParent: <ARTURIResource>newValue});
-				} else if (property.getURI() == SKOS.broader.getURI()) {
-                    this.eventHandler.broaderUpdatedEvent.emit({child: <ARTURIResource>subject, oldParent: <ARTURIResource>value, newParent: <ARTURIResource>newValue});
-				}
+                    this.eventHandler.superPropertyUpdatedEvent.emit({ child: <ARTURIResource>subject, oldParent: <ARTURIResource>value, newParent: <ARTURIResource>newValue });
+                } else if (property.getURI() == SKOS.broader.getURI()) {
+                    this.eventHandler.broaderUpdatedEvent.emit({ child: <ARTURIResource>subject, oldParent: <ARTURIResource>value, newParent: <ARTURIResource>newValue });
+                }
             }
         );
     }
@@ -157,6 +157,26 @@ export class ResourcesServices {
         return this.httpMgr.doGet(this.serviceName, "getResourcePosition", params).map(
             stResp => {
                 return ResourcePosition.deserialize(stResp);
+            }
+        );
+    }
+
+    /**
+     * Returns the position (local/remote/unknown) of the given resources
+     * @param resource
+     */
+    getResourcesPosition(resources: ARTURIResource[]): Observable<{ [key: string]: ResourcePosition }> {
+        let resourcesIri: string[] = resources.map(r => r.toNT());
+        let params: any = {
+            resources: JSON.stringify(resourcesIri)
+        };
+        return this.httpMgr.doPost(this.serviceName, "getResourcesPosition", params).map(
+            stResp => {
+                let map: { [key: string]: ResourcePosition } = {};
+                for (let res in stResp) {
+                    map[res] = ResourcePosition.deserialize(stResp[res].position);
+                }
+                return map;
             }
         );
     }

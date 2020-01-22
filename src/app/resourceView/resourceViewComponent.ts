@@ -1,9 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
-import { Subscription } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { CollaborationModalServices } from "../collaboration/collaborationModalService";
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, LocalResourcePosition, RDFResourceRolesEnum, RemoteResourcePosition, ResAttribute, ResourcePosition } from "../models/ARTResources";
 import { Issue } from "../models/Collaboration";
 import { VersionInfo } from "../models/History";
+import { Project } from "../models/Project";
 import { PropertyFacet, ResourceViewCtx, ResViewPartition } from "../models/ResourceView";
 import { SemanticTurkey } from "../models/Vocabulary";
 import { CollaborationServices } from "../services/collaborationServices";
@@ -336,7 +337,13 @@ export class ResourceViewComponent {
             if (sort) {
                 this.sortObjects(poList);
             }
+
+            //resolve foreign URIs only for "Other properties" partition
+            if (partition == ResViewPartition.properties) {
+                this.resolveForeignURI(poList);
+            }
         }
+
         return poList;
     }
 
@@ -469,6 +476,113 @@ export class ResourceViewComponent {
         }
     }
 
+    /**
+     * Resolves the foreign IRIs of the given predicate object list.
+     * This method iterates over the values (objects in the poList) and in case there are foreign IRIs (IRI with role mention),
+     * tries to resolve them. The foreign IRIs could represent:
+     * - resources in local projects (position local)
+     * - resources in remote projects (position remote; currently left unresolved)
+     * - URL images to display (position unknown)
+     * @param pol 
+     */
+    private resolveForeignURI(pol: ARTPredicateObjects[]) {
+        //collect foreign IRIs, namely IRI values with role mention
+        let foreignResources: ARTURIResource[] = [];
+        pol.forEach(po => {
+            po.getObjects().forEach(o => {
+                if (o instanceof ARTURIResource && o.getRole() == RDFResourceRolesEnum.mention) { //if it is a URI mention
+                    foreignResources.push(o);
+                }
+            })
+        });
+        if (foreignResources.length > 0) {
+            //retrieve the position of the foreign resources
+            this.resourcesService.getResourcesPosition(foreignResources).subscribe(
+                positionMap => {
+                    //collect the foreign resources grouped by project
+                    let candidateImageURLs: string[] = []; //list of foreign IRIs which position is unknown
+                    let localProjectResourcesMap: { [projectName: string]: string[] } = {}; //for each local project -> list of IRI to resolve
+                    for (let resIri in positionMap) {
+                        let position = positionMap[resIri];
+                        if (position.isLocal()) {
+                            let projectName = (<LocalResourcePosition>position).project;
+                            if (projectName != VBContext.getWorkingProject().getName()) {
+                                if (localProjectResourcesMap[projectName] == null) {
+                                    localProjectResourcesMap[projectName] = [resIri];
+                                } else {
+                                    localProjectResourcesMap[projectName].push(resIri);
+                                }
+                            }
+                        } else if (position.isRemote()) {
+                            //at the moment nothing to do
+                        } else { //unknown => potential image URL?
+                            let url = new URL(resIri); //image URL could have query params appended, getting just pathname of URL resolves the issue
+                            if ((/\.(gif|jpg|jpeg|tiff|png)$/i).test(url.pathname)) {
+                                candidateImageURLs.push(resIri); //is a candidate only if satisfies the regex
+                            }
+                        }
+                    }
+                    /**
+                     * Resolves the local project foreign URIs
+                     */
+                    //prepare the service invocations for resolving the foreign URIs. One invocation for each project
+                    let resolveResourcesFn: Observable<void>[] = [];
+                    let resolvedResources: ARTURIResource[] = [];
+                    for (let projectName in localProjectResourcesMap) {
+                        let resources: ARTURIResource[] = localProjectResourcesMap[projectName].map(r => new ARTURIResource(r));
+                        HttpServiceContext.setContextProject(new Project(projectName));
+                        resolveResourcesFn.push(
+                            this.resourcesService.getResourcesInfo(resources).map(
+                                resources => {
+                                    resolvedResources = resolvedResources.concat(resources);
+                                }
+                            ).finally(
+                                () => HttpServiceContext.removeContextProject()
+                            )
+                        );
+                    }
+                    //invoke all the services, then (the resolvedResources array is filled) search and replace the values in the poList
+                    Observable.forkJoin(resolveResourcesFn).subscribe(
+                        () => {
+                            pol.forEach(po => {
+                                po.getObjects().forEach((o: ARTNode, index: number, array: ARTNode[]) => {
+                                    if (o instanceof ARTURIResource && o.getRole() == RDFResourceRolesEnum.mention) {
+                                        let resolved: ARTURIResource = resolvedResources.find(r => r.equals(o)); //search the values among the resolved ones
+                                        if (resolved != null) { //if found, replace
+                                            //replace the entire value (instead of just the attributes) for triggering the ngOnChanges in the rdf-resource component
+                                            let resToReplace: ARTURIResource = <ARTURIResource>array[index].clone();
+                                            resToReplace.setShow(resolved.getShow());
+                                            resToReplace.setRole(resolved.getRole());
+                                            resToReplace.setNature(resolved.getNature());
+                                            array[index] = resToReplace; //replace
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                    );
+                    /**
+                     * Resolves the images URLs
+                     */
+                    candidateImageURLs.forEach(url => {
+                        let i = new Image();
+                        i.onload = () => { //if succesfully loaded => it is an image => search and replace the values in the poList
+                            pol.forEach(po => {
+                                po.getObjects().forEach((o: ARTNode, index: number, array: ARTNode[]) => {
+                                    if (o instanceof ARTURIResource && o.getRole() == RDFResourceRolesEnum.mention && o.getURI() == url) {
+                                        let resToReplace: ARTURIResource = <ARTURIResource>array[index].clone();
+                                        resToReplace.setAdditionalProperty(ResAttribute.IS_IMAGE, true);
+                                        array[index] = resToReplace;
+                                    }
+                                });
+                            });
+                        }
+                        i.src = url;
+                    });
+                }
+            );
+        }
+    }
 
     /**
      * HEADING BUTTON HANDLERS

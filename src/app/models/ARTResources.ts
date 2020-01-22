@@ -103,6 +103,9 @@ export abstract class ARTResource extends ARTNode {
             this.nature.push({ role: role, graphs: [graph] });
         }
     }
+    setNature(nature: ResourceNature[]) {
+        this.nature = nature;
+    }
     getNature(): ResourceNature[] {
         return this.nature;
     }
@@ -347,6 +350,9 @@ export class ResAttribute {
 
     //useful in ResourceView to render potentially reified resource as not reified
     public static NOT_REIFIED = "notReified";//
+
+    //useful in ResourceView to render the value as image
+    public static IS_IMAGE = "isImage";
 
 }
 

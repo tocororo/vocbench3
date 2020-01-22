@@ -74,7 +74,7 @@
                         </td>
                         <td *ngIf="showColumn('Repository Location')" class="text-center">
                             {{p.getRepositoryLocation().location}}
-                            <span *ngIf="p.isRepositoryRemote()" class="glyphicon glyphicon-info-sign" [title]="p.getRepositoryLocation().serverURL"></span>
+                            <span *ngIf="p.isRepositoryRemote()" class="glyphicon glyphicon-map-marker" [title]="p.getRepositoryLocation().serverURL"></span>
                         </td>
                     </tr>
                 </tbody>

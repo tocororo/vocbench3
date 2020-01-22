@@ -72,7 +72,7 @@ export class GraphModalServices {
                 const builder = new BSModalContextBuilder<GraphModalData>(
                     modalData, undefined, GraphModalData
                 );
-                let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size("lg").toJSON() };
+                let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
                 return this.modal.open(GraphModal, overlayConfig).result;
             }
         );
