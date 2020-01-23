@@ -47,6 +47,12 @@ export class PredicateObjectsRenderer {
     private addManuallyAllowed: boolean = false;
     private addExteranlResourceAllowed: boolean = false;
 
+    private actionAddTitle: string;
+
+    ngOnInit() {
+        this.actionAddTitle = "Add a " + this.predicateObjects.getPredicate().getShow();
+    }
+
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource'] || changes['readonly']) {
             this.initActionsStatus();
@@ -103,7 +109,7 @@ export class PredicateObjectsRenderer {
     private addExternalValue() {
         this.add.emit(AddAction.remote);
     }
-    
+
     /**
      * Removes an object related to the given predicate.
      * This is fired when the "-" button is clicked (near an object).
@@ -114,64 +120,27 @@ export class PredicateObjectsRenderer {
     private removeAllValues() {
         this.remove.emit();
     }
+
     /**
-     * Fired when the edit menu item is clicked (only for some partitions)
+     * Events forwarding
      */
-    private editValue(object: ARTNode) {
+
+    private onEdit(object: ARTNode) {
         this.edit.emit(object);
     }
-    /**
-     * Returns the title of the "+" button placed in a subPanel heading.
-     * This is specific of a predicate of a partition, so it depends from a predicate.
-     */
-    private getAddPropImgTitle(predicate: ARTURIResource): string {
-        return "Add a " + predicate.getShow();
-    }
-    /**
-     * Returns the title of the "-" button placed near an object in a subPanel body.
-     * This is specific of a predicate of a partition, so it depends from a predicate.
-     */
-    private getRemovePropImgTitle(predicate: ARTURIResource): string {
-        return "Remove " + predicate.getShow();
-    }
-    /**
-     * Fired when the object is updated
-     */
-    private onObjectUpdate() {
+    private onUpdate() {
         this.update.emit();
     }
-    /**
-     * Fired when an object in a subPanel is double clicked. It should simply emit a objectDblClick event.
-     */
-    private objectDblClick(obj: ARTNode) {
-        if (obj.isResource()) {//emit double click only for resources (not for ARTLiteral that cannot be described in a ResView)
-            this.dblclickObj.emit(<ARTResource>obj);
-        }
+    private onDblClick(obj: ARTResource) {
+        this.dblclickObj.emit(obj);
     }
-    /**
-     * 
-     * @param languages 
-     * @param obj 
-     */
-    private copyLocales(locales: Language[], obj: ARTNode) {
+    private onCopyLocale(locales: Language[], obj: ARTNode) {
         this.copyLocaleOutput.emit({ value: obj, locales: locales });
     }
 
     /**
-     * Tells if the given object need to be rendered as reifiedResource or as simple rdfResource.
-     * A resource should be rendered as reifiedResource if the predicate has custom range and the object
-     * is an ARTBNode or an ARTURIResource (so a reifiable object). Otherwise, if the object is a literal
-     * or the predicate has no custom range, the object should be rendered as simple rdfResource
-     * @param object object of the predicate object list to render in view.
+     * Paging handlers
      */
-    private renderAsReified(predicate: ARTURIResource, object: ARTNode) {
-        return (
-            predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && object.isResource() && 
-            !object.getAdditionalProperty(ResAttribute.NOT_REIFIED)
-        );
-    }
-
-    // PAGING
     private pagingLimit: number = 10;
     private limitActive: boolean = true;
     private showObject(index: number) {

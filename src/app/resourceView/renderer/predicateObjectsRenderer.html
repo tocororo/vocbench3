@@ -4,7 +4,7 @@
         <label style="flex: 1">{{predicateObjects.getPredicate().getShow()}}</label>
         <div class="btn-group">
             <button class="btn btn-xs btn-default predObjRenderPanelBtn" style="padding: 3px 6px;" (click)="addValue()"
-                [title]="getAddPropImgTitle(predicateObjects.getPredicate())" [disabled]="addDisabled">
+                [title]="actionAddTitle" [disabled]="addDisabled">
                 <span class="glyphicon glyphicon-plus" style="font-size: 9px;"></span>
             </button>
             <button class="btn btn-xs btn-default dropdown-toggle predObjRenderPanelBtn" style="padding: 3px;" data-toggle="dropdown"
@@ -26,33 +26,20 @@
     
     <div class="subPanel-body">
 
-        <ng-template ngFor let-obj [ngForOf]="predicateObjects.getObjects()" let-i="index">
-            <ng-template [ngIf]="showObject(i)"> <!-- paging filter -->
+        <ng-container *ngFor="let obj of predicateObjects.getObjects(); let i = index">
+            <resview-value-renderer *ngIf="showObject(i)"
+                [subject]="resource" [predicate]="predicateObjects.getPredicate()" [object]="obj" [rendering]="rendering" 
+                [readonly]="readonly" [partition]="partition"
+                (dblClick)="onDblClick(obj)" (delete)="removeValue(obj)" (edit)="onEdit(obj)" (update)="onUpdate()"
+                (copyLocale)="onCopyLocale($event, obj)">
+            </resview-value-renderer>
+        </ng-container>
 
-                <div class="listItem" [ngClass]="{ imported: obj.tripleScope == 'imported', inferred: obj.tripleScope == 'inferred'}">
-                    <editable-resource *ngIf="!renderAsReified(predicateObjects.getPredicate(), obj)" style="flex: 1" [resource]="obj" [rendering]="rendering" 
-                        [subject]="resource" [predicate]="predicateObjects.getPredicate()" [readonly]="readonly" [partition]="partition"
-                        (dblClick)="objectDblClick($event)" (delete)="removeValue(obj)" (edit)="editValue(obj)" (update)="onObjectUpdate()"
-                        (copyLocale)="copyLocales($event, obj)" [ngClass]="{ clickable: obj.isResource() }"></editable-resource>
-                    <ng-template [ngIf]="renderAsReified(predicateObjects.getPredicate(), obj)">
-                        <reified-resource [resource]="obj" [predicate]="predicateObjects.getPredicate()"
-                            [ngClass]="{ clickable: obj.isResource() }" style="flex:1"
-                            (dblClick)="objectDblClick($event)"></reified-resource>
-                        <button class="transparentBtn" [title]="getRemovePropImgTitle(predicateObjects.getPredicate())"
-                            (click)="removeValue(obj)" [disabled]="deleteDisabled">
-                            <span>-</span>
-                        </button>
-                    </ng-template>
-                </div>
-
-            </ng-template>
-        </ng-template>
-
-        <ng-template [ngIf]="showAllButton()">
+        <ng-container *ngIf="showAllButton()">
             <button class="btn btn-xs btn-default" style="width: 100%; color: #888; border-color: #ddd;" (click)="showAll()">
                 Show all...
             </button>
-        </ng-template>
+        </ng-container>
 
     </div>
 

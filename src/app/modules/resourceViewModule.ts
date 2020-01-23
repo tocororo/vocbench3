@@ -32,6 +32,7 @@ import { TopConceptsPartitionRenderer } from '../resourceView/renderer/impl/topC
 import { TypesPartitionRenderer } from '../resourceView/renderer/impl/typesPartitionRenderer';
 import { LexicalizationEnrichmentHelper } from '../resourceView/renderer/lexicalizationEnrichmentHelper';
 import { PredicateObjectsRenderer } from '../resourceView/renderer/predicateObjectsRenderer';
+import { ResourceViewValueRenderer } from '../resourceView/renderer/resourceViewValueRenderer';
 import { ResourceRenameComponent } from '../resourceView/resourceRenameComponent';
 import { ResourceViewComponent } from '../resourceView/resourceViewComponent';
 import { ResourceViewContextMenu } from '../resourceView/resourceViewCtxMenu';
@@ -70,6 +71,7 @@ import { TreeAndListModule } from "./treeAndListModule";
         ResourceViewSplittedComponent, ResourceViewTabbedComponent,
         ResourceRenameComponent, ResourceViewContextMenu,
         ReifiedResourceComponent, EditableResourceComponent,
+        ResourceViewValueRenderer,
         //renderers
         BroadersPartitionRenderer,
         ClassAxiomPartitionPartitionRenderer, 

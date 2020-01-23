@@ -3,20 +3,24 @@
         <img *ngIf="!lang; else resWithLangBlock" [src]="imgSrc" [title]="natureTooltip">    
         <ng-template #resWithLangBlock>
             <!--If flag is not available write the langTag over an empty flag-->
-            <div *ngIf="!langFlagAvailable" class="flagIcon" [title]="lang">
-                <img [src]="getUnknownFlagImgSrc()" [ngClass]="{disabled: !isExplicit()}">
+            <div *ngIf="!langFlagAvailable; else langFlagBlock" class="flagIcon" [title]="lang">
+                <img [src]="unknownFlagImgSrc" [ngClass]="{disabled: !isExplicit()}">
                 <span>{{lang}}</span>
             </div>
-            <img *ngIf="langFlagAvailable" [src]="imgSrc" [title]="lang" [ngClass]="{disabled: !isExplicit()}">
+            <ng-template #langFlagBlock>
+                <img [src]="imgSrc" [title]="lang" [ngClass]="{disabled: !isExplicit()}">
+            </ng-template>
         </ng-template>
     </ng-container>
 </div>
 <span [title]="resource.toNT()" [class]="'rdfResourceText' + renderingClass">
-    <ng-container *ngIf="literalWithLink">
+    <ng-container *ngIf="literalWithLink; else notLinkBlock">
         <ng-container *ngFor="let s of splittedLiteral; let even = even">
             <span *ngIf="even" style="white-space: pre-wrap">{{s}}</span>
             <a *ngIf="!even" [href]="s" target="_blank">{{s}}</a>
         </ng-container>
     </ng-container>
-    <span *ngIf="!literalWithLink" style="white-space: pre-wrap">{{renderingLabel}}</span>
+    <ng-template #notLinkBlock>
+        <span *ngIf="!literalWithLink" style="white-space: pre-wrap">{{renderingLabel}}</span>
+    </ng-template>
 </span>

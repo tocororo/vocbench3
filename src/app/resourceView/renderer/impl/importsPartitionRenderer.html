@@ -41,23 +41,14 @@
                     </div>
                 </div>
                 <div class="subPanel-body">
-                    <ng-template ngFor let-obj [ngForOf]="po.getObjects()">
-                        <div class="listItem">
-                            <editable-resource *ngIf="!renderAsReified(po.getPredicate(), obj)" style="flex: 1" [resource]="obj"
-                                [rendering]="rendering" [subject]="resource" [predicate]="po.getPredicate()" [readonly]="readonly"
-                                [partition]="partition" (dblClick)="objectDblClick($event)" (update)="onObjectUpdate()"
-                                (delete)="removePredicateObject(po.getPredicate(), obj)">
-                            </editable-resource>
-                            <ng-template [ngIf]="renderAsReified(po.getPredicate(), obj)">
-                                <reified-resource [resource]="obj" [predicate]="po.getPredicate()"
-                                    (dblClick)="objectDblClick($event)" style="flex:1"></reified-resource>
-                                <button class="transparentBtn" [title]="getRemovePropImgTitle(po.getPredicate())" 
-                                    (click)="removePredicateObject(po.getPredicate(), obj)" [disabled]="deleteDisabled">
-                                    <span>-</span>
-                                </button>
-                            </ng-template>
-                        </div>
-                    </ng-template>
+                    <ng-container *ngFor="let obj of po.getObjects()">
+                        <resview-value-renderer
+                            [subject]="resource" [predicate]="po.getPredicate()" [object]="obj" [rendering]="rendering" 
+                            [readonly]="readonly" [partition]="partition"
+                            (dblClick)="onDblClick(obj)" (delete)="removeValue(obj)" (edit)="onEdit(obj)" (update)="onUpdate()"
+                            (copyLocale)="onCopyLocale($event, obj)">
+                        </resview-value-renderer>
+                    </ng-container>
                 </div>
             </div>
         </ng-template>

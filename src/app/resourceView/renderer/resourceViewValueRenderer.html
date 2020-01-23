@@ -1,0 +1,14 @@
+<editable-resource *ngIf="!renderAsReified(); else reifiedBlock" [ngClass]="{ clickable: object.isResource() }" style="flex: 1"
+    [resource]="object" [rendering]="rendering" [subject]="subject" [predicate]="predicate" [readonly]="readonly" [partition]="partition"
+    (dblClick)="onDblClick($event)" (delete)="onDelete(object)" (edit)="onEdit(object)" (update)="onUpdate()"
+    (copyLocale)="onCopyLocale($event)" [title]="graphTitle">
+</editable-resource>
+
+<ng-template #reifiedBlock>
+    <reified-resource [ngClass]="{ clickable: object.isResource() }" style="flex:1" [resource]="object" [predicate]="predicate"
+        (dblClick)="onDblClick($event)">
+    </reified-resource>
+    <button class="transparentBtn" [title]="actionRemoveTitle" [disabled]="deleteDisabled" (click)="removeValue(object)">
+        <span>-</span>
+    </button>
+</ng-template>

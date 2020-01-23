@@ -18,6 +18,7 @@ export class RdfResourceComponent {
 
     private lang: string; //language of the resource
     private langFlagAvailable: boolean = false; //true if the language (if any) has a flag icon available
+    private unknownFlagImgSrc: string = UIUtils.getFlagImgSrc("unknown"); //pass an invalid langTag so returns the empty flag image source
 
     private literalWithLink: boolean = false; //true if the resource is a literal which contains url
     private splittedLiteral: string[]; //when literalWithLink is true, even elements are plain text, odd elements are url
@@ -156,11 +157,6 @@ export class RdfResourceComponent {
                 }
             }
         }
-    }
-
-    private getUnknownFlagImgSrc(): string {
-        //pass an invalid langTag so the method returns the empty flag image source
-        return UIUtils.getFlagImgSrc("unknown");
     }
 
 	/**
