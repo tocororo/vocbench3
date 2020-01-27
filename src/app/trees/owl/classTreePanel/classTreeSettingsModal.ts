@@ -79,7 +79,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
                 if (Cookie.getCookie(Cookie.WARNING_CUSTOM_ROOT, VBContext.getLoggedUser().getIri()) != "false") {
                     let model: string = VBContext.getWorkingProject().getModelType();
                     if ((model == RDFS.uri && cls.getURI() != RDFS.resource.getURI()) ||
-                        (cls.getURI() != RDFS.resource.getURI() && cls.getURI() != OWL.thing.getURI()) //OWL or SKOS model
+                        (cls.getURI() != RDFS.resource.getURI() && cls.getURI() != OWL.thing.getURI()) //OWL or RDFS model
                     ) {
                         let message: string = "Selecting a specific class as a root could hide newly created classes " + 
                             "that are not subclasses of the chosen root.";

@@ -141,6 +141,8 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                     });
                 }
                 this.rangeTypeChangeable = range.ranges.type == RangeType.undetermined;
+
+
                 //if a collection of admitted range classes is provided
                 if (range.ranges.rangeCollection != null) {
                     let rangeColl: ARTURIResource[] = range.ranges.rangeCollection.resources;
@@ -178,7 +180,10 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                             }
                         );
                     }
-                    
+                } else if (range.ranges.type == RangeType.literal) {
+                    //special case: DatatypeProperty without range => ranges.type is literal => treat like any property with rangeColl == RDFS.literal
+                    this.rangeTypeChangeable = true; //range type should be changeable only between typed and plain literal
+                    this.rangeTypes = [this.plainLiteralRangeType, this.typedLiteralRangeType];
                 }
 
                 // try to restore the model about the node
