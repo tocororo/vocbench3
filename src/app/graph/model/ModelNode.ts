@@ -54,11 +54,11 @@ export class ModelNode extends Node {
                 this.shape = NodeShape.label;
             } else if (role == RDFResourceRolesEnum.cls) {
                 this.shape = NodeShape.circle;
-                if (this.res.equals(RDFS.literal)) { //special case
-                    this.shape = NodeShape.rect;
-                }
             } else { //none of the previous => set circle as default
                 this.shape = NodeShape.circle;
+            }
+            if (this.res.getAdditionalProperty("isDatatype")) { //special case: all datatypes are square
+                this.shape = NodeShape.rect;
             }
         } else { //literal
             this.shape = NodeShape.rect;
@@ -70,8 +70,8 @@ export class ModelNode extends Node {
         if (shape == NodeShape.circle) {
             this.measures = { radius: Size.Circle.radius };
         } else if (shape == NodeShape.rect) {
-            if (this.res.equals(RDFS.literal)) { //rdfs:Literal rect in modelGraph is rendered smaller
-                this.measures = { width: 60, height: 30 };
+            if (this.res.getAdditionalProperty("isDatatype")) { //rdfs:Literal rect in modelGraph is rendered smaller
+                this.measures = { width: 70, height: 30 };
             } else {
                 this.measures = { width: Size.Rectangle.base, height: Size.Rectangle.height };
             }

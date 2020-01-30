@@ -30,7 +30,7 @@ export class RDFS {
     //CLASSES
     public static class = new ARTURIResource(RDFS.namespace + "Class", "rdfs:Class", RDFResourceRolesEnum.cls);
     public static container = new ARTURIResource(RDFS.namespace + "Container", "rdfs:Container", RDFResourceRolesEnum.cls);
-    public static containerMembershipProperty = new ARTURIResource(RDFS.namespace + "ContainerMembershipProperty", "rdfs:resource", RDFResourceRolesEnum.cls);
+    public static containerMembershipProperty = new ARTURIResource(RDFS.namespace + "ContainerMembershipProperty", "rdfs:ContainerMembershipProperty", RDFResourceRolesEnum.cls);
     public static datatype = new ARTURIResource(RDFS.namespace + "Datatype", "rdfs:Datatype", RDFResourceRolesEnum.cls);
     public static literal = new ARTURIResource(RDFS.namespace + "Literal", "rdfs:Literal", RDFResourceRolesEnum.cls);
     public static resource = new ARTURIResource(RDFS.namespace + "Resource", "rdfs:Resource", RDFResourceRolesEnum.cls);

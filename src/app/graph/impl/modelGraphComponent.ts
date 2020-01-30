@@ -318,7 +318,7 @@ export class ModelGraphComponent extends AbstractGraph {
      */
     private retrieveNode(node: ModelNode, relatedRes: ARTNode): ModelNode {
         let graphNode: ModelNode;
-        if (node.res.equals(RDFS.literal)) { //rdfs:Literal node must not be reused => create a new one each time
+        if (node.res.getAdditionalProperty("isDatatype")) { //datatype nodes must not be reused => create a new one each time
             graphNode = node;
             this.graph.addNode(graphNode);
         } else if (node.res.equals(OWL.thing)) { //owl:Thing node can be reused only if linked with the same resource

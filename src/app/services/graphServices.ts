@@ -85,11 +85,17 @@ export class GraphServices {
             (annotatedIRIs: ARTURIResource[]) => {
                 let annotatedModel: GraphModelRecord[] = [];
                 plainModel.forEach(record => {
+                    let annotatedSource: ARTURIResource = annotatedIRIs.find(res => res.getURI() == record.source);
+                    let annotatedLink: ARTURIResource = annotatedIRIs.find(res => res.getURI() == record.link);
+                    let annotatedTarget: ARTURIResource = annotatedIRIs.find(res => res.getURI() == record.target);
+                    if (record.rangeDatatype) {
+                        annotatedTarget.setAdditionalProperty("isDatatype", true);
+                    }
                     annotatedModel.push({
-                        source: annotatedIRIs[ResourceUtils.indexOfNode(annotatedIRIs, new ARTURIResource(record.source))],
-                        link: annotatedIRIs[ResourceUtils.indexOfNode(annotatedIRIs, new ARTURIResource(record.link))],
-                        target: annotatedIRIs[ResourceUtils.indexOfNode(annotatedIRIs, new ARTURIResource(record.target))],
-                        classAxiom: record.classAxiom
+                        source: annotatedSource,
+                        link: annotatedLink,
+                        target: annotatedTarget,
+                        classAxiom: record.classAxiom,
                     });
                 });
                 return annotatedModel;
@@ -104,4 +110,5 @@ class PlainGraphModelRecord {
     link: string;
     target: string;
     classAxiom: boolean;
+    rangeDatatype: boolean;
 }
