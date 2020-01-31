@@ -45,9 +45,8 @@
                         <resview-value-renderer
                             [subject]="resource" [predicate]="po.getPredicate()" [object]="obj" [rendering]="rendering" 
                             [readonly]="readonly" [partition]="partition"
-                            (dblClick)="objectDblClick($event)" (delete)="removePredicateObject(po.getPredicate(), obj)"
-                            (edit)="editHandler(po.getPredicate(), $event)" (update)="onObjectUpdate()"
-                            (copyLocale)="copyLocaleHandler(po.getPredicate(), $event)">
+                            (dblClick)="objectDblClick(obj)" (delete)="removePredicateObject(po.getPredicate(), obj)"
+                            (edit)="editHandler(po.getPredicate(), obj)" (update)="onObjectUpdate()">
                         </resview-value-renderer>
                     </ng-container>
                 </div>
