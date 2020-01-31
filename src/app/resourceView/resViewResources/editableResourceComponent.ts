@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Output } from "@angular/core";
 import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute } from "../../models/ARTResources";
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { ResViewPartition } from "../../models/ResourceView";
@@ -17,24 +17,17 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
+import { AbstractResViewResource } from "./abstractResViewResource";
 
 @Component({
     selector: "editable-resource",
     templateUrl: "./editableResourceComponent.html",
 })
-export class EditableResourceComponent {
+export class EditableResourceComponent extends AbstractResViewResource {
 
-    @Input() subject: ARTResource; //subject of the triple which the "resource" represents the object
-    @Input() predicate: ARTURIResource; //property of the triple which the "resource" represents the object
-    @Input() resource: ARTNode; //resource shown in the component. Represents the object of a triple shown in a ResourceView partition
-    @Input() rendering: boolean;
-    @Input() readonly: boolean;
-    @Input() partition: ResViewPartition;
-    @Output('delete') deleteOutput = new EventEmitter();
     @Output() update = new EventEmitter();
     @Output('edit') editOutput = new EventEmitter(); //fire a request for the renderer to edit the value
     @Output('copyLocale') copyLocaleOutput = new EventEmitter<Language[]>(); //fire a request for the renderer to copy the value to different locales
-    @Output() dblClick = new EventEmitter();
 
     //useful to perform a check on the type of the edited value.
     //The check isn't too deep, it just distinguishes between resource, literal or any (undetermined)
@@ -81,7 +74,9 @@ export class EditableResourceComponent {
         private manchesterService: ManchesterServices, private refactorService: RefactorServices,
         private basicModals: BasicModalServices, private creationModals: CreationModalServices,
         private browsingModals: BrowsingModalServices, private rvModalService: ResViewModalServices,
-        private dtValidator: DatatypeValidator, private vbProp: VBProperties) { }
+        private dtValidator: DatatypeValidator, private vbProp: VBProperties) {
+        super();
+    }
 
     ngOnInit() {
         if (this.vbProp.getResourceViewDisplayImg() && this.resource.getAdditionalProperty(ResAttribute.IS_IMAGE)) {
@@ -105,12 +100,12 @@ export class EditableResourceComponent {
             this.editActionScenario = EditActionScenarioEnum.partition;
         }
 
-		/**
-		 * Determines if the menu items about xlabels should be visible.
-		 * Visible only if:
-		 * the subject is a concept, the object is a xLabel and if it is in the lexicalizations partition
-		 * (so avoid "spawn new concept..." from xLabel in labelRelation partition of an xLabel ResView)
-		 */
+        /**
+         * Determines if the menu items about xlabels should be visible.
+         * Visible only if:
+         * the subject is a concept, the object is a xLabel and if it is in the lexicalizations partition
+         * (so avoid "spawn new concept..." from xLabel in labelRelation partition of an xLabel ResView)
+         */
         this.isXLabelMenuItemAvailable = (
             this.partition == ResViewPartition.lexicalizations &&
             this.subject.getRole() == RDFResourceRolesEnum.concept &&
@@ -548,10 +543,6 @@ export class EditableResourceComponent {
 
     //====== "Delete" HANDLER =====
 
-    private delete() {
-        this.deleteOutput.emit();
-    }
-
     private bulkDelete() {
         this.basicModals.confirm("Bulk delete", "Warning. You are deleting the value for every resource that has this predicate-value relation. Are you sure?").then(
             () => {
@@ -566,12 +557,6 @@ export class EditableResourceComponent {
     }
 
     //==============================
-
-    private resourceDblClick() {
-        if (this.resource.isResource()) {
-            this.dblClick.emit(<ARTResource>this.resource);
-        }
-    }
 
 }
 

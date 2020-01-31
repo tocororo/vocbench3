@@ -81,7 +81,6 @@ export abstract class PartitionRenderer {
     private addDisabled: boolean = false;
     private addExteranlResourceAllowed: boolean = false;
     private addManuallyAllowed: boolean = false;
-    private deleteDisabled: boolean = false;//used only for the reified-resource in imports and membersOrderer partition, since they do not uses the pred-obj-list renderer
 
     /**
      * METHODS
@@ -106,16 +105,6 @@ export abstract class PartitionRenderer {
          */
         this.addDisabled = !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && !ResourceUtils.isResourceInStagingAdd(this.resource) ||
             this.readonly || !ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.C, this.resource);
-        /**
-         * Delete is disabled if one of them is true
-         * - resource is not explicit (e.g. imported, inferred, in staging)
-         * - resource is in a staging status (staging-add or staging-remove)
-         * - ResView is working in readonly mode
-         * - user not authorized
-         */
-        this.deleteDisabled = !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
-            ResourceUtils.isResourceInStaging(this.resource) ||
-            this.readonly || !ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.resource);
         this.addExteranlResourceAllowed = ResViewUtils.addExternalResourcePartition.indexOf(this.partition) != -1;
         this.addManuallyAllowed = ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
     }

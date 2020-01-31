@@ -41,7 +41,7 @@ export class PredicateObjectsRenderer {
      */
 
     private addDisabled: boolean = false;
-    private deleteDisabled: boolean = false; //used for reified-resource
+    private deleteDisabled: boolean = false;
     private actionMenuDisabled: boolean = false;
     
     private addManuallyAllowed: boolean = false;

@@ -1,22 +1,41 @@
-import {Component, Input, Output, EventEmitter} from "@angular/core";
-import {ARTNode, ARTResource, ARTURIResource, ARTPredicateObjects, ResAttribute} from "../../models/ARTResources";
-import {CustomFormsServices} from "../../services/customFormsServices";
+import { Component, EventEmitter, Output } from "@angular/core";
+import { ARTNode, ARTPredicateObjects, ARTResource, ResAttribute } from "../../models/ARTResources";
+import { CustomFormsServices } from "../../services/customFormsServices";
+import { CRUDEnum, ResourceViewAuthEvaluator } from "../../utils/AuthorizationEvaluator";
+import { ResourceUtils } from "../../utils/ResourceUtils";
+import { AbstractResViewResource } from "./abstractResViewResource";
 
 @Component({
 	selector: "reified-resource",
-	templateUrl: "./reifiedResourceComponent.html",
+    templateUrl: "./reifiedResourceComponent.html",
+    host: { class: "hbox" }
 })
-export class ReifiedResourceComponent {
-    
-    @Input() predicate: ARTURIResource;
-    @Input() resource: ARTResource; //BNode or URIResource
-    @Output() dblClick: EventEmitter<ARTResource> = new EventEmitter();
+export class ReifiedResourceComponent extends AbstractResViewResource {
     
     private predicateObjectList: ARTPredicateObjects[];
-    
+
+    private actionRemoveTitle: string;
+    private deleteDisabled: boolean = false;
     private open: boolean = false;
 	
-	constructor(private cfService: CustomFormsServices) {}
+    constructor(private cfService: CustomFormsServices) {
+        super();
+    }
+    
+    ngOnInit() {
+        /**
+         * Delete is disabled if one of them is true
+         * - resource is not explicit (e.g. imported, inferred, in staging)
+         * - resource is in a staging status (staging-add or staging-remove)
+         * - ResView is working in readonly mode
+         * - user not authorized
+         */
+        this.deleteDisabled = !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
+            ResourceUtils.isResourceInStaging(this.subject) ||
+            this.readonly || !ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.subject);
+
+        this.actionRemoveTitle = "Remove " + this.predicate.getShow();
+    }
     
     private toggle() {
         if (this.predicateObjectList == null) {
@@ -38,11 +57,8 @@ export class ReifiedResourceComponent {
             this.open = !this.open;
         }
     }
-    
-    private resourceDblClick() {
-        this.dblClick.emit(this.resource);
-    }
 
+    //double click on an object of expanded reified res description
     private objectDblClick(object: ARTNode) {
         if (object.isResource()) {
             this.dblClick.emit(<ARTResource>object);

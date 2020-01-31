@@ -74,10 +74,8 @@
                 </td>
                 <td>
                     <div class="hbox">
-                        <div class="scrollableContainer" style="max-height: 300px; padding: 0px;">
-                            <pearl-editor [(ngModel)]="ref" style="flex: 1; margin-right: 4px;" [disabled]="context.readOnly">
-                            </pearl-editor>
-                        </div>
+                        <pearl-editor [(ngModel)]="ref" style="flex: 1; margin-right: 4px; max-height: 300px" [disabled]="context.readOnly">
+                        </pearl-editor>
                         <button class="btn btn-default btn-xs" (click)="pickConverter()" style="align-self: flex-start" title="Pick converter"
                             [disabled]="context.readOnly">
                             <span class="glyphicon glyphicon-pencil"></span>
