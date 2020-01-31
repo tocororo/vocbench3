@@ -24,6 +24,14 @@ export class ReifiedResourceComponent {
                 graphDescr => {
                     this.predicateObjectList = graphDescr;
                     this.open = !this.open;
+                    /**
+                     * if expanded resource has no description, set the NOT_REIFIED attr to true, 
+                     * so in the resview-value-renderer it is rendered as simple editable-resource and no more 
+                     * as reified resource
+                     */
+                    if (this.predicateObjectList.length == 0) { 
+                        this.resource.setAdditionalProperty(ResAttribute.NOT_REIFIED, true);
+                    }
                 }
             );
         } else {
@@ -38,23 +46,6 @@ export class ReifiedResourceComponent {
     private objectDblClick(object: ARTNode) {
         if (object.isResource()) {
             this.dblClick.emit(<ARTResource>object);
-        }
-    }
-
-    /**
-     * Tells if the resource should be rendered as reified resource (expandable).
-     * The resource should be rendered as reified resource if it is still not open or it has been expanded
-     * and it has a description.
-     * If it has been expanded but it has no description it should be rendered as simple rdf-resource
-     */
-    private isExpandableResource() {
-        if (!this.open || this.open && this.predicateObjectList) {
-            return true;
-        } else {
-            setTimeout(() => {
-                this.resource.setAdditionalProperty(ResAttribute.NOT_REIFIED, true);
-            })
-            return false;
         }
     }
 

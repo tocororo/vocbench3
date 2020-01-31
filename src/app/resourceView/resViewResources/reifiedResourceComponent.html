@@ -1,4 +1,4 @@
-<div *ngIf="isExpandableResource()" class="expandableResource">
+<div class="expandableResource">
     <div class="hbox">
         <rdf-resource [resource]="resource" (dblclick)="resourceDblClick()" style="flex: 1;"></rdf-resource>
         <div class="expandCollapseBtnContainer" (click)="toggle()" title="Expand/Collapse" style="margin-right: 10px">
@@ -10,7 +10,6 @@
         <div class="panel-body" style="padding: 2px;">
             <table class="table table-condensed table-borderless table-hoverable">
                 <tbody>
-                    
                     <ng-template ngFor let-predObj [ngForOf]="predicateObjectList">
                         <tr *ngFor="let obj of predObj.getObjects()">
                             <td style="width: 1%" nowrap>{{predObj.getPredicate().getShow()}}</td>
@@ -20,13 +19,8 @@
                             </td>
                         </tr>
                     </ng-template>
-                    
                 </tbody>
             </table>
         </div>
     </div>
-</div>
-
-<div *ngIf="!isExpandableResource()" style="margin: 3px 3px 3px 4px;">
-    <rdf-resource [resource]="resource" (dblclick)="resourceDblClick()" style="flex: 1;"></rdf-resource>
 </div>

@@ -8,7 +8,7 @@
     <reified-resource [ngClass]="{ clickable: object.isResource() }" style="flex:1" [resource]="object" [predicate]="predicate"
         (dblClick)="onDblClick($event)">
     </reified-resource>
-    <button class="transparentBtn" [title]="actionRemoveTitle" [disabled]="deleteDisabled" (click)="removeValue(object)">
+    <button class="transparentBtn" [title]="actionRemoveTitle" [disabled]="deleteDisabled" (click)="onDelete(object)">
         <span>-</span>
     </button>
 </ng-template>

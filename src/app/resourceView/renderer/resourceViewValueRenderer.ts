@@ -25,12 +25,11 @@ export class ResourceViewValueRenderer {
     @Input() rendering: boolean;
     @Input() readonly: boolean;
 
-    @Output() delete = new EventEmitter();
-    @Output() update = new EventEmitter();
-    @Output() edit = new EventEmitter();
-    @Output() remove = new EventEmitter();
-    @Output() copyLocale = new EventEmitter<Language[]>(); //fire a request for the renderer to copy the value to different locales
-    @Output() dblClick = new EventEmitter();
+    @Output() delete = new EventEmitter(); //request to delete the object ("delete" action of the editable-resource or "-" button of reified-resource)
+    @Output() update = new EventEmitter(); //a change has been done => request to update the RV
+    @Output() edit = new EventEmitter(); //request to edit the object ("edit" action of the editable-resource)
+    @Output() copyLocale = new EventEmitter<Language[]>(); //request for to copy the value to different locales ("copy to locale" action of the editable-resource)
+    @Output() dblClick = new EventEmitter(); //object dbl clicked
 
     @HostBinding("class.imported") importedClass: boolean = false;
     @HostBinding("class.inferred") inferredClass: boolean = false;
@@ -70,11 +69,6 @@ export class ResourceViewValueRenderer {
             this.object.isResource() && !this.object.getAdditionalProperty(ResAttribute.NOT_REIFIED)
         );
     }
-
-    private removeValue() {
-        this.remove.emit();
-    }
-
 
     /**
      * Events forwarding
