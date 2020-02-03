@@ -84,8 +84,10 @@ export class ModelGraphComponent extends AbstractGraph {
                 }
             );
         } else { //model graph contains already a root node, so works in "incremental" mode
-            this.incrementalExploration = true;
-            this.expandNode(this.graph.getNodes()[0], true);
+            setTimeout(() => {
+                this.incrementalExploration = true; //setTimeout prevents an ExpressionChangedAfterItHasBeenCheckedError caused by this change
+                this.expandNode(this.graph.getNodes()[0], true);
+            })
         }
     }
 
@@ -178,6 +180,7 @@ export class ModelGraphComponent extends AbstractGraph {
      * Appends the provided links to the graph (except the filtered ones) and keeps updated the delta filter map
      */
     private appendLinks(links: Link[]) {
+        let linksToNotShow: Link[] = []; //Collects the links that are added to the graph but that, according the filters, should not be shown.
         links.forEach(l => {
             //if the link is already in the graph, update the openBy list and skip the add
             let linkInGraph = this.graph.getLink(l.source.res, l.res, l.target.res);
@@ -206,21 +209,19 @@ export class ModelGraphComponent extends AbstractGraph {
                         }
                         //check also if link should be shown according the filter
                         if (!f.show) { 
-                            show = false;
+                            linksToNotShow.push(l); //links is about a filtered relation which "show" is false (so must be removed)
                         }
                     }
                 });
-
-                if (show) {
-                    //update the incoming-outgoing nodes of both source and target
-                    (<ModelNode>sourceNode).outgoingNodes.push(targetNode); 
-                    (<ModelNode>targetNode).incomingNodes.push(sourceNode);
-                    //add the link to the graph
-                    this.graph.addLink(l); 
-                }
+                //update the incoming-outgoing nodes of both source and target
+                (<ModelNode>sourceNode).outgoingNodes.push(targetNode); 
+                (<ModelNode>targetNode).incomingNodes.push(sourceNode);
+                //add the link to the graph
+                this.graph.addLink(l); 
             }
         });
-        this.graph.update();
+        //Now that all the links are added, removes the collected links that should be hidden according the filters
+        this.removeLinks(linksToNotShow);
     }
 
     private removeLinks(links: Link[]) {
