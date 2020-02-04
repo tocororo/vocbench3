@@ -62,7 +62,7 @@ export abstract class AbstractList extends AbstractStruct {
             () => {
                 var childrenNodeComponent = this.viewChildrenNode.toArray();
                 for (var i = 0; i < childrenNodeComponent.length; i++) {
-                    if (childrenNodeComponent[i].node.getURI() == node.getURI()) {
+                    if (childrenNodeComponent[i].node.equals(node)) {
                         childrenNodeComponent[i].ensureVisible();
                         if (!childrenNodeComponent[i].node.getAdditionalProperty(ResAttribute.SELECTED)) {
                             childrenNodeComponent[i].selectNode();
@@ -89,7 +89,7 @@ export abstract class AbstractList extends AbstractStruct {
     }
     ensureNodeVisibility(resource: ARTURIResource) {
         for (var i = 0; i < this.list.length; i++) {
-            if (this.list[i].getURI() == resource.getURI()) {
+            if (this.list[i].equals(resource)) {
                 if (i >= this.nodeLimit) {
                     //update nodeLimit so that node at index i is within the range
                     let scrollStep: number = ((i - this.nodeLimit)/this.increaseRate)+1;
