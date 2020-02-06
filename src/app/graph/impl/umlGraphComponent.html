@@ -1,0 +1,23 @@
+<!-- html graph-->
+<div class="vbox blockingDivHost">
+
+    <svg:svg #svg class="graphContainer">
+        <svg:g *ngIf="initialized" [zoomableOf]="svg">
+            <svg:g *ngFor="let link of graph.links" [id]="'link' + link.index" [uml-link]="link" (linkClicked)="onLinkClicked($event)"  [selected]="selectedElement == link"></svg:g>
+            <svg:use *ngIf="linkAhead" [attr.xlink:href]="'#link' + linkAhead.index"></svg:use>
+
+            <svg:g *ngFor="let node of graph.nodes" (nodeClicked)="onNodeClicked($event)" (propClicked)="onPropClicked(node,$event)"
+             [umlNode]="node" [draggableNode]="node" [draggableInGraph]="graph" [selected]="selectedElement == node" [rendering]="rendering" [selectedProp]="selectedProp" >
+            </svg:g>
+        </svg:g>
+    </svg:svg>
+
+    <div #blockingDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+
+</div>
