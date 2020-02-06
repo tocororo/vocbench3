@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter,Output } from "@angular/core";
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { GraphModelRecord } from "../../models/Graphs";
 import { ResViewPartition, ResViewUtils } from "../../models/ResourceView";
@@ -27,7 +27,7 @@ export class DataGraphComponent extends AbstractGraph {
     protected mode = GraphMode.dataOriented;
 
     private linkLimit: number = 50;
-
+    @Output() elementSelected = new EventEmitter<Node|Link>();
     private rvPartitions: ResViewPartition[] = ResViewUtils.orderedResourceViewPartitions;
 
     constructor(protected d3Service: D3Service, protected elementRef: ElementRef, protected ref: ChangeDetectorRef, protected basicModals: BasicModalServices,

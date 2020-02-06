@@ -7,6 +7,7 @@
 
     <data-graph-panel *ngIf="context.mode=='dataOriented'" class="vbox" [graph]="context.graph" [rendering]="context.rendering" [role]="context.role" [context]="context.context"></data-graph-panel>
     <model-graph-panel *ngIf="context.mode=='modelOriented'" class="vbox" [graph]="context.graph" [rendering]="context.rendering"></model-graph-panel>
+    <uml-graph-panel *ngIf="context.mode=='umlOriented'" class="vbox" [graph]="context.graph" [rendering]="context.rendering"></uml-graph-panel>
 
 </div>
 <div class="modal-footer">

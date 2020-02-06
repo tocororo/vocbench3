@@ -1,3 +1,4 @@
+import { PropInfo } from './model/UmlNode';
 import { Input } from "@angular/core";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingModalServices";
@@ -9,12 +10,11 @@ import { Node } from "./model/Node";
 export abstract class AbstractGraphPanel {
     @Input() graph: ForceDirectedGraph;
     @Input() rendering: boolean = true;
-
+    protected isLock:boolean=true;
     abstract viewChildGraph: AbstractGraph;
 
     protected selectedElement: Node | Link;
     private forces: GraphForces;
-
     protected basicModals: BasicModalServices
     protected browsingModals: BrowsingModalServices;
     constructor(basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
@@ -29,7 +29,7 @@ export abstract class AbstractGraphPanel {
         this.viewChildGraph.updateForces(this.forces);
     }
 
-    private isSelectedElementNode() {
+    protected isSelectedElementNode() {
         return (this.selectedElement != null && this.selectedElement instanceof Node);
     }
 
@@ -40,23 +40,27 @@ export abstract class AbstractGraphPanel {
             selectedNode.fx = null;
             selectedNode.fy = null;
         }
+
     }
-    private fixAll() {
+    protected fixAll() {
         this.graph.getNodes().forEach(n => {
             n.fixed = true;
             n.fx = n.x;
             n.fy = n.y;
         });
+
+        this.isLock=false;
     }
-    private unfixAll() {
+    protected unfixAll() {
         this.graph.getNodes().forEach(n => {
             n.fixed = false;
             n.fx = null;
             n.fy = null;
         });
+        this.isLock=true
     }
 
-    private onElementSelected(element: Node | Link) {
+    protected onElementSelected(element: Node | Link) {
         this.selectedElement = element;
     }
 

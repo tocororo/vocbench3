@@ -19,6 +19,10 @@
     stroke-width: 2px;
 }
 
+.graphPropSelected {
+    fill: red;
+}
+
 /* If node has children to expand */
 .parentNode {
     stroke-width: 5px;
@@ -111,6 +115,10 @@
     fill: none;
 }
 
+.link-uml {
+    stroke-width: 1.3px;
+}
+
 .linkSelected {
     stroke: red !important;
 }
@@ -134,4 +142,4 @@
 .objectPropertyArrow { fill: #336699 !important; }
 .ontologyPropertyArrow { fill: #826a4a !important; }
 /* .propertyArrow { fill: #336699 !important; } */
-
+.subClassArrow {fill: white !important;}

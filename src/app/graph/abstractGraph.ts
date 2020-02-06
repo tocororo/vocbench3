@@ -9,14 +9,14 @@ import { Node } from "./model/Node";
 export abstract class AbstractGraph {
     @Input() graph: ForceDirectedGraph;
     @Input() rendering: boolean;
-    @Output() elementSelected = new EventEmitter<Node|Link>();
+    @Output() elementSelected = new EventEmitter<any>();
 
     @ViewChild('svg') public svgElement: ElementRef;
     @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
 
     protected selectedElement: Link | Node;
     protected linkAhead: Link; //link selected to bring ahead the other
-
+    
     private initialized: boolean = false; //true once the graph will be initialized (useful in order to not render the graph view until then)
     
     protected abstract mode: GraphMode;
@@ -35,6 +35,7 @@ export abstract class AbstractGraph {
         this.graph.initSimulation(this.options);
         this.initialized = true;
     }
+    
 
     protected onNodeClicked(node: Node) {
         if (node == this.selectedElement) {
@@ -114,7 +115,8 @@ export abstract class AbstractGraph {
 
 export enum GraphMode {
     dataOriented = "dataOriented",
-    modelOriented = "modelOriented"
+    modelOriented = "modelOriented",
+    umlOriented= "umlOriented"
 }
 
 

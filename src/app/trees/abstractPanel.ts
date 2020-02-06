@@ -196,6 +196,8 @@ export abstract class AbstractPanel {
         } else {
             if (graphMode == GraphMode.dataOriented) {
                 return this.selectedNode != null;
+            } else if(graphMode == GraphMode.umlOriented){
+                return true;
             } else { //model oriented
                 return true;
             }    

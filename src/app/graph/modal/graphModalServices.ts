@@ -1,3 +1,7 @@
+import { RDFS } from './../../models/Vocabulary';
+import { UmlLink } from './../model/UmlLink';
+import { RDFResourceRolesEnum } from './../../models/ARTResources';
+import { UmlNode } from './../model/UmlNode';
 import { Injectable } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
@@ -129,6 +133,62 @@ export class GraphModalServices {
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(LinksFilterModal, overlayConfig).result;
 
+    }
+
+
+    openUmlGraph(rendering: boolean) {
+        // let prova1 = new ARTURIResource("http://baseUri/Persona","Persona", RDFResourceRolesEnum.cls);
+        // let prova2 = new ARTURIResource("http://baseUri/Animale","Animale", RDFResourceRolesEnum.cls);
+        // let prova3 = new ARTURIResource("http://baseUri/compra","compra", RDFResourceRolesEnum.property);
+        // let prova4 = new ARTURIResource("http://baseUri/amicoDi","amicoDi", RDFResourceRolesEnum.property);
+        // let prova5 = new ARTURIResource("http://baseUri/haAnimale","haAnimale", RDFResourceRolesEnum.property);
+        // let prova6 = new ARTURIResource("http://baseUri/haNome","haNome", RDFResourceRolesEnum.property);
+        // let prova7 = new ARTURIResource("http://baseUri/haMq","haMq", RDFResourceRolesEnum.property);
+        // let prova8 = new ARTURIResource("http://baseUri/haCasa","haCasa", RDFResourceRolesEnum.property);
+        // let prova9 = new ARTURIResource("http://baseUri/Casa","Casa", RDFResourceRolesEnum.cls);
+        // let prova10 = new ARTURIResource("http://baseUri/Moglie","Moglie", RDFResourceRolesEnum.cls);
+        // let prova11 = new ARTURIResource("http://baseUri/Marito","Marito", RDFResourceRolesEnum.cls);
+        // let prova12 = new ARTURIResource("http://baseUri/èSposato","èSposato", RDFResourceRolesEnum.property);
+        // prova12.setAdditionalProperty("reflexive",true);
+        
+
+        // let nodoPersona = new UmlNode(prova1);
+        // let nodoAnimale = new UmlNode(prova2);
+        // let nodoCasa = new UmlNode(prova9);
+        // let nodoMoglie = new UmlNode(prova10);
+        // let nodoMarito = new UmlNode(prova11);
+
+        // nodoPersona.listProperties = [prova3, prova5, prova4, prova8]
+        // nodoAnimale.listProperties = [prova6]
+        // nodoCasa.listProperties = [prova7]
+        // nodoMoglie.listProperties = [prova12]
+        // nodoMarito.listProperties = [prova12, RDFS.subClassOf]
+        // let nodes: Array<Node> = [nodoPersona, nodoAnimale, nodoCasa, nodoMarito, nodoMoglie];
+
+        // let link1 = new UmlLink(nodoPersona, nodoCasa, prova3)
+        // let link2 = new UmlLink(nodoPersona, nodoCasa, prova8)
+        // let link3 = new UmlLink(nodoPersona, nodoAnimale, prova5)
+        // let link4 = new UmlLink(nodoPersona, nodoPersona, prova4)
+        // let link5 = new UmlLink(nodoMarito, nodoMoglie, prova12)
+        // let link6 = new UmlLink(nodoMarito, nodoPersona,  RDFS.subClassOf)
+
+
+
+        // let links = [link1, link2, link3, link4, link5, link6];
+        // console.log(links);
+
+
+
+        
+        let graph = new ForceDirectedGraph([], [], rendering);
+        //let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph([], []);
+        var umlData = new GraphModalData(graph, GraphMode.umlOriented, rendering); // dati da iniettare dentro il pannello
+        // finestre modali libreria ngx modialog
+        const builder = new BSModalContextBuilder<GraphModalData>(
+            umlData, undefined, GraphModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
+        return this.modal.open(GraphModal, overlayConfig).result;
     }
 
 }

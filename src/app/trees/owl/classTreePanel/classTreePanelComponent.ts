@@ -147,6 +147,10 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
         this.graphModals.openModelGraph(this.selectedNode, this.rendering);
     }
 
+    private openUmlGraph(){
+        this.graphModals.openUmlGraph(this.rendering);
+    }
+
     private settings() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };

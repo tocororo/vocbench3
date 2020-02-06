@@ -187,6 +187,8 @@ export class ForceDirectedGraph {
                     yetInLooping.push(link2);
                 }
             }
+            // inizialize loop flag (useful for uml nodes)
+            loopingGroup.forEach(l=>l.loop=true);
             linkGroups.push(loopingGroup);
         }
         return linkGroups;

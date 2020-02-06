@@ -89,6 +89,12 @@
                             Show data-oriented graph
                         </a>
                     </li>
+                    <li *ngIf="isOpenGraphEnabled('umlOriented')">
+                        <a (click)="openUmlGraph()">
+                            <img src="../../../../assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
+                            Show class-diagram
+                        </a>
+                    </li>
                 </ng-template>
             </ul>
         </div>

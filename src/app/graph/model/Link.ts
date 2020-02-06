@@ -19,6 +19,7 @@ export class Link implements d3.SimulationLinkDatum<Node> {
     openBy: Node[];
 
     offset: number = 0; //useful in case there are multiple links for the same source-target pair
+    loop:boolean;
     
     constructor(source: Node, target: Node, res?: ARTURIResource, classAxiom?: boolean) {
         this.source = source;

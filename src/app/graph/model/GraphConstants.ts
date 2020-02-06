@@ -9,6 +9,10 @@ export class Size {
     public static Circle = {
         radius: 40
     }
+    public static RectangleUml = {
+        base: 200,
+        height: 40
+    };
     /**
      * Same as rectangle, but with corner "cutted"
      */
