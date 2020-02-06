@@ -43,7 +43,7 @@
             <tr>
                 <td class="text-right"><label>Range type:</label></td>
                 <td>
-                    <select class="form-control input-sm" [(ngModel)]="selectedRangeType" [disabled]="!rangeTypeChangeable">
+                    <select class="form-control input-sm" [(ngModel)]="selectedRangeType" [disabled]="!property">
                         <option *ngFor="let rt of rangeTypes" [ngValue]="rt">{{rt.show}}</option>
                     </select>
                 </td>
@@ -85,9 +85,6 @@
                 <td class="text-right"><label>Datatype:</label></td>
                 <td>
                     <datatype-picker [(ngModel)]="datatype" [allowedDatatypes]="allowedDatatypes"></datatype-picker>
-                    <!-- <select class="form-control input-sm" [(ngModel)]="datatype">
-                        <option *ngFor="let dt of datatypeList" [ngValue]="dt">{{dt.getShow()}}</option>
-                    </select> -->
                 </td>
             </tr>
 

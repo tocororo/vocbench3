@@ -6,7 +6,7 @@ import { ARTURIResource } from "../../models/ARTResources";
 import { ConverterContractDescription, RDFCapabilityType } from "../../models/Coda";
 import { NodeConversion, SimpleGraphApplication, SimpleHeader } from "../../models/Sheet2RDF";
 import { RDFS } from "../../models/Vocabulary";
-import { PropertyServices, RangeType } from "../../services/propertyServices";
+import { PropertyServices, RangeResponse, RangeType } from "../../services/propertyServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
@@ -40,8 +40,6 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     private typedLiteralRangeType: HeaderRangeType = { type: RangeType.typedLiteral, show: "Typed Literal" };
     private rangeTypes: HeaderRangeType[];
     private selectedRangeType: HeaderRangeType;
-    //tells if the range type of the property is changeable (only if the property range type is undetermined (so leave the choice to the user))
-    private rangeTypeChangeable: boolean; 
 
     /**
      * Refinement following the range type:
@@ -67,7 +65,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     private selectedNode: NodeConversion;
 
     constructor(public dialog: DialogRef<SimpleGraphApplicationModalData>, private s2rdfService: Sheet2RDFServices,
-        private propService: PropertyServices,  private resourceService: ResourcesServices,
+        private propService: PropertyServices, private resourceService: ResourcesServices,
         private browsingModals: BrowsingModalServices, private modal: Modal) {
         this.context = dialog.context;
     }
@@ -113,7 +111,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                 this.property = property;
                 this.updateHeaderPropertyRange();
             },
-            () => {}
+            () => { }
         )
     }
 
@@ -140,76 +138,86 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                         }
                     });
                 }
-                this.rangeTypeChangeable = range.ranges.type == RangeType.undetermined;
 
-
-                //if a collection of admitted range classes is provided
-                if (range.ranges.rangeCollection != null) {
-                    let rangeColl: ARTURIResource[] = range.ranges.rangeCollection.resources;
-                    
-                    //special case
-                    if (ResourceUtils.containsNode(rangeColl, RDFS.literal)) {
-                        //if range contains rdfs:Literal range type should be changeable only between typed and plain literal
-                        this.rangeTypeChangeable = true;
-                        if (rangeColl.length == 1) { //if rdfs:Literal is the only range, limit the selection of literal range types
-                            this.rangeTypes = [this.plainLiteralRangeType, this.typedLiteralRangeType];
-                        }
-                    }
-                    //selected range type typedLiteral => rangeCollection contains the admitted datatype, so limit it
-                    if (this.selectedRangeType != null && this.selectedRangeType.type == RangeType.typedLiteral) {
-                        this.allowedDatatypes = rangeColl;
-                    } else {
-                        this.annotateResources(rangeColl).subscribe(
-                            () => {
-                                this.rangeCollection.push(...rangeColl);
-                                this.assertableTypes.push(...rangeColl);
-                                //if the modal is editing a graph application, try to restore the asserted type
-                                if (this.context.graphApplication != null) {
-                                    let type = this.context.graphApplication.type;
-                                    if (type != null) {
-                                        this.assertType = true;
-                                        let typeIdx = ResourceUtils.indexOfNode(this.assertableTypes, type);
-                                        if (typeIdx != -1) { //type already in the assertableTypes list
-                                            this.assertedType = this.assertableTypes[typeIdx];
-                                        } else { //type not in the assertableTypes list (probably the user added it manually)
-                                            this.assertableTypes.push(type);
-                                            this.assertedType = this.assertableTypes[this.assertableTypes.length-1];
-                                        }
-                                    }
+                this.annotateRangeCollection(range).subscribe(
+                    () => {
+                        if (range.ranges.type == RangeType.literal) {
+                            if (this.rangeCollection.length > 0) { //there is a range collection specified (datatypes)
+                                this.rangeTypes = [this.typedLiteralRangeType]; //=> allows typed literal
+                                this.allowedDatatypes = this.rangeCollection; //restricted to the rangeCollection datatypes list
+                            } else { //no range datatypes => allows all kind of literal
+                                this.rangeTypes = [this.plainLiteralRangeType, this.typedLiteralRangeType];
+                            }
+                        } else if (range.ranges.type == RangeType.plainLiteral) {
+                            this.rangeTypes = [this.plainLiteralRangeType];
+                        } else if (range.ranges.type == RangeType.typedLiteral) {
+                            this.rangeTypes = [this.typedLiteralRangeType];
+                            this.allowedDatatypes = this.rangeCollection; //restrict to the rangeCollection datatypes list
+                        } else if (range.ranges.type == RangeType.resource) {
+                            this.rangeTypes = [this.resourceRangeType];
+                            this.assertableTypes = this.rangeCollection;
+                            if (this.rangeCollection.some(r => r.equals(RDFS.literal))) {
+                                if (this.rangeCollection.length == 1) { //rdfs:Literal is the only range class admitted => admitted range types are plain/typed literal
+                                    this.rangeTypes = [this.plainLiteralRangeType, this.typedLiteralRangeType];
+                                } else { //rdfs:Literal is among other range class => add also literal ranges
+                                    this.rangeTypes.push(this.typedLiteralRangeType);
+                                    this.rangeTypes.push(this.plainLiteralRangeType);
                                 }
                             }
-                        );
-                    }
-                } else if (range.ranges.type == RangeType.literal) {
-                    //special case: DatatypeProperty without range => ranges.type is literal => treat like any property with rangeColl == RDFS.literal
-                    this.rangeTypeChangeable = true; //range type should be changeable only between typed and plain literal
-                    this.rangeTypes = [this.plainLiteralRangeType, this.typedLiteralRangeType];
-                }
-
-                // try to restore the model about the node
-                if (this.context.graphApplication != null) {
-                    //select the node
-                    let nodeId = this.context.graphApplication.nodeId;
-                    this.availableNodes.forEach(n => {
-                        if (n.nodeId == nodeId) {
-                            this.selectedNode = n;
+                        } else if (range.ranges.type == RangeType.undetermined) {
+                            this.rangeTypes = [this.resourceRangeType, this.plainLiteralRangeType, this.typedLiteralRangeType];
                         }
-                    });
-                    //if a converter is provided, set the range type, eventually the datatype and language
-                    if (this.selectedNode.converter != null) {
-                        if (this.selectedNode.converter.datatypeUri != null) {
-                            this.forceRangeType(RangeType.typedLiteral);
-                            this.datatype = new ARTURIResource(this.selectedNode.converter.datatypeUri);
-                            // this.selectDatatype(new ARTURIResource(this.selectedNode.converter.datatype));
-                        } else if (this.selectedNode.converter.language != null) {
-                            this.forceRangeType(RangeType.plainLiteral);
-                            this.language = this.selectedNode.converter.language;
-                        }
-                    }
 
-                }
+                        // try to restore the model about the node
+                        if (this.context.graphApplication != null) {
+                            //select the node
+                            let nodeId = this.context.graphApplication.nodeId;
+                            this.availableNodes.forEach(n => {
+                                if (n.nodeId == nodeId) {
+                                    this.selectedNode = n;
+                                }
+                            });
+                            //if a converter is provided, set the range type, eventually the datatype and language
+                            if (this.selectedNode.converter != null) {
+                                if (this.selectedNode.converter.datatypeUri != null) {
+                                    this.forceRangeType(RangeType.typedLiteral);
+                                    this.datatype = new ARTURIResource(this.selectedNode.converter.datatypeUri);
+                                } else if (this.selectedNode.converter.language != null) {
+                                    this.forceRangeType(RangeType.plainLiteral);
+                                    this.language = this.selectedNode.converter.language;
+                                }
+                            }
+                            //restore the asserted type
+                            let type = this.context.graphApplication.type;
+                            if (type != null) {
+                                this.assertType = true;
+                                let typeIdx = ResourceUtils.indexOfNode(this.assertableTypes, type);
+                                if (typeIdx != -1) { //type already in the assertableTypes list
+                                    this.assertedType = this.assertableTypes[typeIdx];
+                                } else { //type not in the assertableTypes list (probably the user added it manually)
+                                    this.assertableTypes.push(type);
+                                    this.assertedType = this.assertableTypes[this.assertableTypes.length-1];
+                                }
+                            }
+                        }
+
+                    }
+                )
             }
         )
+    }
+
+    private annotateRangeCollection(rangeResp: RangeResponse): Observable<void> {
+        if (rangeResp.ranges.rangeCollection != null) {
+            let rangeColl: ARTURIResource[] = rangeResp.ranges.rangeCollection.resources;
+            return this.resourceService.getResourcesInfo(rangeColl).map(
+                annotated => {
+                    this.rangeCollection = annotated;
+                }
+            )
+        } else {
+            return Observable.of(null);
+        }
     }
 
     private forceRangeType(rngType: RangeType) {
@@ -268,7 +276,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                 }
                 s += ")";
             }
-        } 
+        }
         return s;
     }
 
@@ -285,7 +293,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                 this.availableNodes.push(node);
                 this.selectedNode = node;
             },
-            () => {}
+            () => { }
         );
     }
 
@@ -297,17 +305,17 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
         let err: string = null;
         if (this.selectedNode != null && this.selectedNode.converter != null && this.selectedRangeType != null) {
             //if range type is resource, node is not compliant if its converter capability is not uri
-            if (this.selectedRangeType.type == RangeType.resource && this.selectedNode.converter.type != RDFCapabilityType.uri) { 
-                err = "the type of converter used to create the node (" + this.selectedNode.converter.type + 
+            if (this.selectedRangeType.type == RangeType.resource && this.selectedNode.converter.type != RDFCapabilityType.uri) {
+                err = "the type of converter used to create the node (" + this.selectedNode.converter.type +
                     ") is not compliant with the selected range type (" + this.selectedRangeType.show + ")";
-            } else if (this.selectedRangeType.type == RangeType.plainLiteral) { 
+            } else if (this.selectedRangeType.type == RangeType.plainLiteral) {
                 //if range type is plain literal, node is not compliant if its converter capability is not literal...
                 if (this.selectedNode.converter.type != RDFCapabilityType.literal) {
-                    err = "the type of converter used to create the node (" + this.selectedNode.converter.type + 
+                    err = "the type of converter used to create the node (" + this.selectedNode.converter.type +
                         ") is not compliant with the selected range type (" + this.selectedRangeType.show + ")";
                 } else { //...or if it is literal but...
                     if (this.selectedNode.converter.datatypeUri != null) { //or a datatype
-                        err = "the used converter creates a typed literal (" + 
+                        err = "the used converter creates a typed literal (" +
                             ResourceUtils.getQName(this.selectedNode.converter.datatypeUri, VBContext.getPrefixMappings()) +
                             ") instead of a language tagged literal.";
                     } else if (this.selectedNode.converter.language != this.language) { //has a different language
@@ -317,7 +325,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
             } else if (this.selectedRangeType.type == RangeType.typedLiteral) {
                 //if range type is typed literal, node is not compliant if its converter capability is not literal
                 if (this.selectedNode.converter.type != RDFCapabilityType.literal) {
-                    err = "the type of converter used to create the node (" + this.selectedNode.converter.type + 
+                    err = "the type of converter used to create the node (" + this.selectedNode.converter.type +
                         ") is not compliant with the selected range type (" + this.selectedRangeType.show + ")";
                 } else { //...or if it is literal but...
                     if (this.selectedNode.converter.language != null) { //or a language
@@ -353,10 +361,10 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
             this.s2rdfService.addNodeToHeader(this.context.header.id, this.selectedNode.nodeId, this.selectedNode.converter.type,
                 this.selectedNode.converter.contractUri, this.selectedNode.converter.datatypeUri, this.selectedNode.converter.language, this.selectedNode.converter.params,
                 this.selectedNode.memoize).subscribe(
-                resp => {
-                    this.createOrUpdateGraphApplication();
-                }
-            );
+                    resp => {
+                        this.createOrUpdateGraphApplication();
+                    }
+                );
         } else { //if it did exist, there is no need to create it, it's enough to set the nodeId of the graph application
             this.createOrUpdateGraphApplication();
         }
@@ -388,7 +396,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
      * Annotates a not-annotated list of ARTURIResource
      * @param resources 
      */
-    private annotateResources(resources: ARTURIResource[]): Observable<any> {
+    private annotateResources(resources: ARTURIResource[]): Observable<void> {
         return this.resourceService.getResourcesInfo(resources).map(
             annotated => {
                 for (let i = 0; i < resources.length; i++) {

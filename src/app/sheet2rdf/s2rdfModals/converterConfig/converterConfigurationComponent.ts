@@ -16,7 +16,7 @@ export class ConverterConfigurationComponent {
     @Input() memoize: boolean;
     @Input() rangeType: RangeType; //the listed converters capability must be compliant with this rangeType (if not provided, all converter are ok)
     @Input() constrainedLanguage: string;
-    @Input() constainedDatatype: ARTURIResource;
+    @Input() constrainedDatatype: ARTURIResource;
     @Output() update: EventEmitter<UpdateStatus> = new EventEmitter();
 
     private availableConverters: ConverterContractDescription[] = [];
@@ -43,7 +43,7 @@ export class ConverterConfigurationComponent {
         if (this.language == null && this.converter != null) { //language not constrained => get the language of the input converter
             this.language = this.converter.language;
         }
-        this.datatype = this.constainedDatatype;
+        this.datatype = this.constrainedDatatype;
         if (this.language != null) {
             this.selectedLiteralAspect = this.languageLiteralAspect;
             this.literalAspectChangeable = false;

@@ -14,7 +14,7 @@ export class NodeCreationModalData extends BSModalContext {
      * @param editingNode provided if it works in edit mode
      * @param constrainedRangeType range type of the property chosen in the graph application. Useful to determine the compliant converters
      * @param constrainedLanguage the language chosen in the graph application.
-     * @param constainedDatatype datatype chosen in the graph application. Useful to determine the compliant converter
+     * @param constrainedDatatype datatype chosen in the graph application. Useful to determine the compliant converter
      * @param headerNodes nodes already defined for the header. Useful to check if the current header has already a node with the same id
      */
     constructor(
@@ -22,7 +22,7 @@ export class NodeCreationModalData extends BSModalContext {
         public editingNode: NodeConversion,
         public constrainedRangeType: RangeType,
         public constrainedLanguage: string,
-        public constainedDatatype: ARTURIResource, 
+        public constrainedDatatype: ARTURIResource, 
         public headerNodes: NodeConversion[]
     ) {
         super();
