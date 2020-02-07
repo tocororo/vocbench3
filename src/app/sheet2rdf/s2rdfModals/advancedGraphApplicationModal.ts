@@ -6,7 +6,7 @@ import { ARTURIResource } from "../../models/ARTResources";
 import { ConverterContractDescription, RDFCapabilityType } from "../../models/Coda";
 import { Configuration, ConfigurationComponents, ConfigurationProperty } from "../../models/Configuration";
 import { PrefixMapping } from "../../models/Metadata";
-import { AdvancedGraphApplication, NodeConversion, SimpleHeader } from "../../models/Sheet2RDF";
+import { AdvancedGraphApplication, NodeConversion, SimpleHeader, SimpleGraphApplication } from "../../models/Sheet2RDF";
 import { RangeType } from "../../services/propertyServices";
 import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
@@ -17,7 +17,13 @@ import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalS
 import { NodeCreationModal, NodeCreationModalData } from "./nodeCreationModal";
 
 export class AdvancedGraphApplicationModalData extends BSModalContext {
-    constructor(public header: SimpleHeader, public graphApplication?: AdvancedGraphApplication) {
+    /**
+     * 
+     * @param header 
+     * @param graphApplication 
+     * @param headers all the headers in the spreadsheet. Useful for creating a complete pearl example to validate
+     */
+    constructor(public header: SimpleHeader, public headers: SimpleHeader[], public graphApplication?: AdvancedGraphApplication) {
         super();
     }
 }
@@ -227,6 +233,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
          * Creates a fake complete pearl rule just for pass it to the validateGraphPattern service.
          */
         let pearl: string = "";
+        //PREFIX
         this.globalPrefixMappings.forEach(m => {
             pearl += "prefix " + m.prefix + ": <" + m.namespace + ">\n";
         });
@@ -234,8 +241,25 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
             pearl += "prefix " + m.prefix + ": <" + m.namespace + ">\n";
         });
         pearl += "rule it.uniroma2.art.FakeRule id:rule {\n";
+        //NODES
         pearl += "nodes = {\n";
-        pearl += "subject uri " + this.context.header.pearlFeature + "\n";
+        // - subject
+        pearl += "subject uri " + this.context.header.pearlFeature + " .\n";
+        //- other headers nodes (useful in case graph section contains foreign reference)
+        this.context.headers.forEach(h => {
+            //skip the same current header (prevent to write multiple time the declaration of its nodes)
+            if (h.id == this.context.header.id) return;
+            h.graph.forEach(graphAppl => {
+                if (graphAppl instanceof SimpleGraphApplication) {
+                    pearl += graphAppl.nodeId + " uri " + this.context.header.pearlFeature + " .\n"; //converter and FS are just mockup
+                } else if (graphAppl instanceof AdvancedGraphApplication) {
+                    graphAppl.nodeIds.forEach(nId => {
+                        pearl += nId + " uri " + this.context.header.pearlFeature + " .\n"; //converter and FS are just mockup
+                    });
+                }
+            })
+        })
+        // - nodes of this graph application
         this.alreadyDefinedNodes.forEach(n => {
             pearl += n.nodeId + " " + n.converter.type + " " + this.context.header.pearlFeature + " .\n";
         });
@@ -243,6 +267,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
             pearl += n.nodeId + " " + n.converter.type + " " + this.context.header.pearlFeature + " .\n";
         });
         pearl += "}\n"; //close nodes
+        //GRAPH
         pearl += "graph = {\n";
         let gp: string = this.graphPattern;
         if (gp.includes(this.PRED_PLACEHOLDER)) {
@@ -255,7 +280,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         return this.s2rdfService.validateGraphPattern(pearl).map(
             validation => {
                 if (!validation.valid) {
-                    this.basicModals.alert("Advanced Graph Application", validation.details, "warning");
+                    this.basicModals.alert("Advanced Graph Application", "The provided graph pattern is not valid.", "warning", validation.details);
                     return validation;
                 } else {
                     validation.usedNodes.forEach((nodeId, index, list) => {
@@ -511,25 +536,16 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                     if (addNodeFn.length != 0) {
                         Observable.forkJoin(addNodeFn).subscribe(
                             () => { //nodes added => now add/update the graph application
-                                let graphAppFn: Observable<any>;
-                                if (this.context.graphApplication == null) { //creation mode
-                                    graphAppFn = this.s2rdfService.addAdvancedGraphApplicationToHeader(
-                                        this.context.header.id, this.graphPattern, validation.usedNodes, prefixMappingMap, this.defaultPredicate);
-                                } else { //edit mode
-                                    graphAppFn = this.s2rdfService.updateAdvancedGraphApplication(
-                                        this.context.header.id, this.context.graphApplication.id, this.graphPattern, validation.usedNodes, prefixMappingMap);
-                                }
-                                graphAppFn.subscribe(
-                                    () => { //done
+                                this.addOrUpdateAdvancedGraphApplication(validation.usedNodes, prefixMappingMap).subscribe(
+                                    () => {
                                         this.dialog.close();
                                     }
                                 );
                             }
                         );
-                    } else { //no node to add, simply update the graph pattern
-                        this.s2rdfService.updateAdvancedGraphApplication(
-                            this.context.header.id, this.context.graphApplication.id, this.graphPattern, validation.usedNodes, prefixMappingMap).subscribe(
-                            stResp => {
+                    } else { //no node to add, simply update/create the graph application
+                        this.addOrUpdateAdvancedGraphApplication(validation.usedNodes, prefixMappingMap).subscribe(
+                            () => {
                                 this.dialog.close();
                             }
                         );
@@ -537,7 +553,18 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                 }
             }
         );
+    }
 
+    private addOrUpdateAdvancedGraphApplication(referencedNodesId: string[], prefixMappingMap: {[key: string]: string}): Observable<void> {
+        let graphAppFn: Observable<void>;
+        if (this.context.graphApplication == null) { //creation mode
+            graphAppFn = this.s2rdfService.addAdvancedGraphApplicationToHeader(
+                this.context.header.id, this.graphPattern, referencedNodesId, prefixMappingMap, this.defaultPredicate);
+        } else { //edit mode
+            graphAppFn = this.s2rdfService.updateAdvancedGraphApplication(
+                this.context.header.id, this.context.graphApplication.id, this.graphPattern, referencedNodesId, prefixMappingMap);
+        }
+        return graphAppFn;
     }
 
     cancel() {

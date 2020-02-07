@@ -16,8 +16,9 @@ export class HeaderEditorModalData extends BSModalContext {
      * This modal get the headerId instead of directly the HeaderStruct in order to prevent changes directly on the HeaderStruct
      * (even if the user discard the modal)
      * @param headerId 
+     * @param headers all the headers in the spreadsheet. Useful for checks
      */
-    constructor(public headerId: string) {
+    constructor(public headerId: string, public headers: SimpleHeader[]) {
         super();
     }
 }
@@ -184,7 +185,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
                 () => {}
             );
         } else { //AdvancedGraphApplication
-            let modalData = new AdvancedGraphApplicationModalData(this.header, <AdvancedGraphApplication>this.selectedGraph);
+            let modalData = new AdvancedGraphApplicationModalData(this.header, this.context.headers, <AdvancedGraphApplication>this.selectedGraph);
             const builder = new BSModalContextBuilder<AdvancedGraphApplicationModalData>(
                 modalData, undefined, AdvancedGraphApplicationModalData
             );
@@ -215,7 +216,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     }
 
     private addAdvancedGraphApplication() {
-        var modalData = new AdvancedGraphApplicationModalData(this.header);
+        var modalData = new AdvancedGraphApplicationModalData(this.header, this.context.headers);
         const builder = new BSModalContextBuilder<AdvancedGraphApplicationModalData>(
             modalData, undefined, AdvancedGraphApplicationModalData
         );

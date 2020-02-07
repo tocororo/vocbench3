@@ -234,7 +234,7 @@ export class Sheet2RdfComponent {
     }
 
     private editHeader(header: SimpleHeader) {
-        var modalData = new HeaderEditorModalData(header.id);
+        var modalData = new HeaderEditorModalData(header.id, this.headers);
         const builder = new BSModalContextBuilder<HeaderEditorModalData>(
             modalData, undefined, HeaderEditorModalData
         );
