@@ -23,7 +23,7 @@ export class DataGraphPanel extends AbstractGraphPanel {
     @Input() role: RDFResourceRolesEnum;
     @Input() context: DataGraphContext;
     @ViewChild(DataGraphComponent) viewChildGraph: DataGraphComponent;
-    protected selectedElement: Node | Link;
+    
     constructor(basicModals: BasicModalServices, browsingModals: BrowsingModalServices, private modal: Modal, private individualService: IndividualsServices) {
         super(basicModals, browsingModals);
     }

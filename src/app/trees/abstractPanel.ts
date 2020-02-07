@@ -9,7 +9,7 @@ import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { ActionDescription, RoleActionResolver } from "../utils/RoleActionResolver";
 import { TreeListContext } from "../utils/UIUtils";
 import { VBActionFunctionCtx } from "../utils/VBActions";
-import { ProjectContext } from "../utils/VBContext";
+import { ProjectContext, VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -197,7 +197,7 @@ export abstract class AbstractPanel {
             if (graphMode == GraphMode.dataOriented) {
                 return this.selectedNode != null;
             } else if(graphMode == GraphMode.umlOriented){
-                return true;
+                return VBContext.getSystemSettings().experimentalFeaturesEnabled;
             } else { //model oriented
                 return true;
             }    

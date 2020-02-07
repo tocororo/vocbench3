@@ -1,4 +1,3 @@
-import { PropInfo } from './model/UmlNode';
 import { Input } from "@angular/core";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingModalServices";
@@ -10,11 +9,13 @@ import { Node } from "./model/Node";
 export abstract class AbstractGraphPanel {
     @Input() graph: ForceDirectedGraph;
     @Input() rendering: boolean = true;
-    protected isLock:boolean=true;
+
     abstract viewChildGraph: AbstractGraph;
 
     protected selectedElement: Node | Link;
+    private isLock: boolean = false;
     private forces: GraphForces;
+    
     protected basicModals: BasicModalServices
     protected browsingModals: BrowsingModalServices;
     constructor(basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
@@ -48,8 +49,7 @@ export abstract class AbstractGraphPanel {
             n.fx = n.x;
             n.fy = n.y;
         });
-
-        this.isLock=false;
+        this.isLock = true;
     }
     protected unfixAll() {
         this.graph.getNodes().forEach(n => {
@@ -57,7 +57,7 @@ export abstract class AbstractGraphPanel {
             n.fx = null;
             n.fy = null;
         });
-        this.isLock=true
+        this.isLock = false;
     }
 
     protected onElementSelected(element: Node | Link) {

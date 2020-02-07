@@ -271,13 +271,13 @@
                     </div>
                 </div>
                 <div class="panel-footer" style="text-align: right;">
-                    <button class="btn btn-info btn-sm" (click)="previewHomeContent()">Preview</button>
+                    <button class="btn btn-info btn-sm" (click)="previewHomeContent()" [disabled]="!homeContent">Preview</button>
                     <button type="submit" class="btn btn-default btn-sm" (click)="updateHomeContent()" [disabled]="!isHomeContentChanged()">Submit</button>
                 </div>
             </div>
 
             <!-- Experimental feature -->
-            <!-- 
+            
             <span style="flex: 1"></span>
             <div class="panel panel-default" style="margin-top: 8px;">
                 <div class="panel-body">
@@ -291,7 +291,7 @@
                     </div>
                 </div>
             </div>
-            -->
+           
 
         </div>
     </div>

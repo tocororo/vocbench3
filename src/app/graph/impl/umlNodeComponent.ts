@@ -17,30 +17,21 @@ import { AbstractGraphNode } from '../abstractGraphNode';
 export class UmlNodeComponent extends AbstractGraphNode {
     @Input() graph: ForceDirectedGraph;
     @Input() selectedProp: NodePropRange;
-    
     @Input('umlNode') node: UmlNode;
-    @ViewChild('textEl') textElement: ElementRef;
-    graphMode = GraphMode.umlOriented;
     @Output() propClicked: EventEmitter<PropInfo> = new EventEmitter<PropInfo>();
+    @ViewChild('textEl') textElement: ElementRef;
+
+    graphMode = GraphMode.umlOriented;
+
     private stripePercentage: number; //percentage of the rect height to dedicate to the top stripe
     private stripeHeight: number; //height (in px) of the top stripe
     protected measures: NodeMeasure;
     private res: ARTNode;
     private lineSeparetorPercentage: number;
-    //private propList: { prop: ARTURIResource, x?: number, y?: number, show: string, normalizedShow: string }[];
-
-
 
     constructor(protected changeDetectorRef: ChangeDetectorRef) {
         super(changeDetectorRef)
     }
-
-    // ngOnChanges(changes:SimpleChanges){
-    //     super.ngOnChanges(changes);
-    //     if(changes["selectedProp"]){
-            
-    //     }
-    // }
 
 
     ngOnInit() {
@@ -50,18 +41,9 @@ export class UmlNodeComponent extends AbstractGraphNode {
         this.updateShow();
     }
 
-    ngAfterViewInit() {
-        super.ngAfterViewInit()
-
-
-    }
-
-
     protected initNode() {
         this.measures = this.node.getNodeMeaseure();
     }
-
-
 
     private initMeasures() {
         let fontSize: number = 14;
@@ -106,23 +88,8 @@ export class UmlNodeComponent extends AbstractGraphNode {
      */
 
     private isSelectedProperty(prop: PropInfo) {
-        return this.selectedProp!=null && this.selectedProp.node.res.equals(this.node.res) && this.selectedProp.prop.property.equals(prop.property) && this.selectedProp.prop.range.equals(prop.range);
+        return this.selectedProp != null && this.selectedProp.node.res.equals(this.node.res) && this.selectedProp.prop.property.equals(prop.property) && this.selectedProp.prop.range.equals(prop.range);
     }
-
-    /**
-      * This method propagate click event on prop
-      */
-    private onClickProp(prop: PropInfo) {
-        /**
-         * catturare questo evento nel graph insieme al nodo
-         * quindi salvare la tripla nodo+prop+range nel graph e
-         * iniettarla nel nodo al posto di selectedProp
-         * basare quindi il controllo in isSelecteProperty su questa tripla
-         */
-        this.propClicked.emit(prop);
-
-    }
-
 
     /**
      * This method is used in order to ensure RDFS.subClassOf is not shown among properties of node
@@ -132,7 +99,7 @@ export class UmlNodeComponent extends AbstractGraphNode {
         return !prop.property.equals(RDFS.subClassOf)
     }
 
-    
+
 
 
     /**
@@ -144,11 +111,11 @@ export class UmlNodeComponent extends AbstractGraphNode {
         //update show class name
         this.show = ResourceUtils.getRendering(this.node.res, this.rendering);
         this.changeDetectorRef.detectChanges(); //fire change detection in order to update the textEl that contains "show"
-        let dimImgClass=14
+        let dimImgClass = 14
         this.normalizedShow = this.show;
         if (this.textElement != null) {
             let textElementWidth = this.textElement.nativeElement.getBBox().width;
-            let nodeWidth = this.node.getNodeWidth() - 4 -dimImgClass; //subtract 4 as padding
+            let nodeWidth = this.node.getNodeWidth() - 4 - dimImgClass; //subtract 4 as padding
             if (textElementWidth > nodeWidth) {
                 let ratio = textElementWidth / nodeWidth;
                 let truncateAt = Math.floor(this.normalizedShow.length / ratio);
@@ -180,10 +147,24 @@ export class UmlNodeComponent extends AbstractGraphNode {
 
                 }
             }
-
         }
         this.changeDetectorRef.detectChanges(); //fire change detection in order to update the normalizedShow in the view
     }
 
+
+    /**
+     * Click handlers
+     */
+
+    protected onClickClass() {
+        this.nodeClicked.emit(this.node);
+    }
+
+    /**
+      * This method propagate click event on prop
+      */
+    private onClickProp(prop: PropInfo) {
+        this.propClicked.emit(prop);
+    }
 
 }

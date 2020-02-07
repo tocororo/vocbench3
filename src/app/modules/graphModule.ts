@@ -1,7 +1,3 @@
-import { UmlLinkComponent } from './../graph/impl/umlLinkComponent';
-import { UmlNodeComponent } from './../graph/impl/umlNodeComponent';
-import { UmlGraphPanel } from './../graph/impl/umlGraphPanel';
-import { UmlGraphComponent } from './../graph/impl/umlGraphComponent';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -21,6 +17,10 @@ import { GraphModalServices } from '../graph/modal/graphModalServices';
 import { LinksFilterModal } from '../graph/modal/linksFilterModal';
 import { ForceControlPanel } from '../graph/widget/forceControlPanel';
 import { ResourceDetailsPanel } from '../graph/widget/resourceDetailsPanel';
+import { UmlGraphComponent } from './../graph/impl/umlGraphComponent';
+import { UmlGraphPanel } from './../graph/impl/umlGraphPanel';
+import { UmlLinkComponent } from './../graph/impl/umlLinkComponent';
+import { UmlNodeComponent } from './../graph/impl/umlNodeComponent';
 import { PreferencesModule } from './preferencesModule';
 import { SharedModule } from './sharedModule';
 

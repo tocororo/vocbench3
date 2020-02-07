@@ -17,15 +17,12 @@ import { UmlNode } from './../model/UmlNode';
     templateUrl: "./umlGraphPanel.html"
 })
 export class UmlGraphPanel extends AbstractGraphPanel {
-    //@override
-    //protected selectedElement: Node | Link | PropInfo;
-    private resourceToDescribe: ARTNode;
-    protected isHideArrows: boolean = false;
-    private activeRemove: boolean;
+
     @ViewChild(UmlGraphComponent) viewChildGraph: UmlGraphComponent;
-    //@Input() nodeToRemove: UmlNode;
-
-
+    
+    private resourceToDescribe: ARTNode;
+    private isHideArrows: boolean = false;
+    private activeRemove: boolean = false;
 
     constructor(basicModals: BasicModalServices, browsingModals: BrowsingModalServices, private modal: Modal) {
         super(basicModals, browsingModals);

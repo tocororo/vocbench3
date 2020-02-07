@@ -1,19 +1,17 @@
 <div class="panel panel-default vbox">
     <div class="panel-heading">
        <div class="btn-toolbar" role="toolbar">
-           
             <button class="btn btn-xs btn-default" (click)="addNode()" title="Add a new node">
                 <span class="glyphicon glyphicon-plus"></span>
             </button>
             <button class="btn btn-xs btn-default" (click)="removeNode()"title="Delete selected node" [disabled]="!activeRemove" >
                 <span class="glyphicon glyphicon-minus"></span>
             </button>
-
         </div> 
         <span style="flex: 1;"></span>
         <div class="btn-toolbar" role="toolbar">
-            <button class="btn btn-default btn-xs"  title="Show/hide arrows" (click)="updateArrows()"  [ngClass]="{ active: isHideArrows }">
-                <span class="glyphicon  glyphicon-arrow-up"></span>
+            <button class="btn btn-default btn-xs"  title="Hide generic relation links" (click)="updateArrows()"  [ngClass]="{ active: isHideArrows }">
+                <span class="glyphicon glyphicon-arrow-up"></span>
             </button>
             <button class="btn btn-default btn-xs" (click)="rendering=!rendering" title="Rendering"  [ngClass]="{ active: rendering }">
                 <span class="glyphicon glyphicon-font"></span>
@@ -21,7 +19,7 @@
             <button class="btn btn-default btn-xs" (click)="snapshot()" title="Export a snapshot of the graph (.svg)">
                 <span class="glyphicon glyphicon-camera"></span>
             </button>
-            <button type="button" class="btn btn-default btn-xs" title="Fix nodes position"  (click)="isLock==true ?fixAll() : unfixAll()"  [ngClass]="{ active: !isLock }">
+            <button type="button" class="btn btn-default btn-xs" title="Fix nodes position" (click)="isLock? unfixAll() : fixAll()"  [ngClass]="{ active: isLock }">
                 <span class="glyphicon glyphicon-lock"></span>
             </button>
           <!--  <button class="btn btn-default btn-xs" (click)="openSettings()" title="Settings">
@@ -30,35 +28,18 @@
         </div>
     </div>
     <div class="panel-body hbox">
-        <uml-graph class="vbox" [graph]="graph" [rendering]="rendering" [hideArrow]="isHideArrows" (elementSelected)="onElementSelected($event)"></uml-graph>
-
+        <uml-graph class="vbox" [graph]="graph" [rendering]="rendering" [hideArrow]="isHideArrows" [fixed]="isLock" (elementSelected)="onElementSelected($event)"></uml-graph>
         <div class="vbox" style="flex: initial; width: 300px; margin-left: 4px;">
             <div class="panel panel-default vbox">
                 <div class="panel-heading">
                     <label></label>
                     <span style="flex: 1;"></span>
-                   <!-- <div *ngIf="isSelectedElementNode()" class="btn-toolbar" role="toolbar">
-                        <div class="btn-group btn-group-xs">
-                            <button type="button" class="btn btn-default" [ngClass]="{ active: selectedElement?.fixed }" title="Fix node position" (click)="fixNode()" [disabled]="!selectedElement">
-                                <span class="glyphicon glyphicon-lock"></span>
-                            </button>
-                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="padding: 3px; line-height: 1;">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a (click)="fixAll()">Fix all nodes</a></li>
-                                <li><a (click)="unfixAll()">Unfix all nodes</a></li>
-                            </ul> 
-                        </div>
-                    </div> -->
                 </div>
                 <div class="panel-body vbox">
                     <resource-details-panel *ngIf="resourceToDescribe" [resource]="resourceToDescribe"></resource-details-panel>
                 </div>
             </div>
-
            <!-- <force-control-panel [(ngModel)]="forces" (ngModelChange)="onForceChange()" style="margin-top: 4px"></force-control-panel> -->
-
         </div>
     </div>
 </div>

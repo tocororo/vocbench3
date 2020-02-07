@@ -114,75 +114,11 @@ export class GraphUtils {
     }
 
 
-    /*
-      Con questo metodo regolo la posizione della freccia(la punta) rispetto al bordo del rettangolo(nodo).
-      Li regolo in base alla posizione del nodo sorgente e del nodo target e in base all'altezza del nodo
-      sorgente rispetto al nodo target
-    */
-
-    // public static positionArrow(source: Point, target: Point, link: Link): { x: number, y: number, tmp: boolean, direction?: boolean } {
-    //     //console.log(source,target,link)
-    //     let differenceX = source.x - target.x;
-    //     let sign = Math.sign(differenceX);// return 1 if positive and -1 if negative
-    //     let dx;
-    //     let dy;
-    //     let tmp: boolean; // indica se sono fuori dai casi in cui la freccia deve essere dritta e non spezzata
-    //     let direction: boolean; // serve a gestire le uscite delle frecce lato sinistro e destro in modo che il centro del nodo rimanga vuoto
-    //     let abs = Math.abs(source.y - target.y);//valore assoluto 
-    //     /*con i primi due "if" gestisco il caso in cui la freccia deve essere dritta e non spezzata
-    //      con gli altri le varie posizioni della freccia(caso spezzato)
-    //      */
-    //     if (sign === -1 && (link.target.getNodeHeight() / 2) + 3 > abs) {
-    //         dx = (target.x - (link.target.getNodeWidth() / 2));
-    //         dy = source.y;
-    //         return { x: dx, y: dy, tmp: true }
-    //     } else if (sign === 1 && (link.target.getNodeHeight() / 2) + 3 > abs) {
-    //         dx = (target.x + (link.target.getNodeWidth() / 2));
-    //         dy = source.y;
-    //         return { x: dx, y: dy, tmp: true }
-
-    //     } else if (sign === -1 && source.y > target.y) {
-    //         dx = target.x;
-    //         dy = (target.y + (link.target.getNodeHeight() / 2));
-    //         if (target.x > source.x && target.x < (source.x + link.source.getNodeWidth() + link.target.getNodeWidth() / 2)) { // caso in cui devo rispezzare la linea perchè il nodo target è sopra il nodo sorgente
-    //             dx = source.x + link.source.getNodeWidth();
-
-    //             return { x: dx, y: dy, tmp: false, direction: true }
-    //         }
-
-    //         return { x: dx, y: dy, tmp: false }
-    //     } else if (sign === -1 && source.y < target.y) {
-    //         dx = target.x;
-    //         dy = (target.y - (link.target.getNodeHeight() / 2));
-    //         if (target.x < (source.x + link.source.getNodeWidth() + link.target.getNodeWidth() / 2) && target.x > source.x) { // caso in cui devo rispezzare la linea perchè il nodo target è sopra il nodo sorgente
-    //             dx = source.x + link.source.getNodeWidth();
-
-    //             return { x: dx, y: dy, tmp: false, direction: true }
-    //         }
-    //         return { x: dx, y: dy, tmp: false }
-
-    //     } else if (sign === 1 && source.y < target.y) {
-    //         dx = target.x;
-    //         dy = (target.y - (link.target.getNodeHeight() / 2));
-
-    //         return { x: dx, y: dy, tmp: false }
-    //     } else if (sign === 1 && source.y > target.y) {
-    //         dx = target.x;
-    //         dy = (target.y + (link.target.getNodeHeight() / 2));
-
-    //         return { x: dx, y: dy, tmp: false }
-    //     }
-
-
-    // }
-
-     /*
-      Con questo metodo regolo la posizione della freccia(la punta) rispetto al bordo del rettangolo(nodo).
-      Li regolo in base alla posizione del nodo sorgente e del nodo target e in base all'altezza del nodo
-      sorgente rispetto al nodo target
-    */
-
-
+    /**
+     * Con questo metodo regolo la posizione della freccia(la punta) rispetto al bordo del rettangolo(nodo).
+     * Li regolo in base alla posizione del nodo sorgente e del nodo target e in base all'altezza del nodo
+     * sorgente rispetto al nodo target
+     */
     public static positionArrow(source: Point, target: Point, link: Link, isSubClassOf: boolean): { x: number, y: number, straightArrow: boolean, directionLeft?: boolean, directionRight?: boolean, isSubClassOf?: boolean } {
         let sign = Math.sign(source.x - target.x);// return 1 if positive and -1 if negative
         if (sign == 0) {// questo è il caso in cui le x di target e source sono uguali
@@ -198,12 +134,12 @@ export class GraphUtils {
         if ((sign === -1 && (((link.target.getNodeHeight() / 2) + 3) > abs))) { // qui il + 3 è per gestire la linea e la punta della freccia subito dopo che finisce di essere dritta la linea
             dx = (target.x - (link.target.getNodeWidth() / 2));
             dy = source.y;
-           
+
             return { x: dx, y: dy, straightArrow: true }
         } else if ((sign === 1 && (((link.target.getNodeHeight() / 2) + 3) > abs))) {
             dx = (target.x + (link.target.getNodeWidth() / 2));
             dy = source.y;
-          
+
             return { x: dx, y: dy, straightArrow: true }
 
         } else if (sign === -1 && source.y >= target.y) {  // caso sorgente a sinistra e target a destra ( ma è più alto)
@@ -253,7 +189,7 @@ export class GraphUtils {
                 dx = target.x;
                 dy = (target.y - (link.target.getNodeHeight() / 2));
                 return { x: dx, y: dy, straightArrow: false, isSubClassOf: true }
-            } 
+            }
             return { x: dx, y: dy, straightArrow: false }
         }
 

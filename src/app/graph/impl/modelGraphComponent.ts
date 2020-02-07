@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output } from "@angular/core";
 import { ARTNode, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { GraphClassAxiomFilter, GraphModelRecord } from "../../models/Graphs";
-import { OWL, RDFS } from "../../models/Vocabulary";
+import { OWL } from "../../models/Vocabulary";
 import { GraphServices } from "../../services/graphServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
@@ -20,6 +20,7 @@ import { Node } from "../model/Node";
 export class ModelGraphComponent extends AbstractGraph {
 
     @Input() filters: GraphClassAxiomFilter[];
+    @Output() elementSelected = new EventEmitter<Link|Node>();
 
     protected mode = GraphMode.modelOriented;
 

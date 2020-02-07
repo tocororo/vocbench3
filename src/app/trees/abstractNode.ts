@@ -69,7 +69,7 @@ export abstract class AbstractNode {
      * affected by the renaming.
      */
     onResourceRenamed(oldResource: ARTURIResource, newResource: ARTURIResource) {
-        if (oldResource.getURI() == this.node.getURI()) {
+        if (oldResource.equals(this.node)) {
             this.node.setURI(newResource.getURI());
             this.node.setAdditionalProperty(ResAttribute.QNAME, newResource.getAdditionalProperty(ResAttribute.QNAME));
             this.node.setShow(newResource.getShow());
@@ -78,7 +78,7 @@ export abstract class AbstractNode {
 
     onResourceDeprecated(resource: ARTResource) {
         if (resource instanceof ARTURIResource) {
-            if (resource.getURI() == this.node.getURI()) {
+            if (resource.equals(this.node)) {
                 /**
                  * Replace the resource held by this component with a clone of it and set the deprecated attribute to true.
                  * In this way the rdfResource component in the node detects the change of @Input node and updates the icon

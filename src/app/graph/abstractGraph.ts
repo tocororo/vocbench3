@@ -16,7 +16,7 @@ export abstract class AbstractGraph {
 
     protected selectedElement: Link | Node;
     protected linkAhead: Link; //link selected to bring ahead the other
-    
+
     private initialized: boolean = false; //true once the graph will be initialized (useful in order to not render the graph view until then)
     
     protected abstract mode: GraphMode;
@@ -35,7 +35,6 @@ export abstract class AbstractGraph {
         this.graph.initSimulation(this.options);
         this.initialized = true;
     }
-    
 
     protected onNodeClicked(node: Node) {
         if (node == this.selectedElement) {

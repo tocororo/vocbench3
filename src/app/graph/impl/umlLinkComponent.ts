@@ -1,13 +1,9 @@
-import { Link } from './../model/Link';
-import { EventEmitter } from '@angular/core';
-import { Output } from '@angular/core';
-import { RDFS } from './../../models/Vocabulary';
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { RDFResourceRolesEnum } from './../../models/ARTResources';
-import { Constants } from './../model/GraphConstants';
+import { RDFS } from './../../models/Vocabulary';
 import { GraphUtils, Point } from './../model/GraphUtils';
+import { Link } from './../model/Link';
 import { UmlLink } from './../model/UmlLink';
-import { templateJitUrl } from '@angular/compiler';
 
 
 
@@ -57,9 +53,6 @@ export class UmlLinkComponent {
 
     }
 
-    
-
-
     private computePathUml() {
 
         let source: Point = new Point(this.link.source.x, this.link.source.y);
@@ -83,68 +76,48 @@ export class UmlLinkComponent {
                 }
             }
         } else {
+            //retrieve the PropInfo of the source node related to the current link
+            let propInfo = this.link.source.listPropInfo.find(pi => {
+                return pi.property.equals(this.link.res) && pi.range.equals(this.link.target.res)
+            })
+            if (propInfo != null) { //found
+                let endpoint;
+                if(propInfo.property.equals(RDFS.subClassOf)){
+                    isSubClassOf=true;
+                }
+                /*
+                from the center to the edge of the node (to bring the arrow out of the resource to which it refers).
+                the -3 is the padding that goes from the side of the rect to the beginning of the property
+                */
+                path = path + " " + "M" + (source.x + (propInfo.x - 3)) + " " + (source.y + propInfo.y + 7);
+                source.x = source.x + (propInfo.x - 3);
+                source.y = source.y + propInfo.y + 7;
+                //endpoint = GraphUtils.positionArrow(source, target, this.link );
+                endpoint = GraphUtils.positionArrow(source, target, this.link, isSubClassOf ); 
+                
+                 if (endpoint.directionRight === true) {
+                    path = path + " " + "M" + endpoint.x + " " + source.y;
+                    path = path + " " + "L" + (endpoint.x + ((this.link.target.getNodeWidth()/2) + 5)) + " " + source.y
+                    source.x = endpoint.x + (this.link.target.getNodeWidth()/2) + 5
 
-            for (let tmp of this.link.source.listPropInfo) {
-                //CREARE UN METODO DEDICATO
-                if (tmp.property.equals(this.link.res) && tmp.range.equals(this.link.target.res)) {
-                    let endpoint;
-                    if(tmp.property.equals(RDFS.subClassOf)){
-                        isSubClassOf=true;
-                    }
-                    /*
-                    from the center to the edge of the node (to bring the arrow out of the resource to which it refers).
-                    the -3 is the padding that goes from the side of the rect to the beginning of the property
-                    */
-                    path = path + " " + "M" + (source.x + (tmp.x - 3)) + " " + (source.y + tmp.y + 7);
-                    source.x = source.x + (tmp.x - 3);
-                    source.y = source.y + tmp.y + 7;
-                    //endpoint = GraphUtils.positionArrow(source, target, this.link );
-                    endpoint = GraphUtils.positionArrow(source, target, this.link, isSubClassOf ); 
-                    
-                     if (endpoint.directionRight === true) {
-                        path = path + " " + "M" + endpoint.x + " " + source.y;
-                        path = path + " " + "L" + (endpoint.x + ((this.link.target.getNodeWidth()/2) + 5)) + " " + source.y
-                        source.x = endpoint.x + (this.link.target.getNodeWidth()/2) + 5
+                    path = path + " " + "L" + source.x + " " + this.link.target.y;
+                    path = path + " " + "L" + (target.x + this.link.target.getNodeWidth() / 2) + " " + this.link.target.y;
+                    return path;
 
-                        path = path + " " + "L" + source.x + " " + this.link.target.y;
-                        path = path + " " + "L" + (target.x + this.link.target.getNodeWidth() / 2) + " " + this.link.target.y;
-                        return path;
+                } else if(endpoint.directionLeft === true){
+                    path = path + " " + "M" + endpoint.x + " " + source.y;
+                    path = path + " " + "L" + (endpoint.x - ((this.link.target.getNodeWidth()/2) + 5)) + " " + source.y
+                    source.x = endpoint.x - ((this.link.target.getNodeWidth()/2) + 5)
+                    path = path + " " + "L" + source.x + " " + this.link.target.y;
+                    path = path + " " + "L" + (target.x - this.link.target.getNodeWidth() / 2) + " " + this.link.target.y;
+                    return path;
+                }
 
-                    } else if(endpoint.directionLeft === true){
-                        path = path + " " + "M" + endpoint.x + " " + source.y;
-                        path = path + " " + "L" + (endpoint.x - ((this.link.target.getNodeWidth()/2) + 5)) + " " + source.y
-                        source.x = endpoint.x - ((this.link.target.getNodeWidth()/2) + 5)
-                        path = path + " " + "L" + source.x + " " + this.link.target.y;
-                        path = path + " " + "L" + (target.x - this.link.target.getNodeWidth() / 2) + " " + this.link.target.y;
-                        return path;
-                    }
-
-                     if (endpoint.straightArrow === false || endpoint.isSubClassOf=== true ) {
-                        path = path + " " + endpoint.x + " " + source.y;
-
-                    }
-                    path = path + " " + endpoint.x + " " + endpoint.y; //path end
-
-
-                    // if (endpoint.direction === true) {
-                    //     path = path + " " + "M" + endpoint.x + " " + source.y;
-                    //     path = path + " " + "L" + (endpoint.x + this.link.target.getNodeWidth()) + " " + source.y
-                    //     source.x = endpoint.x + this.link.target.getNodeWidth();
-
-                    //     path = path + " " + "L" + source.x + " " + this.link.target.y;
-                    //     path = path + " " + "L" + (target.x + this.link.target.getNodeWidth() / 2) + " " + this.link.target.y;
-                    //     return path;
-
-                    // }
-
-                    // if (endpoint.tmp === false ) {
-                    //     path = path + " " + endpoint.x + " " + source.y;
-
-                    // }
-
-                    // path = path + " " + endpoint.x + " " + endpoint.y; //path end
+                 if (endpoint.straightArrow === false || endpoint.isSubClassOf=== true ) {
+                    path = path + " " + endpoint.x + " " + source.y;
 
                 }
+                path = path + " " + endpoint.x + " " + endpoint.y; //path end
             }
         }
         return path;
@@ -157,47 +130,6 @@ export class UmlLinkComponent {
             this.linkClicked.emit(this.link);
         }
     }
-
-
-
-
-    /**
-         * Link label utils
-         */
-
-    // private getLabelPosition() {
-    //     let position: { x: number, y: number } = { x: 0, y: 0 };
-    //     if (this.link.source == this.link.target) { //loop path
-    //         let borderDistY = this.link.source.getNodeHeight() / 2;
-    //         let sign = -1;
-    //         //let sign = this.link.offset > 0 ? 1 : -1;
-    //         let dy = (borderDistY + Math.abs(Constants.loopPathMultiplier * this.link.offset)) * sign;
-    //         position.x = this.link.source.x;
-    //         position.y = this.link.source.y + dy;
-    //     } else { //"normal" path, the label is positioned in corrispondece of the control point of the curve
-    //         let center = GraphUtils.computeCenter(this.link.source, this.link.target);
-    //         let normal = GraphUtils.calculateNormalVector(this.link.source, this.link.target, Constants.normalVectorMultiplier * this.link.offset);
-    //         position.x = center.x + normal.x;
-    //         position.y = center.y + normal.y;
-    //     }
-    //     return position;
-    // }
-
-    // private getLabelTransform() {
-    //     let labelPosition = this.getLabelPosition();
-    //     return "translate(" + labelPosition.x + "," + labelPosition.y + ")";
-    // }
-
-    // private getLabelRectWidth() {
-    //     let padding = 1;
-
-    //     if (this.textElement != null) {
-
-    //         return this.textElement.nativeElement.clientWidth + padding * 2;
-    //     }
-    //     return padding * 2;
-    // }
-
 
 }
 

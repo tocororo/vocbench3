@@ -6,7 +6,6 @@ import { ARTNode } from '../../models/ARTResources';
 
 export class UmlNode extends Node {
 
-
     listPropInfo: Array<PropInfo> = [];
 
     constructor(res: ARTNode) {
@@ -20,9 +19,6 @@ export class UmlNode extends Node {
     initNodeMeasure() {
         this.measures = { width: Size.RectangleUml.base, height: Size.RectangleUml.height };
     }
-
-
-
 
 }
 

@@ -1,5 +1,5 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, SimpleChanges, ChangeDetectorRef } from '@angular/core';
-import { ARTNode, RDFResourceRolesEnum, ResAttribute, ARTResource } from '../models/ARTResources';
+import { ChangeDetectorRef, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ARTNode, ARTResource, RDFResourceRolesEnum, ResAttribute } from '../models/ARTResources';
 import { ResourceUtils } from '../utils/ResourceUtils';
 import { GraphMode } from './abstractGraph';
 import { Node, NodeMeasure } from './model/Node';
