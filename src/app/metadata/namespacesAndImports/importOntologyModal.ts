@@ -26,11 +26,13 @@ export class ImportOntologyModalData extends BSModalContext {
 export class ImportOntologyModal implements ModalComponent<ImportOntologyModalData> {
     context: ImportOntologyModalData;
 
+    private baseURICheck: boolean; //used for type "fromLocalFile" (its value is computed in the method ngOnInit())
     private baseURI: string; //used for type "fromWeb", "fromWebToMirror", "fromLocalFile"
     private baseURIdisabled: boolean = false;
 
     private localFile: File; //used for type "fromLocalFile"
 
+    private mirrorFileCheck: boolean; //used for type "fromWebToMirror", "fromLocalFile" (its value is computed in the method ngOnInit())
     private mirrorFile: string; //used for type "fromWebToMirror", "fromLocalFile"
 
     private altURLCheck: boolean = false; //used for type "fromWeb", "fromWebToMirror"
@@ -84,6 +86,9 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
             this.baseURI = this.context.baseURI;
             this.baseURIdisabled = true;
         }
+        // baseURI and mirrorFile are optional when importing local files
+        this.baseURICheck = !this.baseURIdisabled && this.context.importType != ImportType.fromLocalFile;
+        this.mirrorFileCheck = this.context.importType !=  ImportType.fromLocalFile;
     }
 
     private fileChangeEvent(file: File) {
@@ -103,9 +108,9 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
             var rdfFormatOk = (!this.forceFormatCheck || this.forceFormatCheck && this.rdfFormat != undefined);
             return (baseuriOk && mirrorFileOk && alturlOk && rdfFormatOk);
         } else if (this.context.importType == ImportType.fromLocalFile) {
-            var baseuriOk = (this.baseURI != undefined && this.baseURI.trim() != "");
+            var baseuriOk = (!this.baseURICheck || (this.baseURI != undefined && this.baseURI.trim() != ""));
             var localFileOk = this.localFile != undefined;
-            var mirrorFileOk = (this.mirrorFile != undefined && this.mirrorFile.trim() != "");
+            var mirrorFileOk = (!this.mirrorFileCheck || (this.mirrorFile != undefined && this.mirrorFile.trim() != ""));
             return (baseuriOk && localFileOk && mirrorFileOk);
         } else if (this.context.importType == ImportType.fromOntologyMirror) {
             return this.selectedMirror != undefined;
@@ -123,6 +128,15 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
         if (this.altURLCheck) {
             returnedAltUrl = this.altURL;
         }
+        let returnedBaseURI: string;
+        if (this.baseURICheck) {
+            returnedBaseURI = this.baseURI;
+        }
+        let returnedMirrorFile: string;
+        if (this.mirrorFileCheck) {
+            returnedMirrorFile = this.mirrorFile;
+        }
+
         if (this.context.importType == ImportType.fromWeb) {
             this.dialog.close({
                 baseURI: this.baseURI, altURL: returnedAltUrl, rdfFormat: returnedParam,
@@ -135,7 +149,7 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
             });
         } else if (this.context.importType == ImportType.fromLocalFile) {
             this.dialog.close({
-                baseURI: this.baseURI, localFile: this.localFile, mirrorFile: this.mirrorFile,
+                baseURI: returnedBaseURI, localFile: this.localFile, mirrorFile: returnedMirrorFile,
                 transitiveImportAllowance: this.selectedImportAllowance
             });
         } else if (this.context.importType == ImportType.fromOntologyMirror) {
