@@ -4,20 +4,33 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 7.0.0-beta.1 (dd-mm-yyyy)
+# 7.0.0 (10-02-2020)
   * Enabled management of Edoal projects.
-  * Added support for alignment generation and validation throgh an remote alignment system (Genoma)
-  * Enabled multiple administators.
+  * Added support for alignment generation and validation throgh an remote alignment system (Genoma).
+  * Enabled support of SHACL shapes.
+  * Enabled the possibility to delete related remote repositories when deleting a project.
+  * Implemented a template-based mechanism that allows to customize the ResourceView: it make possible to indicate the partitions to hide.
+  * ResourceView partitions are now subject to authorization check: the partitions which the user has no necessary capabilities are automatically hidden.
   * Enabled the possibility to use CustomRange with lexicalization properties.
-  * Added support for datatype definitions through enumerations, restrictions and general dataranges expressed
-    in Manchester syntax.
+  * Enabled the display of images on ResourceView (it can be enabled/disabled through a setting).
+  * Rendered foreign URIs in ResourceView.
+  * Improved tooltips about resources' nature and graphs in ResourceView.
+  * Added support for datatype definitions through enumerations, restrictions and general dataranges expressed in Manchester syntax.
+  * Improved the Manchester syntax editor with support of syntax highlighting and syntax checking.
   * Improved validation of typed values.
+  * Implemented a new "UML-like" class diagram graph.
   * Improved the "dangling concepts" ICV with the possibility to run the check on all the schemes.
-  * Enabled the load data from dataset catalog
+  * Enabled the load data from dataset catalog.
   * Fixed and improved the Advanced Graph Applications in Sheet2RDF.
-  * Implemented an initial system configuration page available once the first user has been registered.
+  * Extended the Configuration panel with new application-wide settings. Now it is also as initial system configuration page once the first user has been registered.
+  * Enabled multiple administators.
+  * Enabled possibility to customize the path of the SemanticTurkeyData folder.
+  * Enabled configuration of the preload profiler threshold.
   * Enabled customization of optional user fields.
+  * Minor changes to the home page and enabled basic customization of its content.
   * Created a splash screen.
+  * Added kazakhstan and lithuanian flag icons.
+  * Enabled possibility to edit an implicit prefix-namespace mapping.
   * Minor bugfixes and improvements.
 
 # 6.0.1 (01-07-2019)
