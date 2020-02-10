@@ -5,20 +5,21 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 7.0.0 (10-02-2020)
-  * Enabled management of Edoal projects.
-  * Added support for alignment generation and validation throgh an remote alignment system (Genoma).
-  * Enabled support of SHACL shapes.
-  * Enabled the possibility to delete related remote repositories when deleting a project.
-  * Implemented a template-based mechanism that allows to customize the ResourceView: it make possible to indicate the partitions to hide.
-  * ResourceView partitions are now subject to authorization check: the partitions which the user has no necessary capabilities are automatically hidden.
-  * Enabled the possibility to use CustomRange with lexicalization properties.
+  * Introduced EDOAL projects.
+  * Added support for alignment generation and validation through a remote alignment system (Genoma).
+  * Enabled support for SHACL shapes.
+  * Enabled the possibility to delete connected remote repositories when deleting a project.
+  * Implemented a template-based mechanism that allows for the customization of the ResourceView, making it possible to indicate the partitions to hide.
+    * The Administrator can setup defaults for this setting for all users
+  * ResourceView partitions are now subject to authorization check: the partitions for which the user has not the required capabilities are automatically hidden.
+  * Enabled CustomRanges for lexicalization properties (with forms in overlaying)
   * Enabled the display of images on ResourceView (it can be enabled/disabled through a setting).
-  * Rendered foreign URIs in ResourceView.
-  * Improved tooltips about resources' nature and graphs in ResourceView.
+  * Added rendering of foreign URIs in ResourceView with async calls
+  * Added information (as tooltips) about resources' and triples' nature and graphs in ResourceView.
   * Added support for datatype definitions through enumerations, restrictions and general dataranges expressed in Manchester syntax.
   * Improved the Manchester syntax editor with support of syntax highlighting and syntax checking.
   * Improved validation of typed values.
-  * Implemented a new "UML-like" class diagram graph.
+  * Implemented a new graph for class diagrams.
   * Improved the "dangling concepts" ICV with the possibility to run the check on all the schemes.
   * Enabled the load data from dataset catalog.
   * Fixed and improved the Advanced Graph Applications in Sheet2RDF.
