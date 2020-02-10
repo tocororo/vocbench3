@@ -16,7 +16,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Enabled the display of images on ResourceView (it can be enabled/disabled through a setting).
   * Added rendering of foreign URIs in ResourceView with async calls
   * Added information (as tooltips) about resources' and triples' nature and graphs in ResourceView.
-  * Added support for datatype definitions through enumerations, restrictions and general dataranges expressed in Manchester syntax.
+  * Added support for datatype definitions through enumerations, restrictions and general dataranges expressed through dedicated UI or Manchester syntax.
   * Improved the Manchester syntax editor with support of syntax highlighting and syntax checking.
   * Improved validation of typed values.
   * Implemented a new graph for class diagrams.
@@ -30,6 +30,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Enabled customization of optional user fields.
   * Minor changes to the home page and enabled basic customization of its content.
   * Created a splash screen.
+  * added filters on languages to show only labels/notes lists for the desired languages
   * Added kazakhstan and lithuanian flag icons.
   * Enabled possibility to edit an implicit prefix-namespace mapping.
   * Minor bugfixes and improvements.
