@@ -53,6 +53,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        super.ngOnChanges(changes);
         //if changes reguard predicateObjectList
         if (changes['predicateObjectList'] && changes['predicateObjectList'].currentValue) {
             //sort predicate (SKOSXL pref, alt, hidden Label, SKOS pref, alt, hidden Label, RDFS label)
