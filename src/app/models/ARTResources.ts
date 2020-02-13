@@ -234,6 +234,7 @@ export class ARTBNode extends ARTResource {
 }
 
 export class ARTLiteral extends ARTNode {
+    protected show: string;
     private value: string;
     private datatype: string;
     private lang: string;
@@ -279,7 +280,14 @@ export class ARTLiteral extends ARTNode {
     };
 
     getShow(): string {
-        return this.value;
+        //initialize if not yet done
+        if (this.show == null) {
+            this.show = this.value;
+            if (this.datatype != null && !isNaN(Number(this.value))) {
+                this.show = Number(this.value).toLocaleString();
+            }
+        }
+        return this.show;
     }
 
     toNT(): string {
