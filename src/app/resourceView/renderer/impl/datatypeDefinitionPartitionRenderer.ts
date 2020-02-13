@@ -19,7 +19,7 @@ import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 export class DatatypeDefinitionPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.datatypeDefinitions;
-    addBtnImgTitle = "Set facets";
+    addBtnImgTitle = "Set restrictions";
     addBtnImgSrc = require("../../../../assets/images/icons/actions/property_create.png");
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
@@ -33,7 +33,7 @@ export class DatatypeDefinitionPartitionRenderer extends PartitionRenderSingleRo
     }
 
     add() {
-        this.resViewModals.setDatatypeFacets("Set datatype facets", <ARTURIResource> this.resource).then(
+        this.resViewModals.setDatatypeFacets("Set datatype restrictions", <ARTURIResource> this.resource).then(
             () => {
                 this.update.emit();
             },

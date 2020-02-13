@@ -129,8 +129,8 @@ export class ResourceUtils {
                 }
 
                 // Get label
-                let label: string = nTriplesLiteral.substring(1, endLabelIdx);
-                label = label.replace(/\\"/g, '"');
+                let label: string = nTriplesLiteral.substring(0, endLabelIdx+1); //quotes included
+                label = JSON.parse(label);
 
                 if (startLangIdx != -1) {
                     // Get language

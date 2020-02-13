@@ -77,7 +77,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
                 this.values.push(this.value);
                 this.value = null;
             } else {
-                this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow());
+                this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow(), "warning");
                 return;
             }
         } else { //selected dataRangeAspectSelector
@@ -143,7 +143,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
                 if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
                     //first validate
                     if (!this.dtValidator.isValid(this.value, this.datatype)) {
-                        this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow());
+                        this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow(), "warning");
                         return;
                     }
                     literals = [this.value];

@@ -156,7 +156,7 @@ export class DataTypeRestrictionsModal implements ModalComponent<DataTypeRestric
 
         let facetsMap: { [facet: string]: string } = {};
         if (this.facetsDescription.facets.pattern != null && this.facetsDescription.facets.pattern.trim() != "") {
-            facetsMap[XmlSchema.pattern.toNT()] = new ARTLiteral(this.facetsDescription.facets.pattern + "").toNT();
+            facetsMap[XmlSchema.pattern.toNT()] = new ARTLiteral(this.facetsDescription.facets.pattern).toNT();
         }
         if (this.facetsDescription.facets.minExclusive != null) {
             let dt: string = Number.isInteger(this.facetsDescription.facets.minExclusive) ? XmlSchema.integer.getURI() : XmlSchema.decimal.getURI();
