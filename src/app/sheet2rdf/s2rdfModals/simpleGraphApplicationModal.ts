@@ -144,7 +144,10 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                         if (range.ranges.type == RangeType.literal) {
                             if (this.rangeCollection.length > 0) { //there is a range collection specified (datatypes)
                                 this.rangeTypes = [this.typedLiteralRangeType]; //=> allows typed literal
-                                this.allowedDatatypes = this.rangeCollection; //restricted to the rangeCollection datatypes list
+                                if (this.rangeCollection.length != 1 || !this.rangeCollection[0].equals(RDFS.literal)) {
+                                    //restricted to the rangeCollection datatypes list (expect if rangeCollection is the only rdfs:Literal, namely all datatype)
+                                    this.allowedDatatypes = this.rangeCollection;
+                                }
                             } else { //no range datatypes => allows all kind of literal
                                 this.rangeTypes = [this.plainLiteralRangeType, this.typedLiteralRangeType];
                             }
@@ -152,7 +155,10 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                             this.rangeTypes = [this.plainLiteralRangeType];
                         } else if (range.ranges.type == RangeType.typedLiteral) {
                             this.rangeTypes = [this.typedLiteralRangeType];
-                            this.allowedDatatypes = this.rangeCollection; //restrict to the rangeCollection datatypes list
+                            if (this.rangeCollection.length != 1 || !this.rangeCollection[0].equals(RDFS.literal)) {
+                                //restricted to the rangeCollection datatypes list (expect if rangeCollection is the only rdfs:Literal, namely all datatype)
+                                this.allowedDatatypes = this.rangeCollection;
+                            }
                         } else if (range.ranges.type == RangeType.resource) {
                             this.rangeTypes = [this.resourceRangeType];
                             this.assertableTypes = this.rangeCollection;
