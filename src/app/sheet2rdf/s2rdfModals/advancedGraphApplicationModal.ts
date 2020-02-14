@@ -562,7 +562,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                 this.context.header.id, this.graphPattern, referencedNodesId, prefixMappingMap, this.defaultPredicate);
         } else { //edit mode
             graphAppFn = this.s2rdfService.updateAdvancedGraphApplication(
-                this.context.header.id, this.context.graphApplication.id, this.graphPattern, referencedNodesId, prefixMappingMap);
+                this.context.header.id, this.context.graphApplication.id, this.graphPattern, referencedNodesId, prefixMappingMap, this.defaultPredicate);
         }
         return graphAppFn;
     }

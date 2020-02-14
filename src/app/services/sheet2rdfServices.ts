@@ -142,13 +142,14 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "updateSimpleGraphApplication", params);
     }
     
-    updateAdvancedGraphApplication(headerId: string, graphId: string, graphPattern: string, nodeIds: string[], prefixMapping: {[key: string]: string}) {
+    updateAdvancedGraphApplication(headerId: string, graphId: string, graphPattern: string, nodeIds: string[], prefixMapping: {[key: string]: string}, defaultPredicate?: ARTURIResource) {
         let params: any = {
             headerId: headerId,
             graphId: graphId,
             graphPattern: graphPattern,
             nodeIds: nodeIds,
-            prefixMapping: JSON.stringify(prefixMapping)
+            prefixMapping: JSON.stringify(prefixMapping),
+            defaultPredicate: defaultPredicate
         };
         return this.httpMgr.doPost(this.serviceName, "updateAdvancedGraphApplication", params);
     }

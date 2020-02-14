@@ -39,7 +39,7 @@
 
                         <div class="btn-group btn-group-xs">
                             <!-- Workaround to show input file as simple <button> -->
-                            <input #inputStatusFile type="file" (change)="loadStatus(inputStatusFile.files[0])" accept=".json, text/plain" style="display:none">
+                            <input #inputStatusFile type="file" (change)="loadStatus(inputStatusFile.files[0])" (click)="$event.target.value=null" accept=".json, text/plain" style="display:none">
                             <button class="btn btn-default" style="margin-left: -1px" (click)="inputStatusFile.click()" title="Load Mapping Status" [disabled]="!tablePreview">
                                 <span class="glyphicon glyphicon-open"></span>
                             </button>
