@@ -151,6 +151,7 @@ export class Sheet2RdfComponent {
             (headers: { subject: SubjectHeader, headers: SimpleHeader[] }) => {
                 this.subjectHeader = headers.subject;
                 this.headers = headers.headers;
+                this.headers.forEach(h => this.initHeaderCssClass(h));
             }
         );
     }
@@ -173,18 +174,19 @@ export class Sheet2RdfComponent {
         this.loadSpreadsheet();
     }
 
-    private getHeaderCssClass(header: SimpleHeader) {
-        //TODO add an attribute in the Header response object to help this decision? maybe it is better than compute the class at each change detection round
+    private initHeaderCssClass(header: SimpleHeader) {
         /**
          * configuredHeader: if there is at least one graph application which its node is defined (converter assigned)
          * unconfiguredHeader: there is no node definition neither graph application for the header
          * incompleteHeader: only one between nodes and graph not defined, or graph application whith node not defined
          */
         if (header.ignore) {
-            return "ignoredHeader";
+            header['cssClass'] = "ignoreHeader";
+            return;
         }
         if (header.graph.length == 0 && header.nodes.length == 0) {
-            return "unconfiguredHeader";
+            header['cssClass'] = "unconfiguredHeader";
+            return;
         }
         if (header.graph.length > 0 && header.nodes.length > 0) {
             for (let i = 0; i < header.graph.length; i++) {
@@ -195,7 +197,8 @@ export class Sheet2RdfComponent {
                         //property assigned, now check for the node
                         for (let j = 0; j < header.nodes.length; j++) {
                             if (header.nodes[j].nodeId == g.nodeId && header.nodes[j].converter != null) {
-                                return "configuredHeader";
+                                header['cssClass'] = "configuredHeader";
+                                return;
                             }
                         }
                     }
@@ -203,21 +206,25 @@ export class Sheet2RdfComponent {
                     //AdvancedGraphApplication is configured if the pattern is defined, and the referenced nodes are defined
                     if (g.pattern != null && g.nodeIds != null && g.nodeIds.length > 0) {
                         let allDefined: boolean = true; //if one referenced node is not defined, this is set to false
-                        for (let id of g.nodeIds) {
-                            if (header.nodes.find(n => n.nodeId == id) == null) {
-                                allDefined = false;
-                                break;
-                            }
+                        for (let id of g.nodeIds) { //for each node referenced in graph application
+                            this.headers.forEach(h => {
+                                if (!h.nodes.some(n => n.nodeId == id)) {
+                                    allDefined = true;
+                                }
+                            });
                         }
                         if (allDefined) {
-                            return "configuredHeader";
+                            header['cssClass'] = "configuredHeader";
+                            return;
                         }
                     }
                 }
             }
-            return "incompleteHeader";
+            header['cssClass'] = "incompleteHeader";
+            return;
         } else { //graph and node are not both empty neither both not-empty, so the configuration of the header is incomplete
-            return "incompleteHeader";
+            header['cssClass'] = "incompleteHeader";
+            return;
         }
     }
 

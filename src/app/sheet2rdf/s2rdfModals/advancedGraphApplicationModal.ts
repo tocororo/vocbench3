@@ -249,14 +249,8 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         this.context.headers.forEach(h => {
             //skip the same current header (prevent to write multiple time the declaration of its nodes)
             if (h.id == this.context.header.id) return;
-            h.graph.forEach(graphAppl => {
-                if (graphAppl instanceof SimpleGraphApplication) {
-                    pearl += graphAppl.nodeId + " uri " + this.context.header.pearlFeature + " .\n"; //converter and FS are just mockup
-                } else if (graphAppl instanceof AdvancedGraphApplication) {
-                    graphAppl.nodeIds.forEach(nId => {
-                        pearl += nId + " uri " + this.context.header.pearlFeature + " .\n"; //converter and FS are just mockup
-                    });
-                }
+            h.nodes.forEach(n => {
+                pearl += n.nodeId + " uri " + this.context.header.pearlFeature + " .\n"; //converter and FS are just mockup
             })
         })
         // - nodes of this graph application

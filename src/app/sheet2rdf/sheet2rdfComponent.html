@@ -55,7 +55,7 @@
                             <tr>
                                 <td *ngFor="let h of headers" class="columnHeader">
                                     <span *ngIf="h.id==subjectHeader.id" class="label label-success" style="padding: 0px 2px" title="Subject">S</span>
-                                    <span [ngClass]="getHeaderCssClass(h)" style="font-weight: bold;">
+                                    <span [class]="h.cssClass" style="font-weight: bold;">
                                         {{h.nameStruct.fullName}}
                                     </span>
                                     <button class="btn btn-xs btn-default" style="padding: 0px 3px;" title="Edit header" (click)="editHeader(h)">
