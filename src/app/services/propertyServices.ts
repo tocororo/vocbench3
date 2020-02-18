@@ -150,7 +150,7 @@ export class PropertyServices {
      * - ranges: "classic" range of a property omitted if a FormCollection is provided for the given property
      *      and the "replace" attribute is true (so, the "classic" range in replaced by the custom one).
      *      Contains two attributes:
-     *          - type: available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent;
+     *          - type: available values: resource, literal, undetermined, inconsistent;
      *          - rangeColl: an array of ARTURIResource 
      *              (available only if rngType is resource, then represent the admitted range classes,
      *              or typedLiteral, then represent the admitted datatypes);
@@ -624,8 +624,6 @@ export class PropertyServices {
 
 export enum RangeType {
     resource = "resource",
-    plainLiteral = "plainLiteral",
-    typedLiteral = "typedLiteral",
     literal = "literal",
     undetermined = "undetermined",
     inconsistent = "inconsistent"
@@ -649,8 +647,7 @@ export class RangeResponse {
             if (value.isLiteral()) {
                 let rngColl: ARTURIResource[] = response.ranges.rangeCollection ? response.ranges.rangeCollection.resources : [];
                 return (
-                    rngType == RangeType.literal || rngType == RangeType.typedLiteral || rngType == RangeType.plainLiteral ||
-                    (rngType == RangeType.resource && ResourceUtils.containsNode(rngColl, RDFS.literal))
+                    rngType == RangeType.literal || (rngType == RangeType.resource && ResourceUtils.containsNode(rngColl, RDFS.literal))
                 );
             } else { //resource
                 return rngType == RangeType.resource;

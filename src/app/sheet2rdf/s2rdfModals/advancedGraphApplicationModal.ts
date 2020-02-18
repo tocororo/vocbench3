@@ -148,7 +148,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
     }
 
     private changeLiteralConverter(node: NodeConversion) {
-        var modalData = new NodeCreationModalData(this.context.header, node, RangeType.plainLiteral, null, null, null);
+        var modalData = new NodeCreationModalData(this.context.header, node, RangeType.literal, null, null, null);
         const builder = new BSModalContextBuilder<NodeCreationModalData>(
             modalData, undefined, NodeCreationModalData
         );

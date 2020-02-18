@@ -152,10 +152,12 @@ export class CreationModalServices {
      * @param predicate the (optional) predicate that is going to enrich with the typed literal
      * @param allowedDatatypes datatypes allowed in the datatype selection list
      * @param dataRanges if provided, tells which values can be created/chosed (e.g. xml:string ["male", "female"])
+     * @param multivalue if true, allows multiple literal creation
+     * @param validation if true, validates the provided value according the datatype
      * @return if the modal closes with ok returns a promise containing an ARTLiteral
      */
-    newTypedLiteral(title: string, predicate?: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[], multivalue?: boolean) {
-        var modalData = new NewTypedLiteralModalData(title, predicate, allowedDatatypes, dataRanges, multivalue);
+    newTypedLiteral(title: string, predicate?: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[], multivalue?: boolean, validation?: boolean) {
+        var modalData = new NewTypedLiteralModalData(title, predicate, allowedDatatypes, dataRanges, multivalue, validation);
         const builder = new BSModalContextBuilder<NewTypedLiteralModalData>(
             modalData, undefined, NewTypedLiteralModalData
         );

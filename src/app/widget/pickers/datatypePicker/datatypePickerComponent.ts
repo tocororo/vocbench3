@@ -21,7 +21,7 @@ export class DatatypePickerComponent implements ControlValueAccessor {
     private selectClass: string = "form-control input-";
     private allDatatypes: ARTURIResource[]; //list of all datatypes defined
     private datatypeList: ARTURIResource[]; //list of datatypes that the user can pick (could be all datatypes, or a subset restricted by allowedDatatypes)
-    private datatype: ARTURIResource; //default datatype if it is not provided as ngModel
+    private datatype: ARTURIResource;
 
     constructor(private datatypeService: DatatypesServices) { }
 

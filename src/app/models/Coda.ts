@@ -151,7 +151,6 @@ export class ParameterDescription {
 export enum RDFCapabilityType {
     node = "node",
     uri = "uri",
-    typedLiteral = "typedLiteral",
     literal = "literal"
 }
 

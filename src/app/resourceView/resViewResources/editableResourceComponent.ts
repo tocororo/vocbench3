@@ -88,7 +88,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
          * For details see the comments written to the enum definitions of the EditActionScenarioEnum.
          */
         if (this.resource instanceof ARTLiteral && this.resource.getDatatype() == null) {
-            this.editActionScenario = EditActionScenarioEnum.plainLiteral;
+            this.editActionScenario = EditActionScenarioEnum.langTaggedLiteral;
         } else if (this.resource instanceof ARTLiteral && this.resource.getDatatype() != null) {
             this.editActionScenario = EditActionScenarioEnum.typedLiteral;
         } else if (this.resource instanceof ARTResource && this.resource.getRole() == RDFResourceRolesEnum.xLabel) {
@@ -177,10 +177,10 @@ export class EditableResourceComponent extends AbstractResViewResource {
 		 */
         if (
             this.resource.getAdditionalProperty(ResAttribute.LANG) != null && (
-                (this.partition == ResViewPartition.properties && this.editActionScenario == EditActionScenarioEnum.plainLiteral) || //plain in notes
-                (this.partition == ResViewPartition.notes && this.editActionScenario == EditActionScenarioEnum.plainLiteral) || //plain in notes
+                (this.partition == ResViewPartition.properties && this.editActionScenario == EditActionScenarioEnum.langTaggedLiteral) || //plain in notes
+                (this.partition == ResViewPartition.notes && this.editActionScenario == EditActionScenarioEnum.langTaggedLiteral) || //plain in notes
                 (this.partition == ResViewPartition.lexicalizations && //plain or xlabel in lexicalizations
-                    (this.editActionScenario == EditActionScenarioEnum.plainLiteral || this.editActionScenario == EditActionScenarioEnum.xLabel)
+                    (this.editActionScenario == EditActionScenarioEnum.langTaggedLiteral || this.editActionScenario == EditActionScenarioEnum.xLabel)
                 )
             )) {
             let projectLangs: Language[] = VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting;
@@ -200,7 +200,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
     private editLiteral() {
         if (this.editActionScenario == EditActionScenarioEnum.xLabel) {
             this.resourceStringValue = this.resource.getShow()
-        } else if (this.editActionScenario == EditActionScenarioEnum.typedLiteral || this.editActionScenario == EditActionScenarioEnum.plainLiteral) {
+        } else if (this.editActionScenario == EditActionScenarioEnum.typedLiteral || this.editActionScenario == EditActionScenarioEnum.langTaggedLiteral) {
             this.resourceStringValue = (<ARTLiteral>this.resource).getValue();
         }
         this.resourceStringValuePristine = this.resourceStringValue;
@@ -223,20 +223,17 @@ export class EditableResourceComponent extends AbstractResViewResource {
                     this.propService.getRange(this.predicate).subscribe(
                         range => {
                             this.ranges = range.ranges;
-							/**
-							 * special case:
-							 * if range is typed literal and range ha restriction (datarange or datatype), allow to edit only with enumeration of datarange
-							 */
-                            if (this.ranges != null && this.ranges.type == RDFTypesEnum.typedLiteral) {
-                                if (this.ranges.rangeCollection.dataRanges != null || this.ranges.rangeCollection.resources != null) {
-                                    this.creationModals.newTypedLiteral("Edit " + this.predicate.getShow(), this.predicate,
-                                        this.ranges.rangeCollection.resources, this.ranges.rangeCollection.dataRanges).then(
-                                            (literals: ARTLiteral[]) => {
-                                                this.applyUpdate(this.subject, this.predicate, this.resource, literals[0]);
-                                            },
-                                            () => { }
-                                        );
-                                }
+                            /**
+                            * special case: if range is literal and has restriction (datarange), allow to edit only with datarange
+                            */
+                            if (this.ranges != null && this.ranges.type == RDFTypesEnum.literal && this.ranges.rangeCollection.dataRanges != null) {
+                                this.creationModals.newTypedLiteral("Edit " + this.predicate.getShow(), this.predicate,
+                                    this.ranges.rangeCollection.resources, this.ranges.rangeCollection.dataRanges, true).then(
+                                    (literals: ARTLiteral[]) => {
+                                        this.applyUpdate(this.subject, this.predicate, this.resource, literals[0]);
+                                    },
+                                    () => { }
+                                );
                             } else {
                                 this.computeResourceStringValue();
                                 this.editInProgress = true;
@@ -291,7 +288,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
     private confirmEdit() {
         if (this.resourceStringValue != this.resourceStringValuePristine) { //apply edit only if the representation is changed
             if (this.editLiteralInProgress) {
-                if (this.editActionScenario == EditActionScenarioEnum.plainLiteral) {
+                if (this.editActionScenario == EditActionScenarioEnum.langTaggedLiteral) {
                     let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, (<ARTLiteral>this.resource).getLang());
                     this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
                 } else if (this.editActionScenario == EditActionScenarioEnum.typedLiteral) {
@@ -566,7 +563,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
  */
 enum EditActionScenarioEnum {
     xLabel = "xLabel", //edit should allow to change the literal form
-    plainLiteral = "plainLiteral", //edit should allow to change the content of the literal without langTag
+    langTaggedLiteral = "langTaggedLiteral", //edit should allow to change the content of the literal without langTag
     typedLiteral = "typedLiteral", //edit should allow to change the content of the literal without datatype
     partition = "partition", //edit should be handled ad hoc by the partition (an event is emitted) which should implements an editHandler method
     default = "default" //edit should allow to edit the NT form (iri/bnode/...)

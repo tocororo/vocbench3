@@ -390,9 +390,7 @@ export enum RDFResourceRolesEnum {
 export enum RDFTypesEnum {
     bnode = "bnode",
     literal = "literal",
-    plainLiteral = "plainLiteral",
     resource = "resource",
-    typedLiteral = "typedLiteral",
     undetermined = "undetermined",
     uri = "uri"
 }

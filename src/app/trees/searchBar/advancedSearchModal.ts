@@ -215,17 +215,10 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
                 },
                 () => {}
             );
-        } else if (type == RDFTypesEnum.typedLiteral) {
-            this.creationModals.newTypedLiteral("Create typed literal").then(
+        } else if (type == RDFTypesEnum.literal) {
+            this.creationModals.newTypedLiteral("Create literal").then(
                 (values: ARTLiteral[]) => {
                     group.second.push(values[0]);
-                },
-                () => {}
-            );
-        } else if (type == RDFTypesEnum.plainLiteral) {
-            this.creationModals.newPlainLiteral("Create literal").then(
-                (value: ARTLiteral[]) => {
-                    group.second.push(value[0]);
                 },
                 () => {}
             );

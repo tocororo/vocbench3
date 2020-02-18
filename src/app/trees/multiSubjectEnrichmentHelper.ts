@@ -699,9 +699,7 @@ export class MultiSubjectEnrichmentHelper {
             (data: PropertyEnrichmentInfo) => {
                 if (data.type == EnrichmentType.resource) {
                     this.enrichWithResource(subjects, predicate);
-                } else if (data.type == EnrichmentType.plainLiteral) {
-                    this.enrichWithPlainLiteral(subjects, predicate);
-                } else if (data.type == EnrichmentType.typedLiteral) {
+                } else if (data.type == EnrichmentType.literal) {
                     this.enrichWithTypedLiteral(subjects, predicate, data.allowedDatatypes, data.dataRanges);
                 } else if (data.type == EnrichmentType.customForm) {
                     this.enrichWithCustomForm(subjects, predicate, data.form);

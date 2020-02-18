@@ -12,7 +12,7 @@
         <ul class="dropdown-menu">
             <!-- Edit menu items -->
 
-            <li *ngIf="editActionScenario == 'xLabel' || editActionScenario == 'plainLiteral' || editActionScenario == 'typedLiteral'"
+            <li *ngIf="editActionScenario == 'xLabel' || editActionScenario == 'langTaggedLiteral' || editActionScenario == 'typedLiteral'"
                 [ngClass]="{ disabled: !editAuthorized || isInferred }">
                 <a (click)="editLiteral()">Edit literal content</a>
             </li>

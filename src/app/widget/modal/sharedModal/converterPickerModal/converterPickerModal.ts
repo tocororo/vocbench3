@@ -63,13 +63,6 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
                                 if (this.context.capabilities.indexOf(RDFCapabilityType.literal) != -1) {
                                     this.converters.push(conv);
                                 }
-                            } else  if (capab == RDFCapabilityType.typedLiteral) {
-                                if (
-                                    this.context.capabilities.indexOf(RDFCapabilityType.literal) != -1 || 
-                                    this.context.capabilities.indexOf(RDFCapabilityType.typedLiteral) != -1
-                                ) {
-                                    this.converters.push(conv);
-                                }
                             }
                         });
                     }
@@ -96,7 +89,6 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
         if (converter != this.selectedConverter) {
             this.selectedConverter = converter;
             if (this.selectedConverter.getRDFCapability() == RDFCapabilityType.literal ||
-                this.selectedConverter.getRDFCapability() == RDFCapabilityType.typedLiteral ||
                 (this.selectedConverter.getRDFCapability() == RDFCapabilityType.node && 
                 this.context.capabilities != null && this.context.capabilities.length > 0 && 
                 this.context.capabilities.indexOf(RDFCapabilityType.node) == -1 && this.context.capabilities.indexOf(RDFCapabilityType.uri) == -1)

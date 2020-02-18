@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { ARTURIResource } from "../../models/ARTResources";
 import { ConverterContractDescription, RDFCapabilityType } from "../../models/Coda";
 import { NodeConversion, SimpleGraphApplication, SimpleHeader } from "../../models/Sheet2RDF";
-import { RDFS } from "../../models/Vocabulary";
+import { RDF, RDFS } from "../../models/Vocabulary";
 import { PropertyServices, RangeResponse, RangeType } from "../../services/propertyServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
@@ -36,8 +36,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
      * Range type
      */
     private resourceRangeType: HeaderRangeType = { type: RangeType.resource, show: "Resource" };
-    private plainLiteralRangeType: HeaderRangeType = { type: RangeType.plainLiteral, show: "Plain Literal" };
-    private typedLiteralRangeType: HeaderRangeType = { type: RangeType.typedLiteral, show: "Typed Literal" };
+    private literalRangeType: HeaderRangeType = { type: RangeType.literal, show: "Literal" };
     private rangeTypes: HeaderRangeType[];
     private selectedRangeType: HeaderRangeType;
 
@@ -52,10 +51,8 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     private assertType: boolean = false;
     private assertableTypes: ARTURIResource[];
     private assertedType: ARTURIResource;
-    //when rangeType is 'plainLiteral', user can select the language to assert
-    private language: string;
-    //when rangeType is 'typedLiteral', user can select the datatype to assert
-    private datatype: ARTURIResource;
+    //when rangeType is 'literal', user can select the datatype to assert
+    private datatype: ARTURIResource = RDF.langString; //default datatype
     private allowedDatatypes: ARTURIResource[];
 
     /**
@@ -71,7 +68,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     }
 
     ngOnInit() {
-        this.rangeTypes = [this.resourceRangeType, this.plainLiteralRangeType, this.typedLiteralRangeType];
+        this.rangeTypes = [this.resourceRangeType, this.literalRangeType];
         this.availableNodes.push(...this.context.header.nodes);
 
         /**
@@ -80,9 +77,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
          * In this case, during the inizialization, sheet2rdf creates a node (for the header) with the detected language/datatype
          */
         if (this.availableNodes.length == 1 && this.availableNodes[0].converter != null) {
-            if (this.availableNodes[0].converter.language != null) {
-                this.language = this.availableNodes[0].converter.language;
-            } else if (this.availableNodes[0].converter.datatypeUri != null) {
+            if (this.availableNodes[0].converter.datatypeUri != null) {
                 this.datatype = new ARTURIResource(this.availableNodes[0].converter.datatypeUri);
             }
         }
@@ -123,7 +118,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     updateHeaderPropertyRange() {
         //reset range, resource type, assertable types, datatypes
         this.rangeCollection = [];
-        this.rangeTypes = [this.resourceRangeType, this.plainLiteralRangeType, this.typedLiteralRangeType];
+        this.rangeTypes = [this.resourceRangeType, this.literalRangeType];
         this.selectedRangeType = null;
         this.assertableTypes = [];
         this.assertedType = null;
@@ -142,36 +137,25 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                 this.annotateRangeCollection(range).subscribe(
                     () => {
                         if (range.ranges.type == RangeType.literal) {
+                            this.rangeTypes = [this.literalRangeType];
                             if (this.rangeCollection.length > 0) { //there is a range collection specified (datatypes)
-                                this.rangeTypes = [this.typedLiteralRangeType]; //=> allows typed literal
                                 if (this.rangeCollection.length != 1 || !this.rangeCollection[0].equals(RDFS.literal)) {
                                     //restricted to the rangeCollection datatypes list (expect if rangeCollection is the only rdfs:Literal, namely all datatype)
                                     this.allowedDatatypes = this.rangeCollection;
                                 }
-                            } else { //no range datatypes => allows all kind of literal
-                                this.rangeTypes = [this.plainLiteralRangeType, this.typedLiteralRangeType];
-                            }
-                        } else if (range.ranges.type == RangeType.plainLiteral) {
-                            this.rangeTypes = [this.plainLiteralRangeType];
-                        } else if (range.ranges.type == RangeType.typedLiteral) {
-                            this.rangeTypes = [this.typedLiteralRangeType];
-                            if (this.rangeCollection.length != 1 || !this.rangeCollection[0].equals(RDFS.literal)) {
-                                //restricted to the rangeCollection datatypes list (expect if rangeCollection is the only rdfs:Literal, namely all datatype)
-                                this.allowedDatatypes = this.rangeCollection;
                             }
                         } else if (range.ranges.type == RangeType.resource) {
                             this.rangeTypes = [this.resourceRangeType];
                             this.assertableTypes = this.rangeCollection;
                             if (this.rangeCollection.some(r => r.equals(RDFS.literal))) {
                                 if (this.rangeCollection.length == 1) { //rdfs:Literal is the only range class admitted => admitted range types are plain/typed literal
-                                    this.rangeTypes = [this.plainLiteralRangeType, this.typedLiteralRangeType];
+                                    this.rangeTypes = [this.literalRangeType];
                                 } else { //rdfs:Literal is among other range class => add also literal ranges
-                                    this.rangeTypes.push(this.typedLiteralRangeType);
-                                    this.rangeTypes.push(this.plainLiteralRangeType);
+                                    this.rangeTypes.push(this.literalRangeType);
                                 }
                             }
                         } else if (range.ranges.type == RangeType.undetermined) {
-                            this.rangeTypes = [this.resourceRangeType, this.plainLiteralRangeType, this.typedLiteralRangeType];
+                            this.rangeTypes = [this.resourceRangeType, this.literalRangeType];
                         }
 
                         // try to restore the model about the node
@@ -183,14 +167,11 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                                     this.selectedNode = n;
                                 }
                             });
-                            //if a converter is provided, set the range type, eventually the datatype and language
+                            //if a converter is provided, set the range type, eventually the datatype
                             if (this.selectedNode.converter != null) {
                                 if (this.selectedNode.converter.datatypeUri != null) {
-                                    this.forceRangeType(RangeType.typedLiteral);
+                                    this.forceRangeType(RangeType.literal);
                                     this.datatype = new ARTURIResource(this.selectedNode.converter.datatypeUri);
-                                } else if (this.selectedNode.converter.language != null) {
-                                    this.forceRangeType(RangeType.plainLiteral);
-                                    this.language = this.selectedNode.converter.language;
                                 }
                             }
                             //restore the asserted type
@@ -249,6 +230,10 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
         );
     }
 
+    private isLangSelectionVisible(): boolean {
+        return this.datatype != null && this.datatype.equals(RDF.langString);
+    }
+
 
     /**
      * The selection/creation of a node, is enabled only if the property is set and, if the rangeType is typedLiteral, a datatype is selected.
@@ -259,7 +244,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
         if (this.property == null || this.selectedRangeType == null) {
             return false;
         } else {
-            return !(this.selectedRangeType.type == RangeType.typedLiteral && this.datatype == null);
+            return !(this.selectedRangeType.type == RangeType.literal && this.datatype == null);
         }
     }
 
@@ -287,8 +272,19 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     }
 
     private addNode() {
-        let dt: ARTURIResource = (this.selectedRangeType.type == RangeType.typedLiteral) ? this.datatype : null;
-        let lang: string = (this.selectedRangeType.type == RangeType.plainLiteral) ? this.language : null;
+        let dt: ARTURIResource = (this.selectedRangeType.type == RangeType.literal) ? this.datatype : null;
+        let lang: string
+        /**
+         * If there is only a node available, check if it has a language.
+         * This operation is useful for presetting the language in the node creation form when it is inferred from the header name.
+         * In this case, in fact, during the inizialization, sheet2rdf creates a node (for the header) with the detected language/datatype
+         */
+        if (this.selectedRangeType.type == RangeType.literal &&
+            this.datatype.equals(RDF.langString) &&
+            this.availableNodes.length == 1 && this.availableNodes[0].converter != null
+        ) {
+            lang = this.availableNodes[0].converter.language;
+        }
         var modalData = new NodeCreationModalData(this.context.header, null, this.selectedRangeType.type, lang, dt, this.availableNodes);
         const builder = new BSModalContextBuilder<NodeCreationModalData>(
             modalData, undefined, NodeCreationModalData
@@ -314,38 +310,30 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
             if (this.selectedRangeType.type == RangeType.resource && this.selectedNode.converter.type != RDFCapabilityType.uri) {
                 err = "the type of converter used to create the node (" + this.selectedNode.converter.type +
                     ") is not compliant with the selected range type (" + this.selectedRangeType.show + ")";
-            } else if (this.selectedRangeType.type == RangeType.plainLiteral) {
-                //if range type is plain literal, node is not compliant if its converter capability is not literal...
+            } else if (this.selectedRangeType.type == RangeType.literal) {
+                //if range type is literal, node is not compliant if its converter capability is not literal...
                 if (this.selectedNode.converter.type != RDFCapabilityType.literal) {
                     err = "the type of converter used to create the node (" + this.selectedNode.converter.type +
                         ") is not compliant with the selected range type (" + this.selectedRangeType.show + ")";
-                } else { //...or if it is literal but...
-                    if (this.selectedNode.converter.datatypeUri != null) { //or a datatype
-                        err = "the used converter creates a typed literal (" +
-                            ResourceUtils.getQName(this.selectedNode.converter.datatypeUri, VBContext.getPrefixMappings()) +
-                            ") instead of a language tagged literal.";
-                    } else if (this.selectedNode.converter.language != this.language) { //has a different language
-                        err = "the chosen language is not the same of the converter used to create the node";
+                } else { //or if it is literal but produces a typed literal with different datatype
+                    if (this.datatype.equals(RDF.langString)) {
+                        //rdf:langString handled separately => node not compliant also if literal converter has no language
+                        if (this.selectedNode.converter.datatypeCapability != this.datatype.getURI() && this.selectedNode.converter.language == null) {
+                            err = "the chosen datatype (" + this.datatype.getShow() + ") is not compliant with the converter that produces the selected node";
+                        }
+                    } else if ( //converter that creates the selected node doesn't produce the chosen datatype nor has it as datatypeCapability
+                        this.selectedNode.converter.datatypeUri != this.datatype.getURI() &&
+                        this.selectedNode.converter.datatypeCapability != this.datatype.getURI()
+                    ) {
+                        err = "the chosen datatype (" + this.datatype.getShow() + ") is not the same of the selected node";
                     }
                 }
-            } else if (this.selectedRangeType.type == RangeType.typedLiteral) {
-                //if range type is typed literal, node is not compliant if its converter capability is not literal
-                if (this.selectedNode.converter.type != RDFCapabilityType.literal) {
-                    err = "the type of converter used to create the node (" + this.selectedNode.converter.type +
-                        ") is not compliant with the selected range type (" + this.selectedRangeType.show + ")";
-                } else { //...or if it is literal but...
-                    if (this.selectedNode.converter.language != null) { //or a language
-                        err = "the used converter creates a language tagged literal instead of a typed literal";
-                    } else if (this.datatype == null || this.selectedNode.converter.datatypeUri != this.datatype.getURI()) { //has a different datatype
-                        err = "the chosen datatype is not the same of the converter used to create the node";
-                    }
-                }
-            }
+            } 
         }
         if (err != null) {
             return "The selected node is not compliant with the choices made: " + err;
         }
-        return err; //compliant in any other cases
+        return err; //compliant in any other case
     }
 
 

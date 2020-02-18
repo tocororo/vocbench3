@@ -21,7 +21,7 @@
                     <td>{{c.getName()}}</td>
                     <td style="white-space: pre;">{{c.getDescription()}}</td>
                     <td nowrap>{{c.getRDFCapability()}}
-                        <span *ngIf="c.getRDFCapability() == 'typedLiteral'" class="glyphicon glyphicon-info-sign" [title]="c.getDatatypes()"></span>
+                        <span *ngIf="c.getDatatypes().length > 0" class="glyphicon glyphicon-info-sign" [title]="c.getDatatypes()"></span>
                     </td>
                     <td [title]="c.getURI()">{{c.getQName()}}</td>
                 </tr>

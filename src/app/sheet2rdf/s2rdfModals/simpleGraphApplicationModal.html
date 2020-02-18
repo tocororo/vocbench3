@@ -76,12 +76,7 @@
                 </td>
             </tr>
 
-            <tr *ngIf="selectedRangeType?.type == 'plainLiteral'">
-                <td class="text-right"><label>Lang:</label></td>
-                <td><lang-picker [(ngModel)]="language"></lang-picker></td>
-            </tr>
-
-            <tr *ngIf="selectedRangeType?.type == 'typedLiteral'">
+            <tr *ngIf="selectedRangeType?.type == 'literal'">
                 <td class="text-right"><label>Datatype:</label></td>
                 <td>
                     <datatype-picker [(ngModel)]="datatype" [allowedDatatypes]="allowedDatatypes"></datatype-picker>

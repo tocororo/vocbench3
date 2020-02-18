@@ -65,9 +65,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
             (data: PropertyEnrichmentInfo) => {
                 if (data.type == EnrichmentType.resource) {
                     this.enrichWithResource(predicate);
-                } else if (data.type == EnrichmentType.plainLiteral) {
-                    this.enrichWithPlainLiteral(predicate);
-                } else if (data.type == EnrichmentType.typedLiteral) {
+                } else if (data.type == EnrichmentType.literal) {
                     this.enrichWithTypedLiteral(predicate, data.allowedDatatypes, data.dataRanges);
                 } else if (data.type == EnrichmentType.customForm) {
                     this.enrichWithCustomForm(predicate, data.form);
@@ -87,29 +85,10 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
     }
 
     /**
-     * Opens a newPlainLiteral modal to enrich the predicate with a plain literal value 
-     */
-    private enrichWithPlainLiteral(predicate: ARTURIResource) {
-        this.creationModals.newPlainLiteral("Add " + predicate.getShow(), null, null, null, null, null, { enabled: true, allowSameLang: true }).then(
-            (literal: ARTLiteral[]) => {
-                let addFunctions: MultiAddFunction[] = [];
-                literal.forEach((l: ARTLiteral) => {
-                    addFunctions.push({
-                        function: this.resourcesService.addValue(<ARTURIResource>this.resource, predicate, l),
-                        value: l
-                    });
-                });
-                this.addMultiple(addFunctions);
-            },
-            () => { }
-        );
-    }
-
-    /**
      * Opens a newTypedLiteral modal to enrich the predicate with a typed literal value 
      */
     private enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[]) {
-        this.creationModals.newTypedLiteral("Add " + predicate.getShow(), predicate, allowedDatatypes, dataRanges, true).then(
+        this.creationModals.newTypedLiteral("Add " + predicate.getShow(), predicate, allowedDatatypes, dataRanges, true, true).then(
             (literals: ARTLiteral[]) => {
                 let addFunctions: MultiAddFunction[] = [];
                 literals.forEach((l: ARTLiteral) => {

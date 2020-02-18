@@ -68,8 +68,9 @@ export class AdvancedGraphApplication extends GraphApplication {
 export class CODAConverter {
     public type: RDFCapabilityType;
     public contractUri: string;
-    public datatypeUri: string;
-    public language: string;
+    public datatypeUri: string; //e.g. datatype in "literal^^xsd:string"
+    public datatypeCapability: string; //datatype that the converter can produce (e.g. coda:date produces xsd:date)
+    public language: string; //e.g. language in "literal@it"
     public params: { [key: string]: any };
 }
 

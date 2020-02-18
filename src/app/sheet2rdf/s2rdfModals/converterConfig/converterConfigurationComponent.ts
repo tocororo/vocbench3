@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ARTLiteral, ARTURIResource } from "../../../models/ARTResources";
-import { ConverterContractDescription, RDFCapabilityType, SignatureDescription, XRole, ParameterDescription, RequirementLevels } from "../../../models/Coda";
+import { ConverterContractDescription, RDFCapabilityType, SignatureDescription, XRole } from "../../../models/Coda";
 import { CODAConverter } from "../../../models/Sheet2RDF";
+import { RDF } from "../../../models/Vocabulary";
 import { CODAServices } from "../../../services/codaServices";
 import { RangeType } from "../../../services/propertyServices";
 
@@ -15,8 +16,8 @@ export class ConverterConfigurationComponent {
     @Input() converter: CODAConverter;
     @Input() memoize: boolean;
     @Input() rangeType: RangeType; //the listed converters capability must be compliant with this rangeType (if not provided, all converter are ok)
-    @Input() constrainedLanguage: string;
-    @Input() constrainedDatatype: ARTURIResource;
+    @Input() language: string;
+    @Input() datatype: ARTURIResource;
     @Output() update: EventEmitter<UpdateStatus> = new EventEmitter();
 
     private availableConverters: ConverterContractDescription[] = [];
@@ -30,8 +31,6 @@ export class ConverterConfigurationComponent {
     private readonly datatypeLiteralAspect: string = "datatype";
     private literalAspectOpts: string[] = ["---", this.languageLiteralAspect, this.datatypeLiteralAspect];
     private selectedLiteralAspect: string = this.literalAspectOpts[0];
-    private language: string;
-    private datatype: ARTURIResource;
     private literalAspectChangeable: boolean = true;
 
     private xRoles: string[] = [XRole.concept, XRole.conceptScheme, XRole.skosCollection, XRole.xLabel, XRole.xNote];
@@ -39,16 +38,18 @@ export class ConverterConfigurationComponent {
     constructor(private codaService: CODAServices) {}
 
     ngOnInit() {
-        this.language = this.constrainedLanguage;
-        if (this.language == null && this.converter != null) { //language not constrained => get the language of the input converter
+        if (this.language == null && this.converter != null) { //language not provided as input => get the language of the input converter
             this.language = this.converter.language;
         }
-        this.datatype = this.constrainedDatatype;
         if (this.language != null) {
             this.selectedLiteralAspect = this.languageLiteralAspect;
             this.literalAspectChangeable = false;
         } else if (this.datatype != null) {
-            this.selectedLiteralAspect = this.datatypeLiteralAspect;
+            if (this.datatype.equals(RDF.langString)) {
+                this.selectedLiteralAspect = this.languageLiteralAspect;
+            } else {
+                this.selectedLiteralAspect = this.datatypeLiteralAspect;
+            }
             this.literalAspectChangeable = false;
         }
 
@@ -63,12 +64,8 @@ export class ConverterConfigurationComponent {
                         if (capability == RDFCapabilityType.node || capability == RDFCapabilityType.uri) {
                             this.availableConverters.push(c);
                         }
-                    } else if (this.rangeType == RangeType.plainLiteral) {
+                    } else if (this.rangeType == RangeType.literal) {
                         if (capability == RDFCapabilityType.node || capability == RDFCapabilityType.literal) {
-                            this.availableConverters.push(c);
-                        }
-                    } else if (this.rangeType == RangeType.typedLiteral) {
-                        if (capability == RDFCapabilityType.node || capability == RDFCapabilityType.typedLiteral) {
                             let datatypes = c.getDatatypes();
                             if (this.datatype != null && datatypes.length > 0) {
                                 if (datatypes.indexOf(this.datatype.getURI()) != -1) { //datatype in the datatypes of the converter => the converter can produce the required dt
@@ -129,7 +126,7 @@ export class ConverterConfigurationComponent {
                     this.availableSignatures.push(s);
                 } else if (this.rangeType == RangeType.resource && (returnType.endsWith(".IRI") || returnType.endsWith(".Value"))) {
                     this.availableSignatures.push(s);
-                } else if ((this.rangeType == RangeType.plainLiteral || this.rangeType == RangeType.typedLiteral) && returnType.endsWith(".Literal")) {
+                } else if ((this.rangeType == RangeType.literal) && returnType.endsWith(".Literal")) {
                     this.availableSignatures.push(s);
                 }
             })
@@ -231,6 +228,7 @@ export class ConverterConfigurationComponent {
             contractUri: this.selectedConverter.getURI(),
             language: lang,
             datatypeUri: datatypeUri,
+            datatypeCapability: (this.selectedConverter.getDatatypes().length > 0) ? this.selectedConverter.getDatatypes()[0] : null,
             params: params
         }
         let status: UpdateStatus = { converter: c, memoize: this.isConverterRandom() ? this.memoize : false };

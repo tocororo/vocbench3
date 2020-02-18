@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources";
-import { RDF, RDFS } from "../../../../models/Vocabulary";
+import { RDF } from "../../../../models/Vocabulary";
 import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import { VBContext } from "../../../../utils/VBContext";
 import { DatatypeValidator } from "../../../../utils/DatatypeValidator";
@@ -21,7 +21,8 @@ export class NewTypedLiteralModalData extends BSModalContext {
         public predicate: ARTURIResource,
         public allowedDatatypes: Array<ARTURIResource>,
         public dataRanges: Array<ARTLiteral[]>,
-        public multivalue: boolean = false
+        public multivalue: boolean = false,
+        public validate: boolean = false
     ) {
         super();
     }
@@ -64,16 +65,11 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
         } else { //both allowedDatatypes and dataRanges null
             this.selectedAspectSelector = this.typedLiteralAspectSelector;
         }
-
-        //in modal is used to enrich rdfs:comment, set rdf:langString as default
-        if (this.context.predicate != null && this.context.predicate.equals(RDFS.comment)) {
-            this.datatype = RDF.langString;
-        }
     }
 
     private addValue() {
         if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
-            if (this.dtValidator.isValid(this.value, this.datatype)) {
+            if (this.context.validate && this.dtValidator.isValid(this.value, this.datatype)) {
                 this.values.push(this.value);
                 this.value = null;
             } else {
@@ -142,7 +138,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
             } else { //no multiple values => return the input value
                 if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
                     //first validate
-                    if (!this.dtValidator.isValid(this.value, this.datatype)) {
+                    if (this.context.validate && !this.dtValidator.isValid(this.value, this.datatype)) {
                         this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow(), "warning");
                         return;
                     }
@@ -153,6 +149,11 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
             }
         } else {
             if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
+                //first validate
+                if (this.context.validate && !this.dtValidator.isValid(this.value, this.datatype)) {
+                    this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow(), "warning");
+                    return;
+                }
                 literals = [this.value];
             } else { //selected dataRangeAspectSelector
                 literals = [this.value];

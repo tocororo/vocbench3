@@ -10,7 +10,7 @@ export class PropertyEnrichmentHelper {
      * Given a predicate, gets its range and based on the range (and the eventually custom range) returns a PropertyEnrichmentInfo object
      * that describes how to enrich the property. Thi object will contains:
      * - type: 
-     *      tells how the property needs to be enriched (resource|plainLiteral|typedLiteral|customForm).
+     *      tells how the property needs to be enriched (resource|literal|customForm).
      *      In case of error or if the flow is interrupted (closed a modal), the type is null.
      * - allowedDatatypes: list of datatypes assignable to the value. It is provided optionally if type is "typedLiteral"
      * - dataRanges: list of dataRange values. It is provided optionally if type is "typedLiteral"
@@ -41,58 +41,26 @@ export class PropertyEnrichmentHelper {
                  * only "classic" range
                  */
                 if (ranges != undefined && formCollection == undefined) {
-                    //Check on the rangeType. Available values: resource, plainLiteral, typedLiteral, literal, undetermined, inconsistent
+                    //Check on the rangeType. Available values: resource, literal, undetermined, inconsistent
                     if (ranges.type == RangeType.resource) {
                         return Observable.of({ type: EnrichmentType.resource, rangeCollection: ranges.rangeCollection });
-                    } else if (ranges.type == RangeType.plainLiteral) {
-                        return Observable.of({ type: EnrichmentType.plainLiteral });
-                    } else if (ranges.type == RangeType.typedLiteral) {
-                        //in case range type is typedLiteral, the rangeColl (if available) represents the admitted datatypes
-                        let datatypes = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
-                        let dataRanges = ranges.rangeCollection ? ranges.rangeCollection.dataRanges : null;
-                        return Observable.of({
-                            type: EnrichmentType.typedLiteral, 
-                            allowedDatatypes: datatypes,
-                            dataRanges: dataRanges 
-                        });
                     } else if (ranges.type == RangeType.literal) {
                         let datatypes = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
                         let dataRanges = ranges.rangeCollection ? ranges.rangeCollection.dataRanges : null;
-                        if (datatypes != null) {
-                            return Observable.of({ 
-                                type: EnrichmentType.typedLiteral,
-                                allowedDatatypes: datatypes,
-                                dataRanges: dataRanges
-                            });
-                        } else {
-                            var options = [RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
-                            return Observable.fromPromise(
-                                basicModals.select("Select range type", null, options).then(
-                                    (selectedRange: any) => {
-                                        if (selectedRange == RDFTypesEnum.typedLiteral) {
-                                            let datatypes = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
-                                            return { type: EnrichmentType.typedLiteral, allowedDatatypes: datatypes };
-                                        } else if (selectedRange == RDFTypesEnum.plainLiteral) {
-                                            return { type: EnrichmentType.plainLiteral };
-                                        }
-                                    },
-                                    () => {
-                                        return { type: null };
-                                    }
-                                )
-                            );
-                        }
+                        return Observable.of({
+                            type: EnrichmentType.literal,
+                            allowedDatatypes: datatypes,
+                            dataRanges: dataRanges
+                        });
                     } else if (ranges.type == RangeType.undetermined) {
-                        var options = [RDFTypesEnum.resource, RDFTypesEnum.typedLiteral, RDFTypesEnum.plainLiteral];
+                        var options = [RDFTypesEnum.resource, RDFTypesEnum.literal];
                         return Observable.fromPromise(
                             basicModals.select("Select range type", null, options).then(
                                 (selectedRange: any) => {
                                     if (selectedRange == RDFTypesEnum.resource) {
                                         return { type: EnrichmentType.resource }
-                                    } else if (selectedRange == RDFTypesEnum.typedLiteral) {
-                                        return { type: EnrichmentType.typedLiteral };
-                                    } else if (selectedRange == RDFTypesEnum.plainLiteral) {
-                                        return { type: EnrichmentType.plainLiteral };
+                                    } else if (selectedRange == RDFTypesEnum.literal) {
+                                        return { type: EnrichmentType.literal };
                                     }
                                 },
                                 () => {
@@ -111,15 +79,13 @@ export class PropertyEnrichmentHelper {
                 else if (ranges != undefined && formCollection != undefined) {
                     var rangeOptions: CustomForm[] = [];
                     //classic ranges (this is a workaround to use selection CF modal with classic range as well)
-                    if (ranges.type == RangeType.resource || ranges.type == RangeType.plainLiteral || ranges.type == RangeType.typedLiteral) {
+                    if (ranges.type == RangeType.resource) {
                         rangeOptions.push(new CustomForm(ranges.type, ranges.type, ranges.type));
                     } else if (ranges.type == RangeType.literal) {
-                        rangeOptions.push(new CustomForm(RDFTypesEnum.plainLiteral, RDFTypesEnum.plainLiteral, RDFTypesEnum.plainLiteral));
-                        rangeOptions.push(new CustomForm(RDFTypesEnum.typedLiteral, RDFTypesEnum.typedLiteral, RDFTypesEnum.typedLiteral));
+                        rangeOptions.push(new CustomForm(RDFTypesEnum.literal, RDFTypesEnum.literal, RDFTypesEnum.literal));
                     } else if (ranges.type == RangeType.undetermined) { //undetermined => range could be resource and any kind of literal
                         rangeOptions.push(new CustomForm(RDFTypesEnum.resource, RDFTypesEnum.resource, RDFTypesEnum.resource));
-                        rangeOptions.push(new CustomForm(RDFTypesEnum.plainLiteral, RDFTypesEnum.plainLiteral, RDFTypesEnum.plainLiteral));
-                        rangeOptions.push(new CustomForm(RDFTypesEnum.typedLiteral, RDFTypesEnum.typedLiteral, RDFTypesEnum.typedLiteral));
+                        rangeOptions.push(new CustomForm(RDFTypesEnum.literal, RDFTypesEnum.literal, RDFTypesEnum.literal));
                     }
                     //and custom ranges
                     var customForms = formCollection.getForms();
@@ -137,10 +103,8 @@ export class PropertyEnrichmentHelper {
                                 }
                                 if (selectedCF.getId() == RDFTypesEnum.resource) {
                                     return { type: EnrichmentType.resource };
-                                } else if (selectedCF.getId() == RDFTypesEnum.typedLiteral) {
-                                    return { type: EnrichmentType.typedLiteral };
-                                } else if (selectedCF.getId() == RDFTypesEnum.plainLiteral) {
-                                    return { type: EnrichmentType.plainLiteral };
+                                } else if (selectedCF.getId() == RDFTypesEnum.literal) {
+                                    return { type: EnrichmentType.literal };
                                 }
                             },
                             () => {
@@ -169,7 +133,7 @@ export class PropertyEnrichmentHelper {
                             )
                         );
                     } else { //no CR linked to the property has no Entries => error
-                        basicModals.alert("Error", "The FormCollection " + formCollection.getId() + ", linked to property " +  predicate.getShow() + 
+                        basicModals.alert("Error", "The FormCollection " + formCollection.getId() + ", linked to property " + predicate.getShow() +
                             ", doesn't contain any CustomForm", "error");
                         return Observable.of({ type: null });
                     }
@@ -189,8 +153,7 @@ export class PropertyEnrichmentInfo {
 }
 
 export enum EnrichmentType {
-    plainLiteral = "plainLiteral",
-    typedLiteral = "typedLiteral",
+    literal = "literal",
     resource = "resource",
     customForm = "customForm"
 }

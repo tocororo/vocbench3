@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
-import { ARTLiteral, ARTURIResource, RDFTypesEnum } from '../../../models/ARTResources';
-import { BasicModalServices } from '../../modal/basicModal/basicModalServices';
+import { ARTLiteral, ARTURIResource } from '../../../models/ARTResources';
 import { CreationModalServices } from '../../modal/creationModal/creationModalServices';
 
 @Component({
@@ -18,7 +17,7 @@ export class LiteralPickerComponent {
 
     private literalNT: string;
 
-    constructor(private creationModals: CreationModalServices, private basicModals: BasicModalServices) { }
+    constructor(private creationModals: CreationModalServices) { }
 
     ngOnInit() {
         this.init();
@@ -35,47 +34,14 @@ export class LiteralPickerComponent {
     }
 
     private pickLiteral() {
-        let resourceTypes: {[key: string]: RDFTypesEnum} = {
-            "Plain Literal": RDFTypesEnum.plainLiteral,
-            "Typed Literal": RDFTypesEnum.typedLiteral
-        };
-
-        if (this.plain && this.typed) {
-            this.basicModals.select("Create literal", "Select the type of literal to create", Object.keys(resourceTypes)).then(
-                (type: string) => {
-                    this.createLiteral(resourceTypes[type]);
-                },
-                () => {}
-            ); 
-        } else {
-            if (this.plain) {
-                this.createLiteral(RDFTypesEnum.plainLiteral);
-            } else if (this.typed) {
-                this.createLiteral(RDFTypesEnum.typedLiteral);
-            }
-        }
-    }
-
-    private createLiteral(type: RDFTypesEnum) {
-        if (type == RDFTypesEnum.typedLiteral) {
-            this.creationModals.newTypedLiteral("Create typed literal", null, this.datatypes).then(
-                (values: ARTLiteral[]) => {
-                    this.literal = values[0];
-                    this.literalNT = this.literal.toNT();
-                    this.literalChanged.emit(this.literal);
-                },
-                () => {}
-            );
-        } else if (type == RDFTypesEnum.plainLiteral) {
-            this.creationModals.newPlainLiteral("Create literal").then(
-                (value: ARTLiteral[]) => {
-                    this.literal = value[0];
-                    this.literalNT = this.literal.toNT();
-                    this.literalChanged.emit(this.literal);
-                },
-                () => {}
-            );
-        }
+        this.creationModals.newTypedLiteral("Create literal", null, this.datatypes).then(
+            (values: ARTLiteral[]) => {
+                this.literal = values[0];
+                this.literalNT = this.literal.toNT();
+                this.literalChanged.emit(this.literal);
+            },
+            () => {}
+        );
     }
 
 }

@@ -168,7 +168,7 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
                 if (range != undefined) {
                     let rangeCollection: ARTURIResource[] = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
                     if (
-                        (ranges.type == RangeType.literal || ranges.type == RangeType.plainLiteral || ranges.type == RangeType.typedLiteral) ||
+                        ranges.type == RangeType.literal ||
                         (rangeCollection != null && rangeCollection.length == 1 && rangeCollection[0].getURI() == RDFS.literal.getURI())
                     ) { //range literal
                         return false;

@@ -156,17 +156,10 @@ export class QueryParameterizerModal implements ModalComponent<QueryParameterize
                 },
                 () => {}
             );
-        } else if (type == RDFTypesEnum.typedLiteral) {
-            this.creationModals.newTypedLiteral("Create typed literal").then(
+        } else if (type == RDFTypesEnum.literal) {
+            this.creationModals.newTypedLiteral("Create literal").then(
                 (values: ARTLiteral[]) => {
                     binding.value = values[0].toNT();
-                },
-                () => {}
-            );
-        } else if (type == RDFTypesEnum.plainLiteral) {
-            this.creationModals.newPlainLiteral("Create literal").then(
-                (value: ARTLiteral[]) => {
-                    binding.value = value[0].toNT();
                 },
                 () => {}
             );

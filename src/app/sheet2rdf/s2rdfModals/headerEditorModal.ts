@@ -132,7 +132,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     }
 
     private changeLiteralConverter(node: NodeConversion) {
-        var modalData = new NodeCreationModalData(this.header, node, RangeType.plainLiteral, null, null, null);
+        var modalData = new NodeCreationModalData(this.header, node, RangeType.literal, null, null, null);
         const builder = new BSModalContextBuilder<NodeCreationModalData>(
             modalData, undefined, NodeCreationModalData
         );
