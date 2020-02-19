@@ -148,7 +148,6 @@ export class PartitionFilterEditor {
     private checkForAllRoles(partition: ResViewPartition, check: boolean) {
         this.rolePartitionsStructs.forEach(rps => {
             rps.partitions.forEach(p => {
-                console.log("partition ==? p.id", partition, p.id, (partition == p.id))
                 if (partition == p.id) {
                     p.checked = check;
                 }

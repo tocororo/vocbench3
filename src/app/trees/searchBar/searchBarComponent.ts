@@ -23,7 +23,7 @@ import { SearchSettingsModal, SearchSettingsModalData } from './searchSettingsMo
 })
 export class SearchBarComponent {
 
-    @Input() roles: RDFResourceRolesEnum[]; //tells the roles of the panel where the search bar is placed (usefull for customizing the settings)
+    @Input() role: RDFResourceRolesEnum; //tells the role of the panel where the search bar is placed (usefull for customizing the settings)
     @Input() disabled: boolean = false;
     @Input() cls: ARTURIResource; //useful where search-bar is in the instance list panel
     @Input() context: TreeListContext;
@@ -68,7 +68,7 @@ export class SearchBarComponent {
 
     ngOnInit() {
         this.searchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
-        this.completerDatasource = new CustomCompleterData(this.searchService, this.roles, this.searchSettings);
+        this.completerDatasource = new CustomCompleterData(this.searchService, this.role, this.searchSettings);
         this.setSchemeInCompleter(VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeSchemes);
         this.setProjectCtxInCompleter(this.projectCtx);
     }
@@ -104,7 +104,7 @@ export class SearchBarComponent {
     }
 
     private editSettings() {
-        var modalData = new SearchSettingsModalData(this.roles, this.projectCtx);
+        var modalData = new SearchSettingsModalData(this.role, this.context, this.projectCtx);
         const builder = new BSModalContextBuilder<SearchSettingsModalData>(
             modalData, undefined, SearchSettingsModalData
         );
@@ -159,7 +159,7 @@ export class SearchBarComponent {
     }
 
     private setSchemeInCompleter(schemes: ARTURIResource[]) {
-        if (this.roles.indexOf(RDFResourceRolesEnum.concept) != -1) {
+        if (this.role == RDFResourceRolesEnum.concept) {
             this.completerDatasource.setConceptSchemes(schemes);
         }
     }

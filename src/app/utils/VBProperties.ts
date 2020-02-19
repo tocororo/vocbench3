@@ -5,7 +5,7 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ART
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
 import { ProjectTableColumnStruct } from '../models/Project';
-import { ClassIndividualPanelSearchMode, ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, PartitionFilterPreference, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
+import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, PartitionFilterPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { OWL, RDFS } from '../models/Vocabulary';
 import { AdministrationServices } from '../services/administrationServices';
@@ -191,7 +191,6 @@ export class VBProperties {
                 searchSettings.useAutocompletion = prefs[Properties.pref_search_use_autocomplete] == "true";
 
                 projectPreferences.searchSettings = searchSettings;
-
 
                 this.initSearchSettingsCookie(projectPreferences); //other settings stored in cookies
             }
@@ -520,9 +519,9 @@ export class VBProperties {
         if (restrictSchemesCookie != null) {
             preferences.searchSettings.restrictActiveScheme = restrictSchemesCookie == "true";
         }
-        let clsIndPanelSearchModeCookie: string = Cookie.getCookie(Cookie.SEARCH_CLS_IND_PANEL);
-        if (clsIndPanelSearchModeCookie != null) {
-            preferences.searchSettings.classIndividualSearchMode = <ClassIndividualPanelSearchMode>clsIndPanelSearchModeCookie;
+        let extendAllIndividualsCookie: string = Cookie.getCookie(Cookie.SEARCH_EXTEND_ALL_INDIVIDUALS);
+        if (restrictSchemesCookie != null) {
+            preferences.searchSettings.extendToAllIndividuals = extendAllIndividualsCookie == "true";
         }
     }
 
@@ -534,7 +533,7 @@ export class VBProperties {
         Cookie.setCookie(Cookie.SEARCH_USE_LOCAL_NAME, settings.useLocalName+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_USE_NOTES, settings.useNotes+"", 365*10);
         Cookie.setCookie(Cookie.SEARCH_CONCEPT_SCHEME_RESTRICTION, settings.restrictActiveScheme+"", 365*10);
-        Cookie.setCookie(Cookie.SEARCH_CLS_IND_PANEL, settings.classIndividualSearchMode, 365*10);
+        Cookie.setCookie(Cookie.SEARCH_EXTEND_ALL_INDIVIDUALS, settings.extendToAllIndividuals+"", 365*10);
 
         if (projectPreferences.searchSettings.languages != settings.languages) {
             this.prefService.setPUSetting(Properties.pref_search_languages, JSON.stringify(settings.languages), projectCtx.getProject()).subscribe();

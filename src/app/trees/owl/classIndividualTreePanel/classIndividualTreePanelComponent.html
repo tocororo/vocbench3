@@ -1,21 +1,11 @@
-<class-tree-panel #clsPanel [ngStyle]="{ 'flex': classPanelFlex }" (nodeSelected)="onClassSelected($event)"
-    [allowMultiselection]="allowMultiselection" [hideSearch]="true" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
+<class-tree-panel #clsPanel [ngStyle]="{ 'flex': classPanelFlex }" (nodeSelected)="onClassSelected($event)" (advancedSearch)="advancedSearch($event)"
+    [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
 </class-tree-panel>
 
 <div class="sliderY" (mousedown)="onMousedown($event);"></div>
 
-<instance-list-panel #instPanel [ngStyle]="{ 'flex': instancePanelFlex }" [cls]="selectedClass" (nodeSelected)="onInstanceSelected($event)" 
-    [allowMultiselection]="allowMultiselection" [hideSearch]="true" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
+<instance-list-panel #instPanel [ngStyle]="{ 'flex': instancePanelFlex }" (nodeSelected)="onInstanceSelected($event)"
+    (advancedSearch)="advancedSearch($event)" (classChange)="onClassChangeRequest($event)"
+    [cls]="selectedClass" [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx"
+    [readonly]="readonly" [editable]="editable">
 </instance-list-panel>
-
-<search-bar (search)="doSearch($event)" (advancedSearch)="advancedSearch($event)" [roles]="rolesForSearch" 
-    [context]="context" [projectCtx]="projectCtx" style="margin-top: 4px;">
-</search-bar>
-
-<div #blockDivClsIndList class="blockingDiv" style="display:none">
-    <div class="loadingDiv">
-        <div>
-            <p>Loading...</p><img src="../../../../assets/images/loading.gif" />
-        </div>
-    </div>
-</div>

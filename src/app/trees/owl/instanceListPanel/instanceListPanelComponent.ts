@@ -1,12 +1,16 @@
-import { Component, Input, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { Observable } from "rxjs";
 import { GraphModalServices } from "../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { SearchSettings } from "../../../models/Properties";
 import { CustomFormsServices } from "../../../services/customFormsServices";
+import { IndividualsServices } from "../../../services/individualsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { SearchServices } from "../../../services/searchServices";
+import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { ActionDescription, RoleActionResolver } from "../../../utils/RoleActionResolver";
+import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
 import { VBActionFunctionCtx } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
@@ -15,7 +19,6 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { AbstractListPanel } from "../../abstractListPanel";
 import { MultiSubjectEnrichmentHelper } from "../../multiSubjectEnrichmentHelper";
 import { InstanceListComponent } from "../instanceList/instanceListComponent";
-import { VBRequestOptions } from "../../../utils/HttpManager";
 
 @Component({
     selector: "instance-list-panel",
@@ -25,13 +28,14 @@ import { VBRequestOptions } from "../../../utils/HttpManager";
 export class InstanceListPanelComponent extends AbstractListPanel {
     @Input() hideSearch: boolean = false; //if true hide the search bar
     @Input() cls: ARTURIResource; //class of the instances
+    @Output() classChange: EventEmitter<ARTURIResource> = new EventEmitter(); //event emitted when, due to a search, a class change is required
 
     @ViewChild(InstanceListComponent) viewChildInstanceList: InstanceListComponent;
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
     rendering: boolean = false; //override the value in AbstractPanel
 
-    constructor(private searchService: SearchServices,
+    constructor(private searchService: SearchServices, private individualService: IndividualsServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
         super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
@@ -94,20 +98,30 @@ export class InstanceListPanelComponent extends AbstractListPanel {
             searchLangs = searchSettings.languages;
             includeLocales = searchSettings.includeLocales;
         }
-        this.searchService.searchInstancesOfClass(this.cls, searchedText, searchSettings.useLocalName, searchSettings.useURI,
-            searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales,
-            VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
+        let searchFn: Observable<ARTURIResource[]>;
+        if (this.extendSearchToAllIndividuals()) {
+            searchFn = this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.individual], searchSettings.useLocalName, 
+                searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, null, 
+                VBRequestOptions.getRequestOptions(this.projectCtx));
+        } else { //search only in current class
+            searchFn = this.searchService.searchInstancesOfClass(this.cls, searchedText, searchSettings.useLocalName, 
+                searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, 
+                VBRequestOptions.getRequestOptions(this.projectCtx));
+        }
+        UIUtils.startLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
+        searchFn.subscribe(
             searchResult => {
+                UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
                 if (searchResult.length == 0) {
                     this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
                 } else { //1 or more results
                     if (searchResult.length == 1) {
-                        this.openAt(searchResult[0]);
+                        this.selectSearchedResource(searchResult[0]);
                     } else { //multiple results, ask the user which one select
                         ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
                         this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
                             (selectedResource: any) => {
-                                this.openAt(selectedResource);
+                                this.selectSearchedResource(selectedResource);
                             },
                             () => { }
                         );
@@ -115,6 +129,77 @@ export class InstanceListPanelComponent extends AbstractListPanel {
                 }
             }
         );
+    }
+
+    /**
+     * If resource is a class expands the class tree and select the resource,
+     * otherwise (resource is an instance) expands the class tree to the class of the instance and
+     * select the instance in the instance list
+     */
+    public selectSearchedResource(resource: ARTURIResource) {
+        if (this.extendSearchToAllIndividuals()) {
+            //get type of instance, then open the tree to that class
+            this.individualService.getNamedTypes(resource).subscribe(
+                types => {
+                    this.getClassOfIndividual(resource, types).subscribe(
+                        cls => {
+                            if (cls != null) {
+                                if (cls.equals(this.cls)) { //searched individual belongs to the current class
+                                    this.viewChildInstanceList.openListAt(resource);
+                                } else { //searched individual belongs to another class
+                                    //require to parent to switch class
+                                    this.classChange.emit(types[0]);
+                                    //and invoke to open list in order to store the search as pending
+                                    this.viewChildInstanceList.openListAt(resource);
+                                }
+                            } //cls == null means that user has canceled the operation
+                        }
+                    )
+                }
+            )
+        } else {
+            this.viewChildInstanceList.openListAt(resource);
+        }
+    }
+
+    /**
+     * After a search of an individual that belongs to a different class, returns the class to switch to
+     */
+    private getClassOfIndividual(individual: ARTURIResource, types: ARTURIResource[]): Observable<ARTURIResource> {
+        if (types.some(t => t.equals(this.cls))) { //simplest case: searched individual belongs to the current selected class
+            return Observable.of(this.cls);
+        } else {
+            if (types.length == 1) {
+                return Observable.fromPromise(
+                    this.basicModals.confirm("Search", "Searched instance " + individual.getShow() + " belong to a different class " + 
+                        types[0].getShow() + ". Do you want to switch class?").then(
+                        () => { //confirmed => switch class
+                            return types[0];
+                        },
+                        () => { //canceled => don't switch class
+                            return null;
+                        }
+                    )
+                );
+            } else { //multiple types
+                return Observable.fromPromise(
+                    this.basicModals.selectResource("Search", "Searched instance " + individual.getShow() + 
+                        " belong to the following classes. If you want to complete the search, select one of them and confirm", types, this.rendering).then(
+                        res => { //selected => switch class
+                            return res;
+                        },
+                        () => { //canceled => don't switch class
+                            return null;
+                        }
+                    )
+                );
+            }
+        }
+    }
+
+    private extendSearchToAllIndividuals(): boolean {
+        //extended search to all individuals (also in other classes) only if the setting is enabled and only from the panel in the Data page
+        return VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings.extendToAllIndividuals && this.context == TreeListContext.dataPanel;
     }
 
     //this is public so it can be invoked from classIndividualTreePanelComponent

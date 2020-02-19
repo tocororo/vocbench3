@@ -13,6 +13,7 @@ export class Properties {
     static pref_show_flags: string = "show_flags";
     static pref_project_theme: string = "project_theme";
     static pref_show_instances_number: string = "show_instances_number";
+
     static pref_search_languages: string = "search_languages";
     static pref_search_restrict_lang: string = "search_restrict_lang";
     static pref_search_include_locales: string = "search_include_locales";
@@ -64,7 +65,7 @@ export class SearchSettings {
     includeLocales: boolean = false;
     useAutocompletion: boolean = false;
     restrictActiveScheme: boolean = true;
-    classIndividualSearchMode: ClassIndividualPanelSearchMode = ClassIndividualPanelSearchMode.all;
+    extendToAllIndividuals: boolean = false;
 }
 
 export enum SearchMode {
@@ -82,12 +83,6 @@ export enum StatusFilter {
     UNDER_VALIDATION_FOR_DEPRECATION = "UNDER_VALIDATION_FOR_DEPRECATION",
     ANYTHING = "ANYTHING",
 } 
-
-export enum ClassIndividualPanelSearchMode {
-    onlyClasses = "onlyClasses",
-    onlyInstances = "onlyInstances",
-    all = "all"
-}
 
 export class ClassTreePreference {
     rootClassUri: string;

@@ -56,25 +56,32 @@ export class InstanceListComponent extends AbstractList {
     ngOnChanges(changes: SimpleChanges) {
         //viewInitialized needed to prevent the initialization of the list before view is initialized
         if (this.viewInitialized) {
-            if (changes['cls'] && changes['cls'].currentValue) {
-                this.getNumberOfInstances(this.cls).subscribe(
-                    numInst => {
-                        if (numInst > this.instanceLimit) {
-                            this.basicModals.confirm("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
-                                + ") has too many instances (" + numInst + "). Retrieving them all could be a very long process "
-                                + "and it may slow down the server. Do you want to continue anyway?", "warning").then(
-                                (confirm: any) => {
-                                    this.init();
-                                },
-                                (cancel: any) =>  {
-                                    this.list = [];
-                                }
-                            );
-                        } else {
-                            this.init();
+            if (changes['cls']) {
+                if (this.cls != null) {
+                    this.getNumberOfInstances(this.cls).subscribe(
+                        numInst => {
+                            if (numInst > this.instanceLimit) {
+                                this.basicModals.confirm("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
+                                    + ") has too many instances (" + numInst + "). Retrieving them all could be a very long process "
+                                    + "and it may slow down the server. Do you want to continue anyway?", "warning").then(
+                                    (confirm: any) => {
+                                        this.init();
+                                    },
+                                    (cancel: any) =>  {
+                                        this.list = [];
+                                    }
+                                );
+                            } else {
+                                this.init();
+                            }
                         }
-                    }
-                );
+                    );
+                } else { //class not provided
+                    //setTimeout prevent ExpressionChangedAfterItHasBeenCheckedError on isOpenGraphEnabled('dataOriented') in the parent panel
+                    setTimeout(() => {
+                        this.init(); //this will reset the list
+                    });
+                }
             }
         }
     }

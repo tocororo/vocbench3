@@ -16,9 +16,8 @@
     <!--Tabs content-->
     <div class="tab-content">
         <div *ngIf="showTab('cls')" [ngClass]="{vbox : activeTab == 'cls'}" [hidden]="activeTab != 'cls'">
-            <class-individual-tree-panel (classSelected)="onNodeSelected($event)" (instanceSelected)="onNodeSelected($event)"
-                (advancedSearch)="advancedSearch($event)" [allowMultiselection]="allowMultiselection"
-                [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
+            <class-individual-tree-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)"
+                [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </class-individual-tree-panel>
         </div>
         <div *ngIf="showTab('concept')" [ngClass]="{vbox : activeTab == 'concept'}" [hidden]="activeTab != 'concept'">

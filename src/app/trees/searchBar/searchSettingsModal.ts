@@ -2,13 +2,14 @@ import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
-import { ClassIndividualPanelSearchMode, SearchMode, SearchSettings } from "../../models/Properties";
+import { SearchMode, SearchSettings } from "../../models/Properties";
+import { TreeListContext } from "../../utils/UIUtils";
 import { ProjectContext, VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
 export class SearchSettingsModalData extends BSModalContext {
-    constructor(public roles: RDFResourceRolesEnum[], public projectCtx: ProjectContext) {
+    constructor(public role: RDFResourceRolesEnum, public structureCtx: TreeListContext, public projectCtx: ProjectContext) {
         super();
     }
 }
@@ -26,7 +27,7 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
 
     private settings: SearchSettings;
 
-    private settingsForClassPanel: boolean = false;
+    private settingsForInstancePanel: boolean = false;
     private settingsForConceptPanel: boolean = false;
 
     //search mode startsWith/contains/endsWith
@@ -53,23 +54,17 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
     //concept search restriction
     private restrictConceptSchemes: boolean = true;
 
-    //class panel search
-    private clsIndSearchMode: { show: string, value: ClassIndividualPanelSearchMode }[] = [
-        { show: "Only classes", value: ClassIndividualPanelSearchMode.onlyClasses },
-        { show: "Only instances", value: ClassIndividualPanelSearchMode.onlyInstances },
-        { show: "Both classes and instances", value: ClassIndividualPanelSearchMode.all }
-    ];
-    private activeClsIndSearchMode: ClassIndividualPanelSearchMode;
-
+    //individual panel search
+    private extendsToAllIndividuals: boolean = false;
 
     constructor(public dialog: DialogRef<SearchSettingsModalData>, private vbProp: VBProperties, private sharedModals: SharedModalServices) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
-        this.settingsForConceptPanel = (this.context.roles != null && this.context.roles[0] == RDFResourceRolesEnum.concept);
-        this.settingsForClassPanel = (this.context.roles != null && this.context.roles.indexOf(RDFResourceRolesEnum.cls) != -1 && 
-            this.context.roles.indexOf(RDFResourceRolesEnum.individual) != -1);
+        this.settingsForConceptPanel = (this.context.role == RDFResourceRolesEnum.concept);
+        //individual settings (extends individual search to all classes) must be visible only when modal is opened from the cls-ind panel in the data page
+        this.settingsForInstancePanel = (this.context.role == RDFResourceRolesEnum.individual && this.context.structureCtx == TreeListContext.dataPanel);
 
         this.settings = VBContext.getWorkingProjectCtx(this.context.projectCtx).getProjectPreferences().searchSettings;
         this.activeStringMatchMode = this.settings.stringMatchMode;
@@ -81,7 +76,7 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
         this.languages = this.settings.languages;
         this.useAutocompletion = this.settings.useAutocompletion;
         this.restrictConceptSchemes = this.settings.restrictActiveScheme;
-        this.activeClsIndSearchMode = this.settings.classIndividualSearchMode;
+        this.extendsToAllIndividuals = this.settings.extendToAllIndividuals;
     }
 
     private selectRestrictionLanguages() {
@@ -107,7 +102,7 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
                 languages: this.languages,
                 useAutocompletion: this.useAutocompletion,
                 restrictActiveScheme: this.restrictConceptSchemes,
-                classIndividualSearchMode: this.activeClsIndSearchMode
+                extendToAllIndividuals: this.extendsToAllIndividuals,
             }
         );
     }

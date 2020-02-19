@@ -1,14 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
-import { ClassIndividualPanelSearchMode, SearchSettings } from "../../../models/Properties";
 import { IndividualsServices } from "../../../services/individualsServices";
-import { SearchServices } from "../../../services/searchServices";
-import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
-import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
-import { ProjectContext, VBContext } from "../../../utils/VBContext";
+import { TreeListContext } from "../../../utils/UIUtils";
+import { ProjectContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
-import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { ClassTreePanelComponent } from "../classTreePanel/classTreePanelComponent";
 import { InstanceListPanelComponent } from "../instanceListPanel/instanceListPanelComponent";
 
@@ -34,11 +30,9 @@ export class ClassIndividualTreePanelComponent {
     @Input() context: TreeListContext;
     @Input() projectCtx: ProjectContext;
     @Input() allowMultiselection: boolean = false; //if true allow the possibility to enable the multiselection in the contained tree/list
-    @Output() classSelected = new EventEmitter<ARTURIResource>();
-    @Output() instanceSelected = new EventEmitter<ARTURIResource>();
+    @Output() nodeSelected = new EventEmitter<ARTURIResource>();
     @Output('advancedSearch') advancedSearchEvent: EventEmitter<ARTResource> = new EventEmitter();
 
-    @ViewChild('blockDivClsIndList') public blockDivElement: ElementRef;
     //{ read: ElementRef } to specify to get the element instead of the component (see https://stackoverflow.com/q/45921819/5805661)
     @ViewChild('clsPanel', { read: ElementRef }) private classPanelRef: ElementRef; 
     @ViewChild('instPanel',  { read: ElementRef }) private instancePanelRef: ElementRef;
@@ -46,18 +40,12 @@ export class ClassIndividualTreePanelComponent {
     @ViewChild(ClassTreePanelComponent) viewChildTree: ClassTreePanelComponent;
     @ViewChild(InstanceListPanelComponent) viewChildInstanceList: InstanceListPanelComponent;
 
-    private rendering: boolean = false; //if true the nodes in the tree should be rendered with the show, with the qname otherwise
-
     private selectedClass: ARTURIResource = null;
     private selectedInstance: ARTURIResource;
 
-    private rolesForSearch: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual];
-
     private eventSubscriptions: Subscription[] = [];
 
-    constructor(private individualService: IndividualsServices, private searchService: SearchServices,
-        private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
-
+    constructor(private individualService: IndividualsServices, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.classDeletedEvent.subscribe(
             (deletedRes: ARTURIResource) => this.onClassDeleted(deletedRes)));
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
@@ -66,44 +54,6 @@ export class ClassIndividualTreePanelComponent {
 
     ngOnDestroy() {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
-    }
-
-    private doSearch(searchedText: string) {
-        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
-        let searchRoles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual];
-        if (searchSettings.classIndividualSearchMode == ClassIndividualPanelSearchMode.onlyInstances) {
-            searchRoles = [RDFResourceRolesEnum.individual];
-        } else if (searchSettings.classIndividualSearchMode == ClassIndividualPanelSearchMode.onlyClasses) {
-            searchRoles = [RDFResourceRolesEnum.cls];
-        }
-        let searchLangs: string[];
-        let includeLocales: boolean;
-        if (searchSettings.restrictLang) {
-            searchLangs = searchSettings.languages;
-            includeLocales = searchSettings.includeLocales;
-        }
-        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.searchService.searchResource(searchedText, searchRoles, searchSettings.useLocalName, searchSettings.useURI, 
-            searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales).subscribe(
-            searchResult => {
-                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
-                } else { //1 or more results
-                    if (searchResult.length == 1) {
-                        this.selectSearchedResource(searchResult[0]);
-                    } else { //multiple results, ask the user which one select
-                        ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
-                        this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
-                            (selectedResource: any) => {
-                                this.selectSearchedResource(selectedResource);
-                            },
-                            () => { }
-                        );
-                    }
-                }
-            }
-        );
     }
 
     /**
@@ -139,17 +89,12 @@ export class ClassIndividualTreePanelComponent {
             this.selectedInstance.setAdditionalProperty(ResAttribute.SELECTED, false);
             this.selectedInstance = null;
         }
-        if (cls != null) { //cls could be null if the underlaying classTree has been refreshed
-            this.classSelected.emit(cls);
-        }
+        this.nodeSelected.emit(cls);
     }
 
     private onInstanceSelected(instance: ARTURIResource) {
         this.selectedInstance = instance;
-        //event could be fired after a refresh on the list, in that case, instance is null
-        if (instance != null) { //forward the event only if instance is not null
-            this.instanceSelected.emit(instance);
-        }
+        this.nodeSelected.emit(instance);
     }
 
     private onClassDeleted(cls: ARTURIResource) {
@@ -162,6 +107,14 @@ export class ClassIndividualTreePanelComponent {
         if (this.selectedInstance.equals(instance)) {
             this.selectedInstance = null;
         }
+    }
+
+    /**
+     * Fired when, after a search in the individual panel, it's required to select another class in order to focus an individual
+     * @param cls 
+     */
+    private onClassChangeRequest(cls: ARTURIResource) {
+        this.openClassTreeAt(cls);
     }
 
     /**

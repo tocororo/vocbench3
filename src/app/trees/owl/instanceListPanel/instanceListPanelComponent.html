@@ -72,7 +72,7 @@
 
     <!-- Search -->
     <div *ngIf="!hideSearch" class="panel-footer">
-        <search-bar (search)="doSearch($event)" [roles]="[panelRole]" [cls]="cls" [disabled]="!cls" [context]="context"></search-bar>
+        <search-bar (search)="doSearch($event)" [role]="panelRole" [cls]="cls" [disabled]="!cls" [context]="context"></search-bar>
     </div>
     
 </div>

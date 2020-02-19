@@ -107,15 +107,15 @@
         </div>
     </div>
 
-    <div *ngIf="settingsForClassPanel" class="panel panel-default" style="margin-top: 5px;">
+    <div *ngIf="settingsForInstancePanel" class="panel panel-default" style="margin-top: 5px;">
         <div class="panel-heading">
-            <label>Classes-Instances panel search</label>
+            <label>Instances search</label>
         </div>
         <div class="panel-body">
-            <div *ngFor="let sm of clsIndSearchMode" class="radio" style="margin: 5px 0px 0px">
+            <div class="checkbox" style="margin: 5px 0px 0px">
                 <label>
-                    <input type="radio" name="clsIndSearchMode" [value]="sm.value" [(ngModel)]="activeClsIndSearchMode"
-                        (ngModelChange)="updateSettings()">{{sm.show}}
+                    <input type="checkbox" [(ngModel)]="extendsToAllIndividuals" (ngModelChange)="updateSettings()">
+                    Extend the search to all the individuals (also belonging to other classes)
                 </label>
             </div>
         </div>
