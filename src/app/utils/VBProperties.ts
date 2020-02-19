@@ -5,7 +5,7 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ART
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
 import { ProjectTableColumnStruct } from '../models/Project';
-import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, PartitionFilterPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
+import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, PartitionFilterPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { OWL, RDFS } from '../models/Vocabulary';
 import { AdministrationServices } from '../services/administrationServices';
