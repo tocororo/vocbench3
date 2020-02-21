@@ -88,7 +88,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let c of correspondences" (click)="selectCorrespondence(c)" [ngClass]="{ active: selectedCorrespondence == c }">
+                            <tr *ngFor="let c of correspondences" (click)="selectCorrespondence(c)" [ngClass]="{ info: selectedCorrespondence == c }">
                                 <td>
                                     <rdf-resource [resource]="c.leftEntity[0]" style="cursor: pointer" (dblclick)="openLeftResourceView(c.leftEntity[0])"></rdf-resource>
                                 </td>

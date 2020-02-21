@@ -63,7 +63,7 @@
                                     </button>
                                 </td>
                             </tr>
-                            <tr *ngFor="let row of tablePreview" [id]="'tableRow'+row.idx" [ngClass]="{active: row == selectedTablePreviewRow }">
+                            <tr *ngFor="let row of tablePreview" [id]="'tableRow'+row.idx" [ngClass]="{ info: row == selectedTablePreviewRow }">
                                 <td *ngFor="let c of row.cells" class="spreadsheetCell" [title]="c.value">{{c.value}}</td>
                             </tr>
                         </tbody>

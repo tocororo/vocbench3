@@ -40,7 +40,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let task of tasks" [ngClass]="{ active: selectedTask }" (click)="selectTask(task)">
+                    <tr *ngFor="let task of tasks" [ngClass]="{ info: selectedTask }" (click)="selectTask(task)">
                         <td>{{task.leftDataset.projectName}}</td>
                         <td>{{task.rightDataset.projectName}}</td>
                         <td>{{task.status}}</td>

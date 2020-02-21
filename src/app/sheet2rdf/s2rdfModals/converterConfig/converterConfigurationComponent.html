@@ -14,7 +14,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let c of availableConverters" (click)="selectConverter(c)" [ngClass]="{ active: c == selectedConverter }" style="cursor: pointer;">
+                <tr *ngFor="let c of availableConverters" (click)="selectConverter(c)" [ngClass]="{ info: c == selectedConverter }" style="cursor: pointer;">
                     <td>{{c.getName()}}</td>
                     <td style="white-space: pre;">{{c.getDescription()}}</td>
                     <td nowrap>{{c.getRDFCapability()}}

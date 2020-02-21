@@ -58,7 +58,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let n of header?.nodes" (click)="selectNode(n)" [ngStyle]="{ cursor: header?.ignore ? 'not-allowed' : 'pointer' }"
-                        [ngClass]="{ active : n == selectedNode }">
+                        [ngClass]="{ info : n == selectedNode }">
                         <td [ngClass]="{ grayText : header?.ignore }">{{n.nodeId}}</td>
                         <td [ngClass]="{ grayText : header?.ignore }">{{n.converter?.type}}</td>
                         <td [ngClass]="{ grayText : header?.ignore }" nowrap>
@@ -118,7 +118,7 @@
                 </colgroup>
                 <tbody>
                     <tr *ngFor="let g of header?.graph" (click)="selectGraph(g)" [ngStyle]="{ cursor: header?.ignore ? 'not-allowed' : 'pointer' }"
-                        [ngClass]="{ active : g == selectedGraph }">
+                        [ngClass]="{ info : g == selectedGraph }">
                         <ng-container *ngIf="isSimpleGraphApplication(g); else advancedGraphBlock">
                             <td [ngClass]="{ grayText : header?.ignore }" nowrap><label>Simple Graph Application:</label></td>
                             <td [ngClass]="{ grayText : header?.ignore }" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 0">$subject {{g.property.getShow()}} ${{g.nodeId}}</td>

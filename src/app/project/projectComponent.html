@@ -43,7 +43,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let p of projectList" (click)="selectProject(p)" [ngClass]="{active: p == selectedProject}">
+                    <tr *ngFor="let p of projectList" (click)="selectProject(p)" [ngClass]="{ info: p == selectedProject }">
                         <td class="text-center">
                             <input type="radio" name="projRadioGrp" [value]="p.getName()" (click)="activateProject(p)"
                                 [checked]="isWorkingProject(p)" [disabled]="!p.isOpen()"/>

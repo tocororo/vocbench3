@@ -29,7 +29,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let c of catalogs" (click)="selectCatalog(c)" [ngClass]="{ active : selectedCatalog == c }">
+                    <tr *ngFor="let c of catalogs" (click)="selectCatalog(c)" [ngClass]="{ info : selectedCatalog == c }">
                         <td>
                             <label *ngIf="c.abstractDataset.title">{{c.abstractDataset.title}}:</label>
                             {{c.abstractDataset.uriSpace}}

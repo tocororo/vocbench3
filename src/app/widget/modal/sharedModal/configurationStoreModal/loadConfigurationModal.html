@@ -19,7 +19,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let ref of references" (click)="selectReference(ref)" [ngClass]="{active: selectedRef == ref}">
+                    <tr *ngFor="let ref of references" (click)="selectReference(ref)" [ngClass]="{ info: selectedRef == ref }">
                         <td>{{ref.identifier}}</td>
                         <td>{{ref.getReferenceScope()}}</td>
                         <td>
@@ -29,7 +29,7 @@
                         </td>
                     </tr>
 
-                    <tr *ngFor="let ref of context.additionalReferences" (click)="selectReference(ref)" [ngClass]="{active: selectedRef == ref}">
+                    <tr *ngFor="let ref of context.additionalReferences" (click)="selectReference(ref)" [ngClass]="{ info: selectedRef == ref }">
                         <td>{{ref.identifier}}</td>
                         <td>APPLICATION</td>
                         <td></td>

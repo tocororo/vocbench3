@@ -54,7 +54,6 @@ import { SignaturePickerModal } from '../widget/modal/sharedModal/converterPicke
 import { LanguageSelectorModal } from "../widget/modal/sharedModal/languagesSelectorModal/languageSelectorModal";
 import { ManchesterExprModal } from '../widget/modal/sharedModal/manchesterExprModal/manchesterExprModal';
 import { PluginConfigModal } from "../widget/modal/sharedModal/pluginConfigModal/pluginConfigModal";
-import { RemoteAccessConfigEditorModal } from "../widget/modal/sharedModal/remoteAccessConfigModal/remoteAccessConfigEditorModal";
 import { RemoteAccessConfigModal } from "../widget/modal/sharedModal/remoteAccessConfigModal/remoteAccessConfigModal";
 import { RemoteRepoSelectionModal } from "../widget/modal/sharedModal/remoteRepoSelectionModal/remoteRepoSelectionModal";
 import { ResourcePickerModal } from '../widget/modal/sharedModal/resourcePickerModal/resourcePickerModal';
@@ -109,7 +108,6 @@ import { UserModule } from "./userModule";
         PromptPrefixedModal,
         PromptPropertiesModal,
         PropertyTreeModal,
-        RemoteAccessConfigEditorModal,
         RemoteAccessConfigModal,
         RemoteRepoSelectionModal,
         ResourceAlignmentModal,
@@ -177,7 +175,6 @@ import { UserModule } from "./userModule";
         PromptPrefixedModal,
         PromptPropertiesModal,
         PropertyTreeModal,
-        RemoteAccessConfigEditorModal,
         RemoteAccessConfigModal,
         RemoteRepoSelectionModal,
         ResourceAlignmentModal,

@@ -7,7 +7,7 @@
             <col style="width: 1%">
         </colgroup>
         <tbody>
-            <tr *ngFor="let i of issues" (click)="selectIssue(i)" [ngClass]="{ active : i == selectedIssue }">
+            <tr *ngFor="let i of issues" (click)="selectIssue(i)" [ngClass]="{ info : i == selectedIssue }">
                 <td nowrap>
                     <a [href]="i.getUrl()" target="_blank">{{i.getKey()}}</a>
                 </td>

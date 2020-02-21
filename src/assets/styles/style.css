@@ -355,10 +355,6 @@ img.disabled  {
 .table-hoverable tbody tr:hover td { 
     background-color: #e5f3ff !important;
 }
-/*project-component .table tr.active td {*/
-.table tr.active td {
-    background-color: #cde8ff !important;
-}
 
 .table-borderless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {
     border: none;

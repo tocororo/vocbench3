@@ -75,7 +75,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let m of nsPrefMappingList" (click)="selectMapping(m)"
-                                [ngClass]="{active: m == selectedMapping, grayText: !m.explicit}">
+                                [ngClass]="{ info: m == selectedMapping, grayText: !m.explicit }">
                                 <td class="text-center">{{m.prefix}}</td>
                                 <td class="text-center">{{m.namespace}}</td>
                             </tr>

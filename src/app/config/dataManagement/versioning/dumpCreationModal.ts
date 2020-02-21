@@ -34,7 +34,7 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
     ];
     private selectedRepositoryAccess: RepositoryAccessType = this.repositoryAccessList[0];
 
-    private remoteAccessConfig: RemoteRepositoryAccessConfig = { serverURL: null, username: null, password: null };
+    private remoteAccessConfig: RemoteRepositoryAccessConfig;
 
     //core repository containing data
     private repositoryId: string;
@@ -86,7 +86,7 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
      * Configure the selected repository access in case it is remote.
      */
     private configureRemoteRepositoryAccess() {
-        this.sharedModals.configureRemoteRepositoryAccess(this.remoteAccessConfig).then(
+        this.sharedModals.configureRemoteRepositoryAccess().then(
             (config: any) => {
                 this.remoteAccessConfig = config;
             },
@@ -95,7 +95,7 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
     }
 
     private changeRemoteRepository() {
-        if (this.remoteAccessConfig.serverURL == null || this.remoteAccessConfig.serverURL.trim() == "") {
+        if (this.remoteAccessConfig == null) {
             this.basicModals.alert("Missing configuration", "The remote repository has not been configure ('Remote Access Config')."
                 + " Please, enter at least the server url, then retry.", "error");
             return;
@@ -118,9 +118,8 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
         }
         //valid repository access configuration (in case of repository access remote)
         if (this.isSelectedRepoAccessRemote()) {
-            if ((!this.remoteAccessConfig.serverURL || this.remoteAccessConfig.serverURL.trim() == "")) {
-                this.basicModals.alert("Missing configuration", "Remote repository access/creation requires a configuration. " + 
-                    "Please check serverURL, username and password in 'Remote Access Config'.", "error");
+            if ((!this.remoteAccessConfig == null)) {
+                this.basicModals.alert("Missing configuration", "The selected remote Repository Access needs to be configured.", "warning");
                 return;
             }
         }

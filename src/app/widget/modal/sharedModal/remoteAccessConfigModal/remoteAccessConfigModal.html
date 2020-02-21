@@ -3,54 +3,55 @@
 </div>
 <div class="modal-body">
 
-    <table class="table table-condensed table-borderless table-hoverable">
-        <colgroup>
-            <col style="width: 1%;">
-            <col>
-            <col style="width: 1%;">
-        </colgroup>
-        <tbody>
-            <tr>
-                <td nowrap>Server URL</td>
-                <td>
-                    <div class="input-group input-group-sm">
-                        <select class="form-control" [(ngModel)]="selectedConfig" name="selectedRepositoryAccess">
-                            <option *ngFor="let conf of savedConfigs" [ngValue]="conf">{{conf.serverURL}}</option>
-                            <option *ngIf="savedConfigs.length == 0" disabled>No Remote Store Configuration saved. Create a new one by clicking on 'Manage Config'</option>
-                        </select>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default btn-sm" (click)="changeRemoteConfig()">Manage Config</button>
-                        </span>
-                    </div>
-                </td>
-                <td><span class="glyphicon glyphicon-info-sign" style="margin-left: 5px" title="URL to the server of the rdf repository"></span></td>
-            </tr>
-            <tr>
-                <td nowrap>Username</td>
-                <td><input type="text" class="form-control input-sm" [ngModel]="selectedConfig.username" placeholder="username" readonly></td>
-                <td><span class="glyphicon glyphicon-info-sign" style="margin-left: 5px" title="Identifier for the user connecting to the rdf repository"></span></td>
-            </tr>
-            <tr>
-                <td nowrap>Password</td>
-                <td>
-                    <div class="input-group input-group-sm">
-                        <input *ngIf="!showPwd" type="password" class="form-control" [ngModel]="selectedConfig.password" placeholder="password" readonly>
-                        <input *ngIf="showPwd" class="form-control" [ngModel]="selectedConfig.password" placeholder="password" readonly>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" [ngClass]="{ active : showPwd }" (mousedown)="showPwd = true" (mouseup)="showPwd = false">
-                                <span *ngIf="!showPwd" class="glyphicon glyphicon-eye-close"></span>
-                                <span *ngIf="showPwd" class="glyphicon glyphicon-eye-open"></span>
+    <div class="panel panel-default">
+        <div class="panel-body table-responsive">
+            <table class="table table-hoverable">
+                <thead>
+                    <tr>
+                        <th>Server URL</th>
+                        <th>Username</th>
+                        <th>Password</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="savedConfigs.length == 0">
+                        <td colspan="4">No Remote Access Configuration found. Please, create a new one.</td>
+                    </tr>
+                    <tr *ngFor="let conf of savedConfigs" (click)="selectConfig(conf)" [ngClass]="{ info: selectedConfig == conf }" style="cursor: pointer">
+                        <td>
+                            <input-editable [value]="conf.serverURL" (valueEdited)="updateConfServerURL(conf, $event)"></input-editable>
+                        </td>
+                        <td>
+                            <input-editable [value]="conf.username" allowEmpty="true" (valueEdited)="updateConfUsername(conf, $event)"></input-editable>
+                        </td>
+                        <td>
+                            <input-editable [value]="conf.password" allowEmpty="true" (valueEdited)="updateConfPassword(conf, $event)"></input-editable>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-default" (click)="deleteConfig(conf)">
+                                <span class="glyphicon glyphicon-trash"></span>
                             </button>
-                        </span>
-                    </div>
-                </td>
-                <td><span class="glyphicon glyphicon-info-sign" style="margin-left: 5px" title="Password for the user connecting to the rdf repository"></span></td>
-            </tr>
-        </tbody>
-    </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="panel-footer">
+            <div class="hbox" style="align-items: center;">
+                <label>New:</label>
+                <input class="form-control input-sm" style="margin-left: 6px;" [(ngModel)]="newConfig.serverURL" placeholder="http://serverurl">
+                <input class="form-control input-sm" style="margin-left: 6px;" [(ngModel)]="newConfig.username" placeholder="username">
+                <input class="form-control input-sm" style="margin-left: 6px;" [(ngModel)]="newConfig.password" placeholder="password">
+                <button class="btn btn-sm btn-default" style="margin-left: 6px;" (click)="createConfiguration()" [disabled]="!newConfig.serverURL">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </div>
+        </div>
+    </div>
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedConfig.serverURL">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedConfig">Ok</button>
     <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
 </div>

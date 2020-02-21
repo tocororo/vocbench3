@@ -45,7 +45,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let v of versionList; let idx=index" (click)="selectVersion(v)" [ngClass]="{active: v == selectedVersion}">
+                            <tr *ngFor="let v of versionList; let idx=index" (click)="selectVersion(v)" [ngClass]="{ info: v == selectedVersion }">
                                 <td class="text-center">
                                     {{v.versionId}}
                                 </td>

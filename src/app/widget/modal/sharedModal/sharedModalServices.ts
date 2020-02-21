@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { DatasetCatalogModal, DatasetCatalogModalData } from '../../../config/dataManagement/datasetCatalog/datasetCatalogModal';
 import { ImportFromDatasetCatalogModal, ImportFromDatasetCatalogModalData } from '../../../metadata/namespacesAndImports/importFromDatasetCatalogModal';
 import { ImportOntologyModal, ImportOntologyModalData } from '../../../metadata/namespacesAndImports/importOntologyModal';
@@ -20,7 +20,7 @@ import { ConverterPickerModal, ConverterPickerModalData } from "./converterPicke
 import { LanguageSelectorModal, LanguageSelectorModalData } from "./languagesSelectorModal/languageSelectorModal";
 import { ManchesterExprModal, ManchesterExprModalData } from './manchesterExprModal/manchesterExprModal';
 import { PluginConfigModal, PluginConfigModalData } from "./pluginConfigModal/pluginConfigModal";
-import { RemoteAccessConfigModal, RemoteAccessConfigModalData } from "./remoteAccessConfigModal/remoteAccessConfigModal";
+import { RemoteAccessConfigModal } from "./remoteAccessConfigModal/remoteAccessConfigModal";
 import { RemoteRepoSelectionModal, RemoteRepoSelectionModalData } from "./remoteRepoSelectionModal/remoteRepoSelectionModal";
 import { ResourcePickerModal, ResourcePickerModalData } from './resourcePickerModal/resourcePickerModal';
 import { UserSelectionModal, UserSelectionModalData } from './userSelectionModal/userSelectionModal';
@@ -49,11 +49,8 @@ export class SharedModalServices {
      * Returns a new RemoteRepositoryAccessConfig, the input configuration doesn't mutate
      * @param configuration
      */
-    configureRemoteRepositoryAccess(configuration: RemoteRepositoryAccessConfig) {
-        var modalData = new RemoteAccessConfigModalData(configuration);
-        const builder = new BSModalContextBuilder<RemoteAccessConfigModalData>(
-            modalData, undefined, RemoteAccessConfigModalData
-        );
+    configureRemoteRepositoryAccess() {
+        const builder = new BSModalContextBuilder<BSModalContext>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(RemoteAccessConfigModal, overlayConfig).result;
     }

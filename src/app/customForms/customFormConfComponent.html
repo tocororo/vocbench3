@@ -47,7 +47,7 @@
                             <table class="table table-condensed table-borderless table-hoverable">
                                 <tbody>
                                     <tr *ngFor="let cf of customFormList" (click)="selectCustomForm(cf)"
-                                        [ngClass]="{active: cf == selectedCustomForm, grayText: cf.level == 'system'}">
+                                        [ngClass]="{ info: cf == selectedCustomForm, grayText: cf.level == 'system' }">
                                         <td>{{cf.id}}</td>
                                     </tr>
                                 </tbody>
@@ -91,7 +91,7 @@
                             <table class="table table-condensed table-borderless table-hoverable">
                                 <tbody>
                                     <tr *ngFor="let fc of formCollectionList" (click)="selectFormColl(fc)"
-                                        [ngClass]="{active: fc == selectedFormColl, grayText: fc.level == 'system'}">
+                                        [ngClass]="{ info: fc == selectedFormColl, grayText: fc.level == 'system' }">
                                         <td>{{fc.id}}</td>
                                     </tr>
                                 </tbody>
@@ -135,7 +135,7 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let formCollMap of cfConfigurationMap" (click)="selectFormCollMapping(formCollMap)"
-                                    [ngClass]="{active: formCollMap == selectedFormCollMapping}">
+                                    [ngClass]="{ info: formCollMap == selectedFormCollMapping }">
                                     <td>{{formCollMap.getResource().getURI()}}</td>
                                     <td [ngClass]="{grayText: formCollMap.getFormCollection().getLevel() == 'system'}">
                                         {{formCollMap.getFormCollection().getId()}}

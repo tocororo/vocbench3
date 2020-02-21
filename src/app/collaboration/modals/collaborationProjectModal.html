@@ -20,7 +20,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let p of projects" (click)="selectProject(p)" [ngClass]="{ active : p == selectedProject }">
+                    <tr *ngFor="let p of projects" (click)="selectProject(p)" [ngClass]="{ info : p == selectedProject }">
                         <td *ngFor="let h of headers" class="text-center">{{p[h]}}</td>
                     </tr>
                 </tbody>

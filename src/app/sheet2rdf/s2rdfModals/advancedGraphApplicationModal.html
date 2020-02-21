@@ -41,7 +41,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let n of alreadyDefinedNodes" (click)="selectNode(n)" [ngClass]="{ active : n == selectedNode }">
+                    <tr *ngFor="let n of alreadyDefinedNodes" (click)="selectNode(n)" [ngClass]="{ info : n == selectedNode }">
                         <td class="grayText">{{n.nodeId}}</td>
                         <td class="grayText">{{n.converter?.type}}</td>
                         <td class="grayText">{{n.converter?.contractUri}}</td>
@@ -54,7 +54,7 @@
                             </span>
                         </td>
                     </tr>
-                    <tr *ngFor="let n of newDefinedNodes" (click)="selectNode(n)" [ngClass]="{ active : n == selectedNode }">
+                    <tr *ngFor="let n of newDefinedNodes" (click)="selectNode(n)" [ngClass]="{ info : n == selectedNode }">
                         <td>{{n.nodeId}}</td>
                         <td>{{n.converter?.type}}</td>
                         <td nowrap>
@@ -114,7 +114,7 @@
                                 <td>{{m.prefix}}</td>
                                 <td>{{m.namespace}}</td>
                             </tr>
-                            <tr *ngFor="let m of localPrefixMappings" (click)="selectMapping(m)" style="cursor: pointer" [ngClass]="{active: m == selectedMapping}">
+                            <tr *ngFor="let m of localPrefixMappings" (click)="selectMapping(m)" style="cursor: pointer" [ngClass]="{ info: m == selectedMapping }">
                                 <td>{{m.prefix}}</td>
                                 <td>{{m.namespace}}</td>
                             </tr>

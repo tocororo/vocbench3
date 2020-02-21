@@ -4,9 +4,9 @@ import { DatasetCatalogModalReturnData } from "../../config/dataManagement/datas
 import { ARTURIResource } from "../../models/ARTResources";
 import { TransitiveImportMethodAllowance } from "../../models/Metadata";
 import { ConfigurableExtensionFactory, ExtensionPointID, Plugin, PluginSpecification, Settings } from "../../models/Plugins";
-import { BackendTypesEnum, PreloadedDataSummary, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType, Project } from "../../models/Project";
+import { BackendTypesEnum, PreloadedDataSummary, Project, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
 import { RDFFormat } from "../../models/RDFFormat";
-import { DCT, OntoLex, OWL, RDFS, SKOS, SKOSXL, EDOAL } from "../../models/Vocabulary";
+import { DCT, EDOAL, OntoLex, OWL, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { ExtensionsServices } from "../../services/extensionsServices";
 import { InputOutputServices } from "../../services/inputOutputServices";
 import { PluginsServices } from "../../services/pluginsServices";
@@ -106,7 +106,7 @@ export class CreateProjectComponent {
     private selectedRepositoryAccess: RepositoryAccessType = this.repositoryAccessList[0];
 
     //configuration of remote access (used only in case selectedRepositoryAccess is one of CreateRemote or AccessExistingRemote)
-    private remoteAccessConfig: RemoteRepositoryAccessConfig = { serverURL: null, username: null, password: null };
+    private remoteAccessConfig: RemoteRepositoryAccessConfig;
 
     private DEFAULT_REPO_EXTENSION_ID = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.PredefinedRepositoryImplConfigurer";
     private DEFAULT_REPO_CONFIG_TYPE = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.RDF4JNativeSailConfigurerConfiguration";
@@ -497,7 +497,7 @@ export class CreateProjectComponent {
      * Configure the selected repository access in case it is remote.
      */
     private configureRemoteRepositoryAccess() {
-        this.sharedModals.configureRemoteRepositoryAccess(this.remoteAccessConfig).then(
+        this.sharedModals.configureRemoteRepositoryAccess().then(
             (config: any) => {
                 this.remoteAccessConfig = config;
             },
@@ -506,9 +506,8 @@ export class CreateProjectComponent {
     }
 
     private changeRemoteRepository(repoType: "data" | "support") {
-        if (this.remoteAccessConfig.serverURL == null || this.remoteAccessConfig.serverURL.trim() == "") {
-            this.basicModals.alert("Missing configuration", "The remote repository has not been configure ('Remote Access Config')."
-                + " Please, enter at least the server url, then retry.", "error");
+        if (this.remoteAccessConfig == null) {
+            this.basicModals.alert("Missing configuration", "The selected remote Repository Access needs to be configured.", "warning");
             return;
         }
 
@@ -662,9 +661,8 @@ export class CreateProjectComponent {
         //if the selected repo access is remote, add the configuration 
         if (this.isSelectedRepoAccessRemote()) {
             //check if configuration is set
-            if ((!this.remoteAccessConfig.serverURL || this.remoteAccessConfig.serverURL.trim() == "")) {
-                this.basicModals.alert("Create project",
-                    "Remote repository access/creation requires a configuration. Please check serverURL, username and password in 'Remote Access Config'.", "warning");
+            if (this.remoteAccessConfig == null) {
+                this.basicModals.alert("Missing configuration", "The selected remote Repository Access needs to be configured.", "warning");
                 return;
             }
             repositoryAccess.setConfiguration(this.remoteAccessConfig);
