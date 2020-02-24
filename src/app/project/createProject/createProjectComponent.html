@@ -185,10 +185,16 @@
                                     <select class="form-control input-sm" [(ngModel)]="selectedRepositoryAccess" name="selectedRepositoryAccess">
                                         <option *ngFor="let repoAcc of repositoryAccessList" [ngValue]="repoAcc">{{repoAcc}}</option>
                                     </select>
-                                    <button *ngIf="isSelectedRepoAccessRemote()" class="btn btn-default btn-sm" style="margin-left: 5px;" (click)="configureRemoteRepositoryAccess()">
-                                        Configure
-                                        <span *ngIf="!remoteAccessConfig" class="glyphicon glyphicon-warning-sign" title="Missing configuration"></span>
-                                    </button>
+                                    <div *ngIf="isSelectedRepoAccessRemote()" class="input-group input-group-sm" style="margin-left: 5px; min-width: 210px;">
+                                        <select class="form-control" [(ngModel)]="remoteAccessConfig" name="remoteConfig">
+                                            <option *ngFor="let c of remoteRepoConfigs" [ngValue]="c">{{c.serverURL}}</option>
+                                        </select>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" (click)="configureRemoteRepositoryAccess()">
+                                                <span class="glyphicon glyphicon-pencil"></span>
+                                            </button>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

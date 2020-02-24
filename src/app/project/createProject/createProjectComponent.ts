@@ -5,11 +5,13 @@ import { ARTURIResource } from "../../models/ARTResources";
 import { TransitiveImportMethodAllowance } from "../../models/Metadata";
 import { ConfigurableExtensionFactory, ExtensionPointID, Plugin, PluginSpecification, Settings } from "../../models/Plugins";
 import { BackendTypesEnum, PreloadedDataSummary, Project, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
+import { Properties } from "../../models/Properties";
 import { RDFFormat } from "../../models/RDFFormat";
 import { DCT, EDOAL, OntoLex, OWL, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
 import { ExtensionsServices } from "../../services/extensionsServices";
 import { InputOutputServices } from "../../services/inputOutputServices";
 import { PluginsServices } from "../../services/pluginsServices";
+import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
 import { ProjectServices } from "../../services/projectServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
@@ -106,6 +108,7 @@ export class CreateProjectComponent {
     private selectedRepositoryAccess: RepositoryAccessType = this.repositoryAccessList[0];
 
     //configuration of remote access (used only in case selectedRepositoryAccess is one of CreateRemote or AccessExistingRemote)
+    private remoteRepoConfigs: RemoteRepositoryAccessConfig[] = [];
     private remoteAccessConfig: RemoteRepositoryAccessConfig;
 
     private DEFAULT_REPO_EXTENSION_ID = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.PredefinedRepositoryImplConfigurer";
@@ -161,7 +164,8 @@ export class CreateProjectComponent {
 
 
     constructor(private projectService: ProjectServices, private pluginService: PluginsServices, private extensionService: ExtensionsServices,
-        private inOutService: InputOutputServices, private router: Router, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
+        private inOutService: InputOutputServices, private prefService: PreferencesSettingsServices,
+        private router: Router, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
     }
 
     ngOnInit() {
@@ -215,7 +219,19 @@ export class CreateProjectComponent {
             settings => {
                 this.shaclSettings = settings;
             }
-        )
+        );
+
+        //init available remote repo access configurations
+        this.prefService.getSystemSettings([Properties.setting_remote_configs]).subscribe(
+            stResp => {
+                if (stResp[Properties.setting_remote_configs] != null) {
+                    this.remoteRepoConfigs = <RemoteRepositoryAccessConfig[]> JSON.parse(stResp[Properties.setting_remote_configs]);
+                    if (this.remoteRepoConfigs.length == 1) { //in case of just one configuration, select it
+                        this.remoteAccessConfig = this.remoteRepoConfigs[0];
+                    }
+                }
+            }
+        );
 
     }
 
@@ -507,7 +523,8 @@ export class CreateProjectComponent {
 
     private changeRemoteRepository(repoType: "data" | "support") {
         if (this.remoteAccessConfig == null) {
-            this.basicModals.alert("Missing configuration", "The selected remote Repository Access needs to be configured.", "warning");
+            this.basicModals.alert("Missing configuration", "You need to select a configuration for the selected remote Repository Access. " +
+                "Please, select an existing one from the related combobox or create a new one.", "warning");
             return;
         }
 
@@ -662,7 +679,8 @@ export class CreateProjectComponent {
         if (this.isSelectedRepoAccessRemote()) {
             //check if configuration is set
             if (this.remoteAccessConfig == null) {
-                this.basicModals.alert("Missing configuration", "The selected remote Repository Access needs to be configured.", "warning");
+                this.basicModals.alert("Missing configuration", "You need to select a configuration for the selected remote Repository Access. " +
+                "Please, select an existing one from the related combobox or create a new one.", "warning");
                 return;
             }
             repositoryAccess.setConfiguration(this.remoteAccessConfig);
