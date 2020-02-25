@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
-import { ARTNode, ARTURIResource } from "../../../models/ARTResources";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ARTNode } from "../../../models/ARTResources";
 import { CustomForm } from "../../../models/CustomForms";
+import { Cookie } from '../../../utils/Cookie';
+import { VBContext } from '../../../utils/VBContext';
+import { AlertCheckModal, AlertCheckModalData } from './alertModal/alertCheckModal';
+import { AlertModal, AlertModalData } from "./alertModal/alertModal";
+import { ConfirmCheckModal, ConfirmCheckModalData } from "./confirmModal/confirmCheckModal";
+import { ConfirmModal, ConfirmModalData } from "./confirmModal/confirmModal";
+import { DownloadModal, DownloadModalData } from "./downloadModal/downloadModal";
+import { FilePickerModal, FilePickerModalData } from "./filePickerModal/filePickerModal";
 import { PromptModal, PromptModalData } from "./promptModal/promptModal";
 import { PromptPrefixedModal, PromptPrefixedModalData } from "./promptModal/promptPrefixedModal";
 import { PromptPropertiesModal, PromptPropertiesModalData } from './promptModal/promptPropertiesModal';
-import { ConfirmModal, ConfirmModalData } from "./confirmModal/confirmModal";
-import { ConfirmCheckModal, ConfirmCheckModalData } from "./confirmModal/confirmCheckModal";
-import { AlertModal, AlertModalData } from "./alertModal/alertModal";
-import { AlertCheckModal, AlertCheckModalData } from './alertModal/alertCheckModal';
-import { DownloadModal, DownloadModalData } from "./downloadModal/downloadModal";
-import { FilePickerModal, FilePickerModalData } from "./filePickerModal/filePickerModal";
-import { SelectionModal, SelectionModalData } from "./selectionModal/selectionModal";
-import { ResourceSelectionModal, ResourceSelectionModalData } from "./selectionModal/resourceSelectionModal";
 import { CustomFormSelectionModal, CustomFormSelectionModalData } from "./selectionModal/customFormSelectionModal";
-import { Cookie } from '../../../utils/Cookie';
-import { VBContext } from '../../../utils/VBContext';
+import { ResourceSelectionModal, ResourceSelectionModalData } from "./selectionModal/resourceSelectionModal";
+import { SelectionModal, SelectionModalData, SelectionOption } from "./selectionModal/selectionModal";
 
 export type ModalType = "info" | "error" | "warning";
 
@@ -180,12 +180,11 @@ export class BasicModalServices {
      * @param message the message to show in the modal dialog body. If null no message will be in the modal
      * @param options array of options. This can be an array of string or an array of objects 
      * {value: string, description: string}, where the description is shown on mouseover of the option value
-     * @param optionsWithDescription if true the options array is treated as an array of objects,
-     * otherwise it is a simple string array 
      * @return if the modal closes with ok returns a promise containing the selected option
      */
-    select(title: string, message: string, options: Array<any>, optionsWithDescription?: boolean) {
-        var modalData = new SelectionModalData(title, message, options, optionsWithDescription);
+    select(title: string, message: string, options: Array<string|SelectionOption>, type?: ModalType) {
+        var modalType = type ? type : "info"; //set default type to info if not defined
+        var modalData = new SelectionModalData(title, message, options, modalType);
         const builder = new BSModalContextBuilder<SelectionModalData>(
             modalData, undefined, SelectionModalData
         );

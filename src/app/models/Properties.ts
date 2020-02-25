@@ -1,7 +1,7 @@
-import { ResViewPartition } from "./ResourceView";
-import { SKOS } from "./Vocabulary";
 import { ARTURIResource } from "./ARTResources";
 import { Language } from "./LanguagesCountries";
+import { ResViewPartition } from "./ResourceView";
+import { SKOS } from "./Vocabulary";
 
 export class Properties {
 
@@ -28,6 +28,9 @@ export class Properties {
     static pref_concept_tree_include_subprops: string = "concept_tree_include_subprops";
     static pref_concept_tree_sync_inverse: string = "concept_tree_sync_inverse";
     static pref_concept_tree_visualization: string = "concept_tree_visualization";
+    static pref_concept_tree_multischeme_mode: string = "concept_tree_multischeme_mode";
+
+    static pref_instance_list_visualization: string = "instance_list_visualization";
 
     static pref_lex_entry_list_visualization: string = "lex_entry_list_visualization";
     static pref_lex_entry_list_index_lenght: string = "lex_entry_list_index_lenght";
@@ -101,11 +104,17 @@ export class ConceptTreePreference {
     includeSubProps: boolean = true; //tells if the hierarchy should consider
     syncInverse: boolean = true; //tells if the narrower/broader properties should be synced with their inverse
     visualization: ConceptTreeVisualizationMode = ConceptTreeVisualizationMode.hierarchyBased;
+    multischemeMode: MultischemeMode = MultischemeMode.or;
 }
 
 export enum ConceptTreeVisualizationMode {
     searchBased = "searchBased",
     hierarchyBased = "hierarchyBased"
+}
+
+export enum MultischemeMode { //tells if the multi-scheme are considered in AND or in OR when browsing the concept tree
+    and = "and",
+    or = "or"
 }
 
 export class LexicalEntryListPreference {
@@ -116,6 +125,15 @@ export class LexicalEntryListPreference {
 export enum LexEntryVisualizationMode {
     searchBased = "searchBased",
     indexBased = "indexBased"
+}
+
+export class InstanceListPreference {
+    visualization: InstanceListVisualizationMode = InstanceListVisualizationMode.standard;
+}
+
+export enum InstanceListVisualizationMode {
+    searchBased = "searchBased",
+    standard = "standard"
 }
 
 export class ValueFilterLanguages {
@@ -142,6 +160,7 @@ export class ProjectPreferences {
     projectThemeId: number = null;
 
     classTreePreferences: ClassTreePreference;
+    instanceListPreferences: InstanceListPreference;
     conceptTreePreferences: ConceptTreePreference;
     lexEntryListPreferences: LexicalEntryListPreference;
 

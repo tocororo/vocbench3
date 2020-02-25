@@ -1,6 +1,7 @@
 import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { Observable } from "rxjs";
-import { ARTURIResource, RDFResourceRolesEnum, ResAttribute, ARTResource } from "../../../models/ARTResources";
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
+import { InstanceListVisualizationMode } from "../../../models/Properties";
 import { SemanticTurkey } from "../../../models/Vocabulary";
 import { ClassesServices } from "../../../services/classesServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
@@ -10,7 +11,9 @@ import { UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
+import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { SelectionOption } from "../../../widget/modal/basicModal/selectionModal/selectionModal";
 import { AbstractList } from "../../abstractList";
 import { InstanceListNodeComponent } from "./instanceListNodeComponent";
 
@@ -27,15 +30,13 @@ export class InstanceListComponent extends AbstractList {
 
     private pendingSearchCls: ARTURIResource; //class of a searched instance that is waiting to be selected once the list is initialized
 
-    private viewInitialized: boolean = false;//useful to avoid ngOnChanges calls initList when the view is not initialized
-
     private instanceLimit: number = 10000;
 
     structRole = RDFResourceRolesEnum.individual;
 
     list: ARTResource[] = [];
 
-    constructor(private clsService: ClassesServices, private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+    constructor(private clsService: ClassesServices, private vbProp: VBProperties, private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
             (data: any) => { 
@@ -54,41 +55,9 @@ export class InstanceListComponent extends AbstractList {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        //viewInitialized needed to prevent the initialization of the list before view is initialized
-        if (this.viewInitialized) {
-            if (changes['cls']) {
-                if (this.cls != null) {
-                    this.getNumberOfInstances(this.cls).subscribe(
-                        numInst => {
-                            if (numInst > this.instanceLimit) {
-                                this.basicModals.confirm("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
-                                    + ") has too many instances (" + numInst + "). Retrieving them all could be a very long process "
-                                    + "and it may slow down the server. Do you want to continue anyway?", "warning").then(
-                                    (confirm: any) => {
-                                        this.init();
-                                    },
-                                    (cancel: any) =>  {
-                                        this.list = [];
-                                    }
-                                );
-                            } else {
-                                this.init();
-                            }
-                        }
-                    );
-                } else { //class not provided
-                    //setTimeout prevent ExpressionChangedAfterItHasBeenCheckedError on isOpenGraphEnabled('dataOriented') in the parent panel
-                    setTimeout(() => {
-                        this.init(); //this will reset the list
-                    });
-                }
-            }
+        if (changes['cls'] && !changes['cls'].firstChange) {
+            this.init();
         }
-    }
-
-    ngAfterViewInit() {
-        this.viewInitialized = true;
-        this.init();
     }
 
     initImpl() {
@@ -96,26 +65,80 @@ export class InstanceListComponent extends AbstractList {
             return;
         }
 
-        if (this.cls != undefined) {
-            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-            this.clsService.getInstances(this.cls, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-                instances => {
-                    //sort by show if rendering is active, uri otherwise
-                    ResourceUtils.sortResources(instances, this.rendering ? SortAttribute.show : SortAttribute.value);
-                    this.list = instances;
-                    // if there is some pending search where the class is same class which instance are currently described
-                    if (
-                        this.pendingSearchRes && 
-                        (
-                            (this.pendingSearchCls && this.pendingSearchCls.getURI() == this.cls.getURI()) || 
-                            !this.pendingSearchCls //null if already checked that the pendingSearchCls is the current (see selectSearchedInstance)
-                        )
-                    ) {
-                        this.openListAt(this.pendingSearchRes);
+        let visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences.visualization;
+        if (this.cls != null) { //class provided => init list
+            if (visualizationMode == InstanceListVisualizationMode.standard) {
+                this.getNumberOfInstances(this.cls).subscribe(
+                    numInst => {
+                        if (numInst > this.instanceLimit) { //too much instances => ask user
+                            let opts: SelectionOption[] = [
+                                { value: "Continue anyway", description: null },
+                                { 
+                                    value: "Switch visualization of instance list to search-based mode", 
+                                    description: "Visualization mode can be changed also from the instance panel settings"
+                                },
+                            ]
+                            this.basicModals.select("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
+                                + ") has too many instances (" + numInst + "). Retrieving them all could be a very long process, "
+                                + "you might experience performance decrease. What do you want to do?", opts, "warning")
+                            .then(
+                                (choice: SelectionOption) => {
+                                    if (choice == opts[0]) { //continue anyway
+                                        this.initStandardModeInstanceList();
+                                    } else { //swith to search based and reinit the list
+                                        this.vbProp.setInstanceListVisualization(InstanceListVisualizationMode.searchBased);
+                                        this.initImpl();
+                                    }
+                                },
+                                () => {} //canceled
+                            );
+                        } else { //limited insances => init list
+                            this.initStandardModeInstanceList();
+                        }
                     }
-                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                }
-            );
+                );
+            } else { //search based
+                //don't do nothing, just check for pending search
+                this.resumePendingSearch();
+            }
+        } else { //class not provided, reset the instance list
+            //setTimeout prevent ExpressionChangedAfterItHasBeenCheckedError on isOpenGraphEnabled('dataOriented') in the parent panel
+            setTimeout(() => {
+                this.init();
+            });
+        }
+    }
+
+    private initStandardModeInstanceList() {
+        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+        this.clsService.getInstances(this.cls, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
+            instances => {
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                //sort by show if rendering is active, uri otherwise
+                ResourceUtils.sortResources(instances, this.rendering ? SortAttribute.show : SortAttribute.value);
+                this.list = instances;
+                this.resumePendingSearch();
+            }
+        );
+    }
+
+    private resumePendingSearch() {
+        // if there is some pending search where the class is same class which instance are currently described
+        if (
+            this.pendingSearchRes && 
+            (
+                (this.pendingSearchCls && this.pendingSearchCls.getURI() == this.cls.getURI()) || 
+                !this.pendingSearchCls //null if already checked that the pendingSearchCls is the current (see selectSearchedInstance)
+            )
+        ) {
+            if (VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences.visualization == InstanceListVisualizationMode.standard) {
+                this.openListAt(this.pendingSearchRes); //standard mode => simply open list (focus searched res)
+            } else { //search mode => set the pending searched resource as only element of the list and then focus it
+                this.forceList([this.pendingSearchRes]);
+                setTimeout(() => {
+                    this.openListAt(this.pendingSearchRes);
+                });
+            }
         }
     }
 
@@ -139,6 +162,11 @@ export class InstanceListComponent extends AbstractList {
         } else { //otherwise call a service
             return this.clsService.getNumberOfInstances(cls, VBRequestOptions.getRequestOptions(this.projectCtx));
         }
+    }
+
+    public forceList(list: ARTURIResource[]) {
+        this.setInitialStatus();
+        this.list = list;
     }
 
     //EVENT LISTENERS

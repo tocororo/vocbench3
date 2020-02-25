@@ -1,19 +1,22 @@
 <div class="modal-header">
-    <h3 class="modal-title text-info">{{context.title}}</h3>
+    <h3 [class]="headerStyle">{{context.title}}</h3>
 </div>
-<div class="modal-body">
-    <div class="alert alert-info" *ngIf="context.message">
+<div class="modal-body vbox">
+    <div *ngIf="context.message" [class]="msgStyle">
         {{context.message}}
     </div>
-    <div style="margin-top: 5px;">
-        <select *ngIf="!context.optionsWithDescription" class="form-control" style="padding: 5px;" [(ngModel)]="optionSelected" [size]="size">
-            <option *ngFor="let o of context.options" style="font-size: 13px;" [value]="o">{{o}}</option>
-        </select>
-        
-        <select *ngIf="context.optionsWithDescription" class="form-control" style="padding: 5px;" [(ngModel)]="optionSelected" [size]="size">
-            <option *ngFor="let o of context.options" style="font-size: 13px;" [value]="o.value"
-                [title]="o.description">{{o.value}}</option>
-        </select>
+    <div class="panel panel-default vbox" style="margin-top: 5px;">
+        <div class="panel-body vbox scrollableContainer">
+            <div *ngFor="let opt of context.options" class="listItem" [ngClass]="{ active: optionSelected == opt }" (click)="optionSelected = opt">
+                <span *ngIf="!optionsWithDescription; else descrBlock">{{opt}}</span>
+                <ng-template #descrBlock>
+                    <span style="white-space: nowrap;">
+                        <span style="font-size: 13px;">{{opt.value}}</span>
+                        <span *ngIf="opt.description" class="glyphicon glyphicon-info-sign" style="margin-left: 4px;" [title]="opt.description"></span>
+                    </span>
+                </ng-template>
+            </div>
+        </div>
     </div>
 </div>
 <div class="modal-footer">

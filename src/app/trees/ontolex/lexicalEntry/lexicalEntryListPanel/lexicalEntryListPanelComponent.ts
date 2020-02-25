@@ -165,26 +165,23 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
             searchSettings.stringMatchMode, [this.workingLexicon], searchLangs, includeLocales, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
+                if (searchResult.length == 0) {
+                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    return;
+                }
                 ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
                 if (this.visualizationMode == LexEntryVisualizationMode.indexBased) {
-                    if (searchResult.length == 0) {
-                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
-                    } else { //1 or more results
-                        if (searchResult.length == 1) {
-                            this.selectSearchedResource(searchResult[0]);
-                        } else { //multiple results, ask the user which one select
-                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
-                                (selectedResource: any) => {
-                                    this.selectSearchedResource(selectedResource);
-                                },
-                                () => { }
-                            );
-                        }
+                    if (searchResult.length == 1) {
+                        this.selectSearchedResource(searchResult[0]);
+                    } else { //multiple results, ask the user which one select
+                        this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
+                            (selectedResource: any) => {
+                                this.selectSearchedResource(selectedResource);
+                            },
+                            () => { }
+                        );
                     }
                 } else { //searchBased
-                    if (searchResult.length == 0) {
-                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
-                    }
                     this.viewChildList.forceList(searchResult);
                 }
             }

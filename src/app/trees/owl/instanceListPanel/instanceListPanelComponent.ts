@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { Modal, OverlayConfig } from "ngx-modialog";
+import { BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
 import { Observable } from "rxjs";
 import { GraphModalServices } from "../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
-import { SearchSettings } from "../../../models/Properties";
+import { InstanceListPreference, InstanceListVisualizationMode, SearchSettings } from "../../../models/Properties";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { IndividualsServices } from "../../../services/individualsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
@@ -19,6 +21,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { AbstractListPanel } from "../../abstractListPanel";
 import { MultiSubjectEnrichmentHelper } from "../../multiSubjectEnrichmentHelper";
 import { InstanceListComponent } from "../instanceList/instanceListComponent";
+import { InstanceListSettingsModal } from "./instanceListSettingsModal";
 
 @Component({
     selector: "instance-list-panel",
@@ -30,19 +33,29 @@ export class InstanceListPanelComponent extends AbstractListPanel {
     @Input() cls: ARTURIResource; //class of the instances
     @Output() classChange: EventEmitter<ARTURIResource> = new EventEmitter(); //event emitted when, due to a search, a class change is required
 
-    @ViewChild(InstanceListComponent) viewChildInstanceList: InstanceListComponent;
+    @ViewChild(InstanceListComponent) viewChildList: InstanceListComponent;
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
     rendering: boolean = false; //override the value in AbstractPanel
 
-    constructor(private searchService: SearchServices, private individualService: IndividualsServices,
+    private visualizationMode: InstanceListVisualizationMode;
+
+    //for visualization searchBased
+    private lastSearch: string;
+
+    constructor(private searchService: SearchServices, private individualService: IndividualsServices, private modal: Modal,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
         super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
     }
 
+    ngOnInit() {
+        super.ngOnInit();
+        this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences.visualization;
+    }
+
     getActionContext(): VBActionFunctionCtx {
-        let actionCtx: VBActionFunctionCtx = { metaClass: this.cls, loadingDivRef: this.viewChildInstanceList.blockDivElement }
+        let actionCtx: VBActionFunctionCtx = { metaClass: this.cls, loadingDivRef: this.viewChildList.blockDivElement }
         return actionCtx;
     }
 
@@ -85,12 +98,22 @@ export class InstanceListPanelComponent extends AbstractListPanel {
     // }
 
     refresh() {
-        this.viewChildInstanceList.init();
+        if (this.visualizationMode == InstanceListVisualizationMode.standard) {
+            //reinit the list
+            this.viewChildList.init();
+        } else if (this.visualizationMode == InstanceListVisualizationMode.searchBased) {
+            //in search based visualization repeat the search
+            if (this.lastSearch != undefined) {
+                this.doSearch(this.lastSearch);
+            }
+        }
     }
 
     //search handlers
 
     doSearch(searchedText: string) {
+        this.lastSearch = searchedText;
+
         let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
@@ -98,6 +121,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
             searchLangs = searchSettings.languages;
             includeLocales = searchSettings.includeLocales;
         }
+
         let searchFn: Observable<ARTURIResource[]>;
         if (this.extendSearchToAllIndividuals()) {
             searchFn = this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.individual], searchSettings.useLocalName, 
@@ -108,17 +132,19 @@ export class InstanceListPanelComponent extends AbstractListPanel {
                 searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, 
                 VBRequestOptions.getRequestOptions(this.projectCtx));
         }
-        UIUtils.startLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
+        UIUtils.startLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
         searchFn.subscribe(
             searchResult => {
-                UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
+                UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
                 if (searchResult.length == 0) {
                     this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
-                } else { //1 or more results
+                    return;
+                }
+                ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
+                if (this.visualizationMode == InstanceListVisualizationMode.standard) {
                     if (searchResult.length == 1) {
                         this.selectSearchedResource(searchResult[0]);
                     } else { //multiple results, ask the user which one select
-                        ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
                         this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
                             (selectedResource: any) => {
                                 this.selectSearchedResource(selectedResource);
@@ -126,6 +152,8 @@ export class InstanceListPanelComponent extends AbstractListPanel {
                             () => { }
                         );
                     }
+                } else { //searchBased
+                    this.viewChildList.forceList(searchResult);
                 }
             }
         );
@@ -145,12 +173,12 @@ export class InstanceListPanelComponent extends AbstractListPanel {
                         cls => {
                             if (cls != null) {
                                 if (cls.equals(this.cls)) { //searched individual belongs to the current class
-                                    this.viewChildInstanceList.openListAt(resource);
+                                    this.viewChildList.openListAt(resource);
                                 } else { //searched individual belongs to another class
                                     //require to parent to switch class
                                     this.classChange.emit(types[0]);
                                     //and invoke to open list in order to store the search as pending
-                                    this.viewChildInstanceList.openListAt(resource);
+                                    this.viewChildList.openListAt(resource);
                                 }
                             } //cls == null means that user has canceled the operation
                         }
@@ -158,7 +186,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
                 }
             )
         } else {
-            this.viewChildInstanceList.openListAt(resource);
+            this.viewChildList.openListAt(resource);
         }
     }
 
@@ -198,13 +226,39 @@ export class InstanceListPanelComponent extends AbstractListPanel {
     }
 
     private extendSearchToAllIndividuals(): boolean {
-        //extended search to all individuals (also in other classes) only if the setting is enabled and only from the panel in the Data page
-        return VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings.extendToAllIndividuals && this.context == TreeListContext.dataPanel;
+        /**
+         * extended search to all individuals (also in other classes) only if:
+         * - the setting is enabled 
+         * - the panel is in the Data page
+         */
+        return (
+            VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings.extendToAllIndividuals &&
+            this.context == TreeListContext.dataPanel
+        );
     }
+
+    private settings() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        return this.modal.open(InstanceListSettingsModal, overlayConfig).result.then(
+            changesDone => {
+                let listPref: InstanceListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences;
+                this.visualizationMode = listPref.visualization;
+                if (this.visualizationMode == InstanceListVisualizationMode.searchBased) {
+                    this.viewChildList.forceList([]);
+                    this.lastSearch = null;
+                } else {
+                    this.refresh();
+                }
+            },
+            () => {}
+        );
+    }
+
 
     //this is public so it can be invoked from classIndividualTreePanelComponent
     openAt(instance: ARTURIResource) {
-        this.viewChildInstanceList.openListAt(instance);
+        this.viewChildList.openListAt(instance);
     }
 
 }

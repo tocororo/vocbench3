@@ -5,7 +5,7 @@ import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ART
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
 import { ProjectTableColumnStruct } from '../models/Project';
-import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, PartitionFilterPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
+import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, PartitionFilterPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { OWL, RDFS } from '../models/Vocabulary';
 import { AdministrationServices } from '../services/administrationServices';
@@ -46,9 +46,10 @@ export class VBProperties {
             Properties.pref_show_instances_number, Properties.pref_project_theme,
             Properties.pref_search_languages, Properties.pref_search_restrict_lang, 
             Properties.pref_search_include_locales, Properties.pref_search_use_autocomplete, 
-            Properties.pref_class_tree_filter, Properties.pref_class_tree_root,
+            Properties.pref_class_tree_filter, Properties.pref_class_tree_root, Properties.pref_instance_list_visualization,
             Properties.pref_concept_tree_base_broader_prop, Properties.pref_concept_tree_broader_props, Properties.pref_concept_tree_narrower_props,
             Properties.pref_concept_tree_include_subprops, Properties.pref_concept_tree_sync_inverse, Properties.pref_concept_tree_visualization,
+            Properties.pref_concept_tree_multischeme_mode,
             Properties.pref_lex_entry_list_visualization, Properties.pref_lex_entry_list_index_lenght,
             Properties.pref_editing_language, Properties.pref_filter_value_languages,
             Properties.pref_res_view_partition_filter, Properties.pref_graph_view_partition_filter, Properties.pref_hide_literal_graph_nodes
@@ -142,6 +143,14 @@ export class VBProperties {
                     classTreePreferences.showInstancesNumber = modelType == RDFS.uri || modelType == OWL.uri;
                 }
 
+                //instance list preferences
+                let instanceListPreferences: InstanceListPreference = new InstanceListPreference();
+                let instanceListVisualizationPref: string = prefs[Properties.pref_instance_list_visualization];
+                if (instanceListVisualizationPref == InstanceListVisualizationMode.searchBased) {
+                    instanceListPreferences.visualization = instanceListVisualizationPref;
+                }
+                projectPreferences.instanceListPreferences = instanceListPreferences;
+
                 //concept tree preferences
                 let conceptTreePreferences: ConceptTreePreference = new ConceptTreePreference();
                 let conceptTreeBaseBroaderPropPref: string = prefs[Properties.pref_concept_tree_base_broader_prop];
@@ -157,9 +166,14 @@ export class VBProperties {
                     conceptTreePreferences.narrowerProps = conceptTreeNarrowerPropsPref.split(",");
                 }
                 let conceptTreeVisualizationPref: string = prefs[Properties.pref_concept_tree_visualization];
-                if (conceptTreeVisualizationPref != null && conceptTreeVisualizationPref == ConceptTreeVisualizationMode.searchBased) {
+                if (conceptTreeVisualizationPref == ConceptTreeVisualizationMode.searchBased) {
                     conceptTreePreferences.visualization = conceptTreeVisualizationPref;
                 }
+                let conceptTreeMultischemeModePref: string = prefs[Properties.pref_concept_tree_multischeme_mode];
+                if (conceptTreeMultischemeModePref != null && conceptTreeMultischemeModePref == MultischemeMode.and) {
+                    conceptTreePreferences.multischemeMode = conceptTreeMultischemeModePref;
+                }
+
                 conceptTreePreferences.includeSubProps = prefs[Properties.pref_concept_tree_include_subprops] != "false";
                 conceptTreePreferences.syncInverse = prefs[Properties.pref_concept_tree_sync_inverse] != "false";
 
@@ -169,7 +183,7 @@ export class VBProperties {
                 //lexical entry list preferences
                 let lexEntryListPreferences: LexicalEntryListPreference = new LexicalEntryListPreference();
                 let lexEntryListVisualizationPref: string = prefs[Properties.pref_lex_entry_list_visualization];
-                if (lexEntryListVisualizationPref != null && lexEntryListVisualizationPref == LexEntryVisualizationMode.searchBased) {
+                if (lexEntryListVisualizationPref == LexEntryVisualizationMode.searchBased) {
                     lexEntryListPreferences.visualization = lexEntryListVisualizationPref;
                 }
                 let lexEntryListIndexLenghtPref: string = prefs[Properties.pref_lex_entry_list_index_lenght];
@@ -275,7 +289,17 @@ export class VBProperties {
         this.prefService.setPUSetting(Properties.pref_show_instances_number, value).subscribe()
     }
 
+    //instance list settings
+    setInstanceListVisualization(mode: InstanceListVisualizationMode) {
+        this.prefService.setPUSetting(Properties.pref_instance_list_visualization, mode).subscribe();
+        VBContext.getWorkingProjectCtx().getProjectPreferences().instanceListPreferences.visualization = mode;
+    }
+
     //concept tree settings
+    setMultischemeMode(mode: MultischemeMode) {
+        this.prefService.setPUSetting(Properties.pref_concept_tree_multischeme_mode, mode).subscribe();
+        VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.multischemeMode = mode;
+    }
     setConceptTreeBaseBroaderProp(propUri: string) {
         this.prefService.setPUSetting(Properties.pref_concept_tree_base_broader_prop, propUri).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.baseBroaderUri = propUri;
