@@ -4,7 +4,7 @@ import { ARTNode, ARTResource, ARTURIResource, ResourcePosition } from "../model
 import { CustomFormValue } from "../models/CustomForms";
 import { RDFS, SKOS } from '../models/Vocabulary';
 import { Deserializer } from "../utils/Deserializer";
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBEventHandler } from '../utils/VBEventHandler';
 
 @Injectable()
@@ -119,11 +119,11 @@ export class ResourcesServices {
      * Returns the description (nature show and qname) of the given resource
      * @param resource 
      */
-    getResourceDescription(resource: ARTResource): Observable<ARTResource> {
+    getResourceDescription(resource: ARTResource, options?: VBRequestOptions): Observable<ARTResource> {
         var params: any = {
             resource: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "getResourceDescription", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getResourceDescription", params, options).map(
             stResp => {
                 return Deserializer.createRDFResource(stResp);
             }

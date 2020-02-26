@@ -11,7 +11,8 @@
         </button>
     </div>
 
-    <lexical-entry-list-panel [editable]="context.editable" [deletable]="context.deletable" [lexicon]="activeLexicon" [allowMultiselection]="context.allowMultiselection"
+    <lexical-entry-list-panel [editable]="context.editable" [deletable]="context.deletable" [lexicon]="activeLexicon"
+        [allowMultiselection]="context.allowMultiselection" [projectCtx]="context.projectCtx"
         (nodeSelected)="onLexiconSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="multiselection = $event">
     </lexical-entry-list-panel>
     

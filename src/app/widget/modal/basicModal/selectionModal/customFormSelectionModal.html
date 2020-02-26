@@ -2,10 +2,16 @@
     <h3 class="modal-title text-info">{{context.title}}</h3>
 </div>
 <div class="modal-body">
-    <select class="form-control" [(ngModel)]="selectedCF" size="5">
-        <option *ngFor="let cf of context.cfList" style="font-size: 13px; padding: 3px;" [ngValue]="cf"
-            [title]="cf.getDescription()">{{cf.getName()}}</option>
-    </select>
+    <div class="panel panel-default vbox">
+        <div class="panel-body vbox scrollableContainer">
+            <div *ngFor="let cf of context.cfList" class="listItem" [ngClass]="{ active: selectedCF == cf }" (click)="selectedCF = cf">
+                <span style="white-space: nowrap;">
+                    <span style="font-size: 13px;">{{cf.getName()}}</span>
+                    <span *ngIf="cf.getDescription()" class="glyphicon glyphicon-info-sign" style="margin-left: 4px;" [title]="cf.getDescription()"></span>
+                </span>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedCF">Ok</button>

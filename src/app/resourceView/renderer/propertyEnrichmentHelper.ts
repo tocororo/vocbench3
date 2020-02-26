@@ -80,12 +80,12 @@ export class PropertyEnrichmentHelper {
                     var rangeOptions: CustomForm[] = [];
                     //classic ranges (this is a workaround to use selection CF modal with classic range as well)
                     if (ranges.type == RangeType.resource) {
-                        rangeOptions.push(new CustomForm(ranges.type, ranges.type, ranges.type));
+                        rangeOptions.push(new CustomForm(RDFTypesEnum.resource, RDFTypesEnum.resource));
                     } else if (ranges.type == RangeType.literal) {
-                        rangeOptions.push(new CustomForm(RDFTypesEnum.literal, RDFTypesEnum.literal, RDFTypesEnum.literal));
+                        rangeOptions.push(new CustomForm(RDFTypesEnum.literal, RDFTypesEnum.literal));
                     } else if (ranges.type == RangeType.undetermined) { //undetermined => range could be resource and any kind of literal
-                        rangeOptions.push(new CustomForm(RDFTypesEnum.resource, RDFTypesEnum.resource, RDFTypesEnum.resource));
-                        rangeOptions.push(new CustomForm(RDFTypesEnum.literal, RDFTypesEnum.literal, RDFTypesEnum.literal));
+                        rangeOptions.push(new CustomForm(RDFTypesEnum.resource, RDFTypesEnum.resource));
+                        rangeOptions.push(new CustomForm(RDFTypesEnum.literal, RDFTypesEnum.literal));
                     }
                     //and custom ranges
                     var customForms = formCollection.getForms();

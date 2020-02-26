@@ -3,8 +3,9 @@ import { DialogRef, ModalComponent, OverlayConfig } from "ngx-modialog";
 import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from '../../../../models/ARTResources';
 import { ResourcesServices } from "../../../../services/resourcesServices";
+import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { UIUtils } from "../../../../utils/UIUtils";
-import { VBContext } from "../../../../utils/VBContext";
+import { ProjectContext, VBContext } from "../../../../utils/VBContext";
 import { LexiconListModal, LexiconListModalData } from "../lexiconListModal/lexiconListModal";
 
 export class LexicalEntryListModalData extends BSModalContext {
@@ -14,7 +15,8 @@ export class LexicalEntryListModalData extends BSModalContext {
         public lexiconChangeable: boolean = false,
         public editable: boolean = false,
         public deletable: boolean = false,
-        public allowMultiselection: boolean = false
+        public allowMultiselection: boolean = false,
+        public projectCtx: ProjectContext
     ) {
         super();
     }
@@ -41,9 +43,9 @@ export class LexicalEntryListModal implements ModalComponent<LexicalEntryListMod
     ngOnInit() {
         this.activeLexicon = this.context.lexicon;
         if (this.activeLexicon == null) { //if no lexicon has been "forced", set the current active lexicon
-            let activeLexiconProp = VBContext.getWorkingProjectCtx().getProjectPreferences().activeLexicon;
+            let activeLexiconProp = VBContext.getWorkingProjectCtx(this.context.projectCtx).getProjectPreferences().activeLexicon;
             if (activeLexiconProp != null) {
-                this.resourceService.getResourceDescription(activeLexiconProp).subscribe(
+                this.resourceService.getResourceDescription(activeLexiconProp, VBRequestOptions.getRequestOptions(this.context.projectCtx)).subscribe(
                     lex => {
                         this.activeLexicon = <ARTURIResource>lex;
                     }
@@ -74,7 +76,7 @@ export class LexicalEntryListModal implements ModalComponent<LexicalEntryListMod
      * (I'm not sure circular DI is the reasong, but I cannot inject BrowsingModalService)
      */
     private browseLexiconList(title: string) {
-        var modalData = new LexiconListModalData(title);
+        var modalData = new LexiconListModalData(title, this.context.projectCtx);
         const builder = new BSModalContextBuilder<LexiconListModalData>(
             modalData, undefined, LexiconListModalData
         );

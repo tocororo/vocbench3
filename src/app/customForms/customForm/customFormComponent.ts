@@ -13,10 +13,11 @@ import { CustomFormsServices } from "../../services/customFormsServices";
 @Component({
     selector: "custom-form",
     templateUrl: "./customFormComponent.html",
-    // host: { class: "vbox" },
     providers: [{
         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CustomFormComponent), multi: true,
-    }]
+    }],
+    styles: [`.bottomPadding { padding-bottom: 30px; }`]
+    //this, with the ngClass in the view, is necessary to prevent UI problem with the (eventual) btn dropdown in the resource-picker
 })
 export class CustomFormComponent implements ControlValueAccessor {
 
@@ -25,18 +26,7 @@ export class CustomFormComponent implements ControlValueAccessor {
     private formFields: FormField[];
     private submittedWithError: boolean = false;
 
-    private resPickerRoles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.cls, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.property];
-
     constructor(public cfService: CustomFormsServices, private basicModals: BasicModalServices) { }
-
-    ngOnInit() {
-        let ontoType: string = VBContext.getWorkingProject().getModelType();
-        if (ontoType == SKOS.uri || ontoType == OntoLex.uri) {
-            this.resPickerRoles.push(RDFResourceRolesEnum.concept);
-            this.resPickerRoles.push(RDFResourceRolesEnum.conceptScheme);
-            this.resPickerRoles.push(RDFResourceRolesEnum.skosCollection);
-        }
-    }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['cfId'] && changes['cfId'].currentValue) {

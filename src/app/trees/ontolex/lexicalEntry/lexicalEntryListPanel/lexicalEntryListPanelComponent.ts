@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ViewChild, SimpleChanges } from "@angular/core";
 import { OverlayConfig } from "ngx-modialog";
 import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
 import { Observable } from "rxjs/Observable";
@@ -105,6 +105,12 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
         this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.visualization;
         this.indexLenght = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.indexLength;
         this.onDigitChange();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['lexicon'] && changes['lexicon'].currentValue) {
+            this.workingLexicon = this.lexicon;
+        }
     }
 
     private initLexiconLang() {

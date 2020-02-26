@@ -41,8 +41,8 @@ export class BrowsingModalServices {
      * @param title the title of the modal
      * @return if the modal closes with ok returns a promise containing the selected individual
      */
-    browseClassIndividualTree(title: string) {
-        var modalData = new ClassIndividualTreeModalData(title);
+    browseClassIndividualTree(title: string, projectCtx?: ProjectContext) {
+        var modalData = new ClassIndividualTreeModalData(title, projectCtx);
         const builder = new BSModalContextBuilder<ClassIndividualTreeModalData>(
             modalData, undefined, ClassIndividualTreeModalData
         );
@@ -133,8 +133,9 @@ export class BrowsingModalServices {
      * @param lexiconChangeable 
      * @param allowMultiselection
      */
-    browseLexicalEntryList(title: string, lexicon?: ARTURIResource, lexiconChangeable?: boolean, editable?: boolean, deletable?: boolean, allowMultiselection?: boolean) {
-        var modalData = new LexicalEntryListModalData(title, lexicon, lexiconChangeable, editable, deletable, allowMultiselection);
+    browseLexicalEntryList(title: string, lexicon?: ARTURIResource, lexiconChangeable?: boolean, editable?: boolean, deletable?: boolean,
+        allowMultiselection?: boolean, projectCtx?: ProjectContext) {
+        var modalData = new LexicalEntryListModalData(title, lexicon, lexiconChangeable, editable, deletable, allowMultiselection, projectCtx);
         const builder = new BSModalContextBuilder<LexicalEntryListModalData>(
             modalData, undefined, LexicalEntryListModalData
         );

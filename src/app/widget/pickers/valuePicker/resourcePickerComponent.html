@@ -1,9 +1,17 @@
 <div [class]="'input-group input-group-' + size">
-    <input type="text" class="form-control" [(ngModel)]="resourceIRI" (ngModelChange)="onModelChanged()"
-        placeholder="http://example.org" [readonly]="!editable" [disabled]="disabled">
+    <input type="text" class="form-control" [(ngModel)]="resourceIRI" (ngModelChange)="onModelChanged()" placeholder="http://example.org" [readonly]="!editable" [disabled]="disabled">
     <div class="input-group-btn">
-        <button class="btn btn-default" (click)="pickResource()" title="Pick an existing resource" [disabled]="disabled">
+        <button *ngIf="!allowRemote" class="btn btn-default" (click)="pickLocalResource()" title="Pick an existing resource" [disabled]="disabled">
             <span class="glyphicon glyphicon-pencil"></span>
         </button>
+        <ng-container *ngIf="allowRemote">
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span class="glyphicon glyphicon-pencil"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right">
+                <li><a (click)="pickLocalResource()">From current project</a></li>
+                <li><a (click)="pickExternalResource()">From external project</a></li>
+            </ul>
+        </ng-container>
     </div>
 </div>

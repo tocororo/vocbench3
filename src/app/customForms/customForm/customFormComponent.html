@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div [ngClass]="{'table-responsive bottomPadding': formFields?.length > 8 }">
     <table class="table table-condensed table-borderless">
         <colgroup>
             <col style="width: 1%;">
@@ -6,7 +6,7 @@
             <col style="width: 1%;">
         </colgroup>
         <tbody>
-            <ng-template ngFor let-field [ngForOf]="formFields">
+            <ng-container *ngFor="let field of formFields">
                 <tr *ngIf="!field.isDependency()">
                     <!--Form entry label-->
                     <td class="text-right"><label>{{field.getUserPrompt()}}:</label></td>
@@ -71,7 +71,7 @@
                             </div>
                         </div>
                         <div *ngIf="field.getType() == 'uri'">
-                            <resource-picker [roles]="resPickerRoles" (resourceChanged)="updateIRIField($event, field)" [editable]="true">
+                            <resource-picker (resourceChanged)="updateIRIField($event, field)" editable="true" allowRemote="true">
                             </resource-picker>
                         </div>
                     </td>
@@ -80,7 +80,7 @@
                         <span *ngIf="field.isMandatory()" title="Mandatory field">*</span>
                     </td>
                 </tr>
-            </ng-template>
+            </ng-container>
         </tbody>
     </table>
 </div>
