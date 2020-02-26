@@ -62,7 +62,7 @@
                 <div *ngIf="showDefaultLiteralConverterOpt(); else otherConvBlock" class="panel panel-default" style="flex: 3; margin-left: 4px;">
                     <div class="panel-body hbox" style="align-items: center;">
                         <select class="form-control input-sm" style="max-width: 150px; margin-right: 4px;" [(ngModel)]="selectedLiteralAspect"
-                            [disabled]="!literalAspectChangeable">
+                            [disabled]="!literalAspectChangeable" (ngModelChange)="onSignatureParamChange()">
                             <option *ngFor="let o of literalAspectOpts">{{o}}</option>
                         </select>
                         <ng-container [ngSwitch]="selectedLiteralAspect">
