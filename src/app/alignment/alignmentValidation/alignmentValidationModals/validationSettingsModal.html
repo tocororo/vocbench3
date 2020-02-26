@@ -5,7 +5,7 @@
     
     <div class="hbox" style="align-items: center; flex: initial; margin-bottom: 5px;">
         <span class="glyphicon glyphicon-info-sign" style="top: 0"
-            title="Specifies what to do with the rejected alignment when applyng the validation to the ontology"></span>
+            title="Specifies what to do with rejected alignments when applyng the validation to the ontology"></span>
         <label style="white-space: nowrap; margin: 0px 3px;">Rejected alignment action:</label>
         <select class="form-control input-sm" style="display: inline-block" [(ngModel)]="rejectedAlignmentAction">
             <option *ngFor="let opt of rejectedAlignmentOptions" [value]="opt.value">{{opt.label}}</option>
