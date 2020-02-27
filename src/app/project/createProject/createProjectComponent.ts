@@ -109,7 +109,7 @@ export class CreateProjectComponent {
 
     //configuration of remote access (used only in case selectedRepositoryAccess is one of CreateRemote or AccessExistingRemote)
     private remoteRepoConfigs: RemoteRepositoryAccessConfig[] = [];
-    private remoteAccessConfig: RemoteRepositoryAccessConfig;
+    private selectedRemoteRepoConfig: RemoteRepositoryAccessConfig;
 
     private DEFAULT_REPO_EXTENSION_ID = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.PredefinedRepositoryImplConfigurer";
     private DEFAULT_REPO_CONFIG_TYPE = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.RDF4JNativeSailConfigurerConfiguration";
@@ -222,17 +222,7 @@ export class CreateProjectComponent {
         );
 
         //init available remote repo access configurations
-        this.prefService.getSystemSettings([Properties.setting_remote_configs]).subscribe(
-            stResp => {
-                if (stResp[Properties.setting_remote_configs] != null) {
-                    this.remoteRepoConfigs = <RemoteRepositoryAccessConfig[]> JSON.parse(stResp[Properties.setting_remote_configs]);
-                    if (this.remoteRepoConfigs.length == 1) { //in case of just one configuration, select it
-                        this.remoteAccessConfig = this.remoteRepoConfigs[0];
-                    }
-                }
-            }
-        );
-
+        this.initRemoteRepoAccessConfigurations();
     }
 
     /**
@@ -493,6 +483,28 @@ export class CreateProjectComponent {
      * ========= DATA STORE MANAGEMENT (REPOSITORY ACCESS) ==========
      * ============================================================= */
 
+    private initRemoteRepoAccessConfigurations() {
+        this.prefService.getSystemSettings([Properties.setting_remote_configs]).subscribe(
+            stResp => {
+                if (stResp[Properties.setting_remote_configs] != null) {
+                    this.remoteRepoConfigs = <RemoteRepositoryAccessConfig[]> JSON.parse(stResp[Properties.setting_remote_configs]);
+                    //initialize the selected configuration
+                    if (this.selectedRemoteRepoConfig != null) {
+                        //if previously a config was already selected, select it again (deselected if not found, probably it has been deleted)
+                        this.selectedRemoteRepoConfig = this.remoteRepoConfigs.find(c => c.serverURL == this.selectedRemoteRepoConfig.serverURL);
+                    } else {
+                        if (this.remoteRepoConfigs.length == 1) { //in case of just one configuration, select it
+                            this.selectedRemoteRepoConfig = this.remoteRepoConfigs[0];
+                        }
+                    }
+                } else {
+                    this.remoteRepoConfigs = [];
+                    this.selectedRemoteRepoConfig = null;
+                }
+            }
+        );
+    }
+
     /**
      * Tells if the selected RepositoryAccess is remote.
      */
@@ -514,22 +526,21 @@ export class CreateProjectComponent {
      */
     private configureRemoteRepositoryAccess() {
         this.sharedModals.configureRemoteRepositoryAccess().then(
-            (config: any) => {
-                this.remoteAccessConfig = config;
-            },
-            () => { }
+            () => {
+                this.initRemoteRepoAccessConfigurations();
+            }
         );
     }
 
     private changeRemoteRepository(repoType: "data" | "support") {
-        if (this.remoteAccessConfig == null) {
+        if (this.selectedRemoteRepoConfig == null) {
             this.basicModals.alert("Missing configuration", "You need to select a configuration for the selected remote Repository Access. " +
                 "Please, select an existing one from the related combobox or create a new one.", "warning");
             return;
         }
 
         var title: string = repoType == "data" ? "Select Remote Data Repository" : "Select Remote History/Validation Repository";
-        this.sharedModals.selectRemoteRepository(title, this.remoteAccessConfig).then(
+        this.sharedModals.selectRemoteRepository(title, this.selectedRemoteRepoConfig).then(
             (repo: any) => {
                 if (repoType == "data") {
                     this.dataRepoId = (<Repository>repo).id;
@@ -678,12 +689,12 @@ export class CreateProjectComponent {
         //if the selected repo access is remote, add the configuration 
         if (this.isSelectedRepoAccessRemote()) {
             //check if configuration is set
-            if (this.remoteAccessConfig == null) {
+            if (this.selectedRemoteRepoConfig == null) {
                 this.basicModals.alert("Missing configuration", "You need to select a configuration for the selected remote Repository Access. " +
                 "Please, select an existing one from the related combobox or create a new one.", "warning");
                 return;
             }
-            repositoryAccess.setConfiguration(this.remoteAccessConfig);
+            repositoryAccess.setConfiguration(this.selectedRemoteRepoConfig);
         }
 
         /**

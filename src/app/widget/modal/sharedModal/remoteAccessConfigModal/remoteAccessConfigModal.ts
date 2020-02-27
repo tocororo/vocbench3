@@ -14,7 +14,6 @@ export class RemoteAccessConfigModal implements ModalComponent<BSModalContext> {
     context: BSModalContext;
 
     private savedConfigs: RemoteRepositoryAccessConfig[] = [];
-    private selectedConfig: RemoteRepositoryAccessConfig;
 
     private newConfig: RemoteRepositoryAccessConfig = { serverURL: null, username: null, password: null };
 
@@ -30,14 +29,6 @@ export class RemoteAccessConfigModal implements ModalComponent<BSModalContext> {
                 }
             }
         );
-    }
-
-    private selectConfig(c: RemoteRepositoryAccessConfig) {
-        if (this.selectedConfig == c) {
-            this.selectedConfig = null;
-        } else {
-            this.selectedConfig = c;
-        }
     }
 
     createConfiguration() {
@@ -58,9 +49,6 @@ export class RemoteAccessConfigModal implements ModalComponent<BSModalContext> {
         this.basicModals.confirm("Delete configuration", "You are deleting the configuration. Are you sure?", "warning").then(
             () => {
                 this.savedConfigs.splice(this.savedConfigs.indexOf(c), 1);
-                if (this.selectedConfig == c) {
-                    this.selectedConfig = null;
-                }
                 this.updateConfigurations();
             },
             () => {}
@@ -91,11 +79,7 @@ export class RemoteAccessConfigModal implements ModalComponent<BSModalContext> {
     ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
-        this.dialog.close(this.selectedConfig);
-    }
-
-    cancel() {
-        this.dialog.dismiss();
+        this.dialog.close();
     }
 
 }

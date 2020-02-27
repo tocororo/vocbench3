@@ -186,7 +186,7 @@
                                         <option *ngFor="let repoAcc of repositoryAccessList" [ngValue]="repoAcc">{{repoAcc}}</option>
                                     </select>
                                     <div *ngIf="isSelectedRepoAccessRemote()" class="input-group input-group-sm" style="margin-left: 5px; min-width: 210px;">
-                                        <select class="form-control" [(ngModel)]="remoteAccessConfig" name="remoteConfig">
+                                        <select class="form-control" [(ngModel)]="selectedRemoteRepoConfig" name="remoteConfig">
                                             <option *ngFor="let c of remoteRepoConfigs" [ngValue]="c">{{c.serverURL}}</option>
                                         </select>
                                         <span class="input-group-btn">

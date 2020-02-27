@@ -46,7 +46,6 @@ export class SharedModalServices {
 
     /**
      * Opens a modal to change a remote repository access configuration (serverURL, username and password).
-     * Returns a new RemoteRepositoryAccessConfig, the input configuration doesn't mutate
      * @param configuration
      */
     configureRemoteRepositoryAccess() {

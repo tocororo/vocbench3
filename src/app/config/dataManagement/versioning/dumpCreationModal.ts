@@ -3,8 +3,9 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ConfigurableExtensionFactory, ExtensionPointID, PluginSpecification, Settings } from "../../../models/Plugins";
 import { BackendTypesEnum, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../../models/Project";
+import { Properties } from "../../../models/Properties";
 import { ExtensionsServices } from "../../../services/extensionsServices";
-import { PluginsServices } from "../../../services/pluginsServices";
+import { PreferencesSettingsServices } from "../../../services/preferencesSettingsServices";
 import { ExtensionConfiguratorComponent } from "../../../widget/extensionConfigurator/extensionConfiguratorComponent";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
@@ -34,7 +35,9 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
     ];
     private selectedRepositoryAccess: RepositoryAccessType = this.repositoryAccessList[0];
 
-    private remoteAccessConfig: RemoteRepositoryAccessConfig;
+    //configuration of remote access (used only in case selectedRepositoryAccess is one of CreateRemote or AccessExistingRemote)
+    private remoteRepoConfigs: RemoteRepositoryAccessConfig[] = [];
+    private selectedRemoteRepoConfig: RemoteRepositoryAccessConfig;
 
     //core repository containing data
     private repositoryId: string;
@@ -49,9 +52,8 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
     private backendTypes: BackendTypesEnum[] = [BackendTypesEnum.openrdf_NativeStore, BackendTypesEnum.openrdf_MemoryStore, BackendTypesEnum.graphdb_FreeSail];
     private selectedRepoBackendType: BackendTypesEnum = this.backendTypes[0];
 
-    constructor(public dialog: DialogRef<DumpCreationModalData>, private pluginService: PluginsServices,
-        private extensionService: ExtensionsServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
+    constructor(public dialog: DialogRef<DumpCreationModalData>, private extensionService: ExtensionsServices, 
+        private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
         this.context = dialog.context;
     }
 
@@ -62,6 +64,31 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
                 setTimeout(() => { //let the dataRepoConfigurator component to be initialized (due to *ngIf="dataRepoExtensions")
                     this.repoConfigurator.selectExtensionAndConfiguration(this.DEFAULT_REPO_EXTENSION_ID, this.DEFAULT_REPO_CONFIG_TYPE);
                 });
+            }
+        );
+
+        //init available remote repo access configurations
+        this.initRemoteRepoAccessConfigurations();
+    }
+
+    private initRemoteRepoAccessConfigurations() {
+        this.prefService.getSystemSettings([Properties.setting_remote_configs]).subscribe(
+            stResp => {
+                if (stResp[Properties.setting_remote_configs] != null) {
+                    this.remoteRepoConfigs = <RemoteRepositoryAccessConfig[]> JSON.parse(stResp[Properties.setting_remote_configs]);
+                    //initialize the selected configuration
+                    if (this.selectedRemoteRepoConfig != null) {
+                        //if previously a config was already selected, select it again (deselected if not found, probably it has been deleted)
+                        this.selectedRemoteRepoConfig = this.remoteRepoConfigs.find(c => c.serverURL == this.selectedRemoteRepoConfig.serverURL);
+                    } else {
+                        if (this.remoteRepoConfigs.length == 1) { //in case of just one configuration, select it
+                            this.selectedRemoteRepoConfig = this.remoteRepoConfigs[0];
+                        }
+                    }
+                } else {
+                    this.remoteRepoConfigs = [];
+                    this.selectedRemoteRepoConfig = null;
+                }
             }
         );
     }
@@ -87,21 +114,20 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
      */
     private configureRemoteRepositoryAccess() {
         this.sharedModals.configureRemoteRepositoryAccess().then(
-            (config: any) => {
-                this.remoteAccessConfig = config;
-            },
-            () => { }
+            () => {
+                this.initRemoteRepoAccessConfigurations();
+            }
         );
     }
 
     private changeRemoteRepository() {
-        if (this.remoteAccessConfig == null) {
-            this.basicModals.alert("Missing configuration", "The remote repository has not been configure ('Remote Access Config')."
-                + " Please, enter at least the server url, then retry.", "error");
+        if (this.selectedRemoteRepoConfig == null) {
+            this.basicModals.alert("Missing configuration", "You need to select a configuration for the selected remote Repository Access. " +
+                "Please, select an existing one from the related combobox or create a new one.", "warning");
             return;
         }
 
-        this.sharedModals.selectRemoteRepository("Select remote repository", this.remoteAccessConfig).then(
+        this.sharedModals.selectRemoteRepository("Select remote repository", this.selectedRemoteRepoConfig).then(
             (repo: any) => {
                 this.repositoryId = (<Repository>repo).id;
             },
@@ -118,8 +144,9 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
         }
         //valid repository access configuration (in case of repository access remote)
         if (this.isSelectedRepoAccessRemote()) {
-            if ((!this.remoteAccessConfig == null)) {
-                this.basicModals.alert("Missing configuration", "The selected remote Repository Access needs to be configured.", "warning");
+            if (this.selectedRemoteRepoConfig == null) {
+                this.basicModals.alert("Missing configuration", "You need to select a configuration for the selected remote Repository Access. " +
+                "Please, select an existing one from the related combobox or create a new one.", "warning");
                 return;
             }
         }
@@ -145,7 +172,7 @@ export class DumpCreationModal implements ModalComponent<DumpCreationModalData> 
         var repositoryAccess: RepositoryAccess = new RepositoryAccess(this.selectedRepositoryAccess);
         //if the selected repo access is remote, add the configuration 
         if (this.isSelectedRepoAccessRemote()) {
-            repositoryAccess.setConfiguration(this.remoteAccessConfig);
+            repositoryAccess.setConfiguration(this.selectedRemoteRepoConfig);
         }
 
         var returnedData: { versionId: string, repositoryAccess: RepositoryAccess, 

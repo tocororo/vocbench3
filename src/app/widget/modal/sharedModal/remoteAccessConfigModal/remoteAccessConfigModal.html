@@ -5,7 +5,7 @@
 
     <div class="panel panel-default">
         <div class="panel-body table-responsive">
-            <table class="table table-hoverable">
+            <table class="table table-condensed table-hoverable">
                 <thead>
                     <tr>
                         <th>Server URL</th>
@@ -18,7 +18,7 @@
                     <tr *ngIf="savedConfigs.length == 0">
                         <td colspan="4">No Remote Access Configuration found. Please, create a new one.</td>
                     </tr>
-                    <tr *ngFor="let conf of savedConfigs" (click)="selectConfig(conf)" [ngClass]="{ info: selectedConfig == conf }" style="cursor: pointer">
+                    <tr *ngFor="let conf of savedConfigs">
                         <td>
                             <input-editable [value]="conf.serverURL" (valueEdited)="updateConfServerURL(conf, $event)"></input-editable>
                         </td>
@@ -52,6 +52,5 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedConfig">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
 </div>
