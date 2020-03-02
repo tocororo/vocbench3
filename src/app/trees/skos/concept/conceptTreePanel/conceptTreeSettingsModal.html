@@ -3,32 +3,49 @@
 </div>
 <div class="modal-body vbox">
 
-    <div class="hbox" style="margin-bottom: 6px; align-items: center; justify-content: center; flex: initial">
+    <div class="hbox" style="align-items: center; flex: initial">
         <label style="margin-right: 4px; white-space: nowrap;">Visualization mode:</label>
         <select class="form-control input-sm" [(ngModel)]="visualization">
             <option *ngFor="let vm of visualizationModes" [value]="vm.value">{{vm.label}}</option>
         </select>
     </div>
 
-    <div *ngIf="visualization == 'hierarchyBased'" class="panel panel-default vbox">
+    <div *ngIf="visualization == 'hierarchyBased'" class="panel panel-default vbox" style="margin-top: 6px;">
         <div class="panel-body vbox">
 
-            <div class="hbox" style="margin-bottom: 6px; align-items: center; flex: initial;">
-                <span class="glyphicon glyphicon-info-sign" title="Base broader property to be selected when creating narrower concepts"></span>
-                <label style="white-space: nowrap; margin: 0px 4px;">
-                    Base broader property:
-                </label>
-                <div class="input-group input-group-sm" style="flex: 1;">
-                    <input type="text" class="form-control" [ngModel]="baseBroaderProp" readonly>
-                    <div class="input-group-btn">
-                        <button class="btn btn-default" (click)="changeBaseBroaderProperty()">
-                            <img src="../../../../../assets/images/icons/res/propObject.png"/>
-                        </button>
+            <div class="form-horizontal">
+                <!-- <div class="form-group">
+                    <label class="control-label col-sm-4">
+                        Multi-scheme mode
+                        <span class="glyphicon glyphicon-info-sign" 
+                            title="Toggles between OR and AND scheme-based filter of concepts in the concept tree"></span>
+                    </label>
+                    <div class="col-sm-8">
+                        <select class="form-control input-sm" [(ngModel)]="selectedMultischemeMode">
+                            <option *ngFor="let mode of multischemeModes" [value]="mode">{{mode | uppercase}}</option>
+                        </select>
+                    </div>
+                </div> -->
+
+                <div class="form-group">
+                    <label class="control-label col-sm-4">
+                        Base broader property
+                        <span class="glyphicon glyphicon-info-sign" title="Base broader property to be selected when creating narrower concepts"></span>
+                    </label>
+                    <div class="col-sm-8">
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" [ngModel]="baseBroaderProp" readonly>
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" (click)="changeBaseBroaderProperty()">
+                                    <img src="../../../../../assets/images/icons/res/propObject.png"/>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="panel panel-default vbox">
+            <div class="panel panel-default vbox" style="margin-top: 6px;">
                 <div class="panel-heading">
                     <label>Management of broader/narrower</label>
                 </div>
@@ -102,7 +119,7 @@
             </div>
         </div>
 
-        <div *ngIf="userGroup" class="panel-footer">
+        <div *ngIf="userGroup" class="panel-footer" style="margin-top: 6px;">
             <button class="btn btn-xs btn-default pull-right" (click)="applyGroupSettings()">
                 Apply group settings
                 <span class="glyphicon glyphicon-info-sign" [title]="'Group: ' + userGroup.shortName"></span>

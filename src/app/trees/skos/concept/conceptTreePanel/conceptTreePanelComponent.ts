@@ -60,9 +60,6 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
         super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
 
-        // this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
-        //     (schemes: ARTURIResource[]) => this.onSchemeChanged(schemes)));
-
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
             (data: { schemes: ARTURIResource[], project: Project }) => {
                 if (VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getName() == data.project.getName()) {
@@ -117,83 +114,6 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         //In addition to the cross-panel conditions, in this case the create actions are disabled if the panel is in no-scheme mode
         return super.isActionDisabled(action) || (action.editType == "C" && this.isNoSchemeMode());
     }
-
-    // //@Override
-    // isCreateDisabled(): boolean {
-    //     return (this.isNoSchemeMode() || this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
-    // }
-    // //@Override
-    // isCreateChildDisabled(): boolean {
-    //     return (!this.selectedNode || this.isNoSchemeMode() || this.readonly || !AuthorizationEvaluator.Tree.isDeleteAuthorized(this.panelRole));
-    // }
-
-    // createRoot() {
-    //     let metaClass: ARTURIResource = this.modelType == OntoLex.uri ? OntoLex.lexicalConcept : SKOS.concept;
-
-    //     this.creationModals.newConceptCf("Create new skos:Concept", null, this.workingSchemes, metaClass, true).then(
-    //         (data: NewConceptCfModalReturnData) => {
-    //             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-    //             this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue).subscribe(
-    //                 stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-    //                 (err: Error) => {
-    //                     if (err.name.endsWith('PrefAltLabelClashException')) {
-    //                         this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-    //                             confirm => {
-    //                                 UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-    //                                 this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue, false).subscribe(
-    //                                     stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-    //                                 );
-    //                             },
-    //                             reject => {}
-    //                         )
-    //                     }
-    //                 }
-    //             );
-    //         },
-    //         () => { }
-    //     );
-    // }
-
-    // createChild() {
-    //     let metaClass: ARTURIResource = this.modelType == OntoLex.uri ? OntoLex.lexicalConcept : SKOS.concept;
-
-    //     this.creationModals.newConceptCf("Create a skos:narrower", this.selectedNode, null, metaClass, true).then(
-    //         (data: NewConceptCfModalReturnData) => {
-    //             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-    //             this.skosService.createConcept(data.label, data.schemes, data.uriResource, this.selectedNode, data.cls, data.broaderProp, data.cfValue).subscribe(
-    //                 stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-    //                 (err: Error) => {
-    //                     if (err.name.endsWith('PrefAltLabelClashException')) {
-    //                         this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-    //                             confirm => {
-    //                                 this.skosService.createConcept(data.label, data.schemes, data.uriResource, this.selectedNode, data.cls, data.broaderProp, data.cfValue, false).subscribe(
-    //                                     stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-    //                                 );
-    //                             },
-    //                             reject => {}
-    //                         )
-    //                     }
-    //                 }
-    //             );
-    //         },
-    //         () => { }
-    //     );
-    // }
-
-    // delete() {
-    //     if (this.selectedNode.getAdditionalProperty(ResAttribute.MORE)) {
-    //         this.basicModals.alert("Operation denied", "Cannot delete " + this.selectedNode.getURI() + 
-    //             " since it has narrower concept(s). Please delete the narrower(s) and retry", "warning");
-    //         return;
-    //     }
-    //     UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-    //     this.skosService.deleteConcept(this.selectedNode).subscribe(
-    //         stResp => {
-    //             this.selectedNode = null;
-    //             UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-    //         }
-    //     );
-    // }
 
     refresh() {
         if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {

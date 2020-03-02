@@ -11,7 +11,9 @@ import { ResourcesServices } from "../services/resourcesServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { ResourceUtils } from "../utils/ResourceUtils";
 import { VBActionsEnum } from "../utils/VBActions";
+import { ProjectContext } from "../utils/VBContext";
 import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
+import { ResourceTripleEditorModal, ResourceTripleEditorModalData } from "./resourceTripleEditor/resourceTripleEditorModal";
 
 @Component({
     selector: "res-view-menu",
@@ -23,6 +25,7 @@ export class ResourceViewContextMenu {
     @Input() readonly: boolean;
     @Input() rendering: boolean;
     @Input() showInferred: boolean;
+    @Input() projectCtx: ProjectContext;
     @Output() update = new EventEmitter();
     @Output() assertInferred = new EventEmitter();
 
@@ -119,6 +122,15 @@ export class ResourceViewContextMenu {
 
     private openDataGraph() {
         this.graphModals.openDataGraph(this.resource, this.rendering);
+    }
+
+    private openTripleEditor() {
+        var modalData = new ResourceTripleEditorModalData(this.resource, this.readonly);
+        const builder = new BSModalContextBuilder<ResourceTripleEditorModalData>(
+            modalData, undefined, ResourceTripleEditorModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
+        return this.modal.open(ResourceTripleEditorModal, overlayConfig).result;
     }
 
 }

@@ -2,18 +2,6 @@
     <!-- Commands -->
     <div class="panel-heading">
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
-            <!-- <button class="btn btn-default" title="Create Concept Scheme" (click)="create()" [disabled]="isCreateDisabled()">
-                <img src="../../../../../assets/images/icons/actions/conceptScheme_create.png" class="panelButtonImg"/>
-            </button>
-            <ng-template [ngIf]="deletable">
-                <button class="btn btn-default" title="Delete Concept Scheme" (click)="delete()" [disabled]="isDeleteDisabled()">
-                    <img src="../../../../../assets/images/icons/actions/conceptScheme_delete.png" class="panelButtonImg"/>
-                </button>
-                <button class="btn btn-default" title="Deprecate Concept Scheme" (click)="deprecate()" [disabled]="isDeprecateDisabled()">
-                    <img src="../../../../../assets/images/icons/actions/conceptScheme_deprecate.png" class="panelButtonImg"/>
-                </button>
-            </ng-template> -->
-
             <ng-template ngFor let-action [ngForOf]="panelActions">
                 <button *ngIf="isActionVisible(action)" class="btn btn-default" [title]="action.title" (click)="executeAction(action)" [disabled]="isActionDisabled(action)">
                     <img [src]="action.icon" class="panelButtonImg"/>
@@ -22,14 +10,20 @@
         </div>
         <div style="flex: 1"></div>
         <div class="btn-toolbar" role="toolbar">
-            <div *ngIf="editable && context == 'dataPanel'" class="btn-group btn-group-xs" role="group" style="margin-right: 5px;">
-                <button class="btn btn-default" title="Select all schemes" (click)="activateAllScheme()">
-                    <span class="glyphicon glyphicon-check" style="width: 16px;"></span>
-                </button>
-                <button class="btn btn-default" title="Deselect all schemes" (click)="deactivateAllScheme()">
-                    <span class="glyphicon glyphicon-unchecked" style="width: 16px;"></span>
-                </button>
-            </div>
+            <ng-container *ngIf="editable && context == 'dataPanel'">
+                <!-- <button class="btn btn-xs btn-default" style="font-size: 10px; font-weight: bold; width: 28px; height: 20px; padding: 1px 2px;" 
+                    (click)="switchMultischemeMode()" title="Toggles between OR and AND scheme-based filter of concepts in the concept tree">
+                    {{multischemeMode | uppercase}}
+                </button> -->
+                <div class="btn-group btn-group-xs" style="margin-right: 5px;">
+                    <button class="btn btn-default" (click)="activateAllScheme()">
+                        <span class="glyphicon glyphicon-check" style="width: 16px;"></span>
+                    </button>
+                    <button class="btn btn-default" title="Deselect all schemes" (click)="deactivateAllScheme()">
+                        <span class="glyphicon glyphicon-unchecked" style="width: 16px;"></span>
+                    </button>
+                </div>
+            </ng-container>
             <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering=!rendering" [ngClass]="{ active: rendering }">
                 <span class="glyphicon glyphicon-font"></span>
             </button>

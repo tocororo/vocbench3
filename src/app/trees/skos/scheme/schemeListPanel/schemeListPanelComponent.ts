@@ -1,11 +1,12 @@
 import { Component, ViewChild } from "@angular/core";
 import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
-import { SearchSettings } from "../../../../models/Properties";
+import { MultischemeMode, SearchSettings } from "../../../../models/Properties";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
+import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
 import { RoleActionResolver } from "../../../../utils/RoleActionResolver";
 import { UIUtils } from "../../../../utils/UIUtils";
@@ -17,7 +18,6 @@ import { BasicModalServices } from "../../../../widget/modal/basicModal/basicMod
 import { AbstractListPanel } from "../../../abstractListPanel";
 import { MultiSubjectEnrichmentHelper } from "../../../multiSubjectEnrichmentHelper";
 import { SchemeListComponent } from "../schemeList/schemeListComponent";
-import { VBRequestOptions } from "../../../../utils/HttpManager";
 
 @Component({
     selector: "scheme-list-panel",
@@ -32,6 +32,8 @@ export class SchemeListPanelComponent extends AbstractListPanel {
 
     private modelType: string;
 
+    private multischemeMode: MultischemeMode;
+
     constructor(private skosService: SkosServices, private searchService: SearchServices,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
@@ -41,6 +43,7 @@ export class SchemeListPanelComponent extends AbstractListPanel {
     ngOnInit() {
         super.ngOnInit();
         this.modelType = VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getModelType();
+        this.multischemeMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences.multischemeMode;
     }
 
 
@@ -49,57 +52,6 @@ export class SchemeListPanelComponent extends AbstractListPanel {
         let actionCtx: VBActionFunctionCtx = { metaClass: metaClass, loadingDivRef: this.viewChildList.blockDivElement }
         return actionCtx;
     }
-
-    // private create() {
-    //     let metaClass: ARTURIResource = this.modelType == OntoLex.uri ? OntoLex.conceptSet : SKOS.conceptScheme;
-
-    //     this.creationModals.newResourceWithLiteralCf("Create new " + metaClass.getShow(), metaClass, true).then(
-    //         (data: NewResourceWithLiteralCfModalReturnData) => {
-    //             this.skosService.createConceptScheme(data.literal, data.uriResource, data.cls, data.cfValue).subscribe(
-    //                 newScheme => { },
-    //                 (err: Error) => {
-    //                     if (err.name.endsWith('PrefAltLabelClashException')) {
-    //                         this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-    //                             confirm => {
-    //                                 this.skosService.createConceptScheme(data.literal, data.uriResource, data.cls, data.cfValue, false).subscribe(
-    //                                     newScheme => { }
-    //                                 );
-    //                             },
-    //                             () => {}
-    //                         );
-    //                     }
-    //                 }
-    //             );
-    //         },
-    //         () => { }
-    //     );
-    // }
-
-    // delete() {
-    //     this.skosService.isSchemeEmpty(this.selectedNode).subscribe(
-    //         empty => {
-    //             if (empty) {
-    //                 this.deleteSelectedScheme();
-    //             } else {
-    //                 this.basicModals.confirm("Delete scheme", "The scheme is not empty. Deleting it will produce dangling concepts."
-    //                     + " Are you sure to continue?", "warning").then(
-    //                     (confirm: any) => {
-    //                         this.deleteSelectedScheme();
-    //                     },
-    //                     (reject: any) => {}
-    //                 );
-    //             }
-    //         }
-    //     )
-    // }
-
-    // private deleteSelectedScheme() {
-    //     this.skosService.deleteConceptScheme(this.selectedNode).subscribe(
-    //         stResp => {
-    //             this.selectedNode = null;
-    //         }
-    //     );
-    // }
 
     doSearch(searchedText: string) {
         let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
@@ -142,6 +94,12 @@ export class SchemeListPanelComponent extends AbstractListPanel {
 
     private deactivateAllScheme() {
         this.viewChildList.deactivateAllScheme();
+    }
+
+    private switchMultischemeMode() {
+        this.multischemeMode = (this.multischemeMode == MultischemeMode.and) ? MultischemeMode.or : MultischemeMode.and;
+        this.eventHandler.multischemeModeChangedEvent.emit();
+        this.vbProp.setMultischemeMode(this.multischemeMode);
     }
 
     private isAddAllConceptsEnabled() {

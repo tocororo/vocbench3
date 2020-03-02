@@ -5,6 +5,7 @@ import { QueryParameterForm } from '../sparql/queryParameterization/queryParamet
 import { YasguiComponent } from '../sparql/yasguiComponent';
 import { HtmlEditorComponent } from '../widget/codemirror/htmlEditor/htmlEditorComponent';
 import { ManchesterEditorComponent } from '../widget/codemirror/manchesterEditor/manchesterEditorComponent';
+import { NTripleEditorComponent } from '../widget/codemirror/nTripleEditor/nTripleEditorComponent';
 import { PearlEditorComponent } from "../widget/codemirror/pearlEditor/pearlEditorComponent";
 import { SanitizerDirective } from "../widget/directives/sanitizerDirective";
 import { ExtensionConfiguratorComponent } from '../widget/extensionConfigurator/extensionConfiguratorComponent';
@@ -37,6 +38,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         LanguageItemComponent,
         LiteralPickerComponent,
         ManchesterEditorComponent,
+        NTripleEditorComponent,
         PartitionFilterEditor,
         PearlEditorComponent,
         QueryParameterForm,
@@ -62,6 +64,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         LanguageItemComponent,
         LiteralPickerComponent,
         ManchesterEditorComponent,
+        NTripleEditorComponent,
         PartitionFilterEditor,
         PearlEditorComponent,
         QueryParameterForm,

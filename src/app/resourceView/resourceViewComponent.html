@@ -58,7 +58,7 @@
                 <span class="glyphicon glyphicon-cog"></span>
             </button>
             
-            <res-view-menu [resource]="resource" [rendering]="rendering" [showInferred]="showInferred" [readonly]="readonly" 
+            <res-view-menu [resource]="resource" [rendering]="rendering" [showInferred]="showInferred" [readonly]="readonly" [projectCtx]="projectCtx"
                 (update)="buildResourceView(resource)" (assertInferred)="assertInferredStatements()"></res-view-menu>
         </div>
     </div>

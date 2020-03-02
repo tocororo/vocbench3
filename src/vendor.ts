@@ -26,6 +26,7 @@ import 'codemirror/addon/comment/comment.js';
 import 'codemirror/addon/mode/simple.js'; //for defineSimpleMode() in the definition of the manchester mode
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/xml/xml.js';
+import 'codemirror/mode/ntriples/ntriples.js';
 //import 'codemirror/lib/codemirror.js'; //already imported in the components that needs CodeMirror
 
 import 'jsprolog/dist/jsprolog';

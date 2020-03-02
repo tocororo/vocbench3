@@ -29,6 +29,7 @@ export class VBEventHandler {
     public schemeCreatedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("schemeCreatedEvent");
     public schemeDeletedEvent: EventEmitter<ARTURIResource> = new VBEventEmitter("schemeDeletedEvent");
     public schemeChangedEvent: EventEmitter<{ schemes: ARTURIResource[], project: Project }> = new VBEventEmitter("schemeChangedEvent");
+    public multischemeModeChangedEvent: EventEmitter<void> = new VBEventEmitter("multischemeModeChangedEvent");
 
     //COLLECTION EVENTS
     public rootCollectionCreatedEvent: EventEmitter<ARTResource> = new VBEventEmitter<ARTURIResource>("rootCollectionCreatedEvent");

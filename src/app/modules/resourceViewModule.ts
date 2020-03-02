@@ -34,6 +34,8 @@ import { LexicalizationEnrichmentHelper } from '../resourceView/renderer/lexical
 import { PredicateObjectsRenderer } from '../resourceView/renderer/predicateObjectsRenderer';
 import { ResourceViewValueRenderer } from '../resourceView/renderer/resourceViewValueRenderer';
 import { ResourceRenameComponent } from '../resourceView/resourceRenameComponent';
+import { ResourceTripleEditorComponent } from '../resourceView/resourceTripleEditor/resourceTripleEditorComponent';
+import { ResourceTripleEditorModal } from '../resourceView/resourceTripleEditor/resourceTripleEditorModal';
 import { ResourceViewComponent } from '../resourceView/resourceViewComponent';
 import { ResourceViewContextMenu } from '../resourceView/resourceViewCtxMenu';
 import { ResourceViewModal } from '../resourceView/resourceViewModal';
@@ -67,10 +69,17 @@ import { TreeAndListModule } from "./treeAndListModule";
         SharedModule, TreeAndListModule, PreferencesModule
     ],
     declarations: [
-        ResourceViewComponent, ResourceViewPanelComponent, ResourceViewModal,
-        ResourceViewSplittedComponent, ResourceViewTabbedComponent,
-        ResourceRenameComponent, ResourceViewContextMenu,
-        ReifiedResourceComponent, EditableResourceComponent,
+        EditableResourceComponent,
+        ReifiedResourceComponent,
+        ResourceRenameComponent,
+        ResourceTripleEditorComponent,
+        ResourceTripleEditorModal,
+        ResourceViewComponent, 
+        ResourceViewContextMenu,
+        ResourceViewModal,
+        ResourceViewPanelComponent, 
+        ResourceViewSplittedComponent,
+        ResourceViewTabbedComponent,
         ResourceViewValueRenderer,
         //renderers
         BroadersPartitionRenderer,
@@ -120,7 +129,8 @@ import { TreeAndListModule } from "./treeAndListModule";
         ResViewSettingsModal
     ],
     exports: [
-        ResourceViewPanelComponent, ResourceViewComponent
+        ResourceViewComponent,
+        ResourceViewPanelComponent,
     ],
     providers: [ResViewModalServices, LexicalizationEnrichmentHelper],
     entryComponents: [
@@ -136,8 +146,9 @@ import { TreeAndListModule } from "./treeAndListModule";
         InstanceListCreatorModal,
         PropertyChainCreatorModal,
         RdfsMembersModal,
+        ResourceTripleEditorModal,
+        ResourceViewModal,
         ResViewSettingsModal,
-        ResourceViewModal
     ]
 })
 export class ResourceViewModule { }

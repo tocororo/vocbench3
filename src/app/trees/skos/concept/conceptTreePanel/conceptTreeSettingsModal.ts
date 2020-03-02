@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from "../../../../models/ARTResources";
-import { ConceptTreePreference, ConceptTreeVisualizationMode, Properties } from "../../../../models/Properties";
+import { ConceptTreePreference, ConceptTreeVisualizationMode, Properties, MultischemeMode } from "../../../../models/Properties";
 import { UsersGroup } from "../../../../models/User";
 import { SKOS } from "../../../../models/Vocabulary";
 import { PreferencesSettingsServices } from "../../../../services/preferencesSettingsServices";
@@ -41,6 +41,9 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
     private userGroup: UsersGroup;
     private userGroupBaseBroaderProp: string;
 
+    private multischemeModes: MultischemeMode[] = [MultischemeMode.or, MultischemeMode.and];
+    private selectedMultischemeMode: MultischemeMode;
+
     constructor(public dialog: DialogRef<BSModalContext>, private resourceService: ResourcesServices, private propService: PropertyServices,
         private prefService: PreferencesSettingsServices, private vbProp: VBProperties, private browsingModals: BrowsingModalServices) {
         this.context = dialog.context;
@@ -49,6 +52,8 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
     ngOnInit() {
         let conceptTreePref: ConceptTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
         this.pristineConcPref = JSON.parse(JSON.stringify(conceptTreePref));
+
+        this.selectedMultischemeMode = conceptTreePref.multischemeMode;
         
         this.baseBroaderProp = conceptTreePref.baseBroaderUri;
 
@@ -270,6 +275,10 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
         let narrowerPropsChanged: boolean = false;
 
         if (this.visualization == ConceptTreeVisualizationMode.hierarchyBased) {
+            if (this.pristineConcPref.multischemeMode != this.selectedMultischemeMode) {
+                this.vbProp.setMultischemeMode(this.selectedMultischemeMode);
+            }
+
             if (this.pristineConcPref.baseBroaderUri != this.baseBroaderProp) {
                 this.vbProp.setConceptTreeBaseBroaderProp(this.baseBroaderProp);
             }

@@ -9,7 +9,8 @@ import { ResourceViewTabbedComponent } from "./resourceViewTabbedComponent";
 
 @Component({
     selector: "resource-view-panel",
-    templateUrl: "./resourceViewPanelComponent.html"
+    templateUrl: "./resourceViewPanelComponent.html",
+    host: { class: "vbox" }
 })
 export class ResourceViewPanelComponent {
 
