@@ -1,6 +1,6 @@
 export class MatchingProblem {
-    sourceDataset: Dataset;
-    targetDataset: Dataset;
+    leftDataset: Dataset;
+    rightDataset: Dataset;
     supportDatasets: Dataset[];
     pairings: Pairing[];
 }
@@ -14,10 +14,10 @@ export class Pairing {
     score: number;
     source: PairingHand;
     target: PairingHand;
+    synonymizer: Synonymizer;
 }
 export class PairingHand {
     lexicalizationSet: string;
-    synonymizer: Synonymizer;
 }
 export class Synonymizer {
     lexicon: string;

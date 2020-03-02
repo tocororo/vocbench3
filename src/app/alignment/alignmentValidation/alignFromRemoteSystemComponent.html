@@ -50,7 +50,7 @@
                         <td>{{task.startTime}}</td>
                         <td>{{task.endTime}}</td>
                         <td>
-                            <button class="btn btn-xs btn-default" (click)="fetchAlignment(task)" [disabled]="task.status != 'Completed'">
+                            <button class="btn btn-xs btn-default" (click)="fetchAlignment(task)" [disabled]="task.status != 'completed'">
                                 edit alignment
                             </button>
                         </td>
