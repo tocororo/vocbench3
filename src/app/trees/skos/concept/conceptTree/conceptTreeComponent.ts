@@ -80,8 +80,8 @@ export class ConceptTreeComponent extends AbstractTree {
 
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             this.lastInitTimestamp = new Date().getTime();
-            this.skosService.getTopConcepts(this.lastInitTimestamp, this.schemes, broaderProps, narrowerProps, includeSubProps,
-                VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
+            this.skosService.getTopConcepts(this.lastInitTimestamp, this.schemes, conceptTreePreference.multischemeMode,
+                broaderProps, narrowerProps, includeSubProps, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                 data => {
                     if (data.timestamp != this.lastInitTimestamp) { //the response is not about the last getTopConcepts request
                         return; //=> ignore it

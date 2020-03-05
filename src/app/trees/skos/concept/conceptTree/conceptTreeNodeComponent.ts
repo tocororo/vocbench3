@@ -55,7 +55,8 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
         prefs.narrowerProps.forEach((prop: string) => narrowerProps.push(new ARTURIResource(prop)));
         let includeSubProps: boolean = prefs.includeSubProps;
 
-        return this.skosService.getNarrowerConcepts(this.node, this.schemes, broaderProps, narrowerProps, includeSubProps, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
+        return this.skosService.getNarrowerConcepts(this.node, this.schemes, prefs.multischemeMode, broaderProps, narrowerProps, 
+            includeSubProps, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
             narrower => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(narrower, this.rendering ? SortAttribute.show : SortAttribute.value);

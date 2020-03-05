@@ -353,15 +353,16 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
         }
 
         /**
-         * close the dialog if one of the following settings changed
+         * the following settings, if changed, required the refresh of the tree, so close the dialog only if one is changed
          * - the broader/narrower props
          * - includeSubProps 
          * - visualization
-         * so that the concept tree refresh
          */
         if (
-            broaderPropsChanged || narrowerPropsChanged || this.pristineConcPref.includeSubProps != this.includeSubProps ||
-            this.pristineConcPref.visualization != this.visualization
+            broaderPropsChanged || narrowerPropsChanged || 
+            this.pristineConcPref.includeSubProps != this.includeSubProps ||
+            this.pristineConcPref.visualization != this.visualization ||
+            this.pristineConcPref.multischemeMode != this.selectedMultischemeMode
         ) {
             event.stopPropagation();
             event.preventDefault();

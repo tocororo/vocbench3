@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
+import { MultischemeMode } from '../models/Properties';
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBEventHandler } from "../utils/VBEventHandler";
@@ -24,21 +25,16 @@ export class SkosServices {
      * @param schemes
      * @return an array of top concepts
      */
-    getTopConcepts(timestamp: number, schemes?: ARTURIResource[], broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], 
-        includeSubProperties?: boolean, options?: VBRequestOptions): Observable<{ concepts: ARTURIResource[], timestamp: number }> {
-        var params: any = {};
-        if (schemes != null) {
-            params.schemes = schemes;
-        }
-        if (broaderProps != null) {
-            params.broaderProps = broaderProps;
-        }
-        if (narrowerProps != null) {
-            params.narrowerProps = narrowerProps;
-        }
-        if (includeSubProperties != null) {
-            params.includeSubProperties = includeSubProperties;
-        }
+    getTopConcepts(timestamp: number, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, 
+        broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], includeSubProperties?: boolean, 
+        options?: VBRequestOptions): Observable<{ concepts: ARTURIResource[], timestamp: number }> {
+        var params: any = {
+            schemes: schemes,
+            schemeFilter: schemeFilter,
+            broaderProps: broaderProps,
+            narrowerProps: narrowerProps,
+            includeSubProperties: includeSubProperties
+        };
         return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, options).map(
             stResp => {
                 return {
@@ -55,23 +51,17 @@ export class SkosServices {
      * @param schemes schemes where the narrower should belong
      * @return an array of narrowers
      */
-    getNarrowerConcepts(concept: ARTURIResource, schemes?: ARTURIResource[], broaderProps?: ARTURIResource[],
-        narrowerProps?: ARTURIResource[], includeSubProperties?: boolean, options?: VBRequestOptions) {
+    getNarrowerConcepts(concept: ARTURIResource, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, 
+        broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], includeSubProperties?: boolean, 
+        options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {
-            concept: concept
+            concept: concept,
+            schemes: schemes,
+            schemeFilter: schemeFilter,
+            broaderProps: broaderProps,
+            narrowerProps: narrowerProps,
+            includeSubProperties: includeSubProperties
         };
-        if (schemes != null) {
-            params.schemes = schemes;
-        }
-        if (broaderProps != null) {
-            params.broaderProps = broaderProps;
-        }
-        if (narrowerProps != null) {
-            params.narrowerProps = narrowerProps;
-        }
-        if (includeSubProperties != null) {
-            params.includeSubProperties = includeSubProperties;
-        }
         return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
