@@ -12,6 +12,7 @@ import { DeleteRemoteRepoModal } from '../project/remoteRepositories/deleteRemot
 import { DeleteRepositoryReportModal } from '../project/remoteRepositories/deleteRepositoryReportModal';
 import { RemoteRepoEditorModal } from "../project/remoteRepositories/remoteRepoEditorModal";
 import { SharedModule } from './sharedModule';
+import { ProjectACLModal } from '../project/projectACL/projectACLModal';
 
 
 
@@ -25,6 +26,7 @@ import { SharedModule } from './sharedModule';
         ACLEditorModal, 
         DeleteRemoteRepoModal,
         DeleteRepositoryReportModal,
+        ProjectACLModal,
         ProjectDirModal,
         ProjectListModal, 
         ProjectPropertiesModal, 
@@ -37,6 +39,7 @@ import { SharedModule } from './sharedModule';
         ACLEditorModal, 
         DeleteRemoteRepoModal,
         DeleteRepositoryReportModal,
+        ProjectACLModal,
         ProjectDirModal,
         ProjectListModal, 
         ProjectPropertiesModal, 

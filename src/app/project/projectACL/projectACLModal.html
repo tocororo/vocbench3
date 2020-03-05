@@ -1,0 +1,62 @@
+<div class="modal-header">
+    <h3 class="modal-title">Project ACL</h3>
+</div>
+<div class="modal-body vbox blockingDivHost">
+    <div class="scrollableContainer" style="border: 1px solid #ddd">
+        <table class="table table-bordered table-condensed" style="flex: 1">
+            <thead>
+                <tr>
+                    <th class="firstCol">
+                        <div style="text-align: right;">Consumer <span class="glyphicon glyphicon-chevron-right"></span></div>
+                        <div style="text-align: left;"><span class="glyphicon glyphicon-chevron-down"></span> Project</div>
+                    </th>
+                    <th *ngFor="let cons of consumerList" class="text-center fixedCol" [title]="cons">{{cons}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-template ngFor let-map [ngForOf]="tableModel">
+                    <tr>
+                        <td style="font-weight: bold; vertical-align: middle;">
+                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{map.project}}</span>
+                            <button class="btn btn-default btn-xs pull-right" title="Edit project ACL" (click)="editProjectACL(map.project)">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
+                        <td *ngFor="let acl of map.consumerACLs" style="padding: 0px;">
+                            <table class="table table-bordered table-condensed">
+                                <tr>
+                                    <td [class]="acl.availableAccessLevel_class" [title]="acl.availableAccessLevel_title">
+                                        {{ acl.availableAccessLevel }}
+                                    </td>
+                                    <td [class]="acl.acquiredAccessLevel_class" [title]="acl.acquiredAccessLevel_title">
+                                        {{ acl.acquiredAccessLevel }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td [class]="acl.availableLockLevel_class" [title]="acl.availableLockLevel_title">
+                                        {{ acl.availableLockLevel }}
+                                    </td>
+                                    <td [class]="acl.acquiredLockLevel_class" [title]="acl.acquiredLockLevel_title">
+                                        {{ acl.acquiredLockLevel }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </ng-template>
+            </tbody>
+        </table>
+    </div>
+
+    <div #blockingDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+    
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+</div>

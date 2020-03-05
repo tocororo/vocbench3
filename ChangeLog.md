@@ -4,6 +4,9 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
+# 7.0.1 (dd-mm-yyyy)
+  * Enabled organization of projects in directories
+
 # 7.0.0 (10-02-2020)
   * Introduced EDOAL projects.
   * Added support for alignment generation and validation through a remote alignment system (Genoma).

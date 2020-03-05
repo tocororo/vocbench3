@@ -17,6 +17,7 @@ import { VBProperties } from '../utils/VBProperties';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { AbstractProjectComponent } from "./abstractProjectComponent";
 import { ACLEditorModal, ACLEditorModalData } from "./projectACL/aclEditorModal";
+import { ProjectACLModal } from "./projectACL/projectACLModal";
 import { ProjectDirModal, ProjectDirModalData } from "./projectDir/projectDirModal";
 import { ProjectPropertiesModal, ProjectPropertiesModalData } from "./projectPropertiesModal";
 import { ProjectTableConfigModal } from "./projectTableConfig/projectTableConfigModal";
@@ -197,6 +198,12 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         );
         let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
         return this.modal.open(ProjectPropertiesModal, overlayConfig)
+    }
+
+    private openACLModal() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
+        return this.modal.open(ProjectACLModal, overlayConfig);
     }
 
     private editACL(project: Project) {
