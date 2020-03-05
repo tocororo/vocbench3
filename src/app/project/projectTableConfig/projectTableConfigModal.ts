@@ -1,10 +1,8 @@
 import { Component } from "@angular/core";
-import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { OverlayConfig } from 'ngx-modialog';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { ProjectTableColumnStruct } from "../../models/Project";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ProjectColumnId, ProjectTableColumnStruct, ProjectUtils, ProjectViewMode } from "../../models/Project";
 import { Cookie } from "../../utils/Cookie";
-import { VBProperties } from "../../utils/VBProperties";
 
 @Component({
     selector: "proj-table-conf-modal",
@@ -13,16 +11,58 @@ import { VBProperties } from "../../utils/VBProperties";
 export class ProjectTableConfigModal implements ModalComponent<BSModalContext> {
     context: BSModalContext;
 
-    private columns: ProjectTableColumnStruct[] = [];
+    private visualizationModes: { show: string, mode: ProjectViewMode }[] = [
+        { show: "Projects", mode: ProjectViewMode.list }, 
+        { show: "Directories", mode: ProjectViewMode.dir }
+    ];
+    private selectedVisualizationMode: { show: string, mode: ProjectViewMode };
 
+
+    private columns: ProjectTableColumnStruct[] = [];
     private selectedColumn: ProjectTableColumnStruct;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private modal: Modal, private vbProperties: VBProperties) {
+    constructor(public dialog: DialogRef<BSModalContext>) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
-        this.columns = this.vbProperties.getCustomProjectTableColumns();
+        //init visualization mode
+        let mode: ProjectViewMode = Cookie.getCookie(Cookie.PROJECT_VIEW_MODE) == ProjectViewMode.dir ? ProjectViewMode.dir : ProjectViewMode.list;
+        this.selectedVisualizationMode = this.visualizationModes.find(m => m.mode == mode);
+
+        this.initColumnTable();
+    }
+
+    private initColumnTable() {
+        this.columns = ProjectUtils.getDefaultProjectTableColumns();
+        let customOrder: ProjectColumnId[] = this.getCustomColumnsSetting(); //this setting contains the (ordered) comma separated IDs of the columns to show
+        
+        //update the show
+        this.columns.forEach(defCol => {
+            if (customOrder.indexOf(defCol.id) == -1) { //the column is not present in the custom order (hidden)
+                defCol.show = false;
+            }
+        });
+
+        //sort the columns according the custom order
+        this.columns.sort((c1, c2) => {
+            let idx1 = customOrder.indexOf(c1.id);
+            if (idx1 == -1) idx1 = 99;
+            let idx2 = customOrder.indexOf(c2.id);
+            if (idx2 == -1) idx2 = 99;
+            if (idx1 > idx2) return 1;
+            else if (idx1 < idx2) return -1;
+            else return 0;
+        });
+    }
+
+    private getCustomColumnsSetting(): ProjectColumnId[] {
+        let columnOrder: ProjectColumnId[] = ProjectUtils.defaultTableOrder;
+        let colOrderCookie = Cookie.getCookie(Cookie.PROJECT_TABLE_ORDER); //this cookie contains the (ordered) comma separated IDs of the columns to show
+        if (colOrderCookie != null) {
+            columnOrder = <ProjectColumnId[]>colOrderCookie.split(",");
+        }
+        return columnOrder;
     }
 
     private selectColumn(col: ProjectTableColumnStruct) {
@@ -33,35 +73,35 @@ export class ProjectTableConfigModal implements ModalComponent<BSModalContext> {
         }
     }
 
-    private updateColumnShow(col: ProjectTableColumnStruct) {
-        this.saveTableConfig();
-    }
-
     private moveUp() {
         var idx = this.columns.indexOf(this.selectedColumn);
         this.columns.splice(idx-1, 0, this.columns.splice(idx, 1)[0]);
-        this.saveTableConfig();
     }
 
     private moveDown() {
         var idx = this.columns.indexOf(this.selectedColumn);
         this.columns.splice(idx+1, 0, this.columns.splice(idx, 1)[0]);
-        this.saveTableConfig();
     }
 
     private reset() {
-        this.columns = this.vbProperties.getDefaultProjectTableColumns();
         Cookie.deleteCookie(Cookie.PROJECT_TABLE_ORDER);
+        this.initColumnTable();
     }
 
-    private saveTableConfig() {
-        Cookie.setCookie(Cookie.PROJECT_TABLE_ORDER, JSON.stringify(this.columns),  365*10);
-    }
+    ok() {
+        let oldModeCookie = Cookie.getCookie(Cookie.PROJECT_VIEW_MODE);
+        let newModeCookie = this.selectedVisualizationMode.mode;
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+        let oldColumnsCookie = Cookie.getCookie(Cookie.PROJECT_TABLE_ORDER);
+        let newColumnCookie = this.columns.filter(c => c.show).map(c => c.id).join(",");
+
+        if (oldModeCookie != newModeCookie || oldColumnsCookie != newColumnCookie) { //update the cookies only if changed
+            Cookie.setCookie(Cookie.PROJECT_TABLE_ORDER, newColumnCookie);
+            Cookie.setCookie(Cookie.PROJECT_VIEW_MODE, newModeCookie);
+            this.dialog.close();
+        } else { //if nothing changed, simply dismiss the modal
+            this.dialog.dismiss();
+        }
     }
 
 }

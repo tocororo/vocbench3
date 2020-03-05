@@ -1,12 +1,13 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "ngx-modialog";
-import {ProjectServices} from "../../services/projectServices";
-import {BasicModalServices} from "../../widget/modal/basicModal/basicModalServices";
-import {AccessLevel, LockLevel, Project} from '../../models/Project';
+import { Component, ElementRef, ViewChild } from "@angular/core";
+import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { AccessLevel, AccessStatus, ConsumerACL, LockLevel, Project } from '../../models/Project';
+import { ProjectServices } from "../../services/projectServices";
+import { UIUtils } from "../../utils/UIUtils";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 export class ACLEditorModalData extends BSModalContext {
-    constructor(public acl: { name: string, consumers: { name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel }[], lock: any }) {
+    constructor(public project: Project) {
         super();
     }
 }
@@ -18,14 +19,14 @@ export class ACLEditorModalData extends BSModalContext {
 export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
     context: ACLEditorModalData;
 
-    private consumers: Consumer[];
+    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+
+    private consumers: ConsumerACL[];
     private lock: {availableLockLevel: LockLevel, lockingConsumer: string, acquiredLockLevel: LockLevel};
 
     private nullAccessLevel: AccessLevel = null;
     private accessLevels: AccessLevel[] = [AccessLevel.R, AccessLevel.RW];
     private lockLevels: LockLevel[] = [LockLevel.R, LockLevel.W, LockLevel.NO];
-
-    private update: boolean = false; //useful to tells to the calling component if this modal has updated something
 
     private filterProject: string;
 
@@ -34,26 +35,32 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
     }
 
     ngOnInit() {
-        this.consumers = this.context.acl.consumers;
-        this.lock = this.context.acl.lock;
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
+        this.projectService.getAccessStatusMap().subscribe(
+            (status: AccessStatus[]) => {
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
+                let projACL: AccessStatus = status.find(s => s.name == this.context.project.getName());
+                this.consumers = projACL.consumers;
+                this.lock = projACL.lock;
+            }
+        )
     }
 
-    private onAccessLevelChange(consumer: Consumer, newLevel: AccessLevel) {
+    private onAccessLevelChange(consumer: ConsumerACL, newLevel: AccessLevel) {
         var oldLevel: AccessLevel = consumer.availableACLLevel;
 
         var message: string;
         if (newLevel == this.nullAccessLevel) {
-            message = "Are you sure to revoke Access Level of '" + this.context.acl.name + "' for the consumer '" + consumer.name + "'?";
+            message = "Are you sure to revoke Access Level of '" + this.context.project.getName() + "' for the consumer '" + consumer.name + "'?";
         } else {
-            message = "Are you sure to change Access Level of '" + this.context.acl.name + "' to '" + newLevel + 
+            message = "Are you sure to change Access Level of '" + this.context.project.getName() + "' to '" + newLevel + 
                 "' for the consumer '" + consumer.name + "'?";
         }
         this.basicModals.confirm("Update Access Level", message, "warning").then(
             confirm => {
-                this.projectService.updateAccessLevel(new Project(this.context.acl.name), new Project(consumer.name), newLevel).subscribe(
+                this.projectService.updateAccessLevel(this.context.project, new Project(consumer.name), newLevel).subscribe(
                     stResp => {
                         consumer.availableACLLevel = newLevel;
-                        this.update = true;
                     }
                 ) 
             },
@@ -68,10 +75,9 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
         let message: string = "Are you sure to change project lock to '" + newLevel + "'?";
         this.basicModals.confirm("Update Lock Level", message, "warning").then(
             confirm => {
-                this.projectService.updateLockLevel(new Project(this.context.acl.name), newLevel).subscribe(
+                this.projectService.updateLockLevel(this.context.project, newLevel).subscribe(
                     stResp => {
                         this.lock.availableLockLevel = newLevel;
-                        this.update = true;
                     }
                 )
             },
@@ -81,20 +87,14 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
         );
     }
 
-    private showConsumer(consumer: Consumer): boolean {
+    private showConsumer(consumer: ConsumerACL): boolean {
         return this.filterProject == null || consumer.name.toLocaleUpperCase().indexOf(this.filterProject.toLocaleUpperCase()) != -1;
     }
     
     ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
-        this.dialog.close(this.update);
+        this.dialog.close();
     }
 
-}
-
-class Consumer {
-    name: string;
-    availableACLLevel: AccessLevel;
-    acquiredACLLevel: AccessLevel;
 }

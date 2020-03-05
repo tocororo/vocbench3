@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CreateProjectComponent } from "../project/createProject/createProjectComponent";
 import { ACLEditorModal } from "../project/projectACL/aclEditorModal";
-import { ProjectACLModal } from "../project/projectACL/projectACLModal";
 import { ProjectComponent } from "../project/projectComponent";
+import { ProjectDirModal } from '../project/projectDir/projectDirModal';
 import { ProjectListModal } from "../project/projectListModal";
 import { ProjectPropertiesModal } from "../project/projectPropertiesModal";
 import { ProjectTableConfigModal } from "../project/projectTableConfig/projectTableConfigModal";
@@ -25,7 +25,7 @@ import { SharedModule } from './sharedModule';
         ACLEditorModal, 
         DeleteRemoteRepoModal,
         DeleteRepositoryReportModal,
-        ProjectACLModal,
+        ProjectDirModal,
         ProjectListModal, 
         ProjectPropertiesModal, 
         ProjectTableConfigModal,
@@ -37,11 +37,11 @@ import { SharedModule } from './sharedModule';
         ACLEditorModal, 
         DeleteRemoteRepoModal,
         DeleteRepositoryReportModal,
-        ProjectACLModal,
+        ProjectDirModal,
         ProjectListModal, 
         ProjectPropertiesModal, 
-        RemoteRepoEditorModal,
         ProjectTableConfigModal,
+        RemoteRepoEditorModal,
     ]
 })
 export class ProjectModule { }

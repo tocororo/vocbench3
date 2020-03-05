@@ -1,13 +1,14 @@
-import { Component, ElementRef, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from "rxjs";
-import { ExceptionDAO, Project, ProjectTableColumnStruct, RemoteRepositorySummary, RepositorySummary } from '../models/Project';
+import { ExceptionDAO, Project, ProjectColumnId, ProjectFacets, ProjectTableColumnStruct, ProjectUtils, ProjectViewMode, RemoteRepositorySummary, RepositorySummary } from '../models/Project';
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from "../services/projectServices";
 import { RepositoriesServices } from "../services/repositoriesServices";
 import { UserServices } from "../services/userServices";
+import { Cookie } from "../utils/Cookie";
 import { DatatypeValidator } from "../utils/DatatypeValidator";
 import { UIUtils } from "../utils/UIUtils";
 import { VBCollaboration } from '../utils/VBCollaboration';
@@ -15,7 +16,8 @@ import { VBContext } from '../utils/VBContext';
 import { VBProperties } from '../utils/VBProperties';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { AbstractProjectComponent } from "./abstractProjectComponent";
-import { ProjectACLModal } from "./projectACL/projectACLModal";
+import { ACLEditorModal, ACLEditorModalData } from "./projectACL/aclEditorModal";
+import { ProjectDirModal, ProjectDirModalData } from "./projectDir/projectDirModal";
 import { ProjectPropertiesModal, ProjectPropertiesModalData } from "./projectPropertiesModal";
 import { ProjectTableConfigModal } from "./projectTableConfig/projectTableConfigModal";
 import { DeleteRemoteRepoModal, DeleteRemoteRepoModalData } from "./remoteRepositories/deleteRemoteRepoModal";
@@ -25,51 +27,73 @@ import { RemoteRepoEditorModal, RemoteRepoEditorModalData } from "./remoteReposi
 @Component({
     selector: "project-component",
     templateUrl: "./projectComponent.html",
-    host: { class: "pageComponent" }
+    host: { class: "pageComponent" },
+    styles: [ `
+    .project-row:first-of-type { border-top: 1px solid #ddd; }
+    .project-row { border-bottom: 1px solid #ddd; }
+    ` ]
 })
 export class ProjectComponent extends AbstractProjectComponent implements OnInit {
-    private projectList: Project[];
-    private selectedProject: Project; //project selected in the list
 
-    private defaultColumnsOrder: string[]; //default order of the columns (contains only the columns visible according the custom configuration)
-    private customColumnsOrder: string[]; //custom order of the columns
+    private visualizationMode: ProjectViewMode;
+
+    private projectList: Project[];
+    private projectDirs: ProjectDirEntry[];
+
+    private columnIDs: ProjectColumnId[] = [ProjectColumnId.accessed, ProjectColumnId.history, ProjectColumnId.lexicalization,
+        ProjectColumnId.location, ProjectColumnId.model, ProjectColumnId.name, ProjectColumnId.open, ProjectColumnId.validation];
+    private columnOrder: { [id: string]: { show: string, flex: number, order: number} };
 
     constructor(private projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices,
         vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, 
         private repositoriesService: RepositoriesServices, private basicModals: BasicModalServices, private modal: Modal, 
-        private router: Router, private elRef: ElementRef) {
+        private router: Router) {
         super(userService, metadataService, vbCollaboration, vbProp, dtValidator);
     }
 
     ngOnInit() {
-        this.initTable()
+        this.initProjects()
     }
 
-    private initTable() {
-        let columns: ProjectTableColumnStruct[] = this.vbProp.getCustomProjectTableColumns();
-        this.customColumnsOrder = [];
-        columns.forEach(c => { if (c.show) this.customColumnsOrder.push(c.name) });
+    private initProjects() {
+        //init visualization mode
+        this.visualizationMode = Cookie.getCookie(Cookie.PROJECT_VIEW_MODE) == ProjectViewMode.dir ? ProjectViewMode.dir : ProjectViewMode.list;
 
-        let defaultColumns = this.vbProp.getDefaultProjectTableColumns();
-        this.defaultColumnsOrder = []; 
-        defaultColumns.forEach(c => { if (this.customColumnsOrder.indexOf(c.name) != -1) this.defaultColumnsOrder.push(c.name) });
+        //init column order
+        this.columnOrder = {};
+        let columns: ProjectTableColumnStruct[] = ProjectUtils.getDefaultProjectTableColumns();
+        let customOrder: ProjectColumnId[] = this.getCustomColumnsSetting(); //this setting contains the (ordered) IDs of the columns to show
+        customOrder.forEach((colId: ProjectColumnId, idx: number) => {
+            let colStruct: ProjectTableColumnStruct = columns.find(c => c.id == colId); //retrieve the column struct
+            this.columnOrder[colId] = { show: colStruct.name, order: idx, flex: colStruct.flex }
+        })
 
+        //init project list
         this.projectService.listProjects().subscribe(
             projectList => {
                 this.projectList = projectList;
-                setTimeout(() => { //timeout in order to to trigger a new round of change detection and so wait that the table is rendered
-                    this.sortColumns();
+
+                //retrieve from cookie the directory to collapse
+                let collapsedDirs: string[] = this.retrieveCollapsedDirectoriesCookie();
+                //init project dirs structure
+                this.projectDirs = [];
+                this.projectList.forEach(p => {
+                    let dirName = p.getFacet(ProjectFacets.dir);
+                    let pEntry = this.projectDirs.find(p => p.dir == dirName);
+                    if (pEntry == null) {
+                        pEntry = new ProjectDirEntry(dirName);
+                        pEntry.open = !collapsedDirs.some(d => d == dirName);
+                        this.projectDirs.push(pEntry);
+                    }
+                    pEntry.projects.push(p);
                 });
+                this.projectDirs.sort((d1: ProjectDirEntry, d2: ProjectDirEntry) => {
+                    if (d1.dir == null) return -1;
+                    else if (d2.dir == null) return -1;
+                    else return d1.dir.localeCompare(d2.dir);
+                })
             }
         );
-    }
-
-    private selectProject(project: Project) {
-        if (this.selectedProject == project) {
-            this.selectedProject = null;
-        } else {
-            this.selectedProject = project;
-        }
     }
 
     private openOrCloseProject(project: Project) {
@@ -108,23 +132,22 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         this.router.navigate(["/Projects/CreateProject"]);
     }
 
-    private deleteProject() {
-        if (this.selectedProject.isOpen()) {
-            this.basicModals.alert("Delete project", this.selectedProject.getName() +
+    private deleteProject(project: Project) {
+        if (project.isOpen()) {
+            this.basicModals.alert("Delete project", project.getName() +
                 " is currently open. Please, close the project and then retry.", "warning");
             return;
         } else {
             this.basicModals.confirm("Delete project", "Attention, this operation will delete the project " +
-                this.selectedProject.getName() + ". Are you sure to proceed?", "warning").then(
+                project.getName() + ". Are you sure to proceed?", "warning").then(
                 result => {
-                    let deletingProject: Project = this.selectedProject;
                     //retrieve the remote repositories referenced by the deleting project (this must be done before the deletion in order to prevent errors)
-                    this.projectService.getRepositories(deletingProject, true).subscribe(
+                    this.projectService.getRepositories(project, true).subscribe(
                         (repositories: RepositorySummary[]) => {
-                            this.deleteImpl().subscribe( //delete the project
+                            this.deleteImpl(project).subscribe( //delete the project
                                 () => {
                                     if (repositories.length > 0) { //if the deleted project was linked with remote repositories proceed with the deletion
-                                        this.deleteRemoteRepo(deletingProject, repositories);
+                                        this.deleteRemoteRepo(project, repositories);
                                     }
                                 }
                             )
@@ -136,15 +159,10 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         }
     }
 
-    private deleteImpl(): Observable<void> {
-        return this.projectService.deleteProject(this.selectedProject).map(
+    private deleteImpl(project: Project): Observable<void> {
+        return this.projectService.deleteProject(project).map(
             stResp => {
-                for (var i = 0; i < this.projectList.length; i++) { //remove project from list
-                    if (this.projectList[i].getName() == this.selectedProject.getName()) {
-                        this.projectList.splice(i, 1);
-                    }
-                }
-                this.selectedProject = null;
+                this.initProjects();
             }
         );
     }
@@ -203,8 +221,8 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     /**
      * Opens a modal to show the properties of the selected project
      */
-    private openPropertyModal() {
-        var modalData = new ProjectPropertiesModalData(this.selectedProject);
+    private openPropertyModal(project: Project) {
+        var modalData = new ProjectPropertiesModalData(project);
         const builder = new BSModalContextBuilder<ProjectPropertiesModalData>(
             modalData, undefined, ProjectPropertiesModalData
         );
@@ -212,16 +230,24 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         return this.modal.open(ProjectPropertiesModal, overlayConfig)
     }
 
-    private openACLModal() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
-        return this.modal.open(ProjectACLModal, overlayConfig);
+    private editACL(project: Project) {
+        var modalData = new ACLEditorModalData(project);
+        const builder = new BSModalContextBuilder<ACLEditorModalData>(
+            modalData, undefined, ACLEditorModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.size("sm").keyboard(27).toJSON() };
+        return this.modal.open(ACLEditorModal, overlayConfig);
     }
 
     /** 
      * Opens a modal to edit the remote repositories credentials
      */
     private editRemoteRepoCredential(project: Project) {
+        if (project.isOpen()) {
+            this.basicModals.alert("Edit remote repository credentials", 
+                "You cannot edit credentials of remote repositories linked to an open project. Please, close the project and retry", "warning");
+            return;
+        }
         var modalData = new RemoteRepoEditorModalData(project);
         const builder = new BSModalContextBuilder<RemoteRepoEditorModalData>(
             modalData, undefined, RemoteRepoEditorModalData
@@ -230,52 +256,88 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         return this.modal.open(RemoteRepoEditorModal, overlayConfig)
     }
 
-    /**
-     * TABLE SORT MANAGEMENT
-     */
 
-    private openTableConfig() {
+    private editDirectory(project: Project, currentDir: string) {
+        let availableDirs: string[] = [];
+        this.projectDirs.forEach(pd => { 
+            if (pd.dir != null) {
+                availableDirs.push(pd.dir);
+            }
+        });
+        var modalData = new ProjectDirModalData(project, currentDir, availableDirs);
+        const builder = new BSModalContextBuilder<ProjectDirModalData>(
+            modalData, undefined, ProjectDirModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        return this.modal.open(ProjectDirModal, overlayConfig).result.then(
+            () => { //directory changed
+                this.initProjects();
+            },
+            () => {} //directory not changed
+        )
+    }
+
+    private toggleDirectory(projectDir: ProjectDirEntry) {
+        projectDir.open = !projectDir.open
+        //update collapsed directories cookie
+        this.storeCollpasedDirectoriesCookie();
+    }
+
+    private settings() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.size('sm').keyboard(27).toJSON() };
         this.modal.open(ProjectTableConfigModal, overlayConfig).result.then(
-            res => {
-                this.initTable();
-            }
+            () => { //changed settings
+                this.initProjects();
+            },
+            () => {} //nothing changed
         );
     }
 
-    private showColumn(name: string): boolean {
-        return this.customColumnsOrder.indexOf(name) != -1;
-    }
+    /**
+     * COOKIE MANAGEMENT
+     */
 
-    private sortColumns() {
-        let swapped: boolean; //flag to report that there has been a column swap
-        do {
-            swapped = false;
-            for (var i = 0; i < this.defaultColumnsOrder.length-1; i++) {
-                let col: string = this.defaultColumnsOrder[i];
-                let followingCol: string = this.defaultColumnsOrder[i+1];
-                //if in the "target" order, the two following columns are inverted in the order, swap them
-                if (this.customColumnsOrder.indexOf(col) > this.customColumnsOrder.indexOf(followingCol)) {
-                    let td: NodeList = this.elRef.nativeElement.querySelectorAll('td');
-                    this.swapWithPreviousColumn(td, i+1);
-                    //swap also the defaultColumnsOrder
-                    let c = this.defaultColumnsOrder[i+1];
-                    this.defaultColumnsOrder[i+1] = this.defaultColumnsOrder[i];
-                    this.defaultColumnsOrder[i] = c;
-                    swapped = true;
-                }
-            }
-        } while (swapped); //do the sort until there is no more swap to perform
-    }
-
-    private swapWithPreviousColumn(td: NodeList, idx: number) {
-        let nColumn: number = this.customColumnsOrder.length
-        for (var rowIdx = 0; rowIdx < this.projectList.length; rowIdx++) {
-            let idxCellFrom = rowIdx*nColumn+idx;
-            let idxCellTo = rowIdx*nColumn+idx-1;
-            td.item(idxCellFrom).parentNode.insertBefore(td.item(idxCellFrom), td.item(idxCellTo));
+    private getCustomColumnsSetting(): ProjectColumnId[] {
+        let columnOrder: ProjectColumnId[] = ProjectUtils.defaultTableOrder;
+        let colOrderCookie = Cookie.getCookie(Cookie.PROJECT_TABLE_ORDER); //this cookie contains the (ordered) comma separated IDs of the columns to show
+        if (colOrderCookie != null) {
+            columnOrder = <ProjectColumnId[]>colOrderCookie.split(",");
         }
+        return columnOrder;
     }
 
+    private storeCollpasedDirectoriesCookie() {
+        let collapsedDirs: string[] = [];
+        this.projectDirs.forEach(pd => {
+            if (!pd.open) {
+                let dirNameValue = pd.dir != null ? pd.dir : "null";
+                collapsedDirs.push(dirNameValue);
+            }
+        })
+        Cookie.setCookie(Cookie.PROJECT_COLLAPSED_DIRS, collapsedDirs.join(","));
+    }
+    private retrieveCollapsedDirectoriesCookie(): string[] {
+        let collapsedDirs: string[] = [];
+        let collapsedDirsCookie: string = Cookie.getCookie(Cookie.PROJECT_COLLAPSED_DIRS)
+        if (collapsedDirsCookie != null) {
+            collapsedDirs = collapsedDirsCookie.split(",");
+        }
+        collapsedDirs.forEach((dir, index, list) => { //replace the serialized "null" directory with the null value
+            if (dir == "null") list[index] = null;
+        });
+        return collapsedDirs;
+    }
+
+}
+
+class ProjectDirEntry {
+    dir: string;
+    open: boolean;
+    projects: Project[];
+    constructor(dir: string) {
+        this.dir = dir;
+        this.open = true;
+        this.projects = [];
+    }
 }

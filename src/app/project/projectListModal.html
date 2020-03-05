@@ -6,15 +6,39 @@
         <div class="panel-heading">
             <label>Projects</label>
         </div>
-        <div class="panel-body scrollableContainer">
-            <div *ngFor="let p of projectList" class="listItem" (click)="selectProject(p)"
-                [ngClass]="{ active: selectedProject == p, disabled: isWorkingProject(p) }">
-                {{p.getName()}}
-            </div>
+        <div class="panel-body table-responsive">
+            <table class="table table-condensed table-hoverable table-borderless">
+                <thead>
+                    <tr>
+                        <th class="text-center">Project Name</th>
+                        <th class="text-center">Model</th>
+                        <th class="text-center">Lexicalization</th>
+                        <th class="text-center">History</th>
+                        <th class="text-center">Validation</th>
+                        <th class="text-center">Repo Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let p of projectList" [ngClass]="{ info : selectedProject == p }" (click)="selectProject(p)">
+                        <td class="text-center">{{p.getName()}}</td>
+                        <td class="text-center">{{p.getModelType(true)}}</td>
+                        <td class="text-center">{{p.getLexicalizationModelType(true)}}</td>
+                        <td class="text-center">
+                            <span *ngIf="p.isHistoryEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="History enabled"></span>
+                            <span *ngIf="!p.isHistoryEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="History disabled"></span>
+                        </td>
+                        <td class="text-center">
+                            <span *ngIf="p.isValidationEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="Validation enabled"></span>
+                            <span *ngIf="!p.isValidationEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="Validation disabled"></span>
+                        </td>
+                        <td class="text-center">{{p.getRepositoryLocation().location}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isAccessClickable()">Access</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Close</button>
 </div>

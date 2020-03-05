@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { ARTURIResource } from '../models/ARTResources';
 import { TransitiveImportMethodAllowance } from '../models/Metadata';
 import { PluginSpecification, Settings } from '../models/Plugins';
-import { AccessLevel, BackendTypesEnum, LockLevel, PreloadedDataSummary, Project, RepositoryAccess, RepositorySummary } from '../models/Project';
+import { AccessLevel, AccessStatus, BackendTypesEnum, ConsumerACL, LockLevel, LockStatus, PreloadedDataSummary, Project, RepositoryAccess, RepositorySummary } from '../models/Project';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from '../utils/VBContext';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
@@ -231,11 +231,11 @@ export class ProjectServices {
         );
     }
 
-    getAccessStatusMap(): Observable<{name: string, consumers: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel}[], lock: any}[]> {
+    getAccessStatusMap(): Observable<AccessStatus[]> {
         var params = { };
         return this.httpMgr.doGet(this.serviceName, "getAccessStatusMap", params).map(
             stResp => {
-                var aclMap: {name: string, consumers: any[], lock: any}[] = [];
+                var aclMap: AccessStatus[] = [];
 
                 var projectJsonColl: any[] = stResp;
                 for (var i = 0; i < projectJsonColl.length; i++) {
@@ -244,10 +244,10 @@ export class ProjectServices {
 
                     let name = projJson.name;
                     //consumers node
-                    let consumers: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel}[] = [];
+                    let consumers: ConsumerACL[] = [];
                     let consumersJsonColl: any[] = projJson.consumers;
                     for (var j = 0; j < consumersJsonColl.length; j++) {
-                        let consumer: {name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel} = {
+                        let consumer: ConsumerACL = {
                             name: consumersJsonColl[j].name,
                             availableACLLevel: null,
                             acquiredACLLevel: null
@@ -262,7 +262,7 @@ export class ProjectServices {
                     }
                     //lock node
                     let lockNode = projJson.lock;
-                    let projectLock: {availableLockLevel: LockLevel, lockingConsumer: string, acquiredLockLevel: LockLevel} = {
+                    let projectLock: LockStatus = {
                         availableLockLevel: <LockLevel> lockNode.availableLockLevel,
                         lockingConsumer: null,
                         acquiredLockLevel: null
@@ -463,6 +463,30 @@ export class ProjectServices {
                 return Settings.parse(stResp);
             }
         );
+    }
+
+    /**
+     * 
+     * @param projectName 
+     * @param facetValue 
+     */
+    setProjectFacetDir(projectName: string, facetValue?: string) {
+        let params: any = {
+            projectName: projectName,
+            facetValue: facetValue
+        };
+        return this.httpMgr.doPost(this.serviceName, "setProjectFacetDir", params);
+    }
+
+    /**
+     * 
+     * @param dirName 
+     */
+    deleteProjectDir(dirName: string) {
+        let params: any = {
+            dirName: dirName,
+        };
+        return this.httpMgr.doPost(this.serviceName, "deleteProjectDir", params);
     }
 
 }

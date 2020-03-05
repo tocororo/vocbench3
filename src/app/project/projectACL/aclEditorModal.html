@@ -1,7 +1,7 @@
 <div class="modal-header">
     <h3 class="modal-title">Project ACL</h3>
 </div>
-<div class="modal-body vbox">
+<div class="modal-body vbox blockingDivHost">
 
     <div class="input-group input-group-xs" style="margin-bottom: 4px;">
         <input class="form-control" placeholder="Consumer Project name" [(ngModel)]="filterProject">
@@ -10,7 +10,7 @@
 
     <div class="panel panel-default vbox">
         <div class="panel-heading">
-            <label>Access Control List of project: {{context.acl.name}}</label>
+            <label>Access Control List of project <i>{{context.project.getName()}}</i></label>
         </div>
 
         <div class="panel-body scrollableContainer">
@@ -31,7 +31,7 @@
             </table>
         </div>
 
-        <div class="panel-footer">
+        <div *ngIf="lock" class="panel-footer">
             <div class="form-group">
                 <label class="control-label col-sm-5">Lockable:</label>
                 <div class="col-sm-7">
@@ -39,6 +39,14 @@
                         <option *ngFor="let ll of lockLevels" [value]="ll">{{ll}}</option>
                     </select>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div #blockingDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
             </div>
         </div>
     </div>

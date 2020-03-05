@@ -1,6 +1,6 @@
 import { ResourceUtils } from "../utils/ResourceUtils";
 import { ARTURIResource } from "./ARTResources";
-import { OntoLex, OWL, RDFS, SKOS, SKOSXL, EDOAL } from "./Vocabulary";
+import { EDOAL, OntoLex, OWL, RDFS, SKOS, SKOSXL } from "./Vocabulary";
 
 export class Project {
     private name: string;
@@ -15,6 +15,7 @@ export class Project {
     private repositoryLocation: { location: "remote" | "local", serverURL?: string };
     private status: { status: string, message?: string };
     private shaclEnabled: boolean;
+    private facets: {[key: string]: string} = {};
 
     constructor(name?: string) {
         if (name != undefined) {
@@ -138,6 +139,16 @@ export class Project {
         return this.status;
     }
 
+    public setFacets(facets: {[key: string]: string}) {
+        this.facets = facets;
+    }
+    public getFacets(): {[key: string]: string} {
+        return this.facets;
+    }
+    public getFacet(facet: string): string {
+        return this.facets[facet];
+    }
+
     public static deserialize(projJson: any): Project {
         let proj = new Project();
         proj.setName(projJson.name);
@@ -152,6 +163,7 @@ export class Project {
         proj.setRepositoryLocation(projJson.repositoryLocation);
         proj.setStatus(projJson.status);
         proj.setShaclEnabled(projJson.shaclEnabled);
+        proj.setFacets(projJson.facets);
         return proj;
     }
 
@@ -161,6 +173,23 @@ export enum BackendTypesEnum {
     graphdb_FreeSail = "graphdb:FreeSail",
     openrdf_NativeStore = "openrdf:NativeStore",
     openrdf_MemoryStore = "openrdf:MemoryStore"
+}
+
+export class AccessStatus {
+    public name: string;
+    public consumers: ConsumerACL[];
+    public lock: LockStatus;
+}
+
+export class ConsumerACL {
+    name: string;
+    availableACLLevel: AccessLevel;
+    acquiredACLLevel: AccessLevel
+}
+export class LockStatus {
+    public availableLockLevel: LockLevel;
+    public lockingConsumer: string;
+    public acquiredLockLevel: LockLevel
 }
 
 export enum AccessLevel {
@@ -232,12 +261,6 @@ export class Repository {
     public writable: boolean;
 }
 
-export class ProjectTableColumnStruct {
-    public name: string;
-    public show: boolean;
-    public mandatory?: boolean;
-}
-
 export class PreloadedDataSummary {
     public baseURI?: string;
     public model?: ARTURIResource;
@@ -267,4 +290,60 @@ export class ExceptionDAO {
     public message: string;
     public type: string;
     public stacktrace: string;
+}
+
+export enum ProjectFacets {
+    dir = "dir"
+}
+
+export enum ProjectViewMode {
+    list = "list",
+    dir = "dir"
+}
+
+export enum ProjectColumnId {
+    name = "name",
+    open = "open",
+    accessed = "accessed",
+    model = "model",
+    lexicalization = "lexicalization",
+    history = "history",
+    validation = "validation",
+    location = "location"
+}
+
+export class ProjectTableColumnStruct {
+    public id: ProjectColumnId;
+    public name: string;
+    public show: boolean;
+    public flex: number; //useful for the view: tells how much the column should grow
+    public mandatory?: boolean;
+}
+
+export class ProjectUtils {
+
+    public static getDefaultProjectTableColumns(): ProjectTableColumnStruct[] {
+        return [
+            { id: ProjectColumnId.name, name: "Project Name", show: true, flex: 3, mandatory: true },
+            { id: ProjectColumnId.open, name: "Open/Close", show: true, flex: 1, mandatory: true },
+            { id: ProjectColumnId.accessed, name: "Accessed", show: true, flex: 1, mandatory: true },
+            { id: ProjectColumnId.model, name: "Model", show: true, flex: 1 },
+            { id: ProjectColumnId.lexicalization, name: "Lexicalization", show: true, flex: 1 },
+            { id: ProjectColumnId.history, name: "History", show: true, flex: 1 },
+            { id: ProjectColumnId.validation, name: "Validation", show: true, flex: 1 },
+            { id: ProjectColumnId.location, name: "Repository Location", show: true, flex: 2 }
+        ];
+    }
+
+    public static readonly defaultTableOrder: ProjectColumnId[] = [
+        ProjectColumnId.name,
+        ProjectColumnId.open,
+        ProjectColumnId.accessed,
+        ProjectColumnId.model,
+        ProjectColumnId.lexicalization,
+        ProjectColumnId.history,
+        ProjectColumnId.validation,
+        ProjectColumnId.location,
+    ]
+
 }

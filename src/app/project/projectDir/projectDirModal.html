@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <h3 class="modal-title">Project Directory</h3>
+</div>
+<div class="modal-body vbox">
+
+    <div class="hbox" style="align-items: center;">
+        <label style="white-space: nowrap;">Directory name:</label>
+        <input class="form-control input-sm" style="margin-left: 4px;" [(ngModel)]="dirName">
+        <span class="glyphicon glyphicon-info-sign" style="margin-left: 4px;" title="If left empty the project will be removed from the directory and set as 'Unclassified'"></span>
+    </div>
+
+    <div class="panel panel-default" style="margin-top: 6px;">
+        <div class="panel-heading">
+            <label style="flex: 1;">All directories</label>
+        </div>
+        <div class="panel-body scrollableContainer">
+            <div *ngFor="let dir of directories" class="listItem" (click)="dirName = dir">
+                {{dir}}
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

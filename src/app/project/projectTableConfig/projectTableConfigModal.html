@@ -1,9 +1,18 @@
 <div class="modal-header">
-    <h3 class="modal-title">Project table configuration</h3>
+    <h3 class="modal-title">Project view settings</h3>
 </div>
 <div class="modal-body vbox">
-    <div class="panel panel-default">
+
+    <div class="hbox" style="align-items: center;">
+        <label style="white-space: nowrap; margin-right: 4px;">Top level elements:</label>
+        <select class="form-control input-sm" [(ngModel)]="selectedVisualizationMode">
+            <option *ngFor="let m of visualizationModes" [ngValue]="m">{{m.show}}</option>
+        </select>
+    </div>
+
+    <div class="panel panel-default" style="margin-top: 6px;">
         <div class="panel-heading">
+            <label>Project info</label>
             <label style="flex: 1"></label>
             <div class="btn-group btn-group-xs" style="margin-right: 4px;">
                 <button class="btn btn-default" (click)="moveUp()" title="Move up"
@@ -20,6 +29,11 @@
             </button>
         </div>
         <div class="panel-body">
+
+            <div class="alert alert-info" style="margin-bottom: 8px;">
+                Here you can show or hide info about the projects and customize their order.
+            </div>
+            
             <table class="table table-hoverable table-condensed table-borderless">
                 <thead>
                     <th class="text-center">Column name</th>
@@ -29,7 +43,7 @@
                     <tr *ngFor="let c of columns" [ngClass]="{ info : c == selectedColumn }" (click)="selectColumn(c)">
                         <td class="text-center" [ngClass]="{ grayText : !c.show }">{{c.name}}</td>
                         <td class="text-center">
-                            <input type="checkbox" [(ngModel)]="c.show" (ngModelChange)="updateColumnShow(c)" [disabled]="c.mandatory">
+                            <input type="checkbox" [(ngModel)]="c.show" [disabled]="c.mandatory">
                         </td>
                     </tr>
                 </tbody>
@@ -38,5 +52,5 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
 </div>

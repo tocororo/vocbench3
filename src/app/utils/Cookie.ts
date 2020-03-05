@@ -28,6 +28,8 @@ export class Cookie {
 	public static SEARCH_EXTEND_ALL_INDIVIDUALS = "search.extends_all_inividuals";
 
 	public static PROJECT_TABLE_ORDER = "project.table_columns_order";
+	public static PROJECT_COLLAPSED_DIRS = "project.collapsed_dirs"; //comma separated names of collapsed directories
+	public static PROJECT_VIEW_MODE = "project.view_mode";
 
 	public static WARNING_CUSTOM_ROOT = "ui.tree.cls.warnings.customroot";
 
