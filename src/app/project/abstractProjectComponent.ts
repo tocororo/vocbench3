@@ -1,13 +1,18 @@
 import { Observable } from "rxjs/Observable";
-import { Project } from "../models/Project";
+import { Project, ProjectFacets, ProjectViewMode } from "../models/Project";
 import { MetadataServices } from "../services/metadataServices";
 import { UserServices } from "../services/userServices";
+import { Cookie } from "../utils/Cookie";
 import { DatatypeValidator } from "../utils/DatatypeValidator";
 import { VBCollaboration } from "../utils/VBCollaboration";
 import { VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
 
 export abstract class AbstractProjectComponent {
+
+    protected visualizationMode: ProjectViewMode;
+    protected projectList: Project[];
+    protected projectDirs: ProjectDirEntry[];
 
     protected userService: UserServices;
     protected metadataService: MetadataServices;
@@ -20,6 +25,34 @@ export abstract class AbstractProjectComponent {
         this.vbCollaboration = vbCollaboration;
         this.vbProp = vbProp;
         this.dtValidator = dtValidator;
+    }
+
+    ngOnInit() {
+        this.initProjects();
+    }
+
+    protected abstract initProjects(): void;
+
+    protected initProjectDirectories(): void {
+        //retrieve from cookie the directory to collapse
+        let collapsedDirs: string[] = this.retrieveCollapsedDirectoriesCookie();
+        //init project dirs structure
+        this.projectDirs = [];
+        this.projectList.forEach(p => {
+            let dirName = p.getFacet(ProjectFacets.dir);
+            let pEntry = this.projectDirs.find(p => p.dir == dirName);
+            if (pEntry == null) {
+                pEntry = new ProjectDirEntry(dirName);
+                pEntry.open = !collapsedDirs.some(d => d == dirName);
+                this.projectDirs.push(pEntry);
+            }
+            pEntry.projects.push(p);
+        });
+        this.projectDirs.sort((d1: ProjectDirEntry, d2: ProjectDirEntry) => {
+            if (d1.dir == null) return -1;
+            else if (d2.dir == null) return -1;
+            else return d1.dir.localeCompare(d2.dir);
+        })
     }
 
     protected accessProject(project: Project) {
@@ -42,4 +75,43 @@ export abstract class AbstractProjectComponent {
         return (workingProj != undefined && workingProj.getName() == project.getName());
     }
 
+    protected toggleDirectory(projectDir: ProjectDirEntry) {
+        projectDir.open = !projectDir.open
+        //update collapsed directories cookie
+        this.storeCollpasedDirectoriesCookie();
+    }
+
+    protected storeCollpasedDirectoriesCookie() {
+        let collapsedDirs: string[] = [];
+        this.projectDirs.forEach(pd => {
+            if (!pd.open) {
+                let dirNameValue = pd.dir != null ? pd.dir : "null";
+                collapsedDirs.push(dirNameValue);
+            }
+        })
+        Cookie.setCookie(Cookie.PROJECT_COLLAPSED_DIRS, collapsedDirs.join(","));
+    }
+    protected retrieveCollapsedDirectoriesCookie(): string[] {
+        let collapsedDirs: string[] = [];
+        let collapsedDirsCookie: string = Cookie.getCookie(Cookie.PROJECT_COLLAPSED_DIRS)
+        if (collapsedDirsCookie != null) {
+            collapsedDirs = collapsedDirsCookie.split(",");
+        }
+        collapsedDirs.forEach((dir, index, list) => { //replace the serialized "null" directory with the null value
+            if (dir == "null") list[index] = null;
+        });
+        return collapsedDirs;
+    }
+
+}
+
+export class ProjectDirEntry {
+    dir: string;
+    open: boolean;
+    projects: Project[];
+    constructor(dir: string) {
+        this.dir = dir;
+        this.open = true;
+        this.projects = [];
+    }
 }

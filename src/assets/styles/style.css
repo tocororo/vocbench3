@@ -168,6 +168,8 @@ config-bar {
     min-width: 0;
 }
 
+.project-row:first-of-type { border-top: 1px solid #ddd; }
+.project-row { border-bottom: 1px solid #ddd; }
 
 resource-view-splitted, resource-view-tabbed {
     display: flex;

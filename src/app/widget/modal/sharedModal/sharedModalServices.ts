@@ -12,6 +12,7 @@ import { ImportType } from '../../../models/Metadata';
 import { Settings } from "../../../models/Plugins";
 import { RemoteRepositoryAccessConfig } from "../../../models/Project";
 import { User } from '../../../models/User';
+import { ProjectListModal } from '../../../project/projectListModal';
 import { ResourceViewModal, ResourceViewModalData } from "../../../resourceView/resourceViewModal";
 import { ProjectContext } from '../../../utils/VBContext';
 import { LoadConfigurationModal, LoadConfigurationModalData } from "./configurationStoreModal/loadConfigurationModal";
@@ -254,6 +255,16 @@ export class SharedModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(ManchesterExprModal, overlayConfig).result;
+    }
+
+
+    /**
+     * Opens a modal for accessing a project
+     */
+    changeProject() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
+        this.modal.open(ProjectListModal, overlayConfig);
     }
 
 }

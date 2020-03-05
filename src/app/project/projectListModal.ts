@@ -2,10 +2,11 @@ import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { Project } from '../models/Project';
+import { Project, ProjectViewMode } from '../models/Project';
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from "../services/projectServices";
 import { UserServices } from "../services/userServices";
+import { Cookie } from "../utils/Cookie";
 import { DatatypeValidator } from "../utils/DatatypeValidator";
 import { VBCollaboration } from '../utils/VBCollaboration';
 import { VBProperties } from '../utils/VBProperties';
@@ -18,7 +19,6 @@ import { AbstractProjectComponent } from "./abstractProjectComponent";
 export class ProjectListModal extends AbstractProjectComponent implements ModalComponent<BSModalContext> {
     context: BSModalContext;
 
-    private projectList: Array<Project> = [];
     private selectedProject: Project;
 
     constructor(public dialog: DialogRef<BSModalContext>, userService: UserServices, metadataService: MetadataServices,
@@ -28,14 +28,20 @@ export class ProjectListModal extends AbstractProjectComponent implements ModalC
         this.context = dialog.context;
     }
 
-    ngOnInit() {
+    initProjects() {
+        //init visualization mode
+        this.visualizationMode = Cookie.getCookie(Cookie.PROJECT_VIEW_MODE) == ProjectViewMode.dir ? ProjectViewMode.dir : ProjectViewMode.list;
+        
         this.projectService.listProjects(null, true).subscribe(
             projects => {
+                this.projectList = [];
                 for (var i = 0; i < projects.length; i++) {
                     if (projects[i].isOpen()) {
                         this.projectList.push(projects[i]);
                     }
                 }
+
+                this.initProjectDirectories();
             }
         );
     }
@@ -50,18 +56,18 @@ export class ProjectListModal extends AbstractProjectComponent implements ModalC
         return (this.selectedProject != null && !this.isWorkingProject(this.selectedProject));
     }
 
+    private changeVisualizationMode(mode: ProjectViewMode) {
+        this.visualizationMode = mode;
+        Cookie.setCookie(Cookie.PROJECT_VIEW_MODE, mode);
+    }
+
     ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
         this.dialog.close();
-        // let currentRoute = this.router.url;
         this.router.navigate(['/Home']).then(
-            success => {
-                this.accessProject(this.selectedProject).subscribe(
-            //         () => {
-            //             this.router.navigate([currentRoute]);
-            //         }
-                )
+            () => {
+                this.accessProject(this.selectedProject).subscribe()
             }
         );
     }

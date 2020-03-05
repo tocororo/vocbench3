@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from "rxjs";
-import { ExceptionDAO, Project, ProjectColumnId, ProjectFacets, ProjectTableColumnStruct, ProjectUtils, ProjectViewMode, RemoteRepositorySummary, RepositorySummary } from '../models/Project';
+import { ExceptionDAO, Project, ProjectColumnId, ProjectTableColumnStruct, ProjectUtils, ProjectViewMode, RemoteRepositorySummary, RepositorySummary } from '../models/Project';
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from "../services/projectServices";
 import { RepositoriesServices } from "../services/repositoriesServices";
@@ -28,17 +28,8 @@ import { RemoteRepoEditorModal, RemoteRepoEditorModalData } from "./remoteReposi
     selector: "project-component",
     templateUrl: "./projectComponent.html",
     host: { class: "pageComponent" },
-    styles: [ `
-    .project-row:first-of-type { border-top: 1px solid #ddd; }
-    .project-row { border-bottom: 1px solid #ddd; }
-    ` ]
 })
 export class ProjectComponent extends AbstractProjectComponent implements OnInit {
-
-    private visualizationMode: ProjectViewMode;
-
-    private projectList: Project[];
-    private projectDirs: ProjectDirEntry[];
 
     private columnIDs: ProjectColumnId[] = [ProjectColumnId.accessed, ProjectColumnId.history, ProjectColumnId.lexicalization,
         ProjectColumnId.location, ProjectColumnId.model, ProjectColumnId.name, ProjectColumnId.open, ProjectColumnId.validation];
@@ -51,11 +42,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         super(userService, metadataService, vbCollaboration, vbProp, dtValidator);
     }
 
-    ngOnInit() {
-        this.initProjects()
-    }
-
-    private initProjects() {
+    initProjects() {
         //init visualization mode
         this.visualizationMode = Cookie.getCookie(Cookie.PROJECT_VIEW_MODE) == ProjectViewMode.dir ? ProjectViewMode.dir : ProjectViewMode.list;
 
@@ -73,25 +60,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
             projectList => {
                 this.projectList = projectList;
 
-                //retrieve from cookie the directory to collapse
-                let collapsedDirs: string[] = this.retrieveCollapsedDirectoriesCookie();
-                //init project dirs structure
-                this.projectDirs = [];
-                this.projectList.forEach(p => {
-                    let dirName = p.getFacet(ProjectFacets.dir);
-                    let pEntry = this.projectDirs.find(p => p.dir == dirName);
-                    if (pEntry == null) {
-                        pEntry = new ProjectDirEntry(dirName);
-                        pEntry.open = !collapsedDirs.some(d => d == dirName);
-                        this.projectDirs.push(pEntry);
-                    }
-                    pEntry.projects.push(p);
-                });
-                this.projectDirs.sort((d1: ProjectDirEntry, d2: ProjectDirEntry) => {
-                    if (d1.dir == null) return -1;
-                    else if (d2.dir == null) return -1;
-                    else return d1.dir.localeCompare(d2.dir);
-                })
+                this.initProjectDirectories();
             }
         );
     }
@@ -277,12 +246,6 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         )
     }
 
-    private toggleDirectory(projectDir: ProjectDirEntry) {
-        projectDir.open = !projectDir.open
-        //update collapsed directories cookie
-        this.storeCollpasedDirectoriesCookie();
-    }
-
     private settings() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.size('sm').keyboard(27).toJSON() };
@@ -307,37 +270,6 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         return columnOrder;
     }
 
-    private storeCollpasedDirectoriesCookie() {
-        let collapsedDirs: string[] = [];
-        this.projectDirs.forEach(pd => {
-            if (!pd.open) {
-                let dirNameValue = pd.dir != null ? pd.dir : "null";
-                collapsedDirs.push(dirNameValue);
-            }
-        })
-        Cookie.setCookie(Cookie.PROJECT_COLLAPSED_DIRS, collapsedDirs.join(","));
-    }
-    private retrieveCollapsedDirectoriesCookie(): string[] {
-        let collapsedDirs: string[] = [];
-        let collapsedDirsCookie: string = Cookie.getCookie(Cookie.PROJECT_COLLAPSED_DIRS)
-        if (collapsedDirsCookie != null) {
-            collapsedDirs = collapsedDirsCookie.split(",");
-        }
-        collapsedDirs.forEach((dir, index, list) => { //replace the serialized "null" directory with the null value
-            if (dir == "null") list[index] = null;
-        });
-        return collapsedDirs;
-    }
+    
 
-}
-
-class ProjectDirEntry {
-    dir: string;
-    open: boolean;
-    projects: Project[];
-    constructor(dir: string) {
-        this.dir = dir;
-        this.open = true;
-        this.projects = [];
-    }
 }

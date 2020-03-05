@@ -4,10 +4,32 @@
 <div class="modal-body vbox" style="min-height: 100px;">
     <div class="panel panel-default vbox" style="margin-left: 5px;">
         <div class="panel-heading">
-            <label>Projects</label>
+            <label style="flex: 1;">Projects</label>
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-cog"></span>
+                </button>
+                <ul class="dropdown-menu pull-right">
+                    <li class="dropdown-header">Top level elements</li>
+                    <li>
+                        <a (click)="changeVisualizationMode('list')">
+                            Projects
+                            <span *ngIf="visualizationMode == 'list'" class="glyphicon glyphicon-ok pull-right"></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a (click)="changeVisualizationMode('dir')">
+                            Directories
+                            <span *ngIf="visualizationMode == 'dir'" class="glyphicon glyphicon-ok pull-right"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
         </div>
-        <div class="panel-body table-responsive">
-            <table class="table table-condensed table-hoverable table-borderless">
+        <div class="panel-body scrollableContainer">
+            
+            <table *ngIf="visualizationMode == 'list'" class="table table-condensed table-hoverable table-borderless">
                 <thead>
                     <tr>
                         <th class="text-center">Project Name</th>
@@ -35,6 +57,61 @@
                     </tr>
                 </tbody>
             </table>
+
+
+            <ng-container *ngIf="visualizationMode == 'dir'">
+                <!-- 7px applies the same paddings applied to the rows, namely the padding sum of listItem (3px) and groupPanel-body (4px) -->
+                <div class="hbox" style="padding: 7px 7px 0px; flex: none;">
+                    <label class="text-center" style="flex: 3">Project Name</label>
+                    <label class="text-center" style="flex: 1">Model</label>
+                    <label class="text-center" style="flex: 1">Lexicalization</label>
+                    <label class="text-center" style="flex: 1">History</label>
+                    <label class="text-center" style="flex: 1">Validation</label>
+                    <label class="text-center" style="flex: 2">Repo Location</label>
+                </div>
+                <ng-container *ngFor="let pd of projectDirs">
+                    <div class="groupPanel">
+                        <div class="groupPanel-heading">
+                            <div class="groupPanel-heading-content clickable" (click)="toggleDirectory(pd)">
+                                <span [class]="'glyphicon glyphicon-menu-' + (pd.open ? 'down' : 'right')"></span>
+                                <span [class]="'glyphicon glyphicon-folder-' + (pd.open ? 'open' : 'close')" style="margin-left: 4px;"></span>
+                                <label class="clickable" style="margin-left: 4px;">
+                                    <ng-container *ngIf="pd.dir">{{pd.dir}}</ng-container>
+                                    <ng-container *ngIf="!pd.dir">Unclassified</ng-container>
+                                </label>
+                            </div>
+                        </div>
+                    
+                        <div class="groupPanel-body">
+                            <ng-container *ngIf="pd.open">
+                                <div *ngFor="let p of pd.projects" class="listItem project-row" [ngClass]="{ active : selectedProject == p }" (click)="selectProject(p)">
+                                    <div class="text-center" style="flex: 3">
+                                        {{p.getName()}}
+                                    </div>
+                                    <div class="text-center" style="flex: 1">
+                                        {{p.getModelType(true)}}
+                                    </div>
+                                    <div class="text-center" style="flex: 1">
+                                        {{p.getLexicalizationModelType(true)}}
+                                    </div>
+                                    <div class="text-center" style="flex: 1">
+                                        <span *ngIf="p.isHistoryEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="History enabled"></span>
+                                        <span *ngIf="!p.isHistoryEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="History disabled"></span>
+                                    </div>
+                                    <div class="text-center" style="flex: 1">
+                                        <span *ngIf="p.isValidationEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="Validation enabled"></span>
+                                        <span *ngIf="!p.isValidationEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="Validation disabled"></span>
+                                    </div>
+                                    <div class="text-center" style="flex: 2">
+                                        {{p.getRepositoryLocation().location}}
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+
         </div>
     </div>
 </div>

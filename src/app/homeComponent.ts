@@ -1,12 +1,10 @@
 import { Component } from "@angular/core";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { Router } from "@angular/router";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { User } from "./models/User";
-import { ProjectListModal } from './project/projectListModal';
 import { AdministrationServices } from "./services/administrationServices";
 import { VBContext } from "./utils/VBContext";
+import { SharedModalServices } from "./widget/modal/sharedModal/sharedModalServices";
 
 @Component({
     selector: "home-component",
@@ -20,7 +18,7 @@ export class HomeComponent {
 
     private privacyStatementAvailable: boolean = false;
 
-    constructor(private router: Router, private modal: Modal, private administrationService: AdministrationServices, private sanitizer: DomSanitizer) { }
+    constructor(private router: Router, private sharedModals: SharedModalServices, private administrationService: AdministrationServices, private sanitizer: DomSanitizer) { }
 
     ngOnInit() {
         this.privacyStatementAvailable = VBContext.getSystemSettings().privacyStatementAvailable;
@@ -54,9 +52,7 @@ export class HomeComponent {
         if (user.isAdmin()) {
             this.router.navigate(['/Projects']); //redirect to project
         } else {
-            const builder = new BSModalContextBuilder<any>();
-            let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-            this.modal.open(ProjectListModal, overlayConfig);
+            this.sharedModals.changeProject();
         }
     }
 

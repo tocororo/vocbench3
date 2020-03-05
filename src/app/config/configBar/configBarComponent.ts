@@ -4,7 +4,6 @@ import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { VersionInfo } from "../../models/History";
 import { Project } from "../../models/Project";
-import { ProjectListModal } from '../../project/projectListModal';
 import { AdministrationServices } from "../../services/administrationServices";
 import { InputOutputServices } from "../../services/inputOutputServices";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
@@ -17,6 +16,7 @@ import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
     selector: "config-bar",
@@ -39,7 +39,7 @@ export class ConfigBarComponent {
 
     constructor(private inOutService: InputOutputServices, private projectService: ProjectServices, private prefService: PreferencesSettingsServices,
         private administrationService: AdministrationServices, private shaclService: ShaclServices, private vbProp: VBProperties, 
-        private basicModals: BasicModalServices, private router: Router, private modal: Modal) {
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private router: Router, private modal: Modal) {
     }
 
     /**
@@ -72,9 +72,7 @@ export class ConfigBarComponent {
      * Opens a modal that allows to change project among the open
      */
     private changeProject() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(ProjectListModal, overlayConfig);
+        this.sharedModals.changeProject();
     }
 
     /* ===============================
