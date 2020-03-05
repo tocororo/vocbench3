@@ -7,6 +7,7 @@ import { AbstractResourceViewPanel } from "./abstractResourceViewPanel";
 @Component({
     selector: "resource-view-tabbed",
     templateUrl: "./resourceViewTabbedComponent.html",
+    host: { class: "vbox" }
 })
 export class ResourceViewTabbedComponent extends AbstractResourceViewPanel {
 

@@ -171,11 +171,6 @@ config-bar {
 .project-row:first-of-type { border-top: 1px solid #ddd; }
 .project-row { border-bottom: 1px solid #ddd; }
 
-resource-view-splitted, resource-view-tabbed {
-    display: flex;
-    flex: 1;
-}
-
 resource-list, class-individual-tree, resource-view, scheme-selection, data-range-editor, import-tree {
     display: flex;
     flex: 1;
