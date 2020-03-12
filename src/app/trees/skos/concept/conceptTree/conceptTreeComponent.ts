@@ -108,7 +108,9 @@ export class ConceptTreeComponent extends AbstractTree {
     }
 
     openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.schemes, null, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
+        let conceptTreePreference: ConceptTreePreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.schemes, conceptTreePreference.multischemeMode, null, 
+            VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             path => {
                 if (path.length == 0) {
                     this.onTreeNodeNotFound(node);

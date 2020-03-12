@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTNode, ARTResource, ARTURIResource } from "../models/ARTResources";
 import { Settings } from '../models/Plugins';
-import { SearchMode, StatusFilter } from "../models/Properties";
+import { SearchMode, StatusFilter, MultischemeMode } from "../models/Properties";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 
@@ -26,7 +26,7 @@ export class SearchServices {
      * @return an array of resources
      */
     searchResource(searchString: string, rolesArray: string[], useLocalName: boolean, useURI: boolean, useNotes: boolean,
-        searchMode: SearchMode, langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[], options?: VBRequestOptions): Observable<ARTURIResource[]> {
+        searchMode: SearchMode, langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {
             searchString: searchString,
             rolesArray: rolesArray,
@@ -34,16 +34,11 @@ export class SearchServices {
             useURI: useURI,
             useNotes: useNotes,
             searchMode: searchMode,
+            langs: langs,
+            includeLocales: includeLocales,
+            schemes: schemes,
+            schemeFilter: schemeFilter,
         };
-        if (langs != null) {
-            params.langs = langs;
-        }
-        if (includeLocales != null) {
-            params.includeLocales = includeLocales;
-        }
-        if (schemes != null) {
-            params.schemes = schemes;
-        }
         return this.httpMgr.doGet(this.serviceName, "searchResource", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -131,17 +126,14 @@ export class SearchServices {
      * @param root the root of the class tree (optional and used only for cls)
      * @return an array of resources
      */
-    getPathFromRoot(resource: ARTURIResource, role: string, schemes?: ARTURIResource[], root?: ARTURIResource, options?: VBRequestOptions) {
+    getPathFromRoot(resource: ARTURIResource, role: string, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, root?: ARTURIResource, options?: VBRequestOptions) {
         var params: any = {
             role: role,
-            resourceURI: resource
+            resourceURI: resource,
+            schemesIRI: schemes,
+            schemeFilter: schemeFilter,
+            root: root,
         };
-        if (schemes != null) {
-            params.schemesIRI = schemes;
-        }
-        if (root != null) {
-            params.root = root;
-        }
         return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, options).map(
             stResp => {
                 var shortestPath: ARTURIResource[] = [];
@@ -167,26 +159,19 @@ export class SearchServices {
      * @param schemes 
      */
     searchStringList(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: SearchMode, 
-            langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[], cls?: ARTURIResource,
+            langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, cls?: ARTURIResource,
             options?: VBRequestOptions): Observable<string[]> {
         var params: any = {
             searchString: searchString,
             rolesArray: rolesArray,
             useLocalName: useLocalName,
             searchMode: searchMode,
+            langs: langs,
+            includeLocales: includeLocales,
+            schemes: schemes,
+            schemeFilter: schemeFilter,
+            cls: cls
         };
-        if (langs != null) {
-            params.langs = langs;
-        }
-        if (includeLocales != null) {
-            params.includeLocales = includeLocales;
-        }
-        if (schemes != null) {
-            params.schemes = schemes;
-        }
-        if (cls != null) {
-            params.cls = cls;
-        }
         return this.httpMgr.doGet(this.serviceName, "searchStringList", params, options);
     }
 

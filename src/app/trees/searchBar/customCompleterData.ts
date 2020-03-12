@@ -4,7 +4,7 @@ import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources"
 import { SearchSettings } from "../../models/Properties";
 import { SearchServices } from "../../services/searchServices";
 import { VBRequestOptions } from '../../utils/HttpManager';
-import { ProjectContext } from '../../utils/VBContext';
+import { ProjectContext, VBContext } from '../../utils/VBContext';
 
 export class CustomCompleterData extends Subject<CompleterItem[]> implements CompleterData {
 
@@ -31,8 +31,9 @@ export class CustomCompleterData extends Subject<CompleterItem[]> implements Com
         if (this.role == RDFResourceRolesEnum.individual && !this.searchSettings.extendToAllIndividuals) {
             clsParam = this.cls;
         }
+        let concTreePref = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
         this.searchService.searchStringList(term, [this.role], this.searchSettings.useLocalName, this.searchSettings.stringMatchMode, 
-            langsParam, includeLocales, schemesParam, clsParam, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
+            langsParam, includeLocales, schemesParam, concTreePref.multischemeMode, clsParam, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
             strings => {
                 let results: CompleterItem[] = [];
                 strings.slice(0, 100).forEach(s => {

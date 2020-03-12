@@ -5,7 +5,7 @@ import { Observable } from "rxjs/Observable";
 import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../../models/ARTResources";
 import { Project } from "../../../../models/Project";
-import { ConceptTreeVisualizationMode, SearchSettings } from "../../../../models/Properties";
+import { ConceptTreeVisualizationMode, SearchSettings, ProjectPreferences } from "../../../../models/Properties";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
@@ -170,7 +170,8 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     doSearch(searchedText: string) {
         this.lastSearch = searchedText;
 
-        let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
+        let projPref: ProjectPreferences = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences();
+        let searchSettings: SearchSettings = projPref.searchSettings;
         let searchLangs: string[];
         let includeLocales: boolean;
         if (searchSettings.restrictLang) {
@@ -189,7 +190,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
         this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.concept], searchSettings.useLocalName, searchSettings.useURI,
             searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, searchingScheme, 
-            VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
+            projPref.conceptTreePreferences.multischemeMode, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);

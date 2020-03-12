@@ -125,7 +125,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
         let searchFn: Observable<ARTURIResource[]>;
         if (this.extendSearchToAllIndividuals()) {
             searchFn = this.searchService.searchResource(searchedText, [RDFResourceRolesEnum.individual], searchSettings.useLocalName, 
-                searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, null, 
+                searchSettings.useURI, searchSettings.useNotes, searchSettings.stringMatchMode, searchLangs, includeLocales, null, null,
                 VBRequestOptions.getRequestOptions(this.projectCtx));
         } else { //search only in current class
             searchFn = this.searchService.searchInstancesOfClass(this.cls, searchedText, searchSettings.useLocalName, 
