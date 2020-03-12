@@ -27,11 +27,11 @@
                             </label>
                         </div>
 
-                        <resource-picker *ngSwitchCase="'IRI'" [resource]="p.value" [roles]="getIRIRoleConstraints(p)" [editable]="true"
+                        <resource-picker *ngSwitchCase="'IRI'" [resource]="p.value" [config]="{ roles: getIRIRoleConstraints(p) }" [editable]="true"
                             (resourceChanged)="updateValue(p, $event)" [disabled]="disabled">
                         </resource-picker>
 
-                        <resource-picker *ngSwitchCase="'Resource'" [resource]="p.value" [roles]="getIRIRoleConstraints(p)" [editable]="true"
+                        <resource-picker *ngSwitchCase="'Resource'" [resource]="p.value" [config]="{ roles: getIRIRoleConstraints(p) }" [editable]="true"
                             (resourceChanged)="updateValue(p, $event)" [disabled]="disabled">
                         </resource-picker>
 

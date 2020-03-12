@@ -1,4 +1,4 @@
-import { ARTURIResource } from "./ARTResources";
+import { ARTNode, ARTURIResource } from "./ARTResources";
 
 export class FormCollectionMapping {
 
@@ -153,10 +153,16 @@ export class FormField {
     private converter: string;
     private datatype: string; //provided optionally only if type is literal
     private lang: string; //provided optionally only if type is literal and datatype is null or xsd:string
-    private dependency: boolean = false; //tells if the FormEntry is a dependency of another FormEntry 
-    //(it determines also if the FormEntry should be shown in the form) 
-    private converterArg: FormField; //provided optionally only if the entry has coda:langString converter that requires a language
-    //as argument that is in turn provided by means a userPrompt
+    private dependency: boolean = false; //tells if the FormEntry is a dependency of another FormEntry (it determines also if the FormEntry should be shown in the form) 
+    //provided optionally only if the entry has coda:langString converter (that requires a language) and argument is in turn a userPrompt
+    private converterArgPh: FormField;
+    //provided optionally only if the entry has coda:langString converter (that requires a language) and argument is a language tag
+    private converterArgLang: string;
+
+    converterArg: LangStringConverterArg;// arg of coda:langString
+        
+
+    private annotations: FormFieldAnnotation[];
 
 
     constructor(placeholderId: string, type: FormFieldType, mandatory: boolean, userPrompt: string, converter: string) {
@@ -165,6 +171,7 @@ export class FormField {
         this.mandatory = mandatory;
         this.userPrompt = userPrompt;
         this.converter = converter;
+        this.annotations = [];
     }
 
     public isMandatory(): boolean {
@@ -211,14 +218,52 @@ export class FormField {
         return this.dependency;
     }
 
-    public setConverterArg(arg: FormField) {
+    public setConverterArg(arg: LangStringConverterArg) {
         this.converterArg = arg;
     }
-
-    public getConverterArg(): FormField {
+    public getConverterArg(): LangStringConverterArg {
         return this.converterArg;
     }
 
+    public setAnnotations(annotations: FormFieldAnnotation[]) {
+        this.annotations = annotations;
+    }
+
+    public addAnnotation(annotation: FormFieldAnnotation) {
+        this.annotations.push(annotation);
+    }
+
+    public getAnnotations(): FormFieldAnnotation[] {
+        return this.annotations;
+    }
+
+    public getAnnotation(name: string): FormFieldAnnotation {
+        return this.annotations.find(a => a.name == name);
+    }
+
+}
+
+/**
+ * argument of coda:langString converter: could be a placeholder reference of a language tag.
+ * Currently this class is used, as said, only for coda:langString, in the future, if needed, could be extended
+ */
+export class LangStringConverterArg {
+    ph?: FormField;
+    lang?: string;
+}
+
+export enum AnnotationName {
+    ObjectOneOf = "ObjectOneOf",
+    DataOneOf = "DataOneOf",
+    Role = "Role",
+    Range = "Range",
+    RangeList = "RangeList",
+    Foreign = "Foreign",
+}
+
+export class FormFieldAnnotation {
+    name: AnnotationName;
+    values: (ARTNode|string)[];
 }
 
 export class CustomFormValue {

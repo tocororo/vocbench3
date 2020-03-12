@@ -9,11 +9,11 @@
         <tr *ngFor="let v of value; let index = index; let last = last; trackBy: trackByIndex;">
             <td style="padding: 2px 0px;">
                 <div [ngSwitch]="types[0].name">
-                    <resource-picker *ngSwitchCase="'IRI'" [resource]="value[index]" [roles]="getIRIRoleConstraints()" [editable]="true"
+                    <resource-picker *ngSwitchCase="'IRI'" [resource]="value[index]" [config]="{ roles: getIRIRoleConstraints() }" [editable]="true"
                         (resourceChanged)="updateValue(index, $event)" [disabled]="disabled">
                     </resource-picker>
 
-                    <resource-picker *ngSwitchCase="'Resource'" [resource]="value[index]" [roles]="getIRIRoleConstraints(p)" [editable]="true"
+                    <resource-picker *ngSwitchCase="'Resource'" [resource]="value[index]" [config]="{ roles: getIRIRoleConstraints() }" [editable]="true"
                         (resourceChanged)="updateValue(index, $event)" [disabled]="disabled">
                     </resource-picker>
 

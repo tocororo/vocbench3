@@ -21,7 +21,7 @@
                 <td>
                     <div class="hbox" style="align-items: center; margin-bottom: 4px;">
                         <input #toFocus type="text" class="form-control input-sm" style="flex: 1; margin-right: 4px;" name="label" [(ngModel)]="label">
-                        <lang-picker [(ngModel)]="lang" [constrain]="context.langConstraints.constrain" [locale]="context.langConstraints.locale">
+                        <lang-picker [(ngModel)]="lang" [config]="{ constrain: context.langConstraints.constrain, locale: context.langConstraints.locale }">
                         </lang-picker>
                     </div>
                 </td>

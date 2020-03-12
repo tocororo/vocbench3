@@ -1,10 +1,11 @@
-import { Component, ViewChild } from "@angular/core";
-import { DialogRef, Modal, ModalComponent } from "ngx-modialog";
+import { Component, ElementRef, ViewChild } from "@angular/core";
+import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from "../../models/ARTResources";
 import { CustomForm, CustomFormType, EditorMode } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { ResourcesServices } from "../../services/resourcesServices";
+import { UIUtils } from "../../utils/UIUtils";
 import { PearlEditorComponent } from "../../widget/codemirror/pearlEditor/pearlEditorComponent";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
@@ -25,6 +26,10 @@ export class CustomFormEditorModalData extends BSModalContext {
 @Component({
     selector: "custom-form-editor-modal",
     templateUrl: "./customFormEditorModal.html",
+    styles: [`
+        .entryRow { margin-bottom: 4px; }
+        .entryLabel { width: 130px; margin-right: 4px; white-space: nowrap; }
+    `]
 })
 export class CustomFormEditorModal implements ModalComponent<CustomFormEditorModalData> {
     context: CustomFormEditorModalData;
@@ -49,9 +54,9 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
     private submitted: boolean = false;
     private errorMsg: string;
 
-    constructor(public dialog: DialogRef<CustomFormEditorModalData>, private modal: Modal, private resourceService: ResourcesServices,
+    constructor(public dialog: DialogRef<CustomFormEditorModalData>, private resourceService: ResourcesServices,
         private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
-        private cfService: CustomFormsServices) {
+        private cfService: CustomFormsServices, private elementRef: ElementRef) {
         this.context = dialog.context;
     }
 
@@ -79,6 +84,10 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
         } else {
             this.mode = EditorMode.create;
         }
+    }
+
+    ngAfterViewInit() {
+        UIUtils.setFullSizeModal(this.elementRef);
     }
 
     private initShowPropChain() {

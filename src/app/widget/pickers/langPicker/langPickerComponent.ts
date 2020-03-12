@@ -14,11 +14,11 @@ import { VBProperties } from "../../../utils/VBProperties";
 })
 export class LangPickerComponent implements ControlValueAccessor {
 
-    @Input() constrain: boolean = false; //if true, constrain the selection of language only to the input this.lang
-    @Input() locale: boolean = false; //if true, allow the selection of also the locale of this.lang (compatibly with the user assigned langugages)
     @Input() size: string = "sm";
     @Input() disabled: boolean = false;
     @Input() readonly: boolean = false;
+
+    @Input() config: LangPickerConfig;
 
     private selectClass: string = "form-control input-";
     private languageList: Language[] = [];
@@ -34,6 +34,15 @@ export class LangPickerComponent implements ControlValueAccessor {
             this.selectClass += "sm";
         }
 
+        let defaultConfig = new LangPickerConfig();
+        if (this.config == null) {
+            this.config = defaultConfig;
+        } else { //merge provided config (it could be incomplete) with the default values
+            this.config.constrain = this.config.constrain != null ? this.config.constrain : defaultConfig.constrain;
+            this.config.languages = this.config.languages != null ? this.config.languages : defaultConfig.languages;
+            this.config.locale = this.config.locale != null ? this.config.locale : defaultConfig.locale;
+        }
+
         this.showFlag = this.properties.getShowFlags();
 
         //Init languages list considering only languages assigned to user and allowed in project
@@ -41,6 +50,10 @@ export class LangPickerComponent implements ControlValueAccessor {
         var projectLangs: Language[] = VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting;
         var userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
         this.languageList = projectLangs.filter((l: Language) => { return userAssignedLangs.indexOf(l.tag) != -1 });
+        //if configuration provide language limitation, filter also according them
+        if (this.config.languages != null) {
+            this.languageList = projectLangs.filter((l: Language) => { return this.config.languages.indexOf(l.tag) != -1 });
+        }
     }
 
     ngAfterViewInit() {
@@ -73,9 +86,9 @@ export class LangPickerComponent implements ControlValueAccessor {
                     }
                 } else {
                     //lang provided => check constraints
-                    if (this.constrain) {
+                    if (this.config.constrain) {
                         this.languageList = this.languageList.filter((l: Language) => {
-                            return (l.tag == this.language || (this.locale && l.tag.startsWith(this.language + "-")));
+                            return (l.tag == this.language || (this.config.locale && l.tag.startsWith(this.language + "-")));
                         });
                     }
                 }
@@ -130,4 +143,10 @@ export class LangPickerComponent implements ControlValueAccessor {
 
     //--------------------------------------------------
 
+}
+
+export class LangPickerConfig {
+    constrain: boolean = false; //if true, the selection of language is constrained only to the bound language (language set through ngModel)
+    locale: boolean = false; //(used only when constrain is true) if true, the language selection allows also the locales of the bound language (compatibly with the user assigned langugages)
+    languages: string[]; //if provided, the available languages are limited to these language tags (compatibly with the user assigned langugages)
 }

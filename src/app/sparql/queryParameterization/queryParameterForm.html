@@ -48,7 +48,7 @@
                             </ng-template>
         
                             <ng-template [ngIf]="b.bindingType == 'constraint' && b.resourceRole">
-                                <resource-picker [resource]="b.value" [roles]="[b.resourceRole]" [editable]="true" (resourceChanged)="onResourceChanged(b, $event)">
+                                <resource-picker [resource]="b.value" [config]="{ roles: [b.resourceRole] }" [editable]="true" (resourceChanged)="onResourceChanged(b, $event)">
                                 </resource-picker>
                             </ng-template>
                         </td>

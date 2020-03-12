@@ -141,7 +141,7 @@
                 <div class="subPanel-footer">
                     <div class="hbox" style="align-items: center">
                         <label style="margin-right: 4px;">Default predicate:</label>
-                        <resource-picker [resource]="defaultPredicate" roles="property" size="xs"
+                        <resource-picker [resource]="defaultPredicate" size="xs" [config]="{ roles: ['property']}"
                             (resourceChanged)="updateDefaultPredicate($event)" style="flex: 1">
                         </resource-picker>
                         <span class="glyphicon glyphicon-info-sign" style="margin-left: 4px" 

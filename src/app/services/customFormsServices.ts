@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
-import { BrokenCFStructure, CustomForm, CustomFormLevel, CustomFormType, FormCollection, FormCollectionMapping, FormField, FormFieldType } from "../models/CustomForms";
+import { BrokenCFStructure, CustomForm, CustomFormLevel, CustomFormType, FormCollection, FormCollectionMapping, FormField, FormFieldType, FormFieldAnnotation, AnnotationName } from "../models/CustomForms";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from '../utils/ResourceUtils';
@@ -55,7 +55,7 @@ export class CustomFormsServices {
      * @param creId id of a CustomForm
      * @return an array of FormField
      */
-    getCustomFormRepresentation(customFormId: string) {
+    getCustomFormRepresentation(customFormId: string): Observable<FormField[]> {
         var params: any = {
             id: customFormId
         };
@@ -71,52 +71,80 @@ export class CustomFormsServices {
                 (in this case the server throws a PRParserException and it is handled in HttpManager),
                 or if the form doesn't contain any formEntry (in this case <form> element doesn't contain
                 <formEntry> elements but has an "exception" attribute) */
-                var form: Array<FormField> = [];
+                let form: Array<FormField> = [];
 
-                var pendingEntryDependencies = <any>[];
+                let pendingEntryDependencies = <any>[];
                 //an array of objects {phIdEntry: string, userPromptArg: string} that collects the userPrompt
                 //of the formEntries that are used just as argument/dependency of another formEntry and later
                 //will be set as arguments to other formEntries
 
-                for (var i = 0; i < stResp.length; i++) {
-                    var placeholderId = stResp[i].placeholderId;
-                    var type: FormFieldType = stResp[i].type == "literal" ? "literal" : "uri";
-                    var mandatory = stResp[i].mandatory;
-                    var userPrompt = stResp[i].userPrompt;
-                    var converter = stResp[i].converter.uri;
+                for (let i = 0; i < stResp.length; i++) {
+                    let placeholderId = stResp[i].placeholderId;
+                    let type: FormFieldType = stResp[i].type == "literal" ? "literal" : "uri";
+                    let mandatory = stResp[i].mandatory;
+                    let userPrompt = stResp[i].userPrompt;
+                    let converter = stResp[i].converter.uri;
+                    let entry = new FormField(placeholderId, type, mandatory, userPrompt, converter);
+                    
                     //coda:langString could have an argument to specify the language through another entry 
                     if (converter == "http://art.uniroma2.it/coda/contracts/langString") {
-                        var argUserPrompt = stResp[i].converter.arg.userPrompt;
-                        pendingEntryDependencies.push({ phIdEntry: placeholderId, userPromptArg: argUserPrompt });
+                        let argUserPrompt = stResp[i].converter.arg.userPrompt;
+                        let argLang = stResp[i].converter.arg.lang;
+                        if (argUserPrompt != null) {
+                            pendingEntryDependencies.push({ phIdEntry: placeholderId, userPromptArg: argUserPrompt });
+                        } else if (argLang != null) {
+                            entry.setConverterArg({ lang: argLang });
+                        }
                     }
-                    var entry = new FormField(placeholderId, type, mandatory, userPrompt, converter);
+                    
                     if (type == "literal") {
-                        var datatype = stResp[i].datatype;
+                        let datatype = stResp[i].datatype;
                         if (datatype != undefined) {
                             entry.setDatatype(datatype);
                         }
-                        var lang = stResp[i].lang;
+                        let lang = stResp[i].lang;
                         if (lang != undefined) {
                             entry.setLang(lang);
                         }
                     }
+                    stResp[i].annotations.forEach((ann: {name: AnnotationName, values: string[]}) => {
+                        let annName: AnnotationName = ann.name;
+                        let annValues: (ARTNode|string)[] = [];
+                        if (annName == AnnotationName.DataOneOf) {
+                            ann.values.forEach((av: string) => {
+                                annValues.push(ResourceUtils.parseLiteral(av));
+                            })
+                        } else if (annName == AnnotationName.ObjectOneOf || annName == AnnotationName.Range || annName == AnnotationName.RangeList) {
+                            ann.values.forEach((av: string) => {
+                                annValues.push(ResourceUtils.parseURI(av));
+                            })
+                        } else if (annName == AnnotationName.Foreign || annName == AnnotationName.Role) {
+                            annValues = ann.values;
+                        }
+                        ann.values
+                        let ffa: FormFieldAnnotation = {
+                            name: annName,
+                            values: annValues
+                        }
+                        entry.addAnnotation(ffa);
+                    });
                     form.push(entry);
                 }
 
                 //iterate over pendingEntryDependencies and set them as argument of other formEntries
-                for (var i = 0; i < pendingEntryDependencies.length; i++) {
-                    var argEntry: FormField; //entry that is used as argument of another
+                for (let i = 0; i < pendingEntryDependencies.length; i++) {
+                    let argEntry: FormField; //entry that is used as argument of another
                     //get the FormField to set as argument
-                    for (var j = 0; j < form.length; j++) {
+                    for (let j = 0; j < form.length; j++) {
                         if (form[j].getUserPrompt() == pendingEntryDependencies[i].userPromptArg) {
                             argEntry = form[j];
                             argEntry.setDependency(true); //mark the entry as a dependency
                         }
                     }
                     //look for the entry to which inject the argEntry as argument
-                    for (var j = 0; j < form.length; j++) {
+                    for (let j = 0; j < form.length; j++) {
                         if (pendingEntryDependencies[i].phIdEntry == form[j].getPlaceholderId()) {
-                            form[j].setConverterArg(argEntry);
+                            form[j].setConverterArg({ ph: argEntry });
                         }
                     }
                 }

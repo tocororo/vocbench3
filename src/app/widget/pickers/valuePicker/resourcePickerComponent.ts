@@ -16,11 +16,12 @@ import { BrowsingModalServices } from '../../modal/browsingModal/browsingModalSe
 export class ResourcePickerComponent {
     
     @Input() resource: ARTURIResource;
-    @Input() roles: RDFResourceRolesEnum[]; //list of pickable resource roles
+    
     @Input() disabled: boolean = false;
     @Input() editable: boolean = false; //tells if the URI can be manually edited
-    @Input() allowRemote: boolean = false;
     @Input() size: string = "sm"
+
+    @Input() config: ResourcePickerConfig;
     @Output() resourceChanged = new EventEmitter<ARTURIResource>();
 
     private resourceIRI: string;
@@ -33,6 +34,18 @@ export class ResourcePickerComponent {
         if (this.size != "xs" && this.size != "sm" && this.size != "" && this.size != "lg") {
             this.size = "sm";
         }
+
+        let defaultConfig = new ResourcePickerConfig();
+        if (this.config == null) {
+            this.config = defaultConfig;
+        } else { //merge provided config (it could be incomplete) with the default values
+            this.config.allowLocal = this.config.allowLocal != null ? this.config.allowLocal : defaultConfig.allowLocal;
+            this.config.allowRemote = this.config.allowRemote != null ? this.config.allowRemote : defaultConfig.allowRemote;
+            this.config.projects = this.config.projects != null ? this.config.projects : defaultConfig.projects;
+            this.config.roles = this.config.roles != null ? this.config.roles : defaultConfig.roles;
+            this.config.classes = this.config.classes != null ? this.config.classes : defaultConfig.classes;
+        }
+
         this.init();
     }
 
@@ -81,6 +94,10 @@ export class ResourcePickerComponent {
         //project selection
         this.projectService.listProjects(VBContext.getWorkingProject(), true, true).subscribe(
             projects => {
+                if (this.config.projects != null) { //if project limits are provided, filter the projects list
+                    projects = projects.filter(p => this.config.projects.indexOf(p.getName()) != -1)
+                }
+                
                 if (projects.length == 0) {
                     this.basicModals.alert("Pick resource", "You have no granted access to any existing open project", "warning");
                     return;
@@ -156,7 +173,7 @@ export class ResourcePickerComponent {
                 () => { }
             );
         } else if (role == RDFResourceRolesEnum.individual) {
-            this.browsingModals.browseClassIndividualTree("Select an Instance", projectCtx).then(
+            this.browsingModals.browseClassIndividualTree("Select an Instance", this.config.classes, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
@@ -221,8 +238,8 @@ export class ResourcePickerComponent {
      */
     private isRolePickable(role: RDFResourceRolesEnum, project: Project) {
         let modelType: string = project.getModelType();
-        if (this.roles != null && this.roles.length != 0) {
-            return this.roles.indexOf(role) != -1;
+        if (this.config.roles != null && this.config.roles.length != 0) {
+            return this.config.roles.indexOf(role) != -1;
         } else { // if roles array is not provided, allow selection of all roles compliant with the model type
             if (modelType == OntoLex.uri) { //ontolex project allows selection of all type of resource
                 return true;
@@ -236,4 +253,12 @@ export class ResourcePickerComponent {
         }
     }
 
+}
+
+export class ResourcePickerConfig {
+    allowLocal?: boolean = true; //if true, the picker allows the selection of resources from the current project
+    allowRemote?: boolean = false; //if true, the picker allows the selection of resources from an external project
+    projects?: string[]; //if provided, the resource selection from remote project is limited to the given list (only when allowRemote is true)
+    roles?: RDFResourceRolesEnum[]; //if provided, the resource selection is restricted to the given roles
+    classes?: ARTURIResource[]; //if provided (works only if there are no roles restrictions or if it allows to select individual)
 }

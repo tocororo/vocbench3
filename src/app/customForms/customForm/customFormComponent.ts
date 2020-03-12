@@ -1,11 +1,10 @@
-import { Component, Input, SimpleChanges, forwardRef } from "@angular/core";
+import { Component, forwardRef, Input, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { FormField } from "../../models/CustomForms";
-import { RDFResourceRolesEnum, ARTURIResource } from "../../models/ARTResources";
-import { SKOS, OntoLex } from "../../models/Vocabulary";
-import { VBContext } from "../../utils/VBContext";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { ARTNode, ARTLiteral } from "../../models/ARTResources";
+import { AnnotationName, FormField, FormFieldAnnotation } from "../../models/CustomForms";
+import { ConverterContractDescription } from "../../models/Coda";
 import { CustomFormsServices } from "../../services/customFormsServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 /**
  * Modal that allows to choose among a set of rdfResource
@@ -16,7 +15,7 @@ import { CustomFormsServices } from "../../services/customFormsServices";
     providers: [{
         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => CustomFormComponent), multi: true,
     }],
-    styles: [`.bottomPadding { padding-bottom: 30px; }`]
+    styles: [`.bottomPadding { padding-bottom: 40px; }`]
     //this, with the ngClass in the view, is necessary to prevent UI problem with the (eventual) btn dropdown in the resource-picker
 })
 export class CustomFormComponent implements ControlValueAccessor {
@@ -37,6 +36,42 @@ export class CustomFormComponent implements ControlValueAccessor {
     private initFormFields() {
         this.cfService.getCustomFormRepresentation(this.cfId).subscribe(
             form => {
+                /*
+                It is supposed that each form field has just one annotation. 
+                Only "Foreign" can be used in combo with other annotations (semantically valid only with Range, RangeList and Role), 
+                so, here the entry annotations are sorted in order to set at last position the Foreign annotation.
+                In this way, in the view I always take into account just the first annotation (if any) of each entry and then,
+                only when the first one is among Range, RangeList or Role, I look for the Foreign annotation in order to use it in combo
+                */
+                form.forEach(f => {
+                    f.getAnnotations().sort((a1: FormFieldAnnotation, a2: FormFieldAnnotation) => {
+                        if (a1.name == AnnotationName.Foreign) return 1;
+                        else return -1;
+                    })
+                })
+
+                /*
+                Hanldle a special case: annotation DataOneOf can be use to limit the values of a node to a given set.
+                In case this annotation is used for a node that is used as coda:langString converter argument, it means that 
+                the selection of the language is restricted to the values listed in the DataOneOf annotation.
+                */
+                form.forEach(f => {
+                    //look for field generated with the coda:langString converter and with an argument that is a placeholder
+                    if (f.getConverter() == ConverterContractDescription.NAMESPACE + "langString" && f.getConverterArg() != null) {
+                        let langPhFormField: FormField = f.getConverterArg().ph;
+                        if (langPhFormField != null) {
+                            /* if the argument is a placeholder annotated with DataOneOf, set an additional 'oneOfLang' attribute in the
+                            form field above in order to limit the language selection according the values assigned in the annotation.
+                            This 'oneOfLang' attribute will be used in the template for the configuration of lang-picker
+                            */
+                            let dataOneOfAnn: FormFieldAnnotation = langPhFormField.getAnnotation(AnnotationName.DataOneOf);
+                            if (dataOneOfAnn) {
+                                f['oneOfLang'] = dataOneOfAnn.values.map(v => (<ARTLiteral>v).getValue());
+                            }
+                        }
+                    }
+                })
+
                 this.formFields = form
                 /*initialize formEntries in order to adapt it to the view set checked at true to
                 all formEntries. (It wouldn't be necessary for all the entries but just for those optional*/
@@ -55,11 +90,11 @@ export class CustomFormComponent implements ControlValueAccessor {
      * Listener to change of lang-picker used to set the language argument of a formField that
      * has coda:langString as converter
      */
-    private onConverterLangChange(newLang: string, formFieldConvArgument: FormField) {
+    private onConverterLangChange(newLang: string, formFieldConvArgumentPh: FormField) {
         /* setTimeout to trigger a new round of change detection avoid an exception due to changes in a lifecycle hook
         (see https://github.com/angular/angular/issues/6005#issuecomment-165911194) */
         window.setTimeout(() => {
-            formFieldConvArgument['value'] = newLang
+            formFieldConvArgumentPh['value'] = newLang
             this.propagateChange(this.formFields);
         });
     }
@@ -77,7 +112,7 @@ export class CustomFormComponent implements ControlValueAccessor {
         }
     }
 
-    private updateIRIField(res: ARTURIResource, formField: FormField) {
+    private updateNodeField(res: ARTNode, formField: FormField) {
         formField['value'] = res.getNominalValue();
         this.propagateChange(this.formFields);
     }

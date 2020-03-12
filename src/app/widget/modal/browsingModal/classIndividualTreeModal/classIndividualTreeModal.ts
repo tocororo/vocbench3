@@ -6,7 +6,7 @@ import { UIUtils } from "../../../../utils/UIUtils";
 import { ProjectContext } from "../../../../utils/VBContext";
 
 export class ClassIndividualTreeModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title', public projectCtx: ProjectContext) {
+    constructor(public title: string = 'Modal Title', public classes: ARTURIResource[], public projectCtx: ProjectContext) {
         super();
     }
 }

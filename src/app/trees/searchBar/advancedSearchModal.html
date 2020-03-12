@@ -182,7 +182,7 @@
                         <div class="panel-body">
                             <div class="hbox" style="align-items: center; margin-bottom: 4px;">
                                 <label style="margin-right: 4px;">Predicate:</label>
-                                <resource-picker style="flex: 1;" [resource]="group.first" [roles]="['property']" [editable]="true"
+                                <resource-picker style="flex: 1;" [resource]="group.first" [config]="{ roles: ['property'] }" [editable]="true"
                                     (resourceChanged)="updatePropIngoing(group, $event)">
                                 </resource-picker>
                             </div>
@@ -238,7 +238,7 @@
                         <div class="panel-body">
                             <div class="hbox" style="align-items: center; margin-bottom: 4px;">
                                 <label style="margin-right: 4px;">Predicate:</label>
-                                <resource-picker style="flex: 1;" [resource]="group.first" [roles]="['property']" [editable]="true" 
+                                <resource-picker style="flex: 1;" [resource]="group.first" [config]="{ roles: ['property'] }" [editable]="true" 
                                     (resourceChanged)="updatePropOutgoingValue(group, $event)">
                                 </resource-picker>
                             </div>
@@ -283,7 +283,7 @@
                         <div class="panel-body">
                             <div class="hbox" style="align-items: center; margin-bottom: 4px;">
                                 <label style="margin-right: 4px;">Predicate:</label>
-                                <resource-picker style="flex: 1;" [resource]="group.predicate" [roles]="['property']" [editable]="true" 
+                                <resource-picker style="flex: 1;" [resource]="group.predicate" [config]="{ roles: ['property'] }" [editable]="true" 
                                     (resourceChanged)="updatePropOutgoingFreeText(group, $event)">
                                 </resource-picker>
                             </div>

@@ -1,129 +1,122 @@
 <div class="modal-header">
     <h3 class="modal-title">Create Custom Form</h3>
 </div>
-<div class="modal-body vbox scrollableContainer">
+<div class="modal-body vbox">
     
-    <table class="table table-condensed table-borderless" style="height: 100%">
-        <colgroup>
-            <col style="width: 1%;">
-            <col>
-            <col style="width: 1%;">
-        </colgroup>
-        <tbody>
-            <tr style="height: 1%; white-space: nowrap">
-                <td><label>ID:</label></td>
-                <td>
-                    <div class="input-group input-group-xs">
-                        <ng-template [ngIf]="namespaceLocked">
-                            <span class="input-group-addon" style="padding-right: 5px;">
-                                {{cfPrefix}}
-                            </span>
-                            <input type="text" class="form-control" [(ngModel)]="cfShortId" [disabled]="mode == 'edit'" sanitized>
-                        </ng-template>
-                        
-                        <ng-template [ngIf]="!namespaceLocked">
-                            <input type="text" class="form-control" [(ngModel)]="cfId" [disabled]="mode == 'edit'" sanitized>
-                        </ng-template>
-                        
-                        <div class="input-group-btn">
-                            <button class="btn btn-default" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"
-                                title="Lock/Unlock namespace" [ngClass]="{active: namespaceLocked}" [disabled]="mode == 'edit'">
-                                <span class="glyphicon glyphicon-lock" style="font-size: 10px;"></span>
-                            </button>
-                        </div>
-                    </div>
-                </td>
-                <td>*</td>
-            </tr>
-            <tr style="height: 1%; white-space: nowrap">
-                <td>
-                    <label>Name:</label>
-                    <span class="glyphicon glyphicon-info-sign"
-                        title="The name that will be shown to the user to identify this form"></span>
-                </td>
-                <td><input type="text" class="form-control input-xs" [(ngModel)]="name" [disabled]="context.readOnly"></td>
-                <td>*</td>
-            </tr>
-            <tr style="height: 1%; white-space: nowrap">
-                <td>
-                    <label>Description:</label>
-                    <span class="glyphicon glyphicon-info-sign"
-                        title="A natural language description that briefly explain the purpose of this form"></span>
-                </td>
-                <td><input type="text" class="form-control input-xs" [(ngModel)]="description" [disabled]="context.readOnly"></td>
-            </tr>
-            <tr style="height: 1%; white-space: nowrap">
-                <td>
-                    <label>Type:</label>
-                    <span class="glyphicon glyphicon-info-sign"
-                        title="The type determines if the range is a reified resource (Graph) or a literal (Node)"></span>
-                </td>
-                <td>
-                    <select class="form-control input-xs" [(ngModel)]="type" [disabled]="cfId">
-                        <option value="graph">Graph</option>
-                        <option value="node">Node</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label>Ref:</label>
-                    <span class="glyphicon glyphicon-info-sign"
-                        title="In case of Graph type this should contain a PEARL rule otherwise, in case of Node type, this should contain simply a PEARL projection operator">
+    <div class="entryRow">
+        <div class="hbox" style="align-items: center;">
+            <label class="entryLabel">ID:</label>
+            <div class="input-group input-group-xs" style="flex: 1;">
+                <ng-template [ngIf]="namespaceLocked">
+                    <span class="input-group-addon" style="padding-right: 5px;">
+                        {{cfPrefix}}
                     </span>
-                </td>
-                <td>
-                    <div class="hbox">
-                        <pearl-editor [(ngModel)]="ref" style="flex: 1; margin-right: 4px; max-height: 300px" [disabled]="context.readOnly">
-                        </pearl-editor>
-                        <button class="btn btn-default btn-xs" (click)="pickConverter()" style="align-self: flex-start" title="Pick converter"
-                            [disabled]="context.readOnly">
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </button>
-                    </div>
-                </td>
-                <td>*</td>
-            </tr>
-            <tr *ngIf="type=='graph'" style="height: 1%; white-space: nowrap">
-                <td nowrap>
-                    <label>Show property chain:</label>
-                    <span class="glyphicon glyphicon-info-sign" 
-                        title="A property chain to follow to retrieve the value to be shown to represent the graph generated by means of this Form">
+                    <input type="text" class="form-control" [(ngModel)]="cfShortId" [disabled]="mode == 'edit'" sanitized>
+                </ng-template>
+                
+                <ng-template [ngIf]="!namespaceLocked">
+                    <input type="text" class="form-control" [(ngModel)]="cfId" [disabled]="mode == 'edit'" sanitized>
+                </ng-template>
+                
+                <div class="input-group-btn">
+                    <button class="btn btn-default" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"
+                        title="Lock/Unlock namespace" [ngClass]="{active: namespaceLocked}" [disabled]="mode == 'edit'">
+                        <span class="glyphicon glyphicon-lock" style="font-size: 10px;"></span>
+                    </button>
+                </div>
+            </div>
+            <span style="margin-left: 4px;">*</span>
+        </div>
+    </div>
+    <div class="entryRow">
+        <div class="hbox" style="align-items: center;">
+            <label class="entryLabel">
+                Name:
+                <span class="glyphicon glyphicon-info-sign" title="The name that will be shown to the user to identify this form"></span>
+            </label>
+            <input type="text" class="form-control input-xs" style="flex: 1" [(ngModel)]="name" [disabled]="context.readOnly">
+            <span style="margin-left: 4px;">*</span>
+        </div>
+    </div>
+    <div class="entryRow">
+        <div class="hbox" style="align-items: center;">
+            <label class="entryLabel">
+                Description:
+                <span class="glyphicon glyphicon-info-sign" title="A natural language description that briefly explain the purpose of this form"></span>
+            </label>
+            <input type="text" class="form-control input-xs" style="flex: 1;" [(ngModel)]="description" [disabled]="context.readOnly">
+            <span style="margin-left: 4px;">*</span>  
+        </div>
+    </div>
+    <div class="entryRow">
+        <div class="hbox" style="align-items: center;">
+            <label class="entryLabel">
+                Type:
+            </label>
+            <select class="form-control input-xs" style="flex: 1;" [(ngModel)]="type" [disabled]="cfId">
+                <option value="graph">Graph</option>
+                <option value="node">Node</option>
+            </select>
+            <span style="margin-left: 4px;">*</span>  
+        </div>
+    </div>
+    <div class="entryRow vbox">
+        <div class="hbox">
+            <label class="entryLabel" style="align-self: center;">
+                Ref:
+                <span class="glyphicon glyphicon-info-sign"
+                    title="In case of Graph type this should contain a PEARL rule otherwise, in case of Node type, this should contain simply a PEARL projection operator">
+                </span>
+            </label>
+            <div class="hbox">
+                <pearl-editor [(ngModel)]="ref" [disabled]="context.readOnly">
+                </pearl-editor>
+                <button class="btn btn-default btn-xs" (click)="pickConverter()" style="margin-left: 4px; align-self: flex-start" 
+                    title="Pick converter" [disabled]="context.readOnly">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+            <span style="margin-left: 4px;">*</span>
+        </div>
+    </div>
+    <div class="entryRow">
+        <div class="hbox" style="align-items: center;">
+            <label class="entryLabel">
+                Show property chain:
+                <span class="glyphicon glyphicon-info-sign" 
+                    title="A property chain to follow to retrieve the value to be shown to represent the graph generated by means of this Form">
+                </span>
+            </label>
+            <div class="hbox">
+                <div class="hbox tile-group">
+                    <span *ngFor="let prop of showPropertyChain" (click)="selectPropInChain(prop)" 
+                        class="tile" [ngClass]="{selectedResource : selectedPropInChain == prop}">
+                        <rdf-resource [resource]="prop"></rdf-resource>
+                        <span *ngIf="!context.readOnly" class="glyphicon glyphicon-remove-circle" (click)="removePropFromChain(prop)"
+                            style="cursor: pointer" onmouseover="this.className='glyphicon glyphicon-remove-sign';"
+                            onmouseout="this.className='glyphicon glyphicon-remove-circle';">
+                        </span>
+                        <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle" style="cursor: not-allowed"></span>
                     </span>
-                </td>
-                <td>
-                    <div class="hbox">
-                        <div class="hbox tile-group">
-                            <span *ngFor="let prop of showPropertyChain" (click)="selectPropInChain(prop)" 
-                                class="tile" [ngClass]="{selectedResource : selectedPropInChain == prop}">
-                                <!-- {{prop.getURI()}} {{prop.getShow()}} -->
-                                <rdf-resource [resource]="prop"></rdf-resource>
-                                <span *ngIf="!context.readOnly" class="glyphicon glyphicon-remove-circle" (click)="removePropFromChain(prop)"
-                                    style="cursor: pointer" onmouseover="this.className='glyphicon glyphicon-remove-sign';"
-                                    onmouseout="this.className='glyphicon glyphicon-remove-circle';">
-                                </span>
-                                <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle" style="cursor: not-allowed"></span>
-                            </span>
-                        </div>
-                        <div class="btn-group dropup" style="margin-left: 4px;">
-                            <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" [disabled]="context.readOnly">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                            </button>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a (click)="addPropToChain()">Add</a></li>
-                                <li><a (click)="editPropChain()">Edit manually</a></li>
-                                <li [ngClass]="{disabled : !selectedPropInChain}"><a (click)="addPropToChain('before')">Add before</a></li>
-                                <li [ngClass]="{disabled : !selectedPropInChain}"><a (click)="addPropToChain('after')">Add after</a></li>
-                                <li [ngClass]="{disabled : disableMove('before')}"><a (click)="movePropInChain('before')">Move before</a></li>
-                                <li [ngClass]="{disabled : disableMove('after')}"><a (click)="movePropInChain('after')">Move after</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    
+                </div>
+                <div class="btn-group dropup" style="margin-left: 4px;">
+                    <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" [disabled]="context.readOnly">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li><a (click)="addPropToChain()">Add</a></li>
+                        <li><a (click)="editPropChain()">Edit manually</a></li>
+                        <li [ngClass]="{disabled : !selectedPropInChain}"><a (click)="addPropToChain('before')">Add before</a></li>
+                        <li [ngClass]="{disabled : !selectedPropInChain}"><a (click)="addPropToChain('after')">Add after</a></li>
+                        <li [ngClass]="{disabled : disableMove('before')}"><a (click)="movePropInChain('before')">Move before</a></li>
+                        <li [ngClass]="{disabled : disableMove('after')}"><a (click)="movePropInChain('after')">Move after</a></li>
+                    </ul>
+                </div>
+            </div>
+            <span style="margin-left: 4px;">*</span>
+        </div>
+    </div>
+
 </div>
 <div class="modal-footer">
     <div class="hbox">

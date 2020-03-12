@@ -39,10 +39,11 @@ export class BrowsingModalServices {
     /**
      * Opens a modal to browse the class tree and select an individual of a class
      * @param title the title of the modal
+     * @param classes (optional) tells the admitted type of the individual to pick
      * @return if the modal closes with ok returns a promise containing the selected individual
      */
-    browseClassIndividualTree(title: string, projectCtx?: ProjectContext) {
-        var modalData = new ClassIndividualTreeModalData(title, projectCtx);
+    browseClassIndividualTree(title: string, classes?: ARTURIResource[], projectCtx?: ProjectContext) {
+        var modalData = new ClassIndividualTreeModalData(title, classes, projectCtx);
         const builder = new BSModalContextBuilder<ClassIndividualTreeModalData>(
             modalData, undefined, ClassIndividualTreeModalData
         );

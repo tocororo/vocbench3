@@ -33,7 +33,7 @@ export abstract class AbstractList extends AbstractStruct {
      */
 
     init() {
-        this.setInitialStatus();        
+        this.setInitialStatus();
         this.initImpl();
     }
 

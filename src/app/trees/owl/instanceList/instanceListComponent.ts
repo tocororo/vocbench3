@@ -55,7 +55,7 @@ export class InstanceListComponent extends AbstractList {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['cls'] && !changes['cls'].firstChange) {
+        if (changes['cls']) {
             this.init();
         }
     }
@@ -104,7 +104,7 @@ export class InstanceListComponent extends AbstractList {
         } else { //class not provided, reset the instance list
             //setTimeout prevent ExpressionChangedAfterItHasBeenCheckedError on isOpenGraphEnabled('dataOriented') in the parent panel
             setTimeout(() => {
-                this.init();
+                this.setInitialStatus();
             });
         }
     }

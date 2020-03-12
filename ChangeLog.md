@@ -5,8 +5,10 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 7.0.1 (dd-mm-yyyy)
-  * Enabled organization of projects in directories
-  * Enabled the AND-scheme for browsing concept tree
+  * Improved CustomForm widget by exploiting new PEARL annotations.
+  * Enabled organization of projects in directories.
+  * Enabled the AND-scheme for browsing concept tree.
+  * Minor bugfixes and improvements.
 
 # 7.0.0 (10-02-2020)
   * Introduced EDOAL projects.

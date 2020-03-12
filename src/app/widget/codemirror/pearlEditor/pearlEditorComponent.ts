@@ -8,7 +8,8 @@ import "./pearl";
     templateUrl: "pearlEditorComponent.html",
     providers: [{
         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => PearlEditorComponent), multi: true,
-    }]
+    }],
+    host: { class: "vbox" }
 })
 export class PearlEditorComponent implements ControlValueAccessor {
     @Input() disabled: boolean;

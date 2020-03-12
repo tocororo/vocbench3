@@ -19,14 +19,14 @@
             <tr *ngIf="linkToReference; else linkToLexEntry">
                 <td class="text-right"><label>Reference:</label></td>
                 <td>
-                    <resource-picker [roles]="pickerRoles" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
+                    <resource-picker [config]="{ roles: pickerRoles }" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
                 </td>
             </tr>
             <ng-template #linkToLexEntry>
                 <tr>
                     <td class="text-right" nowrap><label>Lexical Entry:</label></td>
                     <td>
-                        <resource-picker [roles]="['ontolexLexicalEntry']" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
+                        <resource-picker [config]="{ roles: ['ontolexLexicalEntry'] }" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
                     </td>
                 </tr>
             </ng-template>
