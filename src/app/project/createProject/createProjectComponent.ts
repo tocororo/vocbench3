@@ -162,6 +162,8 @@ export class CreateProjectComponent {
     private enableSHACL: boolean = false;
     private shaclSettings: Settings;
 
+    //TRIVIAL INFERENCE
+    private enableTrivialInference: boolean = false;
 
     constructor(private projectService: ProjectServices, private pluginService: PluginsServices, private extensionService: ExtensionsServices,
         private inOutService: InputOutputServices, private prefService: PreferencesSettingsServices,
@@ -851,7 +853,7 @@ export class CreateProjectComponent {
             leftDataset, rightDataset,
             uriGeneratorSpecification, renderingEngineSpecification,
             creationProp, modificationProp, 
-            this.enableSHACL, shaclSettingsPar,
+            this.enableSHACL, shaclSettingsPar, this.enableTrivialInference,
             preloadedDataFileName, preloadedDataFormat, transitiveImportAllowance).subscribe(
                 stResp => {
                     UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);

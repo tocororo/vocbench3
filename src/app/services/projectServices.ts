@@ -132,7 +132,7 @@ export class ProjectServices {
         leftDataset?: string, rightDataset?: string,
         uriGeneratorSpecification?: PluginSpecification, renderingEngineSpecification?: PluginSpecification,
         creationDateProperty?: ARTURIResource, modificationDateProperty?: ARTURIResource, 
-        shaclEnabled?: boolean, shaclSettings?: Map<string, any>,
+        shaclEnabled?: boolean, shaclSettings?: Map<string, any>, trivialInferenceEnabled?: boolean,
         preloadedDataFileName?: string, preloadedDataFormat?: string, transitiveImportAllowance?: TransitiveImportMethodAllowance) {
         
         var params: any = {
@@ -159,6 +159,7 @@ export class ProjectServices {
             modificationDateProperty: modificationDateProperty,
             shaclEnabled: shaclEnabled,
             shaclSettings: shaclSettings,
+            trivialInferenceEnabled: trivialInferenceEnabled,
             preloadedDataFileName: preloadedDataFileName,
             preloadedDataFormat: preloadedDataFormat,
             transitiveImportAllowance: transitiveImportAllowance
