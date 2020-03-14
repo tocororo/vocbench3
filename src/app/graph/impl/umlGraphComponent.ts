@@ -232,11 +232,12 @@ export class UmlGraphComponent extends AbstractGraph {
                     //|| (record.source.equals(OWL.thing) && !record.target.equals(OWL.thing))
                 ) {
                     let nodeSource: UmlNode = nodes.find(n => n.res.equals(record.source));
-                    let nodeTarget: UmlNode = nodes.find(n => n.res.equals(record.target));
+                    //let nodeTarget: UmlNode = nodes.find(n => n.res.equals(record.target));
                     if (nodeSource == null) {
                         nodeSource = new UmlNode(record.source);
                         nodes.push(nodeSource);
                     }
+                    let nodeTarget: UmlNode = nodes.find(n => n.res.equals(record.target));
                     if (nodeTarget == null) {
                         nodeTarget = new UmlNode(record.target);
                         nodes.push(nodeTarget);

@@ -6,6 +6,11 @@
 
 /* Nodes */
 
+.graphNodeStripe {
+    stroke:black;
+    stroke-width: 1px;
+}
+
 .graphNode {
     stroke: #000;
     stroke-width: 1px;

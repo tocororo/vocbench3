@@ -10,7 +10,7 @@ export class Size {
         radius: 40
     }
     public static RectangleUml = {
-        base: 200,
+        base: 150,
         height: 40
     };
     /**
