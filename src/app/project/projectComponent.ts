@@ -253,6 +253,22 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         )
     }
 
+    private editDescription(project: Project) {
+        this.basicModals.prompt("Project description", { value: "Description" }, null, project.getDescription(), true).then(
+            descr => {
+                if (descr.trim() == "") {
+                    descr = null;
+                }
+                this.projectService.setProjectProperty(project, "description", descr).subscribe(
+                    () => {
+                        project.setDescription(descr);
+                    }
+                )
+            },
+            () => {}
+        )
+    }
+
     private settings() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.size('sm').keyboard(27).toJSON() };

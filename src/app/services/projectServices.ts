@@ -490,4 +490,19 @@ export class ProjectServices {
         return this.httpMgr.doPost(this.serviceName, "deleteProjectDir", params);
     }
 
+    /**
+     * 
+     * @param project 
+     * @param propName 
+     * @param propValue 
+     */
+    setProjectProperty(project: Project, propName: string, propValue: string) {
+        var params = {
+            projectName: project.getName(),
+            propName: propName,
+            propValue: propValue
+        };
+        return this.httpMgr.doPost(this.serviceName, "setProjectProperty", params);
+    }
+
 }

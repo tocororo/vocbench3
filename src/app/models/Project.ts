@@ -16,6 +16,7 @@ export class Project {
     private status: { status: string, message?: string };
     private shaclEnabled: boolean;
     private facets: {[key: string]: string} = {};
+    private description: string;
 
     constructor(name?: string) {
         if (name != undefined) {
@@ -149,6 +150,13 @@ export class Project {
         return this.facets[facet];
     }
 
+    public setDescription(description: string) {
+        this.description = description;
+    }
+    public getDescription(): string {
+        return this.description;
+    }
+
     public static deserialize(projJson: any): Project {
         let proj = new Project();
         proj.setName(projJson.name);
@@ -164,6 +172,7 @@ export class Project {
         proj.setStatus(projJson.status);
         proj.setShaclEnabled(projJson.shaclEnabled);
         proj.setFacets(projJson.facets);
+        proj.setDescription(projJson.description);
         return proj;
     }
 
