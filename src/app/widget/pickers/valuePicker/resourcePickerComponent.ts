@@ -74,7 +74,7 @@ export class ResourcePickerComponent {
             }
             returnedRes = this.resource.clone();
             returnedRes.setURI(this.resourceIRI); //if IRI has been manually changed
-        } else {
+        } else if (this.resourceIRI != null && this.resourceIRI.trim() != "") {
             returnedRes = new ARTURIResource(this.resourceIRI);
         }
         this.resourceChanged.emit(returnedRes);

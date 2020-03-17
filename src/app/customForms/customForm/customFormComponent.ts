@@ -1,8 +1,8 @@
 import { Component, forwardRef, Input, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ARTNode, ARTLiteral } from "../../models/ARTResources";
-import { AnnotationName, FormField, FormFieldAnnotation } from "../../models/CustomForms";
+import { ARTLiteral } from "../../models/ARTResources";
 import { ConverterContractDescription } from "../../models/Coda";
+import { AnnotationName, FormField, FormFieldAnnotation } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
@@ -37,21 +37,21 @@ export class CustomFormComponent implements ControlValueAccessor {
         this.cfService.getCustomFormRepresentation(this.cfId).subscribe(
             form => {
                 /*
-                It is supposed that each form field has just one annotation. 
-                Only "Foreign" can be used in combo with other annotations (semantically valid only with Range, RangeList and Role), 
-                so, here the entry annotations are sorted in order to set at last position the Foreign annotation.
-                In this way, in the view I always take into account just the first annotation (if any) of each entry and then,
-                only when the first one is among Range, RangeList or Role, I look for the Foreign annotation in order to use it in combo
+                    "Foreign" and "List" can be used in combo with other annotations so, here the entry annotations are sorted in order
+                    to set at last position these annotations.
+                    In this way, in the view I always take into account just the first annotation (if any) of each entry and then,
+                    I look for the other annotations in order to use it in combo (according to compatibility, e.g. Foreign can be used
+                    in combo with Range but not with DataOneOf)
                 */
                 form.forEach(f => {
                     f.getAnnotations().sort((a1: FormFieldAnnotation, a2: FormFieldAnnotation) => {
-                        if (a1.name == AnnotationName.Foreign) return 1;
+                        if (a1.name == AnnotationName.Foreign || a1.name == AnnotationName.List) return 1;
                         else return -1;
                     })
                 })
 
                 /*
-                Hanldle a special case: annotation DataOneOf can be use to limit the values of a node to a given set.
+                Handle a special case: annotation DataOneOf can be use to limit the values of a node to a given set.
                 In case this annotation is used for a node that is used as coda:langString converter argument, it means that 
                 the selection of the language is restricted to the values listed in the DataOneOf annotation.
                 */
@@ -66,7 +66,7 @@ export class CustomFormComponent implements ControlValueAccessor {
                             */
                             let dataOneOfAnn: FormFieldAnnotation = langPhFormField.getAnnotation(AnnotationName.DataOneOf);
                             if (dataOneOfAnn) {
-                                f['oneOfLang'] = dataOneOfAnn.values.map(v => (<ARTLiteral>v).getValue());
+                                f['oneOfLang'] = (<ARTLiteral[]>dataOneOfAnn.value).map(v => (<ARTLiteral>v).getValue());
                             }
                         }
                     }
@@ -86,38 +86,14 @@ export class CustomFormComponent implements ControlValueAccessor {
         );
     }
 
-    /**
-     * Listener to change of lang-picker used to set the language argument of a formField that
-     * has coda:langString as converter
-     */
-    private onConverterLangChange(newLang: string, formFieldConvArgumentPh: FormField) {
-        /* setTimeout to trigger a new round of change detection avoid an exception due to changes in a lifecycle hook
-        (see https://github.com/angular/angular/issues/6005#issuecomment-165911194) */
-        window.setTimeout(() => {
-            formFieldConvArgumentPh['value'] = newLang
-            this.propagateChange(this.formFields);
-        });
-    }
-
-    /**
-     * Listener on change of a formField input field. Checks if there are some other
-     * formEntries with the same userPrompt and eventually updates their value
-     */
-    private onEntryValueChange(value: string, formField: FormField) {
-        for (var i = 0; i < this.formFields.length; i++) {
-            if (this.formFields[i] != formField && this.formFields[i].getUserPrompt() == formField.getUserPrompt()) {
-                this.formFields[i]['value'] = value;
-                this.propagateChange(this.formFields);
+    private onFormFieldChanged(formField: FormField) {
+        //when the value of a form field changes, update also the value to other form fields (if any) related to the same userPrompt
+        this.formFields.forEach(f => {
+            if (f != formField && f.getUserPrompt() == formField.getUserPrompt()) {
+                f.value = formField.value;
             }
-        }
-    }
-
-    private updateNodeField(res: ARTNode, formField: FormField) {
-        formField['value'] = res.getNominalValue();
-        this.propagateChange(this.formFields);
-    }
-
-    private onModelChanged() {
+        })
+        //then propagate changes
         this.propagateChange(this.formFields);
     }
 

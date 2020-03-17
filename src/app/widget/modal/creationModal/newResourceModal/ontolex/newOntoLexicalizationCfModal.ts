@@ -74,7 +74,11 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
     }
 
     private updateLinkedRes(res: ARTURIResource) {
-        this.linkedResource = res.getURI();
+        if (res != null) {
+            this.linkedResource = res.getURI();
+        } else {
+            this.linkedResource = null;
+        }
     }
 
     isStandardFormDataValid(): boolean {

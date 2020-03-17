@@ -6,126 +6,19 @@
             <col style="width: 1%;">
         </colgroup>
         <tbody>
-            <ng-container *ngFor="let field of formFields">
+            <ng-container *ngFor="let field of formFields; let index = index; trackBy: trackByIndex">
                 <tr *ngIf="!field.isDependency()">
                     <!--Form entry label-->
                     <td class="text-right"><label>{{field.getUserPrompt()}}:</label></td>
                     <!--Form entry field: depends on type (uri/literal) and optionally on datatype -->
                     <td>
-                        <!-- Node generated with literal converter -->
-                        <div [ngSwitch]="field.getAnnotations()[0]?.name">
-                            <div *ngSwitchCase="'DataOneOf'">
-                                <select class="form-control input-sm" [(ngModel)]="field.value" (ngModelChange)="onModelChanged()">
-                                    <option *ngFor="let v of field.getAnnotations()[0].values">{{v.getNominalValue()}}</option>
-                                </select>
-                            </div>
-                            <!-- no annotations, or unknown/unhanlded annotation -->
-                            <div *ngSwitchDefault>
-                                <div *ngIf="field.getType() == 'literal'">
-                                    <div [ngSwitch]="field.getDatatype()">
-                                        <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#string'">
-                                            <textarea type="text" rows="1" class="form-control input-sm" style="resize: vertical"
-                                                [(ngModel)]="field.value" (ngModelChange)="onModelChanged()"></textarea>
-                                        </div>
-                                        <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#integer'">
-                                            <input class="form-control input-sm" [(ngModel)]="field.value" type="number" step="1"
-                                                (ngModelChange)="onModelChanged()">
-                                        </div>
-                                        <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#float'">
-                                            <input class="form-control input-sm" [(ngModel)]="field.value" type="number" step="any"
-                                                (ngModelChange)="onModelChanged()">
-                                        </div>
-                                        <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#boolean'" class="hbox">
-                                            <input class="form-control input-sm" [ngModel]="field.value" style="flex: 1"
-                                                (ngModelChange)="onModelChanged()" disabled>
-                                            <span class="hbox" style="align-items: center; margin-left: 10px; justify-content: center;">
-                                                <label class="radio-inline">
-                                                    <input type="radio" (click)="field.value='true'" [checked]="field.value=='true'">true
-                                                </label>
-                                                <label class="radio-inline" style="margin-left: 15px;">
-                                                    <input type="radio" (click)="field.value='false'" [checked]="field.value=='false'">false
-                                                </label>
-                                            </span>
-                                        </div>
-                                        <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#date'" class="hbox">
-                                            <input class="form-control input-sm" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
-                                            <input class="form-control input-sm" style="margin-left: 10px;" type="date" [(ngModel)]="field.value"> 
-                                        </div>
-                                        <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#time'" class="hbox">
-                                            <input class="form-control input-sm" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
-                                            <input class="form-control input-sm" style="margin-left: 10px;" type="time" [(ngModel)]="field.value"
-                                                (ngModelChange)="onModelChanged()">
-                                        </div>
-                                        <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#datetime'" class="hbox">
-                                            <input class="form-control input-sm" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
-                                            <input class="form-control input-sm" style="margin-left: 10px;" type="datetime-local"
-                                                [(ngModel)]="field.value" (ngModelChange)="onModelChanged()">
-                                        </div>
-                                        <div *ngSwitchDefault class="hbox" style="align-items: center;">
-                                            <textarea type="text" rows="1" class="form-control input-sm" style="flex:1; resize: vertical"
-                                                [(ngModel)]="field.value" (ngModelChange)="onModelChanged()"
-                                                (input)="onEntryValueChange($event.target.value, field)">
-                                            </textarea>
-                                            <span *ngIf="field.getLang()" style="margin-left: 4px;">
-                                                <!-- In case language is provided to the default literal convert, disable change to the picker -->
-                                                <lang-picker size="sm" [ngModel]="field.getLang()" disabled="true">
-                                                </lang-picker>
-                                            </span>
-                                            <!-- coda:langString handler -->
-                                            <ng-container *ngIf="field.getConverter() == 'http://art.uniroma2.it/coda/contracts/langString' && field.getConverterArg()">
-                                                <lang-picker *ngIf="field.getConverterArg().ph" size="sm" style="margin-left: 4px;" [ngModel]="field.getConverterArg().ph.value"
-                                                    (ngModelChange)="onConverterLangChange($event, field.getConverterArg().ph)"
-                                                    [config]="{ languages: field['oneOfLang']}">
-                                                </lang-picker>
-                                                <lang-picker *ngIf="field.getConverterArg().lang" size="sm" style="margin-left: 4px;" [ngModel]="field.getConverterArg().lang"
-                                                    disabled="true">
-                                                </lang-picker>
-                                            </ng-container>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Node generated with uri converter -->
-                        <div *ngIf="field.getType() == 'uri'">
-                            <div [ngSwitch]="field.getAnnotations()[0]?.name">
-                                <div *ngSwitchCase="'ObjectOneOf'">
-                                    <select class="form-control input-sm" [(ngModel)]="field.value" (ngModelChange)="onModelChanged()">
-                                        <option *ngFor="let v of field.getAnnotations()[0].values">{{v.getNominalValue()}}</option>
-                                    </select>
-                                </div>
-                                <div *ngSwitchCase="'Role'">
-                                    <resource-picker (resourceChanged)="updateNodeField($event, field)"
-                                        [config]="{ roles: field.getAnnotations()[0].values, allowLocal: !field.getAnnotation('Foreign'), allowRemote: true, projects: field.getAnnotation('Foreign')?.values }"
-                                        editable="true">
-                                    </resource-picker>
-                                </div>
-                                <div *ngSwitchCase="'Range'">
-                                    <resource-picker (resourceChanged)="updateNodeField($event, field)" 
-                                        [config]="{ roles: ['individual'], classes: field.getAnnotations()[0].values, allowLocal: !field.getAnnotation('Foreign'), allowRemote: true, projects: field.getAnnotation('Foreign')?.values }"
-                                        editable="true">
-                                    </resource-picker>
-                                </div>
-                                <div *ngSwitchCase="'RangeList'">
-                                    <resource-picker (resourceChanged)="updateNodeField($event, field)" 
-                                        [config]="{ roles: ['individual'], classes: field.getAnnotations()[0].values, allowLocal: !field.getAnnotation('Foreign'), allowRemote: true, projects: field.getAnnotation('Foreign')?.values }"
-                                        editable="true">
-                                    </resource-picker>
-                                </div>
-                                <div *ngSwitchCase="'Foreign'">
-                                    <resource-picker (resourceChanged)="updateNodeField($event, field)" 
-                                        [config]="{ allowLocal: false, allowRemote: true, projects: field.getAnnotations()[0].values }"
-                                        editable="true">
-                                    </resource-picker>
-                                </div>
-                                <!-- no annotations, or unknown/unhanlded annotation -->
-                                <div *ngSwitchDefault>
-                                    <resource-picker (resourceChanged)="updateNodeField($event, field)" editable="true" 
-                                        [config]="{ allowRemote: true }">
-                                    </resource-picker>
-                                </div>
-                            </div>
-                        </div>
+                        <ng-container *ngIf="field.getAnnotation('List'); else singleFieldBlock">
+                            <custom-form-field-list [(ngModel)]="formFields[index]" (ngModelChange)="onFormFieldChanged(field)"></custom-form-field-list>
+                        </ng-container>
+
+                        <ng-template #singleFieldBlock>
+                            <custom-form-field [(ngModel)]="formFields[index]" (ngModelChange)="onFormFieldChanged(field)"></custom-form-field>
+                        </ng-template>
                     </td>
                     <!--Mandatory/Optional-->
                     <td>

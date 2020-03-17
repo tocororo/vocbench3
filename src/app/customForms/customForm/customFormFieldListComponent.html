@@ -1,0 +1,10 @@
+<div *ngFor="let sf of subFields; let i = index; let last = last" class="hbox" style="padding: 3px;">
+    <custom-form-field style="flex: 1;" [ngModel]="subFields[i]" (ngModelChange)="onFieldChange(i)"></custom-form-field>
+
+    <button *ngIf="last" class="btn btn-xs btn-default" style="margin-left: 2px;" (click)="addValue()" [disabled]="subFields.length == max">
+        <span class="glyphicon glyphicon-plus"></span>
+    </button>
+    <button class="btn btn-xs btn-default" style="margin-left: 2px;" (click)="removeValue(i)" [disabled]="subFields.length == min || subFields.length == 1">
+        <span class="glyphicon glyphicon-trash"></span>
+    </button>
+</div>

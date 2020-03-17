@@ -1,28 +1,34 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-import { SharedModule } from './sharedModule';
-
+import { CustomFormComponent } from '../customForms/customForm/customFormComponent';
+import { CustomFormField } from '../customForms/customForm/customFormFieldComponent';
+import { CustomFormFieldList } from '../customForms/customForm/customFormFieldListComponent';
+import { CustomFormModal } from '../customForms/customForm/customFormModal';
+import { CustomFormConfigComponent } from '../customForms/customFormConfComponent';
+import { BrokenCFStructReportModal } from '../customForms/customFormConfigModals/brokenCFStructReportModal';
+import { CustomFormEditorModal } from '../customForms/customFormConfigModals/customFormEditorModal';
+import { FormCollEditorModal } from '../customForms/customFormConfigModals/formCollEditorModal';
+import { FormCollMappingModal } from '../customForms/customFormConfigModals/formCollMappingModal';
+import { ImportCfModal } from '../customForms/customFormConfigModals/importCfModal';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingModalServices";
-
-import { CustomFormConfigComponent } from '../customForms/customFormConfComponent';
-import { CustomFormModal } from '../customForms/customForm/customFormModal';
-import { CustomFormComponent } from '../customForms/customForm/customFormComponent';
-import { FormCollMappingModal } from '../customForms/customFormConfigModals/formCollMappingModal';
-import { FormCollEditorModal } from '../customForms/customFormConfigModals/formCollEditorModal';
-import { CustomFormEditorModal } from '../customForms/customFormConfigModals/customFormEditorModal';
-import { BrokenCFStructReportModal } from '../customForms/customFormConfigModals/brokenCFStructReportModal';
-import { ImportCfModal } from '../customForms/customFormConfigModals/importCfModal';
+import { SharedModule } from './sharedModule';
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule],
     providers: [BasicModalServices, BrowsingModalServices],
     declarations: [
-        CustomFormConfigComponent, CustomFormComponent,
-        FormCollMappingModal, FormCollEditorModal, CustomFormEditorModal,
-        CustomFormModal, BrokenCFStructReportModal, ImportCfModal
+        BrokenCFStructReportModal,
+        CustomFormConfigComponent,
+        CustomFormComponent,
+        CustomFormEditorModal,
+        CustomFormField,
+        CustomFormFieldList,
+        CustomFormModal,
+        FormCollEditorModal,
+        FormCollMappingModal,
+        ImportCfModal
     ],
     exports: [CustomFormConfigComponent, CustomFormComponent], //CustomForm exported since is used in vbModalModule as well in newResourceCfModal
     entryComponents: [

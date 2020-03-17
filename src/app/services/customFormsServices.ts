@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
-import { BrokenCFStructure, CustomForm, CustomFormLevel, CustomFormType, FormCollection, FormCollectionMapping, FormField, FormFieldType, FormFieldAnnotation, AnnotationName } from "../models/CustomForms";
+import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
+import { AnnotationName, BrokenCFStructure, CustomForm, CustomFormLevel, CustomFormType, FormCollection, FormCollectionMapping, FormField, FormFieldAnnotation, FormFieldType } from "../models/CustomForms";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from '../utils/ResourceUtils';
@@ -107,24 +107,40 @@ export class CustomFormsServices {
                             entry.setLang(lang);
                         }
                     }
-                    stResp[i].annotations.forEach((ann: {name: AnnotationName, values: string[]}) => {
+                    stResp[i].annotations.forEach((ann: CustomFormRepresentationRespRecord) => {
+                        let ffa: FormFieldAnnotation;
                         let annName: AnnotationName = ann.name;
-                        let annValues: (ARTNode|string)[] = [];
-                        if (annName == AnnotationName.DataOneOf) {
-                            ann.values.forEach((av: string) => {
-                                annValues.push(ResourceUtils.parseLiteral(av));
+                        if (annName == AnnotationName.DataOneOf) { 
+                            //arg: "value" that is a list of Literal
+                            let annValue: ARTLiteral[] = [];
+                            ann.value.forEach((av: string) => {
+                                annValue.push(ResourceUtils.parseLiteral(av));
                             })
-                        } else if (annName == AnnotationName.ObjectOneOf || annName == AnnotationName.Range || annName == AnnotationName.RangeList) {
-                            ann.values.forEach((av: string) => {
-                                annValues.push(ResourceUtils.parseURI(av));
+                            ffa = { name: annName, value: annValue }
+                        } else if (annName == AnnotationName.ObjectOneOf || annName == AnnotationName.RangeList) {
+                            //arg: "value" that is a list of IRI
+                            let annValue: ARTURIResource[] = [];
+                            ann.value.forEach((av: string) => {
+                                annValue.push(ResourceUtils.parseURI(av));
                             })
-                        } else if (annName == AnnotationName.Foreign || annName == AnnotationName.Role) {
-                            annValues = ann.values;
-                        }
-                        ann.values
-                        let ffa: FormFieldAnnotation = {
-                            name: annName,
-                            values: annValues
+                            ffa = { name: annName, value: annValue }
+                        } else if (annName == AnnotationName.Range) {
+                            //arg: "value" that is an IRI
+                            let annValue: ARTURIResource = ResourceUtils.parseURI(ann.value[0]);
+                            ffa = { name: annName, value: annValue }
+                        } else if (annName == AnnotationName.Foreign) {
+                            //arg: "value" that is a String
+                            let annValue: string = ann.value[0];
+                            ffa = { name: annName, value: annValue }
+                        } else if (annName == AnnotationName.Role) {
+                            //arg: "value" that is a list of String
+                            let annValue: string[] = ann.value
+                            ffa = { name: annName, value: annValue }
+                        } else if (annName == AnnotationName.List) {
+                            //arg: "min" and "max" that are int
+                            let annMin: number = ann.min ? ann.min[0] : null;
+                            let annMax: number = ann.max ? ann.max[0] : null;
+                            ffa = { name: annName, min: annMin, max: annMax };
                         }
                         entry.addAnnotation(ffa);
                     });
@@ -688,4 +704,11 @@ export class CustomFormsServices {
         );
     }
 
+}
+
+class CustomFormRepresentationRespRecord {
+    public name: AnnotationName;
+    public value?: string[];
+    public min?: number[];
+    public max?: number[];
 }

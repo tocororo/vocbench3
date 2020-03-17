@@ -1,4 +1,4 @@
-import { ARTNode, ARTURIResource } from "./ARTResources";
+import { ARTLiteral, ARTURIResource } from "./ARTResources";
 
 export class FormCollectionMapping {
 
@@ -154,16 +154,10 @@ export class FormField {
     private datatype: string; //provided optionally only if type is literal
     private lang: string; //provided optionally only if type is literal and datatype is null or xsd:string
     private dependency: boolean = false; //tells if the FormEntry is a dependency of another FormEntry (it determines also if the FormEntry should be shown in the form) 
-    //provided optionally only if the entry has coda:langString converter (that requires a language) and argument is in turn a userPrompt
-    private converterArgPh: FormField;
-    //provided optionally only if the entry has coda:langString converter (that requires a language) and argument is a language tag
-    private converterArgLang: string;
-
-    converterArg: LangStringConverterArg;// arg of coda:langString
-        
-
+    private converterArg: LangStringConverterArg;// arg of coda:langString
     private annotations: FormFieldAnnotation[];
 
+    public value: any;
 
     constructor(placeholderId: string, type: FormFieldType, mandatory: boolean, userPrompt: string, converter: string) {
         this.placeholderId = placeholderId;
@@ -241,6 +235,16 @@ export class FormField {
         return this.annotations.find(a => a.name == name);
     }
 
+    public clone(): FormField {
+        let fieldClone: FormField = new FormField(this.placeholderId, this.type, this.mandatory, this.userPrompt, this.converter);
+        fieldClone.setAnnotations(this.annotations);
+        fieldClone.setDatatype(this.datatype);
+        fieldClone.setLang(this.lang);
+        fieldClone.setDependency(this.dependency);
+        fieldClone.setConverterArg(this.converterArg);
+        return fieldClone;
+    }
+
 }
 
 /**
@@ -248,8 +252,8 @@ export class FormField {
  * Currently this class is used, as said, only for coda:langString, in the future, if needed, could be extended
  */
 export class LangStringConverterArg {
-    ph?: FormField;
-    lang?: string;
+    ph?: FormField; //provided if argument is in turn a userPrompt
+    lang?: string; //provided if argument is a language tag
 }
 
 export enum AnnotationName {
@@ -259,11 +263,14 @@ export enum AnnotationName {
     Range = "Range",
     RangeList = "RangeList",
     Foreign = "Foreign",
+    List = "List"
 }
 
 export class FormFieldAnnotation {
     name: AnnotationName;
-    values: (ARTNode|string)[];
+    value?: (ARTLiteral|ARTURIResource|string)[]|ARTURIResource|string;
+    min?: number;
+    max?: number;
 }
 
 export class CustomFormValue {

@@ -48,7 +48,7 @@ export class ReifiedResourceComponent extends AbstractResViewResource {
                      * so in the resview-value-renderer it is rendered as simple editable-resource and no more 
                      * as reified resource
                      */
-                    if (this.predicateObjectList.length == 0) { 
+                    if (this.predicateObjectList == null || this.predicateObjectList.length == 0) { 
                         this.resource.setAdditionalProperty(ResAttribute.NOT_REIFIED, true);
                     }
                 }
