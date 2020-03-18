@@ -159,6 +159,7 @@ export class ConfigBarComponent {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.shaclService.clearShapes().subscribe(
                     () => {
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.basicModals.alert("Clear SHACL shapes", "All SHACL shapes cleared successfully.");
                     }
                 );
