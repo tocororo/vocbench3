@@ -8,6 +8,7 @@ import { CustomFormModal } from '../customForms/customForm/customFormModal';
 import { CustomFormConfigComponent } from '../customForms/customFormConfComponent';
 import { BrokenCFStructReportModal } from '../customForms/customFormConfigModals/brokenCFStructReportModal';
 import { CustomFormEditorModal } from '../customForms/customFormConfigModals/customFormEditorModal';
+import { ExtractFromShaclModal } from '../customForms/customFormConfigModals/extractFromShaclModal';
 import { FormCollEditorModal } from '../customForms/customFormConfigModals/formCollEditorModal';
 import { FormCollMappingModal } from '../customForms/customFormConfigModals/formCollMappingModal';
 import { ImportCfModal } from '../customForms/customFormConfigModals/importCfModal';
@@ -26,14 +27,20 @@ import { SharedModule } from './sharedModule';
         CustomFormField,
         CustomFormFieldList,
         CustomFormModal,
+        ExtractFromShaclModal,
         FormCollEditorModal,
         FormCollMappingModal,
         ImportCfModal
     ],
     exports: [CustomFormConfigComponent, CustomFormComponent], //CustomForm exported since is used in vbModalModule as well in newResourceCfModal
     entryComponents: [
-        FormCollMappingModal, FormCollEditorModal, CustomFormEditorModal,
-        CustomFormModal, BrokenCFStructReportModal, ImportCfModal
+        BrokenCFStructReportModal,
+        CustomFormEditorModal,
+        CustomFormModal,
+        ExtractFromShaclModal,
+        FormCollMappingModal,
+        FormCollEditorModal,
+        ImportCfModal
     ]
 })
 export class CustomFormModule { }

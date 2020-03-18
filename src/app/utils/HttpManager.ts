@@ -151,8 +151,14 @@ export class HttpManager {
         //prepare form data
         var formData = new FormData();
         for (var paramName in params) {
-            if (params[paramName] != null) {
-                formData.append(paramName, params[paramName]);
+            let paramValue = params[paramName];
+            if (paramValue != null) {
+                if (paramValue instanceof ARTURIResource || paramValue instanceof ARTBNode || paramValue instanceof ARTLiteral) {
+                    //it seems that for FormData, I shouldn't invoke encodeURIComponent, otherwise ST converter will raise an exception
+                    formData.append(paramName, paramValue.toNT());
+                } else {
+                    formData.append(paramName, paramValue);
+                }
             }
         }
 

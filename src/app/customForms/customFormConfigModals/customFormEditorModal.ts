@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
+import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from "../../models/ARTResources";
 import { CustomForm, CustomFormType, EditorMode } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
@@ -10,6 +10,7 @@ import { PearlEditorComponent } from "../../widget/codemirror/pearlEditor/pearlE
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
+import { ExtractFromShaclModal } from "./extractFromShaclModal";
 
 export class CustomFormEditorModalData extends BSModalContext {
     /**
@@ -54,9 +55,10 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
     private submitted: boolean = false;
     private errorMsg: string;
 
-    constructor(public dialog: DialogRef<CustomFormEditorModalData>, private resourceService: ResourcesServices,
+    constructor(public dialog: DialogRef<CustomFormEditorModalData>,
         private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
-        private cfService: CustomFormsServices, private elementRef: ElementRef) {
+        private resourceService: ResourcesServices, private cfService: CustomFormsServices, private modal: Modal,
+        private elementRef: ElementRef) {
         this.context = dialog.context;
     }
 
@@ -109,10 +111,23 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
         );
     }
 
+    // ============= PEARL handler ================
+
     private pickConverter() {
         this.sharedModals.selectConverter("Pick a converter", null).then(
             (converter: {projectionOperator: string, contractDesctiption: any }) => {
                 this.viewChildCodemirror.insertAtCursor(converter.projectionOperator);
+            },
+            () => {}
+        )
+    }
+
+    private extractFromShacl() {
+        const builder = new BSModalContextBuilder<any>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        this.modal.open(ExtractFromShaclModal, overlayConfig).result.then(
+            pearl => {
+                this.ref = pearl;
             },
             () => {}
         )

@@ -71,10 +71,16 @@
             <div class="hbox">
                 <pearl-editor [(ngModel)]="ref" [disabled]="context.readOnly">
                 </pearl-editor>
-                <button class="btn btn-default btn-xs" (click)="pickConverter()" style="margin-left: 4px; align-self: flex-start" 
-                    title="Pick converter" [disabled]="context.readOnly">
-                    <span class="glyphicon glyphicon-pencil"></span>
-                </button>
+                <div class="vbox" style="flex: initial; margin-left: 6px;">
+                    <button class="btn btn-default btn-xs" (click)="pickConverter()" title="Pick converter" [disabled]="context.readOnly">
+                        Pick converter
+                    </button>
+                    <button class="btn btn-default btn-xs" (click)="extractFromShacl()" style="margin-top: 4px;" 
+                        title="Extract PEARL from SHACL shape" [disabled]="context.readOnly">
+                        From SHACL
+                    </button>
+                </div>
+                
             </div>
             <span style="margin-left: 4px;">*</span>
         </div>

@@ -1,0 +1,63 @@
+<div class="modal-header">
+    <h3 class="modal-title">Extract from SHACL</h3>
+</div>
+<div class="modal-body">
+
+    <table class="table table-condensed table-borderless">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td><label>Class</label></td>
+                <td>
+                    <resource-picker [resource]="cls" [config]="{ roles: ['cls'] }" [editable]="true" (resourceChanged)="cls = $event">
+                    </resource-picker>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap><label>Shape source</label></td>
+                <td>
+                    <select class="form-control input-sm" [(ngModel)]="selectedSource">
+                        <option *ngFor="let s of sources">{{s}}</option>
+                    </select>
+                </td>
+            </tr>
+            <tr *ngIf="selectedSource == sourceFile">
+                <td><label>File</label></td>
+                <td>
+                    <div class="hbox">
+                        <file-picker (fileChanged)="fileChangeEvent($event)" size="sm" [accept]="filePickerAccept"></file-picker>
+                        <select class="form-control input-sm" style="margin-left: 4px; width: initial;" [(ngModel)]="selectedInputFormat">
+                            <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr *ngIf="selectedSource == sourceUrl">
+                <td><label>URL</label></td>
+                <td>
+                    <div class="hbox">
+                        <input class="form-control input-sm" [(ngModel)]="shapeUrl">
+                        <select class="form-control input-sm" style="margin-left: 4px; width: initial;" [(ngModel)]="selectedInputFormat">
+                            <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr *ngIf="selectedSource">
+                <td nowrap><label>Target shape *</label></td>
+                <td>
+                    <input class="form-control input-sm" [(ngModel)]="targetShapeUri" placeholder="http://example.org#ShapeClass">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+<div class="modal-footer">
+    <span class="pull-left">(*) Optional</span>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkEnabled()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>
