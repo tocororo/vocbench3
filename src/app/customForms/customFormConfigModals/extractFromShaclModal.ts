@@ -6,12 +6,6 @@ import { RDFFormat } from "../../models/RDFFormat";
 import { InputOutputServices } from "../../services/inputOutputServices";
 import { ShaclServices } from "../../services/shaclServices";
 
-// export class ExtractFromShaclModalData extends BSModalContext {
-//     constructor() {
-//         super();
-//     }
-// }
-
 @Component({
     selector: "extract-from-shacl-modal",
     templateUrl: "./extractFromShaclModal.html",
@@ -26,8 +20,6 @@ export class ExtractFromShaclModal implements ModalComponent<BSModalContext> {
     private selectedSource: string;
 
     private cls: ARTURIResource;
-
-    private targetShapeUri: string;
 
     private inputFormats: RDFFormat[];
     private filePickerAccept: string;
@@ -79,24 +71,20 @@ export class ExtractFromShaclModal implements ModalComponent<BSModalContext> {
     }
 
     ok() {
-        let targetShape: ARTURIResource;
-        if (this.targetShapeUri != null) {
-            targetShape = new ARTURIResource(this.targetShapeUri);
-        }
         if (this.selectedSource == this.sourceFile) {
-            this.shaclService.extractCFfromShapeFile(this.cls, this.shapeFile, this.selectedInputFormat, targetShape).subscribe(
+            this.shaclService.extractCFfromShapeFile(this.cls, this.shapeFile, this.selectedInputFormat).subscribe(
                 pearl => {
                     this.dialog.close(pearl);
                 }
             )
         } else if (this.selectedSource == this.sourceGraph) {
-            this.shaclService.extractCFfromShapesGraph(this.cls, targetShape).subscribe(
+            this.shaclService.extractCFfromShapesGraph(this.cls).subscribe(
                 pearl => {
                     this.dialog.close(pearl);
                 }
             )
         } else if (this.selectedSource == this.sourceUrl) {
-            this.shaclService.extractCFfromShapeURL(this.cls, this.shapeUrl, this.selectedInputFormat, targetShape).subscribe(
+            this.shaclService.extractCFfromShapeURL(this.cls, this.shapeUrl, this.selectedInputFormat).subscribe(
                 pearl => {
                     this.dialog.close(pearl);
                 }

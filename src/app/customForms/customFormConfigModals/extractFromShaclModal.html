@@ -46,18 +46,11 @@
                     </div>
                 </td>
             </tr>
-            <tr *ngIf="selectedSource">
-                <td nowrap><label>Target shape *</label></td>
-                <td>
-                    <input class="form-control input-sm" [(ngModel)]="targetShapeUri" placeholder="http://example.org#ShapeClass">
-                </td>
-            </tr>
         </tbody>
     </table>
 
 </div>
 <div class="modal-footer">
-    <span class="pull-left">(*) Optional</span>
     <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkEnabled()">Ok</button>
     <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
 </div>
