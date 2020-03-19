@@ -75,7 +75,7 @@
                     <button class="btn btn-default btn-xs" (click)="pickConverter()" title="Pick converter" [disabled]="context.readOnly">
                         Pick converter
                     </button>
-                    <button class="btn btn-default btn-xs" (click)="extractFromShacl()" style="margin-top: 4px;" 
+                    <button *ngIf="extractFromShaclAuthorized" class="btn btn-default btn-xs" (click)="extractFromShacl()" style="margin-top: 4px;" 
                         title="Extract PEARL from SHACL shape" [disabled]="context.readOnly">
                         From SHACL
                     </button>

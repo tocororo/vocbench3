@@ -133,6 +133,7 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.shaclClearShapes]: 'auth(shacl, "D").',
         [VBActionsEnum.shaclExportShapes]: 'auth(shacl, "R").',
         [VBActionsEnum.shaclLoadShapes]: 'auth(shacl, "CU").',
+        [VBActionsEnum.shaclExtractCF]: 'auth(shacl, "R").',
         [VBActionsEnum.sheet2Rdf]: 'auth(rdf, "CRUD").',
         [VBActionsEnum.skosAddBroaderConcept]: 'auth(rdf(concept, taxonomy), "C").',
         [VBActionsEnum.skosAddConceptToScheme]: 'auth(rdf(concept, schemes), "C").',

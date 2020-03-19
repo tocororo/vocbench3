@@ -165,6 +165,7 @@ export enum VBActionsEnum {
     shaclClearShapes = "shaclClearShapes",
     shaclExportShapes = "shaclExportShapes",
     shaclLoadShapes = "shaclLoadShapes",
+    shaclExtractCF = "shaclExtractCF",
     //Sheet2Rdf
     sheet2Rdf = "sheet2Rdf", //generic
     //Skos

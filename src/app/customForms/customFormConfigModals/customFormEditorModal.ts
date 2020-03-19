@@ -11,6 +11,8 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { ExtractFromShaclModal } from "./extractFromShaclModal";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "../../utils/VBActions";
 
 export class CustomFormEditorModalData extends BSModalContext {
     /**
@@ -55,6 +57,8 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
     private submitted: boolean = false;
     private errorMsg: string;
 
+    private extractFromShaclAuthorized: boolean;
+
     constructor(public dialog: DialogRef<CustomFormEditorModalData>,
         private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
         private resourceService: ResourcesServices, private cfService: CustomFormsServices, private modal: Modal,
@@ -86,6 +90,8 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
         } else {
             this.mode = EditorMode.create;
         }
+
+        this.extractFromShaclAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.shaclExtractCF);
     }
 
     ngAfterViewInit() {
