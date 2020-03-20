@@ -5,6 +5,7 @@ import { ARTURIResource } from "../../models/ARTResources";
 import { RDFFormat } from "../../models/RDFFormat";
 import { InputOutputServices } from "../../services/inputOutputServices";
 import { ShaclServices } from "../../services/shaclServices";
+import { VBContext } from "../../utils/VBContext";
 
 @Component({
     selector: "extract-from-shacl-modal",
@@ -16,7 +17,7 @@ export class ExtractFromShaclModal implements ModalComponent<BSModalContext> {
     private readonly sourceGraph: string = "From SHACL shapes graph";
     private readonly sourceUrl: string = "From SHACL shape URL";
     private readonly sourceFile: string = "From SHACL shape file";
-    private sources: string[] = [this.sourceGraph, this.sourceUrl, this.sourceFile];
+    private sources: string[];
     private selectedSource: string;
 
     private cls: ARTURIResource;
@@ -48,6 +49,12 @@ export class ExtractFromShaclModal implements ModalComponent<BSModalContext> {
                     .join(","); //join with comma separator
             }
         );
+
+        if (VBContext.getWorkingProject().isShaclEnabled()) {
+            this.sources = [this.sourceGraph, this.sourceUrl, this.sourceFile];
+        } else {
+            this.sources = [this.sourceUrl, this.sourceFile];
+        }
     }
 
     fileChangeEvent(file: File) {
