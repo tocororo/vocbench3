@@ -4,6 +4,7 @@ export class Issue {
     private id: string;
     private key: string;
     private status: string;
+    private statusId: string;
     private summary: string;
     private url: string;
     private labels: string[];
@@ -13,21 +14,22 @@ export class Issue {
     private statusClass: string;
     private resources: ARTURIResource[];
 
-    constructor(id: string, key: string, status: string, summary: string, url: string, labels: string[], resolution: string, category: string) {
+    constructor(id: string, key: string, status: string, statusId: string, summary: string, url: string, labels: string[], resolution: string, category: string) {
         this.id = id;
         this.key = key;
         this.status = status;
+        this.statusId = statusId;
         this.summary = summary;
         this.url = url;
         this.labels = labels;
         this.resolution = resolution;
         this.category = category;
 
-        if (status == "To Do" || status == "Reopened" || status == "Open") {
+        if (statusId == "10000") {
             this.statusClass = "label-primary";
-        } else if (status == "Done" || status == "Resolved" || status == "Closed") {
+        } else if (statusId == "10001") {
             this.statusClass = "label-success";
-        } else if (status == "In Progress") {
+        } else if (statusId == "3") {
             this.statusClass = "label-warning";
         } else {
             this.statusClass = "label-info";
@@ -60,9 +62,11 @@ export class Issue {
     public getCategory(): string {
         return this.category;
     }
-
     public getStatusClass(): string {
         return this.statusClass;
+    }
+    public getStatusId(): string {
+        return this.statusId;
     }
     public getResources(): ARTURIResource[] {
         return this.resources;
@@ -86,7 +90,7 @@ export class IssuesStruct {
 export class CollaborationUtils {
 
     public static parseIssue(json: any): Issue {
-        return new Issue(json.id, json.key, json.status, json.summary, json.url, json.labels, json.resolution, json.category);
+        return new Issue(json.id, json.key, json.status, json.statusId, json.summary, json.url, json.labels, json.resolution, json.category);
     }
 
     public static parseIssues(json: any[]): Issue[] {

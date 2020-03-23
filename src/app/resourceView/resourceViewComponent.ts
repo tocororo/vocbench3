@@ -699,12 +699,12 @@ export class ResourceViewComponent {
                      * - blue (.todo-issues) if there are at least one open issue
                      */
                     for (var i = 0; i < issues.length; i++) {
-                        if (issues[i].getStatus() == 'To Do') {
+                        if (issues[i].getStatusId() == '10000') {
                             this.issuesStruct.btnClass = "todo-issues";
                             break;
-                        } else if (issues[i].getStatus() == 'In Progress') {
+                        } else if (issues[i].getStatusId() == '3') {
                             this.issuesStruct.btnClass = "in-progress-issues";
-                        } else if (issues[i].getStatus() == 'Done') {
+                        } else if (issues[i].getStatusId() == '10001') {
                             if (this.issuesStruct.btnClass != "in-progress-issues") {
                                 this.issuesStruct.btnClass = "done-issues";
                             }
