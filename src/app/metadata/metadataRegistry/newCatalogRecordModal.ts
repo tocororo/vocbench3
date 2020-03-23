@@ -40,7 +40,7 @@ export class NewCatalogRecordModal implements ModalComponent<NewCatalogRecordMod
 
     ok(event: Event) {
         let datasetPar: ARTURIResource = null;
-        if (this.dataset != null) {
+        if (this.dataset != null && this.dataset.trim() != "") {
             datasetPar = new ARTURIResource(this.dataset);
         }
         let sparqlEndpointPar: ARTURIResource = null;

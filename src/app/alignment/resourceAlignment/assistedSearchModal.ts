@@ -109,6 +109,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
             () => HttpServiceContext.removeContextProject()
         ).subscribe(
             resp => {
+                HttpServiceContext.removeContextProject()
                 this.profileMediation();
             }
         );
@@ -130,6 +131,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
                 () => HttpServiceContext.removeContextProject()
             ).subscribe(
                 available => {
+                    HttpServiceContext.removeContextProject()
                     this.projectMetadataAvailabilityMap.set(this.selectedProject, available);
                     this.profileMediationLocalProject();
                 }
@@ -151,6 +153,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
         ).subscribe(
             resp => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
+                HttpServiceContext.removeContextProject()
                 this.projectMetadataAvailabilityMap.set(this.selectedProject, true);
                 this.profileMediation();
             }
