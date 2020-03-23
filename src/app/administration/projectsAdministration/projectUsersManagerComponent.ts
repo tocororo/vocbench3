@@ -357,8 +357,14 @@ export class ProjectUsersManagerComponent {
     private updateLanguagesOfUserInProjectAfterAdd() {
         this.adminService.updateLanguagesOfUserInProject(this.project.getName(), this.selectedUser.getEmail(), this.puBinding.getLanguages()).subscribe(
             stResp => {
-                VBContext.setProjectUserBinding(this.puBinding);
                 this.selectedLang = null;
+                //if the updates are applied to the current user in the current project, update project binding in context 
+                if (
+                    VBContext.getLoggedUser().getEmail() == this.selectedUser.getEmail() && 
+                    VBContext.getWorkingProject() != null && VBContext.getWorkingProject().getName() == this.project.getName()
+                ) {
+                    VBContext.setProjectUserBinding(this.puBinding);
+                }
             }
         );
     }
@@ -391,8 +397,14 @@ export class ProjectUsersManagerComponent {
                 if (this.selectedUser.isAdmin() && this.getPULanguages().length == 0) {
                     this.puBinding.setLanguages(Languages.fromLanguagesToTags(this.projectLanguages));
                 }
-                VBContext.setProjectUserBinding(this.puBinding);
                 this.selectedUserLang = null;
+                //if the updates are applied to the current user in the current project, update project binding in context 
+                if (
+                    VBContext.getLoggedUser().getEmail() == this.selectedUser.getEmail() && 
+                    VBContext.getWorkingProject() != null && VBContext.getWorkingProject().getName() == this.project.getName()
+                ) {
+                    VBContext.setProjectUserBinding(this.puBinding);
+                }
             }
         );
     }
