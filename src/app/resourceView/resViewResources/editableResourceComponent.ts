@@ -226,7 +226,10 @@ export class EditableResourceComponent extends AbstractResViewResource {
                             /**
                             * special case: if range is literal and has restriction (datarange), allow to edit only with datarange
                             */
-                            if (this.ranges != null && this.ranges.type == RDFTypesEnum.literal && this.ranges.rangeCollection.dataRanges != null) {
+                            if (
+                                this.ranges != null && this.ranges.type == RDFTypesEnum.literal && 
+                                this.ranges.rangeCollection != null && this.ranges.rangeCollection.dataRanges != null
+                            ) {
                                 this.creationModals.newTypedLiteral("Edit " + this.predicate.getShow(), this.predicate,
                                     this.ranges.rangeCollection.resources, this.ranges.rangeCollection.dataRanges, true).then(
                                     (literals: ARTLiteral[]) => {
