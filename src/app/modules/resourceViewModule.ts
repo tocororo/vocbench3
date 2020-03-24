@@ -34,7 +34,6 @@ import { LexicalizationEnrichmentHelper } from '../resourceView/renderer/lexical
 import { PredicateObjectsRenderer } from '../resourceView/renderer/predicateObjectsRenderer';
 import { ResourceViewValueRenderer } from '../resourceView/renderer/resourceViewValueRenderer';
 import { ResourceRenameComponent } from '../resourceView/resourceRenameComponent';
-import { ResourceTripleEditorComponent } from '../resourceView/resourceTripleEditor/resourceTripleEditorComponent';
 import { ResourceTripleEditorModal } from '../resourceView/resourceTripleEditor/resourceTripleEditorModal';
 import { ResourceViewComponent } from '../resourceView/resourceViewComponent';
 import { ResourceViewContextMenu } from '../resourceView/resourceViewCtxMenu';
@@ -72,7 +71,6 @@ import { TreeAndListModule } from "./treeAndListModule";
         EditableResourceComponent,
         ReifiedResourceComponent,
         ResourceRenameComponent,
-        ResourceTripleEditorComponent,
         ResourceTripleEditorModal,
         ResourceViewComponent, 
         ResourceViewContextMenu,

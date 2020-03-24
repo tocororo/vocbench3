@@ -1,11 +1,14 @@
 import { Component, ElementRef } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTResource } from "../../models/ARTResources";
+import { ARTURIResource } from "../../models/ARTResources";
+import { ResourcesServices } from "../../services/resourcesServices";
 import { UIUtils } from "../../utils/UIUtils";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "../../utils/VBActions";
 
 export class ResourceTripleEditorModalData extends BSModalContext {
-    constructor(public resource: ARTResource, public readonly: boolean) {
+    constructor(public resource: ARTURIResource, public readonly: boolean) {
         super();
     }
 }
@@ -17,19 +20,36 @@ export class ResourceTripleEditorModalData extends BSModalContext {
 export class ResourceTripleEditorModal implements ModalComponent<ResourceTripleEditorModalData> {
     context: ResourceTripleEditorModalData;
 
+    private editAuthorized: boolean;
+    private description: string;
 
-    constructor(public dialog: DialogRef<ResourceTripleEditorModalData>, private elementRef: ElementRef) {
+
+    constructor(public dialog: DialogRef<ResourceTripleEditorModalData>, private elementRef: ElementRef,
+        private resourcesService: ResourcesServices) {
         this.context = dialog.context;
+    }
+
+    ngOnInit() {
+        //editor disabled if user has no permission to edit
+        this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateResourceTriplesDescription, this.context.resource);
+
+        this.resourcesService.getResourceTriplesDescription(this.context.resource, "N-Triples").subscribe(
+            triples => {
+                this.description = triples;
+            }
+        );
     }
 
     ngAfterViewInit() {
         UIUtils.setFullSizeModal(this.elementRef);
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+    ok() {
+        this.resourcesService.updateResourceTriplesDescription(this.context.resource, this.description, "N-Triples").subscribe(
+            () => {
+                this.dialog.close();
+            }
+        );
     }
 
     cancel() {

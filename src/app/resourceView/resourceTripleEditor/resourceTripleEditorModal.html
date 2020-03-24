@@ -1,7 +1,16 @@
 <div class="modal-body vbox">
-    <resource-triple-editor [resource]="context.resource" [readonly]="context.readonly"></resource-triple-editor>    
+    <div class="panel panel-default vbox">
+        <div class="panel-heading">
+            <div class="hbox" style="align-items: center">
+                <rdf-resource [resource]="context.resource"></rdf-resource>
+            </div>
+        </div>
+        <div class="panel-body vbox">
+            <ntriple-editor [(ngModel)]="description" [disabled]="!editAuthorized"></ntriple-editor>
+        </div>
+    </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
     <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
 </div>

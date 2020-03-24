@@ -131,6 +131,35 @@ export class ResourcesServices {
     }
 
     /**
+     * 
+     * @param resource 
+     * @param format 
+     * @param options 
+     */
+    getResourceTriplesDescription(resource: ARTURIResource, format: string): Observable<string> {
+        var params: any = {
+            resource: resource,
+            format: format
+        };
+        return this.httpMgr.doGet(this.serviceName, "getResourceTriplesDescription", params);
+    }
+
+    /**
+     * 
+     * @param resource 
+     * @param triples 
+     * @param format 
+     */
+    updateResourceTriplesDescription(resource: ARTURIResource, triples: string, format: string) {
+        var params: any = {
+            resource: resource,
+            triples: triples,
+            format: format
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateResourceTriplesDescription", params);
+    }
+
+    /**
      * Returns the description of a set of resources
      * @param resources 
      */

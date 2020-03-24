@@ -130,6 +130,8 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.resourcesSetDeprecated]: 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "U").',
         [VBActionsEnum.resourcesUpdateTriple]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', values), "U").',
         [VBActionsEnum.resourcesUpdatePredicateObject]: 'auth(rdf(resource, values), "U").',
+        [VBActionsEnum.resourcesUpdateResourceTriplesDescription]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', values), "U").',
+        [VBActionsEnum.resourcesGetResourceTriplesDescription]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', values), "R").',
         [VBActionsEnum.shaclClearShapes]: 'auth(shacl, "D").',
         [VBActionsEnum.shaclExportShapes]: 'auth(shacl, "R").',
         [VBActionsEnum.shaclLoadShapes]: 'auth(shacl, "CU").',

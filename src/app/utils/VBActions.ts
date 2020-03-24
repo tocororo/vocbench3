@@ -161,6 +161,8 @@ export enum VBActionsEnum {
     resourcesSetDeprecated = "resourcesSetDeprecated",
     resourcesUpdateTriple = "resourcesUpdateTriple",
     resourcesUpdatePredicateObject = "resourcesUpdatePredicateObject",
+    resourcesGetResourceTriplesDescription = "resourcesGetResourceTriplesDescription",
+    resourcesUpdateResourceTriplesDescription = "resourcesUpdateResourceTriplesDescription",
     //Shacl
     shaclClearShapes = "shaclClearShapes",
     shaclExportShapes = "shaclExportShapes",

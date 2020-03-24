@@ -33,6 +33,7 @@ export class ResourceViewContextMenu {
     private isAlignDisabled: boolean;
     private isSpawnFromLabelDisabled: boolean;
     private isAssertInferredDisabled: boolean;
+    private isTriplesEditorAvailable: boolean
 
     constructor(private alignServices: AlignmentServices, private refactorService: RefactorServices, private resourcesService: ResourcesServices,
         private creationModals: CreationModalServices, private graphModals: GraphModalServices, private modal: Modal) { }
@@ -54,6 +55,10 @@ export class ResourceViewContextMenu {
         this.isAssertInferredDisabled = (
             !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || 
             !AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.resource)
+        );
+        this.isTriplesEditorAvailable = (
+            this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && this.resource.isURIResource() &&
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesGetResourceTriplesDescription, this.resource)
         );
     }
 
@@ -125,12 +130,19 @@ export class ResourceViewContextMenu {
     }
 
     private openTripleEditor() {
-        var modalData = new ResourceTripleEditorModalData(this.resource, this.readonly);
-        const builder = new BSModalContextBuilder<ResourceTripleEditorModalData>(
-            modalData, undefined, ResourceTripleEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-        return this.modal.open(ResourceTripleEditorModal, overlayConfig).result;
+        if (this.resource.isURIResource) {
+            var modalData = new ResourceTripleEditorModalData(<ARTURIResource>this.resource, this.readonly);
+            const builder = new BSModalContextBuilder<ResourceTripleEditorModalData>(
+                modalData, undefined, ResourceTripleEditorModalData
+            );
+            let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
+            return this.modal.open(ResourceTripleEditorModal, overlayConfig).result.then(
+                () => {
+                    this.update.emit();
+                },
+                () => {}
+            );
+        }
     }
 
 }
