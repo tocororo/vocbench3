@@ -33,7 +33,7 @@ export class ResourceTripleEditorModal implements ModalComponent<ResourceTripleE
         //editor disabled if user has no permission to edit
         this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateResourceTriplesDescription, this.context.resource);
 
-        this.resourcesService.getResourceTriplesDescription(this.context.resource, "N-Triples").subscribe(
+        this.resourcesService.getOutgoingTriples(this.context.resource, "N-Triples").subscribe(
             triples => {
                 this.description = triples;
             }

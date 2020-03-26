@@ -136,12 +136,12 @@ export class ResourcesServices {
      * @param format 
      * @param options 
      */
-    getResourceTriplesDescription(resource: ARTURIResource, format: string): Observable<string> {
+    getOutgoingTriples(resource: ARTURIResource, format: string): Observable<string> {
         var params: any = {
             resource: resource,
             format: format
         };
-        return this.httpMgr.doGet(this.serviceName, "getResourceTriplesDescription", params);
+        return this.httpMgr.doGet(this.serviceName, "getOutgoingTriples", params);
     }
 
     /**
