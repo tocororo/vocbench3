@@ -1,14 +1,14 @@
 import { Component, ElementRef } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource } from "../../models/ARTResources";
+import { ARTResource } from "../../models/ARTResources";
 import { ResourcesServices } from "../../services/resourcesServices";
-import { UIUtils } from "../../utils/UIUtils";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { UIUtils } from "../../utils/UIUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
 
 export class ResourceTripleEditorModalData extends BSModalContext {
-    constructor(public resource: ARTURIResource, public readonly: boolean) {
+    constructor(public resource: ARTResource, public readonly: boolean) {
         super();
     }
 }
@@ -21,6 +21,7 @@ export class ResourceTripleEditorModal implements ModalComponent<ResourceTripleE
     context: ResourceTripleEditorModalData;
 
     private editAuthorized: boolean;
+    private pristineDescription: string;
     private description: string;
 
 
@@ -44,12 +45,20 @@ export class ResourceTripleEditorModal implements ModalComponent<ResourceTripleE
         UIUtils.setFullSizeModal(this.elementRef);
     }
 
+    private isOkEnabled(): boolean {
+        return this.description != null && this.description.trim() != "";
+    }
+
     ok() {
-        this.resourcesService.updateResourceTriplesDescription(this.context.resource, this.description, "N-Triples").subscribe(
-            () => {
-                this.dialog.close();
-            }
-        );
+        if (this.description == this.pristineDescription) { //nothing changed
+            this.cancel();
+        } else {
+            this.resourcesService.updateResourceTriplesDescription(this.context.resource, this.description, "N-Triples").subscribe(
+                () => {
+                    this.dialog.close();
+                }
+            );
+        }
     }
 
     cancel() {

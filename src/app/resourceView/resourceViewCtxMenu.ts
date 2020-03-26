@@ -57,7 +57,7 @@ export class ResourceViewContextMenu {
             !AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.resource)
         );
         this.isTriplesEditorAvailable = (
-            this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) && this.resource.isURIResource() &&
+            this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) &&
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesGetResourceTriplesDescription, this.resource)
         );
     }
@@ -130,19 +130,16 @@ export class ResourceViewContextMenu {
     }
 
     private openTripleEditor() {
-        if (this.resource.isURIResource) {
-            var modalData = new ResourceTripleEditorModalData(<ARTURIResource>this.resource, this.readonly);
-            const builder = new BSModalContextBuilder<ResourceTripleEditorModalData>(
-                modalData, undefined, ResourceTripleEditorModalData
-            );
-            let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
-            return this.modal.open(ResourceTripleEditorModal, overlayConfig).result.then(
-                () => {
-                    this.update.emit();
-                },
-                () => {}
-            );
-        }
+        var modalData = new ResourceTripleEditorModalData(<ARTURIResource>this.resource, this.readonly);
+        const builder = new BSModalContextBuilder<ResourceTripleEditorModalData>(
+            modalData, undefined, ResourceTripleEditorModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
+        return this.modal.open(ResourceTripleEditorModal, overlayConfig).result.then(
+            () => {
+                this.update.emit();
+            },
+            () => {}
+        );
     }
-
 }

@@ -136,7 +136,7 @@ export class ResourcesServices {
      * @param format 
      * @param options 
      */
-    getOutgoingTriples(resource: ARTURIResource, format: string): Observable<string> {
+    getOutgoingTriples(resource: ARTResource, format: string): Observable<string> {
         var params: any = {
             resource: resource,
             format: format
@@ -150,7 +150,7 @@ export class ResourcesServices {
      * @param triples 
      * @param format 
      */
-    updateResourceTriplesDescription(resource: ARTURIResource, triples: string, format: string) {
+    updateResourceTriplesDescription(resource: ARTResource, triples: string, format: string) {
         var params: any = {
             resource: resource,
             triples: triples,
