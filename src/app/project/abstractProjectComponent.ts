@@ -49,10 +49,10 @@ export abstract class AbstractProjectComponent {
             pEntry.projects.push(p);
         });
         this.projectDirs.sort((d1: ProjectDirEntry, d2: ProjectDirEntry) => {
-            if (d1.dir == null) return -1;
+            if (d1.dir == null) return 1;
             else if (d2.dir == null) return -1;
             else return d1.dir.localeCompare(d2.dir);
-        })
+        });
     }
 
     protected accessProject(project: Project) {
