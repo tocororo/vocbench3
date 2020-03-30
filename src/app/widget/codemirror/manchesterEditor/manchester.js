@@ -19,7 +19,7 @@
     const booleans = ["true", "false"];
     const brackets = ["(", ")", "[", "]", "{", "}"];
     const builtinDatatypes = ["decimal", "double", "float", "integer", "string"];
-    const characteristics = ["Functional", "InverseFunctional", "Reflexive", "Irreflexive", "Symmetric", "Asymmetric", "Transitive"];
+    const characteristics = ["Functional", "InverseFunctional", "Reflexive", "Irreflexive", "Symmetric", "Asymmetric", "Transitive" ,"Inverse"]; 
     const conjuctions = ["and", "not", "that", "or"];
     const facets = ["langRange", "length", "maxLength", "minLength", "pattern", "<", "<=", ">", ">="];
     const quantifiers = ["some", "only", "value", "min", "max", "exactly", "self"];
@@ -29,7 +29,7 @@
     //     "InverseOf", "SubPropertyChain", "Domain", "Range", "Characteristics", "Types", "SameAs", "DifferentFrom",
     //     "Facts", "SuperClassOf", "SuperPropertyOf", "Individuals"];
 
-    //Regular expresions
+    //Regular expressions
     const booleansRegex = getRegexp(booleans, false);
     const builtinDatatypesRegex = getRegexp(builtinDatatypes, true); //case sensitive?
     const characteristicsRegex = getRegexp(characteristics, true);

@@ -27,6 +27,11 @@ import 'codemirror/addon/mode/simple.js'; //for defineSimpleMode() in the defini
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/xml/xml.js';
 import 'codemirror/mode/ntriples/ntriples.js';
+import 'codemirror/addon/hint/show-hint.js';
+import 'codemirror/addon/hint/show-hint.css';
+
+
+
 //import 'codemirror/lib/codemirror.js'; //already imported in the components that needs CodeMirror
 
 import 'jsprolog/dist/jsprolog';

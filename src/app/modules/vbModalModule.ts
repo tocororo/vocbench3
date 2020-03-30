@@ -64,6 +64,7 @@ import { CustomFormModule } from "./customFormModule";
 import { SharedModule } from "./sharedModule";
 import { TreeAndListModule } from "./treeAndListModule";
 import { UserModule } from "./userModule";
+import { HelperModal } from '../widget/codemirror/manchesterEditor/modal/helperModal';
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
@@ -154,6 +155,7 @@ import { UserModule } from "./userModule";
         DumpCreationModal,
         FilePickerModal,
         FilterGraphsModal,
+        HelperModal,
         InstanceListModal,
         LanguageSelectorModal,
         LexicalEntryListModal,

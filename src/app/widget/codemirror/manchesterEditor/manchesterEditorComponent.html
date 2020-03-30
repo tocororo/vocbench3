@@ -1,8 +1,12 @@
 <div class="panel panel-default vbox" style="position: relative;">
-    <div *ngIf="!codeValid" style="position: absolute; top: 12px; right: 30px; z-index: 1;" [title]="codeInvalidDetails">
+    <div> <button class="btn btn-default" style="padding: 1px 5px; margin-left: 5px; margin-top:3px;" (click)="onClick()">Helper</button></div>
+    <div *ngIf="!codeValid" style="position: absolute; top: 30px; right: 30px; z-index: 1;"
+        [title]="codeInvalidDetails"> <!-- top:12 (old value)-->
         <span class="glyphicon glyphicon-alert" style="color: red;"></span>
     </div>
     <div class="panel-body vbox" style="overflow: auto">
         <textarea #txtarea [ngClass]="{disabled: disabled}"></textarea>
     </div>
+    <div> <p style="margin-left: 5px;"> Press 'ctrl-space' to show hints.</p></div>
 </div>
+

@@ -56,7 +56,6 @@ export class UmlGraphComponent extends AbstractGraph {
                 let f = new GraphForces();
                 f.link.distance = 400;
                 this.updateForces(f);
-
                 let graph = this.convertModelToGraph(graphModel);
                 if (graph.nodes.length > this.nodeLimit) {
                     this.basicModals.confirm("Graph", "The graph you're trying to show has an high number of nodes (" + graph.nodes.length + "). " +
@@ -91,6 +90,7 @@ export class UmlGraphComponent extends AbstractGraph {
         graph.links.forEach(l => {
             this.graph.addLink(l)
         })
+       
         this.graph.update();
     }
 
@@ -172,7 +172,7 @@ export class UmlGraphComponent extends AbstractGraph {
         this.graphService.expandGraphModelNode(res).subscribe(
             (graphModel: GraphModelRecord[]) => {
                 let graphTemp = this.convertModelToGraphForAddNode(graphModel, res);
-                console.log("adding links", graphTemp.links.map(l => l.getShow()).join("\n"));
+                //console.log("adding links", graphTemp.links.map(l => l.getShow()).join("\n"));
                 this.mergeGraph(graphTemp);
                 if (this.hideArrow) {
                     this.linksCache.forEach(l => {
@@ -206,6 +206,8 @@ export class UmlGraphComponent extends AbstractGraph {
     private convertModelToGraph(graphModel: GraphModelRecord[]): { links: UmlLink[], nodes: UmlNode[] } {
         let links: UmlLink[] = [];
         let nodes: UmlNode[] = [];
+        
+        
         //set the nodes and the links according the model
         graphModel.forEach(record => {
             /**
@@ -214,6 +216,7 @@ export class UmlGraphComponent extends AbstractGraph {
              * - che ha come range un datatype e dominio! da OWL thing
              * aggiungiamo la property al nodo ma non creiamo il link
              */
+            
             if (
                 (!record.source.equals(OWL.thing) && record.target.equals(OWL.thing)) ||
                 (record.target.getAdditionalProperty("isDatatype") && !record.source.equals(OWL.thing))
@@ -246,6 +249,7 @@ export class UmlGraphComponent extends AbstractGraph {
                     links.push(new UmlLink(nodeSource, nodeTarget, record.link));
                 }
         });
+        
         links.forEach(l => {
             if (!l.res.equals(RDFS.subClassOf)) {
                 this.linksCache.push(l);

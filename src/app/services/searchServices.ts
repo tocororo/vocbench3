@@ -92,7 +92,7 @@ export class SearchServices {
      * @param langs 
      * @param includeLocales 
      */
-    searchLexicalEntry(searchString: string, useLocalName: boolean, useURI: boolean, useNotes: boolean, searchMode: SearchMode, 
+    searchLexicalEntry(searchString: string, useLocalName: boolean, useURI: boolean, useNotes: boolean, searchMode: SearchMode,
         lexicons?: ARTURIResource[], langs?: string[], includeLocales?: boolean, options?: VBRequestOptions): Observable<ARTURIResource[]> {
 
         var params: any = {
@@ -158,9 +158,9 @@ export class SearchServices {
      * @param langs 
      * @param schemes 
      */
-    searchStringList(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: SearchMode, 
-            langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, cls?: ARTURIResource,
-            options?: VBRequestOptions): Observable<string[]> {
+    searchStringList(searchString: string, rolesArray: string[], useLocalName: boolean, searchMode: SearchMode,
+        langs?: string[], includeLocales?: boolean, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, cls?: ARTURIResource,
+        options?: VBRequestOptions): Observable<string[]> {
         var params: any = {
             searchString: searchString,
             rolesArray: rolesArray,
@@ -173,6 +173,45 @@ export class SearchServices {
             cls: cls
         };
         return this.httpMgr.doGet(this.serviceName, "searchStringList", params, options);
+    }
+
+
+    /**
+     * 
+     * @param searchString 
+     * @param searchMode 
+     * @param rolesArray 
+     * @param schemes 
+     * @param schemeFilter 
+     * @param cls 
+     * @param options 
+     */
+    searchURIList(searchString: string, searchMode: SearchMode, rolesArray?: string[],
+        schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, cls?: ARTURIResource, options?: VBRequestOptions): Observable<string[]> {
+        var params: any = {
+            searchString: searchString,
+            searchMode: searchMode,
+            rolesArray: rolesArray,
+            schemes: schemes,
+            schemeFilter: schemeFilter,
+            cls: cls
+        };
+        return this.httpMgr.doGet(this.serviceName, "searchURIList", params, options);
+    }
+
+
+  /**
+   * 
+   * @param searchString 
+   * @param searchMode 
+   * @param options 
+   */
+    searchPrefix(searchString: string, searchMode: SearchMode,options?: VBRequestOptions): Observable<string[]> {
+        var params: any = {
+            searchString: searchString,
+            searchMode: searchMode
+        };
+        return this.httpMgr.doGet(this.serviceName, "searchPrefix", params, options);
     }
 
     /**
@@ -250,13 +289,13 @@ export class SearchServices {
          * 1- first element is a string (serialization of predicate),
          * 2- second element is a list of string (list of serialization of the values)
          */
-        let linksSerialization: (string|string[])[][] = [];
+        let linksSerialization: (string | string[])[][] = [];
         links.forEach((link: { first: ARTURIResource, second: ARTNode[] }) => {
             let secondSerialization: string[] = [];
             link.second.forEach((res: ARTNode) => {
                 secondSerialization.push(res.toNT());
             })
-            linksSerialization.push([ link.first.toNT(), secondSerialization ]);
+            linksSerialization.push([link.first.toNT(), secondSerialization]);
         });
         return JSON.stringify(linksSerialization);
     }
@@ -268,9 +307,9 @@ export class SearchServices {
          * 2- second element is a string (searchString)
          * 3- third element is a SearchMode
          */
-        let serialization: (string|SearchMode)[][] = [];
+        let serialization: (string | SearchMode)[][] = [];
         outgoingSearch.forEach((link: { predicate: ARTURIResource, searchString: string, mode: SearchMode }) => {
-            serialization.push([ link.predicate.toNT(), link.searchString, link.mode ]);
+            serialization.push([link.predicate.toNT(), link.searchString, link.mode]);
         });
         return JSON.stringify(serialization);
     }
