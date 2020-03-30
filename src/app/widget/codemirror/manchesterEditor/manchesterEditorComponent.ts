@@ -147,7 +147,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                             }
 
                         } else { // case only eighter keywords or prefixes
-                            if (keywords.length > 0) {
+                            if (filterKeywords.length > 0) {
                                 filterKeywords.forEach(value => {
                                     if (value == "SOME" || value == "ONLY" || value == "VALUE" || value == "MIN" || value == "MAX" || value == "EXACTLY" || value == "SELF" || value == "INVERSE") {
                                         list.push({ text: value, className: "quantifier" })
