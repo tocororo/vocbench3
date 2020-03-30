@@ -12,6 +12,7 @@ import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGra
 import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreationModal";
 import { PrefixNamespaceModal } from '../metadata/namespacesAndImports/prefixNamespaceModal';
 import { LoadShapesModal } from '../shacl/loadShapesModal';
+import { HelperModal } from '../widget/codemirror/manchesterEditor/modal/helperModal';
 import { AlertCheckModal } from '../widget/modal/basicModal/alertModal/alertCheckModal';
 import { AlertModal } from '../widget/modal/basicModal/alertModal/alertModal';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
@@ -64,7 +65,6 @@ import { CustomFormModule } from "./customFormModule";
 import { SharedModule } from "./sharedModule";
 import { TreeAndListModule } from "./treeAndListModule";
 import { UserModule } from "./userModule";
-import { HelperModal } from '../widget/codemirror/manchesterEditor/modal/helperModal';
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
@@ -87,6 +87,7 @@ import { HelperModal } from '../widget/codemirror/manchesterEditor/modal/helperM
         EditableNsInput,
         FilePickerModal,
         FilterGraphsModal,
+        HelperModal,
         InstanceListModal,
         LanguageSelectorModal,
         LexicalEntryListModal,

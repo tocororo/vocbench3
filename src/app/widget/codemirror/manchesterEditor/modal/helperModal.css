@@ -1,6 +1,6 @@
 /* this file is used to customize css of the helper table*/
 
-.helper-table{
+.helper-table {
     font-size: 13px;
     width: 70%;
     border: 1px solid black;
@@ -8,19 +8,22 @@
     margin-bottom: 10px;
 }
 
-table.helper-table  th{
+table.helper-table th{
     border: 1px solid black;
     border-width: 0px 1px 1px 0px;
     text-align: center;
 }
 
-table.helper-table  td{
+table.helper-table td{
     border: 1px solid black;
     border-width: 0px 1px 0px 0px;
     text-align: center;
 }
 
-p{
+p {
     font-size: 15px;
 }
 
+.quantifier { color: #9c0cb2; font-weight: bold; } /* some, value, ... */
+.conjuction { color: #0c965f; font-weight: bold; } /* and, or, ... */
+.facet { color: #05a; } /* minLenght, pattern, ... */

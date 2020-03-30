@@ -25,7 +25,6 @@ import { SettingSetRendererComponent } from '../widget/settingsRenderer/settingS
 import { SettingsRendererComponent } from '../widget/settingsRenderer/settingsRendererComponent';
 import { SettingsRendererPanelComponent } from '../widget/settingsRenderer/settingsRendererPanelComponent';
 import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLiteralInputComponent';
-import { HelperModal } from '../widget/codemirror/manchesterEditor/modal/helperModal';
 
 @NgModule({
     imports: [CommonModule, FormsModule],
@@ -33,7 +32,6 @@ import { HelperModal } from '../widget/codemirror/manchesterEditor/modal/helperM
         DatatypePickerComponent,
         ExtensionConfiguratorComponent,
         FilePickerComponent,
-        HelperModal,
         HtmlEditorComponent,
         InputEditableComponent,
         LangPickerComponent,
@@ -66,7 +64,6 @@ import { HelperModal } from '../widget/codemirror/manchesterEditor/modal/helperM
         LanguageItemComponent,
         LiteralPickerComponent,
         ManchesterEditorComponent,
-        HelperModal,
         NTripleEditorComponent,
         PartitionFilterEditor,
         PearlEditorComponent,
