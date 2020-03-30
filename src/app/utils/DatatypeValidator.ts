@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { ARTLiteral, ARTURIResource } from "../models/ARTResources";
 import { ConstrainingFacets, DatatypeRestrictionDescription, DatatypeRestrictionsMap, DatatypeUtils } from "../models/Datatypes";
 import { DatatypesServices } from "../services/datatypesServices";
+import { VBEventHandler } from "./VBEventHandler";
 
 /**
  * This service provides useful method in order to manage datatype restrictions and to validate typed literal.
@@ -15,13 +16,27 @@ import { DatatypesServices } from "../services/datatypesServices";
  */
 @Injectable()
 export class DatatypeValidator {
+    
+    private eventSubscriptions: Subscription[] = [];
 
     /**
      * client-side cache of restrictions on user defined datatypes. This is useful for client-side validation
      */
     private userDefinedDatatypeRestrictions: DatatypeRestrictionsMap;
 
-    constructor(private datatypeService: DatatypesServices) { }
+    constructor(private datatypeService: DatatypesServices, private eventHandler: VBEventHandler) {
+        this.eventSubscriptions.push(
+            this.eventHandler.resourceRenamedEvent.subscribe((data: { oldResource: ARTURIResource, newResource: ARTURIResource }) => {
+                if (this.userDefinedDatatypeRestrictions.has(data.oldResource.getURI())) {
+                    this.initDatatypeRestrictions().subscribe();
+                }
+            })
+        );
+    }
+
+    ngOnDestroy() {
+        this.eventHandler.unsubscribeAll(this.eventSubscriptions);
+    }
 
     /**
      * Initializes the datatype-pattern map defined in the project.

@@ -64,7 +64,7 @@ export class RefactorServices {
                          * changes also the oldResource in the event
                          */
                         let oldRes = new ARTURIResource(oldResource.getURI());
-                        this.eventHandler.resourceRenamedEvent.emit({ oldResource: oldRes, newResource: newRes });
+                        this.eventHandler.resourceRenamedEvent.emit({ oldResource: oldRes, newResource: <ARTURIResource>newRes });
                         return stResp;
                     }
                 );

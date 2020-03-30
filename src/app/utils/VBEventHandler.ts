@@ -94,7 +94,7 @@ export class VBEventHandler {
     public refreshDataBroadcastEvent: EventEmitter<any> = new VBEventEmitter("refreshDataBroadcastEvent", true);
     public refreshTreeListEvent: EventEmitter<RDFResourceRolesEnum[]> = new VBEventEmitter("refreshTreeEvent");
 
-    public resourceRenamedEvent: EventEmitter<{ oldResource: ARTResource, newResource: ARTResource }> = new VBEventEmitter("resourceRenamedEvent");
+    public resourceRenamedEvent: EventEmitter<{ oldResource: ARTURIResource, newResource: ARTURIResource }> = new VBEventEmitter("resourceRenamedEvent");
     public resourceDeprecatedEvent: EventEmitter<ARTResource> = new VBEventEmitter<ARTResource>("resourceDeprecatedEvent");
     //useful to refresh the ResourceView when a resource is updated from outside the RV
     public resourceUpdatedEvent: EventEmitter<ARTResource> = new VBEventEmitter<ARTResource>("resourceUpdatedEvent");
