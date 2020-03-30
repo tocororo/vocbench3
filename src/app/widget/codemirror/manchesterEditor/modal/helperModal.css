@@ -24,6 +24,3 @@ p {
     font-size: 15px;
 }
 
-.quantifier { color: #9c0cb2; font-weight: bold; } /* some, value, ... */
-.conjuction { color: #0c965f; font-weight: bold; } /* and, or, ... */
-.facet { color: #05a; } /* minLenght, pattern, ... */

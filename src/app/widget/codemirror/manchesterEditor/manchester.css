@@ -12,3 +12,8 @@ Here I extended the CSS rules of the default theme in codemirror.css
 .cm-s-default .cm-frame { color: #757575; font-weight: bold; } /* AnnotationProperty:, Class:, ... */
 .cm-s-default .cm-section { color: #001abc; font-weight: bold; } /* Annotations:, SubClassOf:, ... */
 .cm-s-default .cm-boolean { color: #219 } /* atom */
+
+/* these are used for hints window*/
+.quantifier { color: #9c0cb2; font-weight: bold; } /* some, value, ... */
+.conjuction { color: #0c965f; font-weight: bold; } /* and, or, ... */
+.facet { color: #05a; } /* minLenght, pattern, ... */ 
