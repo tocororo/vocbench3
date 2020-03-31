@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output } from "@angular/core";
 import { ARTNode, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { GraphClassAxiomFilter, GraphModelRecord } from "../../models/Graphs";
-import { OWL } from "../../models/Vocabulary";
+import { OWL, RDFS } from "../../models/Vocabulary";
 import { GraphServices } from "../../services/graphServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
@@ -75,12 +75,12 @@ export class ModelGraphComponent extends AbstractGraph {
                             "warning"
                         ).then(
                             confirm => {
-                                this.initGlabalModelGraph(links);
+                                this.appendLinks(links);
                             },
                             cancel => {}
                         )
                     } else {
-                        this.initGlabalModelGraph(links);
+                        this.appendLinks(links);
                     }
                 }
             );
@@ -106,12 +106,6 @@ export class ModelGraphComponent extends AbstractGraph {
         this.graph.update();
         //expand and select the node
         this.expandNode(node, true);
-    }
-
-    /* ============== GLOBAL GRAPH MODEL ============== */
-
-    private initGlabalModelGraph(links: Link[]) {
-        this.appendLinks(links);
     }
 
     /* ============== INCREMENTAL GRAPH MODEL ============== */
@@ -183,42 +177,49 @@ export class ModelGraphComponent extends AbstractGraph {
     private appendLinks(links: Link[]) {
         let linksToNotShow: Link[] = []; //Collects the links that are added to the graph but that, according the filters, should not be shown.
         links.forEach(l => {
-            //if the link is already in the graph, update the openBy list and skip the add
-            let linkInGraph = this.graph.getLink(l.source.res, l.res, l.target.res);
-            if (linkInGraph != null) {
-                linkInGraph.openBy.push(...l.openBy);
-            } else { //link does not exist in graph => use it
-                //update the source and target nodes of the link with the same nodes retrieved from the graph
-                let sourceNode = this.retrieveNode(<ModelNode>l.source, l.target.res);
-                l.source = sourceNode;
-                let targetNode = this.retrieveNode(<ModelNode>l.target, l.source.res);
-                l.target = targetNode;
+            if (l.res.equals(RDFS.subClassOf) && l.target.res.equals(OWL.thing)) {
+                //if the relation is about rdfs:subClassOf owl:Thing, just add the source node (a root node) to the graph (if not yet in)
+                if (!this.graph.getNodes().some(n => n.res.equals(l.source.res))) {
+                    this.graph.addNode(l.source);
+                }
+            } else {
+                //if the link is already in the graph, update the openBy list and skip the add
+                let linkInGraph = this.graph.getLink(l.source.res, l.res, l.target.res);
+                if (linkInGraph != null) {
+                    linkInGraph.openBy.push(...l.openBy);
+                } else { //link does not exist in graph => use it
+                    //update the source and target nodes of the link with the same nodes retrieved from the graph
+                    let sourceNode = this.retrieveNode(<ModelNode>l.source, l.target.res);
+                    l.source = sourceNode;
+                    let targetNode = this.retrieveNode(<ModelNode>l.target, l.source.res);
+                    l.target = targetNode;
 
-                //update the filter map
-                let show = true;
-                this.filters.forEach(f => {
-                    if (f.property.equals(l.res)) { //link is about a filtered relation
-                        let delta = this.filtersDeltaMap[l.res.getURI()]; //here l.res is for sure a filter property since show is false only in that case
-                        let alreadyInDelta = false;
-                        delta.forEach(dl => {
-                            if (dl.source == l.source && dl.res.equals(l.res) && dl.target == l.target) {
-                                alreadyInDelta = true;
+                    //update the filter map
+                    let show = true;
+                    this.filters.forEach(f => {
+                        if (f.property.equals(l.res)) { //link is about a filtered relation
+                            let delta = this.filtersDeltaMap[l.res.getURI()]; //here l.res is for sure a filter property since show is false only in that case
+                            let alreadyInDelta = false;
+                            delta.forEach(dl => {
+                                if (dl.source == l.source && dl.res.equals(l.res) && dl.target == l.target) {
+                                    alreadyInDelta = true;
+                                }
+                            })
+                            if (!alreadyInDelta) {
+                                delta.push(l);
                             }
-                        })
-                        if (!alreadyInDelta) {
-                            delta.push(l);
+                            //check also if link should be shown according the filter
+                            if (!f.show) { 
+                                linksToNotShow.push(l); //links is about a filtered relation which "show" is false (so must be removed)
+                            }
                         }
-                        //check also if link should be shown according the filter
-                        if (!f.show) { 
-                            linksToNotShow.push(l); //links is about a filtered relation which "show" is false (so must be removed)
-                        }
-                    }
-                });
-                //update the incoming-outgoing nodes of both source and target
-                (<ModelNode>sourceNode).outgoingNodes.push(targetNode); 
-                (<ModelNode>targetNode).incomingNodes.push(sourceNode);
-                //add the link to the graph
-                this.graph.addLink(l); 
+                    });
+                    //update the incoming-outgoing nodes of both source and target
+                    (<ModelNode>sourceNode).outgoingNodes.push(targetNode); 
+                    (<ModelNode>targetNode).incomingNodes.push(sourceNode);
+                    //add the link to the graph
+                    this.graph.addLink(l); 
+                }
             }
         });
         //Now that all the links are added, removes the collected links that should be hidden according the filters
@@ -308,7 +309,6 @@ export class ModelGraphComponent extends AbstractGraph {
         });
         return links;
     }
-
 
     /* ================== UTILS ================== */
 

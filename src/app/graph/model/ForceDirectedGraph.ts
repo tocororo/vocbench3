@@ -208,12 +208,7 @@ export class ForceDirectedGraph {
      */
     public getNode(res: ARTNode) {
         if (res.isLiteral()) return null; //literal node should never be reused, return null
-        for (let i = 0; i < this.nodes.length; i++) {
-            if (this.nodes[i].res.getNominalValue() == res.getNominalValue()) {
-                return this.nodes[i];
-            }
-        }
-        return null;
+        return this.nodes.find(n => n.res.equals(res));
     }
 
     public addNode(node: Node) {

@@ -26,7 +26,7 @@ export class ProjectDirModal implements ModalComponent<ProjectDirModalData> {
 
     ngOnInit() {
         this.directories = this.context.availableDirs;
-        this.directories.sort();
+        this.directories.sort((d1: string, d2: string) => d1.toLocaleLowerCase().localeCompare(d2.toLocaleLowerCase()));
         this.dirName = this.context.currentDir;
     }
 
