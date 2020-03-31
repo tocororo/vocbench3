@@ -4,7 +4,6 @@ import { ARTURIResource } from '../models/ARTResources';
 import { GraphModelRecord } from '../models/Graphs';
 import { HttpManager } from "../utils/HttpManager";
 import { ResourcesServices } from './resourcesServices';
-import { ResourceUtils } from '../utils/ResourceUtils';
 
 @Injectable()
 export class GraphServices {

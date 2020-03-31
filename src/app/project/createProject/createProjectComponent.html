@@ -411,8 +411,8 @@
                     <div class="subPanel">
                         <div class="subPanel-heading">
                             <label style="flex: 1;">SHACL Shape Validation</label>
-                            <div class="checkbox-inline">
-                                <label>
+                            <div class="checkbox" style="margin: 0px;">
+                                <label style="min-height: initial;">
                                     <input type="checkbox" [(ngModel)]="enableSHACL">
                                     Enable shape validation
                                 </label>
@@ -430,11 +430,16 @@
                         </div>
                     </div>
 
-                    <div>
-                        <label>
-                            <input type="checkbox" [(ngModel)]="enableTrivialInference">
-                            Enable trivial inference
-                        </label>
+                    <div class="subPanel">
+                        <div class="subPanel-heading">
+                            <label style="flex: 1;">Trivial Inference Engine</label>
+                            <div class="checkbox" style="margin: 0px;">
+                                <label style="min-height: initial;">
+                                    <input type="checkbox" [(ngModel)]="enableTrivialInference">
+                                    Enable trivial inference
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
