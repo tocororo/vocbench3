@@ -37,9 +37,11 @@ export class ProjectUsersManagerComponent {
     private selectedRole: Role; //role selected in roleList (available roles)
     private selectedUserRole: string; //selected role in the list of the roles assigned to selectedUser in the selectedProject
 
-    private projectLanguages: Language[]; //available languages for the selected project
+    private projectLanguages: Language[]; //all the languages assigned to the selected project
+    private availableLanguages: Language[]; //the languages that are shown in the "Available languages" panel, those who is possible to assign to user
     private selectedLang: Language; //role selected in langList (available langs)
     private selectedUserLang: Language; //selected lang in the list of the language assigned to the selectedUser in the selectedProject
+    private filterProficiencies: boolean = false;
 
     private groupList: UsersGroup[];
     private selectedGroup: UsersGroup;
@@ -94,6 +96,7 @@ export class ProjectUsersManagerComponent {
                     try {
                         this.projectLanguages = <Language[]>JSON.parse(langsValue);
                         Languages.sortLanguages(this.projectLanguages);
+                        this.initAvailableLanguages();
                     } catch (err) {
                         this.basicModals.alert("Error", "Initialization of languages for project '" + this.project.getName() + 
                             "' has encountered a problem during parsing the 'languages' settings. " + 
@@ -116,6 +119,7 @@ export class ProjectUsersManagerComponent {
                 this.puBinding = puBinding;
                 this.selectedUserRole = null;
                 this.selectedUserLang = null;
+                this.initAvailableLanguages();
             }
         );
         /**
@@ -294,21 +298,36 @@ export class ProjectUsersManagerComponent {
    
     //=========== LANGUAGES ===========
 
-    private getPULanguages(): Language[] {
-        var puLanguages: Language[] = [];
-        var langs: string [] = this.puBinding.getLanguages();
-        for (var i = 0; i < langs.length; i++) {
-            for (var j = 0; j < this.projectLanguages.length; j++) {
-                if (langs[i] == this.projectLanguages[j].tag) {
-                    puLanguages.push(this.projectLanguages[j]);
-                    break;
-                }
+    private toggleFilterProficencies() {
+        this.filterProficiencies = !this.filterProficiencies;
+        this.initAvailableLanguages();
+    }
+
+    private initAvailableLanguages() {
+        this.availableLanguages = [];
+        this.projectLanguages.forEach(l => {
+            let availableLang: Language = { name: l.name, tag: l.tag, mandatory: l.mandatory };
+            availableLang['proficiency'] = this.isProficiencyLang(l.tag);
+            if (!this.filterProficiencies || availableLang['proficiency']) {
+                this.availableLanguages.push(availableLang);
             }
-        }
+        });
+    }
+
+    private getPULanguages(): Language[] {
+        let puLanguages: Language[] = [];
+        this.puBinding.getLanguages().forEach(puLangTag => {
+            let lang: Language = this.projectLanguages.find(l => l.tag == puLangTag);
+            if (lang != null) {
+                let puLang: Language = { name: lang.name, tag: lang.tag, mandatory: lang.mandatory };
+                puLang['proficiency'] = this.isProficiencyLang(lang.tag);
+                puLanguages.push(puLang);
+            }
+        })
         Languages.sortLanguages(puLanguages);
         return puLanguages;
     }
-    
+
     private selectUserLang(lang: Language) {
         if (this.selectedUserLang == lang) {
             this.selectedUserLang = null;    
@@ -347,7 +366,7 @@ export class ProjectUsersManagerComponent {
 
     private addProficienciesLangs() {
         this.projectLanguages.forEach(l => {
-            if (!this.isLangAlreadyAssigned(l) && this.isInUserLangProficiencies(l.tag)) {
+            if (!this.isLangAlreadyAssigned(l) && this.isProficiencyLang(l.tag)) {
                 this.puBinding.addLanguage(l.tag);
             }
         });
@@ -382,12 +401,33 @@ export class ProjectUsersManagerComponent {
     private leaveProficienciesLangs() {
         let langs: string[] = [];
         this.puBinding.getLanguages().forEach(l => {
-            if (this.isInUserLangProficiencies(l)) {
+            if (this.isProficiencyLang(l)) {
                 langs.push(l);
             }
         });
         this.puBinding.setLanguages(langs);
         this.updateLanguagesOfUserInProjectAfterRemove();
+    }
+
+    private isProficiencyLang(lang: string): boolean {
+        if (this.selectedUser != null) {
+            return this.selectedUser.getLanguageProficiencies().indexOf(lang) != -1;
+        } else {
+            return false;
+        }
+    }
+
+    private isLangAlreadyAssigned(lang: Language): boolean {
+        if (this.puBinding == undefined) {
+            return true;
+        }
+        var pubLanguages: string[] = this.puBinding.getLanguages();
+        for (var i = 0; i < pubLanguages.length; i++) {
+            if (pubLanguages[i] == lang.tag) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private updateLanguagesOfUserInProjectAfterRemove() {
@@ -407,28 +447,6 @@ export class ProjectUsersManagerComponent {
                 }
             }
         );
-    }
-
-
-    private isLangAlreadyAssigned(lang: Language): boolean {
-        if (this.puBinding == undefined) {
-            return true;
-        }
-        var pubLanguages: string[] = this.puBinding.getLanguages();
-        for (var i = 0; i < pubLanguages.length; i++) {
-            if (pubLanguages[i] == lang.tag) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private isInUserLangProficiencies(lang: string): boolean {
-        if (this.selectedUser != null) {
-            return this.selectedUser.getLanguageProficiencies().indexOf(lang) != -1;
-        } else {
-            return false;
-        }
     }
 
     //=========== TEMPLATES ===========

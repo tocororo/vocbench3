@@ -123,7 +123,7 @@
                                     <div *ngFor="let l of getPULanguages()" class="listItem" [ngClass]="{active: l == selectedUserLang}" 
                                         (click)="selectUserLang(l)">
                                         <lang-item style="flex: 1" [language]="l" showTag="true"></lang-item>
-                                        <span *ngIf="isInUserLangProficiencies(l.tag)" class="glyphicon glyphicon-star" 
+                                        <span *ngIf="l.proficiency" class="glyphicon glyphicon-star" 
                                             title="This language is in the language proficiencies of the selected user">
                                         </span>
                                     </div>
@@ -170,13 +170,15 @@
                         </div>
                         <div class="subPanel vbox" style="margin: 0px">
                             <div class="subPanel-heading">
-                                <label>Available Languages:</label>
+                                <label style="flex: 1">Available Languages:</label>
+                                <button class="btn btn-xs btn-default" (click)="toggleFilterProficencies()" [ngClass]="{ active: filterProficiencies }">
+                                    <span class="glyphicon glyphicon-star" title="Show only language proficiencies of the user"></span>
+                                </button>
                             </div>
                             <div class="subPanel-body vbox scrollableContainer">
-                                <div *ngFor="let l of projectLanguages" class="listItem" [ngClass]="{active: l == selectedLang}"
-                                    (click)="selectLang(l)">
+                                <div *ngFor="let l of availableLanguages" class="listItem" [ngClass]="{active: l == selectedLang}" (click)="selectLang(l)">
                                     <lang-item [language]="l" showTag="true" style="flex: 1" [disabled]="isLangAlreadyAssigned(l)"></lang-item>
-                                    <span *ngIf="isInUserLangProficiencies(l.tag)" class="glyphicon glyphicon-star" 
+                                    <span *ngIf="l.proficiency" class="glyphicon glyphicon-star" 
                                         title="This language is in the language proficiencies of the selected user">
                                     </span>
                                 </div>
