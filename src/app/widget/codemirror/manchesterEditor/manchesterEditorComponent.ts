@@ -223,7 +223,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                         if (word == wordFound) {
                             let positionWordFound = this.cmEditor.getDoc().getSearchCursor(new RegExp(word + "\\b")); // take word position
                             while (positionWordFound.findNext()) { // it is necessary to check if there are words that metching 
-                                let marker = this.cmEditor.getDoc().markText(positionWordFound.from(), positionWordFound.to(), { className:"underline" }) //underline word that match
+                                let marker = this.cmEditor.getDoc().markText(positionWordFound.from(), positionWordFound.to(), { className:"underline" , title:value }) //underline word that match
                                 this.markers.push(marker); // insert word into array that contain matched and underlined words
                             }
                         }
@@ -237,7 +237,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                         if (word == wordFound) {
                             let positionWordFound = this.cmEditor.getDoc().getSearchCursor(new RegExp(word + "\\b"));
                             while (positionWordFound.findNext()) {
-                                let marker = this.cmEditor.getDoc().markText(positionWordFound.from(), positionWordFound.to(), { className:"underline" })
+                                let marker = this.cmEditor.getDoc().markText(positionWordFound.from(), positionWordFound.to(), { className:"underline", title:value })
                                 this.markers.push(marker);
                             }
                         }
