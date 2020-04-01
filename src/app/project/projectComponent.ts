@@ -108,7 +108,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
                 " is currently open. Please, close the project and then retry.", "warning");
             return;
         } else {
-            this.basicModals.confirm("Delete project", "Attention, this operation will delete the project " +
+            this.basicModals.confirm("Delete project", "Warning, this operation will delete the project " +
                 project.getName() + ". Are you sure to proceed?", "warning").then(
                 result => {
                     //retrieve the remote repositories referenced by the deleting project (this must be done before the deletion in order to prevent errors)

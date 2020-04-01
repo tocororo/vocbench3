@@ -2,12 +2,12 @@
 
     <div class="panel panel-default vbox">
         <div class="panel-heading">
-            <label style="flex: 1;">Projects</label>
+            <button class="btn btn-xs btn-default" (click)="createProject()">
+                Create
+            </button>
+            <span style="flex: 1;"></span>
             <div class="btn-toolbar">
-                <button class="btn btn-xs btn-default" (click)="createProject()">
-                    Create
-                </button>
-                <button class="btn btn-xs btn-default" (click)="openACLModal()">
+                <button class="btn btn-xs btn-default" (click)="openACLModal()" title="Show ACL matrix">
                     ACL
                 </button>
                 <button class="btn btn-xs btn-default" (click)="settings()" title="Project view settings">
@@ -24,8 +24,8 @@
                             {{columnOrder[colId].show}}
                         </label>
                     </ng-container>
-                    <label class="text-center" style="width: 18px; order: 99;">
-                        <!-- just a placeholder for the ctx menu column -->
+                    <label class="text-center" style="width: 100px; order: 99;">
+                        Actions
                     </label>
                 </div>
                 <ng-container *ngFor="let pd of projectDirs">
@@ -75,20 +75,25 @@
                                         {{p.getRepositoryLocation().location}}
                                         <span *ngIf="p.isRepositoryRemote()" class="glyphicon glyphicon-map-marker" [title]="p.getRepositoryLocation().serverURL"></span>
                                     </div>
-                                    <div class="dropdown pull-right" style="width: 18px; order: 99">
-                                        <button class="dropdown-toggle transparentBtn" data-toggle="dropdown">
-                                            <span>&#9662;</span>
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a (click)="editDirectory(p, pd.dir)">Change directory</a></li>
-                                            <li><a (click)="editACL(p)">Edit ACL</a></li>
-                                            <li *ngIf="p.isRepositoryRemote()"><a (click)="editRemoteRepoCredential(p)">Edit Remote Repo configuration</a></li>
-                                            <li role="separator" class="divider"></li>
-                                            <li><a (click)="deleteProject(p)">Delete</a></li>
-                                            <li role="separator" class="divider"></li>
-                                            <li><a (click)="editDescription(p)">Edit description</a></li>
-                                            <li><a (click)="openPropertyModal(p)">Properties</a></li>
-                                        </ul>
+                                    <div class="text-center" style="width: 100px; order: 99;">
+                                        <div class="hbox" style="justify-content: center;">
+                                            <button class="btn btn-xs btn-default" style="margin-left: 10px;">
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </button>
+                                            <div class="dropdown pull-right">
+                                                <button class="dropdown-toggle transparentBtn" data-toggle="dropdown">
+                                                    <span>&#9662;</span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a (click)="editDirectory(p, pd.dir)">Change directory</a></li>
+                                                    <li><a (click)="editACL(p)">Edit ACL</a></li>
+                                                    <li *ngIf="p.isRepositoryRemote()"><a (click)="editRemoteRepoCredential(p)">Edit Remote Repo configuration</a></li>
+                                                    <li><a (click)="editDescription(p)">Edit description</a></li>
+                                                    <li role="separator" class="divider"></li>
+                                                    <li><a (click)="openPropertyModal(p)">Properties</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </ng-container>
@@ -105,8 +110,8 @@
                             {{columnOrder[colId].show}}
                         </label>
                     </ng-container>
-                    <label class="text-center" style="width: 18px; order: 99;">
-                        <!-- just a placeholder for the ctx menu column -->
+                    <label class="text-center" style="width: 100px; order: 99;">
+                        Actions
                     </label>
                 </div>
                 <div>
@@ -142,19 +147,25 @@
                             {{p.getRepositoryLocation().location}}
                             <span *ngIf="p.isRepositoryRemote()" class="glyphicon glyphicon-map-marker" [title]="p.getRepositoryLocation().serverURL"></span>
                         </div>
-                        <div class="dropdown pull-right" style="width: 18px; order: 99">
-                            <button class="dropdown-toggle transparentBtn" data-toggle="dropdown">
-                                <span>&#9662;</span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a (click)="editACL(p)">Edit ACL</a></li>
-                                <li *ngIf="p.isRepositoryRemote()"><a (click)="editRemoteRepoCredential(p)">Edit Remote Repo configuration</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a (click)="deleteProject(p)">Delete</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a (click)="editDescription(p)">Edit description</a></li>
-                                <li><a (click)="openPropertyModal(p)">Properties</a></li>
-                            </ul>
+                        <div class="text-center" style="width: 100px; order: 99;">
+                            <div class="hbox" style="justify-content: center;">
+                                <button class="btn btn-xs btn-default" style="margin-left: 10px;">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                                <div class="dropdown pull-right">
+                                    <button class="dropdown-toggle transparentBtn" data-toggle="dropdown">
+                                        <span>&#9662;</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a (click)="editDirectory(p, pd.dir)">Change directory</a></li>
+                                        <li><a (click)="editACL(p)">Edit ACL</a></li>
+                                        <li *ngIf="p.isRepositoryRemote()"><a (click)="editRemoteRepoCredential(p)">Edit Remote Repo configuration</a></li>
+                                        <li><a (click)="editDescription(p)">Edit description</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a (click)="openPropertyModal(p)">Properties</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
