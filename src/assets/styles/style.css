@@ -716,6 +716,7 @@ textarea {
     padding: 3px;
     background: #fff;
     margin: 2px; 
+    white-space: nowrap;
 }
 
 /* class to add to input-sm in order to create a container (similar to a form-control) for a rdf-resource */

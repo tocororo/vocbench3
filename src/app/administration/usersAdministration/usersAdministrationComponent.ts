@@ -37,10 +37,12 @@ export class UsersAdministrationComponent {
     private aspectSelectors: string[] = [this.userDetailsAspect, this.rvTemplateAspect]
     private selectedAspectSelector: string = this.aspectSelectors[0];
 
+    private userProjects: string[]; //project assigned to the user
+
     private userTemplate: PartitionFilterPreference;
 
-    constructor(private userService: UserServices, private prefService: PreferencesSettingsServices, private vbProp: VBProperties,
-        private sharedModals: SharedModalServices, private modal: Modal) { }
+    constructor(private userService: UserServices, private prefService: PreferencesSettingsServices, 
+        private vbProp: VBProperties, private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.initUserList();
@@ -64,6 +66,14 @@ export class UsersAdministrationComponent {
         if (this.selectedUser != user) {
             this.selectedUser = user;
             this.initTemplate();
+            //init project assigned to user user
+            if (!this.selectedUser.isAdmin()) {
+                this.userService.listProjectsBoundToUser(this.selectedUser.getIri()).subscribe(
+                    projects => {
+                        this.userProjects = projects;
+                    }
+                );
+            }
         }
     }
 

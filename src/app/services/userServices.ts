@@ -104,6 +104,17 @@ export class UserServices {
     }
 
     /**
+     * 
+     * @param userIri 
+     */
+    listProjectsBoundToUser(userIri: string): Observable<string[]> {
+        var params: any = {
+            userIri: userIri
+        }
+        return this.httpMgr.doGet(this.serviceName, "listProjectsBoundToUser", params);
+    }
+
+    /**
      * Register a new user
      * @param email
      * @param password

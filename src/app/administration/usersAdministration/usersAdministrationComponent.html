@@ -51,8 +51,27 @@
                         (click)="selectedAspectSelector = selector">{{selector}}</button>
                 </div>
 
-                <user-details-panel *ngIf="selectedAspectSelector == userDetailsAspect" [user]="selectedUser" (deleted)="initUserList()">
-                </user-details-panel>
+                <div class="panel panel-default vbox" *ngIf="selectedAspectSelector == userDetailsAspect">
+                    <div class="panel-body vbox">
+                        <user-details-panel [user]="selectedUser" (deleted)="initUserList()">
+                        </user-details-panel>
+                        <div class="panel panel-default" style="margin-top: 8px">
+                            <div class="panel-body hbox" style="align-items: center;">
+                                <label>Assigned to projects:</label>
+                                <div class="hbox tile-group" style="align-items: center; margin-left: 6px; flex-wrap: nowrap; overflow: auto;">
+                                    <span *ngIf="selectedUser.isAdmin(); else notAdminBlock" style="margin-left: 4px;">
+                                        Administrator has autmoatically access to all projects
+                                    </span>
+                                    <ng-template #notAdminBlock>
+                                        <span *ngFor="let p of userProjects" class="tile">{{p}}</span>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <user-details-panel *ngIf="selectedAspectSelector == userDetailsAspect" [user]="selectedUser" (deleted)="initUserList()">
+                </user-details-panel> -->
 
                 <div class="panel panel-default vbox" *ngIf="selectedAspectSelector == rvTemplateAspect">
                     <div class="panel-heading">
