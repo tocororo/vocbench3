@@ -7,9 +7,18 @@ import { ARTNode } from '../../models/ARTResources';
 export class UmlNode extends Node {
 
     listPropInfo: Array<PropInfo> = [];
+    xlink: string
+    explicit:boolean
 
     constructor(res: ARTNode) {
         super(res);
+        this.explicit=res.getAdditionalProperty(ResAttribute.EXPLICIT) ||
+            res.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;
+            
+        this.xlink = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABPUlEQVR42mNkoBAwDk4D7hzr/v/q2mKGv78+g/nMbLwMYlpxDCpWJYwEDTi7wvM/69/nDEJCQgzsXMIMb189ZPjy5QvD9+/fGbiENBiMI7Yz4jQAZPO3+0sZFFSNGFikZBk4pRsYPh7xZ3j69CnYABCWNMgCuqSUEasBx+bo/Rfi52CQM3BgYJAWZWC4fo3h/u1LDH///gVjkEtA3rFKuYTdgMPTFP9z8YoxyMnJMbx7947h/5/PYI2/fv0CY5ALQHzngqe4DQD5nY2NDWwbiIYZANL88eNHsDqfyne4vcDG/AfMBmmEAZABIABy1a+/LAyh9W+xGwAKxOcXpmGNb5DtIFfImxUwmPm0YzcAFo3f3t2A80EugWmWUbFisEk8gDsa0RPSr+8fIKH//R+DjEEyg7FnC+GERCoYeAMAAHCnETraWggAAAAASUVORK5CYII="
+        if (!this.explicit) {
+            this.xlink = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABTklEQVR42s2SvUoDQRSFz2ZcSFyza6KYIGyMgqI2CqJNIBai5DUs7H0ASyGtb2DpewhpLERfQIJBiGiUGPdndjIzzg6aQnYJYqG3Ge4w851zfwz8Moz/CejdX8pB9xqCBTrPmDnky9uYqdSMsYDOzbkk4h2Tlq0/Uu8FYRiARSFMqwx389BIBcTK9PkWhbkFkLwN096F377AoP8KxiINcdyaclI3EgHtqzNp5bKYKi2BTFvgj0/o9x4ghACkUE587aq6c5wMuGs1pZl14BRmQQMfECE45xB8CC6GCkA1aLl+kg6IayeEKLsUGTKh1bkCxPbD0NPv1vdO00sghvzMxOieRZE+fe9NOQE2Gs1kQNzEfqeVOO9YndEAxcV9uGuNZMDXGJnXHeVcSNWPAfgwglNaRXXrKH2M3xeJUV83jUYMxUoN8ysH4xfpp/H3gA9iGKIR2Fuw7gAAAABJRU5ErkJggg=="
+        }
     }
 
     initNodeShape() {
@@ -28,7 +37,7 @@ export class NodePropRange {
 }
 
 /**
- * This class is used to have cordinates of Property
+ * This class is used to have cordinates of Properties
  */
 
 export class PropInfo {

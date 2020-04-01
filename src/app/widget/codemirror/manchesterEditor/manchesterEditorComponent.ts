@@ -28,6 +28,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
     @Input() disabled: boolean;
     @ViewChild('txtarea') textareaElement: any;
 
+    private markers: CodeMirror.TextMarker[] = [];
     private cmEditor: CodeMirror.EditorFromTextArea;
     private codeValid: boolean = true;
     private codeValidationTimer: number;
@@ -39,8 +40,8 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
         this.cmEditor = CodeMirror.fromTextArea(
             this.textareaElement.nativeElement,
             {
-                lineNumbers: true, 
-                mode: "manchester", 
+                lineNumbers: true,
+                mode: "manchester",
                 indentUnit: 4,
                 indentWithTabs: true,
                 lineWrapping: true,
@@ -97,7 +98,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
         let word = start != end && curLine.slice(start, end);
 
         if (word != "") {
-             // if word contains ":" it call serachURIList otherwise it call searchPrefix and search in keywords
+            // if word contains ":" it call serachURIList otherwise it call searchPrefix and search in keywords
             if (word.indexOf(":") != -1) {
                 //update start value to put hint choosen after ":"
                 for (let i = start; i <= end; i++) {
@@ -106,8 +107,17 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                         break
                     }
                 }
-                return this.searchServices.searchURIList(word, SearchMode.startsWith).map(
+                return this.searchServices.searchURIList(word, SearchMode.startsWith, 200).map(
                     results => {
+                        if(results.length > 199){
+                            results.sort();
+                            results.push("...");
+                            return {
+                                from: CodeMirror.Pos(cur.line, start),
+                                to: CodeMirror.Pos(cur.line, end),
+                                list:results
+                            }
+                        }
                         return {
                             from: CodeMirror.Pos(cur.line, start),
                             to: CodeMirror.Pos(cur.line, end),
@@ -115,7 +125,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                         }
                     }
                 ).toPromise();
-            } else { // here i look for between keywords and prefixes
+            } else { // here look for between keywords and prefixes
                 let keywords = ["SOME", "ONLY", "VALUE", "MIN", "MAX", "EXACTLY", "SELF", "LENGTH", "MINLENGTH", "MAXLENGTH", "PATTERN", "LANGRANGE", "OR", "AND", "NOT", "THAT"]; // remeber to check and update also manchester.js file in case of modify
                 let filterKeywords = keywords.filter(w => w.startsWith(word.toUpperCase())).sort();
                 return this.searchServices.searchPrefix(word, SearchMode.startsWith).map(
@@ -123,7 +133,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                         let list: CodeMirror.Hint[] = []; // it is a particular data structure that allows me to add a reference for the css ( a list of objects)
                         if (results.length > 0 && filterKeywords.length > 0) { //  case in which you need to add a separator in hints windows ( first keyword and then prefixes)
                             filterKeywords.forEach(value => {
-                                if (value == "SOME" || value == "ONLY" || value == "VALUE" || value == "MIN" || value == "MAX" || value == "EXACTLY" || value == "SELF" ) {
+                                if (value == "SOME" || value == "ONLY" || value == "VALUE" || value == "MIN" || value == "MAX" || value == "EXACTLY" || value == "SELF") {
                                     list.push({ text: value, className: "quantifier" })
                                 } else if (value == "LANGRANGE" || value == "LENGTH" || value == "MAXLENGTH" || value == "MINLENGTH" || value == "PATTERN" || value == "<" || value == "<=" || value == ">" || value == ">=") {
                                     list.push({ text: value, className: "facet" })
@@ -192,19 +202,68 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
 
     }
 
+    /**
+     * 
+     * @param response 
+     * This method underline error in Manchester editor
+     */
+    errorMarks(response: string[]) {
+        // clean words that have been marked (useful when applying changes to underlined words) 
+        this.markers.forEach(value => {
+            value.clear()
+        })
+        let wordFound: string;
+        response.forEach(value => {
+            if (!value.startsWith("Not")) {
+                if (!value.startsWith("Resource")) {
+                    let wordToSearch = value.split(" ", 2);
+                    wordFound = wordToSearch[0]; // take first value
+                    let text = this.cmEditor.getDoc().getValue().split(" ");
+                    text.forEach(word => {
+                        if (word == wordFound) {
+                            let positionWordFound = this.cmEditor.getDoc().getSearchCursor(new RegExp(word + "\\b")); // take word position
+                            while (positionWordFound.findNext()) { // it is necessary to check if there are words that metching 
+                                let marker = this.cmEditor.getDoc().markText(positionWordFound.from(), positionWordFound.to(), { className:"underline" }) //underline word that match
+                                this.markers.push(marker); // insert word into array that contain matched and underlined words
+                            }
+                        }
+                    })
+
+                } else if (value.startsWith("Resource")) {
+                    let wordToSearch = value.split(" ", 3); // split array in 3 parts 
+                    wordFound = wordToSearch[1]; //take second value
+                    let text = this.cmEditor.getDoc().getValue().split(" ");
+                    text.forEach(word => {
+                        if (word == wordFound) {
+                            let positionWordFound = this.cmEditor.getDoc().getSearchCursor(new RegExp(word + "\\b"));
+                            while (positionWordFound.findNext()) {
+                                let marker = this.cmEditor.getDoc().markText(positionWordFound.from(), positionWordFound.to(), { className:"underline" })
+                                this.markers.push(marker);
+                            }
+                        }
+                    })
+                }
+            }
+        })
+    }
 
 
     validateExpression(code: string) {
+        //console.log(code)
         let validationFn: Observable<ExpressionCheckResponse>;
         if (this.context == ManchesterCtx.datatypeFacets) {
             validationFn = this.manchesterService.checkDatatypeExpression(code);
+            //console.log("dataType",validationFn)
         } else if (this.context == ManchesterCtx.datatypeEnumeration) {
             validationFn = this.manchesterService.checkLiteralEnumerationExpression(code);
+            //console.log("dataEnum",validationFn)
         } else {
             validationFn = this.manchesterService.checkExpression(code);
+            //console.log("altrimenti",validationFn)
         }
         validationFn.subscribe(
             (checkResp: ExpressionCheckResponse) => {
+                this.errorMarks(checkResp.details)
                 this.codeValid = checkResp.valid;
                 if (this.codeValid) {
                     this.propagateChange(code);

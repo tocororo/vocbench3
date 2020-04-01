@@ -29,6 +29,7 @@ import 'codemirror/mode/xml/xml.js';
 import 'codemirror/mode/ntriples/ntriples.js';
 import 'codemirror/addon/hint/show-hint.js';
 import 'codemirror/addon/hint/show-hint.css';
+import 'codemirror/addon/search/searchcursor.js';
 
 
 

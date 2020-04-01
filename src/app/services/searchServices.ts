@@ -180,21 +180,24 @@ export class SearchServices {
      * 
      * @param searchString 
      * @param searchMode 
+     * @param maxNumResults default value = 0 (no limit)
      * @param rolesArray 
      * @param schemes 
      * @param schemeFilter 
      * @param cls 
      * @param options 
      */
-    searchURIList(searchString: string, searchMode: SearchMode, rolesArray?: string[],
+    searchURIList(searchString: string, searchMode: SearchMode, maxNumResults?: number, rolesArray?: string[],
         schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, cls?: ARTURIResource, options?: VBRequestOptions): Observable<string[]> {
         var params: any = {
             searchString: searchString,
             searchMode: searchMode,
+            maxNumResults: maxNumResults,
             rolesArray: rolesArray,
             schemes: schemes,
             schemeFilter: schemeFilter,
             cls: cls
+           
         };
         return this.httpMgr.doGet(this.serviceName, "searchURIList", params, options);
     }

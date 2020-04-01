@@ -1,52 +1,51 @@
 <svg:g [attr.transform]="'translate(' + node.x + ',' + node.y + ')'">
     <svg:g style="cursor: pointer;">
 
-        <defs>
+        <defs *ngIf="!node.explicit">
+            <linearGradient [attr.id]="'gradient'+node.index" x2="0%" y2="100%" gradientUnits="objectBoundingBox">
+                <stop offset="0%" style="stop-color: rgb(247, 241, 228)" />
+                <stop [attr.offset]="stripePercentage + '%'" style="stop-color: rgb(241, 239, 239)" />
+                <stop [attr.offset]="stripePercentage + '%'" style="stop-color: #fcfcf5 " />
+                <stop offset="100%" style="stop-color:  #fcfcf5" />
+            </linearGradient>
+        </defs>
+        <defs *ngIf="node.explicit">
             <linearGradient [attr.id]="'gradient'+node.index" x2="0%" y2="100%" gradientUnits="objectBoundingBox">
                 <stop offset="0%" style="stop-color: rgb(245, 237, 217)" />
                 <stop [attr.offset]="stripePercentage + '%'" style="stop-color: rgb(219, 219, 219)" />
                 <!-- <stop [attr.offset]="stripePercentage + '%'" style="stop-color: black" />
                 <stop [attr.offset]="lineSeparetorPercentage + '%'" style="stop-color: black" /> 
                 <stop [attr.offset]="lineSeparetorPercentage + '%'" style="stop-color: #ffffee " /> -->
-                <stop [attr.offset]="stripePercentage + '%'" style="stop-color: #ffffee " /> 
-                <stop offset="100%" style="stop-color:  #ffffee "  />
+                <stop [attr.offset]="stripePercentage + '%'" style="stop-color: #ffffee " />
+                <stop offset="100%" style="stop-color:  #ffffee " />
             </linearGradient>
         </defs>
 
-         <!-- <defs>
-            <linearGradient id="gradientTop" x2="0%" y2="100%" gradientUnits="objectBoundingBox">
-                <stop offset="0%" style="stop-color: rgb(245, 237, 217)" />
-                <stop offset="100%" style="stop-color: rgb(219, 219, 219)"  />
-            </linearGradient>
-        </defs>
-         -->
+        
 
         <svg:g (click)="onClickClass()">
-            
+
             <svg:rect class="graphNode" rx="2" ry="2" [attr.x]="-measures.width/2" [attr.y]="-(measures.height/2)"
                 [attr.width]="measures.width" [attr.height]="measures.height"
                 [attr.fill]="'url(#gradient'+node.index+')'" [ngClass]="{ graphNodeSelected: selected }">
             </svg:rect>
-            <!-- Rettangolo più piccolo-->
-            <!-- <svg:rect class="graphNodeStripe" rx="2" ry="2" [attr.x]="-measures.width/2" [attr.y]="-(measures.height/2)"
-                [attr.width]="measures.width" [attr.height]="18"  stroke-dasharray="214 198"
-                fill="url(#gradientTop)" [ngClass]="{ graphNodeSelected: selected }"> 
-            </svg:rect> -->
-            <path [attr.d]="'M -'+ measures.width/2 + ' ' + (-(measures.height/2-18)) + ' l ' + measures.width + ' 0' " stroke="black"/> 
+           
+            <path [attr.d]="'M -'+ measures.width/2 + ' ' + (-(measures.height/2-18)) + ' l ' + measures.width + ' 0' "
+                stroke="black" />
 
-            
+
             <!-- Il  +14 sarebbe la grandezza dell'immagine(viene gestita direttamente nel front) e serve a spostare la scritta dopo l'immagine-->
             <svg:text #textEl style="visibility: hidden" font-size="14">{{show}}</svg:text>
-            <svg:text [attr.x]="(-measures.width/2+3)+14" [attr.y]="-measures.height/2+3" dominant-baseline="hanging"
+            <svg:text [attr.fill]="!node.explicit ? '#999' : ''" [attr.x]="(-measures.width/2+3)+14" [attr.y]="-measures.height/2+3" dominant-baseline="hanging"
                 font-size="14">
                 {{normalizedShow}}
                 <svg:title>{{node.res.toNT()}}</svg:title>
             </svg:text>
-            
 
-            <image
-                xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABPUlEQVR42mNkoBAwDk4D7hzr/v/q2mKGv78+g/nMbLwMYlpxDCpWJYwEDTi7wvM/69/nDEJCQgzsXMIMb189ZPjy5QvD9+/fGbiENBiMI7Yz4jQAZPO3+0sZFFSNGFikZBk4pRsYPh7xZ3j69CnYABCWNMgCuqSUEasBx+bo/Rfi52CQM3BgYJAWZWC4fo3h/u1LDH///gVjkEtA3rFKuYTdgMPTFP9z8YoxyMnJMbx7947h/5/PYI2/fv0CY5ALQHzngqe4DQD5nY2NDWwbiIYZANL88eNHsDqfyne4vcDG/AfMBmmEAZABIABy1a+/LAyh9W+xGwAKxOcXpmGNb5DtIFfImxUwmPm0YzcAFo3f3t2A80EugWmWUbFisEk8gDsa0RPSr+8fIKH//R+DjEEyg7FnC+GERCoYeAMAAHCnETraWggAAAAASUVORK5CYII="
-                [attr.x]="-measures.width/2+3" [attr.y]="-measures.height/2+3" height="14px" width="14px" />
+
+            <image [attr.xlink:href]="node.xlink" [attr.x]="-measures.width/2+3" [attr.y]="-measures.height/2+3" height="14px" width="14px" />
+                <!-- <image xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABPUlEQVR42mNkoBAwDk4D7hzr/v/q2mKGv78+g/nMbLwMYlpxDCpWJYwEDTi7wvM/69/nDEJCQgzsXMIMb189ZPjy5QvD9+/fGbiENBiMI7Yz4jQAZPO3+0sZFFSNGFikZBk4pRsYPh7xZ3j69CnYABCWNMgCuqSUEasBx+bo/Rfi52CQM3BgYJAWZWC4fo3h/u1LDH///gVjkEtA3rFKuYTdgMPTFP9z8YoxyMnJMbx7947h/5/PYI2/fv0CY5ALQHzngqe4DQD5nY2NDWwbiIYZANL88eNHsDqfyne4vcDG/AfMBmmEAZABIABy1a+/LAyh9W+xGwAKxOcXpmGNb5DtIFfImxUwmPm0YzcAFo3f3t2A80EugWmWUbFisEk8gDsa0RPSr+8fIKH//R+DjEEyg7FnC+GERCoYeAMAAHCnETraWggAAAAASUVORK5CYII="
+                [attr.x]="-measures.width/2+3" [attr.y]="-measures.height/2+3" height="14px" width="14px" /> -->
         </svg:g>
 
         <svg:g *ngFor="let prop of node.listPropInfo" (click)="onClickProp(prop)">
@@ -56,9 +55,8 @@
                 {{prop.normalizedShow}}
                 <svg:title>{{prop.property.toNT() + " " + prop.range.toNT()}}</svg:title>
             </svg:text>
-            
-            <image *ngIf="showPropSubClass(prop)" [attr.xlink:href]="prop.xlink" [attr.x]="prop.x" [attr.y]="prop.y"
-                height="12px" width="12px" />
+
+            <image *ngIf="showPropSubClass(prop)" [attr.xlink:href]="prop.xlink" [attr.x]="prop.x" [attr.y]="prop.y" height="12px" width="12px" />
         </svg:g>
 
     </svg:g>
