@@ -46,10 +46,6 @@ export abstract class AbstractHistValidComponent {
         this.hvModals = hvModals;
     }
 
-    ngOnInit() {
-        this.init();
-    }
-
     abstract init(): void;
 
     abstract listCommits(): void;

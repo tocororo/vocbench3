@@ -39,6 +39,11 @@
                                     <ng-container *ngIf="!pd.dir">Unclassified</ng-container>
                                 </label>
                             </div>
+                            <div class="groupPanel-heading-content clickable" style="margin-left: 4px;">
+                                <button *ngIf="pd.dir" class="close" (click)="renameDirectory(pd.dir)" title="Rename directory" style="font-size: 12px;">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                            </div>
                         </div>
                     
                         <div class="groupPanel-body">
@@ -77,7 +82,7 @@
                                     </div>
                                     <div class="text-center" style="width: 100px; order: 99;">
                                         <div class="hbox" style="justify-content: center;">
-                                            <button class="btn btn-xs btn-default" style="margin-left: 10px;">
+                                            <button class="btn btn-xs btn-default" (click)="deleteProject(p)" style="margin-left: 10px;">
                                                 <span class="glyphicon glyphicon-trash"></span>
                                             </button>
                                             <div class="dropdown pull-right">

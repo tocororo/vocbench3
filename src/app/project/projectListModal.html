@@ -41,7 +41,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let p of projectList" [ngClass]="{ info : selectedProject == p }" (click)="selectProject(p)">
+                    <tr *ngFor="let p of projectList" [ngClass]="{ info : selectedProject == p }" (click)="selectedProject = p">
                         <td class="text-center">{{p.getName()}}</td>
                         <td class="text-center">{{p.getModelType(true)}}</td>
                         <td class="text-center">{{p.getLexicalizationModelType(true)}}</td>
@@ -116,6 +116,6 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isAccessClickable()">Access</button>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedProject">Access</button>
     <button class="btn btn-default btn-sm" (click)="cancel()">Close</button>
 </div>

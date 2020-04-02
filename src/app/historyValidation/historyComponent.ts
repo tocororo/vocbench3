@@ -19,6 +19,10 @@ export class HistoryComponent extends AbstractHistValidComponent {
         super(sharedModals, hvModals);
     }
 
+    ngOnInit() {
+        this.init();
+    }
+
     init() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.page = 0;

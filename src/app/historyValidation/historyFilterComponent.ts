@@ -18,6 +18,9 @@ export class HistoryFilterComponent {
     @Input() performers: User[];
     @Input() fromTime: string;
     @Input() toTime: string;
+    //Useful in order to hide Performers filter from Validation page when user is not validator (it is forced to see only its commits) */
+    @Input() hidePerformers: boolean;
+    
     @Output() apply: EventEmitter<{ operations: ARTURIResource[], performers: User[], fromTime: string, toTime: string }> = new EventEmitter();
 
     constructor(private modal: Modal, private sharedModals: SharedModalServices, private basicModals: BasicModalServices) {}

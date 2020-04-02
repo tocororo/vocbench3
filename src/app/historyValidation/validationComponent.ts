@@ -1,14 +1,17 @@
 import { Component } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from "ngx-modialog";
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { Observable } from "rxjs";
 import { CommitInfo } from "../models/History";
 import { ValidationServices } from "../services/validationServices";
+import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { UIUtils } from "../utils/UIUtils";
+import { VBActionsEnum } from "../utils/VBActions";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { AbstractHistValidComponent } from "./abstractHistValidComponent";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { ValidationCommentsModal, ValidationCommentsModalData } from "./modals/validationCommentsModal";
-import { OverlayConfig } from "ngx-modialog";
 import { HistoryValidationModalServices } from "./modals/historyValidationModalServices";
+import { ValidationCommentsModal, ValidationCommentsModalData } from "./modals/validationCommentsModal";
 
 @Component({
     selector: "validation-component",
@@ -16,6 +19,8 @@ import { HistoryValidationModalServices } from "./modals/historyValidationModalS
     host: { class: "pageComponent" }
 })
 export class ValidationComponent extends AbstractHistValidComponent {
+
+    private isValidator: boolean; //useful to determine if it needs to list all commits (for validator) or only those of the current user
 
     //paging
     private tipTime: string;
@@ -38,11 +43,34 @@ export class ValidationComponent extends AbstractHistValidComponent {
         super(sharedModals, hvModals);
     }
 
+    ngOnInit() {
+        this.isValidator = AuthorizationEvaluator.isAuthorized(VBActionsEnum.validation);
+        
+        //init available actions: validator can accept and reject, not validator can only reject its actions
+        if (this.isValidator) {
+            this.validationActions = [ this.ACTION_NONE, this.ACTION_ACCEPT, this.ACTION_REJECT ];
+        } else {
+            this.validationActions = [ this.ACTION_NONE, this.ACTION_REJECT ];
+        }
+        
+        this.init();
+    }
+
     init() {
-        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.page = 0;
         this.commits = [];
-        this.validationService.getStagedCommitSummary(this.operations, this.getPerformersIRI(), this.getFormattedFromTime(), this.getFormattedToTime(), this.limit).subscribe(
+
+        let getCommitSummaryFn: Observable<any>;
+        if (this.isValidator) { //validator can see the commits of all the users
+            getCommitSummaryFn = this.validationService.getStagedCommitSummary(this.operations, this.getPerformersIRI(), 
+                this.getFormattedFromTime(), this.getFormattedToTime(), this.limit);
+        } else { //not validator can see only its commits
+            getCommitSummaryFn = this.validationService.getCurrentUserStagedCommitSummary(this.operations,
+                this.getFormattedFromTime(), this.getFormattedToTime(), this.limit);
+        }
+
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        getCommitSummaryFn.subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 this.pageCount = stResp.pageCount;
@@ -55,13 +83,22 @@ export class ValidationComponent extends AbstractHistValidComponent {
     }
 
     listCommits() {
-        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         let timeUpperBound: string = this.getFormattedToTime();
         if (timeUpperBound == null) {
             timeUpperBound = this.tipTime;
         }
-        this.validationService.getCommits(this.operations, this.getPerformersIRI(), timeUpperBound, this.getFormattedFromTime(), 
-            this.operationSorting, this.timeSorting, this.page, this.limit).subscribe(
+
+        let getCommitsFn: Observable<CommitInfo[]>;
+        if (this.isValidator) { //validator can see the commits of all the users
+            getCommitsFn = this.validationService.getCommits(this.operations, this.getPerformersIRI(), 
+                timeUpperBound, this.getFormattedFromTime(), this.operationSorting, this.timeSorting, this.page, this.limit);
+        } else { //not validator can see only its commits
+            getCommitsFn = this.validationService.getCurrentUserCommits(this.operations, 
+                timeUpperBound, this.getFormattedFromTime(), this.operationSorting, this.timeSorting, this.page, this.limit);
+        }
+
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        getCommitsFn.subscribe(
             commits => {
                 this.commits = commits;
                 this.commits.forEach(c => c[this.VALIDATION_ACT_ATTR] = this.ACTION_NONE);
@@ -155,14 +192,18 @@ export class ValidationComponent extends AbstractHistValidComponent {
                 validationFunctions = this.validationService.accept(olderCommit.commit);
             } else if (olderCommit[this.VALIDATION_ACT_ATTR] == this.ACTION_REJECT) {
                 let comment: string = olderCommit.commentAllowed ? olderCommit[this.COMMENT_ATTR] : null;
-                validationFunctions = this.validationService.reject(olderCommit.commit, comment);
+                if (this.isValidator) {
+                    validationFunctions = this.validationService.reject(olderCommit.commit, comment);    
+                } else {
+                    validationFunctions = this.validationService.rejectCurrentUserCommit(olderCommit.commit, comment);    
+                }
             } else {
                 commits.splice(commits.indexOf(olderCommit), 1);
                 this.validateCommitsRecursively(commits);
                 return;
             }
             validationFunctions.subscribe(
-                (stResp: any) => {
+                () => {
                     commits.splice(commits.indexOf(olderCommit), 1);
                     this.validateCommitsRecursively(commits);
                 }

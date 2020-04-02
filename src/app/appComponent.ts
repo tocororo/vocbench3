@@ -81,7 +81,9 @@ export class AppComponent {
     
     private isDataAuthorized() {
         let modelType: string = VBContext.getWorkingProject().getModelType();
-        if (modelType == SKOS.uri || modelType == OntoLex.uri) {
+        if (modelType == EDOAL.uri) {
+            return true; //Edoal projects has no capabilities required????
+        } else if (modelType == SKOS.uri || modelType == OntoLex.uri) {
             return (
                 AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetConceptTaxonomy) ||
                 AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetCollectionTaxonomy) ||
@@ -95,10 +97,6 @@ export class AppComponent {
                 AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesGetPropertyTaxonomy)
             );
         }
-    }
-
-    private isEdoalDataAuthorized() {
-        return true; //???
     }
 
     private isMetadataVocAuthorized(): boolean {
@@ -120,10 +118,9 @@ export class AppComponent {
     }
     
     private isValidationAuthorized() {
-        return (
-            AuthorizationEvaluator.isAuthorized(VBActionsEnum.validation) &&
-            VBContext.getContextVersion() == null
-        );
+        //all user are allowed to see Validation page, further auth checks (is user a validator?) are performed in the Validation page
+        return VBContext.getContextVersion() == null;
+        
     }
     
     private isCustomFormAuthorized() {

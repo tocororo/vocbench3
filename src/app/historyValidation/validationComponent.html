@@ -43,20 +43,21 @@
     <div class="panel-body vbox">
 
         <history-filter *ngIf="showFilterBox" class="vbox" style="margin-bottom: 6px; min-height: 115px;" (apply)="onFilterApplied($event)"
-            [operations]="operations" [performers]="performers" [fromTime]="fromTime" [toTime]="toTime"></history-filter>
+            [operations]="operations" [performers]="performers" [fromTime]="fromTime" [toTime]="toTime" [hidePerformers]="!isValidator">
+        </history-filter>
 
         <div class="table-responsive" style="flex: 3;">
             <table class="table table-condensed table-hoverable">
                 <thead>
                     <tr>
                         <th class="text-center">Commit ID</th>
-                        <th class="text-center">Action</th>
+                        <th class="text-center">Operation</th>
                         <th class="text-center">1st Param</th>
                         <th class="text-center" *ngIf="isLargeWidth()">2nd Param</th>
                         <th class="text-center">Other param(s)</th>
                         <th class="text-center">User</th>
                         <th class="text-center">Date</th>
-                        <th class="text-center">Validate</th>
+                        <th class="text-center">Action</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -146,7 +147,7 @@
             </div>
 
             <div class="btn-group btn-group-xs" role="group" style="margin-right: 12px;">
-                <button class="btn btn-xs btn-default" (click)="acceptAll()">Accept all</button>
+                <button *ngIf="isValidator" class="btn btn-xs btn-default" (click)="acceptAll()">Accept all</button>
                 <button class="btn btn-xs btn-default" (click)="rejectAll()">Reject all</button>
             </div>
 

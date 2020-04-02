@@ -46,16 +46,6 @@ export class ProjectListModal extends AbstractProjectComponent implements ModalC
         );
     }
 
-    selectProject(project: Project) {
-        if (!this.isWorkingProject(project)) {
-            this.selectedProject = project;
-        }
-    }
-
-    private isAccessClickable() {
-        return (this.selectedProject != null && !this.isWorkingProject(this.selectedProject));
-    }
-
     private changeVisualizationMode(mode: ProjectViewMode) {
         this.visualizationMode = mode;
         Cookie.setCookie(Cookie.PROJECT_VIEW_MODE, mode);

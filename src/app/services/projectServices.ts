@@ -481,6 +481,19 @@ export class ProjectServices {
 
     /**
      * 
+     * @param oldValue 
+     * @param newValue 
+     */
+    renameProjectFacetDir(oldValue: string, newValue: string) {
+        let params: any = {
+            oldValue: oldValue,
+            newValue: newValue
+        };
+        return this.httpMgr.doPost(this.serviceName, "renameProjectFacetDir", params);
+    }
+
+    /**
+     * 
      * @param dirName 
      */
     deleteProjectDir(dirName: string) {

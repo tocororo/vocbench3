@@ -232,7 +232,6 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         return this.modal.open(RemoteRepoEditorModal, overlayConfig)
     }
 
-
     private editDirectory(project: Project, currentDir: string) {
         let availableDirs: string[] = [];
         this.projectDirs.forEach(pd => { 
@@ -250,6 +249,32 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
                 this.initProjects();
             },
             () => {} //directory not changed
+        )
+    }
+
+    private renameDirectory(directory: string) {
+        this.basicModals.prompt("Rename project directory", { value: "Directory name" }, null, directory).then(
+            newName => {
+                if (this.projectDirs.some(pd => pd.dir == newName)) {
+                    this.basicModals.confirm("Rename project directory", "Warning: a project directory named '" + newName + "' already exists." + 
+                        " You will move there all the projects contained in directory '" + directory + "'. Do you want to continue?", "warning").then(
+                        () => { //confirmed => apply rename
+                            this.projectService.renameProjectFacetDir(directory, newName).subscribe(
+                                () => {
+                                    this.initProjects();
+                                }
+                            );
+                        },
+                        () => {}
+                    )
+                } else {
+                    this.projectService.renameProjectFacetDir(directory, newName).subscribe(
+                        () => {
+                            this.initProjects();
+                        }
+                    );
+                }
+            }
         )
     }
 
