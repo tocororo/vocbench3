@@ -6,9 +6,11 @@
         <table class="table table-bordered table-condensed" style="flex: 1">
             <thead>
                 <tr>
-                    <th class="firstCol">
-                        <div style="text-align: right;">Consumer <span class="glyphicon glyphicon-chevron-right"></span></div>
-                        <div style="text-align: left;"><span class="glyphicon glyphicon-chevron-down"></span> Project</div>
+                    <th>
+                        <div class="firstCol">
+                            <div style="text-align: right;">Consumer <span class="glyphicon glyphicon-chevron-right"></span></div>
+                            <div style="text-align: left;"><span class="glyphicon glyphicon-chevron-down"></span> Project</div>
+                        </div>
                     </th>
                     <th *ngFor="let cons of consumerList" class="text-center fixedCol" [title]="cons">{{cons}}</th>
                 </tr>
@@ -16,12 +18,15 @@
             <tbody>
                 <ng-template ngFor let-map [ngForOf]="tableModel">
                     <tr>
-                        <td style="font-weight: bold; vertical-align: middle;">
-                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{map.project}}</span>
-                            <button class="btn btn-default btn-xs pull-right" title="Edit project ACL" (click)="editProjectACL(map.project)">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                            </button>
+                        <td style="font-weight: bold;">
+                            <div class="firstCol hbox" style="align-items: center;">
+                                <div class="ellipsable" style="flex: 1;">{{map.project}}</div>
+                                <button class="btn btn-default btn-xs pull-right" style="margin-left: 4px;" title="Edit project ACL" (click)="editProjectACL(map.project)">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                            </div>
                         </td>
+
                         <td *ngFor="let acl of map.consumerACLs" style="padding: 0px;">
                             <table class="table table-bordered table-condensed">
                                 <tr>

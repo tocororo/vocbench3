@@ -42,7 +42,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let p of projectList" [ngClass]="{ info : selectedProject == p }" (click)="selectedProject = p">
-                        <td class="text-center">{{p.getName()}}</td>
+                        <td class="text-center ellipsable">{{p.getName()}}</td>
                         <td class="text-center">{{p.getModelType(true)}}</td>
                         <td class="text-center">{{p.getLexicalizationModelType(true)}}</td>
                         <td class="text-center">
@@ -85,7 +85,7 @@
                         <div class="groupPanel-body">
                             <ng-container *ngIf="pd.open">
                                 <div *ngFor="let p of pd.projects" class="listItem project-row" [ngClass]="{ active : selectedProject == p }" (click)="selectProject(p)">
-                                    <div class="text-center" style="flex: 3">
+                                    <div class="text-center ellipsable" style="flex: 3">
                                         {{p.getName()}}
                                     </div>
                                     <div class="text-center" style="flex: 1">

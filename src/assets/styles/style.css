@@ -740,6 +740,16 @@ textarea {
     right: 6px;
 }
 
+/* Utility class (to use in combo with max-width) in order truncate inner text with ellipsis if its width exceeds the max-width */
+.ellipsable {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap !important;
+}
+.ellipsable > label {
+    display: inline;
+}
+
 /* ####################################
 ########## BOOTSTRAP OVERRIDE #########
 #####################################*/

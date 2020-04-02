@@ -18,7 +18,11 @@
                 <tbody>
                     <ng-container *ngFor="let c of consumers">
                         <tr *ngIf="showConsumer(c)">
-                            <td style="width: 1%" nowrap><label>{{c.name}}:</label></td>
+                            <td>
+                                <div class="ellipsable" style="max-width: 180px;">
+                                    <label [title]="c.name">{{c.name}}:</label>
+                                </div>
+                            </td>
                             <td>
                                 <select class="form-control input-xs" (ngModelChange)="onAccessLevelChange(c, $event)" [(ngModel)]="c.availableACLLevel">
                                     <option [ngValue]="nullAccessLevel">---</option>

@@ -10,7 +10,7 @@ import { ACLEditorModal, ACLEditorModalData } from "./aclEditorModal";
     selector: "project-acl-modal",
     templateUrl: "./projectACLModal.html",
     styles: [`
-        .firstCol { min-width: 90px; max-width: 140px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .firstCol { min-width: 90px; max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .fixedCol { max-width: 60px; width: 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .fixedColInner { min-width: 30px; width: 30px; min-height: 22px; height: 22px; }
         .disabledCell { background-color: #eee;}
