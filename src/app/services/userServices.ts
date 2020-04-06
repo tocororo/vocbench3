@@ -107,7 +107,7 @@ export class UserServices {
      * 
      * @param userIri 
      */
-    listProjectsBoundToUser(userIri: string): Observable<string[]> {
+    listProjectsBoundToUser(userIri: ARTURIResource): Observable<string[]> {
         var params: any = {
             userIri: userIri
         }

@@ -1,6 +1,7 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource } from "../../models/ARTResources";
 import { ConfigurationComponents } from "../../models/Configuration";
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { SettingsProp } from "../../models/Plugins";
@@ -9,6 +10,7 @@ import { PartitionFilterPreference, Properties } from "../../models/Properties";
 import { ProjectUserBinding, Role, User, UsersGroup } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
+import { ProjectServices } from "../../services/projectServices";
 import { UserServices } from "../../services/userServices";
 import { UsersGroupsServices } from "../../services/usersGroupsServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
@@ -50,8 +52,8 @@ export class ProjectUsersManagerComponent {
 
     private puTemplate: PartitionFilterPreference;
 
-    constructor(private userService: UserServices, private adminService: AdministrationServices, private groupsService: UsersGroupsServices, 
-        private prefSettingsServices: PreferencesSettingsServices, private vbProp: VBProperties,
+    constructor(private userService: UserServices, private projectService: ProjectServices, private adminService: AdministrationServices, 
+        private groupsService: UsersGroupsServices, private prefSettingsServices: PreferencesSettingsServices, private vbProp: VBProperties,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
 
@@ -184,6 +186,33 @@ export class ProjectUsersManagerComponent {
     /** ==========================
      * PROJECT-USER SETTINGS PANEL
      * ========================== */
+
+    private cloneSettings() {
+        this.projectService.listProjects().subscribe(
+            projects => {
+                this.basicModals.select("Duplicate settings", "Select the target project", projects.map(p => p.getName())).then(
+                    targetProj => {
+                        this.basicModals.confirm("Duplicate settings", "With this operation you will overwrite any roles, group, languages " + 
+                            "and ResourceView template assigned to " + this.selectedUser.getShow() + " in the target project '" + targetProj + 
+                            "'. Are you sure?\n\nNote: the project-level roles will not be cloned", "warning").then(
+                            () => {
+                                //clone binding-related settings (roles, group, language)
+                                let userIri: ARTURIResource = new ARTURIResource(this.selectedUser.getIri());
+                                this.adminService.clonePUBinding(userIri, this.project.getName(), userIri, targetProj).subscribe(
+                                    () => {
+                                        this.basicModals.alert("Duplicate settings", "Settings duplicated successfully");
+                                    }
+                                );
+                                //clone template
+                                this.updateTemplate(new Project(targetProj));
+                            }
+                        )
+                    },
+                    () => {}
+                )
+            }
+        );
+    }
 
     //=========== ROLES ===========
 
@@ -457,12 +486,15 @@ export class ProjectUsersManagerComponent {
         this.sharedModals.storeConfiguration("Store template", ConfigurationComponents.TEMPLATE_STORE, config);
     }
 
-    private updateTemplate() {
-        this.prefSettingsServices.setPUSettingOfUser(Properties.pref_res_view_partition_filter, this.selectedUser, JSON.stringify(this.puTemplate), this.project).subscribe(
+    private updateTemplate(project?: Project) {
+        if (project == null) {
+            project = this.project;
+        }
+        this.prefSettingsServices.setPUSettingOfUser(Properties.pref_res_view_partition_filter, this.selectedUser, JSON.stringify(this.puTemplate), project).subscribe(
             () => {
                 //in case the setting has been changed for the logged user and the project currently accessed => update its cached PU-settings
                 if (
-                    VBContext.getWorkingProject() != null && VBContext.getWorkingProject().getName() == this.project.getName() && //current accessed project
+                    VBContext.getWorkingProject() != null && VBContext.getWorkingProject().getName() == project.getName() && //current accessed project
                     VBContext.getLoggedUser().getEmail() == this.selectedUser.getEmail() //current logged user
                 ) {
                     this.vbProp.refreshResourceViewPartitionFilter().subscribe();

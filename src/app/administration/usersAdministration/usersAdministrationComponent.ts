@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource } from "../../models/ARTResources";
 import { ConfigurationComponents } from "../../models/Configuration";
 import { SettingsProp } from "../../models/Plugins";
 import { PartitionFilterPreference, Properties } from "../../models/Properties";
@@ -68,7 +69,7 @@ export class UsersAdministrationComponent {
             this.initTemplate();
             //init project assigned to user user
             if (!this.selectedUser.isAdmin()) {
-                this.userService.listProjectsBoundToUser(this.selectedUser.getIri()).subscribe(
+                this.userService.listProjectsBoundToUser(new ARTURIResource(this.selectedUser.getIri())).subscribe(
                     projects => {
                         this.userProjects = projects;
                     }

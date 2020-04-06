@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Project } from "../models/Project";
 import { ProjectUserBinding, Role, UsersGroup } from "../models/User";
 import { HttpManager } from "../utils/HttpManager";
+import { ARTURIResource } from '../models/ARTResources';
 
 @Injectable()
 export class AdministrationServices {
@@ -301,6 +302,23 @@ export class AdministrationServices {
             newCapability: newCapability
         };
         return this.httpMgr.doPost(this.serviceName, "updateCapabilityForRole", params);
+    }
+
+    /**
+     * 
+     * @param sourceUserIri 
+     * @param sourceProjectName 
+     * @param targetUserIri 
+     * @param targetProjectName 
+     */
+    clonePUBinding(sourceUserIri: ARTURIResource, sourceProjectName: string, targetUserIri: ARTURIResource, targetProjectName: string) {
+        let params: any = {
+            sourceUserIri: sourceUserIri,
+            sourceProjectName: sourceProjectName,
+            targetUserIri: targetUserIri,
+            targetProjectName: targetProjectName
+        };
+        return this.httpMgr.doPost(this.serviceName, "clonePUBinding", params);
     }
 
     downloadPrivacyStatement() {

@@ -21,7 +21,10 @@
     </div>
     <div *ngIf="selectedUser" class="subPanel vbox" style="margin-left: 5px; flex: 3;">
         <div class="subPanel-heading">
-            <label>Project-User settings:</label>
+            <label style="flex: 1;">Project-User settings:</label>
+            <button *ngIf="isLoggedUserAdmin()" class="btn btn-xs btn-default" (click)="cloneSettings()" title="Duplicate settings to another project">
+                <span class="glyphicon glyphicon-duplicate"></span>
+            </button>
         </div>
         <div class="subPanel-body vbox scrollableContainer">
 
@@ -56,8 +59,10 @@
                             </div>
                             <div class="subPanel-body vbox scrollableContainer">
                                 <div *ngFor="let r of roleList" class="listItem" (click)="selectRole(r)"
-                                    [ngClass]="{active: r == selectedRole, disabled: isRoleAlreadyAssigned(r)}" >
-                                    {{r.getName()}}
+                                    [ngClass]="{active: r == selectedRole, disabled: isRoleAlreadyAssigned(r)}">
+                                    <span style="flex: 1;">{{r.getName()}}</span>
+                                    <span *ngIf="r.getLevel()=='project'" class="label label-default" style="font-size: 10px; padding: 2px 3px;"
+                                        title="Defined at project level">P</span>
                                 </div>
                             </div>
                         </div>
