@@ -39,6 +39,7 @@ export class ProjectUsersManagerComponent {
 
     private projectLanguages: Language[]; //all the languages assigned to the selected project
     private availableLanguages: Language[]; //the languages that are shown in the "Available languages" panel, those who is possible to assign to user
+    private puLanguages: Language[]; //languages assigned to the user in the selected project
     private selectedLang: Language; //role selected in langList (available langs)
     private selectedUserLang: Language; //selected lang in the list of the language assigned to the selectedUser in the selectedProject
     private filterProficiencies: boolean = false;
@@ -120,6 +121,7 @@ export class ProjectUsersManagerComponent {
                 this.selectedUserRole = null;
                 this.selectedUserLang = null;
                 this.initAvailableLanguages();
+                this.initPULanguages();
             }
         );
         /**
@@ -314,18 +316,17 @@ export class ProjectUsersManagerComponent {
         });
     }
 
-    private getPULanguages(): Language[] {
-        let puLanguages: Language[] = [];
+    private initPULanguages() {
+        this.puLanguages = [];
         this.puBinding.getLanguages().forEach(puLangTag => {
             let lang: Language = this.projectLanguages.find(l => l.tag == puLangTag);
             if (lang != null) {
                 let puLang: Language = { name: lang.name, tag: lang.tag, mandatory: lang.mandatory };
                 puLang['proficiency'] = this.isProficiencyLang(lang.tag);
-                puLanguages.push(puLang);
+                this.puLanguages.push(puLang);
             }
         })
-        Languages.sortLanguages(puLanguages);
-        return puLanguages;
+        Languages.sortLanguages(this.puLanguages);
     }
 
     private selectUserLang(lang: Language) {
@@ -350,7 +351,7 @@ export class ProjectUsersManagerComponent {
         this.puBinding.addLanguage(this.selectedLang.tag);
         this.adminService.updateLanguagesOfUserInProject(this.project.getName(), this.selectedUser.getEmail(), this.puBinding.getLanguages()).subscribe(
             stResp => {
-                this.updateLanguagesOfUserInProjectAfterAdd();
+                this.updateLanguagesOfUserInProject();
             }
         );
     }
@@ -361,7 +362,7 @@ export class ProjectUsersManagerComponent {
             langs.push(l.tag);
         });
         this.puBinding.setLanguages(langs);
-        this.updateLanguagesOfUserInProjectAfterAdd();
+        this.updateLanguagesOfUserInProject();
     }
 
     private addProficienciesLangs() {
@@ -370,32 +371,17 @@ export class ProjectUsersManagerComponent {
                 this.puBinding.addLanguage(l.tag);
             }
         });
-        this.updateLanguagesOfUserInProjectAfterAdd();
-    }
-
-    private updateLanguagesOfUserInProjectAfterAdd() {
-        this.adminService.updateLanguagesOfUserInProject(this.project.getName(), this.selectedUser.getEmail(), this.puBinding.getLanguages()).subscribe(
-            stResp => {
-                this.selectedLang = null;
-                //if the updates are applied to the current user in the current project, update project binding in context 
-                if (
-                    VBContext.getLoggedUser().getEmail() == this.selectedUser.getEmail() && 
-                    VBContext.getWorkingProject() != null && VBContext.getWorkingProject().getName() == this.project.getName()
-                ) {
-                    VBContext.setProjectUserBinding(this.puBinding);
-                }
-            }
-        );
+        this.updateLanguagesOfUserInProject();
     }
 
     private removeLanguage() {
         this.puBinding.removeLanguage(this.selectedUserLang.tag);
-        this.updateLanguagesOfUserInProjectAfterRemove();
+        this.updateLanguagesOfUserInProject();
     }
 
     private removeAllLanguages() {
         this.puBinding.setLanguages([]);
-        this.updateLanguagesOfUserInProjectAfterRemove();
+        this.updateLanguagesOfUserInProject();
     }
 
     private leaveProficienciesLangs() {
@@ -406,7 +392,7 @@ export class ProjectUsersManagerComponent {
             }
         });
         this.puBinding.setLanguages(langs);
-        this.updateLanguagesOfUserInProjectAfterRemove();
+        this.updateLanguagesOfUserInProject();
     }
 
     private isProficiencyLang(lang: string): boolean {
@@ -430,14 +416,15 @@ export class ProjectUsersManagerComponent {
         return false;
     }
 
-    private updateLanguagesOfUserInProjectAfterRemove() {
+    private updateLanguagesOfUserInProject() {
         this.adminService.updateLanguagesOfUserInProject(this.project.getName(), this.selectedUser.getEmail(), this.puBinding.getLanguages()).subscribe(
             stResp => {
-                //if no languages are assigned for the admin => assign all project languages
-                if (this.selectedUser.isAdmin() && this.getPULanguages().length == 0) {
+                //if no language is assigned for the admin => assign all project languages
+                if (this.selectedUser.isAdmin() && this.puLanguages.length == 0) {
                     this.puBinding.setLanguages(Languages.fromLanguagesToTags(this.projectLanguages));
                 }
                 this.selectedUserLang = null;
+                this.initPULanguages();
                 //if the updates are applied to the current user in the current project, update project binding in context 
                 if (
                     VBContext.getLoggedUser().getEmail() == this.selectedUser.getEmail() && 

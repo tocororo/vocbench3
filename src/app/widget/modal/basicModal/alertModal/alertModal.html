@@ -2,8 +2,8 @@
     <h3 [class]="headerStyle">{{context.title}}</h3>
 </div>
 <div class="modal-body vbox">
-    <div [class]="msgStyle">
-        <span style="white-space: pre-line">{{context.message}}</span>
+    <div [class]="msgStyle + ' scrollableContainer'">
+        <span style="white-space: pre">{{context.message}}</span>
         <div *ngIf="context.details" class="vbox" style="margin-top: 5px;">
             <div (click)="detailsCollapsed = !detailsCollapsed" style="align-self: left">
                 <div class="expandCollapseBtnContainer" style="display: inline">
@@ -12,13 +12,12 @@
                 </div>
                 <label>Details:</label>
             </div>
-            <div *ngIf="!detailsCollapsed" class="panel panel-default vbox">
+            <div *ngIf="!detailsCollapsed" class="panel panel-default vbox" style="min-height: 260px;">
                 <div class="panel-body scrollableContainer">
-                    {{context.details}}
+                    <span style="white-space: pre;">{{context.details}}</span>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 <div class="modal-footer">

@@ -120,7 +120,7 @@
                             </div>
                             <div class="subPanel-body vbox scrollableContainer">
                                 <ng-template [ngIf]="puBinding">
-                                    <div *ngFor="let l of getPULanguages()" class="listItem" [ngClass]="{active: l == selectedUserLang}" 
+                                    <div *ngFor="let l of puLanguages" class="listItem" [ngClass]="{active: l == selectedUserLang}" 
                                         (click)="selectUserLang(l)">
                                         <lang-item style="flex: 1" [language]="l" showTag="true"></lang-item>
                                         <span *ngIf="l.proficiency" class="glyphicon glyphicon-star" 
