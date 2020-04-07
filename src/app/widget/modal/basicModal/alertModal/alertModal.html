@@ -2,7 +2,7 @@
     <h3 [class]="headerStyle">{{context.title}}</h3>
 </div>
 <div class="modal-body vbox">
-    <div [class]="msgStyle + ' scrollableContainer'">
+    <div [class]="msgStyle + ' scrollableContainer'" style="padding: 8px;">
         <span style="white-space: pre">{{context.message}}</span>
         <div *ngIf="context.details" class="vbox" style="margin-top: 5px;">
             <div (click)="detailsCollapsed = !detailsCollapsed" style="align-self: left">

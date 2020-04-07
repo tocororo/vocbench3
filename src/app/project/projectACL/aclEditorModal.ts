@@ -36,10 +36,9 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
 
     ngOnInit() {
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-        this.projectService.getAccessStatusMap().subscribe(
-            (status: AccessStatus[]) => {
+        this.projectService.getAccessStatus(this.context.project.getName()).subscribe(
+            (projACL: AccessStatus) => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                let projACL: AccessStatus = status.find(s => s.name == this.context.project.getName());
                 this.consumers = projACL.consumers;
                 this.lock = projACL.lock;
             }

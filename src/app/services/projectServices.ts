@@ -232,56 +232,69 @@ export class ProjectServices {
         );
     }
 
+    /**
+     * 
+     */
     getAccessStatusMap(): Observable<AccessStatus[]> {
         var params = { };
         return this.httpMgr.doGet(this.serviceName, "getAccessStatusMap", params).map(
             stResp => {
                 var aclMap: AccessStatus[] = [];
-
                 var projectJsonColl: any[] = stResp;
-                for (var i = 0; i < projectJsonColl.length; i++) {
-
-                    let projJson = projectJsonColl[i];
-
-                    let name = projJson.name;
-                    //consumers node
-                    let consumers: ConsumerACL[] = [];
-                    let consumersJsonColl: any[] = projJson.consumers;
-                    for (var j = 0; j < consumersJsonColl.length; j++) {
-                        let consumer: ConsumerACL = {
-                            name: consumersJsonColl[j].name,
-                            availableACLLevel: null,
-                            acquiredACLLevel: null
-                        };
-                        if (consumersJsonColl[j].availableACLLevel != null) {
-                            consumer.availableACLLevel = <AccessLevel> consumersJsonColl[j].availableACLLevel;
-                        }
-                        if (consumersJsonColl[j].acquiredACLLevel != null) {
-                            consumer.acquiredACLLevel = <AccessLevel> consumersJsonColl[j].acquiredACLLevel;
-                        }
-                        consumers.push(consumer);
-                    }
-                    //lock node
-                    let lockNode = projJson.lock;
-                    let projectLock: LockStatus = {
-                        availableLockLevel: <LockLevel> lockNode.availableLockLevel,
-                        lockingConsumer: null,
-                        acquiredLockLevel: null
-                    }
-                    if (lockNode.lockingConsumer != null && lockNode.acquiredLockLevel != null) {
-                        projectLock.lockingConsumer = lockNode.lockingConsumer;
-                        projectLock.acquiredLockLevel = lockNode.acquiredLockLevel;
-                    }
-
-                    aclMap.push({
-                        name: name,
-                        consumers: consumers,
-                        lock: projectLock
-                    });
-                }
+                projectJsonColl.forEach(projAclJson => {
+                    aclMap.push(this.parseAccessStatus(projAclJson));
+                })
                 return aclMap;
             }
         );
+    }
+
+    /**
+     * 
+     * @param projectName 
+     */
+    getAccessStatus(projectName: string): Observable<AccessStatus> {
+        let params = {
+            projectName: projectName
+        };
+        return this.httpMgr.doGet(this.serviceName, "getAccessStatus", params).map(
+            stResp => {
+                return this.parseAccessStatus(stResp);
+            }
+        );
+    }
+
+    private parseAccessStatus(projAclJson: any): AccessStatus {
+        let name = projAclJson.name;
+        //consumers node
+        let consumers: ConsumerACL[] = [];
+        let consumersJsonColl: any[] = projAclJson.consumers;
+        for (var j = 0; j < consumersJsonColl.length; j++) {
+            let consumer: ConsumerACL = {
+                name: consumersJsonColl[j].name,
+                availableACLLevel: null,
+                acquiredACLLevel: null
+            };
+            if (consumersJsonColl[j].availableACLLevel != null) {
+                consumer.availableACLLevel = <AccessLevel> consumersJsonColl[j].availableACLLevel;
+            }
+            if (consumersJsonColl[j].acquiredACLLevel != null) {
+                consumer.acquiredACLLevel = <AccessLevel> consumersJsonColl[j].acquiredACLLevel;
+            }
+            consumers.push(consumer);
+        }
+        //lock node
+        let lockNode = projAclJson.lock;
+        let projectLock: LockStatus = {
+            availableLockLevel: <LockLevel> lockNode.availableLockLevel,
+            lockingConsumer: null,
+            acquiredLockLevel: null
+        }
+        if (lockNode.lockingConsumer != null && lockNode.acquiredLockLevel != null) {
+            projectLock.lockingConsumer = lockNode.lockingConsumer;
+            projectLock.acquiredLockLevel = lockNode.acquiredLockLevel;
+        }
+        return { name: name, consumers: consumers, lock: projectLock };
     }
 
     /**
