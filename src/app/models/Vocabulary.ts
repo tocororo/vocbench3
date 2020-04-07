@@ -276,8 +276,8 @@ export class SemanticTurkey {
     public static stagingRemoveGraph = "http://semanticturkey.uniroma2.it/ns/validation#staging-remove-graph/";
     public static inferenceGraph = "http://semanticturkey/inference-graph";
 
-    public static standardDereferenciation = "http://semanticturkey.uniroma2.it/ns/mdreg#standardDereferenciation";
-    public static noDereferenciation = "http://semanticturkey.uniroma2.it/ns/mdreg#noDereferenciation";
+    public static standardDereferenciation = "http://semanticturkey.uniroma2.it/ns/mdr#standardDereferenciation";
+    public static noDereferenciation = "http://semanticturkey.uniroma2.it/ns/mdr#noDereferenciation";
 
-    public static noAggregation = "http://semanticturkey.uniroma2.it/ns/mdreg#noAggregation";
+    public static noAggregation = "http://semanticturkey.uniroma2.it/ns/mdr#noAggregation";
 }
