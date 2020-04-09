@@ -32,15 +32,9 @@ export class ProjectListModal extends AbstractProjectComponent implements ModalC
         //init visualization mode
         this.visualizationMode = Cookie.getCookie(Cookie.PROJECT_VIEW_MODE) == ProjectViewMode.dir ? ProjectViewMode.dir : ProjectViewMode.list;
         
-        this.projectService.listProjects(null, true).subscribe(
+        this.projectService.listProjects(null, true, true).subscribe(
             projects => {
-                this.projectList = [];
-                for (var i = 0; i < projects.length; i++) {
-                    if (projects[i].isOpen()) {
-                        this.projectList.push(projects[i]);
-                    }
-                }
-
+                this.projectList = projects;
                 this.initProjectDirectories();
             }
         );

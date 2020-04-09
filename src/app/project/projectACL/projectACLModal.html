@@ -2,55 +2,48 @@
     <h3 class="modal-title">Project ACL</h3>
 </div>
 <div class="modal-body vbox blockingDivHost">
-    <div class="scrollableContainer" style="border: 1px solid #ddd">
-        <table class="table table-bordered table-condensed" style="flex: 1">
+    <div class="scrollableContainer" style="padding-right: 90px; align-items: center;">
+        <table class="table table-condensed table-bordered" style="width: auto; border-top: 0; border-left: 0; border-right: 0;">
             <thead>
                 <tr>
-                    <th>
-                        <div class="firstCol">
-                            <div style="text-align: right;">Consumer <span class="glyphicon glyphicon-chevron-right"></span></div>
-                            <div style="text-align: left;"><span class="glyphicon glyphicon-chevron-down"></span> Project</div>
+                    <th style="vertical-align: bottom;" class="firstCol" style="border-left: 0; border-right: 0; vertical-align: bottom;">
+                        <div class="hbox">
+                            <div style="flex: 1"><span class="glyphicon glyphicon-chevron-down"></span> Project</div>
+                            <div style="margin-left: 15px">Consumer <span class="glyphicon glyphicon-chevron-right"></span></div>
                         </div>
                     </th>
-                    <th *ngFor="let cons of consumerList" class="text-center fixedCol" [title]="cons">{{cons}}</th>
+                    <th *ngFor="let cons of consumerList" class="rotate" [title]="cons">
+                        <div class="rotated-container">
+                            <div class="consumer-container">
+                                <span class="consumer-text">{{cons}}</span>
+                            </div>
+                        </div>
+                    </th>
                 </tr>
             </thead>
             <tbody>
-                <ng-template ngFor let-map [ngForOf]="tableModel">
+                <ng-container *ngFor="let row of aclTable">
                     <tr>
-                        <td style="font-weight: bold;">
-                            <div class="firstCol hbox" style="align-items: center;">
-                                <div class="ellipsable" style="flex: 1;">{{map.project}}</div>
-                                <button class="btn btn-default btn-xs pull-right" style="margin-left: 4px;" title="Edit project ACL" (click)="editProjectACL(map.project)">
+                        <td style="font-weight: bold;" class="firstCol">
+                            <div class="hbox" style="align-items: center;">
+                                <div class="ellipsable" style="flex: 1;">{{row.project}}</div>
+                                <button class="btn btn-default btn-xs pull-right" style="margin-left: 8px;" title="Edit project ACL" (click)="editProjectACL(row.project)">
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </button>
+
+                                <span [class]="row.lock.class" [title]="row.lock.title" style="margin-left: 4px;">
+                                    {{row.lock.status.availableLockLevel}}
+                                </span>
                             </div>
                         </td>
-
-                        <td *ngFor="let acl of map.consumerACLs" style="padding: 0px;">
-                            <table class="table table-bordered table-condensed">
-                                <tr>
-                                    <td [class]="acl.availableAccessLevel_class" [title]="acl.availableAccessLevel_title">
-                                        {{ acl.availableAccessLevel }}
-                                    </td>
-                                    <td [class]="acl.acquiredAccessLevel_class" [title]="acl.acquiredAccessLevel_title">
-                                        {{ acl.acquiredAccessLevel }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td [class]="acl.availableLockLevel_class" [title]="acl.availableLockLevel_title">
-                                        {{ acl.availableLockLevel }}
-                                    </td>
-                                    <td [class]="acl.acquiredLockLevel_class" [title]="acl.acquiredLockLevel_title">
-                                        {{ acl.acquiredLockLevel }}
-                                    </td>
-                                </tr>
-                            </table>
+                        <td *ngFor="let col of row.cols" [class]="col.accessLevelCell.class" [title]="col.accessLevelCell.title">
+                            {{col.accessLevelCell.available}}
                         </td>
                     </tr>
-                </ng-template>
+                </ng-container>
             </tbody>
         </table>
+
     </div>
 
     <div #blockingDiv class="blockingDiv" style="display:none">

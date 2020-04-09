@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent, OverlayConfig } from 'ngx-modialog';
 import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { AccessLevel, LockLevel, AccessStatus, ConsumerACL, LockStatus, Project } from '../../models/Project';
+import { AccessLevel, AccessStatus, ConsumerACL, LockLevel, LockStatus, Project } from '../../models/Project';
 import { ProjectServices } from "../../services/projectServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { ACLEditorModal, ACLEditorModalData } from "./aclEditorModal";
@@ -9,14 +9,7 @@ import { ACLEditorModal, ACLEditorModalData } from "./aclEditorModal";
 @Component({
     selector: "project-acl-modal",
     templateUrl: "./projectACLModal.html",
-    styles: [`
-        .firstCol { min-width: 90px; max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .fixedCol { max-width: 60px; width: 60px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .fixedColInner { min-width: 30px; width: 30px; min-height: 22px; height: 22px; }
-        .disabledCell { background-color: #eee;}
-        .accessed { background-color: #58fa58;}
-        .locked { background-color: #fa5858;}
-    `]
+    styleUrls: ["./projectACL.css"]
 })
 export class ProjectACLModal implements ModalComponent<BSModalContext> {
     context: BSModalContext;
@@ -26,7 +19,7 @@ export class ProjectACLModal implements ModalComponent<BSModalContext> {
     private statusMap: AccessStatus[];
     private consumerList: string[];
 
-    private tableModel: { project: string, consumerACLs: ACLMapping[] }[];
+    private aclTable: AclTableRow[];
 
     constructor(public dialog: DialogRef<BSModalContext>, private modal: Modal, private projectService: ProjectServices) {
         this.context = dialog.context;
@@ -42,147 +35,137 @@ export class ProjectACLModal implements ModalComponent<BSModalContext> {
             statusMap => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 this.statusMap = statusMap;
-                this.tableModel = [];
-                let projectList: string[] = [];
-                for (var i = 0; i < statusMap.length; i++) {
-                    projectList.push(statusMap[i].name);
-                }
-                this.consumerList = projectList.slice();
+                this.aclTable = [];
+                //consumer list (that will compose the header row) is composed by SYSTEM + all the projects 
+                this.consumerList = this.statusMap.map(entry => entry.name);
                 this.consumerList.unshift("SYSTEM");
 
-                for (var i = 0; i < projectList.length; i++) {
-                    let projectName: string = projectList[i];
-                    let projectLock = this.getProjectLock(projectName);
-                    let aclMappings: ACLMapping[] = [];
-                    for (var j = 0; j < this.consumerList.length; j++) {
-                        let projectMapping = this.getAccessControlMapping(projectList[i], this.consumerList[j]);
-                        let mapping: ACLMapping = {
-                            consumer: this.consumerList[j],
-                            availableAccessLevel: projectMapping.availableACLLevel,
-                            acquiredAccessLevel: projectMapping.acquiredACLLevel,
+                this.statusMap.forEach((projectAcl: AccessStatus) => {
+                    let project: string = projectAcl.name;
+                    let row: AclTableRow = {
+                        project: project,
+                        lock: {
+                            status: projectAcl.lock,
+                            title: this.getLockLevelTitle(project, projectAcl.lock),
+                            class: "lock-badge " + (projectAcl.lock.lockingConsumer != null ? "lock-active" : "lock-default")
+                        },
+                        cols: []
+                    };
+                    this.consumerList.forEach(consumer => {
+                        let acl: ConsumerACL = this.findProjectConsumerACL(project, consumer);
+                        let col: AclTableCol = {
+                            consumer: consumer,
+                            accessLevelCell: {
+                                available: acl ? acl.availableACLLevel : null,
+                                acquired: acl ? acl.acquiredACLLevel : null,
+                                title: this.getAccessLevelTitle(project, consumer, acl, projectAcl.lock),
+                                class: this.getAccessLevelClass(project, consumer, acl, projectAcl.lock)
+                            },
                         }
-                        if (projectName != this.consumerList[j]) { //add lock information only if the consumer is != project
-                            mapping.availableLockLevel = projectLock.availableLockLevel;
-                            if (projectLock.lockingConsumer == this.consumerList[j]) {
-                                mapping.acquiredLockLevel = projectLock.acquiredLockLevel;
-                            }
-                        }
-                        aclMappings.push(mapping);
-
-                    }
-                    this.tableModel.push({ project: projectName, consumerACLs: aclMappings });
-                }
-
-                this.tableModel.forEach(tableEntry => {
-                    this.initClassAndTitle(tableEntry);
-                });
+                        row.cols.push(col);
+                    })
+                    this.aclTable.push(row);
+                })
             }
         );
     }
 
-    private getAccessControlMapping(project: string, consumer: string): ConsumerACL {
-        for (var i = 0; i < this.statusMap.length; i++) {
-            if (this.statusMap[i].name == project) {
-                let consumers: { name: string, availableACLLevel: AccessLevel, acquiredACLLevel: AccessLevel }[] = this.statusMap[i].consumers;
-                for (var j = 0; j < consumers.length; j++) {
-                    if (consumers[j].name == consumer) {
-                        return consumers[j];
-                    }
-                }
-            }
+    /**
+     * Return the ACL for the given project-consumer pair
+     * @param project 
+     * @param consumer 
+     */
+    private findProjectConsumerACL(project: string, consumer: string): ConsumerACL {
+        if (project == consumer) {
+            return null; //a project has no ACL for itself
         }
-        return { name: null, availableACLLevel: null, acquiredACLLevel: null };
-    }
-
-    private getProjectLock(project: string): LockStatus {
-        for (var i = 0; i < this.statusMap.length; i++) {
-            if (this.statusMap[i].name == project) {
-                return this.statusMap[i].lock;
-            }
-        }
-        return null;
-    }
-
-    private initClassAndTitle(tableEntry: { project: string, consumerACLs: ACLMapping[] }) {
-        tableEntry.consumerACLs.forEach(consumerAcl => {
-            consumerAcl['availableAccessLevel_title'] = this.initTitleAvailableAccessLevel(tableEntry.project, consumerAcl.consumer, consumerAcl.availableAccessLevel);
-            consumerAcl['acquiredAccessLevel_title'] = this.initTitleAcquiredAccessLevel(tableEntry.project, consumerAcl.consumer, consumerAcl.acquiredAccessLevel);
-            consumerAcl['availableLockLevel_title'] = this.initTitleAvailableLock(tableEntry.project, consumerAcl.availableLockLevel);
-            consumerAcl['acquiredLockLevel_title'] = this.initTitleAcquiredLock(tableEntry.project, consumerAcl.consumer, consumerAcl.acquiredLockLevel);
-            consumerAcl['availableAccessLevel_class'] = this.initCellClass(tableEntry.project, consumerAcl.consumer);
-            consumerAcl['acquiredAccessLevel_class'] = this.initCellClass(tableEntry.project, consumerAcl.consumer, true);
-            consumerAcl['availableLockLevel_class'] = this.initCellClass(tableEntry.project, consumerAcl.consumer);
-            consumerAcl['acquiredLockLevel_class'] = this.initCellClass(tableEntry.project, consumerAcl.consumer, false, true);
-        })
-        
+        let aclOfProject: AccessStatus = this.statusMap.find(entry => entry.name == project);
+        return aclOfProject.consumers.find(consumerAcl => consumerAcl.name == consumer);
     }
 
     /**
-     * Returns the style class to apply to a cell of the table
-     * @param project
+     * Returns the title (to show on access level cell hovering) for the given project-consumer pair.
+     * @param project 
      * @param consumer 
-     * @param accessLevel if true the style is computed in order to be applied to the acquired access level cell
-     * @param locked if true the style is computed in order to be applied to the locked cell
+     * @param acl 
      */
-    private initCellClass(project: string, consumer: string, accessLevel?: boolean, locked?: boolean) {
-        var cls = "text-center fixedColInner";
+    private getAccessLevelTitle(project: string, consumer: string, acl: ConsumerACL, lock: LockStatus): string {
+        let title: string = "";
+        if (project != consumer) { //title shown only if project and consumer are different (disabled cell otherwise)
+            //available
+            title += "Available Access Level: Project '" + project + "'";
+            if (acl.availableACLLevel == AccessLevel.RW) {
+                title += " grants Read and Write";
+            } else if (acl.availableACLLevel == AccessLevel.R) {
+                title += " grants Read";
+            } else {
+                title += " doesn't grant any";
+            }
+            title +=  " access to '" + consumer + "'";
+            //acquired
+            if (acl.acquiredACLLevel != null) {
+                title += "\nAcquired Access Level: Project '" + project + "' is accessed by '" + consumer + "'";
+                if (acl.acquiredACLLevel == AccessLevel.RW) {
+                    title += " in Read and Write level";
+                } else if (acl.availableACLLevel == AccessLevel.R) {
+                    title += " in Read level";
+                }
+            }
+            
+            //lock
+            if (lock.lockingConsumer == consumer) {
+                title += "\nAquired Lock Level: Project '" + project + "' is locked by '" + consumer + "'";
+                if (lock.acquiredLockLevel == LockLevel.R) {
+                    title += " in Read level";
+                } else if (lock.acquiredLockLevel == LockLevel.W) {
+                    title += " in Write level";
+                }
+            }
+        }
+        return title;
+    }
+    private getAccessLevelClass(project: string, consumer: string, acl: ConsumerACL, lock: LockStatus): string {
+        let cls = "text-center fixedColInner";
         if (project == consumer) {
             cls += " disabledCell";
         } else {
-            if (accessLevel && this.getAccessControlMapping(project, consumer).acquiredACLLevel != null) {
+            if (acl.acquiredACLLevel != null) {
                 cls += " accessed";
             }
-            if (locked && this.getProjectLock(project).lockingConsumer == consumer) {
+            if (lock.lockingConsumer == consumer) {
                 cls += " locked";
             }
         }
         return cls;
     }
 
-    private initTitleAvailableAccessLevel(project: string, consumer: string, availableAccessLevel: AccessLevel) {
-        switch (availableAccessLevel) {
-            case AccessLevel.R:
-                return "Available Access Level: Project '" + project + "' grants Read access to '" + consumer + "' project";
-            case AccessLevel.RW:
-                return "Available Access Level: Project '" + project + "' grants Read and Write access to '" + consumer + "' project";
-            default:
-                return "Available Access Level";
+    /**
+     * Returns the title (to show on the lock level cell hovering) for the given project-consumer pair.
+     * @param project 
+     * @param consumer 
+     * @param lockStatus 
+     */
+    private getLockLevelTitle(project: string, lockStatus: LockStatus) {
+        let title: string = "";
+        //available
+        title = "Available Lock Level: Project '" + project + "'";
+        if (lockStatus.availableLockLevel == LockLevel.NO) {
+            title += " cannot be locked by any consumer";
+        } else if (lockStatus.availableLockLevel == LockLevel.W) {
+            title += " can be locked to prevent writing operations by other consumers";
+        } else if (lockStatus.availableLockLevel == LockLevel.R) {
+            title += " can be locked to prevent access by other consumers";
         }
-    }
-
-    private initTitleAcquiredAccessLevel(project: string, consumer: string, acquiredAccessLevel: AccessLevel) {
-        switch (acquiredAccessLevel) {
-            case AccessLevel.R:
-                return "Acquired Access Level: Project '" + project + "' is accessed by '" + consumer + "' in Read level";
-            case AccessLevel.RW:
-                return "Acquired Access Level: Project '" + project + "' is accessed by '" + consumer + "' in Read and Write level";
-            default:
-                return "Acquired Access Level";
+        //acquired
+        if (lockStatus.lockingConsumer != null) { //details about acquired level are shown only if project is locked
+            title += "\nAcquired Lock Level: Project '" + project + "' is locked by '" + lockStatus.lockingConsumer + "'";
+            if (lockStatus.acquiredLockLevel == LockLevel.W) {
+                title += " in Write level";
+            } else if (lockStatus.acquiredLockLevel == LockLevel.R) {
+                title += " in Read level";
+            }
         }
-    }
-
-    private initTitleAvailableLock(project: string, availableLockLevel: LockLevel) {
-        switch (availableLockLevel) {
-            case LockLevel.NO:
-                return "Available Lock Level: Project '" + project + "' cannot be locked by any consumer";
-            case LockLevel.W:
-                return "Available Lock Level: Project '" + project + "' can be locked to prevent writing operations by other consumers";
-            case LockLevel.R:
-                return "Available Lock Level: Project '" + project + "' can be locked to prevent access by other consumers";
-            default:
-                return "Available Lock Level";
-        }
-    }
-
-    private initTitleAcquiredLock(project: string, consumer: string, availableLockLevel: LockLevel) {
-        switch (availableLockLevel) {
-            case LockLevel.R:
-                return "Acquired Lock Level: Project '" + project + "'  is locked by '" + consumer + "' in Read level";
-            case LockLevel.W:
-                return "Acquired Lock Level: Project '" + project + "'  is locked by '" + consumer + "' in Write level";
-            default:
-                return "Acquired Lock Level";
-        }
+        return title;
     }
 
     private editProjectACL(project: string) {
@@ -192,7 +175,7 @@ export class ProjectACLModal implements ModalComponent<BSModalContext> {
         );
         let overlayConfig: OverlayConfig = { context: builder.size('sm').keyboard(27).toJSON() };
         return this.modal.open(ACLEditorModal, overlayConfig).result.then(
-            (update: any) => {
+            (update: boolean) => {
                 if (update) {
                     this.init();
                 }
@@ -208,10 +191,23 @@ export class ProjectACLModal implements ModalComponent<BSModalContext> {
 
 }
 
-class ACLMapping {
-    public consumer: string;
-    public availableAccessLevel: AccessLevel;
-    public acquiredAccessLevel: AccessLevel;
-    public availableLockLevel?: LockLevel;
-    public acquiredLockLevel?: LockLevel;
+class AclTableRow {
+    project: string;
+    lock: LockCell;
+    cols: AclTableCol[]
+}
+class LockCell {
+    status: LockStatus;
+    title: string;
+    class: string;
+}
+class AclTableCol {
+    consumer: string;
+    accessLevelCell: AccessLevelCell;
+}
+class AccessLevelCell {
+    available: AccessLevel;
+    acquired: AccessLevel;
+    title: string;
+    class: string;
 }

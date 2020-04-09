@@ -30,6 +30,8 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
 
     private filterProject: string;
 
+    private update: boolean = false;
+
     constructor(public dialog: DialogRef<ACLEditorModalData>, private projectService: ProjectServices, private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
@@ -60,6 +62,7 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
                 this.projectService.updateAccessLevel(this.context.project, new Project(consumer.name), newLevel).subscribe(
                     stResp => {
                         consumer.availableACLLevel = newLevel;
+                        this.update = true;
                     }
                 ) 
             },
@@ -77,6 +80,7 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
                 this.projectService.updateLockLevel(this.context.project, newLevel).subscribe(
                     stResp => {
                         this.lock.availableLockLevel = newLevel;
+                        this.update = true;
                     }
                 )
             },
@@ -93,7 +97,7 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
     ok(event: Event) {
         event.stopPropagation();
         event.preventDefault();
-        this.dialog.close();
+        this.dialog.close(this.update);
     }
 
 }

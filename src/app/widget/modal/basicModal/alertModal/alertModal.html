@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body vbox">
     <div [class]="msgStyle + ' scrollableContainer'" style="padding: 8px;">
-        <span style="white-space: pre">{{context.message}}</span>
+        <span style="white-space: pre-wrap">{{context.message}}</span>
         <div *ngIf="context.details" class="vbox" style="margin-top: 5px;">
             <div (click)="detailsCollapsed = !detailsCollapsed" style="align-self: left">
                 <div class="expandCollapseBtnContainer" style="display: inline">
@@ -14,7 +14,7 @@
             </div>
             <div *ngIf="!detailsCollapsed" class="panel panel-default vbox" style="min-height: 260px;">
                 <div class="panel-body scrollableContainer">
-                    <span style="white-space: pre;">{{context.details}}</span>
+                    <span style="white-space: pre-wrap;">{{context.details}}</span>
                 </div>
             </div>
         </div>

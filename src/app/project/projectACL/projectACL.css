@@ -1,0 +1,96 @@
+.firstCol { 
+    min-width: 90px; 
+    max-width: 250px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    border-right: 2px solid #ddd;
+}
+.fixedCol { 
+    max-width: 60px; 
+    width: 60px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+}
+.fixedColInner { 
+    min-width: 30px; 
+    width: 30px; 
+    min-height: 26px; 
+    height: 26px; 
+}
+
+
+/* Access level */
+
+.disabledCell { 
+    background-color: #eee;
+}
+.accessed { 
+    background-color: #aef793;
+    color: #3c763d;
+    font-weight: bold;
+}
+.locked {
+    border: 2px double #a94442;
+}
+
+
+/* Lock level */
+
+.lock-badge {
+    width: 25px;
+    padding: 1px 3px;
+    font-size: 11px;
+    line-height: 1.5;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid transparent;
+}
+.lock-badge.lock-default {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+.lock-badge.lock-active {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #a94442;
+    font-weight: bold;
+}
+
+
+/* Rotated headers */
+
+th.rotate {
+    height: 90px;
+    width: 30px;
+    white-space: nowrap;
+    padding: 0px;
+}
+th.rotate > .rotated-container {
+    transform: translate(26px, 34px) rotate(315deg);
+}
+th.rotate > .rotated-container > .consumer-container {
+    position: absolute;
+    width: 127px; /* 127 is the diagonal of a square with side 90px (see height of .rotate) */
+    border-bottom: 1px solid #ccc;
+}
+th.rotate > .rotated-container > .consumer-container > .consumer-text {
+    position: absolute;
+    bottom: 3px;
+    left: -3px;
+    /* For ellipsis */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap !important;
+    max-width: 117px; /* gives a bigger margin to the 127px width of the consumer-container */
+}
+.table-bordered>thead>tr>th.rotate {
+    border: 0px; /* This for removing the default border set by bootstrap */
+    border-bottom: 2px solid #ddd; /* This for setting at least the bottom-border of the header row */
+}
