@@ -1,0 +1,49 @@
+<div class="panel panel-default vbox">
+    <div class="panel-body vbox">
+        <div class="entryRow">
+            <div class="hbox">
+                <label class="entryLabel" style="width: 50px;">Name:</label>
+                <div style="flex: 1">
+                    <!-- <input class="form-control input-sm" [ngModel]="operation.name" readonly> -->
+                    <span class="form-control input-sm" style="background-color: #eee; font-family: monospace;">{{operation.name}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="entryRow">
+            <div class="hbox">
+                <label class="entryLabel">Authorization:</label>
+                <div style="flex: 1">
+                    <!-- <input class="form-control input-sm" [ngModel]="operation.authorization" readonly> -->
+                    <span class="form-control input-sm" style="background-color: #eee; font-family: monospace;">{{operation.authorization}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="entryRow">
+            <div class="hbox">
+                <label class="entryLabel">Parameters:</label>
+                <div style="flex: 1">
+                    <div *ngFor="let p of parameters" class="hbox" style="align-items: center; margin-bottom: 2px;">
+                        <span class="form-control input-sm" style="background-color: #eee; font-family: monospace;">{{p.prettyPrint}}</span>
+                        <span *ngIf="p.required" class="glyphicon glyphicon-question-sign" style="margin-left: 4px;" title="Optional parameter"></span>
+                    </div> 
+                </div>
+            </div>
+        </div>
+        <div class="entryRow">
+            <div class="hbox">
+                <label class="entryLabel">Returns:</label>
+                <div style="flex: 1">
+                    <span class="form-control input-sm" style="background-color: #eee; font-family: monospace;">{{returns}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="entryRow vbox">
+            <div class="hbox">
+                <label class="entryLabel">Sparql:</label>
+                <div class="vbox">
+                    <yasgui [query]="operation.sparql" readonly="true" hideButtons="true"></yasgui>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

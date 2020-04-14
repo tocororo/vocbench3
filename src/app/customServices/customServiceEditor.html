@@ -1,0 +1,111 @@
+<div class="panel panel-default vbox">
+    <div class="panel-body vbox">
+
+
+        <div class="form-horizontal vbox">
+            <div class="form-group">
+                <label class="control-label col-sm-1">Name:</label>
+                <div class="col-sm-11">
+                    <input class="form-control input-sm" [ngModel]="service.name" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-1">Description:</label>
+                <div class="col-sm-11">
+                    <textarea class="form-control input-sm" rows="1" style="resize: vertical" [ngModel]="service.description" readonly></textarea>
+                </div>
+            </div>
+
+            <div class="form-group hbox">
+                <label class="control-label col-sm-1">Operation:</label>
+                <div class="col-sm-11 hbox">
+                    <div class="panel panel-default vbox">
+                        <div class="panel-body hbox">
+                            <div class="panel panel-default vbox">
+                                <div class="panel-heading">
+                                    <label style="flex: 1"></label>
+                                    <div class="btn-toolbar" role="toolbar">
+                                        <div class="btn-group btn-group-xs">
+                                            <button class="btn btn-default" (click)="createOperation()" title="Create operation">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                            <button class="btn btn-default" (click)="deleteOperation()" title="Delete operation" [disabled]="!selectedOperation">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body vbox scrollableContainer">
+                                    <div *ngFor="let o of service.operations" class="listItem" [ngClass]="{ active: selectedOperation == o }" (click)="selectOperation(o)">
+                                        {{o.name}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="selectedOperation" class="panel panel-default vbox" style="margin-left: 4px; flex: 4;">
+                                <div class="panel-body vbox scrollableContainer">
+                                    <custom-operation [operation]="selectedOperation"></custom-operation>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- 
+<div class="panel panel-default vbox">
+    <div class="panel-body vbox">
+        <div class="entryRow">
+            <div class="hbox">
+                <label class="entryLabel">Name:</label>
+                <input class="form-control input-sm" style="flex: 1;" [ngModel]="service.name" readonly>
+            </div>
+        </div>
+        <div class="entryRow">
+            <div class="hbox">
+                <label class="entryLabel">Description:</label>
+                <textarea class="form-control input-sm" rows="1" style="resize: vertical; flex: 1;" [ngModel]="service.description" readonly></textarea>
+            </div>
+        </div>
+
+        <div class="entryRow vbox">
+            <div class="hbox">
+                <label class="entryLabel">Operation:</label>
+                <div class="panel panel-default vbox">
+                    <div class="panel-body hbox">
+                        <div class="panel panel-default vbox">
+                            <div class="panel-heading">
+                                <label style="flex: 1"></label>
+                                <div class="btn-toolbar" role="toolbar">
+                                    <div class="btn-group btn-group-xs">
+                                        <button class="btn btn-default" (click)="createOperation()" title="Create operation">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                        <button class="btn btn-default" (click)="deleteOperation()" title="Delete operation" [disabled]="!selectedOperation">
+                                            <span class="glyphicon glyphicon-minus"></span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body vbox scrollableContainer">
+                                <div *ngFor="let o of service.operations" class="listItem" [ngClass]="{ active: selectedOperation == o }" (click)="selectOperation(o)">
+                                    {{o.name}}
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="selectedOperation" class="panel panel-default vbox" style="margin-left: 4px; flex: 4;">
+                            <div class="panel-body vbox scrollableContainer">
+                                <custom-operation [operation]="selectedOperation"></custom-operation>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

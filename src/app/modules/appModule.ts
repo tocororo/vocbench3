@@ -26,6 +26,7 @@ import { AdministrationModule } from "./administrationModule";
 import { AlignmentModule } from './alignmentModule';
 import { CollaborationModule } from './collaborationModule';
 import { CustomFormModule } from "./customFormModule";
+import { CustomServicesModule } from './customServicesModule';
 import { DatasetCatalogModule } from './datasetCatalogModule';
 import { EdoalModule } from './edoalModule';
 import { GraphModule } from './graphModule';
@@ -49,12 +50,28 @@ import { VBModalModule } from "./vbModalModule";
             BrowserModule,
             FormsModule, //check if this is still necessary when declarated component are reduced in favor of more imported modules
 
-            SharedModule, VBModalModule, TreeAndListModule, ResourceViewModule, GraphModule,
-            ProjectModule, UserModule, ICVModule, AdministrationModule, CustomFormModule, MetadataModule, DatasetCatalogModule,
-            HistoryValidationModule, PreferencesModule, Sheet2RdfModule, SparqlModule, CollaborationModule,
-            AlignmentModule, EdoalModule,
-
+            AdministrationModule, 
+            AlignmentModule,
+            CollaborationModule,
+            CustomFormModule,
+            CustomServicesModule,
+            DatasetCatalogModule,
+            EdoalModule,
+            GraphModule,
+            HistoryValidationModule,
+            ICVModule,
+            MetadataModule,
+            PreferencesModule,
+            ProjectModule,
+            ResourceViewModule,
+            SharedModule,
+            Sheet2RdfModule,
+            SparqlModule,
             STServicesModule,
+            TreeAndListModule,
+            UserModule,
+            VBModalModule,
+            
             appRouting,
             ModalModule.forRoot(), BootstrapModalModule //Modules of ngx-modialog
       ],

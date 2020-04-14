@@ -143,4 +143,8 @@ export class AppComponent {
         return true;
     }
 
+    private isCustomServicesAuthorized() {
+        return true;
+    }
+
 }

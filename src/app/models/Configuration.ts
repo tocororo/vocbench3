@@ -8,6 +8,7 @@ export class ConfigurationComponents {
     static SPARQL_STORE: string = "it.uniroma2.art.semanticturkey.config.sparql.SPARQLStore";
     static TEMPLATE_STORE: string = "it.uniroma2.art.semanticturkey.config.template.TemplateStore";
     static CUSTOM_SEARCH_STORE = "it.uniroma2.art.semanticturkey.settings.search.CustomSearchStore";
+    static CUSTOM_SERVICE_DEFINITION_STORE = "it.uniroma2.art.semanticturkey.config.customservice.CustomServiceDefinitionStore";
 }
 
 export class Reference {

@@ -2,9 +2,9 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
 import { ARTURIResource } from '../models/ARTResources';
 import { PrefixMapping } from '../models/Metadata';
 import { SearchMode } from '../models/Properties';
+import { QueryChangedEvent } from '../models/Sparql';
 import { SearchServices } from '../services/searchServices';
 import { VBContext } from '../utils/VBContext';
-import { QueryChangedEvent } from '../models/Sparql';
 
 // var YASQE = require('yasgui-yasqe/dist/yasqe.bundled.min');
 var YASQE = require('yasgui-yasqe/dist/yasqe.bundled');
@@ -13,6 +13,7 @@ var $: JQueryStatic = require('jquery');
 @Component({
     selector: 'yasgui',
     templateUrl: "./yasguiComponent.html",
+    host: { class: "vbox" }
 })
 export class YasguiComponent {
     @Input() query: string;
