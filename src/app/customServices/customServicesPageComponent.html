@@ -1,0 +1,28 @@
+<div class="panel panel-default vbox">
+    <div class="panel-heading">
+        <label style="flex: 1">Custom Services</label>
+        <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" (click)="editService()" title="Edit service" [disabled]="!selectedServiceId">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+                <button class="btn btn-default" (click)="createService()" title="Create service">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                <button class="btn btn-default" (click)="deleteService()" title="Delete service" [disabled]="!selectedServiceId">
+                    <span class="glyphicon glyphicon-minus"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body hbox">
+        <div class="panel panel-default vbox">
+            <div class="panel-body vbox scrollableContainer">
+                <div *ngFor="let id of serviceIds" class="listItem" [ngClass]="{ active: selectedServiceId == id }" (click)="selectService(id)">
+                    {{id}}
+                </div>
+            </div>
+        </div>
+        <custom-service *ngIf="selectedServiceConf" style="flex: 4; margin-left: 6px;" [serviceConfiguration]="selectedServiceConf"></custom-service>
+    </div>
+</div>

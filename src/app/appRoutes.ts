@@ -7,7 +7,7 @@ import { LoadDataComponent } from "./config/dataManagement/loadData/loadDataComp
 import { RefactorComponent } from "./config/dataManagement/refactor/refactorComponent";
 import { VersioningComponent } from "./config/dataManagement/versioning/versioningComponent";
 import { CustomFormConfigComponent } from "./customForms/customFormConfComponent";
-import { CustomServicesComponent } from './customServices/customServicesComponent';
+import { CustomServicesComponent } from './customServices/customServicesPageComponent';
 import { DataComponent } from "./data/dataComponent";
 import { EdoalComponent } from './edoal/edoalComponent';
 import { HistoryComponent } from "./historyValidation/historyComponent";

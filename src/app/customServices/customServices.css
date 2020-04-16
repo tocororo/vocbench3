@@ -1,0 +1,23 @@
+.gridRow { 
+    margin-bottom: 8px;
+}
+.gridEntry {
+    display: flex;
+    flex-flow: row;
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+    align-items: center;
+}
+.entryLabel {
+    text-align: right;
+    padding: 0px 8px;
+    min-width: 100px;
+    width: 100px;
+    white-space: nowrap;
+}
+.entryRequired {
+    padding: 0px 4px;
+    min-width: 20px;
+    width: 20px;
+}

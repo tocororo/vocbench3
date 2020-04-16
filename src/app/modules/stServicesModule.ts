@@ -8,6 +8,7 @@ import { CODAServices } from "../services/codaServices";
 import { CollaborationServices } from "../services/collaborationServices";
 import { ConfigurationsServices } from "../services/configurationsServices";
 import { CustomFormsServices } from "../services/customFormsServices";
+import { CustomServiceServices } from '../services/customServices';
 import { DatasetCatalogsServices } from '../services/datasetCatalogsServices';
 import { DatasetMetadataServices } from "../services/datasetMetadataServices";
 import { DatatypesServices } from '../services/datatypesServices';
@@ -60,6 +61,7 @@ import { VersionsServices } from "../services/versionsServices";
         CollaborationServices,
         ConfigurationsServices,
         CustomFormsServices,
+        CustomServiceServices,
         DatatypesServices,
         DatasetCatalogsServices,
         DatasetMetadataServices,

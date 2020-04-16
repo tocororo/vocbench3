@@ -1,0 +1,20 @@
+<div class="hbox" style="align-items: center;">
+
+    <select class="form-control input-sm" style="flex: 1; font-family: monospace;" [(ngModel)]="selectedType" (ngModelChange)="onSelectedTypeChange()">
+        <option *ngFor="let t of types" style="font-family: monospace;" [ngValue]="t.type">{{t.show}}</option>
+    </select>
+
+    <table *ngIf="genericArgsList" class="table table-condensed table-borderless" style="flex: 3; margin-left: 4px;">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+        </colgroup>
+        <tbody>
+            <tr *ngFor="let a of genericArgsList; let i=index">
+                <td><label>{{a.name}}</label></td>
+                <td><type-editor [(ngModel)]="a.arg" (ngModelChange)="buildTypeAndPropagate()" [generic]="selectedType" [parameter]="parameter"></type-editor></td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
