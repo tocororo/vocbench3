@@ -55,6 +55,26 @@ export class Settings {
         return false;
     }
 
+    /**
+     * Returns the property with the given name. Returns null if none property with that name exists
+     * @param propName 
+     */
+    public getProperty(propName: string): SettingsProp {
+        return this.properties.find(p => p.name == propName);
+    }
+
+    /**
+     * Returns the value (if any) of the given property. Returns null if none property with that name exists.
+     * @param propName 
+     */
+    public getPropertyValue(propName: string): any {
+        let prop: SettingsProp = this.getProperty(propName);
+        if (prop != null) {
+            return prop.value;
+        }
+        return null;
+    }
+
     public getPropertiesAsMap(): { [key: string]: string } {
         let map: { [key: string]: string } = {};
         for (var i = 0; i < this.properties.length; i++) {

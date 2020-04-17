@@ -8,7 +8,7 @@ import { CODAServices } from "../services/codaServices";
 import { CollaborationServices } from "../services/collaborationServices";
 import { ConfigurationsServices } from "../services/configurationsServices";
 import { CustomFormsServices } from "../services/customFormsServices";
-import { CustomServiceServices } from '../services/customServices';
+import { CustomServiceServices } from '../services/customServiceServices';
 import { DatasetCatalogsServices } from '../services/datasetCatalogsServices';
 import { DatasetMetadataServices } from "../services/datasetMetadataServices";
 import { DatatypesServices } from '../services/datatypesServices';

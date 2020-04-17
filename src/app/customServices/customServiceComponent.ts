@@ -1,10 +1,9 @@
-import { Component, Input, SimpleChanges } from "@angular/core";
+import { Component, Input, SimpleChanges, Output, EventEmitter } from "@angular/core";
 import { Modal, OverlayConfig } from "ngx-modialog";
 import { BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
-import { CustomOperation, CustomService } from "../models/CustomService";
+import { CustomOperationDefinition, CustomService } from "../models/CustomService";
 import { CustomOperationEditorModal, CustomOperationEditorModalData } from "./modals/customOperationEditorModal";
-import { Configuration } from "../models/Configuration";
-import { SettingsProp } from "../models/Plugins";
+import { CustomServiceServices } from "../services/customServiceServices";
 
 @Component({
     selector: "custom-service",
@@ -13,32 +12,35 @@ import { SettingsProp } from "../models/Plugins";
     styleUrls: ["./customServices.css"]
 })
 export class CustomServiceComponent {
+    @Input() service: CustomService;
+    @Output() update: EventEmitter<void> = new EventEmitter(); //tells to the parent that the service has been modified
 
-    @Input() serviceConfiguration: Configuration;
+    private selectedOperation: CustomOperationDefinition;
 
-    private selectedOperation: CustomOperation;
+    private form: CustomServiceForm;
 
-    private form: Form;
-
-    constructor(private modal: Modal) { }
+    constructor(private customServService: CustomServiceServices, private modal: Modal) { }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['serviceConfiguration'] && changes['serviceConfiguration'].currentValue) {
-            this.form = {}
-            this.serviceConfiguration.properties.forEach(p => {
-                let formEntry: FormEntry = {
-                    name: p.name,
-                    displayName: p.displayName,
-                    description: p.description,
-                    required: p.required,
-                    value: p.value
-                };
-                this.form[p.name] = formEntry;
-            })
+        if (changes['service'] && changes['service'].currentValue) {
+            this.form = {
+                name: this.service.getProperty("name"),
+                description: this.service.getProperty("description"),
+                operations: this.service.getProperty("operations")
+            }
+            //try to restore the selected operation (if any)
+            if (this.selectedOperation != null) {
+                let selectedOpName: string = this.selectedOperation.name;
+                this.selectedOperation = null;
+                let operations: CustomOperationDefinition[] = this.form.operations.value;
+                if (operations != null) {
+                    this.selectedOperation = operations.find(o => o.name == selectedOpName);
+                }
+            }
         }
     }
 
-    private selectOperation(operation: CustomOperation) {
+    private selectOperation(operation: CustomOperationDefinition) {
         if (this.selectedOperation != operation) {
             this.selectedOperation = operation;
         }
@@ -46,8 +48,12 @@ export class CustomServiceComponent {
 
     private createOperation() {
         this.openCustomOperationEditor("Create Custom Operation").then(
-            (newOperation: CustomOperation) => {
-
+            (newOperation: CustomOperationDefinition) => {
+                this.customServService.addOperationToCustomService(this.service.id, newOperation).subscribe(
+                    ()=> {
+                        this.update.emit();
+                    }
+                );
             },
             () => {}
         )
@@ -55,18 +61,26 @@ export class CustomServiceComponent {
 
     private editOperation() {
         this.openCustomOperationEditor("Edit Custom Operation", this.selectedOperation).then(
-            (updatedOperation: CustomOperation) => {
-
+            (updatedOperation: CustomOperationDefinition) => {
+                this.customServService.updateOperationInCustomService(this.service.id, updatedOperation).subscribe(
+                    ()=> {
+                        this.update.emit();
+                    }
+                );
             },
             () => {}
         )
     }
 
     private deleteOperation() {
-        alert("TODO");
+        this.customServService.removeOperationFromCustomService(this.service.id, this.selectedOperation.name).subscribe(
+            () => {
+                this.update.emit();
+            }
+        );
     }
 
-    private openCustomOperationEditor(title: string, operation?: CustomOperation) {
+    private openCustomOperationEditor(title: string, operation?: CustomOperationDefinition) {
         let modalData = new CustomOperationEditorModalData(title, operation);
         const builder = new BSModalContextBuilder<CustomOperationEditorModalData>(
             modalData, undefined, CustomOperationEditorModalData
@@ -77,12 +91,16 @@ export class CustomServiceComponent {
 
 }
 
-interface Form { [key: string]: FormEntry }
+interface CustomServiceForm { 
+    name: CustomServiceFormEntry<string>;
+    description: CustomServiceFormEntry<string>;
+    operations: CustomServiceFormEntry<CustomOperationDefinition[]>;
+}
 
-interface FormEntry {
-    name: string;
+interface CustomServiceFormEntry<T> {
+    // name: string;
     displayName: string;
     description: string;
     required: boolean;
-    value: any;
+    value: T;
 }

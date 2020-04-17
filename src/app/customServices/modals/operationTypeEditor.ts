@@ -42,7 +42,9 @@ export class OperationTypeEditor implements ControlValueAccessor {
         }
         if (this.generic != null) {
             //if the editor represents the arg of a generic, limit the available types to a subset (e.g. void cannot be a generic param)
-            this.types = TypeStruct.toTypeStructList(TypeUtils.getAllowedGenericArgsMap(this.generic));
+            let genericArgs: string[] = TypeUtils.getAllowedGenericArgsMap(this.generic);
+            //filter further the types list
+            this.types = this.types.filter(t => genericArgs.indexOf(t.type) != -1);
         }
     }
 

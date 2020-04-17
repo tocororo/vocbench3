@@ -1,5 +1,5 @@
 import { Component, Input, SimpleChanges, ViewChild } from "@angular/core";
-import { CustomOperation, CustomOperationTypes, OperationParameter, TypeUtils } from "../models/CustomService";
+import { CustomOperationDefinition, CustomOperationTypes, OperationParameter, TypeUtils } from "../models/CustomService";
 import { YasguiComponent } from "../sparql/yasguiComponent";
 
 @Component({
@@ -10,7 +10,7 @@ import { YasguiComponent } from "../sparql/yasguiComponent";
 })
 export class CustomOperationComponent {
 
-    @Input() operation: CustomOperation;
+    @Input() operation: CustomOperationDefinition;
     @ViewChild(YasguiComponent) viewChildYasgui: YasguiComponent;
 
     private isSparql: boolean;
@@ -21,10 +21,9 @@ export class CustomOperationComponent {
     
     ngOnChanges(changes: SimpleChanges) {
         if (changes['operation'].currentValue) {
-            
             this.returns = TypeUtils.serializeType(this.operation.returns);
             this.parameters = this.operation.parameters.map(p => {
-                return { prettyPrint: this.getParameterPrettyPrint(p), required: p.required }
+                return { prettyPrint: TypeUtils.serializeParameter(p), required: p.required }
             });
 
             this.isSparql = this.operation["@type"] == CustomOperationTypes.SparqlOperation;
@@ -35,12 +34,6 @@ export class CustomOperationComponent {
             }
             
         }
-    }
-
-    private getParameterPrettyPrint(opParam: OperationParameter): string {
-        let paramPrettyPrint: string = TypeUtils.serializeType(opParam.type);
-        paramPrettyPrint += " " + opParam.name;
-        return paramPrettyPrint;
     }
 
 }

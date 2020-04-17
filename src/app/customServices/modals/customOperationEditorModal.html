@@ -5,8 +5,8 @@
 
     <div class="hbox" style="align-items: center; flex: initial;">
         <label>Type:</label>
-        <select class="form-control input-sm" style="margin-left: 4px;" [(ngModel)]="selectedFormConf" (ngModelChange)="onFormConfigurationChanged()">
-            <option *ngFor="let c of formConfigurations" [ngValue]="c">{{c.shortName}}</option>
+        <select class="form-control input-sm" style="margin-left: 4px;" [(ngModel)]="selectedCustomOperation" (ngModelChange)="onOperationChanged()">
+            <option *ngFor="let c of customOperations" [ngValue]="c">{{c.shortName}}</option>
         </select>
     </div>
 
@@ -20,7 +20,7 @@
                         {{form.name.displayName}}
                         <span class="glyphicon glyphicon-info-sign" [title]="form.name.description"></span>
                     </label>
-                    <input class="form-control input-sm" style="flex: 1" [(ngModel)]="form.name.value">
+                    <input class="form-control input-sm" style="flex: 1" [(ngModel)]="form.name.value" sanitized>
                     <div class="entryRequired">
                         <ng-container *ngIf="form.name.required">*</ng-container>
                     </div>
@@ -58,11 +58,12 @@
                                     <col style="width: 1%;">
                                     <col>
                                     <col style="width: 1%;">
+                                    <col style="width: 1%;">
                                 </colgroup>
                                 <tbody>
-                                    <tr *ngFor="let p of form.parameters.value">
+                                    <tr *ngFor="let p of form.parameters.value; let last=last">
                                         <td><label>Name:</label></td>
-                                        <td><input class="form-control input-sm" style="font-family: monospace;" [(ngModel)]="p.name"></td>
+                                        <td><input class="form-control input-sm" style="font-family: monospace;" [(ngModel)]="p.name" sanitized></td>
                                         <td><label>Type:</label></td>
                                         <td>
                                             <type-editor [(ngModel)]="p.type" parameter="true"></type-editor>
@@ -73,6 +74,23 @@
                                                     <input type="checkbox" [(ngModel)]="p.required">Required
                                                 </label>
                                             </div>
+                                        </td>
+                                        <td>
+                                            <div class="hbox">
+                                                <button class="btn btn-xs btn-default" (click)="removeParameter(p)">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                                <button *ngIf="last" class="btn btn-xs btn-default" (click)="addParameter()" style="margin-left: 2px;">
+                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="!form.parameters.value || form.parameters.value.length == 0">
+                                        <td colspan="6" class="text-right">
+                                            <button class="btn btn-xs btn-default" (click)="addParameter()">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -115,7 +133,7 @@
                     </label>
                     <div class="panel panel-default vbox">
                         <div class="panel-body vbox">
-                            <yasgui [query]="form.sparql.value" hideButtons="true"></yasgui>
+                            <yasgui [query]="form.sparql.value" (querychange)="onQueryChange($event)" hideButtons="true"></yasgui>
                         </div>
                     </div>
                     <div class="entryRequired">

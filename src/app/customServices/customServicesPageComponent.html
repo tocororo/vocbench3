@@ -23,6 +23,6 @@
                 </div>
             </div>
         </div>
-        <custom-service *ngIf="selectedServiceConf" style="flex: 4; margin-left: 6px;" [serviceConfiguration]="selectedServiceConf"></custom-service>
+        <custom-service *ngIf="selectedService" style="flex: 4; margin-left: 6px;" [service]="selectedService" (update)="onServiceUpdate()"></custom-service>
     </div>
 </div>

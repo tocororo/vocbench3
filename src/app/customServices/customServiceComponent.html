@@ -24,43 +24,6 @@
         </div>
 
         <!-- Operations -->
-        <!-- <div class="gridRow vbox">
-            <div class="gridEntry">
-                <label class="entryLabel">
-                    {{form.operations.displayName}}
-                    <span class="glyphicon glyphicon-info-sign" [title]="form.operations.description"></span>
-                </label>
-                <div class="panel panel-default vbox" style="align-self: stretch;">
-                    <div class="panel-body hbox">
-                        <div class="panel panel-default vbox">
-                            <div class="panel-heading">
-                                <label style="flex: 1"></label>
-                                <div class="btn-toolbar" role="toolbar">
-                                    <div class="btn-group btn-group-xs">
-                                        <button class="btn btn-default" (click)="editOperation()" title="Edit operation" [disabled]="!selectedOperation">
-                                            <span class="glyphicon glyphicon-pencil"></span>
-                                        </button>
-                                        <button class="btn btn-default" (click)="createOperation()" title="Create operation">
-                                            <span class="glyphicon glyphicon-plus"></span>
-                                        </button>
-                                        <button class="btn btn-default" (click)="deleteOperation()" title="Delete operation" [disabled]="!selectedOperation">
-                                            <span class="glyphicon glyphicon-minus"></span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="panel-body vbox scrollableContainer">
-                                <div *ngFor="let o of form.operations.value" class="listItem" [ngClass]="{ active: selectedOperation == o }" (click)="selectOperation(o)">
-                                    {{o.name}}
-                                </div>
-                            </div>
-                        </div>
-                        <custom-operation *ngIf="selectedOperation" style="margin-left: 4px; flex: 4;" [operation]="selectedOperation"></custom-operation>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
         <div class="panel panel-default vbox">
             <div class="panel-heading">
                 <label style="flex: 1">

@@ -24,6 +24,7 @@
                     <div *ngFor="let p of parameters" class="hbox" style="align-items: center; margin-bottom: 2px;">
                         <span class="form-control input-sm" style="background-color: #eee; font-family: monospace;">{{p.prettyPrint}}</span>
                         <span *ngIf="!p.required" class="glyphicon glyphicon-question-sign" style="margin-left: 4px;" title="Optional parameter"></span>
+                        <span *ngIf="p.required" class="glyphicon glyphicon-exclamation-sign" style="margin-left: 4px;" title="Mandatory parameter"></span>
                     </div> 
                 </div>
             </div>

@@ -1,10 +1,8 @@
 import { Component } from "@angular/core";
 import { OverlayConfig } from "ngx-modialog";
 import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
-import { Configuration, ConfigurationComponents } from "../models/Configuration";
-import { CustomOperation, CustomService } from "../models/CustomService";
-import { ConfigurationsServices } from "../services/configurationsServices";
-import { CustomServiceServices } from "../services/customServices";
+import { CustomService, CustomServiceDefinition, CustomOperationTypes, CustomOperation, CustomOperationDefinition } from "../models/CustomService";
+import { CustomServiceServices } from "../services/customServiceServices";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { CustomServiceEditorModal, CustomServiceEditorModalData } from "./modals/customServiceEditorModal";
 
@@ -17,9 +15,9 @@ export class CustomServicesComponent {
 
     private serviceIds: string[];
     private selectedServiceId: string;
-    private selectedServiceConf: Configuration;
+    private selectedService: CustomService;
 
-    constructor(private configurationService: ConfigurationsServices, private customServService: CustomServiceServices, private basicModal: BasicModalServices, private modal: Modal) { }
+    constructor(private customServService: CustomServiceServices, private basicModal: BasicModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.initServices();
@@ -44,21 +42,21 @@ export class CustomServicesComponent {
     }
 
     private initServiceConfiguration() {
-        this.configurationService.getConfiguration(ConfigurationComponents.CUSTOM_SERVICE_DEFINITION_STORE, "sys:" + this.selectedServiceId).subscribe(
-            (conf: Configuration) => {
-                this.selectedServiceConf = conf;
+        this.customServService.getCustomService(this.selectedServiceId).subscribe(
+            (conf: CustomService) => {
+                let operations: CustomOperationDefinition[] = conf.getPropertyValue("operations");
+                if (operations != null) {
+                    operations.sort((o1, o2) => o1.name.localeCompare(o2.name));
+                }
+                this.selectedService = conf;
             }
         )
     }
 
     private createService() {
         this.openCustomServiceEditor("New Custom Service").then(
-            (newService: CustomService) => {
-                let config: { [key: string]: any } = {
-                    name: newService.name,
-                    description: newService.description
-                }
-                this.customServService.createCustomService(newService.id, config).subscribe(
+            (newService: CustomServiceDefinition) => {
+                this.customServService.createCustomService(newService.id, newService).subscribe(
                     () => {
                         this.initServices();
                     }
@@ -69,19 +67,15 @@ export class CustomServicesComponent {
     }
 
     private editService() {
-        this.openCustomServiceEditor("Edit Custom Service", this.selectedServiceConf).then(
-            (updatedService: CustomService) => {
+        this.openCustomServiceEditor("Edit Custom Service", this.selectedService).then(
+            (updatedService: CustomServiceDefinition) => {
                 //edited => require update
-                this.selectedServiceConf.properties.find(p => p.name == "name").value = updatedService.name;
-                this.selectedServiceConf.properties.find(p => p.name == "description").value = updatedService.description;
-                let config = this.selectedServiceConf.getPropertiesAsMap();
-                this.configurationService.storeConfiguration(ConfigurationComponents.CUSTOM_SERVICE_DEFINITION_STORE, "sys:" + this.selectedServiceId, config).subscribe(
+                this.selectedService.properties.find(p => p.name == "name").value = updatedService.name;
+                this.selectedService.properties.find(p => p.name == "description").value = updatedService.description;
+                let config = this.selectedService.getPropertiesAsMap();
+                this.customServService.updateCustomService(this.selectedServiceId, config).subscribe(
                     () => {
-                        this.customServService.reloadCustomService(this.selectedServiceId).subscribe(
-                            () => {
-                                this.initServices();
-                            }
-                        )
+                        this.initServices();
                     }
                 )
             },
@@ -101,16 +95,19 @@ export class CustomServicesComponent {
         )
     }
 
-    private openCustomServiceEditor(title: string, serviceConf?: Configuration) {
-        let customService: CustomService;
+    /**
+     * When in the custom-service component a change is made, re-init the service.
+     */
+    private onServiceUpdate() {
+        this.initServiceConfiguration();
+    }
+
+    private openCustomServiceEditor(title: string, serviceConf?: CustomService): Promise<CustomServiceDefinition> {
+        let editedConfId: string;
         if (serviceConf != null) {
-            customService = { 
-                id: this.selectedServiceId,
-                name: serviceConf.properties.find(p => p.name == "name").value,
-                description: serviceConf.properties.find(p => p.name == "description").value
-            }
+            editedConfId = this.selectedServiceId;
         }
-        let modalData = new CustomServiceEditorModalData(title, customService);
+        let modalData = new CustomServiceEditorModalData(title, serviceConf);
         const builder = new BSModalContextBuilder<CustomServiceEditorModalData>(
             modalData, undefined, CustomServiceEditorModalData
         );

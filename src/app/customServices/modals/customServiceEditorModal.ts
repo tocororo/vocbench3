@@ -1,8 +1,7 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { CustomService } from "../../models/CustomService";
-import { Reference } from "../../models/Configuration";
+import { CustomService, CustomServiceDefinition } from "../../models/CustomService";
 
 export class CustomServiceEditorModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title', public service?: CustomService) {
@@ -28,8 +27,8 @@ export class CustomServiceEditorModal implements ModalComponent<CustomServiceEdi
     ngOnInit() {
         if (this.context.service != null) { // edit mode
             this.id = this.context.service.id;
-            this.name = this.context.service.name;
-            this.description = this.context.service.description;
+            this.name = this.context.service.getPropertyValue("name");
+            this.description = this.context.service.getPropertyValue("description");
         }
     }
 
@@ -45,14 +44,16 @@ export class CustomServiceEditorModal implements ModalComponent<CustomServiceEdi
 
         if (this.context.service) { //edit
             //check if something changed
-            if (this.context.service.name != this.name || this.context.service.description != this.description) {
-                let updatedService: CustomService = { name: this.name, description: this.description, id: this.context.service.id };
+            let pristineName: string = this.context.service.getPropertyValue("name");
+            let pristineDescription: string = this.context.service.getPropertyValue("description");
+            if (pristineName != this.name || pristineDescription != this.description) {
+                let updatedService: CustomServiceDefinition = { name: this.name, description: this.description, id: this.context.service.id };
                 this.dialog.close(updatedService);
             } else {
                 this.cancel();
             }
         } else { //create
-            let newService: CustomService = { name: this.name, description: this.description, id: this.id.trim() };
+            let newService: CustomServiceDefinition = { name: this.name, description: this.description, id: this.id.trim() };
             this.dialog.close(newService);
         }
     }

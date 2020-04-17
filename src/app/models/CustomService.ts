@@ -1,13 +1,19 @@
 import { Configuration } from "./Configuration";
 
-export class CustomService {
+export class CustomServiceDefinition {
     name: string;
     description?: string;
-    operations?: CustomOperation[];
-    id?: string; //not in the DTO, but useful to keep trace of the condiguration reference
+    operations?: CustomOperationDefinition[];
+    id?: string; //not in the configuration definition, but useful to keep trace of the id
 }
 
-export class CustomOperation {
+export class CustomService extends Configuration {
+    id?: string; //not in the configuration object, but useful to keep trace of the id
+}
+
+export class CustomOperation extends Configuration {}
+
+export class CustomOperationDefinition {
     '@type': string;
     name: string;
     parameters?: OperationParameter[];
@@ -26,40 +32,12 @@ export class OperationType {
     typeArguments?: OperationType[];
 }
 
-export class SPARQLOperation extends CustomOperation {
+export class SPARQLOperation extends CustomOperationDefinition {
     sparql: string;
 }
 
 export class CustomOperationTypes {
     public static SparqlOperation: string = "it.uniroma2.art.semanticturkey.extension.impl.customservice.sparql.SPARQLOperation";
-}
-
-export interface CustomOperationForm { [key: string]: CustomOperationFormEntry }
-
-export interface CustomOperationFormEntry {
-    name: string;
-    displayName: string;
-    description: string;
-    required: boolean;
-    value: any;
-}
-
-export class CustomServiceUtils {
-    public static extractOperationForm(conf: Configuration): CustomOperationForm {
-        let form: CustomOperationForm = {};
-        conf.properties.forEach(p => {
-            let formEntry: CustomOperationFormEntry = {
-                name: p.name,
-                displayName: p.displayName,
-                description: p.description,
-                required: p.required,
-                value: null
-            }
-            form[p.name] = formEntry;
-        });
-        return form;
-    }
-
 }
 
 export class TypeUtils {
@@ -143,6 +121,12 @@ export class TypeUtils {
         }
         this.sortTypes(args);
         return args;
+    }
+
+    static serializeParameter(opParam: OperationParameter): string {
+        let paramPrettyPrint: string = TypeUtils.serializeType(opParam.type);
+        paramPrettyPrint += " " + opParam.name;
+        return paramPrettyPrint;
     }
 
     static serializeType(type: OperationType): string {
