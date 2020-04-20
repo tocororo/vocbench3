@@ -159,6 +159,7 @@ export enum VBActionsEnum {
     resourcesRemoveValue = "resourcesRemoveValue",
     resourcesRemovePredicateObject = "resourcesRemovePredicateObject",
     resourcesSetDeprecated = "resourcesSetDeprecated",
+    resourcesUpdateLexicalization = "resourcesUpdateLexicalization",
     resourcesUpdateTriple = "resourcesUpdateTriple",
     resourcesUpdatePredicateObject = "resourcesUpdatePredicateObject",
     resourcesGetResourceTriplesDescription = "resourcesGetResourceTriplesDescription",

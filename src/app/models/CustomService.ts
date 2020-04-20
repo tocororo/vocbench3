@@ -156,14 +156,11 @@ export class TypeUtils {
 
 
     public static isOperationTypeValid(type: OperationType): boolean {
+        if (type == null) return false;
         if (TypeUtils.getGenericTypes().indexOf(type.name) != -1) { //is generic => check if its args are valid
             if (type.typeArguments != null) {
                 for (let arg of type.typeArguments) {
-                    if (arg == null) {
-                        return false;
-                    } else {
-                        return TypeUtils.isOperationTypeValid(arg);
-                    }
+                    return TypeUtils.isOperationTypeValid(arg);
                 }
             } else {
                 return false;

@@ -158,12 +158,12 @@ export class EditableResourceComponent extends AbstractResViewResource {
             this.readonly ||
             ResourceUtils.isTripleInStaging(this.resource)
         );
-        this.editAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.U, this.subject);
-        this.deleteAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.subject);
+        this.editAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.U, this.subject, this.resource);
+        this.deleteAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.subject, this.resource);
         this.spawnFromLabelAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSpawnNewConceptFromLabel);
         this.moveLabelAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorMoveXLabelToResource, this.subject);
         this.assertAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.subject);
-        this.copyLocalesAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.C, this.subject);
+        this.copyLocalesAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.C, this.subject, this.resource);
         //bulk actions visible in every partition exept: subPropertyChains that 
         this.bulkEditAuthorized = this.editAuthorized && AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdatePredicateObject);
         this.bulkDeleteAuthorized = this.deleteAuthorized && AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemovePredicateObject);
@@ -233,7 +233,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                                 this.creationModals.newTypedLiteral("Edit " + this.predicate.getShow(), this.predicate,
                                     this.ranges.rangeCollection.resources, this.ranges.rangeCollection.dataRanges, true).then(
                                     (literals: ARTLiteral[]) => {
-                                        this.applyUpdate(this.subject, this.predicate, this.resource, literals[0]);
+                                        this.updateTriple(this.subject, this.predicate, this.resource, literals[0]);
                                     },
                                     () => { }
                                 );
@@ -293,7 +293,11 @@ export class EditableResourceComponent extends AbstractResViewResource {
             if (this.editLiteralInProgress) {
                 if (this.editActionScenario == EditActionScenarioEnum.langTaggedLiteral) {
                     let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, (<ARTLiteral>this.resource).getLang());
-                    this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
+                    if (this.partition == ResViewPartition.lexicalizations) {
+                        this.updateLexicalization(this.subject, this.predicate, <ARTLiteral>this.resource, newValue);
+                    } else {
+                        this.updateTriple(this.subject, this.predicate, this.resource, newValue);
+                    }
                 } else if (this.editActionScenario == EditActionScenarioEnum.typedLiteral) {
                     let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, (<ARTLiteral>this.resource).getDatatype(), null);
                     if (!this.isTypedLiteralValid(newValue)) {
@@ -301,11 +305,16 @@ export class EditableResourceComponent extends AbstractResViewResource {
                         this.cancelEdit();
                         return;
                     }
-                    this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
+                    this.updateTriple(this.subject, this.predicate, this.resource, newValue);
                 } else if (this.editActionScenario == EditActionScenarioEnum.xLabel) {
                     let oldLitForm: ARTLiteral = new ARTLiteral(this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
                     let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, this.resource.getAdditionalProperty(ResAttribute.LANG));
-                    this.applyUpdate(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
+                    // this.applyUpdate(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
+                    if (this.partition == ResViewPartition.lexicalizations) {
+                        this.updateLexicalization(<ARTResource>this.resource, this.predicate, oldLitForm, newValue);
+                    } else {
+                        this.updateTriple(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
+                    }
                 }
             } else if (this.bulkEditInProgress) {
                 try {
@@ -347,11 +356,11 @@ export class EditableResourceComponent extends AbstractResViewResource {
                             let warningMsg = "The type of the new value is not compliant with the range of the property " + this.predicate.getShow()
                                 + ". The change may cause an inconsistency. Do you want to apply the change?";
                             this.basicModals.confirm("Warning", warningMsg, "warning").then(
-                                confirm => { this.applyUpdate(this.subject, this.predicate, this.resource, newValue); },
+                                confirm => { this.updateTriple(this.subject, this.predicate, this.resource, newValue); },
                                 reject => { this.cancelEdit(); }
                             );
                         } else {
-                            this.applyUpdate(this.subject, this.predicate, this.resource, newValue);
+                            this.updateTriple(this.subject, this.predicate, this.resource, newValue);
                         }
                     } catch (err) { //if resourceStringValue is not a NTriple representation, check if it is a manchester expr. 
                         if (this.resource.isBNode() && this.isClassAxiom) {
@@ -415,13 +424,33 @@ export class EditableResourceComponent extends AbstractResViewResource {
         return false;
     }
 
-    private applyUpdate(subject: ARTResource, predicate: ARTURIResource, oldValue: ARTNode, newValue: ARTNode) {
+    private updateTriple(subject: ARTResource, predicate: ARTURIResource, oldValue: ARTNode, newValue: ARTNode) {
         this.resourcesService.updateTriple(subject, predicate, oldValue, newValue).subscribe(
             stResp => {
                 this.cancelEdit;
 				/** Event propagated to the resView that refreshes.
 				 * I cannot simply update the rdf-resource since the URI of the resource
 				 * in the predicate objects list stored in the partition render is still the same */
+                this.update.emit();
+            }
+        );
+    }
+
+    /**
+     * This method handles the edit of a value (EditScenario xlabel or langTaggedLiteral) in the lexicalizations partition.
+     * For the moment this is a "workaround" to allow a more specific authorization check with the lexicalization edit
+     * (which has a dedicated service, more specific than the general updateTriple).
+     * In the future (if more specific/dedicated services will be provided for the triples update) 
+     * it could be handled differently, namely an edit event is propagated up to the renderer that handles ad hoc the edit.
+     * @param subject 
+     * @param predicate 
+     * @param oldValue 
+     * @param newValue 
+     */
+    private updateLexicalization(subject: ARTResource, predicate: ARTURIResource, oldValue: ARTLiteral, newValue: ARTLiteral) {
+        this.resourcesService.updateLexicalization(subject, predicate, oldValue, newValue).subscribe(
+            stResp => {
+                this.cancelEdit;
                 this.update.emit();
             }
         );
@@ -461,7 +490,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
     private replace() {
         this.rvModalService.addPropertyValue("Replace", this.subject, this.predicate, false, null, false).then(
             (data: any) => {
-                this.applyUpdate(this.subject, this.predicate, this.resource, data.value[0]);
+                this.updateTriple(this.subject, this.predicate, this.resource, data.value[0]);
             },
             () => { }
         )

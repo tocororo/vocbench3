@@ -15,14 +15,15 @@ export class CustomServiceComponent {
     @Input() service: CustomService;
     @Output() update: EventEmitter<void> = new EventEmitter(); //tells to the parent that the service has been modified
 
-    private selectedOperation: CustomOperationDefinition;
-
     private form: CustomServiceForm;
+
+    private selectedOperation: CustomOperationDefinition;
 
     constructor(private customServService: CustomServiceServices, private modal: Modal) { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['service'] && changes['service'].currentValue) {
+            //copy the value of the input service into the form
             this.form = {
                 name: this.service.getProperty("name"),
                 description: this.service.getProperty("description"),
@@ -30,11 +31,12 @@ export class CustomServiceComponent {
             }
             //try to restore the selected operation (if any)
             if (this.selectedOperation != null) {
-                let selectedOpName: string = this.selectedOperation.name;
-                this.selectedOperation = null;
+                let selectedOpName: string = this.selectedOperation.name; 
                 let operations: CustomOperationDefinition[] = this.form.operations.value;
                 if (operations != null) {
                     this.selectedOperation = operations.find(o => o.name == selectedOpName);
+                } else {
+                    this.selectedOperation = null;
                 }
             }
         }

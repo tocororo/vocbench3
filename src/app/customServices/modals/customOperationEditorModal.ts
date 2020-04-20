@@ -149,7 +149,7 @@ export class CustomOperationEditorModal implements ModalComponent<CustomOperatio
                     let parameters: OperationParameter[] = field.value;
                     for (let param of parameters) {
                         if (param.name == null) { //all parameter names must be provided
-                            this.basicModals.alert("Invalid data", "An invalid parameter name has been detected, The provided Returns type is not valid", "warning");
+                            this.basicModals.alert("Invalid data", "A provided parameter has an empty name", "warning");
                             return;
                         } else if (!validNameRegexp.test(param.name)) { //all parameter names must be valid variable name
                             this.basicModals.alert("Invalid data", "The parameter name " + param.name + " is not valid", "warning");

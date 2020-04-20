@@ -1,5 +1,5 @@
 import Prolog from 'jsprolog';
-import { ARTResource } from "../models/ARTResources";
+import { ARTResource, ARTNode, ResAttribute } from "../models/ARTResources";
 import { ResViewPartition } from "../models/ResourceView";
 import { User } from "../models/User";
 import { VBActionsEnum } from './VBActions';
@@ -128,6 +128,7 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.resourcesRemoveValue]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', values), "D").',
         [VBActionsEnum.resourcesRemovePredicateObject]: 'auth(rdf(resource, values), "D").',
         [VBActionsEnum.resourcesSetDeprecated]: 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "U").',
+        [VBActionsEnum.resourcesUpdateLexicalization]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "U").',
         [VBActionsEnum.resourcesUpdateTriple]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', values), "U").',
         [VBActionsEnum.resourcesUpdatePredicateObject]: 'auth(rdf(resource, values), "U").',
         [VBActionsEnum.resourcesUpdateResourceTriplesDescription]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', values), "U").',
@@ -187,8 +188,9 @@ export class AuthorizationEvaluator {
     /**
      * @param action 
      * @param resource If provided, is used to get its role 
+     * @param langValue If provided, check if it is a language tagged resource and the user has the permission
      */
-    public static isAuthorized(action: VBActionsEnum, resource?: ARTResource): boolean {
+    public static isAuthorized(action: VBActionsEnum, resource?: ARTResource, langValue?: ARTNode): boolean {
         var user: User = VBContext.getLoggedUser();
         if (user == null) {
             return false;
@@ -196,6 +198,15 @@ export class AuthorizationEvaluator {
         if (user.isAdmin()) {
             return true;
         } else {
+
+            //check language authorization
+            if (langValue != null && langValue.getAdditionalProperty(ResAttribute.LANG)) {
+                let userLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
+                if (userLangs.indexOf(langValue.getAdditionalProperty(ResAttribute.LANG)) == -1) {
+                    return false;
+                }
+            }
+
             if (AuthorizationEvaluator.prologEngine == null) { //engine not yet initialized
                 return false;
             }
@@ -378,273 +389,280 @@ export class ResourceViewAuthEvaluator {
         [
             ResViewPartition.broaders,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddBroaderConcept, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetConceptTaxonomy, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveBroaderConcept, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddBroaderConcept, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetConceptTaxonomy, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveBroaderConcept, resource, value)],
             ]),
         ],
         [
             ResViewPartition.classaxioms,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesCreateClassAxiom, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesRead, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesRemoveClassAxiom, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesCreateClassAxiom, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesRead, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.classesRemoveClassAxiom, resource, value)],
             ])
         ],
         [
             ResViewPartition.constituents,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexSetLexicalEntryConstituent, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexReadLexicalEntryConstituents, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexClearLexicalEntryConstituent, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexSetLexicalEntryConstituent, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexReadLexicalEntryConstituents, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexClearLexicalEntryConstituent, resource, value)],
             ])
         ],
         [
             ResViewPartition.datatypeDefinitions,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.datatypesSetDatatypeRestriction, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.datatypesRead, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.datatypesSetDatatypeRestriction, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.datatypesDeleteDatatypeRestriction, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.datatypesSetDatatypeRestriction, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.datatypesRead, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.datatypesSetDatatypeRestriction, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.datatypesDeleteDatatypeRestriction, resource, value)],
             ])
         ],
         [
             ResViewPartition.denotations,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddLexicalization, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesReadLexicalizations, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemovePlainLexicalization, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddLexicalization, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesReadLexicalizations, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemovePlainLexicalization, resource, value)],
             ])
         ],
         [
             ResViewPartition.disjointProperties,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesAddDisjointProperty, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRead, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRemoveDisjointProperty, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesAddDisjointProperty, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRead, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRemoveDisjointProperty, resource, value)],
             ])
         ],
         [
             ResViewPartition.domains,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesAddPropertyDomain, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesGetDomain, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRemovePropertyDomain, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesAddPropertyDomain, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesGetDomain, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRemovePropertyDomain, resource, value)],
             ])
         ],
         [
             ResViewPartition.equivalentProperties,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesAddEquivalentProperty, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRead, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRemoveEquivalentProperty, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesAddEquivalentProperty, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRead, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRemoveEquivalentProperty, resource, value)],
             ])
         ],
         [
             ResViewPartition.evokedLexicalConcepts,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, resource, value)],
             ])
         ],
         [
             ResViewPartition.facets,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, resource, value)],
             ])
         ],
         [
             ResViewPartition.formBasedPreview, //only read partition
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => false],
-                [CRUDEnum.R, (resource: ARTResource) => true],
-                [CRUDEnum.U, (resource: ARTResource) => false],
-                [CRUDEnum.D, (resource: ARTResource) => false],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => false],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => true],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => false],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => false],
             ])
         ],
         [
             ResViewPartition.formRepresentations,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddFormRepresentation, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexReadFormRepresentation, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveFormRepresentation, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddFormRepresentation, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexReadFormRepresentation, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveFormRepresentation, resource, value)],
             ])
         ],
         [
             ResViewPartition.imports,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataAddImport, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataReadImport, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRemoveImport, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataAddImport, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataReadImport, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRemoveImport, resource, value)],
             ])
         ],
         [
             ResViewPartition.labelRelations,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, resource, value)],
             ])
         ],
         [
             ResViewPartition.lexicalForms,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddLexicalForm, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveLexicalForm, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveLexicalForm, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddLexicalForm, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveLexicalForm, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveLexicalForm, resource, value)],
             ])
         ],
         [
             ResViewPartition.lexicalSenses,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddLexicalization, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesReadLexicalizations, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveReifiedLexicalization, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddLexicalization, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesReadLexicalizations, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveReifiedLexicalization, resource, value)],
             ])
         ],
         [
             ResViewPartition.lexicalizations,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddLexicalization, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesReadLexicalizations, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveLexicalization, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddLexicalization, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesReadLexicalizations, resource, value)],
+                // [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateLexicalization, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveLexicalization, resource, value)],
             ])
         ],
         [
             ResViewPartition.members,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddToCollection, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetCollectionTaxonomy, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveFromCollection, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddToCollection, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetCollectionTaxonomy, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveFromCollection, resource, value)],
             ])
         ],
         [
             ResViewPartition.membersOrdered,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddToCollection, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetCollectionTaxonomy, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveFromCollection, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddToCollection, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosGetCollectionTaxonomy, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveFromCollection, resource, value)],
             ])
         ],
         [
             ResViewPartition.notes,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, resource, value)],
             ])
         ],
         [
             ResViewPartition.properties,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, resource, value)],
             ])
         ],
         [
             ResViewPartition.ranges,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesAddPropertyRange, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesGetRange, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRemovePropertyRange, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesAddPropertyRange, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesGetRange, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRemovePropertyRange, resource, value)],
             ])
         ],
         [
             ResViewPartition.rdfsMembers,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, resource, value)],
             ])
         ],
         [
             ResViewPartition.schemes,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddConceptToScheme, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosReadSchemes, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveConceptFromScheme, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddConceptToScheme, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosReadSchemes, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveConceptFromScheme, resource, value)],
             ])
         ],
         [
             ResViewPartition.subPropertyChains,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesAddPropertyChainAxiom, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesReadPropertyChainAxiom, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesUpdatePropertyChainAxiom, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRemovePropertyChainAxiom, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesAddPropertyChainAxiom, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesReadPropertyChainAxiom, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesUpdatePropertyChainAxiom, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRemovePropertyChainAxiom, resource, value)],
             ])
         ],
         [
             ResViewPartition.subterms,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddSubterm, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexReadSubterm, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveSubterm, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexAddSubterm, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexReadSubterm, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.ontolexRemoveSubterm, resource, value)],
             ])
         ],
         [
             ResViewPartition.superproperties,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesAddSuperProperty, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesGetPropertyTaxonomy, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRemoveSuperProperty, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesAddSuperProperty, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesGetPropertyTaxonomy, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.propertiesRemoveSuperProperty, resource, value)],
             ])
         ],
         [
             ResViewPartition.topconceptof,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddTopConcept, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosReadSchemes, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveTopConcept, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddTopConcept, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosReadSchemes, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveTopConcept, resource, value)],
             ])
         ],
         [
             ResViewPartition.types,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.individualsAddType, resource)],
-                [CRUDEnum.R, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource)],
-                [CRUDEnum.U, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource)],
-                [CRUDEnum.D, (resource: ARTResource) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.individualsRemoveType, resource)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.individualsAddType, resource, value)],
+                [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.individualsRemoveType, resource, value)],
             ])
         ],
     ]);
 
-    public static isAuthorized(partition: ResViewPartition, crud: CRUDEnum, resource: ARTResource): boolean {
+    /**
+     * @param partition ResView partition (e.g. types, topconceptof) of the CRUD to control
+     * @param crud CRUD to check
+     * @param resource resource described in the ResView
+     * @param value value described in the specific predicate-object widget (if provided useful for language checks)
+     */
+    public static isAuthorized(partition: ResViewPartition, crud: CRUDEnum, resource: ARTResource, value?: ARTNode): boolean {
         let evaluationFn: EvaluationFn = this.partitionEvaluationMap.get(partition).get(crud);
-        return evaluationFn(resource);
+        return evaluationFn(resource, value);
     }
 
 }
 
 interface CrudEvaluationMap extends Map<CRUDEnum, EvaluationFn> { }
-interface EvaluationFn { (resource?: ARTResource): boolean }
+interface EvaluationFn { (resource: ARTResource, value: ARTNode): boolean }
 

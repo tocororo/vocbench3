@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { ARTNode, ARTResource, ARTURIResource, ResourcePosition } from "../models/ARTResources";
+import { ARTNode, ARTResource, ARTURIResource, ResourcePosition, ARTLiteral } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
 import { RDFS, SKOS } from '../models/Vocabulary';
 import { Deserializer } from "../utils/Deserializer";
@@ -39,6 +39,23 @@ export class ResourcesServices {
                 }
             }
         );
+    }
+
+    /**
+     * 
+     * @param subject 
+     * @param property 
+     * @param value 
+     * @param newValue 
+     */
+    updateLexicalization(subject: ARTResource, property: ARTURIResource, value: ARTLiteral, newValue: ARTLiteral) {
+        var params: any = {
+            subject: subject,
+            property: property,
+            value: value,
+            newValue: newValue
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateLexicalization", params);
     }
 
     /**
