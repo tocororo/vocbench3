@@ -6,7 +6,7 @@ import { AbstractResourceViewPanel } from "./abstractResourceViewPanel";
 @Component({
     selector: "resource-view-splitted",
     templateUrl: "./resourceViewSplittedComponent.html",
-    host: { class: "vbox" }
+    host: { class: "hbox" }
 })
 export class ResourceViewSplittedComponent extends AbstractResourceViewPanel {
 

@@ -158,11 +158,14 @@ export class ProjectGroupsManagerComponent {
 
         Observable.forkJoin([getPGSettingsFn, getPGBindingFn]).subscribe(
             resp => {
-                Observable.forkJoin(describeFunctions).subscribe(
-                    resp => {
-                        this.revokeProjectAccess(); //remove the ctx_project
-                    }
-                );
+                if (describeFunctions.length > 0) {
+                    Observable.forkJoin(describeFunctions)
+                    .finally(
+                        () => this.revokeProjectAccess() //remove the ctx_project
+                    ).subscribe();
+                } else {
+                    this.revokeProjectAccess(); //remove the ctx_project
+                }
             }
         );
         
