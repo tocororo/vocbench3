@@ -201,6 +201,21 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     }
 
     private openACLModal() {
+        if (this.projectList.length > 50) {
+            this.basicModals.confirm("ACL matrix", "Warning: there are a lot of projects (" + this.projectList.length + "), " +
+                "thus the ACL matrix might be slow to load and hardly readable. Do you want to continue anyway?\n\n" +
+                "Alternatively the ACL for a specific project is available from the related action menu, 'Edit ACL' entry.", "warning").then(
+                () => { //confirmed
+                    this.openACLMatrix();
+                },
+                () => {}
+            )
+        } else {
+            this.openACLMatrix();
+        }
+    }
+
+    private openACLMatrix() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
         return this.modal.open(ProjectACLModal, overlayConfig);
