@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Configuration } from '../models/Configuration';
-import { CustomService } from '../models/CustomService';
+import { CustomService, CustomOperationDefinition } from '../models/CustomService';
 import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
@@ -31,6 +31,11 @@ export class CustomServiceServices {
             stResp => {
                 let config = <CustomService>CustomService.parse(stResp);
                 config.id = id; //useful to keep trace of id in case of future update
+                let operations: CustomOperationDefinition[] = config.getPropertyValue("operations");
+                if (operations != null) {
+                    operations.forEach(o => o.serviceId = id); //add the service id to each operation (useful when the operation is edited)
+                    operations.sort((o1, o2) => o1.name.localeCompare(o2.name)); //sort operations
+                }
                 return config;
             }
         );

@@ -6,6 +6,7 @@ import { CustomServiceComponent } from '../customServices/customServiceComponent
 import { CustomServicesComponent } from '../customServices/customServicesPageComponent';
 import { CustomOperationEditorModal } from '../customServices/modals/customOperationEditorModal';
 import { CustomServiceEditorModal } from '../customServices/modals/customServiceEditorModal';
+import { CustomServiceModalServices } from '../customServices/modals/customServiceModalServices';
 import { OperationTypeEditor } from '../customServices/modals/operationTypeEditor';
 import { SharedModule } from './sharedModule';
 
@@ -23,7 +24,9 @@ import { SharedModule } from './sharedModule';
     exports: [
         CustomServicesComponent
     ],
-    providers: [],
+    providers: [
+        CustomServiceModalServices
+    ],
     entryComponents: [
         CustomOperationEditorModal,
         CustomServiceEditorModal,

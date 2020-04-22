@@ -19,6 +19,7 @@ export class CustomOperationDefinition {
     parameters?: OperationParameter[];
     returns: OperationType;
     authorization?: string;
+    serviceId?: string; //not in the operation definition, but usefult to keep trace of the belonging service
 }
 
 export class OperationParameter {

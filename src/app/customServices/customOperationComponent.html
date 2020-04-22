@@ -1,4 +1,16 @@
 <div class="panel panel-default vbox">
+    <div class="panel-heading">
+        <label style="flex: 1">
+            {{operation.name}}
+        </label>
+        <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" (click)="editOperation()" title="Edit operation">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+        </div>
+    </div>
     <div class="panel-body vbox scrollableContainer">
 
         <div class="gridRow">
@@ -21,6 +33,7 @@
             <div class="gridEntry">
                 <label class="entryLabel">Parameters:</label>
                 <div style="flex: 1">
+                    <span *ngIf="parameters.length == 0" class="form-control input-sm" style="background-color: #eee;"></span>
                     <div *ngFor="let p of parameters" class="hbox" style="align-items: center; margin-bottom: 2px;">
                         <span class="form-control input-sm" style="background-color: #eee; font-family: monospace;">{{p.prettyPrint}}</span>
                         <span *ngIf="!p.required" class="glyphicon glyphicon-question-sign" style="margin: 0px 4px;" title="Optional parameter"></span>

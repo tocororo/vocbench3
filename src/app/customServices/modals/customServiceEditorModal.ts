@@ -1,7 +1,8 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { CustomService, CustomServiceDefinition } from "../../models/CustomService";
+import { CustomOperationDefinition, CustomService, CustomServiceDefinition } from "../../models/CustomService";
+import { CustomServiceServices } from "../../services/customServiceServices";
 
 export class CustomServiceEditorModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title', public service?: CustomService) {
@@ -20,7 +21,7 @@ export class CustomServiceEditorModal implements ModalComponent<CustomServiceEdi
     private name: string;
     private description: string;
 
-    constructor(public dialog: DialogRef<CustomServiceEditorModalData>) {
+    constructor(public dialog: DialogRef<CustomServiceEditorModalData>, private customServService: CustomServiceServices) {
         this.context = dialog.context;
     }
 
@@ -47,14 +48,23 @@ export class CustomServiceEditorModal implements ModalComponent<CustomServiceEdi
             let pristineName: string = this.context.service.getPropertyValue("name");
             let pristineDescription: string = this.context.service.getPropertyValue("description");
             if (pristineName != this.name || pristineDescription != this.description) {
-                let updatedService: CustomServiceDefinition = { name: this.name, description: this.description, id: this.context.service.id };
-                this.dialog.close(updatedService);
-            } else {
+                let operations: CustomOperationDefinition[] = this.context.service.getPropertyValue("operations");
+                let updatedService: CustomServiceDefinition = { name: this.name, description: this.description, operations: operations };
+                this.customServService.updateCustomService(this.context.service.id, updatedService).subscribe(
+                    () => {
+                        this.dialog.close();
+                    }
+                );
+            } else { //nothing's changed => cancel, so the calling component doesn't update
                 this.cancel();
             }
         } else { //create
-            let newService: CustomServiceDefinition = { name: this.name, description: this.description, id: this.id.trim() };
-            this.dialog.close(newService);
+            let newService: CustomServiceDefinition = { name: this.name, description: this.description };
+            this.customServService.createCustomService(this.id.trim(), newService).subscribe(
+                () => {
+                    this.dialog.close();
+                }
+            );
         }
     }
 

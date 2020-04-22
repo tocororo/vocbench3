@@ -1,6 +1,7 @@
-import { Component, Input, SimpleChanges, ViewChild } from "@angular/core";
-import { CustomOperationDefinition, CustomOperationTypes, OperationParameter, TypeUtils } from "../models/CustomService";
+import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { CustomOperationDefinition, CustomOperationTypes, TypeUtils } from "../models/CustomService";
 import { YasguiComponent } from "../sparql/yasguiComponent";
+import { CustomServiceModalServices } from "./modals/customServiceModalServices";
 
 @Component({
     selector: "custom-operation",
@@ -9,22 +10,24 @@ import { YasguiComponent } from "../sparql/yasguiComponent";
     styleUrls: ["./customServices.css"]
 })
 export class CustomOperationComponent {
-
     @Input() operation: CustomOperationDefinition;
+    @Output() update: EventEmitter<void> = new EventEmitter(); //tells to the parent that the service has been modified
     @ViewChild(YasguiComponent) viewChildYasgui: YasguiComponent;
 
     private isSparql: boolean;
-    private parameters: { prettyPrint: string, required: boolean }[];
+    private parameters: { prettyPrint: string, required: boolean }[] = [];
     private returns: string;
 
-    constructor() {}
+    constructor(private customServiceModals: CustomServiceModalServices) {}
     
     ngOnChanges(changes: SimpleChanges) {
         if (changes['operation'].currentValue) {
             this.returns = TypeUtils.serializeType(this.operation.returns);
-            this.parameters = this.operation.parameters.map(p => {
-                return { prettyPrint: TypeUtils.serializeParameter(p), required: p.required }
-            });
+            if (this.operation.parameters != null) {
+                this.parameters = this.operation.parameters.map(p => {
+                    return { prettyPrint: TypeUtils.serializeParameter(p), required: p.required }
+                });
+            }
 
             this.isSparql = this.operation["@type"] == CustomOperationTypes.SparqlOperation;
             if (this.isSparql) {
@@ -34,6 +37,15 @@ export class CustomOperationComponent {
             }
             
         }
+    }
+
+    private editOperation() {
+        this.customServiceModals.openCustomOperationEditor("Edit Custom Operation", this.operation.serviceId, this.operation).then(
+            ()=> {
+                this.update.emit();
+            },
+            () => {}
+        )
     }
 
 }

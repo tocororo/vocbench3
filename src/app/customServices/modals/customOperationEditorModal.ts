@@ -8,7 +8,12 @@ import { CustomServiceServices } from "../../services/customServiceServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 export class CustomOperationEditorModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title', public operation?: CustomOperationDefinition) {
+    /**
+     * @param title 
+     * @param customServiceId needed for the creation/edit of the operation
+     * @param operation if provided, allows the edit of the operation
+     */
+    constructor(public title: string = 'Modal Title', public customServiceId: string, public operation?: CustomOperationDefinition) {
         super();
     }
 }
@@ -25,7 +30,6 @@ export class CustomOperationEditorModal implements ModalComponent<CustomOperatio
     private selectedCustomOperation: CustomOperation;
 
     private form: CustomOperationForm;
-
 
     private returnsPrettyPrint: string;
     private queryValid: boolean = true; //unless otherwise stated bu the yasgui component, the query is considered valid
@@ -147,16 +151,18 @@ export class CustomOperationEditorModal implements ModalComponent<CustomOperatio
                 }
                 if (fieldName == "parameters") { //check that the parameters are completed
                     let parameters: OperationParameter[] = field.value;
-                    for (let param of parameters) {
-                        if (param.name == null) { //all parameter names must be provided
-                            this.basicModals.alert("Invalid data", "A provided parameter has an empty name", "warning");
-                            return;
-                        } else if (!validNameRegexp.test(param.name)) { //all parameter names must be valid variable name
-                            this.basicModals.alert("Invalid data", "The parameter name " + param.name + " is not valid", "warning");
-                            return;
-                        } else if (!TypeUtils.isOperationTypeValid(param.type)) {
-                            this.basicModals.alert("Invalid data", "The type of the parameter " + param.name + " is not valid", "warning");
-                            return;
+                    if (parameters != null) {
+                        for (let param of parameters) {
+                            if (param.name == null) { //all parameter names must be provided
+                                this.basicModals.alert("Invalid data", "A provided parameter has an empty name", "warning");
+                                return;
+                            } else if (!validNameRegexp.test(param.name)) { //all parameter names must be valid variable name
+                                this.basicModals.alert("Invalid data", "The parameter name " + param.name + " is not valid", "warning");
+                                return;
+                            } else if (!TypeUtils.isOperationTypeValid(param.type)) {
+                                this.basicModals.alert("Invalid data", "The type of the parameter " + param.name + " is not valid", "warning");
+                                return;
+                            }
                         }
                     }
                 }
@@ -167,31 +173,51 @@ export class CustomOperationEditorModal implements ModalComponent<CustomOperatio
             }
         }
         //all fields are ok, now copy the value of the form into the configuration
-        let returnOperation: CustomOperationDefinition = {
+        let newOperation: CustomOperationDefinition = {
             "@type": this.selectedCustomOperation.type,
             name: this.form.name.value,
-            authorization: this.form.authorization.value,
             returns: this.form.returns.value,
-            parameters: this.form.parameters.value
+            parameters: this.form.parameters.value,
         }
-        if (returnOperation["@type"] == CustomOperationTypes.SparqlOperation) {
-            (<SPARQLOperation>returnOperation).sparql = this.form.sparql.value;
+        if (this.form.authorization.value != null && this.form.authorization.value.trim() != "") {
+            newOperation.authorization = this.form.authorization.value;
+        }
+        if (newOperation["@type"] == CustomOperationTypes.SparqlOperation) {
+            (<SPARQLOperation>newOperation).sparql = this.form.sparql.value;
         }
 
         if (this.context.operation != null) { //edit => check if something is changed
+            newOperation.serviceId = this.context.customServiceId; //needed just for the comparison, in order to not make it wrongly report as changed
             let changed: boolean = false;
-            for (let operationField in this.context.operation) {
-                if (JSON.stringify(this.context.operation[operationField]) != JSON.stringify(returnOperation[operationField])) {
-                    changed = true;
+
+            //first compare only the fields of the two operations (pristine and new one)
+            let pristineFields = Object.keys(this.context.operation).sort();
+            let updatedFields = Object.keys(newOperation).sort();
+            changed = JSON.stringify(pristineFields) != JSON.stringify(updatedFields);
+
+            if (!changed) { //fields not changed => compare the contents
+                for (let operationField of pristineFields) {
+                    if (JSON.stringify(this.context.operation[operationField]) != JSON.stringify(newOperation[operationField])) {
+                        changed = true;
+                    }
                 }
             }
-            if (changed) {
-                this.dialog.close(returnOperation);
+
+            if (changed) { //changed => update
+                this.customServService.updateOperationInCustomService(this.context.customServiceId, newOperation).subscribe(
+                    ()=> {
+                        this.dialog.close();
+                    }
+                );
             } else {
                 this.cancel();
             }
-        } else {
-            this.dialog.close(returnOperation);
+        } else { //create
+            this.customServService.addOperationToCustomService(this.context.customServiceId, newOperation).subscribe(
+                ()=> {
+                    this.dialog.close();
+                }
+            );
         }
 
     }
