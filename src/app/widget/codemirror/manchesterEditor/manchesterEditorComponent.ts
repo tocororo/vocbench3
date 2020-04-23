@@ -1,14 +1,14 @@
 import { Component, forwardRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as CodeMirror from 'codemirror';
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { OverlayConfig } from 'ngx-modialog';
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from 'rxjs';
-import { ExpressionCheckResponse, ManchesterServices } from '../../../services/manchesterServices';
+import { ExpressionCheckResponse, ManchesterServices, ObjectError } from '../../../services/manchesterServices';
 import { SearchMode } from './../../../models/Properties';
 import { SearchServices } from './../../../services/searchServices';
-import { HelperModal } from './modal/helperModal';
-import { OverlayConfig } from 'ngx-modialog';
 import './manchester';
+import { HelperModal } from './modal/helperModal';
 
 
 
@@ -27,6 +27,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
     @Input() context: ManchesterCtx;
     @Input() disabled: boolean;
     @ViewChild('txtarea') textareaElement: any;
+
 
     private markers: CodeMirror.TextMarker[] = [];
     private cmEditor: CodeMirror.EditorFromTextArea;
@@ -109,13 +110,13 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                 }
                 return this.searchServices.searchURIList(word, SearchMode.startsWith, 200).map(
                     results => {
-                        if(results.length > 199){
+                        if (results.length > 199) {
                             results.sort();
                             results.push("...");
                             return {
                                 from: CodeMirror.Pos(cur.line, start),
                                 to: CodeMirror.Pos(cur.line, end),
-                                list:results
+                                list: results
                             }
                         }
                         return {
@@ -205,74 +206,70 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
     /**
      * 
      * @param response 
-     * This method underline error in Manchester editor
+     * This method underline errors in Manchester editor
      */
-    errorMarks(response: string[]) {
-        // clean words that have been marked (useful when applying changes to underlined words) 
-        this.markers.forEach(value => {
+    errorMarks(response: ObjectError[]) {
+        this.markers.forEach(value => { // clean words that have been marked (useful when applying changes to underlined words) 
             value.clear()
         })
-        let wordFound: string;
         response.forEach(value => {
-            if (!value.startsWith("Not")) {
-                if (!value.startsWith("Resource")) {
-                    let wordToSearch = value.split(" ", 2);
-                    wordFound = wordToSearch[0]; // take first value
-                    let text = this.cmEditor.getDoc().getValue().split(" ");
-                    text.forEach(word => {
-                        if (word == wordFound) {
-                            let positionWordFound = this.cmEditor.getDoc().getSearchCursor(new RegExp(word + "\\b")); // take word position
-                            while (positionWordFound.findNext()) { // it is necessary to check if there are words that metching 
-                                let marker = this.cmEditor.getDoc().markText(positionWordFound.from(), positionWordFound.to(), { className:"underline" , title:value }) //underline word that match
-                                this.markers.push(marker); // insert word into array that contain matched and underlined words
-                            }
-                        }
-                    })
-
-                } else if (value.startsWith("Resource")) {
-                    let wordToSearch = value.split(" ", 3); // split array in 3 parts 
-                    wordFound = wordToSearch[1]; //take second value
-                    let text = this.cmEditor.getDoc().getValue().split(" ");
-                    text.forEach(word => {
-                        if (word == wordFound) {
-                            let positionWordFound = this.cmEditor.getDoc().getSearchCursor(new RegExp(word + "\\b"));
-                            while (positionWordFound.findNext()) {
-                                let marker = this.cmEditor.getDoc().markText(positionWordFound.from(), positionWordFound.to(), { className:"underline", title:value })
-                                this.markers.push(marker);
-                            }
-                        }
-                    })
+            if (value.type == "semantic") {
+                let pattern = value.qname + "\\b|" + value.iri // regex checks if there are some word in text editor which match with any uri or qname if this happens takes its position with "positionWord"
+                let positionWord = this.cmEditor.getDoc().getSearchCursor(new RegExp(pattern)); // take word position
+                for (let i = 0; i <= value.occurrence; i++) {
+                    positionWord.findNext();// take match in text editor
                 }
+                let marker = this.cmEditor.getDoc().markText(positionWord.from(), positionWord.to(), { className: "underline", title: value.msg }) //underline word that match
+                this.markers.push(marker);// insert word into array that contain matched and underlined words
+            } else {
+                let startWordPosition = this.cmEditor.getDoc().posFromIndex(value.occurrence); // it take the position from word start ch
+                let endWord = value.occurrence + value.offendingTerm.length //calculate ch of the word end ( -1 because we just are on the first character)
+                let endWordPosition = this.cmEditor.getDoc().posFromIndex(endWord); // it take the position of the last character of the word
+                let detailsExpectedTokens = value.expectedTokens.join("\n");
+                if (value.offendingTerm == "<EOF>") {
+                    let startWordPosition = this.cmEditor.getDoc().posFromIndex(value.occurrence - 1); // it take the position from word start ch
+                    let endWordPosition = this.cmEditor.getDoc().posFromIndex(value.occurrence);
+                    let marker = this.cmEditor.getDoc().markText(startWordPosition, endWordPosition, { className: "underline", title: detailsExpectedTokens }) //underline word that match
+                    this.markers.push(marker);// insert word into array that contain matched and underlined words
+                } else {
+                    let marker = this.cmEditor.getDoc().markText(startWordPosition, endWordPosition, { className: "underline", title: detailsExpectedTokens }) //underline word that match
+                    this.markers.push(marker);// insert word into array that contain matched and underlined words
+                }
+
+
+
             }
         })
+
     }
 
 
+
     validateExpression(code: string) {
-        //console.log(code)
         let validationFn: Observable<ExpressionCheckResponse>;
         if (this.context == ManchesterCtx.datatypeFacets) {
             validationFn = this.manchesterService.checkDatatypeExpression(code);
-            //console.log("dataType",validationFn)
         } else if (this.context == ManchesterCtx.datatypeEnumeration) {
             validationFn = this.manchesterService.checkLiteralEnumerationExpression(code);
-            //console.log("dataEnum",validationFn)
         } else {
-            validationFn = this.manchesterService.checkExpression(code);
-            //console.log("altrimenti",validationFn)
+            validationFn = this.manchesterService.checkExpression(code)
         }
         validationFn.subscribe(
             (checkResp: ExpressionCheckResponse) => {
-                this.errorMarks(checkResp.details)
                 this.codeValid = checkResp.valid;
+                this.errorMarks(checkResp.details)
                 if (this.codeValid) {
                     this.propagateChange(code);
                 } else {
-                    this.codeInvalidDetails = checkResp.details.join("\n");
+                    let detailsMsgs: string[] = checkResp.details.map(value => value.msg);
+                    this.codeInvalidDetails = detailsMsgs.join("\n");
                     this.propagateChange(null); //in case invalid, propagate a null expression
                 }
             }
         );
+
+
+
     }
 
     /**

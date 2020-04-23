@@ -467,7 +467,8 @@ export class EditableResourceComponent extends AbstractResViewResource {
                         }
                     );
                 } else {
-                    this.basicModals.alert("Invalid Expression", "'" + expression + "' is not a valid Manchester Expression", "warning", checkResp.details.join("\n"));
+                    let detailsMsg: string[] = checkResp.details.map(d => d.msg);
+                    this.basicModals.alert("Invalid Expression", "'" + expression + "' is not a valid Manchester Expression", "warning", detailsMsg.join("\n"));
                 }
             }
         )

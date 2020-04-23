@@ -97,7 +97,24 @@ export class ManchesterServices {
 
 }
 
+
 export class ExpressionCheckResponse {
     public valid: boolean;
-    public details: string[];
+    public details: ObjectError[];
 }
+
+export class ObjectError{
+     public msg: string;
+     public type: string; 
+     // semantic
+     public iri?: string;
+     public qname?: string;
+     public occurrence?: number; // in case type = syntactic it indicates the position of the first character of the string containing the error otherwise it indicates word occurrence (es: first, second ecc..) 
+     //syntactic
+     public offendingTerm: string;
+     public expectedTokens: string[];
+     public prefix: string;
+}
+
+
+

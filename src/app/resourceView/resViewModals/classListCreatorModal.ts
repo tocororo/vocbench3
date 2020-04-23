@@ -2,7 +2,7 @@ import { Component, ElementRef } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTBNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from '../../models/ARTResources';
-import { ManchesterServices, ExpressionCheckResponse } from "../../services/manchesterServices";
+import { ExpressionCheckResponse, ManchesterServices } from "../../services/manchesterServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
@@ -76,8 +76,8 @@ export class ClassListCreatorModal implements ModalComponent<ClassListCreatorMod
                             this.classList.push(exprCls);
                             this.duplicateResource = null;
                         } else {
-                            let details = checkResp.details.join("\n");
-                            this.basicModals.alert("Invalid Expression", "'" + expr + "' is not a valid Manchester Expression", "error", details);
+                            let detailsMsgs: string[] = checkResp.details.map(d => d.msg);
+                            this.basicModals.alert("Invalid Expression", "'" + expr + "' is not a valid Manchester Expression", "error", detailsMsgs.join("\n"));
                         }
                     }
                 )
