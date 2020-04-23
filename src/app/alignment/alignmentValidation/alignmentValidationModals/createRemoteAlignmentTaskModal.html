@@ -1,7 +1,7 @@
 <div class="modal-header">
     <h3 class="modal-title">Create task</h3>
 </div>
-<div class="modal-body vbox">
+<div class="modal-body scrollableContainer">
 
     <div>
         <div class="col-sm-6 text-center">
@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12 vbox" style="margin-top: 6px; min-height: 32px; flex: initial;">
+        <div class="col-sm-12 vbox" style="margin-top: 6px; flex: initial;" [ngStyle]="{ 'min-height': showSupportDatasets ? '100px' : '32px' }">
             <div class="groupPanel vbox">
                 <div class="groupPanel-heading">
                     <div class="groupPanel-heading-content clickable"(click)="showSupportDatasets = !showSupportDatasets">
@@ -76,7 +76,7 @@
             </div>
         </div>
     
-        <div class="col-sm-12 vbox" style="margin-top: 6px; min-height: 32px; flex: initial;">
+        <div class="col-sm-12 vbox" style="margin-top: 6px; flex: initial;" [ngStyle]="{ 'min-height': showPairings ? '100px' : '32px' }">
             <div class="groupPanel vbox">
                 <div class="groupPanel-heading">
                     <div class="groupPanel-heading-content clickable" (click)="showPairings = !showPairings">
