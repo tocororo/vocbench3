@@ -106,6 +106,14 @@ export class CustomServiceComponent {
         this.initCustomService(true);
     }
 
+    private reload() {
+        this.customServService.reloadCustomService(this.id).subscribe(
+            () => {
+                this.initCustomService(true);
+            }
+        )
+    }
+
 }
 
 interface CustomServiceForm {

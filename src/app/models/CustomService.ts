@@ -49,18 +49,23 @@ export class TypeUtils {
     static Types = class {
         public static AnnotatedValue: string = "AnnotatedValue";
         public static boolean: string = "boolean";
+        public static double: string = "double";
+        public static float: string = "float";
+        public static integer: string = "integer";
         public static IRI: string = "IRI";
         public static List: string = "List";
         public static Literal: string = "Literal";
+        public static long: string = "long";
         public static Map: string = "Map";
         public static Resource: string = "Resource";
+        public static short: string = "short";
         public static String: string = "java.lang.String";
-        public static Value: string = "Value";
+        public static RDFValue: string = "RDFValue";
         public static void: string = "void";
     }
 
     static getRdf4jTypes(): string[] {
-        return [ TypeUtils.Types.IRI, TypeUtils.Types.Literal, TypeUtils.Types.Resource, TypeUtils.Types.Value ];
+        return [ TypeUtils.Types.IRI, TypeUtils.Types.Literal, TypeUtils.Types.Resource, TypeUtils.Types.RDFValue ];
     }
 
     /**
@@ -70,8 +75,13 @@ export class TypeUtils {
         let types = [
             TypeUtils.Types.AnnotatedValue,
             TypeUtils.Types.boolean,
+            TypeUtils.Types.double,
+            TypeUtils.Types.float,
+            TypeUtils.Types.integer,
             TypeUtils.Types.List,
+            TypeUtils.Types.long,
             TypeUtils.Types.Map,
+            TypeUtils.Types.short,
             TypeUtils.Types.String,
             TypeUtils.Types.void,
         ]
@@ -115,8 +125,13 @@ export class TypeUtils {
             args = [
                 TypeUtils.Types.AnnotatedValue,
                 TypeUtils.Types.boolean,
+                TypeUtils.Types.double,
+                TypeUtils.Types.float,
+                TypeUtils.Types.integer,
                 TypeUtils.Types.List,
+                TypeUtils.Types.long,
                 TypeUtils.Types.Map,
+                TypeUtils.Types.short,
                 TypeUtils.Types.String
             ].concat(TypeUtils.getRdf4jTypes())
         }

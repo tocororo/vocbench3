@@ -31,13 +31,18 @@ export class OperationTypeEditor implements ControlValueAccessor {
             //if the editor represents a parameter, limit the available types to a subset (e.g. void cannot be a method param)
             this.types = TypeStruct.toTypeStructList([
                 TypeUtils.Types.boolean,
+                TypeUtils.Types.double,
+                TypeUtils.Types.float,
+                TypeUtils.Types.integer,
                 TypeUtils.Types.IRI,
                 TypeUtils.Types.List,
                 TypeUtils.Types.Literal,
+                TypeUtils.Types.long,
                 TypeUtils.Types.Map,
                 TypeUtils.Types.Resource,
+                TypeUtils.Types.short,
                 TypeUtils.Types.String,
-                TypeUtils.Types.Value
+                TypeUtils.Types.RDFValue
             ]);
         }
         if (this.generic != null) {

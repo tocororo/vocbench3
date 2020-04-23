@@ -57,4 +57,12 @@ export class CustomServicesComponent {
         )
     }
 
+    private reload() {
+        this.customServService.reloadCustomServices().subscribe(
+            () => {
+                this.initServices();
+            }
+        )
+    }
+
 }
