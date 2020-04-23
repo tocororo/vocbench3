@@ -6,6 +6,8 @@ import { AlignFromRemoteSystemComponent } from '../alignment/alignmentValidation
 import { AlignmentManagementComponent } from '../alignment/alignmentValidation/alignmentManagementComponent';
 import { AlignmentValidationComponent } from '../alignment/alignmentValidation/alignmentValidationComponent';
 import { CreateRemoteAlignmentTaskModal } from '../alignment/alignmentValidation/alignmentValidationModals/createRemoteAlignmentTaskModal';
+import { MapleDatasetComponent } from '../alignment/alignmentValidation/alignmentValidationModals/mapleDatasetComponent';
+import { MaplePairingComponent } from '../alignment/alignmentValidation/alignmentValidationModals/maplePairingComponent';
 import { SharedModule } from './sharedModule';
 
 
@@ -18,6 +20,8 @@ import { SharedModule } from './sharedModule';
         AlignFromFileComponent,
         AlignFromRemoteSystemComponent,
         AlignmentManagementComponent,
+        MapleDatasetComponent,
+        MaplePairingComponent,
         //modals
         CreateRemoteAlignmentTaskModal
     ],

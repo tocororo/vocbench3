@@ -1,0 +1,48 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+
+        <table class="table table-condensed table-borderless">
+            <colgroup>
+                <col style="width: 1%;">
+                <col>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td class="text-right" nowrap><label>Score:</label></td>
+                    <td><input class="form-control input-sm" [ngModel]="pairing.score" readonly></td>
+                </tr>
+                <tr>
+                    <td class="text-right" nowrap><label>Source:</label></td>
+                    <td><input class="form-control input-sm" [ngModel]="pairing.source.lexicalizationSet" readonly></td>
+                </tr>
+                <tr>
+                    <td class="text-right" nowrap><label>Target:</label></td>
+                    <td><input class="form-control input-sm" [ngModel]="pairing.target.lexicalizationSet" readonly></td>
+                </tr>
+                <tr>
+                    <td class="text-right" nowrap><label>Synonymizer:</label></td>
+                    <td>
+                        <table *ngIf="pairing.synonymizer">
+                            <colgroup>
+                                <col style="width: 1%;">
+                                <col>
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <td class="text-right" nowrap><label>Lexicon:</label></td>
+                                    <td><input class="form-control input-sm" [ngModel]="pairing.synonymizer.lexicon" readonly></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right" nowrap><label>Conceptualization set:</label></td>
+                                    <td><input class="form-control input-sm" [ngModel]="pairing.synonymizer.conceptualizationSet" readonly></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <input *ngIf="!pairing.synonymizer" class="form-control input-sm" readonly>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>

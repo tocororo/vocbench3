@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, ModalComponent } from 'ngx-modialog';
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { MatchingProblem } from "../../../models/Maple";
 import { Project } from "../../../models/Project";
 import { MapleServices } from "../../../services/mapleServices";
 import { ProjectServices } from "../../../services/projectServices";
@@ -19,7 +20,10 @@ export class CreateRemoteAlignmentTaskModalData extends BSModalContext {
 @Component({
     selector: "create-alignment-task-modal",
     templateUrl: "./createRemoteAlignmentTaskModal.html",
-    host: { class: "blockingDivHost" }
+    host: { class: "blockingDivHost" },
+    styles: [`
+        maple-dataset:not(:first-of-type) { display: block; margin-top: 4px; }
+    `]
 })
 export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemoteAlignmentTaskModalData> {
     context: CreateRemoteAlignmentTaskModalData;
@@ -31,6 +35,10 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
 
     private leftProjectStruct: AlignedProjectStruct;
     private rightProjectStruct: AlignedProjectStruct;
+
+    private matchingProblem: MatchingProblem;
+    private showPairings: boolean = false;
+    private showSupportDatasets: boolean = false;
 
     constructor(public dialog: DialogRef<CreateRemoteAlignmentTaskModalData>, private projectService: ProjectServices,
         private mapleService: MapleServices, private remoteAlignmentService: RemoteAlignmentServices, private basicModals: BasicModalServices) {
@@ -99,21 +107,29 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
         );
     }
 
-    private isOkEnabled() {
+    private profileMatching() {
+        this.mapleService.profileMatchingProblemBetweenProjects(this.leftProjectStruct.project, this.rightProjectStruct.project).subscribe(
+            matchingProblem => {
+                this.matchingProblem = matchingProblem;
+            }
+        );
+    }
+
+    private isProfileEnabled() {
         return (
             this.leftProjectStruct.profileAvailable &&
             this.rightProjectStruct != null && this.rightProjectStruct.profileAvailable
         )
     }
 
+    private isOkEnabled() {
+        return this.matchingProblem != null;
+    }
+
     ok() {
-        this.mapleService.profileMatchingProblemBetweenProjects(this.leftProjectStruct.project, this.rightProjectStruct.project).subscribe(
-            matchingProblem => {
-                this.remoteAlignmentService.createTask(matchingProblem).subscribe(
-                    taskId => {
-                        this.dialog.close(taskId);
-                    }
-                );
+        this.remoteAlignmentService.createTask(this.matchingProblem).subscribe(
+            taskId => {
+                this.dialog.close(taskId);
             }
         );
     }

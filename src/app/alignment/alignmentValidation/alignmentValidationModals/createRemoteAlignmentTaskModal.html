@@ -3,50 +3,95 @@
 </div>
 <div class="modal-body vbox">
 
-    <table class="table table-condensed table-borderless">
-        <colgroup>
-            <col style="width: 1%">
-            <col>
-            <col style="width: 1%">
-            <col style="width: 1%">
-        </colgroup>
-        <tbody>
-            <tr>
-                <td nowrap><label>Left project:</label></td>
-                <td><input class="form-control input-sm" [ngModel]="leftProjectStruct.project.getName()" readonly></td>
-                <td>
-                    <button class="btn btn-sm btn-default" (click)="profileProject(leftProjectStruct)" title="Profile project">
-                            <span class="glyphicon glyphicon-align-right" style="transform: rotate(90deg)"></span>
-                    </button>
-                </td>
-                <td>
+    <div>
+        <div class="col-sm-6 text-center">
+            <label>Left project</label>
+        </div>
+        <div class="col-sm-6 text-center">
+            <label>Left project</label>
+        </div>
+    </div>
+    <div style="margin-top: 8px;">
+        <div class="col-sm-6">
+            <div class="hbox" style="align-items: center;">
+                <input class="form-control input-sm" [ngModel]="leftProjectStruct.project.getName()" readonly>
+                <button class="btn btn-sm btn-default" style="margin-left: 4px;" (click)="profileProject(leftProjectStruct)" title="Profile project">
+                    <span class="glyphicon glyphicon-align-right" style="transform: rotate(90deg)"></span>
+                </button>
+                <div style="margin-left: 4px;">
                     <span *ngIf="leftProjectStruct.profileAvailable" class="glyphicon glyphicon-ok" title="Metadata profile available"></span>
                     <span *ngIf="!leftProjectStruct.profileAvailable" class="glyphicon glyphicon-remove" title="Metadata profile not available"></span>
-                </td>
-            </tr>
-            <tr>
-                <td nowrap><label>Right project:</label></td>
-                <td>
-                    <select class="form-control input-sm" [(ngModel)]="selectedRightProject" (ngModelChange)="onRightProjectChange()" [disabled]="context.rightProject">
-                        <ng-container *ngFor="let p of projectList">
-                            <option *ngIf="p.getName() != leftProjectStruct.project.getName()" [ngValue]="p">{{p.getName()}}</option>
-                        </ng-container>
-                    </select>
-                </td>
-                <td>
-                    <button *ngIf="rightProjectStruct" class="btn btn-sm btn-default" (click)="profileProject(rightProjectStruct)" title="Profile project">
-                        <span class="glyphicon glyphicon-align-right" style="transform: rotate(90deg)"></span>
-                    </button>
-                </td>
-                <td>
-                    <ng-container *ngIf="rightProjectStruct">
-                        <span *ngIf="rightProjectStruct.profileAvailable" class="glyphicon glyphicon-ok" title="Metadata profile available"></span>
-                        <span *ngIf="!rightProjectStruct.profileAvailable" class="glyphicon glyphicon-remove" title="Metadata profile not available"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="hbox" style="align-items: center;">
+                <select class="form-control input-sm" [(ngModel)]="selectedRightProject" 
+                    (ngModelChange)="onRightProjectChange()" [disabled]="context.rightProject">
+                    <ng-container *ngFor="let p of projectList">
+                        <option *ngIf="p.getName() != leftProjectStruct.project.getName()" [ngValue]="p">{{p.getName()}}</option>
                     </ng-container>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                </select>
+                <button *ngIf="rightProjectStruct" class="btn btn-sm btn-default" style="margin-left: 4px;" 
+                    (click)="profileProject(rightProjectStruct)" title="Profile project">
+                    <span class="glyphicon glyphicon-align-right" style="transform: rotate(90deg)"></span>
+                </button>
+                <div *ngIf="rightProjectStruct" style="margin-left: 4px;">
+                    <span *ngIf="rightProjectStruct.profileAvailable" class="glyphicon glyphicon-ok" title="Metadata profile available"></span>
+                    <span *ngIf="!rightProjectStruct.profileAvailable" class="glyphicon glyphicon-remove" title="Metadata profile not available"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 8px;">
+        <div class="col-sm-12 text-center">
+            <button class="btn btn-sm btn-info" (click)="profileMatching()" [disabled]="!isProfileEnabled()">Profile matching</button>
+        </div>
+    </div>
+
+    <div *ngIf="matchingProblem" class="vbox" style="margin-top: 8px;">
+        <div>
+            <div class="col-sm-6">
+                <maple-dataset [dataset]="matchingProblem.leftDataset"></maple-dataset>
+            </div>
+            <div class="col-sm-6">
+                <maple-dataset [dataset]="matchingProblem.rightDataset"></maple-dataset>
+            </div>
+        </div>
+
+        <div class="col-sm-12 vbox" style="margin-top: 6px; min-height: 32px; flex: initial;">
+            <div class="groupPanel vbox">
+                <div class="groupPanel-heading">
+                    <div class="groupPanel-heading-content clickable"(click)="showSupportDatasets = !showSupportDatasets">
+                        <span [class]="'glyphicon glyphicon-menu-' + (showSupportDatasets ? 'down' : 'right')"></span>
+                        <label class="clickable" style="margin-left: 4px;" >Support datasets</label>
+                    </div>
+                </div>
+                <div class="groupPanel-body scrollableContainer">
+                    <div *ngIf="showSupportDatasets">
+                        <maple-dataset *ngFor="let sd of matchingProblem.supportDatasets" [dataset]="sd"></maple-dataset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="col-sm-12 vbox" style="margin-top: 6px; min-height: 32px; flex: initial;">
+            <div class="groupPanel vbox">
+                <div class="groupPanel-heading">
+                    <div class="groupPanel-heading-content clickable" (click)="showPairings = !showPairings">
+                        <span [class]="'glyphicon glyphicon-menu-' + (showPairings ? 'down' : 'right')"></span>
+                        <label class="clickable" style="margin-left: 4px;" >Pairings</label>
+                    </div>
+                </div>
+                <div class="groupPanel-body scrollableContainer">
+                    <div *ngIf="showPairings">
+                        <maple-pairing *ngFor="let p of matchingProblem.pairings" [pairing]="p"></maple-pairing>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 <div class="modal-footer">

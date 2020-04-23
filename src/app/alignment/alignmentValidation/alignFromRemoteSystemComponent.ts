@@ -151,7 +151,7 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
         const builder = new BSModalContextBuilder<CreateRemoteAlignmentTaskModalData>(
             modalData, undefined, CreateRemoteAlignmentTaskModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
         this.modal.open(CreateRemoteAlignmentTaskModal, overlayConfig).result.then(
             newTaskId => {
                 this.listTask();
