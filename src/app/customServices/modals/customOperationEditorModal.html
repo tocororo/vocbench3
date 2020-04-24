@@ -27,21 +27,6 @@
                 </div>
             </div>
 
-            <!-- Authorization -->
-            <div *ngIf="form.authorization" class="gridRow">
-                <div class="gridEntry">
-                    <label class="entryLabel">
-                        {{form.authorization.displayName}}
-                        <span class="glyphicon glyphicon-info-sign" [title]="form.authorization.description"></span>
-                    </label>
-                    <input class="form-control input-sm" style="flex: 1" [(ngModel)]="form.authorization.value">
-                    <div class="entryRequired">
-                        
-                        <ng-container *ngIf="form.authorization.required">*</ng-container>
-                    </div>
-                </div>
-            </div>
-
             <!-- Parameters -->
             <div *ngIf="form.parameters" class="gridRow">
                 <div class="gridEntry">
@@ -99,6 +84,25 @@
                     </div>
                     <div class="entryRequired">
                         <ng-container *ngIf="form.parameters.required">*</ng-container>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Authorization -->
+            <div *ngIf="form.authorization" class="gridRow">
+                <div class="gridEntry">
+                    <label class="entryLabel">
+                        {{form.authorization.displayName}}
+                        <span class="glyphicon glyphicon-info-sign" [title]="form.authorization.description"></span>
+                    </label>
+                    <div class="hbox" style="align-items: center;">
+                        <input class="form-control input-sm" [(ngModel)]="form.authorization.value">
+                        <button class="btn btn-xs btn-default" style="margin-left: 4px;" (click)="authorizationHelper()"  title="Edit">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                    </div>
+                    <div class="entryRequired">
+                        <ng-container *ngIf="form.authorization.required">*</ng-container>
                     </div>
                 </div>
             </div>

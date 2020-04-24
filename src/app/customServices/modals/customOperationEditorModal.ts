@@ -1,11 +1,12 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
+import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { Configuration } from "../../models/Configuration";
 import { CustomOperation, CustomOperationDefinition, CustomOperationTypes, OperationParameter, OperationType, SPARQLOperation, TypeUtils } from "../../models/CustomService";
 import { QueryChangedEvent } from "../../models/Sparql";
 import { CustomServiceServices } from "../../services/customServiceServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { AuthorizationHelperModal, AuthorizationHelperModalData } from "./authorizationHelperModal";
 
 export class CustomOperationEditorModalData extends BSModalContext {
     /**
@@ -35,7 +36,7 @@ export class CustomOperationEditorModal implements ModalComponent<CustomOperatio
     private queryValid: boolean = true; //unless otherwise stated bu the yasgui component, the query is considered valid
 
     constructor(private customServService: CustomServiceServices, private basicModals: BasicModalServices,
-        public dialog: DialogRef<CustomOperationEditorModalData>) {
+        public dialog: DialogRef<CustomOperationEditorModalData>, private modal: Modal) {
         this.context = dialog.context;
     }
 
@@ -84,6 +85,30 @@ export class CustomOperationEditorModal implements ModalComponent<CustomOperatio
             };
             this.form[p.name] = formEntry;
         })
+    }
+
+    //AUTHORIZATION
+
+    private authorizationHelper() {
+        let paramNames: string[] = [];
+        let parameters: OperationParameter[] = (<OperationParameter[]>this.form.parameters.value);
+        if (parameters != null) {
+            paramNames = parameters.map(p => p.name);
+        }
+        let authValue: string = this.form.authorization.value;
+        if (authValue != null && authValue.trim() == "") {
+            authValue = null;
+        }
+        let modalData = new AuthorizationHelperModalData(authValue, paramNames);
+        const builder = new BSModalContextBuilder<AuthorizationHelperModalData>(
+            modalData, undefined, AuthorizationHelperModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        return this.modal.open(AuthorizationHelperModal, overlayConfig).result.then(
+            auth => {
+                this.form.authorization.value = auth;
+            }
+        );
     }
 
     //PARAMETERS

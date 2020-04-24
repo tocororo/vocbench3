@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CustomOperationComponent } from '../customServices/customOperationComponent';
 import { CustomServiceComponent } from '../customServices/customServiceComponent';
 import { CustomServicesComponent } from '../customServices/customServicesPageComponent';
+import { AuthorizationHelperModal } from '../customServices/modals/authorizationHelperModal';
 import { CustomOperationEditorModal } from '../customServices/modals/customOperationEditorModal';
 import { CustomServiceEditorModal } from '../customServices/modals/customServiceEditorModal';
 import { CustomServiceModalServices } from '../customServices/modals/customServiceModalServices';
@@ -14,6 +15,7 @@ import { SharedModule } from './sharedModule';
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule],
     declarations: [
+        AuthorizationHelperModal,
         CustomOperationComponent,
         CustomOperationEditorModal,
         CustomServicesComponent,
@@ -28,6 +30,7 @@ import { SharedModule } from './sharedModule';
         CustomServiceModalServices
     ],
     entryComponents: [
+        AuthorizationHelperModal,
         CustomOperationEditorModal,
         CustomServiceEditorModal,
     ]
