@@ -3,14 +3,14 @@ import { Observable } from 'rxjs/Observable';
 import { ARTURIResource, ResourcePosition } from '../models/ARTResources';
 import { CatalogRecord, DatasetMetadata, LexicalizationSetMetadata } from "../models/Metadata";
 import { Deserializer } from '../utils/Deserializer';
-import { HttpManager } from "../utils/HttpManager";
+import { StMetadataRegistry } from '../utils/STMetadataRegistry';
 
 @Injectable()
 export class MetadataRegistryServices {
 
     private serviceName = "MetadataRegistry";
 
-    constructor(private httpMgr: HttpManager) { }
+    constructor(private httpMgr: StMetadataRegistry) { }
 
     /**
      * Adds a abstract version of a void:Dataset together with the dcat:CatalogRecord.

@@ -19,7 +19,7 @@ export class HttpManager {
     //services url parts
     private serverpath: string = "semanticturkey";
     private groupId: string = "it.uniroma2.art.semanticturkey";
-    private artifactId: string = "st-core-services";
+    protected artifactId: string = "st-core-services";
 
     //default request options, to eventually override through options parameter in doGet, doPost, ...
     private defaultRequestOptions: VBRequestOptions = new VBRequestOptions({

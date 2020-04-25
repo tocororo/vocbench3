@@ -128,12 +128,12 @@ export class AuthorizationHelperModal implements ModalComponent<AuthorizationHel
             //lang restriction
             /* Group for capturing the lang requirement
              * The lang can be restricted through:
-             * - a @langOf annotation
+             * - a @langof annotation
              * - the specific lang tag
              * so I need two groups in OR "|".
              * Both of them are capturing, the external group that is used just for the OR is not capturing (?:)
              */
-            let langofGroup = "(?:@langOf\\(#([a-zA-Z0-9_]+)\\))"; //2 groups => external not capturing for "@langOf(#param)", internal capturing for "param"
+            let langofGroup = "(?:@langof\\(#([a-zA-Z0-9_]+)\\))"; //2 groups => external not capturing for "@langof(#param)", internal capturing for "param"
             let langTagGroup = "([a-zA-Z-]+)"; //capturing group for the language tag
             let langGroup = "(?:" + langofGroup + "|" + langTagGroup + ")"; //OR between the two above
             /* the whole language requirement is optional, so use an optional not capturing group
@@ -159,7 +159,7 @@ export class AuthorizationHelperModal implements ModalComponent<AuthorizationHel
                 * 1 - the parameter of the @typeof expression (if used)
                 * 2 - the type (if explicitly specified)
                 * 3 - the scope (if provided)
-                * 4 - the parameter of the @langOf expression (if used)
+                * 4 - the parameter of the @langof expression (if used)
                 * 5 - the langTag (if explicitly specified)
                 * 6 - the crudv
                 */
@@ -182,7 +182,7 @@ export class AuthorizationHelperModal implements ModalComponent<AuthorizationHel
                 }
 
                 //restore the lang requirement
-                if (authMatch[4] != null) { //param specified for @langOf
+                if (authMatch[4] != null) { //param specified for @langof
                     this.selectedLangRequirement = this.langRequirementParam;
                     //restore the selected parameter
                     if (this.context.parameters != null) {
@@ -242,7 +242,7 @@ export class AuthorizationHelperModal implements ModalComponent<AuthorizationHel
         if (this.selectedLangRequirement != this.langRequirementNone) {
             this.authSerialization += ", { lang: ";
             if (this.selectedLangRequirement == this.langRequirementParam) { //using param
-                this.authSerialization += "@langOf(";
+                this.authSerialization += "@langof(";
                 if (this.selectedParamLang != null) { 
                     this.authSerialization += "#" + this.selectedParamLang;
                 } else {

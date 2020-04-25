@@ -18,6 +18,7 @@ import { GUARD_PROVIDERS } from "../utils/CanActivateGuards";
 import { DatatypeValidator } from '../utils/DatatypeValidator';
 import { HttpManager } from "../utils/HttpManager";
 import { RoleActionResolver } from '../utils/RoleActionResolver';
+import { StMetadataRegistry } from '../utils/STMetadataRegistry';
 import { UserResolver } from "../utils/UserResolver";
 import { VBCollaboration } from '../utils/VBCollaboration';
 import { VBEventHandler } from "../utils/VBEventHandler";
@@ -77,7 +78,15 @@ import { VBModalModule } from "./vbModalModule";
       ],
       //services with application scope
       providers: [
-            HttpManager, VBEventHandler, VBProperties, DatatypeValidator, VBCollaboration, GUARD_PROVIDERS, UserResolver, RoleActionResolver,
+            DatatypeValidator,
+            HttpManager,
+            RoleActionResolver,
+            StMetadataRegistry,
+            UserResolver, 
+            VBCollaboration,
+            VBEventHandler,
+            VBProperties, 
+            GUARD_PROVIDERS, 
             { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
       ],
       declarations: [
