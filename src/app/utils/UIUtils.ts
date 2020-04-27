@@ -534,5 +534,6 @@ export class Theme {
  */
 export enum TreeListContext {
     clsIndTree = 'clsIndTree', //usefull to show instance number in some context
-    dataPanel = 'dataPanel' //context for trees and list inside the "multi-panel" (Class, Concept, Scheme,...) in Data page
+    dataPanel = 'dataPanel', //context for trees and lists inside the "multi-panel" (Class, Concept, Scheme,...) in Data page
+    addPropValue = 'addPropValue', //for trees and lists inside the addPropertyValue modal (useful to select the new added resource in this context)
 }

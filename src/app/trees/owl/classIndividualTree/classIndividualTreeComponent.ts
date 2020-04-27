@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { SKOS } from '../../../models/Vocabulary';
-import { VBContext, ProjectContext } from "../../../utils/VBContext";
+import { TreeListContext } from "../../../utils/UIUtils";
+import { ProjectContext, VBContext } from "../../../utils/VBContext";
 
 @Component({
     selector: "class-individual-tree",
@@ -9,6 +10,7 @@ import { VBContext, ProjectContext } from "../../../utils/VBContext";
 })
 export class ClassIndividualTreeComponent {
 
+    @Input() context: TreeListContext;
     @Input() projectCtx: ProjectContext;
     @Input() roots: ARTURIResource[]; //roots of the class three
     @Input() schemes: ARTURIResource[]; //scheme to use in case the class selected is skos:Concept
@@ -25,13 +27,14 @@ export class ClassIndividualTreeComponent {
     private currentSchemes: ARTURIResource[];//the scheme selecte in the concept tree (only if selected class is skos:Concept)
     private selectedInstance: ARTURIResource; //the instance (or concept) selected in the instance list (or concept tree)
 
-    constructor() { }
-
     ngOnInit() {
         if (this.schemes === undefined) { //if @Input scheme is not provided at all, get it from project preference
             this.currentSchemes = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeSchemes;
         } else { //if @Input scheme is provided (it could be null => no scheme-mode), initialize the tree with this scheme
             this.currentSchemes = this.schemes;
+        }
+        if (this.context == undefined) { //if not overwritten from a parent component (e.g. addPropertyValueModal), set its default
+            this.context = TreeListContext.clsIndTree
         }
     }
 

@@ -1,17 +1,15 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { ElementRef, ViewChild } from "@angular/core";
+import { QueryList } from "@angular/core/src/render3";
 import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { SemanticTurkey } from "../models/Vocabulary";
-import { UIUtils, TreeListContext } from "../utils/UIUtils";
+import { TreeListContext, UIUtils } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { AbstractStruct } from "./abstractStruct";
+import { AbstractTreeNode } from "./abstractTreeNode";
 
-@Component({
-    selector: "tree",
-    template: "",
-})
 export abstract class AbstractTree extends AbstractStruct {
 
     /**
@@ -19,6 +17,7 @@ export abstract class AbstractTree extends AbstractStruct {
      */
 
     @ViewChild('blockDivTree') public blockDivElement: ElementRef;//the element in the view referenced with #blockDivTree
+    abstract viewChildrenNode: QueryList<AbstractTreeNode>;
 
     /**
      * Searched resource that is waiting to be expanded/selected once the root list is initialized.
@@ -80,6 +79,32 @@ export abstract class AbstractTree extends AbstractStruct {
     }
 
     abstract openTreeAt(node: ARTURIResource): void;
+
+    /**
+     * Expand the given "path" in order to reach "node" starting from the root.
+     * This method could be invoked also from the parent panel for selecting an advanced search result in search-based mode.
+     * @param path 
+     * @param node 
+     */
+    openRoot(path: ARTURIResource[]) {
+        if (this.ensureRootVisibility(path[0], path)) { //if root is visible
+            setTimeout(() => { //wait the the UI is updated after the (possible) update of rootLimit
+                UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+                var childrenNodeComponent = this.viewChildrenNode.toArray();
+                for (let child of childrenNodeComponent) {
+                    if (child.node.equals(path[0])) {
+                        //let the found node expand itself and the remaining path
+                        path.splice(0, 1);
+                        child.expandPath(path);
+                        UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                        return;
+                    }
+                }
+                //if this line is reached it means that the first node of the path has not been found
+                this.onTreeNodeNotFound(path[0]);
+            });
+        }
+    }
 
     //Listeners to node expansion start/end. Simply show/hide the loading div
     private onNodeExpandStart() {

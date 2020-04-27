@@ -1,12 +1,9 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
+import { ElementRef, ViewChild } from "@angular/core";
 import { ResAttribute } from "../models/ARTResources";
+import { TreeListContext } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { AbstractNode } from "./abstractNode";
 
-@Component({
-    selector: "list-node",
-    template: "",
-})
 export abstract class AbstractListNode extends AbstractNode {
 
     /**
@@ -42,8 +39,7 @@ export abstract class AbstractListNode extends AbstractNode {
          */
         setTimeout(() => {
             this.listNodeElement.nativeElement.scrollIntoView({block: 'end', behavior: 'smooth'});
-        })
-        
+        });
     }
 
 }

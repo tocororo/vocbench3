@@ -5,7 +5,7 @@ import { SkosServices } from "../../../../services/skosServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
-import { UIUtils } from "../../../../utils/UIUtils";
+import { TreeListContext, UIUtils } from "../../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../../utils/VBActions";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
@@ -68,27 +68,8 @@ export class CollectionTreeComponent extends AbstractTree {
                     this.onTreeNodeNotFound(node);
                     return;
                 };
-                
                 //open tree from root to node
-
-                //first ensure that the first element of the path is not excluded by the paging mechanism
-                this.ensureRootVisibility(path[0], path);
-
-                setTimeout( //apply timeout in order to wait that the children node is rendered (in case the visibile roots have been increased)
-                    () => {
-                        var childrenNodeComponent = this.viewChildrenNode.toArray();
-                        for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand
-                            if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) {
-                                //let the found node expand itself and the remaining path
-                                path.splice(0, 1);
-                                childrenNodeComponent[i].expandPath(path);
-                                return;
-                            }
-                        }
-                        //if this line is reached it means that the first node of the path has not been found
-                        this.onTreeNodeNotFound(node);
-                    }
-                );
+                this.openRoot(path); 
             }
         );
     }
@@ -97,6 +78,9 @@ export class CollectionTreeComponent extends AbstractTree {
 
     private onRootCollectionCreated(collection: ARTURIResource) {
         this.roots.unshift(collection);
+        if (this.context == TreeListContext.addPropValue) {
+            this.openRoot([collection]);
+        }
     }
 
     private onNestedCollectionAdded(nested: ARTURIResource, container: ARTURIResource) {

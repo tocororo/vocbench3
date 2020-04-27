@@ -1,18 +1,14 @@
-import { Component, ElementRef, EventEmitter, Output, QueryList, ViewChild, SimpleChanges } from "@angular/core";
+import { ElementRef, EventEmitter, Output, QueryList, SimpleChanges, ViewChild } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { SemanticTurkey } from "../models/Vocabulary";
+import { TreeListContext } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { AbstractNode } from "./abstractNode";
-import { TreeListContext } from "../utils/UIUtils";
 
-@Component({
-    selector: "tree-node",
-    template: "",
-})
 export abstract class AbstractTreeNode extends AbstractNode {
 
     /**
@@ -240,10 +236,32 @@ export abstract class AbstractTreeNode extends AbstractNode {
             this.node.setAdditionalProperty(ResAttribute.MORE, 1);
             if (this.open) { //if node is open, show the child with its children
                 this.children.unshift(<ARTURIResource>child);
+                //in the addPropertyValue context, select the newly created node
+                if (this.context == TreeListContext.addPropValue) {
+                    setTimeout(() => { //gives time to update the viewChildrenNode
+                        this.selectChild(<ARTURIResource>child);
+                    });
+                }
             } else {
-                this.expandNode().subscribe();
+                this.expandNode().subscribe(
+                    () => {
+                        if (this.context == TreeListContext.addPropValue) {
+                            setTimeout(() => {
+                                this.selectChild(<ARTURIResource>child);
+                            });
+                        }
+                    }
+                );
             }
         }
+    }
+
+    private selectChild(child: ARTURIResource) {
+        this.viewChildrenNode.forEach(c => {
+            if (c.node.equals(child)) {
+                c.selectNode();
+            }
+        })
     }
 
     onParentAdded(parent: ARTResource, child: ARTResource) {

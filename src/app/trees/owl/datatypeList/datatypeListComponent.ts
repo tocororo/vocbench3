@@ -5,7 +5,7 @@ import { DatatypesServices } from "../../../services/datatypesServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
-import { UIUtils } from "../../../utils/UIUtils";
+import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
@@ -66,6 +66,9 @@ export class DatatypeListComponent extends AbstractList {
 
     onListNodeCreated(node: ARTURIResource) {
         this.list.unshift(node);
+        if (this.context == TreeListContext.addPropValue) {
+            this.selectNode(node);
+        }
     }
 
     onListNodeDeleted(node: ARTURIResource) {

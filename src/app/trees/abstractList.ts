@@ -1,13 +1,9 @@
-import { Component, ElementRef, QueryList, ViewChild } from "@angular/core";
+import { ElementRef, QueryList, ViewChild } from "@angular/core";
 import { ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { AbstractListNode } from "./abstractListNode";
 import { AbstractStruct } from "./abstractStruct";
 
-@Component({
-    selector: "list",
-    template: "",
-})
 export abstract class AbstractList extends AbstractStruct {
 
     @ViewChild('blockDivList') public blockDivElement: ElementRef; //the element in the view referenced with #blockDivList

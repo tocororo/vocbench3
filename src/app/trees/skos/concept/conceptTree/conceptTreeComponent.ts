@@ -6,7 +6,7 @@ import { SkosServices } from "../../../../services/skosServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
-import { UIUtils } from "../../../../utils/UIUtils";
+import { TreeListContext, UIUtils } from "../../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../../utils/VBActions";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
@@ -114,6 +114,7 @@ export class ConceptTreeComponent extends AbstractTree {
             path => {
                 if (path.length == 0) {
                     this.onTreeNodeNotFound(node);
+                    return;
                 };
                 //open tree from root to node
                 this.openRoot(path); 
@@ -121,43 +122,24 @@ export class ConceptTreeComponent extends AbstractTree {
         );
     }
 
-    /**
-     * Expand the given "path" in order to reach "node" starting from the root.
-     * This method could be invoked also from the parent panel for selecting an advanced search result in search-based mode.
-     * @param path 
-     * @param node 
-     */
-    openRoot(path: ARTURIResource[]) {
-        if (this.ensureRootVisibility(path[0], path)) { //if root is visible
-            setTimeout(() => { //wait the the UI is updated after the (possible) update of rootLimit
-                UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-                var childrenNodeComponent = this.viewChildrenNode.toArray();
-                for (var i = 0; i < childrenNodeComponent.length; i++) {//looking for first node (root) to expand
-                    if (childrenNodeComponent[i].node.getURI() == path[0].getURI()) {
-                        //let the found node expand itself and the remaining path
-                        path.splice(0, 1);
-                        childrenNodeComponent[i].expandPath(path);
-                        UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                        return;
-                    }
-                }
-            });
-        }
-    }
-
     //EVENT LISTENERS
 
     private onTopConceptCreated(concept: ARTURIResource, schemes: ARTURIResource[]) {
         if (this.schemes == undefined) {//in no-scheme mode add to the root if it isn't already in
             if (!ResourceUtils.containsNode(this.roots, concept)) {
-                // this.roots.push(concept);
                 this.roots.unshift(concept);
+                if (this.context == TreeListContext.addPropValue) {
+                    this.openRoot([concept]);
+                }
             }
         } else { //otherwise add the top concept only if it is added in a scheme currently active in the tree
             if (this.schemes != null) {
                 for (var i = 0; i < schemes.length; i++) {
                     if (ResourceUtils.containsNode(this.schemes, schemes[i])) {
                         this.roots.unshift(concept);
+                        if (this.context == TreeListContext.addPropValue) {
+                            this.openRoot([concept]);
+                        }
                         break;
                     }
                 }

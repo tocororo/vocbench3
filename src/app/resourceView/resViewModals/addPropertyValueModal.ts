@@ -4,7 +4,7 @@ import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTLiteral, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from '../../models/ARTResources';
 import { OWL, RDF, RDFS, SKOS, SKOSXL } from '../../models/Vocabulary';
 import { PropertyServices, RangeType } from "../../services/propertyServices";
-import { UIUtils } from "../../utils/UIUtils";
+import { UIUtils, TreeListContext } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
 import { BrowsingModalServices } from '../../widget/modal/browsingModal/browsingModalServices';
 
@@ -36,6 +36,8 @@ export class AddPropertyValueModalData extends BSModalContext {
 })
 export class AddPropertyValueModal implements ModalComponent<AddPropertyValueModalData> {
     context: AddPropertyValueModalData;
+
+    private treeListCtx: TreeListContext = TreeListContext.addPropValue;
 
     private rootProperty: ARTURIResource; //root property of the partition that invoked this modal
     private enrichingProperty: ARTURIResource;

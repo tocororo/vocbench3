@@ -25,18 +25,18 @@
                     <input type="checkbox" [(ngModel)]="showAllClass">Show all classes
                 </label>
             </div>
-            <class-tree-panel [roots]="showAllClass? defaultRootClass : rootsForClsIndList" [deletable]="false" [allowMultiselection]="context.allowMultiselection"
+            <class-tree-panel [context]="treeListCtx" [roots]="showAllClass? defaultRootClass : rootsForClsIndList" [deletable]="false" [allowMultiselection]="context.allowMultiselection"
                 (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
             </class-tree-panel>
         </div>
 
-        <concept-tree-panel *ngIf="viewType == 'conceptTree'" [deletable]="false" [schemeChangeable]="true" [schemes]="schemes" [allowMultiselection]="context.allowMultiselection"
+        <concept-tree-panel *ngIf="viewType == 'conceptTree'" [context]="treeListCtx" [deletable]="false" [schemeChangeable]="true" [schemes]="schemes" [allowMultiselection]="context.allowMultiselection"
             (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (schemeChanged)="onConceptTreeSchemeChange($event)"
             (multiselectionStatus)="onMultiselectionChange($event)">
         </concept-tree-panel>
         
         <ng-template [ngIf]="viewType == 'propertyTree'">
-            <property-tree-panel *ngIf="viewType == 'propertyTree'" [deletable]="false" [type]="propertyType" [allowMultiselection]="context.allowMultiselection"
+            <property-tree-panel *ngIf="viewType == 'propertyTree'" [context]="treeListCtx" [deletable]="false" [type]="propertyType" [allowMultiselection]="context.allowMultiselection"
                 (nodeSelected)="onPropertySelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
             </property-tree-panel>
             <div *ngIf="showInversePropertyCheckbox" class="checkbox" style="margin: 8px 0 0 0;">
@@ -49,21 +49,21 @@
             </div>
         </ng-template>
         
-        <scheme-list-panel *ngIf="viewType == 'schemeList'" [deletable]="false" [allowMultiselection]="context.allowMultiselection"
+        <scheme-list-panel *ngIf="viewType == 'schemeList'" [context]="treeListCtx" [deletable]="false" [allowMultiselection]="context.allowMultiselection"
             (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
         </scheme-list-panel>
         
-        <datatype-list-panel *ngIf="viewType == 'datatypeList'" [full]="true" [deletable]="false"  [allowMultiselection]="context.allowMultiselection"
+        <datatype-list-panel *ngIf="viewType == 'datatypeList'" [context]="treeListCtx" [full]="true" [deletable]="false"  [allowMultiselection]="context.allowMultiselection"
             (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
         </datatype-list-panel>
         
-        <div  *ngIf="viewType == 'classAndIndividual'" class="vbox">
+        <div *ngIf="viewType == 'classAndIndividual'" class="vbox">
             <div *ngIf="rootsForClsIndList" class="checkbox-inline" style="margin-bottom: 5px;">
                 <label>
                     <input type="checkbox" [(ngModel)]="showAllClass">Show all classes
                 </label>
             </div>
-            <class-individual-tree [deletable]="false" [roots]="showAllClass? defaultRootClasses : rootsForClsIndList" [allowMultiselection]="context.allowMultiselection"
+            <class-individual-tree [context]="treeListCtx" [deletable]="false" [roots]="showAllClass? defaultRootClasses : rootsForClsIndList" [allowMultiselection]="context.allowMultiselection"
                 (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
             </class-individual-tree>
         </div>

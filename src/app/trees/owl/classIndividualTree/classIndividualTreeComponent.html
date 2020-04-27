@@ -5,25 +5,25 @@
     <!-- Show appropriate tree/list according to the selected class -->
     <div [ngSwitch]="selectedClass?.getURI()" class="vbox" style="margin-left: 4px;">
 
-        <concept-tree-panel *ngSwitchCase="'http://www.w3.org/2004/02/skos/core#Concept'"
+        <concept-tree-panel *ngSwitchCase="'http://www.w3.org/2004/02/skos/core#Concept'" [context]="context"
             [schemes]="currentSchemes" [editable]="editable" [deletable]="deletable" [schemeChangeable]="true"
             [allowMultiselection]="allowMultiselection" [projectCtx]="projectCtx"
             (nodeSelected)="onInstanceSelected($event)" (nodeChecked)="onNodeChecked($event)"
             (schemeChanged)="onConceptTreeSchemeChange($event)" (multiselectionStatus)="onMultiselectionChange($event)">
         </concept-tree-panel>
 
-        <scheme-list-panel *ngSwitchCase="'http://www.w3.org/2004/02/skos/core#ConceptScheme'"
+        <scheme-list-panel *ngSwitchCase="'http://www.w3.org/2004/02/skos/core#ConceptScheme'" [context]="context"
             [editable]="editable" [deletable]="deletable" [allowMultiselection]="allowMultiselection" [projectCtx]="projectCtx"
             (nodeSelected)="onInstanceSelected($event)" (nodeChecked)="onNodeChecked($event)"
             (multiselectionStatus)="onMultiselectionChange($event)">
         </scheme-list-panel>
 
-        <collection-tree-panel *ngSwitchCase="'http://www.w3.org/2004/02/skos/core#Collection'"
+        <collection-tree-panel *ngSwitchCase="'http://www.w3.org/2004/02/skos/core#Collection'" [context]="context"
             [editable]="editable" [deletable]="deletable" [allowMultiselection]="allowMultiselection"  [projectCtx]="projectCtx"
             (nodeSelected)="onInstanceSelected($event)" (nodeChecked)="onNodeChecked($event)" (multiselectionStatus)="onMultiselectionChange($event)">
         </collection-tree-panel>
 
-        <lexical-entry-list-panel *ngSwitchCase="'http://www.w3.org/ns/lemon/ontolex#LexicalEntry'"
+        <lexical-entry-list-panel *ngSwitchCase="'http://www.w3.org/ns/lemon/ontolex#LexicalEntry'" [context]="context"
             [lexiconChangeable]="true" [editable]="editable" [deletable]="deletable" [allowMultiselection]="allowMultiselection"
             [projectCtx]="projectCtx" (nodeSelected)="onInstanceSelected($event)" (nodeChecked)="onNodeChecked($event)"
             (lexiconChanged)="onLexEntryLexiconChange($event)" (multiselectionStatus)="onMultiselectionChange($event)">
@@ -33,7 +33,7 @@
             (nodeSelected)="onInstanceSelected($event)">
         </lexical-sense-selector>
 
-        <instance-list-panel *ngSwitchDefault 
+        <instance-list-panel *ngSwitchDefault [context]="context"
             [cls]="selectedClass" [editable]="editable" [deletable]="deletable" [allowMultiselection]="allowMultiselection" [projectCtx]="projectCtx"
             (nodeSelected)="onInstanceSelected($event)" (nodeChecked)="onNodeChecked($event)" (multiselectionStatus)="onMultiselectionChange($event)">
         </instance-list-panel>

@@ -6,7 +6,7 @@ import { SkosServices } from "../../../../services/skosServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
-import { UIUtils } from "../../../../utils/UIUtils";
+import { UIUtils, TreeListContext } from "../../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../../utils/VBActions";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
@@ -65,7 +65,11 @@ export class SchemeListComponent extends AbstractList {
     }
 
     onListNodeCreated(node: ARTURIResource) {
-        this.list.unshift({ checked: false, scheme: node });
+        let newItem: SchemeListItem = { checked: false, scheme: node };
+        this.list.unshift(newItem);
+        if (this.context == TreeListContext.addPropValue) {
+            this.selectNode(newItem);
+        }
     }
 
     onListNodeDeleted(node: ARTURIResource) {

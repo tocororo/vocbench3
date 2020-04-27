@@ -6,7 +6,7 @@ import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices"
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
 import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../../utils/ResourceUtils";
-import { UIUtils } from "../../../../utils/UIUtils";
+import { TreeListContext, UIUtils } from "../../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../../utils/VBActions";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
@@ -87,6 +87,9 @@ export class LexicalEntryListComponent extends AbstractList {
         if (VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.visualization = LexEntryVisualizationMode.indexBased) {
             if (node.getShow().toLocaleLowerCase().startsWith(this.index.toLocaleLowerCase())) {
                 this.list.unshift(node);
+                if (this.context == TreeListContext.addPropValue) {
+                    this.selectNode(node);
+                }
             }
         }
     }

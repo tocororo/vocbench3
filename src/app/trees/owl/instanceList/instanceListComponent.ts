@@ -7,7 +7,7 @@ import { ClassesServices } from "../../../services/classesServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
-import { UIUtils } from "../../../utils/UIUtils";
+import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
@@ -39,19 +39,19 @@ export class InstanceListComponent extends AbstractList {
     constructor(private clsService: ClassesServices, private vbProp: VBProperties, private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventSubscriptions.push(eventHandler.instanceDeletedEvent.subscribe(
-            (data: any) => { 
+            (data: {instance: ARTResource, cls: ARTResource}) => { 
                 if (this.cls == null) return; //in case there are multiple InstanceListComponent initialized and one of them has cls null
-                if (data.cls.getURI() == this.cls.getURI()) this.onListNodeDeleted(data.instance); 
+                if (data.cls.equals(this.cls)) this.onListNodeDeleted(data.instance); 
             }
         ));
         this.eventSubscriptions.push(eventHandler.instanceCreatedEvent.subscribe(
-            (data: any) => { 
+            (data: {instance: ARTResource, cls: ARTResource}) => { 
                 if (this.cls == null) return; //in case there are multiple InstanceListComponent initialized and one of them has cls null
-                if (data.cls.getURI() == this.cls.getURI()) this.onListNodeCreated(data.instance); 
+                if (data.cls.equals(this.cls)) this.onListNodeCreated(<ARTURIResource>data.instance); 
             } 
         ));
         this.eventSubscriptions.push(eventHandler.typeRemovedEvent.subscribe(
-            (data: any) => this.onTypeRemoved(data.resource, data.type)));
+            (data: {resource: ARTResource, type: ARTResource}) => this.onTypeRemoved(data.resource, <ARTURIResource>data.type)));
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -127,7 +127,7 @@ export class InstanceListComponent extends AbstractList {
         if (
             this.pendingSearchRes && 
             (
-                (this.pendingSearchCls && this.pendingSearchCls.getURI() == this.cls.getURI()) || 
+                (this.pendingSearchCls && this.pendingSearchCls.equals(this.cls)) || 
                 !this.pendingSearchCls //null if already checked that the pendingSearchCls is the current (see selectSearchedInstance)
             )
         ) {
@@ -170,7 +170,7 @@ export class InstanceListComponent extends AbstractList {
     }
 
     //EVENT LISTENERS
-    onListNodeDeleted(node: ARTURIResource) {
+    onListNodeDeleted(node: ARTResource) {
         for (var i = 0; i < this.list.length; i++) {
             if (this.list[i].equals(node)) {
                 if (VBContext.getWorkingProject().isValidationEnabled()) {
@@ -190,11 +190,14 @@ export class InstanceListComponent extends AbstractList {
 
     onListNodeCreated(node: ARTURIResource) {
         this.list.unshift(node);
+        if (this.context == TreeListContext.addPropValue) {
+            this.selectNode(node);
+        }
     }
 
-    private onTypeRemoved(instance: ARTURIResource, cls: ARTURIResource) {
+    private onTypeRemoved(instance: ARTResource, cls: ARTURIResource) {
         //check of cls not undefined is required if instance list has never been initialized with an @Input class
-        if (this.cls && this.cls.getURI() == cls.getURI()) {
+        if (this.cls && this.cls.equals(cls)) {
             for (var i = 0; i < this.list.length; i++) {
                 if (this.list[i].equals(instance)) {
                     this.list.splice(i, 1);

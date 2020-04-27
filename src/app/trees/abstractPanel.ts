@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { EventEmitter, Input, Output } from "@angular/core";
 import { Subscription } from "rxjs";
 import { GraphMode } from "../graph/abstractGraph";
 import { GraphModalServices } from "../graph/modal/graphModalServices";
@@ -15,7 +15,6 @@ import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { MultiSubjectEnrichmentHelper } from "./multiSubjectEnrichmentHelper";
 
-@Component({})
 export abstract class AbstractPanel {
 
     /**
