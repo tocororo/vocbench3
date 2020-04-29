@@ -136,7 +136,10 @@
                         <span class="glyphicon glyphicon-info-sign" [title]="form.sparql.description"></span>
                     </label>
                     <div class="panel panel-default vbox">
-                        <div class="panel-body vbox">
+                        <div class="panel-body vbox" style="position: relative;">
+                            <button class="btn btn-xs btn-default" style="position: absolute; top: 3px; right: 6px; z-index: 1;" data-toggle="popover">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </button>
                             <yasgui [query]="form.sparql.value" (querychange)="onQueryChange($event)" hideButtons="true"></yasgui>
                         </div>
                     </div>
@@ -145,7 +148,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 

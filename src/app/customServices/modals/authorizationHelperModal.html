@@ -20,7 +20,7 @@
                     <div class="form-group">
                         <label class="control-label col-sm-2">Restriction</label>
                         <div class="col-sm-10">
-                            <select class="form-control input-sm" [(ngModel)]="selectedTypeRestriction">
+                            <select class="form-control input-sm" [(ngModel)]="selectedTypeRestriction" (ngModelChange)="update()">
                                 <option *ngFor="let r of typeRestrictions">{{r}}</option>
                             </select>
                         </div>

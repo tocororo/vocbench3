@@ -826,6 +826,14 @@ input[type="radio"], input[type="checkbox"] {
     margin-bottom: 0px;
 }
 
+.popover {
+    max-width: 500px;
+}
+.popover-content {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
 /*not available in bootstrap*/
 .input-xs {
     height: 20px;

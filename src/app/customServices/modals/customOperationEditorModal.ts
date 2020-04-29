@@ -7,6 +7,7 @@ import { QueryChangedEvent } from "../../models/Sparql";
 import { CustomServiceServices } from "../../services/customServiceServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AuthorizationHelperModal, AuthorizationHelperModalData } from "./authorizationHelperModal";
+var $: JQueryStatic = require('jquery');
 
 export class CustomOperationEditorModalData extends BSModalContext {
     /**
@@ -22,7 +23,7 @@ export class CustomOperationEditorModalData extends BSModalContext {
 @Component({
     selector: "custom-operation-editor-modal",
     templateUrl: "./customOperationEditorModal.html",
-    styleUrls: ["../customServices.css"]
+    styleUrls: ["../customServices.css"],
 })
 export class CustomOperationEditorModal implements ModalComponent<CustomOperationEditorModalData> {
     context: CustomOperationEditorModalData;
@@ -85,6 +86,57 @@ export class CustomOperationEditorModal implements ModalComponent<CustomOperatio
             };
             this.form[p.name] = formEntry;
         })
+        //in case the sparql editor is available, enable the popover button
+        setTimeout(() => {
+            let popoverBtn: any =$('[data-toggle="popover"]'); //defined as any since .popover() is not recognized as function (no @types for bootstrap)
+            if (popoverBtn != null) {
+                let popoverHtmlContent: string = `
+                <p>The parameters are mapped to eponym variables in the SPARQL query.
+                    Actual parameters passed to a service upon invocation are pre-bound to the corresponding variable in the SPARQL query.
+                    A reserved variable is <span style="font-family: monospace">workingGraph</span>,
+                    which is bound by default to the working graph of the project.</p>
+                <p>The allowed parameter types are:</p>
+                <ul>
+                    <li><span style="font-family: monospace">boolean</span></li>
+                    <li><span style="font-family: monospace">integer</span></li>
+                    <li><span style="font-family: monospace">short</span></li>
+                    <li><span style="font-family: monospace">long</span></li>
+                    <li><span style="font-family: monospace">float</span></li>
+                    <li><span style="font-family: monospace">double</span></li>
+                    <li><span style="font-family: monospace">java.lang.String</span></li>
+                    <li><span style="font-family: monospace">BNode</span></li>
+                    <li><span style="font-family: monospace">IRI</span></li>
+                    <li><span style="font-family: monospace">Literal</span></li>
+                    <li><span style="font-family: monospace">Resource</span></li>
+                    <li><span style="font-family: monospace">Value</span></li>
+                </ul>
+                <p>The allowed return type depends on the actual SPARQL operation:</p>
+                <ul>
+                    <li>Udpate => <span style="font-family: monospace;">void</span></li>
+                    <li>ASK => <span style="font-family: monospace;">boolean</span></li>
+                    <li>SELECT => 
+                        <span style="font-family: monospace;">List&lt;T&gt;</span>, where <span style="font-family: monospace;">T</span>
+                        <ul>
+                            <li>might be any of the above accepted parameter types (in this case the SELECT must return one variable)</li>
+                            <li>be <span style="font-family: monospace;">AnnotatedValue&lt;S&gt;</span> where <span style="font-family: monospace;">S</span> might be:
+                                <ul>
+                                    <li><span style="font-family: monospace;">BNode</span></li>
+                                    <li><span style="font-family: monospace;">IRI</span></li>
+                                    <li><span style="font-family: monospace;">Resource</span></li>
+                                </ul>
+                                (in this case the SELECT must return one variable plus additional variables <span style="font-family: monospace;">?attr_...</span> for additional attibutes)
+                            </li>
+                        </ul>
+                    </li>
+                </ul>`;
+                popoverBtn.popover({ 
+                    title: "SPQARL Custom Service istructions",
+                    content: popoverHtmlContent, 
+                    html: true,
+                    placement: "left",
+                });
+            }
+        });
     }
 
     //AUTHORIZATION

@@ -99,7 +99,7 @@ export class AuthorizationHelperModal implements ModalComponent<AuthorizationHel
 
         if (this.context.authorization) { //edit => restore the form with the given authorization
             let auth = this.context.authorization;
-            auth = auth.replace(/\s+/g,""); //removes all the whitespaces
+
             //type restriction
 
             /* Group for capturing the restriction on type (subject of the capability).
@@ -117,7 +117,7 @@ export class AuthorizationHelperModal implements ModalComponent<AuthorizationHel
              * Its group (optional) is composed by an external not capturing group (?:) and an inner capturing group for the sole scope,
              * Thus the match() will returns only the scope, without the trailing ","
              */
-            let scopeGroup = "(?:,(" + this.scopePattern + "))?";
+            let scopeGroup = "(?:,\\s*(" + this.scopePattern + "))?";
 
             /* The subject of a capability (e.g. rdf(...)) is optional, so the group that represents it is in an optional group ()?
              * In addition to the subject, a scope can be provided like: (subject, scope) */
@@ -138,11 +138,11 @@ export class AuthorizationHelperModal implements ModalComponent<AuthorizationHel
             let langGroup = "(?:" + langofGroup + "|" + langTagGroup + ")"; //OR between the two above
             /* the whole language requirement is optional, so use an optional not capturing group
             * (not captturing in order to ignore ", {lang:...}" and capture just the lang) */
-            let langReqPattern = "(?:,{lang:" + langGroup + "})?";
+            let langReqPattern = "(?:,\\s*{\\s*lang:\\s*" + langGroup + "\\s*})?";
 
             //crudv
             let crudvGroup = "([CRUDV]+)";
-            let crudvPattern = "(?:," + crudvGroup + ")"; //external not capturing (for capturing the whole ", CR"), internal capturing for the sole crudv
+            let crudvPattern = "(?:,\\s*" + crudvGroup + ")"; //external not capturing (for capturing the whole ", CR"), internal capturing for the sole crudv
 
             //build the whole pattern with the preious
             let authPattern = "^" + capabilityPattern + langReqPattern + crudvPattern + "$";
@@ -225,6 +225,7 @@ export class AuthorizationHelperModal implements ModalComponent<AuthorizationHel
                 } else {
                     this.authSerialization += "?";
                 }
+                this.authSerialization += ")";
             } else if (this.selectedTypeRestriction == this.typeRestrictionType) { //selecting a role
                 if (this.selectedType != null) {
                     this.authSerialization += this.selectedType;
