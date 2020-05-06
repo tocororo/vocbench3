@@ -4,7 +4,7 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 7.0.1 (dd-mm-yyyy)
+# 8.0.0 (dd-mm-yyyy)
   * Added a tool for the creation of Custom Service (Still to complete).
   * Enabled manipulation of Maple choices in a remote-service alignment task (Still to complete).
   * Improved CustomForm widget by exploiting new PEARL annotations.
