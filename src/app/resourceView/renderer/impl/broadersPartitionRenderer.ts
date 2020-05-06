@@ -12,7 +12,7 @@ import { BrowsingModalServices } from "../../../widget/modal/browsingModal/brows
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
-import { MultiAddFunction } from "../multipleAddHelper";
+import { MultiActionFunction } from "../multipleActionHelper";
 import { VBContext } from "../../../utils/VBContext";
 
 @Component({
@@ -54,7 +54,7 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
             (data: any) => {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;
-                let addFunctions: MultiAddFunction[] = [];
+                let addFunctions: MultiActionFunction[] = [];
 
                 if (prop.getURI() == this.rootProperty.getURI()) { //it's adding a concept as skos:broader
                     values.forEach((v: ARTURIResource) => {

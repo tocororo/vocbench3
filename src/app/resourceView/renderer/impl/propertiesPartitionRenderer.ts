@@ -15,7 +15,7 @@ import { CreationModalServices } from "../../../widget/modal/creationModal/creat
 import { NewXLabelModalReturnData } from "../../../widget/modal/creationModal/newResourceModal/skos/newXLabelModal";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { LexicalizationEnrichmentHelper } from "../lexicalizationEnrichmentHelper";
-import { MultiAddError, MultiAddFunction } from "../multipleAddHelper";
+import { MultiActionError, MultiActionFunction } from "../multipleActionHelper";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from "../propertyEnrichmentHelper";
 
@@ -93,8 +93,8 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
      * It is replicated here, for the same reasons explained in this.add(), for handling the enrichment of the lexicalization properties.
      */
     private addMultipleLabelValues(predicate: ARTURIResource, labels: ARTLiteral[], cls?: ARTURIResource) {
-        let addFunctions: MultiAddFunction[] = [];
-        let errorHandler: (errors: MultiAddError[]) => void;
+        let addFunctions: MultiActionFunction[] = [];
+        let errorHandler: (errors: MultiActionError[]) => void;
 
         //SKOS or SKOSXL lexicalization predicates
         if (
@@ -107,7 +107,7 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
                     value: label 
                 });
             });
-            errorHandler = (errors: MultiAddError[]) => {
+            errorHandler = (errors: MultiActionError[]) => {
                 if (errors.length == 1) { //if only one error, try to handle it
                     let err: Error = errors[0].error;
                     if (err.name.endsWith('PrefAltLabelClashException') || err.name.endsWith('BlacklistForbiddendException')) {
@@ -170,7 +170,7 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     private copyLocaleHandler(predicate: ARTURIResource, eventData: { value: ARTNode, locales: Language[] }) {
-        let addFunctions: MultiAddFunction[] = [];
+        let addFunctions: MultiActionFunction[] = [];
         //this function is the handler of an event invoked in properties only when the value is a plain literal, so the cast is safe
         let value: ARTLiteral = <ARTLiteral>eventData.value;
         eventData.locales.forEach(l => {

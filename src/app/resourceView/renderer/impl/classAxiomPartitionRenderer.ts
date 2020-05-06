@@ -11,7 +11,7 @@ import { ResourcesServices } from "../../../services/resourcesServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { MultiAddFunction } from "../multipleAddHelper";
+import { MultiActionFunction } from "../multipleActionHelper";
 import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
 
 @Component({
@@ -64,7 +64,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
                         );
                     } else { //value is an ARTURIResource[] (class(es) selected from the tree)
                         let values: ARTURIResource[] = data.value;
-                        let addFunctions: MultiAddFunction[] = [];
+                        let addFunctions: MultiActionFunction[] = [];
 
                         if (predicate.getURI() == RDFS.subClassOf.getURI()) {
                             values.forEach((v: ARTURIResource) => {

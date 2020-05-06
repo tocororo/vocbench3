@@ -437,7 +437,7 @@ export class HttpManager {
             this.basicModals.alert("Error", errorMsg, "error");
             error.name = "ConnectionError";
             error.message = errorMsg;
-        } else if (err.status == 401 || err.status == 403) {
+        } else if (err.status == 401 || err.status == 403) { //handle errors in case user did a not authorized requests or is not logged in.
             error.name = "UnauthorizedRequestError";
             let errBody = err._body;
             let errMessage: string = "Unknown error response from the server. Error status: " + err.status;
@@ -449,19 +449,20 @@ export class HttpManager {
                 errMessage = errBody;
             }
             error.message = errMessage;
-            //handle errors in case user did a not authorized requests or is not logged in.
-            //In this case the response (err) body contains an error message
-            this.basicModals.alert("Error", errMessage, "error").then(
-                (result: any) => {
-                    //in case user is not logged at all, reset context and redirect to home
-                    if (err.status == 401) {
+            if (err.status == 401) { //in case user is not logged at all, reset context and redirect to home
+                this.basicModals.alert("Error", errMessage, "error").then(
+                    () => {
                         VBContext.resetContext();
                         HttpServiceContext.resetContext();
                         UIUtils.resetNavbarTheme();
                         this.router.navigate(['/Home']);
                     }
-                }
-            );
+                );
+            } else { //403 operation not authorized
+                if (errorAlertOpt.show && HttpServiceContext.isErrorInterceptionEnabled()) {
+                    this.basicModals.alert("Error", errMessage, "error");
+                }    
+            }
         } else if (err.status == 500 || err.status == 404) { //in case of server error (e.g. out of memory)
             let errorMsg = (err.statusText != null ? err.statusText : "Unknown response from the server") + " (status: " + err.status + ")";
             error.name = "ServerError";

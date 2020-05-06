@@ -11,7 +11,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { MultiAddFunction } from "../multipleAddHelper";
+import { MultiActionFunction } from "../multipleActionHelper";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
@@ -63,7 +63,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
         this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, null, false).then(
             (data: any) => {
                 let values: ARTResource[] = data.value;
-                let addFunctions: MultiAddFunction[] = [{
+                let addFunctions: MultiActionFunction[] = [{
                     function: this.skosService.addFirstToOrderedCollection(this.resource, values[0]),
                     value: values[0]
                 }];
@@ -80,7 +80,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
         this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, null, false).then(
             (data: any) => {
                 let values: ARTResource[] = data.value;
-                let addFunctions: MultiAddFunction[] = [{
+                let addFunctions: MultiActionFunction[] = [{
                     function: this.skosService.addLastToOrderedCollection(this.resource, values[0]),
                     value: values[0]
                 }];
@@ -98,7 +98,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
             (data: any) => {
                 let position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue());
                 let values: ARTResource[] = data.value;
-                let addFunctions: MultiAddFunction[] = [{
+                let addFunctions: MultiActionFunction[] = [{
                     function: this.skosService.addInPositionToOrderedCollection(this.resource, values[0], position),
                     value: values[0]
                 }];
@@ -116,7 +116,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
             (data: any) => {
                 let position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue()) + 1;
                 let values: ARTResource[] = data.value;
-                let addFunctions: MultiAddFunction[] = [{
+                let addFunctions: MultiActionFunction[] = [{
                     function: this.skosService.addInPositionToOrderedCollection(this.resource, values[0], position),
                     value: values[0]
                 }];

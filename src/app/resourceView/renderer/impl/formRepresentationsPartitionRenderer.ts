@@ -10,7 +10,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { MultiAddFunction } from "../multipleAddHelper";
+import { MultiActionFunction } from "../multipleActionHelper";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
@@ -42,7 +42,7 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
                 this.lexiconLang = lang;
                 this.creationModals.newPlainLiteral("Add " + predicate.getShow(), null, false, this.lexiconLang, false, { constrain: true, locale: true }, { enabled: true, allowSameLang: false }).then(
                     (literals: ARTLiteral[]) => {
-                        let addFunctions: MultiAddFunction[] = [];
+                        let addFunctions: MultiActionFunction[] = [];
                         literals.forEach((literal: ARTLiteral) => {
                             addFunctions.push({ 
                                 function: this.ontolexService.addFormRepresentation(this.resource, literal, predicate), 

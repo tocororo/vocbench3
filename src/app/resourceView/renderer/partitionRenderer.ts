@@ -9,7 +9,7 @@ import { ResourceUtils } from "../../utils/ResourceUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowseExternalResourceModalReturnData } from "../resViewModals/browseExternalResourceModal";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { MultiAddError, MultiAddFunction, MultipleAddHelper } from "./multipleAddHelper";
+import { MultiActionError, MultiActionFunction, MultipleActionHelper, MultiActionType } from "./multipleActionHelper";
 
 @Component({
     selector: "partition-renderer",
@@ -150,14 +150,14 @@ export abstract class PartitionRenderer {
      */
     abstract add(predicate: ARTURIResource, propChangeable: boolean): void;
 
-    protected addMultiple(addFunctions: MultiAddFunction[], errorHandler?: (errors: MultiAddError[]) => void, errors?: MultiAddError[]) {
-        MultipleAddHelper.addMultiple(addFunctions, this.basicModals, errorHandler, errors, () => this.update.emit());
+    protected addMultiple(addFunctions: MultiActionFunction[], errorHandler?: (errors: MultiActionError[]) => void, errors?: MultiActionError[]) {
+        MultipleActionHelper.executeActions(addFunctions, MultiActionType.addition, this.basicModals, errorHandler, errors, () => this.update.emit());
     }
-    protected handleSingleMultiAddError(error: MultiAddError) {
-        MultipleAddHelper.handleSingleMultiAddError(error, this.basicModals);
+    protected handleSingleMultiAddError(error: MultiActionError) {
+        MultipleActionHelper.handleSingleMultiActionError(error, MultiActionType.addition, this.basicModals);
     }
-    protected handleMultipleMultiAddError(errors: MultiAddError[]) {
-        MultipleAddHelper.handleMultipleMultiAddError(errors, this.basicModals);
+    protected handleMultipleMultiAddError(errors: MultiActionError[]) {
+        MultipleActionHelper.handleMultipleMultiActionError(errors, MultiActionType.addition, this.basicModals);
     }
 
     /**
@@ -238,24 +238,19 @@ export abstract class PartitionRenderer {
      * @param predicate 
      */
     removeAllValues(predicate: ARTURIResource) {
-        let removeFnArray: any[] = [];
-        for (var i = 0; i < this.predicateObjectList.length; i++) {
-            if (this.predicateObjectList[i].getPredicate().getURI() == predicate.getURI()) {
-                let objList: ARTNode[] = this.predicateObjectList[i].getObjects();
-                for (var j = 0; j < objList.length; j++) {
-                    let object = objList[j];
-                    /**
-                     * Prevent removing a triple in staging. Theoretically, it should not be allowed to execute a "Remove all values"
-                     * if in the pred-obj list there is a triple in the staging graph. Anyway, since the check could be (currently)
-                     * too expensive, the operation is allowed but it simply prevents from removing the staging triples.
-                     */
-                    if (ResourceUtils.isTripleInStaging(object)) continue;
-                    
-                    removeFnArray.push(this.getRemoveFunction(predicate, object));
-                }
+        let deleteFunctions: MultiActionFunction[] = [];
+        this.predicateObjectList.forEach(poList => {
+            if (poList.getPredicate().equals(predicate)) {
+                let values: ARTNode[] = poList.getObjects();
+                values.forEach((v: ARTNode) => {
+                    deleteFunctions.push({
+                        function: this.getRemoveFunction(predicate, v),
+                        value: v
+                    })
+                });
+                MultipleActionHelper.executeActions(deleteFunctions, MultiActionType.deletion, this.basicModals, null, null, () => this.update.emit());
             }
-        }
-        this.removeAllRicursively(removeFnArray);
+        });
     }
     /**
      * Removes an object related to the given predicate.

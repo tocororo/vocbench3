@@ -12,7 +12,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { MultiAddFunction } from "../multipleAddHelper";
+import { MultiActionFunction } from "../multipleActionHelper";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
@@ -56,7 +56,7 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
 
 
     private copyLocaleHandler(predicate: ARTURIResource, eventData: { value: ARTNode, locales: Language[] }) {
-        let addFunctions: MultiAddFunction[] = [];
+        let addFunctions: MultiActionFunction[] = [];
         //this function is the handler of an event invoked in notes only when the value is a plain literal, so the cast is safe
         let value: ARTLiteral = <ARTLiteral>eventData.value;
         eventData.locales.forEach(l => {

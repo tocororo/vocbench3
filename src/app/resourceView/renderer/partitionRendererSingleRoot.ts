@@ -11,7 +11,7 @@ import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsing
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { AddPropertyValueModalReturnData } from "../resViewModals/addPropertyValueModal";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { MultiAddFunction } from "./multipleAddHelper";
+import { MultiActionFunction } from "./multipleActionHelper";
 import { PartitionRenderer } from "./partitionRenderer";
 import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from "./propertyEnrichmentHelper";
 
@@ -90,7 +90,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
     private enrichWithTypedLiteral(predicate: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[]) {
         this.creationModals.newTypedLiteral("Add " + predicate.getShow(), predicate, allowedDatatypes, dataRanges, true, true).then(
             (literals: ARTLiteral[]) => {
-                let addFunctions: MultiAddFunction[] = [];
+                let addFunctions: MultiActionFunction[] = [];
                 literals.forEach((l: ARTLiteral) => {
                     addFunctions.push({
                         function: this.resourcesService.addValue(<ARTURIResource>this.resource, predicate, l),
@@ -111,7 +111,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
             (data: AddPropertyValueModalReturnData) => {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;
-                let addFunctions: MultiAddFunction[] = [];
+                let addFunctions: MultiActionFunction[] = [];
                 values.forEach((v: ARTURIResource) => {
                     addFunctions.push({
                         function: this.resourcesService.addValue(<ARTURIResource>this.resource, prop, v),

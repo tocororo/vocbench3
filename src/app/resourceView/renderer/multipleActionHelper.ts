@@ -2,34 +2,33 @@ import { Observable } from "rxjs";
 import { ARTNode } from "../../models/ARTResources";
 import { HttpServiceContext } from "../../utils/HttpManager";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { EventEmitter } from "@angular/core";
 
-export class MultipleAddHelper {
+export class MultipleActionHelper {
 
     /**
      * Invokes an array of functions in order to add multiple values
-     * @param addFunctions array of observable to invoke with the related value that it is adding
+     * @param functions array of observable to invoke with the related value that it is adding/deleting
      * @param basicModals service for showing a report of eventual error
      * @param errorHandler handler executed in case one of the add functions fails. If no provided a default handler (report dialog) will be executed
      * @param errors list of the errors collected during the recursively invocation of addMultiple().
      * @param onComplete function that will be executed once all the observable are completed
      */
-    public static addMultiple(addFunctions: MultiAddFunction[], basicModals: BasicModalServices, errorHandler?: (errors: MultiAddError[]) => void, errors?: MultiAddError[],
+    public static executeActions(functions: MultiActionFunction[], type: MultiActionType, basicModals: BasicModalServices, errorHandler?: (errors: MultiActionError[]) => void, errors?: MultiActionError[],
         onComplete?: (...args: any[]) => any) {
         if (errors == null) errors = [];
 
         HttpServiceContext.disableErrorInterception(); //temporarly disable the error interceptor
 
-        if (addFunctions.length == 0) { //no more function to call
+        if (functions.length == 0) { //no more function to call
             //handle the errors, if any, if an handler is defined
             if (errors.length > 0) {
                 if (errorHandler != null) {
                     errorHandler(errors);
                 } else {
                     if (errors.length == 1) {
-                        this.handleSingleMultiAddError(errors[0], basicModals);
+                        this.handleSingleMultiActionError(errors[0], type, basicModals);
                     } else {
-                        this.handleMultipleMultiAddError(errors, basicModals);
+                        this.handleMultipleMultiActionError(errors, type, basicModals);
                     }
                 }
             }
@@ -38,29 +37,29 @@ export class MultipleAddHelper {
                 onComplete();
             }
         } else {
-            addFunctions[0].function.subscribe(
+            functions[0].function.subscribe(
                 stResp => {
-                    addFunctions.shift(); //remove the first function (the one just called) and call itself recursively
-                    this.addMultiple(addFunctions, basicModals, errorHandler, errors, onComplete);
+                    functions.shift(); //remove the first function (the one just called) and call itself recursively
+                    this.executeActions(functions, type, basicModals, errorHandler, errors, onComplete);
                 },
                 err => {
-                    errors.push({ value: addFunctions[0].value, error: err }); //collect the value and the error catched
-                    addFunctions.shift(); //remove the first function (the one just called) and call itself recursively
-                    this.addMultiple(addFunctions, basicModals, errorHandler, errors, onComplete);
+                    errors.push({ value: functions[0].value, error: err }); //collect the value and the error catched
+                    functions.shift(); //remove the first function (the one just called) and call itself recursively
+                    this.executeActions(functions, type, basicModals, errorHandler, errors, onComplete);
                 }
             );
         }
     }
 
-    public static handleSingleMultiAddError(error: MultiAddError, basicModals: BasicModalServices) {
-        let message = "The addition of " + error.value.toNT() + " has failed due to the following reason:\n" +  error.error.name + 
+    public static handleSingleMultiActionError(error: MultiActionError, type: MultiActionType, basicModals: BasicModalServices) {
+        let message = "The " + type + " of " + error.value.toNT() + " has failed due to the following reason:\n" +  error.error.name + 
                 ((error.error.message != null) ? ":\n" + error.error.message : "");
         let details = error.error.stack;
         basicModals.alert("Error", message, "error", details);
     }
-    public static handleMultipleMultiAddError(errors: MultiAddError[], basicModals: BasicModalServices) {
-        let message = "The addition of the following values have failed:"
-        errors.forEach((e: MultiAddError) => {
+    public static handleMultipleMultiActionError(errors: MultiActionError[], type: MultiActionType, basicModals: BasicModalServices) {
+        let message = "The " + type + " of the following values have failed:"
+        errors.forEach((e: MultiActionError) => {
             message += "\n\n" + e.value.toNT() + "\nReason:\n" + e.error.name + ((e.error.message != null) ? ":\n" + e.error.message : "");
         });
         basicModals.alert("Error", message, "error");
@@ -68,12 +67,17 @@ export class MultipleAddHelper {
 
 }
 
-export class MultiAddFunction {
+export class MultiActionFunction {
     function: Observable<any>;
     value: ARTNode;
 }
 
-export class MultiAddError { 
+export class MultiActionError { 
     value: ARTNode;
     error: Error;
+}
+
+export enum MultiActionType {
+    addition = "addition",
+    deletion = "deletion"
 }

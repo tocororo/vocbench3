@@ -9,7 +9,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { MultiAddFunction } from "../multipleAddHelper";
+import { MultiActionFunction } from "../multipleActionHelper";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
@@ -38,7 +38,7 @@ export class LabelRelationsPartitionRenderer extends PartitionRenderSingleRoot {
                 let prop: ARTURIResource = data.property;
                 let values: ARTURIResource[] = data.value;
 
-                let addFunctions: MultiAddFunction[] = [];
+                let addFunctions: MultiActionFunction[] = [];
                 values.forEach((v: ARTURIResource) => {
                     addFunctions.push({
                         function: this.resourcesService.addValue(this.resource, prop, v),

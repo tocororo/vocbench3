@@ -11,7 +11,7 @@ import { BrowsingModalServices } from "../../../widget/modal/browsingModal/brows
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { AddPropertyValueModalReturnData } from "../../resViewModals/addPropertyValueModal";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { MultiAddFunction } from "../multipleAddHelper";
+import { MultiActionFunction } from "../multipleActionHelper";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
@@ -41,7 +41,7 @@ export class SuperPropertiesPartitionRenderer extends PartitionRenderSingleRoot 
                 let inverse: boolean = data.inverseProperty;
                 let values: ARTURIResource[] = data.value;
 
-                let addFunctions: MultiAddFunction[] = [];
+                let addFunctions: MultiActionFunction[] = [];
                 values.forEach((v: ARTURIResource) => {
                     addFunctions.push({
                         function: this.propService.addSuperProperty(<ARTURIResource>this.resource, v, prop, inverse),

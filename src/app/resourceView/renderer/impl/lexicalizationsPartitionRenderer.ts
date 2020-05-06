@@ -19,7 +19,7 @@ import { NewOntoLexicalizationCfModalReturnData } from "../../../widget/modal/cr
 import { NewXLabelModalReturnData } from "../../../widget/modal/creationModal/newResourceModal/skos/newXLabelModal";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { LexicalizationEnrichmentHelper } from "../lexicalizationEnrichmentHelper";
-import { MultiAddError, MultiAddFunction } from "../multipleAddHelper";
+import { MultiActionError, MultiActionFunction } from "../multipleActionHelper";
 import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
 import { PropertyEnrichmentHelper, PropertyEnrichmentInfo, EnrichmentType } from "../propertyEnrichmentHelper";
 
@@ -231,8 +231,8 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
      * @param cls optional class of the reified label. Useful expecially in with skosxl lexicalization predicates
      */
     private addMultipleValues(predicate: ARTURIResource, labels: ARTLiteral[], cls?: ARTURIResource) {
-        let addFunctions: MultiAddFunction[] = [];
-        let errorHandler: (errors: MultiAddError[]) => void;
+        let addFunctions: MultiActionFunction[] = [];
+        let errorHandler: (errors: MultiActionError[]) => void;
 
         //SKOS or SKOSXL lexicalization predicates
         if (
@@ -245,7 +245,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                     value: label 
                 });
             });
-            errorHandler = (errors: MultiAddError[]) => {
+            errorHandler = (errors: MultiActionError[]) => {
                 if (errors.length == 1) { //if only one error, try to handle it
                     let err: Error = errors[0].error;
                     if (err.name.endsWith('PrefAltLabelClashException') || err.name.endsWith('BlacklistForbiddendException')) {

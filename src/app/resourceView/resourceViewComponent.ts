@@ -22,7 +22,7 @@ import { ProjectContext, VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { MultiAddFunction, MultipleAddHelper } from "./renderer/multipleAddHelper";
+import { MultiActionFunction, MultiActionType, MultipleActionHelper } from "./renderer/multipleActionHelper";
 import { ResViewModalServices } from "./resViewModals/resViewModalServices";
 
 @Component({
@@ -657,7 +657,7 @@ export class ResourceViewComponent {
             this.subtermsColl, this.superpropertiesColl, this.topconceptofColl, this.typesColl
         ];
 
-        let assertFn: MultiAddFunction[] = [];
+        let assertFn: MultiActionFunction[] = [];
         poLists.forEach((poList: ARTPredicateObjects[]) => {
             if (poList == null) return; //predicate object list null for the current resource (partition not foreseen for the resource role)
             poList.forEach((predObjs: ARTPredicateObjects) => {
@@ -679,7 +679,7 @@ export class ResourceViewComponent {
                 this.buildResourceView(this.resource);
             }
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-            MultipleAddHelper.addMultiple(assertFn, this.basicModals, null, null, onComplete);
+            MultipleActionHelper.executeActions(assertFn, MultiActionType.addition, this.basicModals, null, null, onComplete);
         }
     }
 

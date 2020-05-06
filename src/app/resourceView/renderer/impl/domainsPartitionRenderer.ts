@@ -10,7 +10,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { MultiAddFunction } from "../multipleAddHelper";
+import { MultiActionFunction } from "../multipleActionHelper";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
@@ -44,7 +44,7 @@ export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
                         stResp => this.update.emit(null)
                     );
                 } else { //value is ARTURIResource[] (class(es) selected from the tree)
-                    let addFunctions: MultiAddFunction[] = [];
+                    let addFunctions: MultiActionFunction[] = [];
                     if (prop.getURI() == this.rootProperty.getURI()) { //it's using an rdfs:domain
                         value.forEach((v: ARTURIResource) => {
                             addFunctions.push({
