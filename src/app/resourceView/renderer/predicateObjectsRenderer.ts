@@ -41,7 +41,7 @@ export class PredicateObjectsRenderer {
      */
 
     private addDisabled: boolean = false;
-    private deleteDisabled: boolean = false;
+    private deleteAllDisabled: boolean = false;
     private actionMenuDisabled: boolean = false;
     
     private addManuallyAllowed: boolean = false;
@@ -70,18 +70,28 @@ export class PredicateObjectsRenderer {
             this.readonly || !ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.C, this.resource);
 
         /**
-         * Delete is disabled if one of them is true
-         * - resource is not explicit (e.g. imported, inferred, in staging)
-         * - resource is in a staging status (staging-add or staging-remove)
+         * "Delete all values" is disabled if one of them is true
+         * - subject resource is not explicit (e.g. imported, inferred, in staging)
+         * - subject resource is in a staging status (staging-add or staging-remove)
          * - ResView is working in readonly mode
-         * - user not authorized
+         * - user not authorized to delete operation on subject resource
+         * - delete operation is not allowed on one of the objects (e.g. if user has no language capability on one of them)
          */
-        this.deleteDisabled = !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
+        this.deleteAllDisabled = !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
             ResourceUtils.isResourceInStaging(this.resource) ||
             this.readonly || !ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.resource);
+        
+        if (!this.deleteAllDisabled) { //if checks on subject resource are passed, performs checks on the objects
+            for (let o of this.predicateObjects.getObjects()) {
+                if (!ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.resource, o)) {
+                    this.deleteAllDisabled = true;
+                    break;
+                }
+            }
+        }
 
         //menu disabled if all of its action are disabled
-        this.actionMenuDisabled = this.addDisabled && this.deleteDisabled;
+        this.actionMenuDisabled = this.addDisabled && this.deleteAllDisabled;
 
         this.addManuallyAllowed = ResViewUtils.addManuallyPartition.indexOf(this.partition) != -1;
         this.addExteranlResourceAllowed = ResViewUtils.addExternalResourcePartition.indexOf(this.partition) != -1;
