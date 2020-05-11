@@ -1,13 +1,13 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { CustomOperationDefinition, CustomService, CustomServiceDefinition } from "../models/CustomService";
-import { CustomServiceServices } from "../services/customServiceServices";
+import { CustomOperationDefinition, CustomService, CustomServiceDefinition } from "../../models/CustomService";
+import { CustomServiceServices } from "../../services/customServiceServices";
 import { CustomServiceModalServices } from "./modals/customServiceModalServices";
 
 @Component({
     selector: "custom-service",
     templateUrl: "./customServiceComponent.html",
     host: { class: "vbox" },
-    styleUrls: ["./customServices.css"]
+    styleUrls: ["../customServices.css"]
 })
 export class CustomServiceComponent {
     @Input() id: string;
@@ -46,11 +46,7 @@ export class CustomServiceComponent {
                     if (this.selectedOperation != null) {
                         let selectedOpName: string = this.selectedOperation.name;
                         let operations: CustomOperationDefinition[] = this.form.operations.value;
-                        // if (operations != null) {
-                            this.selectedOperation = operations.find(o => o.name == selectedOpName);
-                        // } else {
-                        //     this.selectedOperation = null;
-                        // }
+                        this.selectedOperation = operations.find(o => o.name == selectedOpName);
                     }
                 } else {
                     this.selectedOperation = null;

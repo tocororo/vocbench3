@@ -1,0 +1,44 @@
+<div class="panel panel-default vbox">
+    <div class="panel-heading">
+        <label style="flex: 1">
+            {{invocation.service}}
+        </label>
+        <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" (click)="editInvocation()" title="Edit service invocation">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body vbox scrollableContainer">
+
+        <div class="gridRow">
+            <div class="gridEntry">
+                <label class="entryLabel">Service:</label>
+                <div style="flex: 1">
+                    <span class="form-control input-sm" style="background-color: #eee; font-family: monospace;">{{invocation.service}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="gridRow">
+            <div class="gridEntry">
+                <label class="entryLabel">Operation:</label>
+                <div style="flex: 1">
+                    <span class="form-control input-sm" style="background-color: #eee; font-family: monospace;">{{invocation.operation}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="gridRow">
+            <div class="gridEntry">
+                <label class="entryLabel">Arguments:</label>
+                <div style="flex: 1">
+                    <span *ngIf="invocation.arguments.length == 0" class="form-control input-sm" style="background-color: #eee;"></span>
+                    <div *ngFor="let arg of invocation.arguments" class="form-control input-sm" style="margin-bottom: 2px; background-color: #eee; font-family: monospace;">
+                        {{arg}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

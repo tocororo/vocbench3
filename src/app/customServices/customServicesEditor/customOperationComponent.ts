@@ -1,16 +1,17 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
-import { CustomOperationDefinition, CustomOperationTypes, TypeUtils } from "../models/CustomService";
-import { YasguiComponent } from "../sparql/yasguiComponent";
+import { CustomOperationDefinition, CustomOperationTypes, TypeUtils } from "../../models/CustomService";
+import { YasguiComponent } from "../../sparql/yasguiComponent";
 import { CustomServiceModalServices } from "./modals/customServiceModalServices";
 
 @Component({
     selector: "custom-operation",
     templateUrl: "./customOperationComponent.html",
     host: { class: "vbox" },
-    styleUrls: ["./customServices.css"]
+    styleUrls: ["../customServices.css"]
 })
 export class CustomOperationComponent {
     @Input() operation: CustomOperationDefinition;
+    @Input() readonly: boolean;
     @Output() update: EventEmitter<void> = new EventEmitter(); //tells to the parent that the service has been modified
     @ViewChild(YasguiComponent) viewChildYasgui: YasguiComponent;
 

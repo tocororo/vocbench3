@@ -7,7 +7,7 @@ import { LoadDataComponent } from "./config/dataManagement/loadData/loadDataComp
 import { RefactorComponent } from "./config/dataManagement/refactor/refactorComponent";
 import { VersioningComponent } from "./config/dataManagement/versioning/versioningComponent";
 import { CustomFormConfigComponent } from "./customForms/customFormConfComponent";
-import { CustomServicesComponent } from './customServices/customServicesPageComponent';
+import { CustomServiceRouterComponent } from './customServices/customServiceRouterComponent';
 import { DataComponent } from "./data/dataComponent";
 import { EdoalComponent } from './edoal/edoalComponent';
 import { HistoryComponent } from "./historyValidation/historyComponent";
@@ -47,7 +47,7 @@ export const routes: Routes = [
     { path: "Sheet2RDF", component: Sheet2RdfComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Collaboration", component: CollaborationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "CustomForm", component: CustomFormConfigComponent, canActivate: [AuthGuard, ProjectGuard] },
-    { path: "CustomServices", component: CustomServicesComponent, canActivate: [AuthGuard, ProjectGuard] },
+    { path: "CustomServices", component: CustomServiceRouterComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Registration/:firstAccess", component: RegistrationComponent }, //param firstAccess 1 to indicate that there's no user registered
     { path: "ResetPassword/:token", component: ResetPasswordComponent },
     { path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard] },

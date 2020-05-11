@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { CustomOperationDefinition, CustomService, CustomServiceDefinition } from "../../models/CustomService";
-import { CustomServiceServices } from "../../services/customServiceServices";
+import { CustomOperationDefinition, CustomService, CustomServiceDefinition } from "../../../models/CustomService";
+import { CustomServiceServices } from "../../../services/customServiceServices";
 
 export class CustomServiceEditorModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title', public service?: CustomService) {

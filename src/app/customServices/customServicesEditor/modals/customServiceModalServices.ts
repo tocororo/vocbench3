@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { CustomOperationDefinition, CustomService, CustomServiceDefinition } from '../../models/CustomService';
+import { CustomOperationDefinition, CustomService } from '../../../models/CustomService';
 import { CustomOperationEditorModal, CustomOperationEditorModalData } from './customOperationEditorModal';
+import { CustomOperationModal, CustomOperationModalData } from './customOperationModal';
 import { CustomServiceEditorModal, CustomServiceEditorModalData } from './customServiceEditorModal';
 
 
@@ -27,6 +28,15 @@ export class CustomServiceModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
         return this.modal.open(CustomOperationEditorModal, overlayConfig).result;
+    }
+
+    public openCustomOperationView(operation: CustomOperationDefinition): Promise<void> {
+        let modalData = new CustomOperationModalData(operation);
+        const builder = new BSModalContextBuilder<CustomOperationModalData>(
+            modalData, undefined, CustomOperationModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
+        return this.modal.open(CustomOperationModal, overlayConfig).result;
     }
 
 }

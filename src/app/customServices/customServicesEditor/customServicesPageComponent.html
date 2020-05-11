@@ -1,0 +1,41 @@
+<div class="panel panel-default vbox">
+    <div class="panel-heading">
+        <label style="flex: 1;">Custom Services</label>
+        <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" (click)="createService()" title="Create service">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                <button class="btn btn-default" (click)="deleteService()" title="Delete service" [disabled]="!selectedServiceId">
+                    <span class="glyphicon glyphicon-minus"></span>
+                </button>
+            </div>
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" (click)="initServices()" title="Refresh">
+                    <span class="glyphicon glyphicon-refresh"></span>
+                </button>
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-default dropdown-toggle" style="padding: 1px 3px;" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right">
+                        <li title="Reload services (useful when the Custom Services are changed/loaded manually)">
+                            <a (click)="reload()">
+                                <div class="hbox">
+                                    <span style="flex:1">Force reload from filesystem</span>
+                                    <span class="glyphicon glyphicon-repeat pull-right" style="margin-left: 5px;"></span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body vbox scrollableContainer">
+        <div *ngFor="let id of serviceIds" class="listItem" [ngClass]="{ active: selectedServiceId == id }" (click)="selectService(id)">
+            {{id}}
+        </div>
+    </div>
+</div>
+<custom-service *ngIf="selectedServiceId" style="flex: 4; margin-left: 6px;" [id]="selectedServiceId"></custom-service>

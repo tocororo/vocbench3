@@ -1,0 +1,21 @@
+<div class="vbox">
+
+    <ul class="nav nav-tabs" (click)="$event.preventDefault()">
+        <li [ngClass]="{active : currentRoute == 'editor' }">
+            <a (click)="currentRoute = 'editor'">Editor</a>
+        </li>
+        <li [ngClass]="{active : currentRoute == 'reporter' }">
+            <a (click)="currentRoute = 'reporter'">Reporter</a>
+        </li>
+    </ul>
+
+    <!--Tabs content-->
+    <div class="tab-content">
+        <div [ngClass]="{vbox : currentRoute == 'editor'}" [hidden]="currentRoute != 'editor'">
+            <custom-services-component></custom-services-component>
+        </div>
+        <div [ngClass]="{vbox : currentRoute == 'reporter'}" [hidden]="currentRoute != 'reporter'">
+            <invokable-reporters-component></invokable-reporters-component>
+        </div>
+    </div>
+</div>

@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { RDFResourceRolesEnum } from "../../models/ARTResources";
-import { Language, Languages } from "../../models/LanguagesCountries";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { RDFResourceRolesEnum } from "../../../models/ARTResources";
+import { Language, Languages } from "../../../models/LanguagesCountries";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 
 export class AuthorizationHelperModalData extends BSModalContext {
     constructor(public authorization?: string, public parameters?: string[]) {

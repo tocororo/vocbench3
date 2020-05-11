@@ -1,0 +1,21 @@
+<div class="panel panel-default vbox">
+    <div class="panel-heading">
+        <label style="flex: 1;">Invokable Reporters</label>
+        <div class="btn-toolbar" role="toolbar">
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" (click)="createReporter()" title="Create reporter">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+                <button class="btn btn-default" (click)="deleteReporter()" title="Delete reporter" [disabled]="!selectedReporter">
+                    <span class="glyphicon glyphicon-minus"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body vbox scrollableContainer">
+        <div *ngFor="let r of reporters" class="listItem" [ngClass]="{ active: selectedReporter == r }" (click)="selectReporter(r)">
+            {{r.identifier}}
+        </div>
+    </div>
+</div>
+<invokable-reporter *ngIf="selectedReporter" style="flex: 4; margin-left: 6px;" [id]="selectedReporter.identifier"></invokable-reporter>

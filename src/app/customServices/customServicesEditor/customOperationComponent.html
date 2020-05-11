@@ -3,7 +3,7 @@
         <label style="flex: 1">
             {{operation.name}}
         </label>
-        <div class="btn-toolbar" role="toolbar">
+        <div *ngIf="!readonly" class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
                 <button class="btn btn-default" (click)="editOperation()" title="Edit operation">
                     <span class="glyphicon glyphicon-pencil"></span>

@@ -20,6 +20,7 @@ import { HistoryServices } from "../services/historyServices";
 import { IcvServices } from "../services/icvServices";
 import { IndividualsServices } from "../services/individualsServices";
 import { InputOutputServices } from "../services/inputOutputServices";
+import { InvokableReportersServices } from '../services/invokableReportersServices';
 import { ManchesterServices } from "../services/manchesterServices";
 import { MapleServices } from '../services/mapleServices';
 import { MetadataRegistryServices } from "../services/metadataRegistryServices";
@@ -73,6 +74,7 @@ import { VersionsServices } from "../services/versionsServices";
         IcvServices,
         IndividualsServices,
         InputOutputServices,
+        InvokableReportersServices,
         ManchesterServices,
         MapleServices,
         MetadataServices,

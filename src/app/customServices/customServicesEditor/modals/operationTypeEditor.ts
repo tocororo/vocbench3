@@ -1,6 +1,6 @@
 import { Component, forwardRef, Input } from "@angular/core";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
-import { OperationType, TypeUtils } from "../../models/CustomService";
+import { OperationType, TypeUtils } from "../../../models/CustomService";
 import { type } from "os";
 
 @Component({

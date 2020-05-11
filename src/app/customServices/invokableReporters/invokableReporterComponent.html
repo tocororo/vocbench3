@@ -1,17 +1,12 @@
 <div class="panel panel-default vbox">
     <div class="panel-heading">
         <label style="flex: 1">{{id}}</label>
-        <!-- <div class="btn-toolbar" role="toolbar">
-            <button class="btn btn-default btn-xs" title="Refresh" (click)="initCustomService()">
-                <span class="glyphicon glyphicon-refresh"></span>
-            </button>
-        </div> -->
 
         <div class="btn-group btn-group-xs">
-            <button class="btn btn-default" (click)="initCustomService()" title="Refresh">
-                <span class="glyphicon glyphicon-refresh"></span>
+            <button class="btn btn-default" (click)="compileReport()" title="Compile report">
+                <span class="glyphicon glyphicon-play"></span>
             </button>
-            <div class="btn-group btn-group-xs">
+            <!-- <div class="btn-group btn-group-xs">
                 <button class="btn btn-default dropdown-toggle" style="padding: 1px 3px;" data-toggle="dropdown">
                     <span class="caret"></span>
                 </button>
@@ -25,20 +20,20 @@
                         </a>
                     </li>
                 </ul>
-            </div>
+            </div> -->
         </div>
 
     </div>
     <div *ngIf="form" class="panel-body vbox">
 
-        <!-- Name -->
+        <!-- Label -->
         <div class="gridRow">
             <div class="gridEntry">
                 <label class="entryLabel">
-                    {{form.name.displayName}}
-                    <span class="glyphicon glyphicon-info-sign" [title]="form.name.description"></span>
+                    {{form.label.displayName}}
+                    <span class="glyphicon glyphicon-info-sign" [title]="form.label.description"></span>
                 </label>
-                <input-editable style="flex: 1;" [value]="form.name.value" (valueEdited)="updateName($event)"></input-editable>
+                <input-editable style="flex: 1;" [value]="form.label.value" (valueEdited)="updateLabel($event)"></input-editable>
             </div>
         </div>
 
@@ -53,33 +48,33 @@
             </div>
         </div>
 
-        <!-- Operations -->
+        <!-- Service invocations -->
         <div class="hbox">
             <div class="panel panel-default vbox">
                 <div class="panel-heading">
                     <label style="flex: 1">
-                        {{form.operations.displayName}}
-                        <span class="glyphicon glyphicon-info-sign" [title]="form.operations.description"></span>
+                        {{form.serviceInvocations.displayName}}
+                        <span class="glyphicon glyphicon-info-sign" [title]="form.serviceInvocations.description"></span>
                     </label>
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-default" (click)="createOperation()" title="Create operation">
+                            <button class="btn btn-default" (click)="createServiceInvocation()" title="Create service invocation">
                                 <span class="glyphicon glyphicon-plus"></span>
                             </button>
-                            <button class="btn btn-default" (click)="deleteOperation()" title="Delete operation" [disabled]="!selectedOperation">
+                            <button class="btn btn-default" (click)="deleteServiceInvocation()" title="Delete service invocation" [disabled]="!selectedServiceInvocation">
                                 <span class="glyphicon glyphicon-minus"></span>
                             </button>
                         </div>
                     </div>
                 </div>
                 <div class="panel-body vbox scrollableContainer">
-                    <div *ngFor="let o of form.operations.value" class="listItem" [ngClass]="{ active: selectedOperation == o }" (click)="selectOperation(o)">
-                        {{o.name}}
+                    <div *ngFor="let i of form.serviceInvocations.value" class="listItem" [ngClass]="{ active: selectedServiceInvocation == i }" (click)="selectServiceInvocation(i)">
+                        {{i.service}}
                     </div>
                 </div>
             </div>
-            <custom-operation *ngIf="selectedOperation" style="margin-left: 4px; flex: 4;" [operation]="selectedOperation" (update)="onOperationUpdate()">
-            </custom-operation>
+            <service-invocation *ngIf="selectedServiceInvocation" style="margin-left: 4px; flex: 4;" [invocation]="selectedServiceInvocation" (update)="onServiceInvocationUpdate()">
+            </service-invocation>
         </div>
 
     </div>

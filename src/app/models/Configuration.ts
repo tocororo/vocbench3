@@ -2,13 +2,14 @@ import { Settings, SettingsProp, Scope } from "./Plugins";
 
 export class ConfigurationComponents {
     static ADVANCED_GRAPH_APPLICATION_STORE = "it.uniroma2.art.semanticturkey.config.sheet2rdf.AdvancedGraphApplicationStore";
+    static CUSTOM_SEARCH_STORE = "it.uniroma2.art.semanticturkey.settings.search.CustomSearchStore";
+    static CUSTOM_SERVICE_DEFINITION_STORE = "it.uniroma2.art.semanticturkey.config.customservice.CustomServiceDefinitionStore";
     static EXPORTER: string = "it.uniroma2.art.semanticturkey.config.exporter.Exporter";
     static IMPORTER: string = "it.uniroma2.art.semanticturkey.config.importer.Importer";
+    static INVOKABLE_REPORER_STORE = "it.uniroma2.art.semanticturkey.config.invokablereporter.InvokableReporterStore";
     static SPARQL_PARAMETERIZATION_STORE: string = "it.uniroma2.art.semanticturkey.config.sparql.SPARQLParameterizationStore";
     static SPARQL_STORE: string = "it.uniroma2.art.semanticturkey.config.sparql.SPARQLStore";
     static TEMPLATE_STORE: string = "it.uniroma2.art.semanticturkey.config.template.TemplateStore";
-    static CUSTOM_SEARCH_STORE = "it.uniroma2.art.semanticturkey.settings.search.CustomSearchStore";
-    static CUSTOM_SERVICE_DEFINITION_STORE = "it.uniroma2.art.semanticturkey.config.customservice.CustomServiceDefinitionStore";
 }
 
 export class Reference {
