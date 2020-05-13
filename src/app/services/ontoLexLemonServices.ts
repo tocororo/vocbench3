@@ -151,6 +151,20 @@ export class OntoLexLemonServices {
     }
 
     /**
+     * 
+     * @param index 
+     * @param lexicon 
+     * @param options 
+     */
+    countLexicalEntriesByAlphabeticIndex(index: string, lexicon: ARTURIResource, options?: VBRequestOptions): Observable<number> {
+        var params: any = {
+            index: index,
+            lexicon: lexicon
+        };
+        return this.httpMgr.doGet(this.serviceName, "countLexicalEntriesByAlphabeticIndex", params, options);
+    }
+
+    /**
      * Returns the lexicon which the lexicalEntry belongs to
      * @param lexicalEntry 
      */

@@ -105,7 +105,15 @@ export class ConceptTreePreference {
     syncInverse: boolean = true; //tells if the narrower/broader properties should be synced with their inverse
     visualization: ConceptTreeVisualizationMode = ConceptTreeVisualizationMode.hierarchyBased;
     multischemeMode: MultischemeMode = MultischemeMode.or;
+    safeToGoMap: SafeToGoMap = {}; //this is not a preference, but it is cached with them since it is contextual to the project 
 }
+
+/**
+ * map <string, boolean> 
+ * checksum: string - it is a representation of the request params (it could be a concat of the params serialization)
+ * safe: boolean tells if the tree/list is safe to be initialized, namely if the amount of elements (root/items) are under a safety limit
+ */
+export interface SafeToGoMap { [checksum: string]: boolean };
 
 export enum ConceptTreeVisualizationMode {
     searchBased = "searchBased",
@@ -120,6 +128,7 @@ export enum MultischemeMode { //tells if the multi-scheme are considered in AND 
 export class LexicalEntryListPreference {
     visualization: LexEntryVisualizationMode = LexEntryVisualizationMode.indexBased;
     indexLength: number = 1;
+    safeToGoMap: SafeToGoMap = {}; //this is not a preference, but it is cached with them since it is contextual to the project 
 }
 
 export enum LexEntryVisualizationMode {

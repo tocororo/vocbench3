@@ -1,6 +1,7 @@
 import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { Observable } from "rxjs";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../../models/ARTResources";
-import { LexEntryVisualizationMode } from "../../../../models/Properties";
+import { LexEntryVisualizationMode, LexicalEntryListPreference, SafeToGoMap } from "../../../../models/Properties";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
@@ -10,6 +11,7 @@ import { TreeListContext, UIUtils } from "../../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../../utils/VBActions";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
+import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { AbstractList } from "../../../abstractList";
 import { LexicalEntryListNodeComponent } from "./lexicalEntryListNodeComponent";
 
@@ -27,7 +29,9 @@ export class LexicalEntryListComponent extends AbstractList {
 
     structRole = RDFResourceRolesEnum.ontolexLexicalEntry;
 
-    constructor(private ontolexService: OntoLexLemonServices, eventHandler: VBEventHandler) {
+    private safeToGoLimit: number = 1000;
+
+    constructor(private ontolexService: OntoLexLemonServices, private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
         super(eventHandler);
         
         this.eventSubscriptions.push(eventHandler.lexicalEntryCreatedEvent.subscribe(
@@ -57,24 +61,78 @@ export class LexicalEntryListComponent extends AbstractList {
         if (this.lexicon != undefined) {
             let visualization: LexEntryVisualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.visualization;
             if (visualization == LexEntryVisualizationMode.indexBased && this.index != undefined) {
-                this.list = [];
-                UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-                this.ontolexService.getLexicalEntriesByAlphabeticIndex(this.index, this.lexicon, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-                    entries => {
-                        //sort by show if rendering is active, uri otherwise
-                        ResourceUtils.sortResources(entries, this.rendering ? SortAttribute.show : SortAttribute.value);
-                        this.list = entries;
-                        UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                this.checkInitializationSafe().subscribe(
+                    proceed => {
+                        if (proceed) {
+                            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+                            this.ontolexService.getLexicalEntriesByAlphabeticIndex(this.index, this.lexicon, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
+                                entries => {
+                                    //sort by show if rendering is active, uri otherwise
+                                    ResourceUtils.sortResources(entries, this.rendering ? SortAttribute.show : SortAttribute.value);
+                                    this.list = entries;
+                                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
 
-                        if (this.pendingSearchRes) {
-                            this.openListAt(this.pendingSearchRes);
+                                    if (this.pendingSearchRes) {
+                                        this.openListAt(this.pendingSearchRes);
+                                    }
+
+                                }
+                            );
                         }
-
                     }
                 );
             } else if (visualization == LexEntryVisualizationMode.searchBased) {
                 //don't do nothing
             }
+        }
+    }
+
+    /**
+     * Perform a check in order to prevent the initialization of the structure with too many elements.
+     * Return true if the initialization is safe or if the user agreed to init the structure anyway
+     */
+    private checkInitializationSafe(): Observable<boolean> {
+        let lexEntryListPreference: LexicalEntryListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences;
+        let unsafetyMessage: string = "The LexicalEntry list has too many elements. " + 
+            "Retrieving them all could be a long process, you might experience performance decrease or it might even hang the system. ";
+        if (LexEntryVisualizationMode.indexBased && lexEntryListPreference.indexLength == 1) {
+            unsafetyMessage += "It is highly recommended to improve the index length or to switch from 'index' to 'search-based' visualization mode.\n";
+        } else { //length 2
+            unsafetyMessage += "It is highly recommended to switch from 'index' to 'search-based' visualization mode.\n";
+        }
+        unsafetyMessage += "Do you want to force the list initialization anyway?";
+
+        let safeToGoMap: SafeToGoMap = lexEntryListPreference.safeToGoMap;
+        let checksum = "lexicon:" + this.lexicon.toNT() + "&index:" + this.index;
+        let safe: boolean = safeToGoMap[checksum];
+        if (safe === true) {
+            return Observable.of(true); //cached to be safe => allow the initalization
+        } else if (safe === false) { //cached to be not safe => warn the user
+            return Observable.fromPromise(
+                this.basicModals.confirm("LexicalEntry list", unsafetyMessage, "warning").then(
+                    () => { return true; },
+                    () => { return false; }
+                )
+            );
+        } else { //never initialized => count
+            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+            return this.ontolexService.countLexicalEntriesByAlphabeticIndex(this.index, this.lexicon, VBRequestOptions.getRequestOptions(this.projectCtx)).flatMap(
+                count => {
+                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                    safe = count < this.safeToGoLimit;
+                    safeToGoMap[checksum] = safe; //cache the safetyness
+                    if (safe) { //safe => proceed
+                        return Observable.of(true);
+                    } else { //limit exceeded, not safe => warn the user
+                        return Observable.fromPromise(
+                            this.basicModals.confirm("LexicalEntry list", unsafetyMessage, "warning").then(
+                                () => { return true; },
+                                () => { return false; }
+                            )
+                        );
+                    }
+                }
+            );
         }
     }
 

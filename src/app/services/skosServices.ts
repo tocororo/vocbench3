@@ -46,6 +46,35 @@ export class SkosServices {
     }
 
     /**
+     * 
+     * @param schemes 
+     * @param schemeFilter 
+     * @param broaderProps 
+     * @param narrowerProps 
+     * @param includeSubProperties 
+     * @param options 
+     */
+    countTopConcepts(timestamp: number, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, 
+        broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], includeSubProperties?: boolean, 
+        options?: VBRequestOptions): Observable<{ count: number, timestamp: number }> {
+        var params: any = {
+            schemes: schemes,
+            schemeFilter: schemeFilter,
+            broaderProps: broaderProps,
+            narrowerProps: narrowerProps,
+            includeSubProperties: includeSubProperties
+        };
+        return this.httpMgr.doGet(this.serviceName, "countTopConcepts", params, options).map(
+            stResp => {
+                return {
+                    count: stResp,
+                    timestamp: timestamp
+                }
+            }
+        );
+    }
+
+    /**
      * Returns the narrowers of the given concept
      * @param concept
      * @param schemes schemes where the narrower should belong

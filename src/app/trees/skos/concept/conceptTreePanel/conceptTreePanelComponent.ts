@@ -50,7 +50,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     private workingSchemes: ARTURIResource[];//keep track of the selected scheme: could be assigned throught @Input scheme or scheme selection
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
-    private visualizationMode: ConceptTreeVisualizationMode;
+    private visualizationMode: ConceptTreeVisualizationMode;//this could be changed dynamically, so each time it is used, get it again from preferences
     
     //for visualization searchBased
     private lastSearch: string;
@@ -116,6 +116,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     }
 
     refresh() {
+        this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences.visualization;
         if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {
             //in index based visualization reinit the list
             this.viewChildTree.init();
@@ -194,6 +195,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
+                this.visualizationMode = projPref.conceptTreePreferences.visualization;
                 if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {
                     if (searchResult.length == 0) {
                         this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
@@ -280,6 +282,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     }
 
     private selectResourceVisualizationModeAware(resource: ARTURIResource) {
+        this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences.visualization;
         if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {
             this.openTreeAt(resource);
         } else {
@@ -353,6 +356,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     private onSchemeChanged(schemes: ARTURIResource[]) {
         this.workingSchemes = schemes;
         //in case of visualization search based reset the list
+        this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences.visualization;
         if (this.visualizationMode == ConceptTreeVisualizationMode.searchBased && this.lastSearch != null) {
             this.viewChildTree.forceList([]);
             this.lastSearch = null;

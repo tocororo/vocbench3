@@ -315,7 +315,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                 } else {
                     this.indexLenght = lexEntryListPref.indexLength;
                     this.onDigitChange();
-                    this.refresh();
+                    //should not be necessary to refresh since the index change triggers a re-init on the child list
                 }
             },
             () => {}
