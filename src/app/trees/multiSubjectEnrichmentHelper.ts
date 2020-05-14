@@ -4,11 +4,11 @@ import { ARTLiteral, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "
 import { CustomForm, CustomFormValue } from "../models/CustomForms";
 import { ResViewPartition, ResViewUtils } from "../models/ResourceView";
 import { OntoLex, OWL, RDFS, SKOS, SKOSXL } from "../models/Vocabulary";
-import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from "../resourceView/renderer/propertyEnrichmentHelper";
-import { AddPropertyValueModalReturnData } from "../resourceView/resViewModals/addPropertyValueModal";
-import { ConstituentListCreatorModalReturnData } from "../resourceView/resViewModals/constituentListCreatorModal";
-import { PropertyListCreatorModalReturnData } from "../resourceView/resViewModals/propertyChainCreatorModal";
-import { ResViewModalServices } from "../resourceView/resViewModals/resViewModalServices";
+import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from "../resourceView/resourceViewEditor/renderer/propertyEnrichmentHelper";
+import { AddPropertyValueModalReturnData } from "../resourceView/resourceViewEditor/resViewModals/addPropertyValueModal";
+import { ConstituentListCreatorModalReturnData } from "../resourceView/resourceViewEditor/resViewModals/constituentListCreatorModal";
+import { PropertyListCreatorModalReturnData } from "../resourceView/resourceViewEditor/resViewModals/propertyChainCreatorModal";
+import { ResViewModalServices } from "../resourceView/resourceViewEditor/resViewModals/resViewModalServices";
 import { ClassesServices } from "../services/classesServices";
 import { IndividualsServices } from "../services/individualsServices";
 import { ManchesterServices } from "../services/manchesterServices";

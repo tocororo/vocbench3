@@ -1,0 +1,14 @@
+<div class="panel panel-default vbox">
+    <div class="panel-heading">
+        <rdf-resource style="flex: 1;" [resource]="resource"></rdf-resource>
+        <button class="btn btn-xs btn-default" (click)="refresh()" title="Refresh">
+            <span class="glyphicon glyphicon-refresh"></span>
+        </button>
+    </div>
+    <div class="panel-body vbox">
+        {{ resource | json }}
+    </div>
+    <div class="panel-footer">
+        footer
+    </div>
+</div>

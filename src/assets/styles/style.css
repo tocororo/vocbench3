@@ -171,7 +171,7 @@ config-bar {
 .project-row:first-of-type { border-top: 1px solid #ddd; }
 .project-row { border-bottom: 1px solid #ddd; }
 
-resource-list, class-individual-tree, resource-view, scheme-selection, data-range-editor, import-tree {
+resource-list, class-individual-tree, scheme-selection, data-range-editor, import-tree {
     display: flex;
     flex: 1;
     min-height: 0;
@@ -808,7 +808,7 @@ input[type="radio"], input[type="checkbox"] {
     margin: 0px;
 }
 
-.tab-content, .tab-content > tab.active {
+.tab-content {
     flex: 1;
     display: flex;
     flex-flow: column;

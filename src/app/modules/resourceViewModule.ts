@@ -1,63 +1,65 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { BroadersPartitionRenderer } from '../resourceView/renderer/impl/broadersPartitionRenderer';
-import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/renderer/impl/classAxiomPartitionRenderer';
-import { ConstituentsPartitionRenderer } from '../resourceView/renderer/impl/constituentsPartitionRenderer';
-import { DatatypeDefinitionPartitionRenderer } from '../resourceView/renderer/impl/datatypeDefinitionPartitionRenderer';
-import { DenotationsPartitionRenderer } from '../resourceView/renderer/impl/denotationsPartitionRenderer';
-import { DisjointPropertiesPartitionRenderer } from '../resourceView/renderer/impl/disjointPropertiesRenderer';
-import { DomainsPartitionRenderer } from '../resourceView/renderer/impl/domainsPartitionRenderer';
-import { EquivalentPropertiesPartitionRenderer } from '../resourceView/renderer/impl/equivalentPropertiesPartitionRenderer';
-import { EvokedLexicalConceptsPartitionRenderer } from '../resourceView/renderer/impl/evokedLexicalConceptsPartitionRenderer';
-import { FormBasedPreviewRenderer } from '../resourceView/renderer/impl/formBasedPreviewRenderer';
-import { FormRepresentationsPartitionRenderer } from '../resourceView/renderer/impl/formRepresentationsPartitionRenderer';
-import { ImportsPartitionRenderer } from '../resourceView/renderer/impl/importsPartitionRenderer';
-import { LabelRelationsPartitionRenderer } from '../resourceView/renderer/impl/labelRelationsPartitionRenderer';
-import { LexicalFormsPartitionRenderer } from '../resourceView/renderer/impl/lexicalFormsPartitionRenderer';
-import { LexicalizationsPartitionRenderer } from '../resourceView/renderer/impl/lexicalizationsPartitionRenderer';
-import { LexicalSensesPartitionRenderer } from '../resourceView/renderer/impl/lexicalSensesPartitionRenderer';
-import { MembersOrderedPartitionRenderer } from '../resourceView/renderer/impl/membersOrderedPartitionRenderer';
-import { MembersPartitionRenderer } from '../resourceView/renderer/impl/membersPartitionRenderer';
-import { NotesPartitionRenderer } from '../resourceView/renderer/impl/notesPartitionRenderer';
-import { PropertiesPartitionRenderer } from '../resourceView/renderer/impl/propertiesPartitionRenderer';
-import { PropertyChainRenderer } from '../resourceView/renderer/impl/propertyChainRenderer';
-import { PropertyFacetsPartitionRenderer } from '../resourceView/renderer/impl/propertyFacetsPartitionRenderer';
-import { RangesPartitionRenderer } from '../resourceView/renderer/impl/rangesPartitionRenderer';
-import { RdfsMembersPartitionRenderer } from '../resourceView/renderer/impl/rdfsMembersPartitionRenderer';
-import { SchemesPartitionRenderer } from '../resourceView/renderer/impl/schemesPartitionRenderer';
-import { SubtermsPartitionRenderer } from '../resourceView/renderer/impl/subtermsPartitionRenderer';
-import { SuperPropertiesPartitionRenderer } from '../resourceView/renderer/impl/superPropertiesPartitionRenderer';
-import { TopConceptsPartitionRenderer } from '../resourceView/renderer/impl/topConceptsPartitionRenderer';
-import { TypesPartitionRenderer } from '../resourceView/renderer/impl/typesPartitionRenderer';
-import { LexicalizationEnrichmentHelper } from '../resourceView/renderer/lexicalizationEnrichmentHelper';
-import { PredicateObjectsRenderer } from '../resourceView/renderer/predicateObjectsRenderer';
-import { ResourceViewValueRenderer } from '../resourceView/renderer/resourceViewValueRenderer';
-import { ResourceRenameComponent } from '../resourceView/resourceRenameComponent';
-import { ResourceTripleEditorModal } from '../resourceView/resourceTripleEditor/resourceTripleEditorModal';
-import { ResourceViewComponent } from '../resourceView/resourceViewComponent';
-import { ResourceViewContextMenu } from '../resourceView/resourceViewCtxMenu';
+import { BroadersPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/broadersPartitionRenderer';
+import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/classAxiomPartitionRenderer';
+import { ConstituentsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/constituentsPartitionRenderer';
+import { DatatypeDefinitionPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/datatypeDefinitionPartitionRenderer';
+import { DenotationsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/denotationsPartitionRenderer';
+import { DisjointPropertiesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/disjointPropertiesRenderer';
+import { DomainsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/domainsPartitionRenderer';
+import { EquivalentPropertiesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/equivalentPropertiesPartitionRenderer';
+import { EvokedLexicalConceptsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/evokedLexicalConceptsPartitionRenderer';
+import { FormBasedPreviewRenderer } from '../resourceView/resourceViewEditor/renderer/impl/formBasedPreviewRenderer';
+import { FormRepresentationsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/formRepresentationsPartitionRenderer';
+import { ImportsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/importsPartitionRenderer';
+import { LabelRelationsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/labelRelationsPartitionRenderer';
+import { LexicalFormsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/lexicalFormsPartitionRenderer';
+import { LexicalizationsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/lexicalizationsPartitionRenderer';
+import { LexicalSensesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/lexicalSensesPartitionRenderer';
+import { MembersOrderedPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/membersOrderedPartitionRenderer';
+import { MembersPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/membersPartitionRenderer';
+import { NotesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/notesPartitionRenderer';
+import { PropertiesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/propertiesPartitionRenderer';
+import { PropertyChainRenderer } from '../resourceView/resourceViewEditor/renderer/impl/propertyChainRenderer';
+import { PropertyFacetsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/propertyFacetsPartitionRenderer';
+import { RangesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/rangesPartitionRenderer';
+import { RdfsMembersPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/rdfsMembersPartitionRenderer';
+import { SchemesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/schemesPartitionRenderer';
+import { SubtermsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/subtermsPartitionRenderer';
+import { SuperPropertiesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/superPropertiesPartitionRenderer';
+import { TopConceptsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/topConceptsPartitionRenderer';
+import { TypesPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/typesPartitionRenderer';
+import { LexicalizationEnrichmentHelper } from '../resourceView/resourceViewEditor/renderer/lexicalizationEnrichmentHelper';
+import { PredicateObjectsRenderer } from '../resourceView/resourceViewEditor/renderer/predicateObjectsRenderer';
+import { ResourceViewValueRenderer } from '../resourceView/resourceViewEditor/renderer/resourceViewValueRenderer';
+import { ResourceRenameComponent } from '../resourceView/resourceViewEditor/resourceRenameComponent';
+import { ResourceTripleEditorComponent } from '../resourceView/resourceTripleEditor/resourceTripleEditorComponent';
+import { ResourceViewEditorComponent } from '../resourceView/resourceViewEditor/resourceViewEditorComponent';
+import { ResourceViewContextMenu } from '../resourceView/resourceViewEditor/resourceViewCtxMenu';
 import { ResourceViewModal } from '../resourceView/resourceViewModal';
-import { ResourceViewPanelComponent } from '../resourceView/resourceViewPanel/resourceViewPanelComponent';
-import { ResourceViewSplittedComponent } from '../resourceView/resourceViewPanel/resourceViewSplittedComponent';
-import { ResourceViewTabbedComponent } from '../resourceView/resourceViewPanel/resourceViewTabbedComponent';
-import { AddManuallyValueModal } from '../resourceView/resViewModals/addManuallyValueModal';
-import { AddPropertyValueModal } from '../resourceView/resViewModals/addPropertyValueModal';
-import { BrowseExternalResourceModal } from '../resourceView/resViewModals/browseExternalResourceModal';
-import { ClassListCreatorModal } from '../resourceView/resViewModals/classListCreatorModal';
-import { ConstituentListCreatorModal } from '../resourceView/resViewModals/constituentListCreatorModal';
-import { CopyLocalesModal } from '../resourceView/resViewModals/copyLocalesModal';
-import { DataRangeEditor } from '../resourceView/resViewModals/dataRangeEditor';
-import { DataRangeEditorModal } from '../resourceView/resViewModals/dataRangeEditorModal';
-import { DatatypeFacetsEditor } from '../resourceView/resViewModals/datatypeFacetsEditor';
-import { DataTypeRestrictionsModal } from '../resourceView/resViewModals/datatypeRestrictionsModal';
-import { InstanceListCreatorModal } from '../resourceView/resViewModals/instanceListCreatorModal';
-import { PropertyChainCreatorModal } from '../resourceView/resViewModals/propertyChainCreatorModal';
-import { RdfsMembersModal } from '../resourceView/resViewModals/rdfsMembersModal';
-import { ResViewModalServices } from '../resourceView/resViewModals/resViewModalServices';
-import { ResViewSettingsModal } from '../resourceView/resViewModals/resViewSettingsModal';
-import { EditableResourceComponent } from '../resourceView/resViewResources/editableResourceComponent';
-import { ReifiedResourceComponent } from '../resourceView/resViewResources/reifiedResourceComponent';
+import { ResourceViewModeDispatcher } from '../resourceView/resourceViewModes/resourceViewModeDispatcher';
+import { ResourceViewSplittedComponent } from '../resourceView/resourceViewModes/resourceViewSplittedComponent';
+import { ResourceViewTabbedComponent } from '../resourceView/resourceViewModes/resourceViewTabbedComponent';
+import { ResourceViewSimpleComponent } from '../resourceView/resourceViewSimple/resourceViewSimpleComponent';
+import { ResourceViewTabContainer } from '../resourceView/resourceViewContainer/resourceViewContainer';
+import { AddManuallyValueModal } from '../resourceView/resourceViewEditor/resViewModals/addManuallyValueModal';
+import { AddPropertyValueModal } from '../resourceView/resourceViewEditor/resViewModals/addPropertyValueModal';
+import { BrowseExternalResourceModal } from '../resourceView/resourceViewEditor/resViewModals/browseExternalResourceModal';
+import { ClassListCreatorModal } from '../resourceView/resourceViewEditor/resViewModals/classListCreatorModal';
+import { ConstituentListCreatorModal } from '../resourceView/resourceViewEditor/resViewModals/constituentListCreatorModal';
+import { CopyLocalesModal } from '../resourceView/resourceViewEditor/resViewModals/copyLocalesModal';
+import { DataRangeEditor } from '../resourceView/resourceViewEditor/resViewModals/dataRangeEditor';
+import { DataRangeEditorModal } from '../resourceView/resourceViewEditor/resViewModals/dataRangeEditorModal';
+import { DatatypeFacetsEditor } from '../resourceView/resourceViewEditor/resViewModals/datatypeFacetsEditor';
+import { DataTypeRestrictionsModal } from '../resourceView/resourceViewEditor/resViewModals/datatypeRestrictionsModal';
+import { InstanceListCreatorModal } from '../resourceView/resourceViewEditor/resViewModals/instanceListCreatorModal';
+import { PropertyChainCreatorModal } from '../resourceView/resourceViewEditor/resViewModals/propertyChainCreatorModal';
+import { RdfsMembersModal } from '../resourceView/resourceViewEditor/resViewModals/rdfsMembersModal';
+import { ResViewModalServices } from '../resourceView/resourceViewEditor/resViewModals/resViewModalServices';
+import { ResViewSettingsModal } from '../resourceView/resourceViewEditor/resViewModals/resViewSettingsModal';
+import { EditableResourceComponent } from '../resourceView/resourceViewEditor/resViewResources/editableResourceComponent';
+import { ReifiedResourceComponent } from '../resourceView/resourceViewEditor/resViewResources/reifiedResourceComponent';
 import { PreferencesModule } from './preferencesModule';
 import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from "./treeAndListModule";
@@ -71,14 +73,16 @@ import { TreeAndListModule } from "./treeAndListModule";
         EditableResourceComponent,
         ReifiedResourceComponent,
         ResourceRenameComponent,
-        ResourceTripleEditorModal,
-        ResourceViewComponent, 
+        ResourceViewSimpleComponent,
+        ResourceTripleEditorComponent,
+        ResourceViewEditorComponent, 
         ResourceViewContextMenu,
         ResourceViewModal,
-        ResourceViewPanelComponent, 
+        ResourceViewModeDispatcher, 
         ResourceViewSplittedComponent,
         ResourceViewTabbedComponent,
         ResourceViewValueRenderer,
+        ResourceViewTabContainer,
         //renderers
         BroadersPartitionRenderer,
         ClassAxiomPartitionPartitionRenderer, 
@@ -127,8 +131,8 @@ import { TreeAndListModule } from "./treeAndListModule";
         ResViewSettingsModal
     ],
     exports: [
-        ResourceViewComponent,
-        ResourceViewPanelComponent,
+        ResourceViewEditorComponent,
+        ResourceViewModeDispatcher,
     ],
     providers: [ResViewModalServices, LexicalizationEnrichmentHelper],
     entryComponents: [
@@ -144,7 +148,6 @@ import { TreeAndListModule } from "./treeAndListModule";
         InstanceListCreatorModal,
         PropertyChainCreatorModal,
         RdfsMembersModal,
-        ResourceTripleEditorModal,
         ResourceViewModal,
         ResViewSettingsModal,
     ]

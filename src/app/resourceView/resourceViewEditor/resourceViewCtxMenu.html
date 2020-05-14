@@ -1,0 +1,22 @@
+<div class="dropdown pull-right">
+    <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" [disabled]="readonly">
+        <span>&#9662;</span>
+    </button>
+    <ul class="dropdown-menu">
+        <li *ngIf="resource.isURIResource()" [ngClass]="{ disabled : isAlignDisabled }">
+            <a (click)="alignResource()">Align with external resource</a>
+        </li>
+        <li *ngIf="isURIResource()" [ngClass]="{ disabled : isSetDeprecatedDisabled }">
+            <a (click)="setAsDeprecated()">Set as deprecated</a>
+        </li>
+        <li *ngIf="showInferred" [ngClass]="{ disabled : isAssertInferredDisabled }">
+            <a (click)="assertInferredStmts()">Assert all the inferred statements</a>
+        </li>
+        <li *ngIf="resource.getRole() == 'xLabel'" [ngClass]="{ disabled : isSpawnFromLabelDisabled }">
+            <a (click)="spawnNewConceptWithLabel()">Spawn new concept from this xLabel</a>
+        </li>
+        <li *ngIf="isOpenDataGraphEnabled()">
+            <a (click)="openDataGraph()">Show in data-oriented graph</a>
+        </li>
+    </ul>
+</div>

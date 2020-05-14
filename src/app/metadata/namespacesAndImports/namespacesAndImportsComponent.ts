@@ -3,7 +3,7 @@ import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ImportType, OntologyImport, PrefixMapping } from "../../models/Metadata";
-import { ResourceViewComponent } from "../../resourceView/resourceViewComponent";
+import { ResourceViewEditorComponent } from "../../resourceView/resourceViewEditor/resourceViewEditorComponent";
 import { MetadataServices } from "../../services/metadataServices";
 import { RefactorServices } from "../../services/refactorServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
@@ -22,7 +22,7 @@ import { OntologyMirrorModal } from "./ontologyMirrorModal";
 })
 export class NamespacesAndImportsComponent {
 
-    @ViewChild(ResourceViewComponent) viewChildResView: ResourceViewComponent;
+    @ViewChild(ResourceViewEditorComponent) viewChildResView: ResourceViewEditorComponent;
 
     // baseURI namespace section
     private pristineBaseURI: string;

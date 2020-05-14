@@ -1,0 +1,48 @@
+<div class="groupPanel">
+
+    <div class="groupPanel-heading">
+        <div class="expandCollapseBtnContainer groupPanel-heading-content" style="margin: 0px">
+            <img src="../../../../../assets/images/icons/arrow.png" (click)="partitionCollapsed = !partitionCollapsed"
+                [ngClass]="{'arrow-right': partitionCollapsed}">
+        </div>
+        <span style="flex: 1">
+            <label class="groupPanel-heading-content">{{label}}:</label>
+        </span>
+        <span class="groupPanel-heading-content groupPanel-add-btn">
+            <button class="resViewPartitionAddBtn" (click)="addHandler(null, 'default')" [title]="addBtnImgTitle" [disabled]="addDisabled">
+                <img [src]="addBtnImgSrc"/>
+            </button>
+            <div *ngIf="addManuallyAllowed" class="btn-group" style="vertical-align: initial;">
+                <button class="transparentBtn" style="width: 12px; padding-right: 2px;" data-toggle="dropdown">
+                    <span class="caret" style="margin: 0px;"></span>
+                </button>
+                <ul class="dropdown-menu pull-right">
+                    <li [ngClass]="{ disabled: addDisabled }"><a (click)="addManually()">Add value manually</a></li>
+                    <li *ngIf="addExteranlResourceAllowed" [ngClass]="{ disabled: addDisabled }">
+                        <a (click)="addExternalValue()">Add value from another project</a>
+                    </li>
+                </ul>
+            </div>
+        </span>
+    </div>
+
+    <div class="groupPanel-body">
+        <ng-template [ngIf]="!partitionCollapsed">
+            <div class="hbox" style="padding: 0px 6px;">
+                <div *ngFor="let f of facets" class="checkbox-inline" style="flex: 1; margin: 6px 0px;">
+                    <label style="font-weight: initial;">
+                        <input type="checkbox" [(ngModel)]="f.value" [disabled]="isChangeFacetDisabled(f)" (change)="changeFacet(f)">
+                        {{f.name}}
+                    </label>
+                </div>
+            </div>
+            <ng-template ngFor let-po [ngForOf]="predicateObjectList">
+                <pred-obj-renderer *ngIf="po.getObjects().length > 0" [pred-obj]="po" [resource]="resource" [rendering]="rendering"
+                    [readonly]="readonly" [partition]="partition" (dblclickObj)="objectDblClick($event)"
+                    (add)="addHandler(po.getPredicate(), $event)" (remove)="removeHandler(po.getPredicate(), $event)">
+               </pred-obj-renderer>
+            </ng-template>
+        </ng-template>
+    </div>
+    
+</div>

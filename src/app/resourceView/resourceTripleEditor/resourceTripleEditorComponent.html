@@ -1,0 +1,23 @@
+<div class="panel panel-default vbox blockingDivHost">
+    <div class="panel-heading">
+        <rdf-resource style="flex: 1;" [resource]="resource"></rdf-resource>
+        <button class="btn btn-xs btn-default" (click)="initDescription()" title="Refresh">
+            <span class="glyphicon glyphicon-refresh"></span>
+        </button>
+    </div>
+    <div class="panel-body vbox">
+        <ntriple-editor [(ngModel)]="description" [disabled]="!editAuthorized"></ntriple-editor>
+    </div>
+    <div class="panel-footer">
+        <button class="btn btn-xs btn-default pull-right" (click)="applyChanges()" [disabled]="!isApplyEnabled()">Apply changes</button>
+    </div>
+
+    <div #blockDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+
+</div>

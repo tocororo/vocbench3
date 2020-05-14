@@ -6,8 +6,8 @@
 
     <ng-template [ngIf]="resViewPanelFlex > 0">
         <div class="sliderX" (mousedown)="onMousedown($event);"></div>
-        <resource-view-panel #resViewPanel [ngStyle]="{ 'flex': resViewPanelFlex }" 
-            (empty)="onResViewEmpty()" (tabSelect)="onTabSelected($event)"></resource-view-panel>
+        <resource-view-mode-dispatcher #resViewPanel [ngStyle]="{ 'flex': resViewPanelFlex }" 
+            (empty)="onResViewEmpty()" (tabSelect)="onTabSelected($event)"></resource-view-mode-dispatcher>
     </ng-template>
 
 </div>
