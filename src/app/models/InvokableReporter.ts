@@ -14,7 +14,7 @@ export class InvokableReporterDefinition {
 export class ServiceInvocation extends Configuration {}
 
 export class ServiceInvocationDefinition {
-    '@type': string;
+    // '@type': string;
     service: string;
     operation: string;
     arguments: string[];

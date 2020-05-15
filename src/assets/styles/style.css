@@ -367,15 +367,17 @@ img.disabled  {
 .listItem.active {
     background-color: #cde8ff;
 }
-
-.listItem rdf-resource {
-	border-radius: 2px;
-	flex: 1;
-}
-
 .listItem.disabled {
     cursor: not-allowed;
     color: #999;
+    pointer-events: none;
+}
+.listItem.disabled.active {
+    background-color: #eee !important;
+}
+.listItem rdf-resource {
+	border-radius: 2px;
+	flex: 1;
 }
 
 .subPanel {

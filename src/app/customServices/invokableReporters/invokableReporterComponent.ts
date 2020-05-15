@@ -31,7 +31,7 @@ export class InvokableReporterComponent {
     }
 
     private initReporter(restoreInvocation: boolean) {
-        this.configurationService.getConfiguration(ConfigurationComponents.INVOKABLE_REPORER_STORE, "sys:" + this.id).subscribe(
+        this.invokableReporterService.getInvokableReporter(this.id).subscribe(
             conf => {
                 this.reporter = conf;
                 this.form = {
@@ -64,7 +64,7 @@ export class InvokableReporterComponent {
         } else {
             this.invokableReporterService.compileReport("sys:" + this.id).subscribe(
                 report => {
-                    this.basicModals.alert("TODO", JSON.stringify(report.sections));
+                    this.basicModals.alert("TODO", JSON.stringify(report.sections, null, 2));
                 }
             );
         }

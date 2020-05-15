@@ -8,7 +8,8 @@
             <label style="flex: 1;">Custom Services</label>
         </div>
         <div class="panel-body vbox scrollableContainer">
-            <div *ngFor="let id of customServiceIds" class="listItem" [ngClass]="{ active: selectedServiceId == id }" (click)="selectService(id)">
+            <div *ngFor="let id of customServiceIds" class="listItem" [ngClass]="{ active: selectedServiceId == id, disabled: context.serviceInvocation }" 
+                (click)="selectService(id).subscribe()">
                 {{id}}
             </div>
         </div>
@@ -39,7 +40,8 @@
                         <label style="flex: 1;">Custom Operations</label>
                     </div>
                     <div class="panel-body vbox scrollableContainer">
-                        <div *ngFor="let o of selectedService.operations" class="listItem" [ngClass]="{ active: selectedOperation == o }" (click)="selectOperation(o)">
+                        <div *ngFor="let o of selectedService.operations" class="listItem" [ngClass]="{ active: selectedOperation == o, disabled: context.serviceInvocation }" 
+                            (click)="selectOperation(o)">
                             {{o.name}}
                         </div>
                     </div>

@@ -12,22 +12,15 @@ export class ServiceInvocationComponent {
     @Input() invocation: ServiceInvocationDefinition;
     @Output() update: EventEmitter<void> = new EventEmitter(); //tells to the parent that the service has been modified
 
-
     constructor(private invokableReporterModals: InvokableReporterModalServices) {}
     
     private editInvocation() {
-        alert("TODO");
-        
-        /* 
-        I need a service that given a service name and an operation name, returns the CustomOperation description, so that I can provide an edit form:
-        namely a form with service name, operation name and parameters
-         */
-        // this.invokableReporterModals.openServiceInvocationEditor("Edit service invocation", this.invocation.reporterId, this.invocation).then(
-        //     ()=> {
-        //         this.update.emit();
-        //     },
-        //     () => {}
-        // )
+        this.invokableReporterModals.openServiceInvocationEditor("Edit Service invocation", this.invocation.reporterId, this.invocation).then(
+            () => {
+                this.update.emit();
+            },
+            () => {}
+        )
     }
 
 }
