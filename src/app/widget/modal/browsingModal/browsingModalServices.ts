@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource } from "../../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { ClassIndividualTreeModal, ClassIndividualTreeModalData } from "./classIndividualTreeModal/classIndividualTreeModal";
 import { ClassTreeModal, ClassTreeModalData } from "./classTreeModal/classTreeModal";
 import { CollectionTreeModal, CollectionTreeModalData } from "./collectionTreeModal/collectionTreeModal";
@@ -115,11 +115,12 @@ export class BrowsingModalServices {
      * @param title the title of the modal
      * @param rootProperties optional , if provided the tree is build with these properties as roots
      * @param resource optional, if provided the returned propertyTree contains 
+     * @param type optional, tells the type of properties to show in the tree
      * just the properties that have as domain the type of the resource 
      * @return if the modal closes with ok returns a promise containing the selected property
      */
-    browsePropertyTree(title: string, rootProperties?: ARTURIResource[], resource?: ARTURIResource, projectCtx?: ProjectContext) {
-        var modalData = new PropertyTreeModalData(title, rootProperties, resource, projectCtx);
+    browsePropertyTree(title: string, rootProperties?: ARTURIResource[], resource?: ARTURIResource, type?: RDFResourceRolesEnum, projectCtx?: ProjectContext) {
+        var modalData = new PropertyTreeModalData(title, rootProperties, resource, type, projectCtx);
         const builder = new BSModalContextBuilder<PropertyTreeModalData>(
             modalData, undefined, PropertyTreeModalData
         );

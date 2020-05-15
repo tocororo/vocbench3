@@ -1,7 +1,7 @@
 import { Component, ElementRef } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource } from '../../../../models/ARTResources';
+import { ARTURIResource, RDFResourceRolesEnum } from '../../../../models/ARTResources';
 import { UIUtils } from "../../../../utils/UIUtils";
 import { ProjectContext } from "../../../../utils/VBContext";
 
@@ -9,12 +9,14 @@ export class PropertyTreeModalData extends BSModalContext {
     /**
      * @param rootProperties optional, if provided the tree is build with these properties as roots
      * @param resource optional, if provided the returned propertyTree contains 
+     * @param type tells the type of the property to show in the tree
      * just the properties that have as domain the type of the resource 
      */
     constructor(
         public title: string = 'Modal Title',
         public rootProperties: ARTURIResource[],
         public resource: ARTURIResource,
+        public type: RDFResourceRolesEnum,
         public projectCtx?: ProjectContext
     ) {
         super();

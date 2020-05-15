@@ -187,7 +187,7 @@ export class ProjectGroupsManagerComponent {
         this.prepareProjectAccess();
         this.prepareProjectBrowse().subscribe(
             () => {
-                this.browsingModals.browsePropertyTree("Select root class", [SKOS.broader], null, this.lastBrowsedProjectCtx).then(
+                this.browsingModals.browsePropertyTree("Select root class", [SKOS.broader], null, null, this.lastBrowsedProjectCtx).then(
                     (prop: ARTURIResource) => {
                         this.revokeProjectAccess();
                         this.baseBroaderProp = prop.getURI();
@@ -207,7 +207,7 @@ export class ProjectGroupsManagerComponent {
         this.prepareProjectAccess();
         this.prepareProjectBrowse().subscribe(
             () => {
-                this.browsingModals.browsePropertyTree("Select a broader property", [SKOS.broader], null, this.lastBrowsedProjectCtx).then(
+                this.browsingModals.browsePropertyTree("Select a broader property", [SKOS.broader], null, null, this.lastBrowsedProjectCtx).then(
                     (prop: ARTURIResource) => {
                         this.revokeProjectAccess();
                         if (!ResourceUtils.containsNode(this.broaderProps, prop)) {
@@ -236,7 +236,7 @@ export class ProjectGroupsManagerComponent {
         this.prepareProjectAccess();
         this.prepareProjectBrowse().subscribe(
             () => {
-                this.browsingModals.browsePropertyTree("Select a narrower property", [SKOS.narrower], null, this.lastBrowsedProjectCtx).then(
+                this.browsingModals.browsePropertyTree("Select a narrower property", [SKOS.narrower], null, null, this.lastBrowsedProjectCtx).then(
                     (prop: ARTURIResource) => {
                         this.revokeProjectAccess();
                         if (!ResourceUtils.containsNode(this.narrowerProps, prop)) {

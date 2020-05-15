@@ -139,6 +139,10 @@ export class ResourcePickerComponent {
             "ConceptScheme": RDFResourceRolesEnum.conceptScheme,
             "Collection": RDFResourceRolesEnum.skosCollection,
             "Property": RDFResourceRolesEnum.property,
+            "AnnotationProperty": RDFResourceRolesEnum.annotationProperty,
+            "DatatypeProperty": RDFResourceRolesEnum.datatypeProperty,
+            "ObjectProperty": RDFResourceRolesEnum.objectProperty,
+            "OntologyProperty": RDFResourceRolesEnum.ontologyProperty,
             "Lexicon": RDFResourceRolesEnum.limeLexicon,
             "LexicalEntry": RDFResourceRolesEnum.ontolexLexicalEntry
         };
@@ -201,8 +205,10 @@ export class ResourcePickerComponent {
                 },
                 () => { }
             );
-        } else if (role == RDFResourceRolesEnum.property) {
-            this.browsingModals.browsePropertyTree("Select a Property", null, null, projectCtx).then(
+        } else if (role == RDFResourceRolesEnum.property || role == RDFResourceRolesEnum.annotationProperty || 
+            role == RDFResourceRolesEnum.datatypeProperty || role == RDFResourceRolesEnum.objectProperty || role == RDFResourceRolesEnum.ontologyProperty) {
+            let propType: RDFResourceRolesEnum = (role != RDFResourceRolesEnum.property) ? role : null; //specify a property type only if it's not the generic "property"
+            this.browsingModals.browsePropertyTree("Select a Property", null, null, propType, projectCtx).then(
                 (selectedResource: ARTURIResource) => {
                     this.updatePickedResource(selectedResource);
                 },
