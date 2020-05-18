@@ -6,7 +6,8 @@
 
             <div *ngIf="isAdminLogged" class="panel panel-default vbox">
                 <div class="panel-heading">
-                    <label>Projects:</label>
+                    <label style="flex: 1;">Projects:</label>
+                    <button class="btn btn-xs btn-default" (click)="editACL()" [disabled]="!selectedProject" title="Edit ACL">ACL</button>
                 </div>
                 <div class="panel-body vbox" style="padding: 0px;">
                     <div class="scrollableContainer">

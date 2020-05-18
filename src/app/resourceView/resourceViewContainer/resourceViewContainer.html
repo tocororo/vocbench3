@@ -11,6 +11,6 @@
         <a (click)="activeView = viewTypeSimplifiedForm">{{viewTypeSimplifiedForm}}</a>
     </li>
     <li *ngIf="isTriplesEditorAvailable" [ngClass]="{ active: viewTypeSourceCode == activeView }">
-        <a (click)="activeView = viewTypeSourceCode">{{viewTypeResourceForm}}</a>
+        <a (click)="activeView = viewTypeSourceCode">{{viewTypeSourceCode}}</a>
     </li>
 </ul>

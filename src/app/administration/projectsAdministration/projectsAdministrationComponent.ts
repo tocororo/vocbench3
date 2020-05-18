@@ -1,5 +1,8 @@
 import { Component } from "@angular/core";
+import { Modal, OverlayConfig } from "ngx-modialog";
+import { BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
 import { Project } from "../../models/Project";
+import { ACLEditorModal, ACLEditorModalData } from "../../project/projectACL/aclEditorModal";
 import { ProjectServices } from "../../services/projectServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "../../utils/VBActions";
@@ -22,7 +25,7 @@ export class ProjectsAdministrationComponent {
     private projSettingsAspect: string = "Project settings";
     private selectedAspect: string;
 
-    constructor(private projectService: ProjectServices) { }
+    constructor(private projectService: ProjectServices, private modal: Modal) { }
 
     ngOnInit() {
         this.isAdminLogged = VBContext.getLoggedUser() && VBContext.getLoggedUser().isAdmin();
@@ -52,6 +55,15 @@ export class ProjectsAdministrationComponent {
         if (this.selectedProject != project) {
             this.selectedProject = project;
         }
+    }
+
+    private editACL() {
+        var modalData = new ACLEditorModalData(this.selectedProject);
+        const builder = new BSModalContextBuilder<ACLEditorModalData>(
+            modalData, undefined, ACLEditorModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.size("sm").keyboard(27).toJSON() };
+        return this.modal.open(ACLEditorModal, overlayConfig);
     }
 
     private isProjUserManagementAuthorized(): boolean {
