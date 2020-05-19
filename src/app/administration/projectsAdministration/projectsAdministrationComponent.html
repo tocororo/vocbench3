@@ -7,7 +7,6 @@
             <div *ngIf="isAdminLogged" class="panel panel-default vbox">
                 <div class="panel-heading">
                     <label style="flex: 1;">Projects:</label>
-                    <button class="btn btn-xs btn-default" (click)="editACL()" [disabled]="!selectedProject" title="Edit ACL">ACL</button>
                 </div>
                 <div class="panel-body vbox" style="padding: 0px;">
                     <div class="scrollableContainer">
@@ -21,13 +20,16 @@
             <div class="panel panel-default vbox" style="margin-left: 5px; flex: 4;">
 
                 <div class="panel-heading" style="justify-content: flex-end">
-                    <div class="btn-group btn-group-xs">
-                        <button *ngIf="isProjUserManagementAuthorized()" class="btn btn-default" [ngClass]="{ active: selectedAspect == projUsersAspect }"
-                            style="padding: 1px 5px;" (click)="selectedAspect = projUsersAspect">{{projUsersAspect}}</button>
-                        <button *ngIf="isProjGroupManagementAuthorized()" class="btn btn-default" [ngClass]="{ active: selectedAspect == projGroupsAspect }"
-                            style="padding: 1px 5px;" (click)="selectedAspect = projGroupsAspect">{{projGroupsAspect}}</button>
-                        <button *ngIf="isProjSettingsAuthorized()" class="btn btn-default" [ngClass]="{ active: selectedAspect == projSettingsAspect }" 
-                            style="padding: 1px 5px;" (click)="selectedAspect = projSettingsAspect">{{projSettingsAspect}}</button>
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group btn-group-xs">
+                            <button *ngIf="isProjUserManagementAuthorized()" class="btn btn-default" [ngClass]="{ active: selectedAspect == projUsersAspect }"
+                                style="padding: 1px 5px;" (click)="selectedAspect = projUsersAspect">{{projUsersAspect}}</button>
+                            <button *ngIf="isProjGroupManagementAuthorized()" class="btn btn-default" [ngClass]="{ active: selectedAspect == projGroupsAspect }"
+                                style="padding: 1px 5px;" (click)="selectedAspect = projGroupsAspect">{{projGroupsAspect}}</button>
+                            <button *ngIf="isProjSettingsAuthorized()" class="btn btn-default" [ngClass]="{ active: selectedAspect == projSettingsAspect }" 
+                                style="padding: 1px 5px;" (click)="selectedAspect = projSettingsAspect">{{projSettingsAspect}}</button>
+                        </div>
+                        <button class="btn btn-xs btn-default" (click)="editACL()" [disabled]="!selectedProject" title="Edit ACL">ACL</button>
                     </div>
                 </div>
 

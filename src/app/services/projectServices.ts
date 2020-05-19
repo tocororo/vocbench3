@@ -298,15 +298,13 @@ export class ProjectServices {
     }
 
     /**
-     * Grants the given access level from the project to the consumer. 
+     * Grants the given access level from the accessed project to the consumer. 
      * If the accessLevel is not provided, revokes any access level assigned from the project to the consumer
-     * @param project 
      * @param consumer 
      * @param accessLevel
      */
-    updateAccessLevel(project: Project, consumer: Project, accessLevel?: AccessLevel) {
+    updateAccessLevel(consumer: Project, accessLevel?: AccessLevel) {
         var params: any = {
-            projectName: project.getName(),
             consumerName: consumer.getName(),
         };
         if (accessLevel != null) {
@@ -316,16 +314,46 @@ export class ProjectServices {
     }
 
     /**
+     * Grants the given access level from the given project to the consumer. 
+     * If the accessLevel is not provided, revokes any access level assigned from the project to the consumer
+     * @param project 
+     * @param consumer 
+     * @param accessLevel
+     */
+    updateProjectAccessLevel(project: Project, consumer: Project, accessLevel?: AccessLevel) {
+        var params: any = {
+            projectName: project.getName(),
+            consumerName: consumer.getName(),
+        };
+        if (accessLevel != null) {
+            params.accessLevel = accessLevel;
+        }
+        return this.httpMgr.doPost(this.serviceName, "updateProjectAccessLevel", params);
+    }
+
+    /**
      * 
      * @param project 
      * @param accessLevel 
      */
-    updateLockLevel(project: Project, lockLevel: LockLevel) {
+    updateLockLevel(lockLevel: LockLevel) {
+        var params = {
+            lockLevel: lockLevel,
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateLockLevel", params);
+    }
+
+    /**
+     * 
+     * @param project 
+     * @param accessLevel 
+     */
+    updateProjectLockLevel(project: Project, lockLevel: LockLevel) {
         var params = {
             projectName: project.getName(),
             lockLevel: lockLevel,
         };
-        return this.httpMgr.doPost(this.serviceName, "updateLockLevel", params);
+        return this.httpMgr.doPost(this.serviceName, "updateProjectLockLevel", params);
     }
 
     /**

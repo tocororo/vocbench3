@@ -5,6 +5,8 @@ import { AccessLevel, AccessStatus, ConsumerACL, LockLevel, Project } from '../.
 import { ProjectServices } from "../../services/projectServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { VBContext } from "../../utils/VBContext";
+import { Observable } from "rxjs";
 
 export class ACLEditorModalData extends BSModalContext {
     constructor(public project: Project) {
@@ -59,12 +61,18 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
         }
         this.basicModals.confirm("Update Access Level", message, "warning").then(
             confirm => {
-                this.projectService.updateAccessLevel(this.context.project, new Project(consumer.name), newLevel).subscribe(
-                    stResp => {
+                let updateFn: Observable<void>;
+                if (VBContext.getLoggedUser().isAdmin()) {
+                    updateFn = this.projectService.updateProjectAccessLevel(this.context.project, new Project(consumer.name), newLevel);
+                } else {
+                    updateFn = this.projectService.updateAccessLevel(new Project(consumer.name), newLevel);
+                }
+                updateFn.subscribe(
+                    () => {
                         consumer.availableACLLevel = newLevel;
                         this.update = true;
                     }
-                ) 
+                );
             },
             reject => {
                 consumer.availableACLLevel = oldLevel;
@@ -77,12 +85,18 @@ export class ACLEditorModal implements ModalComponent<ACLEditorModalData> {
         let message: string = "Are you sure to change project lock to '" + newLevel + "'?";
         this.basicModals.confirm("Update Lock Level", message, "warning").then(
             confirm => {
-                this.projectService.updateLockLevel(this.context.project, newLevel).subscribe(
-                    stResp => {
+                let updateFn: Observable<void>;
+                if (VBContext.getLoggedUser().isAdmin()) {
+                    this.projectService.updateProjectLockLevel(this.context.project, newLevel);
+                } else {
+                    this.projectService.updateLockLevel(newLevel);
+                }
+                updateFn.subscribe(
+                    () => {
                         this.lock.availableLockLevel = newLevel;
                         this.update = true;
                     }
-                )
+                );
             },
             reject => { 
                 this.lock.availableLockLevel = oldLevel;
