@@ -172,7 +172,11 @@ export class ConceptTreeComponent extends AbstractTree {
 
     openTreeAt(node: ARTURIResource) {
         let conceptTreePreference: ConceptTreePreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
-        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.schemes, conceptTreePreference.multischemeMode, null, 
+        let multischemeMode: MultischemeMode = conceptTreePreference.multischemeMode;
+        let broaderProps: ARTURIResource[] = conceptTreePreference.broaderProps.map((prop: string) => new ARTURIResource(prop));
+        let narrowerProps: ARTURIResource[] = conceptTreePreference.narrowerProps.map((prop: string) => new ARTURIResource(prop));
+        let includeSubProps: boolean = conceptTreePreference.includeSubProps;
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.concept, this.schemes, multischemeMode, broaderProps, narrowerProps, includeSubProps, null, 
             VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             path => {
                 if (path.length == 0) {

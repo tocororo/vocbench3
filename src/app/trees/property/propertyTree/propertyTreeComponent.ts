@@ -156,7 +156,8 @@ export class PropertyTreeComponent extends AbstractTree {
     }
 
     openTreeAt(node: ARTURIResource) {
-        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.property, null, null, null, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.property, null, null, null, null, null, null,
+            VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             path => {
                 if (path.length == 0) {
                     this.onTreeNodeNotFound(node);

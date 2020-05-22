@@ -72,7 +72,8 @@ export class ClassTreeComponent extends AbstractTree {
         } else if (this.rootClasses != undefined && this.rootClasses.length == 1) {
             rootForPath = this.rootClasses[0];
         }
-        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.cls, null, null, rootForPath, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
+        this.searchService.getPathFromRoot(node, RDFResourceRolesEnum.cls, null, null, null, null, null, rootForPath, 
+            VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             path => {
                 if (path.length == 0) {
                     this.onTreeNodeNotFound(node);

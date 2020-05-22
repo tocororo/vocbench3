@@ -119,19 +119,29 @@ export class SearchServices {
     }
 
     /**
-     * Returns the shortest path from a root to the given resource
+     * * Returns the shortest path from a root to the given resource
      * @param resource
      * @param role role of the given resource, available roles: "concept", "cls", "property"
      * @param schemes where all the resource of the path should belong (optional and used only for concept)
+     * @param schemeFilter 
+     * @param broaderProps 
+     * @param narrowerProps 
+     * @param includeSubProperties 
      * @param root the root of the class tree (optional and used only for cls)
+     * @param options 
      * @return an array of resources
      */
-    getPathFromRoot(resource: ARTURIResource, role: string, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, root?: ARTURIResource, options?: VBRequestOptions) {
+    getPathFromRoot(resource: ARTURIResource, role: string, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, 
+        broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], includeSubProperties?: boolean, 
+        root?: ARTURIResource, options?: VBRequestOptions) {
         var params: any = {
             role: role,
             resourceURI: resource,
             schemesIRI: schemes,
             schemeFilter: schemeFilter,
+            broaderProps: broaderProps,
+            narrowerProps: narrowerProps,
+            includeSubProperties: includeSubProperties,
             root: root,
         };
         return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, options).map(
