@@ -44,8 +44,9 @@ export class RemoteAlignmentServices {
                             lexicalizationModel: new ARTURIResource(result.rightDataset.lexicalizationModel),
                             open: result.rightDataset.open
                         },
-                        engine: result.engine,
                         status: result.status,
+                        progress: result.progress,
+                        reason: result.reason,
                         startTime: result.startTime,
                         endTime: result.endTime
                     }

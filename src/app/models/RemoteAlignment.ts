@@ -4,10 +4,15 @@ export class RemoteAlignmentTask {
     id: string;
     leftDataset: DatasetInfo;
     rightDataset: DatasetInfo;
-    engine: string;
     status: string;
+    progress?: number;
+    reason?: ReasonInfo;
     startTime: string;
     endTime: string;
+}
+
+export class ReasonInfo {
+    message: string;
 }
 
 export class DatasetInfo {
