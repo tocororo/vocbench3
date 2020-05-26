@@ -1,33 +1,37 @@
 <div class="panel panel-default vbox">
     <div class="panel-body vbox">
 
-        <div *ngIf="safeToGo; else unsafetyBlock" #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
-            <ng-container *ngFor="let n of list; let idx=index">
-                <lexical-entry-list-node *ngIf="idx < nodeLimit && (!n.isDeprecated() || showDeprecated && n.isDeprecated())"
-                    [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated"
-                    [context]="context" [projectCtx]="projectCtx"
-                    (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)">
-                </lexical-entry-list-node>
+        <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
+            
+            <ng-container *ngIf="safeToGo; else unsafetyBlock">
+                <ng-container *ngFor="let n of list; let idx=index">
+                    <lexical-entry-list-node *ngIf="idx < nodeLimit && (!n.isDeprecated() || showDeprecated && n.isDeprecated())"
+                        [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated"
+                        [context]="context" [projectCtx]="projectCtx"
+                        (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)">
+                    </lexical-entry-list-node>
+                </ng-container>
             </ng-container>
-        </div>
 
-        <ng-template #unsafetyBlock>
-            <div class="alert alert-warning" style="margin: 4px;">
-                This LexicalEntry list has a large amount of elements. Retrieving them all could be a long process, 
-                you might experience performance decrease or it might even hang the system.
-                <ng-container *ngIf="unsafeScenario == 'noLexiconMode'">
-                    It is highly recommended to restrict the lexicon selection, to improve the index length or to switch from 'index-based' to 'search-based' visualization mode.
-                </ng-container>
-                <ng-container *ngIf="unsafeScenario == 'oneCharIndex'">
-                    It is highly recommended to improve the index length or to switch from 'index-based' to 'search-based' visualization mode.
-                </ng-container>
-                <ng-container *ngIf="unsafeScenario == 'twoCharIndex'">
-                    It is highly recommended to switch from 'index-based' to 'search-based' visualization mode.
-                </ng-container>
-                <br>
-                If you want to force the lexical entry list initialization at your own risk, click <a href="javascript:void(0)" (click)="forceSafeness()">here</a>
-            </div>
-        </ng-template>
+            <ng-template #unsafetyBlock>
+                <div class="alert alert-warning" style="margin: 4px;">
+                    This LexicalEntry list has a large amount of elements. Retrieving them all could be a long process, 
+                    you might experience performance decrease or it might even hang the system.
+                    <ng-container *ngIf="unsafeScenario == 'noLexiconMode'">
+                        It is highly recommended to restrict the lexicon selection, to improve the index length or to switch from 'index-based' to 'search-based' visualization mode.
+                    </ng-container>
+                    <ng-container *ngIf="unsafeScenario == 'oneCharIndex'">
+                        It is highly recommended to improve the index length or to switch from 'index-based' to 'search-based' visualization mode.
+                    </ng-container>
+                    <ng-container *ngIf="unsafeScenario == 'twoCharIndex'">
+                        It is highly recommended to switch from 'index-based' to 'search-based' visualization mode.
+                    </ng-container>
+                    <br>
+                    If you want to force the lexical entry list initialization at your own risk, click <a href="javascript:void(0)" (click)="forceSafeness()">here</a>
+                </div>
+            </ng-template>
+
+        </div>
 
         <div #blockDivList class="blockingDiv" style="display:none">
             <div class="loadingDiv">
