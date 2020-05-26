@@ -11,7 +11,6 @@ import { TreeListContext, UIUtils } from "../../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../../utils/VBActions";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
-import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { AbstractList } from "../../../abstractList";
 import { LexicalEntryListNodeComponent } from "./lexicalEntryListNodeComponent";
 
@@ -30,8 +29,10 @@ export class LexicalEntryListComponent extends AbstractList {
     structRole = RDFResourceRolesEnum.ontolexLexicalEntry;
 
     private safeToGoLimit: number = 1000;
+    private safeToGo: boolean = true;
+    private unsafeScenario: UnsafeScenario; //describe the scenario where the usafeness happened (useful for customizing the warning alert)
 
-    constructor(private ontolexService: OntoLexLemonServices, private basicModals: BasicModalServices, eventHandler: VBEventHandler) {
+    constructor(private ontolexService: OntoLexLemonServices, eventHandler: VBEventHandler) {
         super(eventHandler);
         
         this.eventSubscriptions.push(eventHandler.lexicalEntryCreatedEvent.subscribe(
@@ -58,85 +59,88 @@ export class LexicalEntryListComponent extends AbstractList {
     }
 
     initImpl() {
-        if (this.lexicon != undefined) {
-            let visualization: LexEntryVisualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.visualization;
-            if (visualization == LexEntryVisualizationMode.indexBased && this.index != undefined) {
-                this.checkInitializationSafe().subscribe(
-                    proceed => {
-                        if (proceed) {
-                            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-                            this.ontolexService.getLexicalEntriesByAlphabeticIndex(this.index, this.lexicon, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
-                                entries => {
-                                    //sort by show if rendering is active, uri otherwise
-                                    ResourceUtils.sortResources(entries, this.rendering ? SortAttribute.show : SortAttribute.value);
-                                    this.list = entries;
-                                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-
-                                    if (this.pendingSearchRes) {
-                                        this.openListAt(this.pendingSearchRes);
-                                    }
-
+        let visualization: LexEntryVisualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences.visualization;
+        if (visualization == LexEntryVisualizationMode.indexBased && this.index != undefined) {
+            this.checkInitializationSafe().subscribe(
+                () => {
+                    if (this.safeToGo) {
+                        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+                        this.ontolexService.getLexicalEntriesByAlphabeticIndex(this.index, this.lexicon, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
+                            entries => {
+                                //sort by show if rendering is active, uri otherwise
+                                ResourceUtils.sortResources(entries, this.rendering ? SortAttribute.show : SortAttribute.value);
+                                this.list = entries;
+                                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                                if (this.pendingSearchRes) {
+                                    this.openListAt(this.pendingSearchRes);
                                 }
-                            );
-                        }
+                            }
+                        );
                     }
-                );
-            } else if (visualization == LexEntryVisualizationMode.searchBased) {
-                //don't do nothing
-            }
+                }
+            );
+        } else if (visualization == LexEntryVisualizationMode.searchBased) {
+            //don't do nothing
         }
     }
 
     /**
-     * Perform a check in order to prevent the initialization of the structure with too many elements.
-     * Return true if the initialization is safe or if the user agreed to init the structure anyway
+     * Forces the safeness of the structure even if it was reported as not safe, then re initialize it
      */
-    private checkInitializationSafe(): Observable<boolean> {
+    private forceSafeness() {
+        this.safeToGo = true;
         let lexEntryListPreference: LexicalEntryListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences;
-        let unsafetyMessage: string = "The LexicalEntry list has too many elements. " + 
-            "Retrieving them all could be a long process, you might experience performance decrease or it might even hang the system. ";
-        if (LexEntryVisualizationMode.indexBased && lexEntryListPreference.indexLength == 1) {
-            unsafetyMessage += "It is highly recommended to improve the index length or to switch from 'index' to 'search-based' visualization mode.\n";
-        } else { //length 2
-            unsafetyMessage += "It is highly recommended to switch from 'index' to 'search-based' visualization mode.\n";
+        let safeToGoMap: SafeToGoMap = lexEntryListPreference.safeToGoMap;
+        let checksum = this.getInitRequestChecksum();
+        safeToGoMap[checksum] = this.safeToGo;
+        this.initImpl();
+    }
+
+    /**
+     * Perform a check in order to prevent the initialization of the structure with too many elements.
+     * Update the safeToGo flag and the cached map
+     */
+    private checkInitializationSafe(): Observable<void> {
+        let lexEntryListPreference: LexicalEntryListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences;
+        if (this.lexicon == null) {
+            this.unsafeScenario = UnsafeScenario.noLexiconMode;
+        } else { //lexicon selected
+            if (lexEntryListPreference.indexLength == 1) {
+                this.unsafeScenario = UnsafeScenario.oneCharIndex;
+            } else {
+                this.unsafeScenario = UnsafeScenario.twoCharIndex;
+            }
         }
-        unsafetyMessage += "Do you want to force the list initialization anyway?";
 
         let safeToGoMap: SafeToGoMap = lexEntryListPreference.safeToGoMap;
-        let checksum = "lexicon:" + this.lexicon.toNT() + "&index:" + this.index;
+
+        let checksum = this.getInitRequestChecksum();
+        
         let safe: boolean = safeToGoMap[checksum];
-        if (safe === true) {
-            return Observable.of(true); //cached to be safe => allow the initalization
-        } else if (safe === false) { //cached to be not safe => warn the user
-            return Observable.fromPromise(
-                this.basicModals.confirm("LexicalEntry list", unsafetyMessage, "warning").then(
-                    () => { return true; },
-                    () => { return false; }
-                )
-            );
-        } else { //never initialized => count
+        if (safe != null) { //found safeness in cache
+            this.safeToGo = safe;
+            return Observable.of(null)
+        } else { //never initialized/cahced => count
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             return this.ontolexService.countLexicalEntriesByAlphabeticIndex(this.index, this.lexicon, VBRequestOptions.getRequestOptions(this.projectCtx)).flatMap(
                 count => {
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                     safe = count < this.safeToGoLimit;
-                    safeToGoMap[checksum] = safe; //cache the safetyness
-                    if (safe) { //safe => proceed
-                        return Observable.of(true);
-                    } else { //limit exceeded, not safe => warn the user
-                        return Observable.fromPromise(
-                            this.basicModals.confirm("LexicalEntry list", unsafetyMessage, "warning").then(
-                                () => { return true; },
-                                () => { return false; }
-                            )
-                        );
-                    }
+                    safeToGoMap[checksum] = safe; //cache the safeness
+                    this.safeToGo = safe;
+                    return Observable.of(null)
                 }
             );
         }
     }
 
+    private getInitRequestChecksum() {
+        let checksum = "lexicon:" + ((this.lexicon != null) ? this.lexicon.toNT() : null) + "&index:" + this.index;
+        return checksum;
+    }
+
     public forceList(list: ARTURIResource[]) {
+        this.safeToGo = true; //prevent the list not showing if a previous index-based initialization set the safeToGo to false
         this.setInitialStatus();
         this.list = list;
     }
@@ -180,4 +184,11 @@ export class LexicalEntryListComponent extends AbstractList {
     }
 
 
+}
+
+enum UnsafeScenario {
+    noLexiconMode = "noLexiconMode", //when there is no lexicon selected => suggest to select a lexicon or to switch to search based
+    oneCharIndex = "oneCharIndex", //index-based mode with 1-char => suggest to increase the index length or to switch to search based
+    twoCharIndex = "twoCharIndex", //index-based mode with 2-char => suggest to switch to search based
+    //for each case it is also provided the possibility to force the initialization
 }

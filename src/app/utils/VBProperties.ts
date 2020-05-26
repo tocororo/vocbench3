@@ -232,7 +232,8 @@ export class VBProperties {
     setActiveLexicon(projectCtx: ProjectContext, lexicon: ARTURIResource) {
         projectCtx.getProjectPreferences().activeLexicon = lexicon;
         this.eventHandler.lexiconChangedEvent.emit({ lexicon: lexicon, project: projectCtx.getProject() });
-        this.prefService.setPUSetting(Properties.pref_active_lexicon, lexicon.getURI(), projectCtx.getProject()).subscribe();
+        let lexiconUri: string = lexicon != null ? lexicon.getURI() : null;
+        this.prefService.setPUSetting(Properties.pref_active_lexicon, lexiconUri, projectCtx.getProject()).subscribe();
     }
 
     getShowFlags(): boolean {

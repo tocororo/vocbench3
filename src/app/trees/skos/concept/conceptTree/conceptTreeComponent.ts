@@ -33,6 +33,7 @@ export class ConceptTreeComponent extends AbstractTree {
     structRole = RDFResourceRolesEnum.concept;
 
     private safeToGoLimit: number = 1000;
+    private safeToGo: boolean = true;
 
     /*
      * when the tree is initialized multiple time in a short amount of time (e.g. when the scheme is changed and then immediately changed again)
@@ -77,8 +78,9 @@ export class ConceptTreeComponent extends AbstractTree {
         if (conceptTreePreference.visualization == ConceptTreeVisualizationMode.hierarchyBased) {
             this.lastInitTimestamp = new Date().getTime();
             this.checkInitializationSafe().subscribe(
-                proceed => {
-                    if (proceed) {
+                () => {
+                    if (this.safeToGo) {
+                        let conceptTreePreference: ConceptTreePreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
                         let broaderProps: ARTURIResource[] = conceptTreePreference.broaderProps.map((prop: string) => new ARTURIResource(prop));
                         let narrowerProps: ARTURIResource[] = conceptTreePreference.narrowerProps.map((prop: string) => new ARTURIResource(prop));
                         let includeSubProps: boolean = conceptTreePreference.includeSubProps;
@@ -108,10 +110,22 @@ export class ConceptTreeComponent extends AbstractTree {
     }
 
     /**
+     * Forces the safeness of the structure even if it was reported as not safe, then re initialize it
+     */
+    private forceSafeness() {
+        this.safeToGo = true;
+        let conceptTreePreference: ConceptTreePreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
+        let safeToGoMap: SafeToGoMap = conceptTreePreference.safeToGoMap;
+        let checksum = this.getInitRequestChecksum();
+        safeToGoMap[checksum] = this.safeToGo;
+        this.initImpl();
+    }
+
+    /**
      * Perform a check in order to prevent the initialization of the structure with too many elements
      * Return true if the initialization is safe or if the user agreed to init the structure anyway
      */
-    private checkInitializationSafe(): Observable<boolean> {
+    private checkInitializationSafe(): Observable<void> {
         let conceptTreePreference: ConceptTreePreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
         let multischemeMode: MultischemeMode = conceptTreePreference.multischemeMode;
         let broaderProps: ARTURIResource[] = conceptTreePreference.broaderProps.map((prop: string) => new ARTURIResource(prop));
@@ -119,50 +133,41 @@ export class ConceptTreeComponent extends AbstractTree {
         let includeSubProps: boolean = conceptTreePreference.includeSubProps;
         let safeToGoMap: SafeToGoMap = conceptTreePreference.safeToGoMap;
 
-        let unsafetyMessage = "The concept tree has a large amount of top concepts. " + 
-            "Retrieving them all could be a long process, you might experience performance decrease or it might even hang the system. " + 
-            "It is highly recommended to switch from 'hierarchy' to 'search-based' visualization mode from the tree settings.\n" + 
-            "Do you want to force the tree initialization anyway?";
+        let checksum = this.getInitRequestChecksum();
 
+        let safe: boolean = safeToGoMap[checksum];
+        if (safe != null) { //found safeness in cache
+            this.safeToGo = safe;
+            return Observable.of(null)
+        } else { //never initialized => count
+            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+            return this.skosService.countTopConcepts(this.lastInitTimestamp, this.schemes, multischemeMode, broaderProps, narrowerProps, includeSubProps, VBRequestOptions.getRequestOptions(this.projectCtx)).flatMap(
+                data => {
+                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                    safe = data.count < this.safeToGoLimit;
+                    safeToGoMap[checksum] = safe; //cache the safeness
+                    if (data.timestamp != this.lastInitTimestamp) { //a newest request has been performed => stop this initialization
+                        return Observable.of(null)
+                    }
+                    this.safeToGo = safe;
+                    return Observable.of(null)
+                }
+            );
+        }
+    }
+
+    private getInitRequestChecksum() {
+        let conceptTreePreference: ConceptTreePreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
+        let multischemeMode: MultischemeMode = conceptTreePreference.multischemeMode;
+        let broaderProps: ARTURIResource[] = conceptTreePreference.broaderProps.map((prop: string) => new ARTURIResource(prop));
+        let narrowerProps: ARTURIResource[] = conceptTreePreference.narrowerProps.map((prop: string) => new ARTURIResource(prop));
+        let includeSubProps: boolean = conceptTreePreference.includeSubProps;
         let checksum = "schemes:" + this.schemes.map(s => s.toNT()).join(",") + 
             "&multischemeMode:" + multischemeMode + 
             "&broaderProps:" + broaderProps + 
             "&narrowerProps:" + narrowerProps + 
             "&includeSubProps:" + includeSubProps;
-
-        let safe: boolean = safeToGoMap[checksum];
-        if (safe === true) { //cached to be safe => allow the initalization
-            return Observable.of(true)
-        } else if (safe === false) { //cached to be not safe => warn the user
-            return Observable.fromPromise(
-                this.basicModals.confirm("Concept tree", unsafetyMessage, "warning").then(
-                    () => { return true; },
-                    () => { return false; }
-                )
-            );
-        } else { //never initialized => count
-            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-            return this.skosService.countTopConcepts(this.lastInitTimestamp, this.schemes, multischemeMode, broaderProps, narrowerProps, includeSubProps, VBRequestOptions.getRequestOptions(this.projectCtx)).flatMap(
-                data => {
-                    if (data.timestamp != this.lastInitTimestamp) { //a newest request has been performed => stop this initialization
-                        return Observable.of(false);
-                    }
-                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                    safe = data.count < this.safeToGoLimit;
-                    safeToGoMap[checksum] = safe; //cache the safetyness
-                    if (safe) { //safe => proceed
-                        return Observable.of(true);
-                    } else { //limit exceeded, not safe => warn the user
-                        return Observable.fromPromise(
-                            this.basicModals.confirm("Concept tree", unsafetyMessage, "warning").then(
-                                () => { return true; },
-                                () => { return false; }
-                            )
-                        );
-                    }
-                }
-            );
-        }
+        return checksum;
     }
 
     public forceList(list: ARTURIResource[]) {

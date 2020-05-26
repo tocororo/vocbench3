@@ -1,14 +1,25 @@
 <div class="panel panel-default vbox">
     <div class="panel-body vbox">
 
-        <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
-            <ng-template ngFor let-r [ngForOf]="roots" let-idx="index">
+        <div *ngIf="safeToGo; else unsafetyBlock" #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
+            <ng-container *ngFor="let r of roots; let idx = index">
                 <concept-tree-node *ngIf="idx < rootLimit && (!r.isDeprecated() || showDeprecated && r.isDeprecated())"
                     [node]="r" [projectCtx]="projectCtx" [schemes]="schemes" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context"
                     (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
                 </concept-tree-node>
-            </ng-template>
+            </ng-container>
         </div>
+
+        <ng-template #unsafetyBlock>
+            <div class="alert alert-warning" style="margin: 4px;">
+                This Concept tree has a large amount of top concepts. Retrieving them all could be a long process, 
+                you might experience performance decrease or it might even hang the system.
+                It is highly recommended to restrict the scheme selection (if possible) or
+                to switch from 'hierarchy' to 'search-based' visualization mode from the tree settings.
+                <br>
+                If you want to force the Concept tree initialization at your own risk, click <a href="javascript:void(0)" (click)="forceSafeness()">here</a>.
+            </div>
+        </ng-template>
 
         <div #blockDivTree class="blockingDiv" style="display:none">
             <div class="loadingDiv">

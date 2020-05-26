@@ -37,7 +37,11 @@ export class LexiconListComponent extends AbstractList {
         this.eventSubscriptions.push(eventHandler.lexiconChangedEvent.subscribe(
             (data: { lexicon: ARTURIResource, project: Project }) => {
                 if (data.project.getName() == VBContext.getWorkingProjectCtx(this.projectCtx).getProject().getName()) {
-                    this.activeLexicon = this.list[ResourceUtils.indexOfNode(this.list, data.lexicon)]
+                    if (data.lexicon != null) {
+                        this.activeLexicon = this.list.find(n => n.equals(data.lexicon));
+                    } else {
+                        this.activeLexicon = null;
+                    }
                 }
             })
         );
@@ -105,9 +109,13 @@ export class LexiconListComponent extends AbstractList {
         this.nodeSelected.emit(node);
     }
 
-    private updateActiveLexiconPref() {
+    private toggleLexicon(lexicon: ARTURIResource) {
+        if (this.activeLexicon == lexicon) {
+            this.activeLexicon = null;
+        } else {
+            this.activeLexicon = lexicon;
+        }
         this.vbProp.setActiveLexicon(VBContext.getWorkingProjectCtx(this.projectCtx), this.activeLexicon);
     }
-
 
 }

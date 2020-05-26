@@ -9,8 +9,9 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Enabled manipulation of Maple choices in a remote-service alignment task (Still to complete).
   * Improved CustomForm widget by exploiting new PEARL annotations.
   * Enabled organization of projects in directories.
-  * Enabled the AND-scheme for browsing concept tree.
   * Renewed the ACL matrix.
+  * Enabled the AND-scheme for browsing concept tree.
+  * Enabled the no-lexicon mode in LexicalEntry panel.
   * Improved Manchester syntax editor with autocomplation and error markers.
   * Enabled the usage of the new Metadata Registry module of SemanticTurkey.
   * Minor bugfixes and improvements.

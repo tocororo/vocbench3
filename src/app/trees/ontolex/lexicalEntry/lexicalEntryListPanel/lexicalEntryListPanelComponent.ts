@@ -133,27 +133,9 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
 
     //@Override
     isActionDisabled(action: ActionDescription) {
-        //In addition to the cross-panel conditions, in this case the actions are disabled if the panel is in no-scheme mode
+        //In addition to the cross-panel conditions, in this case the actions are disabled if the panel is in no-lexicon mode
         return super.isActionDisabled(action) || !this.workingLexicon
     }
-
-    // private create() {
-    //     this.creationModals.newResourceWithLiteralCf("Create new ontolex:LexicalEntry", OntoLex.lexicalEntry, true, "Canonical Form",
-    //         this.lexiconLang, { constrain: true, locale: true }).then(
-    //         (data: NewResourceWithLiteralCfModalReturnData) => {
-    //             this.ontolexService.createLexicalEntry(data.literal, this.workingLexicon, data.uriResource, data.cls, data.cfValue).subscribe();
-    //         },
-    //         () => { }
-    //     );
-    // }
-
-    // delete() {
-    //     this.ontolexService.deleteLexicalEntry(this.selectedNode).subscribe(
-    //         stResp => {
-    //             this.selectedNode = null;
-    //         }
-    //     );
-    // }
 
     doSearch(searchedText: string) {
         this.lastSearch = searchedText;

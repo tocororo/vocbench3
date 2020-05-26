@@ -34,15 +34,12 @@ export class ResourceViewValueRenderer {
     @HostBinding("class.imported") importedClass: boolean = false;
     @HostBinding("class.inferred") inferredClass: boolean = false;
 
-    private actionRemoveTitle: string;
     private graphTitle: string;
 
     ngOnInit() {
         //init classes for coloring the value according the scope of the triple imported/inferred
         this.importedClass = this.object.getAdditionalProperty(ResAttribute.TRIPLE_SCOPE) == TripleScopes.imported;
         this.inferredClass = this.object.getAdditionalProperty(ResAttribute.TRIPLE_SCOPE) == TripleScopes.inferred;
-
-        this.actionRemoveTitle = "Remove " + this.predicate.getShow();
 
         //init the tooltip for the triple graphs
         let graphs: ARTURIResource[] = this.object.getTripleGraphs();
