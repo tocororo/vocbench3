@@ -22,6 +22,14 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
 
     private pristineConcPref: ConceptTreePreference;
 
+    private visualization: ConceptTreeVisualizationMode;
+    private visualizationModes: { label: string, value: ConceptTreeVisualizationMode }[] = [
+        { label: "Hierarchy based", value: ConceptTreeVisualizationMode.hierarchyBased },
+        { label: "Search based", value: ConceptTreeVisualizationMode.searchBased }
+    ]
+
+    private safeToGoLimit: number;
+
     private baseBroaderProp: string;
 
     private broaderProps: ARTURIResource[] = [];
@@ -31,12 +39,6 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
 
     private selectedBroader: ARTURIResource;
     private selectedNarrower: ARTURIResource;
-
-    private visualization: ConceptTreeVisualizationMode;
-    private visualizationModes: { label: string, value: ConceptTreeVisualizationMode }[] = [
-        { label: "Hierarchy based", value: ConceptTreeVisualizationMode.hierarchyBased },
-        { label: "Search based", value: ConceptTreeVisualizationMode.searchBased }
-    ]
 
     private userGroup: UsersGroup;
     private userGroupBaseBroaderProp: string;
@@ -54,6 +56,8 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
         this.pristineConcPref = JSON.parse(JSON.stringify(conceptTreePref));
 
         this.selectedMultischemeMode = conceptTreePref.multischemeMode;
+
+        this.safeToGoLimit = conceptTreePref.safeToGoLimit;
         
         this.baseBroaderProp = conceptTreePref.baseBroaderUri;
 
@@ -277,6 +281,10 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
         if (this.visualization == ConceptTreeVisualizationMode.hierarchyBased) {
             if (this.pristineConcPref.multischemeMode != this.selectedMultischemeMode) {
                 this.vbProp.setMultischemeMode(this.selectedMultischemeMode);
+            }
+
+            if (this.pristineConcPref.safeToGoLimit != this.safeToGoLimit) {
+                this.vbProp.setConceptTreeSafeToGoLimit(this.safeToGoLimit);
             }
 
             if (this.pristineConcPref.baseBroaderUri != this.baseBroaderProp) {

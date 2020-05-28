@@ -17,15 +17,30 @@
                     </select>
                 </td>
             </tr>
-            <tr *ngIf="visualization == 'indexBased'">
-                <td nowrap>
-                    <label>Index length</label>
-                </td>
-                <td>
-                    <select class="form-control input-sm" [(ngModel)]="indexLenght">
-                        <option *ngFor="let l of lenghtChoices">{{l}}</option>
-                    </select>
-                </td>
+            <ng-container *ngIf="visualization == 'indexBased'">
+                <tr>
+                    <td nowrap>
+                        <label>
+                            Lexical entries limitation
+                            <span class="glyphicon glyphicon-info-sign" 
+                                title="Sets the maximum amount of lexical entries visible in the list. This setting prevents the initialization of a list that might cause performance issues"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <input class="form-control input-sm" type="number" min="1" [(ngModel)]="safeToGoLimit">
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap>
+                        <label>Index length</label>
+                    </td>
+                    <td>
+                        <select class="form-control input-sm" [(ngModel)]="indexLenght">
+                            <option *ngFor="let l of lenghtChoices">{{l}}</option>
+                        </select>
+                    </td>
+                </tr>
+            </ng-container>
         </tbody>
     </table>
 

@@ -81,7 +81,7 @@
         </div>
 
         <concept-tree [projectCtx]="projectCtx" [schemes]="workingSchemes" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated" [context]="context"
-            (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" (conceptRemovedFromScheme)="onConceptRemovedFromScheme($event)">
+            (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" (conceptRemovedFromScheme)="onConceptRemovedFromScheme($event)" (requireSettings)="settings()">
         </concept-tree>
     </div>
 

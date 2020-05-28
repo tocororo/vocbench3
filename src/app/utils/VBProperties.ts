@@ -48,8 +48,8 @@ export class VBProperties {
             Properties.pref_class_tree_filter, Properties.pref_class_tree_root, Properties.pref_instance_list_visualization,
             Properties.pref_concept_tree_base_broader_prop, Properties.pref_concept_tree_broader_props, Properties.pref_concept_tree_narrower_props,
             Properties.pref_concept_tree_include_subprops, Properties.pref_concept_tree_sync_inverse, Properties.pref_concept_tree_visualization,
-            Properties.pref_concept_tree_multischeme_mode,
-            Properties.pref_lex_entry_list_visualization, Properties.pref_lex_entry_list_index_lenght,
+            Properties.pref_concept_tree_multischeme_mode, Properties.pref_concept_tree_safe_to_go_limit,
+            Properties.pref_lex_entry_list_visualization, Properties.pref_lex_entry_list_index_lenght, Properties.pref_lex_entry_list_safe_to_go_limit,
             Properties.pref_editing_language, Properties.pref_filter_value_languages,
             Properties.pref_res_view_partition_filter, Properties.pref_graph_view_partition_filter, Properties.pref_hide_literal_graph_nodes
         ];
@@ -172,6 +172,10 @@ export class VBProperties {
                 if (conceptTreeMultischemeModePref != null && conceptTreeMultischemeModePref == MultischemeMode.and) {
                     conceptTreePreferences.multischemeMode = conceptTreeMultischemeModePref;
                 }
+                let conceptTreeSafeToGoLimitPref: string = prefs[Properties.pref_concept_tree_safe_to_go_limit];
+                if (conceptTreeSafeToGoLimitPref != null) {
+                    conceptTreePreferences.safeToGoLimit = parseInt(conceptTreeSafeToGoLimitPref);
+                }
 
                 conceptTreePreferences.includeSubProps = prefs[Properties.pref_concept_tree_include_subprops] != "false";
                 conceptTreePreferences.syncInverse = prefs[Properties.pref_concept_tree_sync_inverse] != "false";
@@ -184,6 +188,10 @@ export class VBProperties {
                 let lexEntryListVisualizationPref: string = prefs[Properties.pref_lex_entry_list_visualization];
                 if (lexEntryListVisualizationPref == LexEntryVisualizationMode.searchBased) {
                     lexEntryListPreferences.visualization = lexEntryListVisualizationPref;
+                }
+                let lexEntryListSafeToGoLimitPref: string = prefs[Properties.pref_lex_entry_list_safe_to_go_limit];
+                if (lexEntryListSafeToGoLimitPref != null) {
+                    lexEntryListPreferences.safeToGoLimit = parseInt(lexEntryListSafeToGoLimitPref);
                 }
                 let lexEntryListIndexLenghtPref: string = prefs[Properties.pref_lex_entry_list_index_lenght];
                 if (lexEntryListIndexLenghtPref == "2") {
@@ -300,6 +308,12 @@ export class VBProperties {
         this.prefService.setPUSetting(Properties.pref_concept_tree_multischeme_mode, mode).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.multischemeMode = mode;
     }
+    setConceptTreeSafeToGoLimit(limit: number) {
+        this.prefService.setPUSetting(Properties.pref_concept_tree_safe_to_go_limit, limit+"").subscribe();
+        let conceptTreePref = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences; 
+        conceptTreePref.safeToGoLimit = limit;
+        conceptTreePref.safeToGoMap = {}; //changing the limit invalidated the safe => reset the map
+    }
     setConceptTreeBaseBroaderProp(propUri: string) {
         this.prefService.setPUSetting(Properties.pref_concept_tree_base_broader_prop, propUri).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.baseBroaderUri = propUri;
@@ -337,6 +351,12 @@ export class VBProperties {
     setLexicalEntryListVisualization(mode: LexEntryVisualizationMode) {
         this.prefService.setPUSetting(Properties.pref_lex_entry_list_visualization, mode).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences.visualization = mode;
+    }
+    setLexicalEntryListSafeToGoLimit(limit: number) {
+        this.prefService.setPUSetting(Properties.pref_concept_tree_safe_to_go_limit, limit+"").subscribe();
+        let lexEntryListPref = VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences;
+        lexEntryListPref.safeToGoLimit = limit;
+        lexEntryListPref.safeToGoMap = {}; //changing the limit invalidated the safe => reset the map
     }
     setLexicalEntryListIndexLenght(lenght: number) {
         this.prefService.setPUSetting(Properties.pref_lex_entry_list_index_lenght, lenght+"").subscribe();

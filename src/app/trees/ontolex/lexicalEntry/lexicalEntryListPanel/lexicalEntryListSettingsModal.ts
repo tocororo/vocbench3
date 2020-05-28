@@ -20,6 +20,8 @@ export class LexicalEntryListSettingsModal implements ModalComponent<BSModalCont
         { label: "Search based", value: LexEntryVisualizationMode.searchBased }
     ]
 
+    private safeToGoLimit: number;
+
     private indexLenght: number;
     private lenghtChoices: number[] = [1, 2];
 
@@ -31,6 +33,7 @@ export class LexicalEntryListSettingsModal implements ModalComponent<BSModalCont
         let lexEntryPref: LexicalEntryListPreference = VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences;
         this.pristineLexEntryPref = JSON.parse(JSON.stringify(lexEntryPref));
         this.visualization = lexEntryPref.visualization;
+        this.safeToGoLimit = lexEntryPref.safeToGoLimit;
         this.indexLenght = lexEntryPref.indexLength;
     }
 
@@ -38,8 +41,14 @@ export class LexicalEntryListSettingsModal implements ModalComponent<BSModalCont
         if (this.pristineLexEntryPref.visualization != this.visualization) {
             this.vbProp.setLexicalEntryListVisualization(this.visualization);
         }
-        if (this.visualization == LexEntryVisualizationMode.indexBased && this.pristineLexEntryPref.indexLength != this.indexLenght) {
-            this.vbProp.setLexicalEntryListIndexLenght(this.indexLenght);
+        
+        if (this.visualization == LexEntryVisualizationMode.indexBased) {
+            if (this.pristineLexEntryPref.safeToGoLimit != this.safeToGoLimit) {
+                this.vbProp.setLexicalEntryListSafeToGoLimit(this.safeToGoLimit);
+            }
+            if (this.pristineLexEntryPref.indexLength != this.indexLenght) {
+                this.vbProp.setLexicalEntryListIndexLenght(this.indexLenght);
+            }
         }
         
         event.stopPropagation();

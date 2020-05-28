@@ -1,7 +1,7 @@
-import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { Observable } from "rxjs";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../../models/ARTResources";
-import { LexEntryVisualizationMode, LexicalEntryListPreference, SafeToGoMap } from "../../../../models/Properties";
+import { LexEntryVisualizationMode, LexicalEntryListPreference, SafeToGo, SafeToGoMap } from "../../../../models/Properties";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
 import { OntoLexLemonServices } from "../../../../services/ontoLexLemonServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
@@ -25,12 +25,13 @@ export class LexicalEntryListComponent extends AbstractList {
 
     @Input() index: string; //initial letter of the entries to show
     @Input() lexicon: ARTURIResource;
+    @Output() requireSettings = new EventEmitter<void>(); //requires to the parent panel to open/change settings
 
     structRole = RDFResourceRolesEnum.ontolexLexicalEntry;
 
-    private safeToGoLimit: number = 1000;
-    private safeToGo: boolean = true;
-    private unsafeScenario: UnsafeScenario; //describe the scenario where the usafeness happened (useful for customizing the warning alert)
+    private safeToGoLimit: number;
+    private safeToGo: SafeToGo = { safe: true };
+    private unsafeIndexOneChar: boolean; //true if in case of safeToGo = false, the current index is 1-char
 
     constructor(private ontolexService: OntoLexLemonServices, eventHandler: VBEventHandler) {
         super(eventHandler);
@@ -63,7 +64,7 @@ export class LexicalEntryListComponent extends AbstractList {
         if (visualization == LexEntryVisualizationMode.indexBased && this.index != undefined) {
             this.checkInitializationSafe().subscribe(
                 () => {
-                    if (this.safeToGo) {
+                    if (this.safeToGo.safe) {
                         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
                         this.ontolexService.getLexicalEntriesByAlphabeticIndex(this.index, this.lexicon, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                             entries => {
@@ -88,7 +89,7 @@ export class LexicalEntryListComponent extends AbstractList {
      * Forces the safeness of the structure even if it was reported as not safe, then re initialize it
      */
     private forceSafeness() {
-        this.safeToGo = true;
+        this.safeToGo = { safe: true };
         let lexEntryListPreference: LexicalEntryListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences;
         let safeToGoMap: SafeToGoMap = lexEntryListPreference.safeToGoMap;
         let checksum = this.getInitRequestChecksum();
@@ -102,32 +103,24 @@ export class LexicalEntryListComponent extends AbstractList {
      */
     private checkInitializationSafe(): Observable<void> {
         let lexEntryListPreference: LexicalEntryListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences;
-        if (this.lexicon == null) {
-            this.unsafeScenario = UnsafeScenario.noLexiconMode;
-        } else { //lexicon selected
-            if (lexEntryListPreference.indexLength == 1) {
-                this.unsafeScenario = UnsafeScenario.oneCharIndex;
-            } else {
-                this.unsafeScenario = UnsafeScenario.twoCharIndex;
-            }
-        }
-
         let safeToGoMap: SafeToGoMap = lexEntryListPreference.safeToGoMap;
+        this.safeToGoLimit = lexEntryListPreference.safeToGoLimit;
+        this.unsafeIndexOneChar = lexEntryListPreference.indexLength == 1;
 
         let checksum = this.getInitRequestChecksum();
         
-        let safe: boolean = safeToGoMap[checksum];
-        if (safe != null) { //found safeness in cache
-            this.safeToGo = safe;
+        let safeness: SafeToGo = safeToGoMap[checksum];
+        if (safeness != null) { //found safeness in cache
+            this.safeToGo = safeness;
             return Observable.of(null)
         } else { //never initialized/cahced => count
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             return this.ontolexService.countLexicalEntriesByAlphabeticIndex(this.index, this.lexicon, VBRequestOptions.getRequestOptions(this.projectCtx)).flatMap(
                 count => {
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                    safe = count < this.safeToGoLimit;
-                    safeToGoMap[checksum] = safe; //cache the safeness
-                    this.safeToGo = safe;
+                    safeness = { safe: count < this.safeToGoLimit, count: count };
+                    safeToGoMap[checksum] = safeness; //cache the safeness
+                    this.safeToGo = safeness;
                     return Observable.of(null)
                 }
             );
@@ -140,7 +133,7 @@ export class LexicalEntryListComponent extends AbstractList {
     }
 
     public forceList(list: ARTURIResource[]) {
-        this.safeToGo = true; //prevent the list not showing if a previous index-based initialization set the safeToGo to false
+        this.safeToGo = { safe: true }; //prevent the list not showing if a previous index-based initialization set the safeToGo to false
         this.setInitialStatus();
         this.list = list;
     }
@@ -184,11 +177,4 @@ export class LexicalEntryListComponent extends AbstractList {
     }
 
 
-}
-
-enum UnsafeScenario {
-    noLexiconMode = "noLexiconMode", //when there is no lexicon selected => suggest to select a lexicon or to switch to search based
-    oneCharIndex = "oneCharIndex", //index-based mode with 1-char => suggest to increase the index length or to switch to search based
-    twoCharIndex = "twoCharIndex", //index-based mode with 2-char => suggest to switch to search based
-    //for each case it is also provided the possibility to force the initialization
 }

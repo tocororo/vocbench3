@@ -85,7 +85,7 @@
         </div>
 
         <lexical-entry-list [lexicon]="workingLexicon" [index]="index" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated"
-            [context]="context" [projectCtx]="projectCtx" (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)">
+            [context]="context" [projectCtx]="projectCtx" (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)" (requireSettings)="settings()">
         </lexical-entry-list>
     </div>
 

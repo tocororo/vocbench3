@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { Observable } from "rxjs";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
-import { ConceptTreePreference, ConceptTreeVisualizationMode, MultischemeMode, SafeToGoMap } from "../../../../models/Properties";
+import { ConceptTreePreference, ConceptTreeVisualizationMode, MultischemeMode, SafeToGo, SafeToGoMap } from "../../../../models/Properties";
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
 import { AuthorizationEvaluator } from "../../../../utils/AuthorizationEvaluator";
@@ -24,16 +24,17 @@ import { ConceptTreeNodeComponent } from "./conceptTreeNodeComponent";
 export class ConceptTreeComponent extends AbstractTree {
 
     @Input() schemes: ARTURIResource[];
-    @Output() conceptRemovedFromScheme = new EventEmitter<ARTURIResource>();//used to report a concept removed from a scheme
-    //only when the scheme is the one used in the current concept tree
+    @Output() conceptRemovedFromScheme = new EventEmitter<ARTURIResource>();//used to report a concept removed from a scheme only when the scheme is the one used in the current concept tree
+    @Output() requireSettings = new EventEmitter<void>(); //requires to the parent panel to open/change settings
+    
 
     //ConceptTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(ConceptTreeNodeComponent) viewChildrenNode: QueryList<ConceptTreeNodeComponent>;
 
     structRole = RDFResourceRolesEnum.concept;
 
-    private safeToGoLimit: number = 1000;
-    private safeToGo: boolean = true;
+    private safeToGoLimit: number;
+    private safeToGo: SafeToGo = { safe: true };
 
     /*
      * when the tree is initialized multiple time in a short amount of time (e.g. when the scheme is changed and then immediately changed again)
@@ -54,8 +55,8 @@ export class ConceptTreeComponent extends AbstractTree {
             (data: any) => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
         this.eventSubscriptions.push(eventHandler.conceptRemovedAsTopConceptEvent.subscribe(
             (data: any) => this.onConceptRemovedFromScheme(data.concept, data.scheme)));
-        this.eventSubscriptions.push(eventHandler.multischemeModeChangedEvent.subscribe( //multischeme mode changed => reinit tree
-            () => this.init()
+        this.eventSubscriptions.push(eventHandler.multischemeModeChangedEvent.subscribe(
+            () => this.init() //multischeme mode changed => reinit tree
         ));
     }
 
@@ -79,7 +80,7 @@ export class ConceptTreeComponent extends AbstractTree {
             this.lastInitTimestamp = new Date().getTime();
             this.checkInitializationSafe().subscribe(
                 () => {
-                    if (this.safeToGo) {
+                    if (this.safeToGo.safe) {
                         let conceptTreePreference: ConceptTreePreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
                         let broaderProps: ARTURIResource[] = conceptTreePreference.broaderProps.map((prop: string) => new ARTURIResource(prop));
                         let narrowerProps: ARTURIResource[] = conceptTreePreference.narrowerProps.map((prop: string) => new ARTURIResource(prop));
@@ -113,7 +114,7 @@ export class ConceptTreeComponent extends AbstractTree {
      * Forces the safeness of the structure even if it was reported as not safe, then re initialize it
      */
     private forceSafeness() {
-        this.safeToGo = true;
+        this.safeToGo.safe = true;
         let conceptTreePreference: ConceptTreePreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
         let safeToGoMap: SafeToGoMap = conceptTreePreference.safeToGoMap;
         let checksum = this.getInitRequestChecksum();
@@ -132,24 +133,25 @@ export class ConceptTreeComponent extends AbstractTree {
         let narrowerProps: ARTURIResource[] = conceptTreePreference.narrowerProps.map((prop: string) => new ARTURIResource(prop));
         let includeSubProps: boolean = conceptTreePreference.includeSubProps;
         let safeToGoMap: SafeToGoMap = conceptTreePreference.safeToGoMap;
+        this.safeToGoLimit = conceptTreePreference.safeToGoLimit;
 
         let checksum = this.getInitRequestChecksum();
 
-        let safe: boolean = safeToGoMap[checksum];
-        if (safe != null) { //found safeness in cache
-            this.safeToGo = safe;
+        let safeness: SafeToGo = safeToGoMap[checksum];
+        if (safeness != null) { //found safeness in cache
+            this.safeToGo = safeness;
             return Observable.of(null)
         } else { //never initialized => count
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
             return this.skosService.countTopConcepts(this.lastInitTimestamp, this.schemes, multischemeMode, broaderProps, narrowerProps, includeSubProps, VBRequestOptions.getRequestOptions(this.projectCtx)).flatMap(
                 data => {
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                    safe = data.count < this.safeToGoLimit;
-                    safeToGoMap[checksum] = safe; //cache the safeness
+                    let safeness = { safe: data.count < this.safeToGoLimit, count: data.count }; 
+                    safeToGoMap[checksum] = safeness; //cache the safeness
                     if (data.timestamp != this.lastInitTimestamp) { //a newest request has been performed => stop this initialization
                         return Observable.of(null)
                     }
-                    this.safeToGo = safe;
+                    this.safeToGo = safeness;
                     return Observable.of(null)
                 }
             );
@@ -171,6 +173,7 @@ export class ConceptTreeComponent extends AbstractTree {
     }
 
     public forceList(list: ARTURIResource[]) {
+        this.safeToGo = { safe: true }; //prevent the list not showing if a previous hierarchy initialization set the safeToGo to false
         this.setInitialStatus();
         this.roots = list;
     }
