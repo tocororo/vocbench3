@@ -1,7 +1,7 @@
 <span [title]="getMenuTitle()" style="display: flex; align-items: center;">
-    <select [ngModel]="language" (ngModelChange)="onLangChange($event)" [class]="selectClass" style="margin-right: 4px;" 
+    <select [(ngModel)]="language" (ngModelChange)="onLangChange()" [class]="selectClass" style="margin-right: 4px;" 
         [disabled]="isDisabled() || readonly">
-        <option *ngFor="let l of languageList" [value]="l.tag">{{l.name}} ({{l.tag}})</option>
+        <option *ngFor="let l of languageList" [ngValue]="l">{{l.name}} ({{l.tag}})</option>
     </select>
-    <img *ngIf="showFlag" [src]="getFlagImgSrc()" [ngClass]="{ disabled : isDisabled() }"/> 
+    <lang-item *ngIf="showFlag && language" [language]="language" [showName]="false"></lang-item>
 </span>

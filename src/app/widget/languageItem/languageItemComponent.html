@@ -1,10 +1,12 @@
-<span [title]="language.name + ' (' + language.tag + ')'">
-    <img *ngIf="flagImgSrc.indexOf('unknown') == -1" [src]="flagImgSrc" 
-        [ngClass]="{ disabled : disabled }">
-    <span *ngIf="flagImgSrc.indexOf('unknown') != -1" class="flagIcon">
-        <img [src]="flagImgSrc">
-        <span [ngClass]="{ grayText: disabled }">{{language.tag}}</span>
-    </span>
-    <span [ngClass]="{ grayText: disabled }">{{language.name}}</span>
+<div style="white-space: nowrap;" [title]="language.name + ' (' + language.tag + ')'">
+    <img *ngIf="flagImgSrc.indexOf('unknown') == -1; else unknownFlag" [src]="flagImgSrc" class="flagCls" [ngClass]="{ disabled : disabled }">
+    <ng-template #unknownFlag>
+        <span [class]="'flagIcon ' + flagCls">
+            <img [src]="flagImgSrc">
+            <span [ngClass]="{ grayText: disabled }">{{language.tag}}</span>
+        </span>
+    </ng-template>
+
+    <span *ngIf="showName" [ngClass]="{ grayText: disabled }">{{language.name}}</span>
     <span *ngIf="showTag" [ngClass]="{ grayText: disabled }">({{language.tag}})</span>
-</span>    
+</div>    

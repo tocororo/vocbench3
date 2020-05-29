@@ -75,7 +75,7 @@ export class VBProperties {
                 }
                 projectPreferences.activeLexicon = activeLexicon;
 
-                projectPreferences.showFlags = prefs[Properties.pref_show_flags] == "true"
+                projectPreferences.showFlags = prefs[Properties.pref_show_flags] == "true";
 
                 let projectThemeId = prefs[Properties.pref_project_theme];
                 projectPreferences.projectThemeId = projectThemeId;
@@ -254,8 +254,7 @@ export class VBProperties {
     setShowFlags(show: boolean) {
         VBContext.getWorkingProjectCtx().getProjectPreferences().showFlags = show;
         this.eventHandler.showFlagChangedEvent.emit(show);
-        let value = show ? "true" : null;
-        this.prefService.setPUSetting(Properties.pref_show_flags, value).subscribe()
+        this.prefService.setPUSetting(Properties.pref_show_flags, show+"").subscribe()
     }
 
     setProjectTheme(theme: number) {

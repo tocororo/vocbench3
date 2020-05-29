@@ -41,6 +41,7 @@ export class ProjectUsersManagerComponent {
 
     private projectLanguages: Language[]; //all the languages assigned to the selected project
     private availableLanguages: Language[]; //the languages that are shown in the "Available languages" panel, those who is possible to assign to user
+        //this might be a subset of projectLanguages (if filterProficiencies is active)
     private puLanguages: Language[]; //languages assigned to the user in the selected project
     private selectedLang: Language; //role selected in langList (available langs)
     private selectedUserLang: Language; //selected lang in the list of the language assigned to the selectedUser in the selectedProject
@@ -378,11 +379,7 @@ export class ProjectUsersManagerComponent {
 
     private addLanguage() {
         this.puBinding.addLanguage(this.selectedLang.tag);
-        this.adminService.updateLanguagesOfUserInProject(this.project.getName(), this.selectedUser.getEmail(), this.puBinding.getLanguages()).subscribe(
-            stResp => {
-                this.updateLanguagesOfUserInProject();
-            }
-        );
+        this.updateLanguagesOfUserInProject();
     }
 
     private addAllLanguages() {
@@ -448,10 +445,6 @@ export class ProjectUsersManagerComponent {
     private updateLanguagesOfUserInProject() {
         this.adminService.updateLanguagesOfUserInProject(this.project.getName(), this.selectedUser.getEmail(), this.puBinding.getLanguages()).subscribe(
             stResp => {
-                //if no language is assigned for the admin => assign all project languages
-                if (this.selectedUser.isAdmin() && this.puLanguages.length == 0) {
-                    this.puBinding.setLanguages(Languages.fromLanguagesToTags(this.projectLanguages));
-                }
                 this.selectedUserLang = null;
                 this.initPULanguages();
                 //if the updates are applied to the current user in the current project, update project binding in context 

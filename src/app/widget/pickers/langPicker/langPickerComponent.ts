@@ -1,7 +1,6 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Language, Languages } from "../../../models/LanguagesCountries";
-import { UIUtils } from "../../../utils/UIUtils";
 import { VBContext } from "../../../utils/VBContext";
 import { VBProperties } from "../../../utils/VBProperties";
 
@@ -22,7 +21,7 @@ export class LangPickerComponent implements ControlValueAccessor {
 
     private selectClass: string = "form-control input-";
     private languageList: Language[] = [];
-    private language: string;
+    private language: Language;
     private showFlag: boolean = true;
 
     constructor(private properties: VBProperties) { }
@@ -49,7 +48,11 @@ export class LangPickerComponent implements ControlValueAccessor {
         this.languageList = []; //intersection between language available in project and language assigned to user.
         var projectLangs: Language[] = VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting;
         var userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
-        this.languageList = projectLangs.filter((l: Language) => { return userAssignedLangs.indexOf(l.tag) != -1 });
+        if (userAssignedLangs.length == 0 && VBContext.getLoggedUser().isAdmin()) {
+            this.languageList = projectLangs; //in case of admin user with no lang assigned => available langs are all the project langs
+        } else {
+            this.languageList = projectLangs.filter((l: Language) => { return userAssignedLangs.indexOf(l.tag) != -1 });
+        }
         //if configuration provide language limitation, filter also according them
         if (this.config.languages != null) {
             this.languageList = projectLangs.filter((l: Language) => { return this.config.languages.indexOf(l.tag) != -1 });
@@ -62,48 +65,35 @@ export class LangPickerComponent implements ControlValueAccessor {
             if (this.languageList.length > 0) { 
                 if (this.language == undefined) { //no language specified as @Input
                     //set the default editing language
-                    let editingLang = VBContext.getWorkingProjectCtx().getProjectPreferences().editingLanguage;
-                    for (var j = 0; j < this.languageList.length; j++) {
-                        if (this.languageList[j].tag == editingLang) {
-                            this.language = this.languageList[j].tag;
-                        }
-                    }
+                    let editingLang: string = VBContext.getWorkingProjectCtx().getProjectPreferences().editingLanguage;
+                    this.language = this.languageList.find(l => l.tag == editingLang);
                     //language null means that the default edit language is not in the in available languages, so set the selected based on the priority list
                     if (this.language == null) {
-                        selectedLangLoop: 
-                        for (var i = 0; i < Languages.priorityLangs.length; i++) {
-                            for (var j = 0; j < this.languageList.length; j++) {
-                                if (this.languageList[j].tag == Languages.priorityLangs[i]) {
-                                    this.language = this.languageList[j].tag;
-                                    break selectedLangLoop;
-                                }
-                            }
+                        for (let priorityLang of Languages.priorityLangs) {
+                            this.language = this.languageList.find(l => l.tag == priorityLang);
+                            if (this.language != null) break;
                         }
                     }
                     //language null means that no language in languageList is in priority list, so set as selected the first language available
                     if (this.language == null) {
-                        this.language = this.languageList[0].tag;
+                        this.language = this.languageList[0];
                     }
                 } else {
                     //lang provided => check constraints
                     if (this.config.constrain) {
                         this.languageList = this.languageList.filter((l: Language) => {
-                            return (l.tag == this.language || (this.config.locale && l.tag.startsWith(this.language + "-")));
+                            return (l.tag == this.language.tag || (this.config.locale && l.tag.startsWith(this.language.tag + "-")));
                         });
                     }
                 }
             }
-            this.propagateChange(this.language);
+            this.onLangChange();
         });
     }
 
-    private onLangChange(newLang: string) {
-        this.language = newLang;
-        this.propagateChange(this.language);
-    }
-
-    private getFlagImgSrc(): string {
-        return UIUtils.getFlagImgSrc(this.language);
+    private onLangChange() {
+        let langTag = this.language != null ? this.language.tag : null;
+        this.propagateChange(langTag);
     }
 
     private isDisabled(): boolean {
@@ -114,7 +104,7 @@ export class LangPickerComponent implements ControlValueAccessor {
         if (this.languageList.length == 0) {
             return "No language assigned for the current project";
         } else {
-            return this.language;
+            return this.language != null ? this.language.tag : null;
         }
     }
 
@@ -124,7 +114,7 @@ export class LangPickerComponent implements ControlValueAccessor {
      * Write a new value to the element.
      */
     writeValue(obj: string) {
-        this.language = obj;
+        this.language = Languages.getSystemLanguages().find(l => l.tag == obj)
     }
     /**
      * Set the function to be called when the control receives a change event.
@@ -139,7 +129,7 @@ export class LangPickerComponent implements ControlValueAccessor {
 
     // the method set in registerOnChange, it is just a placeholder for a method that takes one parameter, 
     // we use it to emit changes back to the parent
-    private propagateChange = (_: any) => { };
+    private propagateChange = (_: string) => { };
 
     //--------------------------------------------------
 

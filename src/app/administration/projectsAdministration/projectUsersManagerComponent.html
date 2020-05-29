@@ -124,7 +124,7 @@
                                 <label>Assigned Languages:</label>
                             </div>
                             <div class="subPanel-body vbox scrollableContainer">
-                                <ng-template [ngIf]="puBinding">
+                                <ng-container *ngIf="puBinding">
                                     <div *ngFor="let l of puLanguages" class="listItem" [ngClass]="{active: l == selectedUserLang}" 
                                         (click)="selectUserLang(l)">
                                         <lang-item style="flex: 1" [language]="l" showTag="true"></lang-item>
@@ -132,7 +132,11 @@
                                             title="This language is in the language proficiencies of the selected user">
                                         </span>
                                     </div>
-                                </ng-template>
+                                    <div *ngIf="puLanguages?.length == 0 && selectedUser.isAdmin()" class="alert alert-warning">
+                                        <span class="glyphicon glyphicon-warning-sign"></span>
+                                        For administrator user, no language assigned implicitly means all project languages
+                                    </div>
+                                </ng-container>
                             </div>
                         </div>
                         <div class="vbox" style="align-self: center; margin: 5px; flex: initial;">

@@ -185,7 +185,12 @@ export class EditableResourceComponent extends AbstractResViewResource {
             )) {
             let projectLangs: Language[] = VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting;
             let userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
-            let intersection: Language[] = projectLangs.filter((l: Language) => { return userAssignedLangs.indexOf(l.tag) != -1 });
+            let intersection: Language[];
+            if (userAssignedLangs.length == 0 && VBContext.getLoggedUser().isAdmin()) {
+                intersection = projectLangs; //admin with no lang assigned => assign all project langs
+            } else {
+                intersection = projectLangs.filter((l: Language) => { return userAssignedLangs.indexOf(l.tag) != -1 });
+            }
             let locales = Languages.getLocales(intersection, this.resource.getAdditionalProperty(ResAttribute.LANG));
             this.copyLocalesAction = {
                 available: locales.length > 0,

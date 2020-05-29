@@ -16,17 +16,16 @@ export class LanguageEditingComponent {
     constructor(private properties: VBProperties) { }
 
     ngOnInit() {
-        var userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
-        this.languages = Languages.fromTagsToLanguages(userAssignedLangs);
-
-        let editingLangTag = VBContext.getWorkingProjectCtx().getProjectPreferences().editingLanguage;
-        
-        for (var i = 0; i < this.languages.length; i++) {
-            if (this.languages[i].tag == editingLangTag) {
-                this.editingLang = this.languages[i];
-                break;
-            }
+        let userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
+        if (userAssignedLangs.length == 0 && VBContext.getLoggedUser().isAdmin()) { //admin with no lang assigned => implicitly set all project langs
+            this.languages = VBContext.getWorkingProjectCtx().getProjectSettings().projectLanguagesSetting;
+        } else {
+            this.languages = Languages.fromTagsToLanguages(userAssignedLangs);
         }
+
+        //init the chosen default editing language
+        let editingLangTag = VBContext.getWorkingProjectCtx().getProjectPreferences().editingLanguage;
+        this.editingLang = this.languages.find(l => l.tag == editingLangTag);
     }
 
     private updateDefaultLang(lang: Language) {
