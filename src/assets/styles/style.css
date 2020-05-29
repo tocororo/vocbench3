@@ -241,21 +241,24 @@ rdf-resource > .rdfResourceText {
 
 .flagIcon {
     position: relative;
+    display: inline-block;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 1;
 }
-.flagIcon > span{
+.flagIcon > span {
     position: absolute;
     top: 1px;
     left: 0px;
     width: 16px;
     margin: 0 auto;
-    font-family: monospace;
-    font-weight: bold;
-    font-size: 10px;
     cursor: default;
     user-select: none;
     white-space: nowrap;
     overflow: hidden;
     text-align: center;
+    vertical-align: middle;
 }
 
 .treeListComponent {
