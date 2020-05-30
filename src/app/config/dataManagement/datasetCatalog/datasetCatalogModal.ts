@@ -2,11 +2,13 @@ import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
 import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { Bucket, DatasetDescription, DatasetSearchFacets, DatasetSearchResult, DownloadDescription, FacetAggregation, SearchResultsPage, SelectionMode } from "../../../models/Metadata";
-import { ExtensionFactory, ExtensionPointID } from "../../../models/Plugins";
+import { ExtensionFactory, ExtensionPointID, ConfigurableExtensionFactory, PluginSpecification } from "../../../models/Plugins";
 import { DatasetCatalogsServices } from "../../../services/datasetCatalogsServices";
 import { ExtensionsServices } from "../../../services/extensionsServices";
 import { DataDumpSelectorModalData, DataDumpSelectorModal } from "./dataDumpSelectorModal";
 import { UIUtils } from "../../../utils/UIUtils";
+import { Configuration } from "../../../models/Configuration";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 
 export class DatasetCatalogModalData extends BSModalContext {
     constructor() {
@@ -35,10 +37,12 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
 
     private extensions: ExtensionFactory[];
     private selectedExtension: ExtensionFactory;
+    private extensionConfig: Configuration;
 
+    private connectorConfigured: boolean;
     private query: string;
     private lastQuery: string;
-    private lastSearchFacets: { [facetName: string]: { facetDisplayName?: string; items: { [itemName:string]: { itemDisplayName?: string}}}} = {};
+    private lastSearchFacets: { [facetName: string]: { facetDisplayName?: string; items: { [itemName: string]: { itemDisplayName?: string } } } } = {};
 
     private searchDatasetResult: SearchResultsPage<DatasetSearchResult>;
     private selectedDataset: DatasetSearchResult;
@@ -48,7 +52,7 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
     private totPage: number;
 
     constructor(public dialog: DialogRef<DatasetCatalogModalData>, private metadataRepositoryService: DatasetCatalogsServices,
-        private extensionService: ExtensionsServices, private modal: Modal) {
+        private extensionService: ExtensionsServices, private modal: Modal, private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
@@ -61,11 +65,24 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
         );
     }
 
-    private onExtensionChange() {
+    private onExtensionChange(selectedExtension: ExtensionFactory) {
+        this.selectedExtension = selectedExtension;
+        this.extensionConfig = null;
+        this.clearResults();
+    }
+
+    private onExtensionConfigUpdated(config: Configuration) {
+        this.extensionConfig = config
+        this.clearResults();
+    }
+
+    private clearResults() {
+        this.connectorConfigured = this.selectedExtension && (!(this.selectedExtension instanceof ConfigurableExtensionFactory) || this.extensionConfig != null);
         this.searchDatasetResult = null;
         this.selectedDataset = null;
         this.selectedDatasetDescription = null;
     }
+
 
     private onKeydown(event: KeyboardEvent) {
         if (event.which == 13) {
@@ -82,6 +99,9 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
     }
 
     private executeSearchDataset() {
+        let connectorSpec = this.buildConnectorSpecification();
+        if (!connectorSpec) return;
+
         let facets: DatasetSearchFacets = {};
         for (let facetName of Object.keys(this.lastSearchFacets)) {
             let items = Object.keys(this.lastSearchFacets[facetName].items);
@@ -90,12 +110,12 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
             }
         }
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-        this.metadataRepositoryService.searchDataset(this.selectedExtension.id, this.lastQuery, facets, this.page).subscribe(
+        this.metadataRepositoryService.searchDataset(connectorSpec, this.lastQuery, facets, this.page).subscribe(
             (results: SearchResultsPage<DatasetSearchResult>) => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 this.searchDatasetResult = results;
                 this.selectedDatasetDescription = null;
-                this.totPage = Math.floor(this.searchDatasetResult.totalResults/this.searchDatasetResult.pageSize);
+                this.totPage = Math.floor(this.searchDatasetResult.totalResults / this.searchDatasetResult.pageSize);
                 if (this.searchDatasetResult.totalResults % this.searchDatasetResult.pageSize != 0) {
                     this.totPage++;
                 }
@@ -104,12 +124,38 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
     }
 
     private selectDataset(dataset: DatasetSearchResult) {
+        let connectorSpec = this.buildConnectorSpecification();
+        if (!connectorSpec) return;
+
         this.selectedDataset = dataset;
-        this.metadataRepositoryService.describeDataset(this.selectedExtension.id, this.selectedDataset.id).subscribe(
+        this.metadataRepositoryService.describeDataset(connectorSpec, this.selectedDataset.id).subscribe(
             datasetDescription => {
                 this.selectedDatasetDescription = datasetDescription;
             }
         )
+    }
+
+    private requireConfigurationConnector() {
+        if (this.extensionConfig != null) {
+            return this.extensionConfig.requireConfiguration();
+        }
+        return false;
+    }
+
+    private buildConnectorSpecification() : PluginSpecification {
+        let connectorSpec: PluginSpecification= { factoryId: this.selectedExtension.id };
+        if (this.extensionConfig != null) {
+            if (this.requireConfigurationConnector()) {
+                this.basicModals.alert("Missing configuration", "The catalog connector needs to be configured", "warning");
+                return;
+            }
+            if (this.extensionConfig != null) {
+                connectorSpec.configType = this.extensionConfig.type;
+                connectorSpec.configuration = this.extensionConfig.getPropertiesAsMap();
+            }
+        }
+        return connectorSpec;
+
     }
 
     private prevPage() {
@@ -146,7 +192,7 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
         if (searchFacet.items[bucket.name]) {
             delete searchFacet.items[bucket.name];
         } else {
-            searchFacet.items[bucket.name] = {itemDisplayName : bucket.displayname};
+            searchFacet.items[bucket.name] = { itemDisplayName: bucket.displayname };
         }
 
         this.executeSearchDataset();
@@ -190,7 +236,7 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
                     }
                     this.dialog.close(returnData);
                 },
-                () => {}
+                () => { }
             );
         }
     }

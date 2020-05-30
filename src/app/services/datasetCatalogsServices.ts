@@ -4,6 +4,8 @@ import { ARTLiteral } from '../models/ARTResources';
 import { DatasetDescription, DatasetSearchFacets, DatasetSearchResult, SearchResultsPage, DownloadDescription } from '../models/Metadata';
 import { HttpManager } from "../utils/HttpManager";
 import { ResourceUtils } from '../utils/ResourceUtils';
+import { Configuration } from '../models/Configuration';
+import { PluginSpecification } from '../models/Plugins';
 
 @Injectable()
 export class DatasetCatalogsServices {
@@ -14,14 +16,14 @@ export class DatasetCatalogsServices {
 
     /**
      * Searched a dataset in the connected repository matching the given criteria
-     * @param connectorId 
+     * @param connectorSpec 
      * @param query 
      * @param facets 
      * @param page 
      */
-    searchDataset(connectorId: string, query: string, facets: DatasetSearchFacets, page: number): Observable<SearchResultsPage<DatasetSearchResult>>{
+    searchDataset(connectorSpec: PluginSpecification, query: string, facets: DatasetSearchFacets, page: number): Observable<SearchResultsPage<DatasetSearchResult>>{
         var params: any = {
-            connectorId: connectorId,
+            connectorSpec: JSON.stringify(connectorSpec),
             query: query,
             facets: JSON.stringify(facets),
             page: page
@@ -62,12 +64,12 @@ export class DatasetCatalogsServices {
 
     /**
      * Returns the description of a given dataset provided by the connected repository
-     * @param connectorId 
+     * @param connectorSpec 
      * @param datasetId 
      */
-    describeDataset(connectorId: string, datasetId: string): Observable<DatasetDescription> {
+    describeDataset(connectorSpec: PluginSpecification, datasetId: string): Observable<DatasetDescription> {
         var params: any = {
-            connectorId: connectorId,
+            connectorSpec: JSON.stringify(connectorSpec),
             datasetId: datasetId
         };
         return this.httpMgr.doGet(this.serviceName, "describeDataset", params).map(

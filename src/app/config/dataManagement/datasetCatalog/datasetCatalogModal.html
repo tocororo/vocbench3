@@ -12,18 +12,18 @@
             <tr>
                 <td nowrap><label>Catalog:</label></td>
                 <td>
-                    <select class="form-control input-sm" [(ngModel)]="selectedExtension" (ngModelChange)="onExtensionChange()">
-                        <option *ngFor="let ext of extensions" [title]="ext.description" [ngValue]="ext">{{ext.name}}</option>
-                    </select>
+                   <extension-configurator *ngIf="extensions" [extensions]="extensions"
+                    (extensionUpdated)="onExtensionChange($event)"
+                    (configurationUpdated)="onExtensionConfigUpdated($event)"></extension-configurator>
                 </td>
             </tr>
             <tr>
                 <td nowrap><label>Search:</label></td>
                 <td>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" [(ngModel)]="query" (keydown)="onKeydown($event)" [disabled]="!selectedExtension">
+                        <input type="text" class="form-control" [(ngModel)]="query" (keydown)="onKeydown($event)" [disabled]="!connectorConfigured">
                         <div class="input-group-btn">
-                            <button class="btn btn-default" (click)="searchDataset()" [disabled]="!selectedExtension">
+                            <button class="btn btn-default" (click)="searchDataset()" [disabled]="!connectorConfigured">
                                 <span class="glyphicon glyphicon-search"></span>
                             </button>
                         </div>
