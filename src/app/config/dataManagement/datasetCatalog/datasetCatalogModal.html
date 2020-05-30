@@ -21,9 +21,9 @@
                 <td nowrap><label>Search:</label></td>
                 <td>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" [(ngModel)]="query" (keydown)="onKeydown($event)" [disabled]="!connectorConfigured">
+                        <input type="text" class="form-control" [(ngModel)]="query" (keydown)="onKeydown($event)" [disabled]="selectedExtension == null  || requireConfigurationConnector()">
                         <div class="input-group-btn">
-                            <button class="btn btn-default" (click)="searchDataset()" [disabled]="!connectorConfigured">
+                            <button class="btn btn-default" (click)="searchDataset()" [disabled]="selectedExtension == null  || requireConfigurationConnector()">
                                 <span class="glyphicon glyphicon-search"></span>
                             </button>
                         </div>

@@ -39,7 +39,6 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
     private selectedExtension: ExtensionFactory;
     private extensionConfig: Configuration;
 
-    private connectorConfigured: boolean;
     private query: string;
     private lastQuery: string;
     private lastSearchFacets: { [facetName: string]: { facetDisplayName?: string; items: { [itemName: string]: { itemDisplayName?: string } } } } = {};
@@ -77,12 +76,10 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
     }
 
     private clearResults() {
-        this.connectorConfigured = this.selectedExtension && (!(this.selectedExtension instanceof ConfigurableExtensionFactory) || this.extensionConfig != null);
         this.searchDatasetResult = null;
         this.selectedDataset = null;
         this.selectedDatasetDescription = null;
     }
-
 
     private onKeydown(event: KeyboardEvent) {
         if (event.which == 13) {
