@@ -7,6 +7,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 # 8.0.0 (dd-mm-yyyy)
   * Added a tool for the creation of Custom Service (Still to complete).
   * Enabled manipulation of Maple choices in a remote-service alignment task (Still to complete).
+  * Enabled configurable dataset catalog connectors
   * Improved CustomForm widget by exploiting new PEARL annotations.
   * Enabled organization of projects in directories.
   * Renewed the ACL matrix.
