@@ -7,7 +7,8 @@ import { VBProperties } from "../../utils/VBProperties";
 
 @Component({
     selector: "rdf-resource",
-    templateUrl: "./rdfResourceComponent.html"
+    templateUrl: "./rdfResourceComponent.html",
+    styleUrls: ["../codemirror/manchesterEditor/manchester.css"]
 })
 export class RdfResourceComponent {
     @Input() resource: ARTNode;
@@ -26,6 +27,9 @@ export class RdfResourceComponent {
     private imgSrc: string; //src of the image icon
     private natureTooltip: string;
 
+    private manchExpr: boolean = false;
+    private manchExprStruct: { token: string, class: string }[] = [];
+
     constructor(private preferences: VBProperties) { }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -41,6 +45,7 @@ export class RdfResourceComponent {
             this.initLiteralWithLink();
             this.initRenderingClass();
             this.initNatureTooltip();
+            this.initManchExpr();
         } else if (changes['rendering']) {
             this.initRenderingLabel();
         }
@@ -159,10 +164,73 @@ export class RdfResourceComponent {
         }
     }
 
-	/**
-	 * Tells if the described resource is explicit.
-	 * Useful for flag icons since they have not the "transparent" version (as for the concept/class/property... icons)
-	 */
+    private initManchExpr() {
+        if (this.resource.isBNode() && this.resource.getAdditionalProperty(ResAttribute.SHOW_INTERPR) != null) {
+            this.manchExpr = true;
+        }
+        if (this.manchExpr) {
+            let booleans = ["true", "false"];
+            let builtinDatatypes = ["decimal", "double", "float", "integer", "string"];
+            let characteristics = ["Functional", "InverseFunctional", "Reflexive", "Irreflexive", "Symmetric", "Asymmetric", "Transitive", "Inverse"];
+            let conjuctions = ["and", "not", "that", "or"];
+            let facets = ["langRange", "length", "maxLength", "minLength", "pattern", "<", "<=", ">", ">="];
+            let quantifiers = ["some", "only", "value", "min", "max", "exactly", "self"];
+
+            let booleansRegex: RegExp = this.getRegexp(booleans, false);
+            let builtinDatatypesRegex: RegExp = this.getRegexp(builtinDatatypes, true);
+            let characteristicsRegex: RegExp = this.getRegexp(characteristics, false);
+            let conjuctionsRegex: RegExp = this.getRegexp(conjuctions, false);
+            let facetsRegex: RegExp = this.getRegexp(facets, true);
+            let quantifiersRegex: RegExp = this.getRegexp(quantifiers, false);
+            let bracketsRegex: RegExp = /(\{|\[|\(|\}|\]|\))/g;
+
+            let tokenizerStruct: { regex: RegExp, tokenClass: string }[] = [
+                { regex: /"(?:[^\\]|\\.)*?(?:"|$)/, tokenClass: "string" },
+                { regex: booleansRegex, tokenClass: "boolean" },
+                { regex: builtinDatatypesRegex, tokenClass: "builtinDatatype" },
+                { regex: characteristicsRegex, tokenClass: "characteristic" },
+                { regex: conjuctionsRegex, tokenClass: "conjuction" },
+                { regex: facetsRegex, tokenClass: "facet" },
+                { regex: quantifiersRegex, tokenClass: "quantifier" },
+                { regex: /0x[a-f\d]+|[-+]?(?:\.\d+|\d+\.?\d*)(?:e[-+]?\d+)?/i, tokenClass: "number" },
+                { regex: /\/(?:[^\\]|\\.)*?\//, tokenClass: "variable-3" },
+                { regex: bracketsRegex, tokenClass: "bracket" },
+                { regex: /[a-z$][\w$]*/, tokenClass: "variable" },
+            ];
+
+            let show = this.resource.getShow();
+            show = show.replace(/([\{\[\(\}\]\)])/g, " $1 ").replace(/\s+/g, " ").trim(); //add spaces before and after brackets, remove multiple spaces, remove ending space
+            let splitted: string[] = show.split(" ");
+            splitted.forEach((s, idx, array) => {
+                let tokenCls: string;
+                for (let ts of tokenizerStruct) {
+                    if (ts.regex.test(s)) {
+                        tokenCls = ts.tokenClass;
+                        break;
+                    }
+                }
+                this.manchExprStruct.push({ token: s, class: "cm-" + tokenCls });
+                if (idx != array.length - 1) {
+                    //add a whitespace token just as separator between other tokens (exept after the laast)
+                    this.manchExprStruct.push({ token: " ", class: "" });
+                }
+
+            })
+        }
+    }
+
+    private getRegexp(tokensList: string[], caseSentitive: boolean) {
+        if (caseSentitive) {
+            return new RegExp("(?:" + tokensList.join("|") + ")\\b");
+        } else {
+            return new RegExp("(?:" + tokensList.join("|") + ")\\b", "i");
+        }
+    }
+
+    /**
+     * Tells if the described resource is explicit.
+     * Useful for flag icons since they have not the "transparent" version (as for the concept/class/property... icons)
+     */
     private isExplicit(): boolean {
         return this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) ||
             this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) == undefined;

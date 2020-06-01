@@ -14,12 +14,21 @@
     </ng-container>
 </div>
 <span [title]="resource.toNT()" [class]="'rdfResourceText' + renderingClass">
-    <ng-container *ngIf="literalWithLink; else notLinkBlock">
-        <ng-container *ngFor="let s of splittedLiteral; let even = even">
-            <span *ngIf="even" style="white-space: pre-wrap">{{s}}</span>
-            <a *ngIf="!even" [href]="s" target="_blank">{{s}}</a>
-        </ng-container>
+    <ng-container *ngIf="manchExpr; else notManchExprBlock">
+        <span style="font-family: monospace;">
+            <span *ngFor="let cas of manchExprStruct" [class]="cas.class">{{cas.token}}</span>
+        </span>
     </ng-container>
+
+    <ng-template #notManchExprBlock>
+        <ng-container *ngIf="literalWithLink; else notLinkBlock">
+            <ng-container *ngFor="let s of splittedLiteral; let even = even">
+                <span *ngIf="even" style="white-space: pre-wrap">{{s}}</span>
+                <a *ngIf="!even" [href]="s" target="_blank">{{s}}</a>
+            </ng-container>
+        </ng-container>
+    </ng-template>
+
     <ng-template #notLinkBlock>
         <span style="white-space: pre-wrap">{{renderingLabel}}</span>
     </ng-template>

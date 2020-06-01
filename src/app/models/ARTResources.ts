@@ -348,6 +348,7 @@ export class ResAttribute {
     public static NATURE = "nature"; //content is a triple separated by "-": <uri of class of resource> - <graph of ???> - <deprecated true/false>
     public static SCHEMES = "schemes"; //attribute of concepts in searchResource response
     public static TRIPLE_SCOPE = "tripleScope"; //used in the object in getResourceView
+    public static SHOW_INTERPR = "show_interpretation"; //used for bnode
 
     //never in st responses, result of nature parsing
     public static DEPRECATED = "deprecated";
@@ -476,4 +477,9 @@ export enum TripleScopes {
 export class ResourceNature {
     role: RDFResourceRolesEnum;
     graphs: ARTURIResource[];
+}
+
+export enum ShowInterpretation {
+    descr = "descr", //class or datatype description
+    ope = "ope" //object property expression
 }

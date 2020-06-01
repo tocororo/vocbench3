@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ResourceTripleEditorComponent } from '../resourceView/resourceTripleEditor/resourceTripleEditorComponent';
+import { ResourceViewTabContainer } from '../resourceView/resourceViewContainer/resourceViewContainer';
 import { BroadersPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/broadersPartitionRenderer';
 import { ClassAxiomPartitionPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/classAxiomPartitionRenderer';
 import { ConstituentsPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/constituentsPartitionRenderer';
@@ -34,15 +36,8 @@ import { LexicalizationEnrichmentHelper } from '../resourceView/resourceViewEdit
 import { PredicateObjectsRenderer } from '../resourceView/resourceViewEditor/renderer/predicateObjectsRenderer';
 import { ResourceViewValueRenderer } from '../resourceView/resourceViewEditor/renderer/resourceViewValueRenderer';
 import { ResourceRenameComponent } from '../resourceView/resourceViewEditor/resourceRenameComponent';
-import { ResourceTripleEditorComponent } from '../resourceView/resourceTripleEditor/resourceTripleEditorComponent';
-import { ResourceViewEditorComponent } from '../resourceView/resourceViewEditor/resourceViewEditorComponent';
 import { ResourceViewContextMenu } from '../resourceView/resourceViewEditor/resourceViewCtxMenu';
-import { ResourceViewModal } from '../resourceView/resourceViewModal';
-import { ResourceViewModeDispatcher } from '../resourceView/resourceViewModes/resourceViewModeDispatcher';
-import { ResourceViewSplittedComponent } from '../resourceView/resourceViewModes/resourceViewSplittedComponent';
-import { ResourceViewTabbedComponent } from '../resourceView/resourceViewModes/resourceViewTabbedComponent';
-import { ResourceViewSimpleComponent } from '../resourceView/resourceViewSimple/resourceViewSimpleComponent';
-import { ResourceViewTabContainer } from '../resourceView/resourceViewContainer/resourceViewContainer';
+import { ResourceViewEditorComponent } from '../resourceView/resourceViewEditor/resourceViewEditorComponent';
 import { AddManuallyValueModal } from '../resourceView/resourceViewEditor/resViewModals/addManuallyValueModal';
 import { AddPropertyValueModal } from '../resourceView/resourceViewEditor/resViewModals/addPropertyValueModal';
 import { BrowseExternalResourceModal } from '../resourceView/resourceViewEditor/resViewModals/browseExternalResourceModal';
@@ -60,6 +55,11 @@ import { ResViewModalServices } from '../resourceView/resourceViewEditor/resView
 import { ResViewSettingsModal } from '../resourceView/resourceViewEditor/resViewModals/resViewSettingsModal';
 import { EditableResourceComponent } from '../resourceView/resourceViewEditor/resViewResources/editableResourceComponent';
 import { ReifiedResourceComponent } from '../resourceView/resourceViewEditor/resViewResources/reifiedResourceComponent';
+import { ResourceViewModal } from '../resourceView/resourceViewModal';
+import { ResourceViewModeDispatcher } from '../resourceView/resourceViewModes/resourceViewModeDispatcher';
+import { ResourceViewSplittedComponent } from '../resourceView/resourceViewModes/resourceViewSplittedComponent';
+import { ResourceViewTabbedComponent } from '../resourceView/resourceViewModes/resourceViewTabbedComponent';
+import { ResourceViewSimpleComponent } from '../resourceView/resourceViewSimple/resourceViewSimpleComponent';
 import { PreferencesModule } from './preferencesModule';
 import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from "./treeAndListModule";

@@ -110,4 +110,32 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
         );
     }
 
+    /**
+     * In this partition, the edit is delegated only for the ObjectProperty expression (manchester) inside the inverseOf pred-objects panel
+     */
+    editHandler(predicate: ARTURIResource, object: ARTNode) {
+        this.resViewModals.addPropertyValue("Set inverse property", this.resource, predicate, false).then(
+            (data: AddPropertyValueModalReturnData) => {
+                //first remove the previous value
+                this.getRemoveFunctionImpl(predicate, object).subscribe(
+                    () => {
+                        //then add the new value
+                        let prop: ARTURIResource = data.property;
+                        let inverse: boolean = data.inverseProperty;
+                        let values: ARTURIResource[] = data.value;
+                        let addFunctions: MultiActionFunction[] = [];
+                        values.forEach((v: ARTURIResource) => {
+                            addFunctions.push({
+                                function: this.propService.addInverseProperty(<ARTURIResource>this.resource, v, prop, inverse),
+                                value: v
+                            });
+                        });
+                        this.addMultiple(addFunctions);
+                    }
+                );
+            },
+            () => { }
+        );
+    }
+
 }

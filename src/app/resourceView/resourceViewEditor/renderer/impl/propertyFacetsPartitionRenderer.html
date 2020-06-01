@@ -39,7 +39,7 @@
             <ng-template ngFor let-po [ngForOf]="predicateObjectList">
                 <pred-obj-renderer *ngIf="po.getObjects().length > 0" [pred-obj]="po" [resource]="resource" [rendering]="rendering"
                     [readonly]="readonly" [partition]="partition" (dblclickObj)="objectDblClick($event)"
-                    (add)="addHandler(po.getPredicate(), $event)" (remove)="removeHandler(po.getPredicate(), $event)">
+                    (add)="addHandler(po.getPredicate(), $event)" (remove)="removeHandler(po.getPredicate(), $event)" (edit)="editHandler(po.getPredicate(), $event)">
                </pred-obj-renderer>
             </ng-template>
         </ng-template>

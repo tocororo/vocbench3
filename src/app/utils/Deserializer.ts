@@ -1,4 +1,4 @@
-import { ARTBNode, ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
+import { ARTBNode, ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute, ShowInterpretation } from "../models/ARTResources";
 import { User } from "../models/User";
 import { SemanticTurkey } from "../models/Vocabulary";
 import { VBContext } from "./VBContext";
@@ -149,6 +149,11 @@ export class Deserializer {
         var tripleScope: string = resJson[ResAttribute.TRIPLE_SCOPE];
         if (tripleScope != undefined) {
             node.setAdditionalProperty(ResAttribute.TRIPLE_SCOPE, tripleScope);
+        }
+
+        let showInterpr: ShowInterpretation = resJson[ResAttribute.SHOW_INTERPR];
+        if (showInterpr != null) {
+            node.setAdditionalProperty(ResAttribute.SHOW_INTERPR, showInterpr);
         }
 
         if (additionalAttr != undefined) {

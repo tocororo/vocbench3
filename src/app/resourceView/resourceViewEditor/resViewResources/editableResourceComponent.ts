@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from "@angular/core";
-import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute } from "../../../models/ARTResources";
+import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute, ShowInterpretation } from "../../../models/ARTResources";
 import { Language, Languages } from "../../../models/LanguagesCountries";
 import { ResViewPartition } from "../../../models/ResourceView";
 import { RDFS, SKOS, SKOSXL } from "../../../models/Vocabulary";
@@ -16,6 +16,7 @@ import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
+import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { AbstractResViewResource } from "./abstractResViewResource";
 
@@ -40,9 +41,6 @@ export class EditableResourceComponent extends AbstractResViewResource {
         }
     }; //stores response.ranges of getRange service
 
-    private isClassAxiom: boolean = false;
-
-    // private hasImagePattern: boolean = false;
     private isImage: boolean = false;
 
     private editActionScenario: EditActionScenarioEnum = EditActionScenarioEnum.default;
@@ -72,7 +70,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
 
     constructor(private resourcesService: ResourcesServices, private propService: PropertyServices,
         private manchesterService: ManchesterServices, private refactorService: RefactorServices,
-        private basicModals: BasicModalServices, private creationModals: CreationModalServices,
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private creationModals: CreationModalServices,
         private browsingModals: BrowsingModalServices, private rvModalService: ResViewModalServices,
         private dtValidator: DatatypeValidator, private vbProp: VBProperties) {
         super();
@@ -94,10 +92,16 @@ export class EditableResourceComponent extends AbstractResViewResource {
         } else if (this.resource instanceof ARTResource && this.resource.getRole() == RDFResourceRolesEnum.xLabel) {
             this.editActionScenario = EditActionScenarioEnum.xLabel;
         } else if (
-            this.partition == ResViewPartition.datatypeDefinitions ||
-            this.partition == ResViewPartition.subPropertyChains
+            //in datatypeDefinitions and subPropertyChains partitions the edit is delegated to the PartitionRenderer.
+            this.partition == ResViewPartition.datatypeDefinitions || this.partition == ResViewPartition.subPropertyChains ||
+            //in facets (precisely inverseOf in property facets) the edit of ObjectProperty expression is delegated to the PartitionRenderer
+            (this.partition == ResViewPartition.facets && this.resource.isBNode() && 
+            this.resource.getAdditionalProperty(ResAttribute.SHOW_INTERPR) == ShowInterpretation.ope)
         ) {
             this.editActionScenario = EditActionScenarioEnum.partition;
+        } else if (this.partition == ResViewPartition.classaxioms && this.resource.isBNode() && 
+            this.resource.getAdditionalProperty(ResAttribute.SHOW_INTERPR) == ShowInterpretation.descr) {
+            this.editActionScenario = EditActionScenarioEnum.manchesterDescr;
         }
 
         /**
@@ -215,6 +219,16 @@ export class EditableResourceComponent extends AbstractResViewResource {
     private edit() {
         if (this.editActionScenario == EditActionScenarioEnum.partition) {
             this.editOutput.emit();
+        } else if (this.editActionScenario == EditActionScenarioEnum.manchesterDescr) {
+            this.sharedModals.manchesterExpression("Edit expression", this.resource.getShow()).then(
+                expr => {
+                    if (expr == this.resource.getShow()) return; //if expression didn't change, don't do nothing
+                    this.manchesterService.updateExpression(expr, <ARTBNode>this.resource).subscribe(
+                        () => { this.update.emit(); }
+                    );
+                },
+                () => {}
+            )
         } else { //default
             //special case: resource is a data range => don't edit inline dataranges, but open the editor instead
             if (this.resource instanceof ARTBNode && this.resource.getRole() == RDFResourceRolesEnum.dataRange) {
@@ -274,15 +288,8 @@ export class EditableResourceComponent extends AbstractResViewResource {
                     this.resourceStringValue = literalForm.toNT();
                 }
                 //special case: if user is editing a class restriction, the widget should allow to edit the manchester expression
-                else if (this.resource instanceof ARTBNode) {
-                    this.manchesterService.isClassAxiom(this.resource).subscribe(
-                        isClassAxiom => {
-                            if (isClassAxiom) {
-                                this.isClassAxiom = true;
-                                this.resourceStringValue = this.resource.getShow();
-                            }
-                        }
-                    )
+                else if (this.resource instanceof ARTBNode && this.resource.getAdditionalProperty(ResAttribute.SHOW_INTERPR) != null) {
+                    this.resourceStringValue = this.resource.getShow();
                 }
             } else if (type.toLowerCase().includes("literal")) {
                 this.rangeType = RDFTypesEnum.literal;
@@ -368,12 +375,8 @@ export class EditableResourceComponent extends AbstractResViewResource {
                             this.updateTriple(this.subject, this.predicate, this.resource, newValue);
                         }
                     } catch (err) { //if resourceStringValue is not a NTriple representation, check if it is a manchester expr. 
-                        if (this.resource.isBNode() && this.isClassAxiom) {
-                            /** 
-                             * If the editing resource is a bnode and if it represents class axiom,
-                             * I can assume that the user has typed a new manchester expression to represent a class axiom 
-                             * */
-                            this.isClassAxiom = false;
+                        if (this.resource.isBNode() && this.resource.getAdditionalProperty(ResAttribute.SHOW_INTERPR) != null) {
+                            //If the editing resource is a bnode and it has a show interpretation, it means that it is a manch expr,
                             this.applyManchesterUpdate(<ARTBNode>this.resource, this.resourceStringValue);
                             return;
                         } else { //if neither a manchester expression, re-throw the exception
@@ -461,6 +464,10 @@ export class EditableResourceComponent extends AbstractResViewResource {
         );
     }
 
+    /**
+     * Theoretically this should be never invoked since every resource that represents a manchester expression
+     * should be handled by the proper partition renderer. Anyway I leave it as it is a fallback handling mechanism
+     */
     private applyManchesterUpdate(node: ARTBNode, expression: string) {
         this.manchesterService.checkExpression(expression).subscribe(
             (checkResp: ExpressionCheckResponse) => {
@@ -603,6 +610,7 @@ enum EditActionScenarioEnum {
     xLabel = "xLabel", //edit should allow to change the literal form
     langTaggedLiteral = "langTaggedLiteral", //edit should allow to change the content of the literal without langTag
     typedLiteral = "typedLiteral", //edit should allow to change the content of the literal without datatype
+    manchesterDescr = "manchesterDescr", //class axiom description expressed in manchester => edit handled through a manchester editor modal
     partition = "partition", //edit should be handled ad hoc by the partition (an event is emitted) which should implements an editHandler method
     default = "default" //edit should allow to edit the NT form (iri/bnode/...)
 }

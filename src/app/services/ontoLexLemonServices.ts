@@ -138,7 +138,7 @@ export class OntoLexLemonServices {
      * @param index 
      * @param lexicon 
      */
-    getLexicalEntriesByAlphabeticIndex(index: string, lexicon: ARTURIResource, options?: VBRequestOptions): Observable<ARTURIResource[]> {
+    getLexicalEntriesByAlphabeticIndex(index: string, lexicon?: ARTURIResource, options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {
             index: index,
             lexicon: lexicon
@@ -156,7 +156,7 @@ export class OntoLexLemonServices {
      * @param lexicon 
      * @param options 
      */
-    countLexicalEntriesByAlphabeticIndex(index: string, lexicon: ARTURIResource, options?: VBRequestOptions): Observable<number> {
+    countLexicalEntriesByAlphabeticIndex(index: string, lexicon?: ARTURIResource, options?: VBRequestOptions): Observable<number> {
         var params: any = {
             index: index,
             lexicon: lexicon

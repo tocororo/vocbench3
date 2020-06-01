@@ -32,7 +32,7 @@
     //Regular expressions
     const booleansRegex = getRegexp(booleans, false);
     const builtinDatatypesRegex = getRegexp(builtinDatatypes, true); //case sensitive?
-    const characteristicsRegex = getRegexp(characteristics, true);
+    const characteristicsRegex = getRegexp(characteristics, false);
     const conjuctionsRegex = getRegexp(conjuctions, false);
     const facetsRegex = getRegexp(facets, true);
     const quantifiersRegex = getRegexp(quantifiers, false);

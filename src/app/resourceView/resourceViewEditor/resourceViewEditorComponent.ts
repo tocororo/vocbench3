@@ -264,8 +264,8 @@ export class ResourceViewEditorComponent {
         this.rangesColl = this.initPartition(ResViewPartition.ranges, partitionFilter, true);
         this.rdfsMembersColl = this.initPartition(ResViewPartition.rdfsMembers, partitionFilter, false); //ordered server-side
         this.schemesColl = this.initPartition(ResViewPartition.schemes, partitionFilter, true);
-        this.subtermsColl = this.initPartition(ResViewPartition.subPropertyChains, partitionFilter, true);
-        this.subPropertyChainsColl = this.initPartition(ResViewPartition.subterms, partitionFilter, true);
+        this.subtermsColl = this.initPartition(ResViewPartition.subterms, partitionFilter, true);
+        this.subPropertyChainsColl = this.initPartition(ResViewPartition.subPropertyChains, partitionFilter, true);
         this.superpropertiesColl = this.initPartition(ResViewPartition.superproperties, partitionFilter, true);
         this.topconceptofColl = this.initPartition(ResViewPartition.topconceptof, partitionFilter, true);
         this.typesColl = this.initPartition(ResViewPartition.types, partitionFilter, true);
