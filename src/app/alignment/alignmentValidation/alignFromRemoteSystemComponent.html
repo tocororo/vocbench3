@@ -43,10 +43,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let task of tasks" [ngClass]="{ info: selectedTask }" (click)="selectTask(task)">
+                    <tr *ngFor="let task of tasks" [ngClass]="{ info: selectedTask == task }" (click)="selectTask(task)">
                         <td>{{task.leftDataset.projectName}}</td>
                         <td>{{task.rightDataset.projectName}}</td>
-                        <td>{{task.status}}<span *ngIf="task.progress !== null"> ({{task.progress}}%)</span><span *ngIf="task.reason?.message !== null" class="glyphicon glyphicon-question-sign" [title]="task.reason?.message"></span></td>
+                        <td>{{task.status}}<span *ngIf="task.progress"> ({{task.progress}}%)</span><span *ngIf="task.reason?.message" class="glyphicon glyphicon-question-sign" [title]="task.reason?.message"></span></td>
                         <td>{{task.startTime}}</td>
                         <td>{{task.endTime}}</td>
                         <td>

@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Pairing } from '../../../models/Maple';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { RefinablePairing, Synonymizer, Pairing } from '../../../models/Maple';
 
 @Component({
     selector: 'maple-pairing',
@@ -7,8 +7,21 @@ import { Pairing } from '../../../models/Maple';
 })
 export class MaplePairingComponent {
 
-    @Input() pairing: Pairing;
+    @Input() pairing: RefinablePairing;
+    @Output() synonymizerChange: EventEmitter<Synonymizer> = new EventEmitter();
+
+    private selectedSynonymizer: Synonymizer;
 
     constructor() {}
+
+    ngOnInit() {
+        let scores = this.pairing.synonymizers.map(s => s.score);
+        let maxScore = Math.max(...scores);
+        this.selectedSynonymizer = this.pairing.synonymizers.find(s => s.score == maxScore);
+    }
+
+    private onSynonimizerChanged() {
+        this.synonymizerChange.emit(this.selectedSynonymizer);
+    }
 
 }

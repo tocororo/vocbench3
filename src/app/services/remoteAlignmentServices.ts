@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTURIResource } from '../models/ARTResources';
 import { RemoteAlignmentTask } from '../models/RemoteAlignment';
-import { MatchingProblem } from '../models/Maple';
+import { TaskReport } from '../models/Maple';
 import { Project } from '../models/Project';
 import { HttpManager } from "../utils/HttpManager";
 import { AlignmentOverview } from '../models/Alignment';
@@ -68,7 +68,7 @@ export class RemoteAlignmentServices {
      * Returns the taskId
      * @param matchingProblem 
      */
-    createTask(matchingProblem: MatchingProblem): Observable<string> {
+    createTask(matchingProblem: TaskReport): Observable<string> {
         var params: any = {
             matchingProblem: JSON.stringify(matchingProblem)
         };

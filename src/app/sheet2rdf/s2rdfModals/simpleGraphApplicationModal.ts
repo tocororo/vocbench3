@@ -257,7 +257,11 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                     s += "@" + n.converter.language;
                 }
                 if (n.converter.datatypeUri != null) {
-                    s += "^^" + ResourceUtils.getQName(n.converter.datatypeUri, VBContext.getPrefixMappings());
+                    let dtQname = ResourceUtils.getQName(n.converter.datatypeUri, VBContext.getPrefixMappings());
+                    if (dtQname == n.converter.datatypeUri) {
+                        dtQname = "<" + n.converter.datatypeUri + ">";
+                    }
+                    s += "^^" + dtQname;
                 }
             } else { //not the default converter
                 s += "(";

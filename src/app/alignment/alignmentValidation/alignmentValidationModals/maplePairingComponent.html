@@ -8,10 +8,6 @@
             </colgroup>
             <tbody>
                 <tr>
-                    <td class="text-right" nowrap><label>Score:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="pairing.score" readonly></td>
-                </tr>
-                <tr>
                     <td class="text-right" nowrap><label>Source:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="pairing.source.lexicalizationSet" readonly></td>
                 </tr>
@@ -20,25 +16,23 @@
                     <td><input class="form-control input-sm" [ngModel]="pairing.target.lexicalizationSet" readonly></td>
                 </tr>
                 <tr>
+                    <td class="text-right" nowrap><label>Score:</label></td>
+                    <td><input class="form-control input-sm" [ngModel]="pairing.score" readonly></td>
+                </tr>
+                <tr>
+                    <td class="text-right" nowrap><label>Best combined score:</label></td>
+                    <td><input class="form-control input-sm" [ngModel]="pairing.bestCombinedScore" readonly></td>
+                </tr>
+                <tr>
                     <td class="text-right" nowrap><label>Synonymizer:</label></td>
                     <td>
-                        <table *ngIf="pairing.synonymizer">
-                            <colgroup>
-                                <col style="width: 1%;">
-                                <col>
-                            </colgroup>
-                            <tbody>
-                                <tr>
-                                    <td class="text-right" nowrap><label>Lexicon:</label></td>
-                                    <td><input class="form-control input-sm" [ngModel]="pairing.synonymizer.lexicon" readonly></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right" nowrap><label>Conceptualization set:</label></td>
-                                    <td><input class="form-control input-sm" [ngModel]="pairing.synonymizer.conceptualizationSet" readonly></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <input *ngIf="!pairing.synonymizer" class="form-control input-sm" readonly>
+                        <select class="form-control input-sm" [(ngModel)]="pairing.selectedSynonymizer" (ngModelChange)="onSynonimizerChanged()"
+                            [title]="'conceptualizationSet: ' + pairing.selectedSynonymizerselectedSynonymizer?.conceptualizationSet + '\nlexicon: ' + pairing.selectedSynonymizerselectedSynonymizer?.lexicon">
+                            <option *ngFor="let s of pairing.synonymizers" [ngValue]="s"
+                                [title]="'conceptualizationSet: ' + s.conceptualizationSet + '\nlexicon: ' + s.lexicon">
+                                {{s.score}}
+                            </option>
+                        </select>
                     </td>
                 </tr>
             </tbody>

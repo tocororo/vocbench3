@@ -1,8 +1,14 @@
-export class MatchingProblem {
+export class TaskReport {
     leftDataset: Dataset;
     rightDataset: Dataset;
     supportDatasets: Dataset[];
     pairings: Pairing[];
+}
+export class RefinableTaskReport {
+    leftDataset: Dataset;
+    rightDataset: Dataset;
+    supportDatasets: Dataset[];
+    pairings: RefinablePairing[];
 }
 export class Dataset {
     '@id': string;
@@ -10,6 +16,7 @@ export class Dataset {
     uriSpace: string;
     sparqlEndpoint?: string;
     conformsTo?: string;
+    title: string[];
 }
 export class Pairing {
     score: number;
@@ -17,12 +24,20 @@ export class Pairing {
     target: PairingHand;
     synonymizer: Synonymizer;
 }
+export class RefinablePairing {
+    score: number;
+    bestCombinedScore: number;
+    source: PairingHand;
+    target: PairingHand;
+    synonymizers: Synonymizer[];
+}
 export class PairingHand {
     lexicalizationSet: string;
 }
 export class Synonymizer {
     lexicon: string;
     conceptualizationSet: string;
+    score: number;
 }
 
 export class LexicalizationSet extends Dataset {
@@ -58,3 +73,5 @@ export class Lexicon extends Dataset {
     linguisticCatalog: string;
 }
 export class VoidDataset extends Dataset { }
+
+export class ProfilerOptions {}

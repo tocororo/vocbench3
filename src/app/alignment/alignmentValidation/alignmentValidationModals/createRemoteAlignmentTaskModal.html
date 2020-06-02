@@ -1,7 +1,7 @@
 <div class="modal-header">
     <h3 class="modal-title">Create task</h3>
 </div>
-<div class="modal-body scrollableContainer">
+<div class="modal-body vbox scrollableContainer">
 
     <div>
         <div class="col-sm-6 text-center">
@@ -50,47 +50,60 @@
         </div>
     </div>
 
-    <div *ngIf="matchingProblem" class="vbox" style="margin-top: 8px;">
-        <div>
-            <div class="col-sm-6">
-                <maple-dataset [dataset]="matchingProblem.leftDataset"></maple-dataset>
+    <div *ngIf="refinableTaskReport" class="vbox" style="margin-top: 8px;">
+        <div class="hbox" style="flex: initial;">
+            <maple-dataset [dataset]="refinableTaskReport.leftDataset" style="flex: 1; margin-right: 6px;"></maple-dataset>
+            <maple-dataset [dataset]="refinableTaskReport.rightDataset" style="flex: 1; margin-left: 6px;"></maple-dataset>
+        </div>
+
+        <div class="panel panel-default vbox" style="margin-top: 6px;">
+            <div class="panel-heading">
+                <label>Pairings</label>
             </div>
-            <div class="col-sm-6">
-                <maple-dataset [dataset]="matchingProblem.rightDataset"></maple-dataset>
+            <div class="panel-body scrollableContainer">
+                <div *ngFor="let p of refinablePairings" class="panel panel-default" style="margin: 4px 0px">
+                    <div class="panel-body">
+                        <div class="hbox" style="align-items: center; justify-content: center;">
+                            <lang-item [language]="p.language" size="lg" [showName]="false"></lang-item>
+                            <div style="margin-left: 10px;">
+                                <div class="text-center">
+                                    <span>Score:</span>
+                                    <b [title]="p.score">{{p.scoreRound}}</b>
+                                </div>
+                                <div class="text-center">
+                                    <span>Best combined score:</span>
+                                    <b [title]="p.bestCombinedScore">{{p.bestCombinedScoreRound}}</b>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="groupPanel">
+                            <div class="groupPanel-heading">
+                                <div class="groupPanel-heading-content">
+                                    <label>Synonymizers</label>
+                                </div>
+                            </div>
+                            <div class="groupPanel-body">
+                                <div *ngFor="let s of p.synonymizers" class="hbox" style="align-items: center; padding: 2px 4px">
+                                    <input type="radio" name="synRadio" [checked]="selectedSynonymizer == s" (click)="selectSynonymizer(p, s)"/>
+                                    <lang-item style="margin-left: 12px;" [language]="s.language" [showName]="false"></lang-item>
+                                    <!-- <span>TITLE</span> -->
+                                    <div style="margin-left: 10px;">
+                                        Score: <b [title]="s.score">{{s.scoreRound}}</b>
+                                    </div>
+                                    <button class="btn btn-default btn-xs" style="margin-left: 12px;" (click)="describeSynonymizer(s)" title="Details">
+                                        <span class="glyphicon glyphicon-info-sign"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
 
-        <div class="col-sm-12 vbox" style="margin-top: 6px; flex: initial;" [ngStyle]="{ 'min-height': showSupportDatasets ? '100px' : '32px' }">
-            <div class="groupPanel vbox">
-                <div class="groupPanel-heading">
-                    <div class="groupPanel-heading-content clickable"(click)="showSupportDatasets = !showSupportDatasets">
-                        <span [class]="'glyphicon glyphicon-menu-' + (showSupportDatasets ? 'down' : 'right')"></span>
-                        <label class="clickable" style="margin-left: 4px;" >Support datasets</label>
-                    </div>
-                </div>
-                <div class="groupPanel-body scrollableContainer">
-                    <div *ngIf="showSupportDatasets">
-                        <maple-dataset *ngFor="let sd of matchingProblem.supportDatasets" [dataset]="sd"></maple-dataset>
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-        <div class="col-sm-12 vbox" style="margin-top: 6px; flex: initial;" [ngStyle]="{ 'min-height': showPairings ? '100px' : '32px' }">
-            <div class="groupPanel vbox">
-                <div class="groupPanel-heading">
-                    <div class="groupPanel-heading-content clickable" (click)="showPairings = !showPairings">
-                        <span [class]="'glyphicon glyphicon-menu-' + (showPairings ? 'down' : 'right')"></span>
-                        <label class="clickable" style="margin-left: 4px;" >Pairings</label>
-                    </div>
-                </div>
-                <div class="groupPanel-body scrollableContainer">
-                    <div *ngIf="showPairings">
-                        <maple-pairing *ngFor="let p of matchingProblem.pairings" [pairing]="p"></maple-pairing>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
 
 </div>

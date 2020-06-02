@@ -219,7 +219,7 @@ export class ResourceUtils {
     }
 
     /**
-     * Returns the qname of a IRI if the prefix-namespace is found, null otherwise
+     * Returns the qname of a IRI if the prefix-namespace is found, the same IRI otherwise
      * @param resource
      * @param prefixMapping 
      */
@@ -229,7 +229,7 @@ export class ResourceUtils {
                 return iri.replace(prefixMapping[i].namespace, prefixMapping[i].prefix + ":");
             }
         }
-        return null;
+        return iri;
     }
 
     /**

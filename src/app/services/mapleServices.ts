@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ResourcePosition, ARTURIResource } from "../models/ARTResources";
-import { HttpManager } from "../utils/HttpManager";
 import { Observable } from 'rxjs';
+import { ARTURIResource, ResourcePosition } from "../models/ARTResources";
+import { RefinableTaskReport, ProfilerOptions } from '../models/Maple';
 import { Project } from '../models/Project';
-import { MatchingProblem, Dataset } from '../models/Maple';
+import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
 export class MapleServices {
@@ -38,10 +38,11 @@ export class MapleServices {
         return this.httpMgr.doGet(this.serviceName, "profileSingleResourceMatchProblem", params);
     }
 
-    profileMatchingProblemBetweenProjects(leftDataset: Project, rightDataset: Project): Observable<MatchingProblem> {
+    profileMatchingProblemBetweenProjects(leftDataset: Project, rightDataset: Project, options?: ProfilerOptions): Observable<RefinableTaskReport> {
         let params = {
             leftDataset: leftDataset.getName(),
-            rightDataset: rightDataset.getName()
+            rightDataset: rightDataset.getName(),
+            options: options
         }
         return this.httpMgr.doGet(this.serviceName, "profileMatchingProblemBetweenProjects", params);
     }

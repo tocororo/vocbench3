@@ -9,108 +9,90 @@
             <tbody>
                 <tr>
                     <td class="text-right" nowrap><label>Type:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="shortType" readonly></td>
+                    <td><input class="form-control input-sm" [ngModel]="shortType" [title]="dataset['@type']" readonly></td>
                 </tr>
-                <tr>
+                <tr *ngIf="dataset.uriSpace">
                     <td class="text-right" nowrap><label>URI space:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.uriSpace" readonly></td>
                 </tr>
-                <tr>
+                <tr *ngIf="dataset.conformsTo">
+                    <td class="text-right" nowrap><label>Conforms to:</label></td>
+                    <td><span [class]="'badge ' + modelBadgeClass" [title]="dataset.conformsTo">{{shortConformsTo}}</span></td>
+                </tr>
+                <tr *ngIf="dataset.sparqlEndpoint">
                     <td class="text-right" nowrap><label>SPARQL endpoint:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.sparqlEndpoint" readonly></td>
                 </tr>
-                <tr>
-                    <td class="text-right" nowrap><label>Conforms to:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.conformsTo" readonly></td>
-                </tr>
-
-                <tr *ngIf="shortType=='ConceptualizationSet'">
+                <tr *ngIf="dataset.avgAmbiguity">
                     <td class="text-right" nowrap><label>Avg ambiguity:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.avgAmbiguity" readonly></td>
                 </tr>
-                <tr *ngIf="shortType=='LexicalizationSet'">
+                <tr *ngIf="dataset.avgNumOfLexicalizations">
                     <td class="text-right" nowrap><label title="Average number of lexicalizations">Avg lexicalizations</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.avgNumOfLexicalizations" readonly></td>
                 </tr>
-                <tr *ngIf="shortType=='ConceptualizationSet'">
+                <tr *ngIf="dataset.avgSynonymy">
                     <td class="text-right" nowrap><label>Avg synonymy:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.avgSynonymy" readonly></td>
                 </tr>
-                <tr *ngIf="shortType=='ConceptSet' || shortType=='ConceptualizationSet'">
+                <tr *ngIf="dataset.concepts">
                     <td class="text-right" nowrap><label>Concepts:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.concepts" readonly></td>
                 </tr>
-                <tr *ngIf="shortType=='ConceptualizationSet'">
+                <tr *ngIf="dataset.conceptualDataset">
                     <td class="text-right" nowrap><label>Conceptual dataset:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.conceptualDataset" readonly></td>
                 </tr>
-                <tr *ngIf="shortType=='ConceptualizationSet'">
+                <tr *ngIf="dataset.conceptualizations">
                     <td class="text-right" nowrap><label>Conceptualizations:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.conceptualizations" readonly></td>
                 </tr>
-                <tr *ngIf="shortType=='LexicalizationSet' || shortType=='Lexicon'">
+                <tr *ngIf="dataset.languageLexvo">
                     <td class="text-right" nowrap><label>Language Lexvo:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.languageLexvo" readonly></td>
                 </tr>
-                <tr *ngIf="shortType=='LexicalizationSet' || shortType=='Lexicon'">
+                <tr *ngIf="dataset.languageLOC">
                     <td class="text-right" nowrap><label>Language LOC:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.languageLOC" readonly></td>
                 </tr>
-                <tr *ngIf="shortType=='LexicalizationSet' || shortType=='Lexicon'">
+                <tr *ngIf="dataset.languageTag">
                     <td class="text-right" nowrap><label>Language Tag:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.languageTag" readonly></td>
                 </tr>
-                <tr *ngIf="shortType=='LexicalizationSet' || shortType=='ConceptualizationSet' || shortType=='Lexicon'">
+                <tr *ngIf="dataset.lexicalEntries">
                     <td class="text-right" nowrap><label>Lexical entries:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.lexicalEntries" readonly></td>
                 </tr>
-                <tr *ngIf="shortType=='LexicalizationSet'">
+                <tr *ngIf="dataset.lexicalizationModel">
                     <td class="text-right" nowrap><label>Lexicalization model:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.lexicalizationModel" readonly></td>
                 </tr>
-                <tr *ngIf="shortType=='LexicalizationSet'">
+                <tr *ngIf="dataset.lexicalizations">
                     <td class="text-right" nowrap><label>Lexicalizations:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.lexicalizations" readonly></td>
                 </tr>
-                <tr *ngIf="shortType=='LexicalizationSet' || shortType=='ConceptualizationSet'">
+                <tr *ngIf="dataset.lexiconDataset">
                     <td class="text-right" nowrap><label>Lexicon dataset:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.lexiconDataset" readonly></td>
                 </tr>
-                <tr *ngIf="shortType=='Lexicon'">
+                <tr *ngIf="dataset.linguisticCatalog">
                     <td class="text-right" nowrap><label>Linguistic catalog:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.linguisticCatalog" readonly></td>
                 </tr>
-                <tr *ngIf="shortType=='LexicalizationSet'">
+                <tr *ngIf="dataset.percentage">
                     <td class="text-right" nowrap><label>Percentage:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.percentage" readonly></td>
                 </tr>
-                <tr *ngIf="shortType=='LexicalizationSet'">
+                <tr *ngIf="dataset.referenceDataset">
                     <td class="text-right" nowrap><label>Reference dataset:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.referenceDataset" readonly></td>
                 </tr>
-                <tr *ngIf="shortType=='LexicalizationSet'">
+                <tr *ngIf="dataset.references">
                     <td class="text-right" nowrap><label>References:</label></td>
                     <td><input class="form-control input-sm" [ngModel]="dataset.references" readonly></td>
                 </tr>
             </tbody>
         </table>
-
-        <!-- <div class="form-group">
-            <label>Type</label>
-            <input class="form-control input-sm" [ngModel]="shortType" readonly>
-        </div>
-        <div class="form-group">
-            <label>URI space</label>
-            <input class="form-control input-sm" [ngModel]="dataset.uriSpace" readonly>
-        </div>
-        <div class="form-group">
-            <label>SPARQL endpoint</label>
-            <input class="form-control input-sm" [ngModel]="dataset.sparqlEndpoint" readonly>
-        </div>
-        <div class="form-group">
-            <label>Conforms to</label>
-            <input class="form-control input-sm" [ngModel]="dataset.conformsTo" readonly>
-        </div> -->
 
     </div>
 </div>

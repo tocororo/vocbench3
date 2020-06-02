@@ -71,9 +71,9 @@ export class CommitDeltaModal implements ModalComponent<CommitDeltaModalData> {
         } else if (res instanceof ARTLiteral) {
             if (res.isTypedLiteral()) {
                 let datatypeIRI: string = res.getDatatype();
-                let datasetQName: string = ResourceUtils.getQName(datatypeIRI, VBContext.getPrefixMappings());
-                if (datasetQName != null) {
-                    return "\"" + res.getValue() + "\"^^" + datasetQName;
+                let datatypeQName: string = ResourceUtils.getQName(datatypeIRI, VBContext.getPrefixMappings());
+                if (datatypeQName != datatypeIRI) {
+                    return "\"" + res.getValue() + "\"^^" + datatypeQName;
                 } else {
                     return res.toNT();
                 }

@@ -98,7 +98,11 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
         for (var i = 0; i < dataRange.length; i++) {
             let v: ARTLiteral = dataRange[i];
             preview += JSON.stringify(v.getValue());
-            preview += "^^" + ResourceUtils.getQName(v.getDatatype(), VBContext.getPrefixMappings());
+            let dtQname = ResourceUtils.getQName(v.getDatatype(), VBContext.getPrefixMappings());
+            if (dtQname == v.getDatatype()) {
+                dtQname = "<" + v.getDatatype() + ">";
+            }
+            preview += "^^" + dtQname;
             preview += ", "
             if (i == 2 && dataRange.length > 3) { //stops the preview at the third element (if there are more)
                 preview += "...";

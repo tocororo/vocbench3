@@ -85,7 +85,7 @@ export class Project {
     }
     public getModelType(prettyPrint?: boolean): string {
         if (prettyPrint) {
-            return this.getPrettyPrintModelType(this.model);
+            return Project.getPrettyPrintModelType(this.model);
         }
         return this.model;
     }
@@ -95,12 +95,12 @@ export class Project {
     }
     public getLexicalizationModelType(prettyPrint?: boolean): string {
         if (prettyPrint) {
-            return this.getPrettyPrintModelType(this.lexicalizationModel);
+            return Project.getPrettyPrintModelType(this.lexicalizationModel);
         }
         return this.lexicalizationModel;
     }
 
-    private getPrettyPrintModelType(modelType: string) {
+    public static getPrettyPrintModelType(modelType: string) {
         if (modelType == RDFS.uri) {
             return "RDFS";
         } else if (modelType == OWL.uri) {
@@ -113,6 +113,8 @@ export class Project {
             return "OntoLex";
         } else if (modelType == EDOAL.uri) {
             return "EDOAL";
+        } else {
+            return modelType;
         }
     }
 

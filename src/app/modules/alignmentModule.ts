@@ -8,6 +8,7 @@ import { AlignmentValidationComponent } from '../alignment/alignmentValidation/a
 import { CreateRemoteAlignmentTaskModal } from '../alignment/alignmentValidation/alignmentValidationModals/createRemoteAlignmentTaskModal';
 import { MapleDatasetComponent } from '../alignment/alignmentValidation/alignmentValidationModals/mapleDatasetComponent';
 import { MaplePairingComponent } from '../alignment/alignmentValidation/alignmentValidationModals/maplePairingComponent';
+import { SynonymizerDetailsModal } from '../alignment/alignmentValidation/alignmentValidationModals/synonymizerDetailsModal';
 import { SharedModule } from './sharedModule';
 
 
@@ -23,12 +24,13 @@ import { SharedModule } from './sharedModule';
         MapleDatasetComponent,
         MaplePairingComponent,
         //modals
-        CreateRemoteAlignmentTaskModal
+        CreateRemoteAlignmentTaskModal,
+        SynonymizerDetailsModal
     ],
     exports: [AlignFromRemoteSystemComponent],
     providers: [],
     entryComponents: [
-        CreateRemoteAlignmentTaskModal
+        CreateRemoteAlignmentTaskModal, SynonymizerDetailsModal
     ]
 })
 export class AlignmentModule { }
