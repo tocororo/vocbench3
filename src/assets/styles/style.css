@@ -180,7 +180,7 @@ resource-list, class-individual-tree, scheme-selection, data-range-editor, impor
 
 /* Note: in order to work, the div with this class needs to be placed into a display:flex container */
 .scrollableContainer {
-    padding: 4px;
+    padding: 6px; /* the same of the panel-body */
     overflow: auto;
     flex: 1;
     min-height: 0;

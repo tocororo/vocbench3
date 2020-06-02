@@ -9,6 +9,7 @@ import { VBProperties } from "../../utils/VBProperties";
     selector: "lang-item",
     templateUrl: "./languageItemComponent.html",
     styles: [`
+        :host { display: inline-block }
         .flag-xs { zoom: 100%; }
         .flag-sm { zoom: 130%; }
         .flag-md { zoom: 150%; }

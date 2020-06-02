@@ -1,12 +1,8 @@
 <div class="hbox" style="align-items: center; justify-content: center;" [title]="language.name + ' (' + language.tag + ')'">
-    <img *ngIf="flagImgSrc.indexOf('unknown') == -1; else unknownFlag" [src]="flagImgSrc" [class]="flagCls" [ngClass]="{ disabled : disabled }">
-    <ng-template #unknownFlag>
-        <div [class]="'flagIcon ' + flagCls">
-            <img [src]="flagImgSrc">
-            <span [ngClass]="{ grayText: disabled }">{{language.tag}}</span>
-        </div>
-    </ng-template>
-
+    <div [class]="'flagIcon ' + flagCls">
+        <img [src]="flagImgSrc">
+        <span *ngIf="flagImgSrc.indexOf('unknown') != -1" [ngClass]="{ grayText: disabled }">{{language.tag}}</span>
+    </div>
     <span *ngIf="showName" [ngClass]="{ grayText: disabled }" style="margin-left: 2px;">{{language.name}}</span>
     <span *ngIf="showTag" [ngClass]="{ grayText: disabled }" style="margin-left: 2px;">({{language.tag}})</span>
 </div>
