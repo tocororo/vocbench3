@@ -176,6 +176,13 @@ export class EdoalComponent {
                 this.correspondences = correspondences;
                 this.renderCorrespondences();
                 this.selectedCorrespondence = null;
+            },
+            (err: Error) => {
+                if (err.name.endsWith("IndexingLanguageNotFound")) {
+                    this.basicModals.alert("Missing user language", "No user language has been detected for the project '" + 
+                    this.leftProjCtx.getProject().getName() + "'. The system will not be able to initialize the list of alignments.\n" +
+                    "Please access that project, then go to the user preferences and set a rendering language.", "warning");
+                }
             }
         );
     }

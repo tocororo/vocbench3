@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Correspondence } from '../models/Alignment';
 import { ARTBNode, ARTResource, ARTURIResource } from '../models/ARTResources';
 import { Deserializer } from '../utils/Deserializer';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 
 @Injectable()
 export class EdoalServices {
@@ -126,7 +126,13 @@ export class EdoalServices {
             page: page,
             pageSize: pageSize
         };
-        return this.httpMgr.doGet(this.serviceName, "getCorrespondences", params).map(
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: [ 'it.uniroma2.art.semanticturkey.services.core.IndexingLanguageNotFound']
+            } 
+        });
+        return this.httpMgr.doGet(this.serviceName, "getCorrespondences", params, options).map(
             stResp => {
                 let correspondences: Correspondence[] = [];
                 for (let i = 0; i < stResp.length; i++) {
