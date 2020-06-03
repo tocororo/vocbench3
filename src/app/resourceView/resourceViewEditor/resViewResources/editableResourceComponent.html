@@ -33,7 +33,7 @@
                 <li [ngClass]="{ disabled: !spawnFromLabelAuthorized || isInferred }">
                     <a (click)="spawnNewConceptWithLabel()">Spawn new concept from this xLabel</a>
                 </li>
-                <li [ngClass]="{ disabled: !spawnFromLabelAuthorized || isInferred }">
+                <li [ngClass]="{ disabled: !moveLabelAuthorized || isInferred }">
                     <a (click)="moveLabelToConcept()">Move xLabel to another concept</a>
                 </li>
             </ng-container>

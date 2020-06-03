@@ -55,7 +55,7 @@ export class UIUtils {
 
 
 
-    private static availableFlagLang = ["ar", "be", "bg", "bn", "cs", "da", "de", "el", "en", "en-GB", "en-US", "es", "et", "fa", "fr", "fi", "ga", 
+    private static availableFlagLang = ["ar", "be", "bg", "bn", "cs", "da", "de", "el", "en", "en-gb", "en-us", "es", "et", "fa", "fr", "fi", "ga", 
         "hi", "hr", "hu", "hy", "id", "it", "ja", "ka", "km", "ko", "kz", "lt", "lv", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sl", "sq", "sr", "sv",
         "th", "tr", "uk", "vi", "zh"];
 
@@ -409,6 +409,7 @@ export class UIUtils {
     }
 
     static getFlagImgSrc(langTag: string): string {
+        langTag = langTag.toLowerCase();
         var imgSrc: string;
         if (langTag != null && this.availableFlagLang.indexOf(langTag) != -1) {
             imgSrc = require("../../assets/images/flags/flag_" + langTag + ".png");

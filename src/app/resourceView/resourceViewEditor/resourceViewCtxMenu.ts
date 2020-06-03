@@ -48,7 +48,7 @@ export class ResourceViewContextMenu {
         );
         this.isSpawnFromLabelDisabled = (
             !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || 
-		    !AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSpawnNewConceptFromLabel)
+		    !AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSpawnNewConceptFromLabel, null, this.resource)
         );
         this.isAssertInferredDisabled = (
             !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || 

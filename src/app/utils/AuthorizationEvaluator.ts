@@ -202,7 +202,7 @@ export class AuthorizationEvaluator {
             //check language authorization
             if (langValue != null && langValue.getAdditionalProperty(ResAttribute.LANG)) {
                 let userLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
-                if (userLangs.indexOf(langValue.getAdditionalProperty(ResAttribute.LANG)) == -1) {
+                if (!userLangs.some(l => l.toLowerCase() == langValue.getAdditionalProperty(ResAttribute.LANG).toLowerCase())) {
                     return false;
                 }
             }

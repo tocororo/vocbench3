@@ -1,4 +1,4 @@
-<div class="hbox" style="align-items: center; justify-content: center;" [title]="language.name + ' (' + language.tag + ')'">
+<div class="hbox" style="align-items: center" [title]="language.name + ' (' + language.tag + ')'">
     <div [class]="'flagIcon ' + flagCls">
         <img [src]="flagImgSrc">
         <span *ngIf="flagImgSrc.indexOf('unknown') != -1" [ngClass]="{ grayText: disabled }">{{language.tag}}</span>

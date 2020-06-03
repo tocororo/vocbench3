@@ -164,8 +164,8 @@ export class EditableResourceComponent extends AbstractResViewResource {
         );
         this.editAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.U, this.subject, this.resource);
         this.deleteAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.D, this.subject, this.resource);
-        this.spawnFromLabelAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSpawnNewConceptFromLabel);
-        this.moveLabelAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorMoveXLabelToResource, this.subject);
+        this.spawnFromLabelAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSpawnNewConceptFromLabel, null, this.resource);
+        this.moveLabelAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorMoveXLabelToResource, this.subject, this.resource);
         this.assertAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.subject);
         this.copyLocalesAuthorized = ResourceViewAuthEvaluator.isAuthorized(this.partition, CRUDEnum.C, this.subject, this.resource);
         //bulk actions visible in every partition exept: subPropertyChains that 
