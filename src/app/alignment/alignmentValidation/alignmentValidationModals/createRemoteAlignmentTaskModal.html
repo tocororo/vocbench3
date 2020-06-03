@@ -87,7 +87,7 @@
                                 <div *ngFor="let s of p.synonymizers" class="hbox" style="align-items: center; padding: 2px 4px">
                                     <input type="radio" name="synRadio" [checked]="selectedSynonymizer == s" (click)="selectSynonymizer(p, s)"/>
                                     <lang-item style="margin-left: 12px;" [language]="s.language" [showName]="false"></lang-item>
-                                    <!-- <span>TITLE</span> -->
+                                    <i *ngIf="s.lexiconDataset.title" style="margin-left: 12px;">{{s.lexiconDataset.title[0]}}</i>
                                     <div style="margin-left: 10px;">
                                         Score: <b [title]="s.score">{{s.scoreRound}}</b>
                                     </div>
@@ -108,6 +108,10 @@
 
 </div>
 <div class="modal-footer">
+    <div *ngIf="refinableTaskReport && noSynonymizersAvailable" class="alert alert-warning pull-left">
+        <span class="glyphicon glyphicon-warning-sign"></span>
+        The matching profilation process has not found any pairing with available synonymizers. Cannot create a task.
+    </div>
     <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkEnabled()">Ok</button>
     <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
 </div>

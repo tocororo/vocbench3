@@ -40,6 +40,7 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
     private refinablePairings: ResolvedPairing[];
     private selectedRefinablePairing: ResolvedPairing;
     private selectedSynonymizer: ResolvedSynonymizer;
+    private noSynonymizersAvailable: boolean = false;
 
     constructor(public dialog: DialogRef<CreateRemoteAlignmentTaskModalData>, private projectService: ProjectServices,
         private mapleService: MapleServices, private remoteAlignmentService: RemoteAlignmentServices, private basicModals: BasicModalServices,
@@ -164,6 +165,12 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
                 let bestScore: number = Math.max(...this.refinablePairings.map(p => p.bestCombinedScore)); //get the highest best combined score
                 this.selectedRefinablePairing = this.refinablePairings.find(p => p.bestCombinedScore == bestScore); //select the pairing with the best combined score
                 this.selectedSynonymizer = this.selectedRefinablePairing.synonymizers.find(s => s.score == bestScore); //select its synonymizer with the best score
+                this.noSynonymizersAvailable = true;
+                this.refinablePairings.forEach(p => {
+                    if (p.synonymizers.length != 0) {
+                        this.noSynonymizersAvailable = false;
+                    }
+                })
             }
         );
     }
