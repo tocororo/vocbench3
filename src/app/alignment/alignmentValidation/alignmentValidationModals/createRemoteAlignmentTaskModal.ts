@@ -159,6 +159,9 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
                     rp.language = Languages.getLanguageFromTag(rp.sourceLexicalizationSet.languageTag)
                     this.refinablePairings.push(rp)
                 });
+                //initialize as selected pairing the one with the highest score
+                let bestScore = Math.max(...this.refinablePairings.map(p => p.score));
+                this.refinablePairings.find(p => p.score == bestScore).checked = true;
             }
         );
     }
@@ -188,6 +191,10 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
     }
 
     ok() {
+        if (!this.refinablePairings.some(p => p.checked)) {
+            this.basicModals.alert("Missing pairing", "You need to select at least one pairing", "warning");
+            return;
+        }
         /* prepare the task report to provide to createTask service */
         //first map the enabled refinable pairings into a Pairing list
         let pairings: Pairing[] = [];
