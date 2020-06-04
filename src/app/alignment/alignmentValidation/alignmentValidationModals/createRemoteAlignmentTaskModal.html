@@ -61,7 +61,18 @@
                 <label>Pairings</label>
             </div>
             <div class="panel-body scrollableContainer">
-                <div *ngFor="let p of refinablePairings" class="panel panel-default" style="margin: 4px 0px">
+                <div *ngFor="let p of refinablePairings" class="panel panel-default" style="margin: 4px 0px; position: relative;">
+
+                    <div class="groupPanel-heading">
+                        <div class="groupPanel-heading-content">
+                            <div class="checkbox-inline" title="If checked enable the usage of this pairing">
+                                <label>
+                                    <input type="checkbox" [(ngModel)]="p.checked">Use
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="panel-body">
                         <div class="hbox" style="align-items: center; justify-content: center;">
                             <lang-item [language]="p.language" size="lg" [showName]="false"></lang-item>
@@ -76,17 +87,19 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="groupPanel">
                             <div class="groupPanel-heading">
                                 <div class="groupPanel-heading-content">
-                                    <label>Synonymizers</label>
+                                    <label>
+                                        Synonymizers
+                                        <span class="glyphicon glyphicon-info-sign" title="Allow the usage of a synonymizer for improving the quality of the alignment"></span>
+                                    </label>
                                 </div>
                             </div>
                             <div class="groupPanel-body">
                                 <div *ngFor="let s of p.synonymizers" class="hbox" style="align-items: center; padding: 2px 4px">
-                                    <input type="radio" name="synRadio" [checked]="selectedSynonymizer == s" (click)="selectSynonymizer(p, s)"/>
-                                    <lang-item style="margin-left: 12px;" [language]="s.language" [showName]="false"></lang-item>
+                                    <input type="radio" [checked]="s == p.selectedSynonymizer" (click)="selectSynonymizer(p, s)" [disabled]="!p.checked"/>
+                                    <lang-item style="margin-left: 12px;" [language]="s.language" [showName]="false" [disabled]="!p.checked"></lang-item>
                                     <i *ngIf="s.lexiconDataset.title" style="margin-left: 12px;">{{s.lexiconDataset.title[0]}}</i>
                                     <div style="margin-left: 10px;">
                                         Score: <b [title]="s.score">{{s.scoreRound}}</b>
@@ -98,7 +111,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -108,10 +120,6 @@
 
 </div>
 <div class="modal-footer">
-    <div *ngIf="refinableTaskReport && noSynonymizersAvailable" class="alert alert-warning pull-left">
-        <span class="glyphicon glyphicon-warning-sign"></span>
-        The matching profilation process has not found any pairing with available synonymizers. Cannot create a task.
-    </div>
     <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkEnabled()">Ok</button>
     <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
 </div>

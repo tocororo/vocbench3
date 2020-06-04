@@ -36,11 +36,7 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
     private rightProjectStruct: AlignedProjectStruct;
 
     private refinableTaskReport: RefinableTaskReport;
-
     private refinablePairings: ResolvedPairing[];
-    private selectedRefinablePairing: ResolvedPairing;
-    private selectedSynonymizer: ResolvedSynonymizer;
-    private noSynonymizersAvailable: boolean = false;
 
     constructor(public dialog: DialogRef<CreateRemoteAlignmentTaskModalData>, private projectService: ProjectServices,
         private mapleService: MapleServices, private remoteAlignmentService: RemoteAlignmentServices, private basicModals: BasicModalServices,
@@ -141,7 +137,7 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
                             conceptualizationSetDataset: <ConceptualizationSet>this.refinableTaskReport.supportDatasets.find(d => d["@id"] == s.conceptualizationSet),
                             lexicon: s.lexicon,
                             lexiconDataset: <Lexicon>this.refinableTaskReport.supportDatasets.find(d => d["@id"] == s.lexicon),
-                            language: null
+                            language: null,
                         }
                         syn.language = Languages.getLanguageFromTag(syn.lexiconDataset.languageTag)
                         synonymizers.push(syn);
@@ -157,27 +153,22 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
                         targetLexicalizationSet: <LexicalizationSet>this.refinableTaskReport.supportDatasets.find(d => d["@id"] == p.target.lexicalizationSet),
                         synonymizers: synonymizers,
                         language: null,
+                        checked: false,
+                        selectedSynonymizer: null
                     }
                     rp.language = Languages.getLanguageFromTag(rp.sourceLexicalizationSet.languageTag)
                     this.refinablePairings.push(rp)
                 });
-                //init the synonymizer to use by selecting the one with the highest score (best combined)
-                let bestScore: number = Math.max(...this.refinablePairings.map(p => p.bestCombinedScore)); //get the highest best combined score
-                this.selectedRefinablePairing = this.refinablePairings.find(p => p.bestCombinedScore == bestScore); //select the pairing with the best combined score
-                this.selectedSynonymizer = this.selectedRefinablePairing.synonymizers.find(s => s.score == bestScore); //select its synonymizer with the best score
-                this.noSynonymizersAvailable = true;
-                this.refinablePairings.forEach(p => {
-                    if (p.synonymizers.length != 0) {
-                        this.noSynonymizersAvailable = false;
-                    }
-                })
             }
         );
     }
 
     private selectSynonymizer(pairing: ResolvedPairing, synonymizer: ResolvedSynonymizer) {
-        this.selectedRefinablePairing = pairing;
-        this.selectedSynonymizer = synonymizer;
+        if (pairing.selectedSynonymizer == synonymizer) {
+            pairing.selectedSynonymizer = null;
+        } else {
+            pairing.selectedSynonymizer = synonymizer;
+        }
     }
 
     private describeSynonymizer(synonymizer: ResolvedSynonymizer) {
@@ -193,35 +184,32 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
     //================================
 
     private isOkEnabled() {
-        return this.refinableTaskReport != null && this.selectedSynonymizer != null;
+        return this.refinableTaskReport != null;
     }
 
     ok() {
         /* prepare the task report to provide to createTask service */
-        //first map the refinable pairings into a Pairing list (the only with a synonymizer provided will be the one chosen)
+        //first map the enabled refinable pairings into a Pairing list
         let pairings: Pairing[] = [];
         this.refinablePairings.forEach(p => {
-            let pairing: Pairing = {
-                score: p.score,
-                source: p.source,
-                target: p.target,
-                synonymizer: null
+            if (p.checked) {
+                let pairing: Pairing = {
+                    score: p.score,
+                    source: p.source,
+                    target: p.target,
+                    synonymizer: null
+                }
+                if (p.selectedSynonymizer != null) {
+                    let synonymizer: Synonymizer = {
+                        score: p.selectedSynonymizer.score,
+                        conceptualizationSet: p.selectedSynonymizer.conceptualizationSet,
+                        lexicon: p.selectedSynonymizer.lexicon
+                    }
+                    pairing.synonymizer = synonymizer;
+                }
+                pairings.push(pairing);
             }
-            pairings.push(pairing);
         });
-        //now detect the selected pairing with the chosen synonymizer
-        let selectedPairing: Pairing = pairings.find(p => {
-            return p.source == this.selectedRefinablePairing.source &&
-                p.target == this.selectedRefinablePairing.target &&
-                p.score == this.selectedRefinablePairing.score
-        })
-        //finally set the Synonymizer according the choice made by the user
-        selectedPairing.synonymizer = {
-            conceptualizationSet: this.selectedSynonymizer.conceptualizationSet,
-            lexicon: this.selectedSynonymizer.lexicon,
-            score: this.selectedSynonymizer.score
-        }
-
         let taskReport: TaskReport = {
             leftDataset: this.refinableTaskReport.leftDataset,
             rightDataset: this.refinableTaskReport.rightDataset,
@@ -261,6 +249,8 @@ class ResolvedPairing extends RefinablePairing {
     sourceLexicalizationSet: LexicalizationSet; //retrieved looking for the source.lexicalizationSet in the supportDatasets
     targetLexicalizationSet: LexicalizationSet; //retrieved looking for the target.lexicalizationSet in the supportDatasets
     language: Language; //language of the lexicalization sets (it's the same for both)
+    checked: boolean; //if the pairing is selected to be used
+    selectedSynonymizer: ResolvedSynonymizer; //the synonymizer to use of the pairing
 }
 export class ResolvedSynonymizer extends Synonymizer {
     // lexicon: string;
