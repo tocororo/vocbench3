@@ -60,3 +60,8 @@ export class ConfigurationManager {
 export class Configuration extends Settings {}
 
 export class ConfigurationProperty extends SettingsProp {}
+
+/**
+ * Represents a configuration object to store
+ */
+export interface ConfigurationDefinition { [key: string]: any }

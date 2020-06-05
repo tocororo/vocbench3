@@ -41,13 +41,7 @@ export class Settings {
     public requireConfiguration(): boolean {
         if (this.editRequired) {
             for (var i = 0; i < this.properties.length; i++) {
-                if (
-                    this.properties[i].required && (
-                        this.properties[i].value == null || 
-                        (typeof this.properties[i].value == "string" && this.properties[i].value.trim() == "") ||
-                        (this.properties[i].value instanceof Array && this.properties[i].value.length == 0)
-                    )
-                ) {
+                if (this.properties[i].requireConfiguration()) {
                     return true;
                 }
             }
@@ -142,6 +136,14 @@ export class SettingsProp {
 
     public clone(): SettingsProp {
         return new SettingsProp(this.name, this.displayName, this.description, this.required, this.type.clone(), this.enumeration, this.value);
+    }
+
+    public requireConfiguration(): boolean {
+        return this.required && (
+            this.value == null || 
+            (typeof this.value == "string" && this.value.trim() == "") || 
+            (this.value instanceof Array && this.value.length == 0)
+        )
     }
 }
 

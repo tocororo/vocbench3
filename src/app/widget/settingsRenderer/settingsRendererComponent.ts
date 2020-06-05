@@ -1,7 +1,6 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ARTNode, RDFResourceRolesEnum } from '../../models/ARTResources';
-import { Settings, SettingsProp, SettingsPropTypeConstraint } from '../../models/Plugins';
+import { Settings } from '../../models/Plugins';
 
 @Component({
     selector: 'settings-renderer',
@@ -20,51 +19,6 @@ export class SettingsRendererComponent implements ControlValueAccessor {
 
     private onModelChanged() {
         this.propagateChange(this.settings);
-    }
-
-    private updateBoolean(prop: SettingsProp, value: boolean) {
-        prop.value = value;
-        this.propagateChange(this.settings);
-    }
-
-    private updateValue(prop: SettingsProp, value: ARTNode) {
-        if (value == null) {
-            prop.value = null;
-        } else {
-            prop.value = value.toNT();
-        }
-        this.propagateChange(this.settings);
-    }
-
-    private updateSetValue(prop: SettingsProp, value: any[]) {
-        prop.value = value;
-        this.propagateChange(this.settings);
-    }
-
-    private updateMapValue(prop: SettingsProp, value: any[]) {
-        prop.value = value;
-        this.propagateChange(this.settings);
-    }
-
-    private getIRIRoleConstraints(prop: SettingsProp): RDFResourceRolesEnum[] {
-        /**
-         * use a cache mechanism to avoid to recreate a roles array each time getIRIRoleConstraints is called
-         * (so prevent firing change detection in resource-picker)
-         */
-        if (prop.type['roles'] != null) { //cached?
-            return prop.type['roles'];
-        }
-        let roles: RDFResourceRolesEnum[] = [];
-        let constr: SettingsPropTypeConstraint[] = prop.type.constraints;
-        if (constr != null) {
-            for (var i = 0; i < constr.length; i++) {
-                if (constr[i].type.endsWith("HasRole")) {
-                    roles.push(<RDFResourceRolesEnum>constr[i].value);
-                }
-            }
-        }
-        prop.type['roles'] = roles;
-        return roles;
     }
 
     //---- method of ControlValueAccessor and Validator interfaces ----

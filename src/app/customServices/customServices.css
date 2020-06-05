@@ -12,8 +12,8 @@
 .entryLabel {
     text-align: right;
     padding: 0px 8px;
-    min-width: 100px;
-    width: 100px;
+    min-width: 130px;
+    width: 130px;
     white-space: nowrap;
 }
 .entryRequired {

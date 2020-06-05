@@ -1,7 +1,7 @@
 <div class="panel panel-default vbox">
     <div class="panel-heading">
         <label style="flex: 1">
-            {{invocation.service}}
+            {{invocation.label}}
         </label>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
@@ -12,12 +12,27 @@
         </div>
     </div>
     <div class="panel-body vbox scrollableContainer">
-
+        <div class="gridRow">
+            <div class="gridEntry">
+                <label class="entryLabel">Label:</label>
+                <div style="flex: 1">
+                    <input class="form-control input-sm" [ngModel]="invocation.label" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="gridRow">
+            <div class="gridEntry">
+                <label class="entryLabel">Description:</label>
+                <div style="flex: 1">
+                    <input class="form-control input-sm" [ngModel]="invocation.description" readonly>
+                </div>
+            </div>
+        </div>
         <div class="gridRow">
             <div class="gridEntry">
                 <label class="entryLabel">Service:</label>
                 <div style="flex: 1">
-                    <span class="form-control input-sm" style="background-color: #eee; font-family: monospace;">{{invocation.service}}</span>
+                    <input class="form-control input-sm" [ngModel]="invocation.service" readonly>
                 </div>
             </div>
         </div>
@@ -25,18 +40,38 @@
             <div class="gridEntry">
                 <label class="entryLabel">Operation:</label>
                 <div style="flex: 1">
-                    <span class="form-control input-sm" style="background-color: #eee; font-family: monospace;">{{invocation.operation}}</span>
+                    <input class="form-control input-sm" [ngModel]="invocation.operation" readonly>
                 </div>
             </div>
         </div>
         <div class="gridRow">
             <div class="gridEntry">
                 <label class="entryLabel">Arguments:</label>
-                <div style="flex: 1">
-                    <span *ngIf="invocation.arguments.length == 0" class="form-control input-sm" style="background-color: #eee;"></span>
-                    <div *ngFor="let arg of invocation.arguments" class="form-control input-sm" style="margin-bottom: 2px; background-color: #eee; font-family: monospace;">
-                        {{arg}}
+                <div class="panel panel-default" style="flex: 1">
+                    <div class="panel-body">
+                        <table class="table table-borderless table-condensed" style="font-family: monospace;">
+                            <colgroup>
+                                <col style="width: 1%;">
+                                <col>
+                            </colgroup>
+                            <tbody>
+                                <tr *ngFor="let argName of objectKeys(invocation.arguments)">
+                                    <td><label>{{argName}}</label></td>
+                                    <td>
+                                        <input class="form-control input-sm" [ngModel]="invocation.arguments[argName]" readonly>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="gridRow">
+            <div class="gridEntry">
+                <label class="entryLabel">Template:</label>
+                <div style="flex: 1">
+                    <mustache-editor [ngModel]="invocation.template" [disabled]="true"></mustache-editor>
                 </div>
             </div>
         </div>

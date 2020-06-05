@@ -1,20 +1,24 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { CustomOperationDefinition, CustomService, CustomServiceDefinition, OperationParameter, TypeUtils, OperationType } from "../../../models/CustomService";
+import { Observable } from "rxjs";
+import { Reference } from "../../../models/Configuration";
+import { CustomOperationDefinition, CustomService, CustomServiceDefinition, OperationParameter, TypeUtils } from "../../../models/CustomService";
 import { ServiceInvocationDefinition } from "../../../models/InvokableReporter";
 import { CustomServiceServices } from "../../../services/customServiceServices";
+import { InvokableReportersServices } from "../../../services/invokableReportersServices";
+import { UIUtils } from "../../../utils/UIUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CustomServiceModalServices } from "../../customServicesEditor/modals/customServiceModalServices";
-import { Observable } from "rxjs";
 
 export class ServiceInvocationEditorModalData extends BSModalContext {
     /**
      * @param title 
-     * @param invokableReporterId needed for the creation/edit of the invocation
-     * @param serviceInvocation if provided, allows the edit of the invocation
+     * @param invokableReporterRef needed for the creation/edit of the invocation
+     * @param serviceInvocation if provided, allows the edit of the invocation.
+     *      It contains the invocation definition and the position in the sections array of the invokableReporterRef
      */
-    constructor(public title: string = 'Modal Title', public invokableReporterId: string, public serviceInvocation?: ServiceInvocationDefinition) {
+    constructor(public title: string = 'Modal Title', public invokableReporterRef: Reference, public serviceInvocation?: { def: ServiceInvocationDefinition, idx: number }) {
         super();
     }
 }
@@ -27,14 +31,19 @@ export class ServiceInvocationEditorModalData extends BSModalContext {
 export class ServiceInvocationEditorModal implements ModalComponent<ServiceInvocationEditorModalData> {
     context: ServiceInvocationEditorModalData;
 
+    private label: string;
+    private description: string;
+    private template: string;
+
     private customServiceIds: string[];
     private selectedServiceId: string;
     private selectedService: CustomServiceDefinition;
     private selectedOperation: CustomOperationDefinition;
     private parameters: EditableParamStruct[]; //list of editable parameter structures
 
-    constructor(private customServService: CustomServiceServices, private basicModals: BasicModalServices, private customServiceModals: CustomServiceModalServices,
-        public dialog: DialogRef<ServiceInvocationEditorModalData>) {
+    constructor(private customServService: CustomServiceServices, private invokableReporterService: InvokableReportersServices,
+        private basicModals: BasicModalServices, private customServiceModals: CustomServiceModalServices,
+        public dialog: DialogRef<ServiceInvocationEditorModalData>, private elementRef: ElementRef) {
         this.context = dialog.context;
     }
 
@@ -44,28 +53,35 @@ export class ServiceInvocationEditorModal implements ModalComponent<ServiceInvoc
                 this.customServiceIds = serviceIds;
 
                 if (this.context.serviceInvocation != null) { //edit => restore the operation
-                    /* Here I need a service that given a service name, returns the id of the related CustomService.
-                    * In this way I can retrieve the CustomServiceDefinition via CustomServices.getCustomService(id),
-                    * then I can select the CustomOperation with name == serviceInvocation.service and I can properly show the arguments editor
-                    */
-                   alert("TODO: service invocation edit still not available")
-                    // let customServiceId = ???;
-                    // this.selectService(customServiceId).subscribe(
-                    //     () => {
-                    //         let operationToSelect = this.selectedService.operations.find(o => o.name == this.context.serviceInvocation.operation);
-                    //         this.selectOperation(operationToSelect);
-                    //         this.parameters.forEach(p => {
-                    //             /**
-                    //              * here I should restore the param value into the proper EditableParamStruct,
-                    //              * but since in the service invocation the arguments are stored as plain string, I don't know
-                    //              * which string corresponds to which parameter
-                    //              */
-                    //         })
-                    //     }
-                    // );
+                    let invocationDef: ServiceInvocationDefinition = this.context.serviceInvocation.def;
+                    this.label = invocationDef.label;
+                    this.description = invocationDef.description;
+                    this.template = invocationDef.template;
+                    
+                    this.customServService.getCustomServiceId(invocationDef.service).subscribe(
+                        serviceId => {
+                            this.selectService(serviceId).subscribe(
+                                () => {
+                                    let operationToSelect = this.selectedService.operations.find(o => o.name == invocationDef.operation);
+                                    this.selectOperation(operationToSelect);
+                                    //restore the arguments in the parameters struct
+                                    for (let argName in invocationDef.arguments) {
+                                        let paramStruct = this.parameters.find(p => p.param.name == argName);
+                                        if (paramStruct != null) {
+                                            paramStruct.value = invocationDef.arguments[argName];
+                                        }
+                                    }
+                                }
+                            );
+                        }
+                   );
                 }
             }
         );
+    }
+
+    ngAfterViewInit() {
+        UIUtils.setFullSizeModal(this.elementRef);
     }
 
     private selectService(id: string): Observable<void> {
@@ -122,7 +138,6 @@ export class ServiceInvocationEditorModal implements ModalComponent<ServiceInvoc
     }
 
     ok() {
-
         if (this.parameters != null) { //check if those required are provided
             for (let p of this.parameters) {
                 if (p.param.required && p.value == null || p.value.trim() == "") {
@@ -131,24 +146,31 @@ export class ServiceInvocationEditorModal implements ModalComponent<ServiceInvoc
                 }
             }
         }
+        let argsMap: { [key: string]: string } = {};
+        this.parameters.forEach(p => argsMap[p.param.name] = p.value);
 
-        let newServiceInvocation: ServiceInvocationDefinition = {
+        let serviceInvocationDef: ServiceInvocationDefinition = {
+            label: this.label,
+            description: this.description,
+            template: this.template,
             service: this.selectedService.name,
             operation: this.selectedOperation.name,
-            arguments: this.parameters.map(p =>  p.value )
+            arguments: argsMap,
         }
         if (this.dialog.context.serviceInvocation == null) { //create
-            //here I expect a service (still not available) that given the reporter ID, add a new service invocation
-            alert("TODO (service still not available)\nAdding a new service invocation:\n" + 
-                JSON.stringify(newServiceInvocation, null, 2) + 
-                "\nto reporter " + this.context.invokableReporterId);
+            this.invokableReporterService.addSectionToReporter(this.context.invokableReporterRef.relativeReference, serviceInvocationDef).subscribe(
+                () => {
+                    this.dialog.close();
+                }
+            )
         } else { //edit
-            //here I expect a service (still not available) that given the reporter ID, edit an existing service invocation
-            alert("TODO (service still not available)\nUpdating service invocation:\n" + 
-                JSON.stringify(newServiceInvocation, null, 2) +
-                "\nin reporter " + this.context.invokableReporterId);
+            this.invokableReporterService.updateSectionInReporter(this.context.invokableReporterRef.relativeReference, serviceInvocationDef, 
+                this.context.serviceInvocation.idx).subscribe(
+                () => {
+                    this.dialog.close();
+                }
+            )
         }
-        this.dialog.close();
     }
 
     cancel() {
@@ -156,16 +178,6 @@ export class ServiceInvocationEditorModal implements ModalComponent<ServiceInvoc
     }
     
 }
-
-// interface ServiceInvokationForm { [key: string]: ServiceInvokationFormEntry }
-
-// interface ServiceInvokationFormEntry {
-//     name: string;
-//     displayName: string;
-//     description: string;
-//     required: boolean;
-//     value: any;
-// }
 
 interface EditableParamStruct {
     param: OperationParameter;

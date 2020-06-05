@@ -5,65 +5,13 @@
         <col style="width: 1%;">
     </colgroup>
     <tbody>
-        <tr *ngFor="let p of settings?.properties">
+        <tr *ngFor="let p of settings?.properties; let i=index">
             <td nowrap>
                 {{p.displayName}}
                 <span *ngIf="p.required">*</span>
             </td>
             <td>
-
-                <select *ngIf="p.enumeration; else notEnumerationBlock" class="form-control input-sm" [(ngModel)]="p.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
-                    <option *ngFor="let enum of p.enumeration" [value]="enum">{{enum}}</option>
-                </select>
-
-                <ng-template #notEnumerationBlock>
-                    <div [ngSwitch]="p.type.name">
-                        <div *ngSwitchCase="'boolean'" class="input-sm form-control text-center">
-                            <label class="radio-inline">
-                                <input type="radio" (click)="updateBoolean(p, true)" [name]="'radio_'+p.name" [checked]="p.value==true" [disabled]="disabled">true
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" (click)="updateBoolean(p, false)" [name]="'radio_'+p.name" [checked]="p.value==false" [disabled]="disabled">false
-                            </label>
-                        </div>
-
-                        <resource-picker *ngSwitchCase="'IRI'" [resource]="p.value" [config]="{ roles: getIRIRoleConstraints(p) }" [editable]="true"
-                            (resourceChanged)="updateValue(p, $event)" [disabled]="disabled">
-                        </resource-picker>
-
-                        <resource-picker *ngSwitchCase="'Resource'" [resource]="p.value" [config]="{ roles: getIRIRoleConstraints(p) }" [editable]="true"
-                            (resourceChanged)="updateValue(p, $event)" [disabled]="disabled">
-                        </resource-picker>
-
-                        <value-picker *ngSwitchCase="'RDFValue'" [value]="p.value" [editable]="true" (valueChanged)="updateValue(p, $event)" [disabled]="disabled">
-                        </value-picker>
-
-                        <literal-picker *ngSwitchCase="'Literal'" [literal]="p.value" (literalChanged)="updateValue(p, $event)" [disabled]="disabled">
-                        </literal-picker>
-
-                        <setting-set *ngSwitchCase="'Set'" [value]="p.value" [types]="p.type.typeArguments" 
-                            (valueChanged)="updateSetValue(p, $event)" [disabled]="disabled"></setting-set>
-
-                        <setting-map *ngSwitchCase="'Map'" [value]="p.value" [types]="p.type.typeArguments" 
-                            (valueChanged)="updateMapValue(p, $event)" [disabled]="disabled"></setting-map>
-
-                        <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control input-sm" style="resize: vertical" 
-                            [(ngModel)]="p.value" [disabled]="disabled">
-                        </textarea>
-
-                        <input *ngSwitchCase="'int'" type="number" class="form-control input-sm" step="1" [(ngModel)]="p.value" [disabled]="disabled">
-
-                        <div *ngSwitchDefault class="hbox" style="align-items: center; position: relative;">
-                            <textarea *ngSwitchDefault type="text" rows="1" class="form-control input-sm" style="resize: vertical;" 
-                                [(ngModel)]="p.value" [disabled]="disabled">
-                            </textarea>
-                            <span class="glyphicon glyphicon-warning-sign" style="position: absolute; top: 8px; right: 8px;"
-                                [title]="'This parameter has an unknown type (' + p.type.name + '). The entered value will be interpreted as a low-level JSON value.'">
-                            </span>
-                        </div>
-                    </div>
-                </ng-template>
-
+                <setting-prop-renderer [(ngModel)]="settings.properties[i]" (ngModelChange)="onModelChanged()" [disabled]="disabled"></setting-prop-renderer>
             </td>
             <td>
                 <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>

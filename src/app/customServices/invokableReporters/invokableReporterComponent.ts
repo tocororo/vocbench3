@@ -1,11 +1,10 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { ConfigurationComponents } from "../../models/Configuration";
-import { CustomOperationDefinition } from "../../models/CustomService";
-import { InvokableReporter, ServiceInvocationDefinition, InvokableReporterDefinition } from "../../models/InvokableReporter";
-import { ConfigurationsServices } from "../../services/configurationsServices";
-import { InvokableReporterModalServices } from "./modals/invokableReporterModalServices";
+import { Reference } from "../../models/Configuration";
+import { InvokableReporter, ServiceInvocationDefinition } from "../../models/InvokableReporter";
+import { SettingsProp } from "../../models/Plugins";
 import { InvokableReportersServices } from "../../services/invokableReportersServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { InvokableReporterModalServices } from "./modals/invokableReporterModalServices";
 
 @Component({
     selector: "invokable-reporter",
@@ -14,55 +13,63 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
     styleUrls: ["../customServices.css"]
 })
 export class InvokableReporterComponent {
-    @Input() id: string;
+    @Input() ref: Reference;
 
     private reporter: InvokableReporter;
     private selectedServiceInvocation: ServiceInvocationDefinition;
+    private selectedServiceInvocationIdx: number;
 
     private form: InvokableReporterForm;
 
-    constructor(private configurationService: ConfigurationsServices, private invokableReporterService: InvokableReportersServices,
-        private invokableReporterModals: InvokableReporterModalServices, private basicModals: BasicModalServices) { }
+    constructor(private invokableReporterService: InvokableReportersServices, private invokableReporterModals: InvokableReporterModalServices,
+        private basicModals: BasicModalServices) { }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['id'] && changes['id'].currentValue) {
+        if (changes['ref'] && changes['ref'].currentValue) {
             this.initReporter(false);
         }
     }
 
     private initReporter(restoreInvocation: boolean) {
-        this.invokableReporterService.getInvokableReporter(this.id).subscribe(
-            conf => {
-                this.reporter = conf;
+        this.invokableReporterService.getInvokableReporter(this.ref.relativeReference).subscribe(
+            (reporter: InvokableReporter) => {
+                this.reporter = reporter;
                 this.form = {
                     label: this.reporter.getProperty("label"),
                     description: this.reporter.getProperty("description"),
-                    serviceInvocations: this.reporter.getProperty("serviceInvocations")
+                    sections: this.reporter.getProperty("sections"),
+                    template: this.reporter.getProperty("template"),
+                    mimeType: this.reporter.getProperty("mimeType")
                 }
-
                 if (restoreInvocation) {
                     //try to restore the selected service invocation (if any)
-                    if (this.selectedServiceInvocation != null) {
-                    //     let selectedOpName: string = this.selectedOperation.name;
-                    //     let operations: CustomOperationDefinition[] = this.form.operations.value;
-                    //     // if (operations != null) {
-                    //         this.selectedOperation = operations.find(o => o.name == selectedOpName);
-                    //     // } else {
-                    //     //     this.selectedOperation = null;
-                    //     // }
+                    if (this.selectedServiceInvocation != null && this.form.sections.value != null) {
+                        //this will not work if there are multiple invocation of the same service and operation
+                        this.selectedServiceInvocation = this.form.sections.value.find(s =>
+                            s.service == this.selectedServiceInvocation.service && s.operation == this.selectedServiceInvocation.operation
+                        );
                     }
                 } else {
                     this.selectedServiceInvocation = null;
                 }
             }
+        );
+    }
+
+    private edit() {
+        this.invokableReporterModals.openInvokableReporterEditor("Edit reporter", this.ref).then(
+            () => {
+                this.initReporter(true);
+            },
+            () => {}
         )
     }
 
     private compileReport() {
-        if (this.form.serviceInvocations.value == null || this.form.serviceInvocations.value.length == 0) {
+        if (this.form.sections.value == null || this.form.sections.value.length == 0) {
             this.basicModals.alert("Compile report", "The reporter cannot be compiled since it has no service invocation provided", "warning");
         } else {
-            this.invokableReporterService.compileReport("sys:" + this.id).subscribe(
+            this.invokableReporterService.compileReport(this.ref.relativeReference).subscribe(
                 report => {
                     this.basicModals.alert("TODO", JSON.stringify(report.sections, null, 2));
                 }
@@ -71,32 +78,17 @@ export class InvokableReporterComponent {
         
     }
     
-    private updateLabel(newLabel: string) {
-        let updatedReporter: InvokableReporterDefinition = { label: newLabel, description: this.form.description.value, serviceInvocations: this.form.serviceInvocations.value };
-        this.configurationService.storeConfiguration(ConfigurationComponents.INVOKABLE_REPORER_STORE, "sys:" + this.id, updatedReporter).subscribe(
-            () => {
-                this.initReporter(true)
-            }
-        )
-    }
-
-    private updateDescription(newDescription: string) {
-        let updatedReporter: InvokableReporterDefinition = { label: this.form.label.value, description: newDescription, serviceInvocations: this.form.serviceInvocations.value };
-        this.configurationService.storeConfiguration(ConfigurationComponents.INVOKABLE_REPORER_STORE, "sys:" + this.id, updatedReporter).subscribe(
-            () => {
-                this.initReporter(true)
-            }
-        )
-    }
-
     private selectServiceInvocation(invocation: ServiceInvocationDefinition) {
         if (this.selectedServiceInvocation != invocation) {
             this.selectedServiceInvocation = invocation;
+            this.selectedServiceInvocationIdx = this.form.sections.value.indexOf(invocation);
+            //set the reference of the reporter which the invocation belongs to (usefult when editing the service invocation)
+            this.selectedServiceInvocation.reporterRef = this.ref;
         }
     }
 
     private createServiceInvocation() {
-        this.invokableReporterModals.openServiceInvocationEditor("Create Service invocation", this.reporter.id).then(
+        this.invokableReporterModals.openServiceInvocationEditor("Create Service invocation", this.ref).then(
             () => { //operation created => require update
                 this.initReporter(true);
             },
@@ -105,12 +97,10 @@ export class InvokableReporterComponent {
     }
 
     private deleteServiceInvocation() {
-        let idx = this.form.serviceInvocations.value.indexOf(this.selectedServiceInvocation);
-        this.form.serviceInvocations.value.splice(idx, 1);
-        let updatedReporter: InvokableReporterDefinition = { label: this.form.label.value, description: this.form.description.value, serviceInvocations: this.form.serviceInvocations.value };
-        this.configurationService.storeConfiguration(ConfigurationComponents.INVOKABLE_REPORER_STORE, "sys:" + this.id, updatedReporter).subscribe(
+        let idx = this.form.sections.value.indexOf(this.selectedServiceInvocation);
+        this.invokableReporterService.removeSectionFromReporter(this.ref.relativeReference, idx).subscribe(
             () => {
-                this.initReporter(true)
+                this.initReporter(false)
             }
         )
     }
@@ -120,27 +110,17 @@ export class InvokableReporterComponent {
         this.initReporter(true);
     }
 
-    // private reload() {
-    //     this.customServService.reloadCustomService(this.id).subscribe(
-    //         () => {
-    //             this.initCustomService(true);
-    //         }
-    //     )
-    // }
-
 }
 
 
-interface InvokableReporterForm {
+export class InvokableReporterForm {
     label: InvokableReporterFormEntry<string>;
     description: InvokableReporterFormEntry<string>;
-    serviceInvocations: InvokableReporterFormEntry<ServiceInvocationDefinition[]>;
+    sections: InvokableReporterFormEntry<ServiceInvocationDefinition[]>;
+    template: InvokableReporterFormEntry<string>;
+    mimeType: InvokableReporterFormEntry<string>;
 }
 
-interface InvokableReporterFormEntry<T> {
-    // name: string;
-    displayName: string;
-    description: string;
-    required: boolean;
+export class InvokableReporterFormEntry<T> extends SettingsProp {
     value: T;
 }

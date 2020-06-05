@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Configuration, ConfigurationManager, Reference } from '../models/Configuration';
+import { Configuration, ConfigurationDefinition, ConfigurationManager, Reference } from '../models/Configuration';
 import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
@@ -49,7 +49,7 @@ export class ConfigurationsServices {
         );
     }
 
-    storeConfiguration(componentID: string, relativeReference: string, configuration: { [key: string]: any }) {
+    storeConfiguration(componentID: string, relativeReference: string, configuration: ConfigurationDefinition) {
         var params = {
             componentID: componentID,
             relativeReference: relativeReference,

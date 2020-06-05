@@ -1,26 +1,16 @@
 <div class="panel panel-default vbox">
     <div class="panel-heading">
-        <label style="flex: 1">{{id}}</label>
+        <label style="flex: 1">{{ref.identifier}}</label>
 
-        <div class="btn-group btn-group-xs">
-            <button class="btn btn-default" (click)="compileReport()" title="Compile report">
-                <span class="glyphicon glyphicon-play"></span>
+        <div class="btn-toolbar">
+            <button class="btn btn-default btn-xs" (click)="edit()" title="Edit basic info">
+                <span class="glyphicon glyphicon-pencil"></span>
             </button>
-            <!-- <div class="btn-group btn-group-xs">
-                <button class="btn btn-default dropdown-toggle" style="padding: 1px 3px;" data-toggle="dropdown">
-                    <span class="caret"></span>
+            <div class="btn-group btn-group-xs">
+                <button class="btn btn-default" (click)="compileReport()" title="Compile report">
+                    <span class="glyphicon glyphicon-play"></span>
                 </button>
-                <ul class="dropdown-menu pull-right">
-                    <li title="Reload service (useful when the Custom Service is changed manually)">
-                        <a (click)="reload()">
-                            <div class="hbox">
-                                <span style="flex:1">Force reload from filesystem</span>
-                                <span class="glyphicon glyphicon-repeat pull-right" style="margin-left: 5px;"></span>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </div> -->
+            </div>
         </div>
 
     </div>
@@ -33,7 +23,7 @@
                     {{form.label.displayName}}
                     <span class="glyphicon glyphicon-info-sign" [title]="form.label.description"></span>
                 </label>
-                <input-editable style="flex: 1;" [value]="form.label.value" (valueEdited)="updateLabel($event)"></input-editable>
+                <input class="form-control input-sm" style="flex: 1;" [ngModel]="form.label.value" disabled/>
             </div>
         </div>
 
@@ -44,7 +34,29 @@
                     {{form.description.displayName}}
                     <span class="glyphicon glyphicon-info-sign" [title]="form.description.description"></span>
                 </label>
-                <input-editable style="flex: 1;" [value]="form.description.value" (valueEdited)="updateDescription($event)"></input-editable>
+                <input class="form-control input-sm" style="flex: 1;" [ngModel]="form.description.value" disabled/>
+            </div>
+        </div>
+
+        <!-- Template -->
+        <div class="gridRow">
+            <div class="gridEntry">
+                <label class="entryLabel">
+                    {{form.template.displayName}}
+                    <span class="glyphicon glyphicon-info-sign" [title]="form.template.description"></span>
+                </label>
+                <mustache-editor style="height: 100px;" [ngModel]="form.template.value" [disabled]="true"></mustache-editor>
+            </div>
+        </div>
+        
+        <!-- MimeType -->
+        <div class="gridRow">
+            <div class="gridEntry">
+                <label class="entryLabel">
+                    {{form.mimeType.displayName}}
+                    <span class="glyphicon glyphicon-info-sign" [title]="form.mimeType.description"></span>
+                </label>
+                <input class="form-control input-sm" style="flex: 1;" [ngModel]="form.mimeType.value" disabled/>
             </div>
         </div>
 
@@ -53,8 +65,8 @@
             <div class="panel panel-default vbox">
                 <div class="panel-heading">
                     <label style="flex: 1">
-                        {{form.serviceInvocations.displayName}}
-                        <span class="glyphicon glyphicon-info-sign" [title]="form.serviceInvocations.description"></span>
+                        {{form.sections.displayName}}
+                        <span class="glyphicon glyphicon-info-sign" [title]="form.sections.description"></span>
                     </label>
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs">
@@ -68,12 +80,14 @@
                     </div>
                 </div>
                 <div class="panel-body vbox scrollableContainer">
-                    <div *ngFor="let i of form.serviceInvocations.value" class="listItem" [ngClass]="{ active: selectedServiceInvocation == i }" (click)="selectServiceInvocation(i)">
-                        {{i.service}}
+                    <div *ngFor="let i of form.sections.value" class="listItem" [ngClass]="{ active: selectedServiceInvocation == i }" (click)="selectServiceInvocation(i)">
+                        <ng-container *ngIf="i.label">{{i.label}}</ng-container>
+                        <ng-container *ngIf="!i.label">{{i.service}}.{{i.operation}}</ng-container>
                     </div>
                 </div>
             </div>
-            <service-invocation *ngIf="selectedServiceInvocation" style="margin-left: 4px; flex: 4;" [invocation]="selectedServiceInvocation" (update)="onServiceInvocationUpdate()">
+            <service-invocation *ngIf="selectedServiceInvocation" style="margin-left: 4px; flex: 4;"
+                [invocation]="selectedServiceInvocation" [idx]="selectedServiceInvocationIdx" (update)="onServiceInvocationUpdate()">
             </service-invocation>
         </div>
 

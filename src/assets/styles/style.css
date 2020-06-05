@@ -498,10 +498,6 @@ input[type=number]::-webkit-outer-spin-button {
     min-width: 130px;
 }
  
-pearl-editor, manchester-editor, html-editor, ntriple-editor {
-    display: flex;
-    flex: 1;
-}
 .CodeMirror { 
     border: 1px solid #ddd; /*Border of textare of CodeMirror (just in the editors, because in yasqe there is already)*/
     height: auto !important; 

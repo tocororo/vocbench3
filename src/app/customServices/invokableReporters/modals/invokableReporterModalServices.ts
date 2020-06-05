@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { Reference } from '../../../models/Configuration';
 import { InvokableReporter, ServiceInvocationDefinition } from '../../../models/InvokableReporter';
 import { InvokableReporterEditorModal, InvokableReporterEditorModalData } from './invokableReporterEditorModal';
-import { ServiceInvocationEditorModalData, ServiceInvocationEditorModal } from './serviceInvocationEditorModal';
+import { ServiceInvocationEditorModal, ServiceInvocationEditorModalData } from './serviceInvocationEditorModal';
 
 
 @Injectable()
@@ -11,8 +12,8 @@ export class InvokableReporterModalServices {
 
     constructor(private modal: Modal) { }
 
-    public openInvokableReporterEditor(title: string, reporterConf?: InvokableReporter): Promise<void> {
-        let modalData = new InvokableReporterEditorModalData(title, reporterConf);
+    public openInvokableReporterEditor(title: string, reporterRef?: Reference): Promise<void> {
+        let modalData = new InvokableReporterEditorModalData(title, reporterRef);
         const builder = new BSModalContextBuilder<InvokableReporterEditorModalData>(
             modalData, undefined, InvokableReporterEditorModalData
         );
@@ -20,8 +21,8 @@ export class InvokableReporterModalServices {
         return this.modal.open(InvokableReporterEditorModal, overlayConfig).result;
     }
 
-    public openServiceInvocationEditor(title: string, invokableReporterId: string, invocation?: ServiceInvocationDefinition): Promise<void> {
-        let modalData = new ServiceInvocationEditorModalData(title, invokableReporterId, invocation);
+    public openServiceInvocationEditor(title: string, invokableReporterRef: Reference, serviceInvocation?: { def: ServiceInvocationDefinition, idx: number }): Promise<void> {
+        let modalData = new ServiceInvocationEditorModalData(title, invokableReporterRef, serviceInvocation);
         const builder = new BSModalContextBuilder<ServiceInvocationEditorModalData>(
             modalData, undefined, ServiceInvocationEditorModalData
         );

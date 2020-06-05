@@ -5,6 +5,7 @@ import { QueryParameterForm } from '../sparql/queryParameterization/queryParamet
 import { YasguiComponent } from '../sparql/yasguiComponent';
 import { HtmlEditorComponent } from '../widget/codemirror/htmlEditor/htmlEditorComponent';
 import { ManchesterEditorComponent } from '../widget/codemirror/manchesterEditor/manchesterEditorComponent';
+import { MustacheEditorComponent } from '../widget/codemirror/mustacheEditor/mustacheEditorComponent';
 import { NTripleEditorComponent } from '../widget/codemirror/nTripleEditor/nTripleEditorComponent';
 import { PearlEditorComponent } from "../widget/codemirror/pearlEditor/pearlEditorComponent";
 import { SanitizerDirective } from "../widget/directives/sanitizerDirective";
@@ -21,10 +22,12 @@ import { ValuePickerComponent } from '../widget/pickers/valuePicker/valuePickerC
 import { RdfResourceComponent } from '../widget/rdfResource/rdfResourceComponent';
 import { ResourceListComponent } from '../widget/rdfResource/resourceListComponent';
 import { SettingMapRendererComponent } from '../widget/settingsRenderer/settingMapRendererComponent';
+import { SettingPropRendererComponent } from '../widget/settingsRenderer/settingPropRendererComponent';
 import { SettingSetRendererComponent } from '../widget/settingsRenderer/settingSetRendererComponent';
 import { SettingsRendererComponent } from '../widget/settingsRenderer/settingsRendererComponent';
 import { SettingsRendererPanelComponent } from '../widget/settingsRenderer/settingsRendererPanelComponent';
 import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLiteralInputComponent';
+
 
 @NgModule({
     imports: [CommonModule, FormsModule],
@@ -38,6 +41,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         LanguageItemComponent,
         LiteralPickerComponent,
         ManchesterEditorComponent,
+        MustacheEditorComponent,
         NTripleEditorComponent,
         PartitionFilterEditor,
         PearlEditorComponent,
@@ -47,6 +51,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         ResourcePickerComponent,
         SanitizerDirective,
         SettingMapRendererComponent,
+        SettingPropRendererComponent,
         SettingSetRendererComponent,
         SettingsRendererComponent,
         SettingsRendererPanelComponent,
@@ -64,6 +69,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         LanguageItemComponent,
         LiteralPickerComponent,
         ManchesterEditorComponent,
+        MustacheEditorComponent,
         NTripleEditorComponent,
         PartitionFilterEditor,
         PearlEditorComponent,
@@ -73,6 +79,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         ResourcePickerComponent,
         SanitizerDirective,
         SettingMapRendererComponent,
+        SettingPropRendererComponent,
         SettingSetRendererComponent,
         SettingsRendererComponent,
         SettingsRendererPanelComponent,

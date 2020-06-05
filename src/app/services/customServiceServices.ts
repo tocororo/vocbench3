@@ -20,6 +20,17 @@ export class CustomServiceServices {
     }
 
     /**
+     * Returns the id of the CustomService with the given service class name
+     * @param name 
+     */
+    getCustomServiceId(name: string): Observable<string> {
+        let params = {
+            name: name
+        };
+        return this.httpMgr.doGet(this.serviceName, "getCustomServiceId", params);
+    }
+
+    /**
      * 
      * @param id 
      */

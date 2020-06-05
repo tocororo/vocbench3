@@ -1,0 +1,56 @@
+<ng-container *ngIf="prop">
+
+    <select *ngIf="prop.enumeration; else notEnumerationBlock" class="form-control input-sm" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
+        <option *ngFor="let enum of prop.enumeration" [value]="enum">{{enum}}</option>
+    </select>
+
+    <ng-template #notEnumerationBlock>
+        <div [ngSwitch]="prop.type.name">
+            <div *ngSwitchCase="'boolean'" class="input-sm form-control text-center">
+                <label class="radio-inline">
+                    <input type="radio" (click)="updateBoolean(p, true)" [name]="'radio_'+prop.name" [checked]="prop.value==true" [disabled]="disabled">true
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" (click)="updateBoolean(p, false)" [name]="'radio_'+prop.name" [checked]="prop.value==false" [disabled]="disabled">false
+                </label>
+            </div>
+
+            <resource-picker *ngSwitchCase="'IRI'" [resource]="prop.value" [config]="{ roles: getIRIRoleConstraints(p) }" [editable]="true"
+                (resourceChanged)="updateValue(p, $event)" [disabled]="disabled">
+            </resource-picker>
+
+            <resource-picker *ngSwitchCase="'Resource'" [resource]="prop.value" [config]="{ roles: getIRIRoleConstraints(p) }" [editable]="true"
+                (resourceChanged)="updateValue(p, $event)" [disabled]="disabled">
+            </resource-picker>
+
+            <value-picker *ngSwitchCase="'RDFValue'" [value]="prop.value" [editable]="true" (valueChanged)="updateValue(p, $event)" [disabled]="disabled">
+            </value-picker>
+
+            <literal-picker *ngSwitchCase="'Literal'" [literal]="prop.value" (literalChanged)="updateValue(p, $event)" [disabled]="disabled">
+            </literal-picker>
+
+            <setting-set *ngSwitchCase="'Set'" [value]="prop.value" [types]="prop.type.typeArguments" 
+                (valueChanged)="updateSetValue(p, $event)" [disabled]="disabled"></setting-set>
+
+            <setting-map *ngSwitchCase="'Map'" [value]="prop.value" [types]="prop.type.typeArguments" 
+                (valueChanged)="updateMapValue(p, $event)" [disabled]="disabled"></setting-map>
+
+            <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control input-sm" style="resize: vertical" 
+                [(ngModel)]="prop.value" [disabled]="disabled">
+            </textarea>
+
+            <input *ngSwitchCase="'int'" type="number" class="form-control input-sm" step="1" [(ngModel)]="prop.value" [disabled]="disabled">
+            <input *ngSwitchCase="'long'" type="number" class="form-control input-sm" step="1" [(ngModel)]="prop.value" [disabled]="disabled">
+
+            <div *ngSwitchDefault class="hbox" style="align-items: center; position: relative;">
+                <textarea *ngSwitchDefault type="text" rows="1" class="form-control input-sm" style="resize: vertical;" 
+                    [(ngModel)]="prop.value" [disabled]="disabled">
+                </textarea>
+                <span class="glyphicon glyphicon-warning-sign" style="position: absolute; top: 8px; right: 8px;"
+                    [title]="'This parameter has an unknown type (' + prop.type.name + '). The entered value will be interpreted as a low-level JSON value.'">
+                </span>
+            </div>
+        </div>
+    </ng-template>
+
+</ng-container>

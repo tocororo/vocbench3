@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Report, InvokableReporter, ServiceInvocationDefinition } from '../models/InvokableReporter';
+import { ConfigurationDefinition, Reference } from '../models/Configuration';
+import { InvokableReporter, Report, ServiceInvocationDefinition } from '../models/InvokableReporter';
+import { Scope } from '../models/Plugins';
 import { HttpManager } from "../utils/HttpManager";
-import { ConfigurationComponents } from '../models/Configuration';
 
 @Injectable()
 export class InvokableReportersServices {
@@ -23,27 +24,133 @@ export class InvokableReportersServices {
     }
 
     /**
-     * TODO in attesa di un servizio in ST, uso il servizio in Configurations
-     * @param id 
+     * 
+     * @param reporterReference 
+     * @param targetMimeType 
      */
-    getInvokableReporter(id: string): Observable<InvokableReporter> {
-        var params = {
-            componentID: ConfigurationComponents.INVOKABLE_REPORER_STORE,
-            relativeReference: "sys:" + id
+    compileAndDownloadReport(reporterReference: string, targetMimeType: string) {
+        let params = {
+            reporterReference: reporterReference,
+            targetMimeType: targetMimeType
         }
-        return this.httpMgr.doGet("Configurations", "getConfiguration", params).map(
+        return this.httpMgr.downloadFile(this.serviceName, "compileAndDownloadReport", params);
+    }
+
+    getConfigurationScopes(): Observable<Scope[]> {
+        let params = {}
+        return this.httpMgr.doGet(this.serviceName, "getConfigurationScopes", params);
+    }
+
+    /**
+     * 
+     */
+    getInvokableReporterIdentifiers(): Observable<Reference[]> {
+        let params = {}
+        return this.httpMgr.doGet(this.serviceName, "getInvokableReporterIdentifiers", params).map(
             stResp => {
-                let config = <InvokableReporter>InvokableReporter.parse(stResp);
-                config.id = id; //useful to keep trace of id in case of future update
-                let invocations: ServiceInvocationDefinition[] = config.getPropertyValue("serviceInvocations");
-                if (invocations != null) {
-                    invocations.forEach(i => i.reporterId = id); //add the reporter id to each invocation (useful when the invocation is edited)
-                    invocations.sort((i1, i2) => (i1.service + "." + i1.operation).localeCompare(i2.service + "." + i2.operation)); //sort invocations
+                let references: Reference[] = [];
+                for (let i = 0; i < stResp.length; i++) {
+                    references.push(Reference.deserialize(stResp[i]));
                 }
-                return config;
+                return references;
             }
         );
     }
+
+    /**
+     * @param reference 
+     */
+    getInvokableReporter(reference: string): Observable<InvokableReporter> {
+        var params = {
+            reference: reference
+        }
+        return this.httpMgr.doGet(this.serviceName, "getInvokableReporter", params).map(
+            stResp => {
+                return <InvokableReporter>InvokableReporter.parse(stResp);
+            }
+        );
+    }
+
+    /**
+     * 
+     * @param reference 
+     * @param definition 
+     */
+    createInvokableReporter(reference: string, definition: ConfigurationDefinition) {
+        let params = {
+            reference: reference,
+            definition: JSON.stringify(definition)
+        }
+        return this.httpMgr.doPost(this.serviceName, "createInvokableReporter", params);
+    }
+
+    /**
+     * 
+     * @param reference 
+     */
+    deleteInvokableReporter(reference: string) {
+        let params = {
+            reference: reference,
+        }
+        return this.httpMgr.doPost(this.serviceName, "deleteInvokableReporter", params);
+    }
+
+    /**
+     * 
+     * @param reference 
+     * @param definition 
+     */
+    updateInvokableReporter(reference: string, definition: ConfigurationDefinition) {
+        let params = {
+            reference: reference,
+            definition: JSON.stringify(definition)
+        }
+        return this.httpMgr.doPost(this.serviceName, "createInvokableReporter", params);
+    }
+
+    /**
+     * 
+     * @param reference 
+     * @param section 
+     * @param index 
+     */
+    addSectionToReporter(reference: string, section: ServiceInvocationDefinition, index?: number) {
+        let params = {
+            reference: reference,
+            section: JSON.stringify(section),
+            index: index
+        }
+        return this.httpMgr.doPost(this.serviceName, "addSectionToReporter", params);
+    }
+
+    /**
+     * 
+     * @param reference 
+     * @param section 
+     * @param index 
+     */
+    updateSectionInReporter(reference: string, section: ServiceInvocationDefinition, index: number) {
+        let params = {
+            reference: reference,
+            section: JSON.stringify(section),
+            index: index
+        }
+        return this.httpMgr.doPost(this.serviceName, "updateSectionInReporter", params);
+    }
+
+    /**
+     * 
+     * @param reference 
+     * @param index 
+     */
+    removeSectionFromReporter(reference: string, index: number) {
+        let params = {
+            reference: reference,
+            index: index
+        }
+        return this.httpMgr.doPost(this.serviceName, "removeSectionFromReporter", params);
+    }
+
 
 }
 
