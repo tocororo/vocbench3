@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Reference } from '../../../models/Configuration';
-import { InvokableReporter, ServiceInvocationDefinition } from '../../../models/InvokableReporter';
+import { Report, ServiceInvocationDefinition } from '../../../models/InvokableReporter';
 import { InvokableReporterEditorModal, InvokableReporterEditorModalData } from './invokableReporterEditorModal';
+import { ReportResultModal, ReportResultModalData } from './reportResultModal';
 import { ServiceInvocationEditorModal, ServiceInvocationEditorModalData } from './serviceInvocationEditorModal';
 
 
@@ -28,6 +29,15 @@ export class InvokableReporterModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
         return this.modal.open(ServiceInvocationEditorModal, overlayConfig).result;
+    }
+
+    public showReport(report: Report): Promise<void> {
+        let modalData = new ReportResultModalData(report);
+        const builder = new BSModalContextBuilder<ReportResultModalData>(
+            modalData, undefined, ReportResultModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        return this.modal.open(ReportResultModal, overlayConfig).result;
     }
 
 }

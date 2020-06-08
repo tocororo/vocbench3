@@ -16,9 +16,11 @@ export class InvokableReportersServices {
      * Checks if a manchester expression in valid
      * @param manchExpr manchester expression to check
      */
-    compileReport(reporterReference: string): Observable<Report> {
+    compileReport(reporterReference: string, render?: boolean, includeTemplate?: boolean): Observable<Report> {
         var params = {
-            reporterReference: reporterReference
+            reporterReference: reporterReference,
+            render: render,
+            includeTemplate: includeTemplate
         };
         return this.httpMgr.doGet(this.serviceName, "compileReport", params);
     }

@@ -10,19 +10,33 @@
         </colgroup>
         <tbody>
             <tr>
-                <td class="text-right"><label>Label</label></td>
+                <td class="text-right" nowrap>
+                    <label>
+                        Label
+                        <span class="glyphicon glyphicon-info-sign" title="The label of this section"></span>
+                    </label>
+                </td>
                 <td><input class="form-control input-sm" [(ngModel)]="label"></td>
             </tr>
             <tr>
-                <td class="text-right"><label>Description</label></td>
+                <td class="text-right" nowrap>
+                    <label>
+                        Description
+                        <span class="glyphicon glyphicon-info-sign" title="A description of this section"></span>
+                    </label>
+                </td>
                 <td><input class="form-control input-sm" [(ngModel)]="description"></td>
             </tr>
             <tr>
-                <td class="text-right"><label>Template</label></td>
+                <td class="text-right" nowrap>
+                    <label>
+                        Template
+                        <span class="glyphicon glyphicon-info-sign" title="A template for rendering an individual section. The template must conform to Mustache templating language."></span>
+                    </label>
+                </td>
                 <td><mustache-editor style="height: 150px;" [(ngModel)]="template"></mustache-editor></td>
             </tr>
         </tbody>
-        
     </table>
 
     <div class="hbox" style="margin-top: 4px;">
@@ -44,7 +58,6 @@
                 <div class="panel-heading">
                     <label style="flex: 1">
                         {{selectedService.name}}
-                        <span *ngIf="selectedService.description" class="glyphicon glyphicon-info-sign" [title]="selectedService.description"></span>
                     </label>
                 </div>
                 <div class="panel-body hbox">

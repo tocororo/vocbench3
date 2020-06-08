@@ -1,11 +1,11 @@
 <div class="panel panel-default vbox">
     <div class="panel-heading">
         <label style="flex: 1">{{ref.identifier}}</label>
-        <div class="btn-toolbar">
+        <div class="hbox" style="flex: initial;">
             <button class="btn btn-default btn-xs" (click)="edit()" title="Edit basic info">
                 <span class="glyphicon glyphicon-pencil"></span>
             </button>
-            <div class="btn-group btn-group-xs">
+            <div class="btn-group btn-group-xs" style="margin-left: 5px;">
                 <button class="btn btn-default" (click)="compileReport()" title="Compile report">
                     <span class="glyphicon glyphicon-play"></span>
                 </button>
@@ -90,9 +90,9 @@
                     </div>
                 </div>
                 <div class="panel-body vbox scrollableContainer">
-                    <div *ngFor="let i of form.sections.value" class="listItem" [ngClass]="{ active: selectedServiceInvocation == i }" (click)="selectServiceInvocation(i)">
-                        <ng-container *ngIf="i.label">{{i.label}}</ng-container>
-                        <ng-container *ngIf="!i.label">{{i.service}}.{{i.operation}}</ng-container>
+                    <div *ngFor="let s of form.sections.value; let idx=index" class="listItem" [ngClass]="{ active: selectedServiceInvocationIdx == idx }" (click)="selectServiceInvocation(idx)">
+                        <ng-container *ngIf="s.label">{{s.label}}</ng-container>
+                        <ng-container *ngIf="!s.label">{{s.service}}.{{s.operation}}</ng-container>
                     </div>
                 </div>
             </div>

@@ -15,6 +15,7 @@ import { InvokableReporterComponent } from '../customServices/invokableReporters
 import { InvokableReportersPageComponent } from '../customServices/invokableReporters/invokableReportersPageComponent';
 import { InvokableReporterEditorModal } from '../customServices/invokableReporters/modals/invokableReporterEditorModal';
 import { InvokableReporterModalServices } from '../customServices/invokableReporters/modals/invokableReporterModalServices';
+import { ReportResultModal } from '../customServices/invokableReporters/modals/reportResultModal';
 import { ServiceInvocationEditorModal } from '../customServices/invokableReporters/modals/serviceInvocationEditorModal';
 import { ServiceInvocationComponent } from '../customServices/invokableReporters/serviceInvocationComponent';
 import { SharedModule } from './sharedModule';
@@ -34,6 +35,7 @@ import { SharedModule } from './sharedModule';
         InvokableReportersPageComponent,
         InvokableReporterComponent,
         InvokableReporterEditorModal,
+        ReportResultModal,
         ServiceInvocationComponent,
         ServiceInvocationEditorModal,
         OperationTypeEditor,
@@ -50,6 +52,7 @@ import { SharedModule } from './sharedModule';
         CustomOperationModal,
         CustomServiceEditorModal,
         InvokableReporterEditorModal,
+        ReportResultModal,
         ServiceInvocationEditorModal,
     ]
 })

@@ -48,14 +48,14 @@ export class InvokableReporterComponent {
                 }
                 if (restoreInvocation) {
                     //try to restore the selected service invocation (if any)
-                    if (this.selectedServiceInvocation != null && this.form.sections.value != null) {
-                        //this will not work if there are multiple invocation of the same service and operation
-                        this.selectedServiceInvocation = this.form.sections.value.find(s =>
-                            s.service == this.selectedServiceInvocation.service && s.operation == this.selectedServiceInvocation.operation
-                        );
+                    if (this.selectedServiceInvocationIdx != null && this.form.sections.value != null && this.form.sections.value.length > this.selectedServiceInvocationIdx) {
+                        this.selectedServiceInvocation = this.form.sections.value[this.selectedServiceInvocationIdx];
+                    } else {
+                        this.selectedServiceInvocation = null;
                     }
                 } else {
                     this.selectedServiceInvocation = null;
+                    this.selectedServiceInvocationIdx = null;
                 }
             }
         );
@@ -74,9 +74,9 @@ export class InvokableReporterComponent {
         if (this.form.sections.value == null || this.form.sections.value.length == 0) {
             this.basicModals.alert("Compile report", "The reporter cannot be compiled since it has no service invocation provided", "warning");
         } else {
-            this.invokableReporterService.compileReport(this.ref.relativeReference).subscribe(
+            this.invokableReporterService.compileReport(this.ref.relativeReference, false).subscribe(
                 report => {
-                    this.basicModals.alert("TODO", JSON.stringify(report.sections, null, 2));
+                    this.invokableReporterModals.showReport(report);
                 }
             );
         }
@@ -95,10 +95,10 @@ export class InvokableReporterComponent {
         }
     }
     
-    private selectServiceInvocation(invocation: ServiceInvocationDefinition) {
-        if (this.selectedServiceInvocation != invocation) {
-            this.selectedServiceInvocation = invocation;
-            this.selectedServiceInvocationIdx = this.form.sections.value.indexOf(invocation);
+    private selectServiceInvocation(index: number) {
+        if (this.selectedServiceInvocationIdx != index) {
+            this.selectedServiceInvocationIdx = index;
+            this.selectedServiceInvocation = this.form.sections.value[index];
             //set the reference of the reporter which the invocation belongs to (usefult when editing the service invocation)
             this.selectedServiceInvocation.reporterRef = this.ref;
         }
@@ -114,8 +114,7 @@ export class InvokableReporterComponent {
     }
 
     private deleteServiceInvocation() {
-        let idx = this.form.sections.value.indexOf(this.selectedServiceInvocation);
-        this.invokableReporterService.removeSectionFromReporter(this.ref.relativeReference, idx).subscribe(
+        this.invokableReporterService.removeSectionFromReporter(this.ref.relativeReference, this.selectedServiceInvocationIdx).subscribe(
             () => {
                 this.initReporter(false)
             }

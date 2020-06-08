@@ -27,6 +27,7 @@ import 'codemirror/addon/mode/simple.js'; //for defineSimpleMode() in the defini
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/xml/xml.js';
 import 'codemirror/mode/ntriples/ntriples.js';
+import 'codemirror/mode/javascript/javascript.js';
 import 'codemirror/addon/hint/show-hint.js';
 import 'codemirror/addon/hint/show-hint.css';
 import 'codemirror/addon/mode/overlay.js';

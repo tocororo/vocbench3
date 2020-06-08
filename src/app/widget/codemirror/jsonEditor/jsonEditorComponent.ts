@@ -1,18 +1,17 @@
 import { Component, forwardRef, Input, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as CodeMirror from 'codemirror';
-import "./mustache";
 
 @Component({
-    selector: 'mustache-editor',
-    templateUrl: "mustacheEditorComponent.html",
+    selector: 'json-editor',
+    templateUrl: "jsonEditorComponent.html",
     providers: [{
-         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => MustacheEditorComponent), multi: true,
+         provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => JsonEditorComponent), multi: true,
     }],
     host: { class: "vbox" }
 })
 
-export class MustacheEditorComponent implements ControlValueAccessor {
+export class JsonEditorComponent implements ControlValueAccessor {
     @Input() disabled: boolean;
     
     @ViewChild('txtarea') textareaElement: any;
@@ -26,14 +25,16 @@ export class MustacheEditorComponent implements ControlValueAccessor {
             this.textareaElement.nativeElement,
             { 
                 lineNumbers: true,
-                mode: "mustache",
+                mode: "application/json",
                 lineWrapping: true,
                 readOnly: this.disabled,
+                matchBrackets: true,
+                autoCloseBrackets: true,
                 viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
                     //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
             }
         );
-
+        
         this.cmEditor.on('change', (cm: CodeMirror.Editor) => {
             this.propagateChange(cm.getDoc().getValue());
         });
@@ -55,12 +56,8 @@ export class MustacheEditorComponent implements ControlValueAccessor {
      * Write a new value to the element.
      */
     writeValue(obj: string) {
-        if (this.cmEditor) { //prevent error if editor is not yet initialized
-            if (obj != null) {
-                this.cmEditor.setValue(obj);
-            } else {
-                this.cmEditor.setValue("");
-            }
+        if (obj != null) {
+            this.cmEditor.setValue(obj);
         }
     }
     /**

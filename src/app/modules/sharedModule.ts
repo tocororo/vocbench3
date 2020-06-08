@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { QueryParameterForm } from '../sparql/queryParameterization/queryParameterForm';
 import { YasguiComponent } from '../sparql/yasguiComponent';
 import { HtmlEditorComponent } from '../widget/codemirror/htmlEditor/htmlEditorComponent';
+import { JsonEditorComponent } from '../widget/codemirror/jsonEditor/jsonEditorComponent';
 import { ManchesterEditorComponent } from '../widget/codemirror/manchesterEditor/manchesterEditorComponent';
 import { MustacheEditorComponent } from '../widget/codemirror/mustacheEditor/mustacheEditorComponent';
 import { NTripleEditorComponent } from '../widget/codemirror/nTripleEditor/nTripleEditorComponent';
@@ -37,6 +38,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         FilePickerComponent,
         HtmlEditorComponent,
         InputEditableComponent,
+        JsonEditorComponent,
         LangPickerComponent,
         LanguageItemComponent,
         LiteralPickerComponent,
@@ -65,6 +67,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         FilePickerComponent,
         HtmlEditorComponent,
         InputEditableComponent,
+        JsonEditorComponent,
         LangPickerComponent,
         LanguageItemComponent,
         LiteralPickerComponent,

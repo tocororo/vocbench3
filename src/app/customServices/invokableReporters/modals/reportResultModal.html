@@ -1,0 +1,63 @@
+<div class="modal-header">
+    <h3 class="modal-title">Report</h3>
+</div>
+<div class="modal-body scrollableContainer">
+
+    <div *ngFor="let s of sections" class="panel panel-default" style="margin-bottom: 5px;">
+        <div class="panel-heading">
+            <label *ngIf="s.label">{{s.label}}</label>
+            <label *ngIf="!s.label">{{s.service}}.{{s.operation}}</label>
+        </div>
+        <div class="panel-body">
+            <table class="table table-condensed table-borderless">
+                <colgroup>
+                    <col style="width: 80px;">
+                    <col>
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td><label>Service</label></td>
+                        <td>{{s.service}}</td>
+                    </tr>
+                    <tr>
+                        <td><label>Operation</label></td>
+                        <td>{{s.operation}}</td>
+                    </tr>
+                    <tr *ngIf="s.arguments">
+                        <td><label>Arguments</label></td>
+                        <td>
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <table class="table table-borderless table-condensed" style="font-family: monospace;">
+                                        <colgroup>
+                                            <col style="width: 1%;">
+                                            <col>
+                                        </colgroup>
+                                        <tbody>
+                                            <tr *ngFor="let argName of objectKeys(s.arguments)">
+                                                <td><label>{{argName}}</label></td>
+                                                <td>
+                                                    <input class="form-control input-sm" [ngModel]="s.arguments[argName]" readonly>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label>Result</label></td>
+                        <td>
+                            <json-editor [ngModel]="jsonStringify(s.result, null, 2)" [disabled]="true"></json-editor>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default btn-sm" (click)="ok()">Close</button>
+</div>
