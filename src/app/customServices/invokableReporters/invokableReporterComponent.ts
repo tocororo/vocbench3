@@ -19,6 +19,11 @@ export class InvokableReporterComponent {
     private selectedServiceInvocation: ServiceInvocationDefinition;
     private selectedServiceInvocationIdx: number;
 
+    private reportFormats: ReportFormatStruct[] = [
+        { label: "HTML", value: null }, { label: "PDF", value: "application/pdf" }
+    ]
+    private selectedReportFormat: ReportFormatStruct = this.reportFormats[0];
+
     private form: InvokableReporterForm;
 
     constructor(private invokableReporterService: InvokableReportersServices, private invokableReporterModals: InvokableReporterModalServices,
@@ -75,7 +80,19 @@ export class InvokableReporterComponent {
                 }
             );
         }
-        
+    }
+
+    private compileAndDownloadReport() {
+        if (this.form.sections.value == null || this.form.sections.value.length == 0) {
+            this.basicModals.alert("Download report", "The reporter cannot be compiled since it has no service invocation provided", "warning");
+        } else {
+            this.invokableReporterService.compileAndDownloadReport(this.ref.relativeReference, this.selectedReportFormat.value).subscribe(
+                report => {
+                    let url = window.URL.createObjectURL(report);
+                    window.open(url);
+                }
+            );
+        }
     }
     
     private selectServiceInvocation(invocation: ServiceInvocationDefinition) {
@@ -123,4 +140,9 @@ export class InvokableReporterForm {
 
 export class InvokableReporterFormEntry<T> extends SettingsProp {
     value: T;
+}
+
+export interface ReportFormatStruct { 
+    label: string; 
+    value: string;
 }

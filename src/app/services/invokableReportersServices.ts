@@ -28,7 +28,7 @@ export class InvokableReportersServices {
      * @param reporterReference 
      * @param targetMimeType 
      */
-    compileAndDownloadReport(reporterReference: string, targetMimeType: string) {
+    compileAndDownloadReport(reporterReference: string, targetMimeType?: string) {
         let params = {
             reporterReference: reporterReference,
             targetMimeType: targetMimeType

@@ -1,7 +1,6 @@
 <div class="panel panel-default vbox">
     <div class="panel-heading">
         <label style="flex: 1">{{ref.identifier}}</label>
-
         <div class="btn-toolbar">
             <button class="btn btn-default btn-xs" (click)="edit()" title="Edit basic info">
                 <span class="glyphicon glyphicon-pencil"></span>
@@ -11,8 +10,19 @@
                     <span class="glyphicon glyphicon-play"></span>
                 </button>
             </div>
+            <div style="display: inline-block; margin-left: 5px;">
+                <div class="input-group input-group-xs">
+                    <select class="form-control" [(ngModel)]="selectedReportFormat">
+                        <option *ngFor="let f of reportFormats" [ngValue]="f">{{f.label}}</option>
+                    </select>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" (click)="compileAndDownloadReport()" title="Compile and download report">
+                            <span class="glyphicon glyphicon-save "></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
         </div>
-
     </div>
     <div *ngIf="form" class="panel-body vbox">
 

@@ -138,6 +138,9 @@ export class ServiceInvocationEditorModal implements ModalComponent<ServiceInvoc
     }
 
     ok() {
+        /**
+         * TODO handle mandatory fields (label, description), preferebly server based
+         */
         if (this.parameters != null) { //check if those required are provided
             for (let p of this.parameters) {
                 if (p.param.required && p.value == null || p.value.trim() == "") {
