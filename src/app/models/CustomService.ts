@@ -57,10 +57,11 @@ export class TypeUtils {
         public static Literal: string = "Literal";
         public static long: string = "long";
         public static Map: string = "Map";
+        public static RDFValue: string = "RDFValue";
         public static Resource: string = "Resource";
         public static short: string = "short";
         public static String: string = "java.lang.String";
-        public static RDFValue: string = "RDFValue";
+        public static TupleQueryResult: string = "TupleQueryResult";
         public static void: string = "void";
     }
 
@@ -83,6 +84,7 @@ export class TypeUtils {
             TypeUtils.Types.Map,
             TypeUtils.Types.short,
             TypeUtils.Types.String,
+            TypeUtils.Types.TupleQueryResult,
             TypeUtils.Types.void,
         ]
         types = types.concat(TypeUtils.getRdf4jTypes())

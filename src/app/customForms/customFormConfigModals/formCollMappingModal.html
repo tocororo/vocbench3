@@ -5,9 +5,7 @@
     
     <div style="display: flex; margin-bottom: 4px; align-items: center;">
         <label>Resource:</label>
-        <div class="form-control input-sm" style="margin: 0px 4px;">
-            <rdf-resource *ngIf="selectedResource" [resource]="selectedResource"></rdf-resource>
-        </div>
+        <input class="form-control input-sm" style="margin: 0px 4px;" [(ngModel)]="selectedResourceIri" placeholder="http://example#resource">
         <div class="dropdown pull-right">
             <button class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">
                 Select
@@ -54,6 +52,6 @@
     
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedResource || !selectedFormColl">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedResourceIri || !selectedFormColl">Ok</button>
     <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
 </div>

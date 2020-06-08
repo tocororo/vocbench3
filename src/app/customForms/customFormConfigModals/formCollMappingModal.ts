@@ -1,12 +1,13 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { CustomFormsServices } from "../../services/customFormsServices";
-import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from "../../models/ARTResources";
 import { FormCollection } from "../../models/CustomForms";
-import { RDF, OWL } from "../../models/Vocabulary";
+import { OWL, RDF } from "../../models/Vocabulary";
+import { CustomFormsServices } from "../../services/customFormsServices";
+import { ResourceUtils } from "../../utils/ResourceUtils";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 
 @Component({
     selector: "form-coll-mapping-modal",
@@ -16,7 +17,7 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
     context: BSModalContext;
 
     private formCollectionList: Array<FormCollection>;
-    private selectedResource: ARTURIResource;
+    private selectedResourceIri: string;
     private selectedFormColl: FormCollection;
 
     constructor(public dialog: DialogRef<BSModalContext>, private cfService: CustomFormsServices, private basicModals: BasicModalServices,
@@ -40,8 +41,8 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
                     this.basicModals.alert("Suggested resources", "No classes/properties suggested for the FormCollection " + fc.getId(), "warning");
                 } else {
                     this.basicModals.selectResource("Suggested resources", null, suggestions).then(
-                        res => {
-                            this.selectedResource = res;
+                        (res: ARTURIResource) => {
+                            this.selectedResourceIri = res.getURI();
                         },
                         () => {}
                     );
@@ -52,8 +53,8 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
 
     private selectProperty() {
         this.browsingModals.browsePropertyTree("Select a property").then(
-            (prop: any) => {
-                this.selectedResource = prop;
+            (res: ARTURIResource) => {
+                this.selectedResourceIri = res.getURI();
             },
             () => { }
         )
@@ -61,8 +62,8 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
 
     private selectClass() {
         this.browsingModals.browseClassTree("Select a class", [RDF.property, OWL.class, OWL.thing]).then(
-            (cls: any) => {
-                this.selectedResource = cls;
+            (res: ARTURIResource) => {
+                this.selectedResourceIri = res.getURI();
             },
             () => { }
         )
@@ -72,9 +73,13 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
         this.selectedFormColl = formColl;
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        this.dialog.close({ resource: this.selectedResource, formCollection: this.selectedFormColl.getId() });
+    ok() {
+        this.selectedResourceIri = this.selectedResourceIri.trim();
+        if (!ResourceUtils.testIRI(this.selectedResourceIri)) {
+            this.basicModals.alert("Invalid IRI", "The provided resource IRI is not valid", "warning");
+            return
+        }
+        this.dialog.close({ resource: new ARTURIResource(this.selectedResourceIri), formCollection: this.selectedFormColl.getId() });
     }
 
     cancel() {
