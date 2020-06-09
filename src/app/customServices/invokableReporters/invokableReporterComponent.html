@@ -1,8 +1,8 @@
-<div class="panel panel-default vbox">
+<div class="panel panel-default vbox blockingDivHost">
     <div class="panel-heading">
         <label style="flex: 1">{{ref.identifier}}</label>
         <div class="hbox" style="flex: initial;">
-            <button class="btn btn-default btn-xs" (click)="edit()" title="Edit basic info">
+            <button class="btn btn-default btn-xs" (click)="edit()" title="Edit basic info" [disabled]="!editReporterAuthorized">
                 <span class="glyphicon glyphicon-pencil"></span>
             </button>
             <div class="btn-group btn-group-xs" style="margin-left: 5px;">
@@ -80,10 +80,12 @@
                     </label>
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-default" (click)="createServiceInvocation()" title="Create service invocation">
+                            <button class="btn btn-default" (click)="createServiceInvocation()" title="Create service invocation" 
+                                [disabled]="!createInvocationAuthorized">
                                 <span class="glyphicon glyphicon-plus"></span>
                             </button>
-                            <button class="btn btn-default" (click)="deleteServiceInvocation()" title="Delete service invocation" [disabled]="!selectedServiceInvocation">
+                            <button class="btn btn-default" (click)="deleteServiceInvocation()" title="Delete service invocation" 
+                                [disabled]="!selectedServiceInvocation || !deleteInvocationAuthorized">
                                 <span class="glyphicon glyphicon-minus"></span>
                             </button>
                         </div>
@@ -102,4 +104,13 @@
         </div>
 
     </div>
+
+    <div #blockingDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+
 </div>

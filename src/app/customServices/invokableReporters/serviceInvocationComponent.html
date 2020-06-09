@@ -5,7 +5,7 @@
         </label>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" (click)="editInvocation()" title="Edit service invocation">
+                <button class="btn btn-default" (click)="editInvocation()" title="Edit service invocation" [disabled]="!editInvocationAuthorized">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </button>
             </div>

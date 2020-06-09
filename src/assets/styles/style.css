@@ -500,8 +500,12 @@ input[type=number]::-webkit-outer-spin-button {
  
 .CodeMirror { 
     border: 1px solid #ddd; /*Border of textare of CodeMirror (just in the editors, because in yasqe there is already)*/
-    height: auto !important; 
+    height: auto; 
     flex: 1;
+}
+.CodeMirrorLimitedHeight .CodeMirror-scroll { 
+    /* height auto in CodeMirror let the textarea of codemirror fill the available space. In this way the height is limited to 300px */
+    max-height: 300px !important; 
 }
 .CodeMirror-scroll {
     min-height: 100px;

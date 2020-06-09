@@ -144,7 +144,10 @@ export class AppComponent {
     }
 
     private isCustomServicesAuthorized() {
-        return true;
+        return (
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.customServiceRead) ||
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.invokableReporterRead)
+        );
     }
 
 }

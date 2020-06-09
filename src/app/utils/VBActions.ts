@@ -57,6 +57,14 @@ export enum VBActionsEnum {
     customFormUpdateCollection = "customFormUpdateCollection",
     customFormUpdateForm = "customFormUpdateForm",
     customFormUpdateFormMapping = "customFormUpdateFormMapping",
+    //CustomService
+    customServiceCreate = "customServiceCreate",
+    customServiceDelete = "customServiceDelete",
+    customServiceRead = "customServiceRead",
+    customServiceUpdate = "customServiceUpdate",
+    customServiceOperationCreate = "customServiceOperationCreate",
+    customServiceOperationDelete = "customServiceOperationDelete",
+    customServiceOperationUpdate = "customServiceOperationUpdate",
     //DatasetMetadata
     datasetMetadataExport = "datasetMetadataExport",
     datasetMetadataGetMetadata = "datasetMetadataGetMetadata",
@@ -82,6 +90,14 @@ export enum VBActionsEnum {
     //InputOutput
     inputOutputClearData = "inputOutputClearData",
     inputOutputLoadData = "inputOutputLoadData",
+    //InvokableReporter
+    invokableReporterCreate = "invokableReporterCreate",
+    invokableReporterDelete = "invokableReporterDelete",
+    invokableReporterRead = "invokableReporterRead",
+    invokableReporterUpdate = "invokableReporterUpdate",
+    invokableReporterSectionCreate = "invokableReporterSectionCreate",
+    invokableReporterSectionDelete = "invokableReporterSectionDelete",
+    invokableReporterSectionUpdate = "invokableReporterSectionUpdate",
     //Metadata
     metadataAddImport = "metadataAddImport",
     metadataChangeNsPrefixMapping = "metadataChangeNsPrefixMapping",

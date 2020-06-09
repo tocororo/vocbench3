@@ -1,5 +1,7 @@
 import { Component } from "@angular/core";
 import { CustomServiceServices } from "../../services/customServiceServices";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "../../utils/VBActions";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { CustomServiceModalServices } from "./modals/customServiceModalServices";
 
@@ -13,10 +15,16 @@ export class CustomServicesPageComponent {
     private serviceIds: string[];
     private selectedServiceId: string;
 
+    private createServiceAuthorized: boolean;
+    private deleteServiceAuthorized: boolean;
+
     constructor(private customServService: CustomServiceServices, private basicModals: BasicModalServices, 
         private customServiceModals: CustomServiceModalServices) { }
 
     ngOnInit() {
+        this.createServiceAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.customServiceCreate);
+        this.deleteServiceAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.customServiceDelete);
+
         this.initServices();
     }
 

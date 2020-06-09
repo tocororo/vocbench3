@@ -3,10 +3,10 @@
         <label style="flex: 1;">Invokable Reporters</label>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" (click)="createReporter()" title="Create reporter">
+                <button class="btn btn-default" (click)="createReporter()" title="Create reporter" [disabled]="!createReporterAuthorized">
                     <span class="glyphicon glyphicon-plus"></span>
                 </button>
-                <button class="btn btn-default" (click)="deleteReporter()" title="Delete reporter" [disabled]="!selectedReporter">
+                <button class="btn btn-default" (click)="deleteReporter()" title="Delete reporter" [disabled]="!selectedReporter || !deleteReporterAuthorized">
                     <span class="glyphicon glyphicon-minus"></span>
                 </button>
             </div>

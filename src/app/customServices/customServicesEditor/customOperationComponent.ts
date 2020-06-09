@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { CustomOperationDefinition, CustomOperationTypes, TypeUtils } from "../../models/CustomService";
 import { YasguiComponent } from "../../sparql/yasguiComponent";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "../../utils/VBActions";
 import { CustomServiceModalServices } from "./modals/customServiceModalServices";
 
 @Component({
@@ -19,7 +21,13 @@ export class CustomOperationComponent {
     private parameters: { prettyPrint: string, required: boolean }[] = [];
     private returns: string;
 
+    private editOperationAuthorized: boolean;
+
     constructor(private customServiceModals: CustomServiceModalServices) {}
+
+    ngOnInit() {
+        this.editOperationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.customServiceOperationUpdate);
+    }
     
     ngOnChanges(changes: SimpleChanges) {
         if (changes['operation'].currentValue) {

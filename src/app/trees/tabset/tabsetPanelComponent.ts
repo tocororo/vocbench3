@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, ViewChild, Input } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
@@ -6,7 +6,7 @@ import { OntoLex, SKOS } from "../../models/Vocabulary";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { TreeListContext } from "../../utils/UIUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
-import { VBContext, ProjectContext } from "../../utils/VBContext";
+import { ProjectContext, VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { LexicalEntryListPanelComponent } from "../ontolex/lexicalEntry/lexicalEntryListPanel/lexicalEntryListPanelComponent";
@@ -44,6 +44,8 @@ export class TabsetPanelComponent {
     private context: TreeListContext = TreeListContext.dataPanel;
 
     private selectedResource: ARTResource;
+
+    private showTabCache: {[key: string]: boolean} = {};
 
     private ONTO_TYPE: string;
     
@@ -166,34 +168,42 @@ export class TabsetPanelComponent {
     //TAB HANDLER
 
     private showTab(tab: RDFResourceRolesEnum): boolean {
-        if (tab == RDFResourceRolesEnum.cls) { //always visible, except if explicitly hidden
-            return this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1; 
-        } else if (tab == RDFResourceRolesEnum.concept) { //visible for skos and ontolex projects, except if explicitly hidden
-            return (
-                (this.isProjectSKOS() || this.isProjectOntolex()) &&
-                (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1)
-            );
-        } else if (tab == RDFResourceRolesEnum.conceptScheme) { //visible for skos and ontolex projects, except if explicitly hidden
-            return (
-                (this.isProjectSKOS() || this.isProjectOntolex()) &&
-                (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1)
-            );
-        } else if (tab == RDFResourceRolesEnum.skosCollection) { //visible for skos and ontolex projects, except if explicitly hidden
-            return (
-                (this.isProjectSKOS() || this.isProjectOntolex()) &&
-                (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1)
-            );
-        } else if (tab == RDFResourceRolesEnum.property) { //always visible, except if explicitly hidden
-            return this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1;
-        } else if (tab == RDFResourceRolesEnum.limeLexicon) { //visible for ontolex projects, except if explicitly hidden
-            return this.isProjectOntolex() && (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1);
-        } else if (tab == RDFResourceRolesEnum.ontolexLexicalEntry) { //visible for ontolex projects, except if explicitly hidden
-            return this.isProjectOntolex() && (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1);
-        } else if (tab == RDFResourceRolesEnum.dataRange) { //always visible, except if explicitly hidden
-            return this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1;
-        } else {
-            return false;
+        if (this.showTabCache[tab] == null) {
+            let show: boolean = false;
+            if (tab == RDFResourceRolesEnum.cls) { //always visible, except if explicitly hidden
+                show = this.isTabAuthorized(tab) && (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1); 
+            } else if (tab == RDFResourceRolesEnum.concept) { //visible for skos and ontolex projects, except if explicitly hidden
+                show = (
+                    this.isTabAuthorized(tab) && 
+                    (this.isProjectSKOS() || this.isProjectOntolex()) &&
+                    (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1)
+                );
+            } else if (tab == RDFResourceRolesEnum.conceptScheme) { //visible for skos and ontolex projects, except if explicitly hidden
+                show = (
+                    this.isTabAuthorized(tab) &&
+                    (this.isProjectSKOS() || this.isProjectOntolex()) &&
+                    (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1)
+                );
+            } else if (tab == RDFResourceRolesEnum.skosCollection) { //visible for skos and ontolex projects, except if explicitly hidden
+                show = (
+                    this.isTabAuthorized(tab) &&
+                    (this.isProjectSKOS() || this.isProjectOntolex()) &&
+                    (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1)
+                );
+            } else if (tab == RDFResourceRolesEnum.property) { //always visible, except if explicitly hidden
+                show = this.isTabAuthorized(tab) && (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1);
+            } else if (tab == RDFResourceRolesEnum.limeLexicon) { //visible for ontolex projects, except if explicitly hidden
+                show = this.isTabAuthorized(tab) && this.isProjectOntolex() && (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1);
+            } else if (tab == RDFResourceRolesEnum.ontolexLexicalEntry) { //visible for ontolex projects, except if explicitly hidden
+                show = this.isTabAuthorized(tab) && this.isProjectOntolex() && (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1);
+            } else if (tab == RDFResourceRolesEnum.dataRange) { //always visible, except if explicitly hidden
+                show = this.isTabAuthorized(tab) && this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1;
+            } else {
+                show = false;
+            }
+            this.showTabCache[tab] = show;
         }
+        return this.showTabCache[tab];
     }
 
     private selectTab(tabName: RDFResourceRolesEnum) {
@@ -273,7 +283,7 @@ export class TabsetPanelComponent {
             } else {
                 this.sharedModals.openResourceView(resource, false);    
             }
-        } else {
+        } else { //BNode are not in trees or lists => open in modal
             this.basicModals.alert("Search", "The resoruce " + resource.getShow() + " cannot be focused in a tree/list view, so its ResourceView will be shown in a modal dialog", "warning").then(
                 () => {
                     this.sharedModals.openResourceView(resource, false);
@@ -281,27 +291,35 @@ export class TabsetPanelComponent {
             );
         }
         if (tabToActivate != null) {
-            this.activeTab = tabToActivate;
-            setTimeout(() => {
-                //wait the update of the UI after the change of the tab
-                if (tabToActivate == RDFResourceRolesEnum.property) {
-                    this.viewChildPropertyPanel.openTreeAt(<ARTURIResource>resource);
-                } else if (tabToActivate == RDFResourceRolesEnum.cls) {
-                    this.viewChildClsIndPanel.selectSearchedResource(<ARTURIResource>resource);
-                } else if (tabToActivate == RDFResourceRolesEnum.concept) {
-                    this.viewChildConceptPanel.selectSearchedResource(<ARTURIResource>resource);
-                } else if (tabToActivate == RDFResourceRolesEnum.conceptScheme) {
-                    this.viewChildSchemePanel.openAt(<ARTURIResource>resource)
-                } else if (tabToActivate == RDFResourceRolesEnum.limeLexicon) {
-                    this.viewChildLexiconPanel.openAt(<ARTURIResource>resource);
-                } else if (tabToActivate == RDFResourceRolesEnum.ontolexLexicalEntry) {
-                    this.viewChildLexialEntryPanel.selectAdvancedSearchedResource(<ARTURIResource>resource);
-                } else if (tabToActivate == RDFResourceRolesEnum.skosCollection) {
-                    this.viewChildCollectionPanel.openTreeAt(<ARTURIResource>resource);
-                } else if (tabToActivate == RDFResourceRolesEnum.dataRange) {
-                    this.viewChildDatatypePanel.openAt(<ARTURIResource>resource);
-                }
-            });
+            if (this.showTab(tabToActivate)) { //if the tab is visible => oper activate the tab and select the resource in list/tree
+                this.activeTab = tabToActivate;
+                setTimeout(() => {
+                    //wait the update of the UI after the change of the tab
+                    if (tabToActivate == RDFResourceRolesEnum.property) {
+                        this.viewChildPropertyPanel.openTreeAt(<ARTURIResource>resource);
+                    } else if (tabToActivate == RDFResourceRolesEnum.cls) {
+                        this.viewChildClsIndPanel.selectSearchedResource(<ARTURIResource>resource);
+                    } else if (tabToActivate == RDFResourceRolesEnum.concept) {
+                        this.viewChildConceptPanel.selectSearchedResource(<ARTURIResource>resource);
+                    } else if (tabToActivate == RDFResourceRolesEnum.conceptScheme) {
+                        this.viewChildSchemePanel.openAt(<ARTURIResource>resource)
+                    } else if (tabToActivate == RDFResourceRolesEnum.limeLexicon) {
+                        this.viewChildLexiconPanel.openAt(<ARTURIResource>resource);
+                    } else if (tabToActivate == RDFResourceRolesEnum.ontolexLexicalEntry) {
+                        this.viewChildLexialEntryPanel.selectAdvancedSearchedResource(<ARTURIResource>resource);
+                    } else if (tabToActivate == RDFResourceRolesEnum.skosCollection) {
+                        this.viewChildCollectionPanel.openTreeAt(<ARTURIResource>resource);
+                    } else if (tabToActivate == RDFResourceRolesEnum.dataRange) {
+                        this.viewChildDatatypePanel.openAt(<ARTURIResource>resource);
+                    }
+                });
+            } else { //if not visible, open resource in modal
+                this.basicModals.alert("Search", "The resoruce " + resource.getShow() + " cannot be focused in a tree/list view, so its ResourceView will be shown in a modal dialog", "warning").then(
+                    () => {
+                        this.sharedModals.openResourceView(resource, false);
+                    }
+                );
+            }
         }
     }
 

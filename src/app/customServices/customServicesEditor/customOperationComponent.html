@@ -5,7 +5,7 @@
         </label>
         <div *ngIf="!readonly" class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" (click)="editOperation()" title="Edit operation">
+                <button class="btn btn-default" (click)="editOperation()" title="Edit operation" [disabled]="!editOperationAuthorized">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </button>
             </div>

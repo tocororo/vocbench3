@@ -9,30 +9,23 @@
         </div>
         <div class="panel-body vbox">
 
-            <form class="form-horizontal">
+            <div class="form-horizontal">
                 <div class="form-group">
                     <label class="control-label col-sm-3">Area:</label>
                     <div class="col-sm-9">
-                        <div class="hbox">
-                            <div *ngFor="let a of areaStruct" style="flex: 1">
-                                <div class="radio" [title]="a.description">
-                                    <label>
-                                        <input type="radio" name="area_radio" [value]="a.value" [checked]="a.value == area"
-                                            (change)="updateArea(a.value)">{{a.label}}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+                        <select class="form-control input-sm" [(ngModel)]="area" (ngModelChange)="updateExtendedCapability()">
+                            <option *ngFor="let a of areaStruct" [ngValue]="a.value">{{a.value}} - {{a.description}}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-sm-3">Subject and scope:</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control input-sm" [(ngModel)]="subjectScope"
-                            (ngModelChange)="updateExtendedCapability()" name="subj_scope">
+                            (ngModelChange)="updateExtendedCapability()">
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 

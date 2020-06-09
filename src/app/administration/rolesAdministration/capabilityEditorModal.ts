@@ -1,9 +1,6 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "ngx-modialog";
-import { UserServices } from "../../services/userServices";
-import { AdministrationServices } from "../../services/administrationServices";
-import { User, Role } from "../../models/User";
+import { Component } from "@angular/core";
+import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 
 export class CapabilityEditorModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title', public capability?: string) {
@@ -24,12 +21,14 @@ export class CapabilityEditorModal implements ModalComponent<CapabilityEditorMod
     private extendedCapability: string; //"capablity(<topic>, <CRUDV>)" where <topic> is <area>(<subject> [, <scope>])
 
     private areaStruct = [
-        { value: "rdf", label: "RDF", description: "Editing of content data"}, 
-        { value: "rbac", label: "RBAC", description: "Role Based Access Control management"},
-        { value: "pm", label: "PM", description: "Project management"},
-        { value: "um", label: "UM", description: "User management"},
-        { value: "cform", label: "CFORM", description: "Custom Form management"},
-        { value: "sys", label: "SYS", description: "System administration"}
+        { value: "rdf", description: "Editing of content data" }, 
+        { value: "rbac", description: "Role Based Access Control management" },
+        { value: "pm", description: "Project management" },
+        { value: "um", description: "User management" },
+        { value: "cform", description: "Custom Form management" },
+        { value: "customService", description: "Custom Service management" },
+        { value: "invokableReporter", description: "Invokable Reporter management" },
+        { value: "sys", description: "System administration" }
     ];
     private area: string;
     private subjectScope: string;
@@ -88,11 +87,6 @@ export class CapabilityEditorModal implements ModalComponent<CapabilityEditorMod
         for (var i = 0; i < this.crudvStruct.length; i++) {
             this.crudvStruct[i].checked = checked;
         }
-        this.updateExtendedCapability();
-    }
-
-    private updateArea(area: string) {
-        this.area = area;
         this.updateExtendedCapability();
     }
 

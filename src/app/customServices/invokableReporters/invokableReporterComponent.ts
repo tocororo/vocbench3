@@ -1,8 +1,11 @@
-import { Component, Input, SimpleChanges } from "@angular/core";
+import { Component, ElementRef, Input, SimpleChanges, ViewChild } from "@angular/core";
 import { Reference } from "../../models/Configuration";
 import { InvokableReporter, ServiceInvocationDefinition } from "../../models/InvokableReporter";
 import { SettingsProp } from "../../models/Plugins";
 import { InvokableReportersServices } from "../../services/invokableReportersServices";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { UIUtils } from "../../utils/UIUtils";
+import { VBActionsEnum } from "../../utils/VBActions";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { InvokableReporterModalServices } from "./modals/invokableReporterModalServices";
 
@@ -15,6 +18,8 @@ import { InvokableReporterModalServices } from "./modals/invokableReporterModalS
 export class InvokableReporterComponent {
     @Input() ref: Reference;
 
+    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+
     private reporter: InvokableReporter;
     private selectedServiceInvocation: ServiceInvocationDefinition;
     private selectedServiceInvocationIdx: number;
@@ -26,6 +31,10 @@ export class InvokableReporterComponent {
 
     private form: InvokableReporterForm;
 
+    private editReporterAuthorized: boolean;
+    private createInvocationAuthorized: boolean;
+    private deleteInvocationAuthorized: boolean;
+
     constructor(private invokableReporterService: InvokableReportersServices, private invokableReporterModals: InvokableReporterModalServices,
         private basicModals: BasicModalServices) { }
 
@@ -33,6 +42,12 @@ export class InvokableReporterComponent {
         if (changes['ref'] && changes['ref'].currentValue) {
             this.initReporter(false);
         }
+    }
+
+    ngOnInit() {
+        this.editReporterAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.invokableReporterUpdate);
+        this.createInvocationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.invokableReporterSectionCreate);
+        this.deleteInvocationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.invokableReporterSectionDelete);
     }
 
     private initReporter(restoreInvocation: boolean) {
@@ -74,8 +89,10 @@ export class InvokableReporterComponent {
         if (this.form.sections.value == null || this.form.sections.value.length == 0) {
             this.basicModals.alert("Compile report", "The reporter cannot be compiled since it has no service invocation provided", "warning");
         } else {
+            UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
             this.invokableReporterService.compileReport(this.ref.relativeReference, false).subscribe(
                 report => {
+                    UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                     this.invokableReporterModals.showReport(report);
                 }
             );
@@ -86,8 +103,10 @@ export class InvokableReporterComponent {
         if (this.form.sections.value == null || this.form.sections.value.length == 0) {
             this.basicModals.alert("Download report", "The reporter cannot be compiled since it has no service invocation provided", "warning");
         } else {
+            UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
             this.invokableReporterService.compileAndDownloadReport(this.ref.relativeReference, this.selectedReportFormat.value).subscribe(
                 report => {
+                    UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                     let url = window.URL.createObjectURL(report);
                     window.open(url);
                 }

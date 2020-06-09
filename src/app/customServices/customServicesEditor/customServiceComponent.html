@@ -33,7 +33,7 @@
                     {{form.name.displayName}}
                     <span class="glyphicon glyphicon-info-sign" [title]="form.name.description"></span>
                 </label>
-                <input-editable style="flex: 1;" [value]="form.name.value" (valueEdited)="updateName($event)"></input-editable>
+                <input-editable style="flex: 1;" [value]="form.name.value" (valueEdited)="updateName($event)" [disabled]="!editServiceAuthorized"></input-editable>
             </div>
         </div>
 
@@ -44,7 +44,7 @@
                     {{form.description.displayName}}
                     <span class="glyphicon glyphicon-info-sign" [title]="form.description.description"></span>
                 </label>
-                <input-editable style="flex: 1;" [value]="form.description.value" (valueEdited)="updateDescription($event)"></input-editable>
+                <input-editable style="flex: 1;" [value]="form.description.value" (valueEdited)="updateDescription($event)" [disabled]="!editServiceAuthorized"></input-editable>
             </div>
         </div>
 
@@ -58,10 +58,10 @@
                     </label>
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-default" (click)="createOperation()" title="Create operation">
+                            <button class="btn btn-default" (click)="createOperation()" title="Create operation" [disabled]="!createOperationAuthorized">
                                 <span class="glyphicon glyphicon-plus"></span>
                             </button>
-                            <button class="btn btn-default" (click)="deleteOperation()" title="Delete operation" [disabled]="!selectedOperation">
+                            <button class="btn btn-default" (click)="deleteOperation()" title="Delete operation" [disabled]="!selectedOperation || !deleteOperationAuthorized">
                                 <span class="glyphicon glyphicon-minus"></span>
                             </button>
                         </div>

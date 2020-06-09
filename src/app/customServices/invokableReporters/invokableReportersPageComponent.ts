@@ -1,6 +1,8 @@
 import { Component } from "@angular/core";
 import { Reference } from "../../models/Configuration";
 import { InvokableReportersServices } from "../../services/invokableReportersServices";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "../../utils/VBActions";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { InvokableReporterModalServices } from "./modals/invokableReporterModalServices";
 
@@ -14,10 +16,16 @@ export class InvokableReportersPageComponent {
     private reporters: Reference[];
     private selectedReporter: Reference;
 
+    private createReporterAuthorized: boolean;
+    private deleteReporterAuthorized: boolean;
+
     constructor(private invokableReporterService: InvokableReportersServices, private invokableReporterModals: InvokableReporterModalServices, 
         private basicModals: BasicModalServices) { }
 
     ngOnInit() {
+        this.createReporterAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.invokableReporterCreate);
+        this.deleteReporterAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.invokableReporterDelete);
+
         this.initReporters();
     }
 

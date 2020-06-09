@@ -1,6 +1,8 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { CustomOperationDefinition, CustomService, CustomServiceDefinition } from "../../models/CustomService";
 import { CustomServiceServices } from "../../services/customServiceServices";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "../../utils/VBActions";
 import { CustomServiceModalServices } from "./modals/customServiceModalServices";
 
 @Component({
@@ -16,12 +18,22 @@ export class CustomServiceComponent {
     private form: CustomServiceForm;
     private selectedOperation: CustomOperationDefinition;
 
+    private editServiceAuthorized: boolean;
+    private createOperationAuthorized: boolean;
+    private deleteOperationAuthorized: boolean;
+
     constructor(private customServService: CustomServiceServices, private customServiceModals: CustomServiceModalServices) { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['id'] && changes['id'].currentValue) {
             this.initCustomService(false);
         }
+    }
+
+    ngOnInit() {
+        this.editServiceAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.customServiceUpdate);
+        this.createOperationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.customServiceOperationCreate);
+        this.deleteOperationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.customServiceOperationDelete);
     }
 
     /**
@@ -119,7 +131,6 @@ interface CustomServiceForm {
 }
 
 interface CustomServiceFormEntry<T> {
-    // name: string;
     displayName: string;
     description: string;
     required: boolean;
