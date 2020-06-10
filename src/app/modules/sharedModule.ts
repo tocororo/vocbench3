@@ -12,6 +12,7 @@ import { PearlEditorComponent } from "../widget/codemirror/pearlEditor/pearlEdit
 import { SanitizerDirective } from "../widget/directives/sanitizerDirective";
 import { ExtensionConfiguratorComponent } from '../widget/extensionConfigurator/extensionConfiguratorComponent';
 import { InputEditableComponent } from '../widget/inputEditable/inputEditableComponent';
+import { TextEditableComponent } from '../widget/inputEditable/textEditableComponent';
 import { LanguageItemComponent } from '../widget/languageItem/languageItemComponent';
 import { PartitionFilterEditor } from '../widget/partitionFilterEditor/partitionFilterEditor';
 import { DatatypePickerComponent } from '../widget/pickers/datatypePicker/datatypePickerComponent';
@@ -57,6 +58,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         SettingSetRendererComponent,
         SettingsRendererComponent,
         SettingsRendererPanelComponent,
+        TextEditableComponent,
         TypedLiteralInputComponent,
         ValuePickerComponent,
         YasguiComponent,
@@ -86,6 +88,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         SettingSetRendererComponent,
         SettingsRendererComponent,
         SettingsRendererPanelComponent,
+        TextEditableComponent,
         TypedLiteralInputComponent,
         ValuePickerComponent,
         YasguiComponent,
