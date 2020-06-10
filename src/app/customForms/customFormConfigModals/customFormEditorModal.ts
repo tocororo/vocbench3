@@ -48,6 +48,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
     private cfShortId: string;
     private name: string;
     private description: string;
+    private descriptionTextareaRows: number = 3; //3 by default, dynamically computed in edit mode
     private type: CustomFormType = "graph";
     private ref: string;
     private showPropertyChain: ARTURIResource[] = [];
@@ -84,6 +85,9 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
                             this.initShowPropChain();
                         }
                     }
+
+                    let lineBreakCount = (this.description.match(/\n/g)||[]).length;
+                    this.descriptionTextareaRows = lineBreakCount + 2;
                 },
                 err => { this.dialog.dismiss() }
             )

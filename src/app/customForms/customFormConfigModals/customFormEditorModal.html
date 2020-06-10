@@ -44,7 +44,7 @@
                 Description:
                 <span class="glyphicon glyphicon-info-sign" title="A natural language description that briefly explain the purpose of this form"></span>
             </label>
-            <textarea class="form-control input-xs" style="flex: 1;" [(ngModel)]="description" rows="3" [disabled]="context.readOnly"></textarea>
+            <textarea class="form-control input-xs" style="flex: 1;" [(ngModel)]="description" [rows]="descriptionTextareaRows" [disabled]="context.readOnly"></textarea>
             <span style="margin-left: 4px;">*</span>  
         </div>
     </div>
