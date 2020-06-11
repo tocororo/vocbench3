@@ -50,10 +50,10 @@
         </div>
     </div>
 
-    <div *ngIf="refinableTaskReport" class="vbox" style="margin-top: 8px;">
+    <div *ngIf="alignmentScenario" class="vbox" style="margin-top: 8px;">
         <div class="hbox" style="flex: initial;">
-            <maple-dataset [dataset]="refinableTaskReport.leftDataset" style="flex: 1; margin-right: 6px;"></maple-dataset>
-            <maple-dataset [dataset]="refinableTaskReport.rightDataset" style="flex: 1; margin-left: 6px;"></maple-dataset>
+            <maple-dataset [dataset]="alignmentScenario.leftDataset" style="flex: 1; margin-right: 6px;"></maple-dataset>
+            <maple-dataset [dataset]="alignmentScenario.rightDataset" style="flex: 1; margin-left: 6px;"></maple-dataset>
         </div>
 
         <div class="panel panel-default vbox" style="margin-top: 6px;">
@@ -61,19 +61,19 @@
                 <label>Pairings</label>
             </div>
             <div class="panel-body scrollableContainer">
-                <div *ngFor="let p of refinablePairings" class="panel panel-default" style="margin: 4px 0px; position: relative;">
+                <div *ngFor="let p of refinablePairings" class="groupPanel" style="margin: 12px 0px; position: relative;">
 
                     <div class="groupPanel-heading">
                         <div class="groupPanel-heading-content">
                             <div class="checkbox-inline" title="If checked enable the usage of this pairing">
                                 <label>
-                                    <input type="checkbox" [(ngModel)]="p.checked">Use
+                                    <input type="checkbox" [(ngModel)]="p.checked" (ngModelChange)="onPairingSelectionChange()">Use
                                 </label>
                             </div>
                         </div>
                     </div>
 
-                    <div class="panel-body">
+                    <div class="groupPanel-body">
                         <div class="hbox" style="align-items: center; justify-content: center;">
                             <lang-item [language]="p.language" size="lg" [showName]="false"></lang-item>
                             <div style="margin-left: 10px;">
@@ -87,7 +87,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="groupPanel">
+                        <div *ngIf="p.synonymizers.length > 0" class="groupPanel">
                             <div class="groupPanel-heading">
                                 <div class="groupPanel-heading-content">
                                     <label>
@@ -118,6 +118,59 @@
             </div>
         </div>
 
+        <div class="panel panel-default vbox" style="margin-top: 6px;">
+            <div class="panel-heading">
+                <label style="flex: 1">Matchers</label>
+            </div>
+            <div class="panel-body scrollableContainer">
+
+                <ng-container *ngIf="!matchers; then noMatchersBlock; else matchersBlock"></ng-container>
+
+                <ng-template #noMatchersBlock>
+                    <div *ngIf="!matchers" class="alert alert-info">
+                        Optionally a matcher can be provided to the alignment system.
+                        Click <a href="javascript:void(0)" (click)="searchMatchers()"><b>here</b></a> to search for available matchers.
+                    </div>
+                </ng-template>
+
+                <ng-template #matchersBlock>
+                    <div *ngIf="outdatedMatchers && matchers.length > 0" class="alert alert-warning" style="margin-bottom: 8px;">
+                        The pairings selection has changed, the list of available matchers could be outdated.
+                        Click <a href="javascript:void(0)" (click)="searchMatchers()"><b>here</b></a> to refresh the list.
+                    </div>
+
+                    <div *ngFor="let m of matchers" class="groupPanel" style="margin: 12px 0px; position: relative;">
+                        <div class="groupPanel-heading">
+                            <div class="groupPanel-heading-content">
+                                <label class="radio-inline" style="font-weight: bold;" title="If selected use this matcher">
+                                    <input type="radio" (click)="selectMatcher(m)" [checked]="selectedMatcher == m">
+                                    {{m.id}}
+                                    <span *ngIf="m.description" class="glyphicon glyphicon-info-sign" [title]="m.description"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="groupPanel-body">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <label>Settings</label>
+                                </div>
+                                <div class="panel-body">
+                                    <ng-container *ngIf="m.settings">
+                                        <settings-renderer *ngIf="m.settings.stProperties; else originalSchemaBlock" 
+                                            [(ngModel)]="m.settings.stProperties" [disabled]="selectedMatcher != m">
+                                        </settings-renderer>
+                                        <ng-template #originalSchemaBlock>
+                                            <json-editor [(ngModel)]="m.settings.originalSchemaStr" class="CodeMirror-sm" [disabled]="selectedMatcher != m"></json-editor>
+                                        </ng-template>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                
+            </div>
+        </div>
 
     </div>
 

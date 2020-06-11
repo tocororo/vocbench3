@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ARTURIResource, ResourcePosition } from "../models/ARTResources";
-import { RefinableTaskReport, ProfilerOptions } from '../models/Maple';
+import { AlignmentScenario, ProfilerOptions } from '../models/Maple';
 import { Project } from '../models/Project';
 import { HttpManager } from "../utils/HttpManager";
 
@@ -38,7 +38,7 @@ export class MapleServices {
         return this.httpMgr.doGet(this.serviceName, "profileSingleResourceMatchProblem", params);
     }
 
-    profileMatchingProblemBetweenProjects(leftDataset: Project, rightDataset: Project, options?: ProfilerOptions): Observable<RefinableTaskReport> {
+    profileMatchingProblemBetweenProjects(leftDataset: Project, rightDataset: Project, options?: ProfilerOptions): Observable<AlignmentScenario> {
         let params = {
             leftDataset: leftDataset.getName(),
             rightDataset: rightDataset.getName(),

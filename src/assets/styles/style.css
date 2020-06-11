@@ -503,9 +503,16 @@ input[type=number]::-webkit-outer-spin-button {
     height: auto; 
     flex: 1;
 }
-.CodeMirrorLimitedHeight .CodeMirror-scroll { 
-    /* height auto in CodeMirror let the textarea of codemirror fill the available space. In this way the height is limited to 300px */
+/* height auto in CodeMirror let the textarea of codemirror fill the available space.
+With the following classes is possible to limit the height of the editor to the given max-height */
+.CodeMirror-sm .CodeMirror-scroll { 
+    max-height: 200px !important; 
+}
+.CodeMirror-md .CodeMirror-scroll { 
     max-height: 300px !important; 
+}
+.CodeMirror-lg .CodeMirror-scroll { 
+    max-height: 400px !important; 
 }
 .CodeMirror-scroll {
     min-height: 100px;

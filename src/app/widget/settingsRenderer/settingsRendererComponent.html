@@ -7,8 +7,14 @@
     <tbody>
         <tr *ngFor="let p of settings?.properties; let i=index">
             <td nowrap>
-                {{p.displayName}}
-                <span *ngIf="p.required">*</span>
+                <ng-container *ngIf="p.displayName; then displayName; else noDisplayName"></ng-container>
+                <ng-template #displayName>
+                    {{p.displayName}}
+                </ng-template>
+                <ng-template #noDisplayName>
+                    {{p.name}}
+                </ng-template>
+                <span *ngIf="p.required" title="Required">*</span>
             </td>
             <td>
                 <setting-prop-renderer [(ngModel)]="settings.properties[i]" (ngModelChange)="onModelChanged()" [disabled]="disabled"></setting-prop-renderer>

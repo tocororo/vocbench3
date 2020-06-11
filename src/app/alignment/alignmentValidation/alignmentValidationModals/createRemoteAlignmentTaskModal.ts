@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, Modal, ModalComponent, OverlayConfig } from 'ngx-modialog';
 import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { Language, Languages } from "../../../models/LanguagesCountries";
-import { ConceptualizationSet, LexicalizationSet, Lexicon, Pairing, RefinablePairing, RefinableTaskReport, Synonymizer, TaskReport } from "../../../models/Maple";
+import { AlignmentPlan, AlignmentScenario, ConceptualizationSet, LexicalizationSet, Lexicon, MatcherDTO, Pairing, RefinablePairing, ScenarioDefinition, Synonymizer, MatcherDefinitionDTO, ServiceMetadataDTO } from "../../../models/Maple";
 import { Project } from "../../../models/Project";
 import { MapleServices } from "../../../services/mapleServices";
 import { ProjectServices } from "../../../services/projectServices";
@@ -11,7 +11,7 @@ import { HttpServiceContext } from "../../../utils/HttpManager";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBContext } from "../../../utils/VBContext";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
-import { SynonymizerDetailsModalData, SynonymizerDetailsModal } from "./synonymizerDetailsModal";
+import { SynonymizerDetailsModal, SynonymizerDetailsModalData } from "./synonymizerDetailsModal";
 
 export class CreateRemoteAlignmentTaskModalData extends BSModalContext {
     constructor(public leftProject: Project, public rightProject: Project) {
@@ -35,12 +35,26 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
     private leftProjectStruct: AlignedProjectStruct;
     private rightProjectStruct: AlignedProjectStruct;
 
-    private refinableTaskReport: RefinableTaskReport;
+    private alignmentScenario: AlignmentScenario;
     private refinablePairings: ResolvedPairing[];
+
+    private serviceMetadata: ServiceMetadataDTO;
+
+    private matchers: MatcherDTO[];
+    private selectedMatcher: MatcherDTO;
+
+    /* when the pairing selection changes, the matchers list (eventually initialized) could be outdated.
+    In order to check this, each time the matchers search is performed, lastPairingSignatureForMatchers is computed.
+    Then, when a pairing is selected/deselected, a new signature is computed and compared with the previous.
+    In case the two signatures differ, the matchers list is marked as outdated.
+    The signature is computed with a comma-separated list of true/false according if the pairing are selected/deselected
+    */
+    private lastPairingSignatureForMatchers: string;
+    private outdatedMatchers: boolean = false;
 
     constructor(public dialog: DialogRef<CreateRemoteAlignmentTaskModalData>, private projectService: ProjectServices,
         private mapleService: MapleServices, private remoteAlignmentService: RemoteAlignmentServices, private basicModals: BasicModalServices,
-        private modal: Modal) {
+        private modal: Modal, private elementRef: ElementRef) {
         this.context = dialog.context;
     }
 
@@ -60,6 +74,19 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
         this.leftProjectStruct = new AlignedProjectStruct();
         this.leftProjectStruct.project = this.context.leftProject;
         this.initProjectStruct(this.leftProjectStruct);
+
+
+        this.remoteAlignmentService.getServiceMetadata().subscribe(
+            serviceMetadata => {
+                this.serviceMetadata = serviceMetadata;
+                /* if the service settings are not expressed as Settings (in stProperties), they will be edited through json editor,
+                * so stringify the originalSchema JSON value to bound to the ngModel of json-editor */
+                if (this.serviceMetadata.settings && !this.serviceMetadata.settings.stProperties) {
+                    this.serviceMetadata.settings['originalSchemaStr'] = JSON.stringify(this.serviceMetadata.settings.originalSchema, null, 2);
+                }
+            }
+        );
+        
     }
 
     //========== Datasets handlers ===========
@@ -119,24 +146,24 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
 
     private profileMatching() {
         this.mapleService.profileMatchingProblemBetweenProjects(this.leftProjectStruct.project, this.rightProjectStruct.project).subscribe(
-            report => {
+            scenario => {
                 /**
-                 * profileMatchingProblemBetweenProjects return a RefinableTaskReport which contains a list of RefinablePairing.
+                 * profileMatchingProblemBetweenProjects return a AlignmentScenario which contains a list of RefinablePairing.
                  * Each pairing has a list of synonymizers, only one of them should be chosen for the task creation.
                  * In order to support the UI, here the pairings are mapped into a list of ResolvedPairing which contains useful info.
                  */
-                this.refinableTaskReport = report;
+                this.alignmentScenario = scenario;
                 this.refinablePairings = [];
-                this.refinableTaskReport.pairings.forEach(p => {
+                this.alignmentScenario.pairings.forEach(p => {
                     let synonymizers: ResolvedSynonymizer[] = [];
                     p.synonymizers.forEach(s => {
                         let syn: ResolvedSynonymizer = {
                             score: s.score,
                             scoreRound: Math.round((s.score + Number.EPSILON) * 1000) / 1000,
                             conceptualizationSet: s.conceptualizationSet,
-                            conceptualizationSetDataset: <ConceptualizationSet>this.refinableTaskReport.supportDatasets.find(d => d["@id"] == s.conceptualizationSet),
+                            conceptualizationSetDataset: <ConceptualizationSet>this.alignmentScenario.supportDatasets.find(d => d["@id"] == s.conceptualizationSet),
                             lexicon: s.lexicon,
-                            lexiconDataset: <Lexicon>this.refinableTaskReport.supportDatasets.find(d => d["@id"] == s.lexicon),
+                            lexiconDataset: <Lexicon>this.alignmentScenario.supportDatasets.find(d => d["@id"] == s.lexicon),
                             language: null,
                         }
                         syn.language = Languages.getLanguageFromTag(syn.lexiconDataset.languageTag)
@@ -148,9 +175,9 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
                         bestCombinedScore: p.bestCombinedScore,
                         bestCombinedScoreRound: Math.round((p.bestCombinedScore + Number.EPSILON) * 1000) / 1000,
                         source: p.source,
-                        sourceLexicalizationSet: <LexicalizationSet>this.refinableTaskReport.supportDatasets.find(d => d["@id"] == p.source.lexicalizationSet),
+                        sourceLexicalizationSet: <LexicalizationSet>this.alignmentScenario.supportDatasets.find(d => d["@id"] == p.source.lexicalizationSet),
                         target: p.target,
-                        targetLexicalizationSet: <LexicalizationSet>this.refinableTaskReport.supportDatasets.find(d => d["@id"] == p.target.lexicalizationSet),
+                        targetLexicalizationSet: <LexicalizationSet>this.alignmentScenario.supportDatasets.find(d => d["@id"] == p.target.lexicalizationSet),
                         synonymizers: synonymizers,
                         language: null,
                         checked: false,
@@ -162,6 +189,9 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
                 //initialize as selected pairing the one with the highest score
                 let bestScore = Math.max(...this.refinablePairings.map(p => p.score));
                 this.refinablePairings.find(p => p.score == bestScore).checked = true;
+
+                //once the Alignment Scenario is initialized, extends the modal to full screen
+                UIUtils.setFullSizeModal(this.elementRef);
             }
         );
     }
@@ -184,19 +214,52 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
         this.modal.open(SynonymizerDetailsModal, overlayConfig);
     }
 
-    //================================
-
-    private isOkEnabled() {
-        return this.refinableTaskReport != null;
+    private onPairingSelectionChange() {
+        //when a pairing is selected/deselected, the matchers listed (if any) could be outdated
+        if (this.matchers != null) {
+            let pairingSignature = this.refinablePairings.map(p => p.checked+"").join(",");
+            this.outdatedMatchers = (this.lastPairingSignatureForMatchers != pairingSignature);
+        }
     }
 
-    ok() {
-        if (!this.refinablePairings.some(p => p.checked)) {
-            this.basicModals.alert("Missing pairing", "You need to select at least one pairing", "warning");
-            return;
-        }
-        /* prepare the task report to provide to createTask service */
-        //first map the enabled refinable pairings into a Pairing list
+    //========== Matchers ===========
+
+    private searchMatchers() {
+        let scenarioDef: ScenarioDefinition = this.getScenarioDefinition();
+        this.lastPairingSignatureForMatchers = this.refinablePairings.map(p => p.checked+"").join(",");
+        this.remoteAlignmentService.searchMatchers(scenarioDef).subscribe(
+            matchers => {
+                this.matchers = matchers;
+                /* if the matchers settings are not expressed as Settings (in stProperties), they will be edited through json editor,
+                * so stringify the originalSchema JSON value to bound to the ngModel of json-editor */
+                this.matchers.forEach(m => {
+                    if (m.settings && !m.settings.stProperties) {
+                        m.settings['originalSchemaStr'] = JSON.stringify(m.settings.originalSchema, null, 2);
+                    }
+                });
+                this.outdatedMatchers = false;
+            }
+        );
+    }
+
+    private selectMatcher(matcher: MatcherDTO) {
+        this.selectedMatcher = (this.selectedMatcher == matcher) ? null : matcher;
+    }
+
+    //========== Utils ===========
+
+    /**
+     * Returns the scenario definition with the current choices made by the user.
+     * Note: in order to generate a scenario definition is mandatory that at least a pairing is selected.
+     * So this method should be invoked only when this requirement is satisfied.
+     * (in order to do that enable/disable buttons accordingly)
+     */
+    private getScenarioDefinition(): ScenarioDefinition {
+        /**
+         * First map the enabled refinable pairings into a Pairing list.
+         * A Pairing, unlike the RefinablePairing, has only one (optional) synonymizer. 
+         * This synonymizer is set in the Pairing only if a synonymizer is selected among those available in the RefinablePairing
+         */
         let pairings: Pairing[] = [];
         this.refinablePairings.forEach(p => {
             if (p.checked) {
@@ -217,13 +280,75 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
                 pairings.push(pairing);
             }
         });
-        let taskReport: TaskReport = {
-            leftDataset: this.refinableTaskReport.leftDataset,
-            rightDataset: this.refinableTaskReport.rightDataset,
-            supportDatasets: this.refinableTaskReport.supportDatasets,
+        return {
+            leftDataset: this.alignmentScenario.leftDataset,
+            rightDataset: this.alignmentScenario.rightDataset,
+            supportDatasets: this.alignmentScenario.supportDatasets,
             pairings: pairings
         }
-        this.remoteAlignmentService.createTask(taskReport).subscribe(
+    }
+
+
+    //================================
+
+    private isOkEnabled() {
+        return this.alignmentScenario != null;
+    }
+
+    ok() {
+        /**
+         * prepare the alignmentPlan to provide to createTask service which includes
+         * - scenario definition
+         * - settings (optionally)
+         * - matcherDefinition (optionally)
+         */
+        let scenarioDef: ScenarioDefinition = this.getScenarioDefinition();
+        
+        let matcherDefinition: MatcherDefinitionDTO;
+        if (this.selectedMatcher != null) { //if a matcher is selected, create its definition
+            let matcherSettings: any;
+            if (this.selectedMatcher.settings != null) { //if settings are available
+                if (this.selectedMatcher.settings.stProperties != null) { //get them from the stProperties
+                    matcherSettings = this.selectedMatcher.settings.stProperties.getPropertiesAsMap()
+                } else { //or from the originalSchema
+                    let parsedSettings: any;
+                    try {
+                        parsedSettings = JSON.parse(this.selectedMatcher.settings['originalSchemaStr']);
+                    } catch (err) {
+                        this.basicModals.alert("Invalid matcher configuration", "The provided matcher configuration cannot be parsed as JSON", "warning");
+                        return;
+                    }
+                    matcherSettings = parsedSettings;
+                }
+            }
+            matcherDefinition = {
+                id: this.selectedMatcher.id,
+                settings: matcherSettings
+            }
+        }
+
+        let serviceSettings: any;
+        if (this.serviceMetadata.settings != null) { //if settings are available
+            if (this.serviceMetadata.settings.stProperties != null) { //get them from the stProperties
+                serviceSettings = this.serviceMetadata.settings.stProperties.getPropertiesAsMap();
+            } else { //or from the originalSchema
+                let parsedSettings: any;
+                try {
+                    parsedSettings = JSON.parse(this.serviceMetadata.settings['originalSchemaStr']);
+                } catch (err) {
+                    this.basicModals.alert("Invalid matcher configuration", "The provided matcher configuration cannot be parsed as JSON", "warning");
+                    return;
+                }
+                serviceSettings = parsedSettings;
+            }
+        }
+
+        let alignmentPlan: AlignmentPlan = {
+            scenarioDefinition: scenarioDef,
+            matcherDefinition: matcherDefinition,
+            settings: serviceSettings,
+        }
+        this.remoteAlignmentService.createTask(alignmentPlan).subscribe(
             taskId => {
                 this.dialog.close(taskId);
             }

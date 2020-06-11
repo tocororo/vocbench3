@@ -1,15 +1,57 @@
-export class TaskReport {
+import { Settings } from "./Plugins";
+
+export class AlignmentPlan {
+    scenarioDefinition: ScenarioDefinition;
+    settings?: any;
+	matcherDefinition?: MatcherDefinitionDTO;
+}
+
+export class ScenarioDefinition {
     leftDataset: Dataset;
     rightDataset: Dataset;
     supportDatasets: Dataset[];
     pairings: Pairing[];
 }
-export class RefinableTaskReport {
+
+export class MatcherDefinitionDTO {
+    id: string;
+    settings?: any;
+}
+
+export class AlignmentScenario {
     leftDataset: Dataset;
     rightDataset: Dataset;
     supportDatasets: Dataset[];
     pairings: RefinablePairing[];
 }
+
+export class MatcherDTO {
+    id: string;
+    description: string;
+    settings?: SettingsDTO;
+}
+
+export class SettingsDTO {
+    originalSchema: any;
+	stProperties: Settings;
+	conversionException: string;
+}
+
+export class ServiceMetadataDTO {
+    service: string;
+	version: string;
+	status: string;
+	specs: string[]; //URL
+	contact?: ServiceMetadataContact;
+	documentation?: string; //URL
+	settings?: SettingsDTO;
+}
+
+export class ServiceMetadataContact {
+    name: string;
+    email: string;
+}
+
 export class Dataset {
     '@id': string;
     '@type': string;
@@ -18,12 +60,14 @@ export class Dataset {
     conformsTo?: string;
     title: string[];
 }
+
 export class Pairing {
     score: number;
     source: PairingHand;
     target: PairingHand;
     synonymizer: Synonymizer;
 }
+
 export class RefinablePairing {
     score: number;
     bestCombinedScore: number;
@@ -31,9 +75,11 @@ export class RefinablePairing {
     target: PairingHand;
     synonymizers: Synonymizer[];
 }
+
 export class PairingHand {
     lexicalizationSet: string;
 }
+
 export class Synonymizer {
     lexicon: string;
     conceptualizationSet: string;

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { ARTURIResource } from '../models/ARTResources';
-import { RemoteAlignmentTask } from '../models/RemoteAlignment';
-import { TaskReport } from '../models/Maple';
-import { Project } from '../models/Project';
-import { HttpManager } from "../utils/HttpManager";
 import { AlignmentOverview } from '../models/Alignment';
+import { ARTURIResource } from '../models/ARTResources';
+import { AlignmentPlan, MatcherDTO, ScenarioDefinition, ServiceMetadataDTO, SettingsDTO } from '../models/Maple';
+import { Settings } from '../models/Plugins';
+import { Project } from '../models/Project';
+import { RemoteAlignmentTask } from '../models/RemoteAlignment';
+import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
 export class RemoteAlignmentServices {
@@ -66,11 +67,11 @@ export class RemoteAlignmentServices {
 
     /**
      * Returns the taskId
-     * @param matchingProblem 
+     * @param alignmentPlan 
      */
-    createTask(matchingProblem: TaskReport): Observable<string> {
+    createTask(alignmentPlan: AlignmentPlan): Observable<string> {
         var params: any = {
-            matchingProblem: JSON.stringify(matchingProblem)
+            alignmentPlan: JSON.stringify(alignmentPlan)
         };
         return this.httpMgr.doPost(this.serviceName, "createTask", params);
     }
@@ -87,6 +88,37 @@ export class RemoteAlignmentServices {
             taskId: taskId
         };
         return this.httpMgr.downloadFile(this.serviceName, "downloadAlignment", params);
+    }
+
+
+    getServiceMetadata(): Observable<ServiceMetadataDTO> {
+        let params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "getServiceMetadata", params);
+    }
+
+    searchMatchers(scenarioDefinition: ScenarioDefinition): Observable<MatcherDTO[]> {
+        let params: any = {
+            scenarioDefinition: JSON.stringify(scenarioDefinition)
+        };
+        return this.httpMgr.doPost(this.serviceName, "searchMatchers", params).map(
+            stResp => {
+                let matchers: MatcherDTO[] = [];
+                for (let matcherJson of stResp) {
+                    let settings: SettingsDTO = {
+                        conversionException: matcherJson.settings.conversionException,
+                        originalSchema: matcherJson.settings.originalSchema,
+                        stProperties: Settings.parse(matcherJson.settings.stProperties)
+                    }
+                    let m: MatcherDTO = {
+                        description: matcherJson.description,
+                        id: matcherJson.id,
+                        settings: settings
+                    }
+                    matchers.push(m);
+                }
+                return matchers;
+            }
+        );
     }
 
 }
