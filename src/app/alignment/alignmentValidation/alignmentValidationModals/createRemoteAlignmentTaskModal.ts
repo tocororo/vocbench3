@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, Modal, ModalComponent, OverlayConfig } from 'ngx-modialog';
 import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { Language, Languages } from "../../../models/LanguagesCountries";
-import { AlignmentPlan, AlignmentScenario, ConceptualizationSet, LexicalizationSet, Lexicon, MatcherDTO, Pairing, RefinablePairing, ScenarioDefinition, Synonymizer, MatcherDefinitionDTO, ServiceMetadataDTO } from "../../../models/Maple";
+import { AlignmentPlan, AlignmentScenario, ConceptualizationSet, LexicalizationSet, Lexicon, MatcherDefinitionDTO, MatcherDTO, Pairing, RefinablePairing, ScenarioDefinition, ServiceMetadataDTO, Synonymizer } from "../../../models/Maple";
 import { Project } from "../../../models/Project";
 import { MapleServices } from "../../../services/mapleServices";
 import { ProjectServices } from "../../../services/projectServices";
@@ -54,7 +54,7 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
 
     constructor(public dialog: DialogRef<CreateRemoteAlignmentTaskModalData>, private projectService: ProjectServices,
         private mapleService: MapleServices, private remoteAlignmentService: RemoteAlignmentServices, private basicModals: BasicModalServices,
-        private modal: Modal, private elementRef: ElementRef) {
+        private modal: Modal) {
         this.context = dialog.context;
     }
 
@@ -189,9 +189,6 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
                 //initialize as selected pairing the one with the highest score
                 let bestScore = Math.max(...this.refinablePairings.map(p => p.score));
                 this.refinablePairings.find(p => p.score == bestScore).checked = true;
-
-                //once the Alignment Scenario is initialized, extends the modal to full screen
-                UIUtils.setFullSizeModal(this.elementRef);
             }
         );
     }

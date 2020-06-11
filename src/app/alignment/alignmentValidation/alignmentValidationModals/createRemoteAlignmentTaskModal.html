@@ -1,7 +1,7 @@
 <div class="modal-header">
     <h3 class="modal-title">Create task</h3>
 </div>
-<div class="modal-body vbox scrollableContainer">
+<div class="modal-body vbox">
 
     <div>
         <div class="col-sm-6 text-center">
@@ -50,18 +50,20 @@
         </div>
     </div>
 
-    <div *ngIf="alignmentScenario" class="vbox" style="margin-top: 8px;">
-        <div class="hbox" style="flex: initial;">
-            <maple-dataset [dataset]="alignmentScenario.leftDataset" style="flex: 1; margin-right: 6px;"></maple-dataset>
-            <maple-dataset [dataset]="alignmentScenario.rightDataset" style="flex: 1; margin-left: 6px;"></maple-dataset>
+    <div *ngIf="alignmentScenario" class="scrollableContainer" style="margin-top: 8px;">
+        <div>
+            <div class="hbox">
+                <maple-dataset [dataset]="alignmentScenario.leftDataset" style="flex: 1; margin-right: 6px;"></maple-dataset>
+                <maple-dataset [dataset]="alignmentScenario.rightDataset" style="flex: 1; margin-left: 6px;"></maple-dataset>
+            </div>
         </div>
 
-        <div class="panel panel-default vbox" style="margin-top: 6px;">
+        <div class="panel panel-default" style="margin-top: 6px;">
             <div class="panel-heading">
                 <label>Pairings</label>
             </div>
-            <div class="panel-body scrollableContainer">
-                <div *ngFor="let p of refinablePairings" class="groupPanel" style="margin: 12px 0px; position: relative;">
+            <div class="panel-body">
+                <div *ngFor="let p of refinablePairings" class="groupPanel" style="margin-top: 12px; margin-bottom: 8px; position: relative;">
 
                     <div class="groupPanel-heading">
                         <div class="groupPanel-heading-content">
@@ -118,11 +120,11 @@
             </div>
         </div>
 
-        <div class="panel panel-default vbox" style="margin-top: 6px;">
+        <div class="panel panel-default" style="margin-top: 6px;">
             <div class="panel-heading">
                 <label style="flex: 1">Matchers</label>
             </div>
-            <div class="panel-body scrollableContainer">
+            <div class="panel-body">
 
                 <ng-container *ngIf="!matchers; then noMatchersBlock; else matchersBlock"></ng-container>
 
@@ -139,7 +141,7 @@
                         Click <a href="javascript:void(0)" (click)="searchMatchers()"><b>here</b></a> to refresh the list.
                     </div>
 
-                    <div *ngFor="let m of matchers" class="groupPanel" style="margin: 12px 0px; position: relative;">
+                    <div *ngFor="let m of matchers" class="groupPanel" style="margin-top: 12px; margin-bottom: 8px; position: relative;">
                         <div class="groupPanel-heading">
                             <div class="groupPanel-heading-content">
                                 <label class="radio-inline" style="font-weight: bold;" title="If selected use this matcher">
