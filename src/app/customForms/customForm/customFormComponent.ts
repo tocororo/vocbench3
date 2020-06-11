@@ -37,7 +37,7 @@ export class CustomFormComponent implements ControlValueAccessor {
         this.cfService.getCustomFormRepresentation(this.cfId).subscribe(
             form => {
                 /*
-                    "Foreign" and "List" can be used in combo with other annotations so, here the entry annotations are sorted in order
+                    "Foreign" and "Collection" can be used in combo with other annotations so, here the entry annotations are sorted in order
                     to set at last position these annotations.
                     In this way, in the view I always take into account just the first annotation (if any) of each entry and then,
                     I look for the other annotations in order to use it in combo (according to compatibility, e.g. Foreign can be used
@@ -45,7 +45,7 @@ export class CustomFormComponent implements ControlValueAccessor {
                 */
                 form.forEach(f => {
                     f.getAnnotations().sort((a1: FormFieldAnnotation, a2: FormFieldAnnotation) => {
-                        if (a1.name == AnnotationName.Foreign || a1.name == AnnotationName.List) return 1;
+                        if (a1.name == AnnotationName.Foreign || a1.name == AnnotationName.Collection) return 1;
                         else return -1;
                     })
                 })

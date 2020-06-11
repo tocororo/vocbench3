@@ -136,7 +136,7 @@ export class CustomFormsServices {
                             //arg: "value" that is a list of String
                             let annValue: string[] = ann.value
                             ffa = { name: annName, value: annValue }
-                        } else if (annName == AnnotationName.List) {
+                        } else if (annName == AnnotationName.Collection) {
                             //arg: "min" and "max" that are int
                             let annMin: number = ann.min ? ann.min[0] : null;
                             let annMax: number = ann.max ? ann.max[0] : null;

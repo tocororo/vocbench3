@@ -12,7 +12,7 @@
                     <td class="text-right"><label>{{field.getUserPrompt()}}:</label></td>
                     <!--Form entry field: depends on type (uri/literal) and optionally on datatype -->
                     <td>
-                        <ng-container *ngIf="field.getAnnotation('List'); else singleFieldBlock">
+                        <ng-container *ngIf="field.getAnnotation('Collection'); else singleFieldBlock">
                             <custom-form-field-list [(ngModel)]="formFields[index]" (ngModelChange)="onFormFieldChanged(field)"></custom-form-field-list>
                         </ng-container>
 

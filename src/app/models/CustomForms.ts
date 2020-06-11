@@ -263,7 +263,7 @@ export enum AnnotationName {
     Range = "Range",
     RangeList = "RangeList",
     Foreign = "Foreign",
-    List = "List"
+    Collection = "Collection"
 }
 
 export class FormFieldAnnotation {

@@ -55,7 +55,7 @@ export class CustomFormFieldList implements ControlValueAccessor {
         if (obj) {
             this.field = obj;
             
-            let annList: FormFieldAnnotation = this.field.getAnnotation(AnnotationName.List);
+            let annList: FormFieldAnnotation = this.field.getAnnotation(AnnotationName.Collection);
             this.min = annList.min;
             this.max = (annList.max != 0) ? annList.max : 99;
             this.subFields = [];

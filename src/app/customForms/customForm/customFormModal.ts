@@ -65,9 +65,9 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
 
     ok(event: Event) {
 
-        //check in case of @List annotation, if min constraint is respected
+        //check in case of @Collection annotation, if min constraint is respected
         for (let f of this.formFields) {
-            let listAnn = f.getAnnotation(AnnotationName.List);
+            let listAnn = f.getAnnotation(AnnotationName.Collection);
             if (listAnn != null) {
                 let min = listAnn.min;
                 if (f.isMandatory()) { 
