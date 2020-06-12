@@ -93,7 +93,28 @@ export class RemoteAlignmentServices {
 
     getServiceMetadata(): Observable<ServiceMetadataDTO> {
         let params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getServiceMetadata", params);
+        return this.httpMgr.doGet(this.serviceName, "getServiceMetadata", params).map(
+            stResp => {
+                let settings: SettingsDTO;
+                if (stResp.settings) {
+                    settings = {
+                        conversionException: stResp.settings.conversionException,
+                        originalSchema: stResp.settings.originalSchema,
+                        stProperties: Settings.parse(stResp.settings.stProperties)
+                    }
+                }
+                let servMetadata: ServiceMetadataDTO = {    
+                    service: stResp.service,
+                    specs: stResp.specs,
+                    status: stResp.status,
+                    version: stResp.version,
+                    contact: stResp.contact,
+                    documentation: stResp.documentation,
+                    settings: settings
+                }
+                return servMetadata;
+            }
+        );
     }
 
     searchMatchers(scenarioDefinition: ScenarioDefinition): Observable<MatcherDTO[]> {
@@ -104,10 +125,13 @@ export class RemoteAlignmentServices {
             stResp => {
                 let matchers: MatcherDTO[] = [];
                 for (let matcherJson of stResp) {
-                    let settings: SettingsDTO = {
-                        conversionException: matcherJson.settings.conversionException,
-                        originalSchema: matcherJson.settings.originalSchema,
-                        stProperties: Settings.parse(matcherJson.settings.stProperties)
+                    let settings: SettingsDTO
+                    if (matcherJson.settings) {
+                        settings = {
+                            conversionException: matcherJson.settings.conversionException,
+                            originalSchema: matcherJson.settings.originalSchema,
+                            stProperties: Settings.parse(matcherJson.settings.stProperties)
+                        }
                     }
                     let m: MatcherDTO = {
                         description: matcherJson.description,

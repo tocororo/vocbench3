@@ -80,9 +80,11 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
             serviceMetadata => {
                 this.serviceMetadata = serviceMetadata;
                 /* if the service settings are not expressed as Settings (in stProperties), they will be edited through json editor,
-                * so stringify the originalSchema JSON value to bound to the ngModel of json-editor */
-                if (this.serviceMetadata.settings && !this.serviceMetadata.settings.stProperties) {
-                    this.serviceMetadata.settings['originalSchemaStr'] = JSON.stringify(this.serviceMetadata.settings.originalSchema, null, 2);
+                * so initialize the settings to manually enter through the json-editor */
+                if (this.serviceMetadata.settings) {
+                    this.serviceMetadata.settings['settingsJson'] = JSON.stringify({});
+                     //add also the schema to show to the user
+                    this.serviceMetadata.settings['originalSchemaJson'] = JSON.stringify(this.serviceMetadata.settings.originalSchema, null, 2);
                 }
             }
         );
@@ -228,10 +230,12 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
             matchers => {
                 this.matchers = matchers;
                 /* if the matchers settings are not expressed as Settings (in stProperties), they will be edited through json editor,
-                * so stringify the originalSchema JSON value to bound to the ngModel of json-editor */
+                * so initialize a json settings string to be edited */
                 this.matchers.forEach(m => {
-                    if (m.settings && !m.settings.stProperties) {
-                        m.settings['originalSchemaStr'] = JSON.stringify(m.settings.originalSchema, null, 2);
+                    if (m.settings) {
+                        m.settings['settingsJson'] = JSON.stringify({});
+                        //add also the schema to show to the user
+                        m.settings['originalSchemaJson'] = JSON.stringify(m.settings.originalSchema, null, 2);
                     }
                 });
                 this.outdatedMatchers = false;
@@ -310,7 +314,7 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
                 } else { //or from the originalSchema
                     let parsedSettings: any;
                     try {
-                        parsedSettings = JSON.parse(this.selectedMatcher.settings['originalSchemaStr']);
+                        parsedSettings = JSON.parse(this.selectedMatcher.settings['settingsJson']);
                     } catch (err) {
                         this.basicModals.alert("Invalid matcher configuration", "The provided matcher configuration cannot be parsed as JSON", "warning");
                         return;
@@ -331,7 +335,7 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
             } else { //or from the originalSchema
                 let parsedSettings: any;
                 try {
-                    parsedSettings = JSON.parse(this.serviceMetadata.settings['originalSchemaStr']);
+                    parsedSettings = JSON.parse(this.serviceMetadata.settings['settingsJson']);
                 } catch (err) {
                     this.basicModals.alert("Invalid matcher configuration", "The provided matcher configuration cannot be parsed as JSON", "warning");
                     return;

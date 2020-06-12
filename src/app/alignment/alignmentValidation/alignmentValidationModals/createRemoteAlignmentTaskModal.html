@@ -154,7 +154,10 @@
                         <div class="groupPanel-body">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <label>Settings</label>
+                                    <label style="flex: 1;">Settings</label>
+                                    <span *ngIf="m.settings && !m.settings.stProperties" class="glyphicon glyphicon-warning-sign" 
+                                        style="margin-right: 4px;" title="The JSON settings must follow the schema specifications shown on the right">
+                                    </span>
                                 </div>
                                 <div class="panel-body">
                                     <ng-container *ngIf="m.settings">
@@ -162,7 +165,14 @@
                                             [(ngModel)]="m.settings.stProperties" [disabled]="selectedMatcher != m">
                                         </settings-renderer>
                                         <ng-template #originalSchemaBlock>
-                                            <json-editor [(ngModel)]="m.settings.originalSchemaStr" class="CodeMirror-sm" [disabled]="selectedMatcher != m"></json-editor>
+                                            <div class="hbox">
+                                                <json-editor [(ngModel)]="m.settings.settingsJson" class="CodeMirror-sm" style="flex: 2" 
+                                                    [disabled]="selectedMatcher != m">
+                                                </json-editor>
+                                                <json-editor [(ngModel)]="m.settings.originalSchemaJson" class="CodeMirror-sm" style="flex: 3; margin-left: 4px;"
+                                                    [lineNumbers]="false" [disabled]="true">
+                                                </json-editor>
+                                            </div>
                                         </ng-template>
                                     </ng-container>
                                 </div>

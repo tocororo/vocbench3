@@ -13,6 +13,7 @@ import * as CodeMirror from 'codemirror';
 
 export class JsonEditorComponent implements ControlValueAccessor {
     @Input() disabled: boolean;
+    @Input() lineNumbers: boolean = true;
     
     @ViewChild('txtarea') textareaElement: any;
 
@@ -24,7 +25,7 @@ export class JsonEditorComponent implements ControlValueAccessor {
         this.cmEditor = CodeMirror.fromTextArea(
             this.textareaElement.nativeElement,
             { 
-                lineNumbers: true,
+                lineNumbers: this.lineNumbers,
                 mode: "application/json",
                 lineWrapping: true,
                 readOnly: this.disabled,
