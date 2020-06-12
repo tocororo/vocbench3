@@ -36,6 +36,7 @@ import { ICVModule } from "./icvModule";
 import { MetadataModule } from "./metadataModule";
 import { PreferencesModule } from "./preferencesModule";
 import { ProjectModule } from "./projectModule";
+import { ResourceMetadataModule } from './resourceMetadataModule';
 import { ResourceViewModule } from "./resourceViewModule";
 import { SharedModule } from "./sharedModule";
 import { Sheet2RdfModule } from "./sheet2rdfModule";
@@ -64,6 +65,7 @@ import { VBModalModule } from "./vbModalModule";
             MetadataModule,
             PreferencesModule,
             ProjectModule,
+            ResourceMetadataModule,
             ResourceViewModule,
             SharedModule,
             Sheet2RdfModule,

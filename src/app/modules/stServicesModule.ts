@@ -34,6 +34,7 @@ import { PropertyServices } from "../services/propertyServices";
 import { RefactorServices } from "../services/refactorServices";
 import { RemoteAlignmentServices } from '../services/remoteAlignmentServices';
 import { RepositoriesServices } from "../services/repositoriesServices";
+import { ResourceMetadataServices } from '../services/resourceMetadataServices';
 import { ResourcesServices } from "../services/resourcesServices";
 import { ResourceViewServices } from "../services/resourceViewServices";
 import { SearchServices } from "../services/searchServices";
@@ -88,6 +89,7 @@ import { VersionsServices } from "../services/versionsServices";
         RefactorServices,
         RemoteAlignmentServices,
         RepositoriesServices,
+        ResourceMetadataServices,
         ResourcesServices,
         ResourceViewServices,
         SearchServices,

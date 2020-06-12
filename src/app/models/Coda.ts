@@ -168,3 +168,8 @@ export enum XRole {
     xNote = "xNote",
     undetermined = "undetermined"
 }
+
+export interface PearlValidationResult {
+    valid: boolean;
+    details?: string;
+}

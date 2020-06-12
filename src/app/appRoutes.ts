@@ -19,6 +19,7 @@ import { NamespacesAndImportsComponent } from './metadata/namespacesAndImports/n
 import { VocbenchPreferencesComponent } from "./preferences/vocbenchPreferencesComponent";
 import { CreateProjectComponent } from "./project/createProject/createProjectComponent";
 import { ProjectComponent } from "./project/projectComponent";
+import { ResourceMetadataComponent } from "./resourceMetadata/resourceMetadataComponent";
 import { Sheet2RdfComponent } from "./sheet2rdf/sheet2rdfComponent";
 import { SparqlComponent } from "./sparql/sparqlComponent";
 import { RegistrationComponent } from "./user/registrationComponent";
@@ -26,8 +27,6 @@ import { ResetPasswordComponent } from "./user/resetPasswordComponent";
 import { UserProfileComponent } from "./user/userProfileComponent";
 import { AdminGuard, AuthGuard, ProjectGuard } from "./utils/CanActivateGuards";
 import { UserResolver } from "./utils/UserResolver";
-
-
 
 export const routes: Routes = [
     { path: "", redirectTo: "/Home", pathMatch: "full" },
@@ -48,6 +47,7 @@ export const routes: Routes = [
     { path: "Collaboration", component: CollaborationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "CustomForm", component: CustomFormConfigComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "CustomServices", component: CustomServiceRouterComponent, canActivate: [AuthGuard, ProjectGuard] },
+    { path: "ResourceMetadata", component: ResourceMetadataComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Registration/:firstAccess", component: RegistrationComponent }, //param firstAccess 1 to indicate that there's no user registered
     { path: "ResetPassword/:token", component: ResetPasswordComponent },
     { path: "Profile", component: UserProfileComponent, canActivate: [AuthGuard] },

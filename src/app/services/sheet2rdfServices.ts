@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { RDFCapabilityType } from "../models/Coda";
+import { Configuration, Reference } from '../models/Configuration';
 import { PrefixMapping } from '../models/Metadata';
 import { RDFFormat } from "../models/RDFFormat";
 import { Sheet2RdfDeserializer, SimpleGraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
 import { HttpManager, HttpServiceContext } from "../utils/HttpManager";
 import { ResourcesServices } from './resourcesServices';
-import { Reference, Configuration } from '../models/Configuration';
 
 @Injectable()
 export class Sheet2RDFServices {
@@ -267,13 +267,6 @@ export class Sheet2RDFServices {
             pearlCode: pearlCode
         };
         return this.httpMgr.doPost(this.serviceName, "savePearl", data);
-    }
-
-    validatePearl(pearlCode: string): Observable<{valid: boolean, details: string}> {
-        var params: any = {
-            pearlCode: pearlCode
-        };
-        return this.httpMgr.doPost(this.serviceName, "validatePearl", params);
     }
 
     validateGraphPattern(pearlCode: string): Observable<{valid: boolean, details: string, usedNodes: string[], usedPrefixes: string[]}> {

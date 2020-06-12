@@ -24,7 +24,7 @@
                                 [disabled]="!selectedCustomForm || selectedCustomForm.level == 'system' || !isDeleteFormAuthorized()">
                                 <span class="glyphicon glyphicon-minus"></span>
                             </button>
-                            <button class="btn btn-default" title="Change Custom Form" (click)="editCustomForm()"
+                            <button class="btn btn-default" title="Modify Custom Form" (click)="editCustomForm()"
                                 [disabled]="!selectedCustomForm || !isUpdateFormAuthorized()">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </button>
@@ -42,16 +42,9 @@
                             </button>
                         </div>
                     </div>
-                    <div class="subPanel-body vbox">
-                        <div class="scrollableContainer">
-                            <table class="table table-condensed table-borderless table-hoverable">
-                                <tbody>
-                                    <tr *ngFor="let cf of customFormList" (click)="selectCustomForm(cf)"
-                                        [ngClass]="{ info: cf == selectedCustomForm, grayText: cf.level == 'system' }">
-                                        <td>{{cf.id}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div class="subPanel-body vbox scrollableContainer">
+                        <div *ngFor="let cf of customFormList" (click)="selectCustomForm(cf)" class="listItem" [ngClass]="{ active: cf == selectedCustomForm, grayText: cf.level == 'system' }">
+                            {{cf.id}}
                         </div>
                     </div>
                 </div>
@@ -86,16 +79,9 @@
                             </button>
                         </div>
                     </div>
-                    <div class="subPanel-body vbox">
-                        <div class="scrollableContainer">
-                            <table class="table table-condensed table-borderless table-hoverable">
-                                <tbody>
-                                    <tr *ngFor="let fc of formCollectionList" (click)="selectFormColl(fc)"
-                                        [ngClass]="{ info: fc == selectedFormColl, grayText: fc.level == 'system' }">
-                                        <td>{{fc.id}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div class="subPanel-body vbox scrollableContainer">
+                        <div *ngFor="let fc of formCollectionList" (click)="selectFormColl(fc)" class="listItem" [ngClass]="{ active: fc == selectedFormColl, grayText: fc.level == 'system' }">
+                            {{fc.id}}
                         </div>
                     </div>
                 </div>

@@ -143,6 +143,10 @@ export class AppComponent {
         return true;
     }
 
+    private isResourceMetadataAuthorized() {
+        return true; //waiting for authorization
+    }
+
     private isCustomServicesAuthorized() {
         return (
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.customServiceRead) ||

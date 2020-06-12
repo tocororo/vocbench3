@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {HttpManager} from "../utils/HttpManager";
-import {ConverterContractDescription, SignatureDescription, ParameterDescription} from "../models/Coda";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { ConverterContractDescription, ParameterDescription, PearlValidationResult, SignatureDescription } from "../models/Coda";
+import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
 export class CODAServices {
@@ -59,6 +59,14 @@ export class CODAServices {
                 return converters;
             }
         );
+    }
+
+    validatePearl(pearlCode: string, rulesShouldExists?: boolean): Observable<PearlValidationResult> {
+        var params: any = {
+            pearlCode: pearlCode,
+            rulesShouldExists: rulesShouldExists
+        };
+        return this.httpMgr.doPost(this.serviceName, "validatePearl", params);
     }
     
 }

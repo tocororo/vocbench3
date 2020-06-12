@@ -1,0 +1,32 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body hbox">
+
+    <div class="panel panel-default vbox">
+        <div class="panel-heading">
+            <label>Resource type</label>
+        </div>
+        <div class="panel-body scrollableContainer">
+            <div *ngFor="let t of resourceTypes" class="listItem" [ngClass]="{ active: selectedType == t }" (click)="selectedType = t">
+                {{t.show}}
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default vbox" style="margin-left: 6px;">
+        <div class="panel-heading">
+            <label>Pattern</label>
+        </div>
+        <div class="panel-body scrollableContainer">
+            <div *ngFor="let p of patterns" class="listItem" [ngClass]="{ active: selectedPattern == p }" (click)="selectedPattern = p">
+                {{p.relativeReference}}
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

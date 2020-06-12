@@ -4,6 +4,7 @@ import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Properties } from "../models/Properties";
 import { RDFFormat } from "../models/RDFFormat";
 import { AdvancedGraphApplication, FsNamingStrategy, GraphApplication, SimpleGraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
+import { CODAServices } from "../services/codaServices";
 import { ExportServices } from "../services/exportServices";
 import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
 import { Sheet2RDFServices } from "../services/sheet2rdfServices";
@@ -15,6 +16,7 @@ import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServ
 import { HeaderEditorModal, HeaderEditorModalData } from "./s2rdfModals/headerEditorModal";
 import { Sheet2RdfSettingsModal, Sheet2RdfSettingsModalData } from "./s2rdfModals/sheet2rdfSettingsModal";
 import { SubjectHeaderEditorModal, SubjectHeaderEditorModalData } from "./s2rdfModals/subjectHeaderEditorModal";
+import { PearlValidationResult } from "../models/Coda";
 
 
 @Component({
@@ -69,8 +71,8 @@ export class Sheet2RdfComponent {
     private useHeader: boolean = true;
     private fsNamingStrategy: FsNamingStrategy = FsNamingStrategy.columnNumericIndex;
 
-    constructor(private s2rdfService: Sheet2RDFServices, private exportService: ExportServices, private prefService: PreferencesSettingsServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) {}
+    constructor(private s2rdfService: Sheet2RDFServices, private codaService: CODAServices, private exportService: ExportServices, 
+        private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) {}
 
     ngOnInit() {
 
@@ -290,7 +292,7 @@ export class Sheet2RdfComponent {
      * ========================================================== */
 
     private pearl: string;
-    private pearlValidation: {valid: boolean, details: string} = { valid: true, details: null };
+    private pearlValidation: PearlValidationResult = { valid: true };
 
     private pearlValidationTimer: number;
 
@@ -325,10 +327,10 @@ export class Sheet2RdfComponent {
 
     private checkPearl() {
         if (this.pearl == undefined) {
-            this.pearlValidation = { valid: true, details: null };
+            this.pearlValidation = { valid: true };
             return;
         };
-        this.s2rdfService.validatePearl(this.pearl).subscribe(
+        this.codaService.validatePearl(this.pearl).subscribe(
             valid => {
                 this.pearlValidation = valid;
             }
