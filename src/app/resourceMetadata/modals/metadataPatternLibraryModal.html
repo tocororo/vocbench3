@@ -1,0 +1,37 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body">
+
+    <div class="hbox" style="align-items: center; margin-bottom: 8px;">
+        <label style="white-space: nowrap;">
+            Name
+            <span class="glyphicon glyphicon-info-sign" [title]="nameTooltip"></span>
+        </label>
+        <input class="input-sm form-control" style="margin-left: 6px;" [(ngModel)]="name">
+    </div>
+
+    <div class="subPanel vbox">
+        <div class="subPanel-heading">
+            <label style="flex: 1">Shared Patterns:</label>
+            <div class="btn-toolbar">
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-default" title="Delete Metadata Pattern" (click)="deletePattern()"
+                        [disabled]="!selectedPattern || !deletePatternAuthorized">
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="subPanel-body vbox scrollableContainer" style="min-height: 100px;">
+            <div *ngFor="let p of patterns" (click)="selectedPattern = p" class="listItem" [ngClass]="{ active: p == selectedPattern }">
+                {{p.name}}
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

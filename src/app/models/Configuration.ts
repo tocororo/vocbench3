@@ -7,7 +7,7 @@ export class ConfigurationComponents {
     static EXPORTER: string = "it.uniroma2.art.semanticturkey.config.exporter.Exporter";
     static IMPORTER: string = "it.uniroma2.art.semanticturkey.config.importer.Importer";
     static INVOKABLE_REPORER_STORE = "it.uniroma2.art.semanticturkey.config.invokablereporter.InvokableReporterStore";
-    static RESOURCE_METADATA_PATTERN_STORE: string = "it.uniroma2.art.semanticturkey.config.resourceMetadata.ResourceMetadataPatternStore";
+    static RESOURCE_METADATA_PATTERN_STORE: string = "it.uniroma2.art.semanticturkey.config.resourcemetadata.ResourceMetadataPatternStore";
     static SPARQL_PARAMETERIZATION_STORE: string = "it.uniroma2.art.semanticturkey.config.sparql.SPARQLParameterizationStore";
     static SPARQL_STORE: string = "it.uniroma2.art.semanticturkey.config.sparql.SPARQLStore";
     static TEMPLATE_STORE: string = "it.uniroma2.art.semanticturkey.config.template.TemplateStore";
@@ -43,7 +43,12 @@ export class Reference {
             return Scope.USER;
         } else if (relativeRef.startsWith("pu:")) {
             return Scope.PROJECT_USER;
+        } else if (relativeRef.startsWith("factory:")) {
+            return Scope.FACTORY;
         }
+    }
+    public static getRelativeReferenceIdentifier(relativeRef: string): string {
+        return relativeRef.substring(relativeRef.indexOf(":")+1);
     }
 
 }

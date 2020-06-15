@@ -1,19 +1,17 @@
 import { Component, ElementRef } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ConfigurationComponents, Reference } from "../../models/Configuration";
-import { Scope, ScopeUtils } from "../../models/Plugins";
 import { PearlValidationResult } from "../../models/Coda";
-import { ResourceMetadataPatternDefinition } from "../../models/ResourceMetadata";
-import { ConfigurationsServices } from "../../services/configurationsServices";
+import { Reference } from "../../models/Configuration";
+import { Scope, ScopeUtils } from "../../models/Plugins";
+import { ResourceMetadataPatternDefinition, PatternStruct } from "../../models/ResourceMetadata";
+import { CODAServices } from "../../services/codaServices";
 import { ResourceMetadataServices } from "../../services/resourceMetadataServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { CODAServices } from "../../services/codaServices";
-import { Observable } from "rxjs";
 
 export class MetadataPatternEditorModalData extends BSModalContext {
-    constructor(public title: string, public ref?: Reference, public readOnly?: boolean) {
+    constructor(public title: string, public existingPatterns: PatternStruct[], public ref?: string, public readOnly?: boolean) {
         super();
     }
 }
@@ -24,9 +22,6 @@ export class MetadataPatternEditorModalData extends BSModalContext {
 })
 export class MetadataPatternEditorModal implements ModalComponent<MetadataPatternEditorModalData> {
     context: MetadataPatternEditorModalData;
-
-    private scopes: Scope[];
-    private selectedScope: Scope;
 
     private name: string; //used as id of the configuration
     private description: string;
@@ -43,33 +38,24 @@ export class MetadataPatternEditorModal implements ModalComponent<MetadataPatter
     private activePearlEditor: PearlEditorStruct = this.pearlEditors[0];
 
     constructor(public dialog: DialogRef<MetadataPatternEditorModalData>, private resourceMetadataService: ResourceMetadataServices,
-        private codaService: CODAServices, private configurationService: ConfigurationsServices, 
-        private basicModals: BasicModalServices, private elementRef: ElementRef) {
+        private codaService: CODAServices, private basicModals: BasicModalServices, private elementRef: ElementRef) {
         this.context = dialog.context;
     }
 
     ngOnInit() {
         UIUtils.setFullSizeModal(this.elementRef);
 
-        this.configurationService.getConfigurationManager(ConfigurationComponents.RESOURCE_METADATA_PATTERN_STORE).subscribe(
-            cfgMgr => {
-                this.scopes = cfgMgr.configurationScopes;
-                this.selectedScope = cfgMgr.scope;
-                if (this.context.ref != null) { //edit
-                    this.resourceMetadataService.getPattern(this.context.ref.relativeReference).subscribe(
-                        patternConf => {
-                            this.name = this.context.ref.identifier;
-                            this.selectedScope = this.context.ref.getReferenceScope();
-                            // this.name = patternConf.getPropertyValue("name");
-                            this.description = patternConf.getPropertyValue("description");
-                            this.pearlEditors.find(ps => ps.type == PearlEditorEnum.Construction).code = patternConf.getPropertyValue("construction");
-                            this.pearlEditors.find(ps => ps.type == PearlEditorEnum.Update).code = patternConf.getPropertyValue("update");
-                            this.pearlEditors.find(ps => ps.type == PearlEditorEnum.Destruction).code = patternConf.getPropertyValue("destruction");
-                        }
-                    );
+        if (this.context.ref != null) { //edit
+            this.resourceMetadataService.getPattern(this.context.ref).subscribe(
+                patternConf => {
+                    this.name = Reference.getRelativeReferenceIdentifier(this.context.ref);
+                    this.description = patternConf.getPropertyValue("description");
+                    this.pearlEditors.find(ps => ps.type == PearlEditorEnum.Construction).code = patternConf.getPropertyValue("construction");
+                    this.pearlEditors.find(ps => ps.type == PearlEditorEnum.Update).code = patternConf.getPropertyValue("update");
+                    this.pearlEditors.find(ps => ps.type == PearlEditorEnum.Destruction).code = patternConf.getPropertyValue("destruction");
                 }
-            }
-        );
+            );
+        }
     }
 
     private onPearlChanged(pearlEditor: PearlEditorStruct) {
@@ -96,12 +82,12 @@ export class MetadataPatternEditorModal implements ModalComponent<MetadataPatter
     ok() {
         //check if at least one pearl is provided
         if (!this.pearlEditors.some(ps => ps.code != null && ps.code.trim() != "")) {
-            this.basicModals.alert("Missing pattern", "You need to provide at least one pattern (Construction, Update or Destruction)");
+            this.basicModals.alert("Missing pattern", "You need to provide at least one pattern (Construction, Update or Destruction)", "warning");
             return;
         }
         //check if pattern are valid
         if (this.pearlEditors.some(p => !p.validation.valid)) {
-            this.basicModals.alert("Invalid pattern", "One (or more) pattern is not valid. Please fix it and retry");
+            this.basicModals.alert("Invalid pattern", "One (or more) pattern is not valid. Please fix it and retry", "warning");
             return;
         }
 
@@ -122,13 +108,19 @@ export class MetadataPatternEditorModal implements ModalComponent<MetadataPatter
             pattern.destruction = destructionPearl;
         }
         if (this.context.ref != null) { //update
-            this.resourceMetadataService.updatePattern(this.context.ref.relativeReference, pattern).subscribe(
+            this.resourceMetadataService.updatePattern(this.context.ref, pattern).subscribe(
                 () => {
                     this.dialog.close();
                 }
             )
         } else { //create
-            this.resourceMetadataService.createPattern(ScopeUtils.serializeScope(this.selectedScope) + ":" + this.name, pattern).subscribe(
+            //in creation check if a pattern with the same name exists
+            if (this.context.existingPatterns.some(p => p.name == this.name)) {
+                this.basicModals.alert("Pattern already existing", "A pattern with the same name already exists. Please change the name and retry.", "warning");
+                return;
+            }
+            let ref = ScopeUtils.serializeScope(Scope.PROJECT) + ":" + this.name; //store pattern at project level
+            this.resourceMetadataService.createPattern(ref, pattern).subscribe(
                 () => {
                     this.dialog.close();
                 }

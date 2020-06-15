@@ -2,12 +2,13 @@ import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
-import { Reference } from "../../models/Configuration";
+import { PatternStruct, ResourceMetadataAssociation, ResourceMetadataUtils } from "../../models/ResourceMetadata";
 import { ResourceMetadataServices } from "../../services/resourceMetadataServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 export class MetadataAssociationEditorModalData extends BSModalContext {
-    constructor(public title: string) {
+    constructor(public title: string, public existingAssociations: ResourceMetadataAssociation[]) {
         super();
     }
 }
@@ -19,8 +20,8 @@ export class MetadataAssociationEditorModalData extends BSModalContext {
 export class MetadataAssociationEditorModal implements ModalComponent<MetadataAssociationEditorModalData> {
     context: MetadataAssociationEditorModalData;
 
-    private patterns: Reference[];
-    private selectedPattern: Reference;
+    private patterns: PatternStruct[];
+    private selectedPattern: PatternStruct;
 
     private roles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.annotationProperty, RDFResourceRolesEnum.cls,
         RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme, RDFResourceRolesEnum.dataRange, 
@@ -33,7 +34,8 @@ export class MetadataAssociationEditorModal implements ModalComponent<MetadataAs
     private selectedType: RoleStruct;
 
 
-    constructor(public dialog: DialogRef<MetadataAssociationEditorModalData>, private resourceMetadataService: ResourceMetadataServices) {
+    constructor(public dialog: DialogRef<MetadataAssociationEditorModalData>, private resourceMetadataService: ResourceMetadataServices,
+        private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
@@ -43,7 +45,7 @@ export class MetadataAssociationEditorModal implements ModalComponent<MetadataAs
         })
         this.resourceMetadataService.getPatternIdentifiers().subscribe(
             refs => {
-                this.patterns = refs;
+                this.patterns = refs.map(ref => ResourceMetadataUtils.convertReferenceToPatternStruct(ref));
             }
         )
     }
@@ -53,7 +55,12 @@ export class MetadataAssociationEditorModal implements ModalComponent<MetadataAs
     }
 
     ok() {
-        this.resourceMetadataService.addAssociation(this.selectedType.role, this.selectedPattern.relativeReference).subscribe(
+        //check if the same association already exists
+        if (this.context.existingAssociations.some(a => a.role == this.selectedType.role && a.pattern.reference == this.selectedPattern.reference)) {
+            this.basicModals.alert("Association already existing", "An association between the same resource type and pattern already exists.", "warning");
+            return;
+        }
+        this.resourceMetadataService.addAssociation(this.selectedType.role, this.selectedPattern.reference).subscribe(
             () => {
                 this.dialog.close();
             }

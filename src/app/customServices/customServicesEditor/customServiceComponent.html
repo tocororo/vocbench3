@@ -44,7 +44,7 @@
                     {{form.description.displayName}}
                     <span class="glyphicon glyphicon-info-sign" [title]="form.description.description"></span>
                 </label>
-                <input-editable style="flex: 1;" [value]="form.description.value" (valueEdited)="updateDescription($event)" [disabled]="!editServiceAuthorized"></input-editable>
+                <input-editable style="flex: 1;" [value]="form.description.value" (valueEdited)="updateDescription($event)" [allowEmpty]="true" [disabled]="!editServiceAuthorized"></input-editable>
             </div>
         </div>
 

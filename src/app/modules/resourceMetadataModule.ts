@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MetadataAssociationEditorModal } from '../resourceMetadata/modals/metadataAssociationEditorModal';
 import { MetadataPatternEditorModal } from '../resourceMetadata/modals/metadataPatternEditorModal';
+import { MetadataPatternLibraryModal } from '../resourceMetadata/modals/metadataPatternLibraryModal';
 import { ResourceMetadataComponent } from '../resourceMetadata/resourceMetadataComponent';
 import { SharedModule } from './sharedModule';
-import { MetadataAssociationEditorModal } from '../resourceMetadata/modals/metadataAssociationEditorModal';
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule],
@@ -13,6 +14,7 @@ import { MetadataAssociationEditorModal } from '../resourceMetadata/modals/metad
         ResourceMetadataComponent,
         MetadataAssociationEditorModal,
         MetadataPatternEditorModal,
+        MetadataPatternLibraryModal
     ],
     exports: [
         ResourceMetadataComponent
@@ -20,6 +22,7 @@ import { MetadataAssociationEditorModal } from '../resourceMetadata/modals/metad
     entryComponents: [
         MetadataAssociationEditorModal,
         MetadataPatternEditorModal,
+        MetadataPatternLibraryModal
     ]
 })
 export class ResourceMetadataModule { }

@@ -298,7 +298,8 @@ export enum Scope {
     SYSTEM = "SYSTEM",
     PROJECT = "PROJECT",
     USER = "USER",
-    PROJECT_USER = "PROJECT_USER"
+    PROJECT_USER = "PROJECT_USER",
+    FACTORY = "FACTORY"
 }
 
 export class ScopeUtils {
@@ -323,6 +324,8 @@ export class ScopeUtils {
             return Scope.USER;
         } else if (serialization == "pu") {
             return Scope.PROJECT_USER
+        }  else if (serialization == "factory") {
+            return Scope.FACTORY
         }
     }
 }

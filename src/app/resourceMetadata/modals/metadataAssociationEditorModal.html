@@ -19,9 +19,12 @@
             <label>Pattern</label>
         </div>
         <div class="panel-body scrollableContainer">
-            <div *ngFor="let p of patterns" class="listItem" [ngClass]="{ active: selectedPattern == p }" (click)="selectedPattern = p">
-                {{p.relativeReference}}
+            <div *ngFor="let p of patterns" class="listItem" [ngClass]="{ active: selectedPattern == p, grayText: p.scope == 'FACTORY' }" (click)="selectedPattern = p">
+                {{p.name}}
             </div>
+        </div>
+        <div class="panel-footer">
+            <span class="grayText pull-right">Pattern Factory-provided</span>
         </div>
     </div>
 

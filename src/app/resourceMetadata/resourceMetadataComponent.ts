@@ -1,12 +1,12 @@
 import { Component } from "@angular/core";
 import { OverlayConfig } from "ngx-modialog";
 import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
-import { Reference } from "../models/Configuration";
-import { ResourceMetadataAssociation } from "../models/ResourceMetadata";
+import { PatternStruct, ResourceMetadataAssociation, ResourceMetadataUtils } from "../models/ResourceMetadata";
 import { ResourceMetadataServices } from "../services/resourceMetadataServices";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { MetadataAssociationEditorModal, MetadataAssociationEditorModalData } from "./modals/metadataAssociationEditorModal";
 import { MetadataPatternEditorModal, MetadataPatternEditorModalData } from "./modals/metadataPatternEditorModal";
-import { MetadataAssociationEditorModalData, MetadataAssociationEditorModal } from "./modals/metadataAssociationEditorModal";
+import { MetadataPatternLibraryModalData, MetadataPatternLibraryModal } from "./modals/metadataPatternLibraryModal";
 
 @Component({
     selector: "resource-metadata-component",
@@ -15,8 +15,8 @@ import { MetadataAssociationEditorModalData, MetadataAssociationEditorModal } fr
 })
 export class ResourceMetadataComponent {
 
-    private patterns: Reference[];
-    private selectedPattern: Reference;
+    private patterns: PatternStruct[];
+    private selectedPattern: PatternStruct;
 
     private associations: ResourceMetadataAssociation[];
     private selectedAssociation: ResourceMetadataAssociation;
@@ -44,33 +44,17 @@ export class ResourceMetadataComponent {
         this.initPatterns();
     }
 
-    private initAssociations() {
-        this.resourceMetadataService.listAssociations().subscribe(
-            associations => {
-                this.associations = associations;
-                this.associations.sort((a1, a2) => {
-                    if (a1.role == a2.role) { //in case of same role, sort by pattern reference
-                        return a1.patternRef.localeCompare(a2.patternRef);
-                    } else {
-                        return a1.role.localeCompare(a2.role);
-                    }
-                });
-                this.selectedAssociation = null;
-            }
-        );
-    }
+
+    /* PATTERNS */
 
     private initPatterns() {
         this.resourceMetadataService.getPatternIdentifiers().subscribe(
             refs => {
-                this.patterns = refs;
-                this.patterns.sort((p1, p2) => p1.relativeReference.localeCompare(p2.relativeReference))
+                this.patterns = refs.map(ref => ResourceMetadataUtils.convertReferenceToPatternStruct(ref));
                 this.selectedPattern = null;
             }
         );
     }
-
-    /* PATTERNS */
 
     private createPattern() {
         this.openPatternEditor("Create metadata pattern").then(
@@ -80,25 +64,50 @@ export class ResourceMetadataComponent {
     }
 
     private editPattern() {
-        this.openPatternEditor("Edit metadata pattern", this.selectedPattern).then(
+        this.openPatternEditor("Edit metadata pattern", this.selectedPattern.reference).then(
             () => this.initPatterns(),
             () => {}
         );
     }
 
     private deletePattern() {
-        this.basicModals.confirm("Delete Metadata Pattern", "You are deleting the pattern " + this.selectedPattern.identifier + ". Are you sure?", "warning").then(
+        let patternUsed: boolean = this.associations.some(a => a.pattern.reference == this.selectedPattern.reference);
+        let message: string = "You are deleting the pattern " + this.selectedPattern.name + ".\n";
+        if (patternUsed) {
+            message += "Note: the pattern is used in one (or more) association. By deleting the association will be deleted as well.\n"
+        }
+        message += "Do you want to continue?";
+        this.basicModals.confirm("Delete Metadata Pattern", message, "warning").then(
             () => {
-                this.resourceMetadataService.deletePattern(this.selectedPattern.relativeReference).subscribe(
-                    () => this.initPatterns()
+                this.resourceMetadataService.deletePattern(this.selectedPattern.reference).subscribe(
+                    () => {
+                        this.initPatterns();
+                        if (patternUsed) {
+                            this.initAssociations();
+                        }
+                    }
                 );
             },
             () => {}
         );
     }
 
-    private openPatternEditor(title: string, pattern?: Reference) {
-        var modalData = new MetadataPatternEditorModalData(title, pattern);
+    importSharedPattern() {
+        this.openPatterLibrary("Import shared Metadata Pattern").then(
+            pattern => {
+                this.initPatterns();
+            },
+            () => {}
+        )
+    }
+
+    sharePattern() {
+        this.openPatterLibrary("Share Metadata Pattern", this.selectedPattern);
+    }
+
+    private openPatternEditor(title: string, patternRef?: string) {
+        let readonly: boolean = (patternRef != null) ? patternRef.startsWith("factory") : false;
+        var modalData = new MetadataPatternEditorModalData(title, this.patterns, patternRef, readonly);
         const builder = new BSModalContextBuilder<MetadataPatternEditorModalData>(
             modalData, undefined, MetadataPatternEditorModalData
         );
@@ -106,7 +115,26 @@ export class ResourceMetadataComponent {
         return this.modal.open(MetadataPatternEditorModal, overlayConfig).result;
     }
 
+    private openPatterLibrary(title: string, patternToShare?: PatternStruct) {
+        var modalData = new MetadataPatternLibraryModalData(title, patternToShare, this.patterns);
+        const builder = new BSModalContextBuilder<MetadataPatternLibraryModalData>(
+            modalData, undefined, MetadataPatternLibraryModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(MetadataPatternLibraryModal, overlayConfig).result;
+        
+    }
+
     /* ASSOCIATIONS */
+
+    private initAssociations() {
+        this.resourceMetadataService.listAssociations().subscribe(
+            associations => {
+                this.associations = associations;
+                this.selectedAssociation = null;
+            }
+        );
+    }
 
     private createAssociation() {
         this.openAssociationEditor("Add association").then(
@@ -115,11 +143,9 @@ export class ResourceMetadataComponent {
         );
     }
 
-    // private editAssociation() {}
-
     private deleteAssociation() {
         this.basicModals.confirm("Delete Metadata Association", "You are deleting the association between " + this.selectedAssociation.role + 
-            " and " + this.selectedAssociation.patternRef + ". Are you sure?", "warning").then(
+            " and " + this.selectedAssociation.pattern.reference + ". Are you sure?", "warning").then(
             () => {
                 this.resourceMetadataService.deleteAssociation(this.selectedAssociation.ref).subscribe(
                     () => this.initAssociations()
@@ -130,7 +156,7 @@ export class ResourceMetadataComponent {
     }
 
     private openAssociationEditor(title: string) {
-        var modalData = new MetadataPatternEditorModalData(title);
+        var modalData = new MetadataAssociationEditorModalData(title, this.associations);
         const builder = new BSModalContextBuilder<MetadataAssociationEditorModalData>(
             modalData, undefined, MetadataAssociationEditorModalData
         );
