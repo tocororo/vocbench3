@@ -46,6 +46,18 @@ export class InvokableReportersServices {
     /**
      * 
      */
+    getInvokableReporterForm(): Observable<InvokableReporter> {
+        let params = {}
+        return this.httpMgr.doGet(this.serviceName, "getInvokableReporterForm", params).map(
+            stResp => {
+                return <InvokableReporter>InvokableReporter.parse(stResp);
+            }
+        )
+    }
+
+    /**
+     * 
+     */
     getInvokableReporterIdentifiers(): Observable<Reference[]> {
         let params = {}
         return this.httpMgr.doGet(this.serviceName, "getInvokableReporterIdentifiers", params).map(
