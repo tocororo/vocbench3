@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { ConfigurationDefinition, Reference } from '../models/Configuration';
 import { InvokableReporter, Report, ServiceInvocationDefinition } from '../models/InvokableReporter';
 import { Scope } from '../models/Plugins';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 
 @Injectable()
 export class InvokableReportersServices {
@@ -22,7 +22,13 @@ export class InvokableReportersServices {
             render: render,
             includeTemplate: includeTemplate
         };
-        return this.httpMgr.doGet(this.serviceName, "compileReport", params);
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.services.core.InvokableReporterException']
+            } 
+        });
+        return this.httpMgr.doGet(this.serviceName, "compileReport", params, options);
     }
 
     /**
@@ -35,7 +41,13 @@ export class InvokableReportersServices {
             reporterReference: reporterReference,
             targetMimeType: targetMimeType
         }
-        return this.httpMgr.downloadFile(this.serviceName, "compileAndDownloadReport", params);
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.services.core.InvokableReporterException']
+            } 
+        });
+        return this.httpMgr.downloadFile(this.serviceName, "compileAndDownloadReport", params, false, options);
     }
 
     getConfigurationScopes(): Observable<Scope[]> {
@@ -119,7 +131,7 @@ export class InvokableReportersServices {
             reference: reference,
             definition: JSON.stringify(definition)
         }
-        return this.httpMgr.doPost(this.serviceName, "createInvokableReporter", params);
+        return this.httpMgr.doPost(this.serviceName, "updateInvokableReporter", params);
     }
 
     /**

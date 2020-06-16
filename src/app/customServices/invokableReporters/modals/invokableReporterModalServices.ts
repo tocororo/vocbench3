@@ -13,8 +13,8 @@ export class InvokableReporterModalServices {
 
     constructor(private modal: Modal) { }
 
-    public openInvokableReporterEditor(title: string, reporterRef?: Reference): Promise<void> {
-        let modalData = new InvokableReporterEditorModalData(title, reporterRef);
+    public openInvokableReporterEditor(title: string, existingReporters: Reference[], reporterRef?: Reference): Promise<void> {
+        let modalData = new InvokableReporterEditorModalData(title, existingReporters, reporterRef);
         const builder = new BSModalContextBuilder<InvokableReporterEditorModalData>(
             modalData, undefined, InvokableReporterEditorModalData
         );

@@ -77,7 +77,7 @@ export class InvokableReporterComponent {
     }
 
     private edit() {
-        this.invokableReporterModals.openInvokableReporterEditor("Edit reporter", this.ref).then(
+        this.invokableReporterModals.openInvokableReporterEditor("Edit reporter", [], this.ref).then(
             () => {
                 this.initReporter(true);
             },
@@ -94,6 +94,9 @@ export class InvokableReporterComponent {
                 report => {
                     UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                     this.invokableReporterModals.showReport(report);
+                },
+                (err: Error) => {
+                    this.compilationErrorHandler(err);
                 }
             );
         }
@@ -109,8 +112,19 @@ export class InvokableReporterComponent {
                     UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                     let url = window.URL.createObjectURL(report);
                     window.open(url);
+                },
+                (err: Error) => {
+                    this.compilationErrorHandler(err);
                 }
             );
+        }
+    }
+
+    private compilationErrorHandler(error: Error) {
+        if (error.name.endsWith("InvokableReporterException") && error.message.includes("AccessDeniedException")) { //not enough privileges
+            this.basicModals.alert("Error", "You have not enough priviledges for invoking one (or more) service invocation performed by this report.", "error", error.message);
+        } else { //if not due to access denied show in error modal
+            this.basicModals.alert("Error", error.message, "error", error.stack);
         }
     }
     

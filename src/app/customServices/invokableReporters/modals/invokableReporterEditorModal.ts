@@ -3,13 +3,14 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { ConfigurationComponents, Reference } from "../../../models/Configuration";
 import { InvokableReporterDefinition } from "../../../models/InvokableReporter";
-import { SettingsProp } from "../../../models/Plugins";
+import { Scope, ScopeUtils, SettingsProp } from "../../../models/Plugins";
+import { ConfigurationsServices } from "../../../services/configurationsServices";
 import { InvokableReportersServices } from "../../../services/invokableReportersServices";
-import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
+import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { InvokableReporterForm } from "../invokableReporterComponent";
 
 export class InvokableReporterEditorModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title', public reporterRef?: Reference) {
+    constructor(public title: string = 'Modal Title', public existingReporters: Reference[], public reporterRef?: Reference) {
         super();
     }
 }
@@ -21,10 +22,13 @@ export class InvokableReporterEditorModalData extends BSModalContext {
 export class InvokableReporterEditorModal implements ModalComponent<InvokableReporterEditorModalData> {
     context: InvokableReporterEditorModalData;
 
+    private id: string;
+    private scopes: Scope[];
+    private selectedScope: Scope;
     private form: InvokableReporterForm;
 
-    constructor(public dialog: DialogRef<InvokableReporterEditorModalData>, private invokableReporterService: InvokableReportersServices,
-        private sharedModals: SharedModalServices) {
+    constructor(public dialog: DialogRef<InvokableReporterEditorModalData>, private configurationServices: ConfigurationsServices,
+        private invokableReporterService: InvokableReportersServices, private basicModals: BasicModalServices) {
         this.context = dialog.context;
     }
 
@@ -40,6 +44,12 @@ export class InvokableReporterEditorModal implements ModalComponent<InvokableRep
                         mimeType: reporter.getProperty("mimeType")
                     };
                     this.form.mimeType.value = "text/html";
+                }
+            );
+            this.configurationServices.getConfigurationManager(ConfigurationComponents.INVOKABLE_REPORER_STORE).subscribe(
+                cfgMgr => {
+                    this.scopes = cfgMgr.configurationScopes;
+                    this.selectedScope = cfgMgr.scope;
                 }
             )
         } else { //edit
@@ -58,6 +68,9 @@ export class InvokableReporterEditorModal implements ModalComponent<InvokableRep
     }
 
     private isDataValid(): boolean {
+        if (this.id == null || this.id.trim() == "") {
+            return false;
+        }
         for (let field in this.form) {
             let f: SettingsProp = this.form[field];
             if (f.requireConfiguration()) {
@@ -80,19 +93,18 @@ export class InvokableReporterEditorModal implements ModalComponent<InvokableRep
         };
 
         if (this.context.reporterRef == null) { //create
-            this.sharedModals.storeConfiguration("Store Invokable Reporter", ConfigurationComponents.INVOKABLE_REPORER_STORE, reporterDef).then(
+            let reference = ScopeUtils.serializeScope(this.selectedScope) + ":" + this.id;
+            //check if id is not duplicated
+            if (this.context.existingReporters.some(r => r.relativeReference == reference)) {
+                this.basicModals.alert("Already existing Reporter", "An Invokable Reporter with the same id already exists. Please change the ID and retry", "warning");
+                return;
+            }
+            this.invokableReporterService.createInvokableReporter(reference, reporterDef).subscribe(
                 () => {
-                    this.dialog.close()
-                },
-                () => {}
-            );
+                    this.dialog.close();
+                }
+            )
         } else { //edit
-            let newReporter: InvokableReporterDefinition = {
-                label: this.form.label.value,
-                description: this.form.description.value,
-                template: this.form.template.value,
-                mimeType: this.form.mimeType.value
-            };
             this.invokableReporterService.updateInvokableReporter(this.context.reporterRef.relativeReference, reporterDef).subscribe(
                 () => {
                     this.dialog.close();

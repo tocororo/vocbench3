@@ -10,27 +10,28 @@
             <col style="width: 1%">
         </colgroup>
         <tbody>
-            <!-- <tr>
-                <td class="text-right" nowrap>
-                    <label>ID</label>
-                </td>
-                <td>
-                    <input class="form-control input-sm" [(ngModel)]="id">
-                </td>
-                <td></td>
-            </tr>
-            <tr style="border-bottom: 1px solid #ddd;">
-                <td class="text-right" nowrap>
-                    <label>Scope</label>
-                </td>
-                <td>
-                    <select class="form-control input-sm" style="display: inline-block" [(ngModel)]="selectedScope">
-                        <option *ngFor="let s of scopes">{{s}}</option>
-                    </select>
-                </td>
-                <td></td>
-            </tr> -->
-
+            <ng-container *ngIf="!context.reporterRef">
+                <tr>
+                    <td class="text-right" nowrap>
+                        <label>ID</label>
+                    </td>
+                    <td>
+                        <input class="form-control input-sm" [(ngModel)]="id">
+                    </td>
+                    <td></td>
+                </tr>
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td class="text-right" nowrap>
+                        <label>Scope</label>
+                    </td>
+                    <td>
+                        <select class="form-control input-sm" style="display: inline-block" [(ngModel)]="selectedScope">
+                            <option *ngFor="let s of scopes">{{s}}</option>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+            </ng-container>
             <tr>
                 <td class="text-right" nowrap>
                     <label>{{form.label.displayName}}</label>

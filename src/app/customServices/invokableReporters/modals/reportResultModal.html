@@ -23,7 +23,7 @@
                         <td><label>Operation</label></td>
                         <td>{{s.operation}}</td>
                     </tr>
-                    <tr *ngIf="s.arguments">
+                    <tr *ngIf="objectKeys(s.arguments).length > 0">
                         <td><label>Arguments</label></td>
                         <td>
                             <div class="panel panel-default">
