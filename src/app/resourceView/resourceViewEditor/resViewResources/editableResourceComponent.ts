@@ -321,9 +321,8 @@ export class EditableResourceComponent extends AbstractResViewResource {
                 } else if (this.editActionScenario == EditActionScenarioEnum.xLabel) {
                     let oldLitForm: ARTLiteral = new ARTLiteral(this.resource.getShow(), null, this.resource.getAdditionalProperty(ResAttribute.LANG));
                     let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, this.resource.getAdditionalProperty(ResAttribute.LANG));
-                    // this.applyUpdate(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
                     if (this.partition == ResViewPartition.lexicalizations) {
-                        this.updateLexicalization(<ARTResource>this.resource, this.predicate, oldLitForm, newValue);
+                        this.updateLexicalization(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
                     } else {
                         this.updateTriple(<ARTResource>this.resource, SKOSXL.literalForm, oldLitForm, newValue);
                     }
