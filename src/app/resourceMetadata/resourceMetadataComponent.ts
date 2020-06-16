@@ -4,9 +4,11 @@ import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
 import { PatternStruct, ResourceMetadataAssociation, ResourceMetadataUtils } from "../models/ResourceMetadata";
 import { ResourceMetadataServices } from "../services/resourceMetadataServices";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ImportPatternModal, ImportPatternModalData } from "./modals/importPatternModal";
 import { MetadataAssociationEditorModal, MetadataAssociationEditorModalData } from "./modals/metadataAssociationEditorModal";
 import { MetadataPatternEditorModal, MetadataPatternEditorModalData } from "./modals/metadataPatternEditorModal";
-import { MetadataPatternLibraryModalData, MetadataPatternLibraryModal } from "./modals/metadataPatternLibraryModal";
+import { MetadataPatternLibraryModal, MetadataPatternLibraryModalData } from "./modals/metadataPatternLibraryModal";
+import { ResourceUtils } from "../utils/ResourceUtils";
 
 @Component({
     selector: "resource-metadata-component",
@@ -57,14 +59,14 @@ export class ResourceMetadataComponent {
     }
 
     private createPattern() {
-        this.openPatternEditor("Create metadata pattern").then(
+        this.openPatternEditor("Create Metadata Pattern").then(
             () => this.initPatterns(),
             () => {}
         );
     }
 
     private editPattern() {
-        this.openPatternEditor("Edit metadata pattern", this.selectedPattern.reference).then(
+        this.openPatternEditor("Edit Metadata Pattern", this.selectedPattern.reference).then(
             () => this.initPatterns(),
             () => {}
         );
@@ -74,7 +76,7 @@ export class ResourceMetadataComponent {
         let patternUsed: boolean = this.associations.some(a => a.pattern.reference == this.selectedPattern.reference);
         let message: string = "You are deleting the pattern " + this.selectedPattern.name + ".\n";
         if (patternUsed) {
-            message += "Note: the pattern is used in one (or more) association. By deleting the association will be deleted as well.\n"
+            message += "Note: the Metadata Pattern is used in one (or more) association. By deleting the pattern, the association(s) will be deleted as well.\n"
         }
         message += "Do you want to continue?";
         this.basicModals.confirm("Delete Metadata Pattern", message, "warning").then(
@@ -92,7 +94,51 @@ export class ResourceMetadataComponent {
         );
     }
 
-    importSharedPattern() {
+    private clonePattern() {
+        this.basicModals.prompt("Clone Metadata Pattern", { value: "Name", tooltip: "The name of the new pattern" }).then(
+            (patternName: string) => {
+                if (this.patterns.some(p => p.name == patternName)) {
+                    this.basicModals.alert("Already existing Pattern", "A Metadata Pattern with the name '" + patternName + "' already exists", "warning");
+                    return;
+                }
+                this.resourceMetadataService.clonePattern(this.selectedPattern.reference, patternName).subscribe(
+                    () => {
+                        this.initPatterns();
+                    }
+                );
+            },
+            () => { }
+        );
+    }
+
+    private importPattern() {
+        let modalData = new ImportPatternModalData("Import Metadata Pattern", this.patterns);
+        const builder = new BSModalContextBuilder<ImportPatternModalData>(
+            modalData, undefined, ImportPatternModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        this.modal.open(ImportPatternModal, overlayConfig).result.then(
+            (data: { file: File, name: string }) => {
+                this.resourceMetadataService.importPattern(data.file, data.name).subscribe(
+                    () => {
+                        this.initPatterns();
+                    }
+                )
+            },
+            () => { }
+        );
+    }
+
+    private exportPattern() {
+        this.resourceMetadataService.exportPattern(this.selectedPattern.reference).subscribe(
+            pattern => {
+                let url = window.URL.createObjectURL(pattern);
+                this.basicModals.downloadLink("Export Metadata Pattern", null, url, this.selectedPattern.name + ".cfg");
+            }
+        )
+    }
+
+    private importPatternFromLibrary() {
         this.openPatterLibrary("Import shared Metadata Pattern").then(
             pattern => {
                 this.initPatterns();
@@ -101,7 +147,7 @@ export class ResourceMetadataComponent {
         )
     }
 
-    sharePattern() {
+    private sharePastorePatternInLibraryttern() {
         this.openPatterLibrary("Share Metadata Pattern", this.selectedPattern);
     }
 
@@ -131,21 +177,24 @@ export class ResourceMetadataComponent {
         this.resourceMetadataService.listAssociations().subscribe(
             associations => {
                 this.associations = associations;
+                this.associations.forEach(a => {
+                    a['roleLabel'] = ResourceUtils.getResourceRoleLabel(a.role)
+                })
                 this.selectedAssociation = null;
             }
         );
     }
 
     private createAssociation() {
-        this.openAssociationEditor("Add association").then(
+        this.openAssociationEditor("Add Metadata Association").then(
             () => this.initAssociations(),
             () => {}
         );
     }
 
     private deleteAssociation() {
-        this.basicModals.confirm("Delete Metadata Association", "You are deleting the association between " + this.selectedAssociation.role + 
-            " and " + this.selectedAssociation.pattern.reference + ". Are you sure?", "warning").then(
+        this.basicModals.confirm("Delete Metadata Association", "You are deleting the association between '" + this.selectedAssociation.role + 
+            "' and '" + this.selectedAssociation.pattern.reference + "'. Are you sure?", "warning").then(
             () => {
                 this.resourceMetadataService.deleteAssociation(this.selectedAssociation.ref).subscribe(
                     () => this.initAssociations()

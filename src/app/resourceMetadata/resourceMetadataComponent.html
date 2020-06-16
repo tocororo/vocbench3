@@ -21,13 +21,23 @@
                         </button>
                     </div>
                     <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default" title="Clone Metadata Pattern" (click)="clonePattern()"
+                            [disabled]="!selectedPattern || !createPatternAuthorized">
+                            <span class="glyphicon glyphicon-duplicate"></span>
+                        </button>
+                        <button class="btn btn-default" title="Export Metadata Pattern" (click)="exportPattern()" [disabled]="!selectedPattern">
+                            <span class="glyphicon glyphicon-save"></span>
+                        </button>
+                        <button class="btn btn-default" title="Import Metadata Pattern" (click)="importPattern()" [disabled]="!createPatternAuthorized">
+                            <span class="glyphicon glyphicon-open"></span>
+                        </button>
                         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="Pattern Library" [disabled]="!createPatternAuthorized">
                             <span class="glyphicon glyphicon-book"></span>
                         </button>
                         <ul class="dropdown-menu pull-right">
-                            <li><a (click)="importSharedPattern()">Import Pattern from shared library</a></li>
+                            <li><a (click)="importPatternFromLibrary()">Import Pattern from shared library</a></li>
                             <li [ngClass]="{ disabled: !selectedPattern || selectedPattern.scope == 'FACTORY' }">
-                                <a (click)="sharePattern()">Store Pattern in shared library</a>
+                                <a (click)="storePatternInLibrary()">Store Pattern in shared library</a>
                             </li>
                         </ul>
                     </div>
@@ -62,7 +72,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let a of associations" (click)="selectedAssociation = a" [ngClass]="{ info: a == selectedAssociation }">
-                            <td>{{a.role}}</td>
+                            <td>{{a.roleLabel}}</td>
                             <td [ngClass]="{grayText: a.pattern.scope == 'FACTORY'}">{{a.pattern.name}}</td>
                         </tr>
                     </tbody>

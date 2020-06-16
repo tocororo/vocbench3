@@ -14,6 +14,9 @@ export class ResourceMetadataServices {
 
     /* ==== Associations ==== */
 
+    /**
+     * 
+     */
     listAssociations(): Observable<ResourceMetadataAssociation[]> {
         let params = {};
         return this.httpMgr.doGet(this.serviceName, "listAssociations", params).map(
@@ -42,6 +45,11 @@ export class ResourceMetadataServices {
         );
     }
 
+    /**
+     * 
+     * @param role 
+     * @param patternReference 
+     */
     addAssociation(role: RDFResourceRolesEnum, patternReference: string) {
         let params = {
             role: role,
@@ -50,6 +58,10 @@ export class ResourceMetadataServices {
         return this.httpMgr.doPost(this.serviceName, "addAssociation", params);
     }
 
+    /**
+     * 
+     * @param reference 
+     */
     deleteAssociation(reference: string) {
         let params = {
             reference: reference,
@@ -59,6 +71,9 @@ export class ResourceMetadataServices {
 
     /* ==== Patterns ==== */
 
+    /**
+     * 
+     */
     getPatternIdentifiers(): Observable<string[]> {
         let params = {}
         return this.httpMgr.doGet(this.serviceName, "getPatternIdentifiers", params).map(
@@ -68,15 +83,22 @@ export class ResourceMetadataServices {
         );
     }
 
-    getSharedPatternIdentifiers(): Observable<string[]> {
+    /**
+     * 
+     */
+    getLibraryPatternIdentifiers(): Observable<string[]> {
         let params = {}
-        return this.httpMgr.doGet(this.serviceName, "getSharedPatternIdentifiers", params).map(
+        return this.httpMgr.doGet(this.serviceName, "getLibraryPatternIdentifiers", params).map(
             refs => {
                 return refs.sort();
             }
         );
     }
 
+    /**
+     * 
+     * @param reference 
+     */
     getPattern(reference: string): Observable<ResourceMetadataPattern> {
         let params = {
             reference: reference
@@ -88,6 +110,11 @@ export class ResourceMetadataServices {
         );
     }
 
+    /**
+     * 
+     * @param reference 
+     * @param definition 
+     */
     createPattern(reference: string, definition: ResourceMetadataPatternDefinition): Observable<void> {
         let params = {
             reference: reference,
@@ -96,6 +123,11 @@ export class ResourceMetadataServices {
         return this.httpMgr.doPost(this.serviceName, "createPattern", params);
 	}
 
+    /**
+     * 
+     * @param reference 
+     * @param definition 
+     */
 	updatePattern(reference: string, definition: ResourceMetadataPatternDefinition): Observable<void> {
         let params = {
             reference: reference,
@@ -104,6 +136,10 @@ export class ResourceMetadataServices {
         return this.httpMgr.doPost(this.serviceName, "updatePattern", params);
 	}
 
+    /**
+     * 
+     * @param reference 
+     */
 	deletePattern(reference: string): Observable<void> {
         let params = {
             reference: reference,
@@ -111,21 +147,68 @@ export class ResourceMetadataServices {
         return this.httpMgr.doPost(this.serviceName, "deletePattern", params);
     }
     
-    importSharedPattern(reference: string, name: string) {
+    /**
+     * 
+     * @param reference 
+     * @param name 
+     */
+    importPatternFromLibrary(reference: string, name: string): Observable<void> {
         let params = {
             reference: reference,
             name: name
         }
-        return this.httpMgr.doPost(this.serviceName, "importSharedPattern", params);
+        return this.httpMgr.doPost(this.serviceName, "importPatternFromLibrary", params);
 
     }
 
-    sharePattern(reference: string, name: string) {
+    /**
+     * 
+     * @param reference 
+     * @param name 
+     */
+    storePatternInLibrary(reference: string, name: string): Observable<void> {
         let params = {
             reference: reference,
             name: name
         }
-        return this.httpMgr.doPost(this.serviceName, "sharePattern", params);
+        return this.httpMgr.doPost(this.serviceName, "storePatternInLibrary", params);
+    }
+
+    /**
+     * 
+     * @param reference 
+     * @param name 
+     */
+    clonePattern(reference: string, name: string) {
+        let params = {
+            reference: reference,
+            name: name
+        }
+        return this.httpMgr.doPost(this.serviceName, "clonePattern", params);
+    }
+
+    /**
+     * 
+     * @param reference 
+     */
+    exportPattern(reference: string): Observable<Blob> {
+        var params = {
+            reference: reference
+        };
+        return this.httpMgr.downloadFile(this.serviceName, "exportPattern", params);
+    }
+
+    /**
+     * 
+     * @param inputFile 
+     * @param name 
+     */
+    importPattern(inputFile: File, name: string): Observable<void> {
+        var data: any = {
+            inputFile: inputFile,
+            name: name
+        };
+        return this.httpMgr.uploadFile(this.serviceName, "importPattern", data);
     }
 
 }

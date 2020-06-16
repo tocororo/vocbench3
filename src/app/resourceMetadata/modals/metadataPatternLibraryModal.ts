@@ -42,23 +42,33 @@ export class MetadataPatternLibraryModal implements ModalComponent<MetadataPatte
             this.nameTooltip = "The name to assign to the imported Pattern";
         }
 
-        this.resourceMetadataService.getSharedPatternIdentifiers().subscribe(
+        this.initLibrary();
+    }
+
+    private initLibrary() {
+        this.resourceMetadataService.getLibraryPatternIdentifiers().subscribe(
             refs => {
                 this.patterns = refs.map(ref => ResourceMetadataUtils.convertReferenceToPatternStruct(ref));
+                this.selectedPattern = null;
             }
         )
     }
 
-    isOkEnabled(): boolean {
-        if (this.context.patternToShare != null) { //sharing pattern => check if name is provided
-            return this.name != null && this.name.trim() != "";
-        } else { //import shared pattern => check if a patten is selected
-            return this.selectedPattern != null;
-        }
+    private deletePattern() {
+        this.basicModals.confirm("Delete Metadata Pattern", "You are deleting the Metadata Pattern '" + this.selectedPattern.name + "' from the library. Are you sure?", "warning").then(
+            () => {
+                this.resourceMetadataService.deletePattern(this.selectedPattern.reference).subscribe(
+                    () => {
+                        this.initLibrary();
+                    }
+                )
+            },
+            () => {}
+        )
     }
 
-    private sharePatternImpl() {
-        this.resourceMetadataService.sharePattern(this.context.patternToShare.reference, this.name).subscribe(
+    private storePatternInLibraryImpl() {
+        this.resourceMetadataService.storePatternInLibrary(this.context.patternToShare.reference, this.name).subscribe(
             () => {
                 this.cancel(); //so the invoking component doesn't refresh the UI
             }
@@ -66,11 +76,19 @@ export class MetadataPatternLibraryModal implements ModalComponent<MetadataPatte
     }
 
     private importPatternImpl() {
-        this.resourceMetadataService.importSharedPattern(this.selectedPattern.reference, this.name).subscribe(
+        this.resourceMetadataService.importPatternFromLibrary(this.selectedPattern.reference, this.name).subscribe(
             () => {
                 this.dialog.close(); //so the invoking component refreshes the UI
             }
         );
+    }
+
+    private isOkEnabled(): boolean {
+        if (this.context.patternToShare != null) { //sharing pattern => check if name is provided
+            return this.name != null && this.name.trim() != "";
+        } else { //import shared pattern => check if a patten is selected
+            return this.selectedPattern != null;
+        }
     }
 
     ok() {
@@ -78,11 +96,11 @@ export class MetadataPatternLibraryModal implements ModalComponent<MetadataPatte
             //check if there is another shared pattern with the given name
             if (this.patterns.some(p => p.name == this.name)) {
                 this.basicModals.confirm(this.context.title, "A shared Pattern with the same name already exists. It will be replaced. Do you want to continue?", "warning").then(
-                    () => this.sharePatternImpl(),
+                    () => this.storePatternInLibraryImpl(),
                     () => {}
                 )
             } else {
-                this.sharePatternImpl();
+                this.storePatternInLibraryImpl();
             }
         } else { //import shared pattern => clone the same pattern at project level
             //check if there is another project pattern with the same name

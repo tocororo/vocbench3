@@ -1,0 +1,25 @@
+<div class="modal-header">
+    <h3 class="modal-title">{{context.title}}</h3>
+</div>
+<div class="modal-body">
+    <table class="table table-condensed table-borderless">
+        <colgroup>
+            <col style="width: 1%;">
+            <col>
+        </colgroup>
+        <tbody>
+            <tr>
+                <td class="text-right"><label>File</label></td>
+                <td><file-picker (fileChanged)="fileChangeEvent($event)" size="sm" accept=".cfg"></file-picker></td>
+            </tr>
+            <tr>
+                <td class="text-right"><label>Name</label></td>
+                <td><input type="text" class="form-control" [(ngModel)]="name"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

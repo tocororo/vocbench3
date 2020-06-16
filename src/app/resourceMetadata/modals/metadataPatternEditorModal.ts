@@ -116,7 +116,7 @@ export class MetadataPatternEditorModal implements ModalComponent<MetadataPatter
         } else { //create
             //in creation check if a pattern with the same name exists
             if (this.context.existingPatterns.some(p => p.name == this.name)) {
-                this.basicModals.alert("Pattern already existing", "A pattern with the same name already exists. Please change the name and retry.", "warning");
+                this.basicModals.alert("Pattern already existing", "A Metadata Pattern with the same name already exists. Please change the name and retry.", "warning");
                 return;
             }
             let ref = ScopeUtils.serializeScope(Scope.PROJECT) + ":" + this.name; //store pattern at project level
