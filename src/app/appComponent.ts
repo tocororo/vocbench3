@@ -132,7 +132,8 @@ export class AppComponent {
     }
     
     private isAlignValidationAuthorized() {
-        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.alignmentLoadAlignment);
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.alignmentLoadAlignment) &&
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.alignmentApplyAlignment);
     }
 
     private isSheet2RdfAuthorized() {

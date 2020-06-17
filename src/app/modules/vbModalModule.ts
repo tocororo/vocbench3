@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MappingPropertySelectionModal } from '../alignment/alignmentValidation/alignmentValidationModals/mappingPropertySelectionModal';
-import { RemoteSystemSettingsModal } from '../alignment/alignmentValidation/alignmentValidationModals/remoteSystemSettingsModal';
 import { ValidationReportModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationReportModal';
 import { ValidationSettingsModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationSettingsModal';
 import { AssistedSearchModal } from '../alignment/resourceAlignment/assistedSearchModal';
@@ -113,7 +112,6 @@ import { UserModule } from "./userModule";
         PropertyTreeModal,
         RemoteAccessConfigModal,
         RemoteRepoSelectionModal,
-        RemoteSystemSettingsModal,
         ResourceAlignmentModal,
         ResourcePickerModal,
         ResourceSelectionModal,
@@ -182,7 +180,6 @@ import { UserModule } from "./userModule";
         PropertyTreeModal,
         RemoteAccessConfigModal,
         RemoteRepoSelectionModal,
-        RemoteSystemSettingsModal,
         ResourceAlignmentModal,
         ResourcePickerModal,
         ResourceSelectionModal,

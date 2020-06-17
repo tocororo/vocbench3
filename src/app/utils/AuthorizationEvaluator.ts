@@ -17,6 +17,7 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.administrationUserGroupManagement]: 'auth(pm(project, group), "CU").', //generic for management of UsersGroup in project
         [VBActionsEnum.administrationUserRoleManagement]: 'auth(rbac(user,_), "CRUD").',
         [VBActionsEnum.alignmentAddAlignment]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', alignment), "C").',
+        [VBActionsEnum.alignmentApplyAlignment]: 'auth(rdf(resource, alignment), "CUD").',
         [VBActionsEnum.alignmentLoadAlignment]: 'auth(rdf(resource, alignment), "R").',
         [VBActionsEnum.classesCreateClass]: 'auth(rdf(cls), "C").',
         [VBActionsEnum.classesCreateSubClass]: 'auth(rdf(cls), "C").',
@@ -136,6 +137,9 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.refactorSkosToSkosxl]: 'auth(lexicalization, "CD").',
         [VBActionsEnum.refactorSkosxlToSkos]: 'auth(lexicalization, "CD").',
         [VBActionsEnum.refactorSpawnNewConceptFromLabel]: 'auth(rdf(concept), "C").',
+        [VBActionsEnum.remoteAlignmentServiceSet]: 'auth(pm(project, alignmentService), "C").',
+        [VBActionsEnum.remoteAlignmentServiceRead]: 'auth(pm(project, alignmentService), "R").',
+        [VBActionsEnum.remoteAlignmentServiceRemove]: 'auth(pm(project, alignmentService), "D").',
         [VBActionsEnum.resourcesAddValue]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', values), "C").',
         [VBActionsEnum.resourcesRead]: 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "R").',
         [VBActionsEnum.resourcesReadLexicalizations]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "R").',

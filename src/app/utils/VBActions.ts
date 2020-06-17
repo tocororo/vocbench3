@@ -30,6 +30,7 @@ export enum VBActionsEnum {
     administrationUserRoleManagement = "administrationUserRoleManagement", //generic for management of user-roles
     //Alignment
     alignmentAddAlignment = "alignmentAddAlignment",
+    alignmentApplyAlignment = "alignmentApplyAlignment",
     alignmentLoadAlignment = "alignmentLoadAlignment",
     //Classes
     classesCreateClass = "classesCreateClass",
@@ -168,6 +169,10 @@ export enum VBActionsEnum {
     refactorSkosxlToSkos = "refactorSkosxlToSkos",
     refactorSkosToSkosxl = "refactorSkosToSkosxl",
     refactorSpawnNewConceptFromLabel = "refactorSpawnNewConceptFromLabel",
+    //RemoteAlignment
+    remoteAlignmentServiceSet = "remoteAlignmentServiceSet",
+    remoteAlignmentServiceRemove = "remoteAlignmentServiceRemove",
+    remoteAlignmentServiceRead = "remoteAlignmentServiceRead",
     //Resources
     resourcesAddValue = "resourcesAddValue",
     resourcesRead = "resourcesRead", //represents a generic action for read

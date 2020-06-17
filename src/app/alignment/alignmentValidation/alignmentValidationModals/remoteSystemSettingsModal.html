@@ -3,13 +3,53 @@
 </div>
 <div class="modal-body vbox">
     
-    <div class="hbox" style="align-items: center;">
-        <label>Port:</label>
-        <input type="number" class="form-control input-sm" style="margin-left: 5px;" [(ngModel)]="remoteSystemPort">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span style="flex: 1"></span>
+            <button *ngIf="isAdmin" class="btn btn-xs btn-default" (click)="administration()" title="Administration">
+                <span class="glyphicon glyphicon-glyphicon glyphicon-wrench"></span>
+            </button>
+        </div>
+        <div class="panel-body table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-center">Active</th>
+                        <th class="text-center">ID</th>
+                        <th class="text-center">Server URL</th>
+                        <th class="text-center">Username</th>
+                        <th class="text-center">Password</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="savedConfigs?.length == 0">
+                        <td colspan="4">No configuration found. Please, create a new one.</td>
+                    </tr>
+                    <tr *ngFor="let conf of savedConfigs">
+                        <td class="text-center">
+                            <!-- <input type="radio" (click)="toggleConfig(conf)" [checked]="conf == activeConfig"> -->
+                            <input type="radio" (click)="activateConfig(conf)" [checked]="conf == activeConfig" [disabled]="!isSetServiceAuthorized">
+                        </td>
+                        <td class="text-center">
+                            {{conf.id}}
+                        </td>
+                        <td class="text-center">
+                            {{conf.serverURL}}
+                        </td>
+                        <td class="text-center">
+                            {{conf.username}}
+                        </td>
+                        <td class="text-center">
+                            <ng-container *ngIf="conf.password">*******</ng-container>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
     </div>
-    
+
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Close</button>
 </div>

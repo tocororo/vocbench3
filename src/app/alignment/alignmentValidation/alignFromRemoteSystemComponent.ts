@@ -9,9 +9,11 @@ import { EdoalServices } from '../../services/edoalServices';
 import { MapleServices } from '../../services/mapleServices';
 import { ProjectServices } from '../../services/projectServices';
 import { RemoteAlignmentServices } from '../../services/remoteAlignmentServices';
+import { AuthorizationEvaluator } from '../../utils/AuthorizationEvaluator';
 import { HttpServiceContext } from '../../utils/HttpManager';
 import { UIUtils } from '../../utils/UIUtils';
-import { ProjectContext, VBContext } from '../../utils/VBContext';
+import { VBActionsEnum } from '../../utils/VBActions';
+import { ProjectContext } from '../../utils/VBContext';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { AlignFromSource } from './alignFromSource';
 import { CreateRemoteAlignmentTaskModal, CreateRemoteAlignmentTaskModalData } from './alignmentValidationModals/createRemoteAlignmentTaskModal';
@@ -26,9 +28,10 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
 
     @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
 
-    private isAdmin: boolean; //true if logged user is the admin (used to show/hide the settings button)
     private tasks: RemoteAlignmentTask[];
     private selectedTask: RemoteAlignmentTask;
+
+    private isSettingsAuthorized: boolean;
 
     constructor(edoalService: EdoalServices, projectService: ProjectServices,
         private remoteAlignmentService: RemoteAlignmentServices, private mapleService: MapleServices, 
@@ -40,7 +43,8 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
      * Initializes the tasks list checking first that the two projects has been profiled
      */
     init() {
-        this.isAdmin = VBContext.getLoggedUser().isAdmin();
+        this.isSettingsAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.remoteAlignmentServiceRead);
+
         this.ensureDatasetProfiled(this.leftProject, "left").subscribe(
             profiledLeft => {
                 if (profiledLeft) {
@@ -181,7 +185,6 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         this.modal.open(RemoteSystemSettingsModal, overlayConfig);
     }
-
 
 }
 

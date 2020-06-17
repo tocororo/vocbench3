@@ -8,11 +8,10 @@ import { AlignmentValidationComponent } from '../alignment/alignmentValidation/a
 import { CreateRemoteAlignmentTaskModal } from '../alignment/alignmentValidation/alignmentValidationModals/createRemoteAlignmentTaskModal';
 import { MapleDatasetComponent } from '../alignment/alignmentValidation/alignmentValidationModals/mapleDatasetComponent';
 import { MaplePairingComponent } from '../alignment/alignmentValidation/alignmentValidationModals/maplePairingComponent';
+import { RemoteSystemConfigurationsAdministration } from '../alignment/alignmentValidation/alignmentValidationModals/remoteSystemConfigurationsAdministration';
+import { RemoteSystemSettingsModal } from '../alignment/alignmentValidation/alignmentValidationModals/remoteSystemSettingsModal';
 import { SynonymizerDetailsModal } from '../alignment/alignmentValidation/alignmentValidationModals/synonymizerDetailsModal';
 import { SharedModule } from './sharedModule';
-
-
-
 
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule],
@@ -21,16 +20,20 @@ import { SharedModule } from './sharedModule';
         AlignFromFileComponent,
         AlignFromRemoteSystemComponent,
         AlignmentManagementComponent,
+        CreateRemoteAlignmentTaskModal,
         MapleDatasetComponent,
         MaplePairingComponent,
-        //modals
-        CreateRemoteAlignmentTaskModal,
-        SynonymizerDetailsModal
+        RemoteSystemSettingsModal,
+        RemoteSystemConfigurationsAdministration,
+        SynonymizerDetailsModal,
     ],
     exports: [AlignFromRemoteSystemComponent],
     providers: [],
     entryComponents: [
-        CreateRemoteAlignmentTaskModal, SynonymizerDetailsModal
+        CreateRemoteAlignmentTaskModal,
+        SynonymizerDetailsModal,
+        RemoteSystemConfigurationsAdministration,
+        RemoteSystemSettingsModal
     ]
 })
 export class AlignmentModule { }

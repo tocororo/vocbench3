@@ -1,4 +1,5 @@
 import { ARTURIResource, ARTNode, ARTResource } from "./ARTResources";
+import { Configuration } from "./Configuration";
 
 export class AlignmentCell {
     private entity1: ARTURIResource;
@@ -117,4 +118,13 @@ export class Correspondence {
     rightEntity: ARTNode[];
     measure: ARTNode[];
     relation: ARTNode[];
+}
+
+
+export class RemoteAlignmentServiceConfiguration extends Configuration {}
+export class RemoteAlignmentServiceConfigurationDef {
+    id: string; //not in the configuration
+    serverURL: string;
+    username?: string;
+    password?: string;
 }

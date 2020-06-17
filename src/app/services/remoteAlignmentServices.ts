@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { AlignmentOverview } from '../models/Alignment';
+import { AlignmentOverview, RemoteAlignmentServiceConfiguration } from '../models/Alignment';
 import { ARTURIResource } from '../models/ARTResources';
 import { AlignmentPlan, MatcherDTO, ScenarioDefinition, ServiceMetadataDTO, SettingsDTO } from '../models/Maple';
 import { Settings } from '../models/Plugins';
@@ -143,6 +143,104 @@ export class RemoteAlignmentServices {
                 return matchers;
             }
         );
+    }
+
+
+    /**
+     * 
+     */
+    getRemoteAlignmentServices(): Observable<{[key: string]: RemoteAlignmentServiceConfiguration }> {
+        let params = {};
+        return this.httpMgr.doGet(this.serviceName, "getRemoteAlignmentServices", params).map(
+            stResp => {
+                let serviceConfigs: {[key: string]: RemoteAlignmentServiceConfiguration } = {};
+                for (let id in stResp) {
+                    serviceConfigs[id] = RemoteAlignmentServiceConfiguration.parse(stResp[id]);
+                }
+                return serviceConfigs;
+            }
+        );
+    }
+
+    getDefaultRemoteAlignmentServiceId(): Observable<string> {
+        let params = {};
+        return this.httpMgr.doGet(this.serviceName, "getDefaultRemoteAlignmentServiceId", params);
+    }
+
+    /**
+     * 
+     * @param id 
+     * @param serverURL 
+     * @param username 
+     * @param password 
+     * @param defaultIfFirst 
+     */
+    addRemoteAlignmentService(id: string, serverURL: string, username?: string, password?: string, asDefault?: boolean): Observable<void> {
+        let params = {
+            id: id,
+            serverURL: serverURL,
+            username: username,
+            password: password,
+            asDefault: asDefault,
+        };
+        return this.httpMgr.doPost(this.serviceName, "addRemoteAlignmentService", params);
+    }
+
+    /**
+     * 
+     * @param id 
+     * @param serverURL 
+     * @param username 
+     * @param password 
+     */
+    updateRemoteAlignmentService(id: string, serverURL: string, username?: string, password?: string, asDefault?: boolean): Observable<void> {
+        let params = {
+            id: id,
+            serverURL: serverURL,
+            username: username,
+            password: password,
+            asDefault: asDefault
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateRemoteAlignmentService", params);
+    }
+
+    /**
+     * 
+     * @param id 
+     */
+    deleteRemoteAlignmentService(id: string): Observable<void> {
+        let params = {
+            id: id,
+        };
+        return this.httpMgr.doPost(this.serviceName, "deleteRemoteAlignmentService", params);
+    }
+
+    /**
+     * 
+     * @param id 
+     */
+    setAlignmentServiceForProject(id: string): Observable<void> {
+        let params = {
+            id: id,
+        };
+        return this.httpMgr.doPost(this.serviceName, "setAlignmentServiceForProject", params);
+    }
+
+    /**
+     * 
+     * @returns a pair<string, boolean>, namely configuration name and a boolean flag telling whether or not it is explicit
+     */
+    getAlignmentServiceForProject(): Observable<any[]> {
+        let params = {};
+        return this.httpMgr.doGet(this.serviceName, "getAlignmentServiceForProject", params);
+    }
+
+    /**
+     * 
+     */
+    removeAlignmentServiceForProject(): Observable<void> {
+        let params = {};
+        return this.httpMgr.doPost(this.serviceName, "removeAlignmentServiceForProject", params);
     }
 
 }

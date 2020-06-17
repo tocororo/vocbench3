@@ -1,0 +1,91 @@
+<div class="modal-header">
+    <h3 class="modal-title text-info">Remote Alignment System configurations</h3>
+</div>
+<div class="modal-body vbox">
+    
+    <div class="panel panel-default">
+        <div class="panel-body table-responsive">
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th class="text-center">Default</th>
+                        <th class="text-center">ID</th>
+                        <th class="text-center">Server URL</th>
+                        <th class="text-center">Username</th>
+                        <th class="text-center">Password</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="savedConfigs?.length == 0">
+                        <td colspan="4">No configuration found. Please, create a new one.</td>
+                    </tr>
+                    <tr *ngFor="let conf of savedConfigs">
+                        <td class="text-center">
+                            <input type="radio" (click)="setDefaultConfig(conf)" [checked]="conf == defaultConfig">
+                        </td>
+                        <td class="text-center">
+                            {{conf.id}}
+                        </td>
+                        <td class="text-center">
+                            <input-editable [value]="conf.serverURL" (valueEdited)="updateConfServerURL(conf, $event)"></input-editable>
+                        </td>
+                        <td class="text-center">
+                            <input-editable [value]="conf.username" allowEmpty="true" (valueEdited)="updateConfUsername(conf, $event)"></input-editable>
+                        </td>
+                        <td class="text-center">
+                            <input-editable [value]="conf.password" allowEmpty="true" (valueEdited)="updateConfPassword(conf, $event)"></input-editable>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-default" (click)="deleteConfig(conf)">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="panel panel-default" style="margin-top: 5px">
+        <div class="panel-body">
+            <table class="table table-condensed table-borderless">
+                <tbody>
+                    <tr>
+                        <td><label>New:</label></td>
+                        <td>
+                            <input class="form-control input-sm" [(ngModel)]="newConfig.id" placeholder="Configuration ID">
+                        </td>
+                        <td>
+                            <input class="form-control input-sm" [(ngModel)]="newConfig.serverURL" placeholder="http://serverurl:8080">
+                        </td>
+                        <td>
+                            <input class="form-control input-sm" [(ngModel)]="newConfig.username" placeholder="username">
+                        </td>
+                        <td>
+                            <input class="form-control input-sm" [(ngModel)]="newConfig.password" placeholder="password">
+                        </td>
+                        <td class="text-center">
+                            <div class="checkbox-inline" title="If checked the new configuration is automatically set as default">
+                                <label>
+                                    <input type="checkbox" [(ngModel)]="newConfig.default">Default
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-default" (click)="createConfig()" [disabled]="!newConfig.serverURL || !newConfig.id">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok()">Close</button>
+</div>
