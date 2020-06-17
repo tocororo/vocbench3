@@ -58,8 +58,12 @@ export class RemoteSystemSettingsModal implements ModalComponent<BSModalContext>
                         this.activeConfig = null;
                         if (pair != null) {
                             let confId: string = pair[0];
-                            let explicit: boolean = pair[1]
+                            let explicit: boolean = pair[1];
                             this.activeConfig = this.savedConfigs.find(c => c.id == confId);
+                            if (this.activeConfig == null) {
+                                //the stored alignment service for the current project has been probably deleted => remove it
+                                this.remoteAlignmentService.removeAlignmentServiceForProject().subscribe();
+                            }
                         }
                     }
                 );
