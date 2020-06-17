@@ -816,7 +816,7 @@ nav {
 
 label { margin-bottom: 0px; }
 
-input[type="checkbox"] {
+input[type="checkbox"], input[type="radio"] {
     margin: 0px;
 }
 

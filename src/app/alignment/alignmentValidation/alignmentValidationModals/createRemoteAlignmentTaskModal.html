@@ -1,5 +1,10 @@
 <div class="modal-header">
-    <h3 class="modal-title">Create task</h3>
+    <div class="hbox" style="align-items: center">
+        <h3 class="modal-title" style="flex: 1">Create task</h3>
+        <button *ngIf="serviceMetadata?.settings?.stProperties" class="btn btn-xs btn-default" (click)="systemSettings()">
+            <span class="glyphicon glyphicon-wrench"></span>
+        </button>
+    </div>
 </div>
 <div class="modal-body vbox">
 
@@ -140,27 +145,33 @@
                         The pairings selection has changed, the list of available matchers could be outdated.
                         Click <a href="javascript:void(0)" (click)="searchMatchers()"><b>here</b></a> to refresh the list.
                     </div>
-
                     <div *ngFor="let m of matchers" class="groupPanel" style="margin-top: 12px; margin-bottom: 8px; position: relative;">
                         <div class="groupPanel-heading">
                             <div class="groupPanel-heading-content">
                                 <label class="radio-inline" style="font-weight: bold;" title="If selected use this matcher">
-                                    <input type="radio" (click)="selectMatcher(m)" [checked]="selectedMatcher == m">
-                                    {{m.id}}
-                                    <span *ngIf="m.description" class="glyphicon glyphicon-info-sign" [title]="m.description"></span>
+                                    <input type="radio" (click)="selectMatcher(m)" [checked]="selectedMatcher == m">Use
                                 </label>
                             </div>
                         </div>
                         <div class="groupPanel-body">
-                            <div class="panel panel-default">
+                            <div class="hbox" style="align-items: center; justify-content: center;">
+                                <b>{{m.id}}</b>
+                            </div>
+                            <div *ngIf="m.description" class="alert alert-info" style="margin-top: 6px">
+                                {{m.description}}
+                            </div>
+                            <div *ngIf="m.settings" class="panel panel-default" style="margin-top: 6px">
                                 <div class="panel-heading">
+                                    <div class="clickable" (click)="m.settings.open = !m.settings.open">
+                                        <span [class]="'glyphicon glyphicon-menu-' + (m.settings.open ? 'down' : 'right')"></span>
+                                    </div>
                                     <label style="flex: 1;">Settings</label>
-                                    <span *ngIf="m.settings && !m.settings.stProperties" class="glyphicon glyphicon-warning-sign" 
+                                    <span *ngIf="!m.settings.stProperties" class="glyphicon glyphicon-warning-sign" 
                                         style="margin-right: 4px;" title="The JSON settings must follow the schema specifications shown on the right">
                                     </span>
                                 </div>
                                 <div class="panel-body">
-                                    <ng-container *ngIf="m.settings">
+                                    <ng-container *ngIf="m.settings.open">
                                         <settings-renderer *ngIf="m.settings.stProperties; else originalSchemaBlock" 
                                             [(ngModel)]="m.settings.stProperties" [disabled]="selectedMatcher != m">
                                         </settings-renderer>

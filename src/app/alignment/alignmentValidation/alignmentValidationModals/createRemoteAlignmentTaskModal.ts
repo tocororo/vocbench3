@@ -11,6 +11,7 @@ import { HttpServiceContext } from "../../../utils/HttpManager";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBContext } from "../../../utils/VBContext";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { SynonymizerDetailsModal, SynonymizerDetailsModalData } from "./synonymizerDetailsModal";
 
 export class CreateRemoteAlignmentTaskModalData extends BSModalContext {
@@ -54,7 +55,7 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
 
     constructor(public dialog: DialogRef<CreateRemoteAlignmentTaskModalData>, private projectService: ProjectServices,
         private mapleService: MapleServices, private remoteAlignmentService: RemoteAlignmentServices, private basicModals: BasicModalServices,
-        private modal: Modal) {
+        private sharedModals: SharedModalServices, private modal: Modal) {
         this.context = dialog.context;
     }
 
@@ -291,6 +292,15 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
 
 
     //================================
+
+    systemSettings() {
+        this.sharedModals.configurePlugin(this.serviceMetadata.settings.stProperties).then(
+            newSettings => {
+                this.serviceMetadata.settings.stProperties = newSettings;
+            },
+            () => {}
+        )
+    }
 
     private isOkEnabled() {
         return this.alignmentScenario != null;

@@ -8,32 +8,32 @@
         <div [ngSwitch]="prop.type.name">
             <div *ngSwitchCase="'boolean'" class="input-sm form-control text-center">
                 <label class="radio-inline">
-                    <input type="radio" (click)="updateBoolean(p, true)" [name]="'radio_'+prop.name" [checked]="prop.value==true" [disabled]="disabled">true
+                    <input type="radio" (click)="updateBoolean(prop, true)" [name]="'radio_'+prop.name" [checked]="prop.value==true" [disabled]="disabled">true
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" (click)="updateBoolean(p, false)" [name]="'radio_'+prop.name" [checked]="prop.value==false" [disabled]="disabled">false
+                    <input type="radio" (click)="updateBoolean(prop, false)" [name]="'radio_'+prop.name" [checked]="prop.value==false" [disabled]="disabled">false
                 </label>
             </div>
 
-            <resource-picker *ngSwitchCase="'IRI'" [resource]="prop.value" [config]="{ roles: getIRIRoleConstraints(p) }" [editable]="true"
-                (resourceChanged)="updateValue(p, $event)" [disabled]="disabled">
+            <resource-picker *ngSwitchCase="'IRI'" [resource]="prop.value" [config]="{ roles: getIRIRoleConstraints(prop) }" [editable]="true"
+                (resourceChanged)="updateValue(prop, $event)" [disabled]="disabled">
             </resource-picker>
 
-            <resource-picker *ngSwitchCase="'Resource'" [resource]="prop.value" [config]="{ roles: getIRIRoleConstraints(p) }" [editable]="true"
-                (resourceChanged)="updateValue(p, $event)" [disabled]="disabled">
+            <resource-picker *ngSwitchCase="'Resource'" [resource]="prop.value" [config]="{ roles: getIRIRoleConstraints(prop) }" [editable]="true"
+                (resourceChanged)="updateValue(prop, $event)" [disabled]="disabled">
             </resource-picker>
 
-            <value-picker *ngSwitchCase="'RDFValue'" [value]="prop.value" [editable]="true" (valueChanged)="updateValue(p, $event)" [disabled]="disabled">
+            <value-picker *ngSwitchCase="'RDFValue'" [value]="prop.value" [editable]="true" (valueChanged)="updateValue(prop, $event)" [disabled]="disabled">
             </value-picker>
 
-            <literal-picker *ngSwitchCase="'Literal'" [literal]="prop.value" (literalChanged)="updateValue(p, $event)" [disabled]="disabled">
+            <literal-picker *ngSwitchCase="'Literal'" [literal]="prop.value" (literalChanged)="updateValue(prop, $event)" [disabled]="disabled">
             </literal-picker>
 
             <setting-set *ngSwitchCase="'Set'" [value]="prop.value" [types]="prop.type.typeArguments" 
-                (valueChanged)="updateSetValue(p, $event)" [disabled]="disabled"></setting-set>
+                (valueChanged)="updateSetValue(prop, $event)" [disabled]="disabled"></setting-set>
 
             <setting-map *ngSwitchCase="'Map'" [value]="prop.value" [types]="prop.type.typeArguments" 
-                (valueChanged)="updateMapValue(p, $event)" [disabled]="disabled"></setting-map>
+                (valueChanged)="updateMapValue(prop, $event)" [disabled]="disabled"></setting-map>
 
             <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control input-sm" style="resize: vertical" 
                 [(ngModel)]="prop.value" [disabled]="disabled">
