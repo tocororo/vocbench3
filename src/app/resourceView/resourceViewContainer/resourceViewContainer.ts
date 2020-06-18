@@ -1,3 +1,4 @@
+import { RDFResourceRolesEnum } from './../../models/ARTResources';
 import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
 import { ARTResource, ResAttribute } from "../../models/ARTResources";
 import { VBActionsEnum } from "../../utils/VBActions";
@@ -26,7 +27,8 @@ export class ResourceViewTabContainer {
     private isSimplifiedFormAvailable: boolean;
 
     ngOnInit() {
-        this.isSimplifiedFormAvailable = VBContext.getSystemSettings().experimentalFeaturesEnabled;
+        this.isSimplifiedFormAvailable = VBContext.getSystemSettings().experimentalFeaturesEnabled && this.resource.getRole() == RDFResourceRolesEnum.concept;
+        
     }
 
     ngOnChanges(changes: SimpleChanges) {

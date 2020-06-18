@@ -1,0 +1,18 @@
+.custom {
+    background-color: rgb(251, 251, 251);
+    border: 1px solid rgb(251, 251, 251);
+    box-shadow: none;
+}
+
+.custom:hover{
+    border: 1px solid rgb(244, 244, 244) !important;
+}
+
+textarea:hover {
+    border: 1px solid rgb(244, 244, 244);
+}
+
+textarea:focus {
+    border: 1px solid rgb(244, 244, 244);
+}
+

@@ -242,7 +242,7 @@ rdf-resource > .rdfResourceText {
 .flagIcon {
     position: relative;
     display: inline-block;
-    font-family: monospace;
+    font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
     font-size: 10px;
     line-height: 1;

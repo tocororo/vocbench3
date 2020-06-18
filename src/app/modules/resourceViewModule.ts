@@ -60,9 +60,13 @@ import { ResourceViewModeDispatcher } from '../resourceView/resourceViewModes/re
 import { ResourceViewSplittedComponent } from '../resourceView/resourceViewModes/resourceViewSplittedComponent';
 import { ResourceViewTabbedComponent } from '../resourceView/resourceViewModes/resourceViewTabbedComponent';
 import { ResourceViewSimpleComponent } from '../resourceView/resourceViewSimple/resourceViewSimpleComponent';
+import { ShowLanguageDefinitionComponent } from '../resourceView/resourceViewSimple/showLanguageDefinition/showLanguageDefinition';
+import { ShowLanguageTermComponent } from '../resourceView/resourceViewSimple/showLanguageTerm/showLanguageTerm';
 import { PreferencesModule } from './preferencesModule';
 import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from "./treeAndListModule";
+
+
 
 @NgModule({
     imports: [
@@ -83,6 +87,8 @@ import { TreeAndListModule } from "./treeAndListModule";
         ResourceViewTabbedComponent,
         ResourceViewValueRenderer,
         ResourceViewTabContainer,
+        ShowLanguageDefinitionComponent,
+        ShowLanguageTermComponent,
         //renderers
         BroadersPartitionRenderer,
         ClassAxiomPartitionPartitionRenderer, 
