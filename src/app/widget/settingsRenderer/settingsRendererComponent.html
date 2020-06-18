@@ -20,7 +20,7 @@
                 <setting-prop-renderer [(ngModel)]="settings.properties[i]" (ngModelChange)="onModelChanged()" [disabled]="disabled"></setting-prop-renderer>
             </td>
             <td>
-                <span class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
+                <span *ngIf="p.description && p.description != ''" class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
             </td>
         </tr>
     </tbody>
