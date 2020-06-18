@@ -12,6 +12,7 @@ import { ExtractFromShaclModal } from '../customForms/customFormConfigModals/ext
 import { FormCollEditorModal } from '../customForms/customFormConfigModals/formCollEditorModal';
 import { FormCollMappingModal } from '../customForms/customFormConfigModals/formCollMappingModal';
 import { ImportCfModal } from '../customForms/customFormConfigModals/importCfModal';
+import { PearlInferenceValidationModal } from '../customForms/customFormConfigModals/pearlInferenceValidationModal';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingModalServices";
 import { SharedModule } from './sharedModule';
@@ -30,7 +31,8 @@ import { SharedModule } from './sharedModule';
         ExtractFromShaclModal,
         FormCollEditorModal,
         FormCollMappingModal,
-        ImportCfModal
+        ImportCfModal,
+        PearlInferenceValidationModal,
     ],
     exports: [CustomFormConfigComponent, CustomFormComponent], //CustomForm exported since is used in vbModalModule as well in newResourceCfModal
     entryComponents: [
@@ -40,7 +42,8 @@ import { SharedModule } from './sharedModule';
         ExtractFromShaclModal,
         FormCollMappingModal,
         FormCollEditorModal,
-        ImportCfModal
+        ImportCfModal,
+        PearlInferenceValidationModal,
     ]
 })
 export class CustomFormModule { }

@@ -75,10 +75,16 @@
                     <button class="btn btn-default btn-xs" (click)="pickConverter()" title="Pick converter" [disabled]="context.readOnly">
                         Pick converter
                     </button>
-                    <button *ngIf="extractFromShaclAuthorized" class="btn btn-default btn-xs" (click)="extractFromShacl()" style="margin-top: 4px;" 
-                        title="Extract PEARL from SHACL shape" [disabled]="context.readOnly">
-                        From SHACL
-                    </button>
+                    <ng-container *ngIf="type == 'graph'">
+                        <button class="btn btn-default btn-xs" (click)="inferAnnotations()" style="margin-top: 4px;" 
+                            title="Infer annotations from CF definition" [disabled]="!ref || context.readOnly">
+                            Infer annotations
+                        </button>
+                        <button *ngIf="extractFromShaclAuthorized" class="btn btn-default btn-xs" (click)="extractFromShacl()" style="margin-top: 4px;" 
+                            title="Extract PEARL from SHACL shape" [disabled]="context.readOnly">
+                            From SHACL
+                        </button>
+                    </ng-container>
                 </div>
                 
             </div>

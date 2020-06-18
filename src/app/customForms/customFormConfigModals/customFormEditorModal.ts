@@ -2,17 +2,19 @@ import { Component, ElementRef, ViewChild } from "@angular/core";
 import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
 import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from "../../models/ARTResources";
+import { PearlValidationResult } from "../../models/Coda";
 import { CustomForm, CustomFormType, EditorMode } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { ResourcesServices } from "../../services/resourcesServices";
+import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../utils/UIUtils";
+import { VBActionsEnum } from "../../utils/VBActions";
 import { PearlEditorComponent } from "../../widget/codemirror/pearlEditor/pearlEditorComponent";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { ExtractFromShaclModal } from "./extractFromShaclModal";
-import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
-import { VBActionsEnum } from "../../utils/VBActions";
+import { PearlInferenceValidationModal, PearlInferenceValidationModalData } from "./pearlInferenceValidationModal";
 
 export class CustomFormEditorModalData extends BSModalContext {
     /**
@@ -130,6 +132,37 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
             },
             () => {}
         )
+    }
+
+    private inferAnnotations() {
+        this.cfService.validatePearl(this.ref, this.type).subscribe(
+            (result: PearlValidationResult) => {
+                if (!result.valid) {
+                    this.basicModals.alert("Invalid PEARL", "Cannot infer annotations on an invalid PEARL:\n" + result.details, "error");
+                    return;
+                }
+                this.cfService.inferPearlAnnotations(this.ref).subscribe(
+                    (annotatedPearl) => {
+                        //ask user for validation
+                        this.openInferenceValidationModal(annotatedPearl).then(
+                            () => {
+                                this.ref = annotatedPearl;
+                            },
+                            () => {}
+                        )
+                    }
+                );
+            }
+        )
+    }
+
+    private openInferenceValidationModal(newPearl: string) {
+        let modalData = new PearlInferenceValidationModalData(this.ref, newPearl);
+        const builder = new BSModalContextBuilder<PearlInferenceValidationModalData>(
+            modalData, undefined, PearlInferenceValidationModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
+        return this.modal.open(PearlInferenceValidationModal, overlayConfig).result;
     }
 
     private extractFromShacl() {
@@ -280,7 +313,11 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
 
         //update CRE only if ref is valid
         this.cfService.validatePearl(this.ref, this.type).subscribe(
-            valid => {
+            (result: PearlValidationResult) => {
+                if (!result.valid) {
+                    this.basicModals.alert("Invalid PEARL", result.details, "error");
+                    return;
+                }
                 if (this.description == null) { //set empty definition if it is not provided (prevent setting "undefined" as definition of CRE)
                     this.description = "";
                 }
@@ -310,7 +347,6 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
                     );
                 }
             },
-            err => { }
         );
     }
 

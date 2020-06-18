@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
+import { PearlValidationResult } from '../models/Coda';
 import { AnnotationName, BrokenCFStructure, CustomForm, CustomFormLevel, CustomFormType, FormCollection, FormCollectionMapping, FormField, FormFieldAnnotation, FormFieldType } from "../models/CustomForms";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
@@ -450,34 +451,13 @@ export class CustomFormsServices {
      * Retrieves the CustomForm with the given id
      * @param id
      */
-    getCustomForm(id: string) {
+    getCustomForm(id: string): Observable<CustomForm> {
         var params: any = {
             id: id
         };
         return this.httpMgr.doGet(this.serviceName, "getCustomForm", params).map(
             stResp => {
-                var id: string = stResp.id;
-                var customForm: CustomForm = new CustomForm(id);
-                var name: string = stResp.name;
-                customForm.setName(name);
-                var type: CustomFormType = stResp.type == "graph" ? "graph" : "node";
-                customForm.setType(type);
-                var description: string = stResp.description;
-                customForm.setDescription(description);
-                var ref: string = stResp.ref;
-                customForm.setRef(ref);
-                if (type == "graph") {
-                    var showPropChainAttr: string = stResp.showPropertyChain;
-                    var propChain: ARTURIResource[] = [];
-                    if (showPropChainAttr != null && showPropChainAttr != "") {
-                        var splitted = showPropChainAttr.split(",");
-                        for (var i = 0; i < splitted.length; i++) {
-                            propChain.push(new ARTURIResource(splitted[i], splitted[i], RDFResourceRolesEnum.property));
-                        }
-                    }
-                    customForm.setShowPropertyChain(propChain);
-                }
-                return customForm;
+                return this.parseCustomFormJson(stResp);
             }
         );
     }
@@ -592,6 +572,37 @@ export class CustomFormsServices {
     }
 
     /**
+     * 
+     * @param String 
+     * @param cfId 
+     * @param prId 
+     * @param save 
+     */
+    updateCustomFormWithAnnotations(cfId: string, prId?: string, save?: boolean): Observable<CustomForm> {
+        var params: any = {
+            cfId: cfId,
+            prId: prId,
+            save: save
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateCustomFormWithAnnotations", params).map(
+            stResp => {
+                return this.parseCustomFormJson(stResp);
+            }
+        );
+    }
+
+    /**
+     * 
+     * @param cfPearl 
+     */
+    inferPearlAnnotations(cfPearl: string): Observable<string> {
+        var params: any = {
+            cfPearl: cfPearl,
+        };
+        return this.httpMgr.doPost(this.serviceName, "inferPearlAnnotations", params);
+    }
+
+    /**
 	 * Checks if a property chain (manually created by the user) is correct.
 	 * Returns an exception if it is not a valid IRI list
 	 * @param propertyChain
@@ -615,7 +626,7 @@ export class CustomFormsServices {
      * @param formType tells if the CRE is type "node" or "graph".
      * Determines also the nature of the pearl parameter
      */
-    validatePearl(pearl: string, formType: CustomFormType) {
+    validatePearl(pearl: string, formType: CustomFormType): Observable<PearlValidationResult> {
         var params: any = {
             pearl: pearl,
             formType: formType
@@ -702,6 +713,31 @@ export class CustomFormsServices {
                 return brokenCFS;
             }
         );
+    }
+
+    private parseCustomFormJson(cfJson: any) {
+        let id: string = cfJson.id;
+        let customForm: CustomForm = new CustomForm(id);
+        let name: string = cfJson.name;
+        customForm.setName(name);
+        let type: CustomFormType = cfJson.type == "graph" ? "graph" : "node";
+        customForm.setType(type);
+        let description: string = cfJson.description;
+        customForm.setDescription(description);
+        let ref: string = cfJson.ref;
+        customForm.setRef(ref);
+        if (type == "graph") {
+            let showPropChainAttr: string = cfJson.showPropertyChain;
+            let propChain: ARTURIResource[] = [];
+            if (showPropChainAttr != null && showPropChainAttr != "") {
+                let splitted = showPropChainAttr.split(",");
+                splitted.forEach(s => {
+                    propChain.push(new ARTURIResource(s, s, RDFResourceRolesEnum.property));
+                })
+            }
+            customForm.setShowPropertyChain(propChain);
+        }
+        return customForm;
     }
 
 }

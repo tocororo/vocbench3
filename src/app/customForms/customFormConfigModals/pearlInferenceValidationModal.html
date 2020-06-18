@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h3 class="modal-title">Pearl annotations inference</h3>
+</div>
+<div class="modal-body vbox">
+
+    <div class="alert alert-warning">
+        Note: in case no annotation has been inferred, the two PEARL might not differ at all. 
+        Anyway, the inference process might apply changes, such as reordering the prefix definitions and removing comments.<br>
+        It is also possible to edit the resulting PEARL before applying the changes.
+    </div>
+
+    <div class="hbox" style="margin-top: 4px;">
+        <div class="panel panel-default vbox">
+            <div class="panel-heading"><label>Original PEARL</label></div>
+            <div class="panel-body vbox">
+                <pearl-editor [ngModel]="context.oldPearl" [disabled]="true"></pearl-editor>
+            </div>
+        </div>
+        <div class="panel panel-default vbox" style="margin-left: 5px;" >
+            <div class="panel-heading"><label>Inferred PEARL</label></div>
+            <div class="panel-body vbox">
+                <pearl-editor [(ngModel)]="newPearl"></pearl-editor>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok()">Accept</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Discard</button>
+</div>
