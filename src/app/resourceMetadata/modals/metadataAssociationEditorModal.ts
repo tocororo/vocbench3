@@ -23,7 +23,7 @@ export class MetadataAssociationEditorModal implements ModalComponent<MetadataAs
     private patterns: PatternStruct[];
     private selectedPattern: PatternStruct;
 
-    private roles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.annotationProperty, RDFResourceRolesEnum.cls,
+    private roles: RDFResourceRolesEnum[] = [RDFResourceRolesEnum.undetermined, RDFResourceRolesEnum.annotationProperty, RDFResourceRolesEnum.cls,
         RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme, RDFResourceRolesEnum.dataRange, 
         RDFResourceRolesEnum.datatypeProperty, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.limeLexicon, 
         RDFResourceRolesEnum.objectProperty, RDFResourceRolesEnum.ontolexForm, RDFResourceRolesEnum.ontolexLexicalEntry,

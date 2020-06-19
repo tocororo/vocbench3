@@ -366,6 +366,8 @@ export class ResourceUtils {
             return "Class";
         } else if (role == RDFResourceRolesEnum.xLabel) {
             return "Skosxl Label";
+        } else if (role == RDFResourceRolesEnum.undetermined) {
+            return "Any resource";
         } else {
             let splitted: string = role.replace(/([a-z])([A-Z])/g, '$1 $2');
             return splitted.charAt(0).toLocaleUpperCase() + splitted.slice(1); //upper case the first letter

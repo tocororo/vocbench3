@@ -16,14 +16,14 @@ CodeMirror.defineMode("pearl", function(config) {
     return new RegExp("^(?:" + words.join("|") + ")$", "i");
   }
   var ops = wordRegexp(["uri", "bnode", "regex", "a", "literal", "as"]);
-  var keywords = wordRegexp(["prefix", "where", "OPTIONAL", "graph", "nodes", "rule", "bindings", 
+  var keywords = wordRegexp(["prefix", "where", "OPTIONAL", "graph", "nodes", "insert", "delete", "rule", "bindings", 
                           "Annotation", "annotations", "lazy", "conditions", "dependsOn", "forRegex"]);
   var operatorChars = /[*+\-<>=&|\^\/!\?]/;
 
   function tokenBase(stream, state) {
     var ch = stream.next();
     curPunc = null;
-    if (ch == "$") {
+    if (ch == "$" || ch == "?") {
       stream.match(/^[\w\d]*/);
       return "variable-2";
     }
