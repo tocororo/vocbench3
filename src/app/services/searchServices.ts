@@ -247,14 +247,14 @@ export class SearchServices {
         outgoingSearch?: { predicate: ARTURIResource, searchString: string, mode: SearchMode }[]): Observable<ARTResource[]> {
 
         var params: any = {
-            statusFilter: statusFilter
+            statusFilter: statusFilter,
+            searchMode: searchMode
         };
         if (searchString != null) {
             params.searchString = searchString;
             params.useLocalName = useLocalName;
             params.useURI = useURI;
             params.useNotes = useNotes;
-            params.searchMode = searchMode;
         }
         if (langs != null) {
             params.langs = langs;
