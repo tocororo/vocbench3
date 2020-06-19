@@ -29,11 +29,7 @@ export class MetadataPatternEditorModal implements ModalComponent<MetadataPatter
     private pearlEditors: PearlEditorStruct[] = [
         { type: PearlEditorEnum.Construction, code: null, validation: { valid: true }, timer: null },
         { type: PearlEditorEnum.Update, code: null, validation: { valid: true }, timer: null },
-        { type: PearlEditorEnum.Destruction, code: null, validation: { valid: true }, timer: null, 
-            info: "Please notice that when the resource is deleted, all of its outgoing triples will be automatically deleted, " + 
-                "so developing a destruction pattern is necessary only in case there are other resources connected only to this " + 
-                "resource that should be deleted in turn"
-        },
+        { type: PearlEditorEnum.Destruction, code: null, validation: { valid: true }, timer: null },
     ];
     private activePearlEditor: PearlEditorStruct = this.pearlEditors[0];
 
@@ -144,5 +140,4 @@ interface PearlEditorStruct {
     code: string;
     validation: PearlValidationResult;
     timer: number;
-    info?: string;
 }
