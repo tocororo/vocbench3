@@ -45,7 +45,7 @@ export class ResourceViewSimpleComponent {
 
 
 
-    ngOnInit() { 
+    ngOnInit() {
         this.buildResourceSimpleView(this.resource)
         this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType();// mi serve per capire che tipo di lessicalizzazione ha quel progetto
     }
@@ -90,34 +90,36 @@ export class ResourceViewSimpleComponent {
             let nodes: ARTNode[] = [];
             this.lexicalizationsColl.forEach(lex => {
                 lex.getObjects().forEach((obj: ARTNode) => {
-                    //case in which there are no existing keys equals to that language
-                    if (!(obj.getAdditionalProperty(ResAttribute.LANG) in this.langStruct) && this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)] == null) {
-                        this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)] = [];
-                        nodes = [];
-                        nodes.push(obj);
-                        let predObj = new ARTPredicateObjects(lex.getPredicate(), nodes);
-                        this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].push(predObj);
-                    } else { // case in which a key equal to that language already exists 
-                        if (!this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].some(item => item.getPredicate().equals(lex.getPredicate()))) { //case in which there are no objects with that type of predicate
+                    if (obj.getAdditionalProperty(ResAttribute.LANG) != null) {
+                        //case in which there are no existing keys equals to that language
+                        if (!(obj.getAdditionalProperty(ResAttribute.LANG) in this.langStruct) && this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)] == null) {
+                            this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)] = [];
                             nodes = [];
                             nodes.push(obj);
                             let predObj = new ARTPredicateObjects(lex.getPredicate(), nodes);
                             this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].push(predObj);
-                            this.sortPredicates(this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)])
-                        } else { // case in which objects with that predicate already exist and I can add others (example: I can have more altLabel)
-                            if (!this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].some(item => { return item.getObjects().some(o => o.equals(obj)) })) { // I check if the object I am analyzing is not present
-                                this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].forEach(item => {
-                                    if (item.getPredicate().equals(lex.getPredicate())) {
-                                        item.getObjects().push(obj);
-                                    }
-                                })
+                        } else { // case in which a key equal to that language already exists 
+                            if (!this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].some(item => item.getPredicate().equals(lex.getPredicate()))) { //case in which there are no objects with that type of predicate
+                                nodes = [];
+                                nodes.push(obj);
+                                let predObj = new ARTPredicateObjects(lex.getPredicate(), nodes);
+                                this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].push(predObj);
+                                this.sortPredicates(this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)])
+                            } else { // case in which objects with that predicate already exist and I can add others (example: I can have more altLabel)
+                                if (!this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].some(item => { return item.getObjects().some(o => o.equals(obj)) })) { // I check if the object I am analyzing is not present
+                                    this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].forEach(item => {
+                                        if (item.getPredicate().equals(lex.getPredicate())) {
+                                            item.getObjects().push(obj);
+                                        }
+                                    })
 
+                                }
                             }
+
                         }
-
                     }
-
                 })
+
             })
 
         }
@@ -183,8 +185,7 @@ export class ResourceViewSimpleComponent {
         } else {
             this.unexistingResource = false;
         }
-        this.objectKeys=Object.keys(this.langStruct).sort();
-        console.log(this.objectKeys)
+        this.objectKeys = Object.keys(this.langStruct).sort();
     }
 
     /**
@@ -306,8 +307,8 @@ export class ResourceViewSimpleComponent {
             }
             this.langStruct[flagClicked.lang.tag] = [];
             this.langStruct[flagClicked.lang.tag].push(predObj)
-            this.objectKeys=Object.keys(this.langStruct); // here there is not .sort() because so it manteins actual order
-        
+            this.objectKeys = Object.keys(this.langStruct); // here there is not .sort() because so it manteins actual order
+
 
         }
     }
