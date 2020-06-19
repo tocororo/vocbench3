@@ -3,13 +3,16 @@ import { BasicModalServices } from "../modal/basicModal/basicModalServices";
 
 @Component({
     selector: 'text-editable',
-    templateUrl: './textEditableComponent.html'
+    templateUrl: './textEditableComponent.html',
+    styleUrls: ["./textEditableComponent.css"]
 })
 export class TextEditableComponent implements OnInit {
     @Input() value: string;
     @Input() allowEmpty: boolean = false; //if true allow the value to be replaced with empty string
     @Input() disabled: boolean = false;
+    @Input() focusOnInit: boolean=false;
     @Output() valueEdited = new EventEmitter<string>();
+    
 
     @ViewChild('editBlock') textarea: ElementRef;
     private textareaRows: number;
@@ -21,6 +24,9 @@ export class TextEditableComponent implements OnInit {
 
     ngOnInit() {
         this.pristineValue = this.value;
+        if(this.focusOnInit){
+            this.edit();
+        }
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -30,9 +36,13 @@ export class TextEditableComponent implements OnInit {
     }
 
     private edit() {
-        //update the rows attribute of the textarea (so when it is editing the textarea will have the same size of the element in non-editing mode)
+        if(this.value != null){
+            //update the rows attribute of the textarea (so when it is editing the textarea will have the same size of the element in non-editing mode)
         let lineBreakCount = (this.value.match(/\n/g)||[]).length;
         this.textareaRows = lineBreakCount + 1;
+        }else{
+            this.textareaRows=1;
+        }
         this.editInProgress = true;
         setTimeout(() => {  //wait to initialize the textarea
             //set the cursor at the end of the content
@@ -61,8 +71,6 @@ export class TextEditableComponent implements OnInit {
 
     private confirmEdit() {
         this.editInProgress = false;
-        this.pristineValue = this.value;
-
         if (this.pristineValue != this.value) {
             if (this.value == undefined || this.value.trim() == "") {
                 if (this.allowEmpty) {
@@ -72,6 +80,7 @@ export class TextEditableComponent implements OnInit {
                     return;
                 }
             }
+            this.pristineValue = this.value;
             this.valueEdited.emit(this.value);
         }
     }

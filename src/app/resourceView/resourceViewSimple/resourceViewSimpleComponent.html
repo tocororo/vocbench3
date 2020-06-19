@@ -1,14 +1,37 @@
 <div class="panel panel-default vbox">
     <div class="panel-heading">
-        <rdf-resource style="flex: 1;" [resource]="resource"></rdf-resource>
-        <button class="btn btn-xs btn-default" (click)="refresh()" title="Refresh">
+        <rdf-resource style="flex: 1;" *ngIf="resource" [resource]="resource"></rdf-resource>
+        <input [value]="resource.getURI()" class="form-control" style="padding-left: 2px; margin-right: 10px; min-width: 80px; height: 20px;" readonly>
+        <!-- <span  style="margin-right: 5%;">{{resource.getURI()}}</span> -->
+        <button class="btn btn-xs btn-default" (click)="buildResourceSimpleView(resource)" title="Refresh">
             <span class="glyphicon glyphicon-refresh"></span>
         </button>
     </div>
-    <div class="panel-body vbox">
-        {{ resource | json }}
+    <div  *ngIf="resource && !unexistingResource" class="panel-body scrollableContainer">
+        <!-- first-->
+        <div class="panel panel-default"> 
+            <div class="panel-body">
+                <h2 class="qname"><span>{{resource.qname}}</span></h2>
+                <div>
+                    <p>{{resource.getShow()}}</p>
+                    <p *ngFor="let item of definitions">{{item.getShow()}}</p>
+                </div>
+                <h2 class="concept"><span>Broader Concepts</span></h2>
+                <div>
+                    <p *ngFor="let broader of broaders">{{broader.getShow()}}</p>
+                </div>
+            </div>
+        </div>
+        <!-- Languages-->
+        <div class="lang">
+            <lang-item *ngFor="let item of languages" [language]="item.lang" [disabled]="item.disabled" [showName]="false" [size]="'md'" (click)="onClick(item)"></lang-item>
+        </div>
+        <!-- Language definitions-->
+        <div class="def-lang">
+            <lang-def *ngFor="let item of objectKeys" [resource]="resource" (update)="buildResourceSimpleView(resource)" [langFromServer]="item" [langStruct]="langStruct" [lexicalizationModelType]="lexicalizationModelType" #langItem></lang-def>
+        </div>
     </div>
     <div class="panel-footer" style="min-height: 31px;">
-        footer
+        
     </div>
 </div>

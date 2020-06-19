@@ -1,0 +1,11 @@
+/* first panel */
+.qname { width:100%;  border-bottom: 1px solid #000; line-height:1px;  margin:20px 0px 20px; font-size: 13px; } 
+.qname span { background:#fff; padding:0px 5px; margin-left:20px; } 
+.concept { width:100%;  border-bottom: 1px solid #000; line-height:1px;  margin:20px 0px 20px; font-size: 13px; } 
+.concept span { background:#fff; padding:0px 5px; margin-left:20px; } 
+/* languages */
+.lang {margin-top: 20px; display: flex; flex-direction: row; flex-wrap: wrap; }
+lang-item{ padding: 3px; flex-basis: 1%;}
+/* languages definition */
+.def-lang {margin-top: 13px;}
+

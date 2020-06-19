@@ -1,0 +1,18 @@
+<div class="groupPanel" style="margin-top: 15px;">
+    <div *ngIf="termToShow.object" class="groupPanel-heading">
+                <label class="groupPanel-heading-content">{{termToShow.object.qname}}</label>
+    </div>
+
+    <div class="groupPanel-body">
+        <div class="term-wrap">
+            <label [ngClass]="termToShow?.isPrefLabel ? 'prefLabelColor' : 'altLabelcolor'">Term:</label>
+            <text-editable style="flex:1;" [focusOnInit]="focus" [value]="termValue" (valueEdited)="onValueEdited($event)"> </text-editable>
+            <button class="btn btn-xs btn-default minus-button ">
+                <span class="glyphicon glyphicon-minus" (click)="deleteTermBox(termFromView)" title="Delete Term" style="font-size: 9px;"></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
