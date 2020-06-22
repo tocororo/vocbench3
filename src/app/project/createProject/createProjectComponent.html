@@ -381,30 +381,62 @@
 
                     <div class="subPanel">
                         <div class="subPanel-heading">
-                            <label style="flex: 1;">Project metadata property</label>
+                            <label style="flex: 1;">Resource Metadata</label>
                             <div class="checkbox" style="margin: 0px">
                                 <label style="min-height: initial;">
-                                    <input type="checkbox" [(ngModel)]="useProjMetadataProp"> Use metadata project properties
+                                    <input type="checkbox" [(ngModel)]="useResourceMetadata"> Use Resource Metadata
+                                    <span class="glyphicon glyphicon-info-sign" title="Usage of Resource Metadata can be enabled also after the project creation"></span>
                                 </label>
                             </div>
                         </div>
                         <div class="subPanel-body">
-                            <form *ngIf="useProjMetadataProp" class="form-horizontal">
-                                <div class="form-group">
-                                    <label class="control-label col-sm-1">Creation date:</label>
-                                    <div class="col-sm-11">
-                                        <input-editable [value]="createdProp" (valueEdited)="updateCreatedProp($event)">
-                                        </input-editable>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-1">Modification date:</label>
-                                    <div class="col-sm-11">
-                                        <input-editable [value]="modifiedProp" (valueEdited)="updateModifiedProp($event)">
-                                        </input-editable>
-                                    </div>
-                                </div>
-                            </form>
+                            <ng-container *ngIf="useResourceMetadata">
+                                <table class="table table-condensed table-borderless">
+                                    <colgroup>
+                                        <col style="width: 1%;">
+                                        <col>
+                                        <col style="width: 1%;">
+                                        <col>
+                                        <col style="width: 1%;">
+                                        <col style="width: 1%;">
+                                    </colgroup>
+                                    <tbody>
+                                        <tr *ngFor="let ma of metadataAssociations; let last = last">
+                                            <td class="text-rigth" nowrap>
+                                                <label>Resource Type:</label>
+                                            </td>
+                                            <td>
+                                                <select class="form-control input-sm" [(ngModel)]="ma.role">
+                                                    <option *ngFor="let r of resourceTypes" [ngValue]="r">{{r.show}}</option>
+                                                </select>
+                                            </td>
+                                            <td class="text-rigth" nowrap>
+                                                <label>Pattern:</label>
+                                            </td>
+                                            <td>
+                                                <div class="input-group input-group-sm">
+                                                    <input class="form-control" [ngModel]="ma.pattern?.name" readonly>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-default" (click)="selectMetadataPattern(ma)">
+                                                            <span class="glyphicon glyphicon-pencil"></span>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-xs btn-default" (click)="removeMetadataAssociation(ma)">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button *ngIf="last" class="btn btn-xs btn-default" (click)="addMetadataAssociation()">
+                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </ng-container>
                         </div>
                     </div>
 

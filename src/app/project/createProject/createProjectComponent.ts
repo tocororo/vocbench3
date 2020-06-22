@@ -1,13 +1,18 @@
 import { Component, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
+import { Modal, OverlayConfig } from "ngx-modialog";
+import { BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
 import { DatasetCatalogModalReturnData } from "../../config/dataManagement/datasetCatalog/datasetCatalogModal";
-import { ARTURIResource } from "../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { TransitiveImportMethodAllowance } from "../../models/Metadata";
 import { ConfigurableExtensionFactory, ExtensionPointID, Plugin, PluginSpecification, Settings } from "../../models/Plugins";
 import { BackendTypesEnum, PreloadedDataSummary, Project, RemoteRepositoryAccessConfig, Repository, RepositoryAccess, RepositoryAccessType } from "../../models/Project";
 import { Properties } from "../../models/Properties";
 import { RDFFormat } from "../../models/RDFFormat";
-import { DCT, EDOAL, OntoLex, OWL, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
+import { PatternStruct } from "../../models/ResourceMetadata";
+import { Pair } from "../../models/Shared";
+import { EDOAL, OntoLex, OWL, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
+import { MetadataFactoryPatternSelectionModal, MetadataFactoryPatternSelectionModalData } from "../../resourceMetadata/modals/metadataFactoryPatternSelectionModal";
 import { ExtensionsServices } from "../../services/extensionsServices";
 import { InputOutputServices } from "../../services/inputOutputServices";
 import { PluginsServices } from "../../services/pluginsServices";
@@ -153,10 +158,10 @@ export class CreateProjectComponent {
     private selectedRendEngPluginConfList: Settings[]; //plugin configurations for the selected plugin
     private selectedRendEngPluginConf: Settings; //chosen configuration for the chosen rendering engine plugin
 
-    //METADATA PROP
-    private useProjMetadataProp: boolean = true;
-    private createdProp: string = DCT.created.getURI();
-    private modifiedProp: string = DCT.modified.getURI();
+    //RESOURCE METADATA
+    private useResourceMetadata: boolean = false;
+    private resourceTypes: RoleStruct[];
+    private metadataAssociations: MetadataAssociationStruct[] = [{ role: null, pattern: null }];
 
     //SHACL
     private enableSHACL: boolean = false;
@@ -167,7 +172,7 @@ export class CreateProjectComponent {
 
     constructor(private projectService: ProjectServices, private pluginService: PluginsServices, private extensionService: ExtensionsServices,
         private inOutService: InputOutputServices, private prefService: PreferencesSettingsServices,
-        private router: Router, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
+        private router: Router, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) {
     }
 
     ngOnInit() {
@@ -222,6 +227,16 @@ export class CreateProjectComponent {
                 this.shaclSettings = settings;
             }
         );
+
+        this.resourceTypes = [RDFResourceRolesEnum.undetermined, RDFResourceRolesEnum.annotationProperty, RDFResourceRolesEnum.cls,
+            RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme, RDFResourceRolesEnum.dataRange, 
+            RDFResourceRolesEnum.datatypeProperty, RDFResourceRolesEnum.individual, RDFResourceRolesEnum.limeLexicon, 
+            RDFResourceRolesEnum.objectProperty, RDFResourceRolesEnum.ontolexForm, RDFResourceRolesEnum.ontolexLexicalEntry,
+            RDFResourceRolesEnum.ontolexLexicalSense, RDFResourceRolesEnum.ontology, RDFResourceRolesEnum.ontologyProperty,
+            RDFResourceRolesEnum.property, RDFResourceRolesEnum.skosCollection, RDFResourceRolesEnum.skosOrderedCollection, 
+            RDFResourceRolesEnum.xLabel].map(r => { 
+            return { role: r, show: ResourceUtils.getResourceRoleLabel(r) }
+        })
 
         //init available remote repo access configurations
         this.initRemoteRepoAccessConfigurations();
@@ -624,32 +639,32 @@ export class CreateProjectComponent {
     }
 
     /**
-     * CREATED/MODIFIED PROPERTIES
+     * RESOURCE METADATA
      */
 
-    private updateCreatedProp(propUri: string) {
-        if (!ResourceUtils.testIRI(propUri)) {
-            this.basicModals.alert("Invalid IRI", "The entered value '" + propUri + "' is not a valid IRI", "warning");
-            let backupProp = this.createdProp;
-            this.createdProp = null;
-            setTimeout(() => {
-                this.createdProp = backupProp;
-            });
-        } else {
-            this.createdProp = propUri;
-        }
+    private selectMetadataPattern(metadataAssociation: MetadataAssociationStruct) {
+        var modalData = new MetadataFactoryPatternSelectionModalData("Select a pattern");
+        const builder = new BSModalContextBuilder<MetadataFactoryPatternSelectionModalData>(
+            modalData, undefined, MetadataFactoryPatternSelectionModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
+        return this.modal.open(MetadataFactoryPatternSelectionModal, overlayConfig).result.then(
+            (pattern: PatternStruct) => {
+                metadataAssociation.pattern = pattern;
+            },
+            () => {}
+        );
     }
 
-    private updateModifiedProp(propUri: string) {
-        if (!ResourceUtils.testIRI(propUri)) {
-            this.basicModals.alert("Invalid IRI", "The entered value '" + propUri + "' is not a valid IRI", "warning");
-            let backupProp = this.modifiedProp;
-            this.modifiedProp = null;
-            setTimeout(() => {
-                this.modifiedProp = backupProp;
-            });
+    private addMetadataAssociation() {
+        this.metadataAssociations.push({ role: null, pattern: null });
+    }
+    private removeMetadataAssociation(metadataAssociation: MetadataAssociationStruct) {
+        if (this.metadataAssociations.length == 1) { //if deleting the only association, just reset it
+            this.metadataAssociations[0].role = null;
+            this.metadataAssociations[0].pattern = null;
         } else {
-            this.modifiedProp = propUri;
+            this.metadataAssociations.slice(this.metadataAssociations.indexOf(metadataAssociation), 1);
         }
     }
 
@@ -804,15 +819,8 @@ export class CreateProjectComponent {
         }
 
         /**
-         * Prepare creationDateProperty and modificationDateProperty
+         * Prepare stuff about preload data
          */
-        var creationProp: ARTURIResource;
-        var modificationProp: ARTURIResource;
-        if (this.useProjMetadataProp) {
-            creationProp = new ARTURIResource(this.createdProp);
-            modificationProp = new ARTURIResource(this.modifiedProp);
-        }
-
         let preloadedDataFileName: string;
         let preloadedDataFormat: string;
         let transitiveImportAllowance: TransitiveImportMethodAllowance;
@@ -824,6 +832,21 @@ export class CreateProjectComponent {
                 preloadedDataFormat = this.preloadedData.summary.preloadedDataFormat
             }
             transitiveImportAllowance = this.selectedImportAllowance;
+        }
+
+        /**
+         * Prepare creationDateProperty and modificationDateProperty
+         */
+        let metadataAssociationsPar: Pair<RDFResourceRolesEnum, string>[];
+        if (this.useResourceMetadata) { //resource metadata enabled => check if data is ok
+            if (this.metadataAssociations.some(a => a.role == null || a.pattern == null)) {
+                this.basicModals.alert("Create project", "An incomplete association has been detected in the configuration of Resource Metadata. " + 
+                    "Please, fix it or disabled the Resource Metadata", "warning");
+                return;
+            }
+            metadataAssociationsPar = this.metadataAssociations.map(ma => {
+                return { first: ma.role.role, second: ma.pattern.reference };
+            });
         }
 
         /**
@@ -850,10 +873,8 @@ export class CreateProjectComponent {
             repositoryAccess, this.dataRepoId, supportRepoIdPar,
             coreRepoSailConfigurerSpecification, coreRepoBackendType,
             supportRepoSailConfigurerSpecification, supportRepoBackendType,
-            leftDataset, rightDataset,
-            uriGeneratorSpecification, renderingEngineSpecification,
-            creationProp, modificationProp, 
-            this.enableSHACL, shaclSettingsPar, this.enableTrivialInference,
+            leftDataset, rightDataset, uriGeneratorSpecification, renderingEngineSpecification,
+            metadataAssociationsPar, this.enableSHACL, shaclSettingsPar, this.enableTrivialInference,
             preloadedDataFileName, preloadedDataFormat, transitiveImportAllowance).subscribe(
                 stResp => {
                     UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
@@ -874,4 +895,13 @@ enum PreloadOpt {
     FROM_LOCAL_FILE = "Preload from local file",
     FROM_URI = "Preload from URI",
     FROM_DATASET_CATALOG = "Preload from Dataset Catalog"
+}
+
+interface MetadataAssociationStruct { 
+    role: RoleStruct;
+    pattern: PatternStruct;
+}
+interface RoleStruct {
+    role: RDFResourceRolesEnum;
+    show: string;
 }

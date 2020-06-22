@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { ARTURIResource } from '../models/ARTResources';
+import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { TransitiveImportMethodAllowance } from '../models/Metadata';
 import { PluginSpecification, Settings } from '../models/Plugins';
 import { AccessLevel, AccessStatus, BackendTypesEnum, ConsumerACL, LockLevel, LockStatus, PreloadedDataSummary, Project, RepositoryAccess, RepositorySummary } from '../models/Project';
+import { Pair } from '../models/Shared';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { VBContext } from '../utils/VBContext';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
@@ -131,7 +132,7 @@ export class ProjectServices {
         supportRepoSailConfigurerSpecification?: PluginSpecification, supportBackendType?: BackendTypesEnum,
         leftDataset?: string, rightDataset?: string,
         uriGeneratorSpecification?: PluginSpecification, renderingEngineSpecification?: PluginSpecification,
-        creationDateProperty?: ARTURIResource, modificationDateProperty?: ARTURIResource, 
+        resourceMetadataAssociations?: Pair<RDFResourceRolesEnum, string>[],
         shaclEnabled?: boolean, shaclSettings?: Map<string, any>, trivialInferenceEnabled?: boolean,
         preloadedDataFileName?: string, preloadedDataFormat?: string, transitiveImportAllowance?: TransitiveImportMethodAllowance) {
         
@@ -155,14 +156,13 @@ export class ProjectServices {
             rightDataset: rightDataset,
             uriGeneratorSpecification: (uriGeneratorSpecification) ? JSON.stringify(uriGeneratorSpecification) : null,
             renderingEngineSpecification: (renderingEngineSpecification) ? JSON.stringify(renderingEngineSpecification) : null,
-            creationDateProperty: creationDateProperty,
-            modificationDateProperty: modificationDateProperty,
+            resourceMetadataAssociations: JSON.stringify(resourceMetadataAssociations.map(p => [p.first, p.second])),
             shaclEnabled: shaclEnabled,
             shaclSettings: shaclSettings,
             trivialInferenceEnabled: trivialInferenceEnabled,
             preloadedDataFileName: preloadedDataFileName,
             preloadedDataFormat: preloadedDataFormat,
-            transitiveImportAllowance: transitiveImportAllowance
+            transitiveImportAllowance: transitiveImportAllowance,
         };
         var options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 

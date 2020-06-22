@@ -8,6 +8,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Added a tool for the creation of Custom Services.
   * Added a tool for creating and compile Invokable Reporter based on Custom Services.
   * Enabled manipulation of Maple choices in a remote-service alignment task.
+  * Added the ResourceMetadata tool for the management of resource metadata on creation/update/delection events.
   * Enabled configurable dataset catalog connectors.
   * Improved CustomForm widget by exploiting new PEARL annotations.
   * Enabled organization of projects in directories.

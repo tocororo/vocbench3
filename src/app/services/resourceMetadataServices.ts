@@ -86,6 +86,18 @@ export class ResourceMetadataServices {
     /**
      * 
      */
+    getFactoryPatternIdentifiers(): Observable<string[]> {
+        let params = {}
+        return this.httpMgr.doGet(this.serviceName, "getFactoryPatternIdentifiers", params).map(
+            refs => {
+                return refs.sort();
+            }
+        );
+    }
+
+    /**
+     * 
+     */
     getLibraryPatternIdentifiers(): Observable<string[]> {
         let params = {}
         return this.httpMgr.doGet(this.serviceName, "getLibraryPatternIdentifiers", params).map(

@@ -33,7 +33,7 @@ export class CustomFormEditorModalData extends BSModalContext {
     templateUrl: "./customFormEditorModal.html",
     styles: [`
         .entryRow { margin-bottom: 4px; }
-        .entryLabel { width: 130px; margin-right: 4px; white-space: nowrap; }
+        .entryLabel { min-width: 130px; width: 130px; margin-right: 4px; white-space: nowrap; }
     `]
 })
 export class CustomFormEditorModal implements ModalComponent<CustomFormEditorModalData> {
