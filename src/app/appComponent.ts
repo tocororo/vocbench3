@@ -145,7 +145,8 @@ export class AppComponent {
     }
 
     private isResourceMetadataAuthorized() {
-        return true; //waiting for authorization
+        return AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourceMetadataPatternRead) &&
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourceMetadataAssociationRead);
     }
 
     private isCustomServicesAuthorized() {

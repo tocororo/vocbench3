@@ -185,6 +185,14 @@ export enum VBActionsEnum {
     resourcesUpdatePredicateObject = "resourcesUpdatePredicateObject",
     resourcesGetResourceTriplesDescription = "resourcesGetResourceTriplesDescription",
     resourcesUpdateResourceTriplesDescription = "resourcesUpdateResourceTriplesDescription",
+    //ResourceMetadata
+    resourceMetadataAssociationCreate = "resourceMetadataAssociationCreate",
+    resourceMetadataAssociationRead = "resourceMetadataAssociationRead",
+    resourceMetadataAssociationDelete = "resourceMetadataAssociationDelete",
+    resourceMetadataPatternCreate = "resourceMetadataPatternCreate",
+    resourceMetadataPatternRead = "resourceMetadataPatternRead",
+    resourceMetadataPatternUpdate = "resourceMetadataPatternUpdate",
+    resourceMetadataPatternDelete = "resourceMetadataPatternDelete",
     //Shacl
     shaclClearShapes = "shaclClearShapes",
     shaclExportShapes = "shaclExportShapes",

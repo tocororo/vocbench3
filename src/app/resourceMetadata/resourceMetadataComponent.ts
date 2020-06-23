@@ -3,12 +3,14 @@ import { OverlayConfig } from "ngx-modialog";
 import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
 import { PatternStruct, ResourceMetadataAssociation, ResourceMetadataUtils } from "../models/ResourceMetadata";
 import { ResourceMetadataServices } from "../services/resourceMetadataServices";
+import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
+import { ResourceUtils } from "../utils/ResourceUtils";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { ImportPatternModal, ImportPatternModalData } from "./modals/importPatternModal";
 import { MetadataAssociationEditorModal, MetadataAssociationEditorModalData } from "./modals/metadataAssociationEditorModal";
 import { MetadataPatternEditorModal, MetadataPatternEditorModalData } from "./modals/metadataPatternEditorModal";
 import { MetadataPatternLibraryModal, MetadataPatternLibraryModalData } from "./modals/metadataPatternLibraryModal";
-import { ResourceUtils } from "../utils/ResourceUtils";
+import { VBActionsEnum } from "../utils/VBActions";
 
 @Component({
     selector: "resource-metadata-component",
@@ -29,18 +31,16 @@ export class ResourceMetadataComponent {
     private modifyPatternAuthorized: boolean;
     private createAssociationAuthorized: boolean;
     private deleteAssociationAuthorized: boolean;
-    private modifyAssociationAuthorized: boolean;
 
     constructor(private resourceMetadataService: ResourceMetadataServices, private basicModals: BasicModalServices, private modal: Modal) { }
 
     ngOnInit() {
         //init authorizations
-        this.createPatternAuthorized = true;
-        this.deletePatternAuthorized = true;
-        this.modifyPatternAuthorized = true;
-        this.createAssociationAuthorized = true;
-        this.modifyAssociationAuthorized = true;
-        this.deleteAssociationAuthorized = true;
+        this.createPatternAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourceMetadataPatternCreate);
+        this.deletePatternAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourceMetadataPatternDelete);
+        this.modifyPatternAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourceMetadataPatternUpdate);
+        this.createAssociationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourceMetadataAssociationCreate);
+        this.deleteAssociationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourceMetadataAssociationDelete);
 
         this.initAssociations();
         this.initPatterns();
