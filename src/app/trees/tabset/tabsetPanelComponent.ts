@@ -197,7 +197,7 @@ export class TabsetPanelComponent {
             } else if (tab == RDFResourceRolesEnum.ontolexLexicalEntry) { //visible for ontolex projects, except if explicitly hidden
                 show = this.isTabAuthorized(tab) && this.isProjectOntolex() && (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1);
             } else if (tab == RDFResourceRolesEnum.dataRange) { //always visible, except if explicitly hidden
-                show = this.isTabAuthorized(tab) && this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1;
+                show = this.isTabAuthorized(tab) && (this.hiddenTabs == null || this.hiddenTabs.indexOf(tab) == -1);
             } else {
                 show = false;
             }
