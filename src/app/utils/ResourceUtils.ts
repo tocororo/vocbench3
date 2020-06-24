@@ -1,6 +1,7 @@
-import { ARTNode, ARTURIResource, ResAttribute, ARTLiteral, ARTBNode, RDFResourceRolesEnum, ARTResource } from "../models/ARTResources";
+import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
+import { DatatypeUtils } from "../models/Datatypes";
 import { PrefixMapping } from "../models/Metadata";
-import { SemanticTurkey, RDF, OWL, SKOS, RDFS, OntoLex, Lime, SKOSXL } from "../models/Vocabulary";
+import { Lime, OntoLex, OWL, RDF, RDFS, SemanticTurkey, SKOS, SKOSXL } from "../models/Vocabulary";
 
 export class ResourceUtils {
 
@@ -53,19 +54,29 @@ export class ResourceUtils {
      * @param rendering 
      */
     static getRendering(resource: ARTNode, rendering: boolean) {
-        if (rendering) {
-            return resource.getShow();
-        } else {
-            if (resource.isURIResource()) {
+        if (resource instanceof ARTURIResource) {
+            if (rendering) {
+                return resource.getShow();
+            } else {
                 let qname = resource.getAdditionalProperty(ResAttribute.QNAME);
                 if (qname != undefined) {
                     return qname;
                 } else {
                     return (<ARTURIResource>resource).getURI();
                 }
-            } else {
-                return resource.getShow();
             }
+        } else if (resource instanceof ARTBNode) {
+            return resource.getShow();
+        } else if (resource instanceof ARTLiteral) {
+            let value: string = resource.getValue();
+            let dt: string = resource.getDatatype();
+            //in case of numerical typed literal, returns it properly formatted
+            if (dt != null && DatatypeUtils.xsdNumericDatatypes.some(d => d.getURI() == dt) && !isNaN(Number(value))) {
+                return Number(value).toLocaleString();
+            } else {
+                return value;
+            }
+            
         }
     }
 
