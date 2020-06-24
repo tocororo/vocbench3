@@ -1,83 +1,68 @@
-<div class="vbox">
-    
-    <!--<div class="panel panel-default vbox">
-        <div class="panel-heading">
-            <label>Versioning</label>
+<div class="panel panel-default vbox">
+    <div class="panel-heading">
+        <label style="flex: 1">Versions:</label>
+
+        <div class="btn-group btn-group-xs" style="margin-right: 5px">
+            <button class="btn btn-default" (click)="swithcToVersion()" [disabled]="!selectedVersion">
+                Switch to
+            </button>
+            <button class="btn btn-default" (click)="delteVersion()" [disabled]="!selectedVersion">
+                Delete
+            </button>
         </div>
-       
-        <div class="panel-body vbox">-->
 
-            <div class="subPanel vbox">
-                <div class="subPanel-heading">
-                    <label style="flex: 1">Versions:</label>
+        <div class="dropdown pull-right">
+            <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+                Dump...
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a (click)="dump()">Dump a new version</a></li>
+                <li><a (click)="dumpWithLocation()">Dump a new version to a different location</a></li>
+            </ul>
+        </div>
 
-                    <div class="btn-group btn-group-xs" style="margin-right: 5px">
-                        <button class="btn btn-default" (click)="swithcToVersion()" [disabled]="!selectedVersion">
-                            Switch to
-                        </button>
-                        <button class="btn btn-default" (click)="delteVersion()" [disabled]="!selectedVersion">
-                            Delete
-                        </button>
-                    </div>
+    </div>
 
-                    <div class="dropdown pull-right">
-                        <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
-                            Dump...
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a (click)="dump()">Dump a new version</a></li>
-                            <li><a (click)="dumpWithLocation()">Dump a new version to a different location</a></li>
-                        </ul>
-                    </div>
-
-                </div>
-
-                <div class="subPanel-body scrollableContainer" style="flex: 1;">
-                    <table class="table table-condensed table-hoverable" style="flex: 1">
-                        <thead>
-                            <tr>
-                                <th class="text-center">Version ID</th>
-                                <th class="text-center">Datetime</th>
-                                <th class="text-center">Repository ID</th>
-                                <th class="text-center">Active</th>
-                                <th class="text-center">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let v of versionList; let idx=index" (click)="selectVersion(v)" [ngClass]="{ info: v == selectedVersion }">
-                                <td class="text-center">
-                                    {{v.versionId}}
-                                </td>
-                                <td class="text-center">
-                                    {{v.dateTimeLocal}}
-                                </td>
-                                <td class="text-center">
-                                    {{v.repositoryId}}
-                                </td>
-                                <td class="text-center">
-                                    <span *ngIf="isActiveVersion(v)" class="glyphicon glyphicon-ok"></span>
-                                </td>
-                                <td class="text-center">
-                                    <ng-template [ngIf]="idx == 0">
-                                        ---
-                                    </ng-template>
-                                    <ng-template [ngIf]="idx > 0">
-                                        {{v.status | lowercase}}
-                                        <button class="btn btn-xs btn-default" (click)="closeVersion(v)"
-                                            [disabled]="v.status != 'INITIALIZED' || isActiveVersion(v)">
-                                            Close
-                                        </button>
-                                    </ng-template>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        <!--</div>
-
-    </div>-->
-    
+    <div class="panel-body scrollableContainer" style="flex: 1;">
+        <table class="table table-condensed table-hoverable" style="flex: 1">
+            <thead>
+                <tr>
+                    <th class="text-center">Version ID</th>
+                    <th class="text-center">Datetime</th>
+                    <th class="text-center">Repository ID</th>
+                    <th class="text-center">Active</th>
+                    <th class="text-center">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let v of versionList; let idx=index" (click)="selectVersion(v)" [ngClass]="{ info: v == selectedVersion }">
+                    <td class="text-center">
+                        {{v.versionId}}
+                    </td>
+                    <td class="text-center">
+                        {{v.dateTimeLocal}}
+                    </td>
+                    <td class="text-center">
+                        {{v.repositoryId}}
+                    </td>
+                    <td class="text-center">
+                        <span *ngIf="isActiveVersion(v)" class="glyphicon glyphicon-ok"></span>
+                    </td>
+                    <td class="text-center">
+                        <ng-template [ngIf]="idx == 0">
+                            ---
+                        </ng-template>
+                        <ng-template [ngIf]="idx > 0">
+                            {{v.status | lowercase}}
+                            <button class="btn btn-xs btn-default" (click)="closeVersion(v)"
+                                [disabled]="v.status != 'INITIALIZED' || isActiveVersion(v)">
+                                Close
+                            </button>
+                        </ng-template>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

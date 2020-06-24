@@ -11,8 +11,8 @@
         <input class="input-sm form-control" style="margin-left: 6px;" [(ngModel)]="name">
     </div>
 
-    <div class="subPanel vbox">
-        <div class="subPanel-heading">
+    <div class="panel panel-alt vbox">
+        <div class="panel-heading">
             <label style="flex: 1">Shared Patterns:</label>
             <div class="btn-toolbar">
                 <div class="btn-group btn-group-xs">
@@ -23,7 +23,7 @@
                 </div>
             </div>
         </div>
-        <div class="subPanel-body vbox scrollableContainer" style="min-height: 100px;">
+        <div class="panel-body vbox scrollableContainer" style="min-height: 100px;">
             <div *ngFor="let p of patterns" (click)="selectedPattern = p" class="listItem" [ngClass]="{ active: p == selectedPattern }">
                 {{p.name}}
             </div>

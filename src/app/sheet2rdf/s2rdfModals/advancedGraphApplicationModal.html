@@ -87,8 +87,8 @@
         </div>
         <div class="panel-body vbox">
 
-            <div class="subPanel" style="margin-top: 4px;">
-                <div class="subPanel-heading">
+            <div class="panel panel-alt" style="margin-top: 4px;">
+                <div class="panel-heading">
                     <label style="flex: 1">Prefix-Namespace mappings</label>
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs">
@@ -101,7 +101,7 @@
                         </div>
                     </div>
                 </div>
-                <div #prefixnstable class="subPanel-body table-responsive" style="min-height: 60px; max-height: 100px;">
+                <div #prefixnstable class="panel-body table-responsive" style="min-height: 60px; max-height: 100px;">
                     <table class="table table-condensed">
                         <thead>
                             <tr>
@@ -123,11 +123,11 @@
                 </div>
             </div>
 
-            <div class="subPanel vbox" style="margin-top: 4px;">
-                <div class="subPanel-heading">
+            <div class="panel panel-alt vbox" style="margin-top: 4px;">
+                <div class="panel-heading">
                     <label style="flex: 1">Graph pattern</label>
                 </div>
-                <div class="subPanel-body vbox">
+                <div class="panel-body vbox">
                     <div class="alert alert-info alert-dismissible alert-multiline" style="margin-bottom: 5px;">
                         The graph pattern must contain only node IDs already defined in any header.<br>
                         It could also contains a <span style="font-family: monospace;" ngNonBindable>{{pred}}</span>
@@ -138,7 +138,7 @@
                     </div>
                     <textarea class="form-control input-sm" style="resize: vertical" rows="5" [(ngModel)]="graphPattern"></textarea>
                 </div>
-                <div class="subPanel-footer">
+                <div class="panel-footer">
                     <div class="hbox" style="align-items: center">
                         <label style="margin-right: 4px;">Default predicate:</label>
                         <resource-picker [resource]="defaultPredicate" size="xs" [config]="{ roles: ['property']}"

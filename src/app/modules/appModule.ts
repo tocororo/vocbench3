@@ -34,6 +34,7 @@ import { GraphModule } from './graphModule';
 import { HistoryValidationModule } from "./historyValidationModule";
 import { ICVModule } from "./icvModule";
 import { MetadataModule } from "./metadataModule";
+import { NotificationsModule } from './notificationsModule';
 import { PreferencesModule } from "./preferencesModule";
 import { ProjectModule } from "./projectModule";
 import { ResourceMetadataModule } from './resourceMetadataModule';
@@ -63,6 +64,7 @@ import { VBModalModule } from "./vbModalModule";
             HistoryValidationModule,
             ICVModule,
             MetadataModule,
+            NotificationsModule,
             PreferencesModule,
             ProjectModule,
             ResourceMetadataModule,

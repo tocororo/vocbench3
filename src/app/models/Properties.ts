@@ -45,6 +45,8 @@ export class Properties {
     static pref_s2rdf_use_headers: string = "s2rdf_use_headers";
     static pref_s2rdf_fs_naming_strategy: string = "s2rdf_fs_naming_strategy";
 
+    static pref_notifications_status: string = "notifications_status";
+
     static setting_languages: string = "languages";
     static setting_remote_configs = "remote_configs";
     static setting_experimental_features_enabled = "experimental_features_enabled";

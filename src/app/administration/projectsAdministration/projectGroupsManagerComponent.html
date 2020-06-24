@@ -1,21 +1,21 @@
 <div class="hbox">
 
-    <div class="subPanel vbox">
-        <div class="subPanel-heading">
+    <div class="panel panel-alt vbox">
+        <div class="panel-heading">
             <label style="flex: 1;">Groups:</label>
         </div>
-        <div class="subPanel-body vbox scrollableContainer">
+        <div class="panel-body vbox scrollableContainer">
             <div *ngFor="let g of groups" class="listItem" [ngClass]="{active: g == selectedGroup}" (click)="selectGroup(g)">
                 <span style="flex: 1">{{g.shortName}}</span>
             </div> 
         </div>
     </div>
 
-    <div *ngIf="project && selectedGroup" class="subPanel vbox" style="margin-left: 5px; flex: 3;">
-        <div class="subPanel-heading">
+    <div *ngIf="project && selectedGroup" class="panel panel-alt vbox" style="margin-left: 5px; flex: 3;">
+        <div class="panel-heading">
             <label>Project-Group settings:</label>
         </div>
-        <div class="subPanel-body vbox">
+        <div class="panel-body vbox">
 
             <div *ngIf="projectClosed; else elseBlock" class="alert alert-warning">
                 Project {{project.getName()}} is closed. It is possible to edit group settings only for open projects.
@@ -51,8 +51,8 @@ If any of the two is selected (with one or more properties), then only the selec
                         <div class="panel-body vbox">
         
                             <div class="hbox">
-                                <div class="subPanel vbox">
-                                    <div class="subPanel-heading">
+                                <div class="panel panel-alt vbox">
+                                    <div class="panel-heading">
                                         <label style="flex:1">Broader</label>
                                         <div class="btn-toolbar" role="toolbar">
                                             <div class="btn-group btn-group-xs">
@@ -65,13 +65,13 @@ If any of the two is selected (with one or more properties), then only the selec
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="subPanel-body vbox" style="min-height: 70px;">
+                                    <div class="panel-body vbox" style="min-height: 70px;">
                                         <resource-list [resources]="broaderProps" (nodeSelected)="selectedBroader = $event"></resource-list>
                                     </div>
                                 </div>
         
-                                <div class="subPanel vbox" style="margin-left: 4px;">
-                                    <div class="subPanel-heading">
+                                <div class="panel panel-alt vbox" style="margin-left: 4px;">
+                                    <div class="panel-heading">
                                         <label style="flex:1">Narrower</label>
                                         <div class="btn-toolbar" role="toolbar">
                                             <div class="btn-group btn-group-xs">
@@ -84,13 +84,13 @@ If any of the two is selected (with one or more properties), then only the selec
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="subPanel-body vbox" style="min-height: 70px;">
+                                    <div class="panel-body vbox" style="min-height: 70px;">
                                         <resource-list [resources]="narrowerProps" (nodeSelected)="selectedNarrower = $event"></resource-list>
                                     </div>
                                 </div>
                             </div>
         
-                            <div>
+                            <div style="margin-top: 5px;">
                                 <div class="checkbox-inline">
                                     <label>
                                         <input type="checkbox" [(ngModel)]="syncInverse" (ngModelChange)="onSyncChange()">Sync inverse properties

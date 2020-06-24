@@ -24,8 +24,8 @@
             <input type="checkbox" style="margin-left: 6px;" [(ngModel)]="filterEnabled" title="Enable filter">
         </div>
         <div class="panel-body hbox">
-            <div class="subPanel vbox">
-                <div class="subPanel-heading">
+            <div class="panel panel-alt vbox">
+                <div class="panel-heading">
                     <label style="flex: 1">Classes</label>
                     <div class="btn-toolbar" role="toolbar">
                         <button class="btn btn-default btn-xs" title="Rendering" (click)="renderingClasses = !renderingClasses"
@@ -42,7 +42,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="subPanel-body scrollableContainer">
+                <div class="panel-body scrollableContainer">
                     <div *ngFor="let f of filterMapRes" class="listItem" (click)="selectFilteredClass(f.cls)"
                         [ngClass]="{ active: f.cls == selectedFilteredClass }">
                         <rdf-resource [resource]="f.cls" [rendering]="renderingClasses"></rdf-resource>
@@ -50,8 +50,8 @@
                 </div>
             </div>
 
-            <div class="subPanel vbox" style="margin-left: 4px;">
-                <div class="subPanel-heading">
+            <div class="panel panel-alt vbox" style="margin-left: 4px;">
+                <div class="panel-heading">
                     <label style="flex: 1">Filtered subClasses</label>
                     <div class="btn-toolbar" role="toolbar">
                         <button class="btn btn-default btn-xs" title="Rendering" (click)="renderingFilter = !renderingFilter"
@@ -68,7 +68,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="subPanel-body scrollableContainer">
+                <div class="panel-body scrollableContainer">
                     <div *ngFor="let f of getFilterSubClasses()" class="listItem">
                         <input type="checkbox" style="margin-right: 5px;" [(ngModel)]="f.checked" [disabled]="f.disabled">
                         <rdf-resource [resource]="f.resource" [rendering]="renderingFilter" style="flex: 1;"></rdf-resource>

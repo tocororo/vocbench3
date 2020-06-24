@@ -1,6 +1,6 @@
 <div class="hbox">
-    <div class="subPanel vbox">
-        <div class="subPanel-heading">
+    <div class="panel panel-alt vbox">
+        <div class="panel-heading">
             <label style="flex: 1;">Users:</label>
             <div class="btn-group btn-group-xs">
                 <button class="btn btn-default" (click)="addUserToProject()" [disabled]="!project" title="Add user to project">
@@ -12,31 +12,31 @@
                 </button>
             </div>
         </div>
-        <div class="subPanel-body vbox scrollableContainer" (keydown)="moveUser($event)">
+        <div class="panel-body vbox scrollableContainer" (keydown)="moveUser($event)">
             <div *ngFor="let u of usersBound" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
                 <span style="flex: 1">{{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span></span>
                 <span *ngIf="u.isAdmin()" class="badge">Admin</span>
             </div> 
         </div>
     </div>
-    <div *ngIf="selectedUser" class="subPanel vbox" style="margin-left: 5px; flex: 3;">
-        <div class="subPanel-heading">
+    <div *ngIf="selectedUser" class="panel panel-alt vbox" style="margin-left: 5px; flex: 3;">
+        <div class="panel-heading">
             <label style="flex: 1;">Project-User settings:</label>
             <button *ngIf="isLoggedUserAdmin()" class="btn btn-xs btn-default" (click)="cloneSettings()" title="Duplicate settings to another project">
                 <span class="glyphicon glyphicon-duplicate"></span>
             </button>
         </div>
-        <div class="subPanel-body vbox scrollableContainer">
+        <div class="panel-body vbox scrollableContainer">
 
             <!-- Roles -->
             <div *ngIf="isRoleManagementAuthorized() && !isSelectedUserAdmin()" class="panel panel-default vbox" style="min-height: 200px;">
                 <div class="panel-body vbox">
                     <div class="hbox">
-                        <div class="subPanel vbox" style="margin: 0px">
-                            <div class="subPanel-heading">
+                        <div class="panel panel-alt vbox">
+                            <div class="panel-heading">
                                 <label>Assigned Roles:</label>
                             </div>
-                            <div class="subPanel-body vbox scrollableContainer">
+                            <div class="panel-body vbox scrollableContainer">
                                 <ng-template [ngIf]="puBinding">
                                     <div *ngFor="let r of puBinding.getRoles()" (click)="selectUserRole(r)"
                                         class="listItem" [ngClass]="{active: r == selectedUserRole}">
@@ -53,11 +53,11 @@
                                 Remove <span class="glyphicon glyphicon-chevron-right"></span>
                             </button>
                         </div>
-                        <div class="subPanel vbox" style="margin: 0px">
-                            <div class="subPanel-heading">
+                        <div class="panel panel-alt vbox">
+                            <div class="panel-heading">
                                 <label>Available Roles:</label>
                             </div>
-                            <div class="subPanel-body vbox scrollableContainer">
+                            <div class="panel-body vbox scrollableContainer">
                                 <div *ngFor="let r of roleList" class="listItem" (click)="selectRole(r)"
                                     [ngClass]="{active: r == selectedRole, disabled: isRoleAlreadyAssigned(r)}">
                                     <span style="flex: 1;">{{r.getName()}}</span>
@@ -74,8 +74,8 @@
             <div *ngIf="isGroupManagementAuthorized()" class="panel panel-default vbox" style="min-height: 120px; margin-top: 4px">
                 <div class="panel-body vbox">
                     <div class="hbox">
-                        <div class="subPanel vbox" style="margin: 0px">
-                            <div class="subPanel-heading">
+                        <div class="panel panel-alt vbox">
+                            <div class="panel-heading">
                                 <label style="flex: 1">Assigned Group:</label>
                                 <button *ngIf="puBinding?.getGroup()" class="btn btn-xs btn-default" [ngClass]="{ active: puBinding.isSubjectToGroupLimitations()}" (click)="changeGroupLimitations()" 
                                 title="If enabled, the user is subject to the group limitations" [disabled]="selectedUser.isAdmin()">
@@ -83,7 +83,7 @@
                                     <span *ngIf="!puBinding.isSubjectToGroupLimitations()" class="grayText">Apply restrictions</span>
                                 </button>
                             </div>
-                            <div class="subPanel-body vbox scrollableContainer">
+                            <div class="panel-body vbox scrollableContainer">
                                 <ng-template [ngIf]="puBinding">
                                     <div *ngIf="puBinding.getGroup()" class="listItem" [ngClass]="{active: selectedUserGroup}"
                                         (click)="selectUserGroup(puBinding.getGroup())">
@@ -100,11 +100,11 @@
                                 Remove <span class="glyphicon glyphicon-chevron-right"></span>
                             </button>
                         </div>
-                        <div class="subPanel vbox" style="margin: 0px">
-                            <div class="subPanel-heading">
+                        <div class="panel panel-alt vbox" style="margin: 0px">
+                            <div class="panel-heading">
                                 <label>Available Groups:</label>
                             </div>
-                            <div class="subPanel-body vbox scrollableContainer">
+                            <div class="panel-body vbox scrollableContainer">
                                 <div *ngFor="let g of groupList" class="listItem" (click)="selectGroup(g)"
                                     [ngClass]="{active: g == selectedGroup, disabled: isGroupAlreadyAssigned(g)}" >
                                     {{g.shortName}}
@@ -119,11 +119,11 @@
             <div class="panel panel-default vbox" style="min-height: 320px; margin-top: 4px;">
                 <div class="panel-body vbox">
                     <div class="hbox">
-                        <div class="subPanel vbox" style="margin: 0px">
-                            <div class="subPanel-heading">
+                        <div class="panel panel-alt vbox" style="margin: 0px">
+                            <div class="panel-heading">
                                 <label>Assigned Languages:</label>
                             </div>
-                            <div class="subPanel-body vbox scrollableContainer">
+                            <div class="panel-body vbox scrollableContainer">
                                 <ng-container *ngIf="puBinding">
                                     <div *ngFor="let l of puLanguages" class="listItem" [ngClass]="{active: l == selectedUserLang}" 
                                         (click)="selectUserLang(l)">
@@ -177,14 +177,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="subPanel vbox" style="margin: 0px">
-                            <div class="subPanel-heading">
+                        <div class="panel panel-alt vbox" style="margin: 0px">
+                            <div class="panel-heading">
                                 <label style="flex: 1">Available Languages:</label>
                                 <button class="btn btn-xs btn-default" (click)="toggleFilterProficencies()" [ngClass]="{ active: filterProficiencies }">
                                     <span class="glyphicon glyphicon-star" title="Show only language proficiencies of the user"></span>
                                 </button>
                             </div>
-                            <div class="subPanel-body vbox scrollableContainer">
+                            <div class="panel-body vbox scrollableContainer">
                                 <div *ngFor="let l of availableLanguages" class="listItem" [ngClass]="{active: l == selectedLang}" (click)="selectLang(l)">
                                     <lang-item [language]="l" showTag="true" style="flex: 1" [disabled]="isLangAlreadyAssigned(l)"></lang-item>
                                     <span *ngIf="l.proficiency" class="glyphicon glyphicon-star" 
@@ -198,7 +198,7 @@
             </div>
 
             <!-- Templates -->
-            <div *ngIf="isLoggedUserAdmin()" class="panel panel-default vbox" style="min-height: 420px; margin-top: 4px;">
+            <div *ngIf="isLoggedUserAdmin()" class="panel panel-alt vbox" style="min-height: 420px; margin-top: 4px;">
                 <div class="panel-heading">
                     <label style="flex: 1;">
                         ResourceView template

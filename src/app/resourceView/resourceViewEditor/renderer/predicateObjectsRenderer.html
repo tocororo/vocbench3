@@ -1,6 +1,6 @@
-<div class="subPanel">
+<div class="panel panel-alt">
     
-    <div class="subPanel-heading">
+    <div class="panel-heading">
         <label style="flex: 1">{{predicateObjects.getPredicate().getShow()}}</label>
         <div class="btn-group">
             <button class="btn btn-xs btn-default predObjRenderPanelBtn" style="padding: 3px 6px;" (click)="addValue()"
@@ -24,7 +24,7 @@
 
     </div>
     
-    <div class="subPanel-body">
+    <div class="panel-body">
 
         <ng-container *ngFor="let obj of predicateObjects.getObjects(); let i = index">
             <resview-value-renderer *ngIf="showObject(i)"

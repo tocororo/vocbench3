@@ -12,8 +12,8 @@
 
             <div class="hbox">
 
-                <div class="subPanel vbox">
-                    <div class="subPanel-heading">
+                <div class="panel panel-alt vbox">
+                    <div class="panel-heading">
                         <label style="flex: 1">Custom Forms:</label>
                         <div class="btn-group btn-group-xs" role="group">
                             <button class="btn btn-default" title="Create Custom Form" (click)="createCustomForm()"
@@ -42,15 +42,15 @@
                             </button>
                         </div>
                     </div>
-                    <div class="subPanel-body vbox scrollableContainer">
+                    <div class="panel-body vbox scrollableContainer">
                         <div *ngFor="let cf of customFormList" (click)="selectCustomForm(cf)" class="listItem" [ngClass]="{ active: cf == selectedCustomForm, grayText: cf.level == 'system' }">
                             {{cf.id}}
                         </div>
                     </div>
                 </div>
                 
-                <div class="subPanel vbox" style="margin-left: 4px;">
-                    <div class="subPanel-heading">
+                <div class="panel panel-alt vbox" style="margin-left: 4px;">
+                    <div class="panel-heading">
                         <label style="flex: 1">Form Collections:</label>
                         <div class="btn-group btn-group-xs" role="group">
                             <button class="btn btn-default" title="Create Form Collection" (click)="createFormCollection()"
@@ -79,7 +79,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="subPanel-body vbox scrollableContainer">
+                    <div class="panel-body vbox scrollableContainer">
                         <div *ngFor="let fc of formCollectionList" (click)="selectFormColl(fc)" class="listItem" [ngClass]="{ active: fc == selectedFormColl, grayText: fc.level == 'system' }">
                             {{fc.id}}
                         </div>
@@ -89,8 +89,8 @@
             </div>
 
 
-            <div class="subPanel vbox">
-                <div class="subPanel-heading">
+            <div class="panel panel-alt vbox" style="margin-top: 4px;">
+                <div class="panel-heading">
                     <label style="flex: 1">Forms mapping:</label>
                     <div class="btn-group btn-group-xs" role="group">
                         <button class="btn btn-default" title="Create Resource - FormCollection mapping" (click)="createFormCollMapping()"
@@ -103,7 +103,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="subPanel-body vbox">
+                <div class="panel-body vbox">
                     
                     <div class="scrollableContainer">
                         <table class="table table-condensed table-borderless table-hoverable">

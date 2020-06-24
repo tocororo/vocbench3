@@ -4,8 +4,8 @@
     </div>
     <div class="panel-body hbox">
 
-        <div class="subPanel vbox">
-            <div class="subPanel-heading">
+        <div class="panel panel-alt vbox">
+            <div class="panel-heading">
                 <label style="flex: 1">Metadata Patterns:</label>
                 <div class="btn-toolbar">
                     <div class="btn-group btn-group-xs">
@@ -43,15 +43,15 @@
                     </div>
                 </div>
             </div>
-            <div class="subPanel-body vbox scrollableContainer">
+            <div class="panel-body vbox scrollableContainer">
                 <div *ngFor="let p of patterns" (click)="selectedPattern = p" class="listItem" [ngClass]="{ active: p == selectedPattern, grayText: p.scope == 'FACTORY' }">
                     {{p.name}}
                 </div>
             </div>
         </div>
 
-        <div class="subPanel vbox" style="margin-left: 6px;">
-            <div class="subPanel-heading">
+        <div class="panel panel-alt vbox" style="margin-left: 6px;">
+            <div class="panel-heading">
                 <label style="flex: 1">Pattern Associations:</label>
                 <div class="btn-group btn-group-xs">
                     <button class="btn btn-default" title="Create Pattern Association" (click)="createAssociation()" [disabled]="!createAssociationAuthorized">
@@ -62,7 +62,7 @@
                     </button>
                 </div>
             </div>
-            <div class="subPanel-body vbox scrollableContainer">
+            <div class="panel-body vbox scrollableContainer">
                 <table class="table table-condensed table-borderless table-hoverable">
                     <thead style="border-bottom: 1px solid #ddd;">
                         <tr>

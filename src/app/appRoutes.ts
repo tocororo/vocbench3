@@ -27,6 +27,7 @@ import { ResetPasswordComponent } from "./user/resetPasswordComponent";
 import { UserProfileComponent } from "./user/userProfileComponent";
 import { AdminGuard, AuthGuard, ProjectGuard } from "./utils/CanActivateGuards";
 import { UserResolver } from "./utils/UserResolver";
+import { NotificationsComponent } from './notifications/notificationsComponent';
 
 export const routes: Routes = [
     { path: "", redirectTo: "/Home", pathMatch: "full" },
@@ -47,6 +48,7 @@ export const routes: Routes = [
     { path: "Collaboration", component: CollaborationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "CustomForm", component: CustomFormConfigComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "CustomServices", component: CustomServiceRouterComponent, canActivate: [AuthGuard, ProjectGuard] },
+    { path: "Notifications", component: NotificationsComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "ResourceMetadata", component: ResourceMetadataComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Registration/:firstAccess", component: RegistrationComponent }, //param firstAccess 1 to indicate that there's no user registered
     { path: "ResetPassword/:token", component: ResetPasswordComponent },

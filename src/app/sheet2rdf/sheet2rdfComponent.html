@@ -21,8 +21,8 @@
 
         <div #topPanel class="hbox" [ngStyle]="{ 'flex': topPanelFlex }">
 
-            <div #previewPanel class="subPanel vbox" [ngStyle]="{ 'flex': previewPanelFlex }" style="margin-bottom: 0px;">
-                <div class="subPanel-heading">
+            <div #previewPanel class="panel panel-alt vbox" [ngStyle]="{ 'flex': previewPanelFlex }">
+                <div class="panel-heading">
                     <span style="flex: 1;">
                         <label>Spreadsheet preview</label>
                         <span *ngIf="truncatedRows != totalRows" style="margin-left: 5px;">(Rows: {{truncatedRows}} out of {{totalRows}})</span>
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="subPanel-body vbox" style="padding: 0px; background: #eee;">
+                <div class="panel-body vbox" style="padding: 0px; background: #eee;">
                     <table class="table scrollableContainer">
                         <tbody>
                             <tr>
@@ -69,7 +69,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="subPanel-footer">
+                <div class="panel-footer">
                     <div class="dropdown pull-right dropup">
                         <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
                             Legend <span class="caret"></span>
@@ -91,8 +91,8 @@
 
             <div class="sliderX" (mousedown)="onMousedownX($event);"></div>
 
-            <div #pearlPanel class="subPanel vbox" [ngStyle]="{ 'flex': pearlPanelFlex }" style="margin-bottom: 0px;">
-                <div class="subPanel-heading">
+            <div #pearlPanel class="panel panel-alt vbox" [ngStyle]="{ 'flex': pearlPanelFlex }">
+                <div class="panel-heading">
                     <label style="flex: 1;">
                         Pearl
                     </label>
@@ -115,7 +115,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="subPanel-body hbox">
+                <div class="panel-body hbox">
                     <pearl-editor [(ngModel)]="pearl" (ngModelChange)="onPearlChange()" style="flex: 1;" [disabled]="!tablePreview">
                     </pearl-editor>
                     <button class="btn btn-default btn-xs" (click)="insertConverter()" style="align-self: flex-end; margin-left: 4px;"
@@ -130,8 +130,8 @@
         <div class="sliderY" (mousedown)="onMousedownY($event);"></div>
 
         <div #triplesPanel class="vbox" [ngStyle]="{ 'flex': triplesPanelFlex }">
-            <div class="subPanel vbox">
-                <div class="subPanel-heading">
+            <div class="panel panel-alt vbox">
+                <div class="panel-heading">
                     <span style="flex: 1;">
                         <label>Generated triples preview</label>
                         <span *ngIf="truncatedTriples != totalTriples" style="margin-left: 5px;">({{truncatedTriples}} out of {{totalTriples}})</span>
@@ -154,7 +154,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="subPanel-body vbox scrollableContainer">
+                <div class="panel-body vbox scrollableContainer">
                     <table class="table table-condensed table-hoverable" style="flex: 1">
                         <thead>
                             <tr>

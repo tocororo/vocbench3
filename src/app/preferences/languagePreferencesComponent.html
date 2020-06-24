@@ -1,6 +1,6 @@
-<div class="subPanel vbox">
+<div class="panel panel-alt vbox">
 
-    <div class="subPanel-heading">
+    <div class="panel-heading">
         <label style="flex: 1">Languages:</label>
         <div class="pull-right">
             <div class="btn-toolbar" role="toolbar">
@@ -18,7 +18,7 @@
             </div>
         </div>
     </div>
-    <div class="subPanel-body vbox">
+    <div class="panel-body vbox">
         <lang-rendering-pref *ngIf="activePanel == 'rendering'" class="vbox"></lang-rendering-pref>
         <lang-editing-pref *ngIf="activePanel == 'editing'" class="vbox"></lang-editing-pref>
         <lang-value-filter-pref *ngIf="activePanel == 'valuefilter'" class="vbox"></lang-value-filter-pref>

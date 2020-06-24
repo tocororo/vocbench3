@@ -51,8 +51,8 @@
 
             <div class="hbox" style="margin-top: 4px;">
                 <!-- Other versions -->
-                <div class="subPanel vbox">
-                    <div class="subPanel-heading">
+                <div class="panel panel-alt vbox">
+                    <div class="panel-heading">
                         <label style="flex: 1;">Other versions:</label>
                         <div class="btn-group btn-group-xs" role="group">
                             <button class="btn btn-default" title="Add Dataset Version" (click)="addDatasetVersion()"
@@ -65,7 +65,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="subPanel-body scrollableContainer">
+                    <div class="panel-body scrollableContainer">
                         <dataset-metadata *ngFor="let v of selectedCatalog?.versions" [dataset]="v" style="margin-bottom: 2px;"
                             (click)="selectedVersion = v" [ngClass]="{ activePanel : v == selectedVersion }" version="true"
                             (update)="onVersionUpdate()">
@@ -73,8 +73,8 @@
                     </div>
                 </div>
                 <!-- Embedded lex sets -->
-                <div class="subPanel vbox blockingDivHost" style="margin-left: 4px;">
-                    <div class="subPanel-heading">
+                <div class="panel panel-alt vbox blockingDivHost" style="margin-left: 4px;">
+                    <div class="panel-heading">
                         <label style="flex: 1;">Embedded Lexicalization Sets:</label>
                         <div class="btn-group btn-group-xs" role="group">
                             <div class="btn-group btn-group-xs" role="group" title="Add Embedded Lexicalization Set">
@@ -96,7 +96,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="subPanel-body scrollableContainer">
+                    <div class="panel-body scrollableContainer">
                         <lexicalization-set-metadata *ngFor="let ls of lexicalizationSets" style="margin-bottom: 2px;"
                             [lexicalizationSetMetadata]="ls" [dataset]="selectedCatalog?.abstractDataset"
                             (click)="selectedLexicalizationSet = ls" [ngClass]="{ activePanel : ls == selectedLexicalizationSet }">

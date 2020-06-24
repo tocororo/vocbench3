@@ -171,11 +171,11 @@
             </form>
 
             <!--Triple store configuration-->
-            <div class="subPanel">
-                <div class="subPanel-heading">
+            <div class="panel panel-alt" style="margin-bottom: 4px;">
+                <div class="panel-heading">
                     <label>Data Store</label>
                 </div>
-                <div class="subPanel-body">
+                <div class="panel-body">
 
                     <form class="form-horizontal">
                         <div class="form-group">
@@ -286,18 +286,18 @@
             </div>
 
             <!--Extention points configuration-->
-            <div class="subPanel">
-                <div class="subPanel-heading">
+            <div class="panel panel-alt" style="margin-bottom: 4px;">
+                <div class="panel-heading">
                     <div class="expandCollapseBtnContainer">
                         <img src="../../../assets/images/icons/arrow.png" (click)="extPointPanelOpen = !extPointPanelOpen"
                             [ngClass]="{'arrow-right' : !extPointPanelOpen}">
                     </div>
                     <label style="flex: 1">Optional settings:</label>
                 </div>
-                <div class="subPanel-body" *ngIf="extPointPanelOpen">
+                <div class="panel-body" *ngIf="extPointPanelOpen">
 
-                    <div class="subPanel">
-                        <div class="subPanel-heading">
+                    <div class="panel panel-alt" style="margin-bottom: 4px;">
+                        <div class="panel-heading">
                             <label style="flex: 1;">URI Generator</label>
                             <div class="checkbox" style="margin: 0px">
                                 <label style="min-height: initial;">
@@ -305,7 +305,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="subPanel-body">
+                        <div class="panel-body">
                             <form *ngIf="!uriGenUseDefaultSetting" class="form-horizontal">
                                 <div class="form-group">
                                     <label class="control-label col-sm-1">Plugin:</label>
@@ -337,8 +337,8 @@
                         </div>
                     </div>
 
-                    <div class="subPanel">
-                        <div class="subPanel-heading">
+                    <div class="panel panel-alt" style="margin-bottom: 4px;">
+                        <div class="panel-heading">
                             <label style="flex: 1;">Rendering Engine</label>
                             <div class="checkbox" style="margin: 0px">
                                 <label style="min-height: initial;">
@@ -346,7 +346,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="subPanel-body">
+                        <div class="panel-body">
                             <form *ngIf="!rendEngUseDefaultSetting" class="form-horizontal">
                                 <div class="form-group">
                                     <label class="control-label col-sm-1">Plugin:</label>
@@ -379,8 +379,8 @@
                         </div>
                     </div>
 
-                    <div class="subPanel">
-                        <div class="subPanel-heading">
+                    <div class="panel panel-alt" style="margin-bottom: 4px;">
+                        <div class="panel-heading">
                             <label style="flex: 1;">Resource Metadata</label>
                             <div class="checkbox" style="margin: 0px">
                                 <label style="min-height: initial;">
@@ -389,7 +389,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="subPanel-body">
+                        <div class="panel-body">
                             <ng-container *ngIf="useResourceMetadata">
                                 <table class="table table-condensed table-borderless">
                                     <colgroup>
@@ -440,8 +440,8 @@
                         </div>
                     </div>
 
-                    <div class="subPanel">
-                        <div class="subPanel-heading">
+                    <div class="panel panel-alt" style="margin-bottom: 4px;">
+                        <div class="panel-heading">
                             <label style="flex: 1;">SHACL Shape Validation</label>
                             <div class="checkbox" style="margin: 0px;">
                                 <label style="min-height: initial;">
@@ -450,7 +450,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="subPanel-body">
+                        <div class="panel-body">
                             <ng-container *ngIf="enableSHACL">
                                 <settings-renderer *ngIf="isSelectedRepoAccessCreateMode()" [(ngModel)]="shaclSettings" [disabled]="!enableSHACL">
                                 </settings-renderer>
@@ -462,8 +462,8 @@
                         </div>
                     </div>
 
-                    <div class="subPanel">
-                        <div class="subPanel-heading">
+                    <div class="panel panel-alt">
+                        <div class="panel-heading">
                             <label style="flex: 1;">Trivial Inference Engine</label>
                             <div class="checkbox" style="margin: 0px;">
                                 <label style="min-height: initial;">

@@ -383,30 +383,6 @@ img.disabled  {
 	flex: 1;
 }
 
-.subPanel {
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	margin-bottom: 5px;
-}
-.subPanel-heading {
-    display: flex;
-    align-items: center;
-    background: linear-gradient(#fff, #eee);
-    padding: 4px 8px;
-    border-bottom: 1px solid #ccc;
-    min-height: 30px;
-}
-.subPanel-body {
-	padding: 4px;
-}
-.subPanel-footer {
-    padding: 4px;
-    background-color: #f5f5f5;
-    border-top: 1px solid #ddd;
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
-}
-
 .groupPanel {
     border: 1px solid #aaa;
     border-radius: 4px;
@@ -812,6 +788,12 @@ nav {
     min-height: 30px;
     background: linear-gradient(#FFFFFF, #CACACA);
     border-color: #BFBFBF;
+}
+
+.panel-alt { border-color: #ddd; }
+.panel-alt > .panel-heading {
+    background: linear-gradient(#fff, #eee);
+    border-bottom: 1px solid #ccc;
 }
 
 label { margin-bottom: 0px; }

@@ -45,6 +45,7 @@ import { Sheet2RDFServices } from "../services/sheet2rdfServices";
 import { SkosServices } from "../services/skosServices";
 import { SkosxlServices } from "../services/skosxlServices";
 import { SparqlServices } from "../services/sparqlServices";
+import { UserNotificationServices } from '../services/userNotificationServices';
 import { UserServices } from "../services/userServices";
 import { UsersGroupsServices } from "../services/usersGroupsServices";
 import { ValidationServices } from "../services/validationServices";
@@ -101,6 +102,7 @@ import { VersionsServices } from "../services/versionsServices";
         SkosxlServices,
         SparqlServices,
         UserServices,
+        UserNotificationServices,
         UsersGroupsServices,
         ValidationServices,
         VersionsServices

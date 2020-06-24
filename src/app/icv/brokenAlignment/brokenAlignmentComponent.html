@@ -6,8 +6,8 @@
     <div class="panel-body vbox">
 
         <icv-config-panel [checkRoles]="checkRoles" (rolesChange)="onRolesChanged($event)">
-            <div class="subPanel vbox" style="flex: initial; margin: 2px;">
-                <div class="subPanel-heading">
+            <div class="panel panel-alt vbox" style="flex: initial; margin: 2px;">
+                <div class="panel-heading">
                     <span style="flex: 1;">
                         <label>Namespaces to check</label>
                         <span class="glyphicon glyphicon-info-sign"
@@ -27,7 +27,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="subPanel-body scrollableContainer" style="max-height: 170px;">
+                <div class="panel-body scrollableContainer" style="max-height: 170px;">
                     <table *ngIf="namespaces" class="table table-condensed table-borderless table-hoverable">
                         <thead>
                             <tr>

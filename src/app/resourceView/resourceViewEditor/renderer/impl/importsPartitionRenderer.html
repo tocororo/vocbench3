@@ -23,8 +23,8 @@
 
     <div class="groupPanel-body">
         <ng-template [ngIf]="!partitionCollapsed">
-            <div class="subPanel" *ngFor="let po of predicateObjectList">
-                <div class="subPanel-heading">
+            <div class="panel panel-alt" *ngFor="let po of predicateObjectList" style="margin-bottom: 4px;">
+                <div class="panel-heading">
                     <label style="flex: 1">{{po.getPredicate().getShow()}}</label>
                     <div class="btn-group pull-right">
                         <button class="btn btn-xs btn-default dropdown-toggle predObjRenderPanelBtn" style="padding: 3px 6px;"
@@ -40,7 +40,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="subPanel-body">
+                <div class="panel-body">
                     <ng-container *ngFor="let obj of po.getObjects()">
                         <resview-value-renderer
                             [subject]="resource" [predicate]="po.getPredicate()" [object]="obj" [rendering]="rendering" 

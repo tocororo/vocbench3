@@ -1,5 +1,5 @@
-<div class="subPanel vbox">
-    <div *ngIf="mode=='sparql'" class="subPanel-heading">
+<div class="panel panel-alt vbox">
+    <div *ngIf="mode=='sparql'" class="panel-heading">
         <label style="flex: 1">Variable bindings</label>
         <div class="btn-toolbar" role="toolbar">
             <button class="btn btn-xs btn-default" [ngClass]="{ active: showDisplayName }" (click)="showDisplayName = !showDisplayName" 
@@ -11,7 +11,7 @@
             </button>
         </div>
     </div>
-    <div class="subPanel-body vbox table-responsive">
+    <div class="panel-body vbox table-responsive">
         <table class="table table-condensed table-borderless">
             <colgroup>
                 <col>
@@ -58,7 +58,7 @@
             </tbody>
         </table>
     </div>
-    <div *ngIf="configurable" class="subPanel-footer">
+    <div *ngIf="configurable" class="panel-footer">
         <div class="checkbox" style="margin: 0px;">
             <label>
                 <input type="checkbox" [(ngModel)]="useBindings" (ngModelChange)="emitUpdate()">Use variable bindings

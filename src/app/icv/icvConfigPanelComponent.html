@@ -1,15 +1,15 @@
-<div class="subPanel vbox">
-    <div class="subPanel-heading">
+<div class="panel panel-alt vbox">
+    <div class="panel-heading">
         <div class="expandCollapseBtnContainer">
             <img src="../../assets/images/icons/arrow.png" (click)="configPanelOpen = !configPanelOpen"
                 [ngClass]="{'arrow-right': !configPanelOpen}">
         </div>
         <label>ICV configuration</label>
     </div>
-    <div class="subPanel-body">
+    <div class="panel-body">
         <div *ngIf="configPanelOpen" class="hbox">
-            <div *ngIf="checkRoles" class="subPanel vbox" style="margin: 2px;">
-                <div class="subPanel-heading">
+            <div *ngIf="checkRoles" class="panel panel-alt vbox" style="margin: 2px;">
+                <div class="panel-heading">
                     <label style="flex: 1">Resources to check</label>
                     <div class="btn-group btn-group-xs">
                         <button class="btn btn-default" (click)="checkAllRoles(true)" title="Check all">
@@ -20,7 +20,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="subPanel-body configPanel scrollableContainer">
+                <div class="panel-body configPanel scrollableContainer">
                     <table class="table table-condensed table-borderless table-hoverable">
                         <thead>
                             <tr>
@@ -41,8 +41,8 @@
                     </table>
                 </div>
             </div>
-            <div *ngIf="checkLanguages" class="subPanel vbox" style="margin: 2px;">
-                <div class="subPanel-heading">
+            <div *ngIf="checkLanguages" class="panel panel-alt vbox" style="margin: 2px;">
+                <div class="panel-heading">
                     <label style="flex: 1">Languages to check</label>
                     <div class="btn-group btn-group-xs">
                         <button class="btn btn-default" (click)="checkAllLangs(true)" title="Check all">
@@ -56,7 +56,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="subPanel-body configPanel scrollableContainer">
+                <div class="panel-body configPanel scrollableContainer">
                     <table class="table table-condensed table-borderless table-hoverable">
                         <thead>
                             <tr>

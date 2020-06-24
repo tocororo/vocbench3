@@ -5,18 +5,27 @@ import { LanguagePreferencesComponent } from "../preferences/languagePreferences
 import { LanguageEditingComponent } from "../preferences/languages/languageEditingComponent";
 import { LanguageRenderingComponent } from "../preferences/languages/languageRenderingComponent";
 import { LanguageValueFilterComponent } from "../preferences/languages/languageValueFilterComponent";
+import { NotificationsPreferencesComponent } from '../preferences/notifications/notificationsPreferencesComponent';
 import { ResourceViewPreferencesComponent } from '../preferences/resourceViewPreferencesComponent';
 import { VocbenchPreferencesComponent } from "../preferences/vocbenchPreferencesComponent";
 import { SharedModule } from './sharedModule';
 
-
 @NgModule({
     imports: [CommonModule, FormsModule, SharedModule],
     declarations: [
-        VocbenchPreferencesComponent, LanguagePreferencesComponent, ResourceViewPreferencesComponent,
-        LanguageEditingComponent, LanguageRenderingComponent, LanguageValueFilterComponent
+        LanguageEditingComponent,
+        LanguagePreferencesComponent,
+        LanguageRenderingComponent,
+        LanguageValueFilterComponent,
+        NotificationsPreferencesComponent,
+        ResourceViewPreferencesComponent,
+        VocbenchPreferencesComponent,
     ],
-    exports: [VocbenchPreferencesComponent, LanguageValueFilterComponent, ResourceViewPreferencesComponent],
+    exports: [
+        LanguageValueFilterComponent,
+        ResourceViewPreferencesComponent,
+        VocbenchPreferencesComponent,
+    ],
     providers: [],
 })
 export class PreferencesModule { }

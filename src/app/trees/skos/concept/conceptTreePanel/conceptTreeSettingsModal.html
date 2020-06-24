@@ -67,8 +67,8 @@
                     </div>
 
                     <div class="hbox">
-                        <div class="subPanel vbox">
-                            <div class="subPanel-heading">
+                        <div class="panel panel-alt vbox">
+                            <div class="panel-heading">
                                 <label style="flex:1">Broader</label>
                                 <div class="btn-toolbar" role="toolbar">
                                     <div class="btn-group btn-group-xs">
@@ -81,13 +81,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="subPanel-body vbox" style="min-height: 80px;">
+                            <div class="panel-body vbox" style="min-height: 80px;">
                                 <resource-list [resources]="broaderProps" (nodeSelected)="selectedBroader = $event"></resource-list>
                             </div>
                         </div>
 
-                        <div class="subPanel vbox" style="margin-left: 4px;">
-                            <div class="subPanel-heading">
+                        <div class="panel panel-alt vbox" style="margin-left: 4px;">
+                            <div class="panel-heading">
                                 <label style="flex:1">Narrower</label>
                                 <div class="btn-toolbar" role="toolbar">
                                     <div class="btn-group btn-group-xs">
@@ -100,7 +100,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="subPanel-body vbox" style="min-height: 80px;">
+                            <div class="panel-body vbox" style="min-height: 80px;">
                                 <resource-list [resources]="narrowerProps" (nodeSelected)="selectedNarrower = $event"></resource-list>
                             </div>
                         </div>

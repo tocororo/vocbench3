@@ -7,8 +7,8 @@
         Choose the graphs (among those exported) to which the filter will be applied
     </div>
 
-    <div class="subPanel vbox" style="margin-top: 5px;">
-        <div class="subPanel-heading">
+    <div class="panel panel-alt vbox" style="margin-top: 5px;">
+        <div class="panel-heading">
             <label style="flex: 1">
                 Graphs
             </label>
@@ -17,7 +17,7 @@
                 If no graph is selected, the filter will be applied to all of them
             </span>
         </div>
-        <div class="subPanel-body scrollableContainer">
+        <div class="panel-body scrollableContainer">
             <div *ngFor="let g of context.graphs" class="listItem" style="align-items: center">
                 <input type="checkbox" [(ngModel)]="g.checked">
                 <span style="margin-left: 5px;">{{g.graph.getURI()}}</span>

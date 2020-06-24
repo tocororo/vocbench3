@@ -56,9 +56,9 @@
                     </div>
                 </div>
                 <div *ngIf="searchDatasetResult?.facetAggregations" class="vbox scrollableContainer" style="flex: initial;">
-                    <div *ngFor="let facetAggregation of searchDatasetResult.facetAggregations" class="subPanel">
-                        <div class="subPanel-heading"><label>{{facetAggregation.displayName||facetAggregation.name}}</label></div>
-                        <div class="subPanel-body">
+                    <div *ngFor="let facetAggregation of searchDatasetResult.facetAggregations" class="panel panel-alt" style="margin-bottom: 4px;">
+                        <div class="panel-heading"><label>{{facetAggregation.displayName||facetAggregation.name}}</label></div>
+                        <div class="panel-body">
                             <div *ngFor="let bucket of facetAggregation.buckets" style="margin-bottom: 3px;">
                                 <button class="btn btn-sm btn-default" [ngClass]="{ active: lastSearchFacets[facetAggregation.name]?.items[bucket.name] }"
                                     (click)="toggleFacet(facetAggregation, bucket)">

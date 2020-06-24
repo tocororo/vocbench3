@@ -1,59 +1,57 @@
-<div class="vbox">
+<div class="panel panel-default vbox">
+    <div class="panel-heading">
+        <label>Vocbench Preferences</label>
+    </div>
     
-    <div class="panel panel-default vbox">
-        <div class="panel-heading">
-            <label>Vocbench Preferences</label>
-        </div>
-       
-        <div class="panel-body vbox">
+    <div class="panel-body scrollableContainer">
 
-            <res-view-pref></res-view-pref>
+        <res-view-pref></res-view-pref>
 
+        <div style="margin-top: 6px;">
             <div class="hbox">
+                <lang-pref style="flex: 1"></lang-pref>
+                <notifications-pref style="flex: 1; margin-left: 6px;"></notifications-pref>
+            </div>
+        </div>
 
-                <lang-pref></lang-pref>
+        <div class="panel panel-alt" style="margin-top: 6px;">
+            <div class="panel-heading">
+                <label style="flex: 1">Other preferences:</label>
+            </div>
+            <div class="panel-body scrollableContainer">
 
-                <div class="subPanel vbox" style="margin-left: 5px;">
-                    <div class="subPanel-heading">
-                        <label style="flex: 1">Other preferences:</label>
+                <div class="panel panel-default" style="padding: 4px; margin-bottom: 2px">
+                    <div class="panel-body">
+                        <div class="checkbox-inline">
+                            <label>
+                                <input type="checkbox" [(ngModel)]="showFlags" (ngModelChange)="onShowFlagChange()"> Show flags
+                            </label>
+                            <span class="glyphicon glyphicon-info-sign"
+                                title="Determines if the flags icon are shown in place of the language ISO code">
+                            </span>
+                        </div>
                     </div>
-                    <div class="subPanel-body scrollableContainer">
+                </div>
 
-                        <div class="panel panel-default" style="padding: 4px; margin-bottom: 2px">
-                            <div class="panel-body">
-                                <div class="checkbox-inline">
-                                    <label>
-                                        <input type="checkbox" [(ngModel)]="showFlags" (ngModelChange)="onShowFlagChange()"> Show flags
-                                    </label>
-                                    <span class="glyphicon glyphicon-info-sign"
-                                        title="Determines if the flags icon are shown in place of the language ISO code">
-                                    </span>
-                                </div>
+                <div class="panel panel-default" style="padding: 4px; margin-bottom: 2px">
+                    <div class="panel-body">
+                        <label>Project theme
+                            <span class="glyphicon glyphicon-info-sign" title="Changes the color of the header/navigationBar for the current project"></span>
+                        </label>
+                        <label *ngFor="let t of themes" class="checkbox-inline" style="margin-left: 12px;">
+                            <input type="checkbox" style="margin-left: -18px;" [checked]="t == selectedTheme" (click)="changeTheme(t)">
+                            <div style="border: 1px solid black; display: inline-block">
+                                <div style="width: 12px; height: 12px; float: left" [ngStyle]="{'background-color': t.mainColor}"></div>
+                                <div style="width: 12px; height: 12px; float: left" [ngStyle]="{'background-color': t.altColor}"></div>
                             </div>
-                        </div>
-
-                        <div class="panel panel-default" style="padding: 4px; margin-bottom: 2px">
-                            <div class="panel-body">
-                                <label>Project theme
-                                    <span class="glyphicon glyphicon-info-sign" title="Changes the color of the header/navigationBar for the current project"></span>
-                                </label>
-                                <label *ngFor="let t of themes" class="checkbox-inline" style="margin-left: 12px;">
-                                    <input type="checkbox" style="margin-left: -18px;" [checked]="t == selectedTheme" (click)="changeTheme(t)">
-                                    <div style="border: 1px solid black; display: inline-block">
-                                        <div style="width: 12px; height: 12px; float: left" [ngStyle]="{'background-color': t.mainColor}"></div>
-                                        <div style="width: 12px; height: 12px; float: left" [ngStyle]="{'background-color': t.altColor}"></div>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-
+                        </label>
                     </div>
                 </div>
 
             </div>
-
         </div>
 
+
     </div>
-    
+
 </div>

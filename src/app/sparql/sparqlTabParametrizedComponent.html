@@ -1,7 +1,7 @@
 <div class="hbox" style="flex: initial">
 
-    <div class="subPanel" style="flex: 2; margin-right: 4px;" >
-        <div class="subPanel-heading">
+    <div class="panel panel-alt" style="flex: 2; margin-right: 4px;" >
+        <div class="panel-heading">
             <span style="flex: 1">
                 <label>Stored query: </label> {{storedQueryName}}
             </span>
@@ -9,7 +9,7 @@
                 <span class="glyphicon glyphicon-pencil"></span>
             </button>
         </div>
-        <div class="subPanel-body">
+        <div class="panel-body">
             <yasgui [query]="query" (querychange)="onQueryChange($event)" [readonly]="true"></yasgui>
         </div>
     </div>

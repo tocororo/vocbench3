@@ -33,11 +33,11 @@
                 </span>
             </div>
             <div class="groupPanel-body hbox">
-                <div class="subPanel" style="flex: 1;">
-                    <div class="subPanel-heading">
+                <div class="panel panel-alt" style="flex: 1;">
+                    <div class="panel-heading">
                         <label>Signature</label>
                     </div>
-                    <div class="subPanel-body">
+                    <div class="panel-body">
                         <div *ngFor="let s of availableSignatures" class="listItem" (click)="selectSignature(s)" [ngClass]="{ active: s == selectedSignature }">
                             <span>{{getSignatureShow(s)}}</span>
                             <span *ngIf="s.getRequirementLevels() != 'IGNORED'" [title]="'Feature path ' + s.getRequirementLevels().toLocaleLowerCase()" style="margin-left: 4px; font-weight: bold;">
@@ -79,11 +79,11 @@
                 </div>
                 <!-- other converters -->
                 <ng-template #otherConvBlock>
-                    <div *ngIf="signatureParams?.length > 0" class="subPanel" style="flex: 2; margin-left: 4px;">
-                        <div class="subPanel-heading">
+                    <div *ngIf="signatureParams?.length > 0" class="panel panel-alt" style="flex: 2; margin-left: 4px;">
+                        <div class="panel-heading">
                             <label>Params</label>
                         </div>
-                        <div class="subPanel-body">
+                        <div class="panel-body">
                             <table class="table table-condensed table-borderless">
                                 <colgroup>
                                     <col style="width: 1%;">

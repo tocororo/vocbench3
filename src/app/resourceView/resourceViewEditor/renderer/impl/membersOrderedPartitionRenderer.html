@@ -23,11 +23,11 @@
 
     <div class="groupPanel-body">
         <ng-template [ngIf]="!partitionCollapsed">
-            <div class="subPanel" *ngFor="let po of predicateObjectList">
-                <div class="subPanel-heading">
+            <div class="panel panel-alt" *ngFor="let po of predicateObjectList">
+                <div class="panel-heading">
                     <label>{{po.getPredicate().getShow()}}</label>
                 </div>
-                <div class="subPanel-body">
+                <div class="panel-body">
                     <ng-container *ngFor="let obj of po.getObjects()">
                         <!-- Member list -->
                         <resview-value-renderer
@@ -37,8 +37,8 @@
                             (edit)="editHandler(po.getPredicate(), obj)" (update)="onObjectUpdate()">
                         </resview-value-renderer>
                         
-                        <div class="subPanel" style="margin-top: 4px">
-                            <div class="subPanel-heading">
+                        <div class="panel panel-alt" style="margin-top: 4px">
+                            <div class="panel-heading">
                                 <label style="flex: 1">Members</label>
                                 <div class="btn-group pull-right">
                                     <button class="btn btn-xs btn-default dropdown-toggle predObjRenderPanelBtn" style="padding: 3px 6px;"
@@ -53,7 +53,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="subPanel-body">
+                            <div class="panel-body">
                                 <div *ngFor="let memb of obj.members" class="listItem" (click)="selectMember(memb)"
                                     [ngClass]="{active: memb == selectedMember}">
                                     <editable-resource style="flex: 1" [resource]="memb" [rendering]="rendering"
