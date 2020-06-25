@@ -156,7 +156,7 @@ export class ProjectServices {
             rightDataset: rightDataset,
             uriGeneratorSpecification: (uriGeneratorSpecification) ? JSON.stringify(uriGeneratorSpecification) : null,
             renderingEngineSpecification: (renderingEngineSpecification) ? JSON.stringify(renderingEngineSpecification) : null,
-            resourceMetadataAssociations: JSON.stringify(resourceMetadataAssociations.map(p => [p.first, p.second])),
+            resourceMetadataAssociations: (resourceMetadataAssociations) ? JSON.stringify(resourceMetadataAssociations.map(p => [p.first, p.second])) : null,
             shaclEnabled: shaclEnabled,
             shaclSettings: shaclSettings,
             trivialInferenceEnabled: trivialInferenceEnabled,
