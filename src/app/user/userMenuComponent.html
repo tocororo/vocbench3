@@ -17,8 +17,8 @@
 	</li>
 	<li role="separator" class="divider"></li>
 	<li><a [routerLink]="['/Profile']"><span class="glyphicon glyphicon-user"></span> View profile</a></li>
-	<li *ngIf="isProjectOpen"><a [routerLink]="['/Preferences']"><span class="glyphicon glyphicon-cog"></span> Preferences</a></li>
 	<li *ngIf="isNotificationsVisible"><a [routerLink]="['/Notifications']"><span class="glyphicon glyphicon-bell"></span> Notifications</a></li>
+	<li *ngIf="isProjectOpen"><a [routerLink]="['/Preferences']"><span class="glyphicon glyphicon-cog"></span> Preferences</a></li>
 	<li *ngIf="isAdministrationVisible"><a [routerLink]="['/Administration/Projects']"><span class="glyphicon glyphicon-wrench"></span> Administration</a></li>
 	<li role="separator" class="divider"></li>
 	<li><a (click)="logout()"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>

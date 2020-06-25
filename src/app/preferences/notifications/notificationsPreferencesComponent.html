@@ -48,18 +48,17 @@
                     <tbody>
                         <tr *ngFor="let rs of roleStructs">
                             <td>
-                                <label>{{rs.show}}</label>
-                                <!-- <div class="hbox" style="align-items: center;">
+                                <div class="hbox" style="align-items: center;">
                                     <label style="flex: 1;">{{rs.show}}</label>
-                                    <div class="btn-group btn-group-xs">
-                                        <button class="btn btn-default" (click)="checkAllActionsForRole(rs.role, true)" title="Enable all actions">
-                                            <span class="glyphicon glyphicon-check"></span>
-                                        </button>
-                                        <button class="btn btn-default" (click)="checkAllActionsForRole(rs.role, false)" title="Disable all actions">
-                                            <span class="glyphicon glyphicon-unchecked"></span>
-                                        </button>
-                                    </div>
-                                </div> -->
+                                    <button #btnCheck class="btn btn-transparent btn-xs" (click)="checkAllActionsForRole(rs.role, true)"
+                                        (mouseup)="btnCheck.blur()" title="Enable all actions for this type">
+                                        <span class="glyphicon glyphicon-check"></span>
+                                    </button>
+                                    <button #btnUncheck class="btn btn-transparent btn-xs" (click)="checkAllActionsForRole(rs.role, false)" 
+                                        (mouseup)="btnUncheck.blur()" title="Disable all actions for this type">
+                                        <span class="glyphicon glyphicon-unchecked"></span>
+                                    </button>
+                                </div>
                             </td>
                             <td *ngFor="let a of actions" class="text-center">
                                 <input type="checkbox" [(ngModel)]="notificationTable[rs.role][a]" (ngModelChange)="updateNotificationPref(rs.role, a)">

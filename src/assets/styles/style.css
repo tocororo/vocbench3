@@ -455,6 +455,23 @@ input[type=number]::-webkit-outer-spin-button {
     display: block;
 }
 
+/* this class might seem duplicate of transparentBtn, but this is more generic, more "bootstrap way" (to apply together with btn and btn-<size>) */
+.btn-transparent {
+    background: transparent;
+    border: 1px transparent;
+    opacity: 0.4;
+	filter: alpha(opacity=40);
+    color: #000000;
+}
+.btn-transparent:hover {
+	opacity: 0.9;
+	filter: alpha(opacity=90);
+}
+.btn-transparent.disabled {
+	opacity: 0.15;
+	filter: alpha(opacity=15);
+}
+
 /**
  * Progress bars text in Bootstrap are centered according the progress bar, not the "background" bar. This classes fix.
  */

@@ -76,12 +76,12 @@ export class NotificationsPreferencesComponent {
         this.updateAllNotifications();
     }
 
-    // private checkAllActionsForRole(role: RDFResourceRolesEnum, status: boolean) {
-    //     this.notificationTable[role].creation = status;
-    //     this.notificationTable[role].deletion = status;
-    //     this.notificationTable[role].update = status;
-    //     this.updateAllNotifications();
-    // }
+    private checkAllActionsForRole(role: RDFResourceRolesEnum, status: boolean) {
+        this.notificationTable[role].creation = status;
+        this.notificationTable[role].deletion = status;
+        this.notificationTable[role].update = status;
+        this.updateAllNotifications();
+    }
 
     private updateAllNotifications() {
         let pref: NotificationPreferences = {};
