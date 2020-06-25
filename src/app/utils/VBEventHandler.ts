@@ -89,6 +89,8 @@ export class VBEventHandler {
 
     public searchPrefsUpdatedEvent: EventEmitter<Project> = new VBEventEmitter("searchPrefsUpdatedEvent");
 
+    public notificationStatusChangedEvent: EventEmitter<void> = new VBEventEmitter("notificationStatusChangedEvent");
+
     //MISC EVENTS 
     //data loaded/imported/removed/refactored => trees/lists need to be resfreshed
     public refreshDataBroadcastEvent: EventEmitter<any> = new VBEventEmitter("refreshDataBroadcastEvent", true);

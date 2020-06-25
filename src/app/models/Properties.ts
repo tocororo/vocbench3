@@ -160,6 +160,13 @@ export class PartitionFilterPreference {
     [role: string]: ResViewPartition[]; //role is a RDFResourceRoleEnum, values are only the hidden partitions
 }
 
+export enum NotificationStatus {
+    no_notifications = "no_notifications",
+    in_app_only = "in_app_only",
+    email_instant = "email_instant",
+    email_daily_digest = "email_daily_digest",
+}
+
 /**
  * Class that represents the user settings (preferences) of a Project 
  */
@@ -186,6 +193,8 @@ export class ProjectPreferences {
     hideLiteralGraphNodes: boolean = true;
 
     searchSettings: SearchSettings;
+
+    notificationStatus: NotificationStatus = NotificationStatus.no_notifications;
 }
 
 /**

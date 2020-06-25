@@ -37,7 +37,7 @@ export class UserNotificationServices {
      * 
      * @param resource 
      */
-    isWatching(resource: ARTResource): Observable<void> {
+    isWatching(resource: ARTResource): Observable<boolean> {
         let params: any = {
             resource: resource
         };

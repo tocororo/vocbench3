@@ -247,7 +247,7 @@ export class CreateProjectComponent {
      * the data and history-validation repositories IDs are determined from project's name
      */
     private onProjectNameChange() {
-        if (this.isSelectedRepoAccessCreateMode()) {
+        if (this.isSelectedRepoAccessCreateMode() && this.projectName != null) {
             this.dataRepoId = this.projectName.trim().replace(new RegExp(" ", 'g'), "_") + "_core";
             this.supportRepoId = this.projectName.trim().replace(new RegExp(" ", 'g'), "_") + "_support";
         }
@@ -520,6 +520,12 @@ export class CreateProjectComponent {
                 }
             }
         );
+    }
+
+    private onRepoAccessChange() {
+        if (this.selectedRepositoryAccess == RepositoryAccessType.CreateRemote) {
+            this.onProjectNameChange()
+        }
     }
 
     /**

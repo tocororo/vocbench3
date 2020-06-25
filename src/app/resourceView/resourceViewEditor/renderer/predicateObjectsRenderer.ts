@@ -9,6 +9,10 @@ import { ResourceUtils } from "../../../utils/ResourceUtils";
     selector: "pred-obj-renderer",
     templateUrl: "./predicateObjectsRenderer.html",
     styles: [`
+        :host {
+            display: block;
+            margin-bottom: 4px;
+        }
         .imported {
             background-color: #ffffee
         }

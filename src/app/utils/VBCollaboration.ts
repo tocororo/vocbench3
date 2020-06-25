@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { CollaborationServices } from '../services/collaborationServices';
-import { ProjectServices } from '../services/projectServices';
 import { VBEventHandler } from '../utils/VBEventHandler';
 
 @Injectable()
@@ -16,7 +15,7 @@ export class VBCollaboration {
     private userSettingsConfigured: boolean = false;
     private backendId: string;
 
-    constructor(private collaborationService: CollaborationServices, private projectService: ProjectServices, private eventHandler: VBEventHandler) {}
+    constructor(private collaborationService: CollaborationServices, private eventHandler: VBEventHandler) {}
 
     public initCollaborationSystem(): Observable<void> {
         this.reset();

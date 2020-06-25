@@ -5,25 +5,28 @@ import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, LocalResourc
 import { Issue } from "../../models/Collaboration";
 import { VersionInfo } from "../../models/History";
 import { Project } from "../../models/Project";
+import { NotificationStatus } from "../../models/Properties";
 import { PropertyFacet, ResourceViewCtx, ResViewPartition } from "../../models/ResourceView";
 import { SemanticTurkey } from "../../models/Vocabulary";
 import { CollaborationServices } from "../../services/collaborationServices";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { ResourceViewServices } from "../../services/resourceViewServices";
+import { UserNotificationServices } from "../../services/userNotificationServices";
 import { VersionsServices } from "../../services/versionsServices";
-import { CRUDEnum, ResourceViewAuthEvaluator } from "../../utils/AuthorizationEvaluator";
+import { AuthorizationEvaluator, CRUDEnum, ResourceViewAuthEvaluator } from "../../utils/AuthorizationEvaluator";
 import { Deserializer } from "../../utils/Deserializer";
 import { HttpServiceContext } from "../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
+import { VBActionsEnum } from "../../utils/VBActions";
 import { VBCollaboration } from "../../utils/VBCollaboration";
 import { ProjectContext, VBContext } from "../../utils/VBContext";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { ResViewModalServices } from "./resViewModals/resViewModalServices";
 import { MultiActionFunction, MultiActionType, MultipleActionHelper } from "./renderer/multipleActionHelper";
+import { ResViewModalServices } from "./resViewModals/resViewModalServices";
 
 @Component({
     selector: "resource-view-editor",
@@ -32,11 +35,11 @@ import { MultiActionFunction, MultiActionType, MultipleActionHelper } from "./re
     styles: [`
         .todo-issues { color: #337ab7 }
         .in-progress-issues { color: #f0ad4e }
-        .done-issues { color: #5cb85c }`
+        .done-issues { color: #5cb85c }
+        .panel-heading .btn.active .glyphicon { color: #4285f4; } `
     ]
 })
 export class ResourceViewEditorComponent {
-
     @Input() resource: ARTResource;
     @Input() readonly: boolean = false;
     @Input() context: ResourceViewCtx;
@@ -47,15 +50,7 @@ export class ResourceViewEditorComponent {
     @ViewChild('blockDiv') blockDivElement: ElementRef;
     private viewInitialized: boolean = false; //in order to wait blockDiv to be ready
 
-    private versionList: VersionInfo[];
-    private activeVersion: VersionInfo;
-
-    private showInferredPristine: boolean = false; //useful to decide whether repeat the getResourceView request once the includeInferred changes
-    private showInferred: boolean = false;
-
-    private rendering: boolean = true; //tells if the resource shown inside the partitions should be rendered
-
-    private valueFilterLangEnabled: boolean;
+    private eventSubscriptions: Subscription[] = [];
 
     private unknownHost: boolean = false; //tells if the resource view of the current resource failed to be fetched due to a UnknownHostException
     private unexistingResource: boolean = false; //tells if the requested resource does not exist (empty description)
@@ -97,20 +92,33 @@ export class ResourceViewEditorComponent {
     private topconceptofColl: ARTPredicateObjects[] = null;
     private typesColl: ARTPredicateObjects[] = null;
 
+    //top bar buttons
+
+    private showInferredPristine: boolean = false; //useful to decide whether repeat the getResourceView request once the includeInferred changes
+    private showInferred: boolean = false;
+
+    private rendering: boolean = true; //tells if the resource shown inside the partitions should be rendered
+
+    private valueFilterLangEnabled: boolean;
+
+    private collaborationAvailable: boolean = false;
     private collaborationWorking: boolean = false;
     private issuesStruct: { btnClass: "" | "todo-issues" | "done-issues" | "in-progress-issues"; issues: Issue[] } = { 
         btnClass: "", issues: null
     };
 
-    //status for show/hide buttons in the top bar
-    private versioningAvailable: boolean = true;
-    private collaborationAvailable: boolean = true;
+    private versioningAvailable: boolean = false;
+    private versionList: VersionInfo[];
+    private activeVersion: VersionInfo;
+
+    private notificationsAvailable: boolean = false;
+    private isWatching: boolean;
+
     private settingsAvailable: boolean = true;
 
-    private eventSubscriptions: Subscription[] = [];
-
-    constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices, private resourcesService: ResourcesServices,
-        private collaborationService: CollaborationServices, private metadataRegistryService: MetadataRegistryServices,
+    constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices, 
+        private resourcesService: ResourcesServices, private collaborationService: CollaborationServices, 
+        private metadataRegistryService: MetadataRegistryServices, private notificationsService: UserNotificationServices,
         private eventHandler: VBEventHandler, private vbProp: VBProperties, private vbCollaboration: VBCollaboration,
         private basicModals: BasicModalServices, private resViewModals: ResViewModalServices, private collabModals: CollaborationModalServices) {
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
@@ -121,6 +129,9 @@ export class ResourceViewEditorComponent {
         ));
         this.eventSubscriptions.push(eventHandler.collaborationSystemStatusChanged.subscribe(
             () => this.onCollaborationSystemStatusChange()
+        ));
+        this.eventSubscriptions.push(eventHandler.notificationStatusChangedEvent.subscribe(
+            () => this.initNotificationsAvailable()
         ));
         this.eventSubscriptions.push(eventHandler.resourceUpdatedEvent.subscribe(
             (resource: ARTResource) => this.onResourceUpdated(resource)
@@ -200,6 +211,8 @@ export class ResourceViewEditorComponent {
             this.versioningAvailable = this.projectCtx == null;
             this.collaborationAvailable = this.collaborationWorking && this.resource.isURIResource() && this.projectCtx == null;
             this.settingsAvailable = this.context != ResourceViewCtx.modal;
+
+            this.initNotificationsAvailable();
         });
     }
 
@@ -487,6 +500,9 @@ export class ResourceViewEditorComponent {
      * @param pol 
      */
     private resolveForeignURI(pol: ARTPredicateObjects[]) {
+        if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesGetResourcePosition)) {
+            return; //if not authorized to get the resource position, do not allow foreign uri resolution
+        }
         //collect foreign IRIs, namely IRI values with role mention
         let foreignResources: ARTURIResource[] = [];
         pol.forEach(po => {
@@ -586,7 +602,7 @@ export class ResourceViewEditorComponent {
     }
 
     /**
-     * HEADING BUTTON HANDLERS
+     * HEADING BUTTONS HANDLERS
      */
 
     private switchInferred() {
@@ -641,6 +657,35 @@ export class ResourceViewEditorComponent {
         }
         //resView is readonly if one of the temp version and the context version are not null
         this.readonly = this.activeVersion != null || VBContext.getContextVersion() != null;
+    }
+
+    //NOTIFICATIONS HANDLERS
+    private initNotificationsAvailable() {
+        //notifications available only if the ResView is about a resource of the current project and if notifications are activated
+        this.notificationsAvailable = this.projectCtx == null && VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().notificationStatus != NotificationStatus.no_notifications;
+        if (this.notificationsAvailable) { //in case notification are active => init the status of watching
+            this.initNotificationsStatus();
+        }
+    }
+    private initNotificationsStatus() {
+        this.notificationsService.isWatching(this.resource).subscribe(
+            isWatching => {
+                this.isWatching = isWatching;
+            }
+        );
+    }
+    private changeNotificationStatus() {
+        let notificationFn: Observable<void>;
+        if (this.isWatching) {
+            notificationFn = this.notificationsService.stopWatching(this.resource);
+        } else {
+            notificationFn = this.notificationsService.startWatching(this.resource);
+        }
+        notificationFn.subscribe(
+            () => {
+                this.isWatching = !this.isWatching;
+            }
+        );
     }
     
     private openSettings() {

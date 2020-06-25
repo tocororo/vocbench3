@@ -5,6 +5,25 @@
             <resource-rename [resource]="resource" style="margin-left: 8px; flex: 1;" [readonly]="readonly" (update)="buildResourceView(resource)">
             </resource-rename>
             
+            <button class="btn btn-default btn-xs" [ngClass]="{active: rendering}" style="margin-left: 3px;"
+                title="Rendering" (click)="switchRendering()">
+                <span class="glyphicon glyphicon-font"></span>
+            </button>
+            <button class="btn btn-default btn-xs" [ngClass]="{active: showInferred}" style="margin-left: 3px;"
+                title="Show/hide inferred information" (click)="switchInferred()">
+                <span *ngIf="showInferred" class="glyphicon glyphicon-eye-open"></span>
+                <span *ngIf="!showInferred" class="glyphicon glyphicon-eye-close"></span>
+            </button>
+            <button class="btn btn-default btn-xs" [ngClass]="{active: valueFilterLangEnabled}" style="margin-left: 3px;"
+                title="Enable/disable value-filter on languages" (click)="switchValueFilterLang()">
+                <span class="glyphicon glyphicon-filter"></span>
+            </button>
+            
+            <button *ngIf="notificationsAvailable" class="btn btn-default btn-xs" [ngClass]="{active: isWatching}" style="margin-left: 3px;"
+                (click)="changeNotificationStatus()" title="Enable/Disable notifications on this resource">
+                <span class="glyphicon glyphicon-bell"></span>
+            </button>
+
             <div *ngIf="versioningAvailable" class="dropdown pull-right" style="margin-left: 3px;">
                 <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" (click)="listVersions()" title="Change version">
                     <span class="glyphicon glyphicon-time"></span>
@@ -12,11 +31,11 @@
                 <ul class="dropdown-menu">
                     <li style="position: relative;">
                         <a (click)="switchToVersion()" style="padding-right: 18px">Current</a>
-                        <span *ngIf="!activeVersion" class="glyphicon glyphicon-ok pull-right" style="position: absolute; right: 4px;"></span>
+                        <span *ngIf="!activeVersion" class="glyphicon glyphicon-ok pull-right" style="position: absolute; right: 8px; top: 4px;"></span>
                     </li>
                     <li *ngFor="let v of versionList" style="position: relative;">
                         <a (click)="switchToVersion(v)" style="padding-right: 18px">{{v.dateTimeLocal}} - {{v.versionId}}</a>
-                        <span *ngIf="v == activeVersion" class="glyphicon glyphicon-ok pull-right" style="position: absolute; right: 4px;"></span>
+                        <span *ngIf="v == activeVersion" class="glyphicon glyphicon-ok pull-right" style="position: absolute; right: 8px; top: 4px;"></span>
                     </li>
                 </ul>
             </div>
@@ -37,23 +56,11 @@
                     <li><a (click)="assignToIssue()">Assign this resource to existing issue</a></li>
                 </ul>
             </div>
-            
-            <button class="btn btn-default btn-xs" [ngClass]="{active: showInferred}" style="margin-left: 3px;"
-                title="Show/hide inferred information" (click)="switchInferred()">
-                <span *ngIf="showInferred" class="glyphicon glyphicon-eye-open"></span>
-                <span *ngIf="!showInferred" class="glyphicon glyphicon-eye-close"></span>
-            </button>
-            <button class="btn btn-default btn-xs" [ngClass]="{active: valueFilterLangEnabled}" style="margin-left: 3px;"
-                title="Enable/disable value-filter on languages" (click)="switchValueFilterLang()">
-                <span class="glyphicon glyphicon-filter"></span>
-            </button>
-            <button class="btn btn-default btn-xs" [ngClass]="{active: rendering}" style="margin-left: 3px;"
-                title="Rendering" (click)="switchRendering()">
-                <span class="glyphicon glyphicon-font"></span>
-            </button>
+
             <button class="btn btn-default btn-xs" style="margin-left: 3px;" title="Refresh" (click)="buildResourceView(resource)">
                 <span class="glyphicon glyphicon-refresh"></span>
             </button>
+
             <button *ngIf="settingsAvailable" class="btn btn-default btn-xs" style="margin-left: 3px;" title="ResourceView settings" (click)="openSettings()">
                 <span class="glyphicon glyphicon-cog"></span>
             </button>

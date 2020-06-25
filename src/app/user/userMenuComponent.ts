@@ -1,12 +1,11 @@
 import { Component } from "@angular/core";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
+import { NotificationStatus } from "../models/Properties";
 import { User } from "../models/User";
 import { AuthServices } from "../services/authServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "../utils/VBActions";
 import { VBContext } from "../utils/VBContext";
-import { VBEventHandler } from "../utils/VBEventHandler";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "li[user-menu]", //what is this? used to avoid css style breaking (use <li user-menu ...></li>)
@@ -16,15 +15,20 @@ import { BasicModalServices } from "../widget/modal/basicModal/basicModalService
 export class UserMenuComponent {
 
     private currentUser: User;
+    private userShow: string;
 
     private imgSrcFallback: string = require("../../assets/images/logos/user.svg");
     private userAvatarUrl: SafeUrl;
 
-    constructor(private evtHandler: VBEventHandler, private authService: AuthServices, private basicModals: BasicModalServices,
-        private sanitizer: DomSanitizer) { }
+    private isProjectOpen: boolean;
+    private isAdministrationVisible: boolean;
+    private isNotificationsVisible: boolean;
+
+    constructor(private authService: AuthServices, private sanitizer: DomSanitizer) { }
 
     ngOnInit() {
         this.currentUser = VBContext.getLoggedUser();
+        this.userShow = this.currentUser.getShow();
         this.initBackgroundImgSrc();
     }
 
@@ -35,37 +39,22 @@ export class UserMenuComponent {
     private onMenuOpen() {
         this.currentUser = VBContext.getLoggedUser();
         this.initBackgroundImgSrc();
-    }
 
-    /**
-     * returns true if a project is open. Useful to enable/disable navbar links
-     */
-    private isProjectOpen(): boolean {
-        return VBContext.getWorkingProject() != undefined;
-    }
+        this.isProjectOpen = VBContext.getWorkingProject() != undefined;
 
-    /**
-     * Returns true if the user is logged (an authentication token is stored)
-     */
-    private isUserLogged(): boolean {
-        return VBContext.isLoggedIn();
-    }
-
-    /**
-     * Determines whether the "Administration" menu item should be visible.
-     * It is visible if the user is adminsitrator or if the user has capabilities of project manager for the current project
-     */
-    private isAdministrationVisible(): boolean {
-        return (
-            VBContext.getLoggedUser().isAdmin() ||
-            this.isProjectOpen() && (
-                AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationRoleManagement) ||
-                (
-                    AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationProjectManagement) &&
-                    AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserRoleManagement)
-                )
+        //administration entry visible if logged user is the admin or if the logged user has permissions
+        this.isAdministrationVisible = VBContext.getLoggedUser().isAdmin() || this.isProjectOpen && (
+            AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationRoleManagement) ||
+            (
+                AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationProjectManagement) &&
+                AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserRoleManagement)
             )
-        );
+        )
+
+        //notifications entry visible if project open and the notifications are active
+        this.isNotificationsVisible = this.isProjectOpen && 
+                VBContext.getWorkingProjectCtx().getProjectPreferences().notificationStatus != NotificationStatus.no_notifications;
+
     }
 
     private initBackgroundImgSrc() {

@@ -23,7 +23,7 @@
 
     <div class="groupPanel-body">
         <ng-template [ngIf]="!partitionCollapsed">
-            <div class="panel panel-alt" *ngFor="let po of predicateObjectList">
+            <div class="panel panel-alt" *ngFor="let po of predicateObjectList" style="margin-bottom: 4px;">
                 <div class="panel-heading">
                     <label>{{po.getPredicate().getShow()}}</label>
                 </div>
@@ -37,7 +37,7 @@
                             (edit)="editHandler(po.getPredicate(), obj)" (update)="onObjectUpdate()">
                         </resview-value-renderer>
                         
-                        <div class="panel panel-alt" style="margin-top: 4px">
+                        <div class="panel panel-alt">
                             <div class="panel-heading">
                                 <label style="flex: 1">Members</label>
                                 <div class="btn-group pull-right">

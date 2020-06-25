@@ -1,10 +1,13 @@
 import { Component } from "@angular/core";
-import { UserNotificationServices } from "../../services/userNotificationServices";
-import { NotificationPreferences, Action } from "../../models/Notifications";
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
-import { ResourceUtils } from "../../utils/ResourceUtils";
+import { Action, NotificationPreferences } from "../../models/Notifications";
+import { NotificationStatus, Properties } from "../../models/Properties";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
-import { Properties } from "../../models/Properties";
+import { UserNotificationServices } from "../../services/userNotificationServices";
+import { ResourceUtils } from "../../utils/ResourceUtils";
+import { VBContext } from "../../utils/VBContext";
+import { VBEventHandler } from "../../utils/VBEventHandler";
+import { VBProperties } from "../../utils/VBProperties";
 
 @Component({
     selector: "notifications-pref",
@@ -14,12 +17,12 @@ import { Properties } from "../../models/Properties";
 export class NotificationsPreferencesComponent {
 
     private notificationOptions: NotificationPrefStruct[] = [
-        { value: NotificationOpt.no_notifications, show: "No notifications", description: "You will not receive any notification" },
-        { value: NotificationOpt.in_app_only, show: "In-app only", description: "You will be able to read notifications in app" },
-        { value: NotificationOpt.email_instant, show: "Email (instant)", description: "You will receive email instantly" },
-        { value: NotificationOpt.email_daily_digest, show: "Email (daily digest)", description: "You will receive a daily email report" },
+        { value: NotificationStatus.no_notifications, show: "No notifications", description: "You will not receive any notification" },
+        { value: NotificationStatus.in_app_only, show: "In-app only", description: "You will be able to read notifications in app" },
+        { value: NotificationStatus.email_instant, show: "Email (instant)", description: "You will receive email instantly" },
+        { value: NotificationStatus.email_daily_digest, show: "Email (daily digest)", description: "You will receive a daily email report" },
     ];
-    private activeNotificationOpt: NotificationOpt;
+    private activeNotificationOpt: NotificationStatus;
 
 
     private actions: Action[] = [Action.creation, Action.deletion, Action.update];
@@ -29,7 +32,7 @@ export class NotificationsPreferencesComponent {
 
     private preferences: NotificationPreferences;
 
-    constructor(private notificationsService: UserNotificationServices, private prefService: PreferencesSettingsServices) { }
+    constructor(private notificationsService: UserNotificationServices, private vbProp: VBProperties) { }
 
     ngOnInit() {
         this.notificationsService.getNotificationPreferences().subscribe(
@@ -55,26 +58,12 @@ export class NotificationsPreferencesComponent {
             }
         );
 
-        //Init notification status preference
-        this.prefService.getPUSettings([Properties.pref_notifications_status]).subscribe(
-            prefs => {
-                let prefValue = prefs[Properties.pref_notifications_status];
-                if (prefValue != null) {
-                    let activeOptStruct = this.notificationOptions.find(opt => opt.value == prefValue);
-                    if (activeOptStruct != null) { //if the preference value is valid (among the available) => set it as active
-                        this.activeNotificationOpt = activeOptStruct.value;
-                    }
-                }
-                if (this.activeNotificationOpt == null) { //if none preference is set or it is not valid => set no notification as default
-                    this.activeNotificationOpt = NotificationOpt.no_notifications;
-                }
-            }
-        );
+        this.activeNotificationOpt = VBContext.getWorkingProjectCtx().getProjectPreferences().notificationStatus;
     }
 
-    private changeNotificationStatus(option: NotificationOpt) {
+    private changeNotificationStatus(option: NotificationStatus) {
         this.activeNotificationOpt = option;
-        this.prefService.setPUSetting(Properties.pref_notifications_status, this.activeNotificationOpt).subscribe();
+        this.vbProp.setNotificationStatus(this.activeNotificationOpt);
     }
 
 
@@ -131,13 +120,7 @@ interface RoleStruct {
 }
 
 interface NotificationPrefStruct {
-    value: NotificationOpt;
+    value: NotificationStatus;
     show: string;
     description: string;
-}
-enum NotificationOpt {
-    no_notifications = "no_notifications",
-    in_app_only = "in_app_only",
-    email_instant = "email_instant",
-    email_daily_digest = "email_daily_digest",
 }

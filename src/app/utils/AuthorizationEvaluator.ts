@@ -151,6 +151,7 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.resourcesUpdatePredicateObject]: 'auth(rdf(resource, values), "U").',
         [VBActionsEnum.resourcesUpdateResourceTriplesDescription]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', values), "U").',
         [VBActionsEnum.resourcesGetResourceTriplesDescription]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', values), "R").',
+        [VBActionsEnum.resourcesGetResourcePosition]: 'auth(rdf(resource), "R").',
         [VBActionsEnum.resourceMetadataAssociationCreate]: 'auth(pm(resourceMetadata,association), "C").',
         [VBActionsEnum.resourceMetadataAssociationDelete]: 'auth(pm(resourceMetadata,association), "D").',
         [VBActionsEnum.resourceMetadataAssociationRead]: 'auth(pm(resourceMetadata,association), "R").',

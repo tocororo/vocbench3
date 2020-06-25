@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
-import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, PartitionFilterPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
+import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, PartitionFilterPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, SearchMode, SearchSettings, ValueFilterLanguages, NotificationStatus } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { OWL, RDFS } from '../models/Vocabulary';
 import { AdministrationServices } from '../services/administrationServices';
@@ -51,7 +51,8 @@ export class VBProperties {
             Properties.pref_concept_tree_multischeme_mode, Properties.pref_concept_tree_safe_to_go_limit,
             Properties.pref_lex_entry_list_visualization, Properties.pref_lex_entry_list_index_lenght, Properties.pref_lex_entry_list_safe_to_go_limit,
             Properties.pref_editing_language, Properties.pref_filter_value_languages,
-            Properties.pref_res_view_partition_filter, Properties.pref_graph_view_partition_filter, Properties.pref_hide_literal_graph_nodes
+            Properties.pref_res_view_partition_filter, Properties.pref_graph_view_partition_filter, Properties.pref_hide_literal_graph_nodes,
+            Properties.pref_notifications_status
         ];
         
         let getPUSettingsNoPlugin = this.prefService.getPUSettings(properties, projectCtx.getProject()).map(
@@ -214,6 +215,12 @@ export class VBProperties {
                 projectPreferences.searchSettings = searchSettings;
 
                 this.initSearchSettingsCookie(projectPreferences); //other settings stored in cookies
+
+                //notifications
+                let notificationStatusPref = prefs[Properties.pref_notifications_status];
+                if (notificationStatusPref != null && (notificationStatusPref in NotificationStatus)) { //if a valid value
+                    projectPreferences.notificationStatus = notificationStatusPref;
+                }
             }
         );
 
@@ -278,6 +285,12 @@ export class VBProperties {
     setValueFilterLanguages(filter: ValueFilterLanguages) {
         this.prefService.setPUSetting(Properties.pref_filter_value_languages, JSON.stringify(filter)).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang = filter;
+    }
+
+    setNotificationStatus(status: NotificationStatus) {
+        this.prefService.setPUSetting(Properties.pref_notifications_status, status).subscribe();
+        VBContext.getWorkingProjectCtx().getProjectPreferences().notificationStatus = status;
+        this.eventHandler.notificationStatusChangedEvent.emit();
     }
 
     //class tree settings

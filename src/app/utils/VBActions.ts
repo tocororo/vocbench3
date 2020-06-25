@@ -185,6 +185,7 @@ export enum VBActionsEnum {
     resourcesUpdatePredicateObject = "resourcesUpdatePredicateObject",
     resourcesGetResourceTriplesDescription = "resourcesGetResourceTriplesDescription",
     resourcesUpdateResourceTriplesDescription = "resourcesUpdateResourceTriplesDescription",
+    resourcesGetResourcePosition = "resourcesGetResourcePosition",
     //ResourceMetadata
     resourceMetadataAssociationCreate = "resourceMetadataAssociationCreate",
     resourceMetadataAssociationRead = "resourceMetadataAssociationRead",
