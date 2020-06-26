@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from "@angular/core";
 import { ARTResource } from "../../models/ARTResources";
+import { VBContext } from "../../utils/VBContext";
 import { VBEventHandler } from "../../utils/VBEventHandler";
-import { VBProperties } from "../../utils/VBProperties";
 import { AbstractResViewVisualizationMode } from "./abstractResViewVisualization";
 
 @Component({
@@ -17,7 +17,7 @@ export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMod
     //emits event when a tab is selected, useful to keep in sync tabbed ResView and trees/lists
     @Output() tabSelect: EventEmitter<ARTResource> = new EventEmitter();
 
-    constructor(private vbProps: VBProperties, eventHandler: VBEventHandler) {
+    constructor(eventHandler: VBEventHandler) {
         super(eventHandler);
         this.eventHandler.resViewTabSyncChangedEvent.subscribe(
             (sync: boolean) => { this.sync = sync; }
@@ -25,7 +25,7 @@ export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMod
     }
 
     ngOnInit() {
-        this.sync = this.vbProps.getResourceViewTabSync();
+        this.sync = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.syncTabs;
     }
 
     selectResource(resource: ARTResource) {

@@ -70,14 +70,15 @@ export class EditableResourceComponent extends AbstractResViewResource {
 
     constructor(private resourcesService: ResourcesServices, private propService: PropertyServices,
         private manchesterService: ManchesterServices, private refactorService: RefactorServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private creationModals: CreationModalServices,
-        private browsingModals: BrowsingModalServices, private rvModalService: ResViewModalServices,
-        private dtValidator: DatatypeValidator, private vbProp: VBProperties) {
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
+        private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices, 
+        private rvModalService: ResViewModalServices, private dtValidator: DatatypeValidator) {
         super();
     }
 
     ngOnInit() {
-        if (this.vbProp.getResourceViewDisplayImg() && this.resource.getAdditionalProperty(ResAttribute.IS_IMAGE)) {
+        let displayImg: boolean = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.displayImg;
+        if (displayImg && this.resource.getAdditionalProperty(ResAttribute.IS_IMAGE)) {
             this.isImage = true;
         }
 

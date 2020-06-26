@@ -52,7 +52,6 @@ import { InstanceListCreatorModal } from '../resourceView/resourceViewEditor/res
 import { PropertyChainCreatorModal } from '../resourceView/resourceViewEditor/resViewModals/propertyChainCreatorModal';
 import { RdfsMembersModal } from '../resourceView/resourceViewEditor/resViewModals/rdfsMembersModal';
 import { ResViewModalServices } from '../resourceView/resourceViewEditor/resViewModals/resViewModalServices';
-import { ResViewSettingsModal } from '../resourceView/resourceViewEditor/resViewModals/resViewSettingsModal';
 import { EditableResourceComponent } from '../resourceView/resourceViewEditor/resViewResources/editableResourceComponent';
 import { ReifiedResourceComponent } from '../resourceView/resourceViewEditor/resViewResources/reifiedResourceComponent';
 import { ResourceViewModal } from '../resourceView/resourceViewModal';
@@ -62,6 +61,7 @@ import { ResourceViewTabbedComponent } from '../resourceView/resourceViewModes/r
 import { ResourceViewSimpleComponent } from '../resourceView/resourceViewSimple/resourceViewSimpleComponent';
 import { ShowLanguageDefinitionComponent } from '../resourceView/resourceViewSimple/showLanguageDefinition/showLanguageDefinition';
 import { ShowLanguageTermComponent } from '../resourceView/resourceViewSimple/showLanguageTerm/showLanguageTerm';
+import { ResViewSettingsModal } from '../resourceView/resViewSettingsModal';
 import { PreferencesModule } from './preferencesModule';
 import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from "./treeAndListModule";

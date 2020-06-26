@@ -1,9 +1,10 @@
-import { RDFResourceRolesEnum } from './../../models/ARTResources';
-import { Component, Input, Output, EventEmitter, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ARTResource, ResAttribute } from "../../models/ARTResources";
-import { VBActionsEnum } from "../../utils/VBActions";
+import { ResourceViewConceptType } from '../../models/Properties';
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
+import { RDFResourceRolesEnum } from './../../models/ARTResources';
 
 @Component({
     selector: "resource-view",
@@ -26,17 +27,20 @@ export class ResourceViewTabContainer {
     private isTriplesEditorAvailable: boolean;
     private isSimplifiedFormAvailable: boolean;
 
-    ngOnInit() {
-        this.isSimplifiedFormAvailable = VBContext.getSystemSettings().experimentalFeaturesEnabled && this.resource.getRole() == RDFResourceRolesEnum.concept;
-        
-    }
-
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource']) {
             this.isTriplesEditorAvailable = (
                 this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) &&
                 AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesGetResourceTriplesDescription, this.resource)
             );
+        }
+        
+        this.isSimplifiedFormAvailable = VBContext.getSystemSettings().experimentalFeaturesEnabled && this.resource.getRole() == RDFResourceRolesEnum.concept;
+        //if the simplified form is available and it has been set as default for concept => activate it immediately
+        if (this.isSimplifiedFormAvailable) {
+            if (VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.defaultConceptType == ResourceViewConceptType.simplifiedForm) {
+                this.activeView = this.viewTypeSimplifiedForm;
+            }
         }
     }
     

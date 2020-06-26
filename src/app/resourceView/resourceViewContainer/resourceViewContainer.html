@@ -1,7 +1,7 @@
 <div class="vbox">
     <resource-view-editor *ngIf="activeView == viewTypeResourceForm" [resource]="resource" (dblclickObj)="onObjectDblClick($event)" (update)="onResourceUpdate($event)"></resource-view-editor>
-    <resource-view-simple *ngIf="activeView == viewTypeSimplifiedForm" [resource]="resource">Simplified</resource-view-simple>
-    <resource-triple-editor *ngIf="activeView == viewTypeSourceCode" [resource]="resource" (update)="onResourceUpdate($event)">Source</resource-triple-editor>
+    <resource-view-simple *ngIf="activeView == viewTypeSimplifiedForm" [resource]="resource"></resource-view-simple>
+    <resource-triple-editor *ngIf="activeView == viewTypeSourceCode" [resource]="resource" (update)="onResourceUpdate($event)"></resource-triple-editor>
 </div>
 <ul class="nav nav-tabs-bottom" *ngIf="isSimplifiedFormAvailable || isTriplesEditorAvailable">
     <li [ngClass]="{ active: viewTypeResourceForm == activeView }">

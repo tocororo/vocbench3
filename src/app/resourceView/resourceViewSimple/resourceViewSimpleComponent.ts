@@ -1,5 +1,8 @@
-import { Component, Input, QueryList, ViewChildren } from "@angular/core";
+import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import { Modal } from "ngx-modialog";
 import { ARTResource } from "../../models/ARTResources";
+import { UIUtils } from "../../utils/UIUtils";
+import { AbstractResourceView } from "../resourceViewEditor/abstractResourceView";
 import { ARTNode, ARTPredicateObjects, ResAttribute } from './../../models/ARTResources';
 import { Language, Languages } from './../../models/LanguagesCountries';
 import { ResViewPartition } from './../../models/ResourceView';
@@ -16,23 +19,17 @@ import { ShowLanguageDefinitionComponent } from './showLanguageDefinition/showLa
     styleUrls: ["./resourceViewSimpleComponent.css"],
     host: { class: "vbox" }
 })
-export class ResourceViewSimpleComponent {
+export class ResourceViewSimpleComponent extends AbstractResourceView {
 
     @Input() resource: ARTResource;
     @Input() projectCtx: ProjectContext;
     @Input() readonly: boolean = false;
-    //objectKeys = Object.keys;
+
     @ViewChildren('langItem') langItemsView: QueryList<ShowLanguageDefinitionComponent>;
+    @ViewChild('blockDiv') blockDivElement: ElementRef;
 
-    constructor(private resViewService: ResourceViewServices) { }
-
-
-    partitionCollapsed: boolean = false;
     private resViewResponse: any = null;
-    private rendering: boolean = true; //tells if the resource shown inside the partitions should be rendered
-    private broadersColl: ARTPredicateObjects[] = null;
-    private lexicalizationsColl: ARTPredicateObjects[] = null;
-    private notesColl: ARTPredicateObjects[] = null;
+    private unknownHost: boolean = false; //tells if the resource view of the current resource failed to be fetched due to a UnknownHostException
     private unexistingResource: boolean = false; //tells if the requested resource does not exist (empty description)
     private definitions: ARTNode[]; // conteins object with definitions predicate (skos:definition)
     private broaders: ARTNode[]; // conteins object with broader predicate (skos:broader)
@@ -43,7 +40,9 @@ export class ResourceViewSimpleComponent {
     private lexicalizationModelType: string;
     private objectKeys: string[]; // takes langStruct keys
 
-
+    constructor(resViewService: ResourceViewServices, modal: Modal) {
+        super(resViewService, modal);
+    }
 
     ngOnChanges() {
         this.buildResourceSimpleView(this.resource)
@@ -56,6 +55,7 @@ export class ResourceViewSimpleComponent {
      * @param res 
      */
     public buildResourceSimpleView(res: ARTResource) {
+        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.resViewService.getResourceView(res).subscribe(
             stResp => {
                 this.langStruct = {}
@@ -63,8 +63,14 @@ export class ResourceViewSimpleComponent {
                 this.resViewResponse = stResp;
                 this.fillPartitions();
                 this.initLanguages();
+                this.unknownHost = false;
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+            },
+            (err: Error) => {
+                if (err.name.endsWith("UnknownHostException")) {
+                    this.unknownHost = true;
+                }
             }
-
         );
     }
 
@@ -74,21 +80,18 @@ export class ResourceViewSimpleComponent {
     * 
     */
     private fillPartitions() {
-        //list of partition filtered out for the role of the current described resource
-        let partitionFilter: ResViewPartition[] = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter[this.resource.getRole()];
-        if (partitionFilter == null) {
-            partitionFilter = []; //to prevent error later (in partitionFilter.indexOf(partition))
+        let broadersColl: ARTPredicateObjects[] = this.initPartition(ResViewPartition.broaders, true);
+        if (broadersColl != null) {
+            let broaderPredObj: ARTPredicateObjects = broadersColl.find(po => po.getPredicate().equals(SKOS.broader));
+            if (broaderPredObj != null) {
+                this.broaders = broaderPredObj.getObjects();
+            }
         }
-        this.broadersColl = this.initPartition(ResViewPartition.broaders, partitionFilter, true);
-        this.lexicalizationsColl = this.initPartition(ResViewPartition.lexicalizations, partitionFilter, false); //the sort is performed in the partition according the language
-        this.notesColl = this.initPartition(ResViewPartition.notes, partitionFilter, true);
-        if (this.broadersColl.length != 0) {
-            this.broaders = this.broadersColl.find(po => { return po.getPredicate().equals(SKOS.broader) }).getObjects();
-        }
-        if (this.lexicalizationsColl.length != 0) {
-            // var langStruct: { [key: string]: ARTPredicateObjects[] } = {};
+
+        let lexicalizationsColl: ARTPredicateObjects[] = this.initPartition(ResViewPartition.lexicalizations, false); //the sort is performed in the partition according the language
+        if (lexicalizationsColl != null) {
             let nodes: ARTNode[] = [];
-            this.lexicalizationsColl.forEach(lex => {
+            lexicalizationsColl.forEach(lex => {
                 lex.getObjects().forEach((obj: ARTNode) => {
                     if (obj.getAdditionalProperty(ResAttribute.LANG) != null) {
                         //case in which there are no existing keys equals to that language
@@ -121,12 +124,18 @@ export class ResourceViewSimpleComponent {
                 })
 
             })
-
         }
-        if (this.notesColl.length != 0) {
+
+        let notesColl: ARTPredicateObjects[] = this.initPartition(ResViewPartition.notes, true);
+        if (notesColl.length != null) {
             let nodes: ARTNode[] = [];
-            this.definitions = this.notesColl.find(po => { return po.getPredicate().equals(SKOS.definition) }).getObjects(); // it is util for first box in the UI ( here takes only objects with skos:definition predicate)
-            this.notesColl.forEach(def => {
+
+            let definitionPredObj: ARTPredicateObjects = notesColl.find(po => po.getPredicate().equals(SKOS.definition));
+            if (definitionPredObj) { //if there are definitions
+                this.definitions = definitionPredObj.getObjects(); // it is util for first box in the UI ( here takes only objects with skos:definition predicate)
+            }
+            
+            notesColl.forEach(def => {
                 if (def.getPredicate().equals(SKOS.definition)) { // there could be several types (editorialNote, changeNote, example etc ..)
                     def.getObjects().forEach((obj: ARTNode) => {
                         //case in which there are no existing keys equal to the language of the considered definition
@@ -148,6 +157,7 @@ export class ResourceViewSimpleComponent {
                 }
             })
         }
+
         if (
             //these partitions are always returned, even when resource is not defined, so I need to check also if length == 0
             (!this.resViewResponse[ResViewPartition.lexicalizations] || this.resViewResponse[ResViewPartition.lexicalizations].length == 0) &&
@@ -222,7 +232,7 @@ export class ResourceViewSimpleComponent {
     }
 
 
-    private initPartition(partition: ResViewPartition, partitionFilter: ResViewPartition[], sort: boolean): ARTPredicateObjects[] {
+    private initPartition(partition: ResViewPartition, sort: boolean): ARTPredicateObjects[] {
         let poList: ARTPredicateObjects[];
         let partitionJson: any = this.resViewResponse[partition];
         poList = Deserializer.createPredicateObjectsList(partitionJson);
@@ -234,8 +244,7 @@ export class ResourceViewSimpleComponent {
 
 
     private sortObjects(predObjList: ARTPredicateObjects[]) {
-        //sort by show if rendering is active, uri otherwise
-        let attribute: SortAttribute = this.rendering ? SortAttribute.show : SortAttribute.value;
+        let attribute: SortAttribute = SortAttribute.show;
         for (var i = 0; i < predObjList.length; i++) {
             let objList: ARTNode[] = predObjList[i].getObjects();
             ResourceUtils.sortResources(<ARTResource[]>objList, attribute);

@@ -76,7 +76,8 @@ export class TextEditableComponent implements OnInit {
                 if (this.allowEmpty) {
                     this.value = null;
                 } else {
-                    this.basicModals.alert("Invalid value", "The inserted value is empty or not valid. Please check and retry.", "error");
+                    this.basicModals.alert("Invalid value", "The inserted value is empty or not valid. Please check and retry.", "warning");
+                    this.value = this.pristineValue;
                     return;
                 }
             }

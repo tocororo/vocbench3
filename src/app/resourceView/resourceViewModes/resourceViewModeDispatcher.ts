@@ -2,8 +2,8 @@ import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ARTResource } from "../../models/ARTResources";
 import { ResourceViewMode } from "../../models/Properties";
+import { VBContext } from "../../utils/VBContext";
 import { VBEventHandler } from "../../utils/VBEventHandler";
-import { VBProperties } from "../../utils/VBProperties";
 import { ResourceViewSplittedComponent } from "./resourceViewSplittedComponent";
 import { ResourceViewTabbedComponent } from "./resourceViewTabbedComponent";
 
@@ -24,7 +24,7 @@ export class ResourceViewModeDispatcher {
 
     private eventSubscriptions: Subscription[] = [];
 
-    constructor(private eventHandler: VBEventHandler, private preferences: VBProperties) {
+    constructor(private eventHandler: VBEventHandler) {
         this.eventHandler.resViewModeChangedEvent.subscribe(
             (event: { mode: ResourceViewMode, fromVbPref: boolean }) => { 
                 /**
@@ -54,7 +54,7 @@ export class ResourceViewModeDispatcher {
     }
 
     ngOnInit() {
-        this.resViewMode = this.preferences.getResourceViewMode();
+        this.resViewMode = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.mode;
     }
 
     ngOnDestroy() {

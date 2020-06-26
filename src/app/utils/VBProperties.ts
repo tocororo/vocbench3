@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
-import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, PartitionFilterPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, SearchMode, SearchSettings, ValueFilterLanguages, NotificationStatus } from '../models/Properties';
+import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, NotificationStatus, PartitionFilterPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewConceptType, ResourceViewMode, ResourceViewPreference, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { OWL, RDFS } from '../models/Vocabulary';
 import { AdministrationServices } from '../services/administrationServices';
@@ -51,7 +51,8 @@ export class VBProperties {
             Properties.pref_concept_tree_multischeme_mode, Properties.pref_concept_tree_safe_to_go_limit,
             Properties.pref_lex_entry_list_visualization, Properties.pref_lex_entry_list_index_lenght, Properties.pref_lex_entry_list_safe_to_go_limit,
             Properties.pref_editing_language, Properties.pref_filter_value_languages,
-            Properties.pref_res_view_partition_filter, Properties.pref_graph_view_partition_filter, Properties.pref_hide_literal_graph_nodes,
+            Properties.pref_res_view_partition_filter, Properties.pref_res_view_default_concept_type,
+            Properties.pref_graph_view_partition_filter, Properties.pref_hide_literal_graph_nodes,
             Properties.pref_notifications_status
         ];
         
@@ -92,12 +93,23 @@ export class VBProperties {
                     projectPreferences.filterValueLang = JSON.parse(filterValueLangPref);
                 }
 
+                //resource view preferences
+                let resViewPreferences: ResourceViewPreference = new ResourceViewPreference();
+                let resViewConceptTypePref = prefs[Properties.pref_res_view_default_concept_type];
+                if (resViewConceptTypePref in ResourceViewConceptType) {
+                    resViewPreferences.defaultConceptType = resViewConceptTypePref;
+                }
+
                 let resViewPartitionFilter: PartitionFilterPreference = {};
                 let rvPartitionFilterPref = prefs[Properties.pref_res_view_partition_filter];
                 if (rvPartitionFilterPref != null) {
                     resViewPartitionFilter = JSON.parse(rvPartitionFilterPref);
                 }
-                projectPreferences.resViewPartitionFilter = resViewPartitionFilter;
+                resViewPreferences.resViewPartitionFilter = resViewPartitionFilter;
+
+                projectPreferences.resViewPreferences = resViewPreferences;
+
+                this.initResourceViewPreferenceCookie(projectPreferences); //fill the preferences also with those stored as cookie
 
                 //graph preferences
                 let graphPartitionFilterPref = prefs[Properties.pref_graph_view_partition_filter];
@@ -376,10 +388,15 @@ export class VBProperties {
     }
 
     //Res view settings
+    setResourceViewConceptType(type: ResourceViewConceptType) {
+        this.prefService.setPUSetting(Properties.pref_res_view_default_concept_type, type).subscribe();
+        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.defaultConceptType = type;
+    }
+
     setResourceViewPartitionFilter(pref: PartitionFilterPreference) {
         let value = (pref != null) ? JSON.stringify(pref) : null;
         this.prefService.setPUSetting(Properties.pref_res_view_partition_filter, value).subscribe();
-        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter = pref;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.resViewPartitionFilter = pref;
     }
     refreshResourceViewPartitionFilter(): Observable<void> { //refreshed the cached rv partition filter
         return this.prefService.getPUSettings([Properties.pref_res_view_partition_filter]).map(
@@ -389,7 +406,7 @@ export class VBProperties {
                 if (value != null) {
                     filter = JSON.parse(value);
                 }
-                VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter = filter;
+                VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.resViewPartitionFilter = filter;
             }
         );
     }
@@ -487,13 +504,44 @@ export class VBProperties {
     ============================= */
 
     /**
+     * Some resource view preference are stored as cookie, not server-side preference. Here they are initialized
+     * @param projectPreferences 
+     */
+    initResourceViewPreferenceCookie(projectPreferences: ProjectPreferences) {
+        let rvPrefs: ResourceViewPreference = projectPreferences.resViewPreferences;
+        //inference
+        let inferenceCookie = Cookie.getCookie(Cookie.RES_VIEW_INCLUDE_INFERENCE);
+        if (inferenceCookie != null) {
+            rvPrefs.inference = inferenceCookie == "true"; //default false
+        }
+        //rendering
+        let renderingCookie = Cookie.getCookie(Cookie.RES_VIEW_RENDERING);
+        if (renderingCookie != null) {
+            rvPrefs.rendering = renderingCookie != "false"; //default true
+        }
+        //mode
+        let modeCookie = Cookie.getCookie(Cookie.RES_VIEW_MODE);
+        if (modeCookie in ResourceViewMode) {
+            rvPrefs.mode = <ResourceViewMode>modeCookie;
+        }
+        //tab sync
+        let syncTabsCookie: string = Cookie.getCookie(Cookie.RES_VIEW_TAB_SYNCED);
+        if (syncTabsCookie != null) {
+            rvPrefs.syncTabs = syncTabsCookie == "true"; //default false
+        }
+        //display img
+        let displayImgCookie = Cookie.getCookie(Cookie.RES_VIEW_DISPLAY_IMG);
+        if (displayImgCookie != null) {
+            rvPrefs.displayImg = displayImgCookie == "true"; //default false
+        }
+    }
+
+    /**
      * ResView Inference
      */
     setInferenceInResourceView(showInferred: boolean) {
         Cookie.setCookie(Cookie.RES_VIEW_INCLUDE_INFERENCE, showInferred + "", 365*10);
-    }
-    getInferenceInResourceView(): boolean {
-        return Cookie.getCookie(Cookie.RES_VIEW_INCLUDE_INFERENCE) == "true";
+        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.inference = showInferred;
     }
 
     /**
@@ -501,10 +549,7 @@ export class VBProperties {
      */
     setRenderingInResourceView(rendering: boolean) {
         Cookie.setCookie(Cookie.RES_VIEW_RENDERING, rendering + "", 365*10);
-    }
-    getRenderingInResourceView(): boolean {
-        let cookieValue: string = Cookie.getCookie(Cookie.RES_VIEW_RENDERING);
-        return (cookieValue == null || cookieValue == "true"); //default true, so true if cookie is not defined
+        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.rendering = rendering;
     }
 
     /**
@@ -512,24 +557,14 @@ export class VBProperties {
      */
     setResourceViewMode(mode: ResourceViewMode) {
         Cookie.setCookie(Cookie.RES_VIEW_MODE, mode, 365*10);
-    }
-    getResourceViewMode(): ResourceViewMode {
-        let mode: ResourceViewMode = <ResourceViewMode>Cookie.getCookie(Cookie.RES_VIEW_MODE);
-        if (mode != ResourceViewMode.splitted && mode != ResourceViewMode.tabbed) {
-            mode = ResourceViewMode.tabbed;
-            this.setResourceViewMode(mode);
-        }
-        return mode;
+        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.mode = mode;
     }
     /**
      * ResView Tab sync
      */
     setResourceViewTabSync(sync: boolean) {
         Cookie.setCookie(Cookie.RES_VIEW_TAB_SYNCED, sync + "", 365*10);
-    }
-    getResourceViewTabSync(): boolean {
-        let cookieValue: string = Cookie.getCookie(Cookie.RES_VIEW_TAB_SYNCED);
-        return cookieValue == "true";
+        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.syncTabs = sync;
     }
 
     /**
@@ -537,9 +572,7 @@ export class VBProperties {
      */
     setResourceViewDisplayImg(display: boolean) {
         Cookie.setCookie(Cookie.RES_VIEW_DISPLAY_IMG, display + "");
-    }
-    getResourceViewDisplayImg(): boolean {
-        return Cookie.getCookie(Cookie.RES_VIEW_DISPLAY_IMG) == "true";
+        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.displayImg = display;
     }
 
     /**

@@ -1,15 +1,15 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ConfigurationComponents } from "../../../models/Configuration";
-import { SettingsProp } from "../../../models/Plugins";
-import { PartitionFilterPreference, Properties } from "../../../models/Properties";
-import { PreferencesSettingsServices } from "../../../services/preferencesSettingsServices";
-import { VBContext } from "../../../utils/VBContext";
-import { VBProperties } from "../../../utils/VBProperties";
-import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
-import { LoadConfigurationModalReturnData } from "../../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
-import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
+import { ConfigurationComponents } from "../models/Configuration";
+import { SettingsProp } from "../models/Plugins";
+import { PartitionFilterPreference, Properties } from "../models/Properties";
+import { PreferencesSettingsServices } from "../services/preferencesSettingsServices";
+import { VBContext } from "../utils/VBContext";
+import { VBProperties } from "../utils/VBProperties";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { LoadConfigurationModalReturnData } from "../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
     selector: "res-view-settings-modal",
@@ -30,7 +30,7 @@ export class ResViewSettingsModal implements ModalComponent<BSModalContext> {
     }
 
     private initTemplate() {
-        this.template = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter;
+        this.template = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.resViewPartitionFilter;
     }
 
     private loadTemplate() {

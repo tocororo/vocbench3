@@ -1,11 +1,12 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Modal } from "ngx-modialog";
 import { Observable, Subscription } from "rxjs";
 import { CollaborationModalServices } from "../../collaboration/collaborationModalService";
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, LocalResourcePosition, RDFResourceRolesEnum, RemoteResourcePosition, ResAttribute, ResourcePosition } from "../../models/ARTResources";
 import { Issue } from "../../models/Collaboration";
 import { VersionInfo } from "../../models/History";
 import { Project } from "../../models/Project";
-import { NotificationStatus } from "../../models/Properties";
+import { NotificationStatus, ProjectPreferences } from "../../models/Properties";
 import { PropertyFacet, ResourceViewCtx, ResViewPartition } from "../../models/ResourceView";
 import { SemanticTurkey } from "../../models/Vocabulary";
 import { CollaborationServices } from "../../services/collaborationServices";
@@ -25,8 +26,8 @@ import { ProjectContext, VBContext } from "../../utils/VBContext";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { AbstractResourceView } from "./abstractResourceView";
 import { MultiActionFunction, MultiActionType, MultipleActionHelper } from "./renderer/multipleActionHelper";
-import { ResViewModalServices } from "./resViewModals/resViewModalServices";
 
 @Component({
     selector: "resource-view-editor",
@@ -39,7 +40,7 @@ import { ResViewModalServices } from "./resViewModals/resViewModalServices";
         .panel-heading .btn.active .glyphicon { color: #4285f4; } `
     ]
 })
-export class ResourceViewEditorComponent {
+export class ResourceViewEditorComponent extends AbstractResourceView {
     @Input() resource: ARTResource;
     @Input() readonly: boolean = false;
     @Input() context: ResourceViewCtx;
@@ -116,11 +117,12 @@ export class ResourceViewEditorComponent {
 
     private settingsAvailable: boolean = true;
 
-    constructor(private resViewService: ResourceViewServices, private versionService: VersionsServices, 
-        private resourcesService: ResourcesServices, private collaborationService: CollaborationServices, 
+    constructor(resViewService: ResourceViewServices, modal: Modal, 
+        private versionService: VersionsServices, private resourcesService: ResourcesServices, private collaborationService: CollaborationServices, 
         private metadataRegistryService: MetadataRegistryServices, private notificationsService: UserNotificationServices,
         private eventHandler: VBEventHandler, private vbProp: VBProperties, private vbCollaboration: VBCollaboration,
-        private basicModals: BasicModalServices, private resViewModals: ResViewModalServices, private collabModals: CollaborationModalServices) {
+        private basicModals: BasicModalServices, private collabModals: CollaborationModalServices) {
+        super(resViewService, modal);
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)
         ));
@@ -139,9 +141,10 @@ export class ResourceViewEditorComponent {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        this.showInferred = this.vbProp.getInferenceInResourceView();
-        this.rendering = this.vbProp.getRenderingInResourceView();
-        this.valueFilterLangEnabled = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().filterValueLang.enabled;
+        let projPref: ProjectPreferences = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences();
+        this.showInferred = projPref.resViewPreferences.inference;
+        this.rendering = projPref.resViewPreferences.rendering;
+        this.valueFilterLangEnabled = projPref.filterValueLang.enabled;
 
         if (changes['resource'] && changes['resource'].currentValue) {
             //if not the first change, avoid to refresh res view if resource is not changed
@@ -248,7 +251,7 @@ export class ResourceViewEditorComponent {
         } //else is unknown => the UI gives the possibility to discover the dataset
 
         //list of partition filtered out for the role of the current described resource
-        let partitionFilter: ResViewPartition[] = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPartitionFilter[this.resource.getRole()];
+        let partitionFilter: ResViewPartition[] = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.resViewPartitionFilter[this.resource.getRole()];
         if (partitionFilter == null) {
             partitionFilter = []; //to prevent error later (in partitionFilter.indexOf(partition))
         }
@@ -688,10 +691,6 @@ export class ResourceViewEditorComponent {
         );
     }
     
-    private openSettings() {
-        this.resViewModals.editSettings()
-    }
-
     private assertInferredStatements() {
         let poLists: ARTPredicateObjects[][] = [
             this.broadersColl, this.classAxiomColl, this.constituentsColl, this.denotationsColl, this.disjointPropertiesColl,

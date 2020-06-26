@@ -21,7 +21,7 @@
                         <span *ngIf="resViewMode == 'splitted'">
                             The Resource View panel is splitted in two: on the left there is a main Resource View which describes
                             (and is synched with) the resource selected in the tree/list; on the right there is an optional
-                            secondary Resource View which describes a resource selected (double click) from the main Resource View.<br><br>
+                            secondary Resource View which describes a resource selected (double click) from the main Resource View.<br>
                             <span class="glyphicon glyphicon-warning-sign"></span> This mode is not recommended in screen with resolution width below 1440px
                         </span>
                     </div>
@@ -43,7 +43,25 @@
                 </div>
             </div>
         </div>
-        <div class="panel panel-default" style="padding: 4px; margin-top: 2px">
+
+        <div *ngIf="typeSelectionAvailable" class="panel panel-default" style="margin-top: 4px">
+            <div class="panel-body">
+                <div class="hbox" style="align-items: center;">
+                    <label style="white-space: nowrap;">
+                        Default view for concepts:
+                        <span class="glyphicon glyphicon-info-sign" title="Determines the default type of Resource View used for describing and editing skos:Concept"></span>
+                    </label>
+                    <select class="form-control input-sm" style="margin-left: 4px;" [(ngModel)]="selectedRvConceptType" (ngModelChange)="onResViewConceptTypeChange()">
+                        <option *ngFor="let t of rvConceptTypes" [ngValue]="t">{{t.show}}</option>
+                    </select>
+                </div>
+                <div class="alert alert-info" style="margin-top: 4px;">
+                    {{selectedRvConceptType.description}}
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default" style="margin-top: 4px">
             <div class="panel-body">
                 <div class="checkbox-inline">
                     <label>

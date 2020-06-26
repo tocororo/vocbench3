@@ -38,6 +38,7 @@ export class Properties {
     static pref_lex_entry_list_safe_to_go_limit: string = "lex_entry_list_safe_to_go_limit";
 
     static pref_res_view_partition_filter: string = "rv_partition_filter";
+    static pref_res_view_default_concept_type: string = "res_view_default_concept_type";
 
     static pref_graph_view_partition_filter: string = "graph_partition_filter";
     static pref_hide_literal_graph_nodes: string = "hide_literal_graph_nodes";
@@ -54,12 +55,26 @@ export class Properties {
 
     static privacy_statement_available = "privacy_statement_available"
     
+}
 
+export class ResourceViewPreference {
+    mode: ResourceViewMode = ResourceViewMode.tabbed; 
+    syncTabs: boolean = false; //in tabbed mode allows to keep sync'd the resource in the active tab with the same resource in the tree/list
+    defaultConceptType: ResourceViewConceptType = ResourceViewConceptType.resourceForm; //tells the RV type to be open by default for concepts
+    displayImg: boolean = false;
+    resViewPartitionFilter: PartitionFilterPreference;
+    rendering: boolean = true;
+    inference: boolean = false;
 }
 
 export enum ResourceViewMode {
     tabbed = "tabbed",
     splitted = "splitted"
+}
+
+export enum ResourceViewConceptType { //used for set a default type of resource view for concepts
+    resourceForm = "resourceForm",
+    simplifiedForm = "simplifiedForm"
 }
 
 export class SearchSettings {
@@ -186,7 +201,7 @@ export class ProjectPreferences {
     conceptTreePreferences: ConceptTreePreference;
     lexEntryListPreferences: LexicalEntryListPreference;
 
-    resViewPartitionFilter: PartitionFilterPreference;
+    resViewPreferences: ResourceViewPreference;
 
     //graph preferences
     graphViewPartitionFilter: PartitionFilterPreference;

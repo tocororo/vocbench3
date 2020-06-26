@@ -15,7 +15,6 @@ import { DataTypeRestrictionsModal, DataTypeRestrictionsModalData } from './data
 import { InstanceListCreatorModal, InstanceListCreatorModalData } from "./instanceListCreatorModal";
 import { PropertyChainCreatorModal, PropertyChainCreatorModalData } from './propertyChainCreatorModal';
 import { RdfsMembersModal, RdfsMembersModalData } from './rdfsMembersModal';
-import { ResViewSettingsModal } from "./resViewSettingsModal";
 
 /**
  * Service to open modals that allow to create a classes list or instances list
@@ -150,15 +149,6 @@ export class ResViewModalServices {
         );
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
         return this.modal.open(DataRangeEditorModal, overlayConfig).result;
-    }
-
-    /**
-     * Opens a modal that allows to edit the resource view settings
-     */
-    editSettings() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
-        return this.modal.open(ResViewSettingsModal, overlayConfig).result;
     }
 
     /**

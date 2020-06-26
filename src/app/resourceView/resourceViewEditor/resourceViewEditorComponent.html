@@ -2,7 +2,7 @@
     <div class="panel-heading">
         <div class="hbox" style="align-items: center">
             <rdf-resource *ngIf="resource" [resource]="resource"></rdf-resource>
-            <resource-rename [resource]="resource" style="margin-left: 8px; flex: 1;" [readonly]="readonly" (update)="buildResourceView(resource)">
+            <resource-rename [resource]="resource" style="flex: 1;" [readonly]="readonly" (update)="buildResourceView(resource)">
             </resource-rename>
             
             <button class="btn btn-default btn-xs" [ngClass]="{active: rendering}" style="margin-left: 3px;"

@@ -92,7 +92,9 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
                     this.project = p;
                 }
             });
-            this.onProjectChange();
+            if (this.project != null) { //last explored project found among the available
+                this.onProjectChange();
+            }
         }
     }
 
