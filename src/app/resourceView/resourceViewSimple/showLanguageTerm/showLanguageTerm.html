@@ -7,8 +7,8 @@
         <div class="term-wrap">
             <label [ngClass]="termToShow?.isPrefLabel ? 'prefLabelColor' : 'altLabelcolor'">Term:</label>
             <text-editable style="flex:1;" [focusOnInit]="focus" [value]="termValue" (valueEdited)="onValueEdited($event)"> </text-editable>
-            <button class="btn btn-xs btn-default minus-button ">
-                <span class="glyphicon glyphicon-minus" (click)="deleteTermBox(termFromView)" title="Delete Term" style="font-size: 9px;"></span>
+            <button class="btn btn-xs btn-default minus-button " (click)="deleteTermBox(termFromView)"  title="Delete Term">
+                <span class="glyphicon glyphicon-minus" style="font-size: 9px;"></span>
             </button>
         </div>
     </div>

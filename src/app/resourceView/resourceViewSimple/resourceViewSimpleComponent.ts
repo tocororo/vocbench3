@@ -45,9 +45,9 @@ export class ResourceViewSimpleComponent {
 
 
 
-    ngOnInit() {
+    ngOnChanges() {
         this.buildResourceSimpleView(this.resource)
-        this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType();// mi serve per capire che tipo di lessicalizzazione ha quel progetto
+        this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType();//it's util to understand project lexicalization
     }
 
 
