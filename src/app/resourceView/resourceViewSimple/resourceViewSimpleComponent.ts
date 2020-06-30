@@ -127,7 +127,7 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
         }
 
         let notesColl: ARTPredicateObjects[] = this.initPartition(ResViewPartition.notes, true);
-        if (notesColl.length != null) {
+        if (notesColl != null) {
             let nodes: ARTNode[] = [];
 
             let definitionPredObj: ARTPredicateObjects = notesColl.find(po => po.getPredicate().equals(SKOS.definition));
@@ -291,7 +291,6 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
      * @param flagClicked 
      */
     private onClick(flagClicked: LangStructView) {
-        console.log(flagClicked, this.objectKeys)
         if (this.objectKeys.some(l => l == flagClicked.lang.tag)) { //(1)
             this.langItemsView.forEach(l => {
                 if (l.langFromServer == flagClicked.lang.tag) {

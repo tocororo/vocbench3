@@ -84,6 +84,7 @@ export class LangPickerComponent implements ControlValueAccessor {
                         this.languageList = this.languageList.filter((l: Language) => {
                             return (l.tag == this.language.tag || (this.config.locale && l.tag.startsWith(this.language.tag + "-")));
                         });
+                        this.language = this.languageList.find(l => l.tag == this.language.tag);
                     }
                 }
             }

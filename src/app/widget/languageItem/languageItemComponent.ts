@@ -1,7 +1,8 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Language } from "../../models/LanguagesCountries";
-import { UIUtils } from "../../utils/UIUtils";
+import { Theme, UIUtils } from "../../utils/UIUtils";
+import { VBContext } from "../../utils/VBContext";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 import { VBProperties } from "../../utils/VBProperties";
 
@@ -26,6 +27,8 @@ export class LanguageItemComponent {
     flagImgSrc: string;
     flagCls: string;
 
+    private unkownFlagBackground: string;
+
     eventSubscriptions: Subscription[] = [];
 
     constructor(private preferences: VBProperties, private eventHandler: VBEventHandler) {
@@ -39,6 +42,13 @@ export class LanguageItemComponent {
         } else {
             this.flagCls = "flag-xs";
         }
+
+        let activeThemeId: number = VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId;
+        let theme: Theme = UIUtils.themes.find(t => t.id == activeThemeId);
+        if (theme == null) {
+            theme = UIUtils.themes[0];
+        }
+        this.unkownFlagBackground = theme.mainColor;
     }
 
     ngOnChanges(changes: SimpleChanges) {

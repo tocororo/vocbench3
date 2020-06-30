@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ResourceViewConceptType, ResourceViewMode, ResourceViewPreference } from "../models/Properties";
+import { ResourceViewType, ResourceViewMode, ResourceViewPreference } from "../models/Properties";
 import { OntoLex, SKOS } from "../models/Vocabulary";
 import { VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
@@ -17,14 +17,14 @@ export class ResourceViewPreferencesComponent {
     private typeSelectionAvailable: boolean;
     private rvConceptTypes: ResViewConceptTypeOpt[] = [
         { 
-            type: ResourceViewConceptType.resourceForm, 
-            show: "Resource Form", 
-            description: "A complete UI for editing RDF data"
+            type: ResourceViewType.resourceView, 
+            show: "Detailed", 
+            description: "The standard form for editing RDF resources"
         },
         { 
-            type: ResourceViewConceptType.simplifiedForm, 
-            show: "Simplified Form", 
-            description: "An alternative and simplified UI, less RDF-centric and more suitable for lexicographer, allowing for editing definitions and lexicalizations" 
+            type: ResourceViewType.termView, 
+            show: "Terminologist", 
+            description: "A simplified - less RDF centric - form tailored on the needs of terminologists and lexicographers" 
         }
     ]
     private selectedRvConceptType: ResViewConceptTypeOpt;
@@ -65,7 +65,7 @@ export class ResourceViewPreferencesComponent {
 }
 
 interface ResViewConceptTypeOpt {
-    type: ResourceViewConceptType;
+    type: ResourceViewType;
     show: string;
     description: string;
 }

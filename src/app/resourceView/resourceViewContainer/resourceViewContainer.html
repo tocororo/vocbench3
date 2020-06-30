@@ -1,16 +1,10 @@
 <div class="vbox">
-    <resource-view-editor *ngIf="activeView == viewTypeResourceForm" [resource]="resource" (dblclickObj)="onObjectDblClick($event)" (update)="onResourceUpdate($event)"></resource-view-editor>
-    <resource-view-simple *ngIf="activeView == viewTypeSimplifiedForm" [resource]="resource"></resource-view-simple>
-    <resource-triple-editor *ngIf="activeView == viewTypeSourceCode" [resource]="resource" (update)="onResourceUpdate($event)"></resource-triple-editor>
+    <resource-view-editor *ngIf="activeView == 'resourceView'" [resource]="resource" (dblclickObj)="onObjectDblClick($event)" (update)="onResourceUpdate($event)"></resource-view-editor>
+    <resource-view-simple *ngIf="activeView == 'termView'" [resource]="resource"></resource-view-simple>
+    <resource-triple-editor *ngIf="activeView == 'sourceCode'" [resource]="resource" (update)="onResourceUpdate($event)"></resource-triple-editor>
 </div>
-<ul class="nav nav-tabs-bottom" *ngIf="isSimplifiedFormAvailable || isTriplesEditorAvailable">
-    <li [ngClass]="{ active: viewTypeResourceForm == activeView }">
-        <a (click)="activeView = viewTypeResourceForm">{{viewTypeResourceForm}}</a>
-    </li>
-    <li *ngIf="isSimplifiedFormAvailable" [ngClass]="{ active: viewTypeSimplifiedForm == activeView }">
-        <a (click)="activeView = viewTypeSimplifiedForm">{{viewTypeSimplifiedForm}}</a>
-    </li>
-    <li *ngIf="isTriplesEditorAvailable" [ngClass]="{ active: viewTypeSourceCode == activeView }">
-        <a (click)="activeView = viewTypeSourceCode">{{viewTypeSourceCode}}</a>
+<ul class="nav nav-tabs-bottom" *ngIf="rViews.length > 1">
+    <li *ngFor="let v of rViews" [ngClass]="{ active: v.type == activeView }">
+        <a (click)="changeView(v.type)">{{v.show}}</a>
     </li>
 </ul>

@@ -60,7 +60,8 @@ export class Properties {
 export class ResourceViewPreference {
     mode: ResourceViewMode = ResourceViewMode.tabbed; 
     syncTabs: boolean = false; //in tabbed mode allows to keep sync'd the resource in the active tab with the same resource in the tree/list
-    defaultConceptType: ResourceViewConceptType = ResourceViewConceptType.resourceForm; //tells the RV type to be open by default for concepts
+    defaultConceptType: ResourceViewType = ResourceViewType.resourceView; //tells the RV type to be open by default for concepts
+    lastConceptType: ResourceViewType;
     displayImg: boolean = false;
     resViewPartitionFilter: PartitionFilterPreference;
     rendering: boolean = true;
@@ -72,9 +73,10 @@ export enum ResourceViewMode {
     splitted = "splitted"
 }
 
-export enum ResourceViewConceptType { //used for set a default type of resource view for concepts
-    resourceForm = "resourceForm",
-    simplifiedForm = "simplifiedForm"
+export enum ResourceViewType { //used for set a default type of resource view for concepts
+    resourceView = "resourceView",
+    termView = "termView",
+    sourceCode = "sourceCode"
 }
 
 export class SearchSettings {

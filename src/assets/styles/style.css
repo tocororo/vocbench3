@@ -253,7 +253,6 @@ rdf-resource > .rdfResourceText {
     left: 0px;
     width: 16px;
     margin: 0 auto;
-    cursor: default;
     user-select: none;
     white-space: nowrap;
     overflow: hidden;

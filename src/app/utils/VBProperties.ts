@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
-import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, NotificationStatus, PartitionFilterPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewConceptType, ResourceViewMode, ResourceViewPreference, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
+import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, NotificationStatus, PartitionFilterPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewType, ResourceViewMode, ResourceViewPreference, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { OWL, RDFS } from '../models/Vocabulary';
 import { AdministrationServices } from '../services/administrationServices';
@@ -96,7 +96,7 @@ export class VBProperties {
                 //resource view preferences
                 let resViewPreferences: ResourceViewPreference = new ResourceViewPreference();
                 let resViewConceptTypePref = prefs[Properties.pref_res_view_default_concept_type];
-                if (resViewConceptTypePref in ResourceViewConceptType) {
+                if (resViewConceptTypePref in ResourceViewType) {
                     resViewPreferences.defaultConceptType = resViewConceptTypePref;
                 }
 
@@ -388,7 +388,7 @@ export class VBProperties {
     }
 
     //Res view settings
-    setResourceViewConceptType(type: ResourceViewConceptType) {
+    setResourceViewConceptType(type: ResourceViewType) {
         this.prefService.setPUSetting(Properties.pref_res_view_default_concept_type, type).subscribe();
         VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.defaultConceptType = type;
     }

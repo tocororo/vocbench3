@@ -48,8 +48,8 @@
             <div class="panel-body">
                 <div class="hbox" style="align-items: center;">
                     <label style="white-space: nowrap;">
-                        Default view for concepts:
-                        <span class="glyphicon glyphicon-info-sign" title="Determines the default type of Resource View used for describing and editing skos:Concept"></span>
+                        Initial view for concepts:
+                        <span class="glyphicon glyphicon-info-sign" title="This selection will be used by default for browsing SKOS concepts. The user can switch to other views during their session of work, but this selection will be applied as an initial setting at each new login"></span>
                     </label>
                     <select class="form-control input-sm" style="margin-left: 4px;" [(ngModel)]="selectedRvConceptType" (ngModelChange)="onResViewConceptTypeChange()">
                         <option *ngFor="let t of rvConceptTypes" [ngValue]="t">{{t.show}}</option>
