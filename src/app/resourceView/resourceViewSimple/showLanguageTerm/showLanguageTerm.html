@@ -5,7 +5,7 @@
 
     <div class="groupPanel-body">
         <div class="term-wrap">
-            <label [ngClass]="termToShow?.isPrefLabel ? 'prefLabelColor' : 'altLabelcolor'">Term:</label>
+            <label [ngClass]="termToShow?.isPrefLabel ? 'prefLabelColor' : 'altLabelcolor'" [title]="termToShow.predicate.getShow()">Term:</label>
             <text-editable style="flex:1;" [focusOnInit]="focus" [value]="termValue" (valueEdited)="onValueEdited($event)"> </text-editable>
             <button class="btn btn-xs btn-default minus-button " (click)="deleteTermBox(termFromView)"  title="Delete Term">
                 <span class="glyphicon glyphicon-minus" style="font-size: 9px;"></span>

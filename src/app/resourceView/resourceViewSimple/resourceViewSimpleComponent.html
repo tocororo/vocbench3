@@ -18,7 +18,8 @@
                     <h2 class="qname"><span>{{resource.qname}}</span></h2>
                     <div>
                         <p>{{resource.getShow()}}</p>
-                        <p *ngFor="let item of definitions">{{item.getShow()}}</p>
+                        <!-- <p *ngFor="let item of definitions">{{item.getShow()}}</p> -->
+                        <p *ngFor="let item of definitions">{{item.definition}} ({{item.lang}})</p>
                     </div>
                     <h2 class="concept"><span>Broader Concepts</span></h2>
                     <div>

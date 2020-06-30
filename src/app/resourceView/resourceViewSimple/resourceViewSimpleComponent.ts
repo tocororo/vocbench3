@@ -31,7 +31,8 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
     private resViewResponse: any = null;
     private unknownHost: boolean = false; //tells if the resource view of the current resource failed to be fetched due to a UnknownHostException
     private unexistingResource: boolean = false; //tells if the requested resource does not exist (empty description)
-    private definitions: ARTNode[]; // conteins object with definitions predicate (skos:definition)
+    //private definitions: ARTNode[]; // conteins object with definitions predicate (skos:definition)
+    private definitions: DefinitionStructView[] = [];  // conteins object with definitions predicate (skos:definition) and its lang
     private broaders: ARTNode[]; // conteins object with broader predicate (skos:broader)
     private langStruct: { [key: string]: ARTPredicateObjects[] } = {}; // new struct to map server response where key is a flag.
     private languages: LangStructView[] = []; // it is used to assign flag status(active/disabled) to flags list (top page under first box)
@@ -60,6 +61,7 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
             stResp => {
                 this.langStruct = {}
                 this.languages = []
+                this.definitions = []
                 this.resViewResponse = stResp;
                 this.fillPartitions();
                 this.initLanguages();
@@ -129,12 +131,23 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
         let notesColl: ARTPredicateObjects[] = this.initPartition(ResViewPartition.notes, true);
         if (notesColl != null) {
             let nodes: ARTNode[] = [];
-
-            let definitionPredObj: ARTPredicateObjects = notesColl.find(po => po.getPredicate().equals(SKOS.definition));
+            let definitionPredObj: ARTPredicateObjects = notesColl.find(po => po.getPredicate().equals(SKOS.definition)); //  here takes only objects with skos:definition predicate
             if (definitionPredObj) { //if there are definitions
-                this.definitions = definitionPredObj.getObjects(); // it is util for first box in the UI ( here takes only objects with skos:definition predicate)
+                // this.definitions = definitionPredObj.getObjects(); 
+                definitionPredObj.getObjects().forEach(def => {
+                    this.definitions.push({ definition: def.getShow(), lang: def.getAdditionalProperty(ResAttribute.LANG) }) // it is util to show "definition + lang" in first box in the UI 
+                    this.definitions.sort((a: DefinitionStructView, b: DefinitionStructView) => { // order about lang
+                        if (a.lang > b.lang) {
+                            return 1
+                        }
+                        if (a.lang < b.lang) {
+                            return -1
+                        }
+                        return 0;
+                    })
+                })
+
             }
-            
             notesColl.forEach(def => {
                 if (def.getPredicate().equals(SKOS.definition)) { // there could be several types (editorialNote, changeNote, example etc ..)
                     def.getObjects().forEach((obj: ARTNode) => {
@@ -329,4 +342,9 @@ interface LangStructView {
     lang: Language;
     disabled: boolean;
 
+}
+
+interface DefinitionStructView {
+    definition: string
+    lang: Language
 }
