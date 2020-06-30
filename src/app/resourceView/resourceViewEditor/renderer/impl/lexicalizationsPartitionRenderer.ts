@@ -142,7 +142,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                 () => {}
             );
         } else if (predicate.equals(OntoLex.isDenotedBy)) {
-            this.creationModals.newOntoLexicalizationCf("Add a lexical sense", predicate, false).then(
+            this.creationModals.newOntoLexicalizationCf("Add a Lexical Entry", predicate, false).then(
                 (data: NewOntoLexicalizationCfModalReturnData) => {
                     this.ontolexService.addLexicalization(data.linkedResource, this.resource, data.createPlain, data.createSense, data.cls, data.cfValue).subscribe(
                         stResp => {

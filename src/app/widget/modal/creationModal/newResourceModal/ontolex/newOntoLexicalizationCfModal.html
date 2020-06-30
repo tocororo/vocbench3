@@ -26,7 +26,12 @@
                 <tr>
                     <td class="text-right" nowrap><label>Lexical Entry:</label></td>
                     <td>
-                        <resource-picker [config]="{ roles: ['ontolexLexicalEntry'] }" [editable]="true" (resourceChanged)="updateLinkedRes($event)"></resource-picker>
+                        <div class="hbox">
+                            <editable-ns-input style="flex: 1" [(ngModel)]="linkedResource"></editable-ns-input>
+                            <button class="btn btn-default btn-sm" style="margin-left: 4px;" (click)="pickLexicalEntry()">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </div>
                     </td>
                 </tr>
             </ng-template>

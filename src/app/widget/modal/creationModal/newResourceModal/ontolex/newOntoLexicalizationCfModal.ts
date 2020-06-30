@@ -1,13 +1,13 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
-import { CustomFormsServices } from "../../../../../services/customFormsServices";
-import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
-import { BasicModalServices } from "../../../basicModal/basicModalServices";
-import { ARTLiteral, ARTURIResource, RDFResourceRolesEnum } from "../../../../../models/ARTResources";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource, RDFResourceRolesEnum } from "../../../../../models/ARTResources";
 import { CustomFormValue } from "../../../../../models/CustomForms";
 import { OntoLex } from "../../../../../models/Vocabulary";
+import { CustomFormsServices } from "../../../../../services/customFormsServices";
+import { BasicModalServices } from "../../../basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
+import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
 
 export class NewOntoLexicalizationCfModalData extends BSModalContext {
     constructor(
@@ -71,6 +71,14 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
 
     changeClass() {
         this.changeClassWithRoot(OntoLex.lexicalSense);
+    }
+
+    private pickLexicalEntry() {
+        this.browsingModals.browseLexicalEntryList("Select a LexicalEntry").then(
+            (lexEntry: ARTURIResource) => {
+                this.linkedResource = lexEntry.getURI();
+            }
+        )
     }
 
     private updateLinkedRes(res: ARTURIResource) {
