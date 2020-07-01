@@ -40,7 +40,7 @@
             </textarea>
 
             <input *ngSwitchCase="'int'" type="number" class="form-control input-sm" step="1" [(ngModel)]="prop.value" [disabled]="disabled">
-            <input *ngSwitchCase="'integer'" type="number" class="form-control input-sm" step="1" [(ngModel)]="p.value" [disabled]="disabled">
+            <input *ngSwitchCase="'integer'" type="number" class="form-control input-sm" step="1" [(ngModel)]="prop.value" [disabled]="disabled">
             <input *ngSwitchCase="'long'" type="number" class="form-control input-sm" step="1" [(ngModel)]="prop.value" [disabled]="disabled">
             <input *ngSwitchCase="'float'" type="number" class="form-control input-sm" step="0.01" [(ngModel)]="prop.value" [disabled]="disabled">
             <input *ngSwitchCase="'double'" type="number" class="form-control input-sm" step="0.01" [(ngModel)]="prop.value" [disabled]="disabled">
