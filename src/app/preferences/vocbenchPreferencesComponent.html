@@ -8,15 +8,25 @@
         <res-view-pref></res-view-pref>
 
         <div style="margin-top: 6px;">
-            <div class="hbox">
+            <div class="hbox" style="max-height: 800px;">
+                
                 <lang-pref style="flex: 1"></lang-pref>
-                <notifications-pref style="flex: 1; margin-left: 6px;"></notifications-pref>
+
+                <div class="panel panel-default vbox" style="flex: 1; margin-left: 6px;">
+                    <div class="panel-heading">
+                        <label>Notifications</label>
+                    </div>
+                    <div class="panel-body vbox">
+                        <notifications-pref></notifications-pref>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <div class="panel panel-alt" style="margin-top: 6px;">
+        <div class="panel panel-default" style="margin-top: 6px;">
             <div class="panel-heading">
-                <label style="flex: 1">Other preferences:</label>
+                <label style="flex: 1">Other preferences</label>
             </div>
             <div class="panel-body scrollableContainer">
 

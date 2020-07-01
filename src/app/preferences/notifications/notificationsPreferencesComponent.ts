@@ -1,13 +1,12 @@
-import { Component } from "@angular/core";
-import { RDFResourceRolesEnum } from "../../models/ARTResources";
+import { Component, Input } from "@angular/core";
+import { RDFResourceRolesEnum, ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { Action, NotificationPreferences } from "../../models/Notifications";
-import { NotificationStatus, Properties } from "../../models/Properties";
-import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
+import { NotificationStatus } from "../../models/Properties";
 import { UserNotificationServices } from "../../services/userNotificationServices";
-import { ResourceUtils } from "../../utils/ResourceUtils";
+import { ResourceUtils, SortAttribute } from "../../utils/ResourceUtils";
 import { VBContext } from "../../utils/VBContext";
-import { VBEventHandler } from "../../utils/VBEventHandler";
 import { VBProperties } from "../../utils/VBProperties";
+import { ResourcesServices } from "../../services/resourcesServices";
 
 @Component({
     selector: "notifications-pref",
@@ -16,14 +15,19 @@ import { VBProperties } from "../../utils/VBProperties";
 })
 export class NotificationsPreferencesComponent {
 
+    @Input() hideModeChange: boolean = false;
+
+    //Notification options
+
     private notificationOptions: NotificationPrefStruct[] = [
         { value: NotificationStatus.no_notifications, show: "No notifications", description: "You will not receive any notification" },
-        { value: NotificationStatus.in_app_only, show: "In-app only", description: "You will be able to read notifications in app" },
+        { value: NotificationStatus.in_app_only, show: "In-app only", description: "You will be able to read notifications only in app from a dedicated page" },
         { value: NotificationStatus.email_instant, show: "Email (instant)", description: "You will receive email instantly" },
         { value: NotificationStatus.email_daily_digest, show: "Email (daily digest)", description: "You will receive a daily email report" },
     ];
-    private activeNotificationOpt: NotificationStatus;
+    private activeNotificationOpt: NotificationPrefStruct;
 
+    //Notifications matrix
 
     private actions: Action[] = [Action.creation, Action.deletion, Action.update];
     private roleStructs: RoleStruct[];
@@ -32,9 +36,16 @@ export class NotificationsPreferencesComponent {
 
     private preferences: NotificationPreferences;
 
-    constructor(private notificationsService: UserNotificationServices, private vbProp: VBProperties) { }
+    //Watching resources
+    private watchingResources: ARTResource[];
+
+    constructor(private notificationsService: UserNotificationServices, private resourceService: ResourcesServices, private vbProp: VBProperties) { }
 
     ngOnInit() {
+        //init active notification option
+        this.activeNotificationOpt = this.notificationOptions.find(o => o.value == VBContext.getWorkingProjectCtx().getProjectPreferences().notificationStatus);
+
+        //init notifications matrix
         this.notificationsService.getNotificationPreferences().subscribe(
             prefs => {
                 this.preferences = prefs;
@@ -58,14 +69,33 @@ export class NotificationsPreferencesComponent {
             }
         );
 
-        this.activeNotificationOpt = VBContext.getWorkingProjectCtx().getProjectPreferences().notificationStatus;
+        //init list of watching resources
+        this.notificationsService.listWatching().subscribe(
+            watchingResources => {
+                let resources: ARTURIResource[] = [];
+                watchingResources.forEach(r => {
+                    let res = ResourceUtils.parseNode(r);
+                    if (res instanceof ARTURIResource) {
+                        resources.push(res);
+                    }
+                })
+                this.resourceService.getResourcesInfo(resources).subscribe(
+                    annotatedRes => {
+                        this.watchingResources = annotatedRes;
+                        ResourceUtils.sortResources(this.watchingResources, SortAttribute.show);
+                    }
+                );
+            }
+        );
     }
 
-    private changeNotificationStatus(option: NotificationStatus) {
-        this.activeNotificationOpt = option;
-        this.vbProp.setNotificationStatus(this.activeNotificationOpt);
+    //============ Notification option handler ============
+
+    private changeNotificationStatus() {
+        this.vbProp.setNotificationStatus(this.activeNotificationOpt.value);
     }
 
+    //============ Notification matrix handler ============
 
     private checkAllActions(status: boolean) {
         for (let role in this.notificationTable) {
@@ -103,6 +133,16 @@ export class NotificationsPreferencesComponent {
 
     private updateNotificationPref(role: RDFResourceRolesEnum, action: Action) {
         this.notificationsService.updateNotificationPreferences(role, action, this.notificationTable[role][action]).subscribe();
+    }
+
+    //============ Watching resources handler ============
+
+    private stopWatching(resource: ARTResource) {
+        this.notificationsService.stopWatching(resource).subscribe(
+            () => {
+                this.watchingResources.splice(this.watchingResources.indexOf(resource), 1);
+            }
+        )
     }
 
 }

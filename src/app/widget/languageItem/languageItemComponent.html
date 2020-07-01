@@ -9,10 +9,9 @@
             <img [src]="flagImgSrc" [ngClass]="{ disabled : disabled }">
         </ng-template>
         <ng-template #unknownFlag>
-            <div style="width: 16px; height: 12px;" [ngStyle]="{ 'background-color': unkownFlagBackground, opacity: disabled ? 0.5 : initial }">
-            </div>
+            <div style="width: 16px; height: 12px;" [ngStyle]="{ 'background-color': unkownFlagBackground, opacity: disabled ? 0.5 : initial }"></div>
+            <span style="color: white;">{{language.tag}}</span>
         </ng-template>
-        <span *ngIf="flagImgSrc.indexOf('unknown') != -1" [ngClass]="{ grayText: disabled }" style="color: white;">{{language.tag}}</span>
     </div>
     
     <span *ngIf="showName" [ngClass]="{ grayText: disabled }" style="margin-left: 2px;">{{language.name}}</span>

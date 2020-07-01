@@ -43,8 +43,11 @@ export class LanguageItemComponent {
             this.flagCls = "flag-xs";
         }
 
-        let activeThemeId: number = VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId;
-        let theme: Theme = UIUtils.themes.find(t => t.id == activeThemeId);
+        let theme: Theme;
+        if (VBContext.getWorkingProjectCtx() != null) {
+            let activeThemeId: number = VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId;
+            theme = UIUtils.themes.find(t => t.id == activeThemeId);
+        }
         if (theme == null) {
             theme = UIUtils.themes[0];
         }

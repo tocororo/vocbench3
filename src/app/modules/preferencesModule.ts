@@ -24,6 +24,7 @@ import { SharedModule } from './sharedModule';
     exports: [
         LanguageValueFilterComponent,
         ResourceViewPreferencesComponent,
+        NotificationsPreferencesComponent,
         VocbenchPreferencesComponent,
     ],
     providers: [],

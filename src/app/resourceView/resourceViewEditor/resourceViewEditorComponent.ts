@@ -664,8 +664,9 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
 
     //NOTIFICATIONS HANDLERS
     private initNotificationsAvailable() {
-        //notifications available only if the ResView is about a resource of the current project and if notifications are activated
-        this.notificationsAvailable = this.projectCtx == null && VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().notificationStatus != NotificationStatus.no_notifications;
+        //notifications available only if the ResView is about an IRI of the current project and if notifications are activated
+        this.notificationsAvailable = this.projectCtx == null && this.resource instanceof ARTURIResource &&
+            VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().notificationStatus != NotificationStatus.no_notifications;
         if (this.notificationsAvailable) { //in case notification are active => init the status of watching
             this.initNotificationsStatus();
         }

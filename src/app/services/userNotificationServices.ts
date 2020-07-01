@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTResource, RDFResourceRolesEnum } from '../models/ARTResources';
+import { Action, Notification, NotificationPreferences } from '../models/Notifications';
+import { Deserializer } from '../utils/Deserializer';
 import { HttpManager } from "../utils/HttpManager";
-import { Action, NotificationPreferences } from '../models/Notifications';
 
 @Injectable()
 export class UserNotificationServices {
@@ -47,7 +48,7 @@ export class UserNotificationServices {
     /**
      * 
      */
-    listWatching(): Observable<void> {
+    listWatching(): Observable<string[]> {
         let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "listWatching", params);
     }
@@ -86,75 +87,33 @@ export class UserNotificationServices {
         return this.httpMgr.doPost(this.serviceName, "updateNotificationPreferences", params);
     }
 
+    /**
+     * 
+     */
+    listNotifications(): Observable<Notification[]> {
+        let params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "listNotifications", params).map(
+            stResp => {
+                let notifications: Notification[] = [];
+                for (let nJson of stResp) {
+                    let n: Notification = {
+                        resource: nJson.resource,
+                        action: nJson.action,
+                        role: nJson.role,
+                        timestamp: new Date(nJson.timestamp)
+                    }
+                    n.timestampLocal = Deserializer.parseDateTime(n.timestamp);
+                    notifications.push(n);
+                }
+                return notifications;
+            }
+        );
+    }
 
-    // /**
-    //  * 
-    //  */
-    // searchResourceFromUser(): Observable<string[]> {
-    //     let params: any = {};
-    //     return this.httpMgr.doGet(this.serviceName, "searchResourceFromUser", params);
-    // }
-
-    // /**
-    //  * 
-    //  */
-    // searchProjRoleActionFromUser(userId: string): Observable<string[]> {
-    //     let params: any = {
-    //         userId: userId
-    //     };
-    //     return this.httpMgr.doGet(this.serviceName, "searchProjRoleActionFromUser", params);
-    // }
-
-    // /**
-    //  * 
-    //  */
-    // searchUserFromProjRes(proj: string, res: ARTURIResource): Observable<string[]> {
-    //     let params: any = {
-    //         proj: proj,
-    //         res: res,
-    //     };
-    //     return this.httpMgr.doGet(this.serviceName, "searchUserFromProjRes", params);
-    // }
-
-    // /**
-    //  * 
-    //  */
-    // searchUserFromProjRoleAction(proj: string, role: RDFResourceRolesEnum, action: Action): Observable<string[]> {
-    //     let params: any = {};
-    //     return this.httpMgr.doGet(this.serviceName, "searchResourceFromUser", params);
-    // }
-
-    // /**
-    //  * 
-    //  */
-    // addToUserWithRes(user: string, projId: string, res: ARTURIResource): Observable<string> {
-    //     let params: any = {};
-    //     return this.httpMgr.doPost(this.serviceName, "addToUserWithRes", params);
-    // }
-
-    // /**
-    //  * 
-    //  */
-    // addToUserWithRole(user: string, projId: string, role: RDFResourceRolesEnum, action: Action): Observable<string> {
-    //     let params: any = {};
-    //     return this.httpMgr.doPost(this.serviceName, "addToUserWithRes", params);
-    // }
-
-    // /**
-    //  * 
-    //  */
-    // removeUser(user: string): Observable<string> {
-    //     let params: any = {};
-    //     return this.httpMgr.doPost(this.serviceName, "addToUserWithRes", params);
-    // }
-
-    // /**
-    //  * 
-    //  */
-    // removeProjRoleActionFromUser(user: string, projId: string, role: RDFResourceRolesEnum, action: Action): Observable<string> {
-    //     let params: any = {};
-    //     return this.httpMgr.doPost(this.serviceName, "removeProjRoleActionFromUser", params);
-    // }
+    clearNotifications(): Observable<void> {
+        let params: any = {};
+        return this.httpMgr.doPost(this.serviceName, "clearNotifications", params);
+    }
 
 
 }

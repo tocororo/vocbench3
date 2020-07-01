@@ -280,7 +280,7 @@ export class VBProperties {
         VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId = theme;
         UIUtils.changeNavbarTheme(theme);
         let value = (theme == 0) ? null : theme+""; //theme 0 is the default one, so remove the preference
-        this.prefService.setPUSetting(Properties.pref_project_theme, value)
+        this.prefService.setPUSetting(Properties.pref_project_theme, value).subscribe();
     }
 
     setLanguagesPreference(languages: string[]) {
