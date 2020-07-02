@@ -41,7 +41,7 @@ export class MetadataAssociationEditorModal implements ModalComponent<MetadataAs
 
     ngOnInit() {
         this.resourceTypes = this.roles.map(r => { 
-            return { role: r, show: ResourceUtils.getResourceRoleLabel(r) }
+            return { role: r, show: ResourceUtils.getResourceRoleLabel(r, true) }
         })
         this.resourceMetadataService.getPatternIdentifiers().subscribe(
             refs => {

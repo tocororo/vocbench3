@@ -178,7 +178,7 @@ export class ResourceMetadataComponent {
             associations => {
                 this.associations = associations;
                 this.associations.forEach(a => {
-                    a['roleLabel'] = ResourceUtils.getResourceRoleLabel(a.role)
+                    a['roleLabel'] = ResourceUtils.getResourceRoleLabel(a.role, true)
                 })
                 this.selectedAssociation = null;
             }

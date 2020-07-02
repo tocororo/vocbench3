@@ -1,12 +1,14 @@
 import { Component } from "@angular/core";
 import { Modal, OverlayConfig } from "ngx-modialog";
 import { BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
+import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { Notification } from "../models/Notifications";
-import { UserNotificationServices } from "../services/userNotificationServices";
-import { NotificationSettingsModal } from "./notificationSettingsModal";
 import { ResourcesServices } from "../services/resourcesServices";
-import { ARTURIResource } from "../models/ARTResources";
+import { UserNotificationServices } from "../services/userNotificationServices";
+import { Deserializer } from "../utils/Deserializer";
 import { ResourceUtils } from "../utils/ResourceUtils";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { NotificationSettingsModal } from "./notificationSettingsModal";
 
 @Component({
     selector: "notifications-component",
@@ -15,11 +17,11 @@ import { ResourceUtils } from "../utils/ResourceUtils";
 })
 export class NotificationsComponent {
 
-    private notifications: Notification[];
+    private notifications: EnrichedNotification[];
     private sortOrder: SortOrder = SortOrder.TIME_ASCENDING;
 
     constructor(private notificationsService: UserNotificationServices, private resourceService: ResourcesServices,
-        private modal: Modal) { }
+        private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.init();
@@ -28,24 +30,33 @@ export class NotificationsComponent {
     private init() {
         this.notificationsService.listNotifications().subscribe(
             notifications => {
-                this.notifications = notifications;
-                let resources: ARTURIResource[] = <ARTURIResource[]> this.notifications.map(n => n.resource) //get only resource id
+                //collect resources to annotate
+                let resources: ARTURIResource[] = <ARTURIResource[]> notifications.map(n => n.resource) //get only resource id
                     .filter((r, pos, list) => list.indexOf(r) == pos) //filter out duplicates
                     .map(r => ResourceUtils.parseNode(r)) //convert id to ARTResource
-                    .filter(r => !(r instanceof ARTURIResource)); //filter out BNode
+                    .filter(r => r instanceof ARTURIResource); //filter out BNode
+
                 this.resourceService.getResourcesInfo(resources).subscribe(
                     annotatedRes => {
-                        annotatedRes.forEach(aRes => {
-                            this.notifications.forEach(n => {
-                                if (n.resource == aRes.toNT()) {
-                                    n.annotatedRes = aRes;
-                                }
-                            });
-                        });
+                        this.notifications = [];
+                        notifications.forEach(n => {
+                            let enrichedNotification: EnrichedNotification = {
+                                resource: n.resource,
+                                role: n.role,
+                                action: n.action,
+                                timestamp: n.timestamp,
+                                //enrichment
+                                annotatedRes: annotatedRes.find(aRes => n.resource == aRes.toNT()),
+                                roleShow: ResourceUtils.getResourceRoleLabel(n.role),
+                                timestampShow: Deserializer.parseDateTime(n.timestamp)
+                            }
+                            this.notifications.push(enrichedNotification);
+                        })
+                        //sort by date from newest to oldest
+                        this.changeTimeOrder();
                     }
                 )
-                //sort by date from newest to oldest
-                this.changeTimeOrder();
+                
             }
         );
     }
@@ -64,15 +75,19 @@ export class NotificationsComponent {
         this.modal.open(NotificationSettingsModal, overlayConfig);
     }
 
+    private openResource(resource: ARTResource) {
+        this.sharedModals.openResourceView(resource, true);
+    }
+
     private changeResourceOrder() {
         if (this.sortOrder == SortOrder.RESOURCE_ASCENDING) {
             this.sortOrder = SortOrder.RESOURCE_DESCENDING;
-            this.notifications.sort((n1: Notification, n2: Notification) => {
+            this.notifications.sort((n1, n2) => {
                 return -n1.annotatedRes.getShow().localeCompare(n2.annotatedRes.getShow());
             });
         } else { //in case is resource descending or any other order active
             this.sortOrder = SortOrder.RESOURCE_ASCENDING;
-            this.notifications.sort((n1: Notification, n2: Notification) => {
+            this.notifications.sort((n1, n2) => {
                 return n1.annotatedRes.getShow().localeCompare(n2.annotatedRes.getShow());
             });
         }
@@ -80,12 +95,12 @@ export class NotificationsComponent {
     private changeRoleOrder() {
         if (this.sortOrder == SortOrder.ROLE_ASCENDING) {
             this.sortOrder = SortOrder.ROLE_DESCENDING;
-            this.notifications.sort((n1: Notification, n2: Notification) => {
+            this.notifications.sort((n1, n2) => {
                 return -n1.role.localeCompare(n2.role);
             });
         } else { //in case is role descending or any other order active
             this.sortOrder = SortOrder.ROLE_ASCENDING;
-            this.notifications.sort((n1: Notification, n2: Notification) => {
+            this.notifications.sort((n1, n2) => {
                 return n1.role.localeCompare(n2.role);
             });
         }
@@ -93,12 +108,12 @@ export class NotificationsComponent {
     private changeActionOrder() {
         if (this.sortOrder == SortOrder.ACTION_ASCENDING) {
             this.sortOrder = SortOrder.ACTION_DESCENDING;
-            this.notifications.sort((n1: Notification, n2: Notification) => {
+            this.notifications.sort((n1, n2) => {
                 return -n1.action.localeCompare(n2.action);
             });
         } else { //in case is action descending or any other order active
             this.sortOrder = SortOrder.ACTION_ASCENDING;
-            this.notifications.sort((n1: Notification, n2: Notification) => {
+            this.notifications.sort((n1, n2) => {
                 return n1.action.localeCompare(n2.action);
             });
         }
@@ -106,12 +121,12 @@ export class NotificationsComponent {
     private changeTimeOrder() {
         if (this.sortOrder == SortOrder.TIME_ASCENDING) {
             this.sortOrder = SortOrder.TIME_DESCENDING;
-            this.notifications.sort((n1: Notification, n2: Notification) => {
+            this.notifications.sort((n1, n2) => {
                 return -n1.timestamp.getTime() - n2.timestamp.getTime();
             });
         } else { //in case is time descending or any other order active
             this.sortOrder = SortOrder.TIME_ASCENDING;
-            this.notifications.sort((n1: Notification, n2: Notification) => {
+            this.notifications.sort((n1, n2) => {
                 return n1.timestamp.getTime() - n2.timestamp.getTime();
             });
         }
@@ -128,4 +143,10 @@ class SortOrder {
     public static ACTION_ASCENDING: string = "action_ascending";
     public static TIME_DESCENDING: string = "time_descending";
     public static TIME_ASCENDING: string = "time_ascending";
+}
+
+class EnrichedNotification extends Notification {
+    annotatedRes: ARTURIResource;
+    roleShow: string;
+    timestampShow: string;
 }

@@ -37,7 +37,7 @@ export class NotificationsPreferencesComponent {
     private preferences: NotificationPreferences;
 
     //Watching resources
-    private watchingResources: ARTResource[];
+    private watchingResources: ARTResource[] = [];
 
     constructor(private notificationsService: UserNotificationServices, private resourceService: ResourcesServices, private vbProp: VBProperties) { }
 
@@ -79,12 +79,14 @@ export class NotificationsPreferencesComponent {
                         resources.push(res);
                     }
                 })
-                this.resourceService.getResourcesInfo(resources).subscribe(
-                    annotatedRes => {
-                        this.watchingResources = annotatedRes;
-                        ResourceUtils.sortResources(this.watchingResources, SortAttribute.show);
-                    }
-                );
+                if (resources.length > 0) {
+                    this.resourceService.getResourcesInfo(resources).subscribe(
+                        annotatedRes => {
+                            this.watchingResources = annotatedRes;
+                            ResourceUtils.sortResources(this.watchingResources, SortAttribute.show);
+                        }
+                    );
+                }
             }
         );
     }

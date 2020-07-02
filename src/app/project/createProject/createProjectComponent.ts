@@ -235,7 +235,8 @@ export class CreateProjectComponent {
             RDFResourceRolesEnum.ontolexLexicalSense, RDFResourceRolesEnum.ontology, RDFResourceRolesEnum.ontologyProperty,
             RDFResourceRolesEnum.property, RDFResourceRolesEnum.skosCollection, RDFResourceRolesEnum.skosOrderedCollection, 
             RDFResourceRolesEnum.xLabel].map(r => { 
-            return { role: r, show: ResourceUtils.getResourceRoleLabel(r) }
+                return { role: r, show: ResourceUtils.getResourceRoleLabel(r, true) 
+            }
         })
 
         //init available remote repo access configurations

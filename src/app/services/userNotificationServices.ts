@@ -102,7 +102,6 @@ export class UserNotificationServices {
                         role: nJson.role,
                         timestamp: new Date(nJson.timestamp)
                     }
-                    n.timestampLocal = Deserializer.parseDateTime(n.timestamp);
                     notifications.push(n);
                 }
                 return notifications;

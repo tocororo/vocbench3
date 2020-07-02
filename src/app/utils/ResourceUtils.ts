@@ -372,12 +372,17 @@ export class ResourceUtils {
         return roleClass;
     }
 
-    static getResourceRoleLabel(role: RDFResourceRolesEnum): string {
+    /**
+     * Returns a human-readable label for the given RDFResourceRole
+     * @param role 
+     * @param anyForUndetermined if true, maps the undetermined role with "Any resource"
+     */
+    static getResourceRoleLabel(role: RDFResourceRolesEnum, anyForUndetermined?: boolean): string {
         if (role == RDFResourceRolesEnum.cls) {
             return "Class";
         } else if (role == RDFResourceRolesEnum.xLabel) {
             return "Skosxl Label";
-        } else if (role == RDFResourceRolesEnum.undetermined) {
+        } else if (role == RDFResourceRolesEnum.undetermined && anyForUndetermined) {
             return "Any resource";
         } else {
             let splitted: string = role.replace(/([a-z])([A-Z])/g, '$1 $2');

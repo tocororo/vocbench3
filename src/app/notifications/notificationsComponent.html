@@ -16,6 +16,14 @@
                 <thead>
                     <tr>
                         <th class="text-center" style="padding: 2px;">
+                            Date
+                            <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="changeTimeOrder()">
+                                <span *ngSwitchCase="'time_ascending'" class="glyphicon glyphicon-sort-by-order"></span>
+                                <span *ngSwitchCase="'time_descending'" class="glyphicon glyphicon-sort-by-order-alt"></span>
+                                <span *ngSwitchDefault class="glyphicon glyphicon-sort"></span>
+                            </button>
+                        </th>
+                        <th class="text-center" style="padding: 2px;">
                             Resource
                             <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="changeResourceOrder()">
                                 <span *ngSwitchCase="'resource_ascending'" class="glyphicon glyphicon-sort-by-alphabet"></span>
@@ -24,7 +32,7 @@
                             </button>
                         </th>
                         <th class="text-center" style="padding: 2px;">
-                            Res.Type
+                            Resource Type
                             <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="changeRoleOrder()">
                                 <span *ngSwitchCase="'role_ascending'" class="glyphicon glyphicon-sort-by-alphabet"></span>
                                 <span *ngSwitchCase="'role_descending'" class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
@@ -32,18 +40,10 @@
                             </button>
                         </th>
                         <th class="text-center" style="padding: 2px;">
-                            Action
+                            Event
                             <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="changeActionOrder()">
                                 <span *ngSwitchCase="'action_ascending'" class="glyphicon glyphicon-sort-by-alphabet"></span>
                                 <span *ngSwitchCase="'action_descending'" class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
-                                <span *ngSwitchDefault class="glyphicon glyphicon-sort"></span>
-                            </button>
-                        </th>
-                        <th class="text-center" style="padding: 2px;">
-                            Date
-                            <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="changeTimeOrder()">
-                                <span *ngSwitchCase="'time_ascending'" class="glyphicon glyphicon-sort-by-order"></span>
-                                <span *ngSwitchCase="'time_descending'" class="glyphicon glyphicon-sort-by-order-alt"></span>
                                 <span *ngSwitchDefault class="glyphicon glyphicon-sort"></span>
                             </button>
                         </th>
@@ -51,10 +51,18 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let n of notifications">
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center">
+                            {{n.timestampShow}}
+                        </td>
+                        <td class="text-center">
+                            <rdf-resource [resource]="n.annotatedRes" class="clickable" (click)="openResource(n.annotatedRes)"></rdf-resource>
+                        </td>
+                        <td class="text-center">
+                            {{n.roleShow}}
+                        </td>
+                        <td class="text-center">
+                            {{n.action}}
+                        </td>
                     </tr>
                 </tbody>
             </table>

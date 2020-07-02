@@ -9,11 +9,9 @@ export enum Action {
 
 export class Notification {
     resource: string;
-    annotatedRes?: ARTResource;
     role: RDFResourceRolesEnum;
     action: Action;
     timestamp: Date;
-    timestampLocal?: string;
 }
 
 //map between role and enabled notification action

@@ -68,10 +68,10 @@
         <label>Watching resources</label>
     </div>
     <div class="panel-body scrollableContainer">
-        <div *ngIf="watchingResources?.length == 0" class="alert alert-warning">
+        <div *ngIf="watchingResources.length == 0" class="alert alert-warning">
             You did not enabled notifications on any resources.
             You can start watching resources by clicking on the <span class="glyphicon glyphicon-bell"></span> button
-            placed on the toolbar of the ResourceView.
+            placed on the toolbar of a ResourceView.
         </div>
 
         <div *ngFor="let r of watchingResources" class="listItem">
