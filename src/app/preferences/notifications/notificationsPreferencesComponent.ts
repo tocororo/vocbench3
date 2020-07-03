@@ -2,7 +2,7 @@ import { Component, Input } from "@angular/core";
 import { RDFResourceRolesEnum, ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { Action, NotificationPreferences } from "../../models/Notifications";
 import { NotificationStatus } from "../../models/Properties";
-import { UserNotificationServices } from "../../services/userNotificationServices";
+import { NotificationServices } from "../../services/notificationServices";
 import { ResourceUtils, SortAttribute } from "../../utils/ResourceUtils";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
@@ -39,7 +39,7 @@ export class NotificationsPreferencesComponent {
     //Watching resources
     private watchingResources: ARTResource[] = [];
 
-    constructor(private notificationsService: UserNotificationServices, private resourceService: ResourcesServices, private vbProp: VBProperties) { }
+    constructor(private notificationsService: NotificationServices, private resourceService: ResourcesServices, private vbProp: VBProperties) { }
 
     ngOnInit() {
         //init active notification option

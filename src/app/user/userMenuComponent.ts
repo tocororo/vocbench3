@@ -52,8 +52,9 @@ export class UserMenuComponent {
         )
 
         //notifications entry visible if project open and the notifications are active
+        let noificationMode = VBContext.getWorkingProjectCtx().getProjectPreferences().notificationStatus;
         this.isNotificationsVisible = this.isProjectOpen && 
-                VBContext.getWorkingProjectCtx().getProjectPreferences().notificationStatus != NotificationStatus.no_notifications;
+            (noificationMode == NotificationStatus.in_app_only || noificationMode == NotificationStatus.email_daily_digest);
 
     }
 

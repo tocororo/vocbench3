@@ -221,12 +221,6 @@ export class CreateProjectComponent {
         //init project list for EDOAL
         this.initProjectList();
 
-        //init shacl settings
-        this.projectService.createEmptySHACLSettingsForm().subscribe(
-            settings => {
-                this.shaclSettings = settings;
-            }
-        );
 
         this.resourceTypes = [RDFResourceRolesEnum.undetermined, RDFResourceRolesEnum.annotationProperty, RDFResourceRolesEnum.cls,
             RDFResourceRolesEnum.concept, RDFResourceRolesEnum.conceptScheme, RDFResourceRolesEnum.dataRange, 
@@ -672,6 +666,21 @@ export class CreateProjectComponent {
             this.metadataAssociations[0].pattern = null;
         } else {
             this.metadataAssociations.slice(this.metadataAssociations.indexOf(metadataAssociation), 1);
+        }
+    }
+
+    /**
+     * SHACLE
+     */
+
+    onShacleEnableChange() {
+        //initialize the shacle settings if are still not
+        if (this.enableSHACL && this.shaclSettings == null) {
+            this.projectService.createEmptySHACLSettingsForm().subscribe(
+                settings => {
+                    this.shaclSettings = settings;
+                }
+            );
         }
     }
 

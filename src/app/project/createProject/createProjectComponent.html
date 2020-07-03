@@ -445,14 +445,14 @@
                             <label style="flex: 1;">SHACL Shape Validation</label>
                             <div class="checkbox" style="margin: 0px;">
                                 <label style="min-height: initial;">
-                                    <input type="checkbox" [(ngModel)]="enableSHACL">
+                                    <input type="checkbox" [(ngModel)]="enableSHACL" (ngModelChange)="onShacleEnableChange()">
                                     Enable shape validation
                                 </label>
                             </div>
                         </div>
                         <div class="panel-body">
                             <ng-container *ngIf="enableSHACL">
-                                <settings-renderer *ngIf="isSelectedRepoAccessCreateMode()" [(ngModel)]="shaclSettings" [disabled]="!enableSHACL">
+                                <settings-renderer *ngIf="isSelectedRepoAccessCreateMode() && shaclSettings" [(ngModel)]="shaclSettings" [disabled]="!enableSHACL">
                                 </settings-renderer>
                                 <div *ngIf="!isSelectedRepoAccessCreateMode()" class="alert alert-warning">
                                     <span class="glyphicon glyphicon-warning-sign"></span>

@@ -2,8 +2,13 @@ import { Component } from "@angular/core";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { Router } from "@angular/router";
 import { ARTURIResource } from "../../models/ARTResources";
+import { ConfigurationComponents } from "../../models/Configuration";
+import { CronDefinition } from "../../models/Notifications";
+import { Scope } from "../../models/Plugins";
 import { UserForm, UserFormCustomField, UserFormOptionalField } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
+import { NotificationServices } from "../../services/notificationServices";
+import { SettingsServices } from "../../services/settingsServices";
 import { UserServices } from "../../services/userServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
@@ -43,6 +48,17 @@ export class SystemConfigurationComponent {
 
     private cryptoProtocol: string;
 
+    /* Notifications configuration */
+    private timezones: string[];
+    private timezone: string;
+    private timezonePristine: string;
+    private hoursOfDay: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+    private cronHourOfDay: number;
+    private cronHourOfDayPristine: number;
+
+    //this is just for testing purpose (see the commented testNotificationSchedule() and the related section in template)
+    // private cronExprTest: string;
+
 
     /* Registration form fields */
     private optionalFields: UserFormOptionalField[];
@@ -61,13 +77,15 @@ export class SystemConfigurationComponent {
     private expFeatEnabled: boolean = false;
 
 
-    constructor(private adminService: AdministrationServices, private userService: UserServices, private vbProp: VBProperties,
+    constructor(private adminService: AdministrationServices, private userService: UserServices, private vbProp: VBProperties, 
+        private settingsService: SettingsServices, private notificationsService: NotificationServices,
         private basicModals: BasicModalServices, public sanitizer: DomSanitizer, private router: Router) { }
 
     ngOnInit() {
         this.isInitialConfiguration = this.router.url == "/Sysconfig";
 
         this.initAdminConfig();
+        this.initNotificationsConfig();
         this.initFields();
         this.initHomeContent();
     }
@@ -102,6 +120,7 @@ export class SystemConfigurationComponent {
                 this.profilerThresholdPristine = conf.preloadProfilerTreshold;
             }
         );
+
         this.expFeatEnabled = VBContext.getSystemSettings().experimentalFeaturesEnabled;
     }
 
@@ -188,6 +207,81 @@ export class SystemConfigurationComponent {
         return false;
     }
 
+    /* ============================
+     * Notifications
+     * ============================ */
+
+    private initNotificationsConfig() {
+        if (this.timezones == null) { //so it is not initalized when refreshing configuration
+            this.notificationsService.getAvailableTimeZoneIds().subscribe(
+                timezoneIds => {
+                    this.timezones = timezoneIds;
+                }
+            );
+        }
+        this.settingsService.getSettings(ConfigurationComponents.NOTIFICATION_SYSTEM_SETTINGS_MANAGER, Scope.SYSTEM).subscribe(
+            settings => {
+                let cronDefinition: CronDefinition = settings.getPropertyValue("notificationDigestSchedule");
+                if (cronDefinition == null) {
+                    cronDefinition = {
+                        expression: null,
+                        zone: null
+                    }
+                }
+                // this.cronExprTest = cronDefinition.expression;
+                if (cronDefinition.expression != null) {
+                    this.cronHourOfDay = parseInt(cronDefinition.expression.split(" ")[2]);
+                    this.cronHourOfDayPristine = this.cronHourOfDay;
+                }
+                this.timezone = cronDefinition.zone;
+                this.timezonePristine = cronDefinition.zone;
+            }
+        )
+    }
+
+    private updateNotificationSchedule() {
+        let cronDefinition: CronDefinition = {
+            expression: "0 0 " + this.cronHourOfDay + " * * *",
+            zone: this.timezone
+        }
+        this.notificationsService.scheduleNotificationDigest(cronDefinition).subscribe(
+            () => {
+                this.initNotificationsConfig();
+            }
+        );
+    }
+    /**
+     * Just for testing purpose
+     */
+    // private testNotificationSchedule() {
+    //     let cronDefinition: CronDefinition = {
+    //         expression: this.cronExprTest
+    //     }
+    //     this.notificationsService.scheduleNotificationDigest(cronDefinition).subscribe(
+    //         () => {
+    //             this.initNotificationsConfig();
+    //         }
+    //     );
+    // }
+
+    private disableNotificationSchedule() {
+        this.notificationsService.scheduleNotificationDigest().subscribe(
+            () => {
+                this.initNotificationsConfig();
+            }
+        );
+    }
+
+    private detectTimezone() {
+        let localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        if (this.timezones.some(t => t == localTimezone)) {
+            this.timezone = localTimezone;
+        }
+    }
+
+    private isCronDefinitionChanged(): boolean {
+        return this.cronHourOfDay != this.cronHourOfDayPristine || this.timezone != this.timezonePristine;
+    }
 
     /* ============================
      * Registration form fields

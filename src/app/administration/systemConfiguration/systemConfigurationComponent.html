@@ -183,6 +183,64 @@
                 </div>
             </div>
 
+            <!-- Notifications -->
+            <div class="panel panel-default" style="margin-top: 6px;">
+                <div class="panel-heading">
+                    <label>Notifications schedule configuration:</label>
+                </div>
+                <div class="panel-body">
+                    <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 4px;">
+                        Configuration of the VocBench e-mail notification service. 
+                        The system will send a notifications daily digest to the users who have chosen the 
+                        <i>Email daily digest</i> as notification mode.
+                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                    </div>
+                    <table class="table table-condensed table-borderless">
+                        <colgroup>
+                            <col style="width: 1%;">
+                            <col style="width: 1%;">
+                            <col>
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td><span class="glyphicon glyphicon-info-sign" title="The hour of the day when the report will be sent every day"></span></td>
+                                <td nowrap><label>Hour of the day:</label></td>
+                                <td>
+                                    <select class="form-control input-sm" [(ngModel)]="cronHourOfDay">
+                                        <option *ngFor="let h of hoursOfDay">{{h}}</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="glyphicon glyphicon-info-sign" title="A timezone id"></span></td>
+                                <td nowrap><label>Time zone:</label></td>
+                                <td>
+                                    <div class="hbox">
+                                        <select class="form-control input-sm" [(ngModel)]="timezone">
+                                            <option *ngFor="let t of timezones">{{t}}</option>
+                                        </select>
+                                        <button class="btn btn-sm btn-default" style="margin-left: 4px;" (click)="detectTimezone()" title="Detect the browser timezone">
+                                            Detect
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="panel-footer" style="text-align: right;">
+                    <!-- <div class="hbox" style="margin-bottom: 4px;">
+                        <input class="input-sm form-control" [(ngModel)]="cronExprTest" placeholder="*/30 * * * * *">
+                        <button class="btn btn-info btn-sm" (click)="testNotificationSchedule()" style="margin-left: 4px"
+                            title="Manually configure the input cron expression (for testing purpose)">Test</button>
+                    </div> -->
+                    <button type="submit" class="btn btn-default btn-sm" (click)="updateNotificationSchedule()" 
+                        [disabled]="!cronHourOfDay || !timezone">Submit</button>
+                    <button class="btn btn-warning btn-sm" (click)="disableNotificationSchedule()" title="Disable the notifications daily digest"
+                        [disabled]="cronHourOfDay || timezone">Disable</button>
+                </div>
+            </div>
+
             <!-- Registration form -->
             <div class="panel panel-default" style="margin-top: 6px;">
                 <div class="panel-heading">

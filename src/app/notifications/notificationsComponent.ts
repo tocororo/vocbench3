@@ -4,7 +4,7 @@ import { BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { Notification } from "../models/Notifications";
 import { ResourcesServices } from "../services/resourcesServices";
-import { UserNotificationServices } from "../services/userNotificationServices";
+import { NotificationServices } from "../services/notificationServices";
 import { Deserializer } from "../utils/Deserializer";
 import { ResourceUtils } from "../utils/ResourceUtils";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
@@ -20,7 +20,7 @@ export class NotificationsComponent {
     private notifications: EnrichedNotification[];
     private sortOrder: SortOrder = SortOrder.TIME_ASCENDING;
 
-    constructor(private notificationsService: UserNotificationServices, private resourceService: ResourcesServices,
+    constructor(private notificationsService: NotificationServices, private resourceService: ResourcesServices,
         private sharedModals: SharedModalServices, private modal: Modal) { }
 
     ngOnInit() {

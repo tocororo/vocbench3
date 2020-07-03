@@ -25,6 +25,7 @@ import { ManchesterServices } from "../services/manchesterServices";
 import { MapleServices } from '../services/mapleServices';
 import { MetadataRegistryServices } from "../services/metadataRegistryServices";
 import { MetadataServices } from "../services/metadataServices";
+import { NotificationServices } from '../services/notificationServices';
 import { OntoLexLemonServices } from "../services/ontoLexLemonServices";
 import { OntoManagerServices } from "../services/ontoManagerServices";
 import { PluginsServices } from "../services/pluginsServices";
@@ -45,7 +46,6 @@ import { Sheet2RDFServices } from "../services/sheet2rdfServices";
 import { SkosServices } from "../services/skosServices";
 import { SkosxlServices } from "../services/skosxlServices";
 import { SparqlServices } from "../services/sparqlServices";
-import { UserNotificationServices } from '../services/userNotificationServices';
 import { UserServices } from "../services/userServices";
 import { UsersGroupsServices } from "../services/usersGroupsServices";
 import { ValidationServices } from "../services/validationServices";
@@ -81,6 +81,7 @@ import { VersionsServices } from "../services/versionsServices";
         MapleServices,
         MetadataServices,
         MetadataRegistryServices,
+        NotificationServices,
         OntoLexLemonServices,
         OntoManagerServices,
         PluginsServices,
@@ -102,7 +103,6 @@ import { VersionsServices } from "../services/versionsServices";
         SkosxlServices,
         SparqlServices,
         UserServices,
-        UserNotificationServices,
         UsersGroupsServices,
         ValidationServices,
         VersionsServices

@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ARTResource, RDFResourceRolesEnum } from '../models/ARTResources';
-import { Action, Notification, NotificationPreferences } from '../models/Notifications';
-import { Deserializer } from '../utils/Deserializer';
+import { Action, CronDefinition, Notification, NotificationPreferences } from '../models/Notifications';
 import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
-export class UserNotificationServices {
+export class NotificationServices {
 
-    private serviceName = "UserNotification";
+    private serviceName = "Notifications";
 
     constructor(private httpMgr: HttpManager) { }
 
@@ -114,5 +113,23 @@ export class UserNotificationServices {
         return this.httpMgr.doPost(this.serviceName, "clearNotifications", params);
     }
 
+
+
+
+    scheduleNotificationDigest(schedule?: CronDefinition) {
+        let params: any = {
+            schedule: schedule != null ? JSON.stringify(schedule) : null
+        };
+        return this.httpMgr.doPost(this.serviceName, "scheduleNotificationDigest", params);
+    }
+
+    getAvailableTimeZoneIds(): Observable<string[]> {
+        let params: any = {};
+        return this.httpMgr.doGet(this.serviceName, "getAvailableTimeZoneIds", params).map(
+            (ids: string[]) => {
+                return ids.sort();
+            }
+        );
+    }
 
 }

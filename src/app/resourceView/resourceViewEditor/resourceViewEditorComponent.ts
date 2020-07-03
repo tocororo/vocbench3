@@ -13,7 +13,7 @@ import { CollaborationServices } from "../../services/collaborationServices";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { ResourceViewServices } from "../../services/resourceViewServices";
-import { UserNotificationServices } from "../../services/userNotificationServices";
+import { NotificationServices } from "../../services/notificationServices";
 import { VersionsServices } from "../../services/versionsServices";
 import { AuthorizationEvaluator, CRUDEnum, ResourceViewAuthEvaluator } from "../../utils/AuthorizationEvaluator";
 import { Deserializer } from "../../utils/Deserializer";
@@ -119,7 +119,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
 
     constructor(resViewService: ResourceViewServices, modal: Modal, 
         private versionService: VersionsServices, private resourcesService: ResourcesServices, private collaborationService: CollaborationServices, 
-        private metadataRegistryService: MetadataRegistryServices, private notificationsService: UserNotificationServices,
+        private metadataRegistryService: MetadataRegistryServices, private notificationsService: NotificationServices,
         private eventHandler: VBEventHandler, private vbProp: VBProperties, private vbCollaboration: VBCollaboration,
         private basicModals: BasicModalServices, private collabModals: CollaborationModalServices) {
         super(resViewService, modal);

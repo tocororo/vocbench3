@@ -14,5 +14,10 @@ export class Notification {
     timestamp: Date;
 }
 
+export class CronDefinition {
+    expression: string;
+    zone?: string;
+}
+
 //map between role and enabled notification action
 export interface NotificationPreferences { [key: string]: Action[] }
