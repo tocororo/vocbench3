@@ -237,7 +237,7 @@
                     <button type="submit" class="btn btn-default btn-sm" (click)="updateNotificationSchedule()" 
                         [disabled]="!cronHourOfDay || !timezone">Submit</button>
                     <button class="btn btn-warning btn-sm" (click)="disableNotificationSchedule()" title="Disable the notifications daily digest"
-                        [disabled]="cronHourOfDay || timezone">Disable</button>
+                        [disabled]="!cronHourOfDay && !timezone">Disable</button>
                 </div>
             </div>
 

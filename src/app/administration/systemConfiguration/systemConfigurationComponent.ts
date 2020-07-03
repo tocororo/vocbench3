@@ -56,10 +56,6 @@ export class SystemConfigurationComponent {
     private cronHourOfDay: number;
     private cronHourOfDayPristine: number;
 
-    //this is just for testing purpose (see the commented testNotificationSchedule() and the related section in template)
-    // private cronExprTest: string;
-
-
     /* Registration form fields */
     private optionalFields: UserFormOptionalField[];
 
@@ -221,6 +217,12 @@ export class SystemConfigurationComponent {
         }
         this.settingsService.getSettings(ConfigurationComponents.NOTIFICATION_SYSTEM_SETTINGS_MANAGER, Scope.SYSTEM).subscribe(
             settings => {
+                //restore empty configuration
+                this.cronHourOfDay = null;
+                this.cronHourOfDayPristine = this.cronHourOfDay;
+                this.timezone = null;
+                this.timezonePristine = this.timezone;
+                //parse the setting
                 let cronDefinition: CronDefinition = settings.getPropertyValue("notificationDigestSchedule");
                 if (cronDefinition == null) {
                     cronDefinition = {
@@ -228,13 +230,15 @@ export class SystemConfigurationComponent {
                         zone: null
                     }
                 }
-                // this.cronExprTest = cronDefinition.expression;
+                //convert the cron expression into hour of the day
                 if (cronDefinition.expression != null) {
                     this.cronHourOfDay = parseInt(cronDefinition.expression.split(" ")[2]);
                     this.cronHourOfDayPristine = this.cronHourOfDay;
                 }
                 this.timezone = cronDefinition.zone;
-                this.timezonePristine = cronDefinition.zone;
+                this.timezonePristine = this.timezone;
+
+                // this.cronExprTest = cronDefinition.expression; //uncomment for test
             }
         )
     }
@@ -251,11 +255,13 @@ export class SystemConfigurationComponent {
         );
     }
     /**
-     * Just for testing purpose
+     * Just for testing purpose (see also the related section in template)
      */
+    // private cronExprTest: string;
     // private testNotificationSchedule() {
     //     let cronDefinition: CronDefinition = {
-    //         expression: this.cronExprTest
+    //         expression: this.cronExprTest,
+    //         zone: this.timezone
     //     }
     //     this.notificationsService.scheduleNotificationDigest(cronDefinition).subscribe(
     //         () => {
