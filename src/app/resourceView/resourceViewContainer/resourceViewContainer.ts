@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
 import { ARTResource, ResAttribute } from "../../models/ARTResources";
 import { ResourceViewPreference, ResourceViewType } from '../../models/Properties';
+import { SKOS } from "../../models/Vocabulary";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
@@ -38,7 +39,11 @@ export class ResourceViewTabContainer {
         if (changes['resource']) {
             this.rViews = [this.resourceFormStruct];
             //add the simplified form if available
-            if (VBContext.getSystemSettings().experimentalFeaturesEnabled && this.resource.getRole() == RDFResourceRolesEnum.concept) {
+            if (
+                VBContext.getSystemSettings().experimentalFeaturesEnabled && 
+                this.resource.getRole() == RDFResourceRolesEnum.concept && 
+                VBContext.getWorkingProject().getModelType() == SKOS.uri
+            ) {
                 this.rViews.push(this.simplifiedFormStruct)
             }
             //add the source code editor if available
