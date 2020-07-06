@@ -48,7 +48,39 @@ export class CustomFormsServices {
             predicate: predicate,
             resource: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "removeReifiedResource", params);
+        return this.httpMgr.doPost(this.serviceName, "removeReifiedResource", params);
+    }
+
+    /**
+     * Updates the "show" value of a reified resource expressed through a custom form value.
+     * @param subject 
+     * @param predicate 
+     * @param reifiedNode 
+     * @param newValue 
+     */
+    updateReifiedResourceShow(subject: ARTResource, predicate: ARTURIResource, reifiedNode: ARTResource, newValue: ARTLiteral) {
+        let params: any = {
+            subject: subject,
+            predicate: predicate,
+            reifiedNode: reifiedNode,
+            newValue: newValue
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateReifiedResourceShow", params);
+    }
+
+    /**
+     * Returns true if the definitionNode represents a "standard" reified definition, namely
+	 * a reified definition which the literal representation is linked to the definition node
+	 * through the sole rdf:value property
+     * @param definitionNode 
+     * @param predicate 
+     */
+    isStandardReifiedDefinition(definitionNode: ARTResource, predicate: ARTURIResource) {
+        let params: any = {
+            definitionNode: definitionNode,
+            predicate: predicate,
+        };
+        return this.httpMgr.doGet(this.serviceName, "isStandardReifiedDefinition", params);
     }
 
     /**

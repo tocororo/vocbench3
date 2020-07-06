@@ -7,6 +7,7 @@ import { ResourceUtils, SortAttribute } from "../../utils/ResourceUtils";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 import { ResourcesServices } from "../../services/resourcesServices";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "notifications-pref",
@@ -45,8 +46,17 @@ export class NotificationsPreferencesComponent {
         //init active notification option
         this.activeNotificationOpt = this.notificationOptions.find(o => o.value == VBContext.getWorkingProjectCtx().getProjectPreferences().notificationStatus);
 
-        //init notifications matrix
-        this.notificationsService.getNotificationPreferences().subscribe(
+        //init notifications matrix and list of watching resources
+        //in order to prevent error due to lock problem, initializes these two sequentially
+        this.initNotificationMatrix().subscribe(
+            () => {
+                this.initWatchingResources().subscribe();
+            }
+        )
+    }
+
+    private initNotificationMatrix(): Observable<void> {
+        return this.notificationsService.getNotificationPreferences().map(
             prefs => {
                 this.preferences = prefs;
                 this.roleStructs = Object.keys(this.preferences)
@@ -68,9 +78,10 @@ export class NotificationsPreferencesComponent {
                 );
             }
         );
+    }
 
-        //init list of watching resources
-        this.notificationsService.listWatching().subscribe(
+    private initWatchingResources(): Observable<void> {
+        return this.notificationsService.listWatching().map(
             watchingResources => {
                 let resources: ARTURIResource[] = [];
                 watchingResources.forEach(r => {

@@ -4,9 +4,10 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 8.0.0 (dd-mm-yyyy)
+# 8.0.0 (dd-07-2020)
   * Added a tool for the creation of Custom Services.
   * Added a tool for creating and compile Invokable Reporter based on Custom Services.
+  * Implemented a notification mechanism.
   * Enabled manipulation of Maple choices in a remote-service alignment task.
   * Added the ResourceMetadata tool for the management of resource metadata on creation/update/delection events.
   * Enabled configurable dataset catalog connectors.
@@ -15,6 +16,8 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Renewed the ACL matrix.
   * Enabled the AND-scheme for browsing concept tree.
   * Enabled the no-lexicon mode in LexicalEntry panel.
+  * Implemented checks for preventing the initialization of lists or trees with too many elements.
+  * Created an alternative ResourceView tailored for terminologists and lexicographers.
   * Improved Manchester syntax editor with autocomplation and error markers.
   * Enabled the usage of the new Metadata Registry module of SemanticTurkey.
   * Minor bugfixes and improvements.
