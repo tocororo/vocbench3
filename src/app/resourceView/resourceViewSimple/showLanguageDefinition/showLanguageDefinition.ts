@@ -1,8 +1,12 @@
-import { CustomFormsServices } from './../../../services/customFormsServices';
 import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
-import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from './../../../models/ARTResources';
+import { CustomForm, CustomFormValue, FormCollection } from '../../../models/CustomForms';
+import { PropertyServices, RangeResponse } from '../../../services/propertyServices';
+import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
+import { ResViewModalServices } from '../../resourceViewEditor/resViewModals/resViewModalServices';
+import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFTypesEnum, ResAttribute } from './../../../models/ARTResources';
 import { Language, Languages } from './../../../models/LanguagesCountries';
-import { SKOS, SKOSXL, OntoLex } from './../../../models/Vocabulary';
+import { OntoLex, SKOS, SKOSXL } from './../../../models/Vocabulary';
+import { CustomFormsServices } from './../../../services/customFormsServices';
 import { ResourcesServices } from './../../../services/resourcesServices';
 import { SkosServices } from './../../../services/skosServices';
 import { SkosxlServices } from './../../../services/skosxlServices';
@@ -30,8 +34,9 @@ export class ShowLanguageDefinitionComponent {
 
 
 
-
-    constructor(public el: ElementRef, private skosService: SkosServices, private skosxlService: SkosxlServices, private resourcesService: ResourcesServices, private customFormsServices: CustomFormsServices) { }
+    constructor(public el: ElementRef, private skosService: SkosServices, private skosxlService: SkosxlServices, 
+        private resourcesService: ResourcesServices, private customFormsServices: CustomFormsServices,
+        private propService: PropertyServices, private resViewModals: ResViewModalServices, private basicModals: BasicModalServices) { }
 
     ngOnChanges() {
         this.lang = Languages.getLanguageFromTag(this.langFromServer)
@@ -74,7 +79,7 @@ export class ShowLanguageDefinitionComponent {
                     stResp => this.update.emit()
                 )
             }else if(oldDefValue.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)){ // if reified
-                this.customFormsServices.updateReifiedResourceShow(this.resource, oldDefValue.predicate, <ARTResource>oldDefValue, newLitForm).subscribe(
+                this.customFormsServices.updateReifiedResourceShow(this.resource, oldDefValue.predicate, <ARTResource>oldDefValue.object, newLitForm).subscribe(
                     stResp => this.update.emit()
                 )
             }
@@ -130,8 +135,74 @@ export class ShowLanguageDefinitionComponent {
      *  Add a new empty box definition
      */
     private addDefinitionItem(){
+        let predicate = SKOS.definition;
+        this.propService.getRange(predicate).subscribe(
+            (range: RangeResponse) => {
+                let ranges = range.ranges;
+                let formCollection: FormCollection = range.formCollection;
+                //handle 3 cases: only CustomRange, only "standard" range, both Custom and standard range
+                if (ranges != null && formCollection == null) { //only standard range => simply add a new field
+                    this.addPlainDefinition();
+                } else if (ranges == null && formCollection != null) { //only CustomRange
+                    let forms = formCollection.getForms();
+                    if (forms.length == 1) { //just one CF in the collection => prompt it
+                        this.addCustomFormDefinition(forms[0]);
+                    } else if (forms.length > 1) { //multiple CF => ask which one to use
+                        //prepare the range options with the custom range entries
+                        this.basicModals.selectCustomForm("Select a Custom Range", forms).then(
+                            (selectedCF: CustomForm) => {
+                                this.addCustomFormDefinition(selectedCF);
+                            },
+                            () => {}
+                        );
+                    } else { //no CR linked to the property has no Entries => error
+                        this.basicModals.alert("Error", "The FormCollection " + formCollection.getId() + ", linked to property " 
+                            + predicate.getShow() + ", doesn't contain any CustomForm", "error");
+                    }
+                } else { //both standard and custom range
+                    //workaroung tu include "literal" as choice in the CF selection modal
+                    let rangeOptions: CustomForm[] = [new CustomForm(RDFTypesEnum.literal, RDFTypesEnum.literal)];
+                    let customForms: CustomForm[] = formCollection.getForms();
+                    rangeOptions = rangeOptions.concat(customForms);
+                    //ask the user to choose
+                    this.basicModals.selectCustomForm("Select a range", rangeOptions).then(
+                        (selectedCF: CustomForm) => {
+                            if (selectedCF.getId() == RDFTypesEnum.literal) { //if selected range is "literal"
+                                this.addPlainDefinition();
+                            } else { //user selected a custom range
+                                this.addCustomFormDefinition(selectedCF);
+                            }
+                        }
+                    );
+                }
+            }
+        );
+    }
+
+    /**
+     * Add a new empty box definition
+     */
+    private addPlainDefinition() {
         this.definitions.push({ predicate: SKOS.definition, lang: this.langFromServer })
         this.disabledAddDef=true;
+    }
+
+    /**
+     * Create a definition through a CF
+     * @param cf 
+     */
+    private addCustomFormDefinition(cf: CustomForm) {
+        this.resViewModals.enrichCustomForm("Add " + SKOS.definition.getShow(), cf.getId()).then(
+            (entryMap: {[key: string]: any}) => {
+                let cfValue: CustomFormValue = new CustomFormValue(cf.getId(), entryMap);
+                this.skosService.addNote(<ARTURIResource>this.resource, SKOS.definition, cfValue).subscribe(
+                    () => {
+                        this.update.emit();
+                    }
+                )
+            },
+            () => { }
+        );
     }
 
 
