@@ -38,9 +38,9 @@ export class ShowLanguageDefinitionComponent {
         this.initializeDefinition();
         this.initializeTerms();
         this.disabled = false;
-        this.disabledAddDef=false;
     }
 
+    
     private initializeDefinition() {
         this.definitions = [];
         this.langStruct[this.langFromServer].forEach(po => {
@@ -50,6 +50,7 @@ export class ShowLanguageDefinitionComponent {
                         this.definitions.push({ object: d, predicate: po.getPredicate(), lang: this.langFromServer })
                     })
                 }
+                this.disabledAddDef=false;
             }
         })
         if (!this.langStruct[this.langFromServer].some(po => po.getPredicate().equals(SKOS.definition))) { // it creates empty box definition when user adds a new language
@@ -121,7 +122,6 @@ export class ShowLanguageDefinitionComponent {
                     stResp => this.update.emit()
                 )
             }
-            // this.definitions.push({ predicate: SKOS.definition, lang: this.langFromServer })
         }
     }
 
