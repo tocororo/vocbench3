@@ -1,4 +1,5 @@
   .wrap {
+    display: flex;
     text-align: center;
     margin: 2px;
     position: relative;
@@ -26,20 +27,29 @@
   display: flex; 
   flex-direction: row; 
   align-items: baseline;
+  margin-top: 5px;
+}
+
+.semitransparent{
+  margin-left: auto;
+}
+
+.semitransparent:hover > .add-button{
+  background: rgba(231, 231, 231, 0.5);
+  transition: all 0.4s ease-in;
 }
 
 .add-button{
   border:none;
   background: rgba(255, 255, 255, 0.5);
   transition: all 0.3s ease-out;
-  margin-left: 3px;
 }
 
 .add-button:hover,
 .add-button:focus,
 .add-button:active {
   background: rgba(231, 231, 231, 0.5);
-  transition: all 0.5s ease-in;
+  transition: all 0.4s ease-in;
 }
 
 .add-button:focus {
@@ -49,6 +59,47 @@
 .add-button span{
   color:white;
 }
+
+.arrow{
+  margin: 0;
+  padding: 0 1px !important;
+}
+
+.minus-button{
+  border:none;
+  background: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease-out;
+  margin-left: 3px;
+}
+
+.minus-button:hover,
+.minus-button:focus,
+.minus-button:active {
+  background: rgba(231, 231, 231, 0.5);
+  transition: all 0.5s ease-in;
+}
+
+.minus-button:focus {
+  outline: none;
+}
+
+.minus-button span{
+  color:white;
+}
+
+li.disabled {
+  cursor: not-allowed;    
+}
+
+/*Disable events when user clicks on a disabled link*/
+li.disabled > a {
+  pointer-events: none;
+}
+
+
+
+
+
 
 /* .def-button{
   border:none;

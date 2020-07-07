@@ -4,14 +4,25 @@
         <lang-item class="groupPanel-heading-content" [language]="lang" [showTag]="false" [showName]="false"
             [size]="'md'"></lang-item>
     </div>
+    <div class="btn-group semitransparent" style="display: flex;">
+        <button type="button" class="btn btn-xs add-button" (click)="addTermBox()" title="Add new Term" [disabled]="disabled"><span class="glyphicon glyphicon-plus" style="font-size: 9px;"></span></button>
+        <button type="button" class="btn add-button arrow dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu pull-right">
+            <li [ngClass]="{ disabled : disabledAddDef }">
+                <a (click)="addDefinitionItem()" >Add definition</a>
+            </li>
+        </ul>
+    </div>
 </div>
 
  
-<div class="def-wrap">
-    <label class="groupPanel-heading-content" style="margin-top: 5px;">Definition:</label>
-    <text-editable style="flex:1;" [value]="defOnView" (valueEdited)="onDefinitionEdited($event)"> </text-editable>
-    <button class="btn btn-xs btn-default add-button"  (click)="addTermBox()" title="Add new Term" [disabled]="disabled">
-        <span class="glyphicon glyphicon-plus" style="font-size: 9px;"></span>
+<div class="def-wrap" *ngFor="let def of definitions">
+    <label class="groupPanel-heading-content" style="margin-top: 5px; font-size: 13px;">Definition:</label>
+    <text-editable style="flex:1;" [value]="def.object?.getShow()" (valueEdited)="onDefinitionEdited($event,def)"> </text-editable>
+    <button class="btn btn-xs btn-default minus-button"  (click)="deleteDefinition(def)" title="Delete definition">
+        <span class="glyphicon glyphicon-minus" style="font-size: 9px;"></span>
     </button>
 </div>
 

@@ -159,11 +159,17 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
                             let predObj = new ARTPredicateObjects(def.getPredicate(), nodes);
                             this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].push(predObj);
                         } else { // case in which there is already a key equals to the language of the considered definition
-                            if (!this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].some(item => item.getPredicate().equals(SKOS.definition))) {
+                            if (!this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].some(item => item.getPredicate().equals(SKOS.definition))) { //case in which there are no objects with that type of predicate
                                 nodes = [];
                                 nodes.push(obj);
                                 let predObj = new ARTPredicateObjects(def.getPredicate(), nodes);
                                 this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].push(predObj);
+                            }else if( !this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].some(item => { return item.getObjects().some(o => o.equals(obj)) })){ // case in which objects with that predicate already exist and I can add others
+                                this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].forEach(item => {
+                                    if (item.getPredicate().equals(def.getPredicate())) {
+                                        item.getObjects().push(obj);
+                                    }
+                                })
                             }
                         }
                     })
@@ -209,6 +215,7 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
             this.unexistingResource = false;
         }
         this.objectKeys = Object.keys(this.langStruct).sort();
+        console.log(this.langStruct)
     }
 
     /**

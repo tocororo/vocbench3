@@ -1,5 +1,6 @@
+import { CustomFormsServices } from './../../../services/customFormsServices';
 import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
-import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource } from './../../../models/ARTResources';
+import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from './../../../models/ARTResources';
 import { Language, Languages } from './../../../models/LanguagesCountries';
 import { SKOS, SKOSXL, OntoLex } from './../../../models/Vocabulary';
 import { ResourcesServices } from './../../../services/resourcesServices';
@@ -21,61 +22,119 @@ export class ShowLanguageDefinitionComponent {
     @Input() lexicalizationModelType: string;
     @Output() update = new EventEmitter();
     private lang: Language;
-    private definition: ARTNode; // it is util for method onDefinitionEdited
-    private defOnView: string;// it is util to pass value (string) to the view
+    private definitions: DefinitionStructView[]; // it is util for method onDefinitionEdited
+    private defOnView: string[] = [];// it is util to pass value (string) to the view
     private terms: TermStructView[]; // it is used to assign each term if it's a prefLabel or not
     private disabled: boolean;
+    private disabledAddDef: boolean; // it is used to disable link inside dropdown
 
 
 
 
-    constructor(public el: ElementRef, private skosService: SkosServices, private skosxlService: SkosxlServices, private resourcesService: ResourcesServices) { }
+    constructor(public el: ElementRef, private skosService: SkosServices, private skosxlService: SkosxlServices, private resourcesService: ResourcesServices, private customFormsServices: CustomFormsServices) { }
 
     ngOnChanges() {
         this.lang = Languages.getLanguageFromTag(this.langFromServer)
         this.initializeDefinition();
         this.initializeTerms();
-        this.disabled=false;
+        this.disabled = false;
+        this.disabledAddDef=false;
     }
 
     private initializeDefinition() {
+        this.definitions = [];
         this.langStruct[this.langFromServer].forEach(po => {
             if (po.getPredicate().equals(SKOS.definition)) {
-                po.getObjects().forEach(d => {
-                    if (d.getShow != null) {
-                        this.definition = d 
-                        this.defOnView = d.getShow() 
-                    } else {
-                        this.defOnView = null
-                    }
-
-                })
+                if (po.getObjects().length != 0) {
+                    po.getObjects().forEach(d => {
+                        this.definitions.push({ object: d, predicate: po.getPredicate(), lang: this.langFromServer })
+                    })
+                }
             }
         })
-
+        if (!this.langStruct[this.langFromServer].some(po => po.getPredicate().equals(SKOS.definition))) { // it creates empty box definition when user adds a new language
+            this.definitions.push({ predicate: SKOS.definition, lang: this.langFromServer })
+            this.disabledAddDef=true;
+        }
 
     }
 
-     /**
-     * This method manages update and add for definition
-     * @param newDefValue (taken from view)
-     */
+    
 
-    private onDefinitionEdited(newDefValue: string) {
-        let oldDefValue = this.defOnView
-        if (this.definition && oldDefValue != newDefValue) { // update case
+    /**
+    * This method manages update and add for definition
+    * @param newDefValue (taken from view)
+    */
+    private onDefinitionEdited(newDefValue: string, oldDefValue: DefinitionStructView) {
+        if (oldDefValue.object && oldDefValue.object.getShow() != newDefValue) { // update case 
             let newLitForm: ARTLiteral = new ARTLiteral(newDefValue, null, this.langFromServer);
-            this.resourcesService.updateTriple(this.resource, SKOS.definition, <ARTLiteral>this.definition, newLitForm).subscribe(
-                stResp => this.update.emit()
-            )
+            if(oldDefValue.object.isLiteral()){ // if standard
+                this.resourcesService.updateTriple(this.resource, oldDefValue.predicate, oldDefValue.object, newLitForm).subscribe(
+                    stResp => this.update.emit()
+                )
+            }else if(oldDefValue.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)){ // if reified
+                this.customFormsServices.updateReifiedResourceShow(this.resource, oldDefValue.predicate, <ARTResource>oldDefValue, newLitForm).subscribe(
+                    stResp => this.update.emit()
+                )
+            }
+           
         } else if (newDefValue != null) { // new case
             let newLitForm: ARTLiteral = new ARTLiteral(newDefValue, null, this.langFromServer);
             this.resourcesService.addValue(this.resource, SKOS.definition, newLitForm).subscribe(
                 stResp => this.update.emit()
             )
+            this.disabledAddDef=false;
         }
 
     }
+
+
+   /**
+    * Delete a definition:
+    * 1) if there are more then one definitions it deletes entire box 
+    * 2) if there is only one definition it delets value but an empty box remains
+    * @param defToDelete 
+    */
+
+    private deleteDefinition(defToDelete:DefinitionStructView ) {
+        this.disabledAddDef=false;
+        if(this.definitions.length > 1 && defToDelete.object != null){
+            if(defToDelete.object.isLiteral()){ // if standard
+                this.resourcesService.removeValue(<ARTURIResource>this.resource, defToDelete.predicate, defToDelete.object).subscribe(
+                    stResp => this.update.emit()
+                )
+            }else if(defToDelete.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)){ // if reified
+                this.customFormsServices.removeReifiedResource(this.resource, defToDelete.predicate, defToDelete.object ).subscribe(
+                    stResp => this.update.emit()
+                )
+            }
+           
+        }else if( this.definitions.length > 1 && defToDelete.object== null){
+            this.definitions.pop()
+        } else if(defToDelete.object != null) {
+            if(defToDelete.object.isLiteral()){ // if standard
+                this.resourcesService.removeValue(<ARTURIResource>this.resource, defToDelete.predicate, defToDelete.object).subscribe(
+                    stResp => this.update.emit()
+                )
+            }else if(defToDelete.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)){ // if reified
+                this.customFormsServices.removeReifiedResource(this.resource, defToDelete.predicate, defToDelete.object ).subscribe(
+                    stResp => this.update.emit()
+                )
+            }
+            // this.definitions.push({ predicate: SKOS.definition, lang: this.langFromServer })
+        }
+    }
+
+
+    /**
+     *  Add a new empty box definition
+     */
+    private addDefinitionItem(){
+        this.definitions.push({ predicate: SKOS.definition, lang: this.langFromServer })
+        this.disabledAddDef=true;
+    }
+
+
 
     // it needs to add ontolex part
     private initializeTerms() {
@@ -106,19 +165,19 @@ export class ShowLanguageDefinitionComponent {
     private addTermBox() {
         if (this.langStruct[this.langFromServer].some(po => po.getPredicate().equals(SKOSXL.prefLabel) || po.getPredicate().equals(SKOS.prefLabel))) { // it means that already there is a prefLabel predicate => so add an altLabel (with SKOS and SKOSXL)
             if (this.lexicalizationModelType == SKOSXL.uri) {
-                this.terms.push({ predicate: SKOSXL.altLabel, lang:this.langFromServer})
+                this.terms.push({ predicate: SKOSXL.altLabel, lang: this.langFromServer })
                 this.disabledAddButton()
             } else if (this.lexicalizationModelType == SKOS.uri) {
-                this.terms.push({ predicate: SKOS.altLabel, lang:this.langFromServer})
+                this.terms.push({ predicate: SKOS.altLabel, lang: this.langFromServer })
                 this.disabledAddButton()
             }
         } else { // contrary
             if (this.lexicalizationModelType == SKOSXL.uri) {
-                this.terms.push({ predicate: SKOSXL.prefLabel, isPrefLabel: true, lang:this.langFromServer })
+                this.terms.push({ predicate: SKOSXL.prefLabel, isPrefLabel: true, lang: this.langFromServer })
                 this.sortPredicates(this.terms)
                 this.disabledAddButton()
             } else if (this.lexicalizationModelType == SKOS.uri) {
-                this.terms.push({ predicate: SKOS.prefLabel, isPrefLabel: true, lang:this.langFromServer })
+                this.terms.push({ predicate: SKOS.prefLabel, isPrefLabel: true, lang: this.langFromServer })
                 this.sortPredicates(this.terms)
                 this.disabledAddButton()
             }
@@ -126,12 +185,12 @@ export class ShowLanguageDefinitionComponent {
 
     }
 
-   // it needs to add ontolex part
-     /**
-     * Take in input a list of TermStructView and sort their predicates:
-     *  - skos and skosxl cases: first prefLabel and then altLabel
-     * @param list 
-     */
+    // it needs to add ontolex part
+    /**
+    * Take in input a list of TermStructView and sort their predicates:
+    *  - skos and skosxl cases: first prefLabel and then altLabel
+    * @param list 
+    */
     private sortPredicates(list: TermStructView[]) {
         if (this.lexicalizationModelType == SKOS.uri) {
             list.sort((second: TermStructView, first: TermStructView) => {
@@ -144,7 +203,7 @@ export class ShowLanguageDefinitionComponent {
                 return 0;
             })
         } else if (this.lexicalizationModelType == SKOSXL.uri) {
-            list.sort((second:TermStructView, first: TermStructView) => {
+            list.sort((second: TermStructView, first: TermStructView) => {
                 if (first.predicate.equals(SKOSXL.prefLabel) && second.predicate.equals(SKOSXL.altLabel)) {
                     return 1;
                 }
@@ -198,18 +257,18 @@ export class ShowLanguageDefinitionComponent {
 
     }
 
-   
+
 
     /**
      * This method manages "add button" status
      */
     private disabledAddButton() {
-            this.terms.forEach(t => {
-                if (t.object == null ) {
-                    this.disabled = true
-                }
-            })
-        
+        this.terms.forEach(t => {
+            if (t.object == null) {
+                this.disabled = true
+            }
+        })
+
     }
 
     /**
@@ -221,6 +280,12 @@ export class ShowLanguageDefinitionComponent {
 
 
 
+}
+
+export interface DefinitionStructView {
+    object?: ARTNode;
+    predicate?: ARTURIResource;
+    lang?: string
 }
 
 export interface TermStructView {
