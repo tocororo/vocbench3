@@ -30,6 +30,7 @@ export class ResourceViewValueRenderer {
     @Output() edit = new EventEmitter(); //request to edit the object ("edit" action of the editable-resource)
     @Output() copyLocale = new EventEmitter<Language[]>(); //request for to copy the value to different locales ("copy to locale" action of the editable-resource)
     @Output() dblClick = new EventEmitter(); //object dbl clicked
+    @Output() link: EventEmitter<ARTURIResource> = new EventEmitter(); //resource in link clicked
 
     @HostBinding("class.imported") importedClass: boolean = false;
     @HostBinding("class.inferred") inferredClass: boolean = false;
@@ -89,6 +90,9 @@ export class ResourceViewValueRenderer {
         if (this.object.isResource()) {//emit double click only for resources (not for ARTLiteral that cannot be described in a ResView)
             this.dblClick.emit();
         }
+    }
+    private onLinkClick(linkRes: ARTURIResource) {
+        this.link.emit(linkRes);
     }
     private onCopyLocale(locales: Language[]) {
         this.copyLocale.emit(locales);

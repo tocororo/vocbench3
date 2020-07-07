@@ -1,6 +1,7 @@
-import { Component, Input, SimpleChanges } from "@angular/core";
-import { ARTLiteral, ARTNode, ARTResource, RDFResourceRolesEnum, ResAttribute, ResourceNature } from "../../models/ARTResources";
+import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResAttribute, ResourceNature } from "../../models/ARTResources";
 import { XmlSchema } from "../../models/Vocabulary";
+import { ResourcesServices } from "../../services/resourcesServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBProperties } from "../../utils/VBProperties";
@@ -13,6 +14,8 @@ import { VBProperties } from "../../utils/VBProperties";
 export class RdfResourceComponent {
     @Input() resource: ARTNode;
     @Input() rendering: boolean = true; //if true the resource should be rendered with the show, with the qname otherwise
+
+    @Output() link: EventEmitter<ARTURIResource> = new EventEmitter();
 
     private renderingClass: string;
     private renderingLabel: string;
@@ -30,7 +33,7 @@ export class RdfResourceComponent {
     private manchExpr: boolean = false;
     private manchExprStruct: { token: string, class: string }[] = [];
 
-    constructor(private preferences: VBProperties) { }
+    constructor(private resourcesService: ResourcesServices, private preferences: VBProperties) { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource'] && changes['resource'].currentValue) {
@@ -162,6 +165,23 @@ export class RdfResourceComponent {
                 }
             }
         }
+    }
+
+    /**
+     * Listener on click of link in a literal: check if it represents a local resource emits an event, otherwise open the link in a modal
+     * @param url
+     */
+    private openLink(url: string) {
+        let urlRes = new ARTURIResource(url);
+        this.resourcesService.getResourcePosition(urlRes).subscribe(
+            position => {
+                if (position.isLocal()) {
+                    this.link.emit(urlRes);
+                } else {
+                    window.open(url, "_blank");
+                }
+            }
+        );
     }
 
     private initManchExpr() {

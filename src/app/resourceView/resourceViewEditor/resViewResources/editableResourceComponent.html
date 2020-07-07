@@ -1,6 +1,6 @@
 <ng-container *ngIf="!editInProgress && !editLiteralInProgress && !bulkEditInProgress">
 
-    <rdf-resource *ngIf="!isImage" [resource]="resource" [rendering]="rendering" style="flex:1" (dblclick)="resourceDblClick()"></rdf-resource>
+    <rdf-resource *ngIf="!isImage" [resource]="resource" [rendering]="rendering" style="flex:1" (dblclick)="resourceDblClick()" (link)="onLinkClicked($event)"></rdf-resource>
     <a *ngIf="isImage" [href]="resource.getURI()" target="_blank" style="flex: 1;">
         <img [src]="resource.getURI()" (error)="isImage=false" style="max-height: 100px; max-width: 300px;" [title]="resource.getURI()">
     </a>

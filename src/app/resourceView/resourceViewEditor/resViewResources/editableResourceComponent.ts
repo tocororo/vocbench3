@@ -12,7 +12,6 @@ import { DatatypeValidator } from "../../../utils/DatatypeValidator";
 import { ResourceUtils } from "../../../utils/ResourceUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
-import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../widget/modal/creationModal/creationModalServices";
@@ -29,6 +28,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
     @Output() update = new EventEmitter();
     @Output('edit') editOutput = new EventEmitter(); //fire a request for the renderer to edit the value
     @Output('copyLocale') copyLocaleOutput = new EventEmitter<Language[]>(); //fire a request for the renderer to copy the value to different locales
+    @Output() link: EventEmitter<ARTURIResource> = new EventEmitter();
 
     //useful to perform a check on the type of the edited value.
     //The check isn't too deep, it just distinguishes between resource, literal or any (undetermined)
@@ -599,6 +599,11 @@ export class EditableResourceComponent extends AbstractResViewResource {
     }
 
     //==============================
+
+    private onLinkClicked(linkRes: ARTURIResource) {
+        console.log("onLinkClicked", linkRes);
+        this.link.emit(linkRes);
+    }
 
 }
 

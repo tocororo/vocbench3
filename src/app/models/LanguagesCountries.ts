@@ -35,7 +35,7 @@ export class Countries {
 
 export class Languages {
 
-    private static systemLanguages: Language[];
+    private static systemLanguages: Language[] = [];
     static priorityLangs = ["en", "fr", "it", "es", "de"];
     
     static setSystemLanguages(langs: Language[]) {

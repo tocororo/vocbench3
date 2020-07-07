@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Output } from "@angular/core";
-import { ARTNode, ARTPredicateObjects, ARTResource, ResAttribute } from "../../../models/ARTResources";
+import { Component } from "@angular/core";
+import { ARTNode, ARTPredicateObjects, ResAttribute } from "../../../models/ARTResources";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { CRUDEnum, ResourceViewAuthEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { ResourceUtils } from "../../../utils/ResourceUtils";
@@ -61,7 +61,7 @@ export class ReifiedResourceComponent extends AbstractResViewResource {
     //double click on an object of expanded reified res description
     private objectDblClick(object: ARTNode) {
         if (object.isResource()) {
-            this.dblClick.emit(<ARTResource>object);
+            this.dblClick.emit();
         }
     }
 

@@ -1,6 +1,6 @@
 <editable-resource *ngIf="!renderAsReified(); else reifiedBlock" [ngClass]="{ clickable: object.isResource() }" style="flex: 1"
     [resource]="object" [rendering]="rendering" [subject]="subject" [predicate]="predicate" [readonly]="readonly" [partition]="partition"
-    (dblClick)="onDblClick($event)" (delete)="onDelete(object)" (edit)="onEdit(object)" (update)="onUpdate()"
+    (dblClick)="onDblClick($event)" (link)="onLinkClick($event)" (delete)="onDelete(object)" (edit)="onEdit(object)" (update)="onUpdate()"
     (copyLocale)="onCopyLocale($event)" [title]="graphTitle">
 </editable-resource>
 

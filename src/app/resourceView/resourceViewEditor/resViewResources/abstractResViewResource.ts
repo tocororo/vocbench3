@@ -11,7 +11,7 @@ export class AbstractResViewResource {
     @Input() partition: ResViewPartition;
 
     @Output('delete') deleteOutput = new EventEmitter();
-    @Output() dblClick = new EventEmitter();
+    @Output() dblClick: EventEmitter<void> = new EventEmitter();
 
     protected delete() {
         this.deleteOutput.emit();
@@ -19,7 +19,7 @@ export class AbstractResViewResource {
 
     protected resourceDblClick() {
         if (this.resource.isResource()) {
-            this.dblClick.emit(<ARTResource>this.resource);
+            this.dblClick.emit();
         }
     }
 }

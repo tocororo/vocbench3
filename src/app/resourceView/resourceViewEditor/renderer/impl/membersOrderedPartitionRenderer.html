@@ -33,7 +33,8 @@
                         <resview-value-renderer
                             [subject]="resource" [predicate]="po.getPredicate()" [object]="obj" [rendering]="rendering" 
                             [readonly]="readonly" [partition]="partition"
-                            (dblClick)="objectDblClick(obj)" (delete)="removePredicateObject(po.getPredicate(), obj)"
+                            (dblClick)="objectDblClick(obj)" (link)="onDblClick($event)"
+                            (delete)="removePredicateObject(po.getPredicate(), obj)"
                             (edit)="editHandler(po.getPredicate(), obj)" (update)="onObjectUpdate()">
                         </resview-value-renderer>
                         

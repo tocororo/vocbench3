@@ -23,8 +23,13 @@
     <ng-template #notManchExprBlock>
         <ng-container *ngIf="literalWithLink; else notLinkBlock">
             <ng-container *ngFor="let s of splittedLiteral; let even = even">
-                <span *ngIf="even" style="white-space: pre-wrap">{{s}}</span>
-                <a *ngIf="!even" [href]="s" target="_blank">{{s}}</a>
+                <ng-container *ngIf="even; then renderNormal; else renderAsLink"></ng-container>
+                <ng-template #renderNormal>
+                    <span style="white-space: pre-wrap">{{s}}</span>
+                </ng-template>
+                <ng-template #renderAsLink>
+                    <a (click)="openLink(s)" class="clickable">{{s}}</a>
+                </ng-template>
             </ng-container>
         </ng-container>
     </ng-template>
