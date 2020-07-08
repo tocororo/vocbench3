@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { Modal } from "ngx-modialog";
 import { ARTResource } from "../../models/ARTResources";
+import { PropertyServices } from "../../services/propertyServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { AbstractResourceView } from "../resourceViewEditor/abstractResourceView";
 import { ARTNode, ARTPredicateObjects, ResAttribute } from './../../models/ARTResources';
@@ -40,8 +41,9 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
     private allProjectLangs = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectSettings().projectLanguagesSetting // all language to manage case in which user is admin without flags assigned
     private lexicalizationModelType: string;
     private objectKeys: string[]; // takes langStruct keys
+    private definitionHasCustomRange: boolean; //tells if skos:definition is mapped to CustomRange
 
-    constructor(resViewService: ResourceViewServices, modal: Modal) {
+    constructor(resViewService: ResourceViewServices, modal: Modal, private propService: PropertyServices) {
         super(resViewService, modal);
     }
 
@@ -146,8 +148,8 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
                         return 0;
                     })
                 })
-
             }
+
             notesColl.forEach(def => {
                 if (def.getPredicate().equals(SKOS.definition)) { // there could be several types (editorialNote, changeNote, example etc ..)
                     def.getObjects().forEach((obj: ARTNode) => {
@@ -175,6 +177,16 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
                     })
                 }
             })
+            
+            if (definitionPredObj != null) {
+                this.definitionHasCustomRange = definitionPredObj.getPredicate().getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)
+            } else {
+                this.propService.getRange(SKOS.definition).subscribe(
+                    range => {
+                        this.definitionHasCustomRange = range.formCollection && range.formCollection.getForms().length > 0
+                    }
+                )
+            }
         }
 
         if (

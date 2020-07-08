@@ -34,6 +34,7 @@ export class CustomFormEditorModalData extends BSModalContext {
     styles: [`
         .entryRow { margin-bottom: 4px; }
         .entryLabel { min-width: 130px; width: 130px; margin-right: 4px; white-space: nowrap; }
+        .optionalCell { min-width: 10px; width: 10px; margin-left: 4px; }
     `]
 })
 export class CustomFormEditorModal implements ModalComponent<CustomFormEditorModalData> {
@@ -288,7 +289,12 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
         var valid = true;
         //name and ref are mandatory
         if (this.name == null || this.name.trim() == "" || this.ref == null || this.ref.trim() == "") {
-            this.errorMsg = "You need to fill all the mandatory field."
+            this.errorMsg = "You need to fill all the mandatory field.";
+            valid = false;
+        }
+
+        if (this.type == "graph" && this.showPropertyChain.length == 0) {
+            this.errorMsg = "You need to provide a show property chain.";
             valid = false;
         }
 

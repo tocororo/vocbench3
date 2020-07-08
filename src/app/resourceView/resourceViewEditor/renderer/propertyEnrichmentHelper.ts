@@ -36,11 +36,17 @@ export class PropertyEnrichmentHelper {
         return propService.getRange(predicate).flatMap(
             range => {
                 var ranges = range.ranges;
-                var formCollection: FormCollection = range.formCollection;
+                let customForms: CustomForm[];
+                if (range.formCollection != null) {
+                    let forms = range.formCollection.getForms();
+                    if (forms.length > 0) {
+                        customForms = forms;
+                    }
+                }
                 /**
                  * only "classic" range
                  */
-                if (ranges != undefined && formCollection == undefined) {
+                if (ranges != undefined && customForms == undefined) {
                     //Check on the rangeType. Available values: resource, literal, undetermined, inconsistent
                     if (ranges.type == RangeType.resource) {
                         return Observable.of({ type: EnrichmentType.resource, rangeCollection: ranges.rangeCollection });
@@ -76,7 +82,7 @@ export class PropertyEnrichmentHelper {
                 /**
                  * both "classic" and custom range
                  */
-                else if (ranges != undefined && formCollection != undefined) {
+                else if (ranges != undefined && customForms != undefined) {
                     var rangeOptions: CustomForm[] = [];
                     //classic ranges (this is a workaround to use selection CF modal with classic range as well)
                     if (ranges.type == RangeType.resource) {
@@ -88,7 +94,6 @@ export class PropertyEnrichmentHelper {
                         rangeOptions.push(new CustomForm(RDFTypesEnum.literal, RDFTypesEnum.literal));
                     }
                     //and custom ranges
-                    var customForms = formCollection.getForms();
                     rangeOptions = rangeOptions.concat(customForms);
 
                     //ask the user to choose
@@ -116,14 +121,13 @@ export class PropertyEnrichmentHelper {
                 /**
                  * only custom range
                  */
-                else if (ranges == undefined && formCollection != undefined) {
-                    var forms = formCollection.getForms();
-                    if (forms.length == 1) {//just one CREntry => prompt the CR form without asking to choose which CRE to use
-                        return Observable.of({ type: EnrichmentType.customForm, form: forms[0] });
-                    } else if (forms.length > 1) { //multiple CREntry => ask which one to use
+                else if (ranges == undefined && customForms != undefined) {
+                    if (customForms.length == 1) {//just one CREntry => prompt the CR form without asking to choose which CRE to use
+                        return Observable.of({ type: EnrichmentType.customForm, form: customForms[0] });
+                    } else if (customForms.length > 1) { //multiple CREntry => ask which one to use
                         //prepare the range options with the custom range entries
                         return Observable.fromPromise(
-                            basicModals.selectCustomForm("Select a Custom Range", forms).then(
+                            basicModals.selectCustomForm("Select a Custom Range", customForms).then(
                                 (selectedCF: CustomForm) => {
                                     return { type: EnrichmentType.customForm, form: selectedCF };
                                 },
@@ -132,10 +136,6 @@ export class PropertyEnrichmentHelper {
                                 }
                             )
                         );
-                    } else { //no CR linked to the property has no Entries => error
-                        basicModals.alert("Error", "The FormCollection " + formCollection.getId() + ", linked to property " + predicate.getShow() +
-                            ", doesn't contain any CustomForm", "error");
-                        return Observable.of({ type: null });
                     }
                 }
             }

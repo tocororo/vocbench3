@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
-import { CustomForm, CustomFormValue, FormCollection } from '../../../models/CustomForms';
+import { CustomForm, CustomFormValue } from '../../../models/CustomForms';
 import { PropertyServices, RangeResponse } from '../../../services/propertyServices';
 import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
 import { ResViewModalServices } from '../../resourceViewEditor/resViewModals/resViewModalServices';
@@ -24,6 +24,7 @@ export class ShowLanguageDefinitionComponent {
     @Input() langStruct: { [key: string]: ARTPredicateObjects[] };
     @Input() resource: ARTResource;
     @Input() lexicalizationModelType: string;
+    @Input() customRange: boolean;
     @Output() update = new EventEmitter();
     private lang: Language;
     private definitions: DefinitionStructView[]; // it is util for method onDefinitionEdited
@@ -34,7 +35,7 @@ export class ShowLanguageDefinitionComponent {
 
 
 
-    constructor(public el: ElementRef, private skosService: SkosServices, private skosxlService: SkosxlServices, 
+    constructor(public el: ElementRef, private skosService: SkosServices, private skosxlService: SkosxlServices,
         private resourcesService: ResourcesServices, private customFormsServices: CustomFormsServices,
         private propService: PropertyServices, private resViewModals: ResViewModalServices, private basicModals: BasicModalServices) { }
 
@@ -45,7 +46,7 @@ export class ShowLanguageDefinitionComponent {
         this.disabled = false;
     }
 
-    
+
     private initializeDefinition() {
         this.definitions = [];
         this.langStruct[this.langFromServer].forEach(po => {
@@ -55,17 +56,17 @@ export class ShowLanguageDefinitionComponent {
                         this.definitions.push({ object: d, predicate: po.getPredicate(), lang: this.langFromServer })
                     })
                 }
-                this.disabledAddDef=false;
+                this.disabledAddDef = false;
             }
         })
         if (!this.langStruct[this.langFromServer].some(po => po.getPredicate().equals(SKOS.definition))) { // it creates empty box definition when user adds a new language
             this.definitions.push({ predicate: SKOS.definition, lang: this.langFromServer })
-            this.disabledAddDef=true;
+            this.disabledAddDef = true;
         }
 
     }
 
-    
+
 
     /**
     * This method manages update and add for definition
@@ -74,56 +75,56 @@ export class ShowLanguageDefinitionComponent {
     private onDefinitionEdited(newDefValue: string, oldDefValue: DefinitionStructView) {
         if (oldDefValue.object && oldDefValue.object.getShow() != newDefValue) { // update case 
             let newLitForm: ARTLiteral = new ARTLiteral(newDefValue, null, this.langFromServer);
-            if(oldDefValue.object.isLiteral()){ // if standard
+            if (oldDefValue.object.isLiteral()) { // if standard
                 this.resourcesService.updateTriple(this.resource, oldDefValue.predicate, oldDefValue.object, newLitForm).subscribe(
                     stResp => this.update.emit()
                 )
-            }else if(oldDefValue.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)){ // if reified
+            } else if (oldDefValue.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)) { // if reified
                 this.customFormsServices.updateReifiedResourceShow(this.resource, oldDefValue.predicate, <ARTResource>oldDefValue.object, newLitForm).subscribe(
                     stResp => this.update.emit()
                 )
             }
-           
+
         } else if (newDefValue != null) { // new case
             let newLitForm: ARTLiteral = new ARTLiteral(newDefValue, null, this.langFromServer);
             this.resourcesService.addValue(this.resource, SKOS.definition, newLitForm).subscribe(
                 stResp => this.update.emit()
             )
-            this.disabledAddDef=false;
+            this.disabledAddDef = false;
         }
 
     }
 
 
-   /**
-    * Delete a definition:
-    * 1) if there are more then one definitions it deletes entire box 
-    * 2) if there is only one definition it delets value but an empty box remains
-    * @param defToDelete 
-    */
+    /**
+     * Delete a definition:
+     * 1) if there are more then one definitions it deletes entire box 
+     * 2) if there is only one definition it delets value but an empty box remains
+     * @param defToDelete 
+     */
 
-    private deleteDefinition(defToDelete:DefinitionStructView ) {
-        this.disabledAddDef=false;
-        if(this.definitions.length > 1 && defToDelete.object != null){
-            if(defToDelete.object.isLiteral()){ // if standard
+    private deleteDefinition(defToDelete: DefinitionStructView) {
+        this.disabledAddDef = false;
+        if (this.definitions.length > 1 && defToDelete.object != null) {
+            if (defToDelete.object.isLiteral()) { // if standard
                 this.resourcesService.removeValue(<ARTURIResource>this.resource, defToDelete.predicate, defToDelete.object).subscribe(
                     stResp => this.update.emit()
                 )
-            }else if(defToDelete.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)){ // if reified
-                this.customFormsServices.removeReifiedResource(this.resource, defToDelete.predicate, defToDelete.object ).subscribe(
+            } else if (defToDelete.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)) { // if reified
+                this.customFormsServices.removeReifiedResource(this.resource, defToDelete.predicate, defToDelete.object).subscribe(
                     stResp => this.update.emit()
                 )
             }
-           
-        }else if( this.definitions.length > 1 && defToDelete.object== null){
+
+        } else if (this.definitions.length > 1 && defToDelete.object == null) {
             this.definitions.pop()
-        } else if(defToDelete.object != null) {
-            if(defToDelete.object.isLiteral()){ // if standard
+        } else if (defToDelete.object != null) {
+            if (defToDelete.object.isLiteral()) { // if standard
                 this.resourcesService.removeValue(<ARTURIResource>this.resource, defToDelete.predicate, defToDelete.object).subscribe(
                     stResp => this.update.emit()
                 )
-            }else if(defToDelete.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)){ // if reified
-                this.customFormsServices.removeReifiedResource(this.resource, defToDelete.predicate, defToDelete.object ).subscribe(
+            } else if (defToDelete.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)) { // if reified
+                this.customFormsServices.removeReifiedResource(this.resource, defToDelete.predicate, defToDelete.object).subscribe(
                     stResp => this.update.emit()
                 )
             }
@@ -134,35 +135,36 @@ export class ShowLanguageDefinitionComponent {
     /**
      *  Add a new empty box definition
      */
-    private addDefinitionItem(){
+    private addDefinitionItem() {
         let predicate = SKOS.definition;
         this.propService.getRange(predicate).subscribe(
             (range: RangeResponse) => {
                 let ranges = range.ranges;
-                let formCollection: FormCollection = range.formCollection;
+                let customForms: CustomForm[];
+                if (range.formCollection != null) {
+                    let forms = range.formCollection.getForms();
+                    if (forms.length > 0) {
+                        customForms = forms;
+                    }
+                }
                 //handle 3 cases: only CustomRange, only "standard" range, both Custom and standard range
-                if (ranges != null && formCollection == null) { //only standard range => simply add a new field
+                if (ranges != null && customForms == null) { //only standard range => simply add a new field
                     this.addPlainDefinition();
-                } else if (ranges == null && formCollection != null) { //only CustomRange
-                    let forms = formCollection.getForms();
-                    if (forms.length == 1) { //just one CF in the collection => prompt it
-                        this.addCustomFormDefinition(forms[0]);
-                    } else if (forms.length > 1) { //multiple CF => ask which one to use
+                } else if (ranges == null && customForms != null) { //only CustomRange
+                    if (customForms.length == 1) { //just one CF in the collection => prompt it
+                        this.addCustomFormDefinition(customForms[0]);
+                    } else if (customForms.length > 1) { //multiple CF => ask which one to use
                         //prepare the range options with the custom range entries
-                        this.basicModals.selectCustomForm("Select a Custom Range", forms).then(
+                        this.basicModals.selectCustomForm("Select a Custom Range", customForms).then(
                             (selectedCF: CustomForm) => {
                                 this.addCustomFormDefinition(selectedCF);
                             },
-                            () => {}
+                            () => { }
                         );
-                    } else { //no CR linked to the property has no Entries => error
-                        this.basicModals.alert("Error", "The FormCollection " + formCollection.getId() + ", linked to property " 
-                            + predicate.getShow() + ", doesn't contain any CustomForm", "error");
                     }
                 } else { //both standard and custom range
                     //workaroung tu include "literal" as choice in the CF selection modal
                     let rangeOptions: CustomForm[] = [new CustomForm(RDFTypesEnum.literal, RDFTypesEnum.literal)];
-                    let customForms: CustomForm[] = formCollection.getForms();
                     rangeOptions = rangeOptions.concat(customForms);
                     //ask the user to choose
                     this.basicModals.selectCustomForm("Select a range", rangeOptions).then(
@@ -184,7 +186,7 @@ export class ShowLanguageDefinitionComponent {
      */
     private addPlainDefinition() {
         this.definitions.push({ predicate: SKOS.definition, lang: this.langFromServer })
-        this.disabledAddDef=true;
+        this.disabledAddDef = true;
     }
 
     /**
@@ -193,7 +195,7 @@ export class ShowLanguageDefinitionComponent {
      */
     private addCustomFormDefinition(cf: CustomForm) {
         this.resViewModals.enrichCustomForm("Add " + SKOS.definition.getShow(), cf.getId()).then(
-            (entryMap: {[key: string]: any}) => {
+            (entryMap: { [key: string]: any }) => {
                 let cfValue: CustomFormValue = new CustomFormValue(cf.getId(), entryMap);
                 this.skosService.addNote(<ARTURIResource>this.resource, SKOS.definition, cfValue).subscribe(
                     () => {

@@ -36,7 +36,8 @@
             <!-- Language definitions-->
             <div class="def-lang">
                 <lang-def *ngFor="let item of objectKeys" [resource]="resource" (update)="buildResourceSimpleView(resource)" 
-                    [langFromServer]="item" [langStruct]="langStruct" [lexicalizationModelType]="lexicalizationModelType" #langItem>
+                    [langFromServer]="item" [langStruct]="langStruct" [lexicalizationModelType]="lexicalizationModelType"
+                    [customRange]="definitionHasCustomRange" #langItem>
                 </lang-def>
             </div>
         </ng-container>
