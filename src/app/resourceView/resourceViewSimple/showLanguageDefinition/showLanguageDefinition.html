@@ -18,12 +18,15 @@
 </div>
 
  
-<div class="def-wrap" *ngFor="let def of definitions">
+<div class="def-wrap" *ngFor="let def of definitions" >
     <label class="groupPanel-heading-content" style="margin-top: 5px; font-size: 13px;">Definition:</label>
-    <text-editable style="flex:1;" [value]="def.object?.getShow()" (valueEdited)="onDefinitionEdited($event,def)"> </text-editable>
+    <text-editable style="flex:1;" [value]="def.object?.getShow()" (valueEdited)="onDefinitionEdited($event,def)" [disabled]="disableTextInputEditableDefinition"> </text-editable>
+    <button *ngIf="disableTextInputEditableDefinition" (click)="addDefinitionItem()" class="btn btn-xs btn-default add-button"  title="Add definition" style="margin-left: 3px;">
+        <span class="glyphicon glyphicon-plus" style="font-size: 9px;"></span>
+    </button>
     <button class="btn btn-xs btn-default minus-button"  (click)="deleteDefinition(def)" title="Delete definition">
         <span class="glyphicon glyphicon-minus" style="font-size: 9px;"></span>
     </button>
 </div>
 
-<lang-term *ngFor="let term of terms" [termToShow]="term" (termToDelete)="deleteTerm(term)"  [resource]="resource" [lexicalizationModelType]="lexicalizationModelType" (update)="onTermUpdate()"></lang-term>
+<lang-term *ngFor="let term of terms" [termToShow]="term" (termToDelete)="deleteTerm(term)" [resource]="resource" (update)="onTermUpdate()"></lang-term>

@@ -148,11 +148,14 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
                         return 0;
                     })
                 })
-            }
 
+            }
             notesColl.forEach(def => {
                 if (def.getPredicate().equals(SKOS.definition)) { // there could be several types (editorialNote, changeNote, example etc ..)
                     def.getObjects().forEach((obj: ARTNode) => {
+                        if (obj.getAdditionalProperty(ResAttribute.LANG) == null) {
+                            return
+                        }
                         //case in which there are no existing keys equal to the language of the considered definition
                         if (!(obj.getAdditionalProperty(ResAttribute.LANG) in this.langStruct) && this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)] == null) {
                             this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)] = [];
@@ -166,7 +169,7 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
                                 nodes.push(obj);
                                 let predObj = new ARTPredicateObjects(def.getPredicate(), nodes);
                                 this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].push(predObj);
-                            }else if( !this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].some(item => { return item.getObjects().some(o => o.equals(obj)) })){ // case in which objects with that predicate already exist and I can add others
+                            } else if (!this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].some(item => { return item.getObjects().some(o => o.equals(obj)) })) { // case in which objects with that predicate already exist and I can add others
                                 this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].forEach(item => {
                                     if (item.getPredicate().equals(def.getPredicate())) {
                                         item.getObjects().push(obj);
@@ -177,7 +180,7 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
                     })
                 }
             })
-            
+
             if (definitionPredObj != null) {
                 this.definitionHasCustomRange = definitionPredObj.getPredicate().getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)
             } else {
@@ -287,7 +290,7 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
      * This method initializes the languages ​​to be displayed in the list of flags as follows:
      * 1) first those for which there is a value received from the server
      * 2) then those assigned to the user (filtered in such a way that there are no duplicates with those of point 1)
-     * If the user is un Admin type and there are no languages ​​assigned to the user, then all languages ​​are taken, always putting first those that have a value
+     * If the user is an Admin type and there are no languages ​​assigned to the user, then all languages ​​are taken, always putting first those that have a value
      */
     private initLanguages() {
         let langListFromServer = this.objectKeys;
@@ -337,13 +340,11 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
             }
             let nodes: ARTNode[] = [];
             let predObj;
-            // this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType(); 
             if (this.lexicalizationModelType == SKOS.uri) {
                 predObj = new ARTPredicateObjects(SKOS.prefLabel, nodes);
             } else if (this.lexicalizationModelType == SKOSXL.uri) {
                 predObj = new ARTPredicateObjects(SKOSXL.prefLabel, nodes);
             } else if (this.lexicalizationModelType == OntoLex.uri) {
-                // predObj = new ARTPredicateObjects(RDFS.label, nodes);
             }
             this.langStruct[flagClicked.lang.tag] = [];
             this.langStruct[flagClicked.lang.tag].push(predObj)

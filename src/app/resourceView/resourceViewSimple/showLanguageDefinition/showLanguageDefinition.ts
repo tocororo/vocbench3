@@ -10,6 +10,8 @@ import { CustomFormsServices } from './../../../services/customFormsServices';
 import { ResourcesServices } from './../../../services/resourcesServices';
 import { SkosServices } from './../../../services/skosServices';
 import { SkosxlServices } from './../../../services/skosxlServices';
+import { VBContext } from './../../../utils/VBContext';
+
 
 @Component({
     selector: "lang-def",
@@ -23,7 +25,6 @@ export class ShowLanguageDefinitionComponent {
     @Input() langFromServer: string;
     @Input() langStruct: { [key: string]: ARTPredicateObjects[] };
     @Input() resource: ARTResource;
-    @Input() lexicalizationModelType: string;
     @Input() customRange: boolean;
     @Output() update = new EventEmitter();
     private lang: Language;
@@ -32,7 +33,8 @@ export class ShowLanguageDefinitionComponent {
     private terms: TermStructView[]; // it is used to assign each term if it's a prefLabel or not
     private disabled: boolean;
     private disabledAddDef: boolean; // it is used to disable link inside dropdown
-
+    private disableTextInputEditableDefinition: boolean;
+    private lexicalizationModelType: string;
 
 
     constructor(public el: ElementRef, private skosService: SkosServices, private skosxlService: SkosxlServices,
@@ -40,6 +42,7 @@ export class ShowLanguageDefinitionComponent {
         private propService: PropertyServices, private resViewModals: ResViewModalServices, private basicModals: BasicModalServices) { }
 
     ngOnChanges() {
+        this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType();//it's util to understand project lexicalization
         this.lang = Languages.getLanguageFromTag(this.langFromServer)
         this.initializeDefinition();
         this.initializeTerms();
@@ -62,6 +65,9 @@ export class ShowLanguageDefinitionComponent {
         if (!this.langStruct[this.langFromServer].some(po => po.getPredicate().equals(SKOS.definition))) { // it creates empty box definition when user adds a new language
             this.definitions.push({ predicate: SKOS.definition, lang: this.langFromServer })
             this.disabledAddDef = true;
+            if (this.customRange) {
+                this.disableTextInputEditableDefinition = true;
+            }
         }
 
     }
@@ -98,8 +104,9 @@ export class ShowLanguageDefinitionComponent {
 
     /**
      * Delete a definition:
-     * 1) if there are more then one definitions it deletes entire box 
+     * 1) if there are more than one definition it deletes entire definition box 
      * 2) if there is only one definition it delets value but an empty box remains
+     * 3) When only one definition empty box remains( and there are no terms) clicking again on button minus it deletes entire box
      * @param defToDelete 
      */
 
@@ -121,13 +128,25 @@ export class ShowLanguageDefinitionComponent {
         } else if (defToDelete.object != null) {
             if (defToDelete.object.isLiteral()) { // if standard
                 this.resourcesService.removeValue(<ARTURIResource>this.resource, defToDelete.predicate, defToDelete.object).subscribe(
-                    stResp => this.update.emit()
+                    stResp => {
+                        // this.update.emit()
+                        defToDelete.object = null;
+                        this.disableTextInputEditableDefinition = true;
+                    }
                 )
             } else if (defToDelete.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)) { // if reified
                 this.customFormsServices.removeReifiedResource(this.resource, defToDelete.predicate, defToDelete.object).subscribe(
-                    stResp => this.update.emit()
+                    stResp => {
+                        // this.update.emit()
+                        defToDelete.object = null;
+                        this.disableTextInputEditableDefinition = true;
+                    }
                 )
             }
+
+        } else if (this.definitions.length == 1 && defToDelete.object == null && this.terms.length == 0) {
+            this.definitions.pop()
+            this.update.emit()
         }
     }
 
@@ -200,6 +219,7 @@ export class ShowLanguageDefinitionComponent {
                 this.skosService.addNote(<ARTURIResource>this.resource, SKOS.definition, cfValue).subscribe(
                     () => {
                         this.update.emit();
+                        this.disableTextInputEditableDefinition = false;
                     }
                 )
             },
@@ -236,7 +256,7 @@ export class ShowLanguageDefinitionComponent {
 
     // it needs to add ontolex part
     private addTermBox() {
-        if (this.langStruct[this.langFromServer].some(po => po.getPredicate().equals(SKOSXL.prefLabel) || po.getPredicate().equals(SKOS.prefLabel))) { // it means that already there is a prefLabel predicate => so add an altLabel (with SKOS and SKOSXL)
+        if (this.terms.some(term => term.predicate.equals(SKOSXL.prefLabel) || term.predicate.equals(SKOS.prefLabel))) { // it means that already there is a prefLabel predicate => so add an altLabel (with SKOS and SKOSXL)
             if (this.lexicalizationModelType == SKOSXL.uri) {
                 this.terms.push({ predicate: SKOSXL.altLabel, lang: this.langFromServer })
                 this.disabledAddButton()
@@ -257,6 +277,7 @@ export class ShowLanguageDefinitionComponent {
         }
 
     }
+
 
     // it needs to add ontolex part
     /**
@@ -303,32 +324,55 @@ export class ShowLanguageDefinitionComponent {
             this.terms.pop()
             this.disabled = false // reactive add button
         } else { // case in which a box is deleted and conteins a term with value
-            this.langStruct[this.langFromServer].forEach(po => {
-                if (po.getObjects().some(obj => obj.equals(termToDelete.object))) {
-                    let found = po.getObjects().find(o => o.equals(termToDelete.object))
-                    if (po.getPredicate().equals(SKOSXL.prefLabel)) {
-                        this.skosxlService.removePrefLabel(<ARTURIResource>this.resource, <ARTResource>found).subscribe(
-                            stResp => this.update.emit()
-                        )
-                    } else if (po.getPredicate().equals(SKOSXL.altLabel)) {
-                        this.skosxlService.removeAltLabel(<ARTURIResource>this.resource, <ARTResource>found).subscribe(
-                            stResp => this.update.emit()
-                        )
-                    } else if (po.getPredicate().equals(SKOS.prefLabel)) {
-                        this.skosService.removePrefLabel(<ARTURIResource>this.resource, <ARTLiteral>found).subscribe(
-                            stResp => this.update.emit()
-                        )
-                    } else if (po.getPredicate().equals(SKOS.altLabel)) {
-                        this.skosService.removeAltLabel(<ARTURIResource>this.resource, <ARTLiteral>found).subscribe(
-                            stResp => this.update.emit()
-                        )
+            this.terms.forEach(term => {
+                if (term == termToDelete) {
+                    if (this.definitions.length == 1 && this.definitions.some(def => def.object == null) && this.terms.length == 1) {  //it means that if there is only one term box( with a value inside) and one empty definition then delete only term box instead of all
+                        if (term.predicate.equals(SKOSXL.prefLabel)) {
+                            this.skosxlService.removePrefLabel(<ARTURIResource>this.resource, <ARTResource>termToDelete.object).subscribe(
+                                stResp => this.terms.splice(this.terms.indexOf(termToDelete), 1)
+                            )
+                        } else if (term.predicate.equals(SKOSXL.altLabel)) {
+                            this.skosxlService.removeAltLabel(<ARTURIResource>this.resource, <ARTResource>termToDelete.object).subscribe(
+                                stResp => this.terms.splice(this.terms.indexOf(termToDelete), 1)
+                            )
+                        } else if (term.predicate.equals(SKOS.prefLabel)) {
+                            this.skosService.removePrefLabel(<ARTURIResource>this.resource, <ARTLiteral>termToDelete.object).subscribe(
+                                stResp => this.terms.splice(this.terms.indexOf(termToDelete), 1)
+                            )
+                        } else if (termToDelete.predicate.equals(SKOS.altLabel)) {
+                            this.skosService.removeAltLabel(<ARTURIResource>this.resource, <ARTLiteral>termToDelete.object).subscribe(
+                                stResp => this.terms.splice(this.terms.indexOf(termToDelete), 1)
+                            )
 
+                        }
+                    } else {
+                        if (term.predicate.equals(SKOSXL.prefLabel)) {
+                            this.skosxlService.removePrefLabel(<ARTURIResource>this.resource, <ARTResource>termToDelete.object).subscribe(
+                                stResp => this.update.emit()
+                            )
+                        } else if (term.predicate.equals(SKOSXL.altLabel)) {
+                            this.skosxlService.removeAltLabel(<ARTURIResource>this.resource, <ARTResource>termToDelete.object).subscribe(
+                                stResp => this.update.emit()
+                            )
+                        } else if (term.predicate.equals(SKOS.prefLabel)) {
+                            this.skosService.removePrefLabel(<ARTURIResource>this.resource, <ARTLiteral>termToDelete.object).subscribe(
+                                stResp => this.update.emit()
+                            )
+                        } else if (termToDelete.predicate.equals(SKOS.altLabel)) {
+                            this.skosService.removeAltLabel(<ARTURIResource>this.resource, <ARTLiteral>termToDelete.object).subscribe(
+                                stResp => this.update.emit()
+                            )
+
+                        }
                     }
                 }
+
             })
         }
 
     }
+
+
 
 
 

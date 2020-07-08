@@ -24,8 +24,8 @@
   .minus-button:hover,
   .minus-button:focus,
   .minus-button:active {
-    background: rgba(231, 231, 231, 0.5);
-    transition: all 0.5s ease-in;
+    background:  rgba(221, 221, 221, 0.5);
+    transition: all 0.4s ease-in;
   }
   
   .minus-button:focus {
