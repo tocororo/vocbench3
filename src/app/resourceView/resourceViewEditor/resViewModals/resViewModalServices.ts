@@ -66,9 +66,10 @@ export class ResViewModalServices {
      * Opens a modal with a custom form to enrich a property with a custom range.
      * @param title title of the dialog
      * @param creId custom range entry ID
+     * @param language optional language that if provided "suggests" to initialize each lang-picker to it
      */
-    enrichCustomForm(title: string, creId: string) {
-        var modalData = new CustomFormModalData(title, creId);
+    enrichCustomForm(title: string, creId: string, language?: string) {
+        var modalData = new CustomFormModalData(title, creId, language);
         const builder = new BSModalContextBuilder<CustomFormModalData>(
             modalData, undefined, CustomFormModalData
         );

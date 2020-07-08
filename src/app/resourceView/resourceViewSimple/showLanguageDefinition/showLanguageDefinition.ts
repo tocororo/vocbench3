@@ -194,7 +194,7 @@ export class ShowLanguageDefinitionComponent {
      * @param cf 
      */
     private addCustomFormDefinition(cf: CustomForm) {
-        this.resViewModals.enrichCustomForm("Add " + SKOS.definition.getShow(), cf.getId()).then(
+        this.resViewModals.enrichCustomForm("Add " + SKOS.definition.getShow(), cf.getId(), this.langFromServer).then(
             (entryMap: { [key: string]: any }) => {
                 let cfValue: CustomFormValue = new CustomFormValue(cf.getId(), entryMap);
                 this.skosService.addNote(<ARTURIResource>this.resource, SKOS.definition, cfValue).subscribe(

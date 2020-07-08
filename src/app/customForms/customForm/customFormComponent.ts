@@ -21,6 +21,7 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 export class CustomFormComponent implements ControlValueAccessor {
 
     @Input() cfId: string;
+    @Input() lang: string;
 
     private formFields: FormField[];
     private submittedWithError: boolean = false;

@@ -1,4 +1,4 @@
-import { Component, forwardRef } from "@angular/core";
+import { Component, forwardRef, Input, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTNode } from "../../models/ARTResources";
 import { FormField } from "../../models/CustomForms";
@@ -15,10 +15,32 @@ import { FormField } from "../../models/CustomForms";
 })
 export class CustomFormField implements ControlValueAccessor {
 
+    @Input() lang: string;
+
     private field: FormField;
 
     constructor() { }
 
+    private initLang() {
+        //if an input language is provided and the field uses the coda:langString converter
+        if (this.field.getConverter() == 'http://art.uniroma2.it/coda/contracts/langString' && this.lang != null) {
+            let convArg = this.field.getConverterArg();
+            /* 
+            if the arguments of the converter is another placeholder (e.g. coda:langString($lang)) 
+            and not directly provided/forced as string (e.g. in coda:langString('en')) 
+            */
+            if (convArg != null && this.field.getConverterArg().ph) {
+                /* 
+                the above conditions set visible the lang-picker, so set as default value of the ph argument the @input lang
+                but first, check also if the language is not foreseen in case of @oneOfLang annotation restrictions
+                */
+                let oneOfLang: string[] = this.field['oneOfLang'];
+                if (oneOfLang == null || oneOfLang.indexOf(this.lang) != -1) {
+                    this.field.getConverterArg().ph.value = this.lang;
+                }
+            }
+        }
+    }
 
     /**
      * Listener to change of lang-picker used to set the language argument of a formField that
@@ -62,6 +84,7 @@ export class CustomFormField implements ControlValueAccessor {
     writeValue(obj: FormField) {
         if (obj) {
             this.field = obj;
+            this.initLang();
         }
     }
     /**

@@ -17,7 +17,7 @@
                         </ng-container>
 
                         <ng-template #singleFieldBlock>
-                            <custom-form-field [(ngModel)]="formFields[index]" (ngModelChange)="onFormFieldChanged(field)"></custom-form-field>
+                            <custom-form-field [(ngModel)]="formFields[index]" (ngModelChange)="onFormFieldChanged(field)" [lang]="lang"></custom-form-field>
                         </ng-template>
                     </td>
                     <!--Mandatory/Optional-->

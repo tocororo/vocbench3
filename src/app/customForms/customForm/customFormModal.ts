@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { FormField, AnnotationName } from "../../models/CustomForms";
+import { AnnotationName, FormField } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
@@ -13,7 +13,8 @@ export class CustomFormModalData extends BSModalContext {
      */
     constructor(
         public title: string,
-        public cfId: string
+        public cfId: string,
+        public language?: string
     ) {
         super();
     }

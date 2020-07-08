@@ -293,11 +293,6 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
             valid = false;
         }
 
-        if (this.type == "graph" && this.showPropertyChain.length == 0) {
-            this.errorMsg = "You need to provide a show property chain.";
-            valid = false;
-        }
-
         if (this.cfId == null) { //check only in create mode
             if (this.cfShortId == null || !this.cfShortId.match(/^[a-zA-Z0-9.]+$/i)) { //invalid character
                 this.errorMsg = "The CustomForm ID is not valid (it may be empty or contain invalid characters). Please fix it."
