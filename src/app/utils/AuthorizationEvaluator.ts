@@ -168,6 +168,7 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.skosAddConceptToScheme]: 'auth(rdf(concept, schemes), "C").',
         [VBActionsEnum.skosAddLexicalization]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "C").',
         [VBActionsEnum.skosAddMultipleToScheme]: 'auth(rdf(concept, schemes), "C").',
+        [VBActionsEnum.skosAddNote]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', notes), "C").',
         [VBActionsEnum.skosAddToCollection]: 'auth(rdf(skosCollection), "U").', //TODO is it ok? or add values (skosCollection, values)
         [VBActionsEnum.skosAddTopConcept]: 'auth(rdf(concept, schemes), "C").',
         [VBActionsEnum.skosCreateCollection]: 'auth(rdf(skosCollection), "C").',
@@ -587,7 +588,7 @@ export class ResourceViewAuthEvaluator {
         [
             ResViewPartition.notes,
             new Map([
-                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, resource, value)],
+                [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddNote, resource, value)],
                 [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource, value)],
                 [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
                 [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, resource, value)],

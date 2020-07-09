@@ -3,5 +3,5 @@
 </textarea>
 
 <ng-template #notEditBlock>
-    <div class="form-control input-xs custom" (click)="edit()">{{value}}</div>
+    <div class="form-control input-xs custom" [ngClass]="{ disabled: disabled }" (click)="edit()">{{value}}</div>
 </ng-template>

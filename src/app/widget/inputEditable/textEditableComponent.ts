@@ -36,6 +36,8 @@ export class TextEditableComponent implements OnInit {
     }
 
     private edit() {
+        if (this.disabled) return;
+        
         if(this.value != null){
             //update the rows attribute of the textarea (so when it is editing the textarea will have the same size of the element in non-editing mode)
         let lineBreakCount = (this.value.match(/\n/g)||[]).length;

@@ -1,6 +1,6 @@
-import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren, Output, EventEmitter, SimpleChanges } from "@angular/core";
 import { Modal } from "ngx-modialog";
-import { ARTResource } from "../../models/ARTResources";
+import { ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { PropertyServices } from "../../services/propertyServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { AbstractResourceView } from "../resourceViewEditor/abstractResourceView";
@@ -25,6 +25,7 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
     @Input() resource: ARTResource;
     @Input() projectCtx: ProjectContext;
     @Input() readonly: boolean = false;
+    @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)
 
     @ViewChildren('langItem') langItemsView: QueryList<ShowLanguageDefinitionComponent>;
     @ViewChild('blockDiv') blockDivElement: ElementRef;
@@ -47,17 +48,28 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
         super(resViewService, modal);
     }
 
-    ngOnChanges() {
-        this.buildResourceSimpleView(this.resource)
+    ngOnInit() {
         this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType();//it's useful to understand project lexicalization
     }
 
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['resource'] && changes['resource'].currentValue) {
+            //if not the first change, avoid to refresh res view if resource is not changed
+            if (!changes['resource'].firstChange) { 
+                let prevRes: ARTResource = changes['resource'].previousValue;
+                if (prevRes.equals(this.resource)) {
+                    return;
+                }
+            }
+            this.buildResourceView(this.resource);//refresh resource view when Input resource changes
+        }
+    }
 
     /**
      * This method takes data from server (about resource).
      * @param res 
      */
-    public buildResourceSimpleView(res: ARTResource) {
+    public buildResourceView(res: ARTResource) {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.resViewService.getResourceView(res).subscribe(
             stResp => {
@@ -84,6 +96,10 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
     * 
     */
     private fillPartitions() {
+        let resourcePartition: any = this.resViewResponse.resource;
+        this.resource = Deserializer.createRDFResource(resourcePartition);
+        this.update.emit(this.resource);
+
         let broadersColl: ARTPredicateObjects[] = this.initPartition(ResViewPartition.broaders, true);
         if (broadersColl != null) {
             let broaderPredObj: ARTPredicateObjects = broadersColl.find(po => po.getPredicate().equals(SKOS.broader));
@@ -94,36 +110,38 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
 
         let lexicalizationsColl: ARTPredicateObjects[] = this.initPartition(ResViewPartition.lexicalizations, false); //the sort is performed in the partition according the language
         if (lexicalizationsColl != null) {
-            let nodes: ARTNode[] = [];
             lexicalizationsColl.forEach(lex => {
+                let predicate: ARTURIResource = lex.getPredicate();
+                //check if predicate belongs to the lexicalization model (otherwise there will be problems editing values e.g. editing a skos:prefLabel through skosxl service)
+                if (!predicate.getURI().startsWith(this.lexicalizationModelType)) return;
+
                 lex.getObjects().forEach((obj: ARTNode) => {
-                    if (obj.getAdditionalProperty(ResAttribute.LANG) != null) {
-                        //case in which there are no existing keys equals to that language
-                        if (!(obj.getAdditionalProperty(ResAttribute.LANG) in this.langStruct) && this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)] == null) {
-                            this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)] = [];
-                            nodes = [];
+                    let lang = obj.getAdditionalProperty(ResAttribute.LANG);
+                    if (lang == null) return;
+
+                    let nodes: ARTNode[] = [];
+                    //case in which there are no existing keys equals to that language
+                    if (!(lang in this.langStruct) && this.langStruct[lang] == null) {
+                        this.langStruct[lang] = [];
+                        nodes.push(obj);
+                        let predObj = new ARTPredicateObjects(predicate, nodes);
+                        this.langStruct[lang].push(predObj);
+                    } else { // case in which a key equal to that language already exists 
+                        if (!this.langStruct[lang].some(item => item.getPredicate().equals(predicate))) { //case in which there are no objects with that type of predicate
                             nodes.push(obj);
-                            let predObj = new ARTPredicateObjects(lex.getPredicate(), nodes);
-                            this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].push(predObj);
-                        } else { // case in which a key equal to that language already exists 
-                            if (!this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].some(item => item.getPredicate().equals(lex.getPredicate()))) { //case in which there are no objects with that type of predicate
-                                nodes = [];
-                                nodes.push(obj);
-                                let predObj = new ARTPredicateObjects(lex.getPredicate(), nodes);
-                                this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].push(predObj);
-                                this.sortPredicates(this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)])
-                            } else { // case in which objects with that predicate already exist and I can add others (example: I can have more altLabel)
-                                if (!this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].some(item => { return item.getObjects().some(o => o.equals(obj)) })) { // I check if the object I am analyzing is not present
-                                    this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].forEach(item => {
-                                        if (item.getPredicate().equals(lex.getPredicate())) {
-                                            item.getObjects().push(obj);
-                                        }
-                                    })
-
-                                }
+                            let predObj = new ARTPredicateObjects(predicate, nodes);
+                            this.langStruct[lang].push(predObj);
+                            this.sortPredicates(this.langStruct[lang])
+                        } else { // case in which objects with that predicate already exist and I can add others (example: I can have more altLabel)
+                            if (!this.langStruct[lang].some(item => { return item.getObjects().some(o => o.equals(obj)) })) { // I check if the object I am analyzing is not present
+                                this.langStruct[lang].forEach(item => {
+                                    if (item.getPredicate().equals(predicate)) {
+                                        item.getObjects().push(obj);
+                                    }
+                                })
                             }
-
                         }
+
                     }
                 })
 
@@ -153,24 +171,24 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
             notesColl.forEach(def => {
                 if (def.getPredicate().equals(SKOS.definition)) { // there could be several types (editorialNote, changeNote, example etc ..)
                     def.getObjects().forEach((obj: ARTNode) => {
-                        if (obj.getAdditionalProperty(ResAttribute.LANG) == null) {
-                            return
-                        }
+                        let lang = obj.getAdditionalProperty(ResAttribute.LANG);
+                        if (lang == null) return;
+
                         //case in which there are no existing keys equal to the language of the considered definition
-                        if (!(obj.getAdditionalProperty(ResAttribute.LANG) in this.langStruct) && this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)] == null) {
-                            this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)] = [];
+                        if (!(lang in this.langStruct) && this.langStruct[lang] == null) {
+                            this.langStruct[lang] = [];
                             nodes = [];
                             nodes.push(obj);
                             let predObj = new ARTPredicateObjects(def.getPredicate(), nodes);
-                            this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].push(predObj);
+                            this.langStruct[lang].push(predObj);
                         } else { // case in which there is already a key equals to the language of the considered definition
-                            if (!this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].some(item => item.getPredicate().equals(SKOS.definition))) { //case in which there are no objects with that type of predicate
+                            if (!this.langStruct[lang].some(item => item.getPredicate().equals(SKOS.definition))) { //case in which there are no objects with that type of predicate
                                 nodes = [];
                                 nodes.push(obj);
                                 let predObj = new ARTPredicateObjects(def.getPredicate(), nodes);
-                                this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].push(predObj);
-                            } else if (!this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].some(item => { return item.getObjects().some(o => o.equals(obj)) })) { // case in which objects with that predicate already exist and I can add others
-                                this.langStruct[obj.getAdditionalProperty(ResAttribute.LANG)].forEach(item => {
+                                this.langStruct[lang].push(predObj);
+                            } else if (!this.langStruct[lang].some(item => { return item.getObjects().some(o => o.equals(obj)) })) { // case in which objects with that predicate already exist and I can add others
+                                this.langStruct[lang].forEach(item => {
                                     if (item.getPredicate().equals(def.getPredicate())) {
                                         item.getObjects().push(obj);
                                     }
@@ -352,6 +370,11 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
 
 
         }
+    }
+
+    private deleteLangBox(lang: string) {
+        delete this.langStruct[lang];
+        this.objectKeys = Object.keys(this.langStruct);
     }
 
 }

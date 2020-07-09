@@ -3,7 +3,7 @@
         <rdf-resource style="flex: 1;" *ngIf="resource" [resource]="resource"></rdf-resource>
         <input class="form-control input-xs" [ngModel]="resource.getURI()" readonly>
 
-        <button class="btn btn-xs btn-default" style="margin-left: 3px;" (click)="buildResourceSimpleView(resource)" title="Refresh">
+        <button class="btn btn-xs btn-default" style="margin-left: 3px;" (click)="buildResourceView(resource)" title="Refresh">
             <span class="glyphicon glyphicon-refresh"></span>
         </button>
         <button class="btn btn-default btn-xs" style="margin-left: 3px;" (click)="openSettings()" title="ResourceView settings">
@@ -18,7 +18,6 @@
                     <h2 class="qname"><span>{{resource.qname}}</span></h2>
                     <div>
                         <p>{{resource.getShow()}}</p>
-                        <!-- <p *ngFor="let item of definitions">{{item.getShow()}}</p> -->
                         <p *ngFor="let item of definitions">{{item.definition}} ({{item.lang}})</p>
                     </div>
                     <h2 class="concept"><span>Broader Concepts</span></h2>
@@ -35,8 +34,8 @@
             </div>
             <!-- Language definitions-->
             <div class="def-lang">
-                <lang-def *ngFor="let item of objectKeys" [resource]="resource" (update)="buildResourceSimpleView(resource)" 
-                    [langFromServer]="item" [langStruct]="langStruct"
+                <lang-def *ngFor="let item of objectKeys" [resource]="resource" (update)="buildResourceView(resource)" 
+                    (delete)="deleteLangBox(item)" [langFromServer]="item" [langStruct]="langStruct"
                     [customRange]="definitionHasCustomRange" #langItem>
                 </lang-def>
             </div>

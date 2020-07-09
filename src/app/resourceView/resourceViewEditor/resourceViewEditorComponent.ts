@@ -194,7 +194,6 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                 HttpServiceContext.removeContextVersion();
                 this.resViewResponse = stResp;
                 this.fillPartitions();
-                this.update.emit(this.resource);
                 this.unknownHost = false;
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             },
@@ -224,8 +223,9 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
      * in fact if the user switches on/off the inference, there's no need to perform a new request.
      */
     private fillPartitions() {
-        var resourcePartition: any = this.resViewResponse.resource;
+        let resourcePartition: any = this.resViewResponse.resource;
         this.resource = Deserializer.createRDFResource(resourcePartition);
+        this.update.emit(this.resource);
 
         this.resourcePosition = ResourcePosition.deserialize(this.resource.getAdditionalProperty(ResAttribute.RESOURCE_POSITION));
         if (

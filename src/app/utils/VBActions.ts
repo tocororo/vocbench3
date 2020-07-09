@@ -206,6 +206,7 @@ export enum VBActionsEnum {
     skosAddConceptToScheme = "skosAddConceptToScheme",
     skosAddLexicalization = "skosAddLexicalization",
     skosAddMultipleToScheme = "skosAddMultipleToScheme",
+    skosAddNote = "skosAddNote",
     skosAddToCollection = "skosAddToCollection",
     skosAddTopConcept = "skosAddTopConcept",
     skosCreateCollection = "skosCreateCollection",

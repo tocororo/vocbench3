@@ -1,7 +1,11 @@
-import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Observable } from 'rxjs';
 import { CustomForm, CustomFormValue } from '../../../models/CustomForms';
 import { PropertyServices, RangeResponse } from '../../../services/propertyServices';
+import { AuthorizationEvaluator } from '../../../utils/AuthorizationEvaluator';
+import { VBActionsEnum } from '../../../utils/VBActions';
 import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
+import { CreationModalServices } from '../../../widget/modal/creationModal/creationModalServices';
 import { ResViewModalServices } from '../../resourceViewEditor/resViewModals/resViewModalServices';
 import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFTypesEnum, ResAttribute } from './../../../models/ARTResources';
 import { Language, Languages } from './../../../models/LanguagesCountries';
@@ -21,34 +25,49 @@ import { VBContext } from './../../../utils/VBContext';
 
 export class ShowLanguageDefinitionComponent {
 
-    partitionCollapsed: boolean = false;
     @Input() langFromServer: string;
     @Input() langStruct: { [key: string]: ARTPredicateObjects[] };
     @Input() resource: ARTResource;
     @Input() customRange: boolean;
     @Output() update = new EventEmitter();
+    @Output() delete = new EventEmitter(); //requires the parent to delete this component
+    
     private lang: Language;
     private definitions: DefinitionStructView[]; // it is useful for method onDefinitionEdited
-    private defOnView: string[] = [];// it is useful to pass value (string) to the view
     private terms: TermStructView[]; // it is used to assign each term if it's a prefLabel or not
-    private disabled: boolean;
-    private disabledAddDef: boolean; // it is used to disable link inside dropdown
-    private disableTextInputEditableDefinition: boolean; // it is used when custom range are active to manage empty box definition(in particural when box flags are initialized) when it has not value. In this way it's possible to add a definition with custom form panel and not directly with an input inside definition box.
-    private displayRemoveButtonOnFlag: boolean;
     private lexicalizationModelType: string;
 
+    private emptyTerm: boolean; //tells if there is an empty term (eventually waiting to be filled or just emptied)
+    private emptyDef: boolean; //tells if there is an empty definition  (eventually waiting to be filled or just emptied)
+
+    //action auth
+    private addDefAuthorized: boolean;
+    private editDefAuthorized: boolean;
+    private deleteDefAuthorized: boolean;
+    private addLabelAuthorized: boolean;
 
     constructor(public el: ElementRef, private skosService: SkosServices, private skosxlService: SkosxlServices,
         private resourcesService: ResourcesServices, private customFormsServices: CustomFormsServices,
-        private propService: PropertyServices, private resViewModals: ResViewModalServices, private basicModals: BasicModalServices) { }
+        private propService: PropertyServices, private resViewModals: ResViewModalServices, 
+        private basicModals: BasicModalServices, private creationModals: CreationModalServices) { }
 
-    ngOnChanges() {
+    ngOnInit() {
         this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType();//it's useful to understand project lexicalization
         this.lang = Languages.getLanguageFromTag(this.langFromServer)
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
         this.initializeDefinition();
         this.initializeTerms();
-        this.disabled = false;
-        this.displayRemoveButtonOnFlag = false;
+
+        if (changes['resource']) {
+            let langAuthorized = VBContext.getProjectUserBinding().getLanguages().indexOf(this.langFromServer) != -1;
+            //all the actions are authorized if user has authorization on the action itself and on the language envolved
+            this.addLabelAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddLexicalization, this.resource) && langAuthorized;
+            this.addDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddNote, this.resource) && langAuthorized;
+            this.editDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, this.resource) && langAuthorized;
+            this.deleteDefAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRemoveValue, this.resource) && langAuthorized;
+        }
     }
 
 
@@ -61,19 +80,12 @@ export class ShowLanguageDefinitionComponent {
                         this.definitions.push({ object: d, predicate: po.getPredicate(), lang: this.langFromServer })
                     })
                 }
-                this.disabledAddDef = false;
             }
         })
         if (!this.langStruct[this.langFromServer].some(po => po.getPredicate().equals(SKOS.definition))) { // it creates empty box definition when user adds a new language
             this.definitions.push({ predicate: SKOS.definition, lang: this.langFromServer })
-            this.disabledAddDef = true;
-            if (this.customRange) {
-                this.disableTextInputEditableDefinition = true;
-            }
-
         }
-
-
+        this.updateEmptyDef();
     }
 
 
@@ -100,61 +112,42 @@ export class ShowLanguageDefinitionComponent {
             this.resourcesService.addValue(this.resource, SKOS.definition, newLitForm).subscribe(
                 stResp => this.update.emit()
             )
-            this.disabledAddDef = false;
         }
-
     }
 
 
     /**
      * Delete a definition:
      * 1) if there are more than one definition it deletes entire definition box 
-     * 2) if there is only one definition it delets value but an empty box remains
+     * 2) if there is only one definition it deletes value but an empty box remains
      * @param defToDelete 
      */
-
     private deleteDefinition(defToDelete: DefinitionStructView) {
-        this.disabledAddDef = false;
-        if (this.definitions.length > 1 && defToDelete.object != null) {
+        if (defToDelete.object == null) {
+            this.definitions.pop();
+            this.updateEmptyDef();
+        } else {
+            let serviceInvocation: Observable<any>;
             if (defToDelete.object.isLiteral()) { // if standard
-                this.resourcesService.removeValue(<ARTURIResource>this.resource, defToDelete.predicate, defToDelete.object).subscribe(
-                    stResp => this.update.emit()
-                )
+                serviceInvocation = this.resourcesService.removeValue(<ARTURIResource>this.resource, defToDelete.predicate, defToDelete.object);
             } else if (defToDelete.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)) { // if reified
-                this.customFormsServices.removeReifiedResource(this.resource, defToDelete.predicate, defToDelete.object).subscribe(
-                    stResp => this.update.emit()
-                )
+                serviceInvocation = this.customFormsServices.removeReifiedResource(this.resource, defToDelete.predicate, defToDelete.object);
             }
-
-        } else if (this.definitions.length > 1 && defToDelete.object == null) {
-            this.definitions.pop()
-        } else if (defToDelete.object != null) { // case in which there is only a definition with a value 
-            if (defToDelete.object.isLiteral()) { // if standard
-                this.resourcesService.removeValue(<ARTURIResource>this.resource, defToDelete.predicate, defToDelete.object).subscribe(
-                    stResp => {
-                        // this.update.emit()
-                        defToDelete.object = null;
-                        this.disableTextInputEditableDefinition = true;
-                        if (this.terms.length == 0) {
-                            this.displayRemoveButtonOnFlag = true
-                        }
-                    }
-                )
-            } else if (defToDelete.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)) { // if reified
-                this.customFormsServices.removeReifiedResource(this.resource, defToDelete.predicate, defToDelete.object).subscribe(
-                    stResp => {
-                        // this.update.emit()
-                        defToDelete.object = null;
-                        this.disableTextInputEditableDefinition = true;
-                        if (this.terms.length == 0) {
-                            this.displayRemoveButtonOnFlag = true
+            if (serviceInvocation != null) {
+                serviceInvocation.subscribe(
+                    () => {
+                        //if the deleted definition was the only one and there are no terms, just empty the definition object
+                        //and prevent to refresh the entire res view (otherwise the whole box disappears)
+                        if (this.definitions.length == 1 && this.emptyTerm) {
+                            defToDelete.object = null;
+                            this.updateEmptyDef();
+                        } else { //there were multiple definitions
+                            this.update.emit();
                         }
                     }
                 )
             }
-
         }
-
     }
 
 
@@ -162,57 +155,68 @@ export class ShowLanguageDefinitionComponent {
      *  Add a new empty box definition
      */
     private addDefinitionItem() {
-        let predicate = SKOS.definition;
-        this.propService.getRange(predicate).subscribe(
-            (range: RangeResponse) => {
-                let ranges = range.ranges;
-                let customForms: CustomForm[];
-                if (range.formCollection != null) {
-                    let forms = range.formCollection.getForms();
-                    if (forms.length > 0) {
-                        customForms = forms;
-                    }
-                }
-                //handle 3 cases: only CustomRange, only "standard" range, both Custom and standard range
-                if (ranges != null && customForms == null) { //only standard range => simply add a new field
-                    this.addPlainDefinition();
-                } else if (ranges == null && customForms != null) { //only CustomRange
-                    if (customForms.length == 1) { //just one CF in the collection => prompt it
-                        this.addCustomFormDefinition(customForms[0]);
-                    } else if (customForms.length > 1) { //multiple CF => ask which one to use
-                        //prepare the range options with the custom range entries
-                        this.basicModals.selectCustomForm("Select a Custom Range", customForms).then(
+        if (this.customRange) { //exists custom range(s) for skos:definition
+            let predicate = SKOS.definition;
+            this.propService.getRange(predicate).subscribe(
+                (range: RangeResponse) => {
+                    let ranges = range.ranges;
+                    let customForms: CustomForm[] = range.formCollection.getForms();
+                    //handle 2 cases: only CustomRange, both Custom and standard range (3rd case, only "standard", is excluded since @Input customRange is true)
+                    if (ranges == null) { //only CustomRange
+                        if (customForms.length == 1) { //just one CF in the collection => prompt it
+                            this.addCustomFormDefinition(customForms[0]);
+                        } else if (customForms.length > 1) { //multiple CF => ask which one to use
+                            //prepare the range options with the custom range entries
+                            this.basicModals.selectCustomForm("Select a Custom Range", customForms).then(
+                                (selectedCF: CustomForm) => {
+                                    this.addCustomFormDefinition(selectedCF);
+                                },
+                                () => { }
+                            );
+                        }
+                    } else { //both standard and custom range
+                        //workaroung tu include "literal" as choice in the CF selection modal
+                        let rangeOptions: CustomForm[] = [new CustomForm(RDFTypesEnum.literal, RDFTypesEnum.literal)];
+                        rangeOptions = rangeOptions.concat(customForms);
+                        //ask the user to choose
+                        this.basicModals.selectCustomForm("Select a range", rangeOptions).then(
                             (selectedCF: CustomForm) => {
-                                this.addCustomFormDefinition(selectedCF);
-                            },
-                            () => { }
+                                if (selectedCF.getId() == RDFTypesEnum.literal) { //if selected range is "literal"
+                                    this.addPlainDefinition();
+                                } else { //user selected a custom range
+                                    this.addCustomFormDefinition(selectedCF);
+                                }
+                            }
                         );
                     }
-                } else { //both standard and custom range
-                    //workaroung tu include "literal" as choice in the CF selection modal
-                    let rangeOptions: CustomForm[] = [new CustomForm(RDFTypesEnum.literal, RDFTypesEnum.literal)];
-                    rangeOptions = rangeOptions.concat(customForms);
-                    //ask the user to choose
-                    this.basicModals.selectCustomForm("Select a range", rangeOptions).then(
-                        (selectedCF: CustomForm) => {
-                            if (selectedCF.getId() == RDFTypesEnum.literal) { //if selected range is "literal"
-                                this.addPlainDefinition();
-                            } else { //user selected a custom range
-                                this.addCustomFormDefinition(selectedCF);
-                            }
-                        }
-                    );
                 }
-            }
-        );
+            );
+        } else {
+            this.addInlineDefinition();
+        }
     }
 
     /**
      * Add a new empty box definition
      */
-    private addPlainDefinition() {
+    private addInlineDefinition() {
         this.definitions.push({ predicate: SKOS.definition, lang: this.langFromServer })
-        this.disabledAddDef = true;
+        this.updateEmptyDef();
+    }
+
+    /**
+     * Open a modal for entering a new plain definition
+     */
+    private addPlainDefinition() {
+        this.creationModals.newPlainLiteral("Add a definition", null, false, this.langFromServer, true).then(
+            (literalDef: ARTLiteral) => {
+                this.skosService.addNote(<ARTURIResource>this.resource, SKOS.definition, literalDef).subscribe(
+                    () => {
+                        this.update.emit();
+                    }
+                )
+            }
+        )
     }
 
     /**
@@ -226,7 +230,6 @@ export class ShowLanguageDefinitionComponent {
                 this.skosService.addNote(<ARTURIResource>this.resource, SKOS.definition, cfValue).subscribe(
                     () => {
                         this.update.emit();
-                        this.disableTextInputEditableDefinition = false;
                     }
                 )
             },
@@ -257,9 +260,8 @@ export class ShowLanguageDefinitionComponent {
             }
 
         })
-        if (this.definitions.length == 1 && this.definitions.some(d => d.object == null) && this.terms.length == 0) { // this check is here because it needs to wait that "terms array" is initialized (see methods order in onChanges at the beginning)
-            this.displayRemoveButtonOnFlag = true
-        }
+
+        this.updateEmptyTerm();
     }
 
 
@@ -268,20 +270,20 @@ export class ShowLanguageDefinitionComponent {
         if (this.terms.some(term => term.predicate.equals(SKOSXL.prefLabel) || term.predicate.equals(SKOS.prefLabel))) { // it means that already there is a prefLabel predicate => so add an altLabel (with SKOS and SKOSXL)
             if (this.lexicalizationModelType == SKOSXL.uri) {
                 this.terms.push({ predicate: SKOSXL.altLabel, lang: this.langFromServer })
-                this.disabledAddButton()
+                this.updateEmptyTerm();
             } else if (this.lexicalizationModelType == SKOS.uri) {
                 this.terms.push({ predicate: SKOS.altLabel, lang: this.langFromServer })
-                this.disabledAddButton()
+                this.updateEmptyTerm();
             }
         } else { // contrary
             if (this.lexicalizationModelType == SKOSXL.uri) {
                 this.terms.push({ predicate: SKOSXL.prefLabel, isPrefLabel: true, lang: this.langFromServer })
                 this.sortPredicates(this.terms)
-                this.disabledAddButton()
+                this.updateEmptyTerm();
             } else if (this.lexicalizationModelType == SKOS.uri) {
                 this.terms.push({ predicate: SKOS.prefLabel, isPrefLabel: true, lang: this.langFromServer })
                 this.sortPredicates(this.terms)
-                this.disabledAddButton()
+                this.updateEmptyTerm();
             }
         }
 
@@ -331,72 +333,48 @@ export class ShowLanguageDefinitionComponent {
     private deleteTerm(termToDelete: TermStructView) {
         if (termToDelete.object == null) { // case in which a box is deleted and it never be modified 
             this.terms.pop()
-            this.disabled = false // reactive add button
-            if (this.terms.length == 0) {
-                this.displayRemoveButtonOnFlag = true
-            }
+            this.updateEmptyTerm();
         } else { // case in which a box is deleted and conteins a term with value
             this.terms.forEach(term => {
                 if (term == termToDelete) {
-                    if (this.definitions.length == 1 && this.definitions.some(def => def.object == null) && this.terms.length == 1) {  //it means that if there is only one term box( with a value inside) and one empty definition then delete only term box instead of all (with refresh)
+                    if (this.definitions.length == 1 && this.definitions.some(def => def.object == null) && this.terms.length == 1) {  
+                        //it means that if there is only one term box( with a value inside) and one empty definition then delete only term box instead of all (with refresh)
+                        let serviceInvocation: Observable<any>;
                         if (term.predicate.equals(SKOSXL.prefLabel)) {
-                            this.skosxlService.removePrefLabel(<ARTURIResource>this.resource, <ARTResource>termToDelete.object).subscribe(
-                                stResp => {
-                                    this.terms.splice(this.terms.indexOf(termToDelete), 1)
-                                    if (this.terms.length == 0) {
-                                        this.displayRemoveButtonOnFlag = true
-                                    }
-                                }
-                            )
-
+                            serviceInvocation = this.skosxlService.removePrefLabel(<ARTURIResource>this.resource, <ARTResource>termToDelete.object);
                         } else if (term.predicate.equals(SKOSXL.altLabel)) {
-                            this.skosxlService.removeAltLabel(<ARTURIResource>this.resource, <ARTResource>termToDelete.object).subscribe(
-                                stResp => {
-                                    this.terms.splice(this.terms.indexOf(termToDelete), 1)
-                                    if (this.terms.length == 0) {
-                                        this.displayRemoveButtonOnFlag = true
-                                    }
-                                }
-                            )
+                            serviceInvocation = this.skosxlService.removeAltLabel(<ARTURIResource>this.resource, <ARTResource>termToDelete.object);
                         } else if (term.predicate.equals(SKOS.prefLabel)) {
-                            this.skosService.removePrefLabel(<ARTURIResource>this.resource, <ARTLiteral>termToDelete.object).subscribe(
-                                stResp => {
-                                    this.terms.splice(this.terms.indexOf(termToDelete), 1)
-                                    if (this.terms.length == 0) {
-                                        this.displayRemoveButtonOnFlag = true
-                                    }
-                                }
-                            )
+                            serviceInvocation = this.skosService.removePrefLabel(<ARTURIResource>this.resource, <ARTLiteral>termToDelete.object);
                         } else if (termToDelete.predicate.equals(SKOS.altLabel)) {
-                            this.skosService.removeAltLabel(<ARTURIResource>this.resource, <ARTLiteral>termToDelete.object).subscribe(
-                                stResp => {
-                                    this.terms.splice(this.terms.indexOf(termToDelete), 1)
-                                    if (this.terms.length == 0) {
-                                        this.displayRemoveButtonOnFlag = true
-                                    }
-                                }
-                            )
-
+                            serviceInvocation = this.skosService.removeAltLabel(<ARTURIResource>this.resource, <ARTLiteral>termToDelete.object);
                         }
-
+                        if (serviceInvocation != null) {
+                            serviceInvocation.subscribe(
+                                () => {
+                                    this.terms.splice(this.terms.indexOf(termToDelete), 1)
+                                    this.updateEmptyTerm();
+                                    // if (this.terms.length == 0) {
+                                    //     this.displayRemoveButtonOnFlag = true
+                                    // }
+                                }
+                            )
+                        }
                     } else {
+                        let serviceInvocation: Observable<any>;
                         if (term.predicate.equals(SKOSXL.prefLabel)) {
-                            this.skosxlService.removePrefLabel(<ARTURIResource>this.resource, <ARTResource>termToDelete.object).subscribe(
-                                stResp => this.update.emit()
-                            )
+                            serviceInvocation = this.skosxlService.removePrefLabel(<ARTURIResource>this.resource, <ARTResource>termToDelete.object);
                         } else if (term.predicate.equals(SKOSXL.altLabel)) {
-                            this.skosxlService.removeAltLabel(<ARTURIResource>this.resource, <ARTResource>termToDelete.object).subscribe(
-                                stResp => this.update.emit()
-                            )
+                            serviceInvocation = this.skosxlService.removeAltLabel(<ARTURIResource>this.resource, <ARTResource>termToDelete.object);
                         } else if (term.predicate.equals(SKOS.prefLabel)) {
-                            this.skosService.removePrefLabel(<ARTURIResource>this.resource, <ARTLiteral>termToDelete.object).subscribe(
-                                stResp => this.update.emit()
-                            )
+                            serviceInvocation = this.skosService.removePrefLabel(<ARTURIResource>this.resource, <ARTLiteral>termToDelete.object);
                         } else if (termToDelete.predicate.equals(SKOS.altLabel)) {
-                            this.skosService.removeAltLabel(<ARTURIResource>this.resource, <ARTLiteral>termToDelete.object).subscribe(
-                                stResp => this.update.emit()
-                            )
-
+                            serviceInvocation = this.skosService.removeAltLabel(<ARTURIResource>this.resource, <ARTLiteral>termToDelete.object);
+                        }
+                        if (serviceInvocation != null) {
+                            serviceInvocation.subscribe(
+                                () => this.update.emit()
+                            );
                         }
                     }
                 }
@@ -412,25 +390,9 @@ export class ShowLanguageDefinitionComponent {
      */
 
     removeBox() {
-        if (this.definitions.length == 1 && this.definitions.some(d => d.object == null) && this.terms.length == 0) {
-            this.definitions.pop()
-            this.update.emit()
-        }
+        this.delete.emit();
     }
 
-
-
-    /**
-     * This method manages "add button" status
-     */
-    private disabledAddButton() {
-        this.terms.forEach(t => {
-            if (t.object == null) {
-                this.disabled = true
-            }
-        })
-
-    }
 
     /**
      * When the object is edited or added requires update of res simple view 
@@ -439,6 +401,21 @@ export class ShowLanguageDefinitionComponent {
         this.update.emit();
     }
 
+    /**
+     * Update the flag that keep trace if there is an empty term in the terms list.
+     * To be invoked each time there is a change to the terms list (but the RV is not updated)
+     */
+    private updateEmptyTerm() {
+        this.emptyTerm = this.terms.some(t => t.object == null);
+    }
+
+    /**
+     * Update the flag that keep trace if there is an empty definition in the definitions list
+     * To be invoked each time there is a change to the definitions list (but the RV is not updated)
+     */
+    private updateEmptyDef() {
+        this.emptyDef = this.definitions.some(d => d.object == null);
+    }
 
 
 }

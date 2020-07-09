@@ -5,6 +5,10 @@
     height: auto; 
     white-space: pre-wrap; 
 }
+.custom.disabled {
+    background-color: rgb(244, 244, 244);
+    cursor: not-allowed;
+}
 
 .custom:hover{
     border: 1px solid rgb(244, 244, 244) !important;
