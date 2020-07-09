@@ -36,4 +36,4 @@
     </button>
 </div>
 
-<lang-term *ngFor="let term of terms" [termToShow]="term" (termToDelete)="deleteTerm(term)" [resource]="resource" (update)="onTermUpdate()"></lang-term>
+<lang-term *ngFor="let term of terms" [termToShow]="term" (termToDelete)="deleteTerm(term)" [resource]="resource" [lang]="langFromServer" (update)="onTermUpdate()"></lang-term>

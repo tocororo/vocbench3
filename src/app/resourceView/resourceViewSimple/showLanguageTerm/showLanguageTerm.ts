@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ARTLiteral, ARTResource } from '../../../models/ARTResources';
+import { AuthorizationEvaluator } from '../../../utils/AuthorizationEvaluator';
+import { VBActionsEnum } from '../../../utils/VBActions';
 import { ARTURIResource } from './../../../models/ARTResources';
 import { OntoLex, SKOS, SKOSXL } from './../../../models/Vocabulary';
 import { ResourcesServices } from './../../../services/resourcesServices';
@@ -20,19 +22,30 @@ export class ShowLanguageTermComponent {
     @Input() termToShow: TermStructView;
     @Input() isEmptyTermsList: boolean;
     @Input() resource: ARTResource;
+    @Input() lang: string;
     @Output() termToDelete = new EventEmitter();
     @Output() update = new EventEmitter();
+
     private termValue: string
     private focus: boolean;
     private lexicalizationModelType: string;
 
+    private editTermAuthorized: boolean;
+    private deleteTermAuthorized: boolean;
+
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private resourcesService: ResourcesServices) { }
 
+    ngOnInit() {
+        this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType();//it's useful to understand project lexicalization
+    }
 
     ngOnChanges() {
-        this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType();//it's useful to understand project lexicalization
         this.initializeTerm();
+
+        let langAuthorized = VBContext.getProjectUserBinding().getLanguages().indexOf(this.lang) != -1;
+        this.editTermAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateLexicalization, this.resource) && langAuthorized;
+        this.deleteTermAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveLexicalization, this.resource) && langAuthorized;
     }
 
     private initializeTerm() {
