@@ -49,7 +49,7 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
 
     ngOnChanges() {
         this.buildResourceSimpleView(this.resource)
-        this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType();//it's util to understand project lexicalization
+        this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType();//it's useful to understand project lexicalization
     }
 
 
@@ -137,7 +137,7 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
             if (definitionPredObj) { //if there are definitions
                 // this.definitions = definitionPredObj.getObjects(); 
                 definitionPredObj.getObjects().forEach(def => {
-                    this.definitions.push({ definition: def.getShow(), lang: def.getAdditionalProperty(ResAttribute.LANG) }) // it is util to show "definition + lang" in first box in the UI 
+                    this.definitions.push({ definition: def.getShow(), lang: def.getAdditionalProperty(ResAttribute.LANG) }) // it is useful to show "definition + lang" in first box in the UI 
                     this.definitions.sort((a: DefinitionStructView, b: DefinitionStructView) => { // order about lang
                         if (a.lang > b.lang) {
                             return 1

@@ -5,157 +5,117 @@
     position: relative;
     margin-top: 3%;
   }
+
   .links {
     padding: 0 10px;
     display: flex;
     /* justify-content: space-between; */
     position: relative;
   }
+
   .wrap:before {
     content: '';
     position: absolute;
-    top: 100%; /* top:50% for flag in middle of the line*/
+    top: 100%;
+    /* top:50% for flag in middle of the line*/
     left: 0;
     border-top: 1px solid black;
     background: black;
     width: 100%;
     transform: translateY(-50%);
-  } 
+  }
 
+  .def-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    margin-top: 5px;
+  }
 
-.def-wrap{
-  display: flex; 
-  flex-direction: row; 
-  align-items: baseline;
-  margin-top: 5px;
-}
+  .semitransparent {
+    margin-left: auto;
+  }
 
-.semitransparent{
-  margin-left: auto;
-}
+  .semitransparent:hover>.add-button {
+    background: rgba(221, 221, 221, 0.5);
+    transition: all 0.4s ease-in;
+  }
 
-.semitransparent:hover > .add-button{
-  background: rgba(221, 221, 221, 0.5);
-  transition: all 0.4s ease-in;
-}
+  .add-button {
+    border: none;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease-out;
+  }
 
-.add-button{
-  border:none;
-  background: rgba(255, 255, 255, 0.5);
-  transition: all 0.3s ease-out;
-}
+  .add-button:hover, .add-button:focus, .add-button:active {
+    background: rgba(221, 221, 221, 0.5);
+    transition: all 0.4s ease-in;
+  }
 
-.add-button:hover,
-.add-button:focus,
-.add-button:active {
-  background:  rgba(221, 221, 221, 0.5);
-  transition: all 0.4s ease-in;
-}
+  .add-button:focus {
+    outline: none;
+  }
 
-.add-button:focus {
-  outline: none;
-}
+  .add-button span {
+    color: white;
+  }
 
-.add-button span{
-  color:white;
-}
+  .arrow {
+    margin: 0;
+    padding: 0 1px !important;
+  }
 
-.arrow{
-  margin: 0;
-  padding: 0 1px !important;
-}
+  .minus-button {
+    border: none;
+    background: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease-out;
+    margin-left: 3px;
+  }
 
-.minus-button{
-  border:none;
-  background: rgba(255, 255, 255, 0.5);
-  transition: all 0.3s ease-out;
-  margin-left: 3px;
-}
+  .minus-button:hover, .minus-button:focus, .minus-button:active {
+    background: rgba(221, 221, 221, 0.5);
+    transition: all 0.4s ease-in;
+  }
 
-.minus-button:hover,
-.minus-button:focus,
-.minus-button:active {
-  background:  rgba(221, 221, 221, 0.5);
-  transition: all 0.4s ease-in;
-}
+  .minus-button:focus {
+    outline: none;
+  }
 
-.minus-button:focus {
-  outline: none;
-}
+  .minus-button span {
+    color: white;
+  }
 
-.minus-button span{
-  color:white;
-}
+  li.disabled {
+    cursor: not-allowed;
+  }
 
-li.disabled {
-  cursor: not-allowed;    
-}
+  /*Disable events when user clicks on a disabled link*/
 
-/*Disable events when user clicks on a disabled link*/
-li.disabled > a {
-  pointer-events: none;
-}
+  li.disabled>a {
+    pointer-events: none;
+  }
 
+  .remove-button {
+    position: absolute;
+    left: 31%;
+    border: none;
+    background: transparent;
+    transition: all 0.3s ease-out;
+  }
 
+  .remove-button:hover, .remove-button:focus, .remove-button:active {
+    background: rgba(124, 124, 124, 0.8);
+    transition: all 0.4s ease-in;
+  }
 
+  .remove-button:hover>span {
+    color: white;
+  }
 
+  .remove-button:focus {
+    outline: none;
+  }
 
-
-/* .def-button{
-  border:none;
-  margin-left: 7px;
-  background-color:transparent;
-}
-
-
-
-.def-button:focus{
-  outline-color:  rgb(250, 250, 250);
-  box-shadow: none;
-}
-
-.def-button:hover{
-  background: rgba(255, 255, 255, 0.5);
-  transition: all 0.3s ease-out;
-}
-
-.def-button span:hover{
-  color:#fff;
-} */
-
-
-
-/* .def-wrap p{
-  padding-left: 3px;
-  padding-right: 3px;
-   min-width: 50px; 
-   background-color: rgb(251, 251, 251);
-   border: 1px solid rgb(251, 251, 251);
-   border-radius: 3px;
-}
-
-.def-wrap p:hover{
-   border: 1px solid rgb(244, 244, 244);
-}
-
-[contenteditable="true"]:focus {
-  outline-color:  rgb(244, 244, 244);
-}
-
-
-.def-wrap:hover .def-button{
-  background-color: rgb(255, 255, 255) !important;
-}
-
-.def-button span{
-  color: rgb(226, 224, 224);
-}
-
-.def-wrap:hover .def-button span{
-  color: black
-} */
-
-
-
-
-
+  .remove-button span {
+    color: transparent;
+  }

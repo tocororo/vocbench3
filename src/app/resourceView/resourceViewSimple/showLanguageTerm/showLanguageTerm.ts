@@ -1,4 +1,3 @@
-import { VBContext } from './../../../utils/VBContext';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ARTLiteral, ARTResource } from '../../../models/ARTResources';
 import { ARTURIResource } from './../../../models/ARTResources';
@@ -6,6 +5,7 @@ import { OntoLex, SKOS, SKOSXL } from './../../../models/Vocabulary';
 import { ResourcesServices } from './../../../services/resourcesServices';
 import { SkosServices } from './../../../services/skosServices';
 import { SkosxlServices } from './../../../services/skosxlServices';
+import { VBContext } from './../../../utils/VBContext';
 import { TermStructView } from './../showLanguageDefinition/showLanguageDefinition';
 
 @Component({
@@ -25,13 +25,13 @@ export class ShowLanguageTermComponent {
     private termValue: string
     private focus: boolean;
     private lexicalizationModelType: string;
-   
+
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private resourcesService: ResourcesServices) { }
 
 
     ngOnChanges() {
-        this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType();//it's util to understand project lexicalization
+        this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType();//it's useful to understand project lexicalization
         this.initializeTerm();
     }
 

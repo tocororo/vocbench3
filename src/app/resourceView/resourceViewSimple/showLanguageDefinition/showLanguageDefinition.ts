@@ -28,12 +28,13 @@ export class ShowLanguageDefinitionComponent {
     @Input() customRange: boolean;
     @Output() update = new EventEmitter();
     private lang: Language;
-    private definitions: DefinitionStructView[]; // it is util for method onDefinitionEdited
-    private defOnView: string[] = [];// it is util to pass value (string) to the view
+    private definitions: DefinitionStructView[]; // it is useful for method onDefinitionEdited
+    private defOnView: string[] = [];// it is useful to pass value (string) to the view
     private terms: TermStructView[]; // it is used to assign each term if it's a prefLabel or not
     private disabled: boolean;
     private disabledAddDef: boolean; // it is used to disable link inside dropdown
-    private disableTextInputEditableDefinition: boolean;
+    private disableTextInputEditableDefinition: boolean; // it is used when custom range are active to manage empty box definition(in particural when box flags are initialized) when it has not value. In this way it's possible to add a definition with custom form panel and not directly with an input inside definition box.
+    private displayRemoveButtonOnFlag: boolean;
     private lexicalizationModelType: string;
 
 
@@ -42,11 +43,12 @@ export class ShowLanguageDefinitionComponent {
         private propService: PropertyServices, private resViewModals: ResViewModalServices, private basicModals: BasicModalServices) { }
 
     ngOnChanges() {
-        this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType();//it's util to understand project lexicalization
+        this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType();//it's useful to understand project lexicalization
         this.lang = Languages.getLanguageFromTag(this.langFromServer)
         this.initializeDefinition();
         this.initializeTerms();
         this.disabled = false;
+        this.displayRemoveButtonOnFlag = false;
     }
 
 
@@ -68,7 +70,9 @@ export class ShowLanguageDefinitionComponent {
             if (this.customRange) {
                 this.disableTextInputEditableDefinition = true;
             }
+
         }
+
 
     }
 
@@ -106,7 +110,6 @@ export class ShowLanguageDefinitionComponent {
      * Delete a definition:
      * 1) if there are more than one definition it deletes entire definition box 
      * 2) if there is only one definition it delets value but an empty box remains
-     * 3) When only one definition empty box remains( and there are no terms) clicking again on button minus it deletes entire box
      * @param defToDelete 
      */
 
@@ -125,13 +128,16 @@ export class ShowLanguageDefinitionComponent {
 
         } else if (this.definitions.length > 1 && defToDelete.object == null) {
             this.definitions.pop()
-        } else if (defToDelete.object != null) {
+        } else if (defToDelete.object != null) { // case in which there is only a definition with a value 
             if (defToDelete.object.isLiteral()) { // if standard
                 this.resourcesService.removeValue(<ARTURIResource>this.resource, defToDelete.predicate, defToDelete.object).subscribe(
                     stResp => {
                         // this.update.emit()
                         defToDelete.object = null;
                         this.disableTextInputEditableDefinition = true;
+                        if (this.terms.length == 0) {
+                            this.displayRemoveButtonOnFlag = true
+                        }
                     }
                 )
             } else if (defToDelete.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)) { // if reified
@@ -140,14 +146,15 @@ export class ShowLanguageDefinitionComponent {
                         // this.update.emit()
                         defToDelete.object = null;
                         this.disableTextInputEditableDefinition = true;
+                        if (this.terms.length == 0) {
+                            this.displayRemoveButtonOnFlag = true
+                        }
                     }
                 )
             }
 
-        } else if (this.definitions.length == 1 && defToDelete.object == null && this.terms.length == 0) {
-            this.definitions.pop()
-            this.update.emit()
         }
+
     }
 
 
@@ -250,7 +257,9 @@ export class ShowLanguageDefinitionComponent {
             }
 
         })
-
+        if (this.definitions.length == 1 && this.definitions.some(d => d.object == null) && this.terms.length == 0) { // this check is here because it needs to wait that "terms array" is initialized (see methods order in onChanges at the beginning)
+            this.displayRemoveButtonOnFlag = true
+        }
     }
 
 
@@ -323,28 +332,53 @@ export class ShowLanguageDefinitionComponent {
         if (termToDelete.object == null) { // case in which a box is deleted and it never be modified 
             this.terms.pop()
             this.disabled = false // reactive add button
+            if (this.terms.length == 0) {
+                this.displayRemoveButtonOnFlag = true
+            }
         } else { // case in which a box is deleted and conteins a term with value
             this.terms.forEach(term => {
                 if (term == termToDelete) {
-                    if (this.definitions.length == 1 && this.definitions.some(def => def.object == null) && this.terms.length == 1) {  //it means that if there is only one term box( with a value inside) and one empty definition then delete only term box instead of all
+                    if (this.definitions.length == 1 && this.definitions.some(def => def.object == null) && this.terms.length == 1) {  //it means that if there is only one term box( with a value inside) and one empty definition then delete only term box instead of all (with refresh)
                         if (term.predicate.equals(SKOSXL.prefLabel)) {
                             this.skosxlService.removePrefLabel(<ARTURIResource>this.resource, <ARTResource>termToDelete.object).subscribe(
-                                stResp => this.terms.splice(this.terms.indexOf(termToDelete), 1)
+                                stResp => {
+                                    this.terms.splice(this.terms.indexOf(termToDelete), 1)
+                                    if (this.terms.length == 0) {
+                                        this.displayRemoveButtonOnFlag = true
+                                    }
+                                }
                             )
+
                         } else if (term.predicate.equals(SKOSXL.altLabel)) {
                             this.skosxlService.removeAltLabel(<ARTURIResource>this.resource, <ARTResource>termToDelete.object).subscribe(
-                                stResp => this.terms.splice(this.terms.indexOf(termToDelete), 1)
+                                stResp => {
+                                    this.terms.splice(this.terms.indexOf(termToDelete), 1)
+                                    if (this.terms.length == 0) {
+                                        this.displayRemoveButtonOnFlag = true
+                                    }
+                                }
                             )
                         } else if (term.predicate.equals(SKOS.prefLabel)) {
                             this.skosService.removePrefLabel(<ARTURIResource>this.resource, <ARTLiteral>termToDelete.object).subscribe(
-                                stResp => this.terms.splice(this.terms.indexOf(termToDelete), 1)
+                                stResp => {
+                                    this.terms.splice(this.terms.indexOf(termToDelete), 1)
+                                    if (this.terms.length == 0) {
+                                        this.displayRemoveButtonOnFlag = true
+                                    }
+                                }
                             )
                         } else if (termToDelete.predicate.equals(SKOS.altLabel)) {
                             this.skosService.removeAltLabel(<ARTURIResource>this.resource, <ARTLiteral>termToDelete.object).subscribe(
-                                stResp => this.terms.splice(this.terms.indexOf(termToDelete), 1)
+                                stResp => {
+                                    this.terms.splice(this.terms.indexOf(termToDelete), 1)
+                                    if (this.terms.length == 0) {
+                                        this.displayRemoveButtonOnFlag = true
+                                    }
+                                }
                             )
 
                         }
+
                     } else {
                         if (term.predicate.equals(SKOSXL.prefLabel)) {
                             this.skosxlService.removePrefLabel(<ARTURIResource>this.resource, <ARTResource>termToDelete.object).subscribe(
@@ -368,11 +402,21 @@ export class ShowLanguageDefinitionComponent {
                 }
 
             })
+
         }
 
     }
 
+    /**
+     * This method removes entire box when there is only a definition box and there are not terms
+     */
 
+    removeBox() {
+        if (this.definitions.length == 1 && this.definitions.some(d => d.object == null) && this.terms.length == 0) {
+            this.definitions.pop()
+            this.update.emit()
+        }
+    }
 
 
 
