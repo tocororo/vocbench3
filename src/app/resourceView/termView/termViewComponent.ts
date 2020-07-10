@@ -1,48 +1,56 @@
-import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren, Output, EventEmitter, SimpleChanges } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from "@angular/core";
 import { Modal } from "ngx-modialog";
 import { ARTResource, ARTURIResource } from "../../models/ARTResources";
+import { VersionInfo } from "../../models/History";
 import { PropertyServices } from "../../services/propertyServices";
+import { HttpServiceContext } from "../../utils/HttpManager";
 import { UIUtils } from "../../utils/UIUtils";
 import { AbstractResourceView } from "../resourceViewEditor/abstractResourceView";
-import { ARTNode, ARTPredicateObjects, ResAttribute } from './../../models/ARTResources';
-import { Language, Languages } from './../../models/LanguagesCountries';
-import { ResViewPartition } from './../../models/ResourceView';
-import { OntoLex, SKOS, SKOSXL } from './../../models/Vocabulary';
-import { ResourceViewServices } from './../../services/resourceViewServices';
-import { Deserializer } from './../../utils/Deserializer';
-import { ResourceUtils, SortAttribute } from './../../utils/ResourceUtils';
-import { ProjectContext, VBContext } from './../../utils/VBContext';
-import { ShowLanguageDefinitionComponent } from './showLanguageDefinition/showLanguageDefinition';
+import { ARTNode, ARTPredicateObjects, ResAttribute } from '../../models/ARTResources';
+import { Language, Languages } from '../../models/LanguagesCountries';
+import { ResViewPartition } from '../../models/ResourceView';
+import { OntoLex, SKOS, SKOSXL } from '../../models/Vocabulary';
+import { ResourceViewServices } from '../../services/resourceViewServices';
+import { Deserializer } from '../../utils/Deserializer';
+import { ResourceUtils, SortAttribute } from '../../utils/ResourceUtils';
+import { ProjectContext, VBContext } from '../../utils/VBContext';
+import { LanguageBoxComponent } from "./languageBox/languageBoxComponent";
 
 @Component({
-    selector: "resource-view-simple",
-    templateUrl: "./resourceViewSimpleComponent.html",
-    styleUrls: ["./resourceViewSimpleComponent.css"],
+    selector: "term-view",
+    templateUrl: "./termViewComponent.html",
+    styleUrls: ["./termViewComponent.css"],
     host: { class: "vbox" }
 })
-export class ResourceViewSimpleComponent extends AbstractResourceView {
+export class TermViewComponent extends AbstractResourceView {
 
     @Input() resource: ARTResource;
     @Input() projectCtx: ProjectContext;
     @Input() readonly: boolean = false;
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)
 
-    @ViewChildren('langItem') langItemsView: QueryList<ShowLanguageDefinitionComponent>;
+    @ViewChildren('langBox') langBoxViews: QueryList<LanguageBoxComponent>;
     @ViewChild('blockDiv') blockDivElement: ElementRef;
 
     private resViewResponse: any = null;
     private unknownHost: boolean = false; //tells if the resource view of the current resource failed to be fetched due to a UnknownHostException
     private unexistingResource: boolean = false; //tells if the requested resource does not exist (empty description)
-    //private definitions: ARTNode[]; // conteins object with definitions predicate (skos:definition)
-    private definitions: DefinitionStructView[] = [];  // conteins object with definitions predicate (skos:definition) and its lang
-    private broaders: ARTNode[]; // conteins object with broader predicate (skos:broader)
+
+    private activeVersion: VersionInfo;
+
     private langStruct: { [key: string]: ARTPredicateObjects[] } = {}; // new struct to map server response where key is a flag.
-    private languages: LangStructView[] = []; // it is used to assign flag status(active/disabled) to flags list (top page under first box)
+    private objectKeys: string[]; // takes langStruct keys
+
     private userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
     private allProjectLangs = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectSettings().projectLanguagesSetting // all language to manage case in which user is admin without flags assigned
-    private lexicalizationModelType: string;
-    private objectKeys: string[]; // takes langStruct keys
+   
+    private broaders: ARTNode[]; // conteins object with broader predicate (skos:broader)
+    private definitions: DefinitionStructView[] = [];  // conteins object with definitions predicate (skos:definition) and its lang
+    private languages: LangStructView[] = []; // it is used to assign flag status(active/disabled) to flags list (top page under first box)
+
     private definitionHasCustomRange: boolean; //tells if skos:definition is mapped to CustomRange
+    
+    private lexicalizationModelType: string;
 
     constructor(resViewService: ResourceViewServices, modal: Modal, private propService: PropertyServices) {
         super(resViewService, modal);
@@ -50,6 +58,14 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
 
     ngOnInit() {
         this.lexicalizationModelType = VBContext.getWorkingProject().getLexicalizationModelType();//it's useful to understand project lexicalization
+
+        this.activeVersion = VBContext.getContextVersion();
+        /*
+        in readonly mode if:
+        - specified from outside (@Input readonly already set)
+        - the RV is working on an old dump version
+        */
+        this.readonly = this.readonly || (this.activeVersion != null || HttpServiceContext.getContextVersion() != null);
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -71,11 +87,12 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
      */
     public buildResourceView(res: ARTResource) {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+        if (this.activeVersion != null) {
+            HttpServiceContext.setContextVersion(this.activeVersion); //set temprorarly version
+        }
         this.resViewService.getResourceView(res).subscribe(
             stResp => {
-                this.langStruct = {}
-                this.languages = []
-                this.definitions = []
+                HttpServiceContext.removeContextVersion();
                 this.resViewResponse = stResp;
                 this.fillPartitions();
                 this.initLanguages();
@@ -107,6 +124,8 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
                 this.broaders = broaderPredObj.getObjects();
             }
         }
+
+        this.langStruct = {};
 
         let lexicalizationsColl: ARTPredicateObjects[] = this.initPartition(ResViewPartition.lexicalizations, false); //the sort is performed in the partition according the language
         if (lexicalizationsColl != null) {
@@ -148,6 +167,7 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
             })
         }
 
+        this.definitions = []
         let notesColl: ARTPredicateObjects[] = this.initPartition(ResViewPartition.notes, true);
         if (notesColl != null) {
             let nodes: ARTNode[] = [];
@@ -248,7 +268,7 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
             this.unexistingResource = false;
         }
         this.objectKeys = Object.keys(this.langStruct).sort();
-        console.log(this.langStruct)
+        console.log("langStruct", this.langStruct);
     }
 
     /**
@@ -311,28 +331,30 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
      * If the user is an Admin type and there are no languages ​​assigned to the user, then all languages ​​are taken, always putting first those that have a value
      */
     private initLanguages() {
+        this.languages = []
         let langListFromServer = this.objectKeys;
         if (langListFromServer.length != 0) {
             langListFromServer.forEach(lang => {
                 this.languages.push({ lang: Languages.getLanguageFromTag(lang), disabled: false })
             })
         }
-        if (VBContext.getLoggedUser().isAdmin() && this.userAssignedLangs.length == 0) {
-            this.allProjectLangs = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectSettings().projectLanguagesSetting
-            this.allProjectLangs.forEach(lang => {
-                if (!langListFromServer.some(l => l == lang.tag)) {
-                    this.languages.push({ lang: lang, disabled: true })
-                }
-            })
-        } else {
-            if (this.userAssignedLangs.length != 0) {
-                this.userAssignedLangs.forEach(lang => {
-                    if (!langListFromServer.some(l => l == lang)) {
-                        this.languages.push({ lang: Languages.getLanguageFromTag(lang), disabled: true })
+        if (!this.readonly) { //add further languages (those for adding new boxes) only if the TermView is not in readonly mode
+            if (VBContext.getLoggedUser().isAdmin() && this.userAssignedLangs.length == 0) {
+                this.allProjectLangs = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectSettings().projectLanguagesSetting
+                this.allProjectLangs.forEach(lang => {
+                    if (!langListFromServer.some(l => l == lang.tag)) {
+                        this.languages.push({ lang: lang, disabled: true })
                     }
                 })
+            } else {
+                if (this.userAssignedLangs.length != 0) {
+                    this.userAssignedLangs.forEach(lang => {
+                        if (!langListFromServer.some(l => l == lang)) {
+                            this.languages.push({ lang: Languages.getLanguageFromTag(lang), disabled: true })
+                        }
+                    })
+                }
             }
-
         }
 
     }
@@ -343,10 +365,10 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
      * 2) click on flag(not in server but user assigned) adds new lang definition and term because this flag is not present in server but is present or in userAssignedLang or in allProjectLangs(particular case)
      * @param flagClicked 
      */
-    private onClick(flagClicked: LangStructView) {
+    private onLanguageClicked(flagClicked: LangStructView) {
         if (this.objectKeys.some(l => l == flagClicked.lang.tag)) { //(1)
-            this.langItemsView.forEach(l => {
-                if (l.langFromServer == flagClicked.lang.tag) {
+            this.langBoxViews.forEach(l => {
+                if (l.lang == flagClicked.lang.tag) {
                     l.el.nativeElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
                 }
             })
@@ -367,8 +389,6 @@ export class ResourceViewSimpleComponent extends AbstractResourceView {
             this.langStruct[flagClicked.lang.tag] = [];
             this.langStruct[flagClicked.lang.tag].push(predObj)
             this.objectKeys = Object.keys(this.langStruct); // here there is not .sort() because so it manteins actual order
-
-
         }
     }
 

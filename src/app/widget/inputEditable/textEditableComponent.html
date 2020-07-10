@@ -1,7 +1,0 @@
-<textarea #editBlock *ngIf="editInProgress; else notEditBlock" [(ngModel)]="value" class="form-control input-xs custom" style="resize: vertical;"
-    [rows]="textareaRows" (keydown)="onKeydown($event)">
-</textarea>
-
-<ng-template #notEditBlock>
-    <div class="form-control input-xs custom" [ngClass]="{ disabled: disabled }" (click)="edit()">{{value}}</div>
-</ng-template>

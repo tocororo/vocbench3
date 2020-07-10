@@ -221,22 +221,22 @@ rdf-resource > .rdfResourceText {
     margin-right: 6px;
 }
 .proposedAddRes {
-    background-color: #dff0d8;
-    color: #3c763d;
+    background-color: #dff0d8 !important;
+    color: #3c763d !important;
     border-color: #d6e9c6 !important;
 }
 .proposedRemoveRes {
-    background-color: #f2dede;
-    color: #a94442;
+    background-color: #f2dede !important;
+    color: #a94442 !important;
     border-color: #ebccd1 !important;
 }
 .proposedAddTriple {
-    color: green;
-    font-style: italic;
+    color: green !important;
+    font-style: italic !important;
 }
 .proposedRemoveTriple {
-    color: darkred;
-    text-decoration: line-through;
+    color: darkred !important;
+    text-decoration: line-through !important;
 }
 
 .flagIcon {

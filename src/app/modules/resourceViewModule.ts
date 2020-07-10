@@ -58,10 +58,12 @@ import { ResourceViewModal } from '../resourceView/resourceViewModal';
 import { ResourceViewModeDispatcher } from '../resourceView/resourceViewModes/resourceViewModeDispatcher';
 import { ResourceViewSplittedComponent } from '../resourceView/resourceViewModes/resourceViewSplittedComponent';
 import { ResourceViewTabbedComponent } from '../resourceView/resourceViewModes/resourceViewTabbedComponent';
-import { ResourceViewSimpleComponent } from '../resourceView/resourceViewSimple/resourceViewSimpleComponent';
-import { ShowLanguageDefinitionComponent } from '../resourceView/resourceViewSimple/showLanguageDefinition/showLanguageDefinition';
-import { ShowLanguageTermComponent } from '../resourceView/resourceViewSimple/showLanguageTerm/showLanguageTerm';
 import { ResViewSettingsModal } from '../resourceView/resViewSettingsModal';
+import { InlineEditableValue } from '../resourceView/termView/inlineEditableValue/inlineEditableValue';
+import { LanguageBoxComponent } from '../resourceView/termView/languageBox/languageBoxComponent';
+import { LanguageDefinitionComponent } from '../resourceView/termView/languageDefinition/languageDefinition';
+import { LanguageTermComponent } from '../resourceView/termView/languageTerm/languageTerm';
+import { TermViewComponent } from '../resourceView/termView/termViewComponent';
 import { PreferencesModule } from './preferencesModule';
 import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from "./treeAndListModule";
@@ -75,9 +77,11 @@ import { TreeAndListModule } from "./treeAndListModule";
     ],
     declarations: [
         EditableResourceComponent,
+        InlineEditableValue,
+        LanguageBoxComponent,
         ReifiedResourceComponent,
         ResourceRenameComponent,
-        ResourceViewSimpleComponent,
+        TermViewComponent,
         ResourceTripleEditorComponent,
         ResourceViewEditorComponent, 
         ResourceViewContextMenu,
@@ -87,8 +91,8 @@ import { TreeAndListModule } from "./treeAndListModule";
         ResourceViewTabbedComponent,
         ResourceViewValueRenderer,
         ResourceViewTabContainer,
-        ShowLanguageDefinitionComponent,
-        ShowLanguageTermComponent,
+        LanguageDefinitionComponent,
+        LanguageTermComponent,
         //renderers
         BroadersPartitionRenderer,
         ClassAxiomPartitionPartitionRenderer, 

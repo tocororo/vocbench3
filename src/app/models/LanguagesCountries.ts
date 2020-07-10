@@ -114,11 +114,11 @@ export class Languages {
     }
 
     static getLanguageFromTag(tag: string): Language {
-        for (var i = 0; i < Languages.systemLanguages.length; i++) {
-            if (Languages.systemLanguages[i].tag == tag) {
-                return Languages.systemLanguages[i];
-            }
+        let l: Language = Languages.systemLanguages.find(l => l.tag == tag);
+        if (l == null) { //no language with the give tag found among the available
+            l = { name: tag, tag: tag };
         }
+        return l;
     }
 
 }

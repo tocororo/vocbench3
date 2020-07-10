@@ -29,15 +29,15 @@
             <!-- Languages-->
             <div class="lang">
                 <lang-item *ngFor="let item of languages" class="clickable" [language]="item.lang" [disabled]="item.disabled" 
-                    [showName]="false" [size]="'md'" (click)="onClick(item)">
+                    [showName]="false" [size]="'md'" (click)="onLanguageClicked(item)">
                 </lang-item>
             </div>
             <!-- Language definitions-->
             <div class="def-lang">
-                <lang-def *ngFor="let item of objectKeys" [resource]="resource" (update)="buildResourceView(resource)" 
-                    (delete)="deleteLangBox(item)" [langFromServer]="item" [langStruct]="langStruct"
-                    [customRange]="definitionHasCustomRange" #langItem>
-                </lang-def>
+                <lang-box #langBox *ngFor="let lang of objectKeys" [resource]="resource" [lang]="lang" [pred-obj-list]="langStruct[lang]"
+                    [customRange]="definitionHasCustomRange" [readonly]="readonly" 
+                    (update)="buildResourceView(resource)" (delete)="deleteLangBox(lang)">
+                </lang-box>
             </div>
         </ng-container>
 

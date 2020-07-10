@@ -25,13 +25,6 @@
     transform: translateY(-50%);
   }
 
-  .def-wrap {
-    display: flex;
-    flex-direction: row;
-    align-items: baseline;
-    margin-top: 5px;
-  }
-
   .semitransparent {
     margin-left: auto;
   }
@@ -83,16 +76,6 @@
 
   .minus-button span {
     color: white;
-  }
-
-  li.disabled {
-    cursor: not-allowed;
-  }
-
-  /*Disable events when user clicks on a disabled link*/
-
-  li.disabled>a {
-    pointer-events: none;
   }
 
   .remove-button {
