@@ -17,7 +17,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Enabled the AND-scheme for browsing concept tree.
   * Enabled the no-lexicon mode in LexicalEntry panel.
   * Implemented checks for preventing the initialization of lists or trees with too many elements.
-  * Created an alternative ResourceView tailored for terminologists and lexicographers.
+  * Created an alternative ResourceView ('TermView') tailored for terminologists and lexicographers.
   * Improved Manchester syntax editor with autocomplation and error markers.
   * Enabled the usage of the new Metadata Registry module of SemanticTurkey.
   * Minor bugfixes and improvements.

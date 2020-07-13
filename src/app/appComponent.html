@@ -48,7 +48,8 @@
                         <li *ngIf="isCustomServicesAuthorized()"><a [routerLink]="['/CustomServices']">Custom Services and Reporter</a></li>
                         <li><a [routerLink]="['/Icv']">Integrity Constraint Validator (ICV)</a></li>
                         <li *ngIf="isResourceMetadataAuthorized()"><a [routerLink]="['/ResourceMetadata']">ResourceMetadata</a></li>
-                        <li *ngIf="isSheet2RdfAuthorized()"><a [routerLink]="['/Sheet2RDF']">Sheet2RDF</a></li>                        
+                        <li *ngIf="isSheet2RdfAuthorized()"><a [routerLink]="['/Sheet2RDF']">Sheet2RDF</a></li>
+                        <li *ngIf="isSkosDiffingAuthorized()"><a [routerLink]="['/SkosDiffing']">SKOS Diffing</a></li>
                     </ul>
                 </li>
             </ul>

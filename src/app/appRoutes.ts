@@ -16,18 +16,19 @@ import { HomeComponent } from "./homeComponent";
 import { MetadataRegistryComponent } from './metadata/metadataRegistry/metadataRegistryComponent';
 import { MetadataVocabulariesComponent } from './metadata/metadataVocabularies/metadataVocabulariesComponent';
 import { NamespacesAndImportsComponent } from './metadata/namespacesAndImports/namespacesAndImportsComponent';
+import { NotificationsComponent } from './notifications/notificationsComponent';
 import { VocbenchPreferencesComponent } from "./preferences/vocbenchPreferencesComponent";
 import { CreateProjectComponent } from "./project/createProject/createProjectComponent";
 import { ProjectComponent } from "./project/projectComponent";
 import { ResourceMetadataComponent } from "./resourceMetadata/resourceMetadataComponent";
 import { Sheet2RdfComponent } from "./sheet2rdf/sheet2rdfComponent";
+import { SkosDiffingComponent } from './skosDiffing/skosDiffingComponent';
 import { SparqlComponent } from "./sparql/sparqlComponent";
 import { RegistrationComponent } from "./user/registrationComponent";
 import { ResetPasswordComponent } from "./user/resetPasswordComponent";
 import { UserProfileComponent } from "./user/userProfileComponent";
 import { AdminGuard, AuthGuard, ProjectGuard } from "./utils/CanActivateGuards";
 import { UserResolver } from "./utils/UserResolver";
-import { NotificationsComponent } from './notifications/notificationsComponent';
 
 export const routes: Routes = [
     { path: "", redirectTo: "/Home", pathMatch: "full" },
@@ -45,6 +46,7 @@ export const routes: Routes = [
     { path: "Validation", component: ValidationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "AlignmentValidation", component: AlignmentValidationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Sheet2RDF", component: Sheet2RdfComponent, canActivate: [AuthGuard, ProjectGuard] },
+    { path: "SkosDiffing", component: SkosDiffingComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "Collaboration", component: CollaborationComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "CustomForm", component: CustomFormConfigComponent, canActivate: [AuthGuard, ProjectGuard] },
     { path: "CustomServices", component: CustomServiceRouterComponent, canActivate: [AuthGuard, ProjectGuard] },

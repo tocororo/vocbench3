@@ -43,6 +43,7 @@ import { ServicesServices } from "../services/servicesServices";
 import { SettingsServices } from "../services/settingsServices";
 import { ShaclServices } from '../services/shaclServices';
 import { Sheet2RDFServices } from "../services/sheet2rdfServices";
+import { SkosDiffingServices } from '../services/skosDiffingServices';
 import { SkosServices } from "../services/skosServices";
 import { SkosxlServices } from "../services/skosxlServices";
 import { SparqlServices } from "../services/sparqlServices";
@@ -100,6 +101,7 @@ import { VersionsServices } from "../services/versionsServices";
         ShaclServices,
         Sheet2RDFServices,
         SkosServices,
+        SkosDiffingServices,
         SkosxlServices,
         SparqlServices,
         UserServices,

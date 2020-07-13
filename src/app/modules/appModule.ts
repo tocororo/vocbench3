@@ -14,6 +14,7 @@ import { RefactorComponent } from "../config/dataManagement/refactor/refactorCom
 import { VersioningComponent } from "../config/dataManagement/versioning/versioningComponent";
 import { DataComponent } from "../data/dataComponent";
 import { HomeComponent } from "../homeComponent";
+import { SkosDiffingModule } from '../skosDiffing/skosDiffingModule';
 import { GUARD_PROVIDERS } from "../utils/CanActivateGuards";
 import { DatatypeValidator } from '../utils/DatatypeValidator';
 import { HttpManager } from "../utils/HttpManager";
@@ -71,6 +72,7 @@ import { VBModalModule } from "./vbModalModule";
             ResourceViewModule,
             SharedModule,
             Sheet2RdfModule,
+            SkosDiffingModule,
             SparqlModule,
             STServicesModule,
             TreeAndListModule,

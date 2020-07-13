@@ -40,7 +40,6 @@ export class ResourceViewTabContainer {
             this.rViews = [this.resourceFormStruct];
             //add the simplified form if available
             if (
-                VBContext.getSystemSettings().experimentalFeaturesEnabled && 
                 this.resource.getRole() == RDFResourceRolesEnum.concept && 
                 VBContext.getWorkingProject().getModelType() == SKOS.uri
             ) {

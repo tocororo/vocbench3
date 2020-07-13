@@ -156,4 +156,11 @@ export class AppComponent {
         );
     }
 
+    private isSkosDiffingAuthorized() {
+        return (
+            VBContext.getWorkingProject().getModelType() == SKOS.uri
+            //TODO add auth check
+        );
+    }
+
 }

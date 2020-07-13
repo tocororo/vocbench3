@@ -148,40 +148,10 @@ export abstract class AbstractPanel {
 
     private enrichMultiSubject() {
         this.multiEnrichment.enrichMultiSubject(this.checkedNodes);
-        // this.browsingModals.browsePropertyTree("Select a property", null, this.checkedNodes[0]).then(
-        //     selectedProp => {
-        //         console.log("enriching", selectedProp, "for nodes:", this.checkedNodes.map(n => n.getShow()).join(", "));
-        //         return selectedProp
-        //     },
-        //     () => { }
-        // )
     }
-
-    // abstract delete(): void;
-    // private deprecate() {
-    //     this.resourceService.setDeprecated(this.selectedNode).subscribe();
-    // }
-    
-    //the following determine if the create/delete buttons are disabled in the UI. They could be overriden in the extending components
-    // isCreateDisabled(): boolean {
-    //     return (this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
-    // }
-    // isDeleteDisabled(): boolean {
-    //     return (
-    //         !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly ||
-    //         !AuthorizationEvaluator.Tree.isDeleteAuthorized(this.panelRole)
-    //     );
-    // }
-    // isDeprecateDisabled(): boolean {
-    //     return (
-    //         !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) || this.readonly ||
-    //         !AuthorizationEvaluator.Tree.isDeprecateAuthorized(this.selectedNode)
-    //     );
-    // }
 
     /**
      * Open data/model-oriented graph is available only if:
-     * - experimental features are enabled
      * - the panel is in the data page panel
      * - there is a selected node (in case of graph mode data-oriented)
      * @param graphMode 
@@ -195,8 +165,6 @@ export abstract class AbstractPanel {
         } else {
             if (graphMode == GraphMode.dataOriented) {
                 return this.selectedNode != null;
-            } else if(graphMode == GraphMode.umlOriented){
-                return VBContext.getSystemSettings().experimentalFeaturesEnabled;
             } else { //model oriented
                 return true;
             }    
