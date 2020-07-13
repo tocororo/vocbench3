@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
-import { ARTLiteral, ARTResource, ARTURIResource, ResAttribute, ARTNode } from '../../../models/ARTResources';
+import { ARTLiteral, ARTNode, ARTResource, ARTURIResource } from '../../../models/ARTResources';
 import { CustomForm, CustomFormValue } from '../../../models/CustomForms';
 import { SKOS } from '../../../models/Vocabulary';
 import { CustomFormsServices } from '../../../services/customFormsServices';
@@ -15,7 +15,7 @@ import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalS
 import { CreationModalServices } from '../../../widget/modal/creationModal/creationModalServices';
 import { ResViewModalServices } from '../../resourceViewEditor/resViewModals/resViewModalServices';
 import { DefEnrichmentType, DefinitionEnrichmentHelper, DefinitionEnrichmentInfo } from '../definitionEnrichmentHelper';
-
+import { DefinitionCustomRangeConfig } from '../languageBox/languageBoxComponent';
 
 @Component({
     selector: "lang-def",
@@ -29,8 +29,7 @@ export class LanguageDefinitionComponent {
     @Input() resource: ARTResource;
     @Input() lang: string;
     @Input() readonly: boolean;
-    @Input() customRange: boolean;
-    @Output() addInline: EventEmitter<void> = new EventEmitter(); //informs the parent component about a request for a new inline definition
+    @Input() defCrConfig: DefinitionCustomRangeConfig;
     @Output() delete: EventEmitter<void> = new EventEmitter();
     @Output() update = new EventEmitter();
     
@@ -67,7 +66,7 @@ export class LanguageDefinitionComponent {
                 this.resourcesService.updateTriple(this.resource, SKOS.definition, oldDefValue, newLitForm).subscribe(
                     stResp => this.update.emit()
                 )
-            } else if (oldDefValue.isResource() && this.customRange) { // if reified
+            } else if (oldDefValue.isResource() && this.defCrConfig.hasCustomRange) { // if reified
                 this.customFormsServices.updateReifiedResourceShow(this.resource, SKOS.definition, <ARTResource>oldDefValue, newLitForm).subscribe(
                     stResp => this.update.emit()
                 )
@@ -87,13 +86,14 @@ export class LanguageDefinitionComponent {
         }
     }
 
-
     /**
-     *  Add a new empty box definition
+     * in case skos:definition has CR, click on and empty inline-editable-value triggers a CF
+     * @param event 
      */
-    private addDefinitionItem() {
-        if (this.customRange) { //exists custom range(s) for skos:definition
-            DefinitionEnrichmentHelper.getDefinitionEnrichmentInfo(this.propService, this.basicModals).subscribe(
+    private onInlineValueClick() {
+        if (this.def == null && this.defCrConfig.hasCustomRange && this.addDefAuthorized && !this.readonly) {
+            //create a new definition through CF
+            DefinitionEnrichmentHelper.getDefinitionEnrichmentInfo(this.propService, this.basicModals, this.defCrConfig).subscribe(
                 (info: DefinitionEnrichmentInfo) => {
                     if (info.type == DefEnrichmentType.literal) {
                         this.addPlainDefinition();
@@ -102,16 +102,7 @@ export class LanguageDefinitionComponent {
                     }
                 }
             );
-        } else {
-            this.addInlineDefinition();
         }
-    }
-
-    /**
-     * Add a new empty box definition
-     */
-    private addInlineDefinition() {
-        this.addInline.emit();
     }
 
     /**

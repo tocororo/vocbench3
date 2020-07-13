@@ -1,12 +1,8 @@
 <div class="def-wrap">
     <label class="groupPanel-heading-content" style="font-size: 13px;">Definition:</label>
-    <inline-editable-value style="flex: 1; margin-left: 4px;" [value]="def" (valueEdited)="onDefinitionEdited($event,def)"
-        [disabled]="!editDefAuthorized || (customRange && !def) || readonly">
+    <inline-editable-value style="flex: 1; margin-left: 4px;" [value]="def" [disabled]="!editDefAuthorized || readonly"
+        [preventEdit]="defCrConfig.hasCustomRange && !def" (click)="onInlineValueClick($event)" (valueEdited)="onDefinitionEdited($event,def)">
     </inline-editable-value>
-    <button *ngIf="customRange && !def" (click)="addDefinitionItem()" class="btn btn-xs btn-default add-button" style="margin-left: 4px;"
-        [disabled]="!editDefAuthorized || readonly">
-        <span class="glyphicon glyphicon-plus" style="font-size: 9px;"></span>
-    </button>
     <button class="btn btn-xs btn-default minus-button"  (click)="deleteDefinition()" title="Delete definition" [disabled]="!deleteDefAuthorized || readonly">
         <span class="glyphicon glyphicon-minus" style="font-size: 9px;"></span>
     </button>

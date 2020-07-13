@@ -11,6 +11,7 @@ import { ResourceUtils } from '../../../utils/ResourceUtils';
 export class InlineEditableValue implements OnInit {
     @Input() value: ARTNode;
     @Input() disabled: boolean = false;
+    @Input() preventEdit: boolean = false; //useful when the edit is handled from outside (e.g. creation of CF value) but the input field should not be disabled
     @Input() focusOnInit: boolean = false;
     @Output() valueEdited = new EventEmitter<string>();
 
@@ -65,7 +66,7 @@ export class InlineEditableValue implements OnInit {
     }
 
     private edit() {
-        if (this.disabled) return;
+        if (this.disabled || this.preventEdit) return;
 
         if (this.value != null) {
             //update the rows attribute of the textarea (so when it is editing the textarea will have the same size of the element in non-editing mode)

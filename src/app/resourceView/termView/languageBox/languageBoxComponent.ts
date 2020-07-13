@@ -29,7 +29,7 @@ export class LanguageBoxComponent {
     @Input() lang: string;
     @Input('pred-obj-list') predicateObjectList: ARTPredicateObjects[];
     @Input() resource: ARTResource;
-    @Input() customRange: boolean;
+    @Input() defCrConfig: DefinitionCustomRangeConfig;
     @Input() readonly: boolean;
     @Output() update = new EventEmitter();
     @Output() delete = new EventEmitter(); //requires the parent to delete this component
@@ -133,7 +133,7 @@ export class LanguageBoxComponent {
             let serviceInvocation: Observable<any>;
             if (defToDelete.isLiteral()) { // if standard
                 serviceInvocation = this.resourcesService.removeValue(<ARTURIResource>this.resource, SKOS.definition, defToDelete);
-            } else if (defToDelete.isResource() && this.customRange) { // if reified
+            } else if (defToDelete.isResource() && this.defCrConfig.hasCustomRange) { // if reified
                 serviceInvocation = this.customFormsServices.removeReifiedResource(this.resource, SKOS.definition, defToDelete);
             } //other cases not handled but should not happen
             if (serviceInvocation != null) {
@@ -158,8 +158,8 @@ export class LanguageBoxComponent {
      *  Add a new empty box definition
      */
     private addDefinitionItem() {
-        if (this.customRange) { //exists custom range(s) for skos:definition
-            DefinitionEnrichmentHelper.getDefinitionEnrichmentInfo(this.propService, this.basicModals).subscribe(
+        if (this.defCrConfig.hasCustomRange) { //exists custom range(s) for skos:definition
+            DefinitionEnrichmentHelper.getDefinitionEnrichmentInfo(this.propService, this.basicModals, this.defCrConfig).subscribe(
                 (info: DefinitionEnrichmentInfo) => {
                     if (info.type == DefEnrichmentType.literal) {
                         this.addPlainDefinition();
@@ -376,5 +376,10 @@ export interface TermStructView {
     predicate?: ARTURIResource;
     isPrefLabel?: boolean;
     lang?: string
+}
 
+export interface DefinitionCustomRangeConfig {
+    hasLiteralRange: boolean; //tells if the "standard" range is available (not replaced by the CR)
+    hasCustomRange: boolean; //tells if CustomRange is available
+    customForms?: CustomForm[]; //list of the available CFs
 }

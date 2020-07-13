@@ -35,8 +35,7 @@
             <!-- Language definitions-->
             <div class="def-lang">
                 <lang-box #langBox *ngFor="let lang of objectKeys" [resource]="resource" [lang]="lang" [pred-obj-list]="langStruct[lang]"
-                    [customRange]="definitionHasCustomRange" [readonly]="readonly" 
-                    (update)="buildResourceView(resource)" (delete)="deleteLangBox(lang)">
+                    [defCrConfig]="defCustomRangeConfig" [readonly]="readonly" (update)="buildResourceView(resource)" (delete)="deleteLangBox(lang)">
                 </lang-box>
             </div>
         </ng-container>

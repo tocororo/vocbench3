@@ -1,20 +1,20 @@
 import { Component, ElementRef, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from "@angular/core";
 import { Modal } from "ngx-modialog";
-import { ARTResource, ARTURIResource } from "../../models/ARTResources";
+import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
+import { CustomForm } from "../../models/CustomForms";
 import { VersionInfo } from "../../models/History";
-import { PropertyServices } from "../../services/propertyServices";
-import { HttpServiceContext } from "../../utils/HttpManager";
-import { UIUtils } from "../../utils/UIUtils";
-import { AbstractResourceView } from "../resourceViewEditor/abstractResourceView";
-import { ARTNode, ARTPredicateObjects, ResAttribute } from '../../models/ARTResources';
 import { Language, Languages } from '../../models/LanguagesCountries';
 import { ResViewPartition } from '../../models/ResourceView';
 import { OntoLex, SKOS, SKOSXL } from '../../models/Vocabulary';
+import { PropertyServices } from "../../services/propertyServices";
 import { ResourceViewServices } from '../../services/resourceViewServices';
 import { Deserializer } from '../../utils/Deserializer';
+import { HttpServiceContext } from "../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from '../../utils/ResourceUtils';
+import { UIUtils } from "../../utils/UIUtils";
 import { ProjectContext, VBContext } from '../../utils/VBContext';
-import { LanguageBoxComponent } from "./languageBox/languageBoxComponent";
+import { AbstractResourceView } from "../resourceViewEditor/abstractResourceView";
+import { DefinitionCustomRangeConfig, LanguageBoxComponent } from "./languageBox/languageBoxComponent";
 
 @Component({
     selector: "term-view",
@@ -45,10 +45,10 @@ export class TermViewComponent extends AbstractResourceView {
     private allProjectLangs = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectSettings().projectLanguagesSetting // all language to manage case in which user is admin without flags assigned
    
     private broaders: ARTNode[]; // conteins object with broader predicate (skos:broader)
-    private definitions: DefinitionStructView[] = [];  // conteins object with definitions predicate (skos:definition) and its lang
+    private definitions: DefinitionStructView[] = [];  // contains object with definitions predicate (skos:definition) and its lang
     private languages: LangStructView[] = []; // it is used to assign flag status(active/disabled) to flags list (top page under first box)
 
-    private definitionHasCustomRange: boolean; //tells if skos:definition is mapped to CustomRange
+    private defCustomRangeConfig: DefinitionCustomRangeConfig; //tells if skos:definition is mapped to CustomRange
     
     private lexicalizationModelType: string;
 
@@ -219,12 +219,33 @@ export class TermViewComponent extends AbstractResourceView {
                 }
             })
 
+            /* 
+            initialize configuration for custom range of skos:definition. Attribute hasCustomRange can be initialized in two ways:
+            - by checking if a pred-obj list for skos:definition is provided. In this case get the hasCustomRange attribute of the predicate
+            - in the previous attribute cannot be retrieved, invokes getRange(). In this case fill the config also with the CFs retrieve (if any)
+            In this way the children components, in case hasCustomRange is true and the CFs are provided, it could be possible to not 
+            invoke getRange again since all the needed info are already in the DefinitionCustomRangeConfig object. Otherwise invokes getRange
+            only when enriching a skos:definition.
+            */
+            this.defCustomRangeConfig = {
+                hasCustomRange: false,
+                hasLiteralRange: true
+            }
             if (definitionPredObj != null) {
-                this.definitionHasCustomRange = definitionPredObj.getPredicate().getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)
+                this.defCustomRangeConfig.hasCustomRange = definitionPredObj.getPredicate().getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)
             } else {
                 this.propService.getRange(SKOS.definition).subscribe(
                     range => {
-                        this.definitionHasCustomRange = range.formCollection && range.formCollection.getForms().length > 0
+                        if (range.formCollection != null) {
+                            let cForms: CustomForm[] = range.formCollection.getForms();
+                            if (cForms.length > 0) {
+                                this.defCustomRangeConfig.hasCustomRange = true;
+                                this.defCustomRangeConfig.customForms = cForms;
+                            }
+                            if (range.ranges == null) { //standard range replaced by the custom one
+                                this.defCustomRangeConfig.hasLiteralRange = false;
+                            }
+                        }
                     }
                 )
             }
@@ -268,7 +289,6 @@ export class TermViewComponent extends AbstractResourceView {
             this.unexistingResource = false;
         }
         this.objectKeys = Object.keys(this.langStruct).sort();
-        // console.log("langStruct", this.langStruct);
     }
 
     /**

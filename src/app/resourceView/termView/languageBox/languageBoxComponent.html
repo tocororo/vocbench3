@@ -21,8 +21,8 @@
     </div>
 </div>
  
-<lang-def *ngFor="let def of definitions" [def]="def" [resource]="resource" [lang]="lang" [readonly]="readonly" [customRange]="customRange" 
-    (addInline)="addInlineDefinition()" (delete)="deleteDefinition(def)" (update)="onDefUpdate()">
+<lang-def *ngFor="let def of definitions" [def]="def" [resource]="resource" [lang]="lang" [readonly]="readonly" [defCrConfig]="defCrConfig"
+    (delete)="deleteDefinition(def)" (update)="onDefUpdate()">
 </lang-def>
 
 <lang-term *ngFor="let term of terms" [term]="term" [resource]="resource" [lang]="lang" [readonly]="readonly" 
