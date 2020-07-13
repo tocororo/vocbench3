@@ -268,7 +268,7 @@ export class TermViewComponent extends AbstractResourceView {
             this.unexistingResource = false;
         }
         this.objectKeys = Object.keys(this.langStruct).sort();
-        console.log("langStruct", this.langStruct);
+        // console.log("langStruct", this.langStruct);
     }
 
     /**
