@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
-import { Deserializer } from "../utils/Deserializer";
-import { RepositoryAccess, BackendTypesEnum } from "../models/Project";
 import { VersionInfo } from "../models/History";
 import { PluginSpecification } from "../models/Plugins";
+import { BackendTypesEnum, RepositoryAccess } from "../models/Project";
+import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
 export class VersionsServices {
@@ -18,13 +17,15 @@ export class VersionsServices {
      */
     getVersions(): Observable<VersionInfo[]> {
         var params: any = {
-            setRepositoryStatus: true
+            setRepositoryStatus: true,
+            setRepositoryLocation: true
         };
         return this.httpMgr.doGet(this.serviceName, "getVersions", params).map(
             stResp => {
                 var versions: VersionInfo[] = [];
                 for (var i = 0; i < stResp.length; i++) {
-                    let v: VersionInfo = new VersionInfo(stResp[i].versionId, stResp[i].repositoryId, new Date(stResp[i].dateTime), stResp[i].repositoryStatus);
+                    let v: VersionInfo = new VersionInfo(stResp[i].versionId, stResp[i].repositoryId, new Date(stResp[i].dateTime), 
+                        stResp[i].repositoryLocation, stResp[i].repositoryStatus);
                     versions.push(v);
                 }
                 //sort by date

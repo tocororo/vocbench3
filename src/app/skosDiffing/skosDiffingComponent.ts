@@ -1,14 +1,9 @@
 import { Component } from "@angular/core";
-import { RepositoryStatus, VersionInfo } from "../models/History";
-import { DatasetMetadata } from "../models/Metadata";
-import { Project, RepositorySummary } from "../models/Project";
-import { ProjectServices } from "../services/projectServices";
+import { Modal, OverlayConfig } from "ngx-modialog";
+import { BSModalContext, BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
+import { DiffingTask, TaskResultType } from "../models/SkosDiffing";
 import { SkosDiffingServices } from "../services/skosDiffingServices";
-import { VersionsServices } from "../services/versionsServices";
-import { VBContext } from "../utils/VBContext";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { versions } from "process";
-import { SKOS } from "../models/Vocabulary";
+import { CreateDiffingTaskModal } from "./modals/createDiffingTaskModal";
 
 @Component({
     selector: "skos-diffing",
@@ -17,109 +12,58 @@ import { SKOS } from "../models/Vocabulary";
 })
 export class SkosDiffingComponent {
 
-    private mode: DiffingMode;
-    private modes: { mode: DiffingMode, show: string }[] = [
-        { mode: DiffingMode.projects, show: "Compare the current project with an external one" },
-        { mode: DiffingMode.versions, show: "Compare two different versions of the current project" }
-    ];
+    private tasks: DiffingTask[];
+    private selectedTask: DiffingTask;
 
-    private leftDataset: DatasetStruct;
-    private rightDataset: DatasetStruct;
+    private resultFormats: TaskResultType[] = [TaskResultType.html, TaskResultType.pdf, TaskResultType.json];
+    private selectedResultFormat: TaskResultType = this.resultFormats[0];
 
-    private versions: VersionInfo[]; //list of available versions of the current project (used if mode is versions)
-    private projects: Project[]; //list of available target projects (used if mode is projects)
+    constructor(private diffingService: SkosDiffingServices, private modal: Modal) {}
 
-    constructor(private versionsService: VersionsServices, private projectService: ProjectServices, 
-        private diffingService: SkosDiffingServices, private basicModals: BasicModalServices) {}
+    ngOnInit() {
+        this.listTasks();
+    }
 
-    private onModeChange() {
-        this.leftDataset = {};
-        this.rightDataset = {};
-        
-        if (this.mode == DiffingMode.projects) {
-            if (this.projects == null) { //init projects list for target dataset
-                this.projectService.listProjects(VBContext.getWorkingProject(), false, true).subscribe(
-                    projects => {
-                        this.projects = projects.filter(p => p.getModelType() == SKOS.uri);
-                    }
-                );
+    private listTasks() {
+        this.diffingService.getAllTasksInfo().subscribe(
+            tasks => {
+                this.tasks = tasks;
             }
-            //init the left dataset to the current project
-            this.leftDataset.project = VBContext.getWorkingProject();
-        } else { //versions
-            //both the dataset are the current project
-            this.leftDataset.project = VBContext.getWorkingProject();
-            this.rightDataset.project = VBContext.getWorkingProject();
-            if (this.versions == null) {
-                this.versionsService.getVersions().subscribe(
-                    versions => {
-                        this.versions = [ { versionId: "CURRENT", dateTimeLocal: "---", dateTime: null, repositoryId: null, status: RepositoryStatus.INITIALIZED } ];
-                        this.versions = this.versions.concat(versions);
-                        //init the left dataset to the current version
-                        this.leftDataset.version = this.versions[0];
-                    }
-                )
-            }
-            
+        );
+    }
+
+    private selectTask(task: DiffingTask) {
+        if (this.selectedTask == task) {
+            this.selectedTask = null;
+        } else {
+            this.selectedTask = task
         }
     }
 
-    private startDiffing() {
-        if (this.mode == DiffingMode.projects) {
-            if (!this.leftDataset.project.isRepositoryRemote()) {
-                this.basicModals.alert("SKOS diffing", "Cannot run a SKOS diffing task on project '" + this.leftDataset.project.getName() 
-                    + "' since it is hosted on a repository that does not have a SPARQL endpoint", "warning");
-                return;
-            }
-            if (!this.rightDataset.project.isRepositoryRemote()) {
-                this.basicModals.alert("SKOS diffing", "Cannot run a SKOS diffing task on project '" + this.rightDataset.project.getName() 
-                    + "' since it is hosted on a repository that does not have a SPARQL endpoint", "warning");
-                return;
-            }
-            this.diffingService.runDiffing(this.leftDataset.project, this.rightDataset.project).subscribe();
-        } else { //versions
-            //check if selected versions are different
-            if (this.leftDataset.version == this.rightDataset.version) {
-                this.basicModals.alert("SKOS diffing", "Cannot compare two identical versions of the project", "warning");
-                return;
-            }
-            //check if selected versions are remote
-            if ((this.leftDataset.version.repositoryId == null || this.leftDataset.version.repositoryId == null) && !this.leftDataset.project.isRepositoryRemote()) {
-                //current version of a local project
-                this.basicModals.alert("SKOS diffing", "Cannot run a SKOS diffing task on version 'CURRENT' since it is hosted on a " + 
-                    "repository that does not have a SPARQL endpoint", "warning");
-                return;
-            }
-            // if (this.leftDataset.version.repositoryId != null) {
-            //     let versionRepo = this.projectRepositories.find(r => r.id == this.leftDataset.version.repositoryId);
-            //     if (versionRepo.remoteRepoSummary.serverURL == null) {
-            //         this.basicModals.alert("SKOS diffing", "Cannot run a SKOS diffing task on version '" + this.leftDataset.version.versionId + 
-            //             "' since it is hosted on a repository that does not have a SPARQL endpoint", "warning");
-            //         return;
-            //     }
-            // }
-            // if (this.rightDataset.version.repositoryId != null) {
-            //     let versionRepo = this.projectRepositories.find(r => r.id == this.rightDataset.version.repositoryId);
-            //     if (versionRepo.remoteRepoSummary.serverURL == null) {
-            //         this.basicModals.alert("SKOS diffing", "Cannot run a SKOS diffing task on version '" + this.rightDataset.version.versionId + 
-            //             "' since it is hosted on a repository that does not have a SPARQL endpoint", "warning");
-            //         return;
-            //     }
-            // }
-            this.diffingService.runDiffing(this.leftDataset.project, this.rightDataset.project, 
-                this.leftDataset.version.repositoryId, this.rightDataset.version.repositoryId).subscribe();
-        }
+    createTask() {
+        const builder = new BSModalContextBuilder<BSModalContext>();
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
+        this.modal.open(CreateDiffingTaskModal, overlayConfig).result.then(
+            () => {
+                this.listTasks();
+            },
+            () => {}
+        );
+    }
+
+    private deleteTask() {
+        this.diffingService.deleteTask(this.selectedTask.taskId).subscribe(() => {
+            this.listTasks();
+        });
+    }
+
+    private downloadTaskResult() {
+        this.diffingService.getTaskResult(this.selectedTask.taskId, this.selectedResultFormat).subscribe();
     }
 
 }
 
-enum DiffingMode {
-    versions = "versions", //between two different versions of the same projects
-    projects = "projects" //between two different projects
-}
-
-interface DatasetStruct {
-    project?: Project;
-    version?: VersionInfo;
-    dataset?: DatasetMetadata;
+export interface TaskResultFormatStruct { 
+    label: string; 
+    value: string;
 }

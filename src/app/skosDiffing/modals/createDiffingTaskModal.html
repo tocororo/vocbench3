@@ -1,0 +1,64 @@
+<div class="modal-header">
+    <h3 class="modal-title">Create task</h3>
+</div>
+<div class="modal-body vbox">
+
+    <div class="hbox" style="flex: initial; align-items: center;">
+        <label>Mode:</label>
+        <select class="form-control input-sm" style="margin-left: 5px;" [(ngModel)]="mode" (ngModelChange)="onModeChange()">
+            <option *ngFor="let m of modes" [ngValue]="m.mode">{{m.show}}</option>
+        </select>
+    </div>
+
+    <div *ngIf="mode" class="panel panel-default vbox" style="margin-top: 10px;">
+        <div class="panel-body">
+            <div class="hbox">
+                <div class="vbox">
+                    <label class="text-center" style="padding: 5px">Left dataset</label>
+                    <div class="form-horizontal" style="margin-top: 5px;">
+                        <div *ngIf="mode == 'projects'" class="form-group">
+                            <label class="control-label col-sm-2">Project:</label>
+                            <div class="col-sm-10">
+                                <input class="form-control input-sm" [ngModel]="leftDataset.project.getName()" disabled>
+                            </div>
+                        </div>
+                        <div *ngIf="mode == 'versions'" class="form-group">
+                            <label class="control-label col-sm-2">Version:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control input-sm" [(ngModel)]="leftDataset.version">
+                                    <option *ngFor="let v of versions" [ngValue]="v">{{v.versionId}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="vbox">
+                    <label class="text-center" style="padding: 5px">Right dataset</label>   
+                    <div class="form-horizontal" style="margin-top: 5px;">
+                        <div *ngIf="mode == 'projects'" class="form-group">
+                            <label class="control-label col-sm-2">Project:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control input-sm" [(ngModel)]="rightDataset.project">
+                                    <option *ngFor="let p of projects" [ngValue]="p">{{p.getName()}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div *ngIf="mode == 'versions'" class="form-group">
+                            <label class="control-label col-sm-2">Version:</label>
+                            <div class="col-sm-10">
+                                <select class="form-control input-sm" [(ngModel)]="rightDataset.version">
+                                    <option *ngFor="let v of versions" [ngValue]="v">{{v.versionId}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+</div>

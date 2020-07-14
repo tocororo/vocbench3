@@ -66,7 +66,6 @@ export class ShaclServices {
             fileFormat: fileFormat != null ? fileFormat.name : null,
             targetShape: targetShape
         };
-        console.log("params", params);
         return this.httpMgr.uploadFile(this.serviceName, "extractCFfromShapeFile", params);
     }
 

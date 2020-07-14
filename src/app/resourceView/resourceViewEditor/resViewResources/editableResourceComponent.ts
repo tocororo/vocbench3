@@ -601,7 +601,6 @@ export class EditableResourceComponent extends AbstractResViewResource {
     //==============================
 
     private onLinkClicked(linkRes: ARTURIResource) {
-        console.log("onLinkClicked", linkRes);
         this.link.emit(linkRes);
     }
 

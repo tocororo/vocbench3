@@ -1,67 +1,57 @@
 <div class="panel panel-default vbox">
     <div class="panel-heading">
-        <label>SKOS Diffing</label>
-    </div>
-    <div class="panel-body vbox">
-        
-        <div class="hbox" style="flex: initial; align-items: center;">
-            <label>Mode:</label>
-            <select class="form-control input-sm" style="margin-left: 5px;" [(ngModel)]="mode" (ngModelChange)="onModeChange()">
-                <option *ngFor="let m of modes" [ngValue]="m.mode">{{m.show}}</option>
-            </select>
+        <label style="flex: 1;">SKOS diffing tasks</label>
+
+        <div class="btn-group btn-group-xs">
+            <button class="btn btn-default" (click)="createTask()" title="Create task">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+            <button class="btn btn-sm btn-default" (click)="deleteTask()" title="Delete task" [disabled]="!selectedTask">
+                <span class="glyphicon glyphicon-minus"></span>
+            </button>
         </div>
 
-        <div *ngIf="mode" class="panel panel-default vbox" style="margin-top: 10px;">
-            <div class="panel-body">
-                <div class="hbox">
-                    <div class="vbox">
-                        <label class="text-center" style="padding: 5px">Left dataset</label>
-                        <div class="form-horizontal" style="margin-top: 5px;">
-                            <div *ngIf="mode == 'projects'" class="form-group">
-                                <label class="control-label col-sm-1">Project:</label>
-                                <div class="col-sm-11">
-                                    <input class="form-control input-sm" [ngModel]="leftDataset.project.getName()" disabled>
-                                </div>
-                            </div>
-                            <div *ngIf="mode == 'versions'" class="form-group">
-                                <label class="control-label col-sm-1">Version:</label>
-                                <div class="col-sm-11">
-                                    <select class="form-control input-sm" [(ngModel)]="leftDataset.version">
-                                        <option *ngFor="let v of versions" [ngValue]="v">{{v.versionId}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="vbox">
-                        <label class="text-center" style="padding: 5px">Right dataset</label>   
-                        <div class="form-horizontal" style="margin-top: 5px;">
-                            <div *ngIf="mode == 'projects'" class="form-group">
-                                <label class="control-label col-sm-1">Project:</label>
-                                <div class="col-sm-11">
-                                    <select class="form-control input-sm" [(ngModel)]="rightDataset.project">
-                                        <option *ngFor="let p of projects" [ngValue]="p">{{p.getName()}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div *ngIf="mode == 'versions'" class="form-group">
-                                <label class="control-label col-sm-1">Version:</label>
-                                <div class="col-sm-11">
-                                    <select class="form-control input-sm" [(ngModel)]="rightDataset.version">
-                                        <option *ngFor="let v of versions" [ngValue]="v">{{v.versionId}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center" style="margin-top: 6px;">
-                <button class="btn btn-sm btn-info" (click)="startDiffing()" [disabled]="!leftDataset.project || !rightDataset.project">Start</button>
+        <div style="display: inline-block; margin-left: 5px;">
+            <div class="input-group input-group-xs">
+                <select class="form-control" [(ngModel)]="selectedResultFormat">
+                    <option *ngFor="let f of resultFormats" [ngValue]="f">{{f | uppercase}}</option>
+                </select>
+                <span class="input-group-btn">
+                    <button class="btn btn-default" (click)="downloadTaskResult()" title="Download task result" [disabled]="!selectedTask">
+                        <span class="glyphicon glyphicon-save "></span>
+                    </button>
+                </span>
             </div>
         </div>
 
+        <button class="btn btn-xs btn-default" style="margin-left: 5px;" (click)="listTask()" title="Refresh tasks list">
+            <span class="glyphicon glyphicon-refresh"></span>
+        </button>
+        <!-- <button *ngIf="isSettingsAuthorized" class="btn btn-xs btn-default" style="margin-left: 5px;" (click)="settings()" title="Settings">
+            <span class="glyphicon glyphicon-cog"></span>
+        </button> -->
     </div>
-
+    <div class="panel-body">
+        <table class="table table-condensed table-hoverable">
+            <colgroup>
+                <col>
+                <col>
+                <col style="width: 1%">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>Left</th>
+                    <th>Right</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let task of tasks" [ngClass]="{ info: selectedTask == task }" (click)="selectTask(task)">
+                    <td>{{task.sparqlEndpoint1}}</td>
+                    <td>{{task.sparqlEndpoint2}}</td>
+                    <td>{{task.status}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { RepositoryStatus, VersionInfo } from '../../../models/History';
+import { RepositoryStatus, VersionInfo, RepositoryLocation } from '../../../models/History';
 import { VersionsServices } from "../../../services/versionsServices";
 import { UIUtils } from '../../../utils/UIUtils';
 import { VBContext } from '../../../utils/VBContext';
@@ -27,7 +27,14 @@ export class VersioningComponent {
     private initVersions() {
         this.versionsService.getVersions().subscribe(
             versions => {
-                this.versionList = [ { versionId: "CURRENT", dateTimeLocal: "---", dateTime: null, repositoryId: "---", status: RepositoryStatus.INITIALIZED } ];
+                this.versionList = [{ 
+                    versionId: "CURRENT", 
+                    dateTimeLocal: "---", 
+                    dateTime: null, 
+                    repositoryId: "---", 
+                    repositoryLocation: null, 
+                    repositoryStatus: RepositoryStatus.INITIALIZED 
+                }];
                 this.versionList = this.versionList.concat(versions);
             }
         );

@@ -78,16 +78,18 @@ export class VersionInfo {
     public repositoryId: string;
     public dateTime: Date;
     public dateTimeLocal: string;
-    public status: RepositoryStatus;
+    public repositoryStatus: RepositoryStatus;
+    public repositoryLocation: RepositoryLocation;
 
-    constructor(versionId: string, repositoryId: string, dateTime: Date, status: RepositoryStatus) {
+    constructor(versionId: string, repositoryId: string, dateTime: Date, repositoryLocation: RepositoryLocation, repositoryStatus: RepositoryStatus) {
         this.versionId = versionId;
         this.repositoryId = repositoryId;
         this.dateTime = dateTime;
         if (dateTime != null) {
             this.dateTimeLocal = Deserializer.parseDateTime(dateTime);
         }
-        this.status = status;
+        this.repositoryLocation = repositoryLocation;
+        this.repositoryStatus = repositoryStatus;
     }
 }
 
@@ -95,6 +97,12 @@ export class VersionInfo {
 export enum RepositoryStatus {
     INITIALIZED = "INITIALIZED",
     UNITIALIZED = "UNITIALIZED"
+}
+
+export enum RepositoryLocation {
+    LOCAL = "LOCAL",
+    REMOTE = "REMOTE", 
+    NOT_FOUND = "NOT_FOUND"
 }
 
 export class CommitDelta {
