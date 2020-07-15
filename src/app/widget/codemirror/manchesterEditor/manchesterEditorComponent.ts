@@ -74,7 +74,6 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
     onCodeChange(code: string) {
         clearTimeout(this.codeValidationTimer);
         this.codeValidationTimer = window.setTimeout(() => { this.validateExpression(code) }, 1000);
-
     }
 
     /**
@@ -191,16 +190,6 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
             }
         }
 
-        // if (filterKeywords.length > 0) {
-        //     let obj = {
-        //         from: CodeMirror.Pos(cur.line, start),
-        //         to: CodeMirror.Pos(cur.line, end),
-        //         list: filterKeywords
-        //     }
-        //     return new Promise<CodeMirror.Hints>(function (resolve) { resolve(obj) });
-
-        // }
-
     }
 
     /**
@@ -256,19 +245,22 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
         }
         validationFn.subscribe(
             (checkResp: ExpressionCheckResponse) => {
-                this.codeValid = checkResp.valid;
-                this.errorMarks(checkResp.details)
-                if (this.codeValid) {
-                    this.propagateChange(code);
+                if (code != "") { 
+                    this.codeValid = checkResp.valid;
+                    this.errorMarks(checkResp.details)
+                    if (this.codeValid) {
+                        this.propagateChange(code);
+                    } else {
+                        let detailsMsgs: string[] = checkResp.details.map(value => value.msg);
+                        this.codeInvalidDetails = detailsMsgs.join("\n");
+                        this.propagateChange(null); //in case invalid, propagate a null expression
+                    }
                 } else {
-                    let detailsMsgs: string[] = checkResp.details.map(value => value.msg);
-                    this.codeInvalidDetails = detailsMsgs.join("\n");
-                    this.propagateChange(null); //in case invalid, propagate a null expression
+                    this.codeValid = true // it's useful to update glyphicon-alert on view(manchesterEditorComponent html) when a user deletes all inside editor 
                 }
+
             }
         );
-
-
 
     }
 
