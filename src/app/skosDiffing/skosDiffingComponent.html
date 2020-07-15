@@ -33,27 +33,22 @@
     </div>
     <div class="panel-body">
         <table class="table table-condensed table-hoverable">
-            <colgroup>
-                <col>
-                <col>
-                <col>
-            </colgroup>
             <thead>
                 <tr>
-                    <th>Left</th>
-                    <th>Right</th>
+                    <th>Left Dataset</th>
+                    <th>Right Dataset</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let task of tasks" [ngClass]="{ info: selectedTask == task }" (click)="selectTask(task)">
                     <td>
-                        {{task.projectName1}}
-                        <span *ngIf="task.versionRepoId1" class="text-muted" style="margin-left: 4px;">(version: {{task.versionId1}})</span>
+                        {{task.leftDataset.projectName}}
+                        <span *ngIf="task.leftDataset.versionId" class="text-muted" style="margin-left: 4px;">(version: {{task.leftDataset.versionId}})</span>
                     </td>
                     <td>
-                        {{task.projectName2}}
-                        <span *ngIf="task.versionRepoId2" class="text-muted" style="margin-left: 4px;">(version: {{task.versionId2}})</span>
+                        {{task.rightDataset.projectName}}
+                        <span *ngIf="task.rightDataset.versionId" class="text-muted" style="margin-left: 4px;">(version: {{task.rightDataset.versionId}})</span>
                     </td>
                     <td>
                         {{task.status}}

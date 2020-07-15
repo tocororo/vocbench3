@@ -89,6 +89,12 @@ export class CreateDiffingTaskModal implements ModalComponent<BSModalContext> {
     }
 
     ok() {
+        //get as language list those set as rendering by the user
+        let langs: string[] = [];
+        let renderingLangs: string[] = VBContext.getWorkingProjectCtx().getProjectPreferences().projectLanguagesPreference;
+        if (renderingLangs != null && !(renderingLangs.length == 1 && renderingLangs[0] == "*")) {
+            langs = renderingLangs;
+        }
         if (this.mode == DiffingMode.projects) {
             if (!this.leftDataset.project.isRepositoryRemote()) {
                 this.basicModals.alert("SKOS diffing", "Cannot run a SKOS diffing task on project '" + this.leftDataset.project.getName() 
@@ -100,7 +106,7 @@ export class CreateDiffingTaskModal implements ModalComponent<BSModalContext> {
                     + "' since it is hosted on a repository that does not have a SPARQL endpoint", "warning");
                 return;
             }
-            this.diffingService.runDiffing(this.leftDataset.project, this.rightDataset.project).subscribe(
+            this.diffingService.runDiffing(this.leftDataset.project, this.rightDataset.project, null, null, langs).subscribe(
                 taskId => {
                     this.dialog.close(taskId);
                 }
@@ -129,7 +135,7 @@ export class CreateDiffingTaskModal implements ModalComponent<BSModalContext> {
                 return;
             }
             this.diffingService.runDiffing(this.leftDataset.project, this.rightDataset.project, 
-                this.leftDataset.version.repositoryId, this.rightDataset.version.repositoryId).subscribe(
+                this.leftDataset.version.repositoryId, this.rightDataset.version.repositoryId, langs).subscribe(
                 taskId => {
                     this.dialog.close(taskId);
                 }

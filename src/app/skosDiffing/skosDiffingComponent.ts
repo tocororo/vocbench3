@@ -35,14 +35,14 @@ export class SkosDiffingComponent {
             tasks => {
                 this.tasks = tasks;
                 //if there is a task with a version, retrieve the version ID
-                if (this.tasks.some(t => t.versionRepoId1 != null || t.versionRepoId2 != null)) {
+                if (this.tasks.some(t => t.leftDataset.versionRepoId != null || t.rightDataset.versionRepoId != null)) {
                     this.initVersions().subscribe(
                         () => {
                             this.tasks.forEach(t => {
-                                let v1 = this.versions.find(v => v.repositoryId == t.versionRepoId1);
-                                t.versionId1 = (v1 != null) ? v1.versionId : v1.repositoryId;
-                                let v2 = this.versions.find(v => v.repositoryId == t.versionRepoId1);
-                                t.versionId2 = (v2 != null) ? v2.versionId : v2.repositoryId;
+                                let leftVers = this.versions.find(v => v.repositoryId == t.leftDataset.versionRepoId);
+                                t.leftDataset.versionId = (leftVers != null) ? leftVers.versionId : leftVers.repositoryId;
+                                let rightVers = this.versions.find(v => v.repositoryId == t.rightDataset.versionRepoId);
+                                t.rightDataset.versionId = (rightVers != null) ? rightVers.versionId : rightVers.repositoryId;
                             })
                         }
                     );

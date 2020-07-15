@@ -11,12 +11,13 @@ export class SkosDiffingServices {
 
     constructor(private httpMgr: HttpManager) { }
 
-    runDiffing(leftProject: Project, rightProject: Project, leftVersionRepoId?: string, rightVersionRepoId?: string): Observable<string> {
+    runDiffing(leftProject: Project, rightProject: Project, leftVersionRepoId?: string, rightVersionRepoId?: string, langList?: string[]): Observable<string> {
         let params: STRequestParams = {
             leftProjectName: leftProject.getName(),
             rightProjectName: rightProject.getName(),
             leftVersionRepoId: leftVersionRepoId,
             rightVersionRepoId: rightVersionRepoId,
+            langList: langList
         };
         return this.httpMgr.doPost(this.serviceName, "runDiffing", params);
     }
@@ -25,11 +26,7 @@ export class SkosDiffingServices {
         let params: STRequestParams = {
             projectName: projectName
         };
-        return this.httpMgr.doGet(this.serviceName, "getAllTasksInfo", params).map(
-            stResp => {
-                return JSON.parse(stResp);
-            }
-        );
+        return this.httpMgr.doGet(this.serviceName, "getAllTasksInfo", params);
     }
 
     deleteTask(taskId: string) {
