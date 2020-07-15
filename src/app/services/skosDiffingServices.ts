@@ -21,8 +21,10 @@ export class SkosDiffingServices {
         return this.httpMgr.doPost(this.serviceName, "runDiffing", params);
     }
 
-    getAllTasksInfo(): Observable<DiffingTask[]> {
-        let params: STRequestParams = {};
+    getAllTasksInfo(projectName: string): Observable<DiffingTask[]> {
+        let params: STRequestParams = {
+            projectName: projectName
+        };
         return this.httpMgr.doGet(this.serviceName, "getAllTasksInfo", params).map(
             stResp => {
                 return JSON.parse(stResp);

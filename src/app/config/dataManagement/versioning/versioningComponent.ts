@@ -32,7 +32,7 @@ export class VersioningComponent {
                     dateTimeLocal: "---", 
                     dateTime: null, 
                     repositoryId: "---", 
-                    repositoryLocation: null, 
+                    repositoryLocation: VBContext.getWorkingProject().isRepositoryRemote() ? RepositoryLocation.REMOTE : RepositoryLocation.LOCAL, 
                     repositoryStatus: RepositoryStatus.INITIALIZED 
                 }];
                 this.versionList = this.versionList.concat(versions);
