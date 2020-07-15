@@ -98,7 +98,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
         let word = start != end && curLine.slice(start, end);
 
         if (word != "") {
-            // if word contains ":" it call serachURIList otherwise it call searchPrefix and search in keywords
+            // if a word contains ":" it calls serachURIList otherwise it calls searchPrefix and search in keywords
             if (word.indexOf(":") != -1) {
                 //update start value to put hint choosen after ":"
                 for (let i = start; i <= end; i++) {
@@ -125,7 +125,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                         }
                     }
                 ).toPromise();
-            } else { // here look for between keywords and prefixes
+            } else { // here it looks for between keywords and prefixes
                 let keywords = ["SOME", "ONLY", "VALUE", "MIN", "MAX", "EXACTLY", "SELF", "LENGTH", "MINLENGTH", "MAXLENGTH", "PATTERN", "LANGRANGE", "OR", "AND", "NOT", "THAT"]; // remeber to check and update also manchester.js file in case of modify
                 let filterKeywords = keywords.filter(w => w.startsWith(word.toUpperCase())).sort();
                 return this.searchServices.searchPrefix(word, SearchMode.startsWith).map(
@@ -177,7 +177,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                             let obj = {
                                 from: CodeMirror.Pos(cur.line, start),
                                 to: CodeMirror.Pos(cur.line, end),
-                                list: list //filterKeywords.concat(results.map(function (elem) { let newElem = elem + ":"; return elem.replace(elem, newElem); }).sort())
+                                list: list 
                             }
                             if (obj.list.length > 0) {
                                 return obj
@@ -195,34 +195,34 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
     /**
      * 
      * @param response 
-     * This method underline errors in Manchester editor
+     * This method underlines errors in Manchester editor
      */
     errorMarks(response: ObjectError[]) {
-        this.markers.forEach(value => { // clean words that have been marked (useful when applying changes to underlined words) 
+        this.markers.forEach(value => { // it cleans words that have been marked (useful when applying changes to underlined words) 
             value.clear()
         })
         response.forEach(value => {
             if (value.type == "semantic") {
                 let pattern = value.qname + "\\b|" + value.iri // regex checks if there are some word in text editor which match with any uri or qname if this happens takes its position with "positionWord"
-                let positionWord = this.cmEditor.getDoc().getSearchCursor(new RegExp(pattern)); // take word position
+                let positionWord = this.cmEditor.getDoc().getSearchCursor(new RegExp(pattern)); // it takes word position
                 for (let i = 0; i <= value.occurrence; i++) {
-                    positionWord.findNext();// take match in text editor
+                    positionWord.findNext();// it takes match in text editor
                 }
-                let marker = this.cmEditor.getDoc().markText(positionWord.from(), positionWord.to(), { className: "underline", title: value.msg }) //underline word that match
-                this.markers.push(marker);// insert word into array that contain matched and underlined words
+                let marker = this.cmEditor.getDoc().markText(positionWord.from(), positionWord.to(), { className: "underline", title: value.msg }) //it underlines word that match
+                this.markers.push(marker);// insert word into array that contains matched and underlined words
             } else {
-                let startWordPosition = this.cmEditor.getDoc().posFromIndex(value.occurrence); // it take the position from word start ch
-                let endWord = value.occurrence + value.offendingTerm.length //calculate ch of the word end ( -1 because we just are on the first character)
-                let endWordPosition = this.cmEditor.getDoc().posFromIndex(endWord); // it take the position of the last character of the word
+                let startWordPosition = this.cmEditor.getDoc().posFromIndex(value.occurrence); // it takes the position from word start ch
+                let endWord = value.occurrence + value.offendingTerm.length //it calculates ch of the word end ( -1 because we just are on the first character)
+                let endWordPosition = this.cmEditor.getDoc().posFromIndex(endWord); // it takes the position of the last character of the word
                 let detailsExpectedTokens = value.expectedTokens.join("\n");
                 if (value.offendingTerm == "<EOF>") {
-                    let startWordPosition = this.cmEditor.getDoc().posFromIndex(value.occurrence - 1); // it take the position from word start ch
+                    let startWordPosition = this.cmEditor.getDoc().posFromIndex(value.occurrence - 1); // it takes the position from word start ch
                     let endWordPosition = this.cmEditor.getDoc().posFromIndex(value.occurrence);
-                    let marker = this.cmEditor.getDoc().markText(startWordPosition, endWordPosition, { className: "underline", title: detailsExpectedTokens }) //underline word that match
-                    this.markers.push(marker);// insert word into array that contain matched and underlined words
+                    let marker = this.cmEditor.getDoc().markText(startWordPosition, endWordPosition, { className: "underline", title: detailsExpectedTokens }) //it underlines word that match
+                    this.markers.push(marker);// insert word into array that contains matched and underlined words
                 } else {
-                    let marker = this.cmEditor.getDoc().markText(startWordPosition, endWordPosition, { className: "underline", title: detailsExpectedTokens }) //underline word that match
-                    this.markers.push(marker);// insert word into array that contain matched and underlined words
+                    let marker = this.cmEditor.getDoc().markText(startWordPosition, endWordPosition, { className: "underline", title: detailsExpectedTokens }) //it underlines word that match
+                    this.markers.push(marker);// insert word into array that contains matched and underlined words
                 }
 
 
@@ -253,7 +253,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                     } else {
                         let detailsMsgs: string[] = checkResp.details.map(value => value.msg);
                         this.codeInvalidDetails = detailsMsgs.join("\n");
-                        this.propagateChange(null); //in case invalid, propagate a null expression
+                        this.propagateChange(null); //in invalid case, it propagates a null expression
                     }
                 } else {
                     this.codeValid = true // it's useful to update glyphicon-alert on view(manchesterEditorComponent html) when a user deletes all inside editor 
@@ -297,7 +297,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
 
     //--------------------------------------------------
 
-    // the method set in registerOnChange, it is just a placeholder for a method that takes one parameter, 
+    // the method sets in registerOnChange, it is just a placeholder for a method that takes one parameter, 
     // we use it to emit changes back to the parent
     private propagateChange = (_: any) => { };
 
