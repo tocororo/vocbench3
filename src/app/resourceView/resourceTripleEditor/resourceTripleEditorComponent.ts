@@ -32,13 +32,26 @@ export class ResourceTripleEditorComponent {
 
     private initDescription() {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-        this.resourcesService.getOutgoingTriples(this.resource, "N-Triples").subscribe(
+        this.resourcesService.getOutgoingTriples(this.resource, "Turtle").subscribe(
             triples => {
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                 this.description = triples;
-                this.pristineDescription = triples;
             }
         );
+    }
+
+    /**
+     * For an unknown reason codemirror changes the char codes of the ngModel-bound description string
+     * (discovered by comparing the charCodeAt of the whole description and pristineDescription).
+     * So if I initialize pristineDescription in initDescription(), description is immediately changed by codemirror, 
+     * then the check this.description != this.pristineDescription (in isApplyEnabled()) detects the strings changed even if they are identical.
+     * 
+     * This is a workaround needed in order to initialize pristineDescription at soon as codemirror fire the update of the bound ngModel.
+     */
+    private onDescriptionChange() {
+        if (this.pristineDescription == null) {
+            this.pristineDescription = this.description;
+        }
     }
 
     private isApplyEnabled(): boolean {
@@ -47,8 +60,10 @@ export class ResourceTripleEditorComponent {
 
     private applyChanges() {
         if (this.description != this.pristineDescription) { //something changed
-            this.resourcesService.updateResourceTriplesDescription(this.resource, this.description, "N-Triples").subscribe(
+            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+            this.resourcesService.updateResourceTriplesDescription(this.resource, this.description, "Turtle").subscribe(
                 () => {
+                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                     this.update.emit(this.resource);
                     this.initDescription();
                 }

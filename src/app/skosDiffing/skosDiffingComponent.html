@@ -1,4 +1,4 @@
-<div class="panel panel-default vbox">
+<div class="panel panel-default vbox blockingDivHost">
     <div class="panel-heading">
         <label style="flex: 1;">SKOS diffing tasks</label>
 
@@ -58,4 +58,13 @@
             </tbody>
         </table>
     </div>
+
+    <div #blockingDiv class="blockingDiv" style="display:none">
+        <div class="loadingDiv">
+            <div>
+                <p>Loading...</p><img src="../../assets/images/loading.gif" />
+            </div>
+        </div>
+    </div>
+
 </div>

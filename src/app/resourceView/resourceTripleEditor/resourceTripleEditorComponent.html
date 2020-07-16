@@ -6,7 +6,7 @@
         </button>
     </div>
     <div class="panel-body vbox">
-        <ntriple-editor [(ngModel)]="description" [disabled]="!editAuthorized"></ntriple-editor>
+        <ntriple-editor [(ngModel)]="description" (ngModelChange)="onDescriptionChange()" [disabled]="!editAuthorized"></ntriple-editor>
     </div>
     <div class="panel-footer" style="min-height: 31px;">
         <button class="btn btn-xs btn-default pull-right" (click)="applyChanges()" [disabled]="!isApplyEnabled()">Apply changes</button>

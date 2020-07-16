@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ElementRef, ViewChild } from "@angular/core";
 import { Modal, OverlayConfig } from "ngx-modialog";
 import { BSModalContext, BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
 import { Observable } from "rxjs";
@@ -6,6 +6,7 @@ import { VersionInfo } from "../models/History";
 import { DiffingTask, TaskResultType } from "../models/SkosDiffing";
 import { SkosDiffingServices } from "../services/skosDiffingServices";
 import { VersionsServices } from "../services/versionsServices";
+import { UIUtils } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
 import { CreateDiffingTaskModal } from "./modals/createDiffingTaskModal";
 
@@ -15,6 +16,8 @@ import { CreateDiffingTaskModal } from "./modals/createDiffingTaskModal";
     host: { class: "pageComponent" }
 })
 export class SkosDiffingComponent {
+
+    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
 
     private tasks: DiffingTask[];
     private selectedTask: DiffingTask;
@@ -89,8 +92,10 @@ export class SkosDiffingComponent {
     }
 
     private downloadTaskResult() {
+        UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.diffingService.getTaskResult(this.selectedTask.taskId, this.selectedResultFormat).subscribe(
             report => {
+                UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 let url = window.URL.createObjectURL(report);
                 window.open(url);
             },
