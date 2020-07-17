@@ -8,6 +8,7 @@ import { SkosDiffingServices } from "../services/skosDiffingServices";
 import { VersionsServices } from "../services/versionsServices";
 import { UIUtils } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { CreateDiffingTaskModal } from "./modals/createDiffingTaskModal";
 
 @Component({
@@ -27,7 +28,8 @@ export class SkosDiffingComponent {
 
     private versions: VersionInfo[];
 
-    constructor(private diffingService: SkosDiffingServices, private versionsService: VersionsServices, private modal: Modal) {}
+    constructor(private diffingService: SkosDiffingServices, private versionsService: VersionsServices, 
+        private basicModals: BasicModalServices, private modal: Modal) {}
 
     ngOnInit() {
         this.listTasks();
@@ -96,8 +98,10 @@ export class SkosDiffingComponent {
         this.diffingService.getTaskResult(this.selectedTask.taskId, this.selectedResultFormat).subscribe(
             report => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                let url = window.URL.createObjectURL(report);
-                window.open(url);
+                // let url = window.URL.createObjectURL(report);
+                // window.open(url);
+                let exportLink = window.URL.createObjectURL(report);
+                this.basicModals.downloadLink("Download SKOS diffing result", null, exportLink, "result." + this.selectedResultFormat);
             },
         );
     }
