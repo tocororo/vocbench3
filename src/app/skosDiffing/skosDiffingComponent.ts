@@ -20,6 +20,8 @@ export class SkosDiffingComponent {
 
     @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
 
+    private serverDown: boolean = false;
+
     private tasks: DiffingTask[];
     private selectedTask: DiffingTask;
 
@@ -38,6 +40,7 @@ export class SkosDiffingComponent {
     private listTasks() {
         this.diffingService.getAllTasksInfo(VBContext.getWorkingProject().getName()).subscribe(
             tasks => {
+                this.serverDown = false;
                 this.tasks = tasks;
                 //if there is a task with a version, retrieve the version ID
                 if (this.tasks.some(t => t.leftDataset.versionRepoId != null || t.rightDataset.versionRepoId != null)) {
@@ -52,6 +55,11 @@ export class SkosDiffingComponent {
                         }
                     );
                 }
+            },
+            (err: Error) => {
+                this.serverDown = true;
+                this.basicModals.alert("SKOS diffing server error", "The SKOS diffing server didn't respond, "
+                    + "make sure it is up and running.", "error", err.stack);
             }
         );
     }

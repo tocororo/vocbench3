@@ -6,7 +6,7 @@ import { AlignmentPlan, MatcherDTO, ScenarioDefinition, ServiceMetadataDTO, Sett
 import { Settings } from '../models/Plugins';
 import { Project } from '../models/Project';
 import { RemoteAlignmentTask } from '../models/RemoteAlignment';
-import { HttpManager } from "../utils/HttpManager";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 
 @Injectable()
 export class RemoteAlignmentServices {
@@ -23,7 +23,13 @@ export class RemoteAlignmentServices {
         if (rightDataset != null) {
             params.rightDataset = rightDataset.getName();
         }
-        return this.httpMgr.doGet(this.serviceName, "listTasks", params).map(
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.services.core.alignmentservices.AlignmentServiceException']
+            } 
+        });
+        return this.httpMgr.doGet(this.serviceName, "listTasks", params, options).map(
             stResp => {
                 let tasks: RemoteAlignmentTask[] = [];
                 stResp.forEach((result: any) => {

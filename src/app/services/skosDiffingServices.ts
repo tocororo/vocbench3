@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Project } from '../models/Project';
 import { DiffingTask, TaskResultType } from '../models/SkosDiffing';
-import { HttpManager, STRequestParams } from "../utils/HttpManager";
+import { HttpManager, STRequestParams, VBRequestOptions } from "../utils/HttpManager";
 
 @Injectable()
 export class SkosDiffingServices {
@@ -26,7 +26,13 @@ export class SkosDiffingServices {
         let params: STRequestParams = {
             projectName: projectName
         };
-        return this.httpMgr.doGet(this.serviceName, "getAllTasksInfo", params);
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['org.apache.http.conn.HttpHostConnectException']
+            } 
+        });
+        return this.httpMgr.doGet(this.serviceName, "getAllTasksInfo", params, options);
     }
 
     deleteTask(taskId: string) {

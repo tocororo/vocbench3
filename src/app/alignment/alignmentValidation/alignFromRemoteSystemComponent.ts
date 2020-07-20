@@ -28,6 +28,8 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
 
     @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
 
+    private serverDown: boolean = false;
+
     private tasks: RemoteAlignmentTask[];
     private selectedTask: RemoteAlignmentTask;
 
@@ -35,7 +37,7 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
 
     constructor(edoalService: EdoalServices, projectService: ProjectServices,
         private remoteAlignmentService: RemoteAlignmentServices, private mapleService: MapleServices, 
-        private basicModal: BasicModalServices, private modal: Modal) {
+        private basicModals: BasicModalServices, private modal: Modal) {
         super(edoalService, projectService);
     }
 
@@ -106,7 +108,7 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
      */
     private profileProject(project: Project, datasetPosition: DatasetPosition): Observable<boolean> {
         return Observable.fromPromise(
-            this.basicModal.confirm("Unavailable metadata", "Unable to find metadata about the " + datasetPosition + 
+            this.basicModals.confirm("Unavailable metadata", "Unable to find metadata about the " + datasetPosition + 
                 " project '" + project.getName() +  "', do you want to generate them? (Required for the alignment)").then(
                 confirm => {
                     HttpServiceContext.setContextProject(project);
@@ -135,7 +137,18 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
         let allowReordering: boolean = !this.isEdoalProject(); //if project is edoal, allow only task with the exact left-right datasets
         this.remoteAlignmentService.listTasks(this.leftProject, allowReordering, this.rightProject).subscribe(
             tasks => {
+                this.serverDown = false;
                 this.tasks = tasks;
+            },
+            (err: Error) => {
+                if (err.message.includes("HttpHostConnectException")) {
+                    this.serverDown = true;
+                    this.basicModals.alert("Alignment Service server error", "The Alignment Service server didn't respond, "
+                        + "make sure it is up and running or the configuration is correct", "error", err.stack);
+                } else {
+                    this.basicModals.alert("Alignment Service server error", err.message, "error", err.stack);
+                }
+                
             }
         );
     }

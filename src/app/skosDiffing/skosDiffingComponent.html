@@ -3,10 +3,10 @@
         <label style="flex: 1;">SKOS diffing tasks</label>
 
         <div class="btn-group btn-group-xs">
-            <button class="btn btn-default" (click)="createTask()" title="Create task">
+            <button class="btn btn-default" (click)="createTask()" title="Create task" [disabled]="serverDown">
                 <span class="glyphicon glyphicon-plus"></span>
             </button>
-            <button class="btn btn-sm btn-default" (click)="deleteTask()" title="Delete task" [disabled]="!selectedTask">
+            <button class="btn btn-sm btn-default" (click)="deleteTask()" title="Delete task" [disabled]="!selectedTask || serverDown">
                 <span class="glyphicon glyphicon-minus"></span>
             </button>
         </div>
@@ -17,7 +17,7 @@
                     <option *ngFor="let f of resultFormats" [ngValue]="f">{{f | uppercase}}</option>
                 </select>
                 <span class="input-group-btn">
-                    <button class="btn btn-default" (click)="downloadTaskResult()" title="Download task result" [disabled]="!selectedTask">
+                    <button class="btn btn-default" (click)="downloadTaskResult()" title="Download task result" [disabled]="!selectedTask || serverDown">
                         <span class="glyphicon glyphicon-save "></span>
                     </button>
                 </span>
