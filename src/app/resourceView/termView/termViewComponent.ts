@@ -43,13 +43,13 @@ export class TermViewComponent extends AbstractResourceView {
 
     private userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
     private allProjectLangs = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectSettings().projectLanguagesSetting // all language to manage case in which user is admin without flags assigned
-   
+
     private broaders: ARTNode[]; // conteins object with broader predicate (skos:broader)
     private definitions: ARTNode[] = [];  // contains object with definitions predicate (skos:definition) and its lang
     private languages: LangStructView[] = []; // it is used to assign flag status(active/disabled) to flags list (top page under first box)
 
     private defCustomRangeConfig: DefinitionCustomRangeConfig; //tells if skos:definition is mapped to CustomRange
-    
+
     private lexicalizationModelType: string;
 
     constructor(resViewService: ResourceViewServices, modal: Modal, private propService: PropertyServices) {
@@ -71,7 +71,7 @@ export class TermViewComponent extends AbstractResourceView {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource'] && changes['resource'].currentValue) {
             //if not the first change, avoid to refresh res view if resource is not changed
-            if (!changes['resource'].firstChange) { 
+            if (!changes['resource'].firstChange) {
                 let prevRes: ARTResource = changes['resource'].previousValue;
                 if (prevRes.equals(this.resource)) {
                     return;
@@ -411,6 +411,7 @@ export class TermViewComponent extends AbstractResourceView {
     private deleteLangBox(lang: string) {
         delete this.langStruct[lang];
         this.objectKeys = Object.keys(this.langStruct);
+        this.initLanguages();
     }
 
 }
