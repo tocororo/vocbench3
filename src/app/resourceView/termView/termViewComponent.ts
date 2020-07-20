@@ -45,7 +45,7 @@ export class TermViewComponent extends AbstractResourceView {
     private allProjectLangs = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectSettings().projectLanguagesSetting // all language to manage case in which user is admin without flags assigned
    
     private broaders: ARTNode[]; // conteins object with broader predicate (skos:broader)
-    private definitions: DefinitionStructView[] = [];  // contains object with definitions predicate (skos:definition) and its lang
+    private definitions: ARTNode[] = [];  // contains object with definitions predicate (skos:definition) and its lang
     private languages: LangStructView[] = []; // it is used to assign flag status(active/disabled) to flags list (top page under first box)
 
     private defCustomRangeConfig: DefinitionCustomRangeConfig; //tells if skos:definition is mapped to CustomRange
@@ -175,15 +175,11 @@ export class TermViewComponent extends AbstractResourceView {
             if (definitionPredObj) { //if there are definitions
                 // this.definitions = definitionPredObj.getObjects(); 
                 definitionPredObj.getObjects().forEach(def => {
-                    this.definitions.push({ definition: def.getShow(), lang: def.getAdditionalProperty(ResAttribute.LANG) }) // it is useful to show "definition + lang" in first box in the UI 
-                    this.definitions.sort((a: DefinitionStructView, b: DefinitionStructView) => { // order about lang
-                        if (a.lang > b.lang) {
-                            return 1
-                        }
-                        if (a.lang < b.lang) {
-                            return -1
-                        }
-                        return 0;
+                    this.definitions.push(def) // it is useful to show "definition + lang" in first box in the UI 
+                    this.definitions.sort((a: ARTNode, b: ARTNode) => { // order about lang
+                        let langA: string = a.getAdditionalProperty(ResAttribute.LANG);
+                        let langB: string = b.getAdditionalProperty(ResAttribute.LANG);
+                        return langA.localeCompare(langB);
                     })
                 })
 
@@ -420,14 +416,8 @@ export class TermViewComponent extends AbstractResourceView {
 }
 
 
-
 interface LangStructView {
     lang: Language;
     disabled: boolean;
 
-}
-
-interface DefinitionStructView {
-    definition: string
-    lang: Language
 }
