@@ -47,10 +47,19 @@ export class SkosDiffingComponent {
                     this.initVersions().subscribe(
                         () => {
                             this.tasks.forEach(t => {
-                                let leftVers = this.versions.find(v => v.repositoryId == t.leftDataset.versionRepoId);
-                                t.leftDataset.versionId = (leftVers != null) ? leftVers.versionId : leftVers.repositoryId;
-                                let rightVers = this.versions.find(v => v.repositoryId == t.rightDataset.versionRepoId);
-                                t.rightDataset.versionId = (rightVers != null) ? rightVers.versionId : rightVers.repositoryId;
+                                if (t.leftDataset.versionRepoId == "") {
+                                    t.leftDataset.versionId = "CURRENT";
+                                } else {
+                                    let leftVers = this.versions.find(v => v.repositoryId == t.leftDataset.versionRepoId);
+                                    t.leftDataset.versionId = (leftVers != null) ? leftVers.versionId : t.leftDataset.versionRepoId;
+                                }
+
+                                if (t.rightDataset.versionRepoId == "") {
+                                    t.rightDataset.versionId = "CURRENT";
+                                } else {
+                                    let leftVers = this.versions.find(v => v.repositoryId == t.rightDataset.versionRepoId);
+                                    t.rightDataset.versionId = (leftVers != null) ? leftVers.versionId : t.rightDataset.versionRepoId;
+                                }
                             })
                         }
                     );
