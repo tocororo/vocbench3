@@ -42,8 +42,8 @@ export class TermViewComponent extends AbstractResourceView {
     private langStruct: { [key: string]: ARTPredicateObjects[] } = {}; // new struct to map server response where key is a flag.
     private langsWithValue: string[]; // takes langStruct keys, namely those languages for which exist at leas a value (lexicalization or definition)
 
-    private userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
-    private allProjectLangs = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectSettings().projectLanguagesSetting // all language to manage case in which user is admin without flags assigned
+    private userAssignedLangs: string[];
+    private allProjectLangs: Language[]; // all language to manage case in which user is admin without flags assigned
 
     private broaders: ARTNode[]; // conteins object with broader predicate (skos:broader)
     private definitions: ARTNode[] = [];  // contains object with definitions predicate (skos:definition) and its lang
@@ -87,6 +87,8 @@ export class TermViewComponent extends AbstractResourceView {
      * @param res 
      */
     public buildResourceView(res: ARTResource) {
+        this.userAssignedLangs = VBContext.getProjectUserBinding().getLanguages();
+        this.allProjectLangs = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectSettings().projectLanguagesSetting // all language to manage case in which user is admin without flags assigned
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         if (this.activeVersion != null) {
             HttpServiceContext.setContextVersion(this.activeVersion); //set temprorarly version
@@ -364,6 +366,7 @@ export class TermViewComponent extends AbstractResourceView {
                 })
             } else {
                 if (this.userAssignedLangs.length != 0) {
+                    this.userAssignedLangs.sort();
                     this.userAssignedLangs.forEach(lang => {
                         if (!langListFromServer.some(l => l == lang)) {
                             this.languages.push({ lang: Languages.getLanguageFromTag(lang), disabled: true })
@@ -372,7 +375,6 @@ export class TermViewComponent extends AbstractResourceView {
                 }
             }
         }
-
     }
 
     /**
