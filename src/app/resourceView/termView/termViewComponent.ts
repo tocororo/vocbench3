@@ -1,5 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from "@angular/core";
 import { Modal } from "ngx-modialog";
+import { Observable } from "rxjs";
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { CustomForm } from "../../models/CustomForms";
 import { VersionInfo } from "../../models/History";
@@ -39,7 +40,7 @@ export class TermViewComponent extends AbstractResourceView {
     private activeVersion: VersionInfo;
 
     private langStruct: { [key: string]: ARTPredicateObjects[] } = {}; // new struct to map server response where key is a flag.
-    private objectKeys: string[]; // takes langStruct keys
+    private langsWithValue: string[]; // takes langStruct keys, namely those languages for which exist at leas a value (lexicalization or definition)
 
     private userAssignedLangs: string[] = VBContext.getProjectUserBinding().getLanguages();
     private allProjectLangs = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectSettings().projectLanguagesSetting // all language to manage case in which user is admin without flags assigned
@@ -95,7 +96,6 @@ export class TermViewComponent extends AbstractResourceView {
                 HttpServiceContext.removeContextVersion();
                 this.resViewResponse = stResp;
                 this.fillPartitions();
-                this.initLanguages();
                 this.unknownHost = false;
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
             },
@@ -109,9 +109,8 @@ export class TermViewComponent extends AbstractResourceView {
 
 
     /**
-    * Fill broader, lexicalization and notes partitions of the RV and creates a new stuct (called langStruct)
-    * 
-    */
+     * Fill broader, lexicalization and notes partitions of the RV and creates a new struct (called langStruct)
+     */
     private fillPartitions() {
         let resourcePartition: any = this.resViewResponse.resource;
         this.resource = Deserializer.createRDFResource(resourcePartition);
@@ -169,83 +168,50 @@ export class TermViewComponent extends AbstractResourceView {
 
         this.definitions = []
         let notesColl: ARTPredicateObjects[] = this.initPartition(ResViewPartition.notes, true);
-        if (notesColl != null) {
-            let nodes: ARTNode[] = [];
-            let definitionPredObj: ARTPredicateObjects = notesColl.find(po => po.getPredicate().equals(SKOS.definition)); //  here takes only objects with skos:definition predicate
-            if (definitionPredObj) { //if there are definitions
-                // this.definitions = definitionPredObj.getObjects(); 
-                definitionPredObj.getObjects().forEach(def => {
-                    this.definitions.push(def) // it is useful to show "definition + lang" in first box in the UI 
-                    this.definitions.sort((a: ARTNode, b: ARTNode) => { // order about lang
-                        let langA: string = a.getAdditionalProperty(ResAttribute.LANG);
-                        let langB: string = b.getAdditionalProperty(ResAttribute.LANG);
-                        return langA.localeCompare(langB);
-                    })
-                })
 
-            }
-            notesColl.forEach(def => {
-                if (def.getPredicate().equals(SKOS.definition)) { // there could be several types (editorialNote, changeNote, example etc ..)
-                    def.getObjects().forEach((obj: ARTNode) => {
-                        let lang = obj.getAdditionalProperty(ResAttribute.LANG);
-                        if (lang == null) return;
-
-                        //case in which there are no existing keys equal to the language of the considered definition
-                        if (!(lang in this.langStruct) && this.langStruct[lang] == null) {
-                            this.langStruct[lang] = [];
-                            nodes = [];
-                            nodes.push(obj);
-                            let predObj = new ARTPredicateObjects(def.getPredicate(), nodes);
-                            this.langStruct[lang].push(predObj);
-                        } else { // case in which there is already a key equals to the language of the considered definition
-                            if (!this.langStruct[lang].some(item => item.getPredicate().equals(SKOS.definition))) { //case in which there are no objects with that type of predicate
-                                nodes = [];
-                                nodes.push(obj);
-                                let predObj = new ARTPredicateObjects(def.getPredicate(), nodes);
-                                this.langStruct[lang].push(predObj);
-                            } else if (!this.langStruct[lang].some(item => { return item.getObjects().some(o => o.equals(obj)) })) { // case in which objects with that predicate already exist and I can add others
-                                this.langStruct[lang].forEach(item => {
-                                    if (item.getPredicate().equals(def.getPredicate())) {
-                                        item.getObjects().push(obj);
-                                    }
-                                })
-                            }
-                        }
-                    })
+        //no need to check if notesColl != null since for concept the partition notes is always returned by getResourceView()
+        let definitionPredObj: ARTPredicateObjects = notesColl.find(po => po.getPredicate().equals(SKOS.definition)); //  here takes only objects with skos:definition predicate
+        if (definitionPredObj) { //if there are definitions
+            definitionPredObj.getObjects().forEach(def => {
+                this.definitions.push(def);
+                this.definitions.sort((a: ARTNode, b: ARTNode) => { //sort by lang
+                    let langA: string = a.getAdditionalProperty(ResAttribute.LANG);
+                    let langB: string = b.getAdditionalProperty(ResAttribute.LANG);
+                    return langA.localeCompare(langB);
+                });
+            });
+        }
+        //init info about skos:definition custom range
+        this.initSkosDefinitionCustomRange(definitionPredObj).subscribe(
+            () => {
+                //eventually filter out reified definition if skos:definition has not custom range
+                if (!this.defCustomRangeConfig.hasCustomRange) {
+                    this.definitions = this.definitions.filter(d => d.isLiteral());
                 }
-            })
+                //update the lang struct
+                this.definitions.forEach(def => {
+                    let lang = def.getAdditionalProperty(ResAttribute.LANG);
+                    if (lang == null) return;
 
-            /* 
-            initialize configuration for custom range of skos:definition. Attribute hasCustomRange can be initialized in two ways:
-            - by checking if a pred-obj list for skos:definition is provided. In this case get the hasCustomRange attribute of the predicate
-            - in the previous attribute cannot be retrieved, invokes getRange(). In this case fill the config also with the CFs retrieve (if any)
-            In this way the children components, in case hasCustomRange is true and the CFs are provided, it could be possible to not 
-            invoke getRange again since all the needed info are already in the DefinitionCustomRangeConfig object. Otherwise invokes getRange
-            only when enriching a skos:definition.
-            */
-            this.defCustomRangeConfig = {
-                hasCustomRange: false,
-                hasLiteralRange: true
-            }
-            if (definitionPredObj != null) {
-                this.defCustomRangeConfig.hasCustomRange = definitionPredObj.getPredicate().getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE)
-            } else {
-                this.propService.getRange(SKOS.definition).subscribe(
-                    range => {
-                        if (range.formCollection != null) {
-                            let cForms: CustomForm[] = range.formCollection.getForms();
-                            if (cForms.length > 0) {
-                                this.defCustomRangeConfig.hasCustomRange = true;
-                                this.defCustomRangeConfig.customForms = cForms;
-                            }
-                            if (range.ranges == null) { //standard range replaced by the custom one
-                                this.defCustomRangeConfig.hasLiteralRange = false;
-                            }
+                    //case in which in langStruct the language has not yet ARTPredicateObjects in it
+                    if (!(lang in this.langStruct) && this.langStruct[lang] == null) {
+                        let predObj = new ARTPredicateObjects(SKOS.definition, [def]);
+                        this.langStruct[lang] = [predObj];
+                    } else { //in langStruct there is already ARTPredicateObjects for the current language
+                        let defPredObj: ARTPredicateObjects = this.langStruct[lang].find(pol => pol.getPredicate().equals(SKOS.definition));
+                        if (defPredObj == null) { //case in which there is no ARTPredicateObjects about skos:definition
+                            let predObj = new ARTPredicateObjects(SKOS.definition, [def]);
+                            this.langStruct[lang].push(predObj);
+                        } else { //there is already ARTPredicateObjects about skos:definition, simply add the definition
+                            defPredObj.getObjects().push(def);
                         }
                     }
-                )
+                });
+
+                //now that lexicalizations and definitions are initialized, initialize the languages list too
+                this.initLanguages();
             }
-        }
+        )
 
         if (
             //these partitions are always returned, even when resource is not defined, so I need to check also if length == 0
@@ -284,7 +250,40 @@ export class TermViewComponent extends AbstractResourceView {
         } else {
             this.unexistingResource = false;
         }
-        this.objectKeys = Object.keys(this.langStruct).sort();
+    }
+
+    /**
+     * initialize configuration for custom range of skos:definition. Attribute hasCustomRange can be initialized in two ways:
+     * - by checking if a pred-obj list for skos:definition is provided. In this case get the hasCustomRange attribute of the predicate
+     * - in the previous attribute cannot be retrieved, invokes getRange(). In this case fill the config also with the CFs retrieve (if any)
+     * In this way the children components, in case hasCustomRange is true and the CFs are provided, it could be possible to not 
+     * invoke getRange again since all the needed info are already in the DefinitionCustomRangeConfig object. Otherwise invokes getRange
+     * only when enriching a skos:definition.
+     */
+    private initSkosDefinitionCustomRange(definitionPredObj: ARTPredicateObjects): Observable<void> {
+        this.defCustomRangeConfig = {
+            hasCustomRange: false,
+            hasLiteralRange: true
+        }
+        if (definitionPredObj != null) {
+            this.defCustomRangeConfig.hasCustomRange = definitionPredObj.getPredicate().getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE);
+            return Observable.of(null);
+        } else {
+            return this.propService.getRange(SKOS.definition).map(
+                range => {
+                    if (range.formCollection != null) {
+                        let cForms: CustomForm[] = range.formCollection.getForms();
+                        if (cForms.length > 0) {
+                            this.defCustomRangeConfig.hasCustomRange = true;
+                            this.defCustomRangeConfig.customForms = cForms;
+                        }
+                        if (range.ranges == null) { //standard range replaced by the custom one
+                            this.defCustomRangeConfig.hasLiteralRange = false;
+                        }
+                    }
+                }
+            );
+        }
     }
 
     /**
@@ -347,8 +346,9 @@ export class TermViewComponent extends AbstractResourceView {
      * If the user is an Admin type and there are no languages ​​assigned to the user, then all languages ​​are taken, always putting first those that have a value
      */
     private initLanguages() {
+        this.langsWithValue = Object.keys(this.langStruct).sort();
         this.languages = []
-        let langListFromServer = this.objectKeys;
+        let langListFromServer = this.langsWithValue;
         if (langListFromServer.length != 0) {
             langListFromServer.forEach(lang => {
                 this.languages.push({ lang: Languages.getLanguageFromTag(lang), disabled: false })
@@ -382,7 +382,7 @@ export class TermViewComponent extends AbstractResourceView {
      * @param flagClicked 
      */
     private onLanguageClicked(flagClicked: LangStructView) {
-        if (this.objectKeys.some(l => l == flagClicked.lang.tag)) { //(1)
+        if (this.langsWithValue.some(l => l == flagClicked.lang.tag)) { //(1)
             this.langBoxViews.forEach(l => {
                 if (l.lang == flagClicked.lang.tag) {
                     l.el.nativeElement.scrollIntoView({ block: 'center', behavior: 'smooth' });
@@ -404,13 +404,13 @@ export class TermViewComponent extends AbstractResourceView {
             }
             this.langStruct[flagClicked.lang.tag] = [];
             this.langStruct[flagClicked.lang.tag].push(predObj)
-            this.objectKeys = Object.keys(this.langStruct); // here there is not .sort() because so it manteins actual order
+            this.langsWithValue = Object.keys(this.langStruct); // here there is not .sort() because so it manteins actual order
         }
     }
 
     private deleteLangBox(lang: string) {
         delete this.langStruct[lang];
-        this.objectKeys = Object.keys(this.langStruct);
+        this.langsWithValue = Object.keys(this.langStruct);
         this.initLanguages();
     }
 
