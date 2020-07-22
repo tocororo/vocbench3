@@ -53,7 +53,9 @@ export class NotificationsComponent {
                             this.notifications.push(enrichedNotification);
                         })
                         //sort by date from newest to oldest
-                        this.changeTimeOrder();
+                        this.notifications.sort((n1, n2) => {
+                            return -n1.timestamp.getTime() - n2.timestamp.getTime();
+                        });
                     }
                 )
                 

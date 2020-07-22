@@ -144,7 +144,7 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
                 if (err.message.includes("HttpHostConnectException")) {
                     this.serverDown = true;
                     this.basicModals.alert("Alignment Service server error", "The Alignment Service server didn't respond, "
-                        + "make sure it is up and running or the configuration is correct", "error", err.stack);
+                        + "make sure it is up and running or the configuration is correct", "warning");
                 } else {
                     this.basicModals.alert("Alignment Service server error", err.message, "error", err.stack);
                 }
