@@ -52,7 +52,7 @@ export class CreateProjectComponent {
     private filePickerAccept: string;
     private preloadUri: string;
     private preloadCatalog: string; //id-title of the datasetCatalog
-    private preloadedData: { summary: PreloadedDataSummary, option: PreloadOpt };
+    private preloadedData: { summary?: PreloadedDataSummary, option: PreloadOpt };
 
     private importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
         { allowance: TransitiveImportMethodAllowance.nowhere, show: "Do not resolve" },
@@ -64,9 +64,7 @@ export class CreateProjectComponent {
     private selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[1].allowance;
 
     //baseURI
-    private baseUriPrefixList: string[] = ["http://", "https://"];
-    private baseUriPrefix: string = this.baseUriPrefixList[0];
-    private baseUriSuffix: string;
+    private baseUri: string;
     private baseUriForced: boolean = false;
     private baseUriLocked: boolean = false;
 
@@ -273,6 +271,17 @@ export class CreateProjectComponent {
     }
 
     private preloadFromFileChanged(file: File) {
+        //reset stuff about preload from file
+        if (this.preloadedData) {
+            this.preloadedData.summary = null;
+        }
+        this.baseUriForced = false;
+        this.baseUriLocked = false;
+        this.ontoModelForced = false;
+        this.ontoModelLocked = false;
+        this.lexicalModelForced = false;
+        this.lexicalModelLocked = false;
+        //update the file and infer the input file format
         this.preloadFile = file;
         this.inOutService.getParserFormatForFileName(this.preloadFile.name).subscribe(
             format => {
@@ -371,7 +380,7 @@ export class CreateProjectComponent {
             option: this.selectedPreloadOpt
         }
         if (summary.baseURI != null) {
-            this.forceBaseURI(summary.baseURI);
+            this.baseUri = summary.baseURI;
             this.baseUriForced = true;
             this.baseUriLocked = true;
         }
@@ -388,37 +397,6 @@ export class CreateProjectComponent {
     }
 
     //================ PRELOAD HANDLERS - END =======================
-
-    /** =============================================================
-     * =================== BASEURI HANDLERS ==========================
-     * ============================================================= */
-
-    /**
-     * When user paste a uri update baseUriPrefix and baseUriSuffix
-     * @param event
-     */
-    private onBaseUriPaste(event: ClipboardEvent) {
-        let pastedText = event.clipboardData.getData("text/plain");
-        this.forceBaseURI(pastedText, event);
-    }
-
-    /**
-     * Forces the given baseURI. This method is useful in case of pasted baseURI (event is provided),
-     * or in case of baseURI obtained after a data preload
-     */
-    private forceBaseURI(baseURI: string, event?: ClipboardEvent) {
-        for (var i = 0; i < this.baseUriPrefixList.length; i++) {
-            let pref = this.baseUriPrefixList[i];
-            if (baseURI.startsWith(pref)) {
-                this.baseUriPrefix = pref;
-                this.baseUriSuffix = baseURI.substring(this.baseUriPrefix.length);
-                if (event) event.preventDefault();
-                break;
-            }
-        }
-    }
-
-    //=============== BASEURI HANDLERS - END ========================
 
     /** =============================================================
      * =================== MODELS HANDLERS ==========================
@@ -702,7 +680,7 @@ export class CreateProjectComponent {
         }
 
         //check baseURI
-        if (!this.baseUriSuffix || this.baseUriSuffix.trim() == "") {
+        if (!this.baseUri || this.baseUri.trim() == "" || !ResourceUtils.testIRI(this.baseUri)) {
             this.basicModals.alert("Create project", "BaseURI is missing or not valid", "warning");
             return;
         }
@@ -884,7 +862,7 @@ export class CreateProjectComponent {
          * Execute request
          */
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.projectService.createProject(this.projectName, this.baseUriPrefix + this.baseUriSuffix,
+        this.projectService.createProject(this.projectName, this.baseUri,
             this.ontoModelType, this.lexicalModelType, this.history, this.validation, this.blacklisting,
             repositoryAccess, this.dataRepoId, supportRepoIdPar,
             coreRepoSailConfigurerSpecification, coreRepoBackendType,
