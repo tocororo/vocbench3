@@ -71,7 +71,7 @@ export abstract class AbstractList extends AbstractStruct {
     }
 
     //Nodes limitation management
-    initialNodes: number = 100;
+    initialNodes: number = 150;
     nodeLimit: number = this.initialNodes;
     increaseRate: number = this.initialNodes/5;
     private onScroll() {

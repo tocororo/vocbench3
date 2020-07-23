@@ -136,7 +136,7 @@ export abstract class AbstractTree extends AbstractStruct {
     }
 
     //Root limitation management
-    initialRoots: number = 100;
+    initialRoots: number = 150;
     rootLimit: number = this.initialRoots;
     private increaseRate: number = this.initialRoots/5;
     private onScroll() {
