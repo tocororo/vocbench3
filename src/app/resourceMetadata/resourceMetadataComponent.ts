@@ -147,7 +147,7 @@ export class ResourceMetadataComponent {
         )
     }
 
-    private sharePastorePatternInLibraryttern() {
+    private storePatternInLibrary() {
         this.openPatterLibrary("Share Metadata Pattern", this.selectedPattern);
     }
 
