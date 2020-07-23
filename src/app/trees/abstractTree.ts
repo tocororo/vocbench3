@@ -141,7 +141,9 @@ export abstract class AbstractTree extends AbstractStruct {
     private increaseRate: number = this.initialRoots/5;
     private onScroll() {
         let scrollElement: HTMLElement = this.scrollableElement.nativeElement;
-        if (scrollElement.scrollTop === (scrollElement.scrollHeight - scrollElement.offsetHeight)) {
+        // if (scrollElement.scrollTop === (scrollElement.scrollHeight - scrollElement.offsetHeight)) {
+        //consider a little buffer of 2px in order to prevent potential problems (see https://stackoverflow.com/a/32283147/5805661)
+        if (Math.abs(scrollElement.scrollHeight - scrollElement.offsetHeight - scrollElement.scrollTop) < 2) {
             //bottom reached => increase max range if there are more roots to show
             if (this.rootLimit < this.roots.length) { 
                 this.rootLimit = this.rootLimit + this.increaseRate;
