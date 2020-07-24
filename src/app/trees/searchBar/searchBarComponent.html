@@ -1,6 +1,6 @@
 <div class="hbox">
     <ng2-completer *ngIf="searchSettings.useAutocompletion" style="flex: 1;" [inputClass]="'form-control input-xs'" 
-        [(ngModel)]="searchStr" [datasource]="completerDatasource" (keydown)="searchKeyHandler($event)" [minSearchLength]="3"
+        [(ngModel)]="searchStr" [datasource]="completerDatasource" (keydown)="searchKeyHandler($event)" (selected)="doSearch()" [minSearchLength]="3"
         placeholder="Search..." matchClass="matchClass" pause="500" [disableInput]="disabled">
     </ng2-completer>
 
