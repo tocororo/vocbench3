@@ -26,7 +26,7 @@ export class ResourceTripleEditorComponent {
 
     ngOnInit() {
         //editor disabled if user has no permission to edit
-        this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateResourceTriplesDescription, this.resource);
+        this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateResourceTriplesDescription);
         this.initDescription();
     }
 

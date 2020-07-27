@@ -149,7 +149,7 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.resourcesUpdateLexicalization]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "U").',
         [VBActionsEnum.resourcesUpdateTriple]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', values), "U").',
         [VBActionsEnum.resourcesUpdatePredicateObject]: 'auth(rdf(resource, values), "U").',
-        [VBActionsEnum.resourcesUpdateResourceTriplesDescription]: 'auth(code), "U").',
+        [VBActionsEnum.resourcesUpdateResourceTriplesDescription]: 'auth(rdf(code), "U").',
         [VBActionsEnum.resourcesGetResourceTriplesDescription]: 'auth(rdf(code), "R").',
         [VBActionsEnum.resourcesGetResourcePosition]: 'auth(rdf(resource), "R").',
         [VBActionsEnum.resourceMetadataAssociationCreate]: 'auth(pm(resourceMetadata,association), "C").',
