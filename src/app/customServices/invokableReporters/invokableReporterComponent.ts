@@ -77,7 +77,7 @@ export class InvokableReporterComponent {
     }
 
     private edit() {
-        this.invokableReporterModals.openInvokableReporterEditor("Edit reporter", [], this.ref).then(
+        this.invokableReporterModals.openInvokableReporterEditor("Edit Invokable Report", [], this.ref).then(
             () => {
                 this.initReporter(true);
             },

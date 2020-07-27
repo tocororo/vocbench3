@@ -45,9 +45,9 @@
             <ng-container *ngFor="let e of pearlEditors">
                 <div *ngIf="e == activePearlEditor" class="vbox" style="position: relative;">
                     <div *ngIf="e.type == 'Destruction'" class="alert alert-warning" style="margin-bottom: 4px;">
-                        Please notice that when the resource is deleted, all of its outgoing triples will be automatically deleted,
-                        so developing a destruction pattern is necessary only in case there are other resources connected only to this
-                        resource that should be deleted in turn
+                        Please notice that when the resource is deleted, all of its outgoing triples will be automatically deleted, 
+                        so developing a destruction pattern is only necessary in case there are other resources linked by this resource 
+                        (and only by it) that should thus be deleted in turn (this happens, e.g., in the case of reified metadata)
                     </div>
                     <pearl-editor [(ngModel)]="e.code" (ngModelChange)="onPearlChanged(e)" [disabled]="context.readOnly"></pearl-editor>
                     <div *ngIf="!e.validation.valid" style="position: absolute; top: 12px; right: 30px; z-index: 10;" [title]="e.validation.details">

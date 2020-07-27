@@ -42,7 +42,7 @@ export class InvokableReportersPageComponent {
     }
 
     private createReporter() {
-        this.invokableReporterModals.openInvokableReporterEditor("New Invokable Reporter", this.reporters).then(
+        this.invokableReporterModals.openInvokableReporterEditor("New Invokable Report", this.reporters).then(
             () => {
                 this.initReporters();
             },

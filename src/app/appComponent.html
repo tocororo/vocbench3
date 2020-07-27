@@ -44,8 +44,8 @@
                     <ul class="dropdown-menu" style="font-size: 12px; line-height: 20px;">
                         <li *ngIf="isAlignValidationAuthorized()"><a [routerLink]="['/AlignmentValidation']">Alignment Validation</a></li>
                         <li *ngIf="isCollaborationAuthorized()"><a [routerLink]="['/Collaboration']">Collaboration System</a></li>
-                        <li *ngIf="isCustomFormAuthorized()"><a [routerLink]="['/CustomForm']">Custom Form configuration</a></li>
-                        <li *ngIf="isCustomServicesAuthorized()"><a [routerLink]="['/CustomServices']">Custom Services and Reporter</a></li>
+                        <li *ngIf="isCustomFormAuthorized()"><a [routerLink]="['/CustomForm']">Custom Form</a></li>
+                        <li *ngIf="isCustomServicesAuthorized()"><a [routerLink]="['/CustomServices']">Custom Services and Reports</a></li>
                         <li><a [routerLink]="['/Icv']">Integrity Constraint Validator (ICV)</a></li>
                         <li *ngIf="isResourceMetadataAuthorized()"><a [routerLink]="['/ResourceMetadata']">ResourceMetadata</a></li>
                         <li *ngIf="isSheet2RdfAuthorized()"><a [routerLink]="['/Sheet2RDF']">Sheet2RDF</a></li>

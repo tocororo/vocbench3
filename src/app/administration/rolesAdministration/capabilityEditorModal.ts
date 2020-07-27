@@ -26,8 +26,8 @@ export class CapabilityEditorModal implements ModalComponent<CapabilityEditorMod
         { value: "pm", description: "Project management" },
         { value: "um", description: "User management" },
         { value: "cform", description: "Custom Form management" },
-        { value: "customService", description: "Custom Service management" },
-        { value: "invokableReporter", description: "Invokable Reporter management" },
+        { value: "customService", description: "Custom Services management" },
+        { value: "invokableReporter", description: "Invokable Reports management" },
         { value: "sys", description: "System administration" }
     ];
     private area: string;
