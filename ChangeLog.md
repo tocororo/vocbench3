@@ -6,7 +6,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 8.0.0 (dd-07-2020)
   * Added a tool for the creation of Custom Services.
-  * Added a tool for creating and compile Invokable Reporter based on Custom Services.
+  * Added a tool for creating and compile Invokable Reports based on Custom Services.
   * Added the SKOS diffing tool.
   * Implemented a notification mechanism.
   * Enabled manipulation of Maple choices in a remote-service alignment task.

@@ -95,24 +95,27 @@ export abstract class AbstractSparqlTabComponent {
         this.resultsTotPage = 0;
         this.queryCache = this.query; //stored the submitted query
 
-        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         if (this.queryMode == QueryMode.query) {
             if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.sparqlEvaluateQuery)) {
                 this.basicModals.alert("Operation denied", "You are not authorized to perform SPARQL query");
                 return;
             }
+            UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
             this.evaluateQueryImpl().subscribe(
                 stResp => {
+                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                     this.sparqlResponseHandler(stResp, initTime);
-                }
+                },
             );
         } else { //queryMode "update"
             if (!AuthorizationEvaluator.isAuthorized(VBActionsEnum.sparqlExecuteUpdate)) {
                 this.basicModals.alert("Operation denied", "You are not authorized to perform SPARQL update");
                 return;
             }
+            UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
             this.executeUpdateImpl().subscribe(
                 stResp => {
+                    UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                     this.sparqlResponseHandler(stResp, initTime);
                 }
             );
@@ -142,7 +145,6 @@ export abstract class AbstractSparqlTabComponent {
             this.headers = ["boolean"];
             this.queryResult = Boolean(stResp.sparql.boolean);
         }
-        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
     }
 
     /**
