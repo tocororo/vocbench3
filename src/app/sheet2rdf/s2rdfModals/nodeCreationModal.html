@@ -16,8 +16,9 @@
         </tbody>
     </table>
 
-    <converter-config style="margin-top: 4px;" [converter]="context.editingNode?.converter" [rangeType]="context.constrainedRangeType" 
-        [language]="context.constrainedLanguage" [datatype]="context.constrainedDatatype" (update)="onConverterUpdate($event)">
+    <converter-config style="margin-top: 4px;" [converter]="context.editingNode?.converter" [memoize]="context.editingNode?.memoize" 
+        [rangeType]="context.constrainedRangeType" [language]="context.constrainedLanguage" [datatype]="context.constrainedDatatype" 
+        (update)="onConverterUpdate($event)">
     </converter-config>
 
 </div>
