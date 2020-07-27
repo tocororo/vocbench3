@@ -19,14 +19,13 @@
         </colgroup>
         <tbody>
             <tr *ngIf="context.importType == 'fromWeb' || context.importType == 'fromWebToMirror' || context.importType == 'fromLocalFile'">
+                <td><label>BaseURI:</label></td>
                 <td>
-                    <div style="display: flex; align-items: center">
-                        <label>BaseURI:</label>
-                        <input *ngIf="context.importType == 'fromLocalFile'" type="checkbox" style="margin-left: 3px;" [checked]="baseURICheck" (change)="baseURICheck=$event.target.checked" [disabled]="baseURIdisabled">
+                    <input *ngIf="editorMode == 'repair'" class="form-control input-sm" [(ngModel)]="baseURI" disabled>
+                    <div *ngIf="editorMode == 'import'" class="hbox" style="align-items: center">
+                        <input class="form-control input-sm" [(ngModel)]="baseURI" [disabled]="!baseURICheck">
+                        <input type="checkbox" style="margin-left: 3px;" [(ngModel)]="baseURICheck">
                     </div>
-                </td>
-                <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="baseURI" [disabled]="!baseURICheck">
                 </td>
             </tr>
             <tr *ngIf="context.importType == 'fromLocalFile'">
@@ -37,13 +36,14 @@
             </tr>
             <tr *ngIf="context.importType == 'fromWebToMirror' || context.importType == 'fromLocalFile'">
                 <td nowrap>
-                    <div style="display: flex; align-items: center">
-                        <label>Mirror file name:</label>
-                        <input *ngIf="context.importType == 'fromLocalFile'" type="checkbox" style="margin-left: 3px;" [checked]="mirrorFileCheck" (change)="mirrorFileCheck=$event.target.checked" [disabled]="baseURIdisabled">
-                    </div>
+                    <label>Mirror file name:</label>
                 </td>
                 <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="mirrorFile" [disabled]="!mirrorFileCheck">
+                    <input *ngIf="editorMode == 'repair'" type="text" class="form-control input-sm" [(ngModel)]="mirrorFile">
+                    <div *ngIf="editorMode == 'import'" class="hbox" style="align-items: center">
+                        <input class="form-control input-sm" [(ngModel)]="mirrorFile" [disabled]="!mirrorFileCheck">
+                        <input type="checkbox" style="margin-left: 3px;" [(ngModel)]="mirrorFileCheck">
+                    </div>
                 </td>
             </tr>
             <tr *ngIf="context.importType == 'fromWeb' || context.importType == 'fromWebToMirror'">

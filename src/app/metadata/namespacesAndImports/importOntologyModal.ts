@@ -13,7 +13,7 @@ export class ImportOntologyModalData extends BSModalContext {
     constructor(
         public title: string = "Modal Title",
         public importType: ImportType, //'fromWeb' | 'fromWebToMirror' | 'fromLocalFile' | 'fromOntologyMirror'
-        public baseURI?: string
+        public baseURI?: string //baseURI of the imported ontology (provided only when repairing)
     ) {
         super();
     }
@@ -26,9 +26,10 @@ export class ImportOntologyModalData extends BSModalContext {
 export class ImportOntologyModal implements ModalComponent<ImportOntologyModalData> {
     context: ImportOntologyModalData;
 
+    private editorMode: EditorMode = EditorMode.import;
+
     private baseURICheck: boolean; //used for type "fromLocalFile" (its value is computed in the method ngOnInit())
     private baseURI: string; //used for type "fromWeb", "fromWebToMirror", "fromLocalFile"
-    private baseURIdisabled: boolean = false;
 
     private localFile: File; //used for type "fromLocalFile"
 
@@ -73,7 +74,7 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
                 formats => {
                     this.formats = formats;
                     //select RDF/XML as default
-                    for (var i = 0; i < this.formats.length; i++) {
+                    for (let i = 0; i < this.formats.length; i++) {
                         if (this.formats[i].name == "RDF/XML") {
                             this.rdfFormat = this.formats[i];
                             return;
@@ -83,11 +84,11 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
             );
         }
         if (this.context.baseURI != null) {
+            this.editorMode = EditorMode.repair;
             this.baseURI = this.context.baseURI;
-            this.baseURIdisabled = true;
         }
-        // baseURI and mirrorFile are optional when importing local files
-        this.baseURICheck = !this.baseURIdisabled && this.context.importType != ImportType.fromLocalFile;
+        //baseURI and mirrorFile are optional when importing local files
+        this.baseURICheck = this.context.importType != ImportType.fromLocalFile;
         this.mirrorFileCheck = this.context.importType !=  ImportType.fromLocalFile;
     }
 
@@ -97,20 +98,31 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
 
     private isOkClickable() {
         if (this.context.importType == ImportType.fromWeb) {
-            var baseuriOk = (this.baseURI != undefined && this.baseURI.trim() != "");
-            var alturlOk = (!this.altURLCheck || (this.altURLCheck && this.altURL != undefined && this.altURL.trim() != ""));
-            var rdfFormatOk = (!this.forceFormatCheck || this.forceFormatCheck && this.rdfFormat != undefined);
+            let baseuriOk = (this.baseURI != undefined && this.baseURI.trim() != "");
+            let alturlOk = (!this.altURLCheck || (this.altURLCheck && this.altURL != undefined && this.altURL.trim() != ""));
+            let rdfFormatOk = (!this.forceFormatCheck || this.forceFormatCheck && this.rdfFormat != undefined);
             return (baseuriOk && alturlOk && rdfFormatOk);
         } else if (this.context.importType == ImportType.fromWebToMirror) {
-            var baseuriOk = (this.baseURI != undefined && this.baseURI.trim() != "");
-            var mirrorFileOk = (this.mirrorFile != undefined && this.mirrorFile.trim() != "");
-            var alturlOk = (!this.altURLCheck || (this.altURLCheck && this.altURL != undefined && this.altURL.trim() != ""));
-            var rdfFormatOk = (!this.forceFormatCheck || this.forceFormatCheck && this.rdfFormat != undefined);
+            let baseuriOk = (this.baseURI != undefined && this.baseURI.trim() != "");
+            let mirrorFileOk = (this.mirrorFile != undefined && this.mirrorFile.trim() != "");
+            let alturlOk = (!this.altURLCheck || (this.altURLCheck && this.altURL != undefined && this.altURL.trim() != ""));
+            let rdfFormatOk = (!this.forceFormatCheck || this.forceFormatCheck && this.rdfFormat != undefined);
             return (baseuriOk && mirrorFileOk && alturlOk && rdfFormatOk);
         } else if (this.context.importType == ImportType.fromLocalFile) {
-            var baseuriOk = (!this.baseURICheck || (this.baseURI != undefined && this.baseURI.trim() != ""));
-            var localFileOk = this.localFile != undefined;
-            var mirrorFileOk = (!this.mirrorFileCheck || (this.mirrorFile != undefined && this.mirrorFile.trim() != ""));
+            //repair requires all parameters, import only baseuri, other params only if explicitly provided
+            let localFileOk = this.localFile != undefined;
+            let baseuriOk: boolean;
+            if (this.editorMode == EditorMode.repair) {
+                baseuriOk = this.baseURI != undefined && this.baseURI.trim() != "";
+            } else { //import mode
+                baseuriOk = !this.baseURICheck || (this.baseURI != undefined && this.baseURI.trim() != "")
+            }
+            let mirrorFileOk: boolean;
+            if (this.editorMode == EditorMode.repair) {
+                mirrorFileOk = this.mirrorFile != undefined && this.mirrorFile.trim() != "";
+            } else { //import mode
+                mirrorFileOk = !this.mirrorFileCheck || (this.mirrorFile != undefined && this.mirrorFile.trim() != "");
+            }
             return (baseuriOk && localFileOk && mirrorFileOk);
         } else if (this.context.importType == ImportType.fromOntologyMirror) {
             return this.selectedMirror != undefined;
@@ -129,11 +141,16 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
             returnedAltUrl = this.altURL;
         }
         let returnedBaseURI: string;
-        if (this.baseURICheck) {
-            returnedBaseURI = this.baseURI;
-        }
         let returnedMirrorFile: string;
-        if (this.mirrorFileCheck) {
+        if (this.editorMode == EditorMode.import) { //when import, baseURI and mirror File are optional
+            if (this.baseURICheck) {
+                returnedBaseURI = this.baseURI;
+            }
+            if (this.mirrorFileCheck) {
+                returnedMirrorFile = this.mirrorFile;
+            }
+        } else { //repair
+            returnedBaseURI = this.baseURI;
             returnedMirrorFile = this.mirrorFile;
         }
 
@@ -161,4 +178,9 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
         this.dialog.dismiss();
     }
 
+}
+
+enum EditorMode {
+    import = "import",
+    repair = "repair"
 }
