@@ -501,7 +501,8 @@ export class ProjectUsersManagerComponent {
     //AUTH
 
     private isLoggedUserAdmin(): boolean {
-        return VBContext.getLoggedUser().isAdmin();
+        let loggedUser = VBContext.getLoggedUser();
+        return loggedUser != null && loggedUser.isAdmin();
     }
 
     private isSelectedUserAdmin(): boolean {
