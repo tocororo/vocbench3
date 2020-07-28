@@ -4,6 +4,7 @@ import { ResourcesServices } from "../../services/resourcesServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
+import { VBContext } from "../../utils/VBContext";
 
 @Component({
     selector: "resource-triple-editor",
@@ -19,6 +20,7 @@ export class ResourceTripleEditorComponent {
     @ViewChild('blockDiv') blockDivElement: ElementRef;
 
     private editAuthorized: boolean;
+    private validationEnabled: boolean;
     private pristineDescription: string;
     private description: string;
 
@@ -27,6 +29,12 @@ export class ResourceTripleEditorComponent {
     ngOnInit() {
         //editor disabled if user has no permission to edit
         this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateResourceTriplesDescription);
+
+        this.validationEnabled = VBContext.getWorkingProject().isValidationEnabled();
+        if (this.validationEnabled) {
+            this.editAuthorized = false;
+        }
+
         this.initDescription();
     }
 
