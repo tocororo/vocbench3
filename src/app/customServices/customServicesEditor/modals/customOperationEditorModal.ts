@@ -91,10 +91,12 @@ export class CustomOperationEditorModal implements ModalComponent<CustomOperatio
             let popoverBtn: any =$('[data-toggle="popover"]'); //defined as any since .popover() is not recognized as function (no @types for bootstrap)
             if (popoverBtn != null) {
                 let popoverHtmlContent: string = `
-                <p>The parameters are mapped to eponym variables in the SPARQL query.
+                <p>
+                    The parameters are mapped to variables with the same name in the SPARQL query. 
                     Actual parameters passed to a service upon invocation are pre-bound to the corresponding variable in the SPARQL query.
                     A reserved variable is <span style="font-family: monospace">workingGraph</span>,
-                    which is bound by default to the working graph of the project.</p>
+                    which is bound by default to the working graph of the project.
+                </p>
                 <p>The allowed parameter types are:</p>
                 <ul>
                     <li><span style="font-family: monospace">boolean</span></li>
