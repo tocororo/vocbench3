@@ -141,14 +141,16 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
                 this.tasks = tasks;
             },
             (err: Error) => {
-                if (err.message.includes("HttpHostConnectException")) {
-                    this.serverDown = true;
-                    this.basicModals.alert("Alignment Service server error", "The Alignment Service server didn't respond, "
-                        + "make sure it is up and running or the configuration is correct", "warning");
-                } else {
-                    this.basicModals.alert("Alignment Service server error", err.message, "error", err.stack);
+                //handle the only exception let through by the default handler
+                if (err.name == "it.uniroma2.art.semanticturkey.services.core.alignmentservices.AlignmentServiceException") {
+                    if (err.message.includes("HttpHostConnectException")) {
+                        this.serverDown = true;
+                        this.basicModals.alert("Alignment Service server error", "The Alignment Service server didn't respond, "
+                            + "make sure it is up and running or the configuration is correct", "warning");
+                    } else {
+                        this.basicModals.alert("Alignment Service server error", err.message, "warning", err.stack);
+                    }
                 }
-                
             }
         );
     }

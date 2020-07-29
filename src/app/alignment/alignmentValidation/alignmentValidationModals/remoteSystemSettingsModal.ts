@@ -23,8 +23,7 @@ export class RemoteSystemSettingsModal implements ModalComponent<BSModalContext>
     private savedConfigs: RemoteAlignmentServiceConfigurationDef[];
     private activeConfig: RemoteAlignmentServiceConfigurationDef;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private remoteAlignmentService: RemoteAlignmentServices, 
-        private basicModals: BasicModalServices, private modal: Modal) {
+    constructor(public dialog: DialogRef<BSModalContext>, private remoteAlignmentService: RemoteAlignmentServices, private modal: Modal) {
         this.context = dialog.context;
     }
 
@@ -75,16 +74,6 @@ export class RemoteSystemSettingsModal implements ModalComponent<BSModalContext>
         this.activeConfig = config;
         this.remoteAlignmentService.setAlignmentServiceForProject(this.activeConfig.id).subscribe();
     }
-
-    // toggleConfig(config: RemoteAlignmentServiceConfigurationDef) {
-    //     if (this.activeConfig == config) {
-    //         this.activeConfig = null;
-    //         this.remoteAlignmentService.removeAlignmentServiceForProject().subscribe();
-    //     } else {
-    //         this.activeConfig = config;
-    //         this.remoteAlignmentService.setAlignmentServiceForProject(this.activeConfig.id).subscribe();
-    //     }
-    // }
 
     administration() {
         const builder = new BSModalContextBuilder<any>();
