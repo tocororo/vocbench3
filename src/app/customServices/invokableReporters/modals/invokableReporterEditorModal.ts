@@ -53,6 +53,7 @@ export class InvokableReporterEditorModal implements ModalComponent<InvokableRep
                 }
             )
         } else { //edit
+            this.id = this.context.reporterRef.identifier;
             this.invokableReporterService.getInvokableReporter(this.context.reporterRef.relativeReference).subscribe(
                 reporter => {
                     this.form = {
