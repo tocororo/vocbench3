@@ -5,23 +5,36 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 8.0.0 (31-07-2020)
-  * Added a tool for the creation of Custom Services.
-  * Added a tool for creating and compile Invokable Reports based on Custom Services.
-  * Added the SKOS diffing tool.
-  * Implemented a notification mechanism.
-  * Enabled manipulation of Maple choices in a remote-service alignment task.
-  * Added the ResourceMetadata tool for the management of resource metadata on creation/update/delection events.
-  * Enabled configurable dataset catalog connectors.
-  * Improved CustomForm widget by exploiting new PEARL annotations.
-  * Enabled organization of projects in directories.
-  * Renewed the ACL matrix.
-  * Enabled the AND-scheme for browsing concept tree.
-  * Enabled the no-lexicon mode in LexicalEntry panel.
-  * Implemented checks for preventing the initialization of lists or trees with too many elements.
-  * Created an alternative ResourceView ('TermView') tailored for terminologists and lexicographers.
-  * Improved Manchester syntax editor with autocomplation and error markers.
-  * Enabled the usage of the new Metadata Registry module of SemanticTurkey.
-  * Minor bugfixes and improvements.
+  * Introduced the Custom Services tool
+  * Introduced the Invokable Reports tool (based on Custom Services)
+  * Added support (in the form of a tool) for connecting to the SKOS diffing system 
+    [https://bitbucket.org/art-uniroma2/skosdiff/]
+  * Implemented a notification mechanism
+  * in Alignment, enabled the possibility for the user to modify the scenario suggested by MAPLE
+  * Introduced the ResourceMetadata tool for the management of resource metadata on creation/update/deletion 
+    events
+  * Enabled configurable dataset catalog connectors
+  * Improved CustomForm widget by exploiting new PEARL annotations
+  * Enabled the organization of projects in directories
+  * Renewed the UI of the ACL matrix
+  * Enabled a AND filter for concept schemse when browsing the concept tree
+  * added support for no-lexicon mode in OntoLex lexical entries view (i.e. if no lexicon has been selected,
+    then all lexical entries are shown)
+  * Implemented scalability checks for preventing painting of lists or trees with too many elements (which
+    are then replaced by search panels on-the-fly)
+  * Introduced an alternative ResourceView ('TermView') tailored for terminologists and lexicographers
+  * Introduced an alternative ResourceView ('CodeView') for viewing/editing the description of resources
+    directly through RDF code
+  * Improved exploitation of the Metadata Registry of SemanticTurkey
+  * Improved support for OWL2
+  * Improved Manchester syntax editor with autocomplation and error markers
+  * Improved the RDF Resource visualization widget for supporting callbacks to various syntax highlights
+  * Added support for loading privacy statements and allowing for their download from the platform
+  * On validation, any user that performed an action may reject it, even with no validation capability
+  * the class diagram visualization is now stable (it was experimental in 7.0.0)
+  * introduced a docker distribution of VB3
+  * Added support for highlighting Manchester syntax to the improved RDF Resource widget
+  * Minor bugfixes and improvements
 
 # 7.0.0 (10-02-2020)
   * Introduced EDOAL projects.
