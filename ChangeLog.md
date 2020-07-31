@@ -4,7 +4,7 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 8.0.0 (dd-07-2020)
+# 8.0.0 (31-07-2020)
   * Added a tool for the creation of Custom Services.
   * Added a tool for creating and compile Invokable Reports based on Custom Services.
   * Added the SKOS diffing tool.
