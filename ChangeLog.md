@@ -29,7 +29,6 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Improved support for OWL2
   * Improved Manchester syntax editor with autocomplation and error markers
   * Improved the RDF Resource visualization widget for supporting callbacks to various syntax highlights
-  * Added support for loading privacy statements and allowing for their download from the platform
   * On validation, any user that performed an action may reject it, even with no validation capability
   * the class diagram visualization is now stable (it was experimental in 7.0.0)
   * introduced a docker distribution of VB3
