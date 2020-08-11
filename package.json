@@ -24,7 +24,7 @@
     "codemirror": "5.26.0",
     "core-js": "2.6.11",
     "d3": "5.7.0",
-    "jquery": "3.2.1",
+    "jquery": "3.5.1",
     "jsprolog": "0.2.2",
     "ng2-completer": "1.6.3",
     "ngx-modialog": "5.0.0",
