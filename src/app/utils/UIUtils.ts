@@ -409,7 +409,7 @@ export class UIUtils {
     }
 
     static getFlagImgSrc(langTag: string): string {
-        langTag = langTag.toLowerCase();
+        langTag = langTag != null ? langTag.toLowerCase() : null;
         var imgSrc: string;
         if (langTag != null && this.availableFlagLang.indexOf(langTag) != -1) {
             imgSrc = require("../../assets/images/flags/flag_" + langTag + ".png");
