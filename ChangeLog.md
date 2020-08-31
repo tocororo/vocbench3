@@ -5,7 +5,7 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 8.0.1 (dd-mm-yyyy)
-  * 
+  * Added Icelandic flag
 
 # 8.0.0 (31-07-2020)
   * Introduced the Custom Services tool
