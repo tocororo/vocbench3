@@ -57,7 +57,9 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
 
 
     /**
-     * Given a predicate, chech how to enrich it and call the dedicated handler
+     * Given a predicate, chech how to enrich it and call the dedicated handler.
+     * This is called only in those case where the predicate has not a known dedicated handler
+     * (e.g. it is not known how to enrich skos:note since it has no range, while for instance skos:broader is enriched by selecting a concept)
      * @param predicate
      */
     enrichProperty(predicate: ARTURIResource) {
@@ -78,7 +80,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
         this.resViewModals.enrichCustomForm("Add " + predicate.getShow(), form.getId()).then(
             (entryMap: any) => {
                 let cfValue: CustomFormValue = new CustomFormValue(form.getId(), entryMap);
-                this.addPartitionAware(this.resource, predicate, cfValue);
+                this.getAddPartitionAware(this.resource, predicate, cfValue).subscribe(() => this.update.emit());
             },
             () => { }
         )
@@ -93,7 +95,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
                 let addFunctions: MultiActionFunction[] = [];
                 literals.forEach((l: ARTLiteral) => {
                     addFunctions.push({
-                        function: this.resourcesService.addValue(<ARTURIResource>this.resource, predicate, l),
+                        function: this.getAddPartitionAware(this.resource, predicate, l),
                         value: l
                     });
                 });
@@ -114,7 +116,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
                 let addFunctions: MultiActionFunction[] = [];
                 values.forEach((v: ARTURIResource) => {
                     addFunctions.push({
-                        function: this.resourcesService.addValue(<ARTURIResource>this.resource, prop, v),
+                        function: this.getAddPartitionAware(this.resource, prop, v),
                         value: v
                     });
                 });
@@ -125,16 +127,15 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
     }
 
     /**
-     * This represents the specific partition implementation for the add. It could be override in a partition if it has
-     * a specific implementation (like in notes partition for which exists the addNote service that accept a SpecialValue as value)
+     * This represents the specific partition implementation for the add. 
+     * By default it is Resource.addValue(...), but it could be override in a partition if it has a specific implementation 
+     * (like in notes partition for which exists the addNote service that accept a SpecialValue as value)
      * @param resource
      * @param predicate 
      * @param value 
      */
-    addPartitionAware(resource: ARTResource, predicate: ARTURIResource, value: ARTNode | CustomFormValue) {
-        this.resourcesService.addValue(resource, predicate, value).subscribe(
-            stResp => this.update.emit()
-        );
+    protected getAddPartitionAware(resource: ARTResource, predicate: ARTURIResource, value: ARTNode | CustomFormValue): Observable<void> {
+        return this.resourcesService.addValue(resource, predicate, value);
     }
 
 }

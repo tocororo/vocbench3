@@ -62,7 +62,7 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
         eventData.locales.forEach(l => {
             let note: ARTLiteral = new ARTLiteral(value.getValue(), null, l.tag);
             addFunctions.push({ 
-                function: this.resourcesService.addValue(<ARTURIResource>this.resource, predicate, note), 
+                function: this.getAddPartitionAware(<ARTURIResource>this.resource, predicate, note), 
                 value: note 
             });
         })
@@ -70,10 +70,8 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     //@Override
-    addPartitionAware(resource: ARTResource, predicate: ARTURIResource, value: ARTNode | CustomFormValue) {
-        this.skosService.addNote(resource, predicate, value).subscribe(
-            stResp => this.update.emit()
-        );
+    getAddPartitionAware(resource: ARTResource, predicate: ARTURIResource, value: ARTNode | CustomFormValue): Observable<void> {
+        return this.skosService.addNote(resource, predicate, value);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
