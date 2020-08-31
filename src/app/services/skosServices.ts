@@ -28,7 +28,7 @@ export class SkosServices {
     getTopConcepts(timestamp: number, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, 
         broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], includeSubProperties?: boolean, 
         options?: VBRequestOptions): Observable<{ concepts: ARTURIResource[], timestamp: number }> {
-        var params: any = {
+        let params: any = {
             schemes: schemes,
             schemeFilter: schemeFilter,
             broaderProps: broaderProps,
@@ -57,7 +57,7 @@ export class SkosServices {
     countTopConcepts(timestamp: number, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, 
         broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], includeSubProperties?: boolean, 
         options?: VBRequestOptions): Observable<{ count: number, timestamp: number }> {
-        var params: any = {
+        let params: any = {
             schemes: schemes,
             schemeFilter: schemeFilter,
             broaderProps: broaderProps,
@@ -83,7 +83,7 @@ export class SkosServices {
     getNarrowerConcepts(concept: ARTURIResource, schemes?: ARTURIResource[], schemeFilter?: MultischemeMode, 
         broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], includeSubProperties?: boolean, 
         options?: VBRequestOptions): Observable<ARTURIResource[]> {
-        var params: any = {
+        let params: any = {
             concept: concept,
             schemes: schemes,
             schemeFilter: schemeFilter,
@@ -105,7 +105,7 @@ export class SkosServices {
      * @return an array of broaders
      */
     getBroaderConcepts(concept: ARTURIResource, schemes: ARTURIResource[]) {
-        var params: any = {
+        let params: any = {
             concept: concept
         };
         if (schemes != null) {
@@ -135,7 +135,7 @@ export class SkosServices {
      */
     createConcept(label: ARTLiteral, conceptSchemes: ARTURIResource[], newConcept?: ARTURIResource, broaderConcept?: ARTURIResource, 
         conceptCls?: ARTURIResource, broaderProp?: ARTURIResource, customFormValue?: CustomFormValue, checkExistingAltLabel?: boolean) {
-        var params: any = {
+        let params: any = {
             label: label,
             conceptSchemes: conceptSchemes,
         };
@@ -157,7 +157,7 @@ export class SkosServices {
         if (customFormValue != null) {
             params.customFormValue = customFormValue;
         }
-        var options: VBRequestOptions = new VBRequestOptions({
+        let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
                 exceptionsToSkip: [
@@ -194,7 +194,7 @@ export class SkosServices {
      * @return object with concept and scheme
      */
     addTopConcept(concept: ARTURIResource, scheme: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             scheme: scheme,
         };
@@ -212,7 +212,7 @@ export class SkosServices {
      * @param scheme
      */
     removeTopConcept(concept: ARTURIResource, scheme: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             scheme: scheme,
         };
@@ -229,7 +229,7 @@ export class SkosServices {
      * @param concept the concept to delete
      */
     deleteConcept(concept: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             concept: concept,
         };
         return this.httpMgr.doPost(this.serviceName, "deleteConcept", params).map(
@@ -246,7 +246,7 @@ export class SkosServices {
      * @param broaderConcept the broader concept
      */
     addBroaderConcept(concept: ARTURIResource, broaderConcept: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             broaderConcept: broaderConcept,
         };
@@ -265,7 +265,7 @@ export class SkosServices {
      * @param broaderConcept broader to remove
      */
     removeBroaderConcept(concept: ARTURIResource, broaderConcept: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             broaderConcept: broaderConcept,
         };
@@ -283,7 +283,7 @@ export class SkosServices {
      * @param scheme
      */
     addConceptToScheme(concept: ARTURIResource, scheme: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             scheme: scheme
         };
@@ -301,7 +301,7 @@ export class SkosServices {
      * @return an object with concept and scheme
      */
     removeConceptFromScheme(concept: ARTURIResource, scheme: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             scheme: scheme,
         };
@@ -330,7 +330,7 @@ export class SkosServices {
     addMultipleConceptsToScheme(scheme: ARTURIResource, rootConcept?: ARTURIResource,
         inSchemeProp?: ARTURIResource, broaderProps?: ARTURIResource[], narrowerProps?: ARTURIResource[], 
         includeSubProperties?: boolean, filterSchemes?: ARTURIResource[], setTopConcept?: boolean) {
-        var params: any = {
+        let params: any = {
             scheme: scheme,
             rootConcept: rootConcept,
             inSchemeProp: inSchemeProp,
@@ -350,7 +350,7 @@ export class SkosServices {
      * @return an array of schemes
      */
     getAllSchemes(options?: VBRequestOptions) {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getAllSchemes", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -369,7 +369,7 @@ export class SkosServices {
      */
     createConceptScheme(label: ARTLiteral, newScheme?: ARTURIResource, schemeCls?: ARTURIResource,
             customFormValue?: CustomFormValue, checkExistingAltLabel?: boolean): Observable<ARTURIResource> {
-        var params: any = {
+        let params: any = {
             label: label
         };
         if (newScheme != undefined) {
@@ -384,7 +384,7 @@ export class SkosServices {
         if (customFormValue != null) {
             params.customFormValue = customFormValue;
         }
-        var options: VBRequestOptions = new VBRequestOptions({
+        let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
                 exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
@@ -412,7 +412,7 @@ export class SkosServices {
      * @param scheme
      */
     isSchemeEmpty(scheme: ARTURIResource): Observable<boolean> {
-        var params: any = {
+        let params: any = {
             scheme: scheme
         };
         return this.httpMgr.doGet(this.serviceName, "isSchemeEmpty", params);
@@ -423,7 +423,7 @@ export class SkosServices {
      * @param scheme the scheme to delete
      */
     deleteConceptScheme(scheme: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             scheme: scheme
         };
         return this.httpMgr.doPost(this.serviceName, "deleteConceptScheme", params).map(
@@ -444,14 +444,14 @@ export class SkosServices {
      * @param checkExistingAltLabel enables the check of clash between existing labels and the new created (default true)
      */
     setPrefLabel(concept: ARTURIResource, literal: ARTLiteral, checkExistingAltLabel?: boolean) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             literal: literal
         };
         if (checkExistingAltLabel != null) {
             params.checkExistingAltLabel = checkExistingAltLabel;
         }
-        var options: VBRequestOptions = new VBRequestOptions({
+        let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
                 exceptionsToSkip: [
@@ -470,7 +470,7 @@ export class SkosServices {
      * @param lang
      */
     removePrefLabel(concept: ARTURIResource, literal: ARTLiteral) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             literal: literal
         };
@@ -483,7 +483,7 @@ export class SkosServices {
      * @param language
      */
     getAltLabels(concept: ARTURIResource, language: string) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             language: language,
         };
@@ -500,7 +500,7 @@ export class SkosServices {
      * @param literal label
      */
     addAltLabel(concept: ARTURIResource, literal: ARTLiteral) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             literal: literal
         };
@@ -519,7 +519,7 @@ export class SkosServices {
      * @param literal label to remove
      */
     removeAltLabel(concept: ARTURIResource, literal: ARTLiteral) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             literal: literal
         };
@@ -532,7 +532,7 @@ export class SkosServices {
      * @param literal label
      */
     addHiddenLabel(concept: ARTURIResource, literal: ARTLiteral) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             literal: literal
         };
@@ -551,7 +551,7 @@ export class SkosServices {
      * @param literal label to remove
      */
     removeHiddenLabel(concept: ARTURIResource, literal: ARTLiteral) {
-        var params: any = {
+        let params: any = {
             concept: concept,
             literal: literal,
         };
@@ -563,7 +563,7 @@ export class SkosServices {
      * @param concept
      */
     getSchemesMatrixPerConcept(concept: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             concept: concept
         };
         return this.httpMgr.doGet(this.serviceName, "getSchemesMatrixPerConcept", params).map(
@@ -579,7 +579,7 @@ export class SkosServices {
      * @param concept
      */
     getSchemesOfConcept(concept: ARTURIResource): Observable<ARTURIResource[]> {
-        var params: any = {
+        let params: any = {
             concept: concept
         };
         return this.httpMgr.doGet(this.serviceName, "getSchemesMatrixPerConcept", params).map(
@@ -602,7 +602,7 @@ export class SkosServices {
      * Gets the root collections
      */
     getRootCollections(options?: VBRequestOptions) {
-        var params: any = {};
+        let params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getRootCollections", params, options).map(
             stResp => {
                 return Deserializer.createURIArray(stResp);
@@ -615,7 +615,7 @@ export class SkosServices {
      * @param container the URI of the container collection
      */
     getNestedCollections(container: ARTResource, options?: VBRequestOptions) {
-        var params: any = {
+        let params: any = {
             container: container
         };
         return this.httpMgr.doGet(this.serviceName, "getNestedCollections", params, options).map(
@@ -639,7 +639,7 @@ export class SkosServices {
      */
     createCollection(collectionType: ARTURIResource, label: ARTLiteral, newCollection?: ARTURIResource, containingCollection?: ARTURIResource,
         collectionCls?: ARTURIResource, customFormValue?: CustomFormValue, checkExistingAltLabel?: boolean) {
-        var params: any = {
+        let params: any = {
             collectionType: collectionType,
             label: label
         };
@@ -658,7 +658,7 @@ export class SkosServices {
         if (customFormValue != null) {
             params.customFormValue = customFormValue;
         }
-        var options: VBRequestOptions = new VBRequestOptions({
+        let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
                 exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
@@ -692,7 +692,7 @@ export class SkosServices {
      * @param lang language used to render the added element in the response
      */
     addToCollection(collection: ARTResource, element: ARTResource) {
-        var params: any = {
+        let params: any = {
             collection: collection,
             element: element
         };
@@ -713,7 +713,7 @@ export class SkosServices {
      * @param element Collection or Concept to remove
      */
     removeFromCollection(collection: ARTResource, element: ARTResource) {
-        var params: any = {
+        let params: any = {
             collection: collection,
             element: element,
         };
@@ -733,7 +733,7 @@ export class SkosServices {
      * @param collection Collection to delete
      */
     deleteCollection(collection: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             collection: collection,
         };
         return this.httpMgr.doPost(this.serviceName, "deleteCollection", params).map(
@@ -752,7 +752,7 @@ export class SkosServices {
      * @param lang language used to render the added element in the response
      */
     addFirstToOrderedCollection(collection: ARTResource, element: ARTResource) {
-        var params: any = {
+        let params: any = {
             collection: collection,
             element: element
         };
@@ -775,7 +775,7 @@ export class SkosServices {
      * @param lang language used to render the added element in the response
      */
     addLastToOrderedCollection(collection: ARTResource, element: ARTResource) {
-        var params: any = {
+        let params: any = {
             collection: collection,
             element: element
         };
@@ -799,7 +799,7 @@ export class SkosServices {
      * @param lang language used to render the added element in the response
      */
     addInPositionToOrderedCollection(collection: ARTResource, element: ARTResource, index: number) {
-        var params: any = {
+        let params: any = {
             collection: collection,
             element: element,
             index: index
@@ -821,7 +821,7 @@ export class SkosServices {
      * @param element Collection or Concept to remove
      */
     removeFromOrderedCollection(collection: ARTResource, element: ARTResource) {
-        var params: any = {
+        let params: any = {
             collection: collection,
             element: element
         };
@@ -841,7 +841,7 @@ export class SkosServices {
      * @param collection Collection to delete
      */
     deleteOrderedCollection(collection: ARTURIResource) {
-        var params: any = {
+        let params: any = {
             collection: collection,
         };
         return this.httpMgr.doPost(this.serviceName, "deleteOrderedCollection", params).map(
@@ -858,13 +858,23 @@ export class SkosServices {
      * @param predicate
      * @param value
      */
-    addNote(resource: ARTURIResource, predicate: ARTURIResource, value: ARTNode | CustomFormValue) {
-        var params: any = {
+    addNote(resource: ARTResource, predicate: ARTURIResource, value: ARTNode | CustomFormValue) {
+        let params: any = {
             resource: resource,
             predicate: predicate,
             value: value
         };
         return this.httpMgr.doPost(this.serviceName, "addNote", params);
+    }
+
+
+    removeNote(resource: ARTResource, predicate: ARTURIResource, value: ARTNode) {
+        let params: any = {
+            resource: resource,
+            predicate: predicate,
+            value: value
+        };
+        return this.httpMgr.doPost(this.serviceName, "removeNote", params);
     }
 
 }

@@ -71,19 +71,19 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
 
     //@Override
     addPartitionAware(resource: ARTResource, predicate: ARTURIResource, value: ARTNode | CustomFormValue) {
-        this.skosService.addNote(<ARTURIResource>resource, predicate, value).subscribe(
+        this.skosService.addNote(resource, predicate, value).subscribe(
             stResp => this.update.emit()
         );
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
-        this.getRemoveFunction(predicate, object).subscribe(
-            stResp => this.update.emit(null)
+        this.getRemoveFunctionImpl(predicate, object).subscribe(
+            () => this.update.emit(null)
         );
     }
 
     getRemoveFunctionImpl(predicate: ARTURIResource, object: ARTNode): Observable<any> {
-        return this.resourcesService.removeValue(this.resource, predicate, object);
+        return this.skosService.removeNote(this.resource, predicate, object);
     }
 
 }

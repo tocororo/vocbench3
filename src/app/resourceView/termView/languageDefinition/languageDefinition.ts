@@ -111,7 +111,7 @@ export class LanguageDefinitionComponent {
     private addPlainDefinition() {
         this.creationModals.newPlainLiteral("Add a definition", null, false, this.lang, true).then(
             (literalDef: ARTLiteral) => {
-                this.skosService.addNote(<ARTURIResource>this.resource, SKOS.definition, literalDef).subscribe(
+                this.skosService.addNote(this.resource, SKOS.definition, literalDef).subscribe(
                     () => {
                         this.update.emit();
                     }
@@ -128,7 +128,7 @@ export class LanguageDefinitionComponent {
         this.resViewModals.enrichCustomForm("Add " + SKOS.definition.getShow(), cf.getId(), this.lang).then(
             (entryMap: { [key: string]: any }) => {
                 let cfValue: CustomFormValue = new CustomFormValue(cf.getId(), entryMap);
-                this.skosService.addNote(<ARTURIResource>this.resource, SKOS.definition, cfValue).subscribe(
+                this.skosService.addNote(this.resource, SKOS.definition, cfValue).subscribe(
                     () => {
                         this.update.emit();
                     }
