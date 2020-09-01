@@ -7,6 +7,7 @@ import { ExpressionCheckResponse, ManchesterServices } from "../../../services/m
 import { PropertyServices } from "../../../services/propertyServices";
 import { RefactorServices } from "../../../services/refactorServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
+import { SkosServices } from "../../../services/skosServices";
 import { AuthorizationEvaluator, CRUDEnum, ResourceViewAuthEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { DatatypeValidator } from "../../../utils/DatatypeValidator";
 import { ResourceUtils } from "../../../utils/ResourceUtils";
@@ -25,7 +26,7 @@ import { AbstractResViewResource } from "./abstractResViewResource";
 })
 export class EditableResourceComponent extends AbstractResViewResource {
 
-    @Output() update = new EventEmitter();
+    @Output() update = new EventEmitter(); //fire a request to update the entire ResView
     @Output('edit') editOutput = new EventEmitter(); //fire a request for the renderer to edit the value
     @Output('copyLocale') copyLocaleOutput = new EventEmitter<Language[]>(); //fire a request for the renderer to copy the value to different locales
     @Output() link: EventEmitter<ARTURIResource> = new EventEmitter();
@@ -69,7 +70,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
     private resourceStringValue: string; //editable representation of the resource
 
     constructor(private resourcesService: ResourcesServices, private propService: PropertyServices,
-        private manchesterService: ManchesterServices, private refactorService: RefactorServices,
+        private manchesterService: ManchesterServices, private refactorService: RefactorServices, private skosService: SkosServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
         private creationModals: CreationModalServices, private browsingModals: BrowsingModalServices, 
         private rvModalService: ResViewModalServices, private dtValidator: DatatypeValidator) {
@@ -308,6 +309,8 @@ export class EditableResourceComponent extends AbstractResViewResource {
                     let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, null, (<ARTLiteral>this.resource).getLang());
                     if (this.partition == ResViewPartition.lexicalizations) {
                         this.updateLexicalization(this.subject, this.predicate, <ARTLiteral>this.resource, newValue);
+                    } else if (this.partition == ResViewPartition.notes) {
+                        this.updateNote(this.subject, this.predicate, <ARTLiteral>this.resource, newValue);
                     } else {
                         this.updateTriple(this.subject, this.predicate, this.resource, newValue);
                     }
@@ -372,7 +375,11 @@ export class EditableResourceComponent extends AbstractResViewResource {
                                 reject => { this.cancelEdit(); }
                             );
                         } else {
-                            this.updateTriple(this.subject, this.predicate, this.resource, newValue);
+                            if (this.partition == ResViewPartition.notes) {
+                                this.updateNote(this.subject, this.predicate, <ARTLiteral>this.resource, newValue);
+                            } else {
+                                this.updateTriple(this.subject, this.predicate, this.resource, newValue);
+                            }
                         }
                     } catch (err) { //if resourceStringValue is not a NTriple representation, check if it is a manchester expr. 
                         if (this.resource.isBNode() && this.resource.getAdditionalProperty(ResAttribute.SHOW_INTERPR) != null) {
@@ -436,9 +443,29 @@ export class EditableResourceComponent extends AbstractResViewResource {
         this.resourcesService.updateTriple(subject, predicate, oldValue, newValue).subscribe(
             stResp => {
                 this.cancelEdit;
-				/** Event propagated to the resView that refreshes.
-				 * I cannot simply update the rdf-resource since the URI of the resource
-				 * in the predicate objects list stored in the partition render is still the same */
+                /** Event propagated to the resView that refreshes.
+                 * I cannot simply update the rdf-resource since the URI of the resource
+                 * in the predicate objects list stored in the partition render is still the same */
+                this.update.emit();
+            }
+        );
+    }
+
+    /**
+     * This method handles the edit of a value in the notes partition.
+     * For the moment this is a "workaround" to allow a more specific authorization check with the note edit
+     * (which has a dedicated service, more specific than the general updateTriple).
+     * In the future (if more specific/dedicated services will be provided for the triples update) 
+     * it could be handled differently, namely an edit event is propagated up to the renderer that handles ad hoc the edit.
+     * @param subject 
+     * @param predicate 
+     * @param oldValue 
+     * @param newValue 
+     */
+    private updateNote(subject: ARTResource, predicate: ARTURIResource, oldValue: ARTNode, newValue: ARTNode) {
+        this.skosService.updateNote(subject, predicate, oldValue, newValue).subscribe(
+            stResp => {
+                this.cancelEdit;
                 this.update.emit();
             }
         );

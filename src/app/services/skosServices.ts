@@ -877,4 +877,14 @@ export class SkosServices {
         return this.httpMgr.doPost(this.serviceName, "removeNote", params);
     }
 
+    updateNote(resource: ARTResource, predicate: ARTURIResource, value: ARTNode, newValue: ARTNode) {
+        let params: any = {
+            resource: resource,
+            predicate: predicate,
+            value: value,
+            newValue: newValue
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateNote", params);
+    }
+
 }

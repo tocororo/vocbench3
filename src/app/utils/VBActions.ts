@@ -227,6 +227,7 @@ export enum VBActionsEnum {
     skosRemoveLexicalization = "skosRemoveLexicalization",
     skosRemoveNote = "skosRemoveNote",
     skosRemoveTopConcept = "skosRemoveTopConcept",
+    skosUpdateNote = "skosUpdateNote",
     //Sparql
     sparqlEvaluateQuery = "sparqlEvaluateQuery",
     sparqlExecuteUpdate = "sparqlExecuteUpdate",

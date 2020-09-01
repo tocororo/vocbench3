@@ -6,6 +6,8 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 8.0.1 (dd-mm-yyyy)
   * Added Icelandic flag
+  * Fixed a bug the prevented authorized users (e.g. lexicographer) to add/update/delete notes in assigned languages
+  * Minor bugfixes and improvements
 
 # 8.0.0 (31-07-2020)
   * Introduced the Custom Services tool

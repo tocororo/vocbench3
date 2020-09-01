@@ -169,7 +169,6 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.skosAddLexicalization]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "C").',
         [VBActionsEnum.skosAddMultipleToScheme]: 'auth(rdf(concept, schemes), "C").',
         [VBActionsEnum.skosAddNote]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', notes), "C").',
-        [VBActionsEnum.skosRemoveNote]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', notes), "D").',
         [VBActionsEnum.skosAddToCollection]: 'auth(rdf(skosCollection), "U").', //TODO is it ok? or add values (skosCollection, values)
         [VBActionsEnum.skosAddTopConcept]: 'auth(rdf(concept, schemes), "C").',
         [VBActionsEnum.skosCreateCollection]: 'auth(rdf(skosCollection), "C").',
@@ -188,7 +187,9 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.skosRemoveConceptFromScheme]: 'auth(rdf(concept, schemes), "D").',
         [VBActionsEnum.skosRemoveFromCollection]: 'auth(rdf(skosCollection), "U").', //TODO is it ok? or add values (skosCollection, values)
         [VBActionsEnum.skosRemoveLexicalization]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "D").',
+        [VBActionsEnum.skosRemoveNote]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', notes), "D").',
         [VBActionsEnum.skosRemoveTopConcept]: 'auth(rdf(concept, schemes), "D").',
+        [VBActionsEnum.skosUpdateNote]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', notes), "U").',
         [VBActionsEnum.sparqlEvaluateQuery]: 'auth(rdf(sparql), "R").',
         [VBActionsEnum.sparqlExecuteUpdate]: 'auth(rdf(sparql), "U").',
         [VBActionsEnum.validation]: 'auth(rdf, "V").',
@@ -591,7 +592,7 @@ export class ResourceViewAuthEvaluator {
             new Map([
                 [CRUDEnum.C, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddNote, resource, value)],
                 [CRUDEnum.R, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesRead, resource, value)],
-                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateTriple, resource, value)],
+                [CRUDEnum.U, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosUpdateNote, resource, value)],
                 [CRUDEnum.D, (resource: ARTResource, value: ARTNode) => AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosRemoveNote, resource, value)],
             ])
         ],
@@ -686,10 +687,6 @@ export class ResourceViewAuthEvaluator {
      */
     public static isAuthorized(partition: ResViewPartition, crud: CRUDEnum, resource: ARTResource, value?: ARTNode): boolean {
         let evaluationFn: EvaluationFn = this.partitionEvaluationMap.get(partition).get(crud);
-        // if (partition == ResViewPartition.notes) {
-        //     console.log(value);
-        //     console.log("evaluationFn", evaluationFn);
-        // }
         return evaluationFn(resource, value);
     }
 
