@@ -79,15 +79,17 @@ export class LanguageBoxComponent {
 
     private initializeDefinitions() {
         this.definitions = [];
-        this.predicateObjectList.forEach(po => {
-            if (po.getPredicate().equals(SKOS.definition)) {
-                if (po.getObjects().length != 0) {
-                    po.getObjects().forEach(d => {
-                        this.definitions.push(d)
-                    })
+        if (this.predicateObjectList != null) {
+            this.predicateObjectList.forEach(po => {
+                if (po.getPredicate().equals(SKOS.definition)) {
+                    if (po.getObjects().length != 0) {
+                        po.getObjects().forEach(d => {
+                            this.definitions.push(d)
+                        })
+                    }
                 }
-            }
-        })
+            });
+        }
         if (this.definitions.length == 0) { // it creates empty box definition when user adds a new language
             this.definitions.push(null)
         }
@@ -96,23 +98,25 @@ export class LanguageBoxComponent {
 
     private initializeTerms() {
         this.terms = [];
-        this.predicateObjectList.forEach(po => {
-            if (po.getPredicate().equals(SKOSXL.prefLabel) || po.getPredicate().equals(SKOS.prefLabel)) {
-                if (po.getObjects().length != 0) {
-                    po.getObjects().forEach(obj => {
-                        this.terms.push({ object: obj, predicate: po.getPredicate(), isPrefLabel: true, lang: this.lang })
-                    })
-                } else { //  always insert a prefLabel first both if there are no objects with a prefLabel predicate and if there are only objects with an altLabel type predicate
-                    this.terms.push({ predicate: po.getPredicate(), isPrefLabel: true, lang: this.lang })
+        if (this.predicateObjectList != null) {
+            this.predicateObjectList.forEach(po => {
+                if (po.getPredicate().equals(SKOSXL.prefLabel) || po.getPredicate().equals(SKOS.prefLabel)) {
+                    if (po.getObjects().length != 0) {
+                        po.getObjects().forEach(obj => {
+                            this.terms.push({ object: obj, predicate: po.getPredicate(), isPrefLabel: true, lang: this.lang })
+                        })
+                    } else { //  always insert a prefLabel first both if there are no objects with a prefLabel predicate and if there are only objects with an altLabel type predicate
+                        this.terms.push({ predicate: po.getPredicate(), isPrefLabel: true, lang: this.lang })
+                    }
+                } else if (po.getPredicate().equals(SKOSXL.altLabel) || po.getPredicate().equals(SKOS.altLabel)) {
+                    if (po.getObjects().length != 0) {
+                        po.getObjects().forEach(obj => {
+                            this.terms.push({ object: obj, predicate: po.getPredicate(), isPrefLabel: false, lang: this.lang })
+                        })
+                    }
                 }
-            } else if (po.getPredicate().equals(SKOSXL.altLabel) || po.getPredicate().equals(SKOS.altLabel)) {
-                if (po.getObjects().length != 0) {
-                    po.getObjects().forEach(obj => {
-                        this.terms.push({ object: obj, predicate: po.getPredicate(), isPrefLabel: false, lang: this.lang })
-                    })
-                }
-            }
-        })
+            })
+        }
 
         this.updateEmptyTerm();
     }

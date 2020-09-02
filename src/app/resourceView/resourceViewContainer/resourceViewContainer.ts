@@ -26,6 +26,8 @@ export class ResourceViewTabContainer {
     private rViews: ResViewStruct[];
     private activeView: ResourceViewType = ResourceViewType.resourceView;
 
+    private pendingValidation: boolean; //tells if the resource (or its content) is under validation (prevent the usage of code tab)
+
     ngOnInit() {
         let resViewPrefs: ResourceViewPreference = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences;
         this.activeView = resViewPrefs.defaultConceptType;

@@ -1,7 +1,11 @@
 <div class="vbox">
-    <resource-view-editor *ngIf="activeView == 'resourceView'" [resource]="resource" (dblclickObj)="onObjectDblClick($event)" (update)="onResourceUpdate($event)"></resource-view-editor>
+    <resource-view-editor *ngIf="activeView == 'resourceView'" [resource]="resource" 
+        (dblclickObj)="onObjectDblClick($event)" (update)="onResourceUpdate($event)" (pendingValidation)="pendingValidation = $event">
+    </resource-view-editor>
     <term-view *ngIf="activeView == 'termView'" [resource]="resource" (update)="onResourceUpdate($event)"></term-view>
-    <resource-triple-editor *ngIf="activeView == 'sourceCode'" [resource]="resource" (update)="onResourceUpdate($event)"></resource-triple-editor>
+    <resource-triple-editor *ngIf="activeView == 'sourceCode'" [resource]="resource" [pendingValidation]="pendingValidation" 
+        (update)="onResourceUpdate($event)">
+    </resource-triple-editor>
 </div>
 <ul class="nav nav-tabs-bottom" *ngIf="rViews.length > 1">
     <li *ngFor="let v of rViews" [ngClass]="{ active: v.type == activeView }">

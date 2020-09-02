@@ -11,9 +11,9 @@ import { PropertyFacet, ResourceViewCtx, ResViewPartition } from "../../models/R
 import { SemanticTurkey } from "../../models/Vocabulary";
 import { CollaborationServices } from "../../services/collaborationServices";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
+import { NotificationServices } from "../../services/notificationServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { ResourceViewServices } from "../../services/resourceViewServices";
-import { NotificationServices } from "../../services/notificationServices";
 import { VersionsServices } from "../../services/versionsServices";
 import { AuthorizationEvaluator, CRUDEnum, ResourceViewAuthEvaluator } from "../../utils/AuthorizationEvaluator";
 import { Deserializer } from "../../utils/Deserializer";
@@ -62,36 +62,38 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
 
     //partitions
     private resViewResponse: any = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
-    private broadersColl: ARTPredicateObjects[] = null;
-    private classAxiomColl: ARTPredicateObjects[] = null;
-    private constituentsColl: ARTPredicateObjects[] = null;
-    private datatypeDefinitionColl: ARTPredicateObjects[] = null;
-    private denotationsColl: ARTPredicateObjects[] = null;
-    private disjointPropertiesColl: ARTPredicateObjects[] = null;
-    private domainsColl: ARTPredicateObjects[] = null;
-    private equivalentPropertiesColl: ARTPredicateObjects[] = null;
-    private evokedLexicalConceptsColl: ARTPredicateObjects[] = null;
-    private formBasedPreviewColl: ARTPredicateObjects[] = null;
-    private formRepresentationsColl: ARTPredicateObjects[] = null;
-    private importsColl: ARTPredicateObjects[] = null;
-    private inverseofColl: ARTPredicateObjects[] = null;
-    private labelRelationsColl: ARTPredicateObjects[] = null;
-    private lexicalFormsColl: ARTPredicateObjects[] = null;
-    private lexicalizationsColl: ARTPredicateObjects[] = null;
-    private lexicalSensesColl: ARTPredicateObjects[] = null;
-    private membersColl: ARTPredicateObjects[] = null;
-    private membersOrderedColl: ARTPredicateObjects[] = null;
-    private notesColl: ARTPredicateObjects[] = null;
-    private propertiesColl: ARTPredicateObjects[] = null;
+    private resViewSections: { [key: string]: ARTPredicateObjects[] } = {
+        [ResViewPartition.broaders]: null,
+        [ResViewPartition.classaxioms]: null,
+        [ResViewPartition.constituents]: null,
+        [ResViewPartition.datatypeDefinitions]: null,
+        [ResViewPartition.denotations]: null,
+        [ResViewPartition.disjointProperties]: null,
+        [ResViewPartition.domains]: null,
+        [ResViewPartition.equivalentProperties]: null,
+        [ResViewPartition.evokedLexicalConcepts]: null,
+        [ResViewPartition.facets]: null,
+        [ResViewPartition.formBasedPreview]: null,
+        [ResViewPartition.formRepresentations]: null,
+        [ResViewPartition.imports]: null,
+        [ResViewPartition.labelRelations]: null,
+        [ResViewPartition.lexicalForms]: null,
+        [ResViewPartition.lexicalSenses]: null,
+        [ResViewPartition.lexicalizations]: null,
+        [ResViewPartition.members]: null,
+        [ResViewPartition.membersOrdered]: null,
+        [ResViewPartition.notes]: null,
+        [ResViewPartition.properties]: null,
+        [ResViewPartition.ranges]: null,
+        [ResViewPartition.rdfsMembers]: null,
+        [ResViewPartition.schemes]: null,
+        [ResViewPartition.subPropertyChains]: null,
+        [ResViewPartition.subterms]: null,
+        [ResViewPartition.superproperties]: null,
+        [ResViewPartition.topconceptof]: null,
+        [ResViewPartition.types]: null,
+    };
     private propertyFacets: PropertyFacet[] = null;
-    private rangesColl: ARTPredicateObjects[] = null;
-    private rdfsMembersColl: ARTPredicateObjects[] = null;
-    private schemesColl: ARTPredicateObjects[] = null;
-    private subPropertyChainsColl: ARTPredicateObjects[] = null;
-    private subtermsColl: ARTPredicateObjects[] = null;
-    private superpropertiesColl: ARTPredicateObjects[] = null;
-    private topconceptofColl: ARTPredicateObjects[] = null;
-    private typesColl: ARTPredicateObjects[] = null;
 
     //top bar buttons
 
@@ -227,6 +229,10 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         this.resource = Deserializer.createRDFResource(resourcePartition);
         this.update.emit(this.resource);
 
+        if (VBContext.getWorkingProject().isValidationEnabled()) {
+            this.pendingValidation.emit(ResourceUtils.isResourceInStaging(this.resource));
+        }
+
         this.resourcePosition = ResourcePosition.deserialize(this.resource.getAdditionalProperty(ResAttribute.RESOURCE_POSITION));
         if (
             this.resource.getRole() == RDFResourceRolesEnum.mention && //mention is also the default role (assigned when nature is empty)
@@ -256,35 +262,35 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
             partitionFilter = []; //to prevent error later (in partitionFilter.indexOf(partition))
         }
 
-        this.broadersColl = this.initPartition(ResViewPartition.broaders, partitionFilter, true);
-        this.classAxiomColl = this.initPartition(ResViewPartition.classaxioms, partitionFilter, true);
-        this.constituentsColl = this.initPartition(ResViewPartition.constituents, partitionFilter, false); //ordered server-side
-        this.datatypeDefinitionColl = this.initPartition(ResViewPartition.datatypeDefinitions, partitionFilter, true);
-        this.denotationsColl = this.initPartition(ResViewPartition.denotations, partitionFilter, true);
-        this.disjointPropertiesColl = this.initPartition(ResViewPartition.disjointProperties, partitionFilter, true);
-        this.domainsColl = this.initPartition(ResViewPartition.domains, partitionFilter, true);
-        this.equivalentPropertiesColl = this.initPartition(ResViewPartition.equivalentProperties, partitionFilter, true);
-        this.evokedLexicalConceptsColl = this.initPartition(ResViewPartition.evokedLexicalConcepts, partitionFilter, true);
-        this.inverseofColl = this.initFacetsPartition(ResViewPartition.facets, partitionFilter);//dedicated initialization
-        this.formBasedPreviewColl = this.initPartition(ResViewPartition.formBasedPreview, partitionFilter, true);
-        this.formRepresentationsColl = this.initPartition(ResViewPartition.formRepresentations, partitionFilter, true);
-        this.importsColl = this.initPartition(ResViewPartition.imports, partitionFilter, true);
-        this.labelRelationsColl = this.initPartition(ResViewPartition.labelRelations, partitionFilter, true);
-        this.lexicalizationsColl = this.initPartition(ResViewPartition.lexicalizations, partitionFilter, false); //the sort is performed in the partition according the language
-        this.lexicalFormsColl = this.initPartition(ResViewPartition.lexicalForms, partitionFilter, true);
-        this.lexicalSensesColl = this.initPartition(ResViewPartition.lexicalSenses, partitionFilter, true);
-        this.membersColl = this.initPartition(ResViewPartition.members, partitionFilter, true);
-        this.membersOrderedColl = this.initOrderedMembersPartition(ResViewPartition.membersOrdered, partitionFilter);//dedicated initialization
-        this.notesColl = this.initPartition(ResViewPartition.notes, partitionFilter, true);
-        this.propertiesColl = this.initPartition(ResViewPartition.properties, partitionFilter, true);
-        this.rangesColl = this.initPartition(ResViewPartition.ranges, partitionFilter, true);
-        this.rdfsMembersColl = this.initPartition(ResViewPartition.rdfsMembers, partitionFilter, false); //ordered server-side
-        this.schemesColl = this.initPartition(ResViewPartition.schemes, partitionFilter, true);
-        this.subtermsColl = this.initPartition(ResViewPartition.subterms, partitionFilter, true);
-        this.subPropertyChainsColl = this.initPartition(ResViewPartition.subPropertyChains, partitionFilter, true);
-        this.superpropertiesColl = this.initPartition(ResViewPartition.superproperties, partitionFilter, true);
-        this.topconceptofColl = this.initPartition(ResViewPartition.topconceptof, partitionFilter, true);
-        this.typesColl = this.initPartition(ResViewPartition.types, partitionFilter, true);
+        this.resViewSections[ResViewPartition.broaders] = this.initPartition(ResViewPartition.broaders, partitionFilter, true);
+        this.resViewSections[ResViewPartition.classaxioms] = this.initPartition(ResViewPartition.classaxioms, partitionFilter, true);
+        this.resViewSections[ResViewPartition.constituents] = this.initPartition(ResViewPartition.constituents, partitionFilter, false); //ordered server-side
+        this.resViewSections[ResViewPartition.datatypeDefinitions] = this.initPartition(ResViewPartition.datatypeDefinitions, partitionFilter, true);
+        this.resViewSections[ResViewPartition.denotations] = this.initPartition(ResViewPartition.denotations, partitionFilter, true);
+        this.resViewSections[ResViewPartition.disjointProperties] = this.initPartition(ResViewPartition.disjointProperties, partitionFilter, true);
+        this.resViewSections[ResViewPartition.domains] = this.initPartition(ResViewPartition.domains, partitionFilter, true);
+        this.resViewSections[ResViewPartition.equivalentProperties] = this.initPartition(ResViewPartition.equivalentProperties, partitionFilter, true);
+        this.resViewSections[ResViewPartition.evokedLexicalConcepts] = this.initPartition(ResViewPartition.evokedLexicalConcepts, partitionFilter, true);
+        this.resViewSections[ResViewPartition.facets] = this.initFacetsPartition(ResViewPartition.facets, partitionFilter);//dedicated initialization
+        this.resViewSections[ResViewPartition.formBasedPreview] = this.initPartition(ResViewPartition.formBasedPreview, partitionFilter, true);
+        this.resViewSections[ResViewPartition.formRepresentations] = this.initPartition(ResViewPartition.formRepresentations, partitionFilter, true);
+        this.resViewSections[ResViewPartition.imports] = this.initPartition(ResViewPartition.imports, partitionFilter, true);
+        this.resViewSections[ResViewPartition.labelRelations] = this.initPartition(ResViewPartition.labelRelations, partitionFilter, true);
+        this.resViewSections[ResViewPartition.lexicalForms] = this.initPartition(ResViewPartition.lexicalizations, partitionFilter, false); //the sort is performed in the partition according the language
+        this.resViewSections[ResViewPartition.lexicalSenses] = this.initPartition(ResViewPartition.lexicalForms, partitionFilter, true);
+        this.resViewSections[ResViewPartition.lexicalizations] = this.initPartition(ResViewPartition.lexicalSenses, partitionFilter, true);
+        this.resViewSections[ResViewPartition.members] = this.initPartition(ResViewPartition.members, partitionFilter, true);
+        this.resViewSections[ResViewPartition.membersOrdered] = this.initOrderedMembersPartition(ResViewPartition.membersOrdered, partitionFilter);//dedicated initialization
+        this.resViewSections[ResViewPartition.notes] = this.initPartition(ResViewPartition.notes, partitionFilter, true);
+        this.resViewSections[ResViewPartition.properties] = this.initPartition(ResViewPartition.properties, partitionFilter, true);
+        this.resViewSections[ResViewPartition.ranges] = this.initPartition(ResViewPartition.ranges, partitionFilter, true);
+        this.resViewSections[ResViewPartition.rdfsMembers] = this.initPartition(ResViewPartition.rdfsMembers, partitionFilter, false); //ordered server-side
+        this.resViewSections[ResViewPartition.schemes] = this.initPartition(ResViewPartition.schemes, partitionFilter, true);
+        this.resViewSections[ResViewPartition.subterms] = this.initPartition(ResViewPartition.subterms, partitionFilter, true);
+        this.resViewSections[ResViewPartition.subPropertyChains] = this.initPartition(ResViewPartition.subPropertyChains, partitionFilter, true);
+        this.resViewSections[ResViewPartition.superproperties] = this.initPartition(ResViewPartition.superproperties, partitionFilter, true);
+        this.resViewSections[ResViewPartition.topconceptof] = this.initPartition(ResViewPartition.topconceptof, partitionFilter, true);
+        this.resViewSections[ResViewPartition.types] = this.initPartition(ResViewPartition.types, partitionFilter, true);
 
         if (
             //these partitions are always returned, even when resource is not defined, so I need to check also if length == 0
@@ -336,32 +342,39 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
      * @param sort 
      */
     private initPartition(partition: ResViewPartition, partitionFilter: ResViewPartition[], sort: boolean): ARTPredicateObjects[] {
-        let poList: ARTPredicateObjects[];
+        //The poList is parsed only if the partition is present in the response.
         let partitionJson: any = this.resViewResponse[partition];
-        /**
-         * the poList is valorized only if:
-         * - the Read is authorized
-         * - the partition is not filtered (in the preference)
-         * - the partition is present in the response
-         */
-        if (
-            partitionJson != null &&
-            ResourceViewAuthEvaluator.isAuthorized(partition, CRUDEnum.R, this.resource) && 
-            partitionFilter.indexOf(partition) == -1
-        ) {
-            poList = Deserializer.createPredicateObjectsList(partitionJson);
-            this.filterPredObjList(poList);
-            if (sort) {
-                this.sortObjects(poList);
+        if (partitionJson != null) {
+            let poList = Deserializer.createPredicateObjectsList(partitionJson);
+
+            //if the there is a value under validation emit a pendingValidation event
+            if (VBContext.getWorkingProject().isValidationEnabled()) {
+                if (poList.some(po => po.getObjects().some(obj => ResourceUtils.isTripleInStaging(obj)))) {
+                    this.pendingValidation.emit(true);
+                }
             }
 
-            //resolve foreign URIs only for "Other properties" partition
-            if (partition == ResViewPartition.properties) {
-                this.resolveForeignURI(poList);
+            /** If:
+             * - the Read is authorized
+             * - the partition is not filtered (in the preference)
+             * it is processed and returned
+             */
+            if (ResourceViewAuthEvaluator.isAuthorized(partition, CRUDEnum.R, this.resource) && partitionFilter.indexOf(partition) == -1) {
+                this.filterPredObjList(poList);
+                if (sort) {
+                    this.sortObjects(poList);
+                }
+                //resolve foreign URIs only for "Other properties" partition
+                if (partition == ResViewPartition.properties) {
+                    this.resolveForeignURI(poList);
+                }
+                return poList;
+            } else {
+                return null;
             }
+        } else {
+            return null;
         }
-
-        return poList;
     }
 
     /**
@@ -693,19 +706,11 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     }
     
     private assertInferredStatements() {
-        let poLists: ARTPredicateObjects[][] = [
-            this.broadersColl, this.classAxiomColl, this.constituentsColl, this.denotationsColl, this.disjointPropertiesColl,
-            this.domainsColl, this.equivalentPropertiesColl, this.evokedLexicalConceptsColl, this.formBasedPreviewColl, 
-            this.formRepresentationsColl, this.importsColl, this.inverseofColl, this.labelRelationsColl, this.lexicalFormsColl,
-            // this.lexicalizationsColl, //lexicalizations not assertable
-            this.lexicalSensesColl, this.membersColl, this.membersOrderedColl, this.notesColl,
-            this.propertiesColl, this.rangesColl, this.rdfsMembersColl, this.schemesColl, this.subPropertyChainsColl,
-            this.subtermsColl, this.superpropertiesColl, this.topconceptofColl, this.typesColl
-        ];
-
         let assertFn: MultiActionFunction[] = [];
-        poLists.forEach((poList: ARTPredicateObjects[]) => {
-            if (poList == null) return; //predicate object list null for the current resource (partition not foreseen for the resource role)
+        for (let p in this.resViewSections) {
+            if (p == ResViewPartition.lexicalizations) continue; //lexicalizations not assertable
+            let poList: ARTPredicateObjects[] = this.resViewSections[p]
+            if (poList == null) continue; //predicate object list null for the current resource (partition not foreseen for the resource role)
             poList.forEach((predObjs: ARTPredicateObjects) => {
                 predObjs.getObjects().forEach((obj: ARTNode) => {
                     if (ResourceUtils.isTripleInferred(obj)) {
@@ -716,7 +721,8 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                     }
                 })
             })
-        });
+        }
+        
         if (assertFn.length == 0) {
             this.basicModals.alert("Assert inferred statements", "There are no inferred statements to assert", "warning");
         } else {

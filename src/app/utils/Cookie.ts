@@ -32,6 +32,7 @@ export class Cookie {
 	public static PROJECT_VIEW_MODE = "project.view_mode";
 
 	public static WARNING_CUSTOM_ROOT = "ui.tree.cls.warnings.customroot";
+	public static WARNING_CODE_CHANGE_VALIDATION = "resource_view.warnings.code_change_validation";
 
 	/**
 	 * Retrieves a single cookie by it's name

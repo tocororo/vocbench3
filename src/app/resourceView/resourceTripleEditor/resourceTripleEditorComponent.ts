@@ -2,9 +2,11 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@
 import { ARTResource } from "../../models/ARTResources";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
+import { Cookie } from "../../utils/Cookie";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "resource-triple-editor",
@@ -15,30 +17,28 @@ export class ResourceTripleEditorComponent {
 
     @Input() resource: ARTResource;
     @Input() readonly: boolean;
+    @Input() pendingValidation: boolean;
     @Output() update: EventEmitter<ARTResource> = new EventEmitter();
 
     @ViewChild('blockDiv') blockDivElement: ElementRef;
 
     private editAuthorized: boolean;
-    private validationEnabled: boolean;
     private pristineDescription: string;
     private description: string;
 
-    constructor(private resourcesService: ResourcesServices) {}
+    constructor(private resourcesService: ResourcesServices, private basicModals: BasicModalServices) {}
 
     ngOnInit() {
         //editor disabled if user has no permission to edit
         this.editAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesUpdateResourceTriplesDescription);
 
-        this.validationEnabled = VBContext.getWorkingProject().isValidationEnabled();
-        if (this.validationEnabled) {
-            this.editAuthorized = false;
-        }
-
         this.initDescription();
     }
 
     private initDescription() {
+        //reinit the descriptions so that when initDescription is invoked after applyChanges, onDescriptionChange is triggered 
+        this.pristineDescription = null;
+        this.description = null;
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.resourcesService.getOutgoingTriples(this.resource, "Turtle").subscribe(
             triples => {
@@ -67,16 +67,28 @@ export class ResourceTripleEditorComponent {
     }
 
     private applyChanges() {
-        if (this.description != this.pristineDescription) { //something changed
-            UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-            this.resourcesService.updateResourceTriplesDescription(this.resource, this.description, "Turtle").subscribe(
+        if (VBContext.getWorkingProject().isValidationEnabled() && Cookie.getCookie(Cookie.WARNING_CODE_CHANGE_VALIDATION, VBContext.getLoggedUser().getIri()) != "false") {
+            this.basicModals.alertCheckWarning("Apply code changes", 
+                "Warning: the current project has the Validation feature enabled. This changes will not undergo to validation.", 
+                Cookie.WARNING_CODE_CHANGE_VALIDATION).then(
                 () => {
-                    UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
-                    this.update.emit(this.resource);
-                    this.initDescription();
+                    this.applyChangesImpl();
                 }
             );
+        } else {
+            this.applyChangesImpl();
         }
+    }
+
+    private applyChangesImpl() {
+        UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
+        this.resourcesService.updateResourceTriplesDescription(this.resource, this.description, "Turtle").subscribe(
+            () => {
+                UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
+                this.update.emit(this.resource);
+                this.initDescription();
+            }
+        );
     }
 
 }

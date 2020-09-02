@@ -77,92 +77,121 @@
             This resource is not available on accessible local projects nor can be reached on the Web
         </div>
         <ng-template [ngIf]="!unexistingResource && !unknownHost">
-            <types-renderer *ngIf="typesColl" [pred-obj-list]="typesColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
+            <types-renderer *ngIf="resViewSections['types']" [pred-obj-list]="resViewSections['types']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </types-renderer>
-            <class-axiom-renderer *ngIf="classAxiomColl" [pred-obj-list]="classAxiomColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <class-axiom-renderer *ngIf="resViewSections['classaxioms']" [pred-obj-list]="resViewSections['classaxioms']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </class-axiom-renderer>
-            <top-concepts-renderer *ngIf="topconceptofColl" [pred-obj-list]="topconceptofColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <top-concepts-renderer *ngIf="resViewSections['topconceptof']" [pred-obj-list]="resViewSections['topconceptof']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </top-concepts-renderer>
-            <schemes-renderer *ngIf="schemesColl" [pred-obj-list]="schemesColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <schemes-renderer *ngIf="resViewSections['schemes']" [pred-obj-list]="resViewSections['schemes']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </schemes-renderer>
-            <broaders-renderer *ngIf="broadersColl" [pred-obj-list]="broadersColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <broaders-renderer *ngIf="resViewSections['broaders']" [pred-obj-list]="resViewSections['broaders']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </broaders-renderer>
-            <superproperties-renderer *ngIf="superpropertiesColl" [pred-obj-list]="superpropertiesColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <superproperties-renderer *ngIf="resViewSections['superproperties']" [pred-obj-list]="resViewSections['superproperties']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly"
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </superproperties-renderer>
-            <equivalent-properties-renderer *ngIf="equivalentPropertiesColl" [pred-obj-list]="equivalentPropertiesColl" [resource]="resource" 
-                [rendering]="rendering" [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <equivalent-properties-renderer *ngIf="resViewSections['equivalentProperties']" [pred-obj-list]="resViewSections['equivalentProperties']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </equivalent-properties-renderer>
-            <disjoint-properties-renderer *ngIf="disjointPropertiesColl" [pred-obj-list]="disjointPropertiesColl" [resource]="resource" 
-                [rendering]="rendering" [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <disjoint-properties-renderer *ngIf="resViewSections['disjointProperties']" [pred-obj-list]="resViewSections['disjointProperties']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </disjoint-properties-renderer>
-            <property-chain-renderer *ngIf="subPropertyChainsColl" [pred-obj-list]="subPropertyChainsColl" [resource]="resource" 
-                [rendering]="rendering" [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <property-chain-renderer *ngIf="resViewSections['subPropertyChains']" [pred-obj-list]="resViewSections['subPropertyChains']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </property-chain-renderer>
-            <subterms-renderer *ngIf="subtermsColl" [pred-obj-list]="subtermsColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <subterms-renderer *ngIf="resViewSections['subterms']" [pred-obj-list]="resViewSections['subterms']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </subterms-renderer>
-            <domains-renderer *ngIf="domainsColl" [pred-obj-list]="domainsColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
+            <domains-renderer *ngIf="resViewSections['domains']" [pred-obj-list]="resViewSections['domains']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </domains-renderer>
-            <ranges-renderer *ngIf="rangesColl" [pred-obj-list]="rangesColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
+            <ranges-renderer *ngIf="resViewSections['ranges']" [pred-obj-list]="resViewSections['ranges']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </ranges-renderer>
-            <property-facets-renderer *ngIf="inverseofColl && propertyFacets" [pred-obj-list]="inverseofColl" [facets]="propertyFacets"
-                [resource]="resource" [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <property-facets-renderer *ngIf="resViewSections['facets'] && propertyFacets" [pred-obj-list]="resViewSections['facets']" [facets]="propertyFacets"
+                [resource]="resource" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </property-facets-renderer>
-            <datatype-definition-renderer *ngIf="datatypeDefinitionColl" [pred-obj-list]="datatypeDefinitionColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <datatype-definition-renderer *ngIf="resViewSections['datatypeDefinitions']" [pred-obj-list]="resViewSections['datatypeDefinitions']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </datatype-definition-renderer>
-            <lexicalizations-renderer *ngIf="lexicalizationsColl" [pred-obj-list]="lexicalizationsColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <lexicalizations-renderer *ngIf="resViewSections['lexicalizations']" [pred-obj-list]="resViewSections['lexicalizations']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </lexicalizations-renderer>
-            <lexical-forms-renderer *ngIf="lexicalFormsColl" [pred-obj-list]="lexicalFormsColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <lexical-forms-renderer *ngIf="resViewSections['lexicalForms']" [pred-obj-list]="resViewSections['lexicalForms']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </lexical-forms-renderer>
-            <lexical-senses-renderer *ngIf="lexicalSensesColl" [pred-obj-list]="lexicalSensesColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <lexical-senses-renderer *ngIf="resViewSections['lexicalSenses']" [pred-obj-list]="resViewSections['lexicalSenses']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </lexical-senses-renderer>
-            <denotations-renderer *ngIf="denotationsColl" [pred-obj-list]="denotationsColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <denotations-renderer *ngIf="resViewSections['denotations']" [pred-obj-list]="resViewSections['denotations']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </denotations-renderer>
-            <evoked-lexical-concepts-renderer *ngIf="evokedLexicalConceptsColl" [pred-obj-list]="evokedLexicalConceptsColl" [resource]="resource"
-                [rendering]="rendering" [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <evoked-lexical-concepts-renderer *ngIf="resViewSections['evokedLexicalConcepts']" [pred-obj-list]="resViewSections['evokedLexicalConcepts']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </evoked-lexical-concepts-renderer>
-            <notes-renderer *ngIf="notesColl" [pred-obj-list]="notesColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
+            <notes-renderer *ngIf="resViewSections['notes']" [pred-obj-list]="resViewSections['notes']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </notes-renderer>
-            <members-renderer *ngIf="membersColl" [pred-obj-list]="membersColl" [resource]="resource" [rendering]="rendering" [readonly]="readonly"
+            <members-renderer *ngIf="resViewSections['members']" [pred-obj-list]="resViewSections['members']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </members-renderer>
-            <members-ordered-renderer *ngIf="membersOrderedColl" [pred-obj-list]="membersOrderedColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <members-ordered-renderer *ngIf="resViewSections['membersOrdered']" [pred-obj-list]="resViewSections['membersOrdered']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </members-ordered-renderer>
-            <label-relations-renderer *ngIf="labelRelationsColl" [pred-obj-list]="labelRelationsColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <label-relations-renderer *ngIf="resViewSections['labelRelations']" [pred-obj-list]="resViewSections['labelRelations']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </label-relations-renderer>
-            <form-representations-renderer *ngIf="formRepresentationsColl" [pred-obj-list]="formRepresentationsColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <form-representations-renderer *ngIf="resViewSections['formRepresentations']" [pred-obj-list]="resViewSections['formRepresentations']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </form-representations-renderer>
-            <form-based-preview-renderer *ngIf="formBasedPreviewColl" [pred-obj-list]="formBasedPreviewColl" [resource]="resource" 
-                [rendering]="rendering" [readonly]="true" (dblclickObj)="objectDblClick($event)">
+            <form-based-preview-renderer *ngIf="resViewSections['formBasedPreview']" [pred-obj-list]="resViewSections['formBasedPreview']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="true" 
+                (dblclickObj)="objectDblClick($event)">
             </form-based-preview-renderer>
-            <imports-renderer *ngIf="importsColl" [pred-obj-list]="importsColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <imports-renderer *ngIf="resViewSections['imports']" [pred-obj-list]="resViewSections['imports']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </imports-renderer>
-            <constituents-renderer *ngIf="constituentsColl" [pred-obj-list]="constituentsColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <constituents-renderer *ngIf="resViewSections['constituents']" [pred-obj-list]="resViewSections['constituents']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </constituents-renderer>
-            <rdfs-members-renderer *ngIf="rdfsMembersColl" [pred-obj-list]="rdfsMembersColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <rdfs-members-renderer *ngIf="resViewSections['rdfsMembers']" [pred-obj-list]="resViewSections['rdfsMembers']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </rdfs-members-renderer>
-            <properties-renderer *ngIf="propertiesColl" [pred-obj-list]="propertiesColl" [resource]="resource" [rendering]="rendering"
-                [readonly]="readonly" (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
+            <properties-renderer *ngIf="resViewSections['properties']" [pred-obj-list]="resViewSections['properties']" 
+                [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
+                (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </properties-renderer>
         </ng-template>
     </div>

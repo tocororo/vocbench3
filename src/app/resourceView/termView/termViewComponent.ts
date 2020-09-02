@@ -118,6 +118,10 @@ export class TermViewComponent extends AbstractResourceView {
         this.resource = Deserializer.createRDFResource(resourcePartition);
         this.update.emit(this.resource);
 
+        if (VBContext.getWorkingProject().isValidationEnabled()) {
+            this.pendingValidation.emit(ResourceUtils.isResourceInStaging(this.resource));
+        }
+
         let broadersColl: ARTPredicateObjects[] = this.initPartition(ResViewPartition.broaders, true);
         if (broadersColl != null) {
             let broaderPredObj: ARTPredicateObjects = broadersColl.find(po => po.getPredicate().equals(SKOS.broader));
@@ -214,6 +218,15 @@ export class TermViewComponent extends AbstractResourceView {
                 this.initLanguages();
             }
         )
+
+        //init every partition (except those already initialized) just for detecting if the resource description is under validation
+        if (VBContext.getWorkingProject().isValidationEnabled()) {
+            for (let p in ResViewPartition) {
+                if (p != ResViewPartition.broaders && p != ResViewPartition.lexicalizations && p != ResViewPartition.notes) {
+                    this.initPartition(this.resViewResponse[p], false)
+                }
+            }
+        }
 
         if (
             //these partitions are always returned, even when resource is not defined, so I need to check also if length == 0
@@ -325,10 +338,21 @@ export class TermViewComponent extends AbstractResourceView {
     private initPartition(partition: ResViewPartition, sort: boolean): ARTPredicateObjects[] {
         let poList: ARTPredicateObjects[];
         let partitionJson: any = this.resViewResponse[partition];
-        poList = Deserializer.createPredicateObjectsList(partitionJson);
-        if (sort) {
-            this.sortObjects(poList);
+        if (partitionJson != null) {
+            poList = Deserializer.createPredicateObjectsList(partitionJson);
+
+            //if the there is a value under validation emit a pendingValidation event
+            if (VBContext.getWorkingProject().isValidationEnabled()) {
+                if (poList.some(po => po.getObjects().some(obj => ResourceUtils.isTripleInStaging(obj)))) {
+                    this.pendingValidation.emit(true);
+                }
+            }
+
+            if (sort) {
+                this.sortObjects(poList);
+            }
         }
+        
         return poList;
     }
 

@@ -1,9 +1,12 @@
+import { EventEmitter, Output } from "@angular/core";
 import { Modal, OverlayConfig } from "ngx-modialog";
 import { BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
 import { ResourceViewServices } from "../../services/resourceViewServices";
 import { ResViewSettingsModal } from "../resViewSettingsModal";
 
 export abstract class AbstractResourceView {
+
+    @Output() pendingValidation: EventEmitter<boolean> = new EventEmitter();
 
     protected resViewService: ResourceViewServices;
     protected modal: Modal;
@@ -17,7 +20,6 @@ export abstract class AbstractResourceView {
      */
     openSettings() {
         const builder = new BSModalContextBuilder<any>();
-        // let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
         return this.modal.open(ResViewSettingsModal, overlayConfig).result;
     }
