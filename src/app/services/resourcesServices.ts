@@ -22,7 +22,7 @@ export class ResourcesServices {
      * @param newValue
      */
     updateTriple(subject: ARTResource, property: ARTURIResource, value: ARTNode, newValue: ARTNode) {
-        var params: any = {
+        let params: any = {
             subject: subject,
             property: property,
             value: value,
@@ -49,7 +49,7 @@ export class ResourcesServices {
      * @param newValue 
      */
     updateLexicalization(subject: ARTResource, property: ARTURIResource, value: ARTLiteral, newValue: ARTLiteral) {
-        var params: any = {
+        let params: any = {
             subject: subject,
             property: property,
             value: value,
@@ -65,7 +65,7 @@ export class ResourcesServices {
      * @param newValue 
      */
     updatePredicateObject(property: ARTURIResource, value: ARTNode, newValue: ARTNode) {
-        var params: any = {
+        let params: any = {
             property: property,
             value: value,
             newValue: newValue
@@ -80,7 +80,7 @@ export class ResourcesServices {
      * @param value
      */
     removeValue(subject: ARTResource, property: ARTURIResource, value: ARTNode) {
-        var params: any = {
+        let params: any = {
             subject: subject,
             property: property,
             value: value
@@ -94,7 +94,7 @@ export class ResourcesServices {
      * @param value 
      */
     removePredicateObject(property: ARTURIResource, value: ARTNode) {
-        var params: any = {
+        let params: any = {
             property: property,
             value: value,
         };
@@ -106,7 +106,7 @@ export class ResourcesServices {
      * @param resource
      */
     setDeprecated(resource: ARTResource) {
-        var params: any = {
+        let params: any = {
             resource: resource,
         };
         return this.httpMgr.doPost(this.serviceName, "setDeprecated", params).map(
@@ -124,7 +124,7 @@ export class ResourcesServices {
      * @param value 
      */
     addValue(subject: ARTResource, property: ARTURIResource, value: ARTNode | CustomFormValue) {
-        var params: any = {
+        let params: any = {
             subject: subject,
             property: property,
             value: value
@@ -137,7 +137,7 @@ export class ResourcesServices {
      * @param resource 
      */
     getResourceDescription(resource: ARTResource, options?: VBRequestOptions): Observable<ARTResource> {
-        var params: any = {
+        let params: any = {
             resource: resource
         };
         return this.httpMgr.doGet(this.serviceName, "getResourceDescription", params, options).map(
@@ -154,7 +154,7 @@ export class ResourcesServices {
      * @param options 
      */
     getOutgoingTriples(resource: ARTResource, format: string): Observable<string> {
-        var params: any = {
+        let params: any = {
             resource: resource,
             format: format
         };
@@ -168,12 +168,18 @@ export class ResourcesServices {
      * @param format 
      */
     updateResourceTriplesDescription(resource: ARTResource, triples: string, format: string) {
-        var params: any = {
+        let params: any = {
             resource: resource,
             triples: triples,
             format: format
         };
-        return this.httpMgr.doPost(this.serviceName, "updateResourceTriplesDescription", params);
+        let options: VBRequestOptions = new VBRequestOptions({
+            errorAlertOpt: { 
+                show: true, 
+                exceptionsToSkip: ['java.lang.IllegalArgumentException'] 
+            } 
+        });
+        return this.httpMgr.doPost(this.serviceName, "updateResourceTriplesDescription", params, options);
     }
 
     /**
@@ -182,7 +188,7 @@ export class ResourcesServices {
      */
     getResourcesInfo(resources: ARTURIResource[]): Observable<ARTURIResource[]> {
         let resourcesIri: string[] = resources.map(r => r.toNT());
-        var params: any = {
+        let params: any = {
             resources: JSON.stringify(resourcesIri)
         };
         return this.httpMgr.doPost(this.serviceName, "getResourcesInfo", params).map(
@@ -197,7 +203,7 @@ export class ResourcesServices {
      * @param resource
      */
     getResourcePosition(resource: ARTURIResource): Observable<ResourcePosition> {
-        var params: any = {
+        let params: any = {
             resource: resource
         };
         return this.httpMgr.doGet(this.serviceName, "getResourcePosition", params).map(
