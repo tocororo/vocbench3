@@ -48,11 +48,14 @@ export class Properties {
 
     static pref_notifications_status: string = "notifications_status";
 
+    //project
+    static label_clash_mode: string = "label_clash_mode";
     static setting_languages: string = "languages";
+
+    //system
     static setting_remote_configs = "remote_configs";
     static setting_experimental_features_enabled = "experimental_features_enabled";
     static setting_home_content = "home_content"
-
     static privacy_statement_available = "privacy_statement_available"
     
 }
@@ -147,6 +150,12 @@ export enum MultischemeMode { //tells if the multi-scheme are considered in AND 
     or = "or"
 }
 
+export enum PrefLabelClashMode {
+    forbid = "forbid", //always forbid
+    warning = "warning", //warn user about the clash and allows to force
+    allow = "allow" //always allow
+}
+
 export class LexicalEntryListPreference {
     visualization: LexEntryVisualizationMode = LexEntryVisualizationMode.indexBased;
     indexLength: number = 1;
@@ -219,6 +228,7 @@ export class ProjectPreferences {
  */
 export class ProjectSettings {
     projectLanguagesSetting: Language[] = []; //all available languages in a project (settings)
+    prefLabelClashMode: PrefLabelClashMode = PrefLabelClashMode.forbid;
 }
 
 /**

@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
-import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, NotificationStatus, PartitionFilterPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewType, ResourceViewMode, ResourceViewPreference, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
+import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, NotificationStatus, PartitionFilterPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewType, ResourceViewMode, ResourceViewPreference, SearchMode, SearchSettings, ValueFilterLanguages, PrefLabelClashMode } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { OWL, RDFS } from '../models/Vocabulary';
 import { AdministrationServices } from '../services/administrationServices';
@@ -478,11 +478,11 @@ export class VBProperties {
     }
 
     initProjectSettings(projectCtx: ProjectContext): Observable<any> {
-        var properties: string[] = [Properties.setting_languages];
+        let properties: string[] = [Properties.setting_languages, Properties.label_clash_mode];
         let projectSettings: ProjectSettings = projectCtx.getProjectSettings();
         return this.prefService.getProjectSettings(properties, projectCtx.getProject()).map(
             settings => {
-                var langsValue: string = settings[Properties.setting_languages];
+                let langsValue: string = settings[Properties.setting_languages];
                 try {
                     projectSettings.projectLanguagesSetting = <Language[]>JSON.parse(langsValue);
                     Languages.sortLanguages(projectSettings.projectLanguagesSetting);
@@ -493,6 +493,11 @@ export class VBProperties {
                         { name: "German" , tag: "de" }, { name: "English" , tag: "en" }, { name: "Spanish" , tag: "es" },
                         { name: "French" , tag: "fr" }, { name: "Italian" , tag: "it" }
                     ];
+                }
+
+                let labelClashModeValue = settings[Properties.label_clash_mode];
+                if (labelClashModeValue != null && labelClashModeValue in PrefLabelClashMode) { //if not null and valid enum
+                    projectSettings.prefLabelClashMode = labelClashModeValue;
                 }
             }
         );
