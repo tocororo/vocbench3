@@ -63,6 +63,7 @@ export class LoadDataComponent {
     private selectedLifterConfig: Settings;
 
     private inputFormats: DataFormat[];
+    private forceFormat: boolean = false;
     private selectedInputFormat: DataFormat;
     private filePickerAccept: string;
 
@@ -122,12 +123,10 @@ export class LoadDataComponent {
         this.inOutService.getParserFormatForFileName(file.name).subscribe(
             format => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                if (format != null) {
-                    for (var i = 0; i < this.inputFormats.length; i++) {
-                        if (this.inputFormats[i].name == format) {
-                            this.selectedInputFormat = this.inputFormats[i];
-                            return;
-                        }
+                if (format != null && !this.forceFormat) {
+                    let formatToSelect = this.inputFormats.find(f => f.name == format);
+                    if (formatToSelect != null) {
+                        this.selectedInputFormat = formatToSelect;
                     }
                 }
             }
@@ -182,15 +181,6 @@ export class LoadDataComponent {
             formats => {
                 this.inputFormats = formats;
                 let extList: string[] = []; //collects the extensions of the formats in order to provide them to the file picker
-                //set rdf/xml format as default
-                let rdfIdx: number = 0;
-                for (var i = 0; i < this.inputFormats.length; i++) {
-                    extList.push("."+this.inputFormats[i].defaultFileExtension);
-                    if (this.inputFormats[i].name == "RDF/XML") {
-                        rdfIdx = i;
-                    }
-                }
-                this.selectedInputFormat = this.inputFormats[rdfIdx];
                 //remove duplicated extensions
                 extList = extList.filter((item: string, pos: number) => {
                     return extList.indexOf(item) == pos;
@@ -463,6 +453,10 @@ export class LoadDataComponent {
          * - dataset catalog (even if for the latter is not show in the UI)
          */
         if (this.selectedLoader.target == null || this.selectedLoader.target == LoaderTarget.stream || this.selectedLoader.target == LoaderTarget.datasetCatalog) {
+            if (this.selectedInputFormat == null) {
+                this.basicModals.alert("Load Data", "Format required. The system has not been able to determine a format according the input.", "warning");
+                return;
+            }
             formatPar = this.selectedInputFormat.name;
             //rdfLifterSpec
             rdfLifterSpec = {

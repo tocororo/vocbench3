@@ -47,9 +47,7 @@
                         </div>
                         <label class="control-label col-sm-1">Format:</label>
                         <div class="col-sm-5">
-                            <select class="form-control input-sm" [(ngModel)]="selectedInputFormat">
-                                <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
-                            </select>
+                            <ng-container *ngTemplateOutlet="formatSelectionTemplate"></ng-container>
                         </div>
                     </div>
 
@@ -87,9 +85,7 @@
                         </div>
                         <label class="control-label col-sm-1">Format:</label>
                         <div class="col-sm-5">
-                            <select class="form-control input-sm" [(ngModel)]="selectedInputFormat">
-                                <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
-                            </select>
+                            <ng-container *ngTemplateOutlet="formatSelectionTemplate"></ng-container>
                         </div>
                     </div>
 
@@ -189,3 +185,27 @@
         <span class="clearfix"></span> <!--To fix UI bug-->
     </div>
 </div>
+
+<ng-template #formatSelectionTemplate>
+    <div class="hbox" style="align-items: center;">
+        <ng-container *ngIf="!selectedInputFormat && !forceFormat; then unkownFormatBlock; else selectFormatBlock"></ng-container>
+        <ng-template #unkownFormatBlock>
+            <select class="form-control input-sm" disabled>
+                <option>Detect Format</option>
+            </select>
+        </ng-template>
+        <ng-template #selectFormatBlock>
+            <select class="form-control input-sm" [(ngModel)]="selectedInputFormat" [disabled]="!forceFormat">
+                <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>    
+            </select>
+        </ng-template>
+        <div class="checkbox-inline" style="margin-left: 6px;">
+            <label style="white-space: nowrap;">
+                <input type="checkbox" [(ngModel)]="forceFormat">
+                Force format
+                <span class="glyphicon glyphicon-info-sign" title="Allows forcing the selection of a format overriding the one detected by the system">
+                </span>
+            </label>
+        </div>
+    </div>
+</ng-template>
