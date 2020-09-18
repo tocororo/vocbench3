@@ -276,9 +276,9 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         this.resViewSections[ResViewPartition.formRepresentations] = this.initPartition(ResViewPartition.formRepresentations, partitionFilter, true);
         this.resViewSections[ResViewPartition.imports] = this.initPartition(ResViewPartition.imports, partitionFilter, true);
         this.resViewSections[ResViewPartition.labelRelations] = this.initPartition(ResViewPartition.labelRelations, partitionFilter, true);
-        this.resViewSections[ResViewPartition.lexicalForms] = this.initPartition(ResViewPartition.lexicalizations, partitionFilter, false); //the sort is performed in the partition according the language
-        this.resViewSections[ResViewPartition.lexicalSenses] = this.initPartition(ResViewPartition.lexicalForms, partitionFilter, true);
-        this.resViewSections[ResViewPartition.lexicalizations] = this.initPartition(ResViewPartition.lexicalSenses, partitionFilter, true);
+        this.resViewSections[ResViewPartition.lexicalForms] = this.initPartition(ResViewPartition.lexicalForms, partitionFilter, true);
+        this.resViewSections[ResViewPartition.lexicalSenses] = this.initPartition(ResViewPartition.lexicalSenses, partitionFilter, true);
+        this.resViewSections[ResViewPartition.lexicalizations] = this.initPartition(ResViewPartition.lexicalizations, partitionFilter, false); //the sort is performed in the partition according the language
         this.resViewSections[ResViewPartition.members] = this.initPartition(ResViewPartition.members, partitionFilter, true);
         this.resViewSections[ResViewPartition.membersOrdered] = this.initOrderedMembersPartition(ResViewPartition.membersOrdered, partitionFilter);//dedicated initialization
         this.resViewSections[ResViewPartition.notes] = this.initPartition(ResViewPartition.notes, partitionFilter, true);
