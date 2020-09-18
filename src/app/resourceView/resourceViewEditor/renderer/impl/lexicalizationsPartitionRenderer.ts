@@ -65,7 +65,8 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                     function (a: ARTNode, b: ARTNode) {
                         if (a.getAdditionalProperty(ResAttribute.LANG) < b.getAdditionalProperty(ResAttribute.LANG)) return -1;
                         if (a.getAdditionalProperty(ResAttribute.LANG) > b.getAdditionalProperty(ResAttribute.LANG)) return 1;
-                        return 0;
+                        //same lang code, order alphabetically
+                        return a.getShow().localeCompare(b.getShow());
                     }
                 );
             }
