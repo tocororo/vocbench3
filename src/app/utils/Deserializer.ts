@@ -250,14 +250,17 @@ export class Deserializer {
     }
 
     public static createPredicateObjectsList(poList: any, additionalAttr?: string[]): ARTPredicateObjects[] {
-        var result: ARTPredicateObjects[] = [];
+        let poLists: ARTPredicateObjects[] = [];
         for (var i = 0; i < poList.length; i++) {
-            var predicate = this.createURI(poList[i].predicate, additionalAttr);
-            var objects = this.createRDFNodeArray(poList[i].objects, additionalAttr);
-            var predicateObjects = new ARTPredicateObjects(predicate, objects);
-            result.push(predicateObjects);
+            let predicate = this.createURI(poList[i].predicate, additionalAttr);
+            let objects = this.createRDFNodeArray(poList[i].objects, additionalAttr);
+            let predicateObjects = new ARTPredicateObjects(predicate, objects);
+            poLists.push(predicateObjects);
         }
-        return result;
+        poLists.sort((po1, po2) => {
+            return po1.getPredicate().getShow().localeCompare(po2.getPredicate().getShow());
+        })
+        return poLists;
     };
 
     /**
