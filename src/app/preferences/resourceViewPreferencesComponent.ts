@@ -30,6 +30,7 @@ export class ResourceViewPreferencesComponent {
     private selectedRvConceptType: ResViewConceptTypeOpt;
 
     private displayImg: boolean;
+    private showDeprecated: boolean;
 
     constructor(private vbProp: VBProperties, private eventHandler: VBEventHandler) { }
 
@@ -38,6 +39,7 @@ export class ResourceViewPreferencesComponent {
         this.resViewMode = rvPrefs.mode;
         this.resViewTabSync = rvPrefs.syncTabs;
         this.displayImg = rvPrefs.displayImg;
+        this.showDeprecated = rvPrefs.showDeprecated;
 
         this.selectedRvConceptType = this.rvConceptTypes.find(t => t.type == rvPrefs.defaultConceptType);
         //selection of RV type for concept available only in skos and ontolex projects
@@ -60,6 +62,10 @@ export class ResourceViewPreferencesComponent {
 
     private onDisplayImgChange() {
         this.vbProp.setResourceViewDisplayImg(this.displayImg);
+    }
+
+    private onShowDeprecatedChange() {
+        this.vbProp.setShowDeprecatedInResView(this.showDeprecated);
     }
 
 }

@@ -75,5 +75,19 @@
             </div>
         </div>
 
+        <div class="panel panel-default" style="margin-top: 4px">
+            <div class="panel-body">
+                <div class="checkbox-inline">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="showDeprecated" (ngModelChange)="onShowDeprecatedChange()">
+                        Show deprecated values
+                        <span class="glyphicon glyphicon-info-sign"
+                            title="If enabled, linked resources marked as deprecated will be shown in the ResourceView">
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

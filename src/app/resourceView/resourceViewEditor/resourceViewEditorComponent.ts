@@ -447,6 +447,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     private filterPredObjList(predObjList: ARTPredicateObjects[]) {
         this.filterInferredFromPredObjList(predObjList);
         this.filterValueLanguageFromPrefObjList(predObjList);
+        this.filterDeprecatedValues(predObjList);
     }
 
     /**
@@ -484,6 +485,28 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                     let lang = objList[j].getAdditionalProperty(ResAttribute.LANG);
                     //remove the object if it has a language not in the languages list of the filter
                     if (lang != null && valueFilterLanguages.indexOf(lang) == -1) {
+                        objList.splice(j, 1);
+                        j--;
+                    }
+                }
+                //after filtering the objects list, if the predicate has no more objects, remove it from predObjList
+                if (objList.length == 0) {
+                    predObjList.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+    }
+
+    private filterDeprecatedValues(predObjList: ARTPredicateObjects[]) {
+        let showDeprecated = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().resViewPreferences.showDeprecated;
+        if (!showDeprecated) {
+            for (let i = 0; i < predObjList.length; i++) {
+                let objList: ARTNode[] = predObjList[i].getObjects();
+                for (let j = 0; j < objList.length; j++) {
+                    let obj = objList[j];
+                    if (obj instanceof ARTResource && obj.isDeprecated()) {
+                        //remove the object if it is deprecated
                         objList.splice(j, 1);
                         j--;
                     }

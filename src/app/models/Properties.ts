@@ -69,6 +69,7 @@ export class ResourceViewPreference {
     resViewPartitionFilter: PartitionFilterPreference;
     rendering: boolean = true;
     inference: boolean = false;
+    showDeprecated: boolean = true;
 }
 
 export enum ResourceViewMode {

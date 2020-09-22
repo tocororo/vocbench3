@@ -539,6 +539,11 @@ export class VBProperties {
         if (displayImgCookie != null) {
             rvPrefs.displayImg = displayImgCookie == "true"; //default false
         }
+        //show deprecated
+        let showDeprecatedCookie = Cookie.getCookie(Cookie.RES_VIEW_SHOW_DEPRECATED);
+        if (showDeprecatedCookie != null) {
+            rvPrefs.showDeprecated = showDeprecatedCookie != "false"; //default true
+        }
     }
 
     /**
@@ -578,6 +583,15 @@ export class VBProperties {
     setResourceViewDisplayImg(display: boolean) {
         Cookie.setCookie(Cookie.RES_VIEW_DISPLAY_IMG, display + "");
         VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.displayImg = display;
+    }
+
+    /**
+     * ResView show deprecated linked resources
+     * @param display 
+     */
+    setShowDeprecatedInResView(show: boolean) {
+        Cookie.setCookie(Cookie.RES_VIEW_SHOW_DEPRECATED, show + "");
+        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.showDeprecated = show;
     }
 
     /**
