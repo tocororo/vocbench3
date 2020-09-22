@@ -16,7 +16,15 @@ export class ResourceUtils {
             let collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" });
             list.sort(
                 function (r1: ARTNode, r2: ARTNode) {
-                    return collator.compare(r1.getShow().toLowerCase(), r2.getShow().toLowerCase());
+                    //if both resources have language tag (literals or reified resources with lang), sort according lang
+                    if (r1.getAdditionalProperty(ResAttribute.LANG) != null && r2.getAdditionalProperty(ResAttribute.LANG) != null) {
+                        if (r1.getAdditionalProperty(ResAttribute.LANG) < r2.getAdditionalProperty(ResAttribute.LANG)) return -1;
+                        if (r1.getAdditionalProperty(ResAttribute.LANG) > r2.getAdditionalProperty(ResAttribute.LANG)) return 1;
+                        //same lang code, order alphabetically
+                        return collator.compare(r1.getShow().toLowerCase(), r2.getShow().toLowerCase());
+                    } else {
+                        return collator.compare(r1.getShow().toLowerCase(), r2.getShow().toLowerCase());
+                    }
                 }
             );
         }
