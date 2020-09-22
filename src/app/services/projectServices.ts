@@ -364,10 +364,19 @@ export class ProjectServices {
      */
     public handleMissingChangetrackierSailError(error: Error, basicModals: BasicModalServices) {
         if (error.name.endsWith("ProjectAccessException") || error.name.endsWith("RepositoryException")) {
-            if (error.message.includes("Unsupported Sail type: http://semanticturkey.uniroma2.it/sail/changetracker")) {
-                let message = "The changetracker sail, required for history and validation, " + 
+            let msg = error.message;
+            let errMsgPattern = "\.*Unsupported Sail type: (\.+)";
+            let msgMatch = msg.match(errMsgPattern);
+            if (msgMatch != null) {
+                let sailMap: {[key:string]: { feature: string, jar: string }} = {
+                    ["http://semanticturkey.uniroma2.it/sail/trivialinferencer"]: { feature: "Trivial Inference", jar: "st-trivial-inference-sail.jar" },
+                    ["http://semanticturkey.uniroma2.it/sail/changetracker"]: { feature: "History and Validation", jar: "st-changetracking-sail.jar" },
+                }
+                let missingSailUrl = msgMatch[1];
+                let missingSail = sailMap[missingSailUrl];
+                let message = "The sail required for the " + missingSail.feature + " feature " + 
                     "is reported to be missing from the triple store; please contact the administrator in order to " + 
-                    "have the st-changetracking-sail.jar bundle deployed within the triple store connected for this project";
+                    "have the " + missingSail.jar + " bundle deployed within the triple store connected for this project";
                 basicModals.alert("Error", message, "error", error.name + ": " + error.message);
             } else {
                 let errorMsg = error.message != null ? error.message : "Unknown response from the server";
