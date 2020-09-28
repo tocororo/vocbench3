@@ -3,7 +3,6 @@ import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
 import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { PatternStruct, ResourceMetadataUtils } from "../../models/ResourceMetadata";
 import { ResourceMetadataServices } from "../../services/resourceMetadataServices";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { MetadataPatternEditorModal, MetadataPatternEditorModalData } from "./metadataPatternEditorModal";
 
 export class MetadataFactoryPatternSelectionModalData extends BSModalContext {
@@ -29,7 +28,7 @@ export class MetadataFactoryPatternSelectionModal implements ModalComponent<Meta
     private selectedPattern: PatternStruct;
 
     constructor(public dialog: DialogRef<MetadataFactoryPatternSelectionModalData>, private resourceMetadataService: ResourceMetadataServices,
-        private basicModals: BasicModalServices, private modal: Modal) {
+        private modal: Modal) {
         this.context = dialog.context;
     }
 

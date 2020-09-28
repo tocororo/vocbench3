@@ -1,12 +1,11 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { Language, Languages } from "../../models/LanguagesCountries";
 import { Project } from "../../models/Project";
 import { Properties } from "../../models/Properties";
-import { Language, Languages } from "../../models/LanguagesCountries";
-import { UIUtils } from "../../utils/UIUtils";
-import { VBProperties } from "../../utils/VBProperties";
-import { VBContext } from "../../utils/VBContext";
 import { PreferencesSettingsServices } from "../../services/preferencesSettingsServices";
+import { VBContext } from "../../utils/VBContext";
+import { VBProperties } from "../../utils/VBProperties";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "project-settings",

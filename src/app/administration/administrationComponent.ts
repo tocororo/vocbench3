@@ -1,8 +1,7 @@
 import { Component } from "@angular/core";
-import { Router } from '@angular/router';
-import { VBContext } from "../utils/VBContext";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "../utils/VBActions";
+import { VBContext } from "../utils/VBContext";
 
 @Component({
     selector: "admin-component",
@@ -11,7 +10,7 @@ import { VBActionsEnum } from "../utils/VBActions";
 })
 export class AdministrationComponent {
 
-    constructor(private router: Router) { }
+    constructor() { }
 
     private isAdmin(): boolean {
         var user = VBContext.getLoggedUser();

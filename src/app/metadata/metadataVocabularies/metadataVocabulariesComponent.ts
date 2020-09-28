@@ -5,7 +5,6 @@ import { RDFFormat } from "../../models/RDFFormat";
 import { DatasetMetadataServices } from "../../services/datasetMetadataServices";
 import { ExportServices } from "../../services/exportServices";
 import { ExtensionsServices } from "../../services/extensionsServices";
-import { PluginsServices } from "../../services/pluginsServices";
 import { SettingsServices } from "../../services/settingsServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
@@ -31,8 +30,7 @@ export class MetadataVocabulariesComponent {
     private extensionPointSettings: Settings;
 
     constructor(private metadataExporterService: DatasetMetadataServices, private exportService: ExportServices,
-        private extensionService: ExtensionsServices, private settingsService: SettingsServices,
-        private pluginService: PluginsServices, private basicModals: BasicModalServices) { }
+        private extensionService: ExtensionsServices, private settingsService: SettingsServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.exportService.getOutputFormats().subscribe(

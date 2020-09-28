@@ -1,6 +1,4 @@
 import { Component } from "@angular/core";
-import { ConfigurationsServices } from "../services/configurationsServices";
-import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
     selector: "sparql-component",
@@ -22,7 +20,7 @@ export class SparqlComponent {
 
     private tabs: Array<Tab> = [];
 
-    constructor(private sharedModals: SharedModalServices, private configurationService: ConfigurationsServices) { }
+    constructor() { }
 
     ngOnInit() {
         this.addQueryTab();

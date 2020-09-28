@@ -1,9 +1,8 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { CustomFormsServices } from "../../services/customFormsServices";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { BrokenCFStructure } from "../../models/CustomForms";
+import { CustomFormsServices } from "../../services/customFormsServices";
 
 @Component({
     selector: "broken-cfs-report-modal",

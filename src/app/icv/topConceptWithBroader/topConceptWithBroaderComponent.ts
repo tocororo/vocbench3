@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
-import { ARTURIResource, RDFResourceRolesEnum, ARTResource } from "../../models/ARTResources";
-import { UIUtils } from "../../utils/UIUtils";
+import { ARTURIResource } from "../../models/ARTResources";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
+import { UIUtils } from "../../utils/UIUtils";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
 @Component({

@@ -1,10 +1,10 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "ngx-modialog";
-import { UserServices } from "../../services/userServices";
-import { AdministrationServices } from "../../services/administrationServices";
-import { User, Role } from "../../models/User";
+import { Component } from "@angular/core";
+import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { Project } from "../../models/Project";
+import { Role, User } from "../../models/User";
+import { AdministrationServices } from "../../services/administrationServices";
+import { UserServices } from "../../services/userServices";
 
 export class UserProjBindingModalData extends BSModalContext {
     constructor(public title: string = 'Modal Title', public project: Project, public usersBound: Array<User>) {

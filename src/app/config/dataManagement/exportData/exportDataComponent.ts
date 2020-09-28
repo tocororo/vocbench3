@@ -1,10 +1,10 @@
-import { Component, QueryList, ViewChildren, ViewChild } from "@angular/core";
+import { Component, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { ARTURIResource } from "../../../models/ARTResources";
 import { ConfigurationComponents } from "../../../models/Configuration";
-import { ConfigurableExtensionFactory, ExtensionConfigurationStatus, ExtensionPointID, TransformationStep, Settings, SettingsProp, ExtensionFactory, PluginSpecification } from "../../../models/Plugins";
-import { RDFFormat, DataFormat } from "../../../models/RDFFormat";
+import { ConfigurableExtensionFactory, ExtensionConfigurationStatus, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings, SettingsProp, TransformationStep } from "../../../models/Plugins";
+import { DataFormat } from "../../../models/RDFFormat";
 import { ExportServices } from "../../../services/exportServices";
 import { ExtensionsServices } from "../../../services/extensionsServices";
 import { UIUtils } from "../../../utils/UIUtils";

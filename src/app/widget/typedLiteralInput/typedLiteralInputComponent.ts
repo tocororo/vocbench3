@@ -1,7 +1,7 @@
 import { Component, EventEmitter, forwardRef, Input, Output } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTLiteral, ARTURIResource } from "../../models/ARTResources";
-import { ConstrainingFacets, FacetsRestriction } from "../../models/Datatypes";
+import { ConstrainingFacets } from "../../models/Datatypes";
 import { RDF, RDFS, XmlSchema } from "../../models/Vocabulary";
 import { DatatypesServices } from "../../services/datatypesServices";
 import { DatatypeValidator } from "../../utils/DatatypeValidator";

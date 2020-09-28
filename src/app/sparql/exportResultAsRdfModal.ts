@@ -1,14 +1,14 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ConfigurableExtensionFactory, ExtensionPointID, Settings, TransformationStep } from "../models/Plugins";
+import { RDFFormat } from "../models/RDFFormat";
 import { ExportServices } from "../services/exportServices";
 import { ExtensionsServices } from "../services/extensionsServices";
 import { SparqlServices } from "../services/sparqlServices";
-import { RDFFormat } from "../models/RDFFormat";
-import { Settings, ExtensionPointID, ExtensionFactory, TransformationStep, ConfigurableExtensionFactory } from "../models/Plugins";
-import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { UIUtils } from "../utils/UIUtils";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
 export class ExportResultAsRdfModalData extends BSModalContext {
     constructor(public query: string, public inferred: boolean) {

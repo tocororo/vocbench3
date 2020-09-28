@@ -1,13 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CollaborationServices } from "../services/collaborationServices";
-import { ResourcesServices } from '../services/resourcesServices';
 import { AuthorizationEvaluator } from '../utils/AuthorizationEvaluator';
 import { VBActionsEnum } from '../utils/VBActions';
 import { VBCollaboration } from '../utils/VBCollaboration';
 import { VBEventHandler } from '../utils/VBEventHandler';
-import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
-import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { CollaborationModalServices } from './collaborationModalService';
 import { IssueListComponent } from './issueListComponent';
 
@@ -31,9 +27,7 @@ export class CollaborationComponent {
 
     private csWorking: boolean;
 
-    constructor(private collaborationService: CollaborationServices, private resourceService: ResourcesServices, private vbCollaboration: VBCollaboration, 
-        private collModals: CollaborationModalServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices,
-        private eventHandler: VBEventHandler) {
+    constructor(private vbCollaboration: VBCollaboration, private collModals: CollaborationModalServices, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.collaborationSystemStatusChanged.subscribe(
             () => this.onCollaborationSystemStatusChange()
         ));

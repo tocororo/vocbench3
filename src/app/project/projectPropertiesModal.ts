@@ -1,8 +1,8 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "ngx-modialog";
-import {ProjectServices} from "../services/projectServices";
-import {Project} from '../models/Project';
+import { Component } from "@angular/core";
+import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Project } from '../models/Project';
+import { ProjectServices } from "../services/projectServices";
 
 export class ProjectPropertiesModalData extends BSModalContext {
     constructor(public project: Project) {

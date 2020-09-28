@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ARTURIResource, RDFResourceRolesEnum, ARTLiteral, ARTNode } from '../../models/ARTResources';
+import { ARTNode, RDFResourceRolesEnum } from '../../models/ARTResources';
 import { SettingsPropType, SettingsPropTypeConstraint } from '../../models/Plugins';
 
 @Component({

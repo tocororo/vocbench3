@@ -1,10 +1,9 @@
-import { Component, forwardRef, Input } from "@angular/core";
+import { Component, forwardRef } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
 import { PartitionFilterPreference } from "../../models/Properties";
 import { ResViewPartition, ResViewUtils } from "../../models/ResourceView";
 import { ResourceUtils } from "../../utils/ResourceUtils";
-import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../modal/basicModal/basicModalServices";
 
 @Component({

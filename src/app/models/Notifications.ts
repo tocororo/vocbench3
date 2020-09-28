@@ -1,4 +1,4 @@
-import { RDFResourceRolesEnum, ARTResource } from "./ARTResources";
+import { RDFResourceRolesEnum } from "./ARTResources";
 
 export enum Action {
     any = "any",

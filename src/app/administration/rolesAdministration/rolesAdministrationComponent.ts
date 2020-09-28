@@ -1,13 +1,12 @@
 import { Component } from "@angular/core";
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { OverlayConfig } from 'ngx-modialog';
+import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { Role } from "../../models/User";
+import { AdministrationServices } from "../../services/administrationServices";
+import { VBContext } from "../../utils/VBContext";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { CapabilityEditorModal, CapabilityEditorModalData } from "./capabilityEditorModal";
 import { ImportRoleModal, ImportRoleModalData } from "./importRoleModal";
-import { AdministrationServices } from "../../services/administrationServices";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { Role } from "../../models/User";
-import { Project } from "../../models/Project";
-import { VBContext } from "../../utils/VBContext";
 
 @Component({
     selector: "roles-admin-component",

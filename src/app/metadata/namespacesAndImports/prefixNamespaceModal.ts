@@ -1,6 +1,6 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "ngx-modialog";
+import { Component } from "@angular/core";
+import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 
 export class PrefixNamespaceModalData extends BSModalContext {
     /**

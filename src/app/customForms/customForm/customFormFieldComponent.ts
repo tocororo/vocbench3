@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, SimpleChanges } from "@angular/core";
+import { Component, forwardRef, Input } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTNode } from "../../models/ARTResources";
 import { FormField } from "../../models/CustomForms";

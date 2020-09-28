@@ -1,7 +1,7 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "ngx-modialog";
-import {CustomForm, FormCollection} from "../../models/CustomForms";
+import { Component } from "@angular/core";
+import { DialogRef, ModalComponent } from "ngx-modialog";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { CustomForm, FormCollection } from "../../models/CustomForms";
 
 export class ImportCfModalData extends BSModalContext {
     /**
