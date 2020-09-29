@@ -230,7 +230,7 @@ export class MetadataServices {
      * @param mirrorFile 
      * @param transitiveImportAllowance 
      */
-    getFromLocalFile(baseURI: string, localFile: File, mirrorFile: string, transitiveImportAllowance: TransitiveImportMethodAllowance) {
+    getFromLocalFile(baseURI: string, localFile: File, transitiveImportAllowance: TransitiveImportMethodAllowance, mirrorFile?: string) {
         var data = {
             baseURI: baseURI,
             localFile: localFile,

@@ -6,7 +6,7 @@ import { MetadataServices } from "../../../services/metadataServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
-import { ImportOntologyModal, ImportOntologyModalData } from "../importOntologyModal";
+import { ImportOntologyModal, ImportOntologyModalData, ImportOntologyReturnData, RepairFromLocalFileData, RepairFromWebData, RepairFromWebToMirrorData } from "../importOntologyModal";
 
 @Component({
     selector: "import-tree-node",
@@ -27,10 +27,10 @@ export class ImportTreeNodeComponent {
 
     private repairFromLocalFile() {
         this.openImportModal("Repair failed import from local file", ImportType.fromLocalFile).then(
-            (data: any) => {
+            (data: RepairFromLocalFileData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-                this.metadataService.getFromLocalFile(data.baseURI, data.localFile, data.mirrorFile, data.transitiveImportAllowance).subscribe(
-                    stResp => {
+                this.metadataService.getFromLocalFile(data.baseURI, data.localFile, data.transitiveImportAllowance, data.mirrorFile).subscribe(
+                    () => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.update.emit();
                     }
@@ -42,10 +42,10 @@ export class ImportTreeNodeComponent {
 
     private repairFromWeb() {
         this.openImportModal("Repair failed import from web", ImportType.fromWeb).then(
-            (data: any) => {
+            (data: RepairFromWebData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.downloadFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
-                    stResp => {
+                    () => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.update.emit();
                     }
@@ -57,11 +57,11 @@ export class ImportTreeNodeComponent {
 
     private repairFromWebToMirror() {
         this.openImportModal("Repair failed import from web to mirror", ImportType.fromWebToMirror).then(
-            (data: any) => {
+            (data: RepairFromWebToMirrorData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.downloadFromWebToMirror(
                     data.baseURI, data.mirrorFile, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
-                    stResp => {
+                    () => {
                         UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.update.emit();
                     }
@@ -82,7 +82,7 @@ export class ImportTreeNodeComponent {
      * fromLocalFile) object contains "baseURI", "localFile" and "mirrorFile";
      * fromOntologyMirror) mirror object contains "namespace" and "file".
      */
-    private openImportModal(title: string, importType: ImportType) {
+    private openImportModal(title: string, importType: ImportType): Promise<ImportOntologyReturnData> {
         var modalData = new ImportOntologyModalData(title, importType, this.import.id);
         const builder = new BSModalContextBuilder<ImportOntologyModalData>(
             modalData, undefined, ImportOntologyModalData

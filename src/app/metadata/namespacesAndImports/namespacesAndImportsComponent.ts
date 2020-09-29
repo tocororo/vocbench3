@@ -13,6 +13,7 @@ import { VBActionsEnum } from "../../utils/VBActions";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { ImportFromDatasetCatalogModalReturnData } from "./importFromDatasetCatalogModal";
+import { ImportFromLocalFileData, ImportFromMirrorData, ImportFromWebData, ImportFromWebToMirrorData } from "./importOntologyModal";
 import { OntologyMirrorModal } from "./ontologyMirrorModal";
 
 @Component({
@@ -291,7 +292,7 @@ export class NamespacesAndImportsComponent {
      */
     private importFromWeb() {
         this.sharedModals.importOntology("Import from web", ImportType.fromWeb).then(
-            (data: any) => {
+            (data: ImportFromWebData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
@@ -313,7 +314,7 @@ export class NamespacesAndImportsComponent {
      */
     private importFromWebToMirror() {
         this.sharedModals.importOntology("Import from web to mirror", ImportType.fromWebToMirror).then(
-            (data: any) => {
+            (data: ImportFromWebToMirrorData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromWebToMirror(data.baseURI, data.mirrorFile, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
                     stResp => {
@@ -335,7 +336,7 @@ export class NamespacesAndImportsComponent {
      */
     private importFromLocalFile() {
         this.sharedModals.importOntology("Import from local file", ImportType.fromLocalFile).then(
-            (data: any) => {
+            (data: ImportFromLocalFileData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromLocalFile(data.baseURI, data.localFile, data.mirrorFile, data.transitiveImportAllowance).subscribe(
                     stResp => {
@@ -357,7 +358,7 @@ export class NamespacesAndImportsComponent {
      */
     private importFromOntologyMirror() {
         this.sharedModals.importOntology("Import from ontology mirror", ImportType.fromOntologyMirror).then(
-            (data: any) => {
+            (data: ImportFromMirrorData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.metadataService.addFromMirror(data.mirror.baseURI, data.mirror.file, data.transitiveImportAllowance).subscribe(
                     stResp => {

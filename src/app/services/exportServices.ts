@@ -67,8 +67,8 @@ export class ExportServices {
         return this.httpMgr.doGet(this.serviceName, "getExportFormats", params).map(
             stResp => {
                 let formats: DataFormat[] = [];
-                for (var i = 0; i < stResp.length; i++) {
-                    formats.push(new DataFormat(stResp[i].name, stResp[i].defaultMimeType, stResp[i].defaultFileExtension));
+                for (let f of stResp) {
+                    formats.push(DataFormat.parse(f));
                 }
                 //sort by name
                 formats.sort(

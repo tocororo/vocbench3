@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ImportType, TransitiveImportMethodAllowance } from "../../models/Metadata";
+import { ImportType, OntologyMirror, TransitiveImportMethodAllowance } from "../../models/Metadata";
 import { RDFFormat } from "../../models/RDFFormat";
 import { ExportServices } from "../../services/exportServices";
 import { OntoManagerServices } from "../../services/ontoManagerServices";
@@ -28,11 +28,13 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
 
     private editorMode: EditorMode = EditorMode.import;
 
+    private baseURIOptional: boolean;
     private baseURICheck: boolean; //used for type "fromLocalFile" (its value is computed in the method ngOnInit())
     private baseURI: string; //used for type "fromWeb", "fromWebToMirror", "fromLocalFile"
 
     private localFile: File; //used for type "fromLocalFile"
 
+    private mirrorFileOptional: boolean;
     private mirrorFileCheck: boolean; //used for type "fromWebToMirror", "fromLocalFile" (its value is computed in the method ngOnInit())
     private mirrorFile: string; //used for type "fromWebToMirror", "fromLocalFile"
 
@@ -43,8 +45,8 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
     private formats: RDFFormat[];
     private rdfFormat: RDFFormat; //used for type "fromWeb", "fromWebToMirror"
 
-    private mirrorList: Array<{ file: string, baseURI: string }>; //used for type "fromOntologyMirror"
-    private selectedMirror: { file: string, baseURI: string }; //used for type "fromOntologyMirror"
+    private mirrorList: OntologyMirror[]; //used for type "fromOntologyMirror"
+    private selectedMirror: OntologyMirror; //used for type "fromOntologyMirror"
 
     private importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
         { allowance: TransitiveImportMethodAllowance.nowhere, show: "Do not resolve" },
@@ -87,9 +89,10 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
             this.editorMode = EditorMode.repair;
             this.baseURI = this.context.baseURI;
         }
-        //baseURI and mirrorFile are optional when importing local files
-        this.baseURICheck = this.context.importType != ImportType.fromLocalFile;
-        this.mirrorFileCheck = this.context.importType !=  ImportType.fromLocalFile;
+        //baseURI is always mandatory, except in import from local file
+        this.baseURIOptional = this.editorMode == EditorMode.import && this.context.importType == ImportType.fromLocalFile;
+        //mirror file is mandatory in import fromMirror, fromWebToMirror and in repair fromWebToMirror. Optional in import and repair fromLocalFile
+        this.mirrorFileOptional = this.context.importType == ImportType.fromLocalFile;
     }
 
     private fileChangeEvent(file: File) {
@@ -129,48 +132,71 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
         }
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        let returnedParam: RDFFormat;
-        if (this.forceFormatCheck) {
-            returnedParam = this.rdfFormat;
-        }
-        let returnedAltUrl: string;
-        if (this.altURLCheck) {
-            returnedAltUrl = this.altURL;
-        }
-        let returnedBaseURI: string;
-        let returnedMirrorFile: string;
-        if (this.editorMode == EditorMode.import) { //when import, baseURI and mirror File are optional
-            if (this.baseURICheck) {
-                returnedBaseURI = this.baseURI;
-            }
-            if (this.mirrorFileCheck) {
-                returnedMirrorFile = this.mirrorFile;
-            }
-        } else { //repair
-            returnedBaseURI = this.baseURI;
-            returnedMirrorFile = this.mirrorFile;
-        }
-
+    ok() {
         if (this.context.importType == ImportType.fromWeb) {
-            this.dialog.close({
-                baseURI: this.baseURI, altURL: returnedAltUrl, rdfFormat: returnedParam,
-                transitiveImportAllowance: this.selectedImportAllowance
-            });
+            if (this.editorMode == EditorMode.import) { 
+                let returnData: ImportFromWebData = {
+                    baseURI: this.baseURI,
+                    altURL: this.altURLCheck ? this.altURL : null,
+                    rdfFormat: this.forceFormatCheck ? this.rdfFormat : null,
+                    transitiveImportAllowance: this.selectedImportAllowance
+                }
+                this.dialog.close(returnData);
+            } else { //repair
+                let returnData: RepairFromWebData = {
+                    baseURI: this.baseURI,
+                    altURL: this.altURLCheck ? this.altURL : null,
+                    rdfFormat: this.forceFormatCheck ? this.rdfFormat : null,
+                    transitiveImportAllowance: this.selectedImportAllowance
+                }
+                this.dialog.close(returnData);
+            }
         } else if (this.context.importType == ImportType.fromWebToMirror) {
-            this.dialog.close({
-                baseURI: this.baseURI, mirrorFile: this.mirrorFile, altURL: returnedAltUrl,
-                rdfFormat: returnedParam, transitiveImportAllowance: this.selectedImportAllowance
-            });
+            if (this.editorMode == EditorMode.import) { 
+                let returnData: ImportFromWebToMirrorData = {
+                    baseURI: this.baseURI,
+                    altURL: this.altURLCheck ? this.altURL : null,
+                    mirrorFile: this.mirrorFile,
+                    rdfFormat: this.forceFormatCheck ? this.rdfFormat : null,
+                    transitiveImportAllowance: this.selectedImportAllowance
+                }
+                this.dialog.close(returnData);
+            } else { //repair
+                let returnData: RepairFromWebToMirrorData = {
+                    baseURI: this.baseURI,
+                    altURL: this.altURLCheck ? this.altURL : null,
+                    mirrorFile: this.mirrorFile,
+                    rdfFormat: this.forceFormatCheck ? this.rdfFormat : null,
+                    transitiveImportAllowance: this.selectedImportAllowance
+                }
+                this.dialog.close(returnData);
+            }
         } else if (this.context.importType == ImportType.fromLocalFile) {
-            this.dialog.close({
-                baseURI: returnedBaseURI, localFile: this.localFile, mirrorFile: returnedMirrorFile,
-                transitiveImportAllowance: this.selectedImportAllowance
-            });
+            if (this.editorMode == EditorMode.import) { 
+                let returnData: ImportFromLocalFileData = {
+                    baseURI: this.baseURICheck ? this.baseURI : null,
+                    localFile: this.localFile,
+                    mirrorFile: this.mirrorFileCheck ? this.mirrorFile : null,
+                    transitiveImportAllowance: this.selectedImportAllowance
+                }
+                this.dialog.close(returnData);
+            } else { //repair
+                let returnData: RepairFromLocalFileData = {
+                    baseURI: this.baseURI,
+                    localFile: this.localFile,
+                    mirrorFile: this.mirrorFileCheck ? this.mirrorFile : null,
+                    transitiveImportAllowance: this.selectedImportAllowance
+                }
+                this.dialog.close(returnData);
+            }
         } else if (this.context.importType == ImportType.fromOntologyMirror) {
-            this.dialog.close({ mirror: this.selectedMirror, transitiveImportAllowance: this.selectedImportAllowance });
+            //from mirror only import is available (no repair)
+            let returnData: ImportFromMirrorData = {
+                baseURI: this.baseURI,
+                mirror: this.selectedMirror,
+                transitiveImportAllowance: this.selectedImportAllowance
+            }
+            this.dialog.close(returnData);
         }
     }
 
@@ -183,4 +209,57 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
 enum EditorMode {
     import = "import",
     repair = "repair"
+}
+
+/** data when importig ontology */
+
+export interface ImportOntologyReturnData {
+    transitiveImportAllowance: TransitiveImportMethodAllowance;
+}
+
+export interface ImportFromLocalFileData extends ImportOntologyReturnData {
+    baseURI?: string;
+    localFile: File;
+    mirrorFile?: string;
+}
+
+export interface ImportFromMirrorData extends ImportOntologyReturnData {
+    baseURI: string;
+    mirror: OntologyMirror;
+}
+
+export interface ImportFromWebData extends ImportOntologyReturnData {
+    baseURI: string;
+    altURL?: string;
+    rdfFormat?: RDFFormat;
+}
+
+export interface ImportFromWebToMirrorData extends ImportOntologyReturnData {
+    baseURI: string;
+    altURL?: string;
+    mirrorFile: string;
+    rdfFormat?: RDFFormat;
+}
+
+/** data when repairing import */
+
+export interface RepairImportReturnData {
+    baseURI: string;
+    transitiveImportAllowance: TransitiveImportMethodAllowance;
+}
+
+export interface RepairFromWebData extends RepairImportReturnData {
+    altURL?: string;
+    rdfFormat?: RDFFormat;
+}
+
+export interface RepairFromWebToMirrorData extends RepairImportReturnData {
+    altURL?: string;
+    mirrorFile: string;
+    rdfFormat?: RDFFormat;
+}
+
+export interface RepairFromLocalFileData extends RepairImportReturnData {
+    localFile: File;
+    mirrorFile?: string;
 }

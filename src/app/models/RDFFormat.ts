@@ -24,11 +24,19 @@ export class RDFFormat {
 export class DataFormat {
     public name: string;
     public defaultMimeType: string;
+    public mimeTypes: string[];
     public defaultFileExtension: string;
+    public fileExtensions: string[];
 
-    constructor(name: string, defaultMimeType: string, defaultFileExtension: string) {
+    constructor(name: string, defaultMimeType: string, mimeTypes: string[], defaultFileExtension: string, fileExtensions: string[]) {
         this.name = name;
         this.defaultMimeType = defaultMimeType;
+        this.mimeTypes = mimeTypes;
         this.defaultFileExtension = defaultFileExtension;
+        this.fileExtensions = fileExtensions;
+    }
+
+    static parse(formatJson: any): DataFormat {
+        return new DataFormat(formatJson.name, formatJson.defaultMimeType, formatJson.mimeTypes, formatJson.defaultFileExtension, formatJson.fileExtensions);
     }
 }

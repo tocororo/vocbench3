@@ -176,11 +176,15 @@ export class LoadDataComponent {
 
     private onLifterExtensionUpdated(ext: ExtensionFactory) {
         this.selectedLifterExtension = ext;
-        //input output getSupportedFormats
         this.inOutService.getSupportedFormats(this.selectedLifterExtension.id).subscribe(
             formats => {
                 this.inputFormats = formats;
                 let extList: string[] = []; //collects the extensions of the formats in order to provide them to the file picker
+                this.inputFormats.forEach(f => 
+                    f.fileExtensions.forEach(ext => {
+                        extList.push("."+ext);
+                    })
+                ); 
                 //remove duplicated extensions
                 extList = extList.filter((item: string, pos: number) => {
                     return extList.indexOf(item) == pos;

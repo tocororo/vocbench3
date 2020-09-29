@@ -31,16 +31,16 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.classesRemoveClassAxiom]: 'auth(rdf(cls, taxonomy), "D").', //@PreAuthorize of removeOneOf/UnionOf/IntersectionOf...
         [VBActionsEnum.collaboration]: 'auth(pm(project, collaboration), "CRUD").',  //generic for Collaboration (creation and assignment of CS project)
         [VBActionsEnum.customFormCreateFormMapping]: 'auth(cform(form, mapping), "C").',
-        [VBActionsEnum.customFormCreateCollection]: 'auth(cform(formCollection), "C").',
-        [VBActionsEnum.customFormCreateForm]: 'auth(cform(formCollection), "C").',
+        [VBActionsEnum.customFormCreateCollection]: 'auth(cform(formCollection, form), "C").',
+        [VBActionsEnum.customFormCreateForm]: 'auth(cform(formCollection, form), "C").',
         [VBActionsEnum.customFormDeleteFormMapping]: 'auth(cform(form, mapping), "D").',
-        [VBActionsEnum.customFormDeleteCollection]: 'auth(cform(formCollection), "D").',
+        [VBActionsEnum.customFormDeleteCollection]: 'auth(cform(formCollection, form), "D").',
         [VBActionsEnum.customFormDeleteForm]: 'auth(cform(form), "D").',
-        [VBActionsEnum.customFormGetFormMappings]: 'auth(cform(formCollection), "R").',
-        [VBActionsEnum.customFormGetCollections]: 'auth(cform(formCollection), "R").',
+        [VBActionsEnum.customFormGetFormMappings]: 'auth(cform(form, mapping), "R").',
+        [VBActionsEnum.customFormGetCollections]: 'auth(cform(formCollection, form), "R").',
         [VBActionsEnum.customFormGetForms]: 'auth(cform(form), "R").',
         [VBActionsEnum.customFormUpdateFormMapping]: 'auth(cform(form, mapping), "U").',
-        [VBActionsEnum.customFormUpdateCollection]: 'auth(cform(formCollection), "U").',
+        [VBActionsEnum.customFormUpdateCollection]: 'auth(cform(formCollection, form), "U").',
         [VBActionsEnum.customFormUpdateForm]: 'auth(cform(form), "U").',
         [VBActionsEnum.customServiceCreate]: 'auth(customService(service), "C").',
         [VBActionsEnum.customServiceRead]: 'auth(customService(service), "R").',
@@ -304,6 +304,14 @@ export class AuthorizationEvaluator {
         chk_capability(rdf(SKOSELEMENT,_), CRUDV) :-
             capability(rdf(skos), CRUDV),
             vocabulary(SKOSELEMENT, skos).
+
+        chk_capability(rdf(ONTOLEXELEMENT), CRUDV) :-
+        	capability(rdf(ontolex), CRUDV),
+	        vocabulary(ONTOLEXELEMENT, ontolex).
+	
+        chk_capability(rdf(ONTOLEXELEMENT,_), CRUDV) :-
+            capability(rdf(ontolex), CRUDV),
+            vocabulary(ONTOLEXELEMENT, ontolex).
         
         chk_capability(rdf(_,lexicalization(LANG)), CRUDV) :-
             capability(rdf(lexicalization(LANGCOVERAGE)), CRUDV),
@@ -337,6 +345,27 @@ export class AuthorizationEvaluator {
         
         chk_capability(rdf(xLabel,_), CRUDV) :-
             capability(rdf(lexicalization), CRUDV).
+
+        chk_capability(rdf(ontolexForm), CRUDV) :-
+            capability(rdf(lexicalization), CRUDV).
+        
+        chk_capability(rdf(ontolexForm,_), CRUDV) :-
+            capability(rdf(lexicalization), CRUDV).	
+            
+        chk_capability(rdf(ontolexLexicalEntry), CRUDV) :-
+            capability(rdf(lexicalization), CRUDV).
+        
+        chk_capability(rdf(ontolexLexicalEntry,_), CRUDV) :-
+            capability(rdf(lexicalization), CRUDV).		
+        
+        chk_capability(rdf(limeLexicon), CRUDV) :-
+            capability(rdf(lexicalization), CRUDV).
+        
+        chk_capability(rdf(limeLexicon,_), CRUDV) :-
+            capability(rdf(lexicalization), CRUDV).			
+            
+        chk_capability(rdf(_,notes), CRUDV) :-
+            capability(rdf(notes), CRUDV).
 
         chk_capability(rbac(_), CRUDV) :-	
             chk_capability(rbac, CRUDV).	
@@ -376,10 +405,17 @@ export class AuthorizationEvaluator {
         role(xLabel(_)).
         role(skosCollection).
         role(skosOrderedCollection).
+        role(ontolexForm).
+        role(ontolexLexicalEntry).
+        role(limeLexicon).
 
         vocabulary(concept, skos).
         vocabulary(conceptScheme, skos).
         vocabulary(skosCollection, skos).
+
+        vocabulary(ontolexForm, ontolex).
+        vocabulary(ontolexLexicalEntry, ontolex).
+        vocabulary(limeLexicon, ontolex).
         
         getCapabilities(FACTLIST) :- findall(capability(A,CRUD),capability(A,CRUD),FACTLIST).    
         `;

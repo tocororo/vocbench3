@@ -13,6 +13,11 @@ export class OntologyImport {
     public imports: OntologyImport[];
 }
 
+export interface OntologyMirror {
+    file: string;
+    baseURI: string;
+}
+
 export enum ImportStatus {
     OK = "OK",
     FAILED = "FAILED",

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { OntologyMirror } from '../models/Metadata';
+import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
 export class OntoManagerServices {
 
-    private serviceName_old = "ontManager";
     private serviceName = "OntManager";
 
     constructor(private httpMgr: HttpManager) { }
@@ -16,7 +16,7 @@ export class OntoManagerServices {
      * "file" (the name of the mirror file) and
      * "namespace" (the namespace of the ontology)
      */
-    getOntologyMirror(): Observable<{ file: string, baseURI: string }[]> {
+    getOntologyMirror(): Observable<OntologyMirror[]> {
         var params: any = {};
         return this.httpMgr.doGet(this.serviceName, "getOntologyMirror", params).map(
             stResp => {
