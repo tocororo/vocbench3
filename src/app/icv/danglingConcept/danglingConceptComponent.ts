@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { ARTURIResource } from "../../models/ARTResources";
+import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
 import { ResourceUtils, SortAttribute } from "../../utils/ResourceUtils";
@@ -47,6 +47,9 @@ export class DanglingConceptComponent {
                     concepts.forEach(c => {
                         let schemeIRI: string = c.getAdditionalProperty("dangScheme");
                         let scheme: ARTURIResource = this.schemeList.find(s => s.getURI() == schemeIRI);
+                        if (scheme == null) {
+                            scheme = new ARTURIResource(schemeIRI, null, RDFResourceRolesEnum.conceptScheme);
+                        }
                         let brokenConceptOfScheme: BrokenConceptEntry = this.brokenConceptMap.find(e => e.scheme.equals(scheme));
                         if (brokenConceptOfScheme == null) {
                             brokenConceptOfScheme = { scheme: scheme, concepts: [c] }
