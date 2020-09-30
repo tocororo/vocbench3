@@ -113,23 +113,8 @@ export class ConfigBarComponent {
                 this.inOutService.clearData().subscribe(
                     stResp => {
                         this.prefService.setActiveSchemes().subscribe();
+                        UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                         this.basicModals.alert("Clear data", "All data cleared successfully.");
-                        this.projectService.disconnectFromProject(VBContext.getWorkingProject()).subscribe(
-                            stResp => {
-                                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
-                                //then redirect to Projects page
-                                if (this.router.url == "/Projects") {
-                                    this.router.navigate(['/Home']).then(
-                                        success => {
-                                            this.router.navigate(['/Projects']);
-                                        }
-                                    );    
-                                } else {
-                                    this.router.navigate(['/Projects']);
-                                }
-                                
-                            }
-                        );
                     }
                 );
             },

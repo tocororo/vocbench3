@@ -84,7 +84,12 @@ export class InputOutputServices {
      */
     clearData() {
         var params: any = {};
-        return this.httpMgr.doPost(this.serviceName, "clearData", params);
+        return this.httpMgr.doPost(this.serviceName, "clearData", params).map(
+            stResp => {
+                this.eventHandler.refreshDataBroadcastEvent.emit();
+                return stResp;
+            }
+        );
     }
 
     /**
