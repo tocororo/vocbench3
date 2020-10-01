@@ -100,35 +100,55 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
     }
 
     private isOkClickable() {
+        /* 
+        in the following checks, selectedImportAllowance is never checked since (even it is mandatory) it is automatically set through the combobox.
+        Moreover, some checks may be the same for both import and repair (e.g. in fromWeb or fromWebToMirror), 
+        but I prefer to keep them separated (using if-else clause) so if the optional/mandatory parameters changes for the given scenario, 
+        it will be easier to fix the conditions.
+        */
         if (this.context.importType == ImportType.fromWeb) {
-            let baseuriOk = (this.baseURI != undefined && this.baseURI.trim() != "");
-            let alturlOk = (!this.altURLCheck || (this.altURLCheck && this.altURL != undefined && this.altURL.trim() != ""));
-            let rdfFormatOk = (!this.forceFormatCheck || this.forceFormatCheck && this.rdfFormat != undefined);
-            return (baseuriOk && alturlOk && rdfFormatOk);
+            if (this.editorMode == EditorMode.import) { 
+                //baseURI required, other params optional
+                return this.baseURI != null && this.baseURI.trim() != "" && //baseURI valid
+                    (!this.altURLCheck || this.altURL != null && this.altURL.trim() != "") && //altURL not checked, or checked and valid
+                    (!this.forceFormatCheck || this.rdfFormat != null); //format not checked or checked and selected
+            } else { //repair
+                //baseURI required, other params optional
+                return this.baseURI != null && this.baseURI.trim() != "" && //baseURI valid
+                    (!this.altURLCheck || this.altURL != null && this.altURL.trim() != "") && //altURL not checked, or checked and valid
+                    (!this.forceFormatCheck || this.rdfFormat != null); //format not checked or checked and selected
+            }
         } else if (this.context.importType == ImportType.fromWebToMirror) {
-            let baseuriOk = (this.baseURI != undefined && this.baseURI.trim() != "");
-            let mirrorFileOk = (this.mirrorFile != undefined && this.mirrorFile.trim() != "");
-            let alturlOk = (!this.altURLCheck || (this.altURLCheck && this.altURL != undefined && this.altURL.trim() != ""));
-            let rdfFormatOk = (!this.forceFormatCheck || this.forceFormatCheck && this.rdfFormat != undefined);
-            return (baseuriOk && mirrorFileOk && alturlOk && rdfFormatOk);
+            if (this.editorMode == EditorMode.import) { 
+                //baseURI and mirrorFile required, other params optional
+                return this.baseURI != null && this.baseURI.trim() != "" && //baseURI valid
+                    this.mirrorFile != null && this.mirrorFile.trim() != "" && //mirrorFile valid
+                    (!this.altURLCheck || this.altURL != null && this.altURL.trim() != "") && //altURL not checked, or checked and valid
+                    (!this.forceFormatCheck || this.rdfFormat != null); //format not checked or checked and selected
+            } else {
+                //baseURI and mirrorFile required, other params optional
+                return this.baseURI != null && this.baseURI.trim() != "" && //baseURI valid
+                    this.mirrorFile != null && this.mirrorFile.trim() != "" && //mirrorFile valid
+                    (!this.altURLCheck || this.altURL != null && this.altURL.trim() != "") && //altURL not checked, or checked and valid
+                    (!this.forceFormatCheck || this.rdfFormat != null); //format not checked or checked and selected
+            }
         } else if (this.context.importType == ImportType.fromLocalFile) {
-            //repair requires all parameters, import only baseuri, other params only if explicitly provided
-            let localFileOk = this.localFile != undefined;
-            let baseuriOk: boolean;
-            if (this.editorMode == EditorMode.repair) {
-                baseuriOk = this.baseURI != undefined && this.baseURI.trim() != "";
-            } else { //import mode
-                baseuriOk = !this.baseURICheck || (this.baseURI != undefined && this.baseURI.trim() != "")
+            if (this.editorMode == EditorMode.import) { 
+                //local file required, other param optional
+                return this.localFile != null && //localFile provided
+                    (!this.baseURICheck || this.baseURI != null && this.baseURI.trim() != "") && //baseURI not checked, or checked and valid
+                    (!this.mirrorFileCheck || this.mirrorFile != null && this.mirrorFile.trim() != "") //mirrorFile not checked, or checked and valid
+            } else {
+                //baseURI and localFile required, other optional
+                return this.baseURI != null && this.baseURI.trim() != "" && //baseURI valid
+                    this.localFile != null && //localFile provided
+                    (!this.mirrorFileCheck || this.mirrorFile != null && this.mirrorFile.trim() != "") //mirrorFile not checked, or checked and valid
             }
-            let mirrorFileOk: boolean;
-            if (this.editorMode == EditorMode.repair) {
-                mirrorFileOk = this.mirrorFile != undefined && this.mirrorFile.trim() != "";
-            } else { //import mode
-                mirrorFileOk = !this.mirrorFileCheck || (this.mirrorFile != undefined && this.mirrorFile.trim() != "");
-            }
-            return (baseuriOk && localFileOk && mirrorFileOk);
         } else if (this.context.importType == ImportType.fromOntologyMirror) {
-            return this.selectedMirror != undefined;
+            //available only import (not repair)
+            //baseURI and mirror required
+            return this.baseURI != null && this.baseURI.trim() != "" && //baseURI valid
+                this.selectedMirror != null;
         }
     }
 
