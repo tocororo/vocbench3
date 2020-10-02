@@ -2,9 +2,6 @@ import { Component, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { AnnotationName, FormField, FormFieldAnnotation } from "../../models/CustomForms";
 
-/**
- * Modal that allows to choose among a set of rdfResource
- */
 @Component({
     selector: "custom-form-field-list",
     templateUrl: "./customFormFieldListComponent.html",
@@ -63,6 +60,8 @@ export class CustomFormFieldList implements ControlValueAccessor {
                 for (let i = 0; i < annList.min; i++) {
                     this.subFields.push(this.field.clone());
                 }
+            } else { //min 0, default value if min is not specified in the annotation
+                this.subFields.push(this.field.clone());
             }
         }
     }

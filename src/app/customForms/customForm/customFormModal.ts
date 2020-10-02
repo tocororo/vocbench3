@@ -72,12 +72,12 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
             if (listAnn != null) {
                 let min = listAnn.min;
                 if (f.isMandatory()) { 
-                    if (f.value.length < min) { //mandatory and minimun required vaules not provided
+                    if (f.value == null || f.value.length < min) { //mandatory and minimun required vaules not provided
                         this.basicModals.alert("Incompleted form", "Field '" + f.getUserPrompt() + "' requires at least " + min + " values.", "warning");
                         return;
                     }
                 } else {
-                    if (f.value.length > 0 && f.value.length < min) { //not mandatory, but not enaugh values provided
+                    if (f.value != null && f.value.length > 0 && f.value.length < min) { //not mandatory, but not enough values provided
                         this.basicModals.alert("Incompleted form", "Field '" + f.getUserPrompt() + "' is optional, anyway you filled it with only " 
                             + f.value.length + " value(s), while it requires at least " + min + " values. "
                             + "Please, provide more values or delete the provided ones", "warning");
