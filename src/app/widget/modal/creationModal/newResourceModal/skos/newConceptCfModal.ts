@@ -95,7 +95,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
             this.schemes != null && this.schemes.length > 0);
     }
 
-    ok(event: Event) {
+    okImpl(event: Event) {
         event.stopPropagation();
         event.preventDefault();
 

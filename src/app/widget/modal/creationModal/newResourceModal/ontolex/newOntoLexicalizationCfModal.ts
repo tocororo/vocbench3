@@ -97,7 +97,7 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
         }
     }
 
-    ok(event: Event) {
+    okImpl(event: Event) {
         event.stopPropagation();
         event.preventDefault();
 

@@ -36,7 +36,7 @@ export class CustomFormFieldList implements ControlValueAccessor {
     onModelChange() {
         let fieldValue: string[] = [];
         this.subFields.forEach(f => {
-            if (f.value != null) {
+            if (f.value != null && f.value.trim() != "") {
                 fieldValue.push(<string>f.value);
             }
         })

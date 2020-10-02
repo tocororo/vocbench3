@@ -150,7 +150,7 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
         );
     }
 
-    ok(event: Event) {
+    okImpl(event: Event) {
         event.stopPropagation();
         event.preventDefault();
 

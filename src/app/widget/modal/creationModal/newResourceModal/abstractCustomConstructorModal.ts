@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { ARTURIResource } from "../../../../models/ARTResources";
-import { CustomForm, FormField } from "../../../../models/CustomForms";
+import { CustomForm, CustomFormUtils, FormField } from "../../../../models/CustomForms";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { BasicModalServices } from "../../basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../browsingModal/browsingModalServices";
@@ -132,19 +132,19 @@ export abstract class AbstractCustomConstructorModal {
      * Check if data in the custom form fields are valid (if the required are not null)
      */
     isCustomFormDataValid(): boolean {
-        for (var i = 0; i < this.formFields.length; i++) {
-            let entry = this.formFields[i];
-            let value: any = entry['value'];
-            let empty: boolean = false;
-            try { if (value.trim() == "") { empty = true; } } catch (err) {} //entry value could be not a string, so the check is in a try-catch
-            if (entry.isMandatory() && (value == null || empty)) {
-                return false;
-            }
-        }
-        return true;
+        return CustomFormUtils.isFormValid(this.formFields);
     }
 
-    abstract ok(event: Event): void;
+    ok(event: Event) {
+        let constraintViolatedMsg = CustomFormUtils.isFormConstraintOk(this.formFields);
+        if (constraintViolatedMsg != null) {
+            this.basicModals.alert("Incompleted form", constraintViolatedMsg, "warning");
+            return;
+        }
+        this.okImpl(event);
+    }
+
+    abstract okImpl(event: Event): void;
 
     abstract cancel(): void;
 

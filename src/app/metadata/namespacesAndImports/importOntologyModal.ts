@@ -146,9 +146,8 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
             }
         } else if (this.context.importType == ImportType.fromOntologyMirror) {
             //available only import (not repair)
-            //baseURI and mirror required
-            return this.baseURI != null && this.baseURI.trim() != "" && //baseURI valid
-                this.selectedMirror != null;
+            //baseURI and mirror required (both from selectedMirror)
+            return this.selectedMirror != null;
         }
     }
 
@@ -212,7 +211,6 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
         } else if (this.context.importType == ImportType.fromOntologyMirror) {
             //from mirror only import is available (no repair)
             let returnData: ImportFromMirrorData = {
-                baseURI: this.baseURI,
                 mirror: this.selectedMirror,
                 transitiveImportAllowance: this.selectedImportAllowance
             }
@@ -244,8 +242,7 @@ export interface ImportFromLocalFileData extends ImportOntologyReturnData {
 }
 
 export interface ImportFromMirrorData extends ImportOntologyReturnData {
-    baseURI: string;
-    mirror: OntologyMirror;
+    mirror: OntologyMirror; //contains both file and baseUri
 }
 
 export interface ImportFromWebData extends ImportOntologyReturnData {

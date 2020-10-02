@@ -312,3 +312,57 @@ export enum EditorMode {
     create = "create",
     edit = "edit"
 }
+
+export class CustomFormUtils {
+
+    static isFormValid(fields: FormField[]): boolean {
+        let valid: boolean = true;
+
+        if (fields != null) {
+            fields.forEach(field => {
+                let value: any = field.value;
+                let emptyString: boolean = false;
+                if (typeof value == "string" && value.trim() == "") {
+                    emptyString = true;
+                }
+                let emptyList: boolean = false;
+                if (field.getAnnotation(AnnotationName.Collection) != null && Array.isArray(value)) {
+                    emptyList = value.length == 0 || //list of 0 lenght
+                        !value.some(v => v != null && v.trim() != ""); //NOT a string not null and different from ""
+                }
+
+                if (field.isMandatory() && (value == null || emptyString || emptyList)) {
+                    valid = false;
+                }
+            })
+        }
+        return valid;
+    }
+
+    /**
+     * Returns an error message if a constraint is violated, null string otherwise
+     * @param fields 
+     */
+    static isFormConstraintOk(fields: FormField[]): string {
+        for (let f of fields) {
+            //currentlty the only constraint is about the collection annotation
+            let listAnn = f.getAnnotation(AnnotationName.Collection);
+            if (listAnn != null) {
+                let min = listAnn.min;
+                if (f.isMandatory()) { 
+                    if (f.value == null || f.value.length < min) { //mandatory and minimun required vaules not provided
+                        return "Field '" + f.getUserPrompt() + "' requires at least " + min + " values.";
+                    }
+                } else {
+                    if (f.value != null && f.value.length > 0 && f.value.length < min) { //not mandatory, but not enough values provided
+                        return "Field '" + f.getUserPrompt() + "' is optional, anyway you filled it with only " 
+                            + f.value.length + " value(s), while it requires at least " + min + " values. "
+                            + "Please, provide more values or delete the provided ones";
+                    }
+                }
+            }
+        };
+        return null; //if this code is reached, none constraint has been violated
+    }
+
+}

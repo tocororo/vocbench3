@@ -61,7 +61,7 @@ export class NewLexiconCfModal extends AbstractCustomConstructorModal implements
         return (this.title != undefined && this.title.trim() != "" && this.title_lang != null && this.lang != null);
     }
 
-    ok(event: Event) {
+    okImpl(event: Event) {
         event.stopPropagation();
         event.preventDefault();
 

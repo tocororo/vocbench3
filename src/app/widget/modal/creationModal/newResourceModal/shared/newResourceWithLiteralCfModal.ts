@@ -65,7 +65,7 @@ export class NewResourceWithLiteralCfModal extends AbstractCustomConstructorModa
         return (this.label != undefined && this.label.trim() != "" && this.lang != null);
     }
 
-    ok(event: Event) {
+    okImpl(event: Event) {
         event.stopPropagation();
         event.preventDefault();
 

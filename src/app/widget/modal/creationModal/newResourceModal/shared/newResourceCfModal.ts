@@ -1,13 +1,13 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
 import { DialogRef, ModalComponent } from "ngx-modialog";
-import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
-import { CustomFormsServices } from "../../../../../services/customFormsServices";
-import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
-import { BasicModalServices } from "../../../basicModal/basicModalServices";
-import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources";
+import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { ARTURIResource } from "../../../../../models/ARTResources";
 import { CustomFormValue } from "../../../../../models/CustomForms";
 import { OWL, RDFS } from "../../../../../models/Vocabulary";
+import { CustomFormsServices } from "../../../../../services/customFormsServices";
+import { BasicModalServices } from "../../../basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
+import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
 
 export class NewResourceCfModalData extends BSModalContext {
     constructor(
@@ -52,7 +52,7 @@ export class NewResourceCfModal extends AbstractCustomConstructorModal implement
         return (this.uri != null && this.uri.trim() != "");
     }
 
-    ok(event: Event) {
+    okImpl(event: Event) {
         event.stopPropagation();
         event.preventDefault();
 

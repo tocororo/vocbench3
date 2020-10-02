@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { AnnotationName, FormField } from "../../models/CustomForms";
+import { AnnotationName, CustomFormUtils, FormField } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
@@ -43,49 +43,15 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
      * Valid if all the mandatory fields are not empty
      */
     private isInputValid(): boolean {
-        var customFormValid: boolean = true;
-        if (this.formFields != null) {
-            for (var i = 0; i < this.formFields.length; i++) {
-                let entry = this.formFields[i];
-                let value = entry.value;
-
-                let empty: boolean = false;
-                if (typeof value == "string" && value.trim() == "") {
-                    empty = true;
-                } else if (Array.isArray(value) && value.length == 0) {
-                    empty = true;
-                }
-
-                if (entry.isMandatory() && (value == null || empty)) {
-                    customFormValid = false;
-                }
-            }
-        }
-        return customFormValid;
+        return CustomFormUtils.isFormValid(this.formFields);
     }
 
     ok(event: Event) {
-
-        //check in case of @Collection annotation, if min constraint is respected
-        for (let f of this.formFields) {
-            let listAnn = f.getAnnotation(AnnotationName.Collection);
-            if (listAnn != null) {
-                let min = listAnn.min;
-                if (f.isMandatory()) { 
-                    if (f.value == null || f.value.length < min) { //mandatory and minimun required vaules not provided
-                        this.basicModals.alert("Incompleted form", "Field '" + f.getUserPrompt() + "' requires at least " + min + " values.", "warning");
-                        return;
-                    }
-                } else {
-                    if (f.value != null && f.value.length > 0 && f.value.length < min) { //not mandatory, but not enough values provided
-                        this.basicModals.alert("Incompleted form", "Field '" + f.getUserPrompt() + "' is optional, anyway you filled it with only " 
-                            + f.value.length + " value(s), while it requires at least " + min + " values. "
-                            + "Please, provide more values or delete the provided ones", "warning");
-                        return;
-                    }
-                }
-            }
-        };
+        let constraintViolatedMsg = CustomFormUtils.isFormConstraintOk(this.formFields);
+        if (constraintViolatedMsg != null) {
+            this.basicModals.alert("Incompleted form", constraintViolatedMsg, "warning");
+            return;
+        }
 
         var entryMap: {[key: string]: any} = {}; //{key: value, key: value,...}
         for (var i = 0; i < this.formFields.length; i++) {
