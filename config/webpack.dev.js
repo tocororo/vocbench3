@@ -13,7 +13,7 @@ var commonConfig = require('./webpack.common.js');
 var helpers = require('./helpers');
 
 //'dev' run angular2 in dev mode, 'prod' or anything else enables angular2 production mode
-const ENV = process.env.NODE_ENV = process.env.ENV = 'prod';
+const ENV = process.env.NODE_ENV = process.env.ENV = 'dev';
 
 module.exports = webpackMerge(commonConfig, {
   devtool: 'cheap-module-eval-source-map',

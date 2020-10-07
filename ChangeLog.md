@@ -9,6 +9,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Fixed a bug the prevented authorized users (e.g. lexicographer) to add/update/delete notes in assigned languages
   * Improved Code editor in order to prevent unauthorized operation on other resources
   * Minor bugfixes and improvements
+  * Fixed dependencies issues that prevented the application from building
 
 # 8.0.0 (31-07-2020)
   * Introduced the Custom Services tool

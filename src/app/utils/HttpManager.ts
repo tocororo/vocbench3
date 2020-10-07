@@ -1,16 +1,16 @@
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response, ResponseContentType, RequestOptions } from '@angular/http';
 import { Router } from "@angular/router";
-import 'rxjs/Rx'; //for map function
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/Rx'; //for map function
+import { ARTBNode, ARTLiteral, ARTNode, ARTURIResource } from "../models/ARTResources";
+import { CustomFormValue } from "../models/CustomForms";
+import { VersionInfo } from "../models/History";
+import { Project } from "../models/Project";
 import { STResponseUtils } from "../utils/STResponseUtils";
 import { UIUtils } from "../utils/UIUtils";
-import { ARTNode, ARTURIResource, ARTBNode, ARTLiteral } from "../models/ARTResources";
-import { CustomFormValue } from "../models/CustomForms";
-import { Project } from "../models/Project";
-import { VersionInfo } from "../models/History";
-import { VBContext, ProjectContext } from './VBContext';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ProjectContext, VBContext } from './VBContext';
 
 @Injectable()
 export class HttpManager {
@@ -26,7 +26,7 @@ export class HttpManager {
         errorAlertOpt: { show: true, exceptionsToSkip: [] }
     });
 
-    constructor(private http: Http, private router: Router, private basicModals: BasicModalServices) {
+    constructor(private http: HttpClient, private router: Router, private basicModals: BasicModalServices) {
         require('file-loader?name=[name].[ext]!../../vbconfig.js'); //this makes webpack copy vbconfig.js to dist folder during the build
 
         let st_protocol: string = window['st_protocol']; //protocol (http/https)
@@ -69,15 +69,15 @@ export class HttpManager {
         url += this.getParametersForUrl(params);
         url += this.getContextParametersForUrl(options);
 
-        var headers = new Headers();
-        headers.append('Accept', STResponseUtils.ContentType.applicationJson);
-        var requestOptions = new RequestOptions({ headers: headers, withCredentials: true });
+        let httpOptions = {
+            headers: new HttpHeaders({
+                "Accept": STResponseUtils.ContentType.applicationJson
+            }),
+            withCredentials: true
+        };
 
         //execute request
-        return this.http.get(url, requestOptions)
-            .map(res => {
-                return this.handleJsonXmlResponse(res);
-            })
+        return this.http.get(url, httpOptions)
             .map(res => { 
                 return this.handleOkOrErrorResponse(res); 
             })
@@ -109,16 +109,16 @@ export class HttpManager {
         //prepare POST data
         var postData: any = this.getPostData(params);
 
-        var headers = new Headers();
-        headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        headers.append('Accept', STResponseUtils.ContentType.applicationJson);
-        var requestOptions = new RequestOptions({ headers: headers, withCredentials: true });
+        let httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': "application/x-www-form-urlencoded",
+                "Accept": STResponseUtils.ContentType.applicationJson
+            }),
+            withCredentials: true
+        };
 
         //execute request
-        return this.http.post(url, postData, requestOptions)
-            .map(res => {
-                return this.handleJsonXmlResponse(res);
-            })
+        return this.http.post(url, postData, httpOptions)
             .map(res => { 
                 return this.handleOkOrErrorResponse(res); 
             })
@@ -149,8 +149,8 @@ export class HttpManager {
         url += this.getContextParametersForUrl(options);
 
         //prepare form data
-        var formData = new FormData();
-        for (var paramName in params) {
+        let formData = new FormData();
+        for (let paramName in params) {
             let paramValue = params[paramName];
             if (paramValue != null) {
                 if (paramValue instanceof ARTURIResource || paramValue instanceof ARTBNode || paramValue instanceof ARTLiteral) {
@@ -162,15 +162,15 @@ export class HttpManager {
             }
         }
 
-        var headers = new Headers();
-        headers.append('Accept', STResponseUtils.ContentType.applicationJson);
-        var requestOptions = new RequestOptions({ headers: headers, withCredentials: true });
+        let httpOptions = {
+            headers: new HttpHeaders({
+                "Accept": STResponseUtils.ContentType.applicationJson
+            }),
+            withCredentials: true
+        };
 
         //execute request
-        return this.http.post(url, formData, requestOptions)
-            .map(res => {
-                return this.handleJsonXmlResponse(res);
-            })
+        return this.http.post(url, formData, httpOptions)
             .map(res => { 
                 return this.handleOkOrErrorResponse(res); 
             })
@@ -202,16 +202,18 @@ export class HttpManager {
             url += this.getContextParametersForUrl(options);
 
             //prepare POST data
-            var postData: any = this.getPostData(params);
-            var headers = new Headers();
-            headers.append('Content-Type', 'application/x-www-form-urlencoded');
-            var requestOptions = new RequestOptions({
-                headers: headers,
-                withCredentials: true,
-                responseType: ResponseContentType.ArrayBuffer
-            });
+            let postData: string = this.getPostData(params);
 
-            return this.http.post(url, postData, requestOptions)
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Content-Type': "application/x-www-form-urlencoded",
+                }),
+                responseType: 'arraybuffer' as 'arraybuffer',
+                withCredentials: true,
+                observe: "response" as "response"
+            };
+
+            return this.http.post(url, postData, httpOptions)
                 .map(
                     res => { return this.arrayBufferRespHandler(res); }
                 ).catch(
@@ -222,14 +224,15 @@ export class HttpManager {
             url += this.getParametersForUrl(params);
             url += this.getContextParametersForUrl(options);
 
-            var requestOptions = new RequestOptions({
-                headers: new Headers(),
+            let httpOptions = {
+                headers: new HttpHeaders(),
+                responseType: 'arraybuffer' as 'arraybuffer',
                 withCredentials: true,
-                responseType: ResponseContentType.ArrayBuffer
-            });
+                observe: "response" as "response"
+            };
 
             //execute request
-            return this.http.get(url, requestOptions)
+            return this.http.get(url, httpOptions)
                 .map(
                     res => { return this.arrayBufferRespHandler(res); }
                 ).catch(
@@ -244,8 +247,8 @@ export class HttpManager {
      * This method check if the response is json, in case it could be an json error response.
      * In case, throws an error containing the error message in the response.
      */
-    private arrayBufferRespHandler(res: Response) {
-        var arrayBuffer = res.arrayBuffer();
+    private arrayBufferRespHandler(res: HttpResponse<ArrayBuffer>) {
+        let arrayBuffer = res.body;
         var respContType = res.headers.get("content-type");
         if (respContType.includes(STResponseUtils.ContentType.applicationJson+";")) { //could be an error response
             //convert arrayBuffer to json object
@@ -387,25 +390,10 @@ export class HttpManager {
     }
 
     /**
-     * First step of the "pipeline" of response management:
-     * Gets the response and parse it as Json or Xml data according the content type
-     * @return returns an object json (any) in case of json response, an xml Document in case of xml response
-     */
-    private handleJsonXmlResponse(res: Response): any | Document {
-        if (res.headers.get("Content-Type").indexOf(STResponseUtils.ContentType.applicationXml) != -1) { //is response Xml?
-            var parser = new DOMParser();
-            var stResp = parser.parseFromString(res.text(), STResponseUtils.ContentType.applicationXml);
-            return stResp;
-        } else if (res.headers.get("Content-Type").indexOf(STResponseUtils.ContentType.applicationJson) != -1) { //is response json?
-            return res.json();
-        }
-    }
-
-    /**
      * Second step of the "pipeline" of response management:
      * Gets the json or xml response and detect whether it is an error response, in case throws an Error, otherwise return the
      * response data content
-     * @param res response json or xml returned by handleJsonXmlResponse
+     * @param res 
      */
     private handleOkOrErrorResponse(res: any | Document) {
         if (STResponseUtils.isErrorResponse(res)) {

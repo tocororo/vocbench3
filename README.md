@@ -87,6 +87,11 @@ http://localhost:8181
 ```
 unless you have changed the port in `package.json` `"start": "webpack-dev-server --inline --progress --port 8181"`
 
+The application will run in development mode. In case you want to run it in production mode (this is discouraged, webpack-dev-server is not designed for such purpose) you need to edit `config/webpack.dev.js` by changing the following line 
+```
+const ENV = process.env.NODE_ENV = process.env.ENV = 'dev';
+```
+replacing `'dev'` with `'prod'`
 
 
 ## FURTHER CONFIGURATION ##
