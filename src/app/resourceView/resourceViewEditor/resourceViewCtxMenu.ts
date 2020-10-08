@@ -32,6 +32,7 @@ export class ResourceViewContextMenu {
     private isAlignDisabled: boolean;
     private isSpawnFromLabelDisabled: boolean;
     private isAssertInferredDisabled: boolean;
+    private isGraphAuthorized: boolean;
 
     constructor(private alignServices: AlignmentServices, private refactorService: RefactorServices, private resourcesService: ResourcesServices,
         private creationModals: CreationModalServices, private graphModals: GraphModalServices, private modal: Modal) { }
@@ -54,6 +55,7 @@ export class ResourceViewContextMenu {
             !this.resource.getAdditionalProperty(ResAttribute.EXPLICIT) || 
             !AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourcesAddValue, this.resource)
         );
+        this.isGraphAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.graphRead);
     }
 
     private alignResource() {
@@ -116,7 +118,7 @@ export class ResourceViewContextMenu {
 
 
     private isOpenDataGraphEnabled(): boolean {
-        return true;
+        return this.isGraphAuthorized;
     }
 
     private openDataGraph() {

@@ -53,6 +53,8 @@ export abstract class AbstractSparqlTabComponent {
     private resultsTotPage: number = 0;
     private resultsLimit: number = 100;
 
+    private isGraphAuthorized: boolean;
+
     protected sparqlService: SparqlServices;
     protected exportService: ExportServices; 
     protected configurationsService: ConfigurationsServices;
@@ -86,6 +88,8 @@ export abstract class AbstractSparqlTabComponent {
         this.sampleQuery = prefixImports + "\n" + this.sampleQuery;
 
         this.query = this.sampleQuery;
+
+        this.isGraphAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.graphRead);
     }
 
     private doQuery() {
@@ -378,7 +382,7 @@ export abstract class AbstractSparqlTabComponent {
     }
 
     private isOpenGraphEnabled() {
-        return this.resultType == 'graph' && (<QueryResultBinding[]>this.queryResult).length > 0;
+        return this.isGraphAuthorized && this.resultType == 'graph' && (<QueryResultBinding[]>this.queryResult).length > 0;
     }
 
     private openGraph() {

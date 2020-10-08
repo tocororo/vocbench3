@@ -12,7 +12,7 @@
         </div>
 
         <div class="dropdown pull-right">
-            <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+            <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" [disabled]="!isDumpAuthorized">
                 Dump...
                 <span class="caret"></span>
             </button>

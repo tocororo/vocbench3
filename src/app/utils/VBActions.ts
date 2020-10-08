@@ -77,7 +77,10 @@ export enum VBActionsEnum {
     datatypesRead = "datatypesRead",
     datatypesSetDatatypeRestriction = "setDatatypeRestriction", //generic for all the kinds of restriction
     //Export
+    exportDataDump = "exportDataDump",
     exportExport = "exportExport",
+    //Graph
+    graphRead = "graphRead", //generic for all the read action in graph
     //History
     history = "history", //generic
     //ICV

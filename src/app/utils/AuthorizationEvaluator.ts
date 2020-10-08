@@ -57,16 +57,18 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.datatypesSetDatatypeRestriction]: 'auth(rdf(datatype), "C").',
         [VBActionsEnum.datasetMetadataExport]: 'auth(rdf(dataset, metadata), "CU").', //export require to set the metadata, so requires CU
         [VBActionsEnum.datasetMetadataGetMetadata]: 'auth(rdf(dataset, metadata), "R").',
-        [VBActionsEnum.exportExport]: 'auth(rdf, "R").',
-        [VBActionsEnum.history]: 'auth(rdf, "R").',
+        [VBActionsEnum.exportDataDump]: 'auth(rdf(code), "R").',
+        [VBActionsEnum.exportExport]: 'auth(rdf(code), "R").',
+        [VBActionsEnum.graphRead]: 'auth(rdf(code), "R").',
+        [VBActionsEnum.history]: 'auth(rdf(code), "R").',
         [VBActionsEnum.icvDanglingXLabel]: 'auth(rdf(xLabel), "R").',
         [VBActionsEnum.icvGenericConcept]: 'auth(rdf(concept), "R").',
         [VBActionsEnum.icvGenericResource]: 'auth(rdf(resource), "R").',
         [VBActionsEnum.individualsAddType]: 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "U").',
         [VBActionsEnum.individualsGetInstances]: 'auth(rdf(cls, instances), "R").',
         [VBActionsEnum.individualsRemoveType]: 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "D").',
-        [VBActionsEnum.inputOutputClearData]: 'auth(rdf, "D").',
-        [VBActionsEnum.inputOutputLoadData]: 'auth(rdf, "C").',
+        [VBActionsEnum.inputOutputClearData]: 'auth(rdf(code), "D").',
+        [VBActionsEnum.inputOutputLoadData]: 'auth(rdf(code), "C").',
         [VBActionsEnum.invokableReporterCreate]: 'auth(invokableReporter(reporter), "C").',
         [VBActionsEnum.invokableReporterRead]: 'auth(invokableReporter(reporter), "R").',
         [VBActionsEnum.invokableReporterUpdate]: 'auth(invokableReporter(reporter), "U").',
@@ -131,9 +133,9 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.propertiesRemoveEquivalentProperty]: 'auth(rdf(property, taxonomy), "D").',
         [VBActionsEnum.propertiesUpdatePropertyChainAxiom]: 'auth(rdf(property, taxonomy), "U").',
         [VBActionsEnum.refactorChangeResourceUri]: 'auth(rdf(' + AuthorizationEvaluator.resRole + '), "U").',
-        [VBActionsEnum.refactorMigrateToBaseUriGraph]: 'auth(rdf, "CRUD").',
+        [VBActionsEnum.refactorMigrateToBaseUriGraph]: 'auth(rdf(code), "CRUD").',
         [VBActionsEnum.refactorMoveXLabelToResource]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "CD").',
-        [VBActionsEnum.refactorReplaceBaseUri]: 'auth(rdf, "CRUD").',
+        [VBActionsEnum.refactorReplaceBaseUri]: 'auth(rdf(code), "CRUD").',
         [VBActionsEnum.refactorSkosToSkosxl]: 'auth(lexicalization, "CD").',
         [VBActionsEnum.refactorSkosxlToSkos]: 'auth(lexicalization, "CD").',
         [VBActionsEnum.refactorSpawnNewConceptFromLabel]: 'auth(rdf(concept), "C").',
@@ -163,7 +165,7 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.shaclExportShapes]: 'auth(shacl, "R").',
         [VBActionsEnum.shaclLoadShapes]: 'auth(shacl, "CU").',
         [VBActionsEnum.shaclExtractCF]: 'auth(shacl, "R").',
-        [VBActionsEnum.sheet2Rdf]: 'auth(rdf, "CRUD").',
+        [VBActionsEnum.sheet2Rdf]: 'auth(rdf(code), "CRUD").',
         [VBActionsEnum.skosAddBroaderConcept]: 'auth(rdf(concept, taxonomy), "C").',
         [VBActionsEnum.skosAddConceptToScheme]: 'auth(rdf(concept, schemes), "C").',
         [VBActionsEnum.skosAddLexicalization]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', lexicalization), "C").',
@@ -192,7 +194,7 @@ export class AuthorizationEvaluator {
         [VBActionsEnum.skosUpdateNote]: 'auth(rdf(' + AuthorizationEvaluator.resRole + ', notes), "U").',
         [VBActionsEnum.sparqlEvaluateQuery]: 'auth(rdf(sparql), "R").',
         [VBActionsEnum.sparqlExecuteUpdate]: 'auth(rdf(sparql), "U").',
-        [VBActionsEnum.validation]: 'auth(rdf, "V").',
+        [VBActionsEnum.validation]: 'auth(rdf(code), "V").',
         [VBActionsEnum.versionsCreateVersionDump]: 'auth(rdf(dataset, version), "C").',
         [VBActionsEnum.versionsGetVersions]: 'auth(rdf(dataset, version), "R").',
     };
@@ -372,6 +374,12 @@ export class AuthorizationEvaluator {
 
         chk_capability(rbac(_,_), CRUDV) :-	
             chk_capability(rbac, CRUDV).
+
+        chk_capability(cform(_), CRUDV) :-	
+            chk_capability(cform, CRUDV).	
+        
+        chk_capability(cform(_,_), CRUDV) :-	
+            chk_capability(cform, CRUDV).
 
         resolveCRUDV(CRUDVRequest, CRUDV) :-
             char_subset(CRUDVRequest, CRUDV).

@@ -8,7 +8,7 @@ import { ResourcesServices } from "../services/resourcesServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { ActionDescription, RoleActionResolver } from "../utils/RoleActionResolver";
 import { TreeListContext } from "../utils/UIUtils";
-import { VBActionFunctionCtx } from "../utils/VBActions";
+import { VBActionFunctionCtx, VBActionsEnum } from "../utils/VBActions";
 import { ProjectContext, VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
@@ -45,6 +45,8 @@ export abstract class AbstractPanel {
     selectedNode: ARTURIResource = null;
     checkedNodes: ARTURIResource[] = [];
 
+    isGraphAuthorized: boolean;
+
     panelActions: ActionDescription[];
 
     /**
@@ -80,6 +82,8 @@ export abstract class AbstractPanel {
     ngOnInit() {
         this.showDeprecated = this.vbProp.getShowDeprecated();
         this.panelActions = this.actionResolver.getActionsForRole(this.panelRole);
+
+        this.isGraphAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.graphRead);
     }
 
     ngOnDestroy() {
@@ -157,6 +161,9 @@ export abstract class AbstractPanel {
      * @param graphMode 
      */
     isOpenGraphEnabled(graphMode?: GraphMode): boolean {
+        if (!this.isGraphAuthorized) {
+            return false;
+        }
         if (this.context != TreeListContext.dataPanel) {
             return false;
         }

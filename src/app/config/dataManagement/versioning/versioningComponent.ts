@@ -3,7 +3,9 @@ import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { RepositoryStatus, VersionInfo, RepositoryLocation } from '../../../models/History';
 import { VersionsServices } from "../../../services/versionsServices";
+import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { UIUtils } from '../../../utils/UIUtils';
+import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from '../../../utils/VBContext';
 import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
 import { DumpCreationModal, DumpCreationModalData } from "./dumpCreationModal";
@@ -18,10 +20,13 @@ export class VersioningComponent {
     private versionList: VersionInfo[];
     private selectedVersion: VersionInfo;
 
+    private isDumpAuthorized: boolean;
+
     constructor(private versionsService: VersionsServices, private basicModals: BasicModalServices, private modal: Modal) { }
 
     ngOnInit() {
         this.initVersions();
+        this.isDumpAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.exportDataDump);
     }
 
     private initVersions() {
