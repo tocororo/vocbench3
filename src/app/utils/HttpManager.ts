@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from "@angular/router";
 import { Observable } from 'rxjs/Observable';
@@ -415,50 +415,57 @@ export class HttpManager {
      */
     private handleError(err: Response | any, errorAlertOpt: ErrorAlertOptions) {
         let error: Error = new Error();
-        /** 
-         * Handle errors in case ST server is down. In this case, the Response (err) is an object like the following 
-         * { "_body": { "isTrusted": true }, "status": 0, "ok": false,
-         * "statusText": "", "headers": {}, "type": 3, "url": null } 
-         */
-        if (err.status == 0 && !err.ok && err.statusText == "" && err.type == 3 && err.url == null) {
-            let errorMsg = "Connection with ST server (" + this.serverhost + ") has failed; please check your internet connection";
-            this.basicModals.alert("Error", errorMsg, "error");
-            error.name = "ConnectionError";
-            error.message = errorMsg;
-        } else if (err.status == 401 || err.status == 403) { //handle errors in case user did a not authorized requests or is not logged in.
-            error.name = "UnauthorizedRequestError";
-            let errBody = err._body;
-            let errMessage: string = "Unknown error response from the server. Error status: " + err.status;
-            if (errBody instanceof ArrayBuffer) { //handle 401 or 403 response even for service invoked via downloadFile (that returns an ArrayBuffer)
-                if (err.headers.get("content-type") == "text/plain") {
-                    errMessage = String.fromCharCode.apply(String, new Uint8Array(errBody));
-                }
-            } else { //textual error body
-                errMessage = errBody;
-            }
-            error.message = errMessage;
-            if (err.status == 401) { //in case user is not logged at all, reset context and redirect to home
-                this.basicModals.alert("Error", errMessage, "error").then(
-                    () => {
-                        VBContext.resetContext();
-                        HttpServiceContext.resetContext();
-                        UIUtils.resetNavbarTheme();
-                        this.router.navigate(['/Home']);
+        if (err instanceof HttpErrorResponse) { //error thrown by the angular HttpClient get() or post()
+            if (err.error instanceof ErrorEvent) { //A client-side or network error occurred
+                let errorMsg = "An error occurred:" + err.error.message;
+                this.basicModals.alert("Client Error", errorMsg, "error");
+                error.name = "Client Error";
+                error.message = errorMsg;
+            } else { //The backend returned an unsuccessful response code. The response body may contain clues as to what went wrong.
+                let errorMsg: string;
+                if (!err.ok && err.status == 0 && err.statusText == "Unknown Error") { //attribute of error response in case of no backend response
+                    errorMsg = "Connection with ST server (" + this.serverhost + ") has failed; please check your internet connection";
+                    this.basicModals.alert("Error", errorMsg, "error");
+                    error.name = "ConnectionError";
+                    error.message = errorMsg;
+                } else { //backend error response
+                    let status: number = err.status;
+                    if (status == 401 || status == 403) { //user did a not authorized requests or is not logged in
+                        if (err.error instanceof ArrayBuffer) {
+                            errorMsg = String.fromCharCode.apply(String, new Uint8Array(err.error));
+                        } else {
+                            errorMsg = err.error;
+                        }
+                        error.name = "UnauthorizedRequestError";
+                        error.message = err.message;
+
+                        this.basicModals.alert("Error", errorMsg, "error").then(
+                            confirm => {
+                                if (err.status == 401) { ////in case user is not logged at all, reset context and redirect to home
+                                    this.basicModals.alert("Error", errorMsg, "error").then(
+                                        () => {
+                                            VBContext.resetContext();
+                                            HttpServiceContext.resetContext();
+                                            UIUtils.resetNavbarTheme();
+                                            this.router.navigate(['/Home']);
+                                        }
+                                    );
+                                };
+                            },
+                            () => {}
+                        );
+                    } else if (status == 500 || status == 404) { //server error (e.g. out of memory)
+                        let errorMsg = (err.statusText != null ? err.statusText : "Unknown response from the server") + " (status: " + err.status + ")";
+                        this.basicModals.alert("Error", errorMsg, "error");
+                        error.name = "ServerError";
+                        error.message = errorMsg;
                     }
-                );
-            } else { //403 operation not authorized
-                if (errorAlertOpt.show && HttpServiceContext.isErrorInterceptionEnabled()) {
-                    this.basicModals.alert("Error", errMessage, "error");
-                }    
+                }
             }
-        } else if (err.status == 500 || err.status == 404) { //in case of server error (e.g. out of memory)
-            let errorMsg = (err.statusText != null ? err.statusText : "Unknown response from the server") + " (status: " + err.status + ")";
-            error.name = "ServerError";
-            error.message = errorMsg;
-            this.basicModals.alert("Error", errorMsg, "error", err._body);
-        } else if (err instanceof Error) { //err is already an Error (parsed and thrown in handleOkOrErrorResponse or arrayBufferRespHandler)
+        } else if (err instanceof Error) { //error already parsed and thrown in handleOkOrErrorResponse or arrayBufferRespHandler
             error = err;
-            if (errorAlertOpt.show && 
+            if (
+                errorAlertOpt.show && 
                 (errorAlertOpt.exceptionsToSkip == null || errorAlertOpt.exceptionsToSkip.indexOf(error.name) == -1) &&
                 HttpServiceContext.isErrorInterceptionEnabled()
             ) { //if the alert should be shown
@@ -466,17 +473,6 @@ export class HttpManager {
                 let errorDetails = error.stack ? error.stack : error.name;
                 this.basicModals.alert("Error", errorMsg, "error", errorDetails);
             }
-        }
-        //if the previous checks are skipped, it means that the server responded with a 200 that contains a description of an excpetion
-        //(needed? maybe the following is already handled by (err instanceof Error) condition)
-        else if (errorAlertOpt.show && 
-            (errorAlertOpt.exceptionsToSkip == null || errorAlertOpt.exceptionsToSkip.indexOf(error.name) == -1) &&
-            HttpServiceContext.isErrorInterceptionEnabled()
-        ) { //if the alert should be shown
-            error = (<Error>err);
-            let errorMsg = error.message != null ? error.message : "Unknown response from the server";
-            let errorDetails = error.stack ? error.stack : error.name;
-            this.basicModals.alert("Error", errorMsg, "error", errorDetails);
         }
         UIUtils.stopAllLoadingDiv();
         return Observable.throw(error);
