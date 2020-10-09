@@ -12,6 +12,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Alphabetically sorted multiple values with the same language code in ResourceView
   * Added an option in the ResourceView for not showing links to deprecated resources
   * Fixed dependencies issues that prevented the application from building
+  * Fixed global ACL table not scrolling when many projects are being shown
   * Minor bugfixes and improvements
 
 # 8.0.0 (31-07-2020)
