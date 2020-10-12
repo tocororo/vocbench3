@@ -17,10 +17,10 @@
             </a>
         </li>
 
-        <li [ngStyle]="{ 'cursor': tabs.length>5 ? 'not-allowed' : 'pointer' }">
+        <li [ngStyle]="{ 'cursor': tabs.length>= tabLimit ? 'not-allowed' : 'pointer' }">
             <div class="btn-group btn-group-xs">
-                <button #addBtn class="btn btn-default addQueryBtn" (click)="addQueryTab()" (mouseup)="addBtn.blur()" [disabled]="tabs.length>9">+</button>
-                <button type="button" class="btn btn-default addQueryBtn dropdown-toggle" style="padding: 4px;" data-toggle="dropdown" [disabled]="tabs.length>5">
+                <button #addBtn class="btn btn-default addQueryBtn" (click)="addQueryTab()" (mouseup)="addBtn.blur()" [disabled]="tabs.length>=tabLimit">+</button>
+                <button type="button" class="btn btn-default addQueryBtn dropdown-toggle" style="padding: 4px;" data-toggle="dropdown" [disabled]="tabs.length>=tabLimit">
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">

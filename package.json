@@ -1,6 +1,6 @@
 {
   "name": "vocbench3",
-  "version": "8.0.1",
+  "version": "8.0.2-beta.0",
   "description": "",
   "scripts": {
     "start": "webpack-dev-server --inline --progress --port 8181",

@@ -4,6 +4,9 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
+# 8.0.2 (dd-mm-yyyy)
+  * 
+
 # 8.0.1 (08-10-2020)
   * Added Icelandic flag
   * Fixed a bug the prevented authorized users (e.g. lexicographer) to add/update/delete notes in assigned languages

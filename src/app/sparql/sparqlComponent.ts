@@ -19,6 +19,7 @@ import { Component } from "@angular/core";
 export class SparqlComponent {
 
     private tabs: Array<Tab> = [];
+    private tabLimit: number = 10;
 
     constructor() { }
 
