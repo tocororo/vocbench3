@@ -70,6 +70,7 @@ export class ResourceViewPreference {
     rendering: boolean = true;
     inference: boolean = false;
     showDeprecated: boolean = true;
+    showDatatypeBadge: boolean = false;
 }
 
 export enum ResourceViewMode {

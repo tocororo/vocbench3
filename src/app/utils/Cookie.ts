@@ -9,6 +9,7 @@ export class Cookie {
 	public static RES_VIEW_TAB_SYNCED = "resource_view.tab_synced";
 	public static RES_VIEW_DISPLAY_IMG = "resource_view.display_img";
 	public static RES_VIEW_SHOW_DEPRECATED = "resource_view.show_deprecated";
+	public static RES_VIEW_SHOW_DATATYPE_BADGE = "resource_view.show_datatype_badge";
 
 	public static SHOW_DEPRECATED = "tree_list.show_deprecated";
 

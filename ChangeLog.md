@@ -5,7 +5,7 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 8.0.2 (dd-mm-yyyy)
-  * 
+  * Added a badge for showing the datatype of typed values in ResourceView
 
 # 8.0.1 (08-10-2020)
   * Added Icelandic flag

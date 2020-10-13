@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResAttribute, ResourceNature } from "../../models/ARTResources";
+import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute, ResourceNature } from "../../models/ARTResources";
 import { XmlSchema } from "../../models/Vocabulary";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
+import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 
 @Component({
@@ -24,6 +25,9 @@ export class RdfResourceComponent {
     private langFlagAvailable: boolean = false; //true if the language (if any) has a flag icon available
     private unknownFlagImgSrc: string = UIUtils.getFlagImgSrc("unknown"); //pass an invalid langTag so returns the empty flag image source
 
+    private datatype: ARTURIResource; //datatype of the resource
+    private showDatatypeBadge: boolean = false;
+
     private literalWithLink: boolean = false; //true if the resource is a literal which contains url
     private splittedLiteral: string[]; //when literalWithLink is true, even elements are plain text, odd elements are url
 
@@ -40,10 +44,9 @@ export class RdfResourceComponent {
             this.initRenderingLabel();
             this.initImgSrc();
 
-            this.lang = this.initLang();
-            if (this.lang) {
-                this.langFlagAvailable = this.isLangFlagAvailable();
-            }
+            this.initLang();
+
+            this.initDatatype();
 
             this.initLiteralWithLink();
             this.initRenderingClass();
@@ -106,29 +109,50 @@ export class RdfResourceComponent {
 	/**
 	 * Returns the language tag of the current resource in order to show it as title of resource icon (flag)
 	 */
-    private initLang(): string {
-        let lang: string = null;
+    private initLang(): void {
+        //reset
+        this.lang = null; 
+        this.langFlagAvailable = false;
+        //init
         if (this.resource.isResource()) { //even if it is a resource, get the lang (it could be a custom form preview)
-            lang = this.resource.getAdditionalProperty(ResAttribute.LANG);
+            this.lang = this.resource.getAdditionalProperty(ResAttribute.LANG);
         } else if (this.resource instanceof ARTLiteral) {
-            lang = this.resource.getLang();
+            this.lang = this.resource.getLang();
             if (this.resource.getDatatype() == XmlSchema.language.getURI()) {
-                lang = this.resource.getValue();
+                this.lang = this.resource.getValue();
             }
         }
-        return lang;
+        if (this.lang != null) { //if a language is present, init langFlagAvailable
+            if (this.preferences.getShowFlags()) {
+                //just check if the image name doesn't contains "unknown" since the image name for unavailable flag is flag_unknown.png
+                this.langFlagAvailable = !this.imgSrc.includes("flag_unknown");
+            } else {
+                this.langFlagAvailable = false; //if the show_flag preference is false, show always the langTag
+            }
+        }
     }
 
-	/**
-	 * Returns true if the current resource langTag has a flag image available and the show_flag is true.
-	 */
-    private isLangFlagAvailable(): boolean {
-        if (this.preferences.getShowFlags()) {
-            //just check if the image name doesn't contains "unknown" since the image name for unavailable flag is flag_unknown.png
-            return !this.imgSrc.includes("unknown");
-        } else {
-            return false; //if the show_flag preference is false, show always the langTag
+    private initDatatype(): ARTURIResource {
+        //reset
+        this.datatype = null;
+        this.showDatatypeBadge = false;
+        //init
+        if (this.resource instanceof ARTLiteral) {
+            let dtIri = this.resource.getDatatype();
+            if (dtIri != null) { //if there is a datatype
+                let show: string = ResourceUtils.getQName(dtIri, VBContext.getPrefixMappings());
+                this.datatype = new ARTURIResource(dtIri, show, RDFResourceRolesEnum.dataRange);
+            }
         }
+        if (this.datatype != null) { //if a datatype is present, init datatypeIconAvailable
+            let datatypeIconAvailable: boolean = !this.imgSrc.includes("unknown_datatype");
+            if (!datatypeIconAvailable) { //if icon is not available, the badge is always shown
+                this.showDatatypeBadge = true;
+            } else { //otherwise, is show only according the preference
+                this.showDatatypeBadge = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.showDatatypeBadge;
+            }
+        }
+        return this.datatype;
     }
 
 	/**

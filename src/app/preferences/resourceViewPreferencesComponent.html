@@ -89,5 +89,19 @@
             </div>
         </div>
 
+        <div class="panel panel-default" style="margin-top: 4px">
+            <div class="panel-body">
+                <div class="checkbox-inline">
+                    <label>
+                        <input type="checkbox" [(ngModel)]="showDatatypeBadge" (ngModelChange)="onShowDatatypeBadge()">
+                        Show datatype badge
+                        <span class="glyphicon glyphicon-info-sign"
+                            title="If enabled, a datatype badge will be shown beside typed values (note: the badge is always visible when datatype has no a dedicated/explicative icon">
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

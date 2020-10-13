@@ -544,6 +544,11 @@ export class VBProperties {
         if (showDeprecatedCookie != null) {
             rvPrefs.showDeprecated = showDeprecatedCookie != "false"; //default true
         }
+        //show datatype badge
+        let showDatatypeBadgeCookie = Cookie.getCookie(Cookie.RES_VIEW_SHOW_DATATYPE_BADGE);
+        if (showDatatypeBadgeCookie != null) {
+            rvPrefs.showDatatypeBadge = showDatatypeBadgeCookie == "true"; //default false
+        }
     }
 
     /**
@@ -592,6 +597,11 @@ export class VBProperties {
     setShowDeprecatedInResView(show: boolean) {
         Cookie.setCookie(Cookie.RES_VIEW_SHOW_DEPRECATED, show + "");
         VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.showDeprecated = show;
+    }
+
+    setShowDatatypeBadge(show: boolean) {
+        Cookie.setCookie(Cookie.RES_VIEW_SHOW_DEPRECATED, show + "");
+        VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.showDatatypeBadge = show;
     }
 
     /**
