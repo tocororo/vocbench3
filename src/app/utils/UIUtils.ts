@@ -224,6 +224,8 @@ export class UIUtils {
                 imgSrc = this.individualImgSrc;
                 if (rdfResource.getAdditionalProperty(ResAttribute.LANG) != null) { //has a language => use the flag icon
                     imgSrc = this.getFlagImgSrc(rdfResource.getAdditionalProperty(ResAttribute.LANG));
+                } else if (rdfResource.getAdditionalProperty(ResAttribute.DATA_TYPE) != null) {
+                    imgSrc = this.getDatatypeImgSrc(rdfResource.getAdditionalProperty(ResAttribute.DATA_TYPE));
                 } else {
                     if (!explicit) {
                         imgSrc = this.individualImportedImgSrc;
@@ -257,6 +259,8 @@ export class UIUtils {
                 }
                 if (rdfResource.getAdditionalProperty(ResAttribute.LANG) != null) { //has a language => use the flag icon
                     imgSrc = this.getFlagImgSrc(rdfResource.getAdditionalProperty(ResAttribute.LANG));
+                } else if (rdfResource.getAdditionalProperty(ResAttribute.DATA_TYPE) != null) {
+                    imgSrc = this.getDatatypeImgSrc(rdfResource.getAdditionalProperty(ResAttribute.DATA_TYPE));
                 }
             } else if (role == RDFResourceRolesEnum.objectProperty) {
                 imgSrc = this.propObjectImgSrc;

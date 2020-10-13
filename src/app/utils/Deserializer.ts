@@ -68,6 +68,10 @@ export class Deserializer {
         if (lang != undefined) {
             node.setAdditionalProperty(ResAttribute.LANG, lang);
         }
+        var dataType: string = resJson[ResAttribute.DATA_TYPE];
+        if (dataType != undefined) {
+            node.setAdditionalProperty(ResAttribute.DATA_TYPE, dataType);
+        }
         var graphsAttr: string = resJson[ResAttribute.GRAPHS];
         if (graphsAttr != undefined) {
             let splittedGraph: string[] = graphsAttr.split(",");

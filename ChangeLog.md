@@ -6,6 +6,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 8.0.2 (dd-mm-yyyy)
   * Added a badge for showing the datatype of typed values in ResourceView
+  * Added data type information in the single-value custom form preview
 
 # 8.0.1 (08-10-2020)
   * Added Icelandic flag

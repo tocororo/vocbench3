@@ -137,13 +137,18 @@ export class RdfResourceComponent {
         this.datatype = null;
         this.showDatatypeBadge = false;
         //init
-        if (this.resource instanceof ARTLiteral) {
-            let dtIri = this.resource.getDatatype();
-            if (dtIri != null) { //if there is a datatype
-                let show: string = ResourceUtils.getQName(dtIri, VBContext.getPrefixMappings());
-                this.datatype = new ARTURIResource(dtIri, show, RDFResourceRolesEnum.dataRange);
-            }
+        let dtIri;
+        if (this.resource instanceof ARTLiteral) { // if it is a literal
+            dtIri = this.resource.getDatatype();
+        } else { // otherwise, it is a resource, possibly with an additional property dataType (as it could be from a custom form preview)
+            dtIri = this.resource.getAdditionalProperty(ResAttribute.DATA_TYPE);
         }
+        
+        if (dtIri != null) { //if there is a datatype
+            let show: string = ResourceUtils.getQName(dtIri, VBContext.getPrefixMappings());
+            this.datatype = new ARTURIResource(dtIri, show, RDFResourceRolesEnum.dataRange);
+        }
+
         if (this.datatype != null) { //if a datatype is present, init datatypeIconAvailable
             let datatypeIconAvailable: boolean = !this.imgSrc.includes("unknown_datatype");
             if (!datatypeIconAvailable) { //if icon is not available, the badge is always shown

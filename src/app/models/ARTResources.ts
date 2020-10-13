@@ -333,6 +333,7 @@ export class ResAttribute {
     public static RESOURCE_POSITION = "resourcePosition";
     public static ACCESS_METHOD = "accessMethod";
     public static LANG = "lang";
+    public static DATA_TYPE = "dataType";
     public static GRAPHS = "graphs"; //used in getResourceView response
     public static MEMBERS = "members"; //used for ordered collections
     public static INDEX = "index"; //used for members of ordered collections
