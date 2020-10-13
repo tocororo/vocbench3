@@ -1,0 +1,32 @@
+:host {
+    min-height: 16px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 2px;
+}
+
+.rdfResourceIcon {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    min-height: 0;
+    min-width: 0;
+}
+
+.rdfResourceText {
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+    margin-left: 2px;
+    margin-right: 6px;
+}
+
+.datatype-badge {
+    background-color: #eb8e54;
+    font-weight: initial;
+    font-size: 70%;
+    padding: 0.3em .6em;
+}

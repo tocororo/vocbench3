@@ -192,16 +192,6 @@ resource-list, class-individual-tree, scheme-selection, data-range-editor, impor
     padding: 10px;
 }
 
-rdf-resource {
-    min-height: 16px;
-    display: inline-flex;
-    align-items: center;
-    border-radius: 2px;
-}
-rdf-resource > .rdfResourceIcon {
-    width: 16px;
-    height: 16px;
-}
 /* Ellipsis of the content of a rdf-resource in a button, in a navigation tab (ResView tabs), and in a panel-heading (heading of ResView) */
 /* button > rdf-resource > span, .nav-tabs rdf-resource > span,
 .panel-heading rdf-resource > span, .tile rdf-resource > span { */
@@ -212,14 +202,7 @@ button > rdf-resource span, .nav-tabs rdf-resource span,
     text-overflow: ellipsis;
     white-space: nowrap !important;
 }
-rdf-resource > .rdfResourceText {
-    border: 1px solid transparent;
-    border-radius: 4px;
-    padding-left: 4px;
-    padding-right: 4px;
-    margin-left: 2px;
-    margin-right: 6px;
-}
+
 .proposedAddRes {
     background-color: #dff0d8 !important;
     color: #3c763d !important;

@@ -36,6 +36,6 @@
 
     <ng-template #notLinkBlock>
         <span style="white-space: pre-wrap">{{renderingLabel}}</span>
-        <span *ngIf="showDatatypeBadge" class="label" style="margin-left: 6px; font-size: 90%; background-color: #eb8e54;">{{datatype.show}}</span>
     </ng-template>
 </span>
+<span *ngIf="showDatatypeBadge" class="label datatype-badge">{{datatype.show}}</span>

@@ -1,11 +1,10 @@
 <div *ngIf="tabs.length > 0" class="vbox">
-    
     <!--Tabs navigation-->
     <ul class="nav nav-tabs">
         <li *ngFor="let t of tabs" [ngClass]="{active : t.active}">
-            <a (click)="selectTab(t, 'true')">
+            <a (click)="selectTab(t, 'true')" style="display: flex; align-items: center;">
                 <rdf-resource [resource]="t.resource"></rdf-resource>
-                <span class="glyphicon glyphicon-remove-circle" (click)="closeTab(t)" style="cursor: pointer"
+                <span class="glyphicon glyphicon-remove-circle" (click)="closeTab(t)" style="cursor: pointer; align-self: flex-start;"
                     onmouseover="this.className='glyphicon glyphicon-remove-sign';"
                     onmouseout="this.className='glyphicon glyphicon-remove-circle';">
                 </span>
@@ -25,5 +24,4 @@
             <resource-view [resource]="t.resource" (dblclickObj)="objectDblClick($event)" (update)="onResourceUpdate($event, t)"></resource-view>
         </div>
     </div>
-
 </div>

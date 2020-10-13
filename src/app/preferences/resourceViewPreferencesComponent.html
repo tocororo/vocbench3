@@ -94,9 +94,9 @@
                 <div class="checkbox-inline">
                     <label>
                         <input type="checkbox" [(ngModel)]="showDatatypeBadge" (ngModelChange)="onShowDatatypeBadge()">
-                        Show datatype badge
+                        Always show datatype badge
                         <span class="glyphicon glyphicon-info-sign"
-                            title="If enabled, a datatype badge will be shown beside typed values (note: the badge is always visible when datatype has no a dedicated/explicative icon">
+                            title="If enabled, a datatype badge will be always shown beside the value. If not, the badge is only shown in case of an unknown datype (the icon on the left of the value will classify the known datatype)">
                         </span>
                     </label>
                 </div>

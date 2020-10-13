@@ -10,7 +10,7 @@ import { VBProperties } from "../../utils/VBProperties";
 @Component({
     selector: "rdf-resource",
     templateUrl: "./rdfResourceComponent.html",
-    styleUrls: ["../codemirror/manchesterEditor/manchester.css"]
+    styleUrls: ["./rdfResourceComponent.css", "../codemirror/manchesterEditor/manchester.css"]
 })
 export class RdfResourceComponent {
     @Input() resource: ARTNode;
