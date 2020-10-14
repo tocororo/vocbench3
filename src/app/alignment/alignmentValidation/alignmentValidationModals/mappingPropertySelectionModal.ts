@@ -27,7 +27,7 @@ export class MappingPropertySelectionModal implements ModalComponent<MappingProp
 
     ngOnInit() {
         //get from server list of mapping properties
-        this.alignmentService.getMappingProperties(this.context.resource, false).subscribe(
+        this.alignmentService.getMappingProperties(this.context.resource.getRole(), false).subscribe(
             props => {
                 this.mappingPropList = props;
             }

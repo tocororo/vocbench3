@@ -289,8 +289,9 @@ export class AlignmentManagementComponent {
     private getSuggestedMappingProperties(cell: AlignmentCell) {
         //call the service only if suggested properties for the given cell is not yet initialized
         if (cell.getSuggestedMappingProperties() == null) {
-            this.alignmentService.getSuggestedProperties(cell.getEntity1(), cell.getRelation()).subscribe(
+            this.alignmentService.getSuggestedProperties(cell.getEntity1().getRole(), cell.getRelation()).subscribe(
                 props => {
+                    props
                     cell.setSuggestedMappingProperties(props);
                 }
             );

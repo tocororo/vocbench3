@@ -20,19 +20,19 @@ export class AlignmentServices {
     /**
      * Returns the available alignment properties depending on the project and resource type (property,
 	 * or concept, or class,...).
-	 * @param resource resource to align
+	 * @param role role of the resource to align
 	 * @param allMappingProps if false returns just the mapping properties available for the current resource and
 	 * model type; if true returns all the mapping properties independently from the model type
 	 * @return a collection of properties
      */
-    getMappingProperties(resource: ARTResource, allMappingProps: boolean) {
-        var params: any = {
-            resource: resource,
+    getMappingProperties(role: RDFResourceRolesEnum, allMappingProps: boolean) {
+        let params: any = {
+            role: role,
             allMappingProps: allMappingProps
         };
         return this.httpMgr.doGet(this.serviceName, "getMappingProperties", params).map(
             stResp => {
-                var props: ARTURIResource[] = Deserializer.createURIArray(stResp);
+                let props: ARTURIResource[] = Deserializer.createURIArray(stResp);
                 ResourceUtils.sortResources(props, SortAttribute.value);
                 return props;
             }
@@ -47,7 +47,7 @@ export class AlignmentServices {
      * @param targetResource the resource (of an external project) to align
      */
     addAlignment(sourceResource: ARTResource, predicate: ARTURIResource, targetResource: ARTResource) {
-        var params: any = {
+        let params: any = {
             sourceResource: sourceResource,
             predicate: predicate,
             targetResource: targetResource
@@ -63,7 +63,7 @@ export class AlignmentServices {
      * @return return an object with "onto1" and "onto2", namely the baseURI of the two aligned ontologies
      */
     loadAlignment(file: File, leftProject?: Project, rightProject?: Project): Observable<AlignmentOverview> {
-        var data = {
+        let data = {
             inputFile: file,
             leftProject: leftProject ? leftProject.getName() : null,
             rightProject: rightProject ? rightProject.getName() : null
@@ -81,17 +81,17 @@ export class AlignmentServices {
      * @return returns an object containing "cells" (an array of AlignmentCell), "page" and "totPage"
      */
     listCells(pageIdx?: number, range?: number): Observable<{page: number, totPage: number, cells: AlignmentCell[]}> {
-        var params: any = {};
+        let params: any = {};
         if (pageIdx != undefined && range != undefined) {
             params.pageIdx = pageIdx,
                 params.range = range
         }
         return this.httpMgr.doGet(this.serviceName, "listCells", params).map(
             stResp => {
-                var page: number = stResp.page;
-                var totPage: number = stResp.totPage;
-                var cells: Array<AlignmentCell> = [];
-                for (var i = 0; i < stResp.cells.length; i++) {
+                let page: number = stResp.page;
+                let totPage: number = stResp.totPage;
+                let cells: Array<AlignmentCell> = [];
+                for (let i = 0; i < stResp.cells.length; i++) {
                     cells.push(this.parseAlignmentCell(stResp.cells[i]));
                 }
                 let alignmentMap = {
@@ -114,7 +114,7 @@ export class AlignmentServices {
      * @return a cell resulting from the action
      */
     acceptAlignment(entity1: ARTURIResource, entity2: ARTURIResource, relation: string, forcedProperty?: ARTURIResource, setAsDefault?: boolean) {
-        var params: any = {
+        let params: any = {
             entity1: entity1,
             entity2: entity2,
             relation: relation
@@ -137,11 +137,11 @@ export class AlignmentServices {
      * @return all cells resulting from the action
      */
     acceptAllAlignment() {
-        var params = {};
+        let params = {};
         return this.httpMgr.doGet(this.serviceName, "acceptAllAlignment", params).map(
             stResp => {
-                var cells: Array<AlignmentCell> = [];
-                for (var i = 0; i < stResp.length; i++) {
+                let cells: Array<AlignmentCell> = [];
+                for (let i = 0; i < stResp.length; i++) {
                     cells.push(this.parseAlignmentCell(stResp[i]));
                 }
                 return cells;
@@ -155,13 +155,13 @@ export class AlignmentServices {
      * @return all cells resulting from the action
      */
     acceptAllAbove(threshold: number) {
-        var params = {
+        let params = {
             threshold: threshold
         };
         return this.httpMgr.doGet(this.serviceName, "acceptAllAbove", params).map(
             stResp => {
-                var cells: Array<AlignmentCell> = [];
-                for (var i = 0; i < stResp.length; i++) {
+                let cells: Array<AlignmentCell> = [];
+                for (let i = 0; i < stResp.length; i++) {
                     cells.push(this.parseAlignmentCell(stResp[i]));
                 }
                 return cells;
@@ -177,7 +177,7 @@ export class AlignmentServices {
      * @return a cell resulting from the action
      */
     rejectAlignment(entity1: ARTURIResource, entity2: ARTURIResource, relation: string) {
-        var params = {
+        let params = {
             entity1: entity1,
             entity2: entity2,
             relation: relation
@@ -194,11 +194,11 @@ export class AlignmentServices {
      * @return all cells resulting from the action
      */
     rejectAllAlignment() {
-        var params = {};
+        let params = {};
         return this.httpMgr.doGet(this.serviceName, "rejectAllAlignment", params).map(
             stResp => {
-                var cells: Array<AlignmentCell> = [];
-                for (var i = 0; i < stResp.length; i++) {
+                let cells: Array<AlignmentCell> = [];
+                for (let i = 0; i < stResp.length; i++) {
                     cells.push(this.parseAlignmentCell(stResp[i]));
                 }
                 return cells;
@@ -212,13 +212,13 @@ export class AlignmentServices {
      * @return all cells resulting from the action
      */
     rejectAllUnder(threshold: number) {
-        var params = {
+        let params = {
             threshold: threshold
         };
         return this.httpMgr.doGet(this.serviceName, "rejectAllUnder", params).map(
             stResp => {
-                var cells: Array<AlignmentCell> = [];
-                for (var i = 0; i < stResp.length; i++) {
+                let cells: Array<AlignmentCell> = [];
+                for (let i = 0; i < stResp.length; i++) {
                     cells.push(this.parseAlignmentCell(stResp[i]));
                 }
                 return cells;
@@ -234,7 +234,7 @@ export class AlignmentServices {
      * @return a cell resulting from the action 
      */
     changeRelation(entity1: ARTURIResource, entity2: ARTURIResource, relation: string) {
-        var params = {
+        let params = {
             entity1: entity1,
             entity2: entity2,
             relation: relation
@@ -254,7 +254,7 @@ export class AlignmentServices {
      * @return a cell resulting from the action
      */
     changeMappingProperty(entity1: ARTURIResource, entity2: ARTURIResource, mappingProperty: ARTURIResource) {
-        var params = {
+        let params = {
             entity1: entity1,
             entity2: entity2,
             mappingProperty: mappingProperty
@@ -274,14 +274,14 @@ export class AlignmentServices {
      * representing a report of the changes.
      */
     applyValidation(deleteRejected: boolean) {
-        var params = {
+        let params = {
             deleteRejected: deleteRejected
         };
         return this.httpMgr.doGet(this.serviceName, "applyValidation", params).map(
             stResp => {
-                var cells: Array<any> = [];
-                for (var i = 0; i < stResp.length; i++) {
-                    var c = {
+                let cells: Array<any> = [];
+                for (let i = 0; i < stResp.length; i++) {
+                    let c = {
                         entity1: stResp[i].entity1,
                         entity2: stResp[i].entity2,
                         property: stResp[i].property,
@@ -295,14 +295,14 @@ export class AlignmentServices {
     }
 
     /**
-     * Returns a list of mapping properties suggested for the given entity and the alignment relation
-     * @param entity the source entity of the alignment
+     * Returns a list of mapping properties suggested for the given entity role and the alignment relation
+     * @param role the role of the source entity of the alignment
      * @param relation the relation of the alignment cell
      * @return collection of ARTURIResource representing suggested mapping property
      */
-    getSuggestedProperties(entity: ARTURIResource, relation: string) {
-        var params = {
-            entity: entity,
+    getSuggestedProperties(role: RDFResourceRolesEnum, relation: string) {
+        let params = {
+            role: role,
             relation: relation
         };
         return this.httpMgr.doGet(this.serviceName, "getSuggestedProperties", params).map(
@@ -316,7 +316,7 @@ export class AlignmentServices {
      * Exports the alignment at the current status.
      */
     exportAlignment() {
-        var params = {};
+        let params = {};
         return this.httpMgr.downloadFile(this.serviceName, "exportAlignment", params);
     }
 
@@ -324,7 +324,7 @@ export class AlignmentServices {
      * Tells to the server that the sessione is closed and the alignment files can be deleted
      */
     closeSession() {
-        var params = {};
+        let params = {};
         return this.httpMgr.doGet(this.serviceName, "closeSession", params).map(
             stResp => {
                 HttpServiceContext.removeSessionToken();
@@ -377,7 +377,7 @@ export class AlignmentServices {
     searchResources(inputRes: ARTURIResource, resourcePosition: string, rolesArray: RDFResourceRolesEnum[], 
         langToLexModel?: Map<string, ARTURIResource>, searchModeList?: SearchMode[]): Observable<ARTURIResource[]> {
 
-        var params: any = {
+        let params: any = {
             inputRes: inputRes,
             resourcePosition: resourcePosition,
             rolesArray: rolesArray
