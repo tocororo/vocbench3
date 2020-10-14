@@ -92,17 +92,29 @@ export class RdfResourceComponent {
         this.natureTooltip = null;
         if (this.resource instanceof ARTResource) {
             let natureList: ResourceNature[] = this.resource.getNature();
-            let natureListSerlalized: string[] = [];
-            natureList.forEach(n => {
-                let graphsToNT: string[] = [];
-                n.graphs.forEach(g => {
-                    graphsToNT.push(g.toNT());
+            if (natureList.length > 0) {
+                let natureListSerlalized: string[] = [];
+                natureList.forEach(n => {
+                    let graphsToNT: string[] = [];
+                    n.graphs.forEach(g => {
+                        graphsToNT.push(g.toNT());
+                    });
+                    natureListSerlalized.push(ResourceUtils.getResourceRoleLabel(n.role) + ", defined in: " + graphsToNT.join(", "));
                 });
-                natureListSerlalized.push(ResourceUtils.getResourceRoleLabel(n.role) + ", defined in: " + graphsToNT.join(", "));
-            });
-            this.natureTooltip = natureListSerlalized.join("\n\n");
-        } else if (this.resource instanceof ARTLiteral) { //literal
-            this.natureTooltip = this.resource.getDatatype();
+                this.natureTooltip = natureListSerlalized.join("\n\n");
+            } else { //nature empty => could be the case of a reified resource => check language or datatype (representing the one of the preview value)
+                if (this.lang != null) {
+                    this.natureTooltip = this.lang;
+                } else if (this.datatype != null) {
+                    this.natureTooltip = this.datatype.toNT();    
+                }
+            }
+        } else if (this.resource instanceof ARTLiteral) {
+            if (this.lang != null) {
+                this.natureTooltip = this.lang;
+            } else if (this.datatype != null) {
+                this.natureTooltip = this.datatype.toNT();    
+            }
         }
     }
 

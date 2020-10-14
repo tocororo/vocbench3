@@ -38,4 +38,4 @@
         <span style="white-space: pre-wrap">{{renderingLabel}}</span>
     </ng-template>
 </span>
-<span *ngIf="showDatatypeBadge" class="label datatype-badge">{{datatype.show}}</span>
+<span *ngIf="showDatatypeBadge" class="label datatype-badge" [title]="datatype.toNT()">{{datatype.show}}</span>
