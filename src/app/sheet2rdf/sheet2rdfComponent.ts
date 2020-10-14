@@ -183,7 +183,7 @@ export class Sheet2RdfComponent {
          * incompleteHeader: only one between nodes and graph not defined, or graph application whith node not defined
          */
         if (header.ignore) {
-            header['cssClass'] = "ignoreHeader";
+            header['cssClass'] = "ignoredHeader";
             return;
         }
         if (header.graph.length == 0 && header.nodes.length == 0) {
