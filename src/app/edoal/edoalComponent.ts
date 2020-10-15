@@ -252,7 +252,8 @@ export class EdoalComponent {
     private deleteCorrespondece() {
         this.edoalService.deleteCorrespondence(this.selectedCorrespondence.identity).subscribe(
             () => {
-                this.listCorrespondences();
+                this.correspondences.splice(this.correspondences.indexOf(this.selectedCorrespondence), 1);
+                this.selectedCorrespondence = null;
             }
         );
     }

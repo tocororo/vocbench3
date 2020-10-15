@@ -277,7 +277,7 @@ export class AlignmentServices {
         let params = {
             deleteRejected: deleteRejected
         };
-        return this.httpMgr.doGet(this.serviceName, "applyValidation", params).map(
+        return this.httpMgr.doPost(this.serviceName, "applyValidation", params).map(
             stResp => {
                 let cells: Array<any> = [];
                 for (let i = 0; i < stResp.length; i++) {
@@ -292,6 +292,13 @@ export class AlignmentServices {
                 return cells;
             }
         );
+    }
+
+    applyValidationToEdoal(deleteRejected: boolean) {
+        let params = {
+            deleteRejected: deleteRejected
+        };
+        return this.httpMgr.doPost(this.serviceName, "applyValidationToEdoal", params);
     }
 
     /**

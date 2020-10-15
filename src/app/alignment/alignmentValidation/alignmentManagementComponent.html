@@ -134,11 +134,12 @@
             </button>
         </span>
         <span class="pull-right">
-            <button class="btn btn-default btn-xs" (click)="applyToOnto()" [disabled]="alignmentCellList.length == 0">
-                Apply to Ontology
+            <button class="btn btn-default btn-xs" (click)="applyValidation()" [disabled]="alignmentCellList.length == 0">
+                <span *ngIf="!isEdoal">Apply to Dataset</span>
+                <span *ngIf="isEdoal">Apply EDOAL linkset</span>
             </button>
             <button class="btn btn-default btn-xs" (click)="export()" [disabled]="alignmentCellList.length == 0">
-                Export as...
+                Save
             </button>
         </span>
     </div>

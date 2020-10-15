@@ -1,3 +1,4 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, Input, SimpleChanges } from '@angular/core';
 import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
@@ -5,11 +6,13 @@ import { Observable } from 'rxjs';
 import { AlignmentCell, AlignmentOverview, AlignmentRelationSymbol } from '../../models/Alignment';
 import { ARTURIResource, LocalResourcePosition, ResourcePosition } from "../../models/ARTResources";
 import { Project } from "../../models/Project";
+import { EDOAL } from '../../models/Vocabulary';
 import { AlignmentServices } from "../../services/alignmentServices";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { Cookie } from "../../utils/Cookie";
 import { HttpServiceContext } from "../../utils/HttpManager";
 import { UIUtils } from "../../utils/UIUtils";
+import { VBContext } from '../../utils/VBContext';
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { MappingPropertySelectionModal, MappingPropertySelectionModalData } from './alignmentValidationModals/mappingPropertySelectionModal';
@@ -26,6 +29,8 @@ export class AlignmentManagementComponent {
     @Input() overview: AlignmentOverview; //not used, useful in order to trigger the reload of the alignment cells when it changes
     @Input() leftProject: Project;
     @Input() rightProject: Project;
+
+    private isEdoal: boolean;
 
     private alignmentCellList: Array<AlignmentCell> = [];
 
@@ -57,6 +62,9 @@ export class AlignmentManagementComponent {
     constructor(private alignmentService: AlignmentServices, private resourceService: ResourcesServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
 
+    ngOnInit() {
+        this.isEdoal = VBContext.getWorkingProject().getModelType() == EDOAL.uri;
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         this.initSettings();
@@ -432,30 +440,45 @@ export class AlignmentManagementComponent {
     }
 
     /**
-     * Listener to "Apply to ontology button"
+     * Listener to "Apply to dataset/Edoal linkset" button
      */
-    private applyToOnto() {
-        if (this.rejectedAlignmentAction == "skip") {
-            this.basicModals.confirm("Apply validation", "This operation will add to the ontology the triples of the "
-                + "accepted alignments. Are you sure to continue?", "warning").then(
-                (confirm: any) => {
-                    this.applyValidation(false);
+    private applyValidation() {
+        let message: string;
+        if (this.isEdoal) {
+            if (this.rejectedAlignmentAction == "skip" || this.rejectedAlignmentAction == "ask") {
+                message = "This operation will add the accepted alignment to the EDOAL linkset. Are you sure to continue?";
+            } else {
+                message = "This operation will add the accepted alignment to the EDOAL linkset and will delete those rejected. Are you sure to continue?";
+            }
+        } else {
+            if (this.rejectedAlignmentAction == "skip" || this.rejectedAlignmentAction == "ask") {
+                message = "This operation will add to the ontology the triples of the accepted alignments. Are you sure to continue?";
+            } else {
+                message = "This operation will add to the ontology the triples of the accepted alignments and delete the triples of the ones rejected. Are you sure to continue?";
+            }
+        }
+
+        if (this.rejectedAlignmentAction == "skip" || this.rejectedAlignmentAction == "delete") {
+            this.basicModals.confirm("Apply validation", message, "warning").then(
+                () => {
+                    let deleteRejected = this.rejectedAlignmentAction == "delete";
+                    if (this.isEdoal) {
+                        this.applyToEdoalLinkset(deleteRejected)
+                    } else {
+                        this.applyToDataset(deleteRejected);
+                    }
+                    
                 },
                 () => { }
             );
-        } else if (this.rejectedAlignmentAction == "delete") {
-            this.basicModals.confirm("Apply validation", "This operation will add to the ontology the triples of the "
-                + "accepted alignments and delete the triples of the ones rejected. Are you sure to continue?", "warning").then(
-                (confirm: any) => {
-                    this.applyValidation(true);
-                },
-                () => { }
-            );
-        } else if (this.rejectedAlignmentAction == "ask") {
-            this.basicModals.confirmCheck("Apply valdiation", "This operation will add to the ontology the triples of the "
-                + "accepted alignments. Are you sure to continue?", "Delete triples of rejected alignments", "warning").then(
-                (confirm: any) => {
-                    this.applyValidation(confirm);
+        } else { //ask
+            this.basicModals.confirmCheck("Apply valdiation", message, "Delete triples of rejected alignments", "warning").then(
+                (check: boolean) => {
+                    if (this.isEdoal) {
+                        this.applyToEdoalLinkset(check)
+                    } else {
+                        this.applyToDataset(check);
+                    }
                 },
                 () => { }
             );
@@ -465,9 +488,9 @@ export class AlignmentManagementComponent {
     /**
      * calls the service to apply the validation and shows the report dialog.
      */
-    private applyValidation(deleteReject: boolean) {
+    private applyToDataset(deleteRejected: boolean) {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.alignmentService.applyValidation(deleteReject).subscribe(
+        this.alignmentService.applyValidation(deleteRejected).subscribe(
             report => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 //open report modal
@@ -481,11 +504,23 @@ export class AlignmentManagementComponent {
         )
     }
 
+    private applyToEdoalLinkset(deleteRejected: boolean) {
+        UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
+        this.alignmentService.applyValidationToEdoal(deleteRejected).subscribe(
+            () => {
+                UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
+                this.basicModals.alert("Apply validation", "All correspondences have been added succesfully");
+            }
+        );
+    }
+
     private export() {
         this.alignmentService.exportAlignment().subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
-                this.basicModals.downloadLink("Export alignment", null, exportLink, "alignment.rdf");
+                this.basicModals.downloadLink("Export alignment", 
+                    "Please notice that the validation data is not stored internally and must be restored through the saved file available at this download link", 
+                    exportLink, "alignment.rdf");
             }
         );
     }

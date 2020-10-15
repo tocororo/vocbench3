@@ -440,16 +440,12 @@ export class HttpManager {
                         error.message = err.message;
 
                         this.basicModals.alert("Error", errorMsg, "error").then(
-                            confirm => {
+                            () => {
                                 if (err.status == 401) { ////in case user is not logged at all, reset context and redirect to home
-                                    this.basicModals.alert("Error", errorMsg, "error").then(
-                                        () => {
-                                            VBContext.resetContext();
-                                            HttpServiceContext.resetContext();
-                                            UIUtils.resetNavbarTheme();
-                                            this.router.navigate(['/Home']);
-                                        }
-                                    );
+                                    VBContext.resetContext();
+                                    HttpServiceContext.resetContext();
+                                    UIUtils.resetNavbarTheme();
+                                    this.router.navigate(['/Home']);
                                 };
                             },
                             () => {}
