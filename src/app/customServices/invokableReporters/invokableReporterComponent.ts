@@ -64,7 +64,7 @@ export class InvokableReporterComponent {
                 if (restoreInvocation) {
                     //try to restore the selected service invocation (if any)
                     if (this.selectedServiceInvocationIdx != null && this.form.sections.value != null && this.form.sections.value.length > this.selectedServiceInvocationIdx) {
-                        this.selectedServiceInvocation = this.form.sections.value[this.selectedServiceInvocationIdx];
+                        this.selectServiceInvocation(this.selectedServiceInvocationIdx)
                     } else {
                         this.selectedServiceInvocation = null;
                     }
@@ -129,12 +129,10 @@ export class InvokableReporterComponent {
     }
     
     private selectServiceInvocation(index: number) {
-        if (this.selectedServiceInvocationIdx != index) {
-            this.selectedServiceInvocationIdx = index;
-            this.selectedServiceInvocation = this.form.sections.value[index];
-            //set the reference of the reporter which the invocation belongs to (usefult when editing the service invocation)
-            this.selectedServiceInvocation.reporterRef = this.ref;
-        }
+        this.selectedServiceInvocationIdx = index;
+        this.selectedServiceInvocation = this.form.sections.value[index];
+        //set the reference of the reporter which the invocation belongs to (usefult when editing the service invocation)
+        this.selectedServiceInvocation.reporterRef = this.ref;
     }
 
     private createServiceInvocation() {

@@ -90,6 +90,7 @@ export class InvokableReporterEditorModal implements ModalComponent<InvokableRep
             label: this.form.label.value,
             description: this.form.description.value,
             template: this.form.template.value,
+            sections: this.form.sections.value,
             mimeType: this.form.mimeType.value
         };
 
