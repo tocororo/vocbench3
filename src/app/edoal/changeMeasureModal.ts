@@ -4,7 +4,6 @@ import { DialogRef, ModalComponent } from "ngx-modialog";
 
 export class ChangeMeasureModalData extends BSModalContext {
     constructor(
-        public title: string,
         public value: number,
         public min: number = 0,
         public max: number = 1,

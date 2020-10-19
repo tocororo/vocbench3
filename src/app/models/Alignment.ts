@@ -114,10 +114,11 @@ export class AlignmentRelationSymbol {
 
 export class Correspondence {
     identity: ARTResource;
-    leftEntity: ARTNode[];
-    rightEntity: ARTNode[];
+    leftEntity: ARTResource[];
+    rightEntity: ARTResource[];
     measure: ARTNode[];
     relation: ARTNode[];
+    mappingProperty: ARTURIResource[];
 }
 
 

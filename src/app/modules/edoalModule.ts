@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ChangeMeasureModal } from '../edoal/changeMeasureModal';
 import { EdoalComponent } from '../edoal/edoalComponent';
 import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from './treeAndListModule';
-import { ChangeMeasureModal } from '../edoal/changeMeasureModal';
 
 @NgModule({
     imports: [

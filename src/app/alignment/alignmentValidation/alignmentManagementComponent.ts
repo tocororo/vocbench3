@@ -4,7 +4,7 @@ import { OverlayConfig } from 'ngx-modialog';
 import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from 'rxjs';
 import { AlignmentCell, AlignmentOverview, AlignmentRelationSymbol } from '../../models/Alignment';
-import { ARTURIResource, LocalResourcePosition, ResourcePosition } from "../../models/ARTResources";
+import { ARTURIResource, LocalResourcePosition, RDFResourceRolesEnum, ResourcePosition } from "../../models/ARTResources";
 import { Project } from "../../models/Project";
 import { EDOAL } from '../../models/Vocabulary';
 import { AlignmentServices } from "../../services/alignmentServices";
@@ -278,7 +278,7 @@ export class AlignmentManagementComponent {
                 "Manually changing the relation will set automatically the measure of the alignment to 1.0. Do you want to continue?",
                 "warning").then(
                 (confirm: any) => {
-                    this.alignmentService.changeRelation(cell.getEntity1(), cell.getEntity2(), relation).subscribe(
+                    this.alignmentService.changeRelation(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), relation).subscribe(
                         resultCell => {//replace the alignment cell with the new one
                             this.replaceAlignmentCell(resultCell);
                         }
@@ -297,7 +297,12 @@ export class AlignmentManagementComponent {
     private getSuggestedMappingProperties(cell: AlignmentCell) {
         //call the service only if suggested properties for the given cell is not yet initialized
         if (cell.getSuggestedMappingProperties() == null) {
-            this.alignmentService.getSuggestedProperties(cell.getEntity1().getRole(), cell.getRelation()).subscribe(
+            //mention is not a valid role in ST, so get the role with fallback to individual
+            let role = cell.getEntity1().getRole();
+            if (role == RDFResourceRolesEnum.mention) {
+                role = RDFResourceRolesEnum.individual;
+            }
+            this.alignmentService.getSuggestedProperties(role, cell.getRelation()).subscribe(
                 props => {
                     props
                     cell.setSuggestedMappingProperties(props);
@@ -315,7 +320,7 @@ export class AlignmentManagementComponent {
     private changeMappingProperty(cell: AlignmentCell, property: ARTURIResource) {
         //change property only if the user choses a property different from the current.
         if (property.getURI() != cell.getMappingProperty().getURI()) {
-            this.alignmentService.changeMappingProperty(cell.getEntity1(), cell.getEntity2(), property).subscribe(
+            this.alignmentService.changeMappingProperty(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), property).subscribe(
                 resultCell => {//replace the alignment cell with the new one
                     this.replaceAlignmentCell(resultCell);
                 }

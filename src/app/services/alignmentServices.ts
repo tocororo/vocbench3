@@ -230,14 +230,15 @@ export class AlignmentServices {
      * Changes the relation of a alignment
      * @param entity1 uri of the source entity of the alignment
      * @param entity2 uri of the target entity of the alignment
-     * @param relation the new relation of the alignment
+     * @param newRelation the new relation of the alignment
      * @return a cell resulting from the action 
      */
-    changeRelation(entity1: ARTURIResource, entity2: ARTURIResource, relation: string) {
+    changeRelation(entity1: ARTURIResource, entity2: ARTURIResource, oldRelation: string, newRelation: string) {
         let params = {
             entity1: entity1,
             entity2: entity2,
-            relation: relation
+            oldRelation: oldRelation,
+            newRelation: newRelation
         };
         return this.httpMgr.doGet(this.serviceName, "changeRelation", params).map(
             stResp => {
@@ -253,10 +254,11 @@ export class AlignmentServices {
      * @param mappingProperty the new mappingProperty of the alignment
      * @return a cell resulting from the action
      */
-    changeMappingProperty(entity1: ARTURIResource, entity2: ARTURIResource, mappingProperty: ARTURIResource) {
+    changeMappingProperty(entity1: ARTURIResource, entity2: ARTURIResource, relation: string, mappingProperty: ARTURIResource) {
         let params = {
             entity1: entity1,
             entity2: entity2,
+            relation: relation,
             mappingProperty: mappingProperty
         };
         return this.httpMgr.doGet(this.serviceName, "changeMappingProperty", params).map(

@@ -65,8 +65,7 @@
                         <td>
                             <span *ngIf="a.getMappingProperty()">
                                 <div class="btn-group" [ngClass]="{ dropup : i > alignmentCellList.length/2 }">
-                                    <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown"
-                                        (click)="getSuggestedMappingProperties(a)">
+                                    <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" (click)="getSuggestedMappingProperties(a)">
                                         {{a.getMappingProperty().getShow()}}
                                         <span class="caret"></span>
                                     </button>

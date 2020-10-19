@@ -6,12 +6,14 @@ import { AlignmentRelationSymbol, Correspondence } from "../models/Alignment";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { Project } from "../models/Project";
 import { OntoLex, OWL, RDFS, SKOS } from "../models/Vocabulary";
+import { AlignmentServices } from "../services/alignmentServices";
 import { EdoalServices } from "../services/edoalServices";
 import { ProjectServices } from "../services/projectServices";
 import { ResourcesServices } from "../services/resourcesServices";
 import { TabsetPanelComponent } from "../trees/tabset/tabsetPanelComponent";
 import { HttpServiceContext } from "../utils/HttpManager";
-import { ProjectContext } from "../utils/VBContext";
+import { ResourceUtils } from "../utils/ResourceUtils";
+import { ProjectContext, VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
@@ -55,7 +57,7 @@ export class EdoalComponent {
     private totPage: number;
     private pageSize: number = 50;
 
-    constructor(private edoalService: EdoalServices, private projectService: ProjectServices, private resourcesService: ResourcesServices,
+    constructor(private edoalService: EdoalServices, private alignmentService: AlignmentServices, private projectService: ProjectServices, private resourcesService: ResourcesServices,
         private vbProp: VBProperties, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) {}
 
     ngOnInit() {
@@ -174,6 +176,12 @@ export class EdoalComponent {
         this.edoalService.getCorrespondences(this.alignemnts[0], this.page, this.pageSize).subscribe(
             correspondences => {
                 this.correspondences = correspondences;
+                //try to set qname of mapping property
+                this.correspondences.forEach(c => {
+                    c.mappingProperty.forEach(mp => {
+                        mp.setShow(ResourceUtils.getQName(mp.getURI(), VBContext.getPrefixMappings()));
+                    });
+                })
                 this.renderCorrespondences();
                 this.selectedCorrespondence = null;
             },
@@ -272,7 +280,7 @@ export class EdoalComponent {
     }
 
     private changeMeasure(correspondence: Correspondence) {
-        var modalData = new ChangeMeasureModalData("Edit measure", <number><any>correspondence.measure[0].getShow());
+        var modalData = new ChangeMeasureModalData(<number><any>correspondence.measure[0].getShow());
         const builder = new BSModalContextBuilder<ChangeMeasureModalData>(
             modalData, undefined, ChangeMeasureModalData
         );
@@ -287,6 +295,35 @@ export class EdoalComponent {
             },
             () => {}
         );
+    }
+
+    private changeMappingProperty(correspondence: Correspondence, property: ARTURIResource) {
+        this.edoalService.setMappingProperty(correspondence.identity, property).subscribe(
+            () => {
+                this.listCorrespondences();
+            }
+        )
+    }
+
+    /**
+     * Called when user click on menu to change the mapping property.
+     * Useful to populate the menu of the mapping properties.
+     * Retrieves the suggested mapping properties and set them to the alignment cell.
+     */
+    private initSuggestedMappingProperties(correspondence: Correspondence) {
+        //call the service only if suggested properties for the given cell is not yet initialized
+        if (correspondence['suggestedMappingProperties'] == null) {
+            //mention is not a valid role in ST, so get the role with fallback to individual
+            let role = correspondence.leftEntity[0].getRole();
+            if (role == RDFResourceRolesEnum.mention) {
+                role = RDFResourceRolesEnum.individual;
+            }
+            this.alignmentService.getSuggestedProperties(role, correspondence.relation[0].getShow()).subscribe(
+                props => {
+                    correspondence['suggestedMappingProperties'] = props;
+                }
+            );
+        }
     }
 
     /**

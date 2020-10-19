@@ -3,7 +3,7 @@
     <tabset-panel #leftTabset [projectCtx]="leftProjCtx" (nodeSelected)="onLeftResourceSelected($event)" [hiddenTabs]="leftHiddenTabs" [editable]="false">
     </tabset-panel>
 
-    <div class="vbox" style="margin: 0px 8px">
+    <div class="vbox" style="flex: 2; margin: 0px 8px">
 
         <div class="hbox" style="flex: initial; align-items: center;padding: 8px">
             <div class="text-center" style="flex: 1; border-right: 1px solid black">
@@ -81,18 +81,19 @@
                         </colgroup>
                         <thead>
                             <tr>
-                                <th>Left entity</th>
-                                <th>Right entity</th>
-                                <th>Relation</th>
-                                <th>Measure</th>
+                                <th class="text-center">Left entity</th>
+                                <th class="text-center">Right entity</th>
+                                <th class="text-center">Relation</th>
+                                <th class="text-center" nowrap>Mapping Prop</th>
+                                <th class="text-center">Measure</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let c of correspondences" (click)="selectCorrespondence(c)" [ngClass]="{ info: selectedCorrespondence == c }">
-                                <td>
+                                <td class="text-center">
                                     <rdf-resource [resource]="c.leftEntity[0]" style="cursor: pointer" (dblclick)="openLeftResourceView(c.leftEntity[0])"></rdf-resource>
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <rdf-resource [resource]="c.rightEntity[0]" style="cursor: pointer" (dblclick)="openRightResourceView(c.rightEntity[0])"></rdf-resource>
                                 </td>
                                 <td class="text-center">
@@ -103,6 +104,19 @@
                                         <ul class="dropdown-menu pull-right">
                                             <li *ngFor="let rel of relations">
                                                 <a (click)="changeRelation(c, rel)" [title]="rel.text">{{rel.relation}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-xs" style="width: 100%">
+                                        <button class="btn btn-default dropdown-toggle btn-xs" style="width: 100%" (click)="initSuggestedMappingProperties(c)" data-toggle="dropdown">
+                                            <span *ngIf="c.mappingProperty[0]" [title]="c.mappingProperty[0].toNT()">{{c.mappingProperty[0].getShow()}}</span>
+                                            <span *ngIf="!c.mappingProperty[0]">----</span>
+                                        </button>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li *ngFor="let p of c.suggestedMappingProperties">
+                                                <a (click)="changeMappingProperty(c, p)" [title]="p.toNT()">{{p.getShow()}}</a>
                                             </li>
                                         </ul>
                                     </div>

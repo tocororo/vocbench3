@@ -104,6 +104,19 @@ export class EdoalServices {
     }
 
     /**
+     * Sets the align:mappingProperty of the provided correspondece
+     * @param correspondence 
+     * @param property 
+     */
+    setMappingProperty(correspondence: ARTResource, property: ARTURIResource): Observable<void> {
+        var params: any = {
+            correspondence: correspondence,
+            property: property
+        };
+        return this.httpMgr.doPost(this.serviceName, "setMappingProperty", params);
+    }
+
+    /**
      * Deletes the provided correspondence.
      * @param correspondence 
      */
@@ -135,16 +148,17 @@ export class EdoalServices {
         return this.httpMgr.doGet(this.serviceName, "getCorrespondences", params, options).map(
             stResp => {
                 let correspondences: Correspondence[] = [];
-                for (let i = 0; i < stResp.length; i++) {
+                stResp.forEach((corrJson: any) => {
                     let c: Correspondence = {
-                        identity: new ARTBNode(stResp[i].identity),
-                        leftEntity: Deserializer.createRDFNodeArray(stResp[i].leftEntity),
-                        rightEntity: Deserializer.createRDFNodeArray(stResp[i].rightEntity),
-                        measure: Deserializer.createRDFNodeArray(stResp[i].measure),
-                        relation: Deserializer.createRDFNodeArray(stResp[i].relation)
+                        identity: new ARTBNode(corrJson.identity),
+                        leftEntity: Deserializer.createURIArray(corrJson.leftEntity),
+                        rightEntity: Deserializer.createURIArray(corrJson.rightEntity),
+                        measure: Deserializer.createRDFNodeArray(corrJson.measure),
+                        relation: Deserializer.createRDFNodeArray(corrJson.relation),
+                        mappingProperty: Deserializer.createURIArray(corrJson.mappingProperty)
                     }
                     correspondences.push(c);
-                }
+                })
                 return correspondences;
             }
         );

@@ -5,6 +5,9 @@ The full changelog of the platform includes also changes brought to the Semantic
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
 # 8.0.2 (dd-mm-yyyy)
+  * Improved alignment management in EDOAL project
+    * Enabled the storing of validated alignment in the EDOAL linkset
+    * Added possibility to specify the mapping property of a correspondence
   * Added a badge for showing the datatype of typed values in ResourceView
   * Added data type information in the single-value custom form preview
 
