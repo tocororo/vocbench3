@@ -142,12 +142,21 @@ export class EditableResourceComponent extends AbstractResViewResource {
             (this.partition == ResViewPartition.domains && this.resource instanceof ARTURIResource) ||
             this.partition == ResViewPartition.equivalentProperties ||
             // this.partition == ResViewPartition.evokedLexicalConcepts ||
+            // this.partition == ResViewPartition.facets ||
+            // this.partition == ResViewPartition.formBasedPreview ||
+            // this.partition == ResViewPartition.imports ||
             this.partition == ResViewPartition.labelRelations ||
             // this.partition == ResViewPartition.lexicalForms ||
             // this.partition == ResViewPartition.lexicalSenses ||
+            (this.partition == ResViewPartition.lexicalizations && this.resource instanceof ARTLiteral) ||
             this.partition == ResViewPartition.members ||
+            // this.partition == ResViewPartition.membersOrdered ||
+            this.partition == ResViewPartition.notes ||
+            (this.partition == ResViewPartition.properties && this.resource instanceof ARTLiteral) ||
             (this.partition == ResViewPartition.ranges && this.resource instanceof ARTURIResource) ||
+            // this.partition == ResViewPartition.rdfsMembers ||
             this.partition == ResViewPartition.schemes ||
+            // this.partition == ResViewPartition.subPropertyChains ||
             this.partition == ResViewPartition.subterms ||
             this.partition == ResViewPartition.superproperties ||
             this.partition == ResViewPartition.topconceptof ||

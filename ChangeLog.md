@@ -10,6 +10,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
     * Added possibility to specify the mapping property of a correspondence
   * Added a badge for showing the datatype of typed values in ResourceView
   * Added data type information in the single-value custom form preview
+  * Enabled bulk edit operation for literal values in some partitions of the ResourceView
 
 # 8.0.1 (08-10-2020)
   * Added Icelandic flag
