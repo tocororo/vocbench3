@@ -64,7 +64,12 @@
                 <tbody>
                     <tr *ngFor="let n of header?.nodes" (click)="selectNode(n)" [ngStyle]="{ cursor: header?.ignore ? 'not-allowed' : 'pointer' }"
                         [ngClass]="{ info : n == selectedNode }">
-                        <td [ngClass]="{ grayText : header?.ignore }">{{n.nodeId}}</td>
+                        <td [ngClass]="{ grayText : header?.ignore }">
+                            {{n.nodeId}}
+                            <button class="btn btn-xs btn-default" (click)="renameNode(n)">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                        </td>
                         <td [ngClass]="{ grayText : header?.ignore }">{{n.converter?.type}}</td>
                         <td [ngClass]="{ grayText : header?.ignore }" nowrap>
                             {{n.converter?.contractUri}}

@@ -201,6 +201,15 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "updateNodeInHeader", params);
     }
 
+    renameNodeId(headerId: string, nodeId: string, newNodeId: String) {
+        let params: any = {
+            headerId: headerId,
+            nodeId: nodeId,
+            newNodeId: newNodeId
+        }
+        return this.httpMgr.doPost(this.serviceName, "renameNodeId", params);
+    }
+
     removeNodeFromHeader(headerId: string, nodeId: string) {
         let params: any = {
             headerId: headerId,

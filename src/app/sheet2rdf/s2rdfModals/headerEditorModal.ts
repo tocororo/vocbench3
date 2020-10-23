@@ -104,6 +104,22 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         );
     }
 
+    private renameNode(node: NodeConversion) {
+        this.basicModals.prompt("Rename node", { value: "ID" }, null, node.nodeId, false, true).then(
+            (newID: string) => {
+                if (newID != node.nodeId) {
+                    this.s2rdfService.renameNodeId(this.header.id, node.nodeId, newID).subscribe(
+                        () => {
+                            this.initHeader();
+                            this.changed = true;
+                        }
+                    );
+                }
+            },
+            () => {}
+        )
+    }
+
     private removeNode() {
         let used: boolean = false;
         //check if the node is used by some graph application
@@ -210,7 +226,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
             const builder = new BSModalContextBuilder<AdvancedGraphApplicationModalData>(
                 modalData, undefined, AdvancedGraphApplicationModalData
             );
-            let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+            let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
             this.modal.open(AdvancedGraphApplicationModal, overlayConfig).result.then(
                 () => {
                     this.initHeader();
@@ -241,7 +257,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         const builder = new BSModalContextBuilder<AdvancedGraphApplicationModalData>(
             modalData, undefined, AdvancedGraphApplicationModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
         this.modal.open(AdvancedGraphApplicationModal, overlayConfig).result.then(
             () => {
                 this.initHeader();

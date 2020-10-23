@@ -11,6 +11,9 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Added a badge for showing the datatype of typed values in ResourceView
   * Added data type information in the single-value custom form preview
   * Enabled bulk edit operation for literal values in some partitions of the ResourceView
+  * Improvements to Sheet2Rdf
+    * Added possibility to rename nodes
+    * Enabled creation of nodes independently from their usage in graph applications
 
 # 8.0.1 (08-10-2020)
   * Added Icelandic flag
