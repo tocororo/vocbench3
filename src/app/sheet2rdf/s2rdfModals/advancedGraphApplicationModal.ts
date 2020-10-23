@@ -90,7 +90,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         const builder = new BSModalContextBuilder<NodeCreationModalData>(
             modalData, undefined, NodeCreationModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
         this.modal.open(NodeCreationModal, overlayConfig).result.then(
             (node: NodeConversion) => {
                 this.newDefinedNodes.push(node);
@@ -138,7 +138,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         const builder = new BSModalContextBuilder<NodeCreationModalData>(
             modalData, undefined, NodeCreationModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
         this.modal.open(NodeCreationModal, overlayConfig).result.then(
             (n: NodeConversion) => {
                 node.converter = n.converter;
@@ -152,7 +152,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         const builder = new BSModalContextBuilder<NodeCreationModalData>(
             modalData, undefined, NodeCreationModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
         this.modal.open(NodeCreationModal, overlayConfig).result.then(
             (n: NodeConversion) => {
                 node.converter = n.converter;

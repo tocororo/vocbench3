@@ -293,7 +293,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
         const builder = new BSModalContextBuilder<NodeCreationModalData>(
             modalData, undefined, NodeCreationModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
         this.modal.open(NodeCreationModal, overlayConfig).result.then(
             (node: NodeConversion) => {
                 this.availableNodes.push(node);

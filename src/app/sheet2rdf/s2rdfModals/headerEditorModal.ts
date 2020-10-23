@@ -83,6 +83,27 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         }
     }
 
+    addNode() {
+        var modalData = new NodeCreationModalData(this.header, null, null, null, null, this.header.nodes);
+        const builder = new BSModalContextBuilder<NodeCreationModalData>(
+            modalData, undefined, NodeCreationModalData
+        );
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
+        this.modal.open(NodeCreationModal, overlayConfig).result.then(
+            (newNode: NodeConversion) => {
+                console.log("newNode", newNode);
+                this.s2rdfService.addNodeToHeader(this.header.id, newNode.nodeId, newNode.converter.type, 
+                    newNode.converter.contractUri, newNode.converter.datatypeUri, newNode.converter.language,
+                    newNode.converter.params, newNode.memoize).subscribe(
+                    () => {
+                        this.initHeader();
+                        this.changed = true;
+                    }
+                );
+            }
+        );
+    }
+
     private removeNode() {
         let used: boolean = false;
         //check if the node is used by some graph application
@@ -114,7 +135,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         const builder = new BSModalContextBuilder<NodeCreationModalData>(
             modalData, undefined, NodeCreationModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
         this.modal.open(NodeCreationModal, overlayConfig).result.then(
             (n: NodeConversion) => {
                 node.converter = n.converter;
@@ -136,7 +157,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         const builder = new BSModalContextBuilder<NodeCreationModalData>(
             modalData, undefined, NodeCreationModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
         this.modal.open(NodeCreationModal, overlayConfig).result.then(
             (n: NodeConversion) => {
                 node.converter = n.converter;

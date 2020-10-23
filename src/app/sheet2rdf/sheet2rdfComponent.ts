@@ -247,7 +247,7 @@ export class Sheet2RdfComponent {
         const builder = new BSModalContextBuilder<HeaderEditorModalData>(
             modalData, undefined, HeaderEditorModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
         this.modal.open(HeaderEditorModal, overlayConfig).result.then(
             () => { //closed with the "ok" button, so changes performed => update header
                 this.initHeaders();
@@ -261,7 +261,7 @@ export class Sheet2RdfComponent {
         const builder = new BSModalContextBuilder<SubjectHeaderEditorModalData>(
             modalData, undefined, SubjectHeaderEditorModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
         this.modal.open(SubjectHeaderEditorModal, overlayConfig).result.then(
             () => { //closed with the "ok" button, so changes performed => update header
                 this.initHeaders();

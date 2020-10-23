@@ -41,9 +41,14 @@
                 <span class="glyphicon glyphicon-info-sign" title="List of nodes generated from the current header"></span>
             </label>
             <div class="btn-toolbar" role="toolbar">
-                <button class="btn btn-xs btn-default" (click)="removeNode()" [disabled]="!selectedNode || header.ignore">
-                    <span class="glyphicon glyphicon-minus"></span>
-                </button>
+                <div class="btn-group btn-group-xs">
+                    <button class="btn btn-default" (click)="addNode()" [disabled]="header?.ignore">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                    <button class="btn btn-default" (click)="removeNode()" [disabled]="!selectedNode || header?.ignore">
+                        <span class="glyphicon glyphicon-minus"></span>
+                    </button>
+                </div>
             </div>
         </div>
         <div class="panel-body vbox table-responsive">
