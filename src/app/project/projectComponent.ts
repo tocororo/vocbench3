@@ -217,7 +217,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
 
     private openACLMatrix() {
         const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-full").keyboard(27).toJSON() };
         return this.modal.open(ProjectACLModal, overlayConfig);
     }
 

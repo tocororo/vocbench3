@@ -244,7 +244,7 @@ export class CustomFormConfigComponent {
         const builder = new BSModalContextBuilder<CustomFormEditorModalData>(
             modalData, undefined, CustomFormEditorModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-full").keyboard(27).toJSON() };
         return this.modal.open(CustomFormEditorModal, overlayConfig).result.then(
             res => this.initCustomFormList(),
             () => { }
@@ -256,7 +256,7 @@ export class CustomFormConfigComponent {
         const builder = new BSModalContextBuilder<CustomFormEditorModalData>(
             modalData, undefined, CustomFormEditorModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-full").keyboard(27).toJSON() };
         return this.modal.open(CustomFormEditorModal, overlayConfig).result.then(
             res => { },
             () => { }

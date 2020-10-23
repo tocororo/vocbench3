@@ -869,11 +869,13 @@ input[type="checkbox"], input[type="radio"] {
     white-space: nowrap;
 }
 
-@media (min-width: 768px) {
-    .modal-xl {
-        width: 90%;
-        max-width:1600px;
-    }
+.modal-xl {
+    width: 90%;
+    max-width:1600px;
+}
+.modal-full.modal-dialog {
+    width: 95% !important;
+    max-width: 95% !important;
 }
 
 /* 

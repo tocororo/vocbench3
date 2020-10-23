@@ -76,7 +76,7 @@ export class GraphModalServices {
                 const builder = new BSModalContextBuilder<GraphModalData>(
                     modalData, undefined, GraphModalData
                 );
-                let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
+                let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-full").keyboard(27).toJSON() };
                 return this.modal.open(GraphModal, overlayConfig).result;
             }
         );
@@ -100,7 +100,7 @@ export class GraphModalServices {
         const builder = new BSModalContextBuilder<GraphModalData>(
             modalData, undefined, GraphModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-full").keyboard(27).toJSON() };
         return this.modal.open(GraphModal, overlayConfig).result;
     }
 
@@ -121,7 +121,7 @@ export class GraphModalServices {
         const builder = new BSModalContextBuilder<GraphModalData>(
             modalData, undefined, GraphModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-full").keyboard(27).toJSON() };
         return this.modal.open(GraphModal, overlayConfig).result;
     }
 
@@ -142,7 +142,7 @@ export class GraphModalServices {
         const builder = new BSModalContextBuilder<GraphModalData>(
             umlData, undefined, GraphModalData
         );
-        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
+        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-full").keyboard(27).toJSON() };
         return this.modal.open(GraphModal, overlayConfig).result;
     }
 
