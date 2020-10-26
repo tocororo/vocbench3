@@ -1,8 +1,3 @@
-<div class="modal-header">
-    <h3 class="modal-title">
-        Graph
-    </h3>
-</div>
 <div class="modal-body vbox" style="min-height: 70vh;">
 
     <data-graph-panel *ngIf="context.mode=='dataOriented'" class="vbox" [graph]="context.graph" [rendering]="context.rendering" [role]="context.role" [context]="context.context"></data-graph-panel>
@@ -11,5 +6,5 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-default btn-sm" (click)="ok()">Close</button>
 </div>

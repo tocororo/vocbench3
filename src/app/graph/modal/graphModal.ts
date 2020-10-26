@@ -34,9 +34,7 @@ export class GraphModal implements ModalComponent<GraphModalData> {
         UIUtils.setFullSizeModal(this.elementRef);
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
+    ok() {
         this.dialog.close();
     }
 
