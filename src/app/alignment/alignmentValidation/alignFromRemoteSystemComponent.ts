@@ -29,11 +29,12 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
     @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
 
     private serverDown: boolean = false;
+    private serviceNotConfigured: boolean = false;
+
+    private isSettingsAuthorized: boolean;
 
     private tasks: RemoteAlignmentTask[];
     private selectedTask: RemoteAlignmentTask;
-
-    private isSettingsAuthorized: boolean;
 
     constructor(edoalService: EdoalServices, projectService: ProjectServices,
         private remoteAlignmentService: RemoteAlignmentServices, private mapleService: MapleServices, 
@@ -132,12 +133,15 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
     }
 
     private listTask() {
+        //reset all before retrieving tasks
+        this.serverDown = false;
+        this.serviceNotConfigured = false;
         this.tasks = null;
         this.selectedTask = null;
         let allowReordering: boolean = !this.isEdoalProject(); //if project is edoal, allow only task with the exact left-right datasets
+
         this.remoteAlignmentService.listTasks(this.leftProject, allowReordering, this.rightProject).subscribe(
             tasks => {
-                this.serverDown = false;
                 this.tasks = tasks;
             },
             (err: Error) => {
@@ -149,6 +153,12 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
                             + "make sure it is up and running or the configuration is correct", "warning");
                     } else {
                         this.basicModals.alert("Alignment Service server error", err.message, "warning", err.stack);
+                    }
+                } else if (err.name == "java.lang.IllegalStateException") {
+                    if (err.message.includes("No alignement service configured")) {
+                        this.serviceNotConfigured = true;
+                    } else {
+                        this.basicModals.alert("Alignment Service error", err.message, "warning", err.stack);
                     }
                 }
             }
@@ -198,7 +208,13 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
     private settings() {
         const builder = new BSModalContextBuilder<any>();
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(RemoteSystemSettingsModal, overlayConfig);
+        this.modal.open(RemoteSystemSettingsModal, overlayConfig).result.then(
+            (configChanged: boolean) => {
+                if (configChanged) { 
+                    this.listTask();
+                }
+            }
+        );
     }
 
 }

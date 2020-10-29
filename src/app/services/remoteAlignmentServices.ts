@@ -6,6 +6,7 @@ import { AlignmentPlan, MatcherDTO, ScenarioDefinition, ServiceMetadataDTO, Sett
 import { Settings } from '../models/Plugins';
 import { Project } from '../models/Project';
 import { RemoteAlignmentTask } from '../models/RemoteAlignment';
+import { Pair } from '../models/Shared';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 
 @Injectable()
@@ -26,7 +27,10 @@ export class RemoteAlignmentServices {
         let options: VBRequestOptions = new VBRequestOptions({
             errorAlertOpt: { 
                 show: true, 
-                exceptionsToSkip: ['it.uniroma2.art.semanticturkey.services.core.alignmentservices.AlignmentServiceException']
+                exceptionsToSkip: [
+                    'it.uniroma2.art.semanticturkey.services.core.alignmentservices.AlignmentServiceException',
+                    'java.lang.IllegalStateException'
+                ]
             } 
         });
         return this.httpMgr.doGet(this.serviceName, "listTasks", params, options).map(
@@ -236,9 +240,17 @@ export class RemoteAlignmentServices {
      * 
      * @returns a pair<string, boolean>, namely configuration name and a boolean flag telling whether or not it is explicit
      */
-    getAlignmentServiceForProject(): Observable<any[]> {
+    getAlignmentServiceForProject(): Observable<Pair<string, boolean>> {
         let params = {};
-        return this.httpMgr.doGet(this.serviceName, "getAlignmentServiceForProject", params);
+        return this.httpMgr.doGet(this.serviceName, "getAlignmentServiceForProject", params).map(
+            stResp => {
+                let pair: Pair<string, boolean>;
+                if (stResp != null) {
+                    pair = { first: stResp[0], second: stResp[1] };
+                }
+                return pair;
+            }
+        );
     }
 
     /**

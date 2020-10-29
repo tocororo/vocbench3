@@ -2,11 +2,11 @@ import { Component } from "@angular/core";
 import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
 import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { RemoteAlignmentServiceConfiguration, RemoteAlignmentServiceConfigurationDef } from "../../../models/Alignment";
+import { Pair } from "../../../models/Shared";
 import { RemoteAlignmentServices } from "../../../services/remoteAlignmentServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from "../../../utils/VBContext";
-import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { RemoteSystemConfigurationsAdministration } from "./remoteSystemConfigurationsAdministration";
 
 @Component({
@@ -22,6 +22,8 @@ export class RemoteSystemSettingsModal implements ModalComponent<BSModalContext>
 
     private savedConfigs: RemoteAlignmentServiceConfigurationDef[];
     private activeConfig: RemoteAlignmentServiceConfigurationDef;
+
+    private changed: boolean = false;
 
     constructor(public dialog: DialogRef<BSModalContext>, private remoteAlignmentService: RemoteAlignmentServices, private modal: Modal) {
         this.context = dialog.context;
@@ -53,11 +55,11 @@ export class RemoteSystemSettingsModal implements ModalComponent<BSModalContext>
                 this.savedConfigs.sort((c1, c2) => c1.id.localeCompare(c2.id));
                 //initialize the active configuration
                 this.remoteAlignmentService.getAlignmentServiceForProject().subscribe(
-                    pair => {
+                    (pair: Pair<string, boolean>) => {
                         this.activeConfig = null;
                         if (pair != null) {
-                            let confId: string = pair[0];
-                            let explicit: boolean = pair[1];
+                            let confId: string = pair.first;
+                            let explicit: boolean = pair.second;
                             this.activeConfig = this.savedConfigs.find(c => c.id == confId);
                             if (this.activeConfig == null) {
                                 //the stored alignment service for the current project has been probably deleted => remove it
@@ -72,7 +74,11 @@ export class RemoteSystemSettingsModal implements ModalComponent<BSModalContext>
 
     activateConfig(config: RemoteAlignmentServiceConfigurationDef) {
         this.activeConfig = config;
-        this.remoteAlignmentService.setAlignmentServiceForProject(this.activeConfig.id).subscribe();
+        this.remoteAlignmentService.setAlignmentServiceForProject(this.activeConfig.id).subscribe(
+            () => {
+                this.changed = true;
+            }
+        );
     }
 
     administration() {
@@ -80,6 +86,7 @@ export class RemoteSystemSettingsModal implements ModalComponent<BSModalContext>
         let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
         this.modal.open(RemoteSystemConfigurationsAdministration, overlayConfig).result.then(
             () => {
+                this.changed = true;
                 this.initConfigs();
             }
         )
@@ -87,7 +94,7 @@ export class RemoteSystemSettingsModal implements ModalComponent<BSModalContext>
 
 
     ok() {
-        this.dialog.close();
+        this.dialog.close(this.changed);
     }
 
 }
