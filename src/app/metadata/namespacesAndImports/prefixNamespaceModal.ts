@@ -1,6 +1,8 @@
+import { HttpClient } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 export class PrefixNamespaceModalData extends BSModalContext {
     /**
@@ -29,10 +31,27 @@ export class PrefixNamespaceModal implements ModalComponent<PrefixNamespaceModal
     private prefix: string;
     private namespace: string;
 
-    constructor(public dialog: DialogRef<PrefixNamespaceModalData>) {
+    constructor(public dialog: DialogRef<PrefixNamespaceModalData>, private basicModals: BasicModalServices, private httpClient: HttpClient) {
         this.context = dialog.context;
         this.prefix = this.context.prefix;
         this.namespace = this.context.namespace;
+    }
+
+    private resolveWithPrefixCC() {
+        if (this.namespace == null || this.namespace.trim() == "") {
+            this.basicModals.alert("Resolve prefix", "Namespace must be provided.", "warning");
+            return;
+        }
+        this.httpClient.get("https://prefix.cc/reverse?uri=" + this.namespace + "&format=json").subscribe(
+            prefixMap => {
+                for (let p in prefixMap) {
+                    if (prefixMap[p] == this.namespace) {
+                        this.prefix = p;
+                        break;
+                    }
+                }
+            }
+        );
     }
     
     /**

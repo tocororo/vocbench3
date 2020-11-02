@@ -226,6 +226,10 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
 
     private searchMatchers() {
         let scenarioDef: ScenarioDefinition = this.getScenarioDefinition();
+        if (scenarioDef.pairings.length == 0) {
+            this.basicModals.alert("Search matchers", "You need to select at least one pairing.", "warning");
+            return;
+        }
         this.lastPairingSignatureForMatchers = this.refinablePairings.map(p => p.checked+"").join(",");
         this.remoteAlignmentService.searchMatchers(scenarioDef).subscribe(
             matchers => {
@@ -314,6 +318,10 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
          * - matcherDefinition (optionally)
          */
         let scenarioDef: ScenarioDefinition = this.getScenarioDefinition();
+        if (scenarioDef.pairings.length == 0) {
+            this.basicModals.alert("Create task", "You need to select at least one pairing.", "warning");
+            return;
+        }
         
         let matcherDefinition: MatcherDefinitionDTO;
         if (this.selectedMatcher != null) { //if a matcher is selected, create its definition

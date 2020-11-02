@@ -12,7 +12,12 @@
             <tr>
                 <td><label>Prefix:</label></td>
                 <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="prefix">
+                    <div class="hbox">
+                        <input type="text" class="form-control input-sm" [(ngModel)]="prefix">
+                        <button *ngIf="context.namespaceReadonly" class="btn btn-sm btn-default" style="margin-left: 5px;" (click)="resolveWithPrefixCC()" title="Try to resolve prefix using prefix.cc">
+                            <span class="glyphicon glyphicon-subtitles"></span>
+                        </button>
+                    </div>
                 </td>
             </tr>
             <tr>

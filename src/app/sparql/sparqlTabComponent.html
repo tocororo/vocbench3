@@ -68,9 +68,7 @@
                         <ng-template [ngIf]="i >= resultsPage*resultsLimit && i < resultsPage*resultsLimit + resultsLimit"> <!-- paging filter -->
                             <tr>
                                 <td *ngFor="let h of headers">
-                                    <span *ngIf="bindings[h]" [ngClass]="{ clickable: isBindingResource(bindings[h]) }" (click)="onBindingClick(bindings[h])">
-                                        {{getBindingShow(bindings[h])}}
-                                    </span>
+                                    <span *ngIf="bindings[h]" [ngClass]="{ clickable: isBindingResource(bindings[h]) }" style="white-space: pre-wrap;" (click)="onBindingClick(bindings[h])">{{getBindingShow(bindings[h])}}</span>
                                 </td>
                             </tr>
                         </ng-template>
