@@ -1,4 +1,4 @@
-import { ARTURIResource } from "./ARTResources";
+import { ARTNode, ARTURIResource } from "./ARTResources";
 
 /**
  * in the future this could have also a description field
@@ -69,26 +69,33 @@ export class Settings {
         return null;
     }
 
-    public getPropertiesAsMap(): { [key: string]: string } {
+    public getPropertiesAsMap(includeType?: boolean): { [key: string]: string } {
         let map: { [key: string]: string } = {};
+        if (includeType) {
+            map["@type"] = this.type;
+        }
         for (var i = 0; i < this.properties.length; i++) {
             let value = this.properties[i].value;
 
             if (value != null && typeof value === "string" && value == "") { //if user write then delete a value, the value is "", in this case "clear" the value
                 value = undefined;
-            } else if (value instanceof ARTURIResource) {
+            } else if (value instanceof ARTNode) {
                 value = value.toNT();
             } else if (value instanceof Array) {
-                let serializedValues: string[] = [];
+                let serializedValues: any[] = [];
                 for (var j = 0; j < value.length; j++) {
                     let v: any = value[j];
-                    if (v instanceof ARTURIResource) {
+                    if (v instanceof ARTNode) {
                         serializedValues.push(v.toNT())
+                    } else if(v instanceof Settings) {
+                        serializedValues.push(v.getPropertiesAsMap());
                     } else {
                         serializedValues.push(v);
                     }
                 }
                 value = serializedValues;
+            } else if(value instanceof Settings) {
+                value = value.getPropertiesAsMap();
             } else if (typeof value == "object") { //object => probably a map (associative array object)
                 //don't do nothing
             }
@@ -116,6 +123,11 @@ export class Settings {
     }
 }
 
+export class Enumeration {
+    values: string[];
+    open: boolean;
+};
+
 export class SettingsProp {
     public name: string;
     public displayName: string;
@@ -123,8 +135,9 @@ export class SettingsProp {
     public required: boolean;
     public type: SettingsPropType;
     public value: any;
-    public enumeration: string[];
-    constructor (name: string, displayName: string, description: string, required: boolean, type: SettingsPropType, enumeration?: string[], value?: string) {
+    public enumeration: Enumeration;
+
+    constructor (name: string, displayName: string, description: string, required: boolean, type: SettingsPropType, enumeration?: Enumeration, value?: string) {
         this.name = name;
         this.displayName = displayName;
         this.description = description;
@@ -139,11 +152,16 @@ export class SettingsProp {
     }
 
     public requireConfiguration(): boolean {
-        return this.required && (
-            this.value == null || 
-            (typeof this.value == "string" && this.value.trim() == "") || 
-            (this.value instanceof Array && this.value.length == 0)
-        )
+        return this.required && SettingsProp.isNullish(this.value);
+    }
+
+    private static isNullish(v: any): boolean {
+        return v == null ||
+            (typeof v == "string" && v.trim() == "") ||
+            (v instanceof Settings && v.requireConfiguration()) ||
+            (v instanceof Array && (v.length == 0 ||
+                v.findIndex(SettingsProp.isNullish) != -1
+            ))
     }
 }
 
@@ -151,11 +169,13 @@ export class SettingsPropType {
     public name: string;
     public constraints: SettingsPropTypeConstraint[];
     public typeArguments: SettingsPropType[];
+    public schema?: Settings;
 
-    constructor(name: string, constraints?: SettingsPropTypeConstraint[], typeArguments?: SettingsPropType[]) {
+    constructor(name: string, constraints?: SettingsPropTypeConstraint[], typeArguments?: SettingsPropType[], schema?: Settings) {
         this.name = name;
         this.constraints = constraints;
         this.typeArguments = typeArguments;
+        this.schema = schema;
     }
 
     public static parse(jsonObject: any): SettingsPropType {
@@ -179,7 +199,12 @@ export class SettingsPropType {
             }
         }
 
-        return new SettingsPropType(name, constraints, typeArguments);
+        let schema: Settings = null;
+        if (jsonObject.schema) {
+            schema = Settings.parse(jsonObject.schema);
+        }
+
+        return new SettingsPropType(name, constraints, typeArguments, schema);
     }
 
     public clone(): SettingsPropType {
@@ -197,7 +222,7 @@ export class SettingsPropType {
                 typeArguments.push(this.typeArguments[i].clone());
             }
         }
-        return new SettingsPropType(this.name, constraints, typeArguments);
+        return new SettingsPropType(this.name, constraints, typeArguments, this.schema ? this.schema.clone() : null);
     }
 }
 

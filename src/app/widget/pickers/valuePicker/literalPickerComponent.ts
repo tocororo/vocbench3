@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { ARTLiteral, ARTURIResource } from '../../../models/ARTResources';
+import { ResourceUtils } from '../../../utils/ResourceUtils';
 import { CreationModalServices } from '../../modal/creationModal/creationModalServices';
 
 @Component({
@@ -29,6 +30,9 @@ export class LiteralPickerComponent {
 
     private init() {
         if (this.literal) {
+            if (typeof this.literal == 'string') {
+                this.literal = ResourceUtils.parseLiteral(this.literal);
+            }
             this.literalNT = this.literal.toNT();
         }
     }

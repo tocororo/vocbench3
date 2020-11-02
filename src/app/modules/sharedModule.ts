@@ -22,6 +22,7 @@ import { ResourcePickerComponent } from '../widget/pickers/valuePicker/resourceP
 import { ValuePickerComponent } from '../widget/pickers/valuePicker/valuePickerComponent';
 import { RdfResourceComponent } from '../widget/rdfResource/rdfResourceComponent';
 import { ResourceListComponent } from '../widget/rdfResource/resourceListComponent';
+import { NestedSettingSetRendererComponent } from '../widget/settingsRenderer/nestedSettingsRendererComponent';
 import { SettingMapRendererComponent } from '../widget/settingsRenderer/settingMapRendererComponent';
 import { SettingPropRendererComponent } from '../widget/settingsRenderer/settingPropRendererComponent';
 import { SettingSetRendererComponent } from '../widget/settingsRenderer/settingSetRendererComponent';
@@ -56,6 +57,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         SettingPropRendererComponent,
         SettingSetRendererComponent,
         SettingsRendererComponent,
+        NestedSettingSetRendererComponent,
         SettingsRendererPanelComponent,
         TypedLiteralInputComponent,
         ValuePickerComponent,

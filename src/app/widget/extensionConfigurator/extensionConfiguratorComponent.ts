@@ -81,7 +81,7 @@ export class ExtensionConfiguratorComponent {
     }
 
     private saveConfig() {
-        let config: { [key: string]: any } = this.selectedConfiguration.getPropertiesAsMap();
+        let config: { [key: string]: any } = this.selectedConfiguration.getPropertiesAsMap(true);
         this.sharedModals.storeConfiguration("Store configuration", this.selectedExtension.id, config).then(
             (relativeRef: string) => {
                 this.basicModals.alert("Save configuration", "Configuration saved succesfully");

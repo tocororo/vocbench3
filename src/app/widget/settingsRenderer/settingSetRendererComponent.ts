@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ARTNode, RDFResourceRolesEnum } from '../../models/ARTResources';
-import { SettingsPropType, SettingsPropTypeConstraint } from '../../models/Plugins';
+import { Settings, SettingsProp, SettingsPropType, SettingsPropTypeConstraint } from '../../models/Plugins';
 
 @Component({
     selector: 'setting-set',
@@ -28,7 +28,7 @@ export class SettingSetRendererComponent {
     }
 
     private delete(index: number) {
-        this.value.splice(index, 1);
+        this.value.splice(index, 1);        
         this.onModelChange();
     }
 
@@ -58,6 +58,15 @@ export class SettingSetRendererComponent {
             this.value[index] = null;
         } else {
             this.value[index] = value.toNT();
+        }
+        this.onModelChange();
+    }
+
+    private updatePropertiesValue(index: number, value: Settings) {
+        if (value == null) {
+            this.value[index] = null;
+        } else {
+            this.value[index] =  value;
         }
         this.onModelChange();
     }

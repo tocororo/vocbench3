@@ -1,9 +1,18 @@
 <ng-container *ngIf="prop">
 
-    <select *ngIf="prop.enumeration; else notEnumerationBlock" class="form-control input-sm" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
-        <option *ngFor="let enum of prop.enumeration" [value]="enum">{{enum}}</option>
-    </select>
+    <ng-container  *ngIf="prop.enumeration; else notEnumerationBlock">
+        <select *ngIf="!prop.enumeration.open" class="form-control input-sm" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
+            <option *ngFor="let enum of prop.enumeration.values" [value]="enum">{{enum}}</option>
+        </select>
 
+        <ng-container *ngIf="prop.enumeration.open">
+            <!-- Why attr.list? https://github.com/angular/angular/issues/12759#issuecomment-278940455 -->
+            <input class="form-control input-sm" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled" [attr.list]="'datalist_' + prop.name">
+            <datalist [id]="'datalist_' + prop.name">
+                <option *ngFor="let enum of prop.enumeration.values" [value]="enum">
+            </datalist>
+        </ng-container>
+    </ng-container>
     <ng-template #notEnumerationBlock>
         <div [ngSwitch]="prop.type.name">
             <div *ngSwitchCase="'boolean'" class="input-sm form-control text-center">
@@ -34,6 +43,8 @@
 
             <setting-map *ngSwitchCase="'Map'" [value]="prop.value" [types]="prop.type.typeArguments" 
                 (valueChanged)="updateMapValue(prop, $event)" [disabled]="disabled"></setting-map>
+
+                <nested-settings-renderer *ngSwitchCase="'Properties'" [(ngModel)]="prop.value" [schema]="prop.type.schema" (ngModelChange)="updatePropertiesValue($event)"></nested-settings-renderer>
 
             <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control input-sm" style="resize: vertical" 
                 [(ngModel)]="prop.value" [disabled]="disabled">

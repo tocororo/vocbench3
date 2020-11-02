@@ -14,6 +14,10 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Improvements to Sheet2Rdf
     * Added possibility to rename nodes
     * Enabled creation of nodes independently from their usage in graph applications
+  * Updates to the OntoPortal deployer, allowing for a specific configuration dedicated to EcoPortal
+  * Enabled nesting of settings
+  * Enabled open enumerations in settings
+  * Fixed issues and other extensions in settings management related to typed literals and required set-typed properties
 
 # 8.0.1 (08-10-2020)
   * Added Icelandic flag

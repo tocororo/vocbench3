@@ -6,7 +6,7 @@
     </colgroup>
     <tbody>
         <!-- Why index and track by? https://stackoverflow.com/q/40314732/5805661 -->
-        <tr *ngFor="let v of value; let index = index; let last = last; trackBy: trackByIndex;">
+        <tr *ngFor="let v of value; let index = index; let last = last; trackBy: trackByIndex">
             <td style="padding: 2px 0px;">
                 <div [ngSwitch]="types[0].name">
                     <resource-picker *ngSwitchCase="'IRI'" [resource]="value[index]" [config]="{ roles: getIRIRoleConstraints() }" [editable]="true"
@@ -24,15 +24,17 @@
                     <literal-picker *ngSwitchCase="'Literal'" [literal]="value[index]" (literalChanged)="updateValue(index, $event)" [disabled]="disabled">
                     </literal-picker>
 
+                    <nested-settings-renderer *ngSwitchCase="'Properties'" [(ngModel)]="value[index]" [schema]="types[0].schema" (ngModelChange)="updatePropertiesValue(index, $event)"></nested-settings-renderer>
+
                     <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control input-sm" style="resize: vertical"
                         [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
                     </textarea>
 
-                    <input *ngSwitchCase="'int'" type="number" class="form-control input-sm" step="1" [(ngModel)]="p.value" [disabled]="disabled">
-                    <input *ngSwitchCase="'integer'" type="number" class="form-control input-sm" step="1" [(ngModel)]="p.value" [disabled]="disabled">
-                    <input *ngSwitchCase="'long'" type="number" class="form-control input-sm" step="1" [(ngModel)]="p.value" [disabled]="disabled">
-                    <input *ngSwitchCase="'float'" type="number" class="form-control input-sm" step="0.01" [(ngModel)]="p.value" [disabled]="disabled">
-                    <input *ngSwitchCase="'double'" type="number" class="form-control input-sm" step="0.01" [(ngModel)]="p.value" [disabled]="disabled">
+                    <input *ngSwitchCase="'int'" type="number" class="form-control input-sm" step="1" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
+                    <input *ngSwitchCase="'integer'" type="number" class="form-control input-sm" step="1" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
+                    <input *ngSwitchCase="'long'" type="number" class="form-control input-sm" step="1" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
+                    <input *ngSwitchCase="'float'" type="number" class="form-control input-sm" step="0.01" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
+                    <input *ngSwitchCase="'double'" type="number" class="form-control input-sm" step="0.01" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
 
                     <div *ngSwitchDefault class="hbox" style="align-items: center; position: relative;">
                         <textarea *ngSwitchDefault type="text" rows="1" class="form-control input-sm" 

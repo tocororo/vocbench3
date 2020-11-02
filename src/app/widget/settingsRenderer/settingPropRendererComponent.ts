@@ -1,7 +1,7 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ARTNode, RDFResourceRolesEnum } from '../../models/ARTResources';
-import { SettingsProp, SettingsPropTypeConstraint } from '../../models/Plugins';
+import { Settings, SettingsProp, SettingsPropTypeConstraint } from '../../models/Plugins';
 
 @Component({
     selector: 'setting-prop-renderer',
@@ -31,7 +31,16 @@ export class SettingPropRendererComponent implements ControlValueAccessor {
         if (value == null) {
             prop.value = null;
         } else {
-            prop.value = value.toNT();
+            prop.value = value;
+        }
+        this.propagateChange(this.prop);
+    }
+
+    private updatePropertiesValue(prop: SettingsProp, value: Settings) {
+        if (value == null) {
+            prop.value = null;
+        } else {
+            prop.value =  value;
         }
         this.propagateChange(this.prop);
     }
