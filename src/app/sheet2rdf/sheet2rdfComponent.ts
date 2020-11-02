@@ -52,9 +52,10 @@ import { PearlValidationResult } from "../models/Coda";
             background-color: #eee;
         }
         .configuredHeader { color: green; }
-        .ignoredHeader { color: gray; }
+        .partiallyConfiguredHeader { color: orange; } /* only for sheets headers: if partially configured, is better orange since red could be too "warning" */
         .unconfiguredHeader { color: black; }
-        .incompleteHeader { color: red; }
+        .incompleteSubjectHeader { color: red; } /* Only for subject header */
+        .ignoredHeader { color: gray; }
     `]
 })
 export class Sheet2RdfComponent {
@@ -222,10 +223,10 @@ export class Sheet2RdfComponent {
                     }
                 }
             }
-            header['cssClass'] = "incompleteHeader";
+            header['cssClass'] = "partiallyConfiguredHeader";
             return;
         } else { //graph and node are not both empty neither both not-empty, so the configuration of the header is incomplete
-            header['cssClass'] = "incompleteHeader";
+            header['cssClass'] = "partiallyConfiguredHeader";
             return;
         }
     }
@@ -235,7 +236,7 @@ export class Sheet2RdfComponent {
             if (this.subjectHeader.id != null && this.subjectHeader.node.converter != null) {
                 return "configuredHeader";
             } else {
-                return "incompleteHeader";
+                return "incompleteSubjectHeader";
             }
         } else {
             return null;

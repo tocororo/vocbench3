@@ -77,11 +77,14 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a>
-                                    <div><span class="glyphicon glyphicon-stop configuredHeader"></span> Header with at least a valid configuration</div>
-                                    <div><span class="glyphicon glyphicon-stop incompleteHeader"></span> Header with incomplete configuration</div>
                                     <div><span class="glyphicon glyphicon-stop unconfiguredHeader"></span> Header not configured</div>
+                                    <div><span class="glyphicon glyphicon-stop configuredHeader"></span> Header with at least a valid configuration</div>
+                                    <div><span class="glyphicon glyphicon-stop partiallyConfiguredHeader"></span> Header partially configured (e.g. only node defined)</div>
                                     <div><span class="glyphicon glyphicon-stop ignoredHeader"></span> Header ignored</div>
-                                    <div><span class="label label-success" style="padding: 0px 2px">S</span> Header used for the subject mapping</div>
+                                    <div><span class="glyphicon glyphicon-stop incompleteSubjectHeader"></span> Incompleted Subject header</div>
+                                    <div class="hbox" style="align-items: center;">
+                                        <span class="label label-success" style="padding: 1px 2px; width: 10px; margin: 0px 2px 0px 1px;">S</span> Header used for the subject mapping
+                                    </div>
                                 </a>
                             </li>
                         </ul>
