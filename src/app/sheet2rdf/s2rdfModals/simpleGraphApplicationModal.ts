@@ -2,7 +2,7 @@ import { Component } from "@angular/core";
 import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
 import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from "rxjs";
-import { ARTURIResource } from "../../models/ARTResources";
+import { ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { ConverterContractDescription, RDFCapabilityType } from "../../models/Coda";
 import { NodeConversion, SimpleGraphApplication, SimpleHeader } from "../../models/Sheet2RDF";
 import { RDF, RDFS } from "../../models/Vocabulary";
@@ -49,8 +49,8 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     private rangeCollection: ARTURIResource[]; //all the range classes of the selected property
     //when rangeType is 'resource', user can select the range class to assert
     private assertType: boolean = false;
-    private assertableTypes: ARTURIResource[];
-    private assertedType: ARTURIResource;
+    private assertableTypes: ARTResource[];
+    private assertedType: ARTResource;
     //when rangeType is 'literal', user can select the datatype to assert
     private datatype: ARTURIResource = RDF.langString; //default datatype
     private allowedDatatypes: ARTURIResource[];
@@ -175,14 +175,14 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                                 }
                             }
                             //restore the asserted type
-                            let type = this.context.graphApplication.type;
+                            let type = this.context.graphApplication.value;
                             if (type != null) {
                                 this.assertType = true;
                                 let typeIdx = ResourceUtils.indexOfNode(this.assertableTypes, type);
                                 if (typeIdx != -1) { //type already in the assertableTypes list
                                     this.assertedType = this.assertableTypes[typeIdx];
                                 } else { //type not in the assertableTypes list (probably the user added it manually)
-                                    this.assertableTypes.push(type);
+                                    this.assertableTypes.push(<ARTResource>type);
                                     this.assertedType = this.assertableTypes[this.assertableTypes.length-1];
                                 }
                             }
@@ -369,7 +369,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     }
 
     private createOrUpdateGraphApplication() {
-        let type: ARTURIResource;
+        let type: ARTResource;
         if (this.selectedRangeType.type == RangeType.resource && this.assertType) {
             type = this.assertedType;
         }

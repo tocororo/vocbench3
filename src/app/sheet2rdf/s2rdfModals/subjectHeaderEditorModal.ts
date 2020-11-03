@@ -1,9 +1,12 @@
 import { Component } from "@angular/core";
 import { DialogRef, ModalComponent } from "ngx-modialog";
 import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTURIResource } from "../../models/ARTResources";
+import { ARTNode, ARTResource, ARTURIResource } from "../../models/ARTResources";
+import { Pair } from "../../models/Shared";
 import { CODAConverter, SimpleHeader, SubjectHeader } from "../../models/Sheet2RDF";
+import { SKOS } from "../../models/Vocabulary";
 import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 
 export class SubjectHeaderEditorModalData extends BSModalContext {
@@ -22,13 +25,15 @@ export class SubjectHeaderEditorModal implements ModalComponent<SubjectHeaderEdi
     private selectedHeader: SimpleHeader;
 
     private assertType: boolean = false;
-    private type: ARTURIResource;
+    private type: ARTResource;
 
     private selectedConverter: CODAConverter;
     private memoize: boolean = false;
 
+    private additionalPredObjs: PredObjPair[];
+
     constructor(public dialog: DialogRef<SubjectHeaderEditorModalData>, private s2rdfService: Sheet2RDFServices, 
-        private browsingModals: BrowsingModalServices) {
+        private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) {
         this.context = dialog.context;
     }
 
@@ -43,7 +48,7 @@ export class SubjectHeaderEditorModal implements ModalComponent<SubjectHeaderEdi
             }
         });
         //type + type assertion
-        this.type = this.context.subjectHeader.graph.type;
+        this.type = <ARTResource>this.context.subjectHeader.typeGraph.value;
         if (this.type != null) {
             this.assertType = true;
         }
@@ -52,6 +57,11 @@ export class SubjectHeaderEditorModal implements ModalComponent<SubjectHeaderEdi
             this.selectedConverter = this.context.subjectHeader.node.converter;
             this.memoize = this.context.subjectHeader.node.memoize;
         }
+        //additional po
+        this.additionalPredObjs = [];
+        this.context.subjectHeader.additionalGraphs.forEach(g => {
+            this.additionalPredObjs.push({ predicate: g.property, object: g.value });
+        })
     }
 
     private changeType() {
@@ -65,6 +75,22 @@ export class SubjectHeaderEditorModal implements ModalComponent<SubjectHeaderEdi
     private onConverterUpdate(updateStatus: { converter: CODAConverter, memoize: boolean }) {
         this.selectedConverter = updateStatus.converter;
         this.memoize = updateStatus.memoize;
+    }
+
+    private addAdditionalPredObj() {
+        this.additionalPredObjs.push({ predicate: null, object: null });
+    }
+
+    private onAdditionalPropChanged(po: PredObjPair, prop: ARTURIResource) {
+        po.predicate = prop;
+    }
+
+    private onAdditionalObjChanged(po: PredObjPair, obj: ARTNode) {
+        po.object = obj;
+    }
+
+    private removeAdditionalPredObj(po: PredObjPair) {
+        this.additionalPredObjs.splice(this.additionalPredObjs.indexOf(po), 1);
     }
 
     /**
@@ -118,9 +144,22 @@ export class SubjectHeaderEditorModal implements ModalComponent<SubjectHeaderEdi
     }
 
     ok() {
-        this.s2rdfService.updateSubjectHeader(this.selectedHeader.id, this.selectedConverter.contractUri, this.selectedConverter.params,
+        //check that there are no additional PO pending
+        for (let po of this.additionalPredObjs) {
+            if (po.predicate == null || po.object == null) {
+                this.basicModals.alert("Subject Header editor", "An incomplete additional predicate-object pair has been detected.", "warning");
+                return;
+            }
+        }
+        //prepare the additional PO param
+        let additionalPOParam: Pair<ARTURIResource, ARTNode>[] = [];
+        this.additionalPredObjs.forEach(po => {
+            additionalPOParam.push({ first: po.predicate, second: po.object });
+        });
+        //execute the update
+        this.s2rdfService.updateSubjectHeader(this.selectedHeader.id, this.selectedConverter.contractUri, additionalPOParam, this.selectedConverter.params,
             this.type, this.memoize).subscribe(
-            resp => {
+            () => {
                 this.dialog.close();
             }
         );
@@ -130,4 +169,9 @@ export class SubjectHeaderEditorModal implements ModalComponent<SubjectHeaderEdi
         this.dialog.dismiss();
     }
 
+}
+
+interface PredObjPair {
+    predicate: ARTURIResource;
+    object: ARTNode;
 }

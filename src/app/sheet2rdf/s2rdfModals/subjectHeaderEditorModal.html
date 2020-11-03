@@ -70,6 +70,45 @@
         <converter-config [converter]="selectedConverter" [memoize]="memoize" [rangeType]="'resource'" style="margin-top: 4px;" (update)="onConverterUpdate($event)">
         </converter-config>
 
+        <div class="panel panel-default" style="margin-top: 4px;">
+            <div class="panel-heading">
+                <label style="flex: 1;">Additional predicate-object</label>
+                <button class="btn btn-xs btn-default" (click)="addAdditionalPredObj()">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+            </div>
+            <div class="panel-body">
+                <table class="table table-borderless table-condensed">
+                    <colgroup>
+                        <col style="width: 1%;">
+                        <col>
+                        <col style="width: 1%;">
+                        <col>
+                        <col style="width: 1%;">
+                    </colgroup>
+                    <tbody>
+                        <tr *ngFor="let po of additionalPredObjs">
+                            <td><label>Predicate:</label></td>
+                            <td>
+                                <resource-picker [resource]="po.predicate" [editable]="true" [config]="{ roles: ['property'] }" 
+                                    (resourceChanged)="onAdditionalPropChanged(po, $event)">
+                                </resource-picker>
+                            </td>
+                            <td><label>Object:</label></td>
+                            <td>
+                                <value-picker [value]="po.object" [editable]="true" (valueChanged)="onAdditionalObjChanged(po, $event)"></value-picker>
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-default" (click)="removeAdditionalPredObj(po)">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>

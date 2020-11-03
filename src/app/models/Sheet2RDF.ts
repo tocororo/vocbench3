@@ -1,4 +1,5 @@
-import { ARTURIResource } from "./ARTResources";
+import { ResourceUtils } from "../utils/ResourceUtils";
+import { ARTNode, ARTURIResource } from "./ARTResources";
 import { RDFCapabilityType } from "./Coda";
 
 export class SimpleHeader {
@@ -41,7 +42,8 @@ export class SubjectHeader {
     public id: string;
     public pearlFeature: string;
     public node: NodeConversion;
-    public graph: SimpleGraphApplication;
+    public typeGraph: SimpleGraphApplication;
+    public additionalGraphs: SimpleGraphApplication[];
 }
 
 export class NodeConversion {
@@ -56,7 +58,7 @@ export abstract class GraphApplication {
 export class SimpleGraphApplication extends GraphApplication {
     public nodeId: string;
     public property: ARTURIResource;
-    public type?: ARTURIResource;
+    public value?: ARTNode;
 }
 export class AdvancedGraphApplication extends GraphApplication {
     public nodeIds: string[];
@@ -104,17 +106,23 @@ export class Sheet2RdfDeserializer {
 
     public static parseSubjectHeader(json: any): SubjectHeader {
         let node: NodeConversion = json.node;
-        let graph: SimpleGraphApplication;
-        let gJson = json.graph;
-        if (gJson != null) {
-            graph = <SimpleGraphApplication>this.parseGraphApplication(gJson);
+        let typeGraph: SimpleGraphApplication;
+        let typeGraphJson = json.type_graph;
+        if (typeGraphJson != null) {
+            typeGraph = <SimpleGraphApplication>this.parseGraphApplication(typeGraphJson);
         }
+        let additionalGraphs: SimpleGraphApplication[] = [];
+        let additionalGraphsJson = json.additional_graphs;
+        additionalGraphsJson.forEach((gJson: any) => {
+            additionalGraphs.push(this.parseSimpleGraphApplication(gJson))
+        });
 
         let h: SubjectHeader = {
             id: json.id,
             pearlFeature: json.pearlFeature,
             node: node,
-            graph: graph
+            typeGraph: typeGraph,
+            additionalGraphs: additionalGraphs
         }
         return h;
     }
@@ -140,21 +148,29 @@ export class Sheet2RdfDeserializer {
 
     private static parseGraphApplication(gJson: any): GraphApplication {
         if (gJson.hasOwnProperty('nodeId')) { //simple graph application
-            let g = new SimpleGraphApplication();
-            g.id = gJson.id;
-            g.nodeId = gJson.nodeId;
-            g.property = (gJson.property) ? new ARTURIResource(gJson.property) : null;
-            g.type = (gJson.type) ? new ARTURIResource(gJson.type) : null;
-            return g;
+            return this.parseSimpleGraphApplication(gJson);
         } else { //advanced graph application
-            let g = new AdvancedGraphApplication();
-            g.id = gJson.id;
-            g.nodeIds = gJson.nodeIds;
-            g.pattern = gJson.pattern;
-            g.prefixMapping = gJson.prefixMapping;
-            g.defaultPredicate = (gJson.defaultPredicate) ? new ARTURIResource(gJson.defaultPredicate) : null;
-            return g;
+            return this.parseAdvancedGraphApplication(gJson);
         }
+    }
+
+    private static parseSimpleGraphApplication(gJson: any): SimpleGraphApplication {
+        let g = new SimpleGraphApplication();
+        g.id = gJson.id;
+        g.nodeId = gJson.nodeId;
+        g.property = (gJson.property) ? new ARTURIResource(gJson.property) : null;
+        g.value = (gJson.value) ? ResourceUtils.parseNode(gJson.value) : null;
+        return g;
+    }
+
+    private static parseAdvancedGraphApplication(gJson: any): AdvancedGraphApplication {
+        let g = new AdvancedGraphApplication();
+        g.id = gJson.id;
+        g.nodeIds = gJson.nodeIds;
+        g.pattern = gJson.pattern;
+        g.prefixMapping = gJson.prefixMapping;
+        g.defaultPredicate = (gJson.defaultPredicate) ? new ARTURIResource(gJson.defaultPredicate) : null;
+        return g;
     }
 
 }

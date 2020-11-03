@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { ARTResource, ARTURIResource } from "../models/ARTResources";
+import { ARTNode, ARTResource, ARTURIResource } from "../models/ARTResources";
 import { RDFCapabilityType } from "../models/Coda";
 import { Configuration, Reference } from '../models/Configuration';
 import { PrefixMapping } from '../models/Metadata';
 import { RDFFormat } from "../models/RDFFormat";
+import { Pair } from '../models/Shared';
 import { Sheet2RdfDeserializer, SimpleGraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
 import { HttpManager, HttpServiceContext } from "../utils/HttpManager";
 import { ResourcesServices } from './resourcesServices';
@@ -42,10 +43,10 @@ export class Sheet2RDFServices {
                     headers.push(Sheet2RdfDeserializer.parseSimpleHeader(headersJson[i]));
                 }
                 //annotate the type of the subject mapping (do not annotate the properties of the headers, they will be annotated individually when editing the single header)
-                if (subject.graph.type != null) {
-                    return this.resourcesService.getResourceDescription(subject.graph.type).map(
+                if (subject.typeGraph.value != null) {
+                    return this.resourcesService.getResourceDescription(<ARTResource>subject.typeGraph.value).map(
                         annotatedRes => {
-                            subject.graph.type = <ARTURIResource>annotatedRes;
+                            subject.typeGraph.value = annotatedRes;
                             return { subject: subject, headers: headers };
                         }
                     );
@@ -70,8 +71,8 @@ export class Sheet2RDFServices {
                         if (g.property != null) {
                             resources.push(g.property);
                         }
-                        if (g.type != null) {
-                            resources.push(g.type);
+                        if (g.value != null) {
+                            resources.push(<ARTURIResource>g.value);
                         }
                     }
                 });
@@ -85,8 +86,8 @@ export class Sheet2RDFServices {
                                         if (g.property != null && g.property.equals(ar)) {
                                             g.property = ar;
                                         }
-                                        if (g.type != null && g.type.equals(ar)) {
-                                            g.type = ar;
+                                        if (g.value != null && g.value.equals(ar)) {
+                                            g.value = ar;
                                         }
                                     }
                                 });
@@ -110,7 +111,7 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "ignoreHeader", params);
     }
 
-    addSimpleGraphApplicationToHeader(headerId: string, property: ARTURIResource, nodeId: string, type?: ARTURIResource) {
+    addSimpleGraphApplicationToHeader(headerId: string, property: ARTURIResource, nodeId: string, type?: ARTResource) {
         let params: any = {
             headerId: headerId,
             property: property,
@@ -131,7 +132,7 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "addAdvancedGraphApplicationToHeader", params);
     }
 
-    updateSimpleGraphApplication(headerId: string, graphId: string, property: ARTURIResource, nodeId: string, type?: ARTURIResource) {
+    updateSimpleGraphApplication(headerId: string, graphId: string, property: ARTURIResource, nodeId: string, type?: ARTResource) {
         let params: any = {
             headerId: headerId,
             graphId: graphId,
@@ -218,15 +219,24 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "removeNodeFromHeader", params);
     }
 
-    updateSubjectHeader(headerId: string, converterContract: string, converterParams?: {[key: string]: any}, type?: ARTURIResource, memoize?: boolean) {
+    updateSubjectHeader(headerId: string, converterContract: string, additionalPredObjs: Pair<ARTURIResource, ARTNode>[], converterParams?: {[key: string]: any}, type?: ARTResource, memoize?: boolean) {
         let params: any = {
             headerId: headerId,
             converterContract: converterContract,
             converterParams: (converterParams != null) ? this.getMapSerialization(converterParams) : null,
             type: type,
-            memoize
+            memoize: memoize,
+            additionalPredObjs: JSON.stringify(additionalPredObjs.map(p => [p.first.toNT(), p.second.toNT()]))
         };
         return this.httpMgr.doPost(this.serviceName, "updateSubjectHeader", params);
+    }
+
+    updateSubjectHeaderAdditionalGraph(predicate: ARTURIResource, object: ARTNode) {
+        let params: any = {
+            predicate: predicate,
+            object: object
+        };
+        return this.httpMgr.doPost(this.serviceName, "updateSubjectHeaderAdditionalGraph", params);
     }
 
     replicateMultipleHeader(headerId: string) {

@@ -14,6 +14,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Improvements to Sheet2Rdf
     * Added possibility to rename nodes
     * Enabled creation of nodes independently from their usage in graph applications
+    * Added possibility to provide additional predicate-object pairs for the subject
   * Updates to the OntoPortal deployer, allowing for a specific configuration dedicated to EcoPortal
   * Enabled nesting of settings
   * Enabled open enumerations in settings
