@@ -43,10 +43,10 @@ export class Sheet2RDFServices {
                     headers.push(Sheet2RdfDeserializer.parseSimpleHeader(headersJson[i]));
                 }
                 //annotate the type of the subject mapping (do not annotate the properties of the headers, they will be annotated individually when editing the single header)
-                if (subject.typeGraph.value != null) {
-                    return this.resourcesService.getResourceDescription(<ARTResource>subject.typeGraph.value).map(
+                if (subject.graph.type != null) {
+                    return this.resourcesService.getResourceDescription(subject.graph.type).map(
                         annotatedRes => {
-                            subject.typeGraph.value = annotatedRes;
+                            subject.graph.type = <ARTURIResource>annotatedRes;
                             return { subject: subject, headers: headers };
                         }
                     );
@@ -219,14 +219,14 @@ export class Sheet2RDFServices {
         return this.httpMgr.doPost(this.serviceName, "removeNodeFromHeader", params);
     }
 
-    updateSubjectHeader(headerId: string, converterContract: string, additionalPredObjs: Pair<ARTURIResource, ARTNode>[], converterParams?: {[key: string]: any}, type?: ARTResource, memoize?: boolean) {
+    updateSubjectHeader(headerId: string, converterContract: string, converterParams?: {[key: string]: any}, type?: ARTResource, additionalPredObjs?: Pair<ARTURIResource, ARTNode>[], memoize?: boolean) {
         let params: any = {
             headerId: headerId,
             converterContract: converterContract,
             converterParams: (converterParams != null) ? this.getMapSerialization(converterParams) : null,
             type: type,
             memoize: memoize,
-            additionalPredObjs: JSON.stringify(additionalPredObjs.map(p => [p.first.toNT(), p.second.toNT()]))
+            additionalPredObjs: additionalPredObjs != null ? JSON.stringify(additionalPredObjs.map(p => [p.first.toNT(), p.second.toNT()])) : null,
         };
         return this.httpMgr.doPost(this.serviceName, "updateSubjectHeader", params);
     }

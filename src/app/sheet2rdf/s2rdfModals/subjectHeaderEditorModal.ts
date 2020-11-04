@@ -48,7 +48,7 @@ export class SubjectHeaderEditorModal implements ModalComponent<SubjectHeaderEdi
             }
         });
         //type + type assertion
-        this.type = <ARTResource>this.context.subjectHeader.typeGraph.value;
+        this.type = <ARTResource>this.context.subjectHeader.graph.type;
         if (this.type != null) {
             this.assertType = true;
         }
@@ -157,8 +157,8 @@ export class SubjectHeaderEditorModal implements ModalComponent<SubjectHeaderEdi
             additionalPOParam.push({ first: po.predicate, second: po.object });
         });
         //execute the update
-        this.s2rdfService.updateSubjectHeader(this.selectedHeader.id, this.selectedConverter.contractUri, additionalPOParam, this.selectedConverter.params,
-            this.type, this.memoize).subscribe(
+        this.s2rdfService.updateSubjectHeader(this.selectedHeader.id, this.selectedConverter.contractUri, this.selectedConverter.params,
+            this.type, additionalPOParam, this.memoize).subscribe(
             () => {
                 this.dialog.close();
             }

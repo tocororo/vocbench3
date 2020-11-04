@@ -42,7 +42,7 @@ export class SubjectHeader {
     public id: string;
     public pearlFeature: string;
     public node: NodeConversion;
-    public typeGraph: SimpleGraphApplication;
+    public graph: SimpleGraphApplication;
     public additionalGraphs: SimpleGraphApplication[];
 }
 
@@ -58,6 +58,7 @@ export abstract class GraphApplication {
 export class SimpleGraphApplication extends GraphApplication {
     public nodeId: string;
     public property: ARTURIResource;
+    public type?: ARTURIResource;
     public value?: ARTNode;
 }
 export class AdvancedGraphApplication extends GraphApplication {
@@ -107,12 +108,12 @@ export class Sheet2RdfDeserializer {
     public static parseSubjectHeader(json: any): SubjectHeader {
         let node: NodeConversion = json.node;
         let typeGraph: SimpleGraphApplication;
-        let typeGraphJson = json.type_graph;
+        let typeGraphJson = json.graph;
         if (typeGraphJson != null) {
             typeGraph = <SimpleGraphApplication>this.parseGraphApplication(typeGraphJson);
         }
         let additionalGraphs: SimpleGraphApplication[] = [];
-        let additionalGraphsJson = json.additional_graphs;
+        let additionalGraphsJson = json.additionalGraphs;
         additionalGraphsJson.forEach((gJson: any) => {
             additionalGraphs.push(this.parseSimpleGraphApplication(gJson))
         });
@@ -121,7 +122,7 @@ export class Sheet2RdfDeserializer {
             id: json.id,
             pearlFeature: json.pearlFeature,
             node: node,
-            typeGraph: typeGraph,
+            graph: typeGraph,
             additionalGraphs: additionalGraphs
         }
         return h;
@@ -159,6 +160,7 @@ export class Sheet2RdfDeserializer {
         g.id = gJson.id;
         g.nodeId = gJson.nodeId;
         g.property = (gJson.property) ? new ARTURIResource(gJson.property) : null;
+        g.type = (gJson.type) ? ResourceUtils.parseURI(gJson.type) : null;
         g.value = (gJson.value) ? ResourceUtils.parseNode(gJson.value) : null;
         return g;
     }
