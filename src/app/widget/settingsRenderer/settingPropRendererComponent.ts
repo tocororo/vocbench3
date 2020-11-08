@@ -76,6 +76,28 @@ export class SettingPropRendererComponent implements ControlValueAccessor {
         return roles;
     }
 
+    private isLanguageTaggedString(prop: SettingsProp): boolean {
+        /**
+         * use a cache mechanism to avoid to recreate a languageTaggedString field each time isLanguageTaggedString is called
+         */
+        if (prop.type['languageTaggedString'] != null) { //cached?
+            return prop.type['languageTaggedString'];
+        }
+        let constr: SettingsPropTypeConstraint[] = prop.type.constraints;
+        let isLanguageTaggedString: boolean = false;
+        if (constr != null) {
+            for (var i = 0; i < constr.length; i++) {
+                if (constr[i].type.endsWith("LanguageTaggedString")) {
+                    isLanguageTaggedString = true;
+                    break;
+                }
+            }
+        }
+        prop.type['languageTaggedString'] = isLanguageTaggedString;
+        return isLanguageTaggedString;
+    }
+
+
     //---- method of ControlValueAccessor and Validator interfaces ----
     /**
      * Write a new value to the element.

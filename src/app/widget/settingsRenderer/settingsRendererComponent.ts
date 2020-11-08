@@ -12,7 +12,8 @@ import { Settings } from '../../models/Plugins';
 export class SettingsRendererComponent implements ControlValueAccessor {
 
     @Input() disabled: boolean = false;
-    
+    @Input() preventHoverInheritance: boolean = false;
+
     private settings: Settings;
 
     constructor() { }

@@ -22,10 +22,12 @@ export class NestedSettingSetRendererComponent implements ControlValueAccessor {
         this.init();
     }
 
+    /*
     ngOnChanges(changes: SimpleChanges) {
         this.init();
     }
-
+    */
+   
     init() {
         if (this.settings) {
             this.displayedSettings = this.settings;

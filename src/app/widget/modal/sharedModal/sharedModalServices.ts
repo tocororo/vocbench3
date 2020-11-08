@@ -89,9 +89,10 @@ export class SharedModalServices {
      * @param languages languages already selected
      * @param projectAware if true, allow selection only of languages available in the current project
      * @param projectCtx allow to customize the available languages for the contextual project
+     * @param radio if true, exactly one language should be selected
      */
-    selectLanguages(title: string, languages: string[], projectAware?: boolean, projectCtx?: ProjectContext) {
-        var modalData = new LanguageSelectorModalData(title, languages, projectAware, projectCtx);
+    selectLanguages(title: string, languages: string[], projectAware?: boolean, projectCtx?: ProjectContext, radio: boolean = false) {
+        var modalData = new LanguageSelectorModalData(title, languages, projectAware, projectCtx, radio);
         const builder = new BSModalContextBuilder<LanguageSelectorModalData>(
             modalData, undefined, LanguageSelectorModalData
         );

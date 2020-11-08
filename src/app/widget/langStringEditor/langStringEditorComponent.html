@@ -1,0 +1,13 @@
+<div style="display: flex; align-items: center;">
+    <div class="flagIcon" [title]="language" style="margin-left: 2px; cursor: pointer;" (click)="editLanguage()">
+        <ng-container *ngIf="!langFlagAvailable; else langFlagBlock">
+            <img [src]="unknownFlagImgSrc">
+            <span>{{langTag}}</span>
+        </ng-container>
+        <ng-template #langFlagBlock>
+            <img [src]="imgSrc">
+        </ng-template>
+    </div>
+    <input type="text" class="form-control input-sm" style="margin-left: -18px; padding-left: 20px;"
+        [(ngModel)]="stringValue" (ngModelChange)="onStringValueChanged()">
+</div>

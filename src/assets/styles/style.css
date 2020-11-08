@@ -335,6 +335,15 @@ img.disabled  {
     background-color: #e5f3ff !important;
 }
 
+/* when a table-hoverable is nested within another one, add the class table-hoverable-nested to avoid that selection is inherited by the inner table */
+.table-hoverable tbody tr:hover .table-hoverable.table-hoverable-nested  td {
+    background-color: transparent !important;
+}
+
+.table-hoverable tbody tr:hover .table-hoverable  tr:hover td {
+    background-color: #e5f3ff !important;
+}
+
 .table-borderless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {
     border: none;
 }

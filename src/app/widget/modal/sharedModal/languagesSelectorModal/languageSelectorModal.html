@@ -19,7 +19,12 @@
             <tbody>
                 <tr *ngFor="let l of languageItems">
                     <td class="text-center">
-                        <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.selected">
+                        <ng-container *ngIf="context.radio; else checkboxItem">
+                            <input type="radio" style="vertical-align: middle" [checked]="l.selected" value="{{l.lang.tag}}" (change)="updateRadioSelection($event.target.value)">
+                        </ng-container>
+                        <ng-template #checkboxItem>
+                            <input type="checkbox" style="vertical-align: middle" [(ngModel)]="l.selected">
+                        </ng-template>
                     </td>
                     <td class="text-center" nowrap>{{l.lang.tag}}</td>
                     <td class="text-center">
@@ -31,6 +36,6 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="okDisabled()">Ok</button>
     <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
 </div>
