@@ -93,7 +93,11 @@ export class Settings {
                         serializedValues.push(v);
                     }
                 }
-                value = serializedValues;
+                if (serializedValues.length) {
+                    value = serializedValues;
+                } else {
+                    value = undefined;
+                }
             } else if(value instanceof Settings) {
                 value = value.getPropertiesAsMap();
             } else if (typeof value == "object") { //object => probably a map (associative array object)
@@ -148,11 +152,34 @@ export class SettingsProp {
     }
 
     public clone(): SettingsProp {
-        return new SettingsProp(this.name, this.displayName, this.description, this.required, this.type.clone(), this.enumeration, this.value);
+        let clonedValue = SettingsProp.cloneValue(this.value);
+        return new SettingsProp(this.name, this.displayName, this.description, this.required, this.type.clone(), this.enumeration, clonedValue);
+    }
+
+    private static cloneValue(value: any): any {
+        if (value === null || typeof value != "object" || value instanceof String) { // "primitive" values that don't need to be cloned
+            return value;
+        } else if (value instanceof Array) {
+            return value.map(v => SettingsProp.cloneValue(v));
+        } else {
+            let propValues = {};
+            for (let prop of Object.getOwnPropertyNames(value)) {
+                propValues[prop] = Object.getOwnPropertyDescriptor(value, prop);
+                propValues[prop].value = SettingsProp.cloneValue(propValues[prop].value);
+            }
+
+            return Object.create(Object.getPrototypeOf(value), propValues);
+        }
     }
 
     public requireConfiguration(): boolean {
-        return this.required && SettingsProp.isNullish(this.value);
+        if (this.required) {
+            return SettingsProp.isNullish(this.value);
+        } else {
+            return (this.value instanceof Array && this.value.some(v => SettingsProp.isNullish(v))) ||
+                (this.value instanceof Settings && SettingsProp.isNullish(this.value));
+
+        }
     }
 
     private static isNullish(v: any): boolean {

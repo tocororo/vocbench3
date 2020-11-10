@@ -11,6 +11,7 @@ export class SettingSetRendererComponent {
     @Input() types: SettingsPropType[]; //list of types (actually it is handled only the first type)
     @Input() value: any[];
     @Input() disabled: boolean = false;
+    @Input() collapsable: boolean = false; // can be empty
 
     @Output() valueChanged = new EventEmitter<any[]>();
 
@@ -19,12 +20,15 @@ export class SettingSetRendererComponent {
     ngOnInit() {
         if (this.value == null) {
             this.value = [];
-            this.value.push(null);
+            if (!this.collapsable) {
+                this.value.push(null);
+            }
         }
     }
 
     private add() {
         this.value.push(null);
+        this.onModelChange();
     }
 
     private delete(index: number) {

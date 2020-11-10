@@ -55,6 +55,17 @@ export class SettingPropRendererComponent implements ControlValueAccessor {
         this.propagateChange(this.prop);
     }
 
+    private addOptionalSettingsValue(prop: SettingsProp) {
+        prop.value = prop.type.schema.clone();
+        this.propagateChange(this.prop);
+    }
+
+    private deleteOptionalSettingsValue(prop: SettingsProp) {
+        prop.value = null;
+        this.propagateChange(this.prop);
+    }
+
+
     private getIRIRoleConstraints(prop: SettingsProp): RDFResourceRolesEnum[] {
         /**
          * use a cache mechanism to avoid to recreate a roles array each time getIRIRoleConstraints is called
