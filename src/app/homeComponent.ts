@@ -13,10 +13,10 @@ import { SharedModalServices } from "./widget/modal/sharedModal/sharedModalServi
 })
 export class HomeComponent {
 
-    private safeCustomContentFromPref: SafeHtml;
-    private safeCustomContentFromFile: SafeHtml;
+    safeCustomContentFromPref: SafeHtml;
+    safeCustomContentFromFile: SafeHtml;
 
-    private privacyStatementAvailable: boolean = false;
+    privacyStatementAvailable: boolean = false;
 
     constructor(private router: Router, private sharedModals: SharedModalServices, private administrationService: AdministrationServices, private sanitizer: DomSanitizer) { }
 
@@ -43,11 +43,11 @@ export class HomeComponent {
         );
     }
 
-    private isUserLogged(): boolean {
+    isUserLogged(): boolean {
         return VBContext.isLoggedIn();
     }
 
-    private onLogin() {
+    onLogin() {
         let user: User = VBContext.getLoggedUser();
         if (user.isAdmin()) {
             this.router.navigate(['/Projects']); //redirect to project
@@ -56,7 +56,7 @@ export class HomeComponent {
         }
     }
 
-    private downloadPrivacyStatement() {
+    downloadPrivacyStatement() {
         this.administrationService.downloadPrivacyStatement().subscribe();
     }
 

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { DatasetMetadataComponent } from "../metadata/metadataRegistry/datasetMetadataComponent";
 import { LexicalizationSetMetadataComponent } from '../metadata/metadataRegistry/lexicalizationSetMetadataComponent';
 import { MetadataRegistryComponent } from "../metadata/metadataRegistry/metadataRegistryComponent";
@@ -18,7 +19,13 @@ import { ResourceViewModule } from './resourceViewModule';
 import { SharedModule } from './sharedModule';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedModule, ResourceViewModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        NgbDropdownModule,
+        SharedModule,
+        ResourceViewModule
+    ],
     declarations: [
         MetadataVocabulariesComponent,
         NamespacesAndImportsComponent,

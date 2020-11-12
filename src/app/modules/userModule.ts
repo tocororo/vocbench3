@@ -2,18 +2,25 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from "@angular/router";
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChangePasswordModal } from '../user/changePasswordModal';
 import { LoginComponent } from '../user/loginComponent';
 import { RegistrationComponent } from '../user/registrationComponent';
 import { ResetPasswordComponent } from '../user/resetPasswordComponent';
 import { UserCreateComponent } from '../user/userCreateComponent';
+import { UserDetailsComponent } from '../user/userDetailsComponent';
 import { UserMenuComponent } from '../user/userMenuComponent';
 import { UserProfileComponent } from '../user/userProfileComponent';
 import { SharedModule } from './sharedModule';
-import { UserDetailsComponent } from '../user/userDetailsComponent';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, RouterModule, SharedModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        NgbDropdownModule,
+        RouterModule,
+        SharedModule,
+    ],
     declarations: [
         ChangePasswordModal,
         LoginComponent,

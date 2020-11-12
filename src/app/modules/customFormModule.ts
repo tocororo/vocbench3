@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { CustomFormComponent } from '../customForms/customForm/customFormComponent';
 import { CustomFormField } from '../customForms/customForm/customFormFieldComponent';
 import { CustomFormFieldList } from '../customForms/customForm/customFormFieldListComponent';
@@ -18,7 +19,12 @@ import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingMod
 import { SharedModule } from './sharedModule';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        NgbDropdownModule,
+        SharedModule
+    ],
     providers: [BasicModalServices, BrowsingModalServices],
     declarations: [
         BrokenCFStructReportModal,

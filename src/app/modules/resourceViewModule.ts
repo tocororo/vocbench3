@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ResourceTripleEditorComponent } from '../resourceView/resourceTripleEditor/resourceTripleEditorComponent';
 import { ResourceViewTabContainer } from '../resourceView/resourceViewContainer/resourceViewContainer';
 import { BroadersPartitionRenderer } from '../resourceView/resourceViewEditor/renderer/impl/broadersPartitionRenderer';
@@ -72,8 +73,12 @@ import { TreeAndListModule } from "./treeAndListModule";
 
 @NgModule({
     imports: [
-        CommonModule, FormsModule,
-        SharedModule, TreeAndListModule, PreferencesModule
+        CommonModule, 
+        FormsModule,
+        NgbDropdownModule,
+        PreferencesModule,
+        SharedModule, 
+        TreeAndListModule, 
     ],
     declarations: [
         EditableResourceComponent,

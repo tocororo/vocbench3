@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { QueryParameterForm } from '../sparql/queryParameterization/queryParameterForm';
 import { YasguiComponent } from '../sparql/yasguiComponent';
 import { HtmlEditorComponent } from '../widget/codemirror/htmlEditor/htmlEditorComponent';
@@ -33,7 +34,11 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
 
 
 @NgModule({
-    imports: [CommonModule, FormsModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        NgbDropdownModule,
+    ],
     declarations: [
         DatatypePickerComponent,
         ExtensionConfiguratorComponent,
@@ -42,6 +47,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         InputEditableComponent,
         JsonEditorComponent,
         LangPickerComponent,
+        LangStringEditorComponent,
         LanguageItemComponent,
         LiteralPickerComponent,
         ManchesterEditorComponent,
@@ -61,7 +67,6 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         NestedSettingSetRendererComponent,
         SettingsRendererPanelComponent,
         TypedLiteralInputComponent,
-        LangStringEditorComponent,
         ValuePickerComponent,
         YasguiComponent,
     ],
@@ -73,6 +78,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         InputEditableComponent,
         JsonEditorComponent,
         LangPickerComponent,
+        LangStringEditorComponent,
         LanguageItemComponent,
         LiteralPickerComponent,
         ManchesterEditorComponent,
@@ -91,7 +97,6 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         SettingsRendererComponent,
         SettingsRendererPanelComponent,
         TypedLiteralInputComponent,
-        LangStringEditorComponent,
         ValuePickerComponent,
         YasguiComponent,
     ],

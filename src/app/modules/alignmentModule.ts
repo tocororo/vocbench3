@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { AlignFromFileComponent } from '../alignment/alignmentValidation/alignFromFileComponent';
 import { AlignFromRemoteSystemComponent } from '../alignment/alignmentValidation/alignFromRemoteSystemComponent';
 import { AlignmentManagementComponent } from '../alignment/alignmentValidation/alignmentManagementComponent';
@@ -14,7 +15,12 @@ import { SynonymizerDetailsModal } from '../alignment/alignmentValidation/alignm
 import { SharedModule } from './sharedModule';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        NgbDropdownModule,
+        SharedModule
+    ],
     declarations: [
         AlignmentValidationComponent,
         AlignFromFileComponent,

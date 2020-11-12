@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.uniroma2.art.semanticturkey</groupId>
 	<artifactId>vocbench3</artifactId>
-	<version>8.0.2-SNAPSHOT</version>
+	<version>9.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<licenses>
@@ -35,7 +35,7 @@
 						<!-- optional: default phase is "generate-resources" -->
 						<phase>generate-resources</phase>
 						<configuration>
-							<nodeVersion>v6.10.3</nodeVersion>
+							<nodeVersion>v10.23.0</nodeVersion>
 						</configuration>
 					</execution>
 					<execution>

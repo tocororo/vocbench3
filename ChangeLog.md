@@ -4,7 +4,12 @@ The full changelog of the platform includes also changes brought to the Semantic
 
 https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
 
-# 8.0.2 (dd-mm-yyyy)
+# 9.0.0 (dd-mm-yyyy)
+  * Widely changed the code after project changes:
+    * Dropped webpack build structure in favor of angular-cli
+    * Updated Angular version to ^10.2.2
+    * Dropped dependency from ngx-modialog in favor of ng-bootstrap
+    * Updated Bootstrap dependency to version 4.5.3
   * Improved alignment management in EDOAL project
     * Enabled the storing of validated alignment in the EDOAL linkset
     * Added possibility to specify the mapping property of a correspondence
@@ -22,6 +27,7 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Extended the language selector modal with a radio button mode (mandatory single selection)
   * Fixed issues and other extensions in settings management related to typed literals and set-typed properties
   * Fixed issues in the plugin configuration modal which retained (in some cases) edits after canceling 
+
 # 8.0.1 (08-10-2020)
   * Added Icelandic flag
   * Fixed a bug the prevented authorized users (e.g. lexicographer) to add/update/delete notes in assigned languages

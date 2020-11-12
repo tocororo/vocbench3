@@ -1,5 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { HttpManager } from '../utils/HttpManager';
+import { StMetadataRegistry } from '../utils/STMetadataRegistry';
 import { AdministrationServices } from "../services/administrationServices";
 import { AlignmentServices } from "../services/alignmentServices";
 import { AuthServices } from "../services/authServices";
@@ -74,6 +76,7 @@ import { VersionsServices } from "../services/versionsServices";
         ExtensionsServices,
         GraphServices,
         HistoryServices,
+        HttpManager,
         IcvServices,
         IndividualsServices,
         InputOutputServices,
@@ -104,6 +107,7 @@ import { VersionsServices } from "../services/versionsServices";
         SkosDiffingServices,
         SkosxlServices,
         SparqlServices,
+        StMetadataRegistry,
         UserServices,
         UsersGroupsServices,
         ValidationServices,

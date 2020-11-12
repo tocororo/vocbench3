@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { D3Service } from '../graph/d3/d3Services';
 import { DraggableDirective } from '../graph/d3/draggableDirective';
 import { ZoomableDirective } from '../graph/d3/zoomableDirective';
@@ -25,7 +26,13 @@ import { PreferencesModule } from './preferencesModule';
 import { SharedModule } from './sharedModule';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedModule, PreferencesModule],
+    imports: [
+        CommonModule, 
+        FormsModule, 
+        NgbDropdownModule,
+        SharedModule, 
+        PreferencesModule
+    ],
     declarations: [
         LinkComponent, NodeModelComponent, DataNodeComponent, DraggableDirective, ZoomableDirective,
         ModelGraphPanel, DataGraphPanel, ModelGraphComponent, DataGraphComponent,

@@ -1,0 +1,131 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "vocbench3": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "inlineTemplate": true,
+          "inlineStyle": true,
+          "skipTests": true
+        },
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:guard": {
+          "skipTests": true
+        },
+        "@schematics/angular:interceptor": {
+          "skipTests": true
+        },
+        "@schematics/angular:module": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
+        }
+      },
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/vocbench3",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "src/assets",
+              "src/vbconfig.js"
+            ],
+            "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/fontawesome.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "node_modules/yasgui-yasqe/dist/yasqe.min.css",
+              "node_modules/codemirror/lib/codemirror.css",
+              "node_modules/codemirror/addon/hint/show-hint.css",
+              "src/styles.css"
+            ],
+            "scripts": [
+              "node_modules/d3/dist/d3.min.js",
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/codemirror/lib/codemirror.js",
+              "node_modules/codemirror/addon/comment/comment.js",
+              "node_modules/codemirror/addon/edit/matchbrackets.js",
+              "node_modules/codemirror/addon/edit/closebrackets.js",
+              "node_modules/codemirror/addon/hint/show-hint.js",
+              "node_modules/codemirror/addon/mode/simple.js",
+              "node_modules/codemirror/addon/mode/overlay.js",
+              "node_modules/codemirror/addon/search/searchcursor.js",
+              "node_modules/codemirror/mode/javascript/javascript.js",
+              "node_modules/codemirror/mode/ntriples/ntriples.js",
+              "node_modules/codemirror/mode/xml/xml.js",
+              "node_modules/yasgui-yasqe/dist/yasqe.bundled.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "vocbench3:build",
+            "port": 8181
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "vocbench3:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "vocbench3:build"
+          }
+        }
+      }
+    }},
+  "defaultProject": "vocbench3"
+}

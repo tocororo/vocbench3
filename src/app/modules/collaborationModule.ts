@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { CollaborationComponent } from '../collaboration/collaborationComponent';
 import { CollaborationModalServices } from '../collaboration/collaborationModalService';
 import { IssueListComponent } from '../collaboration/issueListComponent';
@@ -15,7 +16,12 @@ import { SharedModule } from './sharedModule';
 
 
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        NgbDropdownModule,
+        SharedModule
+    ],
     declarations: [
         CollaborationComponent, IssueListComponent, 
         IssueListModal, CollaborationProjectModal, CollaborationProjSettingsModal, CollaborationUserSettingsModal, CreateIssueModal,

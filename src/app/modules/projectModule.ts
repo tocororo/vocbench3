@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { CreateProjectComponent } from "../project/createProject/createProjectComponent";
 import { ACLEditorModal } from "../project/projectACL/aclEditorModal";
+import { ProjectACLModal } from '../project/projectACL/projectACLModal';
 import { ProjectComponent } from "../project/projectComponent";
 import { ProjectDirModal } from '../project/projectDir/projectDirModal';
 import { ProjectListModal } from "../project/projectListModal";
@@ -12,13 +14,14 @@ import { DeleteRemoteRepoModal } from '../project/remoteRepositories/deleteRemot
 import { DeleteRepositoryReportModal } from '../project/remoteRepositories/deleteRepositoryReportModal';
 import { RemoteRepoEditorModal } from "../project/remoteRepositories/remoteRepoEditorModal";
 import { SharedModule } from './sharedModule';
-import { ProjectACLModal } from '../project/projectACL/projectACLModal';
-
-
-
 
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        NgbDropdownModule,
+        SharedModule
+    ],
     declarations: [
         CreateProjectComponent,
         ProjectComponent,

@@ -7,14 +7,13 @@ import { ValidationSettingsModal } from '../alignment/alignmentValidation/alignm
 import { AssistedSearchModal } from '../alignment/resourceAlignment/assistedSearchModal';
 import { AssistedSearchResultModal } from '../alignment/resourceAlignment/assistedSearchResultModal';
 import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceAlignmentModal';
-import { FilterGraphsModal } from "../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal";
-import { DumpCreationModal } from "../config/dataManagement/versioning/dumpCreationModal";
+import { FilterGraphsModal } from '../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal';
+import { DumpCreationModal } from '../config/dataManagement/versioning/dumpCreationModal';
 import { PrefixNamespaceModal } from '../metadata/namespacesAndImports/prefixNamespaceModal';
 import { LoadShapesModal } from '../shacl/loadShapesModal';
 import { HelperModal } from '../widget/codemirror/manchesterEditor/modal/helperModal';
-import { AlertCheckModal } from '../widget/modal/basicModal/alertModal/alertCheckModal';
 import { AlertModal } from '../widget/modal/basicModal/alertModal/alertModal';
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
 import { ConfirmCheckModal } from '../widget/modal/basicModal/confirmModal/confirmCheckModal';
 import { ConfirmModal } from '../widget/modal/basicModal/confirmModal/confirmModal';
 import { DownloadModal } from '../widget/modal/basicModal/downloadModal/downloadModal';
@@ -25,8 +24,8 @@ import { PromptPropertiesModal } from '../widget/modal/basicModal/promptModal/pr
 import { CustomFormSelectionModal } from '../widget/modal/basicModal/selectionModal/customFormSelectionModal';
 import { ResourceSelectionModal } from '../widget/modal/basicModal/selectionModal/resourceSelectionModal';
 import { SelectionModal } from '../widget/modal/basicModal/selectionModal/selectionModal';
-import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingModalServices";
-import { ClassIndividualTreeModal } from "../widget/modal/browsingModal/classIndividualTreeModal/classIndividualTreeModal";
+import { BrowsingModalServices } from '../widget/modal/browsingModal/browsingModalServices';
+import { ClassIndividualTreeModal } from '../widget/modal/browsingModal/classIndividualTreeModal/classIndividualTreeModal';
 import { ClassTreeModal } from '../widget/modal/browsingModal/classTreeModal/classTreeModal';
 import { CollectionTreeModal } from '../widget/modal/browsingModal/collectionTreeModal/collectionTreeModal';
 import { ConceptTreeModal } from '../widget/modal/browsingModal/conceptTreeModal/conceptTreeModal';
@@ -36,7 +35,7 @@ import { LexicalEntryListModal } from '../widget/modal/browsingModal/lexicalEntr
 import { LexiconListModal } from '../widget/modal/browsingModal/lexiconListModal/lexiconListModal';
 import { PropertyTreeModal } from '../widget/modal/browsingModal/propertyTreeModal/propertyTreeModal';
 import { SchemeListModal } from '../widget/modal/browsingModal/schemeListModal/schemeListModal';
-import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
+import { CreationModalServices } from '../widget/modal/creationModal/creationModalServices';
 import { NewPlainLiteralModal } from '../widget/modal/creationModal/newPlainLiteralModal/newPlainLiteralModal';
 import { EditableNsInput } from '../widget/modal/creationModal/newResourceModal/editableNsInput';
 import { NewLexiconCfModal } from '../widget/modal/creationModal/newResourceModal/ontolex/newLexiconCfModal';
@@ -52,23 +51,28 @@ import { LoadConfigurationModal } from '../widget/modal/sharedModal/configuratio
 import { StoreConfigurationModal } from '../widget/modal/sharedModal/configurationStoreModal/storeConfigurationModal';
 import { ConverterPickerModal } from '../widget/modal/sharedModal/converterPickerModal/converterPickerModal';
 import { SignaturePickerModal } from '../widget/modal/sharedModal/converterPickerModal/signaturePickerModal';
-import { LanguageSelectorModal } from "../widget/modal/sharedModal/languagesSelectorModal/languageSelectorModal";
+import { LanguageSelectorModal } from '../widget/modal/sharedModal/languagesSelectorModal/languageSelectorModal';
 import { ManchesterExprModal } from '../widget/modal/sharedModal/manchesterExprModal/manchesterExprModal';
-import { PluginConfigModal } from "../widget/modal/sharedModal/pluginConfigModal/pluginConfigModal";
-import { RemoteAccessConfigModal } from "../widget/modal/sharedModal/remoteAccessConfigModal/remoteAccessConfigModal";
-import { RemoteRepoSelectionModal } from "../widget/modal/sharedModal/remoteRepoSelectionModal/remoteRepoSelectionModal";
+import { PluginConfigModal } from '../widget/modal/sharedModal/pluginConfigModal/pluginConfigModal';
+import { RemoteAccessConfigModal } from '../widget/modal/sharedModal/remoteAccessConfigModal/remoteAccessConfigModal';
+import { RemoteRepoSelectionModal } from '../widget/modal/sharedModal/remoteRepoSelectionModal/remoteRepoSelectionModal';
 import { ResourcePickerModal } from '../widget/modal/sharedModal/resourcePickerModal/resourcePickerModal';
-import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { SharedModalServices } from '../widget/modal/sharedModal/sharedModalServices';
 import { UserSelectionModal } from '../widget/modal/sharedModal/userSelectionModal/userSelectionModal';
-import { CustomFormModule } from "./customFormModule";
-import { SharedModule } from "./sharedModule";
-import { TreeAndListModule } from "./treeAndListModule";
-import { UserModule } from "./userModule";
+import { CustomFormModule } from './customFormModule';
+import { SharedModule } from './sharedModule';
+import { TreeAndListModule } from './treeAndListModule';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, CustomFormModule, UserModule],
+    imports: [
+        CommonModule, 
+        FormsModule, 
+        SharedModule, 
+        TreeAndListModule, //I'm not sure this needs to be imported since it is already imported in the main AppModule
+        CustomFormModule, 
+        // UserModule
+    ],
     declarations: [
-        AlertCheckModal,
         AlertModal,
         AssistedSearchModal,
         AssistedSearchResultModal,
@@ -126,7 +130,10 @@ import { UserModule } from "./userModule";
     ],
     exports: [],
     providers: [
-        BasicModalServices, BrowsingModalServices, CreationModalServices, SharedModalServices, 
+        BasicModalServices, 
+        BrowsingModalServices, 
+        CreationModalServices, 
+        SharedModalServices,
     ],
     //components never used outside the module (so not in exports array), but rendered (loaded) dynamically
     /**
@@ -137,7 +144,6 @@ import { UserModule } from "./userModule";
      * There's no harm in exporting them but no benefit either. 
      */
     entryComponents: [
-        AlertCheckModal,
         AlertModal,
         AssistedSearchModal,
         AssistedSearchResultModal,

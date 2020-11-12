@@ -1,5 +1,4 @@
 import { Component } from "@angular/core";
-import '../assets/styles/style.css';
 import { Project } from "./models/Project";
 import { EDOAL, OntoLex, OWL, RDFS, SKOS } from "./models/Vocabulary";
 import { AuthorizationEvaluator } from "./utils/AuthorizationEvaluator";
@@ -7,15 +6,15 @@ import { VBActionsEnum } from "./utils/VBActions";
 import { VBContext } from "./utils/VBContext";
 import { VBProperties } from "./utils/VBProperties";
 
-
 @Component({
     selector: "app",
     templateUrl: "./appComponent.html",
 })
-
 export class AppComponent {
 
-    private appVersion = require('../../package.json').version;
+    appVersion = require('../../package.json').version;
+
+    navbarCollapsed: boolean;
 
     constructor(private vbProp: VBProperties) {}
 
@@ -27,29 +26,29 @@ export class AppComponent {
      * Returns true if the user is logged (an authentication token is stored)
      * Useful to show/hide menubar link
      */
-    private isUserLogged(): boolean {
+    isUserLogged(): boolean {
         return VBContext.isLoggedIn();
     }
 
-    private isUserAdmin(): boolean {
+    isUserAdmin(): boolean {
         return VBContext.getLoggedUser().isAdmin();
     }
 
     /**
      * returns true if a project is open. Useful to show/hide menubar links
      */
-    private isProjectOpen(): boolean {
+    isProjectOpen(): boolean {
         return VBContext.getWorkingProject() != undefined;
     }
 
-    private isProjectEdoal(): boolean {
+    isProjectEdoal(): boolean {
         return VBContext.getWorkingProject().getModelType() == EDOAL.uri;
     }
 
     /**
      * Returns true if the current open project has history enabled
      */
-    private isProjectHistoryEnabled(): boolean {
+    isProjectHistoryEnabled(): boolean {
         var wProj: Project = VBContext.getWorkingProject();
         if (wProj != undefined) {
             return wProj.isHistoryEnabled();
@@ -60,7 +59,7 @@ export class AppComponent {
     /**
      * Returns true if the current open project has validation enabled
      */
-    private isProjectValidationEnabled(): boolean {
+    isProjectValidationEnabled(): boolean {
         var wProj: Project = VBContext.getWorkingProject();
         if (wProj != undefined) {
             return wProj.isValidationEnabled();
@@ -72,14 +71,14 @@ export class AppComponent {
      * Authorizations
      */
 
-    private isSparqlAuthorized() {
+    isSparqlAuthorized() {
         return ( //authorized if one of update or query is authorized
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.sparqlEvaluateQuery) ||
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.sparqlExecuteUpdate)
         );
     }
     
-    private isDataAuthorized() {
+    isDataAuthorized() {
         let modelType: string = VBContext.getWorkingProject().getModelType();
         if (modelType == EDOAL.uri) {
             return true; //Edoal projects has no capabilities required????
@@ -99,31 +98,31 @@ export class AppComponent {
         }
     }
 
-    private isMetadataVocAuthorized(): boolean {
+    isMetadataVocAuthorized(): boolean {
         return (
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.datasetMetadataExport) &&
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.datasetMetadataGetMetadata)
         );
     }
 
-    private isMetadataRegistryAuthorized(): boolean {
+    isMetadataRegistryAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryRead);
     }
 
-    private isHistoryAuthorized() {
+    isHistoryAuthorized() {
         return (
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.history) &&
             VBContext.getContextVersion() == null
         );
     }
     
-    private isValidationAuthorized() {
+    isValidationAuthorized() {
         //all user are allowed to see Validation page, further auth checks (is user a validator?) are performed in the Validation page
         return VBContext.getContextVersion() == null;
         
     }
     
-    private isCustomFormAuthorized() {
+    isCustomFormAuthorized() {
         return (
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormGetFormMappings) &&
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormGetCollections) &&
@@ -131,32 +130,32 @@ export class AppComponent {
         );
     }
     
-    private isAlignValidationAuthorized() {
+    isAlignValidationAuthorized() {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.alignmentLoadAlignment) &&
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.alignmentApplyAlignment);
     }
 
-    private isSheet2RdfAuthorized() {
+    isSheet2RdfAuthorized() {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.sheet2Rdf);
     }
 
-    private isCollaborationAuthorized() {
+    isCollaborationAuthorized() {
         return true;
     }
 
-    private isResourceMetadataAuthorized() {
+    isResourceMetadataAuthorized() {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourceMetadataPatternRead) &&
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.resourceMetadataAssociationRead);
     }
 
-    private isCustomServicesAuthorized() {
+    isCustomServicesAuthorized() {
         return (
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.customServiceRead) ||
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.invokableReporterRead)
         );
     }
 
-    private isSkosDiffingAuthorized() {
+    isSkosDiffingAuthorized() {
         return (
             VBContext.getWorkingProject().getModelType() == SKOS.uri
             //TODO add auth check

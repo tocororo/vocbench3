@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrokenAlignmentComponent } from "../icv/brokenAlignment/brokenAlignmentComponent";
 import { BrokenDefinitionComponent } from "../icv/brokenDefinition/brokenDefinitionComponent";
 import { ConflictualLabelComponent } from "../icv/conflictualLabel/conflictualLabelComponent";
@@ -31,7 +32,14 @@ import { TreeAndListModule } from "./treeAndListModule";
 
 
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedModule, TreeAndListModule, icvRouting],
+    imports: [
+        icvRouting,
+        CommonModule,
+        FormsModule,
+        NgbDropdownModule,
+        SharedModule,
+        TreeAndListModule,
+    ],
     declarations: [
         IcvComponent, IcvListComponent,
         DanglingConceptComponent, NoSchemeConceptComponent, NoTopConceptSchemeComponent, TopConceptWithBroaderComponent,
@@ -45,4 +53,4 @@ import { TreeAndListModule } from "./treeAndListModule";
     exports: [IcvComponent],
     providers: []
 })
-export class ICVModule { }
+export class IcvModule { }

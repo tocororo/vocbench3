@@ -1,69 +1,66 @@
 <config-bar></config-bar>
-<nav class="navbar navbar-default navbar-static-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                <span class="glyphicon glyphicon-menu-hamburger"></span>
-            </button>
-            <a class="navbar-brand" [routerLink]="['/Home']">VocBench</a>
-        </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav">
-                <li *ngIf="isUserLogged() && isUserAdmin()" routerLinkActive="active">
-                    <a [routerLink]="['/Projects']">Projects</a>
-                </li>
-                <li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{ disabled : !isDataAuthorized() }" routerLinkActive="active">
-                    <a *ngIf="!isProjectEdoal()" [routerLink]="['/Data']">Data</a>
-                    <a *ngIf="isProjectEdoal()"[routerLink]="['/Edoal']">Data</a>
-                </li>
-                <li *ngIf="isUserLogged() && isProjectOpen()" class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                        Metadata <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" style="font-size: 12px; line-height: 20px;">
-                        <li><a [routerLink]="['/Imports']">Namespaces and Imports</a></li>
-                        <li *ngIf="isMetadataVocAuthorized()"><a [routerLink]="['/Vocabularies']">Metadata Vocabularies</a></li>
-                        <li *ngIf="isMetadataRegistryAuthorized()"><a [routerLink]="['/MetadataRegistry']">Metadata Registry</a></li>
-                    </ul>
-                </li>
-				<li *ngIf="isUserLogged() && isProjectOpen()" [ngClass]="{ disabled : !isSparqlAuthorized() }" routerLinkActive="active">
-                    <a [routerLink]="['/Sparql']">SPARQL</a>
-                </li>
-                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectHistoryEnabled()" [ngClass]="{ disabled : !isHistoryAuthorized() }"
-                    routerLinkActive="active">
-                    <a [routerLink]="['/History']">History</a>
-                </li>
-                <li *ngIf="isUserLogged() && isProjectOpen() && isProjectValidationEnabled()" [ngClass]="{ disabled : !isValidationAuthorized() }"
-                    routerLinkActive="active">
-                    <a [routerLink]="['/Validation']">Validation</a>
-                </li>
-                <li *ngIf="isUserLogged() && isProjectOpen()" class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
-                        Tools <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" style="font-size: 12px; line-height: 20px;">
-                        <li *ngIf="isAlignValidationAuthorized()"><a [routerLink]="['/AlignmentValidation']">Alignment Validation</a></li>
-                        <li *ngIf="isCollaborationAuthorized()"><a [routerLink]="['/Collaboration']">Collaboration System</a></li>
-                        <li *ngIf="isCustomFormAuthorized()"><a [routerLink]="['/CustomForm']">Custom Form</a></li>
-                        <li *ngIf="isCustomServicesAuthorized()"><a [routerLink]="['/CustomServices']">Custom Services and Reports</a></li>
-                        <li><a [routerLink]="['/Icv']">Integrity Constraint Validator (ICV)</a></li>
-                        <li *ngIf="isResourceMetadataAuthorized()"><a [routerLink]="['/ResourceMetadata']">ResourceMetadata</a></li>
-                        <li *ngIf="isSheet2RdfAuthorized()"><a [routerLink]="['/Sheet2RDF']">Sheet2RDF</a></li>
-                        <li *ngIf="isSkosDiffingAuthorized()"><a [routerLink]="['/SkosDiffing']">SKOS Diffing</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <!-- See userMenuComponent to understand user-menu attribute (to avoid css style breaking) -->
-                <li user-menu *ngIf="isUserLogged()" class="dropdown">
-            </ul>
-        </div>    
-    </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-vocbench">
+
+    <a class="navbar-brand" [routerLink]="['/Home']">VocBench</a>
+    <button class="navbar-toggler" data-toggle="collapse" data-target="#mainNavbar" (click)="navbarCollapsed = !navbarCollapsed">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNavbar" [ngbCollapse]="navbarCollapsed">
+        <ul class="navbar-nav mr-auto">
+            <li *ngIf="isUserLogged() && isUserAdmin()" class="nav-item" routerLinkActive="active">
+                <a class="nav-link" [routerLink]="['/Projects']">Projects</a>
+            </li>
+            <li *ngIf="isUserLogged() && isProjectOpen()" class="nav-item" [ngClass]="{ disabled : !isDataAuthorized() }" routerLinkActive="active">
+                <a *ngIf="!isProjectEdoal()" class="nav-link" [routerLink]="['/Data']">Data</a>
+                <a *ngIf="isProjectEdoal()" class="nav-link" [routerLink]="['/Edoal']">Data</a>
+            </li>
+            <li *ngIf="isUserLogged() && isProjectOpen()" class="nav-item dropdown" ngbDropdown display="dynamic">
+                <a [routerLink]="" class="nav-link dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                    Metadata
+                    <span class="fas fa-caret-down ml-1"></span>
+                </a>
+                <div class="dropdown-menu" style="font-size: 12px; line-height: 20px;" ngbDropdownMenu>
+                    <a class="dropdown-item" [routerLink]="['/Imports']">Namespaces and Imports</a>
+                    <a *ngIf="isMetadataVocAuthorized()" class="dropdown-item" [routerLink]="['/Vocabularies']">Metadata Vocabularies</a>
+                    <a *ngIf="isMetadataRegistryAuthorized()" class="dropdown-item" [routerLink]="['/MetadataRegistry']">Metadata Registry</a>
+                </div>
+            </li>
+            <li *ngIf="isUserLogged() && isProjectOpen()" class="nav-item" [ngClass]="{ disabled : !isSparqlAuthorized() }" routerLinkActive="active">
+                <a class="nav-link" [routerLink]="['/Sparql']">SPARQL</a>
+            </li>
+            <li *ngIf="isUserLogged() && isProjectOpen() && isProjectHistoryEnabled()" class="nav-item" [ngClass]="{ disabled : !isHistoryAuthorized() }"
+                routerLinkActive="active">
+                <a class="nav-link" [routerLink]="['/History']">History</a>
+            </li>
+            <li *ngIf="isUserLogged() && isProjectOpen() && isProjectValidationEnabled()" class="nav-item" [ngClass]="{ disabled : !isValidationAuthorized() }"
+                routerLinkActive="active">
+                <a class="nav-link" [routerLink]="['/Validation']">Validation</a>
+            </li>
+            <li *ngIf="isUserLogged() && isProjectOpen()" class="nav-item dropdown" ngbDropdown display="dynamic">
+                <a [routerLink]="" class="nav-link dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                    Tools
+                    <span class="fas fa-caret-down ml-1"></span>
+                </a>
+                <div class="dropdown-menu" style="font-size: 12px; line-height: 20px;" ngbDropdownMenu>
+                    <a *ngIf="isAlignValidationAuthorized()" class="dropdown-item" [routerLink]="['/AlignmentValidation']">Alignment Validation</a>
+                    <a *ngIf="isCollaborationAuthorized()" class="dropdown-item" [routerLink]="['/Collaboration']">Collaboration System</a>
+                    <a *ngIf="isCustomFormAuthorized()" class="dropdown-item" [routerLink]="['/CustomForm']">Custom Form</a>
+                    <a *ngIf="isCustomServicesAuthorized()" class="dropdown-item" [routerLink]="['/CustomServices']">Custom Services and Reports</a>
+                    <a class="dropdown-item" [routerLink]="['/Icv']">Integrity Constraint Validator (ICV)</a>
+                    <a *ngIf="isResourceMetadataAuthorized()" class="dropdown-item" [routerLink]="['/ResourceMetadata']">ResourceMetadata</a>
+                    <a *ngIf="isSheet2RdfAuthorized()" class="dropdown-item" [routerLink]="['/Sheet2RDF']">Sheet2RDF</a>
+                    <a *ngIf="isSkosDiffingAuthorized()" class="dropdown-item" [routerLink]="['/SkosDiffing']">SKOS Diffing</a>
+                </div>
+            </li>
+        </ul>
+        <ul user-menu *ngIf="isUserLogged()" class="navbar-nav navbar-right"></ul>
+
+    </div>    
 </nav>
 <div class="vbox" style="padding: 10px;">
     <router-outlet></router-outlet>
 </div>
 <div class="bottom-bar">
     <span>v. {{appVersion}}</span>
-    <span class="pull-right">© <a href="http://art.uniroma2.it/" target="_blank">ART Group</a>, 2016</span>
+    <span class="float-right">© <a href="http://art.uniroma2.it/" target="_blank">ART Group</a>, 2016</span>
 </div>

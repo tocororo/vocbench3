@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ExportResultAsRdfModal } from '../sparql/exportResultAsRdfModal';
 import { QueryParameterizerModal } from '../sparql/queryParameterization/queryParameterizerModal';
 import { SparqlComponent } from '../sparql/sparqlComponent';
@@ -9,7 +10,12 @@ import { SparqlTabParametrizedComponent } from '../sparql/sparqlTabParametrizedC
 import { SharedModule } from './sharedModule';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, SharedModule],
+    imports: [
+        CommonModule,
+        FormsModule,
+        NgbDropdownModule,
+        SharedModule
+    ],
     declarations: [
         SparqlComponent, SparqlTabComponent, SparqlTabParametrizedComponent,
         //modals

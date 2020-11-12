@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { Ng2CompleterModule } from "ng2-completer";
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+// import { Ng2CompleterModule } from "ng2-completer";
 import { MultiSubjectEnrichmentHelper } from '../trees/multiSubjectEnrichmentHelper';
 import { LexicalEntryListComponent } from '../trees/ontolex/lexicalEntry/lexicalEntryList/lexicalEntryListComponent';
 import { LexicalEntryListNodeComponent } from '../trees/ontolex/lexicalEntry/lexicalEntryList/lexicalEntryListNodeComponent';
@@ -24,6 +25,7 @@ import { DatatypeListPanelComponent } from '../trees/owl/datatypeListPanel/datat
 import { InstanceListComponent } from '../trees/owl/instanceList/instanceListComponent';
 import { InstanceListNodeComponent } from '../trees/owl/instanceList/instanceListNodeComponent';
 import { InstanceListPanelComponent } from '../trees/owl/instanceListPanel/instanceListPanelComponent';
+import { InstanceListSettingsModal } from '../trees/owl/instanceListPanel/instanceListSettingsModal';
 import { PropertyTreeComponent } from '../trees/property/propertyTree/propertyTreeComponent';
 import { PropertyTreeNodeComponent } from '../trees/property/propertyTree/propertyTreeNodeComponent';
 import { PropertyTreePanelComponent } from '../trees/property/propertyTreePanel/propertyTreePanelComponent';
@@ -43,13 +45,19 @@ import { ConceptTreeSettingsModal } from '../trees/skos/concept/conceptTreePanel
 import { SchemeListComponent } from '../trees/skos/scheme/schemeList/schemeListComponent';
 import { SchemeListNodeComponent } from '../trees/skos/scheme/schemeList/schemeListNodeComponent';
 import { SchemeListPanelComponent } from '../trees/skos/scheme/schemeListPanel/schemeListPanelComponent';
-import { TreeListSettingsModal } from '../trees/tabset/treeListSettingsModal';
 import { TabsetPanelComponent } from '../trees/tabset/tabsetPanelComponent';
+import { TreeListSettingsModal } from '../trees/tabset/treeListSettingsModal';
 import { SharedModule } from './sharedModule';
-import { InstanceListSettingsModal } from '../trees/owl/instanceListPanel/instanceListSettingsModal';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, RouterModule, SharedModule, Ng2CompleterModule],
+    imports: [
+        CommonModule, 
+        FormsModule, 
+        NgbDropdownModule,
+        RouterModule, 
+        SharedModule, 
+        // Ng2CompleterModule
+    ],
     declarations: [
         AddToSchemeModal,
         AdvancedSearchModal,
