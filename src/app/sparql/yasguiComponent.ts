@@ -1,14 +1,12 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import * as $ from 'jquery';
+import * as YASQE from 'yasgui-yasqe';
 import { ARTURIResource } from '../models/ARTResources';
 import { PrefixMapping } from '../models/Metadata';
 import { SearchMode } from '../models/Properties';
 import { QueryChangedEvent } from '../models/Sparql';
 import { SearchServices } from '../services/searchServices';
 import { VBContext } from '../utils/VBContext';
-
-// var YASQE = require('yasgui-yasqe/dist/yasqe.bundled.min');
-var YASQE = require('yasgui-yasqe/dist/yasqe.bundled');
-var $: JQueryStatic = require('jquery');
 
 @Component({
     selector: 'yasgui',
@@ -39,7 +37,18 @@ export class YasguiComponent {
         YASQE.defaults.persistent = null; //disable persistency
         YASQE.defaults.autocompleters = ["variables"];
 
-        //register the autocompleters if not yet done (by other instances of YasguiComponent)
+        this.yasqe = YASQE.fromTextArea(
+            this.textareaElement.nativeElement,
+            {
+                persistent: null, //avoid same query for all the tabs
+                createShareLink: null, //disable share button
+                // autocompleters: ["variables", this.CLASS_COMPLETER_NAME, this.PREFIX_COMPLETER_NAME, this.PROPERTY_COMPLETER_NAME],
+                // autocompleters: ["prefixes", "properties", "classes", "variables"],
+                extraKeys: { "Ctrl-7": YASQE.commentLines },
+                readOnly: this.readonly
+            }
+        );
+        // register the autocompleters if not yet done (by other instances of YasguiComponent)
         if (YASQE.defaults.autocompleters.indexOf(this.PREFIX_COMPLETER_NAME) == -1) {
             YASQE.registerAutocompleter(this.PREFIX_COMPLETER_NAME,
                 (yasqe: any) => {
@@ -61,18 +70,6 @@ export class YasguiComponent {
                 }
             );
         }
-
-        this.yasqe = YASQE.fromTextArea(
-            this.textareaElement.nativeElement,
-            {
-                persistent: null, //avoid same query for all the tabs
-                createShareLink: null, //disable share button
-                // autocompleters: ["variables", this.CLASS_COMPLETER_NAME, this.PREFIX_COMPLETER_NAME, this.PROPERTY_COMPLETER_NAME],
-                // autocompleters: ["prefixes", "properties", "classes", "variables"],
-                extraKeys: { "Ctrl-7": YASQE.commentLines },
-                readOnly: this.readonly
-            }
-        );
 
         this.collapsePrefixDeclaration();
 

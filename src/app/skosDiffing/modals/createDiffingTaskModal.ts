@@ -1,28 +1,26 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from 'ngx-modialog';
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
+import { RepositoryLocation, RepositoryStatus, VersionInfo } from "../../models/History";
 import { Project } from "../../models/Project";
-import { VersionInfo, RepositoryStatus, RepositoryLocation } from "../../models/History";
-import { DatasetMetadata } from "../../models/Metadata";
-import { ProjectServices } from "../../services/projectServices";
 import { SKOS } from "../../models/Vocabulary";
-import { VBContext } from "../../utils/VBContext";
-import { VersionsServices } from "../../services/versionsServices";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
+import { ProjectServices } from "../../services/projectServices";
 import { SkosDiffingServices } from "../../services/skosDiffingServices";
+import { VersionsServices } from "../../services/versionsServices";
+import { VBContext } from "../../utils/VBContext";
+import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
 @Component({
     selector: "create-diffing-task-modal",
     templateUrl: "./createDiffingTaskModal.html",
 })
-export class CreateDiffingTaskModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class CreateDiffingTaskModal {
 
-    private modes: { mode: DiffingMode, show: string }[] = [
+    modes: { mode: DiffingMode, show: string }[] = [
         { mode: DiffingMode.projects, show: "Compare the current project with an external one" },
         { mode: DiffingMode.versions, show: "Compare two different versions of the current project" }
     ];
-    private mode: DiffingMode;
+    mode: DiffingMode;
 
     private leftDataset: DatasetStruct = {};
     private rightDataset: DatasetStruct = {};
@@ -31,12 +29,11 @@ export class CreateDiffingTaskModal implements ModalComponent<BSModalContext> {
     private projects: Project[]; //list of available target projects (used if mode is projects)
 
 
-    constructor(public dialog: DialogRef<BSModalContext>, private projectService: ProjectServices, private versionsService: VersionsServices,
+    constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices, private versionsService: VersionsServices,
         private diffingService: SkosDiffingServices, private basicModals: BasicModalServices) {
-        this.context = dialog.context;
     }
 
-    private onModeChange() {
+    onModeChange() {
         //reset both datasets
         this.leftDataset = {};
         this.rightDataset = {};
@@ -78,7 +75,7 @@ export class CreateDiffingTaskModal implements ModalComponent<BSModalContext> {
         }
     }
 
-    private isOkEnabled() {
+    isOkEnabled() {
         if (this.mode == DiffingMode.projects) {
             return this.leftDataset.project != null && this.rightDataset.project != null;
         } else {
@@ -98,53 +95,53 @@ export class CreateDiffingTaskModal implements ModalComponent<BSModalContext> {
         if (this.mode == DiffingMode.projects) {
             if (!this.leftDataset.project.isRepositoryRemote()) {
                 this.basicModals.alert("SKOS diffing", "Cannot run a SKOS diffing task on project '" + this.leftDataset.project.getName() 
-                    + "' since it is hosted on a repository that does not have a SPARQL endpoint", "warning");
+                    + "' since it is hosted on a repository that does not have a SPARQL endpoint", ModalType.warning);
                 return;
             }
             if (!this.rightDataset.project.isRepositoryRemote()) {
                 this.basicModals.alert("SKOS diffing", "Cannot run a SKOS diffing task on project '" + this.rightDataset.project.getName() 
-                    + "' since it is hosted on a repository that does not have a SPARQL endpoint", "warning");
+                    + "' since it is hosted on a repository that does not have a SPARQL endpoint", ModalType.warning);
                 return;
             }
             this.diffingService.runDiffing(this.leftDataset.project, this.rightDataset.project, null, null, langs).subscribe(
                 taskId => {
-                    this.dialog.close(taskId);
+                    this.activeModal.close(taskId);
                 }
             );
         } else { //versions
             //check if selected versions are different
             if (this.leftDataset.version == this.rightDataset.version) {
-                this.basicModals.alert("SKOS diffing", "Cannot compare two identical versions of the project", "warning");
+                this.basicModals.alert("SKOS diffing", "Cannot compare two identical versions of the project", ModalType.warning);
                 return;
             }
             //check if selected versions are remote
             if ((this.leftDataset.version.repositoryId == null || this.leftDataset.version.repositoryId == null) && !this.leftDataset.project.isRepositoryRemote()) {
                 //current version of a local project
                 this.basicModals.alert("SKOS diffing", "Cannot run a SKOS diffing task on version 'CURRENT' since it is hosted on a " + 
-                    "repository that does not have a SPARQL endpoint", "warning");
+                    "repository that does not have a SPARQL endpoint", ModalType.warning);
                 return;
             }
             if (this.leftDataset.version.repositoryId != null && this.leftDataset.version.repositoryLocation != RepositoryLocation.REMOTE) {
                 this.basicModals.alert("SKOS diffing", "Cannot run a SKOS diffing task on version '" + this.leftDataset.version.versionId + 
-                    "' since it is hosted on a repository that does not have a SPARQL endpoint", "warning");
+                    "' since it is hosted on a repository that does not have a SPARQL endpoint", ModalType.warning);
                 return;
             }
             if (this.rightDataset.version.repositoryId != null && this.rightDataset.version.repositoryLocation != RepositoryLocation.REMOTE) {
                 this.basicModals.alert("SKOS diffing", "Cannot run a SKOS diffing task on version '" + this.rightDataset.version.versionId + 
-                    "' since it is hosted on a repository that does not have a SPARQL endpoint", "warning");
+                    "' since it is hosted on a repository that does not have a SPARQL endpoint", ModalType.warning);
                 return;
             }
             this.diffingService.runDiffing(this.leftDataset.project, this.rightDataset.project, 
                 this.leftDataset.version.repositoryId, this.rightDataset.version.repositoryId, langs).subscribe(
                 taskId => {
-                    this.dialog.close(taskId);
+                    this.activeModal.close(taskId);
                 }
             );
         }
     }
     
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

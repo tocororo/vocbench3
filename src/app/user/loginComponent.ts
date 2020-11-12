@@ -16,19 +16,19 @@ export class LoginComponent {
     @Output() loggedIn: EventEmitter<User> = new EventEmitter();
 
     private rememberMe: boolean = false;
-    private email: string;
-    private password: string;
+    email: string;
+    password: string;
 
     constructor(private router: Router, private authService: AuthServices, private userService: UserServices,
         private basicModals: BasicModalServices) { }
 
-    private onKeydown(event: KeyboardEvent) {
+    onKeydown(event: KeyboardEvent) {
         if (event.which == 13) {
             this.login();
         }
     }
 
-    private login() {
+    login() {
         this.authService.login(this.email, this.password, this.rememberMe).subscribe(
             user => {
                 if (VBContext.isLoggedIn()) {
@@ -39,7 +39,7 @@ export class LoginComponent {
         );
     }
 
-    private forgotPassword() {
+    forgotPassword() {
         this.basicModals.prompt("Forgot password", { value: "E-mail" }, "Insert the e-mail address of your account. " + 
             "You will receive an e-mail with the instructions for resetting the password").then(
             (email: string) => {

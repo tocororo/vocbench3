@@ -11,15 +11,14 @@ import { Component } from "@angular/core";
             border-radius: 4px 4px 0px 0px;
             font-weight: bold;
             color: rgb(51, 122, 183);
-            line-height: 1.42857143;
             background-color: #eee;
         }
     `]
 })
 export class SparqlComponent {
 
-    private tabs: Array<Tab> = [];
-    private tabLimit: number = 10;
+    tabs: Array<Tab> = [];
+    tabLimit: number = 10;
 
     constructor() { }
 

@@ -1,6 +1,5 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfigurableExtensionFactory, ExtensionPointID, Settings, TransformationStep } from "../models/Plugins";
 import { RDFFormat } from "../models/RDFFormat";
 import { ExportServices } from "../services/exportServices";
@@ -8,35 +7,30 @@ import { ExtensionsServices } from "../services/extensionsServices";
 import { SparqlServices } from "../services/sparqlServices";
 import { UIUtils } from "../utils/UIUtils";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ModalType } from '../widget/modal/Modals';
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
-
-export class ExportResultAsRdfModalData extends BSModalContext {
-    constructor(public query: string, public inferred: boolean) {
-        super();
-    }
-}
 
 @Component({
     selector: "export-as-rdf-modal",
     templateUrl: "./exportResultAsRdfModal.html",
 })
-export class ExportResultAsRdfModal implements ModalComponent<ExportResultAsRdfModalData> {
-    context: ExportResultAsRdfModalData;
+export class ExportResultAsRdfModal {
+    @Input() query: string;
+    @Input() inferred: boolean;
 
-    private exportFormats: RDFFormat[];
-    private selectedExportFormat: RDFFormat;
+    exportFormats: RDFFormat[];
+    selectedExportFormat: RDFFormat;
 
-    private applyFilter: boolean = false;
+    applyFilter: boolean = false;
 
     //export filter management
     private filters: ConfigurableExtensionFactory[];
     private filtersChain: FilterChainElement[] = [];
     private selectedFilterChainElement: FilterChainElement;
 
-    constructor(public dialog: DialogRef<ExportResultAsRdfModalData>, 
+    constructor(public activeModal: NgbActiveModal, 
         private exportService: ExportServices, private extensionServices: ExtensionsServices, private sparqlService: SparqlServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
-        this.context = dialog.context;
     }
 
     ngOnInit() {
@@ -60,14 +54,14 @@ export class ExportResultAsRdfModal implements ModalComponent<ExportResultAsRdfM
         );
     }
 
-    ok(event: Event) {
+    ok() {
         let filteringPipelineParam: string;
         if (this.applyFilter) {
             //check if every filter has been configured
             for (var i = 0; i < this.filtersChain.length; i++) {
                 if (this.requireConfiguration(this.filtersChain[i])) {
                     this.basicModals.alert("Missing filter configuration", "An export filter ("
-                        + this.filtersChain[i].selectedFactory.id + ") needs to be configured", "warning");
+                        + this.filtersChain[i].selectedFactory.id + ") needs to be configured", ModalType.warning);
                     return;
                 }
             }
@@ -78,7 +72,7 @@ export class ExportResultAsRdfModal implements ModalComponent<ExportResultAsRdfM
             filteringPipelineParam = JSON.stringify(filteringPipeline);
         }
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        this.sparqlService.exportGraphQueryResultAsRdf(this.context.query, this.selectedExportFormat, this.context.inferred, filteringPipelineParam).subscribe(
+        this.sparqlService.exportGraphQueryResultAsRdf(this.query, this.selectedExportFormat, this.inferred, filteringPipelineParam).subscribe(
             blob => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 var exportLink = window.URL.createObjectURL(blob);
@@ -86,12 +80,11 @@ export class ExportResultAsRdfModal implements ModalComponent<ExportResultAsRdfM
             }
         );
 
-        event.stopPropagation();
-        this.dialog.close();
+        this.activeModal.close();
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 

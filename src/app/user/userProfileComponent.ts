@@ -9,7 +9,7 @@ import { VBContext } from "../utils/VBContext";
 })
 export class UserProfileComponent {
 
-    private user: User;
+    user: User;
 
     constructor() { }
 

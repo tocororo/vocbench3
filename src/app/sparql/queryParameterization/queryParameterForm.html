@@ -1,18 +1,18 @@
-<div class="panel panel-alt vbox">
-    <div *ngIf="mode=='sparql'" class="panel-heading">
+<div class="card card-alt vbox">
+    <div *ngIf="mode=='sparql'" class="card-header">
         <label style="flex: 1">Variable bindings</label>
         <div class="btn-toolbar" role="toolbar">
-            <button class="btn btn-xs btn-default" [ngClass]="{ active: showDisplayName }" (click)="showDisplayName = !showDisplayName" 
+            <button class="btn btn-xs btn-light" [ngClass]="{ active: showDisplayName }" (click)="showDisplayName = !showDisplayName" 
                 title="Show variable bindings display name">
-                <span class="glyphicon glyphicon-eye-open"></span>
+                <span class="fas fa-eye"></span>
             </button>
-            <button *ngIf="configurable" class="btn btn-xs btn-default" (click)="editParameterization()" title="Edit parameterization">
-                <span class="glyphicon glyphicon-pencil"></span>
+            <button *ngIf="configurable" class="btn btn-xs btn-light" (click)="editParameterization()" title="Edit parameterization">
+                <span class="fas fa-pencil-alt"></span>
             </button>
         </div>
     </div>
-    <div class="panel-body vbox table-responsive">
-        <table class="table table-condensed table-borderless">
+    <div class="card-body vbox table-responsive">
+        <table class="table table-sm table-borderless">
             <colgroup>
                 <col>
                 <col>
@@ -39,7 +39,7 @@
 
                         <td>
                             <ng-template [ngIf]="b.bindingType == 'assignment' && b.value">
-                                <input class="form-control input-sm" [ngModel]="b.value.toNT()" readonly>
+                                <input class="form-control form-control-sm" [ngModel]="b.value.toNT()" readonly>
                             </ng-template>
         
                             <ng-template [ngIf]="b.bindingType == 'constraint' && b.datatype">
@@ -52,13 +52,13 @@
                                 </resource-picker>
                             </ng-template>
                         </td>
-                        <td *ngIf="b.description"><span class="glyphicon glyphicon-info-sign" [title]="b.description"></span></td>
+                        <td *ngIf="b.description"><span class="fas fa-info-circle" [title]="b.description"></span></td>
                     </ng-template>
                 </tr>
             </tbody>
         </table>
     </div>
-    <div *ngIf="configurable" class="panel-footer">
+    <div *ngIf="configurable" class="card-footer">
         <div class="checkbox" style="margin: 0px;">
             <label>
                 <input type="checkbox" [(ngModel)]="useBindings" (ngModelChange)="emitUpdate()">Use variable bindings

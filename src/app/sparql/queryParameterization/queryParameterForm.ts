@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { OverlayConfig } from "ngx-modialog";
-import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { BindingTypeEnum, VariableBindings } from "../../models/Sparql";
 import { ResourceUtils } from "../../utils/ResourceUtils";
-import { QueryParameterizerModal, QueryParameterizerModalData } from "./queryParameterizerModal";
+import { QueryParameterizerModal } from "./queryParameterizerModal";
 
 @Component({
     selector: "query-param-form",
@@ -18,12 +18,12 @@ export class QueryParameterForm {
     @Output() update = new EventEmitter<Map<string, ARTNode>>();
     @Output() paramsChange = new EventEmitter<VariableBindings>(); //when parametrization changes, useful to the parent in order to detect unsaved parametrizations
 
-    private bindingStructs: BindingStruct[];
+    bindingStructs: BindingStruct[];
     private useBindings: boolean = true;
 
     private showDisplayName: boolean = false;
 
-    constructor(private modal: Modal) { }
+    constructor(private modalService: NgbModal) { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['bindings'] && changes['bindings'].currentValue) {
@@ -70,12 +70,9 @@ export class QueryParameterForm {
     }
 
     private editParameterization() {
-        var modalData = new QueryParameterizerModalData(this.bindings);
-        const builder = new BSModalContextBuilder<QueryParameterizerModalData>(
-            modalData, undefined, QueryParameterizerModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-        this.modal.open(QueryParameterizerModal, overlayConfig).result.then(
+        const modalRef: NgbModalRef = this.modalService.open(QueryParameterizerModal, new ModalOptions('lg'));
+        modalRef.componentInstance.variableBindings = this.bindings;
+        return modalRef.result.then(
             (updatedVarBindings: VariableBindings) => {
                 this.bindings = updatedVarBindings;
                 this.paramsChange.emit(this.bindings);

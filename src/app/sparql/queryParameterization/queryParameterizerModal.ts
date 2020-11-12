@@ -1,7 +1,8 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { Observable } from "rxjs/Observable";
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum } from "../../models/ARTResources";
 import { BindingTypeEnum, VariableBindings } from "../../models/Sparql";
 import { DatatypesServices } from "../../services/datatypesServices";
@@ -10,20 +11,14 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 import { CreationModalServices } from "../../widget/modal/creationModal/creationModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
-export class QueryParameterizerModalData extends BSModalContext {
-    constructor(public variableBindings?: VariableBindings) {
-        super();
-    }
-}
-
 @Component({
     selector: "query-parameterizer-modal",
     templateUrl: "./queryParameterizerModal.html"
 })
-export class QueryParameterizerModal implements ModalComponent<QueryParameterizerModalData> {
-    context: QueryParameterizerModalData;
+export class QueryParameterizerModal {
+    @Input() variableBindings: VariableBindings;
 
-    private bindings: BindingStruct[] = [];
+    bindings: BindingStruct[] = [];
 
     private bindingTypes: BindingTypeStruct[] = [
         { show: "Assignment", value: BindingTypeEnum.assignment },
@@ -48,14 +43,13 @@ export class QueryParameterizerModal implements ModalComponent<QueryParameterize
 
     private datatypes: ARTURIResource[];
 
-    constructor(public dialog: DialogRef<QueryParameterizerModalData>, private datatypeService: DatatypesServices,
+    constructor(public activeModal: NgbActiveModal, private datatypeService: DatatypesServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices,  private creationModals: CreationModalServices) {
-        this.context = dialog.context;
     }
 
     ngOnInit() {
-        if (this.context.variableBindings) { //edit mode
-            let varBinds: VariableBindings = this.context.variableBindings;
+        if (this.variableBindings) { //edit mode
+            let varBinds: VariableBindings = this.variableBindings;
             //restore variableBindings into bindings
             for (var varName in varBinds) {
                 let bs: BindingStruct;
@@ -121,34 +115,34 @@ export class QueryParameterizerModal implements ModalComponent<QueryParameterize
         }
     }
 
-    private initDatatypes(): Observable<any> {
+    private initDatatypes(): Observable<void> {
         if (this.datatypes == null) {
-            return this.datatypeService.getDatatypes().map(
-                datatypes => {
+            return this.datatypeService.getDatatypes().pipe(
+                map(datatypes => {
                     datatypes.sort((dt1: ARTURIResource, dt2: ARTURIResource) => {
                         return dt1.getShow().localeCompare(dt2.getShow());
                     });
                     this.datatypes = datatypes;
-                }
+                })
             );
         } else {
-            return Observable.of();
+            return of();
         }
     }
 
-    private addBinding() {
+    addBinding() {
         this.bindings.push({ varName: null, bindingType: this.bindingTypes[0] });
     }
 
-    private removeBinding(binding: BindingStruct) {
+    removeBinding(binding: BindingStruct) {
         this.bindings.splice(this.bindings.indexOf(binding), 1);
     }
 
-    private onBindingTypeChange() {
+    onBindingTypeChange() {
         this.initDatatypes().subscribe();
     }
 
-    private setAssignemntValue(binding: BindingStruct, type: RDFTypesEnum) {
+    setAssignemntValue(binding: BindingStruct, type: RDFTypesEnum) {
         if (type == RDFTypesEnum.resource) {
             this.sharedModals.pickResource("Select a resource").then(
                 (value: ARTNode) => {
@@ -166,7 +160,7 @@ export class QueryParameterizerModal implements ModalComponent<QueryParameterize
         }
     }
 
-    private updateValue(binding: BindingStruct, value: ARTNode) {
+    updateValue(binding: BindingStruct, value: ARTNode) {
         if (value != null) {
             binding.value = value.toNT();
         } else {
@@ -174,19 +168,19 @@ export class QueryParameterizerModal implements ModalComponent<QueryParameterize
         }
     }
 
-    ok(event: Event) {
+    ok() {
         let varBindings: VariableBindings = {};
         for (var i = 0; i < this.bindings.length; i++) {
             let b: BindingStruct = this.bindings[i];
 
             if (b.varName == null || b.varName.trim() == "") { //check if name is not set
-                this.basicModals.alert("Missing binding name", "Missing binding name at position " + (i+1) + ", please insert a name", "warning");
+                this.basicModals.alert("Missing binding name", "Missing binding name at position " + (i+1) + ", please insert a name", ModalType.warning);
                 return;
             }
             
             if (varBindings[b.varName] != null) {
                 this.basicModals.alert("Duplicated binding name", "Duplicated binding name '" + b.varName
-                    + "', please change the name or delete the binding", "warning");
+                    + "', please change the name or delete the binding", ModalType.warning);
                 return;
             }
 
@@ -198,7 +192,7 @@ export class QueryParameterizerModal implements ModalComponent<QueryParameterize
             if (b.bindingType.value == BindingTypeEnum.assignment) {
                 if (b.value == null) {//check if type is assignment and the resource is not set
                     this.basicModals.alert("Incomplete binding", "Incomplete parameterization for binding '" + b.varName 
-                        + "', please set a value or delete the binding", "warning");
+                        + "', please set a value or delete the binding", ModalType.warning);
                     return;
                 }
                 varBindings[b.varName].value = b.value;
@@ -206,25 +200,25 @@ export class QueryParameterizerModal implements ModalComponent<QueryParameterize
                 if (b.bindingType.specialization == "role") {
                     if (b.resourceRole == null) { //check if type is constraint and the role is not set
                         this.basicModals.alert("Incomplete binding", "Incomplete parameterization for binding '" + b.varName 
-                            + "', please set a role or delete the binding", "warning");
+                            + "', please set a role or delete the binding", ModalType.warning);
                         return;
                     } 
                     varBindings[b.varName].resourceRole = b.resourceRole;
                 } else if (b.bindingType.specialization == "datatype") {
                     if (b.datatype == null) { //check if type is constraint and the datatype is not set
                         this.basicModals.alert("Incomplete binding", "Incomplete parameterization for binding '" + b.varName 
-                            + "', please set a datatype or delete the binding", "warning");
+                            + "', please set a datatype or delete the binding", ModalType.warning);
                         return;
                     } 
                     varBindings[b.varName].datatype = b.datatype.toNT();
                 }
             }
         };
-        this.dialog.close(varBindings);
+        this.activeModal.close(varBindings);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

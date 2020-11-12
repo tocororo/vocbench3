@@ -3,15 +3,15 @@
 </div>
 <div class="modal-body vbox" style="min-height: 30vh;">
 
-    <div class="panel panel-default vbox">
-        <div class="panel-heading">
+    <div class="card card-default vbox">
+        <div class="card-header">
             <label style="flex: 1">Query parameters</label>
-            <button class="btn btn-xs btn-default" (click)="addBinding()" title="Add binding">
-                <span class="glyphicon glyphicon-plus"></span>
+            <button class="btn btn-xs btn-light" (click)="addBinding()" title="Add binding">
+                <span class="fas fa-plus"></span>
             </button>
         </div>
-        <div class="panel-body table-responsive" style="flex: 1;">
-            <table class="table table-condensed table-borderless">
+        <div class="card-body table-responsive" style="flex: 1;">
+            <table class="table table-sm table-borderless">
                 <colgroup>
                     <col>
                     <col>
@@ -32,11 +32,11 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let b of bindings">
-                        <td><input class="form-control input-sm" [(ngModel)]="b.varName"></td>
-                        <td><input class="form-control input-sm" [(ngModel)]="b.displayName"></td>
-                        <td><textarea class="form-control input-sm" style="resize: vertical" rows="1" [(ngModel)]="b.description"></textarea></td>
+                        <td><input class="form-control form-control-sm" [(ngModel)]="b.varName"></td>
+                        <td><input class="form-control form-control-sm" [(ngModel)]="b.displayName"></td>
+                        <td><textarea class="form-control form-control-sm" style="resize: vertical" rows="1" [(ngModel)]="b.description"></textarea></td>
                         <td>
-                            <select class="form-control input-sm" [(ngModel)]="b.bindingType" (ngModelChange)="onBindingTypeChange()">
+                            <select class="form-control form-control-sm" [(ngModel)]="b.bindingType" (ngModelChange)="onBindingTypeChange()">
                                 <option *ngFor="let t of bindingTypes" [ngValue]="t">{{t.show}}</option>
                             </select>
                         </td>
@@ -45,19 +45,19 @@
                                 <value-picker [value]="b.value" (valueChanged)="updateValue(b, $event)"></value-picker>
                             </div>
                             <ng-template #constraintBlock>
-                                <select *ngIf="b.bindingType?.specialization=='datatype'; else roleBlock" class="form-control input-sm" [(ngModel)]="b.datatype">
+                                <select *ngIf="b.bindingType?.specialization=='datatype'; else roleBlock" class="form-control form-control-sm" [(ngModel)]="b.datatype">
                                     <option *ngFor="let d of datatypes" [ngValue]="d">{{d.getShow()}}</option>
                                 </select>
                                 <ng-template #roleBlock>
-                                    <select class="form-control input-sm" [(ngModel)]="b.resourceRole">
+                                    <select class="form-control form-control-sm" [(ngModel)]="b.resourceRole">
                                         <option *ngFor="let r of roles" [value]="r.value">{{r.show}}</option>
                                     </select>
                                 </ng-template>
                             </ng-template>
                         </td>
                         <td>
-                            <button class="btn btn-default btn-sm" (click)="removeBinding(b)">
-                                <span class="glyphicon glyphicon-trash"></span>
+                            <button class="btn btn-light btn-sm" (click)="removeBinding(b)">
+                                <span class="far fa-trash-alt"></span>
                             </button>
                         </td>
                     </tr>
@@ -68,6 +68,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="bindings.length == 0">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="bindings.length == 0">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

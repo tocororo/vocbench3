@@ -8,6 +8,7 @@ import { UserServices } from "../services/userServices";
 import { UIUtils } from "../utils/UIUtils";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ModalType } from '../widget/modal/Modals';
 
 @Component({
     selector: "registration-component",
@@ -16,9 +17,9 @@ import { BasicModalServices } from "../widget/modal/basicModal/basicModalService
 })
 export class RegistrationComponent {
 
-    private firstAccess: boolean = false;
-    private privacyStatementAvailable: boolean = false;
-    private userForm: UserForm;
+    firstAccess: boolean = false;
+    privacyStatementAvailable: boolean = false;
+    userForm: UserForm;
 
     constructor(private userService: UserServices, private administrationService: AdministrationServices, private authService: AuthServices,
         private vbProp: VBProperties, private basicModals: BasicModalServices, private router: Router, private activeRoute: ActivatedRoute) { }
@@ -28,7 +29,7 @@ export class RegistrationComponent {
         this.privacyStatementAvailable = this.vbProp.isPrivacyStatementAvailable();
     }
 
-    private fillDefaultUser() {
+    fillDefaultUser() {
         this.userForm.givenName = "Admin";
         this.userForm.familyName = "Admin";
         this.userForm.email = "admin@vocbench.com";
@@ -36,34 +37,34 @@ export class RegistrationComponent {
         this.userForm.confirmedPassword = "admin";
     }
 
-    private submit() {
+    submit() {
         //check all required parameter
         if (!this.userForm.email || 
             (!this.userForm.password || this.userForm.password.trim() == "") ||
             (!this.userForm.confirmedPassword || this.userForm.confirmedPassword.trim() == "") ||
             (!this.userForm.givenName || this.userForm.givenName.trim() == "") ||
             (!this.userForm.familyName || this.userForm.familyName.trim() == "")) {
-            this.basicModals.alert("Invalid data", "Please fill all the required fields", "error");
+            this.basicModals.alert("Invalid data", "Please fill all the required fields", ModalType.warning);
             return;
         }
         if (this.userForm.urlAsIri && (this.userForm.url == null || this.userForm.url.trim() == "")) {
             this.basicModals.alert("Invalid data", "You checked the option to use the personal URL as user IRI, but the URL is not provided." + 
-                " Please enter a valid URL or uncheck the above option", "error");
+                " Please enter a valid URL or uncheck the above option", ModalType.warning);
             return
         }
         //check email
         if (!UserForm.isValidEmail(this.userForm.email)) {
-            this.basicModals.alert("Invalid data", "Please enter a valid e-mail address", "error");
+            this.basicModals.alert("Invalid data", "Please enter a valid e-mail address", ModalType.warning);
             return;
         }
         //check password
         if (this.userForm.password != this.userForm.confirmedPassword) {
-            this.basicModals.alert("Invalid data", "Password and confirmed password are different.", "error");
+            this.basicModals.alert("Invalid data", "Password and confirmed password are different.", ModalType.warning);
             return;
         }
         //check IRI
         if (this.userForm.urlAsIri && !UserForm.isIriValid(this.userForm.iri)) {
-            this.basicModals.alert("Invalid data", "Please enter a valid IRI.", "error");
+            this.basicModals.alert("Invalid data", "Please enter a valid IRI.", ModalType.warning);
             return;
         }
         

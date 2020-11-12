@@ -13,12 +13,15 @@ import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServ
 })
 export class UserCreateComponent implements ControlValueAccessor {
 
-    private iriInfoTitle = "This will be used as user identifier inside VocBench. You can specify a personal IRI";
-    private personalUrlVisible: boolean;
+    iriInfoTitle = "This will be used as user identifier inside VocBench. You can specify a personal IRI";
+    personalUrlVisible: boolean;
 
-    private form: UserForm = new UserForm();
-    private optionalFields: UserFormOptionalField[];
-    private customFields: UserFormCustomField[];
+    form: UserForm = new UserForm();
+    optionalFields: UserFormOptionalField[];
+    customFields: UserFormCustomField[];
+
+    showPwd: boolean = false;
+    showPwdConf: boolean = false;
 
     constructor(private userService: UserServices, private sharedModals: SharedModalServices) { }
 
@@ -77,7 +80,7 @@ export class UserCreateComponent implements ControlValueAccessor {
         this.onModelChange();
     }
 
-    private editLanguages() {
+    editLanguages() {
         this.sharedModals.selectLanguages("Language proficiencies", this.form.languageProficiencies).then(
             langs => {
                 this.form.languageProficiencies = langs;
@@ -95,7 +98,7 @@ export class UserCreateComponent implements ControlValueAccessor {
     }
 
 
-    private onModelChange() {
+    onModelChange() {
         for (let key in this.form) {
             if (this.form[key] == "") {
                 this.form[key] = undefined;

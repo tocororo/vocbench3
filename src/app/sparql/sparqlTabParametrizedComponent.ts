@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { Modal } from 'ngx-modialog/plugins/bootstrap';
-import { Observable } from "rxjs/Observable";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs';
 import { GraphModalServices } from "../graph/modal/graphModalServices";
 import { ARTNode } from "../models/ARTResources";
 import { Configuration, ConfigurationComponents, ConfigurationProperty } from "../models/Configuration";
@@ -23,18 +23,18 @@ import { AbstractSparqlTabComponent } from "./abstractSparqlTabComponent";
 export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
 
     //query
-    private storedQueryName: string;
+    storedQueryName: string;
 
     //parameterization
-    private parameterization: VariableBindings;
+    parameterization: VariableBindings;
     private parametrizationRef: string;
     private bindingsMap: Map<string, ARTNode>;
 
-    private description: string;
+    description: string;
 
     constructor(sparqlService: SparqlServices, exportService: ExportServices, configurationsService: ConfigurationsServices,
-        searchService: SearchServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices, modal: Modal, vbProp: VBProperties) {
-        super(sparqlService, exportService, configurationsService, searchService, basicModals, sharedModals, graphModals, modal, vbProp);
+        searchService: SearchServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices, modalService: NgbModal, vbProp: VBProperties) {
+        super(sparqlService, exportService, configurationsService, searchService, basicModals, sharedModals, graphModals, modalService, vbProp);
     }
 
     evaluateQueryImpl(): Observable<any> {
@@ -47,7 +47,7 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
 
     //LOAD/SAVE/PARAMETERIZE QUERY
 
-    private changeStoredQuery() {
+    changeStoredQuery() {
         this.sharedModals.loadConfiguration("Load SPARQL query", ConfigurationComponents.SPARQL_STORE).then(
             (data: LoadConfigurationModalReturnData) => {
                 let relativeRef = data.reference.relativeReference;
@@ -146,16 +146,16 @@ export class SparqlTabParametrizedComponent extends AbstractSparqlTabComponent {
         )
     }
 
-    private onParametrizationsChange(parameterization: VariableBindings) {
+    onParametrizationsChange(parameterization: VariableBindings) {
         this.parameterization = parameterization;
         this.savedStatus.emit(false);
     }
 
-    private onVarBindingsUpdate(bindings: Map<string, ARTNode>) {
+    onVarBindingsUpdate(bindings: Map<string, ARTNode>) {
         this.bindingsMap = bindings;
     }
 
-    private onDescriptionChange() {
+    onDescriptionChange() {
         this.savedStatus.emit(false);
     }
 

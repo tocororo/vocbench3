@@ -1,10 +1,10 @@
 import { Component, Input } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from "../models/ARTResources";
 import { User, UserFormCustomField, UserFormOptionalField } from "../models/User";
 import { UserServices } from "../services/userServices";
 import { VBContext } from "../utils/VBContext";
+import { ModalOptions } from '../widget/modal/Modals';
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { ChangePasswordModal } from "./changePasswordModal";
 
@@ -18,10 +18,10 @@ export class UserDetailsComponent {
     @Input() readonly: boolean = false; //true if the component is inside the Profile page, so the info (about the current logged user) can be changed
     @Input() user: User;
 
-    private optionalFields: UserFormOptionalField[];
-    private customFields: UserFormCustomField[];
+    optionalFields: UserFormOptionalField[];
+    customFields: UserFormCustomField[];
 
-    constructor(private userService: UserServices, private sharedModals: SharedModalServices, private modal: Modal) { }
+    constructor(private userService: UserServices, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         this.userService.getUserFormFields().subscribe(
@@ -61,9 +61,7 @@ export class UserDetailsComponent {
     }
 
     private changePwd() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(ChangePasswordModal, overlayConfig);
+        this.modalService.open(ChangePasswordModal, new ModalOptions())
     }
 
     /**
@@ -140,7 +138,7 @@ export class UserDetailsComponent {
         )
     }
 
-    private editLanguages() {
+    editLanguages() {
         this.sharedModals.selectLanguages("Language proficiencies", this.user.getLanguageProficiencies()).then(
             langs => {
                 this.userService.updateUserLanguageProficiencies(this.user.getEmail(), langs).subscribe(

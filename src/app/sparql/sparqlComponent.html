@@ -2,31 +2,31 @@
 
     <!--Tabs navigation-->
     <ul class="nav nav-tabs" (click)="$event.preventDefault()">
-        <li *ngFor="let t of tabs" [ngClass]="{active : t.active}">
-            <a href (click)="selectTab(t)">
-                <span *ngIf="t.type=='query'" class="label label-primary" title="Query">Q</span>
-                <span *ngIf="t.type=='parameterization'" class="label label-info" title="Parameterized query">P</span>
+        <li *ngFor="let t of tabs" class="nav-item" [ngClass]="{active : t.active}">
+            <a href class="nav-link" (click)="selectTab(t)">
+                <span *ngIf="t.type=='query'" class="badge badge-primary" title="Query">Q</span>
+                <span *ngIf="t.type=='parameterization'" class="badge badge-info" title="Parameterized query">P</span>
                 <span>
                     {{t.name}}
                     <span *ngIf="!t.saved">*</span>
                 </span>
-                <span *ngIf="tabs.length > 1" class="glyphicon glyphicon-remove-circle" (click)="closeTab(t)" style="cursor: pointer"
-                    onmouseover="this.className='glyphicon glyphicon-remove-sign';"
-                    onmouseout="this.className='glyphicon glyphicon-remove-circle';">
+                <span *ngIf="tabs.length > 1" class="far fa-times-circle" (click)="closeTab(t)" style="cursor: pointer"
+                    onmouseover="this.className='fas fa-times-circle';"
+                    onmouseout="this.className='far fa-times-circle';">
                 </span>
             </a>
         </li>
 
         <li [ngStyle]="{ 'cursor': tabs.length>= tabLimit ? 'not-allowed' : 'pointer' }">
-            <div class="btn-group btn-group-xs">
-                <button #addBtn class="btn btn-default addQueryBtn" (click)="addQueryTab()" (mouseup)="addBtn.blur()" [disabled]="tabs.length>=tabLimit">+</button>
-                <button type="button" class="btn btn-default addQueryBtn dropdown-toggle" style="padding: 4px;" data-toggle="dropdown" [disabled]="tabs.length>=tabLimit">
-                    <span class="caret"></span>
+            <div class="btn-group btn-group-xs" ngbDropdown>
+                <button #addBtn class="btn btn-light addQueryBtn" (click)="addQueryTab()" (mouseup)="addBtn.blur()" [disabled]="tabs.length>=tabLimit">+</button>
+                <button type="button" class="btn btn-light addQueryBtn dropdown-toggle" style="padding: 4px;" data-toggle="dropdown" ngbDropdownToggle [disabled]="tabs.length>=tabLimit">
+                    <span class="fas fa-caret-down fa-sm"></span>
                 </button>
-                <ul class="dropdown-menu">
-                    <li><a href (click)="addQueryTab()">Add query tab</a></li>
-                    <li><a href (click)="addParameterizationTab()">Add parameterized query tab</a></li>
-                </ul>
+                <div class="dropdown-menu" ngbDropdownMenu>
+                    <a class="dropdown-item" (click)="addQueryTab()">Add query tab</a>
+                    <a class="dropdown-item" (click)="addParameterizationTab()">Add parameterized query tab</a>
+                </div>
               </div>
         </li>
 

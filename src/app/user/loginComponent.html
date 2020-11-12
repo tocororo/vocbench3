@@ -1,10 +1,10 @@
 <div class="vbox" style="align-items: center;" (keydown)="onKeydown($event)">
 	<div style="margin-bottom: 5px; font-weight: bold; font-size: 13px;">
-		<span class="glyphicon glyphicon-log-in"></span>
+		<span class="fas fa-sign-in-alt"></span>
 		<span> User login</span>
 	</div>
-	<input type="text" class="form-control input-sm" style="margin-bottom: 5px;" [(ngModel)]="email" placeholder="E-mail address">
-	<input type="password" class="form-control input-sm" style="margin-bottom: 5px;" [(ngModel)]="password" placeholder="Password">
+	<input type="text" class="form-control form-control-sm" style="margin-bottom: 5px;" [(ngModel)]="email" placeholder="E-mail address">
+	<input type="password" class="form-control form-control-sm" style="margin-bottom: 5px;" [(ngModel)]="password" placeholder="Password">
 	<button class="btn btn-sm btn-primary" style="margin-bottom: 5px;" (click)="login()">Log in</button>
 	<a (click)="forgotPassword()" style="cursor: pointer">Forgot password?</a>
 	<a [routerLink]="['/Registration/0']">Sign up</a>

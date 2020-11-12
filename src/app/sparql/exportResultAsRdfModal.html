@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body vbox">
     
-    <select class="form-control input-sm" [(ngModel)]="selectedExportFormat" name="format">
+    <select class="form-control form-control-sm" [(ngModel)]="selectedExportFormat" name="format">
         <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
     </select>
 
@@ -13,33 +13,33 @@
         </label>
     </div>
 
-    <div *ngIf="applyFilter" class="panel panel-alt vbox">
-        <div class="panel-heading">
+    <div *ngIf="applyFilter" class="card card-alt vbox">
+        <div class="card-header">
             <label style="flex: 1">Export transformations:</label>
             <div class="btn-group btn-group-xs" role="group">
-                <button class="btn btn-default" title="Add filter" (click)="appendFilter()">
-                    <span class="glyphicon glyphicon-plus"></span>
+                <button class="btn btn-light" title="Add filter" (click)="appendFilter()">
+                    <span class="fas fa-plus"></span>
                 </button>
-                <button class="btn btn-default" title="Remove filter" (click)="removeFilter()"
+                <button class="btn btn-light" title="Remove filter" (click)="removeFilter()"
                     [disabled]="filtersChain.length == 0 || !selectedFilterChainElement">
-                    <span class="glyphicon glyphicon-minus"></span>
+                    <span class="fas fa-minus"></span>
                 </button>
-                <button class="btn btn-default" title="Move down"  (click)="moveFilterDown()"
+                <button class="btn btn-light" title="Move down"  (click)="moveFilterDown()"
                     [disabled]="isSelectedFilterLast() || !selectedFilterChainElement">
-                    <span class="glyphicon glyphicon-chevron-down"></span>
+                    <span class="fas fa-chevron-down"></span>
                 </button>
-                <button class="btn btn-default" title="Move up" (click)="moveFilterUp()"
+                <button class="btn btn-light" title="Move up" (click)="moveFilterUp()"
                     [disabled]="isSelectedFilterFirst() || !selectedFilterChainElement">
-                    <span class="glyphicon glyphicon-chevron-up"></span>
+                    <span class="fas fa-chevron-up"></span>
                 </button>
             </div>
         </div>
-        <div class="panel-body scrollableContainer" style="min-height: 60px;">
+        <div class="card-body scrollableContainer" style="min-height: 60px;">
             <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 5px;">
                 Here it is possible to create and configure a sequence of transformations to be applied during the export process.
                 <button class="close" data-dismiss="alert"><span>&times;</span></button>
             </div>
-            <table class="table table-condensed table-hoverable">
+            <table class="table table-sm table-hoverable">
                 <colgroup>
                     <col style="width: 2%">
                     <col>
@@ -56,7 +56,7 @@
                             </extension-configurator>
                         </td>
                         <td class="text-center" style="font-size: 14px; font-weight: 700;">
-                            <span *ngIf="requireConfiguration(filterChainEl)" class="glyphicon glyphicon-warning-sign"
+                            <span *ngIf="requireConfiguration(filterChainEl)" class="fas fa-exclamation-triangle"
                                 title="This filter needs to be configured"></span>
                         </td>
                     </tr>
@@ -68,6 +68,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

@@ -11,7 +11,7 @@ import { UIUtils } from "../utils/UIUtils";
 })
 export class ResetPasswordComponent {
 
-    private email: string;
+    email: string;
     private token: string;
 
     constructor(private userService: UserServices, private basicModals: BasicModalServices,
@@ -21,11 +21,11 @@ export class ResetPasswordComponent {
         this.token = this.activeRoute.snapshot.params['token'];
     }
 
-    private isEmailValid(): boolean {
+    isEmailValid(): boolean {
         return (this.email != null && this.email.trim() != "");
     }
 
-    private reset() {
+    reset() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.userService.resetPassword(this.email, this.token).subscribe(
             stResp => {

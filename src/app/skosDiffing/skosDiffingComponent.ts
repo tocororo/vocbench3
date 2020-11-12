@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { Modal, OverlayConfig } from "ngx-modialog";
-import { BSModalContext, BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
-import { Observable } from "rxjs";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, of } from "rxjs";
+import { map } from 'rxjs/operators';
 import { VersionInfo } from "../models/History";
 import { DiffingTask, TaskResultType } from "../models/SkosDiffing";
 import { SkosDiffingServices } from "../services/skosDiffingServices";
@@ -9,6 +9,7 @@ import { VersionsServices } from "../services/versionsServices";
 import { UIUtils } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ModalOptions, ModalType } from '../widget/modal/Modals';
 import { CreateDiffingTaskModal } from "./modals/createDiffingTaskModal";
 
 @Component({
@@ -18,26 +19,26 @@ import { CreateDiffingTaskModal } from "./modals/createDiffingTaskModal";
 })
 export class SkosDiffingComponent {
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
 
-    private serverDown: boolean = false;
+    serverDown: boolean = false;
 
-    private tasks: DiffingTask[];
-    private selectedTask: DiffingTask;
+    tasks: DiffingTask[];
+    selectedTask: DiffingTask;
 
-    private resultFormats: TaskResultType[] = [TaskResultType.html, TaskResultType.pdf, TaskResultType.json];
-    private selectedResultFormat: TaskResultType = this.resultFormats[0];
+    resultFormats: TaskResultType[] = [TaskResultType.html, TaskResultType.pdf, TaskResultType.json];
+    selectedResultFormat: TaskResultType = this.resultFormats[0];
 
     private versions: VersionInfo[];
 
     constructor(private diffingService: SkosDiffingServices, private versionsService: VersionsServices, 
-        private basicModals: BasicModalServices, private modal: Modal) {}
+        private basicModals: BasicModalServices, private modalService: NgbModal) {}
 
     ngOnInit() {
         this.listTasks();
     }
 
-    private listTasks() {
+    listTasks() {
         this.diffingService.getAllTasksInfo(VBContext.getWorkingProject().getName()).subscribe(
             tasks => {
                 this.serverDown = false;
@@ -68,24 +69,24 @@ export class SkosDiffingComponent {
             (err: Error) => {
                 this.serverDown = true;
                 this.basicModals.alert("SKOS diffing server error", "The SKOS diffing server didn't respond, "
-                    + "make sure it is up and running.", "warning");
+                    + "make sure it is up and running.", ModalType.warning);
             }
         );
     }
 
     private initVersions(): Observable<void> {
         if (this.versions != null) {
-            return Observable.of(null);
+            return of(null);
         } else {
-            return this.versionsService.getVersions().map(
-                versions => {
+            return this.versionsService.getVersions().pipe(
+                map(versions => {
                     this.versions = versions;
-                }
+                })
             )
         }
     }
 
-    private selectTask(task: DiffingTask) {
+    selectTask(task: DiffingTask) {
         if (this.selectedTask == task) {
             this.selectedTask = null;
         } else {
@@ -94,9 +95,7 @@ export class SkosDiffingComponent {
     }
 
     createTask() {
-        const builder = new BSModalContextBuilder<BSModalContext>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
-        this.modal.open(CreateDiffingTaskModal, overlayConfig).result.then(
+        this.modalService.open(CreateDiffingTaskModal, new ModalOptions('lg')).result.then(
             () => {
                 this.listTasks();
             },
@@ -104,13 +103,13 @@ export class SkosDiffingComponent {
         );
     }
 
-    private deleteTask() {
+    deleteTask() {
         this.diffingService.deleteTask(this.selectedTask.taskId).subscribe(() => {
             this.listTasks();
         });
     }
 
-    private downloadTaskResult() {
+    downloadTaskResult() {
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.diffingService.getTaskResult(this.selectedTask.taskId, this.selectedResultFormat).subscribe(
             report => {

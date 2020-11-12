@@ -1,12 +1,11 @@
-import { Component, EventEmitter, Output, ViewChild } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { Observable } from "rxjs/Observable";
+import { Component, Directive, EventEmitter, Output, ViewChild } from "@angular/core";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs';
 import { GraphModalServices } from "../graph/modal/graphModalServices";
 import { ARTBNode, ARTResource, ARTURIResource } from "../models/ARTResources";
 import { Configuration, ConfigurationProperty } from "../models/Configuration";
 import { PrefixMapping } from "../models/Metadata";
-import { GraphResultBindings, QueryMode, ResultType, QueryResultBinding, QueryChangedEvent } from "../models/Sparql";
+import { GraphResultBindings, QueryChangedEvent, QueryMode, QueryResultBinding, ResultType } from "../models/Sparql";
 import { ConfigurationsServices } from "../services/configurationsServices";
 import { ExportServices } from "../services/exportServices";
 import { SearchServices } from "../services/searchServices";
@@ -17,32 +16,33 @@ import { VBActionsEnum } from "../utils/VBActions";
 import { VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
+import { ModalOptions, ModalType } from '../widget/modal/Modals';
 import { SharedModalServices } from '../widget/modal/sharedModal/sharedModalServices';
-import { ExportResultAsRdfModal, ExportResultAsRdfModalData } from "./exportResultAsRdfModal";
+import { ExportResultAsRdfModal } from "./exportResultAsRdfModal";
 import { YasguiComponent } from "./yasguiComponent";
 
-@Component({})
+@Directive()
 export abstract class AbstractSparqlTabComponent {
 
-    @ViewChild(YasguiComponent) viewChildYasgui: YasguiComponent;
+    @ViewChild(YasguiComponent, { static: false }) viewChildYasgui: YasguiComponent;
 
     @Output() updateName: EventEmitter<string> = new EventEmitter();
     @Output() savedStatus: EventEmitter<boolean> = new EventEmitter();
 
-    protected query: string;
+    query: string;
     protected queryMode: QueryMode = QueryMode.query;
-    protected inferred: boolean = false;
-    protected storedQueryReference: string;
+    inferred: boolean = false;
+    storedQueryReference: string;
 
     private sampleQuery: string = "SELECT * WHERE {\n    ?s ?p ?o .\n} LIMIT 10";
     private queryCache: string; //contains the last query submitted (useful to invoke the export excel)
     private respSparqlJSON: any; //keep the "sparql" JSON object contained in the response
-    private resultType: ResultType;
+    resultType: ResultType;
     private headers: string[];
-    private queryResult: boolean | QueryResultBinding[];
-    private queryInProgress: boolean = false;
-    private queryValid: boolean = true;
-    private queryTime: string;
+    queryResult: boolean | QueryResultBinding[];
+    queryInProgress: boolean = false;
+    queryValid: boolean = true;
+    queryTime: string;
     
     private sortOrder: string;
     private asc_Order: string = "_asc";
@@ -62,10 +62,10 @@ export abstract class AbstractSparqlTabComponent {
     protected basicModals: BasicModalServices;
     protected sharedModals: SharedModalServices;
     protected graphModals: GraphModalServices;
-    protected modal: Modal;
+    protected modalService: NgbModal;
     protected vbProp: VBProperties;
     constructor(sparqlService: SparqlServices, exportService: ExportServices, configurationsService: ConfigurationsServices,
-        searchService: SearchServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices, modal: Modal, vbProp: VBProperties) {
+        searchService: SearchServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices, modalService: NgbModal, vbProp: VBProperties) {
         this.sparqlService = sparqlService;
         this.exportService = exportService;
         this.configurationsService = configurationsService;
@@ -73,7 +73,7 @@ export abstract class AbstractSparqlTabComponent {
         this.basicModals = basicModals;
         this.sharedModals = sharedModals;
         this.graphModals = graphModals;
-        this.modal = modal;
+        this.modalService = modalService;
         this.vbProp = vbProp;
     }
 
@@ -92,7 +92,7 @@ export abstract class AbstractSparqlTabComponent {
         this.isGraphAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.graphRead);
     }
 
-    private doQuery() {
+    doQuery() {
         var initTime = new Date().getTime();
         this.queryResult = null;
         this.resultsPage = 0;
@@ -158,14 +158,14 @@ export abstract class AbstractSparqlTabComponent {
      * valid tells wheter the query is syntactically correct
      * mode tells the query mode (query/update) 
      */
-    private onQueryChange(event: QueryChangedEvent) {
+    onQueryChange(event: QueryChangedEvent) {
         this.query = event.query;
         this.queryValid = event.valid;
         this.queryMode = event.mode;
         this.savedStatus.emit(false);
     }
 
-    private clear() {
+    clear() {
         this.respSparqlJSON = null;
         this.headers = null;
         this.queryResult = null;
@@ -174,11 +174,11 @@ export abstract class AbstractSparqlTabComponent {
         this.resultsTotPage = 0;
     }
 
-    private exportAsJSON() {
+    exportAsJSON() {
         this.downloadSavedResult(JSON.stringify(this.respSparqlJSON), "json");
     }
 
-    private exportAsCSV() {
+    exportAsCSV() {
         //https://www.w3.org/TR/sparql11-results-csv-tsv/#csv
         var serialization = "";
         var separator = ",";
@@ -233,7 +233,7 @@ export abstract class AbstractSparqlTabComponent {
         return value;
     }
 
-    private exportAsTSV() {
+    exportAsTSV() {
         //https://www.w3.org/TR/sparql11-results-csv-tsv/#csv
         var serialization = "";
         var separator = "\t";
@@ -296,7 +296,7 @@ export abstract class AbstractSparqlTabComponent {
         return value;
     }
 
-    private exportAsSpradsheet(format: "xlsx" | "ods") {
+    exportAsSpradsheet(format: "xlsx" | "ods") {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.sparqlService.exportQueryResultAsSpreadsheet(this.queryCache, format, this.inferred).subscribe(
             blob => {
@@ -307,13 +307,11 @@ export abstract class AbstractSparqlTabComponent {
         );
     }
 
-    private exportAsRdf() {
-        var modalData = new ExportResultAsRdfModalData(this.queryCache, this.inferred);
-        const builder = new BSModalContextBuilder<ExportResultAsRdfModalData>(
-            modalData, undefined, ExportResultAsRdfModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ExportResultAsRdfModal, overlayConfig).result;
+    exportAsRdf() {
+        const modalRef: NgbModalRef = this.modalService.open(ExportResultAsRdfModal, new ModalOptions());
+        modalRef.componentInstance.query = this.queryCache;
+		modalRef.componentInstance.inferred = this.inferred;
+        return modalRef.result;
     }
 
     /**
@@ -388,7 +386,7 @@ export abstract class AbstractSparqlTabComponent {
     private openGraph() {
         if ((<QueryResultBinding[]>this.queryResult).length > 100) { //limit of triples
             this.basicModals.confirm("Graph view", "Attention: The graph you are trying to show will have a large amount of nodes and links. " + 
-                "It could be really confused and not much readable. Do you want to show it anyway?", "warning").then(
+                "It could be really confused and not much readable. Do you want to show it anyway?", ModalType.warning).then(
                 confirm => {
                     this.graphModals.openGraphQuertyResult(<GraphResultBindings[]><any>this.queryResult);
                 },

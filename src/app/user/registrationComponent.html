@@ -1,10 +1,10 @@
 <div class="container vbox" style="flex: initial">
 
-    <div class="panel panel-default vbox" style="flex: initial">
-        <div class="panel-heading">
-            <label><span class="glyphicon glyphicon-user"></span> User registration:</label>
+    <div class="card card-default vbox" style="flex: initial">
+        <div class="card-header">
+            <label><span class="fas fa-user"></span> User registration:</label>
         </div>
-        <div class="panel-body scrollableContainer">
+        <div class="card-body scrollableContainer">
             <div *ngIf="privacyStatementAvailable" class="alert alert-info" style="margin-bottom: 6px;">
                 Please read our <a [routerLink]="" (click)="downloadPrivacyStatement()" style="font-weight: bold;">privacy statement</a>
             </div>
@@ -18,12 +18,12 @@
             </div>
             <user-create [(ngModel)]="userForm"></user-create>
         </div>
-        <div class="panel-footer">
-            <div class="pull-left">
+        <div class="card-footer">
+            <div class="float-left">
                 <div><span style="color: red; margin-right: 2px;">* </span>Mandatory field</div>
                 <div><span style="color: red; margin-right: 2px;">** </span>Optional but highly recommended field</div>
             </div>
-            <button type="submit" class="btn btn-default btn-sm pull-right" (click)="submit()">Submit</button>
+            <button type="submit" class="btn btn-light btn-sm float-right" (click)="submit()">Submit</button>
             <span class="clearfix"></span>
         </div>
     </div>

@@ -8,21 +8,22 @@ import { VBActionsEnum } from "../utils/VBActions";
 import { VBContext } from "../utils/VBContext";
 
 @Component({
-    selector: "li[user-menu]", //what is this? used to avoid css style breaking (use <li user-menu ...></li>)
+    // selector: "li[user-menu]", //what is this? used to avoid css style breaking (use <li user-menu ...></li>)
+    selector: "ul[user-menu]", //what is this? used to avoid css style breaking (use <li user-menu ...></li>)
     //see http://stackoverflow.com/questions/34707029/angular-2-semantic-ui-component-encapsulation-breaks-style
     templateUrl: "./userMenuComponent.html",
 })
 export class UserMenuComponent {
 
     private currentUser: User;
-    private userShow: string;
+    userShow: string;
 
-    private imgSrcFallback: string = require("../../assets/images/logos/user.svg");
-    private userAvatarUrl: SafeUrl;
+    private imgSrcFallback: string = "../../assets/images/logos/user.svg";
+    userAvatarUrl: SafeUrl;
 
-    private isProjectOpen: boolean;
-    private isAdministrationVisible: boolean;
-    private isNotificationsVisible: boolean;
+    isProjectOpen: boolean;
+    isAdministrationVisible: boolean;
+    isNotificationsVisible: boolean;
 
     constructor(private authService: AuthServices, private sanitizer: DomSanitizer) { }
 
@@ -36,7 +37,7 @@ export class UserMenuComponent {
      * Listener when menu is clicked to open. Updates currentUser variable.
      * This is needed because the user in the context could have been changed from user profile page.
      */
-    private onMenuOpen() {
+    onMenuOpen() {
         this.currentUser = VBContext.getLoggedUser();
         this.initBackgroundImgSrc();
 
@@ -72,14 +73,14 @@ export class UserMenuComponent {
         
     }
 
-    private setFallbackImage() {
+    setFallbackImage() {
         this.userAvatarUrl = this.sanitizer.bypassSecurityTrustUrl(this.imgSrcFallback);
     }
 
     /**
      * Removes the authentication token and redirect to home page
      */
-    private logout() {
+    logout() {
         this.authService.logout().subscribe();
     }
 

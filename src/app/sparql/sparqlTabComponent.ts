@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { Modal } from 'ngx-modialog/plugins/bootstrap';
-import { Observable } from "rxjs/Observable";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs';
 import { GraphModalServices } from "../graph/modal/graphModalServices";
 import { ConfigurationComponents } from "../models/Configuration";
 import { ConfigurationsServices } from "../services/configurationsServices";
@@ -20,8 +20,8 @@ import { AbstractSparqlTabComponent } from "./abstractSparqlTabComponent";
 export class SparqlTabComponent extends AbstractSparqlTabComponent {
 
     constructor(sparqlService: SparqlServices, exportService: ExportServices, configurationsService: ConfigurationsServices,
-        searchService: SearchServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices, modal: Modal, vbProp: VBProperties) {
-        super(sparqlService, exportService, configurationsService, searchService, basicModals, sharedModals, graphModals, modal, vbProp);
+        searchService: SearchServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices, modalService: NgbModal, vbProp: VBProperties) {
+        super(sparqlService, exportService, configurationsService, searchService, basicModals, sharedModals, graphModals, modalService, vbProp);
     }
 
     evaluateQueryImpl(): Observable<any> {

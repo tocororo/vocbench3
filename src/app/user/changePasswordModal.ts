@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthServices } from "../services/authServices";
 import { UserServices } from "../services/userServices";
 import { VBContext } from "../utils/VBContext";
@@ -8,21 +7,19 @@ import { BasicModalServices } from "../widget/modal/basicModal/basicModalService
 
 @Component({
     selector: "change-pwd-modal",
-    templateUrl: "/changePasswordModal.html",
+    templateUrl: "./changePasswordModal.html",
 })
-export class ChangePasswordModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class ChangePasswordModal {
 
-    private oldPwd: string;
-    private newPwd: string;
-    private newPwdConfirm: string;
+    oldPwd: string;
+    newPwd: string;
+    newPwdConfirm: string;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private userService: UserServices, private authService: AuthServices, 
+    constructor(public activeModal: NgbActiveModal, private userService: UserServices, private authService: AuthServices, 
         private basicModals: BasicModalServices) {
-        this.context = dialog.context;
     }
 
-    private isInputValid(): boolean {
+    isInputValid(): boolean {
         return (
             this.oldPwd != undefined && this.oldPwd.trim() != "" &&
             this.newPwd != undefined && this.newPwd.trim() != "" &&
@@ -31,18 +28,18 @@ export class ChangePasswordModal implements ModalComponent<BSModalContext> {
         );
     }
 
-    private isNewPwdConfirmOk(): boolean {
+    isNewPwdConfirmOk(): boolean {
         return this.newPwd == this.newPwdConfirm;
     }
 
-    ok(event: Event) {
+    ok() {
         this.userService.changePassword(VBContext.getLoggedUser().getEmail(), this.oldPwd, this.newPwd).subscribe(
-            stResp => {
+            () => {
                 this.basicModals.alert("Password changed", "Your password has been succesfully changed. Now you will be logged out.").then(
-                    ok => {
+                    () => {
                         this.authService.logout().subscribe(
-                            stResp => {
-                                this.dialog.close();
+                            () => {
+                                this.activeModal.close();
                             }
                         );
                         
@@ -55,7 +52,7 @@ export class ChangePasswordModal implements ModalComponent<BSModalContext> {
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

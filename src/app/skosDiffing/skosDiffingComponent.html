@@ -1,13 +1,13 @@
-<div class="panel panel-default vbox blockingDivHost">
-    <div class="panel-heading">
+<div class="card card-default vbox blockingDivHost">
+    <div class="card-header">
         <label style="flex: 1;">SKOS diffing tasks</label>
 
         <div class="btn-group btn-group-xs">
-            <button class="btn btn-default" (click)="createTask()" title="Create task" [disabled]="serverDown">
-                <span class="glyphicon glyphicon-plus"></span>
+            <button class="btn btn-light" (click)="createTask()" title="Create task" [disabled]="serverDown">
+                <span class="fas fa-plus"></span>
             </button>
-            <button class="btn btn-sm btn-default" (click)="deleteTask()" title="Delete task" [disabled]="!selectedTask || serverDown">
-                <span class="glyphicon glyphicon-minus"></span>
+            <button class="btn btn-sm btn-light" (click)="deleteTask()" title="Delete task" [disabled]="!selectedTask || serverDown">
+                <span class="fas fa-minus"></span>
             </button>
         </div>
 
@@ -16,23 +16,23 @@
                 <select class="form-control" [(ngModel)]="selectedResultFormat">
                     <option *ngFor="let f of resultFormats" [ngValue]="f">{{f | uppercase}}</option>
                 </select>
-                <span class="input-group-btn">
-                    <button class="btn btn-default" (click)="downloadTaskResult()" title="Download task result" [disabled]="!selectedTask || serverDown">
-                        <span class="glyphicon glyphicon-save "></span>
+                <span class="input-group-append">
+                    <button class="btn btn-light" (click)="downloadTaskResult()" title="Download task result" [disabled]="!selectedTask || serverDown">
+                        <span class="fas fa-download"></span>
                     </button>
                 </span>
             </div>
         </div>
 
-        <button class="btn btn-xs btn-default" style="margin-left: 5px;" (click)="listTasks()" title="Refresh tasks list">
-            <span class="glyphicon glyphicon-refresh"></span>
+        <button class="btn btn-xs btn-light" style="margin-left: 5px;" (click)="listTasks()" title="Refresh tasks list">
+            <span class="fas fa-redo"></span>
         </button>
-        <!-- <button *ngIf="isSettingsAuthorized" class="btn btn-xs btn-default" style="margin-left: 5px;" (click)="settings()" title="Settings">
-            <span class="glyphicon glyphicon-cog"></span>
+        <!-- <button *ngIf="isSettingsAuthorized" class="btn btn-xs btn-light" style="margin-left: 5px;" (click)="settings()" title="Settings">
+            <span class="fas fa-cog"></span>
         </button> -->
     </div>
-    <div class="panel-body">
-        <table class="table table-condensed table-hoverable">
+    <div class="card-body">
+        <table class="table table-sm table-hoverable">
             <thead>
                 <tr>
                     <th>Left Dataset</th>
