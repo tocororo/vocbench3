@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { TransitiveImportMethodAllowance } from "../models/Metadata";
 import { PluginSpecification } from '../models/Plugins';
 import { DataFormat, RDFFormat } from "../models/RDFFormat";
@@ -49,11 +50,11 @@ export class InputOutputServices {
         if (validateImplicitly != null) {
             data.validateImplicitly = validateImplicitly;
         }
-        return this.httpMgr.uploadFile(this.serviceName, "loadRDF", data).map(
-            stResp => {
+        return this.httpMgr.uploadFile(this.serviceName, "loadRDF", data).pipe(
+            map(stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
-            }
+            })
         );
     }
 
@@ -84,11 +85,11 @@ export class InputOutputServices {
      */
     clearData() {
         var params: any = {};
-        return this.httpMgr.doPost(this.serviceName, "clearData", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "clearData", params).pipe(
+            map(stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
-            }
+            })
         );
     }
 
@@ -100,8 +101,8 @@ export class InputOutputServices {
         let params = {
             extensionID: extensionID
         };
-        return this.httpMgr.doGet(this.serviceName, "getSupportedFormats", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getSupportedFormats", params).pipe(
+            map(stResp => {
                 let formats: DataFormat[] = [];
                 for (let f of stResp) {
                     formats.push(DataFormat.parse(f));
@@ -115,7 +116,7 @@ export class InputOutputServices {
                     }
                 );
                 return formats;
-            }
+            })
         );
     }
 
@@ -124,8 +125,8 @@ export class InputOutputServices {
      */
     getInputRDFFormats(): Observable<RDFFormat[]> {
         var params = {};
-        return this.httpMgr.doGet(this.serviceName, "getInputRDFFormats", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getInputRDFFormats", params).pipe(
+            map(stResp => {
                 var formats: RDFFormat[] = [];
                 for (var i = 0; i < stResp.length; i++) {
                     let name = stResp[i].name;
@@ -146,7 +147,7 @@ export class InputOutputServices {
                     }
                 );
                 return formats;
-            }
+            })
         );
     }
 

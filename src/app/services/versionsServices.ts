@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { VersionInfo } from "../models/History";
 import { PluginSpecification } from "../models/Plugins";
 import { BackendTypesEnum, RepositoryAccess } from "../models/Project";
@@ -20,8 +21,8 @@ export class VersionsServices {
             setRepositoryStatus: true,
             setRepositoryLocation: true
         };
-        return this.httpMgr.doGet(this.serviceName, "getVersions", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getVersions", params).pipe(
+            map(stResp => {
                 var versions: VersionInfo[] = [];
                 for (var i = 0; i < stResp.length; i++) {
                     let v: VersionInfo = new VersionInfo(stResp[i].versionId, stResp[i].repositoryId, new Date(stResp[i].dateTime), 
@@ -38,7 +39,7 @@ export class VersionsServices {
                 );
 
                 return versions;
-            }
+            })
         );
     }
 

@@ -1,63 +1,53 @@
-import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { DialogRef, ModalComponent } from "ngx-modialog";
-
-export class AlertModalData extends BSModalContext {
-    /**
-     * @param title modal title
-     * @param message modal message
-     * @param type type of the modal. Determines the style of the message alert.
-     *      Available values: "info", "warning", "error"
-     * @param details futher details that will be shown in an expandable panel (useful to show Exception name)
-     */
-    constructor(
-        public title: string = 'Modal Title',
-        public message: string = 'Modal Body!',
-        public type: string = 'info',
-        public details: string
-    ) {
-        super();
-    }
-}
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from '../../Modals';
 
 @Component({
-    selector: "alert-modal",
-    templateUrl: "./alertModal.html",
+	selector: "alert-modal",
+	templateUrl: "./alertModal.html",
+	styleUrls: ['../../modals.css']
 })
-export class AlertModal implements ModalComponent<AlertModalData> {
-    context: AlertModalData;
+export class AlertModal {
 
-    private headerStyle: string;
-    private msgStyle: string;
+	@Input() title: string;
+	@Input() message: string;
+	@Input() type: ModalType;
+	@Input() details: string;
+	@Input() checkboxLabel: string;
 
-    private detailsCollapsed: boolean = true;
+	titleClass: string;
+	alertClass: string;
 
-    constructor(public dialog: DialogRef<AlertModalData>) {
-        this.context = dialog.context;
+	detailsCollapsed: boolean = true;
 
-        //based on the modal type set the css style of the message alert
-        switch (this.context.type) {
-            case "info":
-                this.msgStyle = "vbox alert alert-info";
-                this.headerStyle = "modal-title text-info";
-                break;
-            case "error":
-                this.msgStyle = "vbox alert alert-danger";
-                this.headerStyle = "modal-title text-danger";
-                break;
-            case "warning":
-                this.msgStyle = "vbox alert alert-warning";
-                this.headerStyle = "modal-title text-warning";
-                break;
-            default:
-                this.msgStyle = "vbox alert alert-info";
-                this.headerStyle = "modal-title text-info";
-                break;
-        }
-    }
+	checkbox: boolean = false;
 
-    ok() {
-        this.dialog.close(true);
-    }
+	constructor(public activeModal: NgbActiveModal) { }
+
+	ngOnInit() {
+		//based on the modal type set the css style of the message alert
+
+		if (this.type == null) {
+			this.type = ModalType.info
+		}
+		if (this.type == ModalType.info) {
+			this.titleClass = "text-info";
+			this.alertClass = "alert alert-info";
+		} else if (this.type == ModalType.warning) {
+			this.titleClass = "text-warning";
+			this.alertClass = "alert alert-warning";
+		} else if (this.type == ModalType.error) {
+			this.titleClass = "text-danger";
+			this.alertClass = "alert alert-danger";
+		}
+	}
+
+	ok() {
+		this.activeModal.close(this.checkbox);
+	}
+
+	close() {
+		this.activeModal.dismiss();
+	}
 
 }

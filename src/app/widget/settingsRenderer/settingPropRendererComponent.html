@@ -1,13 +1,13 @@
 <ng-container *ngIf="prop">
 
     <ng-container  *ngIf="prop.enumeration; else notEnumerationBlock">
-        <select *ngIf="!prop.enumeration.open" class="form-control input-sm" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
+        <select *ngIf="!prop.enumeration.open" class="form-control form-control-sm" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled">
             <option *ngFor="let enum of prop.enumeration.values" [value]="enum">{{enum}}</option>
         </select>
 
         <ng-container *ngIf="prop.enumeration.open">
             <!-- Why attr.list? https://github.com/angular/angular/issues/12759#issuecomment-278940455 -->
-            <input class="form-control input-sm" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled" [attr.list]="'datalist_' + prop.name">
+            <input class="form-control form-control-sm" [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled" [attr.list]="'datalist_' + prop.name">
             <datalist [id]="'datalist_' + prop.name">
                 <option *ngFor="let enum of prop.enumeration.values" [value]="enum">
             </datalist>
@@ -15,7 +15,7 @@
     </ng-container>
     <ng-template #notEnumerationBlock>
         <div [ngSwitch]="prop.type.name">
-            <div *ngSwitchCase="'boolean'" class="input-sm form-control text-center">
+            <div *ngSwitchCase="'boolean'" class="form-control-sm form-control text-center">
                 <label class="radio-inline">
                     <input type="radio" (click)="updateBoolean(prop, true)" [name]="'radio_'+prop.name" [checked]="prop.value==true" [disabled]="disabled">true
                 </label>
@@ -57,34 +57,35 @@
                         <nested-settings-renderer style="flex:auto" [(ngModel)]="prop.value" [schema]="prop.type.schema" (ngModelChange)="updatePropertiesValue($event)"></nested-settings-renderer>
                         <ng-container *ngIf="!prop.required">
                             <div style="width: 1%"></div>
-                            <button class="btn btn-sm btn-default" title="Delete optional value" style="align-self: center; margin-left: 3px" (click)="deleteOptionalSettingsValue(prop)">
-                                <span class="glyphicon glyphicon-trash"></span>
+                            <button class="btn btn-sm btn-light" title="Delete optional value" style="align-self: center; margin-left: 3px" (click)="deleteOptionalSettingsValue(prop)">
+                                <span class="far fa-trash-alt"></span>
                             </button>  
                         </ng-container>
                     </div>    
                 </ng-container>
                 <ng-template #collapsedNestedSettings>
-                    <button class="btn btn-sm btn-default" title="Add optional value" (click)="addOptionalSettingsValue(prop)">
-                        <span class="glyphicon glyphicon-plus"></span>
+                    <button class="btn btn-sm btn-light" title="Add optional value" (click)="addOptionalSettingsValue(prop)">
+                        <span class="fas fa-plus"></span>
                     </button>
                 </ng-template>    
             </ng-container>
+    
 
-            <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control input-sm" style="resize: vertical" 
+            <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control form-control-sm" style="resize: vertical" 
                 [(ngModel)]="prop.value" [disabled]="disabled">
             </textarea>
 
-            <input *ngSwitchCase="'int'" type="number" class="form-control input-sm" step="1" [(ngModel)]="prop.value" [disabled]="disabled">
-            <input *ngSwitchCase="'integer'" type="number" class="form-control input-sm" step="1" [(ngModel)]="prop.value" [disabled]="disabled">
-            <input *ngSwitchCase="'long'" type="number" class="form-control input-sm" step="1" [(ngModel)]="prop.value" [disabled]="disabled">
-            <input *ngSwitchCase="'float'" type="number" class="form-control input-sm" step="0.01" [(ngModel)]="prop.value" [disabled]="disabled">
-            <input *ngSwitchCase="'double'" type="number" class="form-control input-sm" step="0.01" [(ngModel)]="prop.value" [disabled]="disabled">
+            <input *ngSwitchCase="'int'" type="number" class="form-control form-control-sm" step="1" [(ngModel)]="prop.value" [disabled]="disabled">
+            <input *ngSwitchCase="'integer'" type="number" class="form-control form-control-sm" step="1" [(ngModel)]="prop.value" [disabled]="disabled">
+            <input *ngSwitchCase="'long'" type="number" class="form-control form-control-sm" step="1" [(ngModel)]="prop.value" [disabled]="disabled">
+            <input *ngSwitchCase="'float'" type="number" class="form-control form-control-sm" step="0.01" [(ngModel)]="prop.value" [disabled]="disabled">
+            <input *ngSwitchCase="'double'" type="number" class="form-control form-control-sm" step="0.01" [(ngModel)]="prop.value" [disabled]="disabled">
 
             <div *ngSwitchDefault class="hbox" style="align-items: center; position: relative;">
-                <textarea *ngSwitchDefault type="text" rows="1" class="form-control input-sm" style="resize: vertical;" 
+                <textarea *ngSwitchDefault type="text" rows="1" class="form-control form-control-sm" style="resize: vertical;" 
                     [(ngModel)]="prop.value" [disabled]="disabled">
                 </textarea>
-                <span class="glyphicon glyphicon-warning-sign" style="position: absolute; top: 8px; right: 8px;"
+                <span class="fas fa-exclamation-triangle" style="position: absolute; top: 8px; right: 8px;"
                     [title]="'This parameter has an unknown type (' + prop.type.name + '). The entered value will be interpreted as a low-level JSON value.'">
                 </span>
             </div>

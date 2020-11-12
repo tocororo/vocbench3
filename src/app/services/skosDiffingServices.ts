@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Project } from '../models/Project';
 import { DiffingTask, TaskResultType } from '../models/SkosDiffing';
 import { HttpManager, STRequestParams, VBRequestOptions } from "../utils/HttpManager";

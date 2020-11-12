@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Configuration } from '../models/Configuration';
-import { CustomService, CustomOperationDefinition } from '../models/CustomService';
+import { CustomOperationDefinition, CustomService } from '../models/CustomService';
 import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
@@ -38,8 +39,8 @@ export class CustomServiceServices {
         let params: any = {
             id: id
         }
-        return this.httpMgr.doGet(this.serviceName, "getCustomService", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getCustomService", params).pipe(
+            map(stResp => {
                 let config = <CustomService>CustomService.parse(stResp);
                 config.id = id; //useful to keep trace of id in case of future update
                 let operations: CustomOperationDefinition[] = config.getPropertyValue("operations");
@@ -48,7 +49,7 @@ export class CustomServiceServices {
                     operations.sort((o1, o2) => o1.name.localeCompare(o2.name)); //sort operations
                 }
                 return config;
-            }
+            })
         );
     }
 
@@ -94,14 +95,14 @@ export class CustomServiceServices {
      */
     getOperationForms(): Observable<Configuration[]> {
         let params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getOperationForms", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getOperationForms", params).pipe(
+            map(stResp => {
                 let configs: Configuration[] = [];
                 stResp.forEach((c: any) => {
                     configs.push(Configuration.parse(c));
                 })
                 return configs;
-            }
+            })
         );
     }
 

@@ -1,15 +1,21 @@
 <div class="modal-header">
-    <h3 class="modal-title text-info">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
+    <button class="close" (click)="close()">
+        <span>&times;</span>
+    </button>
 </div>
 <div class="modal-body">
-    <div class="alert alert-info" *ngIf="context.message" style="margin-bottom: 4px">
-        {{context.message}}
+
+    <div *ngIf="message" class="alert alert-info mb-1">
+        {{message}}
     </div>
-    <file-picker (fileChanged)="fileChangeEvent($event)" [label]="context.label"
-        [accept]="context.accept" [placeholder]="context.placeholder">
+
+    <file-picker (fileChanged)="fileChangeEvent($event)" [label]="label"
+        [accept]="accept" [placeholder]="placeholder">
     </file-picker>
+
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-sm btn-primary" (click)="ok()">Ok</button>
+    <button class="btn btn-sm btn-secondary" (click)="close()">Close</button>
 </div>

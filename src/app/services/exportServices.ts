@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
-import { Deserializer } from "../utils/Deserializer";
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTURIResource } from "../models/ARTResources";
-import { RDFFormat, DataFormat } from "../models/RDFFormat";
 import { PluginSpecification } from '../models/Plugins';
+import { DataFormat, RDFFormat } from "../models/RDFFormat";
+import { Deserializer } from "../utils/Deserializer";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 
 @Injectable()
 export class ExportServices {
@@ -18,10 +19,10 @@ export class ExportServices {
      */
     getNamedGraphs(): Observable<ARTURIResource[]> {
         var params = {};
-        return this.httpMgr.doGet(this.serviceName, "getNamedGraphs", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getNamedGraphs", params).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -30,8 +31,8 @@ export class ExportServices {
      */
     getOutputFormats(): Observable<RDFFormat[]> {
         var params = {};
-        return this.httpMgr.doGet(this.serviceName, "getOutputFormats", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getOutputFormats", params).pipe(
+            map(stResp => {
                 var formats: RDFFormat[] = [];
                 for (var i = 0; i < stResp.length; i++) {
                     let name = stResp[i].name;
@@ -52,7 +53,7 @@ export class ExportServices {
                     }
                 );
                 return formats;
-            }
+            })
         );
     }
 
@@ -64,8 +65,8 @@ export class ExportServices {
         var params = {
             reformattingExporterID: reformattingExporterID
         };
-        return this.httpMgr.doGet(this.serviceName, "getExportFormats", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getExportFormats", params).pipe(
+            map(stResp => {
                 let formats: DataFormat[] = [];
                 for (let f of stResp) {
                     formats.push(DataFormat.parse(f));
@@ -79,7 +80,7 @@ export class ExportServices {
                     }
                 );
                 return formats;
-            }
+            })
         );
     }
 

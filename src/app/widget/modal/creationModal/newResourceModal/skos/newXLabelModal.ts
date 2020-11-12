@@ -1,58 +1,30 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources";
 import { SKOSXL } from "../../../../../models/Vocabulary";
 import { BasicModalServices } from "../../../basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
 
-export class NewXLabelModalData extends BSModalContext {
-    /**
-     * @param title the title of the modal dialog
-     * @param value the value inserted by default
-     * @param valueReadonly if true the input field is disable and cannot be changed
-     * @param lang the language selected by default
-     * @param langReadonly if true the language selection is disable and language cannot be changed
-     * @param clsChangeable if true allow to change the type of the xlabel
-     * @param multiLabelOpt if true allow to enter multiple label
-     */
-    constructor(
-        public title: string = 'Create new label',
-        public value: string,
-        public valueReadonly: boolean = false,
-        public lang: string,
-        public langReadonly: boolean = false,
-        public clsChangeable: boolean = true,
-        public multiLabelOpt: { enabled: boolean, allowSameLang: boolean } = { enabled: false, allowSameLang: true }
-    ) {
-        super();
-    }
-}
-
 @Component({
     selector: "new-xlabel-modal",
-    templateUrl: "/newXLabelModal.html",
+    templateUrl: "./newXLabelModal.html",
 })
-export class NewXLabelModal implements ModalComponent<NewXLabelModalData> {
-    context: NewXLabelModalData;
+export class NewXLabelModal {
+    @Input() title: string = 'Create new label';
+    @Input() value: string;
+    @Input() valueReadonly: boolean = false;
+    @Input() lang: string;
+    @Input() langReadonly: boolean = false;
+    @Input() clsChangeable: boolean = true;
+    @Input() multiLabelOpt: { enabled: boolean, allowSameLang: boolean } = { enabled: false, allowSameLang: true };
 
-    private viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
+    viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
 
-    private value: string;
-    private lang: string;
+    labelClass: ARTURIResource = SKOSXL.label;
 
-    private labelClass: ARTURIResource = SKOSXL.label;
+    values: ARTLiteral[] = [];
 
-    private values: ARTLiteral[] = [];
-
-    constructor(public dialog: DialogRef<NewXLabelModalData>, private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) {
-        this.context = dialog.context;
-    }
-
-    ngOnInit() {
-        this.lang = this.context.lang;
-        this.value = this.context.value;
-        document.getElementById("toFocus").focus();
+    constructor(public activeModal: NgbActiveModal, private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) {
     }
 
     ngAfterViewInit() {
@@ -61,17 +33,17 @@ export class NewXLabelModal implements ModalComponent<NewXLabelModalData> {
         });
     }
 
-    private onKeydown(event: KeyboardEvent) {
-        if (event.which == 13) {
+    onKeydown(event: KeyboardEvent) {
+        if (event.key == "Enter") {
             if (!event.shiftKey && !event.altKey && !event.ctrlKey) {
                 if (this.values.length == 0 && this.isInputValid()) { //only when the input value is the only one
-                    this.ok(event);
+                    this.ok();
                 }
             }
         }
     }
 
-    private changeClass() {
+    changeClass() {
         let rootClass: ARTURIResource = SKOSXL.label;
         this.browsingModals.browseClassTree("Change class", [rootClass]).then(
             (selectedClass: any) => {
@@ -81,16 +53,16 @@ export class NewXLabelModal implements ModalComponent<NewXLabelModalData> {
         );
     }
 
-    private isInputValid(): boolean {
+    isInputValid(): boolean {
         return (this.value != undefined && this.value.trim() != "");
     }
 
-    private addValue() {
+    addValue() {
         this.values.push(new ARTLiteral(this.value, null, this.lang));
         this.value = null;
     }
 
-    private removeValue(value: ARTLiteral) {
+    removeValue(value: ARTLiteral) {
         this.values.splice(this.values.indexOf(value), 1);
     }
 
@@ -100,7 +72,7 @@ export class NewXLabelModal implements ModalComponent<NewXLabelModalData> {
          * of a label already addded to the values array
          */
         let violated: boolean = false;
-        if (!this.context.multiLabelOpt.allowSameLang && this.value != null && this.value.length > 0) {
+        if (!this.multiLabelOpt.allowSameLang && this.value != null && this.value.length > 0) {
             this.values.forEach((v: ARTLiteral) => {
                 if (v.getLang() == this.lang) {
                     violated = true;
@@ -110,7 +82,7 @@ export class NewXLabelModal implements ModalComponent<NewXLabelModalData> {
         return violated;
     }
 
-    private isOkWarningActive(): boolean {
+    isOkWarningActive(): boolean {
         return (this.values.length > 0 && this.value != null && this.value.trim() != "")
     }
 
@@ -121,7 +93,7 @@ export class NewXLabelModal implements ModalComponent<NewXLabelModalData> {
      * - the lang is specified (it could be omitted if user has no assigned langs)
      * - there is no already a label with the same lang (if duplicated lang is enabled)
      */
-    private isAddValueEnabled() {
+    isAddValueEnabled() {
         return (
             this.value != null && this.value.trim() != "" &&
             this.lang != null &&
@@ -133,13 +105,13 @@ export class NewXLabelModal implements ModalComponent<NewXLabelModalData> {
      * Determines if the Ok button is enabled.
      * Ok is enabled in case multiple values are added or if a single value is valid
      */
-    private isOkEnabled(): boolean {
+    isOkEnabled(): boolean {
         return this.values.length > 0 || (this.isInputValid() && this.lang != null);
     }
 
-    ok(event: Event) {
+    ok() {
         let labels: ARTLiteral[];
-        if (this.context.multiLabelOpt.enabled) {
+        if (this.multiLabelOpt.enabled) {
             if (this.values.length > 0) { //there are multiple values
                 labels = this.values;
             } else { //no multiple values => return the input label
@@ -152,11 +124,11 @@ export class NewXLabelModal implements ModalComponent<NewXLabelModalData> {
             labels: labels,
             cls: this.labelClass
         }
-        this.dialog.close(returnedData);
+        this.activeModal.close(returnedData);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

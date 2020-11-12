@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Correspondence } from '../models/Alignment';
 import { ARTBNode, ARTResource, ARTURIResource } from '../models/ARTResources';
 import { Deserializer } from '../utils/Deserializer';
@@ -25,10 +26,10 @@ export class EdoalServices {
      */
     getAlignments(): Observable<ARTResource[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getAlignments", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getAlignments", params).pipe(
+            map(stResp => {
                 return Deserializer.createResourceArray(stResp, ['correspondences']);
-            }
+            })
         );
     }
 
@@ -145,8 +146,8 @@ export class EdoalServices {
                 exceptionsToSkip: [ 'it.uniroma2.art.semanticturkey.services.core.IndexingLanguageNotFound']
             } 
         });
-        return this.httpMgr.doGet(this.serviceName, "getCorrespondences", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getCorrespondences", params, options).pipe(
+            map(stResp => {
                 let correspondences: Correspondence[] = [];
                 stResp.forEach((corrJson: any) => {
                     let c: Correspondence = {
@@ -160,16 +161,16 @@ export class EdoalServices {
                     correspondences.push(c);
                 })
                 return correspondences;
-            }
+            })
         );
     }
 
     createAlignment(): Observable<ARTBNode> {
         let params: any = {}
-        return this.httpMgr.doPost(this.serviceName, "createAlignment", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "createAlignment", params).pipe(
+            map(stResp => {
                 return Deserializer.createBlankNode(stResp);
-            }
+            })
         );
     }
 

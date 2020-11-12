@@ -1,7 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {HttpManager} from "../utils/HttpManager";
-import {Plugin, Settings, SettingsProp} from "../models/Plugins";
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Plugin, Settings } from "../models/Plugins";
+import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
 export class PluginsServices {
@@ -18,8 +19,8 @@ export class PluginsServices {
         var params = {
             extensionPoint: extensionPoint
         };
-        return this.httpMgr.doGet(this.serviceName, "getAvailablePlugins", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getAvailablePlugins", params).pipe(
+            map(stResp => {
                 var pluginColl: any[] = stResp;
                 var plugins: Plugin[] = [];
                 for (var j = 0; j < pluginColl.length; j++) {
@@ -35,7 +36,7 @@ export class PluginsServices {
                     }
                 );
                 return plugins;
-            }
+            })
         );
     }
     
@@ -49,15 +50,15 @@ export class PluginsServices {
         var params = {
             factoryID: factoryID
         };
-        return this.httpMgr.doGet(this.serviceName, "getPluginConfigurations", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getPluginConfigurations", params).pipe(
+            map(stResp => {
                 var configColl: any[] = stResp;
                 var configurations: Settings[] = [];
                 for (var i = 0; i < configColl.length; i++) {
                     configurations.push(Settings.parse(configColl[i]));
                 }
                 return {factoryID: factoryID, configurations: configurations};
-            }
+            })
         );
     }
 

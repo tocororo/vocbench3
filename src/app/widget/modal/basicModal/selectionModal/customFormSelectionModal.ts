@@ -1,18 +1,6 @@
-import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { DialogRef, ModalComponent } from "ngx-modialog";
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CustomForm } from "../../../../models/CustomForms";
-
-export class CustomFormSelectionModalData extends BSModalContext {
-    /**
-     * @param title title of the modal
-     * @param cfList array of CustomForm among which choose
-     * @param hideNo tells if the no button should be hide
-     */
-    constructor(public title: string, public cfList: Array<CustomForm>, public hideNo: boolean = false) {
-        super();
-    }
-}
 
 /**
  * Modal that allows to choose among a set of options
@@ -21,25 +9,24 @@ export class CustomFormSelectionModalData extends BSModalContext {
     selector: "cf-selection-modal",
     templateUrl: "./customFormSelectionModal.html",
 })
-export class CustomFormSelectionModal implements ModalComponent<CustomFormSelectionModalData> {
-    context: CustomFormSelectionModalData;
+export class CustomFormSelectionModal {
+    @Input() title: string; 
+    @Input() cfList: Array<CustomForm>; 
+    @Input() hideNo: boolean = false;
 
-    private selectedCF: CustomForm;
+    selectedCF: CustomForm;
 
-    constructor(public dialog: DialogRef<CustomFormSelectionModalData>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) {}
 
     private selectCF(cf: CustomForm) {
         this.selectedCF = cf;
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        this.dialog.close(this.selectedCF);
+    ok() {
+        this.activeModal.close(this.selectedCF);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 }

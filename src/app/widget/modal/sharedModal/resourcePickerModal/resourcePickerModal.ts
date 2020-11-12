@@ -1,39 +1,30 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { ARTResource, RDFResourceRolesEnum, ARTURIResource } from "../../../../models/ARTResources";
-
-export class ResourcePickerModalData extends BSModalContext {
-    constructor(public title: string, public roles: RDFResourceRolesEnum[], public editable: boolean) {
-        super();
-    }
-}
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 
 @Component({
     selector: "resource-picker-modal",
     templateUrl: "./resourcePickerModal.html",
 })
-export class ResourcePickerModal implements ModalComponent<ResourcePickerModalData> {
-    context: ResourcePickerModalData;
+export class ResourcePickerModal {
+    @Input() title: string;
+    @Input() roles: RDFResourceRolesEnum[];
+    @Input() editable: boolean;
 
-    private resource: ARTResource;
+    resource: ARTResource;
 
-    constructor(public dialog: DialogRef<ResourcePickerModalData>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) {}
 
-    private updateResource(res: ARTURIResource) {
+    updateResource(res: ARTURIResource) {
         this.resource = res;
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close(this.resource);
+    ok() {
+        this.activeModal.close(this.resource);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

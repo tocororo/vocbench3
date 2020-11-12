@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AlignmentCell, AlignmentOverview } from '../models/Alignment';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
+import { Project } from '../models/Project';
 import { SearchMode } from '../models/Properties';
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, HttpServiceContext } from "../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from '../utils/ResourceUtils';
-import { Project } from '../models/Project';
 
 @Injectable()
 export class AlignmentServices {
@@ -30,12 +31,12 @@ export class AlignmentServices {
             role: role,
             allMappingProps: allMappingProps
         };
-        return this.httpMgr.doGet(this.serviceName, "getMappingProperties", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getMappingProperties", params).pipe(
+            map(stResp => {
                 let props: ARTURIResource[] = Deserializer.createURIArray(stResp);
                 ResourceUtils.sortResources(props, SortAttribute.value);
                 return props;
-            }
+            })
         );
     }
 
@@ -86,8 +87,8 @@ export class AlignmentServices {
             params.pageIdx = pageIdx,
                 params.range = range
         }
-        return this.httpMgr.doGet(this.serviceName, "listCells", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "listCells", params).pipe(
+            map(stResp => {
                 let page: number = stResp.page;
                 let totPage: number = stResp.totPage;
                 let cells: Array<AlignmentCell> = [];
@@ -100,7 +101,7 @@ export class AlignmentServices {
                     cells: cells
                 };
                 return alignmentMap;
-            }
+            })
         );
     }
 
@@ -125,10 +126,10 @@ export class AlignmentServices {
                 params.setAsDefault = setAsDefault;
             }
         }
-        return this.httpMgr.doGet(this.serviceName, "acceptAlignment", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "acceptAlignment", params).pipe(
+            map(stResp => {
                 return this.parseAlignmentCell(stResp);
-            }
+            })
         );
     }
 
@@ -138,14 +139,14 @@ export class AlignmentServices {
      */
     acceptAllAlignment() {
         let params = {};
-        return this.httpMgr.doGet(this.serviceName, "acceptAllAlignment", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "acceptAllAlignment", params).pipe(
+            map(stResp => {
                 let cells: Array<AlignmentCell> = [];
                 for (let i = 0; i < stResp.length; i++) {
                     cells.push(this.parseAlignmentCell(stResp[i]));
                 }
                 return cells;
-            }
+            })
         );
     }
 
@@ -158,14 +159,14 @@ export class AlignmentServices {
         let params = {
             threshold: threshold
         };
-        return this.httpMgr.doGet(this.serviceName, "acceptAllAbove", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "acceptAllAbove", params).pipe(
+            map(stResp => {
                 let cells: Array<AlignmentCell> = [];
                 for (let i = 0; i < stResp.length; i++) {
                     cells.push(this.parseAlignmentCell(stResp[i]));
                 }
                 return cells;
-            }
+            })
         );
     }
 
@@ -182,10 +183,10 @@ export class AlignmentServices {
             entity2: entity2,
             relation: relation
         };
-        return this.httpMgr.doGet(this.serviceName, "rejectAlignment", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "rejectAlignment", params).pipe(
+            map(stResp => {
                 return this.parseAlignmentCell(stResp);
-            }
+            })
         );
     }
 
@@ -195,14 +196,14 @@ export class AlignmentServices {
      */
     rejectAllAlignment() {
         let params = {};
-        return this.httpMgr.doGet(this.serviceName, "rejectAllAlignment", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "rejectAllAlignment", params).pipe(
+            map(stResp => {
                 let cells: Array<AlignmentCell> = [];
                 for (let i = 0; i < stResp.length; i++) {
                     cells.push(this.parseAlignmentCell(stResp[i]));
                 }
                 return cells;
-            }
+            })
         );
     }
 
@@ -215,14 +216,14 @@ export class AlignmentServices {
         let params = {
             threshold: threshold
         };
-        return this.httpMgr.doGet(this.serviceName, "rejectAllUnder", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "rejectAllUnder", params).pipe(
+            map(stResp => {
                 let cells: Array<AlignmentCell> = [];
                 for (let i = 0; i < stResp.length; i++) {
                     cells.push(this.parseAlignmentCell(stResp[i]));
                 }
                 return cells;
-            }
+            })
         );
     }
 
@@ -240,10 +241,10 @@ export class AlignmentServices {
             oldRelation: oldRelation,
             newRelation: newRelation
         };
-        return this.httpMgr.doGet(this.serviceName, "changeRelation", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "changeRelation", params).pipe(
+            map(stResp => {
                 return this.parseAlignmentCell(stResp);
-            }
+            })
         );
     }
 
@@ -261,10 +262,10 @@ export class AlignmentServices {
             relation: relation,
             mappingProperty: mappingProperty
         };
-        return this.httpMgr.doGet(this.serviceName, "changeMappingProperty", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "changeMappingProperty", params).pipe(
+            map(stResp => {
                 return this.parseAlignmentCell(stResp);
-            }
+            })
         );
     }
 
@@ -279,8 +280,8 @@ export class AlignmentServices {
         let params = {
             deleteRejected: deleteRejected
         };
-        return this.httpMgr.doPost(this.serviceName, "applyValidation", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "applyValidation", params).pipe(
+            map(stResp => {
                 let cells: Array<any> = [];
                 for (let i = 0; i < stResp.length; i++) {
                     let c = {
@@ -292,7 +293,7 @@ export class AlignmentServices {
                     cells.push(c);
                 }
                 return cells;
-            }
+            })
         );
     }
 
@@ -314,10 +315,10 @@ export class AlignmentServices {
             role: role,
             relation: relation
         };
-        return this.httpMgr.doGet(this.serviceName, "getSuggestedProperties", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getSuggestedProperties", params).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -334,11 +335,11 @@ export class AlignmentServices {
      */
     closeSession() {
         let params = {};
-        return this.httpMgr.doGet(this.serviceName, "closeSession", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "closeSession", params).pipe(
+            map(stResp => {
                 HttpServiceContext.removeSessionToken();
                 return stResp;
-            }
+            })
         );
     }
 
@@ -397,10 +398,10 @@ export class AlignmentServices {
         if (searchModeList != null) {
             params.searchModeList = searchModeList;
         }
-        return this.httpMgr.doGet(this.serviceName, "searchResources", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "searchResources", params).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp, ["matchMode", "matchedLang"]);
-            }
+            })
         );
     }
 

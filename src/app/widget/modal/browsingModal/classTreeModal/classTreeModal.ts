@@ -1,44 +1,35 @@
-import { Component, ElementRef } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from '../../../../models/ARTResources';
 import { UIUtils } from "../../../../utils/UIUtils";
 import { ProjectContext } from "../../../../utils/VBContext";
-
-export class ClassTreeModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title', public roots: ARTURIResource[] = null, public projectCtx?: ProjectContext) {
-        super();
-    }
-}
 
 @Component({
     selector: "class-tree-modal",
     templateUrl: "./classTreeModal.html",
 })
-export class ClassTreeModal implements ModalComponent<ClassTreeModalData> {
-    context: ClassTreeModalData;
+export class ClassTreeModal {
+    @Input() title: string;
+    @Input() roots?: ARTURIResource[];
+    @Input() projectCtx?: ProjectContext;
     
-    private selectedClass: ARTURIResource;
+    selectedClass: ARTURIResource;
 
-    constructor(public dialog: DialogRef<ClassTreeModalData>, private elementRef: ElementRef) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private elementRef: ElementRef) {}
 
     ngAfterViewInit() {
         UIUtils.setFullSizeModal(this.elementRef);
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close(this.selectedClass);
+    ok() {
+        this.activeModal.close(this.selectedClass);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
-    private onClassSelected(cls: ARTURIResource) {
+    onClassSelected(cls: ARTURIResource) {
         this.selectedClass = cls;
     }
 

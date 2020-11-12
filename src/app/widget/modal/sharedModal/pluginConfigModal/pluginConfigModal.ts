@@ -1,48 +1,34 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Settings } from "../../../../models/Plugins";
-
-export class PluginConfigModalData extends BSModalContext {
-    /**
-     * @param configuration 
-     */
-    constructor(public configuration: Settings) {
-        super();
-    }
-}
 
 @Component({
     selector: "plugin-config-modal",
     templateUrl: "./pluginConfigModal.html",
 })
-export class PluginConfigModal implements ModalComponent<PluginConfigModalData> {
-    context: PluginConfigModalData;
+export class PluginConfigModal {
+    @Input() configuration: Settings;
 
-    private config: Settings;
+    config: Settings;
 
-    constructor(public dialog: DialogRef<PluginConfigModalData>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) {}
 
     ngOnInit() {
-        //copy the context configuration (so changes of params don't affect original configuration params)
-        this.config = this.context.configuration.clone();
+        //copy the input configuration (so changes of params don't affect original configuration params)
+        this.config = this.configuration.clone();
     }
 
-    private isOkClickable(): boolean {
+    isOkClickable(): boolean {
         return !this.config.requireConfiguration();
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
+    ok() {
         // console.log(this.config);
-        this.dialog.close(this.config);
+        this.activeModal.close(this.config);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

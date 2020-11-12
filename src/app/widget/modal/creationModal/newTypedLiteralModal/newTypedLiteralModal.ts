@@ -1,45 +1,30 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTLiteral, ARTURIResource } from "../../../../models/ARTResources";
-import { RDF } from "../../../../models/Vocabulary";
+import { DatatypeValidator } from "../../../../utils/DatatypeValidator";
 import { ResourceUtils } from "../../../../utils/ResourceUtils";
 import { VBContext } from "../../../../utils/VBContext";
-import { DatatypeValidator } from "../../../../utils/DatatypeValidator";
 import { BasicModalServices } from "../../basicModal/basicModalServices";
-
-export class NewTypedLiteralModalData extends BSModalContext {
-
-    /**
-     * @param predicate the (optional) predicate that is going to enrich with the typed literal
-     * @param allowedDatatypes array of datatype URIs of the allowed datatypes in the typed literal creation.
-     * If null all the datatypes are allowed
-     * @param dataRanges if provided, tells which values can be created/chosed (e.g. xml:string ["male", "female"])
-     */
-    constructor(
-        public title: string = 'Create new label',
-        public predicate: ARTURIResource,
-        public allowedDatatypes: Array<ARTURIResource>,
-        public dataRanges: Array<ARTLiteral[]>,
-        public multivalue: boolean = false,
-        public validate: boolean = false
-    ) {
-        super();
-    }
-}
+import { ModalType } from '../../Modals';
 
 @Component({
     selector: "new-typed-lang-modal",
     templateUrl: "./newTypedLiteralModal.html",
 })
-export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModalData> {
-    context: NewTypedLiteralModalData;
+export class NewTypedLiteralModal {
 
-    private showAspectSelector: boolean = false;
-    private typedLiteralAspectSelector: string = "Typed literal";
-    private dataRangeAspectSelector: string = "DataRange";
+    @Input() title: string = 'Create new label';
+    @Input() predicate: ARTURIResource;
+    @Input() allowedDatatypes: Array<ARTURIResource>;
+    @Input() dataRanges: Array<ARTLiteral[]>;
+    @Input() multivalue: boolean = false;
+    @Input() validate: boolean = false;
+
+    showAspectSelector: boolean = false;
+    typedLiteralAspectSelector: string = "Typed literal";
+    dataRangeAspectSelector: string = "DataRange";
     private aspectSelectors: string[] = [this.typedLiteralAspectSelector, this.dataRangeAspectSelector];
-    private selectedAspectSelector: string = this.aspectSelectors[0];
+    selectedAspectSelector: string = this.aspectSelectors[0];
 
     private datatype: ARTURIResource;
     private value: ARTLiteral; //value inserted by the user or selected among the datarange
@@ -47,21 +32,19 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
 
     private selectedDataRange: ARTLiteral[]; //selected list of dataranges among which chose one
 
-    private values: ARTLiteral[] = [];
+    values: ARTLiteral[] = [];
 
-    constructor(public dialog: DialogRef<NewTypedLiteralModalData>, private basicModals: BasicModalServices, private dtValidator: DatatypeValidator) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices, private dtValidator: DatatypeValidator) {}
 
     ngOnInit() {
-        if (this.context.allowedDatatypes != null && this.context.dataRanges != null) {
+        if (this.allowedDatatypes != null && this.dataRanges != null) {
             this.showAspectSelector = true;
-            this.selectedDataRange = this.context.dataRanges[0];
-        } else if (this.context.allowedDatatypes != null) {
+            this.selectedDataRange = this.dataRanges[0];
+        } else if (this.allowedDatatypes != null) {
             this.selectedAspectSelector = this.typedLiteralAspectSelector;
-        } else if (this.context.dataRanges != null) {
+        } else if (this.dataRanges != null) {
             this.selectedAspectSelector = this.dataRangeAspectSelector;
-            this.selectedDataRange = this.context.dataRanges[0];
+            this.selectedDataRange = this.dataRanges[0];
         } else { //both allowedDatatypes and dataRanges null
             this.selectedAspectSelector = this.typedLiteralAspectSelector;
         }
@@ -69,11 +52,11 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
 
     private addValue() {
         if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
-            if (this.context.validate && this.dtValidator.isValid(this.value, this.datatype)) {
+            if (this.validate && this.dtValidator.isValid(this.value, this.datatype)) {
                 this.values.push(this.value);
                 this.value = null;
             } else {
-                this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow(), "warning");
+                this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow(), ModalType.warning);
                 return;
             }
         } else { //selected dataRangeAspectSelector
@@ -122,7 +105,7 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
      * Determines if the Ok button is enabled.
      * Ok is enabled in case multiple values are added or if a single value is valid
      */
-    private isOkEnabled(): boolean {
+    isOkEnabled(): boolean {
         return this.values.length > 0 || (this.value != null && this.value.getValue() != "");
     }
 
@@ -130,20 +113,20 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
      * Determines if the warning icon is shown.
      * The icon warns the user if there is a value typed/selected but not added in mutlivalue mode
      */
-    private isOkWarningActive(): boolean {
+    isOkWarningActive(): boolean {
         return this.values.length > 0 && this.value != null;
     }
 
-    ok(event: Event) {
+    ok() {
         let literals: ARTLiteral[];
-        if (this.context.multivalue) {
+        if (this.multivalue) {
             if (this.values.length > 0) { //there are multiple values (no need to validate since the validation has been done for each added value)
                 literals = this.values;
             } else { //no multiple values => return the input value
                 if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
                     //first validate
-                    if (this.context.validate && !this.dtValidator.isValid(this.value, this.datatype)) {
-                        this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow(), "warning");
+                    if (this.validate && !this.dtValidator.isValid(this.value, this.datatype)) {
+                        this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow(), ModalType.warning);
                         return;
                     }
                     literals = [this.value];
@@ -154,8 +137,8 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
         } else {
             if (this.selectedAspectSelector == this.typedLiteralAspectSelector) {
                 //first validate
-                if (this.context.validate && !this.dtValidator.isValid(this.value, this.datatype)) {
-                    this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow(), "warning");
+                if (this.validate && !this.dtValidator.isValid(this.value, this.datatype)) {
+                    this.basicModals.alert("Invalid value", "The inserted value '" + this.value.getValue() + "' is not a valid " + this.datatype.getShow(), ModalType.warning);
                     return;
                 }
                 literals = [this.value];
@@ -163,12 +146,12 @@ export class NewTypedLiteralModal implements ModalComponent<NewTypedLiteralModal
                 literals = [this.value];
             }
         }
-        this.dialog.close(literals);
+        this.activeModal.close(literals);
     }
     
 
-    cancel() {
-        this.dialog.dismiss();
+    close() {
+        this.activeModal.dismiss();
     }
 
 }

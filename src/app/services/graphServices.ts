@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
+import { flatMap, map } from 'rxjs/operators';
 import { ARTURIResource } from '../models/ARTResources';
 import { GraphModelRecord } from '../models/Graphs';
 import { HttpManager } from "../utils/HttpManager";
@@ -14,10 +15,10 @@ export class GraphServices {
 
     getGraphModel(): Observable<GraphModelRecord[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getGraphModel", params).flatMap(
-            (plainModel: PlainGraphModelRecord[]) => {
+        return this.httpMgr.doGet(this.serviceName, "getGraphModel", params).pipe(
+            flatMap((plainModel: PlainGraphModelRecord[]) => {
                 return this.enrichGraphModelRecords(plainModel);
-            }
+            })
         )
     }
 
@@ -25,10 +26,10 @@ export class GraphServices {
         var params: any = {
             resource: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "expandGraphModelNode", params).flatMap(
-            (plainModel: PlainGraphModelRecord[]) => {
+        return this.httpMgr.doGet(this.serviceName, "expandGraphModelNode", params).pipe(
+            flatMap((plainModel: PlainGraphModelRecord[]) => {
                 return this.enrichGraphModelRecords(plainModel);
-            }
+            })
         );
     }
 
@@ -37,10 +38,10 @@ export class GraphServices {
             resource: resource,
             role: resource.getRole()
         };
-        return this.httpMgr.doGet(this.serviceName, "expandSubResources", params).flatMap(
-            (plainModel: PlainGraphModelRecord[]) => {
+        return this.httpMgr.doGet(this.serviceName, "expandSubResources", params).pipe(
+            flatMap((plainModel: PlainGraphModelRecord[]) => {
                 return this.enrichGraphModelRecords(plainModel);
-            }
+            })
         );
     }
 
@@ -49,10 +50,10 @@ export class GraphServices {
             resource: resource,
             role: resource.getRole()
         };
-        return this.httpMgr.doGet(this.serviceName, "expandSuperResources", params).flatMap(
-            (plainModel: PlainGraphModelRecord[]) => {
+        return this.httpMgr.doGet(this.serviceName, "expandSuperResources", params).pipe(
+            flatMap((plainModel: PlainGraphModelRecord[]) => {
                 return this.enrichGraphModelRecords(plainModel);
-            }
+            })
         );
     }
 
@@ -77,11 +78,11 @@ export class GraphServices {
         });
 
         if (unannotatedIRIs.length == 0) {
-            return Observable.of([]);
+            return of([]);
         }
 
-        return this.resourceService.getResourcesInfo(unannotatedIRIs).map(
-            (annotatedIRIs: ARTURIResource[]) => {
+        return this.resourceService.getResourcesInfo(unannotatedIRIs).pipe(
+            map((annotatedIRIs: ARTURIResource[]) => {
                 let annotatedModel: GraphModelRecord[] = [];
                 plainModel.forEach(record => {
                     let annotatedSource: ARTURIResource = annotatedIRIs.find(res => res.getURI() == record.source);
@@ -98,7 +99,7 @@ export class GraphServices {
                     });
                 });
                 return annotatedModel;
-            }
+            })
         );
     }
 

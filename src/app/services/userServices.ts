@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTURIResource } from "../models/ARTResources";
 import { User, UserFormFields } from "../models/User";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
@@ -22,8 +23,8 @@ export class UserServices {
      */
     getUser(): Observable<User> {
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "getUser", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getUser", params).pipe(
+            map(stResp => {
                 if (stResp.user != null) { //user object in respnse => serialize it (it could be empty, so no user logged)
                     let user: User = Deserializer.createUser(stResp.user);
                     if (user != null) {
@@ -33,7 +34,7 @@ export class UserServices {
                 } else { //no user object in the response => there is no user registered
                     this.router.navigate(["/Registration/1"]);
                 }
-            }
+            })
         );
     }
 
@@ -42,14 +43,14 @@ export class UserServices {
      */
     listUsers(): Observable<User[]> {
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "listUsers", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "listUsers", params).pipe(
+            map(stResp => {
                 let users: User[] = Deserializer.createUsersArray(stResp);
                 users.sort((u1: User, u2: User) => {
                     return u1.getGivenName().localeCompare(u2.getGivenName());
                 });
                 return users;
-            }
+            })
         );
     }
 
@@ -58,14 +59,14 @@ export class UserServices {
      */
     listOnlineUsers(): Observable<User[]> {
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "listOnlineUsers", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "listOnlineUsers", params).pipe(
+            map(stResp => {
                 let users: User[] = Deserializer.createUsersArray(stResp);
                 users.sort((u1: User, u2: User) => {
                     return u1.getGivenName().localeCompare(u2.getGivenName());
                 });
                 return users;
-            }
+            })
         );
     }
 
@@ -76,11 +77,11 @@ export class UserServices {
      */
     listUserCapabilities(): Observable<string[]> {
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "listUserCapabilities", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "listUserCapabilities", params).pipe(
+            map(stResp => {
                 AuthorizationEvaluator.initEvalutator(stResp);
                 return stResp;
-            }
+            })
         );
     }
 
@@ -92,14 +93,14 @@ export class UserServices {
         var params: any = {
             projectName: projectName
         }
-        return this.httpMgr.doGet(this.serviceName, "listUsersBoundToProject", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "listUsersBoundToProject", params).pipe(
+            map(stResp => {
                 let users: User[] = Deserializer.createUsersArray(stResp);
                 users.sort((u1: User, u2: User) => {
                     return u1.getGivenName().localeCompare(u2.getGivenName());
                 });
                 return users;
-            }
+            })
         );
     }
 
@@ -160,10 +161,10 @@ export class UserServices {
             email: email,
             givenName: givenName,
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserGivenName", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "updateUserGivenName", params).pipe(
+            map(stResp => {
                 return Deserializer.createUser(stResp);
-            }
+            })
         );
     }
 
@@ -177,10 +178,10 @@ export class UserServices {
             email: email,
             familyName: familyName,
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserFamilyName", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "updateUserFamilyName", params).pipe(
+            map(stResp => {
                 return Deserializer.createUser(stResp);
-            }
+            })
         );
     }
 
@@ -194,10 +195,10 @@ export class UserServices {
             email: email,
             newEmail: newEmail,
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserEmail", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "updateUserEmail", params).pipe(
+            map(stResp => {
                 return Deserializer.createUser(stResp);
-            }
+            })
         );
     }
 
@@ -213,10 +214,10 @@ export class UserServices {
         if (phone != null) {
             params.phone = phone;
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserPhone", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "updateUserPhone", params).pipe(
+            map(stResp => {
                 return Deserializer.createUser(stResp);
-            }
+            })
         );
     }
 
@@ -232,10 +233,10 @@ export class UserServices {
         if (address != null) {
             params.address = address;
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserAddress", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "updateUserAddress", params).pipe(
+            map(stResp => {
                 return Deserializer.createUser(stResp);
-            }
+            })
         );
     }
 
@@ -251,10 +252,10 @@ export class UserServices {
         if (affiliation != null) {
             params.affiliation = affiliation;
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserAffiliation", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "updateUserAffiliation", params).pipe(
+            map(stResp => {
                 return Deserializer.createUser(stResp);
-            }
+            })
         );
     }
 
@@ -270,10 +271,10 @@ export class UserServices {
         if (url != null) {
             params.url = url;
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserUrl", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "updateUserUrl", params).pipe(
+            map(stResp => {
                 return Deserializer.createUser(stResp);
-            }
+            })
         );
     }
 
@@ -289,10 +290,10 @@ export class UserServices {
         if (avatarUrl != null) {
             params.avatarUrl = avatarUrl;
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserAvatarUrl", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "updateUserAvatarUrl", params).pipe(
+            map(stResp => {
                 return Deserializer.createUser(stResp);
-            }
+            })
         );
     }
 
@@ -306,10 +307,10 @@ export class UserServices {
             email: email,
             languageProficiencies: languageProficiencies,
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserLanguageProficiencies", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "updateUserLanguageProficiencies", params).pipe(
+            map(stResp => {
                 return Deserializer.createUser(stResp);
-            }
+            })
         );
     }
 
@@ -325,10 +326,10 @@ export class UserServices {
             property: property,
             value: value
         }
-        return this.httpMgr.doPost(this.serviceName, "updateUserCustomField", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "updateUserCustomField", params).pipe(
+            map(stResp => {
                 return Deserializer.createUser(stResp);
-            }
+            })
         );
     }
 
@@ -342,10 +343,10 @@ export class UserServices {
             email: email,
             enabled: enabled,
         }
-        return this.httpMgr.doPost(this.serviceName, "enableUser", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "enableUser", params).pipe(
+            map(stResp => {
                 return Deserializer.createUser(stResp);
-            }
+            })
         );
     }
 

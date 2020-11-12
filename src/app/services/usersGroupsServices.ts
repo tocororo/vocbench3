@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTURIResource } from '../models/ARTResources';
 import { ProjectGroupBinding, UsersGroup } from "../models/User";
 import { HttpManager } from "../utils/HttpManager";
@@ -17,8 +18,8 @@ export class UsersGroupsServices {
      */
     listGroups(): Observable<UsersGroup[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listGroups", params).map(
-            resp => {
+        return this.httpMgr.doGet(this.serviceName, "listGroups", params).pipe(
+            map(resp => {
                 let groups: UsersGroup[] = [];
                 for (var i = 0; i < resp.length; i++) {
                     groups.push(UsersGroup.deserialize(resp[i]));
@@ -29,7 +30,7 @@ export class UsersGroupsServices {
                 })
                 groups.sort((g1: UsersGroup, g2: UsersGroup) => g1.shortName.localeCompare(g2.shortName));
                 return groups;
-            }
+            })
         );
     }
 
@@ -41,10 +42,10 @@ export class UsersGroupsServices {
         var params: any = {
             groupIri: groupIri
         };
-        return this.httpMgr.doGet(this.serviceName, "getGroup", params).map(
-            resp => {
+        return this.httpMgr.doGet(this.serviceName, "getGroup", params).pipe(
+            map(resp => {
                 return UsersGroup.deserialize(resp);
-            }
+            })
         );
     }
 
@@ -72,10 +73,10 @@ export class UsersGroupsServices {
         if (logoUrl != null) {
             params.logoUrl = logoUrl;
         }
-        return this.httpMgr.doPost(this.serviceName, "createGroup", params).map(
-            resp => {
+        return this.httpMgr.doPost(this.serviceName, "createGroup", params).pipe(
+            map(resp => {
                 return UsersGroup.deserialize(resp);
-            }
+            })
         );
     }
 
@@ -89,10 +90,10 @@ export class UsersGroupsServices {
             groupIri: groupIri,
             shortName: shortName
         };
-        return this.httpMgr.doPost(this.serviceName, "updateGroupShortName", params).map(
-            resp => {
+        return this.httpMgr.doPost(this.serviceName, "updateGroupShortName", params).pipe(
+            map(resp => {
                 return UsersGroup.deserialize(resp);
-            }
+            })
         );
     }
 
@@ -106,10 +107,10 @@ export class UsersGroupsServices {
             groupIri: groupIri,
             fullName: fullName
         };
-        return this.httpMgr.doPost(this.serviceName, "updateGroupFullName", params).map(
-            resp => {
+        return this.httpMgr.doPost(this.serviceName, "updateGroupFullName", params).pipe(
+            map(resp => {
                 return UsersGroup.deserialize(resp);
-            }
+            })
         );
     }
 
@@ -123,10 +124,10 @@ export class UsersGroupsServices {
             groupIri: groupIri,
             description: description
         };
-        return this.httpMgr.doPost(this.serviceName, "updateGroupDescription", params).map(
-            resp => {
+        return this.httpMgr.doPost(this.serviceName, "updateGroupDescription", params).pipe(
+            map(resp => {
                 return UsersGroup.deserialize(resp);
-            }
+            })
         );
     }
 
@@ -140,10 +141,10 @@ export class UsersGroupsServices {
             groupIri: groupIri,
             webPage: webPage
         };
-        return this.httpMgr.doPost(this.serviceName, "updateGroupWebPage", params).map(
-            resp => {
+        return this.httpMgr.doPost(this.serviceName, "updateGroupWebPage", params).pipe(
+            map(resp => {
                 return UsersGroup.deserialize(resp);
-            }
+            })
         );
     }
 
@@ -157,10 +158,10 @@ export class UsersGroupsServices {
             groupIri: groupIri,
             logoUrl: logoUrl
         };
-        return this.httpMgr.doPost(this.serviceName, "updateGroupLogoUrl", params).map(
-            resp => {
+        return this.httpMgr.doPost(this.serviceName, "updateGroupLogoUrl", params).pipe(
+            map(resp => {
                 return UsersGroup.deserialize(resp);
-            }
+            })
         );
     }
 

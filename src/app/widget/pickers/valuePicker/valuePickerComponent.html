@@ -1,6 +1,6 @@
 <div class="hbox">
 
-    <select class="form-control input-sm" style="margin-right: 4px; width: initial" [(ngModel)]="selectedResType" (ngModelChange)="onTypeChange()"
+    <select class="form-control form-control-sm" style="margin-right: 4px; width: initial" [(ngModel)]="selectedResType" (ngModelChange)="onTypeChange()"
         [disabled]="disabled">
         <option *ngFor="let rt of resTypes" [ngValue]="rt">{{rt.show}}</option>
     </select>

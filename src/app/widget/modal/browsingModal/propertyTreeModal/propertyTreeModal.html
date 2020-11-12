@@ -1,17 +1,17 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body vbox">
-    <div *ngIf="context.resource" class="checkbox-inline" style="margin-bottom: 5px;">
+    <div *ngIf="resource" class="checkbox-inline" style="margin-bottom: 5px;">
         <label>
             <input type="checkbox" [(ngModel)]="showAll" (ngModelChange)="onShowAllChanged()">Show all properties
         </label>
     </div>
-    <property-tree-panel [editable]="false" [roots]="context.rootProperties" [resource]="domainRes" [type]="context.type" [projectCtx]="context.projectCtx"
+    <property-tree-panel [editable]="false" [roots]="rootProperties" [resource]="domainRes" [type]="type" [projectCtx]="projectCtx"
         (nodeSelected)="onPropertySelected($event)">
     </property-tree-panel>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedProperty">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedProperty">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

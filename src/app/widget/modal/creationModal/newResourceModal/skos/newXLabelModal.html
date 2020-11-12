@@ -1,8 +1,8 @@
 <div class="modal-header">
     <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">{{context.title}}</h3>
+        <h3 class="modal-title" style="flex: 1">{{title}}</h3>
         <span>
-            <button class="btn btn-default btn-xs" title="Change class" (click)="changeClass()" [disabled]="!context.clsChangeable">
+            <button class="btn btn-light btn-xs" title="Change class" (click)="changeClass()" [disabled]="!clsChangeable">
                 <rdf-resource [resource]="labelClass"></rdf-resource>
             </button>
         </span>
@@ -14,28 +14,28 @@
         <div style="flex: 1;" (keydown)="onKeydown($event)">
             <div class="hbox" style="align-items: center;">
                 <label style="width: 50px;">Value:</label>
-                <textarea id="toFocus" type="text" class="form-control input-sm" rows="1" style="flex: 1; margin-right: 4px; height: initial; resize: vertical;"
-                    [(ngModel)]="value" [disabled]="context.valueReadonly"></textarea>
-                <lang-picker [(ngModel)]="lang" [disabled]="context.langReadonly"></lang-picker>
+                <textarea ngbAutofocus type="text" class="form-control form-control-sm" rows="1" style="flex: 1; margin-right: 4px; height: initial; resize: vertical;"
+                    [(ngModel)]="value" [disabled]="valueReadonly"></textarea>
+                <lang-picker [(ngModel)]="lang" [disabled]="langReadonly"></lang-picker>
             </div>
         </div>
 
-        <div *ngIf="context.multiLabelOpt.enabled" class="hbox" style="flex: initial; align-items: center; margin-left: 6px;">
-            <button *ngIf="context.multiLabelOpt.enabled" class="btn btn-default btn-xs" (click)="addValue()" [disabled]="!isAddValueEnabled()">
-                <span class="glyphicon glyphicon-plus"></span>
+        <div *ngIf="multiLabelOpt.enabled" class="hbox" style="flex: initial; align-items: center; margin-left: 6px;">
+            <button *ngIf="multiLabelOpt.enabled" class="btn btn-light btn-xs" (click)="addValue()" [disabled]="!isAddValueEnabled()">
+                <span class="fas fa-plus"></span>
             </button>
             <div style="width: 14px; margin-left: 2px;">
-                <span *ngIf="isDuplicateLangViolated()" class="glyphicon glyphicon-exclamation-sign" title="You cannot create multiple values with the same language"></span>
+                <span *ngIf="isDuplicateLangViolated()" class="fas fa-exclamation-circle" title="You cannot create multiple values with the same language"></span>
             </div>
         </div>
     </div>
 
-    <div class="panel panel-default" *ngIf="values.length > 0">
-        <div class="panel-body vbox scrollableContainer" style="max-height: 300px;">
+    <div class="card card-default" *ngIf="values.length > 0">
+        <div class="card-body vbox scrollableContainer" style="max-height: 300px;">
             <div *ngFor="let v of values" class="listItem">
                 <rdf-resource style="flex: 1;" [resource]="v"></rdf-resource>
-                <button class="btn btn-default btn-xs" (click)="removeValue(v)">
-                    <span class="glyphicon glyphicon-trash" title="Remove label"></span>
+                <button class="btn btn-light btn-xs" (click)="removeValue(v)">
+                    <span class="far fa-trash-alt" title="Remove label"></span>
                 </button>
             </div>
         </div>
@@ -50,11 +50,11 @@
             </div>
         </div>
         <div>
-            <span *ngIf="isOkWarningActive()" class="glyphicon glyphicon-warning-sign" style="margin-right: 2px;"
+            <span *ngIf="isOkWarningActive()" class="fas fa-exclamation-triangle" style="margin-right: 2px;"
                 title="Warning: the value currently typed will not be considered. It needs to be added through the '+' button">
             </span>
-            <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkEnabled()">Ok</button>
-            <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+            <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+            <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
         </div>
     </div>
 </div>

@@ -1,51 +1,42 @@
-import { Component, ElementRef } from "@angular/core";
-import { DialogRef, ModalComponent, OverlayConfig } from "ngx-modialog";
-import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input } from "@angular/core";
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from '../../../../models/ARTResources';
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { VBRequestOptions } from "../../../../utils/HttpManager";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { ProjectContext, VBContext } from "../../../../utils/VBContext";
-import { LexiconListModal, LexiconListModalData } from "../lexiconListModal/lexiconListModal";
-
-export class LexicalEntryListModalData extends BSModalContext {
-    constructor(
-        public title: string = 'Modal Title',
-        public lexicon: ARTURIResource,
-        public lexiconChangeable: boolean = false,
-        public editable: boolean = false,
-        public deletable: boolean = false,
-        public allowMultiselection: boolean = false,
-        public projectCtx: ProjectContext
-    ) {
-        super();
-    }
-}
+import { ModalOptions } from '../../Modals';
+import { LexiconListModal } from "../lexiconListModal/lexiconListModal";
 
 @Component({
     selector: "lexical-entry-list-modal",
     templateUrl: "./lexicalEntryListModal.html",
 })
-export class LexicalEntryListModal implements ModalComponent<LexicalEntryListModalData> {
-    context: LexicalEntryListModalData;
+export class LexicalEntryListModal {
+    @Input() title: string;
+    @Input() lexicon: ARTURIResource;
+    @Input() lexiconChangeable: boolean = false;
+    @Input() editable: boolean = false;
+    @Input() deletable: boolean = false;
+    @Input() allowMultiselection: boolean = false;
+    @Input() projectCtx: ProjectContext;
 
-    private activeLexicon: ARTURIResource;
-    private selectedEntry: ARTURIResource;
-    private checkedResources: ARTURIResource[] = [];
+    activeLexicon: ARTURIResource;
+    selectedEntry: ARTURIResource;
+    checkedResources: ARTURIResource[] = [];
 
-    private multiselection: boolean = false;
+    multiselection: boolean = false;
 
-    constructor(public dialog: DialogRef<LexicalEntryListModalData>, private modal: Modal, private resourceService: ResourcesServices,
+    constructor(public activeModal: NgbActiveModal, private modalService: NgbModal, private resourceService: ResourcesServices,
         private elementRef: ElementRef) {
-        this.context = dialog.context;
     }
 
     ngOnInit() {
-        this.activeLexicon = this.context.lexicon;
+        this.activeLexicon = this.lexicon;
         if (this.activeLexicon == null) { //if no lexicon has been "forced", set the current active lexicon
-            let activeLexiconProp = VBContext.getWorkingProjectCtx(this.context.projectCtx).getProjectPreferences().activeLexicon;
+            let activeLexiconProp = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeLexicon;
             if (activeLexiconProp != null) {
-                this.resourceService.getResourceDescription(activeLexiconProp, VBRequestOptions.getRequestOptions(this.context.projectCtx)).subscribe(
+                this.resourceService.getResourceDescription(activeLexiconProp, VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
                     lex => {
                         this.activeLexicon = <ARTURIResource>lex;
                     }
@@ -58,11 +49,11 @@ export class LexicalEntryListModal implements ModalComponent<LexicalEntryListMod
         UIUtils.setFullSizeModal(this.elementRef);
     }
 
-    private onLexiconSelected(entry: ARTURIResource) {
+    onLexiconSelected(entry: ARTURIResource) {
         this.selectedEntry = entry;
     }
 
-    private changeLexicon() {
+    changeLexicon() {
         this.browseLexiconList("Select a Lexicon").then(
             (lexicon: ARTURIResource) => {
                 this.activeLexicon = lexicon;
@@ -73,18 +64,17 @@ export class LexicalEntryListModal implements ModalComponent<LexicalEntryListMod
 
     /**
      * Here I don't use the method browseLexiconList() of BrowsingModalService since injecting it here would cause a circular dependency.
-     * (I'm not sure circular DI is the reasong, but I cannot inject BrowsingModalService)
+     * (I'm not sure circular DI is the reason, but I cannot inject BrowsingModalService)
      */
+    //TODO TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO check if now it is possible
     private browseLexiconList(title: string) {
-        var modalData = new LexiconListModalData(title, this.context.projectCtx);
-        const builder = new BSModalContextBuilder<LexiconListModalData>(
-            modalData, undefined, LexiconListModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(LexiconListModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(LexiconListModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.projectCtx = this.projectCtx;
+        return modalRef.result;
     }
 
-    private isOkEnabled() {
+    isOkEnabled() {
         if (this.multiselection) {
             return this.checkedResources.length > 0;
         } else {
@@ -92,15 +82,13 @@ export class LexicalEntryListModal implements ModalComponent<LexicalEntryListMod
         }
     }
 
-    ok(event: Event) {
+    ok() {
         let returnValue: any = this.multiselection ? this.checkedResources : this.selectedEntry; //ARTURIResource or ARTURIResource (multiselection on)
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close(returnValue);
+        this.activeModal.close(returnValue);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

@@ -1,11 +1,11 @@
 <div class="modal-header">
-    <h3 class="modal-title text-info">{{context.title}}</h3>
+    <h3 class="modal-title text-info">{{title}}</h3>
 </div>
 <div class="modal-body vbox">
     
-    <div class="panel panel-default vbox">
-        <div class="panel-body table-responsive" style="min-height: 80px;">
-            <table class="table table-condensed table-hoverable">
+    <div class="card card-default vbox">
+        <div class="card-body table-responsive" style="min-height: 80px;">
+            <table class="table table-sm table-hoverable">
                 <colgroup>
                     <col>
                     <col>
@@ -23,13 +23,13 @@
                         <td>{{ref.identifier}}</td>
                         <td>{{ref.getReferenceScope()}}</td>
                         <td>
-                            <button *ngIf="context.allowDelete" class="btn btn-xs btn-default" (click)="deleteReference(ref)" title="Delete">
-                                <span class="glyphicon glyphicon-trash"></span>
+                            <button *ngIf="allowDelete" class="btn btn-xs btn-light" (click)="deleteReference(ref)" title="Delete">
+                                <span class="far fa-trash-alt"></span>
                             </button>
                         </td>
                     </tr>
 
-                    <tr *ngFor="let ref of context.additionalReferences" (click)="selectReference(ref)" [ngClass]="{ info: selectedRef == ref }">
+                    <tr *ngFor="let ref of additionalReferences" (click)="selectReference(ref)" [ngClass]="{ info: selectedRef == ref }">
                         <td>{{ref.identifier}}</td>
                         <td>APPLICATION</td>
                         <td></td>
@@ -41,6 +41,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedRef">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedRef">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

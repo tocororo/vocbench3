@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ARTURIResource } from '../models/ARTResources';
 import { RDFFormat } from '../models/RDFFormat';
 import { HttpManager, STRequestParams } from "../utils/HttpManager";

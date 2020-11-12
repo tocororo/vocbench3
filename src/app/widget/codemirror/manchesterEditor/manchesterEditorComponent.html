@@ -1,10 +1,10 @@
-<div class="panel panel-default vbox">
+<div class="card card-default vbox">
     <div style="padding: 6px 6px 0px">
-        <button class="btn btn-xs btn-default" (click)="onClick()">Helper</button>
+        <button class="btn btn-xs btn-light" (click)="openHelper()">Helper</button>
     </div>
-    <div class="panel-body vbox" style="overflow: auto; position: relative">
+    <div class="card-body vbox" style="overflow: auto; position: relative">
         <div *ngIf="!codeValid" style="position: absolute; top: 12px; right: 30px; z-index: 1;" [title]="codeInvalidDetails">
-            <span class="glyphicon glyphicon-alert" style="color: red;"></span>
+            <span class="fas fa-exclamation-triangle" style="color: red;"></span>
         </div>
         <textarea #txtarea [ngClass]="{disabled: disabled}"></textarea>
         <span style="margin-top: 5px;">Press 'ctrl-space' to show hints.</span>

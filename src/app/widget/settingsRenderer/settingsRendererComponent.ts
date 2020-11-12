@@ -13,12 +13,12 @@ export class SettingsRendererComponent implements ControlValueAccessor {
 
     @Input() disabled: boolean = false;
     @Input() preventHoverInheritance: boolean = false;
-
-    private settings: Settings;
+    
+    settings: Settings;
 
     constructor() { }
 
-    private onModelChanged() {
+    onModelChanged() {
         this.propagateChange(this.settings);
     }
 

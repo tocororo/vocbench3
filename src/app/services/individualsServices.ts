@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
-import { Deserializer } from "../utils/Deserializer";
-import { VBEventHandler } from "../utils/VBEventHandler";
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
+import { Deserializer } from "../utils/Deserializer";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { VBEventHandler } from "../utils/VBEventHandler";
 
 @Injectable()
 export class IndividualsServices {
@@ -20,11 +21,11 @@ export class IndividualsServices {
         var params: any = {
             individual: individual
         };
-        return this.httpMgr.doGet(this.serviceName, "getNamedTypes", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getNamedTypes", params, options).pipe(
+            map(stResp => {
                 var types = Deserializer.createURIArray(stResp);
                 return types;
-            }
+            })
         );
     }
 
@@ -38,11 +39,11 @@ export class IndividualsServices {
             individual: individual,
             type: type,
         };
-        return this.httpMgr.doGet(this.serviceName, "addType", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "addType", params).pipe(
+            map(stResp => {
                 this.eventHandler.typeAddedEvent.emit({ resource: individual, type: type });
                 return stResp;
-            }
+            })
         );
     }
 
@@ -57,11 +58,11 @@ export class IndividualsServices {
             individual: individual,
             type: type,
         };
-        return this.httpMgr.doGet(this.serviceName, "removeType", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "removeType", params).pipe(
+            map(stResp => {
                 this.eventHandler.typeRemovedEvent.emit({ resource: individual, type: type });
                 return stResp;
-            }
+            })
         );
     }
 

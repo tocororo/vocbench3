@@ -1,44 +1,34 @@
-import { Component, ElementRef } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from '../../../../models/ARTResources';
 import { UIUtils } from "../../../../utils/UIUtils";
 import { ProjectContext } from "../../../../utils/VBContext";
-
-export class SchemeListModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title', public projectCtx?: ProjectContext) {
-        super();
-    }
-}
 
 @Component({
     selector: "scheme-list-modal",
     templateUrl: "./schemeListModal.html",
 })
-export class SchemeListModal implements ModalComponent<SchemeListModalData> {
-    context: SchemeListModalData;
+export class SchemeListModal {
+    @Input() title: string;
+    @Input() projectCtx?: ProjectContext;
     
-    private selectedScheme: ARTURIResource;
+    selectedScheme: ARTURIResource;
     
-    constructor(public dialog: DialogRef<SchemeListModalData>, private elementRef: ElementRef) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private elementRef: ElementRef) {}
 
     ngAfterViewInit() {
         UIUtils.setFullSizeModal(this.elementRef);
     }
     
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close(this.selectedScheme);
+    ok() {
+        this.activeModal.close(this.selectedScheme);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
-    private onSchemeSelected(scheme: ARTURIResource) {
+    onSchemeSelected(scheme: ARTURIResource) {
         this.selectedScheme = scheme;
     }
 

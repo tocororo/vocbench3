@@ -1,6 +1,5 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from "../../../../../models/ARTResources";
 import { CustomFormValue } from "../../../../../models/CustomForms";
 import { OWL, RDFS } from "../../../../../models/Vocabulary";
@@ -9,39 +8,30 @@ import { BasicModalServices } from "../../../basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
 import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
 
-export class NewResourceCfModalData extends BSModalContext {
-    constructor(
-        public title: string = "Modal title",
-        public cls: ARTURIResource, //class that this modal is creating
-        public clsChangeable: boolean = true,
-    ) {
-        super();
-    }
-}
-
 @Component({
     selector: "new-resource-cf-modal",
     templateUrl: "./newResourceCfModal.html",
 })
-export class NewResourceCfModal extends AbstractCustomConstructorModal implements ModalComponent<NewResourceCfModalData> {
-    context: NewResourceCfModalData;
+export class NewResourceCfModal extends AbstractCustomConstructorModal {
+    @Input() title: string;
+    @Input() cls: ARTURIResource; //class that this modal is creating
+    @Input() clsChangeable: boolean = true;
 
     //standard form
-    private uri: string;
+    uri: string;
 
-    constructor(public dialog: DialogRef<NewResourceCfModalData>, cfService: CustomFormsServices,
+    constructor(public activeModal: NgbActiveModal, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         super(cfService, basicModals, browsingModals);
-        this.context = dialog.context;
     }
 
     ngOnInit() {
-        this.resourceClass = this.context.cls;
+        this.resourceClass = this.cls;
         this.selectCustomForm();
     }
 
     changeClass() {
-        let cls: ARTURIResource = this.context.cls;
+        let cls: ARTURIResource = this.cls;
         if (cls.getURI() == OWL.class.getURI()) {
             cls = RDFS.class;
         }
@@ -52,10 +42,7 @@ export class NewResourceCfModal extends AbstractCustomConstructorModal implement
         return (this.uri != null && this.uri.trim() != "");
     }
 
-    okImpl(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-
+    okImpl() {
         var entryMap: any = this.collectCustomFormData();
 
         var returnedData: { uriResource: ARTURIResource, cls: ARTURIResource, cfValue: CustomFormValue } = {
@@ -67,11 +54,11 @@ export class NewResourceCfModal extends AbstractCustomConstructorModal implement
         if (this.customFormId != null && entryMap != null) {
             returnedData.cfValue = new CustomFormValue(this.customFormId, entryMap);
         }
-        this.dialog.close(returnedData);
+        this.activeModal.close(returnedData);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

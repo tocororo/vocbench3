@@ -1,25 +1,33 @@
 <div class="modal-header">
-    <h3 [class]="headerStyle">{{context.title}}</h3>
+	<h3 [class]="'modal-title ' + titleClass">{{title}}</h3>
 </div>
-<div class="modal-body vbox">
-    <div [class]="msgStyle + ' scrollableContainer'" style="padding: 8px;">
-        <span style="white-space: pre-wrap">{{context.message}}</span>
-        <div *ngIf="context.details" class="vbox" style="margin-top: 5px;">
-            <div (click)="detailsCollapsed = !detailsCollapsed" style="align-self: left">
+<div class="modal-body">
+	<div *ngIf="alertClass" [class]="alertClass + ' vbox'">
+        <span style="white-space: pre-line">{{message}}</span>
+
+		<div *ngIf="details" class="vbox mt-1">
+            <div (click)="detailsCollapsed = !detailsCollapsed">
                 <div class="expandCollapseBtnContainer" style="display: inline">
-                    <img src="../../../../../assets/images/icons/arrow.png"
-                        [ngClass]="{'arrow-right': detailsCollapsed}">
+                    <img src="./assets/images/icons/arrow.png" [ngClass]="{'arrow-right': detailsCollapsed}">
                 </div>
                 <label>Details:</label>
             </div>
-            <div *ngIf="!detailsCollapsed" class="panel panel-default vbox" style="min-height: 260px;">
-                <div class="panel-body scrollableContainer">
-                    <span style="white-space: pre-wrap;">{{context.details}}</span>
+            <div *ngIf="!detailsCollapsed" class="card vbox">
+                <div class="card-body overflow-auto" style="font-size: .8rem;">
+                    {{details}}
                 </div>
             </div>
-        </div>
-    </div>
+		</div>
+		
+	</div>
+	<p *ngIf="!alertClass" class="m-0">{{message}}</p>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <div *ngIf="checkboxLabel" class="form-check float-left">
+        <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="checkbox">
+            {{checkboxLabel}}
+        </label>
+    </div>
+	<button class="btn btn-sm btn-primary" (click)="ok()">Ok</button>
 </div>

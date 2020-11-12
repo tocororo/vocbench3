@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
-import { Deserializer } from "../utils/Deserializer";
-import { VBEventHandler } from "../utils/VBEventHandler";
-import { ARTResource, ARTURIResource, ARTNode, ARTBNode, ResAttribute } from "../models/ARTResources";
+import { Observable } from 'rxjs';
+import { flatMap, map } from 'rxjs/operators';
+import { ARTBNode, ARTNode, ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
-import { ResourcesServices } from "./resourcesServices"
+import { Deserializer } from "../utils/Deserializer";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { VBEventHandler } from "../utils/VBEventHandler";
+import { ResourcesServices } from "./resourcesServices";
 
 @Injectable()
 export class ClassesServices {
@@ -23,10 +24,10 @@ export class ClassesServices {
         var params: any = {
             classList: classList
         };
-        return this.httpMgr.doGet(this.serviceName, "getClassesInfo", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getClassesInfo", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -39,10 +40,10 @@ export class ClassesServices {
             superClass: superClass,
             numInst: numInst
         };
-        return this.httpMgr.doGet(this.serviceName, "getSubClasses", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getSubClasses", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -54,11 +55,11 @@ export class ClassesServices {
         var params: any = {
             cls: cls
         };
-        return this.httpMgr.doGet(this.serviceName, "getInstances", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getInstances", params, options).pipe(
+            map(stResp => {
                 var instances = Deserializer.createResourceArray(stResp);
                 return instances;
-            }
+            })
         );
     }
 
@@ -91,21 +92,21 @@ export class ClassesServices {
         if (customFormValue != null) {
             params.customFormValue = customFormValue;
         }
-        return this.httpMgr.doPost(this.serviceName, "createClass", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "createClass", params).pipe(
+            map(stResp => {
                 return Deserializer.createURI(stResp);
-            }
-        ).flatMap(
-            cls => {
-                return this.resourceService.getResourceDescription(cls).map(
-                    resource => {
+            })
+        ).pipe(
+            flatMap(cls => {
+                return this.resourceService.getResourceDescription(cls).pipe(
+                    map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NUM_INST, 0);
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
                         this.eventHandler.subClassCreatedEvent.emit({ subClass: resource, superClass: superClass });
                         return resource;
-                    }
+                    })
                 );
-            }
+            })
         );
     }
 
@@ -117,11 +118,11 @@ export class ClassesServices {
         var params: any = {
             cls: cls
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteClass", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "deleteClass", params).pipe(
+            map(stResp => {
                 this.eventHandler.classDeletedEvent.emit(cls);
                 return stResp;
-            }
+            })
         );
     }
 
@@ -139,20 +140,20 @@ export class ClassesServices {
         if (customFormValue != null) {
             params.customFormValue = customFormValue;
         }
-        return this.httpMgr.doPost(this.serviceName, "createInstance", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "createInstance", params).pipe(
+            map(stResp => {
                 return Deserializer.createURI(stResp);
-            }
-        ).flatMap(
-            instance => {
-                return this.resourceService.getResourceDescription(instance).map(
-                    resource => {
+            })
+        ).pipe(
+            flatMap(instance => {
+                return this.resourceService.getResourceDescription(instance).pipe(
+                    map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
                         this.eventHandler.instanceCreatedEvent.emit({ cls: cls, instance: resource });
                         return resource;
-                    }
+                    })
                 );
-            }
+            })
         );
     }
 
@@ -166,11 +167,11 @@ export class ClassesServices {
         var params: any = {
             instance: instance
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteInstance", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "deleteInstance", params).pipe(
+            map(stResp => {
                 this.eventHandler.instanceDeletedEvent.emit({instance: instance, cls: cls});
                 return stResp;
-            }
+            })
         );
     }
 
@@ -185,11 +186,11 @@ export class ClassesServices {
             cls: cls,
             supercls: supercls,
         };
-        return this.httpMgr.doPost(this.serviceName, "addSuperCls", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "addSuperCls", params).pipe(
+            map(stResp => {
                 this.eventHandler.superClassAddedEvent.emit({subClass: cls, superClass: supercls});
                 return stResp;
-            }
+            })
         );
     }
 
@@ -205,11 +206,11 @@ export class ClassesServices {
             cls: cls,
             supercls: supercls,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeSuperCls", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "removeSuperCls", params).pipe(
+            map(stResp => {
                 this.eventHandler.superClassRemovedEvent.emit({superClass: supercls, subClass: cls});
                 return stResp;
-            }
+            })
         );
     }
     

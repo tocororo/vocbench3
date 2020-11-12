@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { flatMap, map } from 'rxjs/operators';
 import { ARTBNode, ARTLiteral, ARTURIResource, ResAttribute } from '../models/ARTResources';
-import { FacetsRestriction, DatatypeRestrictionDescription, DatatypeRestrictionsMap } from '../models/Datatypes';
+import { DatatypeRestrictionDescription, DatatypeRestrictionsMap, FacetsRestriction } from '../models/Datatypes';
 import { OWL, XmlSchema } from '../models/Vocabulary';
 import { Deserializer } from '../utils/Deserializer';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
@@ -21,10 +22,10 @@ export class DatatypesServices {
      */
     getDatatypes(options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getDatatypes", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getDatatypes", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -33,19 +34,19 @@ export class DatatypesServices {
      */
     getOWL2DatatypeMap(options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getOWL2DatatypeMap", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getOWL2DatatypeMap", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
     getDeclaredDatatypes(options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getDeclaredDatatypes", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getDeclaredDatatypes", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -57,20 +58,20 @@ export class DatatypesServices {
         var params: any = {
             newDatatype: newDatatype
         };
-        return this.httpMgr.doPost(this.serviceName, "createDatatype", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "createDatatype", params).pipe(
+            map(stResp => {
                 return Deserializer.createURI(stResp);
-            }
-        ).flatMap(
-            datatype => {
-                return this.resourceService.getResourceDescription(datatype).map(
-                    resource => {
+            })
+        ).pipe(
+            flatMap(datatype => {
+                return this.resourceService.getResourceDescription(datatype).pipe(
+                    map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
                         this.eventHandler.datatypeCreatedEvent.emit(<ARTURIResource>resource);
                         return <ARTURIResource>resource;
-                    }
+                    })
                 );
-            }
+            })
         );
     }
 
@@ -82,24 +83,24 @@ export class DatatypesServices {
         var params: any = {
             datatype: datatype
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteDatatype", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "deleteDatatype", params).pipe(
+            map(stResp => {
                 this.eventHandler.datatypeDeletedEvent.emit(datatype);
                 return stResp;
-            }
+            })
         );
     }
 
     getDatatypeRestrictions(): Observable<DatatypeRestrictionsMap> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getDatatypeRestrictions", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getDatatypeRestrictions", params).pipe(
+            map(stResp => {
                 let dtRestrMap: DatatypeRestrictionsMap = new Map();
                 for (let dt in stResp) {
                     dtRestrMap.set(dt, this.parseDatatypeRestrictionDescription(stResp[dt]));
                 }
                 return dtRestrMap;
-            }
+            })
         );
     }
 
@@ -107,10 +108,10 @@ export class DatatypesServices {
         var params: any = {
             restriction: restriction
         };
-        return this.httpMgr.doGet(this.serviceName, "getRestrictionDescription", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getRestrictionDescription", params).pipe(
+            map(stResp => {
                 return this.parseDatatypeRestrictionDescription(stResp);
-            }
+            })
         );
     }
 

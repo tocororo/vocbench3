@@ -18,23 +18,23 @@ export class RdfResourceComponent {
 
     @Output() link: EventEmitter<ARTURIResource> = new EventEmitter();
 
-    private renderingClass: string;
-    private renderingLabel: string;
+    renderingClass: string;
+    renderingLabel: string;
 
     private lang: string; //language of the resource
     private langFlagAvailable: boolean = false; //true if the language (if any) has a flag icon available
     private unknownFlagImgSrc: string = UIUtils.getFlagImgSrc("unknown"); //pass an invalid langTag so returns the empty flag image source
 
     private datatype: ARTURIResource; //datatype of the resource
-    private showDatatypeBadge: boolean = false;
+    showDatatypeBadge: boolean = false;
 
     private literalWithLink: boolean = false; //true if the resource is a literal which contains url
     private splittedLiteral: string[]; //when literalWithLink is true, even elements are plain text, odd elements are url
 
-    private imgSrc: string; //src of the image icon
+    imgSrc: string; //src of the image icon
     private natureTooltip: string;
 
-    private manchExpr: boolean = false;
+    manchExpr: boolean = false;
     private manchExprStruct: { token: string, class: string }[] = [];
 
     constructor(private resourcesService: ResourcesServices, private preferences: VBProperties) { }

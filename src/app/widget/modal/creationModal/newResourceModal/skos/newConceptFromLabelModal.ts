@@ -1,6 +1,5 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTResource, ARTURIResource } from "../../../../../models/ARTResources";
 import { CustomFormValue } from "../../../../../models/CustomForms";
 import { CustomFormsServices } from "../../../../../services/customFormsServices";
@@ -10,62 +9,51 @@ import { BasicModalServices } from "../../../basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
 import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
 
-export class NewConceptFromLabelModalData extends BSModalContext {
-    constructor(
-        public title: string = "Modal title",
-        public xLabel: ARTResource,
-        public cls: ARTURIResource, //class that this modal is creating
-        public clsChangeable: boolean = true,
-        public sibling: ARTURIResource
-    ) {
-        super();
-    }
-}
-
 @Component({
     selector: "new-concept-from-label-modal",
     templateUrl: "./newConceptFromLabelModal.html",
 })
-export class NewConceptFromLabelModal extends AbstractCustomConstructorModal implements ModalComponent<NewConceptFromLabelModalData> {
-    context: NewConceptFromLabelModalData;
+export class NewConceptFromLabelModal extends AbstractCustomConstructorModal {
+    @Input() title: string = "Modal title";
+    @Input() xLabel: ARTResource;
+    @Input() cls: ARTURIResource; //class that this modal is creating
+    @Input() clsChangeable: boolean = true;
 
     //standard form
-    private uri: string;
+    uri: string;
 
-    private positionList: string[] = [SpawnPosition.AS_TOP_CONCEPT, SpawnPosition.AS_NARROWER, SpawnPosition.AS_SIBLING];
-    private position: string = this.positionList[0];
+    positionList: string[] = [SpawnPosition.AS_TOP_CONCEPT, SpawnPosition.AS_NARROWER, SpawnPosition.AS_SIBLING];
+    position: string = this.positionList[0];
     //param for position: AS_NARROWER
-    private broader: ARTURIResource;
+    broader: ARTURIResource;
     //param for position: AS_SIBLING
-    private sibling: ARTURIResource;
-    private siblingBroaders: ARTURIResource[];
+    @Input() sibling: ARTURIResource;
+    siblingBroaders: ARTURIResource[];
     private selectedSiblingBroader: ARTURIResource;
-    private multipleSiblingBroaders: boolean;
+    multipleSiblingBroaders: boolean;
 
     private schemes: ARTURIResource[];
 
-    constructor(public dialog: DialogRef<NewConceptFromLabelModalData>, private skosService: SkosServices,
+    constructor(public activeModal: NgbActiveModal, private skosService: SkosServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         super(cfService, basicModals, browsingModals)
-        this.context = dialog.context;
     }
 
     ngOnInit() {
-        this.resourceClass = this.context.cls;
+        this.resourceClass = this.cls;
         this.selectCustomForm();
 
         //if a sibling is provided, set AS_SIBLING as chosen position
-        if (this.context.sibling) {
-            this.sibling = this.context.sibling;
+        if (this.sibling) {
             this.updateBroaderOfSibling(); //check for multiple sibling
         }
     }
 
     changeClass() {
-        this.changeClassWithRoot(this.context.cls);
+        this.changeClassWithRoot(this.cls);
     }
 
-    private onSchemesChanged(schemes: ARTURIResource[]) {
+    onSchemesChanged(schemes: ARTURIResource[]) {
         this.schemes = schemes;
     }
 
@@ -87,7 +75,7 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
     }
 
     //when position select changes, reset the parameters for broader/sibling...
-    private onPositionChange() {
+    onPositionChange() {
         this.broader = null;
         this.selectedSiblingBroader = null;
         this.multipleSiblingBroaders = false;
@@ -97,11 +85,11 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
      * Tells if selected position option is "Child of existing Concept", so the modal is creating a narrower.
      * Useful to show in the view the broader selection field
      */
-    private isPositionNarrower(): boolean {
+    isPositionNarrower(): boolean {
         return this.position == SpawnPosition.AS_NARROWER;
     }
 
-    private selectBroader() {
+    selectBroader() {
         this.browsingModals.browseConceptTree("Select broader").then(
             (concept: any) => {
                 this.broader = concept;
@@ -114,11 +102,11 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
      * Tells if selected position option is "Sibling of existing Concept", so the modal is creating a sibling.
      * Useful to show in the view the sibling selection field
      */
-    private isPositionSibling(): boolean {
+    isPositionSibling(): boolean {
         return this.position == SpawnPosition.AS_SIBLING;
     }
 
-    private selectSibling() {
+    selectSibling() {
         this.browsingModals.browseConceptTree("Select sibling").then(
             (concept: any) => {
                 this.sibling = concept;
@@ -150,10 +138,7 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
         );
     }
 
-    okImpl(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-
+    okImpl() {
         var entryMap: any = this.collectCustomFormData();
 
         var returnedData: { uriResource: ARTURIResource, broader: ARTURIResource, cls: ARTURIResource, schemes: ARTURIResource[], cfValue: CustomFormValue } = {
@@ -175,18 +160,18 @@ export class NewConceptFromLabelModal extends AbstractCustomConstructorModal imp
             returnedData.broader = this.selectedSiblingBroader;
         }
         //set class only if not the default
-        if (this.resourceClass.getURI() != this.context.cls.getURI()) {
+        if (this.resourceClass.getURI() != this.cls.getURI()) {
             returnedData.cls = this.resourceClass;
         }
         //set cfValue only if not null
         if (this.customFormId != null && entryMap != null) {
             returnedData.cfValue = new CustomFormValue(this.customFormId, entryMap);
         }
-        this.dialog.close(returnedData);
+        this.activeModal.close(returnedData);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

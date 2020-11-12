@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { CollaborationServices } from '../services/collaborationServices';
 import { VBEventHandler } from '../utils/VBEventHandler';
 
@@ -19,8 +20,8 @@ export class VBCollaboration {
 
     public initCollaborationSystem(): Observable<void> {
         this.reset();
-        return this.collaborationService.getCollaborationSystemStatus().map(
-            resp => {
+        return this.collaborationService.getCollaborationSystemStatus().pipe(
+            map(resp => {
                 this.enabled = resp.enabled;
                 this.backendId = resp.backendId;
                 this.linked = resp.linked;
@@ -29,7 +30,7 @@ export class VBCollaboration {
                 if (this.userSettingsConfigured && this.projSettingsConfigured && this.linked && this.enabled) {
                     this.working = true;
                 }
-            }
+            })
         );
     }
 

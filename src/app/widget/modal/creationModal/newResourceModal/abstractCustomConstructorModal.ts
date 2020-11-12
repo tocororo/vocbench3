@@ -1,14 +1,10 @@
-import { Component } from "@angular/core";
 import { ARTURIResource } from "../../../../models/ARTResources";
 import { CustomForm, CustomFormUtils, FormField } from "../../../../models/CustomForms";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { BasicModalServices } from "../../basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../browsingModal/browsingModalServices";
+import { ModalType } from '../../Modals';
 
-@Component({
-    selector: "custom-constructor",
-    template: "",
-})
 export abstract class AbstractCustomConstructorModal {
     resourceClass: ARTURIResource; //type of the resource that the custom constructor is creating
     customFormId: string; //custom form id that is used to create the resource
@@ -104,11 +100,9 @@ export abstract class AbstractCustomConstructorModal {
         return entryMap;
     }
 
-    onKeydown(event: KeyboardEvent) {
-        if (event.which == 13) {
-            if (this.isInputValid()) {
-                this.ok(event);
-            }
+    onEnter() {
+        if (this.isInputValid()) {
+            this.ok();
         }
     }
 
@@ -116,7 +110,7 @@ export abstract class AbstractCustomConstructorModal {
      * Check if standard form data and custom form data are valid. Useful to disable OK button if
      * tha data are not valid or incomplete
      */
-    private isInputValid(): boolean {
+    isInputValid(): boolean {
         var standardFormValid: boolean = this.isStandardFormDataValid();
         var customFormValid: boolean = this.isCustomFormDataValid();
         return (standardFormValid && customFormValid);
@@ -135,16 +129,16 @@ export abstract class AbstractCustomConstructorModal {
         return CustomFormUtils.isFormValid(this.formFields);
     }
 
-    ok(event: Event) {
+    ok() {
         let constraintViolatedMsg = CustomFormUtils.isFormConstraintOk(this.formFields);
         if (constraintViolatedMsg != null) {
-            this.basicModals.alert("Incompleted form", constraintViolatedMsg, "warning");
+            this.basicModals.alert("Incompleted form", constraintViolatedMsg, ModalType.warning);
             return;
         }
-        this.okImpl(event);
+        this.okImpl();
     }
 
-    abstract okImpl(event: Event): void;
+    abstract okImpl(): void;
 
     abstract cancel(): void;
 

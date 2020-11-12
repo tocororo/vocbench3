@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { flatMap, map } from 'rxjs/operators';
 import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
 import { ResourcesServices } from "../services/resourcesServices";
@@ -23,10 +24,10 @@ export class RefactorServices {
         var params: any = {
             reifyNotes: reifyNotes
         };
-        return this.httpMgr.doGet(this.serviceName, "SKOStoSKOSXL", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "SKOStoSKOSXL", params).pipe(
+            map(stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
-            }
+            })
         );
     }
 
@@ -37,10 +38,10 @@ export class RefactorServices {
         var params: any = {
             flattenNotes: flattenNotes
         };
-        return this.httpMgr.doGet(this.serviceName, "SKOSXLtoSKOS", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "SKOSXLtoSKOS", params).pipe(
+            map(stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
-            }
+            })
         );
     }
 
@@ -55,10 +56,10 @@ export class RefactorServices {
             oldResource: oldResource,
             newResource: newResource
         };
-        return this.httpMgr.doGet(this.serviceName, "changeResourceURI", params).flatMap(
-            stResp => {
-                return this.resourceService.getResourceDescription(newResource).map(
-                    newRes => {
+        return this.httpMgr.doGet(this.serviceName, "changeResourceURI", params).pipe(
+            flatMap(stResp => {
+                return this.resourceService.getResourceDescription(newResource).pipe(
+                    map(newRes => {
                         /**
                          * create a clone to avoid that changes on oldResource (in onResourceRenamed of ResView),
                          * changes also the oldResource in the event
@@ -66,9 +67,9 @@ export class RefactorServices {
                         let oldRes = new ARTURIResource(oldResource.getURI());
                         this.eventHandler.resourceRenamedEvent.emit({ oldResource: oldRes, newResource: <ARTURIResource>newRes });
                         return stResp;
-                    }
+                    })
                 );
-            }
+            })
         );
     }
 
@@ -85,15 +86,15 @@ export class RefactorServices {
         if (sourceBaseURI != undefined) {
             params.sourceBaseURI = new ARTURIResource(sourceBaseURI);
         }
-        return this.httpMgr.doPost(this.serviceName, "replaceBaseURI", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "replaceBaseURI", params).pipe(
+            map(stResp => {
                 //if the project baseURI was replaced, update it
                 if (sourceBaseURI == null || sourceBaseURI == VBContext.getWorkingProject().getBaseURI()) {
                     VBContext.getWorkingProject().setBaseURI(targetBaseURI);
                     this.preferences.setActiveSchemes(VBContext.getWorkingProjectCtx(), []);
                 }
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
-            }
+            })
         );
     }
 
@@ -102,10 +103,10 @@ export class RefactorServices {
         if (clearDestinationGraph != undefined) {
             params.clearDestinationGraph = clearDestinationGraph;
         }
-        return this.httpMgr.doGet(this.serviceName, "migrateDefaultGraphToBaseURIGraph", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "migrateDefaultGraphToBaseURIGraph", params).pipe(
+            map(stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit(null);
-            }
+            })
         );
     }
 
@@ -137,14 +138,14 @@ export class RefactorServices {
         if (customFormValue != null) {
             params.customFormValue = customFormValue;
         }
-        return this.httpMgr.doPost(this.serviceName, "spawnNewConceptFromLabel", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "spawnNewConceptFromLabel", params).pipe(
+            map(stResp => {
                 return Deserializer.createURI(stResp);
-            }
-        ).flatMap(
-            concept => {
-                return this.resourceService.getResourceDescription(concept).map(
-                    resource => {
+            })
+        ).pipe(
+            flatMap(concept => {
+                return this.resourceService.getResourceDescription(concept).pipe(
+                    map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
                         if (broaderConcept != null) { //created narrower
                             this.eventHandler.narrowerCreatedEvent.emit({narrower: <ARTURIResource>resource, broader: broaderConcept});
@@ -153,9 +154,9 @@ export class RefactorServices {
                             this.eventHandler.topConceptCreatedEvent.emit({concept: <ARTURIResource>resource, schemes: conceptSchemes});
                             return {concept: <ARTURIResource>resource, schemes: conceptSchemes};
                         }
-                    }
+                    })
                 );
-            }
+            })
         );
     }
 

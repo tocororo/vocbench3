@@ -5,6 +5,7 @@ import { PartitionFilterPreference } from "../../models/Properties";
 import { ResViewPartition, ResViewUtils } from "../../models/ResourceView";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { BasicModalServices } from "../modal/basicModal/basicModalServices";
+import { ModalType } from '../modal/Modals';
 
 @Component({
     selector: "partition-filter-editor",
@@ -78,8 +79,8 @@ export class PartitionFilterEditor {
             ResViewPartition.notes, ResViewPartition.properties]
     };
 
-    private rolePartitionsStructs: RolePartitionsStruct[];
-    private selectedRolePartitionsStruct: RolePartitionsStruct;
+    rolePartitionsStructs: RolePartitionsStruct[];
+    selectedRolePartitionsStruct: RolePartitionsStruct;
 
     constructor(private basicModals: BasicModalServices) {}
 
@@ -125,7 +126,7 @@ export class PartitionFilterEditor {
         return struct
     }
 
-    private selectRolePartitionsStruct(rps: RolePartitionsStruct) {
+    selectRolePartitionsStruct(rps: RolePartitionsStruct) {
         this.selectedRolePartitionsStruct = rps;
     }
 
@@ -134,7 +135,7 @@ export class PartitionFilterEditor {
      * @param rolePartitionsStruct 
      * @param check 
      */
-    private checkAll(rolePartitionsStruct: RolePartitionsStruct, check: boolean) {
+    checkAll(rolePartitionsStruct: RolePartitionsStruct, check: boolean) {
         rolePartitionsStruct.partitions.forEach(p => {
             p.checked = check;
         });
@@ -144,7 +145,7 @@ export class PartitionFilterEditor {
     /**
      * Checks/Unchecks (according the check parameter) the same partition (the provided one) for all the roles.
      */
-    private checkForAllRoles(partition: ResViewPartition, check: boolean) {
+    checkForAllRoles(partition: ResViewPartition, check: boolean) {
         this.rolePartitionsStructs.forEach(rps => {
             rps.partitions.forEach(p => {
                 if (partition == p.id) {
@@ -158,8 +159,8 @@ export class PartitionFilterEditor {
     /**
      * Restore to visible all the partitions for all the roles
      */
-    private reset() {
-        this.basicModals.confirm("Enable all", "All the partitions will be set visible for all the available resource types. Are you sure?", "warning").then(
+    reset() {
+        this.basicModals.confirm("Enable all", "All the partitions will be set visible for all the available resource types. Are you sure?", ModalType.warning).then(
             confirm => {
                 this.rolePartitionsStructs.forEach(rps => {
                     rps.partitions.forEach(p => {

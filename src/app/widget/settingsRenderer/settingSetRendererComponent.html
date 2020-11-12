@@ -1,4 +1,4 @@
-<table class="table table-condensed table-borderless">
+<table class="table table-sm table-borderless">
     <colgroup>
         <col>
         <col style="width: 1%">
@@ -26,41 +26,41 @@
 
                     <nested-settings-renderer *ngSwitchCase="'Properties'" [(ngModel)]="value[index]" [schema]="types[0].schema" (ngModelChange)="updatePropertiesValue(index, $event)"></nested-settings-renderer>
 
-                    <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control input-sm" style="resize: vertical"
+                    <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control form-control-sm" style="resize: vertical"
                         [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
                     </textarea>
 
-                    <input *ngSwitchCase="'int'" type="number" class="form-control input-sm" step="1" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
-                    <input *ngSwitchCase="'integer'" type="number" class="form-control input-sm" step="1" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
-                    <input *ngSwitchCase="'long'" type="number" class="form-control input-sm" step="1" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
-                    <input *ngSwitchCase="'float'" type="number" class="form-control input-sm" step="0.01" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
-                    <input *ngSwitchCase="'double'" type="number" class="form-control input-sm" step="0.01" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
+                    <input *ngSwitchCase="'int'" type="number" class="form-control form-control-sm" step="1" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
+                    <input *ngSwitchCase="'integer'" type="number" class="form-control form-control-sm" step="1" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
+                    <input *ngSwitchCase="'long'" type="number" class="form-control form-control-sm" step="1" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
+                    <input *ngSwitchCase="'float'" type="number" class="form-control form-control-sm" step="0.01" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
+                    <input *ngSwitchCase="'double'" type="number" class="form-control form-control-sm" step="0.01" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
 
                     <div *ngSwitchDefault class="hbox" style="align-items: center; position: relative;">
-                        <textarea *ngSwitchDefault type="text" rows="1" class="form-control input-sm" 
+                        <textarea *ngSwitchDefault type="text" rows="1" class="form-control form-control-sm" 
                             style="resize: vertical;" [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">
                         </textarea>
-                        <span class="glyphicon glyphicon-warning-sign" style="position: absolute; top: 8px; right: 8px;"
+                        <span class="fas fa-exclamation-triangle" style="position: absolute; top: 8px; right: 8px;"
                             [title]="'This parameter has an unknown type (' + types[0].name + '). The entered value will be interpreted as a low-level JSON value.'">
                         </span>
                     </div>
                 </div>
             </td>
             <td style="padding: 0px;">
-                <button *ngIf="value.length > 1 || collapsable" class="btn btn-sm btn-default" (click)="delete(index)" style="margin-left: 3px;" [disabled]="disabled">
-                    <span class="glyphicon glyphicon-trash"></span>
+                <button *ngIf="value.length > 1 || collapsable" class="btn btn-sm btn-light" (click)="delete(index)" style="margin-left: 3px;" [disabled]="disabled">
+                    <span class="far fa-trash-alt"></span>
                 </button>
             </td>
             <td style="padding: 0px;">
-                <button *ngIf="last" class="btn btn-sm btn-default" (click)="add(index)" style="margin-left: 3px;" [disabled]="disabled">
-                    <span class="glyphicon glyphicon-plus"></span>
+                <button *ngIf="last" class="btn btn-sm btn-light" (click)="add(index)" style="margin-left: 3px;" [disabled]="disabled">
+                    <span class="fas fa-plus"></span>
                 </button>
             </td>
         </tr>
         <tr *ngIf="!value?.length && collapsable">
             <td colspan="3" style="padding: 0px;">
-                <button class="btn btn-sm btn-default" (click)="add(0)" [disabled]="disabled">
-                    <span class="glyphicon glyphicon-plus"></span>
+                <button class="btn btn-sm btn-light" (click)="add(0)" [disabled]="disabled">
+                    <span class="fas fa-plus"></span>
                 </button>
             </td>    
         </tr>

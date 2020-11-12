@@ -1,6 +1,6 @@
 <div [class]="inputGroupClass">
-    <span class="input-group-btn">
-        <span class="btn btn-default btn-file">{{label}}
+    <span class="input-group-prepend">
+        <span class="btn btn-light btn-file">{{label}}
             <input #inputFile type="file" (change)="fileChangeEvent(inputFile.files[0])" [accept]="accept">
         </span>
     </span>

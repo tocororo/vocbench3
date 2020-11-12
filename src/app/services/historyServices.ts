@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { CommitInfo, ParameterInfo, CommitOperation, SortingDirection, CommitDelta } from "../models/History";
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTURIResource } from "../models/ARTResources";
-import { HttpManager } from "../utils/HttpManager";
+import { CommitDelta, CommitInfo, CommitOperation, ParameterInfo, SortingDirection } from "../models/History";
 import { Deserializer } from "../utils/Deserializer";
+import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
 export class HistoryServices {
@@ -29,10 +30,10 @@ export class HistoryServices {
             timeUpperBound: timeUpperBound,
             limit: limit
         }
-        return this.httpMgr.doGet(this.serviceName, "getCommitSummary", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getCommitSummary", params).pipe(
+            map(stResp => {
                 return stResp;
-            }
+            })
         );
     }
 
@@ -63,8 +64,8 @@ export class HistoryServices {
             page: page,
             limit: limit
         };
-        return this.httpMgr.doGet(this.serviceName, "getCommits", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getCommits", params).pipe(
+            map(stResp => {
                 var commits: CommitInfo[] = [];
                 var commitsJsonArray: any[] = stResp;
                 for (var i = 0; i < commitsJsonArray.length; i++) {
@@ -111,7 +112,7 @@ export class HistoryServices {
                     commits.push(commit);
                 }
                 return commits;
-            }
+            })
         );
     }
 
@@ -123,8 +124,8 @@ export class HistoryServices {
         var params: any = {
             commit: commit
         };
-        return this.httpMgr.doGet(this.serviceName, "getCommitDelta", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getCommitDelta", params).pipe(
+            map(stResp => {
                 let additions: CommitOperation[] = [];
                 let removals: CommitOperation[] = [];
 
@@ -165,7 +166,7 @@ export class HistoryServices {
                 }
 
                 return commitDelta;
-            }
+            })
         );
     }
 

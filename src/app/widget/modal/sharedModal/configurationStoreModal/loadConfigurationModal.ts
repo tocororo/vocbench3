@@ -1,53 +1,30 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Configuration, Reference } from "../../../../models/Configuration";
 import { ConfigurationsServices } from "../../../../services/configurationsServices";
-
-export class LoadConfigurationModalData extends BSModalContext {
-    /**
-     * @param title 
-     * @param configurationComponent 
-     * @param allowLoad 
-     *      if true (default), the dialog loads and returns the selected configuration;
-     *      if false just returns the selected configuration without loading it.
-     * @param allowDelete
-     *      if true (default) the UI provides buttons for deleting the configuration;
-     *      if false the deletion of the configuration is disabled.
-     * @param additionalReferences additional references not deletable. 
-     *  If one of these references is chosen, it is just returned, its configuration is not loaded
-     */
-    constructor(
-        public title: string, 
-        public configurationComponent: string,
-        public allowLoad: boolean = true,
-        public allowDelete: boolean = true,
-        public additionalReferences: Reference[]
-    ) {
-        super();
-    }
-}
 
 @Component({
     selector: "load-configuration",
     templateUrl: "./loadConfigurationModal.html",
 })
-export class LoadConfigurationModal implements ModalComponent<LoadConfigurationModalData> {
-    context: LoadConfigurationModalData;
+export class LoadConfigurationModal {
+    @Input() title: string;
+    @Input() configurationComponent: string;
+    @Input() allowLoad: boolean = true;
+    @Input() allowDelete: boolean = true;
+    @Input() additionalReferences: Reference[];
 
-    private references: Reference[];
-    private selectedRef: Reference;
+    references: Reference[];
+    selectedRef: Reference;
 
-    constructor(public dialog: DialogRef<LoadConfigurationModalData>, private configurationService: ConfigurationsServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private configurationService: ConfigurationsServices) {}
 
     ngOnInit() {
         this.initReferences();
     }
 
     private initReferences() {
-        this.configurationService.getConfigurationReferences(this.context.configurationComponent).subscribe(
+        this.configurationService.getConfigurationReferences(this.configurationComponent).subscribe(
             refs => {
                 this.references = refs;
             }
@@ -63,7 +40,7 @@ export class LoadConfigurationModal implements ModalComponent<LoadConfigurationM
     }
 
     private deleteReference(reference: Reference) {
-        this.configurationService.deleteConfiguration(this.context.configurationComponent, reference.relativeReference).subscribe(
+        this.configurationService.deleteConfiguration(this.configurationComponent, reference.relativeReference).subscribe(
             stResp => {
                 this.selectedRef = null;
                 this.initReferences();
@@ -71,29 +48,29 @@ export class LoadConfigurationModal implements ModalComponent<LoadConfigurationM
         )
     }
 
-    ok(event: Event) {
-        if (!this.context.allowLoad) {
+    ok() {
+        if (!this.allowLoad) {
             let returnData: LoadConfigurationModalReturnData = {
                 configuration: null,
                 reference: this.selectedRef
             }
-            this.dialog.close(returnData);
+            this.activeModal.close(returnData);
         } else {
             //selected reference is from the additionals => do not load the configuration, but let handling it to the component that opened the modal
-            if (this.context.additionalReferences != null && this.context.additionalReferences.indexOf(this.selectedRef) != -1) {
+            if (this.additionalReferences != null && this.additionalReferences.indexOf(this.selectedRef) != -1) {
                 let returnData: LoadConfigurationModalReturnData = {
                     configuration: null,
                     reference: this.selectedRef
                 }
-                this.dialog.close(returnData);
+                this.activeModal.close(returnData);
             } else {
-                this.configurationService.getConfiguration(this.context.configurationComponent, this.selectedRef.relativeReference).subscribe(
+                this.configurationService.getConfiguration(this.configurationComponent, this.selectedRef.relativeReference).subscribe(
                     conf => {
                         let returnData: LoadConfigurationModalReturnData = {
                             configuration: conf,
                             reference: this.selectedRef
                         }
-                        this.dialog.close(returnData);
+                        this.activeModal.close(returnData);
                     }
                 );
             }
@@ -101,7 +78,7 @@ export class LoadConfigurationModal implements ModalComponent<LoadConfigurationM
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

@@ -1,22 +1,21 @@
 import { Injectable } from '@angular/core';
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ARTLiteral, ARTResource, ARTURIResource } from "../../../models/ARTResources";
 import { LanguageConstraint } from '../../../models/LanguagesCountries';
-import { NewPlainLiteralModal, NewPlainLiteralModalData } from "./newPlainLiteralModal/newPlainLiteralModal";
-import { NewLexiconCfModal, NewLexiconCfModalData } from './newResourceModal/ontolex/newLexiconCfModal';
-import { NewOntoLexicalizationCfModal, NewOntoLexicalizationCfModalData } from './newResourceModal/ontolex/newOntoLexicalizationCfModal';
-import { NewResourceCfModal, NewResourceCfModalData } from "./newResourceModal/shared/newResourceCfModal";
-import { NewResourceWithLiteralCfModal, NewResourceWithLiteralCfModalData } from './newResourceModal/shared/newResourceWithLiteralCfModal';
-import { NewConceptCfModal, NewConceptCfModalData } from "./newResourceModal/skos/newConceptCfModal";
-import { NewConceptFromLabelModal, NewConceptFromLabelModalData } from "./newResourceModal/skos/newConceptFromLabelModal";
-import { NewXLabelModal, NewXLabelModalData } from './newResourceModal/skos/newXLabelModal';
-import { NewTypedLiteralModal, NewTypedLiteralModalData } from "./newTypedLiteralModal/newTypedLiteralModal";
+import { ModalOptions } from '../Modals';
+import { NewPlainLiteralModal } from "./newPlainLiteralModal/newPlainLiteralModal";
+import { NewLexiconCfModal } from './newResourceModal/ontolex/newLexiconCfModal';
+import { NewOntoLexicalizationCfModal } from './newResourceModal/ontolex/newOntoLexicalizationCfModal';
+import { NewResourceCfModal } from "./newResourceModal/shared/newResourceCfModal";
+import { NewResourceWithLiteralCfModal } from './newResourceModal/shared/newResourceWithLiteralCfModal';
+import { NewConceptFromLabelModal } from "./newResourceModal/skos/newConceptFromLabelModal";
+import { NewXLabelModal } from './newResourceModal/skos/newXLabelModal';
+import { NewTypedLiteralModal } from "./newTypedLiteralModal/newTypedLiteralModal";
 
 @Injectable()
 export class CreationModalServices {
 
-    constructor(private modal: Modal) { }
+    constructor(private modalService: NgbModal) { }
 
     /**
      * Opens a modal to create a new resource with uri plus custom form supplement fields
@@ -27,12 +26,12 @@ export class CreationModalServices {
      * @return
      */
     newResourceCf(title: string, cls: ARTURIResource, clsChangeable?: boolean) {
-        var modalData = new NewResourceCfModalData(title, cls, clsChangeable);
-        const builder = new BSModalContextBuilder<NewResourceCfModalData>(
-            modalData, undefined, NewResourceCfModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(NewResourceCfModal, overlayConfig).result;
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(NewResourceCfModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.cls = cls;
+        modalRef.componentInstance.clsChangeable = clsChangeable;
+        return modalRef.result;
     }
 
     /**
@@ -46,13 +45,16 @@ export class CreationModalServices {
      * @return
      */
     newResourceWithLiteralCf(title: string, cls: ARTURIResource, clsChangeable?: boolean, literalLabel?: string,
-            lang?: string, langConstraints?: LanguageConstraint) {
-        var modalData = new NewResourceWithLiteralCfModalData(title, cls, clsChangeable, literalLabel, lang, langConstraints);
-        const builder = new BSModalContextBuilder<NewResourceWithLiteralCfModalData>(
-            modalData, undefined, NewResourceWithLiteralCfModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(NewResourceWithLiteralCfModal, overlayConfig).result;
+        lang?: string, langConstraints?: LanguageConstraint) {
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(NewResourceWithLiteralCfModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.cls = cls;
+        modalRef.componentInstance.clsChangeable = clsChangeable;
+        modalRef.componentInstance.literalLabel = literalLabel;
+        modalRef.componentInstance.lang = lang;
+        modalRef.componentInstance.langConstraints = langConstraints;
+        return modalRef.result;
     }
 
     /**
@@ -66,12 +68,15 @@ export class CreationModalServices {
      * @return 
      */
     newConceptCf(title: string, broader?: ARTURIResource, schemes?: ARTURIResource[], cls?: ARTURIResource, clsChangeable?: boolean, lang?: string) {
-        var modalData = new NewConceptCfModalData(title, broader, schemes, cls, clsChangeable, lang);
-        const builder = new BSModalContextBuilder<NewConceptCfModalData>(
-            modalData, undefined, NewConceptCfModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(NewConceptCfModal, overlayConfig).result;
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(NewResourceWithLiteralCfModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.broader = broader;
+        modalRef.componentInstance.schemes = schemes;
+        modalRef.componentInstance.cls = cls;
+        modalRef.componentInstance.clsChangeable = clsChangeable;
+        modalRef.componentInstance.lang = lang;
+        return modalRef.result;
     }
 
     /**
@@ -80,12 +85,11 @@ export class CreationModalServices {
      * @param clsChangeable 
      */
     newLexiconCf(title: string, clsChangeable?: boolean) {
-        var modalData = new NewLexiconCfModalData(title, clsChangeable);
-        const builder = new BSModalContextBuilder<NewLexiconCfModalData>(
-            modalData, undefined, NewLexiconCfModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(NewLexiconCfModal, overlayConfig).result;
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(NewLexiconCfModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.clsChangeable = clsChangeable;
+        return modalRef.result;
     }
 
     /**
@@ -96,12 +100,12 @@ export class CreationModalServices {
      * @param clsChangeable 
      */
     newOntoLexicalizationCf(title: string, lexicalizationProp: ARTURIResource, clsChangeable?: boolean) {
-        var modalData = new NewOntoLexicalizationCfModalData(title, lexicalizationProp, clsChangeable);
-        const builder = new BSModalContextBuilder<NewOntoLexicalizationCfModalData>(
-            modalData, undefined, NewOntoLexicalizationCfModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(NewOntoLexicalizationCfModal, overlayConfig).result;
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(NewOntoLexicalizationCfModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.lexicalizationProp = lexicalizationProp;
+        modalRef.componentInstance.clsChangeable = clsChangeable;
+        return modalRef.result;
     }
 
     /**
@@ -115,14 +119,18 @@ export class CreationModalServices {
      * @param multivalueOpt options about the creation of multiple labels
      * @return if the modal closes with ok returns a promise containing an object with label and cls
      */
-    newXLabel(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean, 
+    newXLabel(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean,
         clsChangeable?: boolean, multivalueOpt?: { enabled: boolean, allowSameLang: boolean }) {
-        var modalData = new NewXLabelModalData(title, value, valueReadonly, lang, langReadonly, clsChangeable, multivalueOpt);
-        const builder = new BSModalContextBuilder<NewXLabelModalData>(
-            modalData, undefined, NewXLabelModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(NewXLabelModal, overlayConfig).result;
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(NewXLabelModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.value = value;
+        modalRef.componentInstance.valueReadonly = valueReadonly;
+        modalRef.componentInstance.lang = lang;
+        modalRef.componentInstance.langReadonly = langReadonly;
+        modalRef.componentInstance.clsChangeable = clsChangeable;
+        modalRef.componentInstance.multivalueOpt = multivalueOpt;
+        return modalRef.result;
     }
 
     /**
@@ -138,12 +146,16 @@ export class CreationModalServices {
      */
     newPlainLiteral(title: string, value?: string, valueReadonly?: boolean, lang?: string, langReadonly?: boolean,
         langConstraints?: LanguageConstraint, multivalueOpt?: { enabled: boolean, allowSameLang: boolean }) {
-        var modalData = new NewPlainLiteralModalData(title, value, valueReadonly, lang, langReadonly, langConstraints, multivalueOpt);
-        const builder = new BSModalContextBuilder<NewPlainLiteralModalData>(
-            modalData, undefined, NewPlainLiteralModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(NewPlainLiteralModal, overlayConfig).result;
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(NewPlainLiteralModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.value = value;
+        modalRef.componentInstance.valueReadonly = valueReadonly;
+        modalRef.componentInstance.lang = lang;
+        modalRef.componentInstance.langReadonly = langReadonly;
+        modalRef.componentInstance.langConstraints = langConstraints;
+        modalRef.componentInstance.multivalueOpt = multivalueOpt;
+        return modalRef.result;
     }
 
     /**
@@ -157,12 +169,15 @@ export class CreationModalServices {
      * @return if the modal closes with ok returns a promise containing an ARTLiteral
      */
     newTypedLiteral(title: string, predicate?: ARTURIResource, allowedDatatypes?: ARTURIResource[], dataRanges?: (ARTLiteral[])[], multivalue?: boolean, validation?: boolean) {
-        var modalData = new NewTypedLiteralModalData(title, predicate, allowedDatatypes, dataRanges, multivalue, validation);
-        const builder = new BSModalContextBuilder<NewTypedLiteralModalData>(
-            modalData, undefined, NewTypedLiteralModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(NewTypedLiteralModal, overlayConfig).result;
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(NewTypedLiteralModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.predicate = predicate;
+        modalRef.componentInstance.allowedDatatypes = allowedDatatypes;
+        modalRef.componentInstance.dataRanges = dataRanges;
+        modalRef.componentInstance.multivalue = multivalue;
+        modalRef.componentInstance.validation = validation;
+        return modalRef.result;
     }
 
     /**
@@ -174,12 +189,14 @@ export class CreationModalServices {
      * @param sibling a concept that if provided, set the default sibling in case of position chosen "sibling"
      */
     newConceptFromLabel(title: string, xLabel: ARTResource, cls: ARTURIResource, clsChangeable?: boolean, sibling?: ARTURIResource) {
-        var modalData = new NewConceptFromLabelModalData(title, xLabel, cls, clsChangeable, sibling);
-        const builder = new BSModalContextBuilder<NewConceptFromLabelModalData>(
-            modalData, undefined, NewConceptFromLabelModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(NewConceptFromLabelModal, overlayConfig).result;
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(NewConceptFromLabelModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.xLabel = xLabel;
+        modalRef.componentInstance.cls = cls;
+        modalRef.componentInstance.clsChangeable = clsChangeable;
+        modalRef.componentInstance.sibling = sibling;
+        return modalRef.result;
     }
 
 }

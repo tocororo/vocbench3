@@ -1,6 +1,6 @@
-<div class="panel panel-default">
-    <div class="panel-body">
-        <table class="table table-condensed table-borderless">
+<div class="card card-default">
+    <div class="card-body">
+        <table class="table table-sm table-borderless">
             <colgroup>
                 <col style="width: 1%">
                 <col>
@@ -23,13 +23,13 @@
                         </textarea>
                     </td>
                     <td>
-                        <button *ngIf="map.length > 1" class="btn btn-xs btn-default" (click)="delete(index)" [disabled]="disabled">
-                            <span class="glyphicon glyphicon-trash"></span>
+                        <button *ngIf="map.length > 1" class="btn btn-xs btn-light" (click)="delete(index)" [disabled]="disabled">
+                            <span class="far fa-trash-alt"></span>
                         </button>
                     </td>
                     <td>
-                        <button *ngIf="last" class="btn btn-xs btn-default" (click)="add(index)" [disabled]="disabled">
-                            <span class="glyphicon glyphicon-plus"></span>
+                        <button *ngIf="last" class="btn btn-xs btn-light" (click)="add(index)" [disabled]="disabled">
+                            <span class="fas fa-plus"></span>
                         </button>
                     </td>
                 </tr>

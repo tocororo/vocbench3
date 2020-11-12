@@ -1,29 +1,26 @@
 import { Injectable } from '@angular/core';
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { ARTNode } from "../../../models/ARTResources";
-import { CustomForm } from "../../../models/CustomForms";
-import { Cookie } from '../../../utils/Cookie';
-import { VBContext } from '../../../utils/VBContext';
-import { AlertCheckModal, AlertCheckModalData } from './alertModal/alertCheckModal';
-import { AlertModal, AlertModalData } from "./alertModal/alertModal";
-import { ConfirmCheckModal, ConfirmCheckModalData } from "./confirmModal/confirmCheckModal";
-import { ConfirmModal, ConfirmModalData } from "./confirmModal/confirmModal";
-import { DownloadModal, DownloadModalData } from "./downloadModal/downloadModal";
-import { FilePickerModal, FilePickerModalData } from "./filePickerModal/filePickerModal";
-import { PromptModal, PromptModalData } from "./promptModal/promptModal";
-import { PromptPrefixedModal, PromptPrefixedModalData } from "./promptModal/promptPrefixedModal";
-import { PromptPropertiesModal, PromptPropertiesModalData } from './promptModal/promptPropertiesModal';
-import { CustomFormSelectionModal, CustomFormSelectionModalData } from "./selectionModal/customFormSelectionModal";
-import { ResourceSelectionModal, ResourceSelectionModalData } from "./selectionModal/resourceSelectionModal";
-import { SelectionModal, SelectionModalData, SelectionOption } from "./selectionModal/selectionModal";
-
-export type ModalType = "info" | "error" | "warning";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ARTNode } from 'src/app/models/ARTResources';
+import { CustomForm } from 'src/app/models/CustomForms';
+import { Cookie } from 'src/app/utils/Cookie';
+import { VBContext } from 'src/app/utils/VBContext';
+import { ModalOptions, ModalType } from '../Modals';
+import { AlertModal } from "./alertModal/alertModal";
+import { ConfirmCheckModal, ConfirmCheckOptions } from './confirmModal/confirmCheckModal';
+import { ConfirmModal } from './confirmModal/confirmModal';
+import { DownloadModal } from './downloadModal/downloadModal';
+import { FilePickerModal } from './filePickerModal/filePickerModal';
+import { PromptModal } from './promptModal/promptModal';
+import { PromptPrefixedModal } from './promptModal/promptPrefixedModal';
+import { PromptPropertiesModal } from './promptModal/promptPropertiesModal';
+import { CustomFormSelectionModal } from './selectionModal/customFormSelectionModal';
+import { ResourceSelectionModal } from './selectionModal/resourceSelectionModal';
+import { SelectionModal, SelectionOption } from './selectionModal/selectionModal';
 
 @Injectable()
 export class BasicModalServices {
 
-    constructor(private modal: Modal) { }
+    constructor(private modalService: NgbModal) { }
 
     /**
      * Opens a modal with an input text and two buttons (Ok and Cancel) with the given title and content message.
@@ -37,12 +34,14 @@ export class BasicModalServices {
      * @return if the modal closes with ok returns a promise containing the input text
      */
     prompt(title: string, label?: { value: string, tooltip?: string }, message?: string, value?: string, inputOptional?: boolean, inputSanitized?: boolean) {
-        var modalData = new PromptModalData(title, label, message, value, false, inputOptional, inputSanitized);
-        const builder = new BSModalContextBuilder<PromptModalData>(
-            modalData, undefined, PromptModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(PromptModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(PromptModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.label = label;
+        modalRef.componentInstance.message = message;
+        modalRef.componentInstance.value = value;
+        modalRef.componentInstance.inputOptional = inputOptional;
+        modalRef.componentInstance.inputSanitized = inputSanitized;
+        return modalRef.result;
     }
 
     /**
@@ -58,12 +57,15 @@ export class BasicModalServices {
      * @return if the modal closes with ok returns a promise containing the input text
      */
     promptPrefixed(title: string, prefix: string, label?: string, value?: string, inputOptional?: boolean, inputSanitized?: boolean, prefixEditable?: boolean) {
-        var modalData = new PromptPrefixedModalData(title, prefix, label, value, false, inputOptional, inputSanitized, prefixEditable);
-        const builder = new BSModalContextBuilder<PromptPrefixedModalData>(
-            modalData, undefined, PromptPrefixedModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(PromptPrefixedModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(PromptPrefixedModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.prefix = prefix;
+        modalRef.componentInstance.label = label;
+        modalRef.componentInstance.value = value;
+        modalRef.componentInstance.inputOptional = inputOptional;
+        modalRef.componentInstance.inputSanitized = inputSanitized;
+        modalRef.componentInstance.prefixEditable = prefixEditable;
+        return modalRef.result;
     }
 
     /**
@@ -73,12 +75,11 @@ export class BasicModalServices {
      * @param allowEmpty
      */
     promptProperties(title: string, properties: { [key: string]: string }, allowEmpty: boolean) {
-        var modalData = new PromptPropertiesModalData(title, properties, allowEmpty);
-        const builder = new BSModalContextBuilder<PromptPropertiesModalData>(
-            modalData, undefined, PromptPropertiesModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(PromptPropertiesModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(PromptPropertiesModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.properties = properties;
+        modalRef.componentInstance.allowEmpty = allowEmpty;
+        return modalRef.result;
     }
 
     /**
@@ -91,33 +92,30 @@ export class BasicModalServices {
      * @return if the modal closes with ok returns a promise containing a boolean true
      */
     confirm(title: string, message: string, type?: ModalType) {
-        var modalType = type ? type : "warning"; //set default type to warning if not defined
-        var modalData = new ConfirmModalData(title, message, modalType);
-        const builder = new BSModalContextBuilder<ConfirmModalData>(
-            modalData, undefined, ConfirmModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ConfirmModal, overlayConfig).result;
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(ConfirmModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.message = message;
+        modalRef.componentInstance.type = type;
+        return modalRef.result;
     }
 
     /**
-     * Opens a modal with two buttons (Yes and No) with the given title and content message.
-     * Returns a Promise with the result
+     * Opens a modal with two buttons (Yes and No) with a checkbox and the given title and content message.
+     * Returns a Promise with the checkbox status
      * @param title the title of the modal dialog
      * @param message the message to show in the modal dialog body
-     * @param checkboxLabel the label of the checkbox in the modal body
+     * @param checkOpts options for customizing the checkbox
      * @param type tells the type of the dialog. Determines the style of the message in the dialog.
-     * Available values: info, error, warning (default)
-     * @return if the modal closes with ok returns a promise containing a boolean with the value of the checkbox
+     * Available values: info (default), error, warning
      */
-    confirmCheck(title: string, message: string, checkboxLabel: string, type?: ModalType) {
-        var modalType = type ? type : "warning"; //set default type to warning if not defined
-        var modalData = new ConfirmCheckModalData(title, message, checkboxLabel, modalType);
-        const builder = new BSModalContextBuilder<ConfirmCheckModalData>(
-            modalData, undefined, ConfirmCheckModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ConfirmCheckModal, overlayConfig).result;
+    confirmCheck(title: string, message: string, checkOpts: ConfirmCheckOptions[], type?: ModalType): Promise<ConfirmCheckOptions[]> {
+        const modalRef: NgbModalRef = this.modalService.open(ConfirmCheckModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.message = message;
+        modalRef.componentInstance.checkOpts = checkOpts;
+        modalRef.componentInstance.type = type;
+        return modalRef.result;
     }
 
     /**
@@ -126,36 +124,17 @@ export class BasicModalServices {
      * @param message the message to show in the modal dialog body
      * @param type tells the type of the dialog. Determines the style of the message in the dialog.
      * Available values: info (default), error, warning
+     * @param checkboxLabel if provided, the alert will contain a checkbox with the given label
      * @param details details showed in a expandable/collapsable panel
      */
-    alert(title: string, message: string, type?: ModalType, details?: string) {
-        var modalType = type ? type : "info"; //set default type to info if not defined
-        var modalData = new AlertModalData(title, message, modalType, details);
-        const builder = new BSModalContextBuilder<AlertModalData>(
-            modalData, undefined, AlertModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(AlertModal, overlayConfig).result;
-    }
-
-    /**
-     * Opens a modal with an info message and a single button to dismiss the modal. Contains also a checkbox.
-     * @param title the title of the modal dialog
-     * @param message the message to show in the modal dialog body
-     * @param checkboxLabel the label of the checkbox in the modal body
-     * @param type tells the type of the dialog. Determines the style of the message in the dialog.
-     * Available values: info (default), error, warning
-     * @param details details showed in a expandable/collapsable panel
-     * @return returns a promise containing a boolean with the value of the checkbox
-     */
-    alertCheck(title: string, message: string, checkboxLabel: string, type?: ModalType, details?: string) {
-        var modalType = type ? type : "info"; //set default type to info if not defined
-        var modalData = new AlertCheckModalData(title, message, checkboxLabel, modalType, details);
-        const builder = new BSModalContextBuilder<AlertCheckModalData>(
-            modalData, undefined, AlertCheckModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(AlertCheckModal, overlayConfig).result;
+    alert(title: string, message: string, type?: ModalType, details?: string, checkboxLabel?: string): Promise<boolean> {
+        const modalRef: NgbModalRef = this.modalService.open(AlertModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.message = message;
+        modalRef.componentInstance.type = type;
+        modalRef.componentInstance.details = details;
+        modalRef.componentInstance.checkboxLabel = checkboxLabel;
+        return modalRef.result;
     }
 
     /**
@@ -164,8 +143,8 @@ export class BasicModalServices {
      * @param message 
      * @param warningCookie 
      */
-    alertCheckWarning(title: string, message: string, warningCookie: string) {
-        return this.alertCheck(title, message, "Don't show this again", "warning").then(
+    alertCheckCookie(title: string, message: string, warningCookie: string, type?: ModalType) {
+        return this.alert(title, message, type, null, "Don't show this again").then(
             confirm => {
                 if (confirm) {
                     Cookie.setCookie(warningCookie, "false", 365*10, VBContext.getLoggedUser().getIri());
@@ -183,13 +162,12 @@ export class BasicModalServices {
      * @return if the modal closes with ok returns a promise containing the selected option
      */
     select(title: string, message: string, options: Array<string|SelectionOption>, type?: ModalType) {
-        var modalType = type ? type : "info"; //set default type to info if not defined
-        var modalData = new SelectionModalData(title, message, options, modalType);
-        const builder = new BSModalContextBuilder<SelectionModalData>(
-            modalData, undefined, SelectionModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(SelectionModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(SelectionModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.message = message;
+        modalRef.componentInstance.options = options;
+        modalRef.componentInstance.type = type;
+        return modalRef.result;
     }
 
     /**
@@ -200,12 +178,12 @@ export class BasicModalServices {
      * @param fileName name of the file to download
      */
     downloadLink(title: string, message: string, downloadLink: string, fileName: string) {
-        var modalData = new DownloadModalData(title, message, downloadLink, fileName);
-        const builder = new BSModalContextBuilder<DownloadModalData>(
-            modalData, undefined, DownloadModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(DownloadModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(DownloadModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.message = message;
+        modalRef.componentInstance.downloadLink = downloadLink;
+        modalRef.componentInstance.fileName = fileName;
+        return modalRef.result;
     }
 
     /**
@@ -217,12 +195,13 @@ export class BasicModalServices {
      * @param placeholder text to show in the filepicker when no file is selected
      */
     selectFile(title: string, message?: string, label?: string, placeholder?: string, accept?: string) {
-        var modalData = new FilePickerModalData(title, message, label, placeholder, accept);
-        const builder = new BSModalContextBuilder<FilePickerModalData>(
-            modalData, undefined, FilePickerModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(FilePickerModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(FilePickerModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.message = message;
+        modalRef.componentInstance.label = label;
+        modalRef.componentInstance.placeholder = placeholder;
+        modalRef.componentInstance.accept = accept;
+        return modalRef.result;
     }
 
     /**
@@ -234,12 +213,12 @@ export class BasicModalServices {
      * @return if the modal closes with ok returns a promise containing the selected resource
      */
     selectResource(title: string, message: string, resourceList: Array<ARTNode>, rendering?: boolean) {
-        var modalData = new ResourceSelectionModalData(title, message, resourceList, rendering);
-        const builder = new BSModalContextBuilder<ResourceSelectionModalData>(
-            modalData, undefined, ResourceSelectionModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ResourceSelectionModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(ResourceSelectionModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.message = message;
+        modalRef.componentInstance.resourceList = resourceList;
+        modalRef.componentInstance.rendering = rendering;
+        return modalRef.result;
     }
 
     /**
@@ -250,12 +229,11 @@ export class BasicModalServices {
      * @return a promise containing the selected CF
      */
     selectCustomForm(title: string, cfList: CustomForm[], hideNo?: boolean) {
-        var modalData = new CustomFormSelectionModalData(title, cfList, hideNo);
-        const builder = new BSModalContextBuilder<CustomFormSelectionModalData>(
-            modalData, undefined, CustomFormSelectionModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(CustomFormSelectionModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(CustomFormSelectionModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.cfList = cfList;
+        modalRef.componentInstance.hideNo = hideNo;
+        return modalRef.result;
     }
 
 }

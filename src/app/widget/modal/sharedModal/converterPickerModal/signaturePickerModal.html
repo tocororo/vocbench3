@@ -1,14 +1,14 @@
 <div class="modal-header">
-    <h3 class="modal-title text-info">{{context.title}}</h3>
+    <h3 class="modal-title text-info">{{title}}</h3>
 </div>
 <div class="modal-body">
-    <div class="alert alert-info" *ngIf="context.message">
-        {{context.message}}
+    <div class="alert alert-info" *ngIf="message">
+        {{message}}
     </div>
         
     <div class="scrollableContainer" style="border: 1px solid #ddd; margin-top: 5px;">
         
-        <ng-template ngFor let-s [ngForOf]="context.signatures">
+        <ng-template ngFor let-s [ngForOf]="signatures">
 
             <div class="listItem vbox" style="margin: 2px; padding: 6px; border: 1px solid #ddd; border-radius: 4px;" (click)="selectSignature(s)"
                 [ngClass]="{active: selectedSignature == s}">
@@ -29,6 +29,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedSignature">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedSignature">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

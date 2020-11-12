@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { CommitInfo, ParameterInfo, SortingDirection } from "../models/History";
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTURIResource } from "../models/ARTResources";
+import { CommitInfo, ParameterInfo, SortingDirection } from "../models/History";
 import { HttpManager } from "../utils/HttpManager";
-import { Deserializer } from "../utils/Deserializer";
 
 @Injectable()
 export class ValidationServices {
@@ -65,10 +65,10 @@ export class ValidationServices {
             limit: limit
         };
 
-        return this.httpMgr.doGet(this.serviceName, "getCommits", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getCommits", params).pipe(
+            map(stResp => {
                 return this.parseCommitInfoList(stResp);
-            }
+            })
         );
     }
 
@@ -84,10 +84,10 @@ export class ValidationServices {
             limit: limit
         };
 
-        return this.httpMgr.doGet(this.serviceName, "getCurrentUserCommits", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getCurrentUserCommits", params).pipe(
+            map(stResp => {
                 return this.parseCommitInfoList(stResp);
-            }
+            })
         );
     }
 

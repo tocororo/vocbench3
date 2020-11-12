@@ -1,53 +1,36 @@
-import { Component, ElementRef } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource, RDFResourceRolesEnum } from '../../../../models/ARTResources';
 import { UIUtils } from "../../../../utils/UIUtils";
 import { ProjectContext } from "../../../../utils/VBContext";
 
-export class PropertyTreeModalData extends BSModalContext {
-    /**
-     * @param rootProperties optional, if provided the tree is build with these properties as roots
-     * @param resource optional, if provided the returned propertyTree contains 
-     * @param type tells the type of the property to show in the tree
-     * just the properties that have as domain the type of the resource 
-     */
-    constructor(
-        public title: string = 'Modal Title',
-        public rootProperties: ARTURIResource[],
-        public resource: ARTURIResource,
-        public type: RDFResourceRolesEnum,
-        public projectCtx?: ProjectContext
-    ) {
-        super();
-    }
-}
-
 @Component({
-    selector: "class-tree-modal",
+    selector: "property-tree-modal",
     templateUrl: "./propertyTreeModal.html",
 })
-export class PropertyTreeModal implements ModalComponent<PropertyTreeModalData> {
-    context: PropertyTreeModalData;
+export class PropertyTreeModal {
+    @Input() title: string;
+    @Input() rootProperties: ARTURIResource[];
+    @Input() resource: ARTURIResource;
+    @Input() type: RDFResourceRolesEnum;
+    @Input() projectCtx?: ProjectContext;
     
-    private selectedProperty: ARTURIResource;
-    private domainRes: ARTURIResource;
+    selectedProperty: ARTURIResource;
+    domainRes: ARTURIResource;
 
     private showAll: boolean = false;
     
-    constructor(public dialog: DialogRef<PropertyTreeModalData>, private elementRef: ElementRef) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private elementRef: ElementRef) {}
     
     ngOnInit() {
-        this.domainRes = this.context.resource;
+        this.domainRes = this.resource;
     }
 
     ngAfterViewInit() {
         UIUtils.setFullSizeModal(this.elementRef);
     }
     
-    private onPropertySelected(property: ARTURIResource) {
+    onPropertySelected(property: ARTURIResource) {
         this.selectedProperty = property;
     }
     
@@ -56,23 +39,21 @@ export class PropertyTreeModal implements ModalComponent<PropertyTreeModalData> 
      * Resets the selectedProperty and update the domainRes that represents 
      * the resource which its type should be the domain of the properties in the tree
      */
-    private onShowAllChanged() {
+    onShowAllChanged() {
         this.selectedProperty = null;
         if (this.showAll) {
             this.domainRes = null;
         } else {
-            this.domainRes = this.context.resource;
+            this.domainRes = this.resource;
         }
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close(this.selectedProperty);
+    ok() {
+        this.activeModal.close(this.selectedProperty);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ConfigurationDefinition, Reference } from '../models/Configuration';
 import { InvokableReporter, Report, ServiceInvocationDefinition } from '../models/InvokableReporter';
 import { Scope } from '../models/Plugins';
@@ -60,10 +61,10 @@ export class InvokableReportersServices {
      */
     getInvokableReporterForm(): Observable<InvokableReporter> {
         let params = {}
-        return this.httpMgr.doGet(this.serviceName, "getInvokableReporterForm", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getInvokableReporterForm", params).pipe(
+            map(stResp => {
                 return <InvokableReporter>InvokableReporter.parse(stResp);
-            }
+            })
         )
     }
 
@@ -72,14 +73,14 @@ export class InvokableReportersServices {
      */
     getInvokableReporterIdentifiers(): Observable<Reference[]> {
         let params = {}
-        return this.httpMgr.doGet(this.serviceName, "getInvokableReporterIdentifiers", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getInvokableReporterIdentifiers", params).pipe(
+            map(stResp => {
                 let references: Reference[] = [];
                 for (let i = 0; i < stResp.length; i++) {
                     references.push(Reference.deserialize(stResp[i]));
                 }
                 return references;
-            }
+            })
         );
     }
 
@@ -90,10 +91,10 @@ export class InvokableReportersServices {
         var params = {
             reference: reference
         }
-        return this.httpMgr.doGet(this.serviceName, "getInvokableReporter", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getInvokableReporter", params).pipe(
+            map(stResp => {
                 return <InvokableReporter>InvokableReporter.parse(stResp);
-            }
+            })
         );
     }
 

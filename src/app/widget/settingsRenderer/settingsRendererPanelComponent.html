@@ -1,16 +1,16 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading hbox" style="flex: initial">
+<div class="card card-default vbox">
+    <div class="card-header hbox" style="flex: initial">
         <label style="flex: 1">{{settings?.shortName}}</label>
         <div *ngIf="scope">
             <label>scope:</label>
             <span>{{scope}}</span>
         </div>
     </div>
-    <div class="panel-body" class="scrollableContainer">
+    <div class="card-body" class="scrollableContainer">
 
         <div *ngIf="settings?.htmlDescription" class="alert alert-info alert-dismissible alert-multiline" style="margin-bottom: 4px;">
             <div class="hbox" style="align-items: center;">
-                <span class="glyphicon glyphicon-info-sign" style="margin-right: 6px;"></span>
+                <span class="fas fa-info-circle" style="margin-right: 6px;"></span>
                 <span style="flex: 1;" [innerHTML]="safeDescription"></span>
             </div>
             <button class="close" data-dismiss="alert"><span>&times;</span></button>
@@ -18,7 +18,7 @@
 
         <div *ngIf="settings?.htmlWarning" class="alert alert-warning alert-dismissible alert-multiline" style="margin-bottom: 4px;">
             <div class="hbox" style="align-items: center;">
-                <span class="glyphicon glyphicon-warning-sign" style="margin-right: 6px;"></span>
+                <span class="fas fa-exclamation-triangle" style="margin-right: 6px;"></span>
                 <span style="flex: 1;" [innerHTML]="safeWarning"></span>
             </div>
             <button class="close" data-dismiss="alert"><span>&times;</span></button>

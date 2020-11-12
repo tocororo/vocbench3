@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AlignmentOverview, RemoteAlignmentServiceConfiguration } from '../models/Alignment';
 import { ARTURIResource } from '../models/ARTResources';
 import { AlignmentPlan, MatcherDTO, ScenarioDefinition, ServiceMetadataDTO, SettingsDTO } from '../models/Maple';
@@ -33,8 +34,8 @@ export class RemoteAlignmentServices {
                 ]
             } 
         });
-        return this.httpMgr.doGet(this.serviceName, "listTasks", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "listTasks", params, options).pipe(
+            map(stResp => {
                 let tasks: RemoteAlignmentTask[] = [];
                 stResp.forEach((result: any) => {
                     let task: RemoteAlignmentTask = {
@@ -64,7 +65,7 @@ export class RemoteAlignmentServices {
                     tasks.push(task);
                 });
                 return tasks;
-            }
+            })
         )
     }
 
@@ -103,8 +104,8 @@ export class RemoteAlignmentServices {
 
     getServiceMetadata(): Observable<ServiceMetadataDTO> {
         let params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getServiceMetadata", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getServiceMetadata", params).pipe(
+            map(stResp => {
                 let settings: SettingsDTO;
                 if (stResp.settings) {
                     settings = {
@@ -123,7 +124,7 @@ export class RemoteAlignmentServices {
                     settings: settings
                 }
                 return servMetadata;
-            }
+            })
         );
     }
 
@@ -131,8 +132,8 @@ export class RemoteAlignmentServices {
         let params: any = {
             scenarioDefinition: JSON.stringify(scenarioDefinition)
         };
-        return this.httpMgr.doPost(this.serviceName, "searchMatchers", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "searchMatchers", params).pipe(
+            map(stResp => {
                 let matchers: MatcherDTO[] = [];
                 for (let matcherJson of stResp) {
                     let settings: SettingsDTO
@@ -151,7 +152,7 @@ export class RemoteAlignmentServices {
                     matchers.push(m);
                 }
                 return matchers;
-            }
+            })
         );
     }
 
@@ -161,14 +162,14 @@ export class RemoteAlignmentServices {
      */
     getRemoteAlignmentServices(): Observable<{[key: string]: RemoteAlignmentServiceConfiguration }> {
         let params = {};
-        return this.httpMgr.doGet(this.serviceName, "getRemoteAlignmentServices", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getRemoteAlignmentServices", params).pipe(
+            map(stResp => {
                 let serviceConfigs: {[key: string]: RemoteAlignmentServiceConfiguration } = {};
                 for (let id in stResp) {
                     serviceConfigs[id] = RemoteAlignmentServiceConfiguration.parse(stResp[id]);
                 }
                 return serviceConfigs;
-            }
+            })
         );
     }
 
@@ -242,14 +243,14 @@ export class RemoteAlignmentServices {
      */
     getAlignmentServiceForProject(): Observable<Pair<string, boolean>> {
         let params = {};
-        return this.httpMgr.doGet(this.serviceName, "getAlignmentServiceForProject", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getAlignmentServiceForProject", params).pipe(
+            map(stResp => {
                 let pair: Pair<string, boolean>;
                 if (stResp != null) {
                     pair = { first: stResp[0], second: stResp[1] };
                 }
                 return pair;
-            }
+            })
         );
     }
 

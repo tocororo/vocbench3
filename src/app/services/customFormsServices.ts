@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { PearlValidationResult } from '../models/Coda';
 import { AnnotationName, BrokenCFStructure, CustomForm, CustomFormLevel, CustomFormType, FormCollection, FormCollectionMapping, FormField, FormFieldAnnotation, FormFieldType } from "../models/CustomForms";
@@ -25,14 +26,14 @@ export class CustomFormsServices {
             predicate: predicate,
             resource: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "getGraphObjectDescription", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getGraphObjectDescription", params).pipe(
+            map(stResp => {
                 var predicateObjectList: ARTPredicateObjects[];
                 if (stResp.properties != null) { //only if resource has a reified description
                     predicateObjectList = Deserializer.createPredicateObjectsList(stResp.properties);
                 }
                 return predicateObjectList;
-            }
+            })
         );
     }
 
@@ -98,7 +99,8 @@ export class CustomFormsServices {
                 exceptionsToSkip: ['it.uniroma2.art.coda.exception.parserexception.PRParserException'] 
             } 
         });
-        return this.httpMgr.doGet(this.serviceName, "getCustomFormRepresentation", params, options).map(
+        return this.httpMgr.doGet(this.serviceName, "getCustomFormRepresentation", params, options).pipe(
+            map(
             stResp => {
                 /* this service could throw an error if Pearl is invalid
                 (in this case the server throws a PRParserException and it is handled in HttpManager),
@@ -198,7 +200,7 @@ export class CustomFormsServices {
                     }
                 }
                 return form;
-            }
+            })
         );
     }
 
@@ -211,8 +213,8 @@ export class CustomFormsServices {
      */
     getCustomFormConfigMap(): Observable<FormCollectionMapping[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getCustomFormConfigMap", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getCustomFormConfigMap", params).pipe(
+            map(stResp => {
                 var fcMappings: Array<FormCollectionMapping> = [];
                 for (var i = 0; i < stResp.length; i++) {
                     let mappingNode = stResp[i];
@@ -230,7 +232,7 @@ export class CustomFormsServices {
                     }
                 );
                 return fcMappings;
-            }
+            })
         );
     }
 
@@ -285,8 +287,8 @@ export class CustomFormsServices {
      */
     getAllFormCollections(): Observable<FormCollection[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getAllFormCollections", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getAllFormCollections", params).pipe(
+            map(stResp => {
                 var formCollections: Array<FormCollection> = [];
                 for (var i = 0; i < stResp.length; i++) {
                     let fc: FormCollection = new FormCollection(stResp[i].id);
@@ -301,7 +303,7 @@ export class CustomFormsServices {
                     }
                 );
                 return formCollections;
-            }
+            })
         );
     }
 
@@ -313,8 +315,8 @@ export class CustomFormsServices {
         var params: any = {
             id: id
         };
-        return this.httpMgr.doGet(this.serviceName, "getFormCollection", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getFormCollection", params).pipe(
+            map(stResp => {
                 var formColl: FormCollection;
                 var fcId = stResp.id;
                 formColl = new FormCollection(fcId);
@@ -338,7 +340,7 @@ export class CustomFormsServices {
                 formColl.setSuggestions(suggestions);
                 
                 return formColl;
-            }
+            })
         );
     }
 
@@ -427,8 +429,8 @@ export class CustomFormsServices {
      */
     getAllCustomForms(): Observable<CustomForm[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getAllCustomForms", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getAllCustomForms", params).pipe(
+            map(stResp => {
                 var customForms: Array<CustomForm> = [];
                 for (var i = 0; i < stResp.length; i++) {
                     let cf: CustomForm = new CustomForm(stResp[i].id);
@@ -444,7 +446,7 @@ export class CustomFormsServices {
                     }
                 );
                 return customForms;
-            }
+            })
         );
     }
 
@@ -455,8 +457,8 @@ export class CustomFormsServices {
         var params: any = {
             resource: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "getCustomConstructors", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getCustomConstructors", params).pipe(
+            map(stResp => {
                 var forms: CustomForm[] = [];
                 if (stResp.forms) {
                     for (var i = 0; i < stResp.forms.length; i++) {
@@ -475,7 +477,7 @@ export class CustomFormsServices {
                     )
                 }
                 return forms;
-            }
+            })
         );
     }
 
@@ -487,10 +489,10 @@ export class CustomFormsServices {
         var params: any = {
             id: id
         };
-        return this.httpMgr.doGet(this.serviceName, "getCustomForm", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getCustomForm", params).pipe(
+            map(stResp => {
                 return this.parseCustomFormJson(stResp);
-            }
+            })
         );
     }
 
@@ -616,10 +618,10 @@ export class CustomFormsServices {
             prId: prId,
             save: save
         };
-        return this.httpMgr.doPost(this.serviceName, "updateCustomFormWithAnnotations", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "updateCustomFormWithAnnotations", params).pipe(
+            map(stResp => {
                 return this.parseCustomFormJson(stResp);
-            }
+            })
         );
     }
 
@@ -644,10 +646,10 @@ export class CustomFormsServices {
         var params: any = {
             propChain: propChain
         };
-        return this.httpMgr.doGet(this.serviceName, "validateShowPropertyChain", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "validateShowPropertyChain", params).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -671,8 +673,8 @@ export class CustomFormsServices {
      */
     getBrokenCustomForms(): Observable<BrokenCFStructure[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getBrokenCustomForms", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getBrokenCustomForms", params).pipe(
+            map(stResp => {
                 let brokenCFS: BrokenCFStructure[] = [];
                 for (var i = 0; i < stResp.length; i++) {
                     brokenCFS.push({
@@ -743,7 +745,7 @@ export class CustomFormsServices {
                 });
 
                 return brokenCFS;
-            }
+            })
         );
     }
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
@@ -26,8 +27,8 @@ export class ServicesServices {
         var params: any = {
             extensionPath: extensionPath
         };
-        return this.httpMgr.doGet(this.serviceName, "getServiceClasses", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getServiceClasses", params).pipe(
+            map(stResp => {
                 stResp.sort(
                     function (sc1: string, sc2: string) {
                         if (sc1 > sc2) return 1;
@@ -36,7 +37,7 @@ export class ServicesServices {
                     }
                 );
                 return stResp;
-            }
+            })
         );
     }
 
@@ -50,8 +51,8 @@ export class ServicesServices {
             extensionPath: extensionPath,
             serviceClass: serviceClass
         };
-        return this.httpMgr.doGet(this.serviceName, "getServiceOperations", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getServiceOperations", params).pipe(
+            map(stResp => {
                 stResp.sort(
                     function (op1: string, op2: string) {
                         if (op1 > op2) return 1;
@@ -60,7 +61,7 @@ export class ServicesServices {
                     }
                 );
                 return stResp;
-            }
+            })
         );
     }
 

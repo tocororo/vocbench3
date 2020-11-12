@@ -26,13 +26,13 @@ export class Issue {
         this.category = category;
 
         if (statusId == "10000") {
-            this.statusClass = "label-primary";
+            this.statusClass = "badge-primary";
         } else if (statusId == "10001") {
-            this.statusClass = "label-success";
+            this.statusClass = "badge-success";
         } else if (statusId == "3") {
-            this.statusClass = "label-warning";
+            this.statusClass = "badge-warning";
         } else {
-            this.statusClass = "label-info";
+            this.statusClass = "badge-info";
         }
 
         this.resources = [];

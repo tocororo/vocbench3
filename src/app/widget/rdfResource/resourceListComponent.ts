@@ -12,11 +12,11 @@ export class ResourceListComponent {
 
 	@ViewChild('scrollableContainer') scrollableElement: ElementRef;
 
-	private resourceSelected: ARTNode;
+	resourceSelected: ARTNode;
 
 	constructor() { }
 
-	private onResourceSelected(resource: ARTNode) {
+	onResourceSelected(resource: ARTNode) {
 		this.resourceSelected = resource;
 		this.nodeSelected.emit(resource);
 	}
@@ -25,7 +25,7 @@ export class ResourceListComponent {
 	private initialRes: number = 50;
 	private resLimit: number = this.initialRes;
 	private increaseRate: number = this.initialRes / 5;
-	private onScroll() {
+	onScroll() {
 		let scrollElement: HTMLElement = this.scrollableElement.nativeElement;
 		if (scrollElement.scrollTop === (scrollElement.scrollHeight - scrollElement.offsetHeight)) {
 			//bottom reached => increase max range if there are more roots to show

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { UserForm } from "../../models/User";
 import { BasicModalServices } from "../modal/basicModal/basicModalServices";
+import { ModalType } from '../modal/Modals';
 
 @Component({
     selector: 'input-editable',
@@ -8,7 +9,7 @@ import { BasicModalServices } from "../modal/basicModal/basicModalServices";
 })
 export class InputEditableComponent implements OnInit {
     @Input() value: any;
-    @Input() size: string = "sm"; //xs, sm (default), md, lg
+    @Input() size: string; //xs, sm, md (default), lg
     @Input() type: string; //text (default), email, date, number, select
     @Input() options: string[]; //options of select element. Used only if type = "select"
     @Input() min: number; //Useful only if type = "number"
@@ -19,19 +20,17 @@ export class InputEditableComponent implements OnInit {
 
     @Output() valueEdited = new EventEmitter<any>();
 
-    private inputClass = "input-group input-group-";
+    inputClass = "input-group";
     private inputType = "text";
-    private editInProgress: boolean = false;
+    editInProgress: boolean = false;
     private pristineValue: any; //original input value, as backup
 
     constructor(private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         //init class of input field
-        if (this.size == "xs" || this.size == "md" || this.size == "lg") {
-            this.inputClass += this.size;
-        } else {
-            this.inputClass += "sm";
+        if (this.size == "xs" || this.size == "sm" || this.size == "md" || this.size == "lg") {
+            this.inputClass += " input-group-" + this.size;
         }
         //init type of input field
         if (this.type == "email" || this.type == "date" || this.type == "number") {
@@ -56,11 +55,11 @@ export class InputEditableComponent implements OnInit {
             if (this.allowEmpty) {
                 this.value = null;
             } else {
-                this.basicModals.alert("Invalid value", "The inserted value is empty or not valid. Please check and retry.", "error");
+                this.basicModals.alert("Invalid value", "The inserted value is empty or not valid. Please check and retry.", ModalType.warning);
                 return;
             }
         } else if (this.type == "email" && !UserForm.isValidEmail(this.value)) {
-            this.basicModals.alert("Invalid value", "The inserted value is not valid. Please check and retry.", "error");
+            this.basicModals.alert("Invalid value", "The inserted value is not valid. Please check and retry.", ModalType.warning);
             return;
         }
         this.editInProgress = false;

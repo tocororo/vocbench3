@@ -1,25 +1,22 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { RemoteRepositoryAccessConfig } from "../../../../models/Project";
 import { Properties } from "../../../../models/Properties";
 import { PreferencesSettingsServices } from "../../../../services/preferencesSettingsServices";
 import { BasicModalServices } from "../../basicModal/basicModalServices";
+import { ModalType } from '../../Modals';
 
 @Component({
     selector: "remote-access-config-modal",
     templateUrl: "./remoteAccessConfigModal.html",
 })
-export class RemoteAccessConfigModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class RemoteAccessConfigModal {
 
-    private savedConfigs: RemoteRepositoryAccessConfig[] = [];
+    savedConfigs: RemoteRepositoryAccessConfig[] = [];
 
-    private newConfig: RemoteRepositoryAccessConfig = { serverURL: null, username: null, password: null };
+    newConfig: RemoteRepositoryAccessConfig = { serverURL: null, username: null, password: null };
 
-    constructor(public dialog: DialogRef<BSModalContext>, private basicModals: BasicModalServices, private prefService: PreferencesSettingsServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices, private prefService: PreferencesSettingsServices) {}
 
     ngOnInit() {
         this.prefService.getSystemSettings([Properties.setting_remote_configs]).subscribe(
@@ -36,7 +33,7 @@ export class RemoteAccessConfigModal implements ModalComponent<BSModalContext> {
         for (var i = 0; i < this.savedConfigs.length; i++) {
             if (this.savedConfigs[i].serverURL == this.newConfig.serverURL) {
                 this.basicModals.alert("Duplicate configuration", "A configuration for the serverURL '" + this.newConfig.serverURL 
-                    + "' already exists", "warning");
+                    + "' already exists", ModalType.warning);
                 return;
             }
         }
@@ -46,7 +43,7 @@ export class RemoteAccessConfigModal implements ModalComponent<BSModalContext> {
     }
 
     private deleteConfig(c: RemoteRepositoryAccessConfig) {
-        this.basicModals.confirm("Delete configuration", "You are deleting the configuration. Are you sure?", "warning").then(
+        this.basicModals.confirm("Delete configuration", "You are deleting the configuration. Are you sure?", ModalType.warning).then(
             () => {
                 this.savedConfigs.splice(this.savedConfigs.indexOf(c), 1);
                 this.updateConfigurations();
@@ -76,10 +73,8 @@ export class RemoteAccessConfigModal implements ModalComponent<BSModalContext> {
         this.prefService.setSystemSetting(Properties.setting_remote_configs, conf).subscribe();
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+    ok() {
+        this.activeModal.close();
     }
 
 }

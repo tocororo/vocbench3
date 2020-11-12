@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Scope, Settings } from '../models/Plugins';
 import { HttpManager } from "../utils/HttpManager";
 
@@ -31,10 +32,10 @@ export class SettingsServices {
             componentID: componentID,
             scope: scope
         };
-        return this.httpMgr.doGet(this.serviceName, "getSettings", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getSettings", params).pipe(
+            map(stResp => {
                 return Settings.parse(stResp);
-            }
+            })
         );
     }
 

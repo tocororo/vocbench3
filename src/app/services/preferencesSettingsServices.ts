@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTURIResource } from "../models/ARTResources";
 import { Project } from "../models/Project";
 import { User } from '../models/User';
@@ -34,14 +35,14 @@ export class PreferencesSettingsServices {
         var params: any = {
             projectName: projectName
         }
-        return this.httpMgr.doGet(this.serviceName, "getActiveSchemes", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getActiveSchemes", params).pipe(
+            map(stResp => {
                 if (stResp == null) {
                     return null;
                 } else {
                     return Deserializer.createURIArray(stResp);
                 }
-            }
+            })
         );
     }
 

@@ -1,43 +1,33 @@
-import { Component, ElementRef } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from '../../../../models/ARTResources';
 import { UIUtils } from "../../../../utils/UIUtils";
-
-export class InstanceListModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title', public cls: ARTURIResource) {
-        super();
-    }
-}
 
 @Component({
     selector: "instance-list-modal",
     templateUrl: "./instanceListModal.html",
 })
-export class InstanceListModal implements ModalComponent<InstanceListModalData> {
-    context: InstanceListModalData;
+export class InstanceListModal {
+    @Input() title: string;
+    @Input() cls: ARTURIResource;
     
-    private selectedInstance: ARTURIResource;
+    selectedInstance: ARTURIResource;
     
-    constructor(public dialog: DialogRef<InstanceListModalData>, private elementRef: ElementRef) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private elementRef: ElementRef) {}
 
     ngAfterViewInit() {
         UIUtils.setFullSizeModal(this.elementRef);
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close(this.selectedInstance);
+    ok() {
+        this.activeModal.close(this.selectedInstance);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
-    private onInstanceSelected(instance: ARTURIResource) {
+    onInstanceSelected(instance: ARTURIResource) {
         this.selectedInstance = instance;
     }
 

@@ -1,12 +1,12 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body vbox">
-    <concept-tree-panel [editable]="false" [schemeChangeable]="context.schemeChangeable" [schemes]="context.schemes" [projectCtx]="context.projectCtx"
+    <concept-tree-panel [editable]="false" [schemeChangeable]="schemeChangeable" [schemes]="schemes" [projectCtx]="projectCtx"
         (nodeSelected)="onConceptSelected($event)" >
     </concept-tree-panel>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedConcept">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedConcept">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

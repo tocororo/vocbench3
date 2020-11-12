@@ -17,19 +17,17 @@ export class FilePickerComponent {
     
     @Output() fileChanged = new EventEmitter<File>();
 
-    private inputGroupClass: string = "input-group input-group-";
+    inputGroupClass: string = "input-group";
     
     constructor() { }
 
     ngOnInit() {
         if (this.size == "xs" || this.size == "sm" || this.size == "md" || this.size == "lg") {
-            this.inputGroupClass += this.size;
-        } else {
-            this.inputGroupClass += "sm";
+            this.inputGroupClass += " input-group-" + this.size;
         }
     }
     
-    private fileChangeEvent(file: File) {
+    fileChangeEvent(file: File) {
         if (file != null) {
             this.file = file;
             this.fileChanged.emit(file);

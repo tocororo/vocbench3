@@ -1,5 +1,5 @@
-import {Injectable} from '@angular/core';
-import {HttpManager} from "../utils/HttpManager";
+import { Injectable } from '@angular/core';
+import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
 export class XmlSchemaServices {

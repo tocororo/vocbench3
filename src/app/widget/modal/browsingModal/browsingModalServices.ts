@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
-import { ClassIndividualTreeModal, ClassIndividualTreeModalData } from "./classIndividualTreeModal/classIndividualTreeModal";
-import { ClassTreeModal, ClassTreeModalData } from "./classTreeModal/classTreeModal";
-import { CollectionTreeModal, CollectionTreeModalData } from "./collectionTreeModal/collectionTreeModal";
-import { ConceptTreeModal, ConceptTreeModalData } from "./conceptTreeModal/conceptTreeModal";
-import { DatatypeListModal, DatatypeListModalData } from './datatypeListModal/datatypeListModal';
-import { InstanceListModal, InstanceListModalData } from "./instanceListModal/instanceListModal";
-import { LexicalEntryListModal, LexicalEntryListModalData } from './lexicalEntryListModal/lexicalEntryListModal';
-import { LexiconListModal, LexiconListModalData } from './lexiconListModal/lexiconListModal';
-import { PropertyTreeModal, PropertyTreeModalData } from "./propertyTreeModal/propertyTreeModal";
-import { SchemeListModal, SchemeListModalData } from "./schemeListModal/schemeListModal";
 import { ProjectContext } from '../../../utils/VBContext';
+import { ModalOptions } from '../Modals';
+import { ClassIndividualTreeModal } from "./classIndividualTreeModal/classIndividualTreeModal";
+import { ClassTreeModal } from "./classTreeModal/classTreeModal";
+import { CollectionTreeModal } from "./collectionTreeModal/collectionTreeModal";
+import { ConceptTreeModal } from "./conceptTreeModal/conceptTreeModal";
+import { DatatypeListModal } from './datatypeListModal/datatypeListModal';
+import { InstanceListModal } from "./instanceListModal/instanceListModal";
+import { LexiconListModal } from './lexiconListModal/lexiconListModal';
+import { PropertyTreeModal } from "./propertyTreeModal/propertyTreeModal";
+import { SchemeListModal } from "./schemeListModal/schemeListModal";
 
 /**
  * Service to open browsing modals, namely the modal that contains trees (concept, class, property) or list (instances).
@@ -20,20 +19,20 @@ import { ProjectContext } from '../../../utils/VBContext';
 @Injectable()
 export class BrowsingModalServices {
 
-    constructor(private modal: Modal) { }
+    constructor(private modalService: NgbModal) { }
 
     /**
      * Opens a modal to browse the class tree
      * @param title the title of the modal
      * @return if the modal closes with ok returns a promise containing the selected class
      */
-    browseClassTree(title: string, roots?: ARTURIResource[], projectCtx?: ProjectContext) {
-        var modalData = new ClassTreeModalData(title, roots, projectCtx);
-        const builder = new BSModalContextBuilder<ClassTreeModalData>(
-            modalData, undefined, ClassTreeModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ClassTreeModal, overlayConfig).result;
+    browseClassTree(title: string, roots?: ARTURIResource[], projectCtx?: ProjectContext): Promise<ARTURIResource> {
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(ClassTreeModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.roots = roots;
+        modalRef.componentInstance.projectCtx = projectCtx;
+        return modalRef.result;
     }
 
     /**
@@ -42,13 +41,13 @@ export class BrowsingModalServices {
      * @param classes (optional) tells the admitted type of the individual to pick
      * @return if the modal closes with ok returns a promise containing the selected individual
      */
-    browseClassIndividualTree(title: string, classes?: ARTURIResource[], projectCtx?: ProjectContext) {
-        var modalData = new ClassIndividualTreeModalData(title, classes, projectCtx);
-        const builder = new BSModalContextBuilder<ClassIndividualTreeModalData>(
-            modalData, undefined, ClassIndividualTreeModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-        return this.modal.open(ClassIndividualTreeModal, overlayConfig).result;
+    browseClassIndividualTree(title: string, classes?: ARTURIResource[], projectCtx?: ProjectContext): Promise<ARTURIResource> {
+        let _options: ModalOptions = new ModalOptions('lg');
+        const modalRef: NgbModalRef = this.modalService.open(ClassIndividualTreeModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.classes = classes;
+        modalRef.componentInstance.projectCtx = projectCtx;
+        return modalRef.result;
     }
 
     /**
@@ -57,13 +56,12 @@ export class BrowsingModalServices {
      * @param cls the class of the instance to browse
      * @return if the modal closes with ok returns a promise containing the selected instance
      */
-    browseInstanceList(title: string, cls: ARTURIResource) {
-        var modalData = new InstanceListModalData(title, cls);
-        const builder = new BSModalContextBuilder<InstanceListModalData>(
-            modalData, undefined, InstanceListModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(InstanceListModal, overlayConfig).result;
+    browseInstanceList(title: string, cls: ARTURIResource): Promise<ARTURIResource> {
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(InstanceListModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.cls = cls;
+        return modalRef.result;
     }
 
     /**
@@ -73,13 +71,14 @@ export class BrowsingModalServices {
      * @param schemeChangeable if true a menu is shown and the user can browse not only the selected scheme
      * @return if the modal closes with ok returns a promise containing the selected concept
      */
-    browseConceptTree(title: string, schemes?: ARTURIResource[], schemeChangeable?: boolean, projectCtx?: ProjectContext) {
-        var modalData = new ConceptTreeModalData(title, schemes, schemeChangeable, projectCtx);
-        const builder = new BSModalContextBuilder<ConceptTreeModalData>(
-            modalData, undefined, ConceptTreeModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ConceptTreeModal, overlayConfig).result;
+    browseConceptTree(title: string, schemes?: ARTURIResource[], schemeChangeable?: boolean, projectCtx?: ProjectContext): Promise<ARTURIResource> {
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(ConceptTreeModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.schemes = schemes;
+        modalRef.componentInstance.schemeChangeable = schemeChangeable;
+        modalRef.componentInstance.projectCtx = projectCtx;
+        return modalRef.result;
     }
 
     /**
@@ -87,13 +86,12 @@ export class BrowsingModalServices {
      * @param title the title of the modal
      * @return if the modal closes with ok returns a promise containing the selected collection
      */
-    browseCollectionTree(title: string, projectCtx?: ProjectContext) {
-        var modalData = new CollectionTreeModalData(title, projectCtx);
-        const builder = new BSModalContextBuilder<CollectionTreeModalData>(
-            modalData, undefined, CollectionTreeModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(CollectionTreeModal, overlayConfig).result;
+    browseCollectionTree(title: string, projectCtx?: ProjectContext): Promise<ARTURIResource> {
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(CollectionTreeModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.projectCtx = projectCtx;
+        return modalRef.result;
     }
 
     /**
@@ -101,13 +99,12 @@ export class BrowsingModalServices {
      * @param title the title of the modal
      * @return if the modal closes with ok returns a promise containing the selected scheme
      */
-    browseSchemeList(title: string, projectCtx?: ProjectContext) {
-        var modalData = new SchemeListModalData(title, projectCtx);
-        const builder = new BSModalContextBuilder<SchemeListModalData>(
-            modalData, undefined, SchemeListModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(SchemeListModal, overlayConfig).result;
+    browseSchemeList(title: string, projectCtx?: ProjectContext): Promise<ARTURIResource> {
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(SchemeListModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.projectCtx = projectCtx;
+        return modalRef.result;
     }
 
     /**
@@ -119,13 +116,15 @@ export class BrowsingModalServices {
      * just the properties that have as domain the type of the resource 
      * @return if the modal closes with ok returns a promise containing the selected property
      */
-    browsePropertyTree(title: string, rootProperties?: ARTURIResource[], resource?: ARTURIResource, type?: RDFResourceRolesEnum, projectCtx?: ProjectContext) {
-        var modalData = new PropertyTreeModalData(title, rootProperties, resource, type, projectCtx);
-        const builder = new BSModalContextBuilder<PropertyTreeModalData>(
-            modalData, undefined, PropertyTreeModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(PropertyTreeModal, overlayConfig).result;
+    browsePropertyTree(title: string, rootProperties?: ARTURIResource[], resource?: ARTURIResource, type?: RDFResourceRolesEnum, projectCtx?: ProjectContext): Promise<ARTURIResource> {
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(PropertyTreeModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.rootProperties = rootProperties;
+        modalRef.componentInstance.resource = resource;
+        modalRef.componentInstance.type = type;
+        modalRef.componentInstance.projectCtx = projectCtx;
+        return modalRef.result;
     }
 
     /**
@@ -137,25 +136,28 @@ export class BrowsingModalServices {
      */
     browseLexicalEntryList(title: string, lexicon?: ARTURIResource, lexiconChangeable?: boolean, editable?: boolean, deletable?: boolean,
         allowMultiselection?: boolean, projectCtx?: ProjectContext) {
-        var modalData = new LexicalEntryListModalData(title, lexicon, lexiconChangeable, editable, deletable, allowMultiselection, projectCtx);
-        const builder = new BSModalContextBuilder<LexicalEntryListModalData>(
-            modalData, undefined, LexicalEntryListModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(LexicalEntryListModal, overlayConfig).result;
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(ClassTreeModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.lexicon = lexicon;
+        modalRef.componentInstance.lexiconChangeable = lexiconChangeable;
+        modalRef.componentInstance.editable = editable;
+        modalRef.componentInstance.deletable = deletable;
+        modalRef.componentInstance.allowMultiselection = allowMultiselection;
+        modalRef.componentInstance.projectCtx = projectCtx;
+        return modalRef.result;
     }
 
     /**
      * 
      * @param title 
      */
-    browseLexiconList(title: string, projectCtx?: ProjectContext) {
-        var modalData = new LexiconListModalData(title, projectCtx);
-        const builder = new BSModalContextBuilder<LexiconListModalData>(
-            modalData, undefined, LexiconListModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(LexiconListModal, overlayConfig).result;
+    browseLexiconList(title: string, projectCtx?: ProjectContext): Promise<ARTURIResource> {
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(LexiconListModal, _options);
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.projectCtx = projectCtx;
+        return modalRef.result;
     }
 
     /**
@@ -163,13 +165,11 @@ export class BrowsingModalServices {
      * @param title the title of the modal
      * @return if the modal closes with ok returns a promise containing the selected datatype
      */
-    browseDatatypeList(title: string) {
-        var modalData = new DatatypeListModalData(title);
-        const builder = new BSModalContextBuilder<DatatypeListModalData>(
-            modalData, undefined, DatatypeListModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(DatatypeListModal, overlayConfig).result;
+    browseDatatypeList(title: string): Promise<ARTURIResource> {
+        let _options: ModalOptions = new ModalOptions();
+        const modalRef: NgbModalRef = this.modalService.open(DatatypeListModal, _options);
+        modalRef.componentInstance.title = title;
+        return modalRef.result;
     }
 
 }

@@ -1,45 +1,35 @@
-import { Component, ElementRef } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from '../../../../models/ARTResources';
 import { UIUtils } from "../../../../utils/UIUtils";
 import { ProjectContext } from "../../../../utils/VBContext";
-
-export class LexiconListModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title', public projectCtx?: ProjectContext) {
-        super();
-    }
-}
 
 @Component({
     selector: "lexicon-list-modal",
     templateUrl: "./lexiconListModal.html",
 })
-export class LexiconListModal implements ModalComponent<LexiconListModalData> {
-    context: LexiconListModalData;
+export class LexiconListModal {
+    @Input() title: string;
+    @Input() projectCtx?: ProjectContext;
     
-    private selectedLexicon: ARTURIResource;
+    selectedLexicon: ARTURIResource;
     
-    constructor(public dialog: DialogRef<LexiconListModalData>, private elementRef: ElementRef) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private elementRef: ElementRef) {}
 
     ngAfterViewInit() {
         UIUtils.setFullSizeModal(this.elementRef);
     }
     
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close(this.selectedLexicon);
+    onLexiconSelected(lexicon: ARTURIResource) {
+        this.selectedLexicon = lexicon;
+    }
+    
+    ok() {
+        this.activeModal.close(this.selectedLexicon);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
-    private onLexiconSelected(lexicon: ARTURIResource) {
-        this.selectedLexicon = lexicon;
-    }
-
 }

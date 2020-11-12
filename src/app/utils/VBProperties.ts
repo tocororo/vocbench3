@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Subscription } from 'rxjs/Subscription';
+import { forkJoin, Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Language, Languages } from '../models/LanguagesCountries';
 import { ExtensionPointID } from '../models/Plugins';
-import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, NotificationStatus, PartitionFilterPreference, ProjectPreferences, ProjectSettings, Properties, ResourceViewType, ResourceViewMode, ResourceViewPreference, SearchMode, SearchSettings, ValueFilterLanguages, PrefLabelClashMode } from '../models/Properties';
+import { ClassTreeFilter, ClassTreePreference, ConceptTreePreference, ConceptTreeVisualizationMode, InstanceListPreference, InstanceListVisualizationMode, LexEntryVisualizationMode, LexicalEntryListPreference, MultischemeMode, NotificationStatus, PartitionFilterPreference, PrefLabelClashMode, ProjectPreferences, ProjectSettings, Properties, ResourceViewMode, ResourceViewPreference, ResourceViewType, SearchMode, SearchSettings, ValueFilterLanguages } from '../models/Properties';
 import { ResViewPartition } from '../models/ResourceView';
 import { OWL, RDFS } from '../models/Vocabulary';
 import { AdministrationServices } from '../services/administrationServices';
@@ -13,6 +13,7 @@ import { Cookie } from '../utils/Cookie';
 import { UIUtils } from '../utils/UIUtils';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
+import { ModalType } from '../widget/modal/Modals';
 import { VBRequestOptions } from './HttpManager';
 import { ProjectContext, VBContext } from './VBContext';
 
@@ -56,8 +57,8 @@ export class VBProperties {
             Properties.pref_notifications_status
         ];
         
-        let getPUSettingsNoPlugin = this.prefService.getPUSettings(properties, projectCtx.getProject()).map(
-            prefs => {
+        let getPUSettingsNoPlugin = this.prefService.getPUSettings(properties, projectCtx.getProject()).pipe(
+            map(prefs => {
                 let projectPreferences: ProjectPreferences = projectCtx.getProjectPreferences();
 
                 let activeSchemes: ARTURIResource[] = [];
@@ -233,17 +234,16 @@ export class VBProperties {
                 if (notificationStatusPref != null && (notificationStatusPref in NotificationStatus)) { //if a valid value
                     projectPreferences.notificationStatus = notificationStatusPref;
                 }
-            }
+            })
         );
 
         // this is called separately since requires the pluginId parameter
-        let getPUSettingsRenderingEngine = this.prefService.getPUSettings([Properties.pref_languages], projectCtx.getProject(), ExtensionPointID.RENDERING_ENGINE_ID).map(
-            prefs => {
+        let getPUSettingsRenderingEngine = this.prefService.getPUSettings([Properties.pref_languages], projectCtx.getProject(), ExtensionPointID.RENDERING_ENGINE_ID).pipe(
+            map(prefs => {
                 projectCtx.getProjectPreferences().projectLanguagesPreference = prefs[Properties.pref_languages].split(",");
-            }
+            })
         );
-
-        return Observable.forkJoin(getPUSettingsNoPlugin, getPUSettingsRenderingEngine);
+        return forkJoin([getPUSettingsNoPlugin, getPUSettingsRenderingEngine]);
     }
 
     setActiveSchemes(projectCtx: ProjectContext, schemes: ARTURIResource[]) {
@@ -399,15 +399,15 @@ export class VBProperties {
         VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.resViewPartitionFilter = pref;
     }
     refreshResourceViewPartitionFilter(): Observable<void> { //refreshed the cached rv partition filter
-        return this.prefService.getPUSettings([Properties.pref_res_view_partition_filter]).map(
-            prefs => {
+        return this.prefService.getPUSettings([Properties.pref_res_view_partition_filter]).pipe(
+            map(prefs => {
                 let value = prefs[Properties.pref_res_view_partition_filter];
                 let filter: PartitionFilterPreference;
                 if (value != null) {
                     filter = JSON.parse(value);
                 }
                 VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.resViewPartitionFilter = filter;
-            }
+            })
         );
     }
 
@@ -427,10 +427,10 @@ export class VBProperties {
     ============================= */
 
     initProjectUserBindings(projectCtx: ProjectContext): Observable<void> {
-        return this.adminService.getProjectUserBinding(projectCtx.getProject().getName(), VBContext.getLoggedUser().getEmail()).map(
-            pub => {
+        return this.adminService.getProjectUserBinding(projectCtx.getProject().getName(), VBContext.getLoggedUser().getEmail()).pipe(
+            map(pub => {
                 projectCtx.setProjectUserBinding(pub);
-            }
+            })
         );
     }
 
@@ -455,7 +455,7 @@ export class VBProperties {
                     Languages.setSystemLanguages(systemLanguages);
                 } catch (err) {
                     this.basicModals.alert("Error", "Initialization of system languages has encountered a problem during parsing the " +
-                        "'languages' property. Please, report this to the system administrator.", "error");
+                        "'languages' property. Please, report this to the system administrator.", ModalType.error);
                 }
                 //home content
                 VBContext.getSystemSettings().homeContent = stResp[Properties.setting_home_content];
@@ -480,15 +480,15 @@ export class VBProperties {
     initProjectSettings(projectCtx: ProjectContext): Observable<any> {
         let properties: string[] = [Properties.setting_languages, Properties.label_clash_mode];
         let projectSettings: ProjectSettings = projectCtx.getProjectSettings();
-        return this.prefService.getProjectSettings(properties, projectCtx.getProject()).map(
-            settings => {
+        return this.prefService.getProjectSettings(properties, projectCtx.getProject()).pipe(
+            map(settings => {
                 let langsValue: string = settings[Properties.setting_languages];
                 try {
                     projectSettings.projectLanguagesSetting = <Language[]>JSON.parse(langsValue);
                     Languages.sortLanguages(projectSettings.projectLanguagesSetting);
                 } catch (err) {
                     this.basicModals.alert("Error", "Project setting initialization has encountered a problem during parsing " +
-                        "languages settings. Default languages will be set for this project.", "error");
+                        "languages settings. Default languages will be set for this project.", ModalType.error);
                     projectSettings.projectLanguagesSetting = [
                         { name: "German" , tag: "de" }, { name: "English" , tag: "en" }, { name: "Spanish" , tag: "es" },
                         { name: "French" , tag: "fr" }, { name: "Italian" , tag: "it" }
@@ -499,7 +499,7 @@ export class VBProperties {
                 if (labelClashModeValue != null && labelClashModeValue in PrefLabelClashMode) { //if not null and valid enum
                     projectSettings.prefLabelClashMode = labelClashModeValue;
                 }
-            }
+            })
         );
     }
 

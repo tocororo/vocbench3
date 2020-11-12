@@ -1,9 +1,9 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body vbox">
     <div class="scrollableContainer">
-        <table class="table table-condensed table-hoverable">
+        <table class="table table-sm table-hoverable">
             <colgroup>
                 <col style="width: 1%">
                 <col style="width: 1%">
@@ -19,7 +19,7 @@
             <tbody>
                 <tr *ngFor="let l of languageItems">
                     <td class="text-center">
-                        <ng-container *ngIf="context.radio; else checkboxItem">
+                        <ng-container *ngIf="radio; else checkboxItem">
                             <input type="radio" style="vertical-align: middle" [checked]="l.selected" value="{{l.lang.tag}}" (change)="updateRadioSelection($event.target.value)">
                         </ng-container>
                         <ng-template #checkboxItem>
@@ -36,6 +36,6 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="okDisabled()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="okDisabled()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

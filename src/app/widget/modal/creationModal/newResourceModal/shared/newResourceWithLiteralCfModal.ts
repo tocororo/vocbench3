@@ -1,6 +1,5 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources";
 import { CustomFormValue } from "../../../../../models/CustomForms";
 import { LanguageConstraint } from "../../../../../models/LanguagesCountries";
@@ -9,66 +8,49 @@ import { BasicModalServices } from "../../../basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
 import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
 
-export class NewResourceWithLiteralCfModalData extends BSModalContext {
-    constructor(
-        public title: string = "Modal title",
-        public cls: ARTURIResource, //class that this modal is creating an instance
-        public clsChangeable: boolean = true,
-        public literalLabel: string = "Label",
-        public lang: string,
-        public langConstraints: LanguageConstraint = { constrain: false, locale: true }
-    ) {
-        super();
-    }
-}
-
 @Component({
     selector: "new-resource-lit-cf-modal",
     templateUrl: "./newResourceWithLiteralCfModal.html",
 })
-export class NewResourceWithLiteralCfModal extends AbstractCustomConstructorModal implements ModalComponent<NewResourceWithLiteralCfModalData> {
-    context: NewResourceWithLiteralCfModalData;
+export class NewResourceWithLiteralCfModal extends AbstractCustomConstructorModal {
+    @Input() title: string = "Modal title";
+    @Input() cls: ARTURIResource; //class that this modal is creating an instance
+    @Input() clsChangeable: boolean = true;
+    @Input() literalLabel: string = "Label";
+    @Input() langConstraints: LanguageConstraint = { constrain: false, locale: true };
 
-    @ViewChild("toFocus") inputToFocus: ElementRef;
-    
-    private viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
+    viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
 
     //standard form
-    private label: string;
-    private lang: string;
-    private uri: string;
+    label: string;
+    @Input() lang: string;
+    uri: string;
 
-    constructor(public dialog: DialogRef<NewResourceWithLiteralCfModalData>, cfService: CustomFormsServices,
+    constructor(public activeModal: NgbActiveModal, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         super(cfService, basicModals, browsingModals);
-        this.context = dialog.context;
     }
 
     ngOnInit() {
-        this.lang = this.context.lang;
-        this.resourceClass = this.context.cls;
+        this.resourceClass = this.cls;
         this.selectCustomForm();
     }
 
     ngAfterViewInit() {
-        this.inputToFocus.nativeElement.focus();
         setTimeout(() => {
             this.viewInitialized = true;
         });
     }
 
     changeClass() {
-        this.changeClassWithRoot(this.context.cls);
+        this.changeClassWithRoot(this.cls);
     }
 
     isStandardFormDataValid(): boolean {
         return (this.label != undefined && this.label.trim() != "" && this.lang != null);
     }
 
-    okImpl(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-
+    okImpl() {
         var entryMap: any = this.collectCustomFormData();
 
         var returnedData: NewResourceWithLiteralCfModalReturnData = {
@@ -85,11 +67,11 @@ export class NewResourceWithLiteralCfModal extends AbstractCustomConstructorModa
         if (this.customFormId != null && entryMap != null) {
             returnedData.cfValue = new CustomFormValue(this.customFormId, entryMap);
         }
-        this.dialog.close(returnedData);
+        this.activeModal.close(returnedData);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

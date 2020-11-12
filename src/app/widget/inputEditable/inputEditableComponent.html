@@ -9,18 +9,18 @@
     </select>
 
     <!-- Edit buttons -->
-    <span class="input-group-btn">
-        <button *ngIf="!editInProgress" class="btn btn-default" type="button" style="width:36px;"
+    <span class="input-group-append">
+        <button *ngIf="!editInProgress" class="btn btn-light" type="button" style="width:36px;"
             (click)="edit()" title="Edit" [disabled]="disabled">
-            <span class="glyphicon glyphicon-pencil"></span>
+            <span class="fas fa-pencil-alt"></span>
         </button>
-        <button *ngIf="editInProgress" class="btn btn-default" type="button" style="width:18px; padding: 0px;"
+        <button *ngIf="editInProgress" class="btn btn-light" type="button" style="width:18px; padding: 0px;"
             (click)="confirmEdit()" title="Confirm">
-            <span class="glyphicon glyphicon-ok" style="color: green"></span>
+            <span class="fas fa-check" style="color: green"></span>
         </button>
-        <button *ngIf="editInProgress" class="btn btn-default" type="button" style="width:18px; padding: 0px;"
+        <button *ngIf="editInProgress" class="btn btn-light" type="button" style="width:18px; padding: 0px;"
             (click)="cancelEdit()" title="Cancel">
-            <span class="glyphicon glyphicon-remove" style="color: red"></span>
+            <span class="fas fa-times" style="color: red"></span>
         </button>
     </span>
 </div>

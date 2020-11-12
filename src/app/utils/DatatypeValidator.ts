@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable, Subscription } from "rxjs";
+import { map } from 'rxjs/operators';
 import { ARTLiteral, ARTURIResource } from "../models/ARTResources";
 import { ConstrainingFacets, DatatypeRestrictionDescription, DatatypeRestrictionsMap, DatatypeUtils } from "../models/Datatypes";
 import { DatatypesServices } from "../services/datatypesServices";
@@ -43,10 +44,10 @@ export class DatatypeValidator {
      * To call each time the project changes, or a Datatype facet is changed (TODO). 
      */
     public initDatatypeRestrictions(): Observable<any> {
-        return this.datatypeService.getDatatypeRestrictions().map(
-            dtRestrinctions => {
+        return this.datatypeService.getDatatypeRestrictions().pipe(
+            map(dtRestrinctions => {
                 this.userDefinedDatatypeRestrictions = dtRestrinctions;
-            }
+            })
         )
     }
 

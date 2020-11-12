@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
-import { ARTURIResource, ARTNode } from "../models/ARTResources";
+import { ARTNode, ARTURIResource } from "../models/ARTResources";
 import { RDFFormat } from '../models/RDFFormat';
+import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
 export class SparqlServices {

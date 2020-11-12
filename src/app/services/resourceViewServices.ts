@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
-import { Deserializer } from "../utils/Deserializer";
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
+import { Deserializer } from "../utils/Deserializer";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 
 @Injectable()
 export class ResourceViewServices {
@@ -45,10 +46,10 @@ export class ResourceViewServices {
         if (resourcePosition != null) {
             params.resourcePosition = resourcePosition;
         }
-        return this.httpMgr.doGet(this.serviceName, "getLexicalizationProperties", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getLexicalizationProperties", params).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 

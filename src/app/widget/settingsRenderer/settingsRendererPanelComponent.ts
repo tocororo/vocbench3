@@ -14,7 +14,7 @@ export class SettingsRendererPanelComponent implements ControlValueAccessor {
 
     @Input() scope: Scope;
 
-    private settings: Settings;
+    settings: Settings;
     private safeDescription: SafeHtml;
     private safeWarning: SafeHtml;
 
@@ -29,7 +29,7 @@ export class SettingsRendererPanelComponent implements ControlValueAccessor {
         }
     }
 
-    private onModelChanged() {
+    onModelChanged() {
         this.propagateChange(this.settings);
     }
 

@@ -60,98 +60,98 @@ export class UIUtils {
         "th", "tr", "uk", "vi", "zh"];
 
 
-    private static classImgSrc = require("../../assets/images/icons/res/class.png");
-    private static classImportedImgSrc = require("../../assets/images/icons/res/class_imported.png");
-    private static classDeprecatedImgSrc = require("../../assets/images/icons/res/class_deprecated.png");
-    private static classImportedDeprecatedImgSrc = require("../../assets/images/icons/res/class_imported_deprecated.png");
-    private static classDefVocImgSrc = require("../../assets/images/icons/res/class_defvoc.png");//how to use?
-    private static classDefVocDeprecatedImgSrc = require("../../assets/images/icons/res/class_defvoc_deprecated.png");//how to use?
-    
-    private static individualImgSrc = require("../../assets/images/icons/res/individual.png");
-    private static individualImportedImgSrc = require("../../assets/images/icons/res/individual_imported.png");
-    private static individualDeprecatedImgSrc = require("../../assets/images/icons/res/individual_deprecated.png");
-    private static individualImportedDeprecatedImgSrc = require("../../assets/images/icons/res/individual_imported_deprecated.png");
-    
-    private static conceptImgSrc = require("../../assets/images/icons/res/concept.png");
-    private static conceptImportedImgSrc = require("../../assets/images/icons/res/concept_imported.png");
-    private static conceptDeprecatedImgSrc = require("../../assets/images/icons/res/concept_deprecated.png");
-    private static conceptImportedDeprecatedImgSrc = require("../../assets/images/icons/res/concept_imported_deprecated.png");
-    
-    private static conceptSchemeImgSrc = require("../../assets/images/icons/res/conceptScheme.png");
-    private static conceptSchemeImportedImgSrc = require("../../assets/images/icons/res/conceptScheme_imported.png");
-    private static conceptSchemeDeprecatedImgSrc = require("../../assets/images/icons/res/conceptScheme_deprecated.png");
-    private static conceptSchemeImportedDeprecatedImgSrc = require("../../assets/images/icons/res/conceptScheme_imported_deprecated.png");
-    
-    private static collectionImgSrc = require("../../assets/images/icons/res/collection.png");
-    private static collectionImportedImgSrc = require("../../assets/images/icons/res/collection_imported.png");
-    private static collectionDeprecatedImgSrc = require("../../assets/images/icons/res/collection_deprecated.png");
-    private static collectionImportedDeprecatedImgSrc = require("../../assets/images/icons/res/collection_imported_deprecated.png");
+    private static classImgSrc = "./assets/images/icons/res/class.png";
+    private static classImportedImgSrc = "./assets/images/icons/res/class_imported.png";
+    private static classDeprecatedImgSrc = "./assets/images/icons/res/class_deprecated.png";
+    private static classImportedDeprecatedImgSrc = "./assets/images/icons/res/class_imported_deprecated.png";
+    private static classDefVocImgSrc = "./assets/images/icons/res/class_defvoc.png";//how to use?
+    private static classDefVocDeprecatedImgSrc = "./assets/images/icons/res/class_defvoc_deprecated.png";//how to use?
 
-    private static datatypeImgSrc = require("../../assets/images/icons/res/datatype.png");
-    private static datatypeImportedImgSrc = require("../../assets/images/icons/res/datatype_imported.png");
-    private static datatypeDeprecatedImgSrc = require("../../assets/images/icons/res/datatype_deprecated.png");
-    private static datatypeImportedDeprecatedImgSrc = require("../../assets/images/icons/res/datatype_imported_deprecated.png");
+    private static conceptImgSrc = "./assets/images/icons/res/concept.png";
+    private static conceptImportedImgSrc = "./assets/images/icons/res/concept_imported.png";
+    private static conceptDeprecatedImgSrc = "./assets/images/icons/res/concept_deprecated.png";
+    private static conceptImportedDeprecatedImgSrc = "./assets/images/icons/res/concept_imported_deprecated.png";
 
-    private static lexiconImgSrc = require("../../assets/images/icons/res/lexicon.png");
-    private static lexiconImportedImgSrc = require("../../assets/images/icons/res/lexicon_imported.png");
-    private static lexiconDeprecatedImgSrc = require("../../assets/images/icons/res/lexicon_deprecated.png");
-    private static lexiconImportedDeprecatedImgSrc = require("../../assets/images/icons/res/lexicon_imported_deprecated.png");
+    private static conceptSchemeImgSrc = "./assets/images/icons/res/conceptScheme.png";
+    private static conceptSchemeImportedImgSrc = "./assets/images/icons/res/conceptScheme_imported.png";
+    private static conceptSchemeDeprecatedImgSrc = "./assets/images/icons/res/conceptScheme_deprecated.png";
+    private static conceptSchemeImportedDeprecatedImgSrc = "./assets/images/icons/res/conceptScheme_imported";
 
-    private static lexicEntryImgSrc = require("../../assets/images/icons/res/lexEntry.png");
-    private static lexicEntryImportedImgSrc = require("../../assets/images/icons/res/lexEntry_imported.png");
-    private static lexicEntryDeprecatedImgSrc = require("../../assets/images/icons/res/lexEntry_deprecated.png");
-    private static lexicEntryImportedDeprecatedImgSrc = require("../../assets/images/icons/res/lexEntry_imported_deprecated.png");
+    private static collectionImgSrc = "./assets/images/icons/res/collection.png";
+    private static collectionImportedImgSrc = "./assets/images/icons/res/collection_imported.png";
+    private static collectionDeprecatedImgSrc = "./assets/images/icons/res/collection_deprecated.png";
+    private static collectionImportedDeprecatedImgSrc = "./assets/images/icons/res/collection_imported_deprecated.png";
 
-    private static lexicSenseImgSrc = require("../../assets/images/icons/res/ontolexLexicalSense.png");
-    private static lexicSenseImportedImgSrc = require("../../assets/images/icons/res/ontolexLexicalSense_imported.png");
-    private static lexicSenseDeprecatedImgSrc = require("../../assets/images/icons/res/ontolexLexicalSense_deprecated.png");
-    private static lexicSenseImportedDeprecatedImgSrc = require("../../assets/images/icons/res/ontolexLexicalSense_imported_deprecated.png");
-
-    private static lexicalFormImgSrc = require("../../assets/images/icons/res/lexForm.png");
-    private static lexicalFormImportedImgSrc = require("../../assets/images/icons/res/lexForm_imported.png");
-    private static lexicalFormDeprecatedImgSrc = require("../../assets/images/icons/res/lexForm_deprecated.png");
-    private static lexicalFormImportedDeprecatedImgSrc = require("../../assets/images/icons/res/lexForm_imported_deprecated.png");
-
-    private static orderedCollectionImgSrc = require("../../assets/images/icons/res/orderedCollection.png");
-    private static orderedCollectionImportedImgSrc = require("../../assets/images/icons/res/orderedCollection_imported.png");
-    private static orderedCollectionDeprecatedImgSrc = require("../../assets/images/icons/res/orderedCollection_deprecated.png");
-    private static orderedCollectionImportedDeprecatedImgSrc = require("../../assets/images/icons/res/orderedCollection_imported_deprecated.png");
-
-    private static xLabelImgSrc = require("../../assets/images/icons/res/xLabel.png");
-    private static xLabelImportedImgSrc = require("../../assets/images/icons/res/xLabel_imported.png");
-    private static xLabelDeprecatedImgSrc = require("../../assets/images/icons/res/xLabel_deprecated.png");
-    private static xLabelImportedDeprecatedImgSrc = require("../../assets/images/icons/res/xLabel_imported_deprecated.png");
+    private static datatypeImgSrc = "./assets/images/icons/res/datatype.png";
+    private static datatypeImportedImgSrc = "./assets/images/icons/res/datatype_imported.png";
+    private static datatypeDeprecatedImgSrc = "./assets/images/icons/res/datatype_deprecated.png";
+    private static datatypeImportedDeprecatedImgSrc = "./assets/images/icons/res/datatype_imported_deprecated.png";
     
-    private static ontologyImgSrc = require("../../assets/images/icons/res/ontology.png");
-    
-    private static propImgSrc = require("../../assets/images/icons/res/prop.png");
-    private static propImportedImgSrc = require("../../assets/images/icons/res/prop_imported.png");
-    private static propDeprecatedImgSrc = require("../../assets/images/icons/res/prop_deprecated.png");
-    private static propImportedDeprecatedImgSrc = require("../../assets/images/icons/res/prop_imported_deprecated.png");
-    
-    private static propObjectImgSrc = require("../../assets/images/icons/res/propObject.png");
-    private static propObjectImportedImgSrc = require("../../assets/images/icons/res/propObject_imported.png");
-    private static propObjectDeprecatedImgSrc = require("../../assets/images/icons/res/propObject_deprecated.png");
-    private static propObjectImportedDeprecatedImgSrc = require("../../assets/images/icons/res/propObject_imported_deprecated.png");
-    
-    private static propDatatypeImgSrc = require("../../assets/images/icons/res/propDatatype.png");
-    private static propDatatypeImportedImgSrc = require("../../assets/images/icons/res/propDatatype_imported.png");
-    private static propDatatypeDeprecatedImgSrc = require("../../assets/images/icons/res/propDatatype_deprecated.png");
-    private static propDatatypeImportedDeprecatedImgSrc = require("../../assets/images/icons/res/propDatatype_imported_deprecated.png");
-    
-    private static propAnnotationImgSrc = require("../../assets/images/icons/res/propAnnotation.png");
-    private static propAnnotationImportedImgSrc = require("../../assets/images/icons/res/propAnnotation_imported.png");
-    private static propAnnotationDeprecatedImgSrc = require("../../assets/images/icons/res/propAnnotation_deprecated.png");
-    private static propAnnotationImportedDeprecatedImgSrc = require("../../assets/images/icons/res/propAnnotation_imported_deprecated.png");
-    
-    private static propOntologyImgSrc = require("../../assets/images/icons/res/propOntology.png");
-    private static propOntologyImportedImgSrc = require("../../assets/images/icons/res/propOntology_imported.png");
-    private static propOntologyDeprecatedImgSrc = require("../../assets/images/icons/res/propOntology_deprecated.png");
-    private static propOntologyImportedDeprecatedImgSrc = require("../../assets/images/icons/res/propOntology_imported_deprecated.png");
+    private static individualImgSrc = "./assets/images/icons/res/individual.png";
+    private static individualImportedImgSrc = "./assets/images/icons/res/individual_imported.png";
+    private static individualDeprecatedImgSrc = "./assets/images/icons/res/individual_deprecated.png";
+    private static individualImportedDeprecatedImgSrc = "./assets/images/icons/res/individual_imported_deprecated.png";
 
-    private static mentionImgSrc = require("../../assets/images/icons/res/mention.png"); 
+    private static lexiconImgSrc = "./assets/images/icons/res/lexicon.png";
+    private static lexiconImportedImgSrc = "./assets/images/icons/res/lexicon_imported.png";
+    private static lexiconDeprecatedImgSrc = "./assets/images/icons/res/lexicon_deprecated.png";
+    private static lexiconImportedDeprecatedImgSrc = "./assets/images/icons/res/lexicon_imported_deprecated.png";
 
-    private static untypedIndividualImgSrc = require("../../assets/images/icons/res/untyped_individual.png"); 
+    private static lexicEntryImgSrc = "./assets/images/icons/res/lexEntry.png";
+    private static lexicEntryImportedImgSrc = "./assets/images/icons/res/lexEntry_imported.png";
+    private static lexicEntryDeprecatedImgSrc = "./assets/images/icons/res/lexEntry_deprecated.png";
+    private static lexicEntryImportedDeprecatedImgSrc = "./assets/images/icons/res/lexEntry_imported_deprecated.png";
+
+    private static lexicSenseImgSrc = "./assets/images/icons/res/ontolexLexicalSense.png";
+    private static lexicSenseImportedImgSrc = "./assets/images/icons/res/ontolexLexicalSense_imported.png";
+    private static lexicSenseDeprecatedImgSrc = "./assets/images/icons/res/ontolexLexicalSense_deprecated.png";
+    private static lexicSenseImportedDeprecatedImgSrc = "./assets/images/icons/res/ontolexLexicalSense_imported_deprecated.png";
+
+    private static lexicalFormImgSrc = "./assets/images/icons/res/lexForm.png";
+    private static lexicalFormImportedImgSrc = "./assets/images/icons/res/lexForm_imported.png";
+    private static lexicalFormDeprecatedImgSrc = "./assets/images/icons/res/lexForm_deprecated.png";
+    private static lexicalFormImportedDeprecatedImgSrc = "./assets/images/icons/res/lexForm_imported_deprecated.png";
+
+    private static orderedCollectionImgSrc = "./assets/images/icons/res/orderedCollection.png";
+    private static orderedCollectionImportedImgSrc = "./assets/images/icons/res/orderedCollection_imported.png";
+    private static orderedCollectionDeprecatedImgSrc = "./assets/images/icons/res/orderedCollection_deprecated.png";
+    private static orderedCollectionImportedDeprecatedImgSrc = "./assets/images/icons/res/orderedCollection_imported_deprecated.png";
+
+    private static xLabelImgSrc = "./assets/images/icons/res/xLabel.png";
+    private static xLabelImportedImgSrc = "./assets/images/icons/res/xLabel_imported.png";
+    private static xLabelDeprecatedImgSrc = "./assets/images/icons/res/xLabel_deprecated.png";
+    private static xLabelImportedDeprecatedImgSrc = "./assets/images/icons/res/xLabel_imported_deprecated.png";
+    
+    private static ontologyImgSrc = "./assets/images/icons/res/ontology.png";
+    
+    private static propImgSrc = "./assets/images/icons/res/prop.png";
+    private static propImportedImgSrc = "./assets/images/icons/res/prop_imported.png";
+    private static propDeprecatedImgSrc = "./assets/images/icons/res/prop_deprecated.png";
+    private static propImportedDeprecatedImgSrc = "./assets/images/icons/res/prop_imported_deprecated.png";
+    
+    private static propObjectImgSrc = "./assets/images/icons/res/propObject.png";
+    private static propObjectImportedImgSrc = "./assets/images/icons/res/propObject_imported.png";
+    private static propObjectDeprecatedImgSrc = "./assets/images/icons/res/propObject_deprecated.png";
+    private static propObjectImportedDeprecatedImgSrc = "./assets/images/icons/res/propObject_imported_deprecated.png";
+    
+    private static propDatatypeImgSrc = "./assets/images/icons/res/propDatatype.png";
+    private static propDatatypeImportedImgSrc = "./assets/images/icons/res/propDatatype_imported.png";
+    private static propDatatypeDeprecatedImgSrc = "./assets/images/icons/res/propDatatype_deprecated.png";
+    private static propDatatypeImportedDeprecatedImgSrc = "./assets/images/icons/res/propDatatype_imported_deprecated.png";
+    
+    private static propAnnotationImgSrc = "./assets/images/icons/res/propAnnotation.png";
+    private static propAnnotationImportedImgSrc = "./assets/images/icons/res/propAnnotation_imported.png";
+    private static propAnnotationDeprecatedImgSrc = "./assets/images/icons/res/propAnnotation_deprecated.png";
+    private static propAnnotationImportedDeprecatedImgSrc = "./assets/images/icons/res/propAnnotation_imported_deprecated.png";
+    
+    private static propOntologyImgSrc = "./assets/images/icons/res/propOntology.png";
+    private static propOntologyImportedImgSrc = "./assets/images/icons/res/propOntology_imported.png";
+    private static propOntologyDeprecatedImgSrc = "./assets/images/icons/res/propOntology_deprecated.png";
+    private static propOntologyImportedDeprecatedImgSrc = "./assets/images/icons/res/propOntology_imported_deprecated.png";
+
+    private static mentionImgSrc = "./assets/images/icons/res/mention.png"; 
+
+    private static untypedIndividualImgSrc = "./assets/images/icons/res/untyped_individual.png"; 
 
     static getImageSrc(rdfResource: ARTNode): string {
         var imgSrc: string;
@@ -409,16 +409,16 @@ export class UIUtils {
     }
 
     static getActionImageSrc(role: RDFResourceRolesEnum, action: ResAction): string {
-        return require("../../assets/images/icons/actions/" + role + "_" + action + ".png");
+        return "./assets/images/icons/actions/" + role + "_" + action + ".png";
     }
 
     static getFlagImgSrc(langTag: string): string {
         langTag = langTag != null ? langTag.toLowerCase() : null;
         var imgSrc: string;
         if (langTag != null && this.availableFlagLang.indexOf(langTag) != -1) {
-            imgSrc = require("../../assets/images/flags/flag_" + langTag + ".png");
+            imgSrc = "./assets/images/flags/flag_" + langTag + ".png";
         } else {
-            imgSrc = require("../../assets/images/flags/flag_unknown.png");
+            imgSrc = "./assets/images/flags/flag_unknown.png";
         }
         return imgSrc;
     }
@@ -426,16 +426,16 @@ export class UIUtils {
     static getDatatypeImgSrc(datatype: string): string {
         var imgSrc: string;
         if (datatype == XmlSchema.dateTime.getURI() || datatype == XmlSchema.dateTimeStamp.getURI()) {
-            imgSrc = require("../../assets/images/icons/res/datetime.png");
+            imgSrc = "./assets/images/icons/res/datetime.png";
         } else if (datatype == XmlSchema.date.getURI()) {
-            imgSrc = require("../../assets/images/icons/res/date.png");
+            imgSrc = "./assets/images/icons/res/date.png";
         } else if (datatype == XmlSchema.time.getURI()) {
-            imgSrc = require("../../assets/images/icons/res/time.png");
+            imgSrc = "./assets/images/icons/res/time.png";
         } else if (datatype == RDF.xmlLiteral.getURI() || datatype == XmlSchema.string.getURI() || 
             datatype == XmlSchema.normalizedString.getURI()) {
-            imgSrc = require("../../assets/images/icons/res/string.png");
+            imgSrc = "./assets/images/icons/res/string.png";
         } else if (datatype == XmlSchema.boolean.getURI()) {
-            imgSrc = require("../../assets/images/icons/res/boolean.png");
+            imgSrc = "./assets/images/icons/res/boolean.png";
         } else if (datatype == OWL.rational.getURI() || datatype == OWL.real.getURI() ||
             datatype == XmlSchema.byte.getURI() || datatype == XmlSchema.decimal.getURI() || datatype == XmlSchema.double.getURI() || 
             datatype == XmlSchema.float.getURI() || datatype == XmlSchema.int.getURI() || datatype == XmlSchema.integer.getURI() || 
@@ -444,9 +444,9 @@ export class UIUtils {
             datatype == XmlSchema.positiveInteger.getURI() ||  datatype == XmlSchema.short.getURI() || 
             datatype == XmlSchema.unsignedByte.getURI() || datatype == XmlSchema.unsignedInt.getURI() || 
             datatype == XmlSchema.unsignedLong.getURI() || datatype == XmlSchema.unsignedShort.getURI()) {
-            imgSrc = require("../../assets/images/icons/res/number.png");
+            imgSrc = "./assets/images/icons/res/number.png";
         } else {
-            imgSrc = require("../../assets/images/icons/res/unknown_datatype.png");
+            imgSrc = "./assets/images/icons/res/unknown_datatype.png";
         }
         return imgSrc;
     }
@@ -465,55 +465,55 @@ export class UIUtils {
         UIUtils.changeNavbarTheme();
     }
     public static changeNavbarTheme(themeId: number = 0) {
-        let theme: Theme = UIUtils.themes[0];
-        UIUtils.themes.forEach(t => {
-            if (t.id == themeId) { theme = t; return };
-        });
-        var cssRuleCode = document.all ? 'rules' : 'cssRules';
-        var sheets: StyleSheetList = document.styleSheets;
-        var sheet: StyleSheet;
+        // let theme: Theme = UIUtils.themes[0];
+        // UIUtils.themes.forEach(t => {
+        //     if (t.id == themeId) { theme = t; return };
+        // });
+        // var cssRuleCode = document.all ? 'rules' : 'cssRules';
+        // var sheets: StyleSheetList = document.styleSheets;
+        // var sheet: StyleSheet;
 
-        for (var i = 0; i < sheets.length; i++) {
-            //look for something like http://<hostname>:<port>/app.<hash>.css (hash is optional)
-            if (sheets.item(i).href != null && sheets.item(i).href.includes("app.") && sheets.item(i).href.endsWith(".css")) {
-                sheet = sheets.item(i);
-                break;
-            }
-        }
+        // for (var i = 0; i < sheets.length; i++) {
+        //     //look for something like http://<hostname>:<port>/app.<hash>.css (hash is optional)
+        //     if (sheets.item(i).href != null && sheets.item(i).href.includes("app.") && sheets.item(i).href.endsWith(".css")) {
+        //         sheet = sheets.item(i);
+        //         break;
+        //     }
+        // }
 
-        let rules: CSSRuleList = sheet[cssRuleCode];
-        for (var j = 0; j < rules.length; j++) {
-            let rule: CSSRule = rules.item(j);
-            if (rule instanceof CSSStyleRule) {
-                if (rule.selectorText.includes(".navbar-default")) {
-                    if (rule.selectorText == ".navbar-default" || 
-                        rule.selectorText == ".navbar-default .navbar-collapse, .navbar-default .navbar-form" ||
-                        rule.selectorText == ".navbar-default .navbar-brand" ||
-                        rule.selectorText == ".navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus" ||
-                        rule.selectorText == ".navbar-default .navbar-nav > li > a" ||
-                        rule.selectorText == ".navbar-default .navbar-toggle"
-                    ) {
-                        rule.style.backgroundColor = theme.mainColor;
-                    } else if (
-                        rule.selectorText == ".navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus" ||
-                        rule.selectorText == ".navbar-default .navbar-nav > .active > a, " +
-                            ".navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus" ||
-                        rule.selectorText == ".navbar-default .navbar-link:hover" ||
-                        rule.selectorText == ".navbar-default .navbar-nav > .open > a, " + 
-                            ".navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus" ||
-                        rule.selectorText == ".navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, " + 
-                            ".navbar-default .navbar-nav .open .dropdown-menu > li > a:focus" ||
-                        rule.selectorText == ".navbar-default .navbar-nav .open .dropdown-menu > .active > a, " + 
-                            ".navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, " + 
-                            ".navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus" ||
-                        rule.selectorText == ".navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus"
-                    ) {
-                        rule.style.backgroundColor = theme.altColor;
-                    }
-                }
-            }
+        // let rules: CSSRuleList = sheet[cssRuleCode];
+        // for (var j = 0; j < rules.length; j++) {
+        //     let rule: CSSRule = rules.item(j);
+        //     if (rule instanceof CSSStyleRule) {
+        //         if (rule.selectorText.includes(".navbar-default")) {
+        //             if (rule.selectorText == ".navbar-default" || 
+        //                 rule.selectorText == ".navbar-default .navbar-collapse, .navbar-default .navbar-form" ||
+        //                 rule.selectorText == ".navbar-default .navbar-brand" ||
+        //                 rule.selectorText == ".navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus" ||
+        //                 rule.selectorText == ".navbar-default .navbar-nav > li > a" ||
+        //                 rule.selectorText == ".navbar-default .navbar-toggle"
+        //             ) {
+        //                 rule.style.backgroundColor = theme.mainColor;
+        //             } else if (
+        //                 rule.selectorText == ".navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus" ||
+        //                 rule.selectorText == ".navbar-default .navbar-nav > .active > a, " +
+        //                     ".navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus" ||
+        //                 rule.selectorText == ".navbar-default .navbar-link:hover" ||
+        //                 rule.selectorText == ".navbar-default .navbar-nav > .open > a, " + 
+        //                     ".navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus" ||
+        //                 rule.selectorText == ".navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, " + 
+        //                     ".navbar-default .navbar-nav .open .dropdown-menu > li > a:focus" ||
+        //                 rule.selectorText == ".navbar-default .navbar-nav .open .dropdown-menu > .active > a, " + 
+        //                     ".navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, " + 
+        //                     ".navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus" ||
+        //                 rule.selectorText == ".navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus"
+        //             ) {
+        //                 rule.style.backgroundColor = theme.altColor;
+        //             }
+        //         }
+        //     }
             
-        }
+        // }
     }
 
     /**

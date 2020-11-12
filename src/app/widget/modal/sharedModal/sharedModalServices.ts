@@ -1,35 +1,35 @@
 import { Injectable } from '@angular/core';
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { DatasetCatalogModal, DatasetCatalogModalData } from '../../../config/dataManagement/datasetCatalog/datasetCatalogModal';
-import { ImportFromDatasetCatalogModal, ImportFromDatasetCatalogModalData } from '../../../metadata/namespacesAndImports/importFromDatasetCatalogModal';
-import { ImportOntologyModal, ImportOntologyModalData } from '../../../metadata/namespacesAndImports/importOntologyModal';
-import { PrefixNamespaceModal, PrefixNamespaceModalData } from '../../../metadata/namespacesAndImports/prefixNamespaceModal';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DatasetCatalogModal } from 'src/app/config/dataManagement/datasetCatalog/datasetCatalogModal';
+import { ImportFromDatasetCatalogModal } from 'src/app/metadata/namespacesAndImports/importFromDatasetCatalogModal';
+import { ImportOntologyModal } from 'src/app/metadata/namespacesAndImports/importOntologyModal';
+import { PrefixNamespaceModal } from 'src/app/metadata/namespacesAndImports/prefixNamespaceModal';
+import { ImportType } from 'src/app/models/Metadata';
+import { ProjectListModal } from 'src/app/project/projectListModal';
+import { ResourceViewModal } from 'src/app/resourceView/resourceViewModal';
 import { ARTResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDFCapabilityType } from "../../../models/Coda";
 import { Reference } from '../../../models/Configuration';
-import { ImportType } from '../../../models/Metadata';
 import { Settings } from "../../../models/Plugins";
 import { RemoteRepositoryAccessConfig } from "../../../models/Project";
 import { User } from '../../../models/User';
-import { ProjectListModal } from '../../../project/projectListModal';
-import { ResourceViewModal, ResourceViewModalData } from "../../../resourceView/resourceViewModal";
 import { ProjectContext } from '../../../utils/VBContext';
-import { LoadConfigurationModal, LoadConfigurationModalData } from "./configurationStoreModal/loadConfigurationModal";
-import { StoreConfigurationModal, StoreConfigurationModalData } from "./configurationStoreModal/storeConfigurationModal";
-import { ConverterPickerModal, ConverterPickerModalData } from "./converterPickerModal/converterPickerModal";
-import { LanguageSelectorModal, LanguageSelectorModalData } from "./languagesSelectorModal/languageSelectorModal";
-import { ManchesterExprModal, ManchesterExprModalData } from './manchesterExprModal/manchesterExprModal';
-import { PluginConfigModal, PluginConfigModalData } from "./pluginConfigModal/pluginConfigModal";
+import { ModalOptions } from '../Modals';
+import { LoadConfigurationModal } from "./configurationStoreModal/loadConfigurationModal";
+import { StoreConfigurationModal } from "./configurationStoreModal/storeConfigurationModal";
+import { ConverterPickerModal } from "./converterPickerModal/converterPickerModal";
+import { LanguageSelectorModal } from "./languagesSelectorModal/languageSelectorModal";
+import { ManchesterExprModal } from './manchesterExprModal/manchesterExprModal';
+import { PluginConfigModal } from "./pluginConfigModal/pluginConfigModal";
 import { RemoteAccessConfigModal } from "./remoteAccessConfigModal/remoteAccessConfigModal";
-import { RemoteRepoSelectionModal, RemoteRepoSelectionModalData } from "./remoteRepoSelectionModal/remoteRepoSelectionModal";
-import { ResourcePickerModal, ResourcePickerModalData } from './resourcePickerModal/resourcePickerModal';
-import { UserSelectionModal, UserSelectionModalData } from './userSelectionModal/userSelectionModal';
+import { RemoteRepoSelectionModal } from "./remoteRepoSelectionModal/remoteRepoSelectionModal";
+import { ResourcePickerModal } from './resourcePickerModal/resourcePickerModal';
+import { UserSelectionModal } from './userSelectionModal/userSelectionModal';
 
 @Injectable()
 export class SharedModalServices {
 
-    constructor(private modal: Modal) { }
+    constructor(private modalService: NgbModal) { }
 
     /**
      * Opens a modal to change a plugin configuration.
@@ -37,12 +37,9 @@ export class SharedModalServices {
      * @param configuration
      */
     configurePlugin(configuration: Settings) {
-        var modalData = new PluginConfigModalData(configuration);
-        const builder = new BSModalContextBuilder<PluginConfigModalData>(
-            modalData, undefined, PluginConfigModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(PluginConfigModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(PluginConfigModal, new ModalOptions());
+        modalRef.componentInstance.configuration = configuration;
+        return modalRef.result;
     }
 
     /**
@@ -50,9 +47,8 @@ export class SharedModalServices {
      * @param configuration
      */
     configureRemoteRepositoryAccess() {
-        const builder = new BSModalContextBuilder<BSModalContext>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(RemoteAccessConfigModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(RemoteAccessConfigModal, new ModalOptions());
+        return modalRef.result;
     }
 
     /**
@@ -62,12 +58,10 @@ export class SharedModalServices {
      * @param remoteRepoConfig contains serverURL, username and password
      */
     selectRemoteRepository(title: string, remoteRepoConfig: RemoteRepositoryAccessConfig) {
-        var modalData = new RemoteRepoSelectionModalData(title, remoteRepoConfig);
-        const builder = new BSModalContextBuilder<RemoteRepoSelectionModalData>(
-            modalData, undefined, RemoteRepoSelectionModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-        return this.modal.open(RemoteRepoSelectionModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(RemoteRepoSelectionModal, new ModalOptions('lg'));
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.repoConfig = remoteRepoConfig;
+        return modalRef.result;
     }
 
     /**
@@ -75,29 +69,29 @@ export class SharedModalServices {
      * @param resource 
      */
     openResourceView(resource: ARTResource, readonly: boolean, projectCtx?: ProjectContext) {
-        var modalData = new ResourceViewModalData(resource, readonly, projectCtx);
-        const builder = new BSModalContextBuilder<ResourceViewModalData>(
-            modalData, undefined, ResourceViewModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-        return this.modal.open(ResourceViewModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(ResourceViewModal, new ModalOptions('lg'));
+        modalRef.componentInstance.resource = resource;
+        modalRef.componentInstance.readonly = readonly;
+        modalRef.componentInstance.projectCtx = projectCtx;
+        return modalRef.result;
     }
 
     /**
      * Opens a modal to select multiple languages
      * @param title
      * @param languages languages already selected
+     * @param radio if true, exactly one language should be selected
      * @param projectAware if true, allow selection only of languages available in the current project
      * @param projectCtx allow to customize the available languages for the contextual project
-     * @param radio if true, exactly one language should be selected
      */
-    selectLanguages(title: string, languages: string[], projectAware?: boolean, projectCtx?: ProjectContext, radio: boolean = false) {
-        var modalData = new LanguageSelectorModalData(title, languages, projectAware, projectCtx, radio);
-        const builder = new BSModalContextBuilder<LanguageSelectorModalData>(
-            modalData, undefined, LanguageSelectorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(LanguageSelectorModal, overlayConfig).result;
+    selectLanguages(title: string, languages: string[], radio?: boolean, projectAware?: boolean, projectCtx?: ProjectContext) {
+        const modalRef: NgbModalRef = this.modalService.open(LanguageSelectorModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.languages = languages;
+        modalRef.componentInstance.radio = radio;
+        modalRef.componentInstance.projectAware = projectAware;
+        modalRef.componentInstance.projectCtx = projectCtx;
+        return modalRef.result;
     }
 
     /**
@@ -106,12 +100,11 @@ export class SharedModalServices {
      * @param message 
      */
     selectConverter(title: string, message?: string, capabilities?: RDFCapabilityType[]) {
-        var modalData = new ConverterPickerModalData(title, message, capabilities);
-        const builder = new BSModalContextBuilder<ConverterPickerModalData>(
-            modalData, undefined, ConverterPickerModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-        return this.modal.open(ConverterPickerModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(ConverterPickerModal, new ModalOptions('lg'));
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.message = message;
+        modalRef.componentInstance.capabilities = capabilities;
+        return modalRef.result;
     }
 
 
@@ -124,12 +117,12 @@ export class SharedModalServices {
      * @return the relativeReference of the stored configuration
      */
     storeConfiguration(title: string, configurationComponent: string, configurationObject: { [key: string]: any }, relativeRef?: string) {
-        var modalData = new StoreConfigurationModalData(title, configurationComponent, configurationObject, relativeRef);
-        const builder = new BSModalContextBuilder<StoreConfigurationModalData>(
-            modalData, undefined, StoreConfigurationModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(StoreConfigurationModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(StoreConfigurationModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.configurationComponent = configurationComponent;
+        modalRef.componentInstance.configurationObject = configurationObject;
+        modalRef.componentInstance.relativeRef = relativeRef;
+        return modalRef.result;
     }
 
     /**
@@ -148,12 +141,13 @@ export class SharedModalServices {
      * @return returns a LoadConfigurationModalReturnData object with configuration and relativeReference
      */
     loadConfiguration(title: string, configurationComponent: string, allowLoad?: boolean, allowDelete?: boolean, additionalReferences?: Reference[]) {
-        var modalData = new LoadConfigurationModalData(title, configurationComponent, allowLoad, allowDelete, additionalReferences);
-        const builder = new BSModalContextBuilder<LoadConfigurationModalData>(
-            modalData, undefined, LoadConfigurationModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(LoadConfigurationModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(LoadConfigurationModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.configurationComponent = configurationComponent;
+        modalRef.componentInstance.allowLoad = allowLoad;
+        modalRef.componentInstance.allowDelete = allowDelete;
+        modalRef.componentInstance.additionalReferences = additionalReferences;
+        return modalRef.result;
     }
 
     /**
@@ -163,12 +157,11 @@ export class SharedModalServices {
      * @param editable 
      */
     pickResource(title: string, roles?: RDFResourceRolesEnum[], editable?: boolean) {
-        var modalData = new ResourcePickerModalData(title, roles, editable);
-        const builder = new BSModalContextBuilder<ResourcePickerModalData>(
-            modalData, undefined, ResourcePickerModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ResourcePickerModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(ResourcePickerModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.roles = roles;
+        modalRef.componentInstance.editable = editable;
+        return modalRef.result;
     }
 
     /**
@@ -177,12 +170,10 @@ export class SharedModalServices {
      * @param importType 
      */
     importOntology(title: string, importType: ImportType) {
-        var modalData = new ImportOntologyModalData(title, importType);
-        const builder = new BSModalContextBuilder<ImportOntologyModalData>(
-            modalData, undefined, ImportOntologyModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ImportOntologyModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(ImportOntologyModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.importType = importType;
+        return modalRef.result;
     }
 
     /**
@@ -190,12 +181,9 @@ export class SharedModalServices {
      * @param title 
      */
     importFromDatasetCatalog(title: string) {
-        var modalData = new ImportFromDatasetCatalogModalData(title);
-        const builder = new BSModalContextBuilder<ImportFromDatasetCatalogModalData>(
-            modalData, undefined, ImportFromDatasetCatalogModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ImportFromDatasetCatalogModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(ImportFromDatasetCatalogModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        return modalRef.result;
     }
 
     /**
@@ -206,24 +194,19 @@ export class SharedModalServices {
      * disable the selection of some users when the modal is used to enrich an existing list of users
      */
     selectUser(title: string, projectDependent?: boolean, unselectableUsers?: User[]) {
-        var modalData = new UserSelectionModalData(title, projectDependent, unselectableUsers);
-        const builder = new BSModalContextBuilder<UserSelectionModalData>(
-            modalData, undefined, UserSelectionModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(UserSelectionModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(UserSelectionModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.projectDepending = projectDependent;
+        modalRef.componentInstance.unselectableUsers = unselectableUsers;
+        return modalRef.result;
     }
 
     /**
      * 
      */
     datasetCatalog() {
-        var modalData = new DatasetCatalogModalData();
-        const builder = new BSModalContextBuilder<DatasetCatalogModalData>(
-            modalData, undefined, DatasetCatalogModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
-        return this.modal.open(DatasetCatalogModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(DatasetCatalogModal, new ModalOptions('xl'));
+        return modalRef.result;
     }
 
     /**
@@ -235,12 +218,12 @@ export class SharedModalServices {
      * @return returns a mapping object containing "prefix" and "namespace"
      */
     prefixNamespace(title: string, prefix?: string, namespace?: string, namespaceReadonly?: boolean): Promise<{ prefix: string, namespace: string }> {
-        var modalData = new PrefixNamespaceModalData(title, prefix, namespace, namespaceReadonly);
-        const builder = new BSModalContextBuilder<PrefixNamespaceModalData>(
-            modalData, undefined, PrefixNamespaceModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(PrefixNamespaceModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(PrefixNamespaceModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.prefixInput = prefix;
+        modalRef.componentInstance.namespaceInput = namespace;
+        modalRef.componentInstance.namespaceReadonly = namespaceReadonly;
+        return modalRef.result;
     }
 
     /**
@@ -250,12 +233,10 @@ export class SharedModalServices {
      * @return returns a manchester expression
      */
     manchesterExpression(title: string, expression?: string): Promise<string> {
-        var modalData = new ManchesterExprModalData(title, expression);
-        const builder = new BSModalContextBuilder<ManchesterExprModalData>(
-            modalData, undefined, ManchesterExprModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ManchesterExprModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(ManchesterExprModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.expression = expression;
+        return modalRef.result;
     }
 
 
@@ -263,9 +244,8 @@ export class SharedModalServices {
      * Opens a modal for accessing a project
      */
     changeProject() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-        this.modal.open(ProjectListModal, overlayConfig);
+        const modalRef: NgbModalRef = this.modalService.open(ProjectListModal, new ModalOptions('lg'));
+        return modalRef.result;
     }
 
 }

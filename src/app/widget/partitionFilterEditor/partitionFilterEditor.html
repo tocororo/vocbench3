@@ -1,12 +1,12 @@
 
-<div class="panel panel-default vbox">
-    <div class="panel-body hbox">
+<div class="card card-default vbox">
+    <div class="card-body hbox">
 
-        <div class="panel panel-default vbox" style="margin-right: 4px;">
-            <div class="panel-heading">
+        <div class="card card-default vbox" style="margin-right: 4px;">
+            <div class="card-header">
                 <label>Resource Types</label>
             </div>
-            <div class="panel-body scrollableContainer">
+            <div class="card-body scrollableContainer">
                 <div *ngFor="let rps of rolePartitionsStructs" class="listItem" (click)="selectRolePartitionsStruct(rps)"
                     [ngClass]="{ active: rps == selectedRolePartitionsStruct }">
                     {{rps.role.show}}
@@ -14,43 +14,39 @@
             </div>
         </div>
 
-        <div class="panel panel-default vbox">
-            <div class="panel-heading">
+        <div class="card card-default vbox">
+            <div class="card-header">
                 <label style="flex: 1;">Partitions</label>
                 <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group btn-group-xs" role="group">
-                        <button class="btn btn-default" (click)="checkAll(selectedRolePartitionsStruct, true)" title="Check all">
-                            <span class="glyphicon glyphicon-check"></span>
+                        <button class="btn btn-light" (click)="checkAll(selectedRolePartitionsStruct, true)" title="Check all">
+                            <span class="far fa-check-square"></span>
                         </button>
-                        <button class="btn btn-default" (click)="checkAll(selectedRolePartitionsStruct, false)" title="Uncheck all">
-                            <span class="glyphicon glyphicon-unchecked"></span>
+                        <button class="btn btn-light" (click)="checkAll(selectedRolePartitionsStruct, false)" title="Uncheck all">
+                            <span class="far fa-square"></span>
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="panel-body scrollableContainer">
+            <div class="card-body scrollableContainer">
                 <div *ngFor="let partition of selectedRolePartitionsStruct?.partitions" class="listItem">
                     <input type="checkbox" [(ngModel)]="partition.checked" (ngModelChange)="updatePref()">
                     <span style="flex: 1; margin-left: 4px">{{partition.show}}</span>
-                    <span *ngIf="partition.checked" class="glyphicon glyphicon-eye-open"></span>
-                    <span *ngIf="!partition.checked" class="glyphicon glyphicon-eye-close"></span>
+                    <span *ngIf="partition.checked" class="fas fa-eye"></span>
+                    <span *ngIf="!partition.checked" class="fas fa-eye-slash"></span>
                     
-                    <div class="dropdown pull-right">
-                        <button class="dropdown-toggle transparentBtn" data-toggle="dropdown">
-                            <span>&#9662;</span>
+                    <div class="dropdown float-right" ngbDropdown>
+                        <button class="dropdown-toggle transparentBtn" data-toggle="dropdown" ngbDropdownToggle>
+                            <span class="fas fa-caret-down fa-sm"></span>
                         </button>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a (click)="checkForAllRoles(partition.id, true)">
-                                    <span class="glyphicon glyphicon-eye-open" style="margin-right: 4px;"></span>Set visible for all resource types
-                                </a>
-                            </li>
-                            <li>
-                                <a (click)="checkForAllRoles(partition.id, false)">
-                                    <span class="glyphicon glyphicon-eye-close" style="margin-right: 4px;"></span>Hide for all resource types
-                                </a>
-                            </li>
-                        </ul>
+                        <div class="dropdown-menu" ngbDropdownMenu>
+                            <a class="dropdown-item" (click)="checkForAllRoles(partition.id, true)">
+                                <span class="fas fa-eye" style="margin-right: 4px;"></span>Set visible for all resource types
+                            </a>
+                            <a class="dropdown-item" (click)="checkForAllRoles(partition.id, false)">
+                                <span class="fas fa-eye-slash" style="margin-right: 4px;"></span>Hide for all resource types
+                            </a>
+                        </div>
                     </div>
 
                 </div>
@@ -59,9 +55,9 @@
 
     </div>
 
-    <div class="panel-footer">
-        <button class="btn btn-xs btn-default pull-right" (click)="reset()" title="Set visible all the partitions of all the Resource types">
-            <span class="glyphicon glyphicon-eye-open"></span>
+    <div class="card-footer">
+        <button class="btn btn-xs btn-light float-right" (click)="reset()" title="Set visible all the partitions of all the Resource types">
+            <span class="fas fa-eye"></span>
             Enable all
         </button>
     </div>

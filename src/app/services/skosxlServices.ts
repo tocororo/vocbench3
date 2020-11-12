@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { VBEventHandler } from "../utils/VBEventHandler";
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { map } from 'rxjs/operators';
+import { ARTLiteral, ARTResource, ARTURIResource, RDFTypesEnum } from "../models/ARTResources";
 import { Deserializer } from "../utils/Deserializer";
-import { ARTResource, ARTURIResource, ARTLiteral, ResAttribute, RDFResourceRolesEnum, RDFTypesEnum } from "../models/ARTResources";
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { VBEventHandler } from "../utils/VBEventHandler";
 
 @Injectable()
 export class SkosxlServices {
@@ -23,10 +23,10 @@ export class SkosxlServices {
             concept: concept,
             lang: lang
         };
-        return this.httpMgr.doGet(this.serviceName, "getPrefLabel", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getPrefLabel", params).pipe(
+            map(stResp => {
                 return Deserializer.createRDFResource(stResp[0]);
-            }
+            })
         );
     }
 
@@ -86,10 +86,10 @@ export class SkosxlServices {
             concept: concept,
             lang: lang,
         };
-        return this.httpMgr.doGet(this.serviceName, "getAltLabels", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getAltLabels", params).pipe(
+            map(stResp => {
                 return Deserializer.createRDFNodeArray(stResp);
-            }
+            })
         );
     }
 

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { HttpManager } from "../utils/HttpManager";
-import { VBEventHandler } from "../utils/VBEventHandler";
-import { VBContext } from "../utils/VBContext";
-import { ARTURIResource } from "../models/ARTResources";
-import { PrefixMapping, OntologyImport, ImportStatus, TransitiveImportMethodAllowance } from "../models/Metadata";
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ImportStatus, OntologyImport, PrefixMapping, TransitiveImportMethodAllowance } from "../models/Metadata";
 import { RDFFormat } from "../models/RDFFormat";
+import { HttpManager } from "../utils/HttpManager";
+import { VBContext } from "../utils/VBContext";
+import { VBEventHandler } from "../utils/VBEventHandler";
 
 @Injectable()
 export class MetadataServices {
@@ -23,8 +23,8 @@ export class MetadataServices {
      */
     getNamespaceMappings(): Observable<PrefixMapping[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getNamespaceMappings", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getNamespaceMappings", params).pipe(
+            map(stResp => {
                 var mappings: PrefixMapping[] = [];
                 for (var i = 0; i < stResp.length; i++) {
                     var m: PrefixMapping = {
@@ -39,7 +39,7 @@ export class MetadataServices {
                 })
                 VBContext.setPrefixMappings(mappings);
                 return mappings;
-            }
+            })
         );
     }
 
@@ -89,15 +89,15 @@ export class MetadataServices {
      */
     getImports(): Observable<OntologyImport[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getImports", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getImports", params).pipe(
+            map(stResp => {
                 var importedOntologies: OntologyImport[] = [];
 
                 for (var i = 0; i < stResp.length; i++) {
                     importedOntologies.push(this.parseImport(stResp[i]));
                 }
                 return importedOntologies;
-            }
+            })
         );
     }
 
@@ -121,11 +121,11 @@ export class MetadataServices {
         var params: any = {
             baseURI: baseURI
         };
-        return this.httpMgr.doPost(this.serviceName, "removeImport", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "removeImport", params).pipe(
+            map(stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
-            }
+            })
         );
     }
 
@@ -146,11 +146,11 @@ export class MetadataServices {
         if (rdfFormat != undefined) {
             params.rdfFormat = rdfFormat.name;
         }
-        return this.httpMgr.doPost(this.serviceName, "addFromWeb", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "addFromWeb", params).pipe(
+            map(stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
-            }
+            })
         );
     }
 
@@ -173,11 +173,11 @@ export class MetadataServices {
         if (rdfFormat != undefined) {
             params.rdfFormat = rdfFormat.name;
         }
-        return this.httpMgr.doPost(this.serviceName, "addFromWebToMirror", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "addFromWebToMirror", params).pipe(
+            map(stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
-            }
+            })
         );
     }
 
@@ -195,11 +195,11 @@ export class MetadataServices {
             mirrorFile: mirrorFile,
             transitiveImportAllowance: transitiveImportAllowance
         };
-        return this.httpMgr.uploadFile(this.serviceName, "addFromLocalFile", data).map(
-            stResp => {
+        return this.httpMgr.uploadFile(this.serviceName, "addFromLocalFile", data).pipe(
+            map(stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
-            }
+            })
         );
     }
 
@@ -215,11 +215,11 @@ export class MetadataServices {
             mirrorFile: mirrorFile,
             transitiveImportAllowance: transitiveImportAllowance
         };
-        return this.httpMgr.doPost(this.serviceName, "addFromMirror", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "addFromMirror", params).pipe(
+            map(stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
-            }
+            })
         );
     }
 
@@ -237,11 +237,11 @@ export class MetadataServices {
             mirrorFile: mirrorFile,
             transitiveImportAllowance: transitiveImportAllowance
         };
-        return this.httpMgr.uploadFile(this.serviceName, "getFromLocalFile", data).map(
-            stResp => {
+        return this.httpMgr.uploadFile(this.serviceName, "getFromLocalFile", data).pipe(
+            map(stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
-            }
+            })
         );
     }
 
@@ -262,11 +262,11 @@ export class MetadataServices {
         if (rdfFormat != undefined) {
             params.rdfFormat = rdfFormat.name;
         }
-        return this.httpMgr.doPost(this.serviceName, "downloadFromWeb", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "downloadFromWeb", params).pipe(
+            map(stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
-            }
+            })
         );
     }
 
@@ -290,11 +290,11 @@ export class MetadataServices {
         if (rdfFormat != undefined) {
             params.rdfFormat = rdfFormat.name;
         }
-        return this.httpMgr.doPost(this.serviceName, "downloadFromWebToMirror", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "downloadFromWebToMirror", params).pipe(
+            map(stResp => {
                 this.eventHandler.refreshDataBroadcastEvent.emit();
                 return stResp;
-            }
+            })
         );
     }
 
@@ -314,11 +314,11 @@ export class MetadataServices {
         var params = {
             namespace: namespace
         };
-        return this.httpMgr.doPost(this.serviceName, "setDefaultNamespace", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "setDefaultNamespace", params).pipe(
+            map(stResp => {
                 VBContext.getWorkingProject().setDefaultNamespace(namespace);
                 return stResp;
-            }
+            })
         );
     }
 

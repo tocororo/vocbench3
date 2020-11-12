@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { ARTNode, ARTResource, ARTURIResource, ResourcePosition, ARTLiteral } from "../models/ARTResources";
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResourcePosition } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
 import { RDFS, SKOS } from '../models/Vocabulary';
 import { Deserializer } from "../utils/Deserializer";
@@ -28,8 +29,8 @@ export class ResourcesServices {
             value: value,
             newValue: newValue
         };
-        return this.httpMgr.doPost(this.serviceName, "updateTriple", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "updateTriple", params).pipe(
+            map(stResp => {
                 if (property.getURI() == RDFS.subClassOf.getURI()) {
                     this.eventHandler.superClassUpdatedEvent.emit({ child: <ARTURIResource>subject, oldParent: <ARTURIResource>value, newParent: <ARTURIResource>newValue });
                 } else if (property.getURI() == RDFS.subPropertyOf.getURI()) {
@@ -37,7 +38,7 @@ export class ResourcesServices {
                 } else if (property.getURI() == SKOS.broader.getURI()) {
                     this.eventHandler.broaderUpdatedEvent.emit({ child: <ARTURIResource>subject, oldParent: <ARTURIResource>value, newParent: <ARTURIResource>newValue });
                 }
-            }
+            })
         );
     }
 
@@ -109,11 +110,11 @@ export class ResourcesServices {
         let params: any = {
             resource: resource,
         };
-        return this.httpMgr.doPost(this.serviceName, "setDeprecated", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "setDeprecated", params).pipe(
+            map(stResp => {
                 this.eventHandler.resourceDeprecatedEvent.emit(resource);
                 return stResp;
-            }
+            })
         );
     }
 
@@ -140,10 +141,10 @@ export class ResourcesServices {
         let params: any = {
             resource: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "getResourceDescription", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getResourceDescription", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createRDFResource(stResp);
-            }
+            })
         );
     }
 
@@ -191,10 +192,10 @@ export class ResourcesServices {
         let params: any = {
             resources: JSON.stringify(resourcesIri)
         };
-        return this.httpMgr.doPost(this.serviceName, "getResourcesInfo", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "getResourcesInfo", params).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -206,10 +207,10 @@ export class ResourcesServices {
         let params: any = {
             resource: resource
         };
-        return this.httpMgr.doGet(this.serviceName, "getResourcePosition", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getResourcePosition", params).pipe(
+            map(stResp => {
                 return ResourcePosition.deserialize(stResp);
-            }
+            })
         );
     }
 
@@ -222,14 +223,14 @@ export class ResourcesServices {
         let params: any = {
             resources: JSON.stringify(resourcesIri)
         };
-        return this.httpMgr.doPost(this.serviceName, "getResourcesPosition", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "getResourcesPosition", params).pipe(
+            map(stResp => {
                 let map: { [key: string]: ResourcePosition } = {};
                 for (let res in stResp) {
                     map[res] = ResourcePosition.deserialize(stResp[res].position);
                 }
                 return map;
-            }
+            })
         );
     }
 

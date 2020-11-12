@@ -15,11 +15,11 @@ export class ValuePickerComponent {
     @Input() disabled: boolean = false;
     @Output() valueChanged = new EventEmitter<ARTNode>();
 
-    private resTypes: { show: string, value: RDFTypesEnum }[] = [
+    resTypes: { show: string, value: RDFTypesEnum }[] = [
         { show: "IRI", value: RDFTypesEnum.uri },
         { show: "Literal", value: RDFTypesEnum.literal }
     ];
-    private selectedResType: { show: string, value: RDFTypesEnum } = this.resTypes[0];
+    selectedResType: { show: string, value: RDFTypesEnum } = this.resTypes[0];
 
     constructor() { }
 
@@ -49,16 +49,16 @@ export class ValuePickerComponent {
         }
     }
 
-    private onTypeChange() {
+    onTypeChange() {
         this.value = null;
         this.valueChanged.emit(this.value);
     }
 
-    private updateIRI(value: ARTURIResource) {
+    updateIRI(value: ARTURIResource) {
         this.valueChanged.emit(value);
     }
 
-    private updateLiteral(value: ARTLiteral) {
+    updateLiteral(value: ARTLiteral) {
         this.valueChanged.emit(value);
     }
 

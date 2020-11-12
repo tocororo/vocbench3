@@ -16,7 +16,7 @@ export class LiteralPickerComponent {
     @Input() disabled: boolean = false;
     @Output() literalChanged = new EventEmitter<ARTLiteral>();
 
-    private literalNT: string;
+    literalNT: string;
 
     constructor(private creationModals: CreationModalServices) { }
 
@@ -37,7 +37,7 @@ export class LiteralPickerComponent {
         }
     }
 
-    private pickLiteral() {
+    pickLiteral() {
         this.creationModals.newTypedLiteral("Create literal", null, this.datatypes).then(
             (values: ARTLiteral[]) => {
                 this.literal = values[0];

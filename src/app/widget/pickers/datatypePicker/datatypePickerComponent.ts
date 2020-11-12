@@ -18,10 +18,10 @@ export class DatatypePickerComponent implements ControlValueAccessor {
     @Input() readonly: boolean = false;
     @Input() allowedDatatypes: ARTURIResource[]; //list of allowed datatypes. If null allows all datatypes
 
-    private selectClass: string = "form-control input-";
+    selectClass: string = "form-control input-";
     private allDatatypes: ARTURIResource[]; //list of all datatypes defined
-    private datatypeList: ARTURIResource[]; //list of datatypes that the user can pick (could be all datatypes, or a subset restricted by allowedDatatypes)
-    private datatype: ARTURIResource;
+    datatypeList: ARTURIResource[]; //list of datatypes that the user can pick (could be all datatypes, or a subset restricted by allowedDatatypes)
+    datatype: ARTURIResource;
 
     constructor(private datatypeService: DatatypesServices) { }
 

@@ -1,23 +1,23 @@
 <div [class]="'input-group input-group-' + size">
     <input type="text" class="form-control" [(ngModel)]="resourceIRI" (ngModelChange)="onModelChanged()" placeholder="http://example.org" [readonly]="!editable" [disabled]="disabled">
-    <div class="input-group-btn">
+    <div class="input-group-append" ngbDropdown>
         <!-- Allowed only local -->
-        <button *ngIf="config.allowLocal && !config.allowRemote" class="btn btn-default" (click)="pickLocalResource()" title="Pick an existing resource" [disabled]="disabled">
-            <span class="glyphicon glyphicon-pencil"></span>
+        <button *ngIf="config.allowLocal && !config.allowRemote" class="btn btn-light" (click)="pickLocalResource()" title="Pick an existing resource" [disabled]="disabled">
+            <span class="fas fa-pencil-alt"></span>
         </button>
         <!-- Allowed only remote -->
-        <button *ngIf="!config.allowLocal && config.allowRemote" class="btn btn-default" (click)="pickExternalResource()" title="Pick a resource from external project" [disabled]="disabled">
-            <span class=" glyphicon glyphicon-share-alt"></span>
+        <button *ngIf="!config.allowLocal && config.allowRemote" class="btn btn-light" (click)="pickExternalResource()" title="Pick a resource from external project" [disabled]="disabled">
+            <span class=" fas fa-share"></span>
         </button>
         <!-- Allowed both local and remote -->
         <ng-container *ngIf="config.allowLocal && config.allowRemote">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                <span class="glyphicon glyphicon-pencil"></span>
+            <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                <span class="fas fa-pencil-alt"></span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-right">
-                <li><a (click)="pickLocalResource()">From current project</a></li>
-                <li><a (click)="pickExternalResource()">From external project</a></li>
-            </ul>
+            <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                <a class="dropdown-item" (click)="pickLocalResource()">From current project</a>
+                <a class="dropdown-item" (click)="pickExternalResource()">From external project</a>
+            </div>
         </ng-container>
     </div>
 </div>

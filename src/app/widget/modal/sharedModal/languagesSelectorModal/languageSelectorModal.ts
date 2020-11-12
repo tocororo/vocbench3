@@ -1,45 +1,34 @@
-import { Component } from "@angular/core";
-import { forEach } from "@angular/router/src/utils/collection";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Language, Languages } from "../../../../models/LanguagesCountries";
 import { ProjectContext, VBContext } from "../../../../utils/VBContext";
-
-export class LanguageSelectorModalData extends BSModalContext {
-    /**
-     * @param languages languages selected
-     * @param projectAware if true, restrict the languages only to the available in the current project
-     * @param radio if true, exactly one language should be selected
-     */
-    constructor(public title: string, public languages: string[] = [], public projectAware: boolean = false, public projectCtx: ProjectContext, public radio: boolean) {
-        super();
-    }
-}
 
 @Component({
     selector: "lang-selector-modal",
     templateUrl: "./languageSelectorModal.html",
 })
-export class LanguageSelectorModal implements ModalComponent<LanguageSelectorModalData> {
-    context: LanguageSelectorModalData;
+export class LanguageSelectorModal {
+    @Input() title: string;
+    @Input() languages: string[] = [];
+    @Input() radio: boolean;
+    @Input() projectAware: boolean;
+    @Input() projectCtx: ProjectContext;
 
-    private languageItems: LanguageItem[];
+    languageItems: LanguageItem[];
 
-    constructor(public dialog: DialogRef<LanguageSelectorModalData>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) {}
 
     ngOnInit() {
         let languages: Language[];
         this.languageItems = [];
-        if (this.context.projectAware) {
-            languages = VBContext.getWorkingProjectCtx(this.context.projectCtx).getProjectSettings().projectLanguagesSetting;
+        if (this.projectAware) {
+            languages = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectSettings().projectLanguagesSetting;
         } else {
             languages = Languages.getSystemLanguages();
         }
 
-        let initiallySelectedLanguages = this.context.languages;
-        if (this.context.radio && initiallySelectedLanguages.length > 1) {
+        let initiallySelectedLanguages = this.languages;
+        if (this.radio && initiallySelectedLanguages.length > 1) {
             initiallySelectedLanguages = initiallySelectedLanguages.slice(0, 1); // in case of radio behavior, only consider the first selected language
         }
 
@@ -51,7 +40,7 @@ export class LanguageSelectorModal implements ModalComponent<LanguageSelectorMod
         }
     }
 
-    private updateRadioSelection(langTag: string) {
+    updateRadioSelection(langTag: string) {
         for (let item of this.languageItems) {
             if (item.lang.tag == langTag) {
                 item.selected = true;
@@ -61,23 +50,22 @@ export class LanguageSelectorModal implements ModalComponent<LanguageSelectorMod
         }
     }
 
-    private okDisabled(): boolean {
-        return this.context.radio && !this.languageItems.some(l => l.selected);
+    okDisabled(): boolean {
+        return this.radio && !this.languageItems.some(l => l.selected);
     }
 
-    ok(event: Event) {
+    ok() {
         var activeLangs: string[] = [];
         for (var i = 0; i < this.languageItems.length; i++) {
             if (this.languageItems[i].selected) {
                 activeLangs.push(this.languageItems[i].lang.tag);
             }
         }
-        event.stopPropagation();
-        this.dialog.close(activeLangs);
+        this.activeModal.close(activeLangs);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { RDFResourceRolesEnum } from '../models/ARTResources';
+import { Reference } from '../models/Configuration';
 import { ResourceMetadataAssociation, ResourceMetadataPattern, ResourceMetadataPatternDefinition } from '../models/ResourceMetadata';
 import { HttpManager } from "../utils/HttpManager";
-import { Reference } from '../models/Configuration';
-import { RDFResourceRolesEnum } from '../models/ARTResources';
 
 @Injectable()
 export class ResourceMetadataServices {
@@ -19,8 +20,8 @@ export class ResourceMetadataServices {
      */
     listAssociations(): Observable<ResourceMetadataAssociation[]> {
         let params = {};
-        return this.httpMgr.doGet(this.serviceName, "listAssociations", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "listAssociations", params).pipe(
+            map(stResp => {
                 let associations: ResourceMetadataAssociation[] = []
                 stResp.forEach((a: { ref: string, role: RDFResourceRolesEnum, patternRef: string }) => {
                     associations.push({
@@ -41,7 +42,7 @@ export class ResourceMetadataServices {
                     }
                 });
                 return associations;
-            }
+            })
         );
     }
 
@@ -76,10 +77,10 @@ export class ResourceMetadataServices {
      */
     getPatternIdentifiers(): Observable<string[]> {
         let params = {}
-        return this.httpMgr.doGet(this.serviceName, "getPatternIdentifiers", params).map(
-            refs => {
+        return this.httpMgr.doGet(this.serviceName, "getPatternIdentifiers", params).pipe(
+            map(refs => {
                 return refs.sort();
-            }
+            })
         );
     }
 
@@ -88,10 +89,10 @@ export class ResourceMetadataServices {
      */
     getFactoryPatternIdentifiers(): Observable<string[]> {
         let params = {}
-        return this.httpMgr.doGet(this.serviceName, "getFactoryPatternIdentifiers", params).map(
-            refs => {
+        return this.httpMgr.doGet(this.serviceName, "getFactoryPatternIdentifiers", params).pipe(
+            map(refs => {
                 return refs.sort();
-            }
+            })
         );
     }
 
@@ -100,10 +101,10 @@ export class ResourceMetadataServices {
      */
     getLibraryPatternIdentifiers(): Observable<string[]> {
         let params = {}
-        return this.httpMgr.doGet(this.serviceName, "getLibraryPatternIdentifiers", params).map(
-            refs => {
+        return this.httpMgr.doGet(this.serviceName, "getLibraryPatternIdentifiers", params).pipe(
+            map(refs => {
                 return refs.sort();
-            }
+            })
         );
     }
 
@@ -115,10 +116,10 @@ export class ResourceMetadataServices {
         let params = {
             reference: reference
         }
-        return this.httpMgr.doGet(this.serviceName, "getPattern", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getPattern", params).pipe(
+            map(stResp => {
                 return <ResourceMetadataPattern>ResourceMetadataPattern.parse(stResp);
-            }
+            })
         );
     }
 

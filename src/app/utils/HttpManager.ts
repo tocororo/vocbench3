@@ -1,8 +1,8 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from "@angular/router";
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/Rx'; //for map function
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { ARTBNode, ARTLiteral, ARTNode, ARTURIResource } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
 import { VersionInfo } from "../models/History";
@@ -10,6 +10,7 @@ import { Project } from "../models/Project";
 import { STResponseUtils } from "../utils/STResponseUtils";
 import { UIUtils } from "../utils/UIUtils";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ModalType } from '../widget/modal/Modals';
 import { ProjectContext, VBContext } from './VBContext';
 
 @Injectable()
@@ -27,8 +28,6 @@ export class HttpManager {
     });
 
     constructor(private http: HttpClient, private router: Router, private basicModals: BasicModalServices) {
-        require('file-loader?name=[name].[ext]!../../vbconfig.js'); //this makes webpack copy vbconfig.js to dist folder during the build
-
         let st_protocol: string = window['st_protocol']; //protocol (http/https)
         let protocol: string = st_protocol ? st_protocol : location.protocol;
         if (!protocol.endsWith(":")) protocol += ":"; //protocol from location includes ending ":", st_protocol variable could not include ":"
@@ -77,13 +76,14 @@ export class HttpManager {
         };
 
         //execute request
-        return this.http.get(url, httpOptions)
-            .map(res => { 
+        return this.http.get(url, httpOptions).pipe(
+            map(res => { 
                 return this.handleOkOrErrorResponse(res); 
-            })
-            .catch(error => {
+            }),
+            catchError(error => {
                 return this.handleError(error, options.errorAlertOpt);
-            });
+            })
+        );
     }
 
     /**
@@ -118,13 +118,14 @@ export class HttpManager {
         };
 
         //execute request
-        return this.http.post(url, postData, httpOptions)
-            .map(res => { 
+        return this.http.post(url, postData, httpOptions).pipe(
+            map(res => { 
                 return this.handleOkOrErrorResponse(res); 
-            })
-            .catch(error => {
+            }),
+            catchError(error => {
                 return this.handleError(error, options.errorAlertOpt);
-            });
+            })
+        );
     }
 
     /**
@@ -170,13 +171,14 @@ export class HttpManager {
         };
 
         //execute request
-        return this.http.post(url, formData, httpOptions)
-            .map(res => { 
+        return this.http.post(url, formData, httpOptions).pipe(
+            map(res => { 
                 return this.handleOkOrErrorResponse(res); 
-            })
-            .catch(error => {
+            }),
+            catchError(error => {
                 return this.handleError(error, options.errorAlertOpt);
-            });
+            })
+        );
     }
 
     /**
@@ -213,12 +215,14 @@ export class HttpManager {
                 observe: "response" as "response"
             };
 
-            return this.http.post(url, postData, httpOptions)
-                .map(
+            return this.http.post(url, postData, httpOptions).pipe(
+                map(
                     res => { return this.arrayBufferRespHandler(res); }
-                ).catch(
+                ),
+                catchError(
                     error => { return this.handleError(error, options.errorAlertOpt) }
-                );
+                )
+            );
         } else { //GET
             //add parameters
             url += this.getParametersForUrl(params);
@@ -232,12 +236,14 @@ export class HttpManager {
             };
 
             //execute request
-            return this.http.get(url, httpOptions)
-                .map(
+            return this.http.get(url, httpOptions).pipe(
+                map(
                     res => { return this.arrayBufferRespHandler(res); }
-                ).catch(
+                ),
+                catchError(
                     error => { return this.handleError(error, options.errorAlertOpt) }
-                );
+                )
+            );
         }
 
     }
@@ -418,14 +424,14 @@ export class HttpManager {
         if (err instanceof HttpErrorResponse) { //error thrown by the angular HttpClient get() or post()
             if (err.error instanceof ErrorEvent) { //A client-side or network error occurred
                 let errorMsg = "An error occurred:" + err.error.message;
-                this.basicModals.alert("Client Error", errorMsg, "error");
+                this.basicModals.alert("Client Error", errorMsg, ModalType.error);
                 error.name = "Client Error";
                 error.message = errorMsg;
             } else { //The backend returned an unsuccessful response code. The response body may contain clues as to what went wrong.
                 let errorMsg: string;
                 if (!err.ok && err.status == 0 && err.statusText == "Unknown Error") { //attribute of error response in case of no backend response
                     errorMsg = "Connection with ST server (" + this.serverhost + ") has failed; please check your internet connection";
-                    this.basicModals.alert("Error", errorMsg, "error");
+                    this.basicModals.alert("Error", errorMsg, ModalType.error);
                     error.name = "ConnectionError";
                     error.message = errorMsg;
                 } else { //backend error response
@@ -439,7 +445,7 @@ export class HttpManager {
                         error.name = "UnauthorizedRequestError";
                         error.message = err.message;
 
-                        this.basicModals.alert("Error", errorMsg, "error").then(
+                        this.basicModals.alert("Error", errorMsg, ModalType.error).then(
                             () => {
                                 if (err.status == 401) { ////in case user is not logged at all, reset context and redirect to home
                                     VBContext.resetContext();
@@ -452,7 +458,7 @@ export class HttpManager {
                         );
                     } else if (status == 500 || status == 404) { //server error (e.g. out of memory)
                         let errorMsg = (err.statusText != null ? err.statusText : "Unknown response from the server") + " (status: " + err.status + ")";
-                        this.basicModals.alert("Error", errorMsg, "error");
+                        this.basicModals.alert("Error", errorMsg, ModalType.error);
                         error.name = "ServerError";
                         error.message = errorMsg;
                     }
@@ -467,11 +473,11 @@ export class HttpManager {
             ) { //if the alert should be shown
                 let errorMsg = error.message != null ? error.message : "Unknown response from the server";
                 let errorDetails = error.stack ? error.stack : error.name;
-                this.basicModals.alert("Error", errorMsg, "error", errorDetails);
+                this.basicModals.alert("Error", errorMsg, ModalType.error, errorDetails);
             }
         }
         UIUtils.stopAllLoadingDiv();
-        return Observable.throw(error);
+        return throwError(error);
     }
 
 }

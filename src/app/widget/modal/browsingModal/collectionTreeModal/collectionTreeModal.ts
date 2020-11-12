@@ -1,44 +1,34 @@
-import { Component, ElementRef } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from '../../../../models/ARTResources';
 import { UIUtils } from "../../../../utils/UIUtils";
 import { ProjectContext } from "../../../../utils/VBContext";
-
-export class CollectionTreeModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title', public projectCtx?: ProjectContext) {
-        super();
-    }
-}
 
 @Component({
     selector: "collection-tree-modal",
     templateUrl: "./collectionTreeModal.html",
 })
-export class CollectionTreeModal implements ModalComponent<CollectionTreeModalData> {
-    context: CollectionTreeModalData;
+export class CollectionTreeModal {
+    @Input() title: string;
+    @Input() projectCtx?: ProjectContext;
     
-    private selectedCollection: ARTURIResource;
+    selectedCollection: ARTURIResource;
     
-    constructor(public dialog: DialogRef<CollectionTreeModalData>, private elementRef: ElementRef) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private elementRef: ElementRef) {}
 
     ngAfterViewInit() {
         UIUtils.setFullSizeModal(this.elementRef);
     }
     
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close(this.selectedCollection);
+    ok() {
+        this.activeModal.close(this.selectedCollection);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
-    private onCollectionSelected(collection: ARTURIResource) {
+    onCollectionSelected(collection: ARTURIResource) {
         this.selectedCollection = collection;
     }
 

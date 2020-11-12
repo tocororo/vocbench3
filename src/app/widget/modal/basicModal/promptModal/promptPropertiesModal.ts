@@ -1,46 +1,35 @@
-import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { DialogRef, ModalComponent } from "ngx-modialog";
-
-export class PromptPropertiesModalData extends BSModalContext {
-    
-    constructor(
-        public title: string,
-        public properties: { [key: string]: string },
-        public allowEmpty: boolean
-    ) {
-        super();
-    }
-}
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: "prompt-prop-modal",
     templateUrl: "./promptPropertiesModal.html",
 })
-export class PromptPropertiesModal implements ModalComponent<PromptPropertiesModalData> {
-    context: PromptPropertiesModalData;
+export class PromptPropertiesModal {
+    @Input() title: string;
+    @Input() properties: { [key: string]: string };
+    @Input() allowEmpty: boolean;
 
-    private properties: { [key: string]: string };
-    private mapKeys: string[] = [];
+    private props: { [key: string]: string };
+    mapKeys: string[] = [];
 
-    constructor(public dialog: DialogRef<PromptPropertiesModalData>) {
-        this.context = dialog.context;
-        this.properties = JSON.parse(JSON.stringify(this.context.properties));
+    constructor(public activeModal: NgbActiveModal) {
+        this.props = JSON.parse(JSON.stringify(this.properties));
     }
 
     ngOnInit() {
-        for (let key in this.properties) {
+        for (let key in this.props) {
             this.mapKeys.push(key);
         }
     }
 
-    private isOkClickable(): boolean {
-        if (this.context.allowEmpty) {
+    isOkClickable(): boolean {
+        if (this.allowEmpty) {
             return true;
         } else {
             let empty: boolean = false;
             this.mapKeys.forEach((key: string) => {
-                if (this.properties[key] == null || this.properties[key].trim() == "") {
+                if (this.props[key] == null || this.props[key].trim() == "") {
                     empty = true;
                 }
             });
@@ -48,14 +37,12 @@ export class PromptPropertiesModal implements ModalComponent<PromptPropertiesMod
         }
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close(this.properties);
+    ok() {
+        this.activeModal.close(this.props);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

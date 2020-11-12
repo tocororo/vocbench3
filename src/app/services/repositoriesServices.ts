@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ExceptionDAO, RemoteRepositorySummary, Repository } from "../models/Project";
 import { HttpManager } from "../utils/HttpManager";
-import { Repository, RemoteRepositorySummary, ExceptionDAO } from "../models/Project";
 
 @Injectable()
 export class RepositoriesServices {
@@ -21,8 +22,8 @@ export class RepositoriesServices {
             params.username = username;
             params.password = password;
         }
-        return this.httpMgr.doPost(this.serviceName, "getRemoteRepositories", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "getRemoteRepositories", params).pipe(
+            map(stResp => {
                 var repositories: Repository[] = [];
                 for (var i = 0; i < stResp.length; i++) {
                     let repo: Repository = {
@@ -35,7 +36,7 @@ export class RepositoriesServices {
                     repositories.push(repo);
                 }
                 return repositories;
-            }
+            })
         );
     }
 
@@ -50,8 +51,8 @@ export class RepositoriesServices {
         let params: any = {
             remoteRepositories: JSON.stringify(remoteRepositories)
         }
-        return this.httpMgr.doPost(this.serviceName, "deleteRemoteRepositories", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "deleteRemoteRepositories", params).pipe(
+            map(stResp => {
                 let exceptions: ExceptionDAO[] = [];
                 for (var i = 0; i < stResp.length; i++) {
                     let ex: ExceptionDAO;
@@ -65,7 +66,7 @@ export class RepositoriesServices {
                     exceptions.push(ex); //in case the repository at position i has been
                 }
                 return exceptions;
-            }
+            })
         );
     }
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
+import { flatMap, map } from 'rxjs/operators';
 import { ARTNode, ARTResource, ARTURIResource } from "../models/ARTResources";
 import { RDFCapabilityType } from "../models/Coda";
 import { Configuration, Reference } from '../models/Configuration';
@@ -34,8 +35,8 @@ export class Sheet2RDFServices {
      */
     getHeaders(): Observable<{subject: SubjectHeader, headers: SimpleHeader[]}> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getHeaders", params).flatMap(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getHeaders", params).pipe(
+            flatMap(stResp => {
                 let subject: SubjectHeader = Sheet2RdfDeserializer.parseSubjectHeader(stResp.subject);
                 let headers: SimpleHeader[] = [];
                 let headersJson = stResp.headers;
@@ -44,16 +45,16 @@ export class Sheet2RDFServices {
                 }
                 //annotate the type of the subject mapping (do not annotate the properties of the headers, they will be annotated individually when editing the single header)
                 if (subject.graph.type != null) {
-                    return this.resourcesService.getResourceDescription(subject.graph.type).map(
-                        annotatedRes => {
+                    return this.resourcesService.getResourceDescription(subject.graph.type).pipe(
+                        map(annotatedRes => {
                             subject.graph.type = <ARTURIResource>annotatedRes;
                             return { subject: subject, headers: headers };
-                        }
+                        })
                     );
                 } else {
-                    return Observable.of({ subject: subject, headers: headers });
+                    return of({ subject: subject, headers: headers });
                 }
-            }
+            })
         );
     }
 
@@ -61,8 +62,8 @@ export class Sheet2RDFServices {
         var params: any = {
             headerId: headerId
         };
-        return this.httpMgr.doGet(this.serviceName, "getHeaderFromId", params).flatMap(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getHeaderFromId", params).pipe(
+            flatMap(stResp => {
                 let header: SimpleHeader = Sheet2RdfDeserializer.parseSimpleHeader(stResp);
                 //collect the URI resources: properties and types
                 let resources: ARTURIResource[] = [];
@@ -78,8 +79,8 @@ export class Sheet2RDFServices {
                 });
                 //replace
                 if (resources.length > 0) {
-                    return this.resourcesService.getResourcesInfo(resources).map(
-                        annotatedRes => {
+                    return this.resourcesService.getResourcesInfo(resources).pipe(
+                        map(annotatedRes => {
                             annotatedRes.forEach(ar => {
                                 header.graph.forEach(g => {
                                     if (g instanceof SimpleGraphApplication) {
@@ -93,13 +94,13 @@ export class Sheet2RDFServices {
                                 });
                             });
                             return header;
-                        }
+                        })
                     );
                 } else {
-                    return Observable.of(header);
+                    return of(header);
                 }
                 
-            }
+            })
         );
     }
 
@@ -316,11 +317,11 @@ export class Sheet2RDFServices {
         var params: any = {
             maxTableRows: maxTableRows
         };
-        return this.httpMgr.doGet(this.serviceName, "getTriplesPreview", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getTriplesPreview", params).pipe(
+            map(stResp => {
                 stResp.returned;
                 return stResp;
-            }
+            })
         );
     }
 
@@ -338,8 +339,8 @@ export class Sheet2RDFServices {
 
     getPrefixMappings() {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getPrefixMappings", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getPrefixMappings", params).pipe(
+            map(stResp => {
                 let mappings: PrefixMapping[] = [];
                 for (let i = 0; i < stResp.length; i++) {
                     let m: PrefixMapping = {
@@ -350,20 +351,20 @@ export class Sheet2RDFServices {
                     mappings.push(m);
                 }
                 return mappings;
-            }
+            })
         );
     }
 
     getDefaultAdvancedGraphApplicationConfigurations(): Observable<Reference[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getDefaultAdvancedGraphApplicationConfigurations", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getDefaultAdvancedGraphApplicationConfigurations", params).pipe(
+            map(stResp => {
                 let references: Reference[] = [];
                 for (var i = 0; i < stResp.length; i++) {
                     references.push(Reference.deserialize(stResp[i]));
                 }
                 return references;
-            }
+            })
         );
     }
 
@@ -371,20 +372,20 @@ export class Sheet2RDFServices {
         var params = {
             identifier: identifier
         };
-        return this.httpMgr.doGet(this.serviceName, "getConfiguration", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getConfiguration", params).pipe(
+            map(stResp => {
                 return Configuration.parse(stResp);
-            }
+            })
         );
     }
 
     closeSession() {
         var params = {};
-        return this.httpMgr.doGet(this.serviceName, "closeSession", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "closeSession", params).pipe(
+            map(stResp => {
                 HttpServiceContext.removeSessionToken();
                 return stResp;
-            }
+            })
         );
     }
 

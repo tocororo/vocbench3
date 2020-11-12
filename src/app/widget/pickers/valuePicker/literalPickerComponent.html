@@ -1,8 +1,8 @@
 <div class="input-group input-group-sm">
     <input type="text" class="form-control" [ngModel]="literalNT" [disabled]="disabled" readonly>
-    <div class="input-group-btn">
-        <button class="btn btn-default" (click)="pickLiteral()" title="Pick an existing resource" [disabled]="disabled">
-            <span class="glyphicon glyphicon-pencil"></span>
+    <div class="input-group-append">
+        <button class="btn btn-light" (click)="pickLiteral()" title="Pick an existing resource" [disabled]="disabled">
+            <span class="fas fa-pencil-alt"></span>
         </button>
     </div>
 </div>

@@ -1,24 +1,22 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
+    <button *ngIf="!hideNo" class="close" (click)="close()">
+        <span>&times;</span>
+    </button>
 </div>
 <div class="modal-body">
-    <div *ngIf="context.message" class="alert alert-info" style="margin-bottom: 5px">
-        {{context.message}}
+    <div *ngIf="message" class="alert alert-info mb-2">
+        {{message}}
     </div>
-    <div class="hbox" style="align-items: center;">
-        <div *ngIf="context.label" style="margin-right: 4px;">
-            <label>{{context.label.value}}:</label>
-            <span *ngIf="context.label.tooltip" class="glyphicon glyphicon-question-sign" [title]="context.label.tooltip"></span>
+	<div class="hbox" style="align-items: center;">
+        <div *ngIf="label" class="mr-2">
+            <label>{{label.value}}:</label>
+            <span *ngIf="label.tooltip" class="fas fa-info-circle" [title]="label.tooltip"></span>
         </div>
-        <textarea id="toFocus" class="form-control input-sm" style="flex: 1; resize: vertical;" [(ngModel)]="inputTxt" rows="1"
-            (keydown)="onKeydown($event)" [sanitized]="context.inputSanitized">
-        </textarea>
-    </div>
-    <div *ngIf="!isInputValid() && !context.inputOptional && submitted" class="alert alert-danger">
-        <strong>{{context.label}}</strong> is required
+        <textarea ngbAutofocus class="form-control" style="flex: 1; resize: vertical" [(ngModel)]="value" rows="1" (keydown.enter)="ok()" [sanitized]="inputSanitized"></textarea>
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!context.inputOptional && !isInputValid()">Ok</button>
-    <button *ngIf="!context.hideNo" class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-sm btn-primary" (click)="ok()" [disabled]="!inputOptional && !isInputValid()">Ok</button>
+    <button *ngIf="!hideNo" class="btn btn-sm btn-secondary" (click)="close()">Cancel</button>
 </div>

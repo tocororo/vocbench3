@@ -19,7 +19,7 @@ export class ExtensionConfiguratorComponent {
     @Output() configurationUpdated = new EventEmitter<Settings>();
     @Output() configStatusUpdated = new EventEmitter<{ status: ExtensionConfigurationStatus, relativeReference?: string }>();
 
-    private selectedExtension: ConfigurableExtensionFactory;
+    selectedExtension: ConfigurableExtensionFactory;
     private selectedConfiguration: Settings;
 
     private status: ExtensionConfigurationStatus;

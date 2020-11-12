@@ -1,18 +1,18 @@
 <div class="modal-header">
-    <h3 [class]="headerStyle">{{context.title}}</h3>
+    <h3 [class]="headerStyle">{{title}}</h3>
 </div>
 <div class="modal-body vbox">
-    <div *ngIf="context.message" [class]="msgStyle">
-        {{context.message}}
+    <div *ngIf="message" [class]="msgStyle">
+        {{message}}
     </div>
-    <div class="panel panel-default vbox" style="margin-top: 5px;">
-        <div class="panel-body vbox scrollableContainer">
-            <div *ngFor="let opt of context.options" class="listItem" [ngClass]="{ active: optionSelected == opt }" (click)="optionSelected = opt">
+    <div class="card card-default vbox" style="margin-top: 5px;">
+        <div class="card-body vbox scrollableContainer">
+            <div *ngFor="let opt of options" class="listItem" [ngClass]="{ active: optionSelected == opt }" (click)="optionSelected = opt">
                 <span *ngIf="!optionsWithDescription; else descrBlock">{{opt}}</span>
                 <ng-template #descrBlock>
                     <span style="white-space: nowrap;">
                         <span style="font-size: 13px;">{{opt.value}}</span>
-                        <span *ngIf="opt.description" class="glyphicon glyphicon-info-sign" style="margin-left: 4px;" [title]="opt.description"></span>
+                        <span *ngIf="opt.description" class="fas fa-info-circle" style="margin-left: 4px;" [title]="opt.description"></span>
                     </span>
                 </ng-template>
             </div>
@@ -20,6 +20,6 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!optionSelected">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!optionSelected">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

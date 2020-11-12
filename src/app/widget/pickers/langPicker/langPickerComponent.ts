@@ -19,10 +19,10 @@ export class LangPickerComponent implements ControlValueAccessor {
 
     @Input() config: LangPickerConfig;
 
-    private selectClass: string = "form-control input-";
-    private languageList: Language[] = [];
-    private language: Language;
-    private showFlag: boolean = true;
+    selectClass: string = "form-control input-";
+    languageList: Language[] = [];
+    language: Language;
+    showFlag: boolean = true;
 
     constructor(private properties: VBProperties) { }
 
@@ -92,16 +92,16 @@ export class LangPickerComponent implements ControlValueAccessor {
         });
     }
 
-    private onLangChange() {
+    onLangChange() {
         let langTag = this.language != null ? this.language.tag : null;
         this.propagateChange(langTag);
     }
 
-    private isDisabled(): boolean {
+    isDisabled(): boolean {
         return this.disabled || this.languageList.length == 0;
     }
 
-    private getMenuTitle(): string {
+    getMenuTitle(): string {
         if (this.languageList.length == 0) {
             return "No language assigned for the current project";
         } else {

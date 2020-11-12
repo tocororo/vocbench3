@@ -3,9 +3,9 @@
 </div>
 <div class="modal-body">
 
-    <div class="panel panel-default">
-        <div class="panel-body table-responsive">
-            <table class="table table-condensed table-hoverable">
+    <div class="card card-default">
+        <div class="card-body table-responsive">
+            <table class="table table-sm table-hoverable">
                 <thead>
                     <tr>
                         <th>Server URL</th>
@@ -29,22 +29,22 @@
                             <input-editable [value]="conf.password" allowEmpty="true" (valueEdited)="updateConfPassword(conf, $event)"></input-editable>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-default" (click)="deleteConfig(conf)">
-                                <span class="glyphicon glyphicon-trash"></span>
+                            <button class="btn btn-sm btn-light" (click)="deleteConfig(conf)">
+                                <span class="far fa-trash-alt"></span>
                             </button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="panel-footer">
+        <div class="card-footer">
             <div class="hbox" style="align-items: center;">
                 <label>New:</label>
-                <input class="form-control input-sm" style="margin-left: 6px;" [(ngModel)]="newConfig.serverURL" placeholder="http://serverurl">
-                <input class="form-control input-sm" style="margin-left: 6px;" [(ngModel)]="newConfig.username" placeholder="username">
-                <input class="form-control input-sm" style="margin-left: 6px;" [(ngModel)]="newConfig.password" placeholder="password">
-                <button class="btn btn-sm btn-default" style="margin-left: 6px;" (click)="createConfiguration()" [disabled]="!newConfig.serverURL">
-                    <span class="glyphicon glyphicon-plus"></span>
+                <input class="form-control form-control-sm" style="margin-left: 6px;" [(ngModel)]="newConfig.serverURL" placeholder="http://serverurl">
+                <input class="form-control form-control-sm" style="margin-left: 6px;" [(ngModel)]="newConfig.username" placeholder="username">
+                <input class="form-control form-control-sm" style="margin-left: 6px;" [(ngModel)]="newConfig.password" placeholder="password">
+                <button class="btn btn-sm btn-light" style="margin-left: 6px;" (click)="createConfiguration()" [disabled]="!newConfig.serverURL">
+                    <span class="fas fa-plus"></span>
                 </button>
             </div>
         </div>
@@ -52,5 +52,5 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
 </div>

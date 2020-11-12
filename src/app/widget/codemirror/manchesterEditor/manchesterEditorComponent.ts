@@ -1,10 +1,11 @@
 import { Component, forwardRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as CodeMirror from 'codemirror';
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ExpressionCheckResponse, ManchesterServices, ObjectError } from '../../../services/manchesterServices';
+import { ModalOptions } from '../../modal/Modals';
 import { SearchMode } from './../../../models/Properties';
 import { SearchServices } from './../../../services/searchServices';
 import './manchester';
@@ -31,13 +32,95 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
 
     private markers: CodeMirror.TextMarker[] = [];
     private cmEditor: CodeMirror.EditorFromTextArea;
-    private codeValid: boolean = true;
+    codeValid: boolean = true;
     private codeValidationTimer: number;
     private codeInvalidDetails: string;
 
-    constructor(private manchesterService: ManchesterServices, private searchServices: SearchServices, private modal: Modal) { }
+    constructor(private manchesterService: ManchesterServices, private searchServices: SearchServices, private modalService: NgbModal) { }
+
+    private getRegexp(tokensList: string[], caseSentitive: boolean) {
+        if (caseSentitive) {
+            return new RegExp("(?:" + tokensList.join("|") + ")\\b");
+        } else {
+            return new RegExp("(?:" + tokensList.join("|") + ")\\b", "i");
+        }
+    }
 
     ngAfterViewInit() {
+        const booleans = ["true", "false"];
+        const brackets = ["(", ")", "[", "]", "{", "}"];
+        const builtinDatatypes = ["decimal", "double", "float", "integer", "string"];
+        const characteristics = ["Functional", "InverseFunctional", "Reflexive", "Irreflexive", "Symmetric", "Asymmetric", "Transitive" ,"Inverse"]; 
+        const conjuctions = ["and", "not", "that", "or"];
+        const facets = ["langRange", "length", "maxLength", "minLength", "pattern", "<", "<=", ">", ">="];
+        const quantifiers = ["some", "only", "value", "min", "max", "exactly", "self"];
+        // const frames = ["AnnotationProperty", "Class", "DataProperty", "Datatype", "DifferentIndividuals", "DisjointClasses",
+        //     "DisjointProperties", "EquivalentClasses", "EquivalentProperties", "Individual", "ObjectProperty", "SameIndividual"];
+        // const sections = ["Annotations", "SubClassOf", "EquivalentTo", "DisjointWith", "DisjointUnion", "SubPropertyOf",
+        //     "InverseOf", "SubPropertyChain", "Domain", "Range", "Characteristics", "Types", "SameAs", "DifferentFrom",
+        //     "Facts", "SuperClassOf", "SuperPropertyOf", "Individuals"];
+
+        //Regular expressions
+        const booleansRegex = this.getRegexp(booleans, false);
+        const builtinDatatypesRegex = this.getRegexp(builtinDatatypes, true); //case sensitive?
+        const characteristicsRegex = this.getRegexp(characteristics, false);
+        const conjuctionsRegex = this.getRegexp(conjuctions, false);
+        const facetsRegex = this.getRegexp(facets, true);
+        const quantifiersRegex = this.getRegexp(quantifiers, false);
+    // const framesRegex = new RegExp("(?:" + frames.join("|") + "):(\\b|\\s|$)");
+    // const sectionsRegex = new RegExp("(?:" + sections.join("|") + "):(\\b|\\s|$)");
+        (<any>CodeMirror).defineSimpleMode("manchester", {
+            // The start state contains the rules that are intially used
+            start: [
+                {
+                    regex: /"(?:[^\\]|\\.)*?(?:"|$)/,
+                    token: "string"
+                },
+                {
+                    regex: booleansRegex,
+                    token: "boolean"
+                },
+                {
+                    regex: builtinDatatypesRegex,
+                    token: "builtinDatatype"
+                },
+                {
+                    regex: characteristicsRegex,
+                    token: "characteristic"
+                },
+                {
+                    regex: conjuctionsRegex,
+                    token: "conjuction"
+                },
+                {
+                    regex: facetsRegex,
+                    token: "facet"
+                },
+                {
+                    regex: quantifiersRegex,
+                    token: "quantifier"
+                },
+                // {
+                //     regex: framesRegex,
+                //     token: "frame"
+                // },
+                // {
+                //     regex: sectionsRegex,
+                //     token: "section"
+                // },
+                {
+                    regex: /0x[a-f\d]+|[-+]?(?:\.\d+|\d+\.?\d*)(?:e[-+]?\d+)?/i,
+                    token: "number"
+                },
+                { regex: /\/(?:[^\\]|\\.)*?\//, token: "variable-3" },
+                // indent and dedent properties guide autoindentation
+                { regex: /[\{\[\(]/, indent: true, token: "bracket" },
+                { regex: /[\}\]\)]/, dedent: true, token: "bracket" },
+                { regex: /[a-z$][\w$]*/, token: "variable" },
+            ],
+        });
+
+
         this.cmEditor = CodeMirror.fromTextArea(
             this.textareaElement.nativeElement,
             {
@@ -50,11 +133,11 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                 viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
                 //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
                 extraKeys: { "Ctrl-Space": "autocomplete" },
-                hintOptions: {
-                    hint: (cm: CodeMirror.Editor, callback: (hints: CodeMirror.Hints) => any) => {
-                        return this.asyncHintFunction();
-                    }
-                }
+                // hintOptions: {
+                //     hint: (cm: CodeMirror.Editor, callback: (hints: CodeMirror.Hints) => any) => {
+                //         return this.asyncHintFunction();
+                //     }
+                // }
             }
         );
 
@@ -79,16 +162,15 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
     /**
      * Open helper modal
      */
-    private onClick() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog").keyboard(27).toJSON() };
-        return this.modal.open(HelperModal, overlayConfig);
+    openHelper() {
+        this.modalService.open(HelperModal, new ModalOptions());
     }
 
     /**
      * This method manages hints window (activated via "crtl-space").
      */
-    private asyncHintFunction(): Promise<CodeMirror.Hints> {
+    // private asyncHintFunction(): Promise<CodeMirror.Hints> {
+    private asyncHintFunction(): Promise<any> {
         let wordRegExp = /[\w|:$]+/;
         let cur = this.cmEditor.getDoc().getCursor();
         let curLine = this.cmEditor.getDoc().getLine(cur.line);
@@ -107,8 +189,8 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                         break
                     }
                 }
-                return this.searchServices.searchURIList(word, SearchMode.startsWith, 200).map(
-                    results => {
+                return this.searchServices.searchURIList(word, SearchMode.startsWith, 200).pipe(
+                    map(results => {
                         if (results.length > 199) {
                             results.sort();
                             results.push("...");
@@ -123,14 +205,15 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                             to: CodeMirror.Pos(cur.line, end),
                             list: results.sort()
                         }
-                    }
+                    })
                 ).toPromise();
             } else { // here it looks for between keywords and prefixes
                 let keywords = ["SOME", "ONLY", "VALUE", "MIN", "MAX", "EXACTLY", "SELF", "LENGTH", "MINLENGTH", "MAXLENGTH", "PATTERN", "LANGRANGE", "OR", "AND", "NOT", "THAT"]; // remeber to check and update also manchester.js file in case of modify
                 let filterKeywords = keywords.filter(w => w.startsWith(word.toUpperCase())).sort();
-                return this.searchServices.searchPrefix(word, SearchMode.startsWith).map(
-                    results => {
-                        let list: CodeMirror.Hint[] = []; // it is a particular data structure that allows me to add a reference for the css ( a list of objects)
+                return this.searchServices.searchPrefix(word, SearchMode.startsWith).pipe(
+                    map(results => {
+                        // let list: CodeMirror.Hint[] = []; // it is a particular data structure that allows me to add a reference for the css ( a list of objects)
+                        let list: any[] = []; // it is a particular data structure that allows me to add a reference for the css ( a list of objects)
                         if (results.length > 0 && filterKeywords.length > 0) { //  case in which you need to add a separator in hints windows ( first keyword and then prefixes)
                             filterKeywords.forEach(value => {
                                 if (value == "SOME" || value == "ONLY" || value == "VALUE" || value == "MIN" || value == "MAX" || value == "EXACTLY" || value == "SELF") {
@@ -183,9 +266,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                                 return obj
                             }
                         }
-
-
-                    }
+                    })
                 ).toPromise()
             }
         }
@@ -204,7 +285,8 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
         response.forEach(value => {
             if (value.type == "semantic") {
                 let pattern = value.qname + "\\b|" + value.iri // regex checks if there are some word in text editor which match with any uri or qname if this happens takes its position with "positionWord"
-                let positionWord = this.cmEditor.getDoc().getSearchCursor(new RegExp(pattern)); // it takes word position
+                // let positionWord = this.cmEditor.getDoc().getSearchCursor(new RegExp(pattern)); // it takes word position
+                let positionWord = (<any>this.cmEditor.getDoc()).getSearchCursor(new RegExp(pattern)); // it takes word position
                 for (let i = 0; i <= value.occurrence; i++) {
                     positionWord.findNext();// it takes match in text editor
                 }
@@ -256,7 +338,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                         this.propagateChange(null); //in invalid case, it propagates a null expression
                     }
                 } else {
-                    this.codeValid = true // it's useful to update glyphicon-alert on view(manchesterEditorComponent html) when a user deletes all inside editor 
+                    this.codeValid = true // it's useful to update alert icon on view(manchesterEditorComponent html) when a user deletes all inside editor 
                 }
 
             }

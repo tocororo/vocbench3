@@ -1,24 +1,9 @@
-import { Component } from "@angular/core";
-import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
-import { DialogRef, ModalComponent, Modal, OverlayConfig } from "ngx-modialog";
-import { SignaturePickerModal, SignaturePickerModalData } from "./signaturePickerModal";
-import { CODAServices } from "../../../../services/codaServices"
-import { ConverterContractDescription, ConverterUtils, SignatureDescription, ParameterDescription, RDFCapabilityType } from "../../../../models/Coda";
-
-export class ConverterPickerModalData extends BSModalContext {
-    /**
-     * @param title modal title
-     * @param message modal message, if null no the message is shwown the modal
-     * @param capabilities list of admitted capabilities of converter to show
-     */
-    constructor(
-        public title: string = 'Modal Title',
-        public message: string,
-        public capabilities: RDFCapabilityType[]
-    ) {
-        super();
-    }
-}
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ConverterContractDescription, ConverterUtils, RDFCapabilityType, SignatureDescription } from "../../../../models/Coda";
+import { CODAServices } from "../../../../services/codaServices";
+import { ModalOptions } from '../../Modals';
+import { SignaturePickerModal } from "./signaturePickerModal";
 
 /**
  * Modal that allows to choose among a set of options
@@ -27,26 +12,26 @@ export class ConverterPickerModalData extends BSModalContext {
     selector: "converter-picker-modal",
     templateUrl: "./converterPickerModal.html",
 })
-export class ConverterPickerModal implements ModalComponent<ConverterPickerModalData> {
-    context: ConverterPickerModalData;
+export class ConverterPickerModal {
+    @Input() title: string;
+    @Input() message: string;
+    @Input() capabilities: RDFCapabilityType[];
     
-    private converters: ConverterContractDescription[];
-    private selectedConverter: ConverterContractDescription;
-    private selectedConverterType: RDFCapabilityType; //uri/literal
-    private concerterTypeConstrained: boolean = false; //if true disable the selection of converter type (uri/literal) when available
-    private selectedSignature: SignatureDescription;
+    converters: ConverterContractDescription[];
+    selectedConverter: ConverterContractDescription;
+    selectedConverterType: RDFCapabilityType; //uri/literal
+    concerterTypeConstrained: boolean = false; //if true disable the selection of converter type (uri/literal) when available
+    selectedSignature: SignatureDescription;
 
-    private projectionOperator: string = "";
+    projectionOperator: string = "";
     
-    constructor(public dialog: DialogRef<ConverterPickerModalData>, private modal: Modal, private codaService: CODAServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private modalService: NgbModal, private codaService: CODAServices) {}
 
     ngOnInit() {
         this.codaService.listConverterContracts().subscribe(
             converterList => {
-                if (this.context.capabilities != null && this.context.capabilities.length != 0) {
-                    if (this.context.capabilities.indexOf(RDFCapabilityType.node) != -1) {
+                if (this.capabilities != null && this.capabilities.length != 0) {
+                    if (this.capabilities.indexOf(RDFCapabilityType.node) != -1) {
                         this.converters = converterList;
                     } else {
                         //=> filter for capability, show only converters compliant with given capabilities
@@ -56,11 +41,11 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
                             if (capab == RDFCapabilityType.node) {
                                 this.converters.push(conv);
                             } else if (capab == RDFCapabilityType.uri) {
-                                if (this.context.capabilities.indexOf(RDFCapabilityType.uri) != -1) {
+                                if (this.capabilities.indexOf(RDFCapabilityType.uri) != -1) {
                                     this.converters.push(conv);
                                 }
                             } else if (capab == RDFCapabilityType.literal) {
-                                if (this.context.capabilities.indexOf(RDFCapabilityType.literal) != -1) {
+                                if (this.capabilities.indexOf(RDFCapabilityType.literal) != -1) {
                                     this.converters.push(conv);
                                 }
                             }
@@ -77,9 +62,9 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
          * allowed capabilities are only literal (no node or uri) => constrained to literal
          * allowed capabilities is only uri (no other capabilities) => constrained to uri
          */
-        if (this.context.capabilities != null &&
-            ((this.context.capabilities.length > 0 && this.context.capabilities.indexOf(RDFCapabilityType.node) == -1 && this.context.capabilities.indexOf(RDFCapabilityType.uri) == -1 ) ||
-            (this.context.capabilities.length == 1 && this.context.capabilities[0] == RDFCapabilityType.uri))
+        if (this.capabilities != null &&
+            ((this.capabilities.length > 0 && this.capabilities.indexOf(RDFCapabilityType.node) == -1 && this.capabilities.indexOf(RDFCapabilityType.uri) == -1 ) ||
+            (this.capabilities.length == 1 && this.capabilities[0] == RDFCapabilityType.uri))
          ) {
             this.concerterTypeConstrained = true;
         }
@@ -90,8 +75,8 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
             this.selectedConverter = converter;
             if (this.selectedConverter.getRDFCapability() == RDFCapabilityType.literal ||
                 (this.selectedConverter.getRDFCapability() == RDFCapabilityType.node && 
-                this.context.capabilities != null && this.context.capabilities.length > 0 && 
-                this.context.capabilities.indexOf(RDFCapabilityType.node) == -1 && this.context.capabilities.indexOf(RDFCapabilityType.uri) == -1)
+                this.capabilities != null && this.capabilities.length > 0 && 
+                this.capabilities.indexOf(RDFCapabilityType.node) == -1 && this.capabilities.indexOf(RDFCapabilityType.uri) == -1)
             ) {
                 this.selectedConverterType = RDFCapabilityType.literal;
             } else { //'node' or 'uri'
@@ -109,14 +94,13 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
         }
     }
 
-    private chooseSignature() {
-        var modalData = new SignaturePickerModalData("Choose the signature for " + this.selectedConverter.getName(), null,
-            this.selectedConverter.getSignatures(), this.selectedSignature);
-        const builder = new BSModalContextBuilder<SignaturePickerModalData>(
-            modalData, undefined, SignaturePickerModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(SignaturePickerModal, overlayConfig).result.then(
+    chooseSignature() {
+        const modalRef: NgbModalRef = this.modalService.open(SignaturePickerModal, new ModalOptions());
+        modalRef.componentInstance.title = "Choose the signature for " + this.selectedConverter.getName();
+        modalRef.componentInstance.message = null;
+        modalRef.componentInstance.signatures = this.selectedConverter.getSignatures();
+        modalRef.componentInstance.selected = this.selectedSignature;
+        return modalRef.result.then(
             (signature: SignatureDescription) => {
                 this.selectedSignature = signature;
                 this.updateProjectionOperator();
@@ -125,7 +109,7 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
         );
     }
 
-    private isSignatureEditable(): boolean {
+    isSignatureEditable(): boolean {
         if (this.selectedConverter != null) {
             /* For each signatures check if it has at least a parameter
              * if every signature doesn't have any parameters it should not allow
@@ -154,15 +138,14 @@ export class ConverterPickerModal implements ModalComponent<ConverterPickerModal
         this.updateProjectionOperator();
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        this.dialog.close({
+    ok() {
+        this.activeModal.close({
             projectionOperator: this.projectionOperator,
             contractDesctiption: this.selectedConverter
         });
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 }

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTLiteral } from '../models/ARTResources';
-import { DatasetDescription, DatasetSearchFacets, DatasetSearchResult, SearchResultsPage, DownloadDescription } from '../models/Metadata';
+import { DatasetDescription, DatasetSearchFacets, DatasetSearchResult, DownloadDescription, SearchResultsPage } from '../models/Metadata';
+import { PluginSpecification } from '../models/Plugins';
 import { HttpManager } from "../utils/HttpManager";
 import { ResourceUtils } from '../utils/ResourceUtils';
-import { Configuration } from '../models/Configuration';
-import { PluginSpecification } from '../models/Plugins';
 
 @Injectable()
 export class DatasetCatalogsServices {
@@ -28,8 +28,8 @@ export class DatasetCatalogsServices {
             facets: JSON.stringify(facets),
             page: page
         };
-        return this.httpMgr.doGet(this.serviceName, "searchDataset", params).map(
-            resp => {
+        return this.httpMgr.doGet(this.serviceName, "searchDataset", params).pipe(
+            map(resp => {
                 let content: DatasetSearchResult[] = [];
                 resp.content.forEach((c: any) => {
                     let titles: ARTLiteral[] = [];
@@ -58,7 +58,7 @@ export class DatasetCatalogsServices {
                     facetAggregations: resp.facetAggregations
                 };
                 return resPage;
-            }
+            })
         );
     }
 
@@ -72,8 +72,8 @@ export class DatasetCatalogsServices {
             connectorSpec: JSON.stringify(connectorSpec),
             datasetId: datasetId
         };
-        return this.httpMgr.doGet(this.serviceName, "describeDataset", params).map(
-            resp => {
+        return this.httpMgr.doGet(this.serviceName, "describeDataset", params).pipe(
+            map(resp => {
                 let titles: ARTLiteral[] = [];
                 resp.titles.forEach((t: string) => {
                     titles.push(ResourceUtils.parseLiteral(t));
@@ -99,7 +99,7 @@ export class DatasetCatalogsServices {
                 description.titles = titles;
                 description.uriPrefix = resp.uriPrefix;
                 return description;
-            }
+            })
         );
     }
         

@@ -1,8 +1,8 @@
-<div class="input-group input-group-sm">
+<div class="input-group">
 
     <ng-template [ngIf]="namespaceLocked">
-        <span class="input-group-addon" style="padding-right: 5px;">
-            {{namespace}}
+        <span class="input-group-prepend">
+            <span class="input-group-text">{{namespace}}</span>
         </span>
         <input #lnWithPH *ngIf="placeholder" type="text" class="form-control" [(ngModel)]="localName"
             (ngModelChange)="onModelChanged()" [placeholder]="placeholder" sanitized>
@@ -17,10 +17,10 @@
             sanitized>
     </ng-template>
     
-    <div class="input-group-btn">
-        <button class="btn btn-default" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"
+    <div class="input-group-append">
+        <button class="btn btn-light" style="width:30px;" (click)="unlockNamespace()"
             title="Lock/Unlock namespace" [ngClass]="{active: namespaceLocked}">
-            <span class="glyphicon glyphicon-lock" style="font-size: 10px;"></span>
+            <span class="fas fa-lock"></span>
         </button>
     </div>
 </div>

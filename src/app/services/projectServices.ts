@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTURIResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { TransitiveImportMethodAllowance } from '../models/Metadata';
 import { PluginSpecification, Settings } from '../models/Plugins';
 import { AccessLevel, AccessStatus, BackendTypesEnum, ConsumerACL, LockLevel, LockStatus, PreloadedDataSummary, Project, RepositoryAccess, RepositorySummary } from '../models/Project';
 import { Pair } from '../models/Shared';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { UIUtils } from '../utils/UIUtils';
 import { VBContext } from '../utils/VBContext';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
+import { ModalType } from '../widget/modal/Modals';
 
 @Injectable()
 export class ProjectServices {
@@ -39,8 +42,8 @@ export class ProjectServices {
         if (onlyOpen != null) {
             params.onlyOpen = onlyOpen;
         }
-        return this.httpMgr.doGet(this.serviceName, "listProjects", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "listProjects", params).pipe(
+            map(stResp => {
                 var projCollJson: any[] = stResp;
                 var projectList: Project[] = [];
                 for (var i = 0; i < projCollJson.length; i++) {
@@ -53,7 +56,7 @@ export class ProjectServices {
                     }
                 )
                 return projectList;
-            }
+            })
         );
     }
 
@@ -64,10 +67,10 @@ export class ProjectServices {
             requestedAccessLevel: requestedAccessLevel,
             requestedLockLevel: requestedLockLevel
         }
-        return this.httpMgr.doGet(this.serviceName, "getProjectInfo", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getProjectInfo", params).pipe(
+            map(stResp => {
                 return Project.deserialize(stResp);
-            }
+            })
         );
     }
         
@@ -83,16 +86,17 @@ export class ProjectServices {
         //but is not a "perfect" solution, since it remove the working project from the ctx before it is effectively closed
         if (VBContext.getWorkingProject() != undefined && VBContext.getWorkingProject().getName() == project.getName()) {
             VBContext.removeWorkingProject();
+            UIUtils.resetNavbarTheme(); //when quitting current project, reset the style to the default
         }
 
         var params = {
             consumer: "SYSTEM",
             projectName: project.getName()
         };
-        return this.httpMgr.doPost(this.serviceName, "disconnectFromProject", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "disconnectFromProject", params).pipe(
+            map(stResp => {
                 return stResp;
-            }
+            })
         );
     }
 
@@ -217,8 +221,8 @@ export class ProjectServices {
         var params = {
             projectName: project.getName()
         };
-        return this.httpMgr.doGet(this.serviceName, "getProjectPropertyMap", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getProjectPropertyMap", params).pipe(
+            map(stResp => {
                 var propCollJson: any[] = stResp;
                 var propertyList: Array<any> = [];
                 for (var i = 0; i < propCollJson.length; i++) {
@@ -228,7 +232,7 @@ export class ProjectServices {
                     propertyList.push(prop);
                 }
                 return propertyList;
-            }
+            })
         );
     }
 
@@ -237,15 +241,15 @@ export class ProjectServices {
      */
     getAccessStatusMap(): Observable<AccessStatus[]> {
         var params = { };
-        return this.httpMgr.doGet(this.serviceName, "getAccessStatusMap", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getAccessStatusMap", params).pipe(
+            map(stResp => {
                 var aclMap: AccessStatus[] = [];
                 var projectJsonColl: any[] = stResp;
                 projectJsonColl.forEach(projAclJson => {
                     aclMap.push(this.parseAccessStatus(projAclJson));
                 })
                 return aclMap;
-            }
+            })
         );
     }
 
@@ -257,10 +261,10 @@ export class ProjectServices {
         let params = {
             projectName: projectName
         };
-        return this.httpMgr.doGet(this.serviceName, "getAccessStatus", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getAccessStatus", params).pipe(
+            map(stResp => {
                 return this.parseAccessStatus(stResp);
-            }
+            })
         );
     }
 
@@ -377,11 +381,11 @@ export class ProjectServices {
                 let message = "The sail required for the " + missingSail.feature + " feature " + 
                     "is reported to be missing from the triple store; please contact the administrator in order to " + 
                     "have the " + missingSail.jar + " bundle deployed within the triple store connected for this project";
-                basicModals.alert("Error", message, "error", error.name + ": " + error.message);
+                basicModals.alert("Error", message, ModalType.error, error.name + ": " + error.message);
             } else {
                 let errorMsg = error.message != null ? error.message : "Unknown response from the server";
                 let errorDetails = error.stack ? error.stack : error.name;
-                basicModals.alert("Error", errorMsg, "error", errorDetails);
+                basicModals.alert("Error", errorMsg, ModalType.error, errorDetails);
             }
         }
     }
@@ -463,10 +467,10 @@ export class ProjectServices {
             preloadedData: preloadedData,
             preloadedDataFormat: preloadedDataFormat,
         };
-        return this.httpMgr.uploadFile(this.serviceName, "preloadDataFromFile", params).map(
-            stResp => {
+        return this.httpMgr.uploadFile(this.serviceName, "preloadDataFromFile", params).pipe(
+            map(stResp => {
                 return PreloadedDataSummary.parse(stResp);
-            }
+            })
         );
     }
 
@@ -480,10 +484,10 @@ export class ProjectServices {
             preloadedDataURL: preloadedDataURL,
             preloadedDataFormat: preloadedDataFormat,
         };
-        return this.httpMgr.doPost(this.serviceName, "preloadDataFromURL", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "preloadDataFromURL", params).pipe(
+            map(stResp => {
                 return PreloadedDataSummary.parse(stResp);
-            }
+            })
         );
     }
 
@@ -497,10 +501,10 @@ export class ProjectServices {
             connectorId: connectorId,
             datasetId: datasetId,
         };
-        return this.httpMgr.doPost(this.serviceName, "preloadDataFromCatalog", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "preloadDataFromCatalog", params).pipe(
+            map(stResp => {
                 return PreloadedDataSummary.parse(stResp);
-            }
+            })
         );
     }
 
@@ -509,10 +513,10 @@ export class ProjectServices {
      */
     createEmptySHACLSettingsForm(): Observable<Settings> {
         let params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "createEmptySHACLSettingsForm", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "createEmptySHACLSettingsForm", params).pipe(
+            map(stResp => {
                 return Settings.parse(stResp);
-            }
+            })
         );
     }
 

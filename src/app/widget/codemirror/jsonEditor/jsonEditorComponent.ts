@@ -29,8 +29,8 @@ export class JsonEditorComponent implements ControlValueAccessor {
                 mode: "application/json",
                 lineWrapping: true,
                 readOnly: this.disabled,
-                matchBrackets: true,
-                autoCloseBrackets: true,
+                // matchBrackets: true,
+                // autoCloseBrackets: true,
                 viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
                     //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
             }

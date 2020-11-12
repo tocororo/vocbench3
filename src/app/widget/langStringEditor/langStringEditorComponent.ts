@@ -19,17 +19,15 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
     private unknownFlagImgSrc: string = UIUtils.getFlagImgSrc(null); // image associated with unknown (or null) language
 
     private imgSrc: string; // image associated with the current language
-    private langFlagAvailable: boolean = false; //true if the language (if any) has a flag icon available
+    langFlagAvailable: boolean = false; //true if the language (if any) has a flag icon available
 
-    private stringValue: string; // string value of the literal
+    stringValue: string; // string value of the literal
     private langTag: string; // language tag of the literal
-    private language: string; // human-friendly rendering of the language (name plus tag)
+    language: string; // human-friendly rendering of the language (name plus tag)
     
     private literalValue: ARTLiteral; // the rdf:langString being edited (the model) 
 
-    public constructor(private sharedModals: SharedModalServices, private preferences: VBProperties) {
-
-    }
+    constructor(private sharedModals: SharedModalServices, private preferences: VBProperties) { }
 
     ngOnInit(): void {
         this.initLangInfo();
@@ -57,12 +55,12 @@ export class LangStringEditorComponent implements ControlValueAccessor, OnInit {
         }
     }
 
-    private onStringValueChanged() {
+    onStringValueChanged() {
         this.onModelChanged();
     }
 
-    private editLanguage() {
-        this.sharedModals.selectLanguages("Value language", (this.langTag ? [this.langTag] : []), false, undefined, true).then(
+    editLanguage() {
+        this.sharedModals.selectLanguages("Value language", (this.langTag ? [this.langTag] : []), true).then(
             langs => {
                 this.langTag = langs[0];
                 this.onModelChanged();

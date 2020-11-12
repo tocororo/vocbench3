@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
-import { Scope, ExtensionFactory, Settings, ConfigurableExtensionFactory, NonConfigurableExtensionFactory } from '../models/Plugins';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ConfigurableExtensionFactory, ExtensionFactory, NonConfigurableExtensionFactory, Scope, Settings } from '../models/Plugins';
+import { HttpManager } from "../utils/HttpManager";
 
 @Injectable()
 export class ExtensionsServices {
@@ -29,8 +30,8 @@ export class ExtensionsServices {
         var params: any = {
             extensionPointID: extensionPointID
         };
-        return this.httpMgr.doGet(this.serviceName, "getExtensions", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getExtensions", params).pipe(
+            map(stResp => {
                 let exts: ExtensionFactory[] = [];
                 for (var i = 0; i < stResp.length; i++) {
                     let extFact: ExtensionFactory;
@@ -55,7 +56,7 @@ export class ExtensionsServices {
                     return e1.name.localeCompare(e2.name);
                 });
                 return exts;
-            }
+            })
         );
     }
 

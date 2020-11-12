@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
-import { Deserializer } from '../utils/Deserializer';
-import { VBEventHandler } from '../utils/VBEventHandler';
-import { ARTURIResource, ARTLiteral, ResAttribute, ARTResource } from "../models/ARTResources";
+import { Observable } from 'rxjs';
+import { flatMap, map } from 'rxjs/operators';
+import { ARTLiteral, ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { CustomFormValue } from '../models/CustomForms';
+import { Deserializer } from '../utils/Deserializer';
+import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
+import { VBEventHandler } from '../utils/VBEventHandler';
 import { ResourcesServices } from './resourcesServices';
 
 @Injectable()
@@ -35,20 +36,20 @@ export class OntoLexLemonServices {
             params.customFormValue = customFormValue;
         }
 
-        return this.httpMgr.doPost(this.serviceName, "createLexicon", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "createLexicon", params).pipe(
+            map(stResp => {
                 return Deserializer.createURI(stResp);
-            }
-        ).flatMap(
-            lexicon => {
-                return this.resourceService.getResourceDescription(lexicon).map(
-                    resource => {
+            })
+        ).pipe(
+            flatMap(lexicon => {
+                return this.resourceService.getResourceDescription(lexicon).pipe(
+                    map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
                         this.eventHandler.lexiconCreatedEvent.emit(<ARTURIResource>resource);
                         return <ARTURIResource>resource;
-                    }
+                    })
                 );
-            }
+            })
         );
     }
 
@@ -57,11 +58,11 @@ export class OntoLexLemonServices {
      */
     getLexicons(options?: VBRequestOptions): Observable<ARTURIResource[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getLexicons", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getLexicons", params, options).pipe(
+            map(stResp => {
                 var lexicons = Deserializer.createURIArray(stResp);
                 return lexicons;
-            }
+            })
         );
     }
 
@@ -73,11 +74,11 @@ export class OntoLexLemonServices {
         var params: any = {
             lexicon: lexicon
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteLexicon", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "deleteLexicon", params).pipe(
+            map(stResp => {
                 this.eventHandler.lexiconDeletedEvent.emit(lexicon);
                 return stResp;
-            }
+            })
         );
     }
 
@@ -116,20 +117,20 @@ export class OntoLexLemonServices {
         if (customFormValue != null) {
             params.customFormValue = customFormValue;
         }
-        return this.httpMgr.doPost(this.serviceName, "createLexicalEntry", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "createLexicalEntry", params).pipe(
+            map(stResp => {
                 return Deserializer.createURI(stResp);
-            }
-        ).flatMap(
-            entry => {
-                return this.resourceService.getResourceDescription(entry).map(
-                    resource => {
+            })
+        ).pipe(
+            flatMap(entry => {
+                return this.resourceService.getResourceDescription(entry).pipe(
+                    map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
                         this.eventHandler.lexicalEntryCreatedEvent.emit({ entry: (<ARTURIResource>resource), lexicon: lexicon });
                         return <ARTURIResource>resource;
-                    }
+                    })
                 );
-            }
+            })
         );
     }
 
@@ -143,10 +144,10 @@ export class OntoLexLemonServices {
             index: index,
             lexicon: lexicon
         };
-        return this.httpMgr.doGet(this.serviceName, "getLexicalEntriesByAlphabeticIndex", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getLexicalEntriesByAlphabeticIndex", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -172,10 +173,10 @@ export class OntoLexLemonServices {
         var params: any = {
             lexicalEntry: lexicalEntry
         };
-        return this.httpMgr.doGet(this.serviceName, "getLexicalEntryLexicons", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getLexicalEntryLexicons", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -187,10 +188,10 @@ export class OntoLexLemonServices {
         var params: any = {
             lexicalEntry: lexicalEntry
         };
-        return this.httpMgr.doGet(this.serviceName, "getLexicalEntrySenses", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getLexicalEntrySenses", params).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -319,11 +320,11 @@ export class OntoLexLemonServices {
         var params: any = {
             lexicalEntry: lexicalEntry
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteLexicalEntry", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "deleteLexicalEntry", params).pipe(
+            map(stResp => {
                 this.eventHandler.lexicalEntryDeletedEvent.emit(lexicalEntry);
                 return stResp;
-            }
+            })
         );
     }
 

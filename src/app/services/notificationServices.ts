@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTResource, RDFResourceRolesEnum } from '../models/ARTResources';
 import { Action, CronDefinition, Notification, NotificationPreferences } from '../models/Notifications';
 import { HttpManager } from "../utils/HttpManager";
@@ -91,8 +92,8 @@ export class NotificationServices {
      */
     listNotifications(): Observable<Notification[]> {
         let params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "listNotifications", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "listNotifications", params).pipe(
+            map(stResp => {
                 let notifications: Notification[] = [];
                 for (let nJson of stResp) {
                     let n: Notification = {
@@ -104,7 +105,7 @@ export class NotificationServices {
                     notifications.push(n);
                 }
                 return notifications;
-            }
+            })
         );
     }
 
@@ -125,10 +126,10 @@ export class NotificationServices {
 
     getAvailableTimeZoneIds(): Observable<string[]> {
         let params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getAvailableTimeZoneIds", params).map(
-            (ids: string[]) => {
+        return this.httpMgr.doGet(this.serviceName, "getAvailableTimeZoneIds", params).pipe(
+            map((ids: string[]) => {
                 return ids.sort();
-            }
+            })
         );
     }
 

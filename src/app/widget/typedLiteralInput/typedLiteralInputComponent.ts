@@ -21,8 +21,8 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
     @Output() datatypeChange: EventEmitter<ARTURIResource> = new EventEmitter();
     @Output() langChange: EventEmitter<string> = new EventEmitter();
 
-    private datatypeList: ARTURIResource[];
-    private selectedDatatype: ARTURIResource;
+    datatypeList: ARTURIResource[];
+    selectedDatatype: ARTURIResource;
 
     
     private lang: string; //optional, used only if datatype is xsd:string or rdfs:langString
@@ -31,7 +31,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
     private numericInputMin: number;
     private numericInputMax: number;
 
-    private enumerations: ARTLiteral[];
+    enumerations: ARTLiteral[];
     private selectedEnumeration: ARTLiteral;
 
     private stringValue: string;
@@ -97,7 +97,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
      * Returns true if the current datatype doesn't admit all values.
      * (e.g. boolean admits only true and false, time admits values like hh:mm:ss, ...)
      */
-    private isDatatypeBound(): boolean {
+    isDatatypeBound(): boolean {
         if (this.selectedDatatype) {
             return (
                 this.selectedDatatype.equals(XmlSchema.boolean) || this.selectedDatatype.equals(XmlSchema.date) ||
@@ -108,7 +108,7 @@ export class TypedLiteralInputComponent implements ControlValueAccessor {
         }
     }
 
-    private onDatatypeChange() {
+    onDatatypeChange() {
         this.updateInputConfiguration();
         this.datatypeChange.emit(this.selectedDatatype);
         this.stringValue = null;

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTURIResource, ResourcePosition } from '../models/ARTResources';
 import { CatalogRecord, DatasetMetadata, LexicalizationSetMetadata } from "../models/Metadata";
 import { Deserializer } from '../utils/Deserializer';
@@ -228,14 +229,14 @@ export class MetadataRegistryServices {
      */
     getCatalogRecords(): Observable<CatalogRecord[]> {
         var params: any = {}
-        return this.httpMgr.doGet(this.serviceName, "getCatalogRecords", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getCatalogRecords", params).pipe(
+            map(stResp => {
                 let records: CatalogRecord[] = [];
                 for (var i = 0; i < stResp.length; i++) {
                     records.push(CatalogRecord.deserialize(stResp[i]));
                 }
                 return records;
-            }
+            })
         );
     }
 
@@ -247,10 +248,10 @@ export class MetadataRegistryServices {
         var params: any = {
             dataset: dataset
         }
-        return this.httpMgr.doGet(this.serviceName, "getDatasetMetadata", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getDatasetMetadata", params).pipe(
+            map(stResp => {
                 return DatasetMetadata.deserialize(stResp);
-            }
+            })
         );
     }
 
@@ -274,10 +275,10 @@ export class MetadataRegistryServices {
         var params: any = {
             iri: iri,
         }
-        return this.httpMgr.doGet(this.serviceName, "findDataset", params).map(
-            resp => {
+        return this.httpMgr.doGet(this.serviceName, "findDataset", params).pipe(
+            map(resp => {
                 return ResourcePosition.deserialize(resp);
-            }
+            })
         );
     }
 
@@ -290,10 +291,10 @@ export class MetadataRegistryServices {
         var params: any = {
             iri: iri,
         }
-        return this.httpMgr.doPost(this.serviceName, "discoverDataset", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "discoverDataset", params).pipe(
+            map(stResp => {
                 return Deserializer.createURI(stResp);
-            }
+            })
         );
     }
 

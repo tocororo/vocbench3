@@ -4,15 +4,20 @@ import { ARTURIResource } from "../models/ARTResources";
 import { OntoLex, OWL, RDFS, SKOS } from "../models/Vocabulary";
 import { ClassesServices } from "../services/classesServices";
 import { DatatypesServices } from "../services/datatypesServices";
-import { OntoLexLemonServices } from "../services/ontoLexLemonServices";
-import { PropertyServices } from "../services/propertyServices";
-import { ResourcesServices } from "../services/resourcesServices";
-import { SkosServices } from "../services/skosServices";
+import { OntoLexLemonServices } from '../services/ontoLexLemonServices';
+import { PropertyServices } from '../services/propertyServices';
+import { ResourcesServices } from '../services/resourcesServices';
+import { SkosServices } from '../services/skosServices';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
-import { NewLexiconCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/ontolex/newLexiconCfModal";
-import { NewResourceWithLiteralCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal";
-import { NewConceptCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal";
+import { CreationModalServices } from '../widget/modal/creationModal/creationModalServices';
+import { NewLexiconCfModalReturnData } from '../widget/modal/creationModal/newResourceModal/ontolex/newLexiconCfModal';
+import { NewResourceWithLiteralCfModalReturnData } from '../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal';
+import { NewConceptCfModalReturnData } from '../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal';
+import { ModalType } from '../widget/modal/Modals';
+// import { CreationModalServices } from "../widget/modal/creationModal/creationModalServices";
+// import { NewLexiconCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/ontolex/newLexiconCfModal";
+// import { NewResourceWithLiteralCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal";
+// import { NewConceptCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/skos/newConceptCfModal";
 import { HttpServiceContext } from "./HttpManager";
 import { UIUtils } from "./UIUtils";
 
@@ -302,7 +307,7 @@ export class VBActionFunctions {
      */
 
     private classesCreateClass = (ctx: VBActionFunctionCtx) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             this.creationModals.newResourceCf("Create a new class", ctx.metaClass).then(
                 (data: any) => {
                     let superClass: ARTURIResource = OWL.thing;
@@ -323,7 +328,7 @@ export class VBActionFunctions {
     }
 
     private classesCreateSubClass = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             this.creationModals.newResourceCf("Create a subClass of " + parent.getShow(), ctx.metaClass).then(
                 (data: any) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -340,7 +345,7 @@ export class VBActionFunctions {
     }
 
     private classesDeleteClass = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);;
             this.classesService.deleteClass(deletingResource).subscribe(
                 stResp => {
@@ -356,7 +361,7 @@ export class VBActionFunctions {
      */
 
     private skosCreateTopConcept = (ctx: VBActionFunctionCtx) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             this.creationModals.newConceptCf("Create new skos:Concept", null, ctx.schemes, ctx.metaClass, true).then(
                 (data: NewConceptCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -367,7 +372,7 @@ export class VBActionFunctions {
                         },
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
-                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
                                     confirm => {
                                         UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                         this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue, false).subscribe(
@@ -382,7 +387,7 @@ export class VBActionFunctions {
                                     }
                                 );
                             } else if (err.name.endsWith('BlacklistForbiddendException')) {
-                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
                                     confirm => {
                                         UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                         HttpServiceContext.setContextForce(true);
@@ -410,7 +415,7 @@ export class VBActionFunctions {
     }
 
     private skosCreateNarrowerConcept = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             this.creationModals.newConceptCf("Create a skos:narrower", parent, null, ctx.metaClass, true).then(
                 (data: NewConceptCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -421,7 +426,7 @@ export class VBActionFunctions {
                         },
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
-                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
                                     confirm => {
                                         UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                         this.skosService.createConcept(data.label, data.schemes, data.uriResource, parent, data.cls, data.broaderProp, data.cfValue, false).subscribe(
@@ -443,7 +448,7 @@ export class VBActionFunctions {
     }
 
     private skosDeleteConcept = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
             this.skosService.deleteConcept(deletingResource).subscribe(
                 stResp => {
@@ -459,7 +464,7 @@ export class VBActionFunctions {
      */
 
     private skosCreateScheme = (ctx: VBActionFunctionCtx) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             this.creationModals.newResourceWithLiteralCf("Create new " + ctx.metaClass.getShow(), ctx.metaClass, true).then(
                 (data: NewResourceWithLiteralCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -470,7 +475,7 @@ export class VBActionFunctions {
                         },
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
-                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
                                     confirm => {
                                         UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                         this.skosService.createConceptScheme(data.literal, data.uriResource, data.cls, data.cfValue, false).subscribe(
@@ -492,7 +497,7 @@ export class VBActionFunctions {
     }
 
     private skosDeleteScheme = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             this.skosService.isSchemeEmpty(deletingResource).subscribe(
                 empty => {
                     if (empty) {
@@ -505,7 +510,7 @@ export class VBActionFunctions {
                         );
                     } else {
                         this.basicModals.confirm("Delete scheme", "The scheme is not empty. Deleting it will produce dangling concepts."
-                            + " Are you sure to continue?", "warning").then(
+                            + " Are you sure to continue?", ModalType.warning).then(
                             confirm => {
                                 UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
                                 this.skosService.deleteConceptScheme(deletingResource).subscribe(
@@ -528,7 +533,7 @@ export class VBActionFunctions {
      */
 
     private datatypesCreateDatatype = (ctx: VBActionFunctionCtx) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             this.creationModals.newResourceCf("Create a new datatype", RDFS.datatype, false).then(
                 (data: any) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -545,7 +550,7 @@ export class VBActionFunctions {
     }
 
     private datatypesDeleteDatatype = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
             this.datatypeService.deleteDatatype(deletingResource).subscribe(
                 stResp => {
@@ -561,7 +566,7 @@ export class VBActionFunctions {
      */
 
     private classesCreateIndividual = (ctx: VBActionFunctionCtx) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             this.creationModals.newResourceCf("Create a new instance of " + ctx.metaClass.getShow(), ctx.metaClass, false).then(
                 (data: any) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -577,7 +582,7 @@ export class VBActionFunctions {
         });
     }
     private classesDeleteIndividual = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
             this.classesService.deleteInstance(deletingResource, ctx.metaClass).subscribe(
                 stResp => {
@@ -593,7 +598,7 @@ export class VBActionFunctions {
      */
 
     private ontolexCreateLexicon = (ctx: VBActionFunctionCtx) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             this.creationModals.newLexiconCf("Create new lime:Lexicon").then(
                 (res: NewLexiconCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -609,7 +614,7 @@ export class VBActionFunctions {
         });
     }
     private ontolexDeleteLexicon = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
             this.ontolexService.deleteLexicon(deletingResource).subscribe(
                 stResp => {
@@ -625,7 +630,7 @@ export class VBActionFunctions {
      */
 
     private ontolexCreateLexicalEntry = (ctx: VBActionFunctionCtx) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             this.creationModals.newResourceWithLiteralCf("Create new ontolex:LexicalEntry", OntoLex.lexicalEntry, true, "Canonical Form",
                 ctx.lexicon.lang, { constrain: true, locale: true }).then(
                 (data: NewResourceWithLiteralCfModalReturnData) => {
@@ -643,7 +648,7 @@ export class VBActionFunctions {
     }
 
     private ontolexDeleteLexicalEntry = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
             this.ontolexService.deleteLexicalEntry(deletingResource).subscribe(
                 stResp => {
@@ -660,7 +665,7 @@ export class VBActionFunctions {
      */
 
     private propertiesCreateProperty = (ctx: VBActionFunctionCtx) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             this.creationModals.newResourceCf("Create a new " + ctx.metaClass.getShow(), ctx.metaClass, false).then(
                 (data: any) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -676,7 +681,7 @@ export class VBActionFunctions {
         });
     }
     private propertiesCreateSubProperty = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             this.creationModals.newResourceCf("Create subProperty of " + parent.getShow(), ctx.metaClass, false).then(
                 (data: any) => {
                     this.propertyService.createProperty(data.cls, data.uriResource, parent, data.cfValue).subscribe(
@@ -691,7 +696,7 @@ export class VBActionFunctions {
         });
     }
     private propertiesDeleteProperty = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
             this.propertyService.deleteProperty(deletingResource).subscribe(
                 stResp => {
@@ -706,7 +711,7 @@ export class VBActionFunctions {
      * SkosCollection
      */
     private skosCreateCollection = (ctx: VBActionFunctionCtx) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             this.creationModals.newResourceWithLiteralCf("Create new " + ctx.metaClass.getShow(), ctx.metaClass, true).then(
                 (data: NewResourceWithLiteralCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -717,7 +722,7 @@ export class VBActionFunctions {
                         },
                         (err: Error) => {
                             if (err.name.endsWith('PrefAltLabelClashException')) {
-                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
                                     confirm => {
                                         this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, null, data.cls, data.cfValue, false).subscribe(
                                             stResp => {
@@ -738,7 +743,7 @@ export class VBActionFunctions {
     }
 
     private skosCreateSubCollection = (ctx: VBActionFunctionCtx, parent: ARTURIResource) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             this.creationModals.newResourceWithLiteralCf("Create a nested " + ctx.metaClass.getShow(), ctx.metaClass, true).then(
                 (data: NewResourceWithLiteralCfModalReturnData) => {
                     UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
@@ -749,7 +754,7 @@ export class VBActionFunctions {
                             },
                             (err: Error) => {
                                 if (err.name.endsWith('PrefAltLabelClashException')) {
-                                    this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                                    this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
                                         confirm => {
                                             this.skosService.createCollection(ctx.metaClass, data.literal, data.uriResource, parent, data.cls, data.cfValue, false).subscribe(
                                                 stResp => {
@@ -770,7 +775,7 @@ export class VBActionFunctions {
     }
 
     private skosDeleteCollection = (ctx: VBActionFunctionCtx, deletingResource: ARTURIResource) => {
-        return Observable.create((observer: Observer<void>) => {
+        return new Observable((observer: Observer<void>) => {
             UIUtils.startLoadingDiv(ctx.loadingDivRef.nativeElement);
             if (ctx.metaClass.equals(SKOS.collection)) {
                 this.skosService.deleteCollection(deletingResource).subscribe(

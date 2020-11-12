@@ -1,6 +1,5 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources";
 import { CustomFormValue } from "../../../../../models/CustomForms";
 import { SKOS } from "../../../../../models/Vocabulary";
@@ -11,50 +10,37 @@ import { BasicModalServices } from "../../../basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
 import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
 
-export class NewConceptCfModalData extends BSModalContext {
-    constructor(
-        public title: string = "Modal title",
-        public broader: ARTURIResource,
-        public schemes: ARTURIResource[],
-        public cls: ARTURIResource,
-        public clsChangeable: boolean = true,
-        public lang: string
-    ) {
-        super();
-    }
-}
-
 @Component({
     selector: "new-concept-cf-modal",
     templateUrl: "./newConceptCfModal.html",
 })
-export class NewConceptCfModal extends AbstractCustomConstructorModal implements ModalComponent<NewConceptCfModalData> {
-    context: NewConceptCfModalData;
+export class NewConceptCfModal extends AbstractCustomConstructorModal {
 
-    @ViewChild("toFocus") inputToFocus: ElementRef;
+    @Input() title: string = "Modal title";
+    @Input() broader: ARTURIResource;
+    @Input() cls: ARTURIResource;
+    @Input() clsChangeable: boolean = true;
 
-    private viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
+    viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
 
     private broaderProp: ARTURIResource = SKOS.broader;
 
     //standard form
-    private label: string;
-    private lang: string;
-    private uri: string;
-    private schemes: ARTURIResource[];
+    label: string;
+    @Input() lang: string;
+    uri: string;
+    @Input() schemes: ARTURIResource[];
 
-    constructor(public dialog: DialogRef<NewConceptCfModalData>, private resourceService: ResourcesServices,
+    constructor(public activeModal: NgbActiveModal, private resourceService: ResourcesServices,
         cfService: CustomFormsServices, basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         super(cfService, basicModals, browsingModals);
-        this.context = dialog.context;
     }
 
     ngOnInit() {
-        this.lang = this.context.lang;
-        this.resourceClass = this.context.cls ? this.context.cls : SKOS.concept;
+        this.resourceClass = this.cls ? this.cls : SKOS.concept;
         this.selectCustomForm();
 
-        if (this.context.broader) {
+        if (this.broader) {
             let broaderPropUri = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.baseBroaderUri;
             if (broaderPropUri != SKOS.broader.getURI()) {
                 this.resourceService.getResourceDescription(new ARTURIResource(broaderPropUri)).subscribe(
@@ -67,13 +53,12 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
     }
 
     ngAfterViewInit() {
-        this.inputToFocus.nativeElement.focus();
         setTimeout(() => {
             this.viewInitialized = true;
         });
     }
 
-    private onSchemesChanged(schemes: ARTURIResource[]) {
+    onSchemesChanged(schemes: ARTURIResource[]) {
         this.schemes = schemes;
     }
 
@@ -81,7 +66,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
         this.changeClassWithRoot(SKOS.concept);
     }
 
-    private changeBroaderProp() {
+    changeBroaderProp() {
         this.browsingModals.browsePropertyTree("Change property", [SKOS.broader]).then(
             (selectedProp: ARTURIResource) => {
                 this.broaderProp = selectedProp;
@@ -95,10 +80,7 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
             this.schemes != null && this.schemes.length > 0);
     }
 
-    okImpl(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-
+    okImpl() {
         var entryMap: any = this.collectCustomFormData();
 
         var returnedData: NewConceptCfModalReturnData = {
@@ -122,11 +104,11 @@ export class NewConceptCfModal extends AbstractCustomConstructorModal implements
             returnedData.cfValue = new CustomFormValue(this.customFormId, entryMap);
         }
         
-        this.dialog.close(returnedData);
+        this.activeModal.close(returnedData);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

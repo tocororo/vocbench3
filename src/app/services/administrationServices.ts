@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ARTURIResource } from '../models/ARTResources';
 import { Project } from "../models/Project";
 import { ProjectUserBinding, Role, UsersGroup } from "../models/User";
 import { HttpManager } from "../utils/HttpManager";
-import { ARTURIResource } from '../models/ARTResources';
 
 @Injectable()
 export class AdministrationServices {
@@ -95,14 +96,14 @@ export class AdministrationServices {
             projectName: projectName,
             email: email
         };
-        return this.httpMgr.doGet(this.serviceName, "getProjectUserBinding", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getProjectUserBinding", params).pipe(
+            map(stResp => {
                 let group: UsersGroup;
                 if (stResp.group != null) {
                     group = UsersGroup.deserialize(stResp.group);
                 }
                 return new ProjectUserBinding(stResp.projectName, stResp.userEmail, stResp.roles, group, stResp.groupLimitations, stResp.languages);
-            }
+            })
         );
     }
 
@@ -176,8 +177,8 @@ export class AdministrationServices {
         if (project != null) {
             params.projectName = project.getName();
         }
-        return this.httpMgr.doGet(this.serviceName, "listRoles", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "listRoles", params).pipe(
+            map(stResp => {
                 var roles: Role[] = [];
                 for (var i = 0; i < stResp.length; i++) {
                     let roleJson = stResp[i];
@@ -186,7 +187,7 @@ export class AdministrationServices {
                 }
                 roles.sort((r1: Role, r2: Role) => r1.getName().localeCompare(r2.getName()));
                 return roles;
-            }
+            })
         );
     }
 
@@ -322,8 +323,8 @@ export class AdministrationServices {
     }
 
     downloadPrivacyStatement() {
-        return this.httpMgr.downloadFile(this.serviceName, "downloadPrivacyStatement", {}).map(
-            blob => {
+        return this.httpMgr.downloadFile(this.serviceName, "downloadPrivacyStatement", {}).pipe(
+            map(blob => {
                 let downloadUrl = window.URL.createObjectURL(blob);
                 let downloadLink = document.createElement('a');
                 downloadLink.href = downloadUrl;
@@ -331,7 +332,7 @@ export class AdministrationServices {
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 downloadLink.remove();
-            }
+            })
         );
     }
 

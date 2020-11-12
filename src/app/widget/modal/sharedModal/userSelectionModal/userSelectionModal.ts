@@ -1,33 +1,26 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from "../../../../models/User";
 import { AdministrationServices } from "../../../../services/administrationServices";
 import { UserServices } from "../../../../services/userServices";
 import { VBContext } from "../../../../utils/VBContext";
 
-export class UserSelectionModalData extends BSModalContext {
-    constructor(public title: string = 'Select user', public projectDepending: boolean = false, public unselectableUsers: User[] = []) {
-        super();
-    }
-}
-
 @Component({
     selector: "user-selection-modal",
     templateUrl: "./userSelectionModal.html",
 })
-export class UserSelectionModal implements ModalComponent<UserSelectionModalData> {
-    context: UserSelectionModalData;
+export class UserSelectionModal {
+    @Input() title: string = "Select user";
+    @Input() projectDepending: boolean;
+    @Input() unselectableUsers: User[] = [];
 
-    private userList: User[] = [];
-    private selectedUser: User;
+    userList: User[] = [];
+    selectedUser: User;
 
-    constructor(public dialog: DialogRef<UserSelectionModalData>, public userService: UserServices, public adminService: AdministrationServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, public userService: UserServices, public adminService: AdministrationServices) {}
 
     ngOnInit() {
-        if (this.context.projectDepending) {
+        if (this.projectDepending) {
             this.userService.listUsersBoundToProject(VBContext.getWorkingProject().getName()).subscribe(
                 users => {
                     this.userList = users;
@@ -43,7 +36,7 @@ export class UserSelectionModal implements ModalComponent<UserSelectionModalData
         
     }
 
-    private selectUser(user: User) {
+    selectUser(user: User) {
         if (this.isUserSelectable(user)) {
             if (this.selectedUser == user) {
                 this.selectedUser = null;
@@ -54,22 +47,20 @@ export class UserSelectionModal implements ModalComponent<UserSelectionModalData
     }
 
     private isUserSelectable(user: User): boolean {
-        for (var i = 0; i < this.context.unselectableUsers.length; i++) {
-            if (user.getEmail() == this.context.unselectableUsers[i].getEmail()) {
+        for (var i = 0; i < this.unselectableUsers.length; i++) {
+            if (user.getEmail() == this.unselectableUsers[i].getEmail()) {
                 return false;
             }
         }
         return true;
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close(this.selectedUser);
+    ok() {
+        this.activeModal.close(this.selectedUser);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
 }

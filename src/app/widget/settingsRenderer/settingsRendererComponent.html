@@ -1,4 +1,4 @@
-<table class="table table-condensed table-borderless table-hoverable" [ngClass]="{'table-hoverable-nested' : preventHoverInheritance}">
+<table class="table table-sm table-borderless table-hoverable" [ngClass]="{'table-hoverable-nested' : preventHoverInheritance}">
     <colgroup>
         <col style="width: 1%;">
         <col>
@@ -20,7 +20,7 @@
                 <setting-prop-renderer [(ngModel)]="settings.properties[i]" (ngModelChange)="onModelChanged()" [disabled]="disabled"></setting-prop-renderer>
             </td>
             <td>
-                <span *ngIf="p.description && p.description != ''" class="glyphicon glyphicon-info-sign" style="margin-left: 3px" [title]="p.description"></span>
+                <span *ngIf="p.description && p.description != ''" class="fas fa-info-circle" style="margin-left: 3px" [title]="p.description"></span>
             </td>
         </tr>
     </tbody>

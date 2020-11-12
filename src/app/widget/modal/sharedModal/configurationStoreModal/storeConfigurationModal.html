@@ -1,9 +1,9 @@
 <div class="modal-header">
-    <h3 class="modal-title text-info">{{context.title}}</h3>
+    <h3 class="modal-title text-info">{{title}}</h3>
 </div>
 <div class="modal-body vbox">
     
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%;">
             <col>
@@ -14,7 +14,7 @@
                     <label>ID:</label>
                 </td>
                 <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="identifier">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="identifier">
                 </td>
             </tr>
             <tr>
@@ -22,7 +22,7 @@
                     <label>Scope:</label>
                 </td>
                 <td>
-                    <select class="form-control input-sm" style="display: inline-block" [(ngModel)]="selectedScope">
+                    <select class="form-control form-control-sm" style="display: inline-block" [(ngModel)]="selectedScope">
                         <option *ngFor="let s of scopes">{{s}}</option>
                     </select>
                 </td>
@@ -30,9 +30,9 @@
         </tbody>
     </table>
 
-    <div class="panel panel-default vbox" style="margin-top: 6px;">
-        <div class="panel-body table-responsive" style="min-height: 80px;">
-            <table class="table table-condensed table-hoverable">
+    <div class="card card-default vbox" style="margin-top: 6px;">
+        <div class="card-body table-responsive" style="min-height: 80px;">
+            <table class="table table-sm table-hoverable">
                 <colgroup>
                     <col>
                 </colgroup>
@@ -54,6 +54,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!identifier">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!identifier">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
-import { Observable } from 'rxjs';
+import { forkJoin, from, Observable, of } from 'rxjs';
 import { ARTURIResource, RDFResourceRolesEnum } from '../../../models/ARTResources';
 import { Project } from '../../../models/Project';
 import { OntoLex, OWL, RDFS, SKOS } from '../../../models/Vocabulary';
@@ -8,6 +8,7 @@ import { ProjectContext, VBContext } from '../../../utils/VBContext';
 import { VBProperties } from '../../../utils/VBProperties';
 import { BasicModalServices } from '../../modal/basicModal/basicModalServices';
 import { BrowsingModalServices } from '../../modal/browsingModal/browsingModalServices';
+import { ModalType } from '../../modal/Modals';
 
 @Component({
     selector: 'resource-picker',
@@ -24,7 +25,7 @@ export class ResourcePickerComponent {
     @Input() config: ResourcePickerConfig;
     @Output() resourceChanged = new EventEmitter<ARTURIResource>();
 
-    private resourceIRI: string;
+    resourceIRI: string;
 
     constructor(private projectService: ProjectServices, private vbProp: VBProperties,
         private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) { }
@@ -66,7 +67,7 @@ export class ResourcePickerComponent {
         }
     }
 
-    private onModelChanged() {
+    onModelChanged() {
         let returnedRes: ARTURIResource;
         if (this.resource != null) {
             if (typeof this.resource == 'string') {
@@ -99,7 +100,7 @@ export class ResourcePickerComponent {
                 }
                 
                 if (projects.length == 0) {
-                    this.basicModals.alert("Pick resource", "You have no granted access to any existing open project", "warning");
+                    this.basicModals.alert("Pick resource", "You have no granted access to any existing open project", ModalType.warning);
                     return;
                 }
                 let options = projects.map(p => p.getName());
@@ -113,7 +114,7 @@ export class ResourcePickerComponent {
                             this.vbProp.initUserProjectPreferences(externalProjectCtx),
                             this.vbProp.initProjectSettings(externalProjectCtx)
                         ];
-                        Observable.forkJoin(initProjectCtxFn).subscribe(
+                        forkJoin(initProjectCtxFn).subscribe(
                             () => {
                                 this.selectResourceType(externalProject).subscribe(
                                     role => {
@@ -153,9 +154,9 @@ export class ResourcePickerComponent {
             }
         }
         if (options.length == 1) {
-            return Observable.of(resourceTypes[options[0]]);
+            return of(resourceTypes[options[0]]);
         } else {
-            return Observable.fromPromise(
+            return from(
                 this.basicModals.select("Pick resource", "Select the type of resource to pick", options).then(
                     (role: string) => {
                         return resourceTypes[role];

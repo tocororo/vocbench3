@@ -1,44 +1,32 @@
-import { Component, ViewChild, ElementRef } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
-import { CustomFormsServices } from "../../../../../services/customFormsServices";
-import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
-import { BasicModalServices } from "../../../basicModal/basicModalServices";
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTLiteral, ARTURIResource } from "../../../../../models/ARTResources";
 import { CustomFormValue } from "../../../../../models/CustomForms";
-import { OWL, RDFS, Lime } from "../../../../../models/Vocabulary";
-
-export class NewLexiconCfModalData extends BSModalContext {
-    constructor(
-        public title: string = "Modal title",
-        public clsChangeable: boolean = false, //currently is not possible to specify the Lexicon class in the service, so disallow class change
-    ) {
-        super();
-    }
-}
+import { Lime } from "../../../../../models/Vocabulary";
+import { CustomFormsServices } from "../../../../../services/customFormsServices";
+import { BasicModalServices } from "../../../basicModal/basicModalServices";
+import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
+import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
 
 @Component({
     selector: "new-lexicon-cf-modal",
     templateUrl: "./newLexiconCfModal.html",
 })
-export class NewLexiconCfModal extends AbstractCustomConstructorModal implements ModalComponent<NewLexiconCfModalData> {
-    context: NewLexiconCfModalData;
-
-    @ViewChild("toFocus") inputToFocus: ElementRef;
+export class NewLexiconCfModal extends AbstractCustomConstructorModal {
+    @Input() title: string;
+    @Input() clsChangeable: boolean = false; //currently is not possible to specify the Lexicon class in the service, so disallow class change
 
     //standard form
-    private title: string;
-    private title_lang: string;
-    private lang: string;
-    private uri: string;
+    lex_title: string;
+    title_lang: string;
+    lang: string;
+    uri: string;
 
-    private viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
+    viewInitialized: boolean = false; //in order to avoid ugly UI effect on the alert showed if no language is available
 
-    constructor(public dialog: DialogRef<NewLexiconCfModalData>, cfService: CustomFormsServices,
+    constructor(public activeModal: NgbActiveModal, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         super(cfService, basicModals, browsingModals);
-        this.context = dialog.context;
     }
 
     ngOnInit() {
@@ -47,7 +35,6 @@ export class NewLexiconCfModal extends AbstractCustomConstructorModal implements
     }
 
     ngAfterViewInit() {
-        this.inputToFocus.nativeElement.focus();
         setTimeout(() => {
             this.viewInitialized = true;
         });
@@ -58,18 +45,15 @@ export class NewLexiconCfModal extends AbstractCustomConstructorModal implements
     }
 
     isStandardFormDataValid(): boolean {
-        return (this.title != undefined && this.title.trim() != "" && this.title_lang != null && this.lang != null);
+        return (this.lex_title != undefined && this.lex_title.trim() != "" && this.title_lang != null && this.lang != null);
     }
 
-    okImpl(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-
+    okImpl() {
         var entryMap: any = this.collectCustomFormData();
 
         var returnedData: NewLexiconCfModalReturnData = {
             uriResource: null,
-            title: new ARTLiteral(this.title, null, this.title_lang),
+            title: new ARTLiteral(this.lex_title, null, this.title_lang),
             language: this.lang,
             cls: null,
             cfValue: null
@@ -87,12 +71,12 @@ export class NewLexiconCfModal extends AbstractCustomConstructorModal implements
             returnedData.cfValue = new CustomFormValue(this.customFormId, entryMap);
         }
         
-        this.dialog.close(returnedData);
+        this.activeModal.close(returnedData);
 
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

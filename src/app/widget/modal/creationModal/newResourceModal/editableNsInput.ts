@@ -18,7 +18,7 @@ export class EditableNsInput implements ControlValueAccessor {
     @Input() placeholder: string;
     @Input() toFocus: boolean; //tells if the input field should be focused
 
-    private namespaceLocked: boolean = true;
+    namespaceLocked: boolean = true;
     private namespace: string;
     private namespacePristine: string;
     private localName: string;
@@ -42,7 +42,7 @@ export class EditableNsInput implements ControlValueAccessor {
         }
     }
 
-    private unlockNamespace() {
+    unlockNamespace() {
         this.namespaceLocked = !this.namespaceLocked;
         if (this.namespaceLocked) { //from free uri to locked namespace
             this.fromUriToNamespaceAndLocalName();
@@ -89,7 +89,7 @@ export class EditableNsInput implements ControlValueAccessor {
 
     //--------------------------------------------------
 
-    private onModelChanged() {
+    onModelChanged() {
         if (this.namespaceLocked) {
             this.propagateChange(this.namespace + this.localName);
         } else {

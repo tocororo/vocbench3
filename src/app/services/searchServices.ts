@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTNode, ARTResource, ARTURIResource } from "../models/ARTResources";
 import { Settings } from '../models/Plugins';
-import { SearchMode, StatusFilter, MultischemeMode } from "../models/Properties";
+import { MultischemeMode, SearchMode, StatusFilter } from "../models/Properties";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 
@@ -39,10 +40,10 @@ export class SearchServices {
             schemes: schemes,
             schemeFilter: schemeFilter,
         };
-        return this.httpMgr.doGet(this.serviceName, "searchResource", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "searchResource", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -73,10 +74,10 @@ export class SearchServices {
         if (includeLocales != null) {
             params.includeLocales = includeLocales;
         }
-        return this.httpMgr.doGet(this.serviceName, "searchInstancesOfClass", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "searchInstancesOfClass", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -111,10 +112,10 @@ export class SearchServices {
         if (includeLocales != null) {
             params.includeLocales = includeLocales;
         }
-        return this.httpMgr.doGet(this.serviceName, "searchLexicalEntry", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "searchLexicalEntry", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp, ["index"]);
-            }
+            })
         );
     }
 
@@ -144,8 +145,8 @@ export class SearchServices {
             includeSubProperties: includeSubProperties,
             root: root,
         };
-        return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getPathFromRoot", params, options).pipe(
+            map(stResp => {
                 var shortestPath: ARTURIResource[] = [];
                 var paths: ARTURIResource[] = Deserializer.createURIArray(stResp);
                 for (var i = 0; i < paths.length; i++) {
@@ -155,7 +156,7 @@ export class SearchServices {
                     }
                 }
                 return shortestPath;
-            }
+            })
         );
     }
 
@@ -277,10 +278,10 @@ export class SearchServices {
         if (outgoingSearch != null) {
             params.outgoingSearch = this.serializeSearchLinks(outgoingSearch);
         }
-        return this.httpMgr.doPost(this.serviceName, "advancedSearch", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "advancedSearch", params).pipe(
+            map(stResp => {
                 return Deserializer.createResourceArray(stResp);
-            }
+            })
         );
     }
 
@@ -336,10 +337,10 @@ export class SearchServices {
         var params: any = {
             searchParameterizationReference: searchParameterizationReference
         };
-        return this.httpMgr.doGet(this.serviceName, "getCustomSearchForm", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getCustomSearchForm", params).pipe(
+            map(stResp => {
                 return Settings.parse(stResp);
-            }
+            })
         );
     }
 
@@ -348,10 +349,10 @@ export class SearchServices {
             searchParameterizationReference: searchParameterizationReference,
             boundValues: boundValues
         };
-        return this.httpMgr.doGet(this.serviceName, "customSearch", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "customSearch", params).pipe(
+            map(stResp => {
                 return Deserializer.createResourceArray(stResp);
-            }
+            })
         );
     }
 

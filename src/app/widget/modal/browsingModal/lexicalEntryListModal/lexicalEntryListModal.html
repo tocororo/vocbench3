@@ -1,23 +1,23 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body vbox">
 
     <div class="hbox" style="flex: initial; align-items: center; margin-bottom: 5px;">
         <label style="margin-right: 4px;">Lexicon:</label>
-        <button class="btn btn-default btn-xs" title="Change Lexicon" (click)="changeLexicon()" [disabled]="!context.lexiconChangeable">
+        <button class="btn btn-light btn-xs" title="Change Lexicon" (click)="changeLexicon()" [disabled]="!lexiconChangeable">
             <rdf-resource *ngIf="activeLexicon" [resource]="activeLexicon"></rdf-resource>
             <span *ngIf="!activeLexicon">Select Lexicon</span>
         </button>
     </div>
 
-    <lexical-entry-list-panel [editable]="context.editable" [deletable]="context.deletable" [lexicon]="activeLexicon"
-        [allowMultiselection]="context.allowMultiselection" [projectCtx]="context.projectCtx"
+    <lexical-entry-list-panel [editable]="editable" [deletable]="deletable" [lexicon]="activeLexicon"
+        [allowMultiselection]="allowMultiselection" [projectCtx]="projectCtx"
         (nodeSelected)="onLexiconSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="multiselection = $event">
     </lexical-entry-list-panel>
     
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

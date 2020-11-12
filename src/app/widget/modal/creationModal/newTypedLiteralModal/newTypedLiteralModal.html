@@ -1,51 +1,51 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body vbox">
 
     <div *ngIf="showAspectSelector" class="btn-group btn-group-xs" style="align-self: flex-end; margin-bottom: 6px;">
-        <button *ngFor="let selector of aspectSelectors" class="btn btn-default" [ngClass]="{ active: selectedAspectSelector == selector }"
+        <button *ngFor="let selector of aspectSelectors" class="btn btn-light" [ngClass]="{ active: selectedAspectSelector == selector }"
             (click)="selectedAspectSelector = selector">{{selector}}</button>
     </div>
     
     <div *ngIf="selectedAspectSelector == typedLiteralAspectSelector">
         <div class="hbox" style="align-items: flex-end;">
-            <typed-literal-input [allowedDatatypes]="context.allowedDatatypes" [datatype]="datatype" [(ngModel)]="value"
+            <typed-literal-input [allowedDatatypes]="allowedDatatypes" [datatype]="datatype" [(ngModel)]="value"
                 (datatypeChange)="onDatatypeChange($event)" style="flex: 1;">
             </typed-literal-input>
-            <button *ngIf="context.multivalue" class="btn btn-default btn-xs" (click)="addValue()" style="margin-left: 4px; margin-bottom: 4px;" [disabled]="!isAddValueEnabled()">
-                <span class="glyphicon glyphicon-plus"></span>
+            <button *ngIf="multivalue" class="btn btn-light btn-xs" (click)="addValue()" style="margin-left: 4px; margin-bottom: 4px;" [disabled]="!isAddValueEnabled()">
+                <span class="fas fa-plus"></span>
             </button>
         </div>
 
         <div *ngIf="notValidatableType" class="alert alert-warning" style="margin-top: 6px;">
-            <span class="glyphicon glyphicon-warning-sign" style="margin-right: 6px;"></span>
+            <span class="fas fa-exclamation-triangle" style="margin-right: 6px;"></span>
             Creation of a literal for datatype {{datatype.getShow()}} does not undergo any validation.
         </div>
     </div>
 
     <div *ngIf="selectedAspectSelector == dataRangeAspectSelector">
-        <select *ngIf="context.dataRanges.length > 1" class="form-control input-sm" [(ngModel)]="selectedDataRange">
-            <option *ngFor="let dr of context.dataRanges" [ngValue]="dr">
+        <select *ngIf="dataRanges.length > 1" class="form-control form-control-sm" [(ngModel)]="selectedDataRange">
+            <option *ngFor="let dr of dataRanges" [ngValue]="dr">
                 {{getDataRangePreview(dr)}}
             </option>
         </select>
         <div class="hbox" style="align-items: center; margin-top: 6px;">
-            <select class="form-control input-sm" [(ngModel)]="value">
+            <select class="form-control form-control-sm" [(ngModel)]="value">
                 <option *ngFor="let v of selectedDataRange" [ngValue]="v">{{v.toNT()}}</option>
             </select>
-            <button *ngIf="context.multivalue" class="btn btn-default btn-xs" (click)="addValue()" style="margin-left: 4px; margin-bottom: 4px;" [disabled]="!isAddValueEnabled()">
-                <span class="glyphicon glyphicon-plus"></span>
+            <button *ngIf="multivalue" class="btn btn-light btn-xs" (click)="addValue()" style="margin-left: 4px; margin-bottom: 4px;" [disabled]="!isAddValueEnabled()">
+                <span class="fas fa-plus"></span>
             </button>
         </div>
     </div>
 
-    <div *ngIf="values.length > 0" class="panel panel-default" style="margin-top: 4px;">
-        <div class="panel-body vbox scrollableContainer" style="max-height: 300px;">
+    <div *ngIf="values.length > 0" class="card card-default" style="margin-top: 4px;">
+        <div class="card-body vbox scrollableContainer" style="max-height: 300px;">
             <div *ngFor="let v of values" class="listItem">
                 <rdf-resource style="flex: 1;" [resource]="v"></rdf-resource>
-                <button class="btn btn-default btn-xs" (click)="removeValue(v)">
-                    <span class="glyphicon glyphicon-trash" title="Remove"></span>
+                <button class="btn btn-light btn-xs" (click)="removeValue(v)">
+                    <span class="far fa-trash-alt" title="Remove"></span>
                 </button>
             </div>
         </div>
@@ -54,9 +54,9 @@
     
 </div>
 <div class="modal-footer">
-    <span *ngIf="isOkWarningActive()" class="glyphicon glyphicon-warning-sign" style="margin-right: 2px;"
+    <span *ngIf="isOkWarningActive()" class="fas fa-exclamation-triangle" style="margin-right: 2px;"
         title="Warning: the value currently typed will not be considered. It needs to be added through the '+' button">
     </span>
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="close()">Cancel</button>
 </div>

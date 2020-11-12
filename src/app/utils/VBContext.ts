@@ -41,7 +41,6 @@ export class VBContext {
     }
     static removeWorkingProject() {
         this.workingProjectCtx = null;
-        UIUtils.resetNavbarTheme(); //when quitting current project, reset the style to the default
     }
 
     /**

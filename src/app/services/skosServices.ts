@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { flatMap, map } from 'rxjs/operators';
 import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
 import { CustomFormValue } from "../models/CustomForms";
 import { MultischemeMode } from '../models/Properties';
@@ -35,13 +36,13 @@ export class SkosServices {
             narrowerProps: narrowerProps,
             includeSubProperties: includeSubProperties
         };
-        return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getTopConcepts", params, options).pipe(
+            map(stResp => {
                 return {
                     concepts: Deserializer.createURIArray(stResp),
                     timestamp: timestamp
                 }
-            }
+            })
         );
     }
 
@@ -64,13 +65,13 @@ export class SkosServices {
             narrowerProps: narrowerProps,
             includeSubProperties: includeSubProperties
         };
-        return this.httpMgr.doGet(this.serviceName, "countTopConcepts", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "countTopConcepts", params, options).pipe(
+            map(stResp => {
                 return {
                     count: stResp,
                     timestamp: timestamp
                 }
-            }
+            })
         );
     }
 
@@ -91,10 +92,10 @@ export class SkosServices {
             narrowerProps: narrowerProps,
             includeSubProperties: includeSubProperties
         };
-        return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getNarrowerConcepts", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -111,10 +112,10 @@ export class SkosServices {
         if (schemes != null) {
             params.schemes = schemes;
         }
-        return this.httpMgr.doGet(this.serviceName, "getBroaderConcepts", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getBroaderConcepts", params).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -166,14 +167,14 @@ export class SkosServices {
                 ] 
             } 
         });
-        return this.httpMgr.doPost(this.serviceName, "createConcept", params, options).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "createConcept", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURI(stResp);
-            }
-        ).flatMap(
-            concept => {
-                return this.resourceService.getResourceDescription(concept).map(
-                    resource => {
+            })
+        ).pipe(
+            flatMap(concept => {
+                return this.resourceService.getResourceDescription(concept).pipe(
+                    map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
                         if (broaderConcept != null) {
                             this.eventHandler.narrowerCreatedEvent.emit({ narrower: <ARTURIResource>resource, broader: broaderConcept });
@@ -181,9 +182,9 @@ export class SkosServices {
                             this.eventHandler.topConceptCreatedEvent.emit({ concept: <ARTURIResource>resource, schemes: conceptSchemes });
                         }
                         return <ARTURIResource>resource;
-                    }
+                    })
                 );
-            }
+            })
         );
     }
 
@@ -198,11 +199,11 @@ export class SkosServices {
             concept: concept,
             scheme: scheme,
         };
-        return this.httpMgr.doPost(this.serviceName, "addTopConcept", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "addTopConcept", params).pipe(
+            map(stResp => {
                 this.eventHandler.topConceptCreatedEvent.emit({ concept: concept, schemes: [scheme] });
                 return { concept: concept, scheme: scheme };
-            }
+            })
         );
     }
 
@@ -216,11 +217,11 @@ export class SkosServices {
             concept: concept,
             scheme: scheme,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeTopConcept", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "removeTopConcept", params).pipe(
+            map(stResp => {
                 this.eventHandler.conceptRemovedAsTopConceptEvent.emit({ concept: concept, scheme: scheme });
                 return stResp;
-            }
+            })
         );
     }
 
@@ -232,11 +233,11 @@ export class SkosServices {
         let params: any = {
             concept: concept,
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteConcept", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "deleteConcept", params).pipe(
+            map(stResp => {
                 this.eventHandler.conceptDeletedEvent.emit(concept);
                 return stResp;
-            }
+            })
         );
     }
 
@@ -250,12 +251,12 @@ export class SkosServices {
             concept: concept,
             broaderConcept: broaderConcept,
         };
-        return this.httpMgr.doPost(this.serviceName, "addBroaderConcept", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "addBroaderConcept", params).pipe(
+            map(stResp => {
                 //concept doesn't contain info about "more", so when the concept is appended in the tree, it doesn't show the arrow for expand it
                 this.eventHandler.broaderAddedEvent.emit({ narrower: concept, broader: broaderConcept });
                 return stResp;
-            }
+            })
         );
     }
 
@@ -269,11 +270,11 @@ export class SkosServices {
             concept: concept,
             broaderConcept: broaderConcept,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeBroaderConcept", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "removeBroaderConcept", params).pipe(
+            map(stResp => {
                 this.eventHandler.broaderRemovedEvent.emit({ concept: concept, broader: broaderConcept });
                 return stResp;
-            }
+            })
         );
     }
 
@@ -305,11 +306,11 @@ export class SkosServices {
             concept: concept,
             scheme: scheme,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeConceptFromScheme", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "removeConceptFromScheme", params).pipe(
+            map(stResp => {
                 this.eventHandler.conceptRemovedFromSchemeEvent.emit({ concept: concept, scheme: scheme });
                 return { concept: concept, scheme: scheme };
-            }
+            })
         );
     }
 
@@ -351,10 +352,10 @@ export class SkosServices {
      */
     getAllSchemes(options?: VBRequestOptions) {
         let params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getAllSchemes", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getAllSchemes", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -390,20 +391,20 @@ export class SkosServices {
                 exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
             } 
         });
-        return this.httpMgr.doPost(this.serviceName, "createConceptScheme", params, options).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "createConceptScheme", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURI(stResp);
-            }
-        ).flatMap(
-            scheme => {
-                return this.resourceService.getResourceDescription(scheme).map(
-                    resource => {
+            })
+        ).pipe(
+            flatMap(scheme => {
+                return this.resourceService.getResourceDescription(scheme).pipe(
+                    map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
                         this.eventHandler.schemeCreatedEvent.emit(<ARTURIResource>resource);
                         return <ARTURIResource>resource;
-                    }
+                    })
                 );
-            }
+            })
         );
     }
 
@@ -426,11 +427,11 @@ export class SkosServices {
         let params: any = {
             scheme: scheme
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteConceptScheme", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "deleteConceptScheme", params).pipe(
+            map(stResp => {
                 this.eventHandler.schemeDeletedEvent.emit(scheme);
                 return stResp;
-            }
+            })
         );
     }
 
@@ -487,10 +488,10 @@ export class SkosServices {
             concept: concept,
             language: language,
         };
-        return this.httpMgr.doGet(this.serviceName, "getAltLabels", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getAltLabels", params).pipe(
+            map(stResp => {
                 return Deserializer.createRDFNodeArray(stResp);
-            }
+            })
         );
     }
 
@@ -566,10 +567,10 @@ export class SkosServices {
         let params: any = {
             concept: concept
         };
-        return this.httpMgr.doGet(this.serviceName, "getSchemesMatrixPerConcept", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getSchemesMatrixPerConcept", params).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -582,8 +583,8 @@ export class SkosServices {
         let params: any = {
             concept: concept
         };
-        return this.httpMgr.doGet(this.serviceName, "getSchemesMatrixPerConcept", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getSchemesMatrixPerConcept", params).pipe(
+            map(stResp => {
                 let allSchemes: ARTURIResource[] = Deserializer.createURIArray(stResp);
                 let schemes: ARTURIResource[] = [];
                 allSchemes.forEach((s: ARTURIResource) => {
@@ -592,7 +593,7 @@ export class SkosServices {
                     }
                 });
                 return schemes;
-            }
+            })
         );
     }
 
@@ -603,10 +604,10 @@ export class SkosServices {
      */
     getRootCollections(options?: VBRequestOptions) {
         let params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getRootCollections", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getRootCollections", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -618,10 +619,10 @@ export class SkosServices {
         let params: any = {
             container: container
         };
-        return this.httpMgr.doGet(this.serviceName, "getNestedCollections", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getNestedCollections", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURIArray(stResp);
-            }
+            })
         );
     }
 
@@ -664,14 +665,14 @@ export class SkosServices {
                 exceptionsToSkip: ['it.uniroma2.art.semanticturkey.exceptions.PrefAltLabelClashException'] 
             } 
         });
-        return this.httpMgr.doPost(this.serviceName, "createCollection", params, options).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "createCollection", params, options).pipe(
+            map(stResp => {
                 return Deserializer.createURI(stResp);
-            }
-        ).flatMap(
-            collection => {
-                return this.resourceService.getResourceDescription(collection).map(
-                    resource => {
+            })
+        ).pipe(
+            flatMap(collection => {
+                return this.resourceService.getResourceDescription(collection).pipe(
+                    map(resource => {
                         resource.setAdditionalProperty(ResAttribute.NEW, true);
                         if (containingCollection != null) {
                             this.eventHandler.nestedCollectionCreatedEvent.emit({ nested: resource, container: containingCollection });
@@ -679,9 +680,9 @@ export class SkosServices {
                             this.eventHandler.rootCollectionCreatedEvent.emit(resource);
                         }
                         return resource;
-                    }
+                    })
                 );
-            }
+            })
         );
     }
 
@@ -696,14 +697,14 @@ export class SkosServices {
             collection: collection,
             element: element
         };
-        return this.httpMgr.doPost(this.serviceName, "addToCollection", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "addToCollection", params).pipe(
+            map(stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
                     this.eventHandler.nestedCollectionAddedEvent.emit({ nested: element, container: collection });
                 }
                 return stResp;
-            }
+            })
         );
     }
 
@@ -717,14 +718,14 @@ export class SkosServices {
             collection: collection,
             element: element,
         };
-        return this.httpMgr.doPost(this.serviceName, "removeFromCollection", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "removeFromCollection", params).pipe(
+            map(stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
                     this.eventHandler.nestedCollectionRemovedEvent.emit({ nested: element, container: collection });
                 }
                 return stResp;
-            }
+            })
         );
     }
 
@@ -736,11 +737,11 @@ export class SkosServices {
         let params: any = {
             collection: collection,
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteCollection", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "deleteCollection", params).pipe(
+            map(stResp => {
                 this.eventHandler.collectionDeletedEvent.emit(collection);
                 return stResp;
-            }
+            })
         );
     }
 
@@ -756,14 +757,14 @@ export class SkosServices {
             collection: collection,
             element: element
         };
-        return this.httpMgr.doPost(this.serviceName, "addFirstToOrderedCollection", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "addFirstToOrderedCollection", params).pipe(
+            map(stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
                     this.eventHandler.nestedCollectionAddedFirstEvent.emit({ nested: element, container: collection });
                 }
                 return stResp;
-            }
+            })
         );
     }
 
@@ -779,14 +780,14 @@ export class SkosServices {
             collection: collection,
             element: element
         };
-        return this.httpMgr.doPost(this.serviceName, "addLastToOrderedCollection", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "addLastToOrderedCollection", params).pipe(
+            map(stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
                     this.eventHandler.nestedCollectionAddedLastEvent.emit({ nested: element, container: collection });
                 }
                 return stResp;
-            }
+            })
         );
     }
 
@@ -804,14 +805,14 @@ export class SkosServices {
             element: element,
             index: index
         };
-        return this.httpMgr.doPost(this.serviceName, "addInPositionToOrderedCollection", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "addInPositionToOrderedCollection", params).pipe(
+            map(stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
                     this.eventHandler.nestedCollectionAddedInPositionEvent.emit({ nested: element, container: collection, position: index });
                 }
                 return stResp;
-            }
+            })
         );
     }
 
@@ -825,14 +826,14 @@ export class SkosServices {
             collection: collection,
             element: element
         };
-        return this.httpMgr.doPost(this.serviceName, "removeFromOrderedCollection", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "removeFromOrderedCollection", params).pipe(
+            map(stResp => {
                 if (element.getRole() == RDFResourceRolesEnum.skosCollection ||
                     element.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
                     this.eventHandler.nestedCollectionRemovedEvent.emit({ nested: element, container: collection });
                 }
                 return stResp;
-            }
+            })
         );
     }
 
@@ -844,11 +845,11 @@ export class SkosServices {
         let params: any = {
             collection: collection,
         };
-        return this.httpMgr.doPost(this.serviceName, "deleteOrderedCollection", params).map(
-            stResp => {
+        return this.httpMgr.doPost(this.serviceName, "deleteOrderedCollection", params).pipe(
+            map(stResp => {
                 this.eventHandler.collectionDeletedEvent.emit(collection);
                 return stResp;
-            }
+            })
         );
     }
 

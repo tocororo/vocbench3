@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { OntologyMirror } from '../models/Metadata';
 import { HttpManager } from "../utils/HttpManager";
 
@@ -18,15 +19,15 @@ export class OntoManagerServices {
      */
     getOntologyMirror(): Observable<OntologyMirror[]> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getOntologyMirror", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getOntologyMirror", params).pipe(
+            map(stResp => {
                 var mirrors: { file: string, baseURI: string }[] = [];
                 var mirrorNodeColl: any[] = stResp;
                 for (var i = 0; i < mirrorNodeColl.length; i++) {
                     mirrors.push({ file: mirrorNodeColl[i].file, baseURI: mirrorNodeColl[i].baseURI });
                 }
                 return mirrors;
-            }
+            })
         );
     }
 

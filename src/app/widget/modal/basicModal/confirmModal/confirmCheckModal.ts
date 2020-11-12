@@ -1,70 +1,37 @@
-import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { DialogRef, ModalComponent } from "ngx-modialog";
-
-export class ConfirmCheckModalData extends BSModalContext {
-    /**
-     * @param title modal title
-     * @param message modal message
-     * @param checkboxLabel label of the checkbox
-     * @param type type of the modal. Determines the style of the message alert.
-     *      Available values: "info", "warning", "error"
-     * @param yesText text of the yes button
-     * @param noText text of the no button
-     */
-    constructor(
-        public title: string = 'Modal Title',
-        public message: string = 'Modal Body!',
-        public checkboxLabel: string = 'Label check',
-        public type: string = 'info',
-        public yesText: string = 'Yes',
-        public noText: string = 'No'
-    ) {
-        super();
-    }
-}
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { AbstractConfirmModal } from './abstractConfirmModal';
 
 @Component({
     selector: "confirm-modal",
-    templateUrl: "./confirmCheckModal.html",
+	templateUrl: "./confirmCheckModal.html",
+	styleUrls: ['../../modals.css']
 })
-export class ConfirmCheckModal implements ModalComponent<ConfirmCheckModalData> {
-    context: ConfirmCheckModalData;
+export class ConfirmCheckModal extends AbstractConfirmModal {
 
-    private check: boolean = false;
+    @Input() checkOpts: ConfirmCheckOptions[];
 
-    private headerStyle: string;
-    private msgStyle: string;
+    headerStyle: string;
+    msgStyle: string;
 
-    constructor(public dialog: DialogRef<ConfirmCheckModalData>) {
-        this.context = dialog.context;
+    constructor(public activeModal: NgbActiveModal) {
+		super(activeModal);
+	}
 
-        //based on the modal type set the css style of the message alert
-        switch (this.context.type) {
-            case "info":
-                this.msgStyle = "alert alert-info";
-                this.headerStyle = "modal-title text-info";
-                break;
-            case "error":
-                this.msgStyle = "alert alert-danger";
-                this.headerStyle = "modal-title text-danger";
-                break;
-            case "warning":
-                this.msgStyle = "alert alert-warning";
-                this.headerStyle = "modal-title text-warning";
-                break;
-            default:
-                this.msgStyle = "alert alert-info";
-                this.headerStyle = "modal-title text-info";
-                break;
-        }
+    ok() {
+		this.activeModal.close(this.checkOpts);
+	}
+
+	close() {
+		this.activeModal.dismiss(this.checkOpts);
     }
+    
+}
 
-    ok(event: Event) {
-        this.dialog.close(this.check);
-    }
-
-    cancel() {
-        this.dialog.dismiss();
-    }
+export class ConfirmCheckOptions {
+	label: string;
+	value: boolean; //default value
+	disabled?: boolean;
+	info?: string; //message shown as tooltip on an info icon 
+	warning?: string; //message shown as tooltip on a warning icon (useful for example in combo with disabled=true in order to explain the reason)
 }

@@ -90,7 +90,7 @@ export class SettingSetRendererComponent {
      * @param index 
      * @param obj 
      */
-    private trackByIndex(index: number, obj: any): any {
+    trackByIndex(index: number, obj: any): any {
         if (this.types && this.types[0].name == "IRI") {
             return obj;
         } else 

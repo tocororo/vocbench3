@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTURIResource } from '../models/ARTResources';
 import { CollaborationUtils, Issue, IssuesStruct } from '../models/Collaboration';
 import { Settings } from '../models/Plugins';
@@ -29,10 +30,10 @@ export class CollaborationServices {
         var params: any = {
             backendId: backendId,
         };
-        return this.httpMgr.doGet(this.serviceName, "getProjectSettings", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getProjectSettings", params).pipe(
+            map(stResp => {
                 return Settings.parse(stResp);
-            }
+            })
         );
     }
 
@@ -44,10 +45,10 @@ export class CollaborationServices {
         var params: any = {
             backendId: backendId,
         };
-        return this.httpMgr.doGet(this.serviceName, "getProjectPreferences", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getProjectPreferences", params).pipe(
+            map(stResp => {
                 return Settings.parse(stResp);
-            }
+            })
         );
     }
 
@@ -85,10 +86,10 @@ export class CollaborationServices {
      */
     getIssueCreationForm(): Observable<Settings> {
         var params: any = {};
-        return this.httpMgr.doGet(this.serviceName, "getIssueCreationForm", params).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "getIssueCreationForm", params).pipe(
+            map(stResp => {
                 return Settings.parse(stResp);
-            }
+            })
         );
     }
 
@@ -160,12 +161,12 @@ export class CollaborationServices {
                 ]
             } 
         });
-        return this.httpMgr.doGet(this.serviceName, "listIssuesAssignedToResource", params, options).map(
-            resp => {
+        return this.httpMgr.doGet(this.serviceName, "listIssuesAssignedToResource", params, options).pipe(
+            map(resp => {
                 let issues: Issue[] = CollaborationUtils.parseIssues(resp);
                 CollaborationUtils.sortIssues(issues, "id");
                 return issues;
-            }
+            })
         );
     }
 
@@ -202,8 +203,8 @@ export class CollaborationServices {
                 ]
             } 
         });
-        return this.httpMgr.doGet(this.serviceName, "listIssues", params, options).map(
-            stResp => {
+        return this.httpMgr.doGet(this.serviceName, "listIssues", params, options).pipe(
+            map(stResp => {
                 let issues: Issue[] = CollaborationUtils.parseIssues(stResp.issues);
                 CollaborationUtils.sortIssues(issues, "id", true);
                 let issuesStruct: IssuesStruct = {
@@ -213,7 +214,7 @@ export class CollaborationServices {
                     numPagesTotal: stResp.numPagesTotal
                 }
                 return issuesStruct;
-            }
+            })
         );
     }
 

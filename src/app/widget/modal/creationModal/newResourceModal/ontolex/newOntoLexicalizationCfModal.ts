@@ -1,6 +1,5 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../../models/ARTResources";
 import { CustomFormValue } from "../../../../../models/CustomForms";
 import { OntoLex } from "../../../../../models/Vocabulary";
@@ -9,22 +8,14 @@ import { BasicModalServices } from "../../../basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../browsingModal/browsingModalServices";
 import { AbstractCustomConstructorModal } from "../abstractCustomConstructorModal";
 
-export class NewOntoLexicalizationCfModalData extends BSModalContext {
-    constructor(
-        public title: string = "Modal title",
-        public lexicalizationProp: ARTURIResource, //(OntoLex.senses | OntoLex.denotes | Ontolex.isDenotedBy)
-        public clsChangeable: boolean = true,
-    ) {
-        super();
-    }
-}
-
 @Component({
     selector: "new-ontolexicalization-cf-modal",
     templateUrl: "./newOntoLexicalizationCfModal.html",
 })
-export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal implements ModalComponent<NewOntoLexicalizationCfModalData> {
-    context: NewOntoLexicalizationCfModalData;
+export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal {
+    @Input() title: string;
+    @Input() lexicalizationProp: ARTURIResource; //(OntoLex.senses | OntoLex.denotes | Ontolex.isDenotedBy)
+    @Input() clsChangeable: boolean = true;
 
     //standard form
     private linkedResource: string;
@@ -39,29 +30,28 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
      * true if the modal should allow to link a lexical entry to a reference (show the reference input field),
      * false if it should allow to link a resource to a lexical entry (show the lexical entry input field).
      */
-    private linkToReference: boolean;
+    linkToReference: boolean;
     /**
      * true if the modal should allow to create a LexicalSense (show the "create plain" checkbox),
      * false if it should allow to create a plain lexicalization (show the "create sense" checkbox).
      */
-    private createSense: boolean;
+    createSense: boolean;
 
-    constructor(public dialog: DialogRef<NewOntoLexicalizationCfModalData>, cfService: CustomFormsServices,
+    constructor(public activeModal: NgbActiveModal, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices) {
         super(cfService, basicModals, browsingModals);
-        this.context = dialog.context;
     }
 
     ngOnInit() {
         this.resourceClass = OntoLex.lexicalSense;
 
-        if (this.context.lexicalizationProp.getURI() == OntoLex.isDenotedBy.getURI()) {
+        if (this.lexicalizationProp.getURI() == OntoLex.isDenotedBy.getURI()) {
             this.linkToReference = false;
             this.createSense = false;
-        } else if (this.context.lexicalizationProp.getURI() == OntoLex.sense.getURI()) {
+        } else if (this.lexicalizationProp.getURI() == OntoLex.sense.getURI()) {
             this.linkToReference = true;
             this.createSense = true;
-        } else if (this.context.lexicalizationProp.getURI() == OntoLex.denotes.getURI()) {
+        } else if (this.lexicalizationProp.getURI() == OntoLex.denotes.getURI()) {
             this.linkToReference = true;
             this.createSense = false;
         }
@@ -97,10 +87,7 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
         }
     }
 
-    okImpl(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-
+    okImpl() {
         var entryMap: any = this.collectCustomFormData();
 
         var returnedData: NewOntoLexicalizationCfModalReturnData = {
@@ -118,11 +105,11 @@ export class NewOntoLexicalizationCfModal extends AbstractCustomConstructorModal
         if (this.createSense && this.customFormId != null && entryMap != null) {
             returnedData.cfValue = new CustomFormValue(this.customFormId, entryMap);
         }
-        this.dialog.close(returnedData);
+        this.activeModal.close(returnedData);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

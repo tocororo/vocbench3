@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { ARTBNode, ARTNode, ARTURIResource } from "../models/ARTResources";
 import { HttpManager } from "../utils/HttpManager";
-import { ARTURIResource, ARTNode, ARTBNode } from "../models/ARTResources";
 
 @Injectable()
 export class ManchesterServices {
