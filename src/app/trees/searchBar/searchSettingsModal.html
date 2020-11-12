@@ -3,11 +3,11 @@
 </div>
 <div class="modal-body scrollableContainer">
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card card-default">
+        <div class="card-header">
             <label>String match mode</label>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div *ngFor="let mode of stringMatchModes" class="radio" style="margin: 5px 0px 0px">
                 <label>
                     <input type="radio" name="searchMode" [value]="mode.value" [(ngModel)]="activeStringMatchMode" 
@@ -17,12 +17,12 @@
         </div>
     </div>
 
-    <div class="panel panel-default" style="margin-top: 5px;">
-        <div class="panel-heading">
+    <div class="card card-default" style="margin-top: 5px;">
+        <div class="card-header">
             <label style="margin-right: 5px;">Search mode</label>
-            <span class="glyphicon glyphicon-info-sign" title="Search always looks for the input string among the lexicalizations"></span>
+            <span class="fas fa-info-circle" title="Search always looks for the input string among the lexicalizations"></span>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="checkbox" style="margin: 5px 0px 0px">
                 <label>
                     <input type="checkbox" [(ngModel)]="useURI" (ngModelChange)="updateSettings()">
@@ -44,11 +44,11 @@
         </div>
     </div>
 
-    <div class="panel panel-default" style="margin-top: 5px;">
-        <div class="panel-heading">
+    <div class="card card-default" style="margin-top: 5px;">
+        <div class="card-header">
             <label>Lexicalizations search</label>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="hbox">
                 <div class="checkbox" style="margin: 5px 0px 0px">
                     <label>
@@ -59,10 +59,10 @@
                 <div class="hbox" style="align-items: center; margin-left: 8px;">
                     <div class="input-group input-group-xs">
                         <input type="text" class="form-control" [ngModel]="languages" [disabled]="!restrictLang" readonly>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" (click)="selectRestrictionLanguages()" placeholder="Select languages"
+                        <span class="input-group-append">
+                            <button class="btn btn-light" (click)="selectRestrictionLanguages()" placeholder="Select languages"
                                 [disabled]="!restrictLang">
-                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="fas fa-pencil-alt"></span>
                             </button>
                         </span>
                     </div>
@@ -77,13 +77,13 @@
         </div>
     </div>
 
-    <div class="panel panel-default" style="margin-top: 5px;">
-        <div class="panel-heading">
+    <div class="card card-default" style="margin-top: 5px;">
+        <div class="card-header">
             <label style="margin-right: 5px;">Autocompletion</label>
-            <span class="glyphicon glyphicon-info-sign" 
+            <span class="fas fa-info-circle" 
                 title="It is highly recommended to disable this feature in big project not hosted by a GraphDB server"></span>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="checkbox" style="margin: 5px 0px 0px">
                 <label>
                     <input type="checkbox" [(ngModel)]="useAutocompletion" (ngModelChange)="updateSettings()">
@@ -93,11 +93,11 @@
         </div>
     </div>
 
-    <div *ngIf="settingsForConceptPanel" class="panel panel-default" style="margin-top: 5px;">
-        <div class="panel-heading">
+    <div *ngIf="settingsForConceptPanel" class="card card-default" style="margin-top: 5px;">
+        <div class="card-header">
             <label>Concept search</label>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="checkbox" style="margin: 5px 0px 0px">
                 <label>
                     <input type="checkbox" [(ngModel)]="restrictConceptSchemes" (ngModelChange)="updateSettings()">
@@ -107,11 +107,11 @@
         </div>
     </div>
 
-    <div *ngIf="settingsForInstancePanel" class="panel panel-default" style="margin-top: 5px;">
-        <div class="panel-heading">
+    <div *ngIf="settingsForInstancePanel" class="card card-default" style="margin-top: 5px;">
+        <div class="card-header">
             <label>Instances search</label>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="checkbox" style="margin: 5px 0px 0px">
                 <label>
                     <input type="checkbox" [(ngModel)]="extendsToAllIndividuals" (ngModelChange)="updateSettings()">
@@ -123,5 +123,5 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
 </div>

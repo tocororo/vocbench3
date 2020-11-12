@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from "rxjs";
 import { ARTNode, ARTResource, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -28,7 +28,7 @@ export class DenotationsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.denotations;
     addBtnImgTitle = "Add denotation";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/objectProperty_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/objectProperty_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
@@ -59,7 +59,7 @@ export class DenotationsPartitionRenderer extends PartitionRenderSingleRoot {
 
     //not used since this partition doesn't allow manual add operation
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(true);
+        return of(true);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

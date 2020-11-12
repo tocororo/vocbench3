@@ -1,30 +1,24 @@
-<div class="panel panel-alt">
+<div class="card card-alt">
     
-    <div class="panel-heading">
+    <div class="card-header">
         <label style="flex: 1">{{predicateObjects.getPredicate().getShow()}}</label>
-        <div class="btn-group">
-            <button class="btn btn-xs btn-default predObjRenderPanelBtn" style="padding: 3px 6px;" (click)="addValue()"
-                [title]="actionAddTitle" [disabled]="addDisabled">
-                <span class="glyphicon glyphicon-plus" style="font-size: 9px;"></span>
+        <div class="btn-group" ngbDropdown>
+            <button class="btn btn-xs btn-light predObjRenderPanelBtn" style="padding: 3px 6px;" (click)="addValue()" [title]="actionAddTitle" [disabled]="addDisabled">
+                <span class="fas fa-plus fa-sm"></span>
             </button>
-            <button class="btn btn-xs btn-default dropdown-toggle predObjRenderPanelBtn" style="padding: 3px;" data-toggle="dropdown"
-                [disabled]="actionMenuDisabled">
-                <span class="caret"></span>
+            <button class="btn btn-xs btn-light dropdown-toggle predObjRenderPanelBtn" style="padding: 3px;" data-toggle="dropdown" ngbDropdownToggle [disabled]="actionMenuDisabled">
+                <span class="fas fa-caret-down fa-sm"></span>
             </button>
-            <ul class="dropdown-menu pull-right">
-                <li *ngIf="addManuallyAllowed" [ngClass]="{ disabled: addDisabled }">
-                    <a (click)="addManually()">Add value manually</a>
-                </li>
-                <li *ngIf="addExteranlResourceAllowed" [ngClass]="{ disabled: addDisabled }">
-                    <a (click)="addExternalValue()">Add value from another project</a>
-                </li>
-                <li [ngClass]="{ disabled: deleteAllDisabled }"><a (click)="removeAllValues()">Delete all values</a></li>
-            </ul>
+            <div class="dropdown-menu float-right" ngbDropdownMenu>
+                <a *ngIf="addManuallyAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }"(click)="addManually()">Add value manually</a>
+                <a *ngIf="addExteranlResourceAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addExternalValue()">Add value from another project</a>
+                <a class="dropdown-item" [ngClass]="{ disabled: deleteAllDisabled }" (click)="removeAllValues()">Delete all values</a>
+            </div>
         </div>
 
     </div>
     
-    <div class="panel-body">
+    <div class="card-body">
 
         <ng-container *ngFor="let obj of predicateObjects.getObjects(); let i = index">
             <resview-value-renderer *ngIf="showObject(i)"
@@ -36,7 +30,7 @@
         </ng-container>
 
         <ng-container *ngIf="showAllButton()">
-            <button class="btn btn-xs btn-default" style="width: 100%; color: #888; border-color: #ddd;" (click)="showAll()">
+            <button class="btn btn-xs btn-light" style="width: 100%; color: #888; border-color: #ddd;" (click)="showAll()">
                 Show all...
             </button>
         </ng-container>

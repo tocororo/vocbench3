@@ -1,5 +1,7 @@
 import { Component, SimpleChanges } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { from, Observable, of } from 'rxjs';
+import { flatMap, map } from 'rxjs/operators';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
 import { CustomForm, CustomFormValue } from "../../../../models/CustomForms";
 import { Language } from "../../../../models/LanguagesCountries";
@@ -21,7 +23,7 @@ import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { LexicalizationEnrichmentHelper } from "../lexicalizationEnrichmentHelper";
 import { MultiActionError, MultiActionFunction } from "../multipleActionHelper";
 import { PartitionRendererMultiRoot } from "../partitionRendererMultiRoot";
-import { PropertyEnrichmentHelper, PropertyEnrichmentInfo, EnrichmentType } from "../propertyEnrichmentHelper";
+import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from "../propertyEnrichmentHelper";
 
 @Component({
     selector: "lexicalizations-renderer",
@@ -31,7 +33,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
 
     partition = ResViewPartition.lexicalizations;
     addBtnImgTitle = "Add a lexicalization";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/annotationProperty_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/annotationProperty_create.png";
 
     private predicateOrder: string[] = [
         SKOSXL.prefLabel.getURI(), SKOSXL.altLabel.getURI(), SKOSXL.hiddenLabel.getURI(),
@@ -85,28 +87,28 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
 
     //not used since this partition doesn't allow manual add operation
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(true);
+        return of(true);
     }
 
     private ensureInitializedRootProperties(): Observable<void> {
         if (this.rootProperties.length == 0) { //root properties not yet initialized
-            return this.resViewService.getLexicalizationProperties(this.resource).map(
-                props => {
+            return this.resViewService.getLexicalizationProperties(this.resource).pipe(
+                map(props => {
                     this.rootProperties = props;
-                }
+                })
             );
         } else { //root properties already initialized
-            return Observable.of(null);
+            return of(null);
         }
     }
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
-        return this.ensureInitializedRootProperties().flatMap(
-            res => {
+        return this.ensureInitializedRootProperties().pipe(
+            flatMap(res => {
                 if (this.rootProperties.length == 1) { //just one property => return it
-                    return Observable.of(this.rootProperties[0]);
+                    return of(this.rootProperties[0]);
                 } else { //multiple properties => ask user to select
-                    return Observable.fromPromise(
+                    return from(
                         this.browsingModals.browsePropertyTree("Select a property", this.rootProperties).then(
                             (selectedProp: any) => {
                                 return selectedProp;
@@ -115,7 +117,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                         )
                     );
                 }
-            }
+            })
         );
     }
 
@@ -250,7 +252,7 @@ export class LexicalizationsPartitionRenderer extends PartitionRendererMultiRoot
                 if (errors.length == 1) { //if only one error, try to handle it
                     let err: Error = errors[0].error;
                     if (err.name.endsWith('PrefAltLabelClashException') || err.name.endsWith('BlacklistForbiddendException')) {
-                        this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                        this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
                             confirm => {
                                 this.lexicalizationEnrichmentHelper.getAddLabelFn(
                                     <ARTURIResource>this.resource, predicate, <ARTLiteral>errors[0].value, cls, 

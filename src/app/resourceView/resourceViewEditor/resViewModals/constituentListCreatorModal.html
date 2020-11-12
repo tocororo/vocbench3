@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body vbox">
 
@@ -10,33 +10,33 @@
         </lexical-entry-list-panel>
         
         <div style="align-self: center; margin: 5px;">
-            <button class="btn btn-default btn-sm btn-block" style="margin-bottom: 5px;" (click)="addConstituentToList()" [disabled]="!selectedConstituentSource">
-                Add<span class="glyphicon glyphicon-chevron-right"></span>
+            <button class="btn btn-light btn-sm btn-block" style="margin-bottom: 5px;" (click)="addConstituentToList()" [disabled]="!selectedConstituentSource">
+                Add<span class="fas fa-chevron-right"></span>
             </button>
-            <button class="btn btn-default btn-sm btn-block" style="margin-bottom: 5px;" (click)="removeConstituentFromList()" [disabled]="!selectedConstituentTarget">
-                <span class="glyphicon glyphicon-chevron-left"></span>Remove
+            <button class="btn btn-light btn-sm btn-block" style="margin-bottom: 5px;" (click)="removeConstituentFromList()" [disabled]="!selectedConstituentTarget">
+                <span class="fas fa-chevron-left"></span>Remove
             </button>
         </div>
         
-        <div class="panel panel-default vbox">
-            <div class="panel-heading">
+        <div class="card card-default vbox">
+            <div class="card-header">
                 <div style="flex: 1;"></div>
                 <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default btn-xs" (click)="moveDown()" [disabled]="!ordered || !selectedConstituentTarget || isLastInList()">
-                            <span class="glyphicon glyphicon-chevron-down"></span>
+                        <button class="btn btn-light btn-xs" (click)="moveDown()" [disabled]="!ordered || !selectedConstituentTarget || isLastInList()">
+                            <span class="fas fa-chevron-down"></span>
                         </button>
-                        <button class="btn btn-default btn-xs" (click)="moveUp()" [disabled]="!ordered || !selectedConstituentTarget || isFirstInList()">
-                            <span class="glyphicon glyphicon-chevron-up"></span>
+                        <button class="btn btn-light btn-xs" (click)="moveUp()" [disabled]="!ordered || !selectedConstituentTarget || isFirstInList()">
+                            <span class="fas fa-chevron-up"></span>
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="panel-body vbox">
+            <div class="card-body vbox">
                 <resource-list [resources]="list" (nodeSelected)="selectedConstituentTarget = $event"></resource-list>
             </div>
-            <div class="panel-footer">
-                <div class="checkbox-inline pull-right">
+            <div class="card-footer">
+                <div class="checkbox-inline float-right">
                     <label>
                         <input type="checkbox" [(ngModel)]="ordered">Ordered
                     </label>
@@ -48,6 +48,6 @@
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="list.length == 0">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="list.length == 0">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

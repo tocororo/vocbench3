@@ -10,9 +10,9 @@ import { ARTLiteral } from "../../../models/ARTResources";
     }]
 })
 export class DataRangeEditor implements ControlValueAccessor {
-    private datarange: ARTLiteral[] = [];
+    datarange: ARTLiteral[] = [];
 
-    private value: ARTLiteral;
+    value: ARTLiteral;
 
     ngOnInit() {
         if (this.datarange === undefined) {
@@ -20,7 +20,7 @@ export class DataRangeEditor implements ControlValueAccessor {
         }
     }
 
-    private add() {
+    add() {
         for (var i = 0; i < this.datarange.length; i++) {
             if (this.datarange[i].getValue() == this.value.getValue() && this.datarange[i].getDatatype() == this.value.getDatatype()) {
                 return; //datarange already in list => do not add
@@ -31,7 +31,7 @@ export class DataRangeEditor implements ControlValueAccessor {
         this.value = null;
     }
 
-    private remove(dr: ARTLiteral) {
+    remove(dr: ARTLiteral) {
         this.datarange.splice(this.datarange.indexOf(dr), 1);
         this.propagateChange(this.datarange);
     }

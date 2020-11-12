@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from "rxjs";
+import { ImportFromDatasetCatalogModalReturnData } from "../../../../metadata/namespacesAndImports/importFromDatasetCatalogModal";
 import { ARTNode, ARTURIResource } from "../../../../models/ARTResources";
 import { ImportType } from "../../../../models/Metadata";
 import { ResViewPartition } from "../../../../models/ResourceView";
@@ -13,7 +14,6 @@ import { CreationModalServices } from "../../../../widget/modal/creationModal/cr
 import { SharedModalServices } from "../../../../widget/modal/sharedModal/sharedModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
 import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
-import { ImportFromDatasetCatalogModalReturnData } from "../../../../metadata/namespacesAndImports/importFromDatasetCatalogModal";
 
 @Component({
     selector: "imports-renderer",
@@ -23,7 +23,7 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.imports;
     addBtnImgTitle = "Add import";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/ontologyProperty_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/ontologyProperty_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
@@ -49,7 +49,7 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
      * Opens a modal to import an ontology from web,
      * once done refreshes the imports list and the namespace prefix mapping
      */
-    private importFromWeb() {
+    importFromWeb() {
         this.sharedModals.importOntology("Import from web", ImportType.fromWeb).then(
             (data: any) => {
                 this.metadataService.addFromWeb(data.baseURI, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
@@ -66,7 +66,7 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
      * Opens a modal to import an ontology from web and copies it to a mirror file,
      * once done refreshes the imports list and the namespace prefix mapping
      */
-    private importFromWebToMirror() {
+    importFromWebToMirror() {
         this.sharedModals.importOntology("Import from web to mirror", ImportType.fromWebToMirror).then(
             (data: any) => {
                 this.metadataService.addFromWebToMirror(data.baseURI, data.mirrorFile, data.transitiveImportAllowance, data.altURL, data.rdfFormat).subscribe(
@@ -83,7 +83,7 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
      * Opens a modal to import an ontology from a local file and copies it to a mirror file,
      * once done refreshes the imports list and the namespace prefix mapping
      */
-    private importFromLocalFile() {
+    importFromLocalFile() {
         this.sharedModals.importOntology("Import from local file", ImportType.fromLocalFile).then(
             (data: any) => {
                 this.metadataService.addFromLocalFile(data.baseURI, data.localFile, data.mirrorFile, data.transitiveImportAllowance).subscribe(
@@ -100,7 +100,7 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
      * Opens a modal to import an ontology from a mirror file,
      * once done refreshes the imports list and the namespace prefix mapping
      */
-    private importFromOntologyMirror() {
+    importFromOntologyMirror() {
         this.sharedModals.importOntology("Import from ontology mirror", ImportType.fromOntologyMirror).then(
             (data: any) => {
                 this.metadataService.addFromMirror(data.mirror.baseURI, data.mirror.file, data.transitiveImportAllowance).subscribe(
@@ -117,7 +117,7 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
      * Opens a modal to import an ontology from the dataset catalog. This uses the addFromWeb import.
      * Once done refreshes the imports list and the namespace prefix mapping
      */
-    private importFromDatasetCatalog() {
+    importFromDatasetCatalog() {
         this.sharedModals.importFromDatasetCatalog("Import from Dataset Catalog").then(
             (data: ImportFromDatasetCatalogModalReturnData) => {
                 this.metadataService.addFromWeb(data.ontologyIRI, data.transitiveImportAllowance, data.dataDump, data.rdfFormat).subscribe(
@@ -131,7 +131,7 @@ export class ImportsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(value instanceof ARTURIResource);
+        return of(value instanceof ARTURIResource);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

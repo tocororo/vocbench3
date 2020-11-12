@@ -1,7 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTNode, ARTResource } from '../../../models/ARTResources';
-import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
 import { ResourceUtils } from '../../../utils/ResourceUtils';
+import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
 
 @Component({
     selector: 'inline-editable-value',
@@ -19,7 +20,7 @@ export class InlineEditableValue implements OnInit {
     @ViewChild('editBlock') textarea: ElementRef;
     private textareaRows: number;
 
-    private editInProgress: boolean = false;
+    editInProgress: boolean = false;
     private stringValue: string;
     private pristineStringValue: string;
 
@@ -105,7 +106,7 @@ export class InlineEditableValue implements OnInit {
         this.editInProgress = false;
         if (this.pristineStringValue != this.stringValue) {
             if (this.stringValue == undefined || this.stringValue.trim() == "") {
-                this.basicModals.alert("Invalid value", "The inserted value is empty or not valid. Please check and retry.", "warning");
+                this.basicModals.alert("Invalid value", "The inserted value is empty or not valid. Please check and retry.", ModalType.warning);
                 this.stringValue = this.pristineStringValue;
                 return;
             }

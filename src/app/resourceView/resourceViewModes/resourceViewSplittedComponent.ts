@@ -10,10 +10,10 @@ import { AbstractResViewVisualizationMode } from "./abstractResViewVisualization
 })
 export class ResourceViewSplittedComponent extends AbstractResViewVisualizationMode {
 
-    private resource: ARTResource; //resource that is selected in a tree or list and should be described in the main RV
+    resource: ARTResource; //resource that is selected in a tree or list and should be described in the main RV
 
     private resStack: Array<ARTResource> = [];
-    private object: ARTResource; //this represent a double clicked object in a resource view (to show in the 2nd RV)
+    object: ARTResource; //this represent a double clicked object in a resource view (to show in the 2nd RV)
 
     constructor(eventHandler: VBEventHandler) {
         super(eventHandler);

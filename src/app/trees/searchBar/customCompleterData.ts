@@ -1,19 +1,22 @@
-import { CompleterData, CompleterItem } from 'ng2-completer';
-import { Subject } from "rxjs/Subject";
+// import { CompleterData, CompleterItem } from 'ng2-completer';
+import { Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { SearchSettings } from "../../models/Properties";
 import { SearchServices } from "../../services/searchServices";
 import { VBRequestOptions } from '../../utils/HttpManager';
 import { ProjectContext, VBContext } from '../../utils/VBContext';
 
-export class CustomCompleterData extends Subject<CompleterItem[]> implements CompleterData {
+export class CustomCompleterData 
+// extends Subject<CompleterItem[]> implements CompleterData 
+{
 
     private activeSchemes: ARTURIResource[];
     private cls: ARTURIResource;
     private projectCtx: ProjectContext;
     
     constructor(private searchService: SearchServices, private role: RDFResourceRolesEnum, private searchSettings: SearchSettings) {
-        super();
+        // super();
     }
 
     public search(term: string): void {
@@ -33,14 +36,14 @@ export class CustomCompleterData extends Subject<CompleterItem[]> implements Com
         }
         let concTreePref = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences;
         this.searchService.searchStringList(term, [this.role], this.searchSettings.useLocalName, this.searchSettings.stringMatchMode, 
-            langsParam, includeLocales, schemesParam, concTreePref.multischemeMode, clsParam, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
-            strings => {
-                let results: CompleterItem[] = [];
-                strings.slice(0, 100).forEach(s => {
-                    results.push({title: s, originalObject: s});
-                })
-                this.next(results);
-            }
+            langsParam, includeLocales, schemesParam, concTreePref.multischemeMode, clsParam, VBRequestOptions.getRequestOptions(this.projectCtx)).pipe(
+            map(strings => {
+                // let results: CompleterItem[] = [];
+                // strings.slice(0, 100).forEach(s => {
+                //     results.push({title: s, originalObject: s});
+                // })
+                // this.next(results);
+            })
         ).subscribe();
     }
 

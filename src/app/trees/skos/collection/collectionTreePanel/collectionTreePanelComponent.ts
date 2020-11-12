@@ -1,4 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { SearchSettings } from "../../../../models/Properties";
@@ -42,94 +43,6 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
         return actionCtx;
     }
 
-
-    // createRoot(role: RDFResourceRolesEnum) {
-    //     let collectionType: ARTURIResource;
-    //     if (role == RDFResourceRolesEnum.skosCollection) {
-    //         collectionType = SKOS.collection;
-    //     } else if (role == RDFResourceRolesEnum.skosOrderedCollection) {
-    //         collectionType = SKOS.orderedCollection;
-    //     }
-    //     this.createCollection(collectionType);
-    // }
-
-    // createChild(role: RDFResourceRolesEnum) {
-    //     let collectionType: ARTURIResource;
-    //     if (role == RDFResourceRolesEnum.skosCollection) {
-    //         collectionType = SKOS.collection;
-    //     } else if (role == RDFResourceRolesEnum.skosOrderedCollection) {
-    //         collectionType = SKOS.orderedCollection;
-    //     }
-    //     this.createNestedCollection(collectionType);
-    // }
-
-    // private createCollection(collectionType: ARTURIResource) {
-    //     this.creationModals.newResourceWithLiteralCf("Create new " + collectionType.getShow(), collectionType, true).then(
-    //         (data: NewResourceWithLiteralCfModalReturnData) => {
-    //             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-    //             this.skosService.createCollection(collectionType, data.literal, data.uriResource, null, data.cls, data.cfValue).subscribe(
-    //                 stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-    //                 (err: Error) => {
-    //                     if (err.name.endsWith('PrefAltLabelClashException')) {
-    //                         this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-    //                             confirm => {
-    //                                 this.skosService.createCollection(collectionType, data.literal, data.uriResource, null, data.cls, data.cfValue, false).subscribe(
-    //                                     stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-    //                                 );
-    //                             },
-    //                             () => {}
-    //                         );
-    //                     }
-    //                 }
-    //             );
-    //         },
-    //         () => { }
-    //     );
-    // }
-
-    // private createNestedCollection(collectionType: ARTURIResource) {
-    //      this.creationModals.newResourceWithLiteralCf("Create a nested" + collectionType.getShow(), collectionType, true).then(
-    //         (data: NewResourceWithLiteralCfModalReturnData) => {
-    //             UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-    //                 this.skosService.createCollection(collectionType, data.literal, data.uriResource, this.selectedNode, data.cls, data.cfValue).subscribe(
-    //                     stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-    //                     (err: Error) => {
-    //                         if (err.name.endsWith('PrefAltLabelClashException')) {
-    //                             this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
-    //                                 confirm => {
-    //                                     this.skosService.createCollection(collectionType, data.literal, data.uriResource, this.selectedNode, data.cls, data.cfValue, false).subscribe(
-    //                                         stResp => UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement),
-    //                                     );
-    //                                 },
-    //                                 () => {}
-    //                             );
-    //                         }
-    //                     }
-    //                 );
-    //         },
-    //         () => { }
-    //     );
-    // }
-
-    // delete() {
-    //     UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-    //     if (this.selectedNode.getRole() == RDFResourceRolesEnum.skosCollection) {
-    //         this.skosService.deleteCollection(this.selectedNode).subscribe(
-    //             stResp => {
-    //                 this.selectedNode = null;
-    //                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-    //             }
-    //         );
-    //     } else { //skosOrderedCollection
-    //         this.skosService.deleteOrderedCollection(this.selectedNode).subscribe(
-    //             stResp => {
-    //                 this.selectedNode = null;
-    //                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-    //             }
-    //         );
-    //     }
-    // }
-
     refresh() {
         this.viewChildTree.init();
     }
@@ -151,7 +64,7 @@ export class CollectionTreePanelComponent extends AbstractTreePanel {
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", ModalType.warning);
                 } else { //1 or more results
                     if (searchResult.length == 1) {
                         this.openTreeAt(searchResult[0]);

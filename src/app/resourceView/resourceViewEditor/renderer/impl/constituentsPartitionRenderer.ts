@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from 'rxjs';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTNode, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -21,7 +22,7 @@ export class ConstituentsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.constituents;
     addBtnImgTitle = "Add constituent";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/objectProperty_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/objectProperty_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
@@ -47,13 +48,13 @@ export class ConstituentsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(value instanceof ARTURIResource);
+        return of(value instanceof ARTURIResource);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
         this.basicModals.confirm("Delete constituent", "Deleting a single constituent could compromise the integrity of the constituents section."
             + " If you want to edit the constituents of the LexicalEntry, it is highly recommended to use the add procedure which will replace the current constituent list."
-            + " Do you want to confirm the deletion?", "warning").then(
+            + " Do you want to confirm the deletion?", ModalType.warning).then(
             () => {
                 this.getRemoveFunction(predicate, object).subscribe(
                     stResp => {

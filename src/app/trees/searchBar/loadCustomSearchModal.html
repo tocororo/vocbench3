@@ -5,21 +5,21 @@
 
     <div class="hbox" style="flex: initial; align-items: center; margin-bottom: 4px;">
         <label>Level:</label>
-        <select class="form-control input-sm" style="display: inline-block; margin-left: 4px;" [(ngModel)]="selectedScope" (ngModelChange)="initReferences()">
+        <select class="form-control form-control-sm" style="display: inline-block; margin-left: 4px;" [(ngModel)]="selectedScope" (ngModelChange)="initReferences()">
             <option *ngFor="let s of scopes">{{s}}</option>
         </select>
     </div>
 
-    <div class="panel panel-default vbox">
-        <div class="panel-heading">
+    <div class="card card-default vbox">
+        <div class="card-header">
             <label style="flex: 1;">Stored Custom Search</label>
-            <button class="btn btn-xs btn-default" (click)="add()" title="Delete">
-                <span class="glyphicon glyphicon-plus"></span>
+            <button class="btn btn-xs btn-light" (click)="add()" title="Delete">
+                <span class="fas fa-plus"></span>
             </button>
         </div>
 
-        <div class="panel-body table-responsive" style="min-height: 80px;">
-            <table class="table table-condensed table-hoverable">
+        <div class="card-body table-responsive" style="min-height: 80px;">
+            <table class="table table-sm table-hoverable">
                 <colgroup>
                     <col>
                     <col style="width: 1%;">
@@ -28,8 +28,8 @@
                     <tr *ngFor="let ref of references" (click)="selectReference(ref)" [ngClass]="{ info: selectedRef == ref }">
                         <td>{{ref.identifier}}</td>
                         <td>
-                            <button class="btn btn-xs btn-default" (click)="deleteReference(ref)" title="Delete">
-                                <span class="glyphicon glyphicon-trash"></span>
+                            <button class="btn btn-xs btn-light" (click)="deleteReference(ref)" title="Delete">
+                                <span class="far fa-trash-alt"></span>
                             </button>
                         </td>
                     </tr>
@@ -40,6 +40,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedRef">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedRef">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

@@ -1,18 +1,11 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
 import { SearchMode, SearchSettings } from "../../models/Properties";
 import { TreeListContext } from "../../utils/UIUtils";
 import { ProjectContext, VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-
-export class SearchSettingsModalData extends BSModalContext {
-    constructor(public role: RDFResourceRolesEnum, public structureCtx: TreeListContext, public projectCtx: ProjectContext) {
-        super();
-    }
-}
 
 @Component({
     selector: "search-settings-modal",
@@ -22,16 +15,18 @@ export class SearchSettingsModalData extends BSModalContext {
         '.form-control[readonly]:not([disabled]) { background-color: #fff; }'
     ]
 })
-export class SearchSettingsModal implements ModalComponent<SearchSettingsModalData> {
-    context: SearchSettingsModalData;
+export class SearchSettingsModal {
+    @Input() role: RDFResourceRolesEnum;
+    @Input() structureCtx: TreeListContext;
+    @Input() projectCtx: ProjectContext;
 
     private settings: SearchSettings;
 
-    private settingsForInstancePanel: boolean = false;
-    private settingsForConceptPanel: boolean = false;
+    settingsForInstancePanel: boolean = false;
+    settingsForConceptPanel: boolean = false;
 
     //search mode startsWith/contains/endsWith
-    private stringMatchModes: { show: string, value: SearchMode }[] = [
+    stringMatchModes: { show: string, value: SearchMode }[] = [
         { show: "Starts with", value: SearchMode.startsWith },
         { show: "Contains", value: SearchMode.contains },
         { show: "Ends with", value: SearchMode.endsWith },
@@ -41,15 +36,15 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
     private activeStringMatchMode: SearchMode;
 
     //search mode use URI/LocalName
-    private useURI: boolean = true;
-    private useLocalName: boolean = true;
-    private useNotes: boolean = true;
+    useURI: boolean = true;
+    useLocalName: boolean = true;
+    useNotes: boolean = true;
 
-    private restrictLang: boolean = false;
-    private includeLocales: boolean = false;
-    private languages: string[];
+    restrictLang: boolean = false;
+    includeLocales: boolean = false;
+    languages: string[];
 
-    private useAutocompletion: boolean = false;
+    useAutocompletion: boolean = false;
 
     //concept search restriction
     private restrictConceptSchemes: boolean = true;
@@ -57,16 +52,14 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
     //individual panel search
     private extendsToAllIndividuals: boolean = false;
 
-    constructor(public dialog: DialogRef<SearchSettingsModalData>, private vbProp: VBProperties, private sharedModals: SharedModalServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private vbProp: VBProperties, private sharedModals: SharedModalServices) {}
 
     ngOnInit() {
-        this.settingsForConceptPanel = (this.context.role == RDFResourceRolesEnum.concept);
+        this.settingsForConceptPanel = (this.role == RDFResourceRolesEnum.concept);
         //individual settings (extends individual search to all classes) must be visible only when modal is opened from the cls-ind panel in the data page
-        this.settingsForInstancePanel = (this.context.role == RDFResourceRolesEnum.individual && this.context.structureCtx == TreeListContext.dataPanel);
+        this.settingsForInstancePanel = (this.role == RDFResourceRolesEnum.individual && this.structureCtx == TreeListContext.dataPanel);
 
-        this.settings = VBContext.getWorkingProjectCtx(this.context.projectCtx).getProjectPreferences().searchSettings;
+        this.settings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
         this.activeStringMatchMode = this.settings.stringMatchMode;
         this.useURI = this.settings.useURI;
         this.useLocalName = this.settings.useLocalName;
@@ -79,8 +72,8 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
         this.extendsToAllIndividuals = this.settings.extendToAllIndividuals;
     }
 
-    private selectRestrictionLanguages() {
-        this.sharedModals.selectLanguages("Language restrictions", this.languages, true, this.context.projectCtx).then(
+    selectRestrictionLanguages() {
+        this.sharedModals.selectLanguages("Language restrictions", this.languages, false, true, this.projectCtx).then(
             (langs: string[]) => {
                 this.languages = langs;
                 this.updateSettings();
@@ -89,9 +82,9 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
         );
     }
 
-    private updateSettings() {
+    updateSettings() {
         this.vbProp.setSearchSettings(
-            VBContext.getWorkingProjectCtx(this.context.projectCtx),
+            VBContext.getWorkingProjectCtx(this.projectCtx),
             {
                 stringMatchMode: this.activeStringMatchMode,
                 useURI: this.useURI,
@@ -107,10 +100,8 @@ export class SearchSettingsModal implements ModalComponent<SearchSettingsModalDa
         );
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+    ok() {
+        this.activeModal.close();
     }
 
 }

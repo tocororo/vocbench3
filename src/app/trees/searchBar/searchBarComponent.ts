@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { Subscription } from "rxjs/Subscription";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { Project } from "../../models/Project";
 import { SearchMode, SearchSettings } from "../../models/Properties";
@@ -13,9 +13,9 @@ import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { AdvancedSearchModal } from "./advancedSearchModal";
 import { CustomCompleterData } from "./customCompleterData";
-import { CustomSearchModal, CustomSearchModalData } from "./customSearchModal";
+import { CustomSearchModal } from "./customSearchModal";
 import { LoadCustomSearchModal } from "./loadCustomSearchModal";
-import { SearchSettingsModal, SearchSettingsModalData } from './searchSettingsModal';
+import { SearchSettingsModal } from './searchSettingsModal';
 
 @Component({
     selector: "search-bar",
@@ -32,7 +32,7 @@ export class SearchBarComponent {
     @Output('advancedSearch') advancedSearchEvent: EventEmitter<ARTResource> = new EventEmitter();
 
     //search mode startsWith/contains/endsWith
-    private stringMatchModes: { show: string, value: SearchMode, symbol: string }[] = [
+    stringMatchModes: { show: string, value: SearchMode, symbol: string }[] = [
         { show: "Starts with", value: SearchMode.startsWith, symbol: "α.." },
         { show: "Contains", value: SearchMode.contains, symbol: ".α." },
         { show: "Ends with", value: SearchMode.endsWith, symbol: "..α" },
@@ -40,14 +40,14 @@ export class SearchBarComponent {
         { show: "Fuzzy", value: SearchMode.fuzzy, symbol: "~α" }
     ];
 
-    private searchSettings: SearchSettings;
+    searchSettings: SearchSettings;
 
-    private searchStr: string;
-    private completerDatasource: CustomCompleterData;
+    searchStr: string;
+    // private completerDatasource: CustomCompleterData;
 
     private eventSubscriptions: Subscription[] = [];
 
-    constructor(private searchService: SearchServices, private modal: Modal, private vbProperties: VBProperties,
+    constructor(private searchService: SearchServices, private modalService: NgbModal, private vbProperties: VBProperties,
         private eventHandler: VBEventHandler, private basicModals: BasicModalServices) {
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
@@ -68,7 +68,7 @@ export class SearchBarComponent {
 
     ngOnInit() {
         this.searchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
-        this.completerDatasource = new CustomCompleterData(this.searchService, this.role, this.searchSettings);
+        // this.completerDatasource = new CustomCompleterData(this.searchService, this.role, this.searchSettings);
         this.setSchemeInCompleter(VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().activeSchemes);
         this.setProjectCtxInCompleter(this.projectCtx);
     }
@@ -79,50 +79,37 @@ export class SearchBarComponent {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['cls'] && ! changes['cls'].firstChange) {
-            this.completerDatasource.setClass(changes['cls'].currentValue);
+            // this.completerDatasource.setClass(changes['cls'].currentValue);
         }
         
     }
 
-    /**
-     * Handles the keyup event in search text field (when enter key is pressed execute the search)
-     */
-    private searchKeyHandler(event: KeyboardEvent) {
-        if (event.which == 13) {
-            event.preventDefault();
-            event.stopPropagation();
-            this.doSearch();
-        }
-    }
-
-    private doSearch() {
+    doSearch() {
         if (this.searchStr != undefined && this.searchStr.trim() != "") {
             this.search.emit(this.searchStr);
         } else {
-            this.basicModals.alert("Search", "Please enter a valid string to search", "warning");
+            this.basicModals.alert("Search", "Please enter a valid string to search", ModalType.warning);
         }
     }
 
-    private editSettings() {
-        var modalData = new SearchSettingsModalData(this.role, this.context, this.projectCtx);
-        const builder = new BSModalContextBuilder<SearchSettingsModalData>(
-            modalData, undefined, SearchSettingsModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(SearchSettingsModal, overlayConfig);
+    editSettings() {
+        const modalRef: NgbModalRef = this.modalService.open(SearchSettingsModal, new ModalOptions());
+        modalRef.componentInstance.role = this.role;
+        modalRef.componentInstance.structureCtx = this.context;
+        modalRef.componentInstance.projectCtx = this.projectCtx;
+        return modalRef.result;
     }
 
     /**
      * Advanced and Custom search are available only if the panel is in the data page and works on the current project, not a contextual one
      */
-    private showOtherSearch(): boolean {
+    showOtherSearch(): boolean {
         return this.context == TreeListContext.dataPanel && this.projectCtx == null;
     }
 
-    private advancedSearch() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-        this.modal.open(AdvancedSearchModal, overlayConfig).result.then(
+    advancedSearch() {
+        const modalRef: NgbModalRef = this.modalService.open(AdvancedSearchModal, new ModalOptions('lg'));
+        modalRef.result.then(
             (resource: ARTResource) => {
                 this.advancedSearchEvent.emit(resource);
             },
@@ -131,16 +118,12 @@ export class SearchBarComponent {
     }
 
     private customSearch() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(LoadCustomSearchModal, overlayConfig).result.then(
+        const modalRef: NgbModalRef = this.modalService.open(LoadCustomSearchModal, new ModalOptions());
+        modalRef.result.then(
             customSearchRef => {
-                var modalData = new CustomSearchModalData(customSearchRef);
-                const builder = new BSModalContextBuilder<CustomSearchModalData>(
-                    modalData, undefined, SearchSettingsModalData
-                );
-                let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-                this.modal.open(CustomSearchModal, overlayConfig).result.then(
+                const modalRef: NgbModalRef = this.modalService.open(CustomSearchModal, new ModalOptions());
+                modalRef.componentInstance.searchParameterizationReference = customSearchRef;
+                modalRef.result.then(
                     (resource: ARTResource) => {
                         //exploit the same event (and related handler) of advanced search
                         this.advancedSearchEvent.emit(resource);
@@ -160,12 +143,12 @@ export class SearchBarComponent {
 
     private setSchemeInCompleter(schemes: ARTURIResource[]) {
         if (this.role == RDFResourceRolesEnum.concept) {
-            this.completerDatasource.setConceptSchemes(schemes);
+            // this.completerDatasource.setConceptSchemes(schemes);
         }
     }
 
     private setProjectCtxInCompleter(projectCtx: ProjectContext) {
-        this.completerDatasource.setProjectCtx(projectCtx);
+        // this.completerDatasource.setProjectCtx(projectCtx);
     }
 
     /**
@@ -173,7 +156,7 @@ export class SearchBarComponent {
      */
     private updateSearchSettings() {
         this.searchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
-        this.completerDatasource.updateSearchSettings(this.searchSettings);
+        // this.completerDatasource.updateSearchSettings(this.searchSettings);
     }
 
 }

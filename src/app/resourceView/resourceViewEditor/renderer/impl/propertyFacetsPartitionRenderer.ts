@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from "rxjs";
 import { ARTNode, ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
-import { PropertyFacet, PropertyFacetsEnum, ResViewPartition } from "../../../../models/ResourceView";
+import { AddAction, PropertyFacet, PropertyFacetsEnum, ResViewPartition } from "../../../../models/ResourceView";
 import { OWL, RDF } from "../../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { PropertyServices } from "../../../../services/propertyServices";
@@ -24,9 +24,11 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
 
     @Input('facets') facets: PropertyFacet[];
 
+    AddAction = AddAction; //workaround for using enum in template
+
     partition = ResViewPartition.facets;
     addBtnImgTitle = "Add a inverse property";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/property_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/property_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
@@ -59,7 +61,7 @@ export class PropertyFacetsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(value instanceof ARTURIResource);
+        return of(value instanceof ARTURIResource);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

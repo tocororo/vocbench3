@@ -26,6 +26,7 @@ import { CreationModalServices } from "../widget/modal/creationModal/creationMod
 import { NewOntoLexicalizationCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/ontolex/newOntoLexicalizationCfModal";
 import { NewResourceWithLiteralCfModalReturnData } from "../widget/modal/creationModal/newResourceModal/shared/newResourceWithLiteralCfModal";
 import { NewXLabelModalReturnData } from "../widget/modal/creationModal/newResourceModal/skos/newXLabelModal";
+import { ModalType } from '../widget/modal/Modals';
 
 @Injectable()
 export class MultiSubjectEnrichmentHelper {
@@ -69,12 +70,12 @@ export class MultiSubjectEnrichmentHelper {
         });
         
         if (subjects.length == 0) {
-            this.basicModals.alert("Multivalue addition", "All the selected resources are not explicit, so they cannot be edited", "warning");
+            this.basicModals.alert("Multivalue addition", "All the selected resources are not explicit, so they cannot be edited", ModalType.warning);
             return;
         } else if (excludedSubject.length > 0) {
             this.basicModals.alert("Multivalue addition", 
                 "Some of the selected resources are not explicit, they cannot be edited, so they will be not affected by the changes:\n" + 
-                excludedSubject.map(s => " - " + s.getShow()).join("\n"), "warning").then(
+                excludedSubject.map(s => " - " + s.getShow()).join("\n"), ModalType.warning).then(
                 resp => {
                     this.selectProperty(subjects);
                 }
@@ -426,7 +427,7 @@ export class MultiSubjectEnrichmentHelper {
     private lexicalizationsHandler(subjects: ARTURIResource[], predicate: ARTURIResource) {
         if (predicate.equals(SKOS.prefLabel) || predicate.equals(SKOSXL.prefLabel)) {
             this.basicModals.alert("Add " + predicate.getShow(), "This operation is not allowed for the selected property. " + 
-                "Multiple resources cannot have the same " + predicate.getShow() + ".", "warning");
+                "Multiple resources cannot have the same " + predicate.getShow() + ".", ModalType.warning);
             return;
         }
         if (predicate.getBaseURI() == SKOSXL.namespace) { //SKOSXL
@@ -529,7 +530,7 @@ export class MultiSubjectEnrichmentHelper {
         //check if all the properties are of the same type
         for (let i = 0; i < subjects.length; i++) {
             if (subjects[i].getRole() != subjects[0].getRole()) {
-                this.basicModals.alert("Add range", "The addition of the same range to multiple properties is not allowed on properties of different types", "warning");
+                this.basicModals.alert("Add range", "The addition of the same range to multiple properties is not allowed on properties of different types", ModalType.warning);
                 return;
             }
         }
@@ -828,14 +829,14 @@ export class MultiSubjectEnrichmentHelper {
         let message = "The addition for the subject " + error.subject.toNT() + " has failed due to the following reason:\n" +  error.error.name + 
                 ((error.error.message != null) ? ":\n" + error.error.message : "");
         let details = error.error.stack;
-        this.basicModals.alert("Error", message, "error", details);
+        this.basicModals.alert("Error", message, ModalType.error, details);
     }
     private handleMultipleMultiAddError(errors: MultiSubjectAddError[]) {
         let message = "The addition for the following subject have failed:"
         errors.forEach((e: MultiSubjectAddError) => {
             message += "\n\n" + e.subject.toNT() + "\nReason:\n" + e.error.name + ((e.error.message != null) ? ":\n" + e.error.message : "");
         });
-        this.basicModals.alert("Error", message, "error");
+        this.basicModals.alert("Error", message, ModalType.error);
     }
 
 }

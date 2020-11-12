@@ -1,22 +1,22 @@
 <div class="modal-header">
     <h3 class="modal-title">Andvanced search</h3>
 </div>
-<div class="modal-body scrollableContainer blockingDivHost" style="padding: 8px;">
+<div class="modal-body scrollableContainer blockingDivHost">
 
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%">
             <col>
         </colgroup>
         <tbody>
             <tr>
-                <td nowrap><label class="control-label">Search string:</label></td>
-                <td><input class="form-control input-sm" [(ngModel)]="searchString"></td>
+                <td nowrap><label>Search string:</label></td>
+                <td><input class="form-control" [(ngModel)]="searchString"></td>
             </tr>
             <tr>
-                <td><label class="control-label">Status:</label></td>
+                <td><label>Status:</label></td>
                 <td>
-                    <select class="form-control input-sm" [(ngModel)]="selectedStatus">
+                    <select class="form-control" [(ngModel)]="selectedStatus">
                         <option *ngFor="let s of statuses" [value]="s.value">{{s.show}}</option>
                     </select>
                 </td>
@@ -24,14 +24,14 @@
         </tbody>
     </table>
 
-    <div class="panel panel-default" style="margin-top: 5px;">
-        <div class="panel-heading">
+    <div class="card card-default mt-2">
+        <div class="card-header">
             <label>Search mode</label>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="hbox" style="align-items: center;">
-                <label class="control-label" style="white-space: nowrap; margin-right: 4px;">String match mode:</label>
-                <select class="form-control input-xs" [(ngModel)]="activeSearchMode">
+                <label style="white-space: nowrap; margin-right: 4px;">String match mode:</label>
+                <select class="form-control" [(ngModel)]="activeSearchMode">
                     <option *ngFor="let sm of searchModes" [value]="sm.value">{{sm.show}}</option>
                 </select>
             </div>
@@ -55,11 +55,11 @@
         </div>
     </div>
 
-    <div class="panel panel-default" style="margin-top: 5px;">
-        <div class="panel-heading">
+    <div class="card card-default" style="margin-top: 5px;">
+        <div class="card-header">
             <label>Lexicalization</label>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="hbox">
                 <div class="checkbox" style="margin: 5px 0px 0px">
                     <label>
@@ -67,11 +67,11 @@
                     </label>
                 </div>
                 <div class="hbox" style="align-items: center; margin-left: 8px;">
-                    <div class="input-group input-group-xs">
+                    <div class="input-group">
                         <input type="text" class="form-control" [ngModel]="languages" [disabled]="!restrictLang" readonly>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" (click)="selectRestrictionLanguages()" placeholder="Select languages" [disabled]="!restrictLang">
-                                <span class="glyphicon glyphicon-pencil"></span>
+                        <span class="input-group-append">
+                            <button class="btn btn-light" (click)="selectRestrictionLanguages()" placeholder="Select languages" [disabled]="!restrictLang">
+                                <span class="fas fa-pencil-alt"></span>
                             </button>
                         </span>
                     </div>
@@ -86,38 +86,38 @@
     </div>
 
     <!-- Types -->
-    <div class="panel panel-default" style="margin-top: 5px;">
-        <div class="panel-heading">
+    <div class="card card-default" style="margin-top: 5px;">
+        <div class="card-header">
             <label style="flex: 1;">Types</label>
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" (click)="addTypesGroup()" title="Add group">
-                    <span class="glyphicon glyphicon-plus"></span>
+                <button class="btn btn-light" (click)="addTypesGroup()" title="Add group">
+                    <span class="fas fa-plus"></span>
                 </button>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div *ngFor="let group of typesGroups; let lastGroup = last; let indexGroup = index">
                 <div class="hbox" style="align-items: center; margin: 2px 0;">
                     <div class="hbox tile-group">
                         <div *ngFor="let t of group; let indexType=index; let lastType = last" class="hbox" style="align-items: center; flex: initial">
                             <span class="tile">
                                 <rdf-resource [resource]="t"></rdf-resource>
-                                <span class="glyphicon glyphicon-remove-circle" (click)="deleteType(group, indexType)" style="cursor: pointer"
-                                    onmouseover="this.className='glyphicon glyphicon-remove-sign';"
-                                    onmouseout="this.className='glyphicon glyphicon-remove-circle';">
+                                <span class="far fa-times-circle" (click)="deleteType(group, indexType)" style="cursor: pointer"
+                                    onmouseover="this.className='fas fa-times-circle';"
+                                    onmouseout="this.className='far fa-times-circle';">
                                 </span>
-                                <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle" style="cursor: not-allowed"></span>
+                                <span *ngIf="readOnly" class="far fa-times-circle" style="cursor: not-allowed"></span>
                             </span>
                             <span *ngIf="!lastType">AND</span>
                         </div>
                         <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
-                            <button class="btn btn-default btn-xs" (click)="addType(group)">
-                                <span class="glyphicon glyphicon-plus"></span>
+                            <button class="btn btn-light btn-xs" (click)="addType(group)">
+                                <span class="fas fa-plus"></span>
                             </button>
                         </div>
                     </div>
-                    <button class="btn btn-sm btn-default" (click)="deleteTypesGroup(indexGroup)" style="margin-left: 4px;">
-                        <span class="glyphicon glyphicon-trash"></span>
+                    <button class="btn btn-sm btn-light" (click)="deleteTypesGroup(indexGroup)" style="margin-left: 4px;">
+                        <span class="far fa-trash-alt"></span>
                     </button>
                 </div>
                 <span *ngIf="!lastGroup">OR</span>
@@ -126,38 +126,38 @@
     </div>
 
     <!-- Schemes -->
-    <div *ngIf="showSchemeSelector" class="panel panel-default" style="margin-top: 5px;">
-        <div class="panel-heading">
+    <div *ngIf="showSchemeSelector" class="card card-default" style="margin-top: 5px;">
+        <div class="card-header">
             <label style="flex: 1;">Schemes</label>
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" (click)="addSchemesGroup()" title="Add group">
-                    <span class="glyphicon glyphicon-plus"></span>
+                <button class="btn btn-light" (click)="addSchemesGroup()" title="Add group">
+                    <span class="fas fa-plus"></span>
                 </button>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div *ngFor="let group of schemesGroups; let lastGroup = last; let indexGroup = index">
                 <div class="hbox" style="align-items: center; margin: 2px 0;">
                     <div class="hbox tile-group">
                         <div *ngFor="let s of group; let indexScheme=index; let lastScheme = last" class="hbox" style="align-items: center; flex: initial">
                             <span class="tile">
                                 <rdf-resource [resource]="s"></rdf-resource>
-                                <span class="glyphicon glyphicon-remove-circle" (click)="deleteScheme(group, indexScheme)" 
-                                    style="cursor: pointer" onmouseover="this.className='glyphicon glyphicon-remove-sign';"
-                                    onmouseout="this.className='glyphicon glyphicon-remove-circle';">
+                                <span class="far fa-times-circle" (click)="deleteScheme(group, indexScheme)" 
+                                    style="cursor: pointer" onmouseover="this.className='fas fa-times-circle';"
+                                    onmouseout="this.className='far fa-times-circle';">
                                 </span>
-                                <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle" style="cursor: not-allowed"></span>
+                                <span *ngIf="readOnly" class="far fa-times-circle" style="cursor: not-allowed"></span>
                             </span>
                             <span *ngIf="!lastScheme">AND</span>
                         </div>
                         <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
-                            <button class="btn btn-default btn-xs" (click)="addScheme(group)">
-                                <span class="glyphicon glyphicon-plus"></span>
+                            <button class="btn btn-light btn-xs" (click)="addScheme(group)">
+                                <span class="fas fa-plus"></span>
                             </button>
                         </div>
                     </div>
-                    <button class="btn btn-sm btn-default" (click)="deleteSchemesGroup(indexGroup)" style="margin-left: 4px;">
-                        <span class="glyphicon glyphicon-trash"></span>
+                    <button class="btn btn-sm btn-light" (click)="deleteSchemesGroup(indexGroup)" style="margin-left: 4px;">
+                        <span class="far fa-trash-alt"></span>
                     </button>
                 </div>
                 <span *ngIf="!lastGroup">OR</span>
@@ -166,20 +166,20 @@
     </div>
 
     <!-- Ingoing links -->
-    <div class="panel panel-default" style="margin-top: 5px;">
-        <div class="panel-heading">
+    <div class="card card-default" style="margin-top: 5px;">
+        <div class="card-header">
             <label style="flex: 1;">Ingoing links</label>
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" (click)="addIngoingGroup()" title="Add group">
-                    <span class="glyphicon glyphicon-plus"></span>
+                <button class="btn btn-light" (click)="addIngoingGroup()" title="Add group">
+                    <span class="fas fa-plus"></span>
                 </button>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div *ngFor="let group of ingoingLinks; let lastGroup = last; let indexGroup = index">
                 <div class="hbox" style="align-items: center; margin: 3px 0;">
-                    <div class="panel panel-default" style="flex: 1;">
-                        <div class="panel-body">
+                    <div class="card card-default" style="flex: 1;">
+                        <div class="card-body">
                             <div class="hbox" style="align-items: center; margin-bottom: 4px;">
                                 <label style="margin-right: 4px;">Predicate:</label>
                                 <resource-picker style="flex: 1;" [resource]="group.first" [config]="{ roles: ['property'] }" [editable]="true"
@@ -190,24 +190,24 @@
                                 <div *ngFor="let v of group.second; let indexValue = index; let lastValue = last" class="hbox" style="align-items: center; flex: initial">
                                     <span class="tile">
                                         <rdf-resource [resource]="v"></rdf-resource>
-                                        <span class="glyphicon glyphicon-remove-circle" (click)="deleteIngoingValue(group, indexValue)"
+                                        <span class="far fa-times-circle" (click)="deleteIngoingValue(group, indexValue)"
                                             style="cursor: pointer"
-                                            onmouseover="this.className='glyphicon glyphicon-remove-sign';"
-                                            onmouseout="this.className='glyphicon glyphicon-remove-circle';">
+                                            onmouseover="this.className='fas fa-times-circle';"
+                                            onmouseout="this.className='far fa-times-circle';">
                                         </span>
                                     </span>
                                     <span *ngIf="!lastValue">OR</span>
                                 </div>
                                 <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
-                                    <button class="btn btn-default btn-xs" (click)="addIngoingValue(group)">
-                                        <span class="glyphicon glyphicon-plus"></span>
+                                    <button class="btn btn-light btn-xs" (click)="addIngoingValue(group)">
+                                        <span class="fas fa-plus"></span>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-sm btn-default" (click)="deleteIngoingGroup(indexGroup)" style="margin-left: 4px;">
-                        <span class="glyphicon glyphicon-trash"></span>
+                    <button class="btn btn-sm btn-light" (click)="deleteIngoingGroup(indexGroup)" style="margin-left: 4px;">
+                        <span class="far fa-trash-alt"></span>
                     </button>
                 </div>
                 <span *ngIf="!lastGroup">AND</span>
@@ -217,25 +217,25 @@
 
 
     <!-- Outgoing links -->
-    <div class="panel panel-default" style="margin-top: 5px;">
-        <div class="panel-heading">
+    <div class="card card-default" style="margin-top: 5px;">
+        <div class="card-header">
             <label style="flex: 1;">Outgoing links</label>
-            <div class="btn-group btn-group-xs dropup">
-                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    <span class="glyphicon glyphicon-plus"></span>
+            <div class="btn-group btn-group-xs dropup" ngbDropdown>
+                <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                    <span class="fas fa-plus"></span>
                 </button>
-                <ul class="dropdown-menu pull-right">
-                    <li><a (click)="addOutgoingGroupValue()">Add set of values</a></li>
-                    <li><a (click)="addOutgoingGroupFreeText()">Add free text search</a></li>
-                </ul>
+                <div class="dropdown-menu float-right" ngbDropdownMenu>
+                    <a class="dropdown-item" (click)="addOutgoingGroupValue()">Add set of values</a>
+                    <a class="dropdown-item" (click)="addOutgoingGroupFreeText()">Add free text search</a>
+                </div>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
 
             <div *ngFor="let group of outgoingLinksValue; let lastGroup = last; let indexGroup = index">
                 <div class="hbox" style="align-items: center; margin: 3px 0;">
-                    <div class="panel panel-default" style="flex: 1;">
-                        <div class="panel-body">
+                    <div class="card card-default" style="flex: 1;">
+                        <div class="card-body">
                             <div class="hbox" style="align-items: center; margin-bottom: 4px;">
                                 <label style="margin-right: 4px;">Predicate:</label>
                                 <resource-picker style="flex: 1;" [resource]="group.first" [config]="{ roles: ['property'] }" [editable]="true" 
@@ -246,30 +246,30 @@
                                 <div *ngFor="let v of group.second; let indexValue = index; let lastValue = last" class="hbox" style="align-items: center; flex: initial">
                                     <span class="tile">
                                         <rdf-resource [resource]="v"></rdf-resource>
-                                        <span class="glyphicon glyphicon-remove-circle" (click)="deleteOutgoingValue(group, indexValue)"
+                                        <span class="far fa-times-circle" (click)="deleteOutgoingValue(group, indexValue)"
                                             style="cursor: pointer"
-                                            onmouseover="this.className='glyphicon glyphicon-remove-sign';"
-                                            onmouseout="this.className='glyphicon glyphicon-remove-circle';">
+                                            onmouseover="this.className='fas fa-times-circle';"
+                                            onmouseout="this.className='far fa-times-circle';">
                                         </span>
                                     </span>
                                     <span *ngIf="!lastValue">OR</span>
                                 </div>
                                 <div class="hbox" style="align-items: center; flex: initial; margin-left: 2px;">
-                                    <div class="btn-group btn-group-xs dropup">
-                                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                            <span class="glyphicon glyphicon-plus"></span>
+                                    <div class="btn-group btn-group-xs dropup" ngbDropdown>
+                                        <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                                            <span class="fas fa-plus"></span>
                                         </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a (click)="addOutgoingValue(group, 'resource')">Add resource</a></li>
-                                            <li><a (click)="addOutgoingValue(group, 'literal')">Add literal</a></li>
-                                        </ul>
+                                        <div class="dropdown-menu" ngbDropdownMenu>
+                                            <a class="dropdown-item" (click)="addOutgoingValue(group, 'resource')">Add resource</a>
+                                            <a class="dropdown-item" (click)="addOutgoingValue(group, 'literal')">Add literal</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-sm btn-default" (click)="deleteOutgoingGroupValue(indexGroup)" style="margin-left: 4px;">
-                        <span class="glyphicon glyphicon-trash"></span>
+                    <button class="btn btn-sm btn-light" (click)="deleteOutgoingGroupValue(indexGroup)" style="margin-left: 4px;">
+                        <span class="far fa-trash-alt"></span>
                     </button>
                 </div>
                 <span *ngIf="!lastGroup">AND</span>
@@ -279,8 +279,8 @@
 
             <div *ngFor="let group of outgoingLinksFreeText; let lastGroup = last; let indexGroup = index">
                 <div class="hbox" style="align-items: center; margin: 3px 0;">
-                    <div class="panel panel-default" style="flex: 1;">
-                        <div class="panel-body">
+                    <div class="card card-default" style="flex: 1;">
+                        <div class="card-body">
                             <div class="hbox" style="align-items: center; margin-bottom: 4px;">
                                 <label style="margin-right: 4px;">Predicate:</label>
                                 <resource-picker style="flex: 1;" [resource]="group.predicate" [config]="{ roles: ['property'] }" [editable]="true" 
@@ -288,15 +288,15 @@
                                 </resource-picker>
                             </div>
                             <div class="hbox">
-                                <select class="form-control input-sm" style="width: initial; margin-right: 4px;" [(ngModel)]="group.mode">
+                                <select class="form-control" style="width: initial; margin-right: 4px;" [(ngModel)]="group.mode">
                                     <option *ngFor="let sm of searchModes" [value]="sm.value">{{sm.show}}</option>
                                 </select>
-                                <input class="form-control input-sm" [(ngModel)]="group.searchString">
+                                <input class="form-control" [(ngModel)]="group.searchString">
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-sm btn-default" (click)="deleteOutgoingGroupFreeText(indexGroup)" style="margin-left: 4px;">
-                        <span class="glyphicon glyphicon-trash"></span>
+                    <button class="btn btn-sm btn-light" (click)="deleteOutgoingGroupFreeText(indexGroup)" style="margin-left: 4px;">
+                        <span class="far fa-trash-alt"></span>
                     </button>
                 </div>
                 <span *ngIf="!lastGroup">AND</span>
@@ -315,6 +315,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Search</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Search</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

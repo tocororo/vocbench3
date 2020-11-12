@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { CustomFormModal, CustomFormModalData } from "../../../customForms/customForm/customFormModal";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { CustomFormModal } from 'src/app/customForms/customForm/customFormModal';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { ARTBNode, ARTNode, ARTResource, ARTURIResource } from '../../../models/ARTResources';
 import { Language } from '../../../models/LanguagesCountries';
-import { AddManuallyValueData, AddManuallyValueModal } from "./addManuallyValueModal";
-import { AddPropertyValueModal, AddPropertyValueModalData } from "./addPropertyValueModal";
-import { BrowseExternalResourceModal, BrowseExternalResourceModalData } from './browseExternalResourceModal';
-import { ClassListCreatorModal, ClassListCreatorModalData } from "./classListCreatorModal";
-import { ConstituentListCreatorModal, ConstituentListCreatorModalData } from './constituentListCreatorModal';
-import { CopyLocalesModal, CopyLocalesModalData } from './copyLocalesModal';
-import { DataRangeEditorModal, DataRangeEditorModalData } from "./dataRangeEditorModal";
-import { DataTypeRestrictionsModal, DataTypeRestrictionsModalData } from './datatypeRestrictionsModal';
-import { InstanceListCreatorModal, InstanceListCreatorModalData } from "./instanceListCreatorModal";
-import { PropertyChainCreatorModal, PropertyChainCreatorModalData } from './propertyChainCreatorModal';
-import { RdfsMembersModal, RdfsMembersModalData } from './rdfsMembersModal';
+import { AddManuallyValueModal } from "./addManuallyValueModal";
+import { AddPropertyValueModal } from "./addPropertyValueModal";
+import { BrowseExternalResourceModal } from './browseExternalResourceModal';
+import { ClassListCreatorModal } from "./classListCreatorModal";
+import { ConstituentListCreatorModal } from './constituentListCreatorModal';
+import { CopyLocalesModal } from './copyLocalesModal';
+import { DataRangeEditorModal } from "./dataRangeEditorModal";
+import { DataTypeRestrictionsModal } from './datatypeRestrictionsModal';
+import { InstanceListCreatorModal } from "./instanceListCreatorModal";
+import { PropertyChainCreatorModal } from './propertyChainCreatorModal';
+import { RdfsMembersModal } from './rdfsMembersModal';
 
 /**
  * Service to open modals that allow to create a classes list or instances list
@@ -22,7 +22,7 @@ import { RdfsMembersModal, RdfsMembersModalData } from './rdfsMembersModal';
 @Injectable()
 export class ResViewModalServices {
 
-    constructor(private modal: Modal) { }
+    constructor(private modalService: NgbModal) { }
 
     /**
      * Opens a modal to create a list of classes (useful for class axioms)
@@ -31,12 +31,9 @@ export class ResViewModalServices {
      * classes (ARTURIResource) and expressions (ARTBNode)
      */
     createClassList(title: string) {
-        var modalData = new ClassListCreatorModalData(title);
-        const builder = new BSModalContextBuilder<ClassListCreatorModalData>(
-            modalData, undefined, ClassListCreatorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-        return this.modal.open(ClassListCreatorModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(ClassListCreatorModal, new ModalOptions('lg'));
+        modalRef.componentInstance.title = title;
+        return modalRef.result;
     }
 
     /**
@@ -45,36 +42,32 @@ export class ResViewModalServices {
      * @return if the modal closes with ok returns a promise containing an array of instances
      */
     createInstanceList(title: string) {
-        var modalData = new InstanceListCreatorModalData(title);
-        const builder = new BSModalContextBuilder<InstanceListCreatorModalData>(
-            modalData, undefined, InstanceListCreatorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-        return this.modal.open(InstanceListCreatorModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(InstanceListCreatorModal, new ModalOptions('lg'));
+        modalRef.componentInstance.title = title;
+        return modalRef.result;
     }
 
     createPropertyChain(title: string, property: ARTURIResource, propChangeable?: boolean, chain?: ARTBNode) {
-        var modalData = new PropertyChainCreatorModalData(title, property, propChangeable, chain);
-        const builder = new BSModalContextBuilder<InstanceListCreatorModalData>(
-            modalData, undefined, InstanceListCreatorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-        return this.modal.open(PropertyChainCreatorModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(PropertyChainCreatorModal, new ModalOptions('lg'));
+        modalRef.componentInstance.title = title;
+		modalRef.componentInstance.property = property;
+        modalRef.componentInstance.propChangeable = propChangeable;
+        modalRef.componentInstance.chain = chain;
+        return modalRef.result;
     }
 
     /**
      * Opens a modal with a custom form to enrich a property with a custom range.
      * @param title title of the dialog
-     * @param creId custom range entry ID
+     * @param cfId custom form ID
      * @param language optional language that if provided "suggests" to initialize each lang-picker to it
      */
-    enrichCustomForm(title: string, creId: string, language?: string) {
-        var modalData = new CustomFormModalData(title, creId, language);
-        const builder = new BSModalContextBuilder<CustomFormModalData>(
-            modalData, undefined, CustomFormModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(CustomFormModal, overlayConfig).result;
+    enrichCustomForm(title: string, cfId: string, language?: string) {
+        const modalRef: NgbModalRef = this.modalService.open(CustomFormModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+		modalRef.componentInstance.cfId = cfId;
+		modalRef.componentInstance.language = language;
+        return modalRef.result;
     }
 
     /**
@@ -90,12 +83,14 @@ export class ResViewModalServices {
      * require to disable the multiselection, like the addFirst/After...() in oreded collection).
      */
     addPropertyValue(title: string, resource: ARTResource, property: ARTURIResource, propChangeable?: boolean, rootProperty?: ARTURIResource, allowMultiselection?: boolean) {
-        var modalData = new AddPropertyValueModalData(title, resource, property, propChangeable, rootProperty, allowMultiselection);
-        const builder = new BSModalContextBuilder<AddPropertyValueModalData>(
-            modalData, undefined, AddPropertyValueModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(AddPropertyValueModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(AddPropertyValueModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+		modalRef.componentInstance.resource = resource;
+        modalRef.componentInstance.property = property;
+        modalRef.componentInstance.propChangeable = propChangeable;
+		modalRef.componentInstance.rootPropertyInput = rootProperty;
+		modalRef.componentInstance.allowMultiselection = allowMultiselection;
+        return modalRef.result;
     }
 
     /**
@@ -104,12 +99,10 @@ export class ResViewModalServices {
      * @param propChangeable 
      */
     addManualValue(property: ARTURIResource, propChangeable?: boolean) {
-        var modalData = new AddManuallyValueData(property, propChangeable);
-        const builder = new BSModalContextBuilder<AddManuallyValueData>(
-            modalData, undefined, AddManuallyValueData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(AddManuallyValueModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(AddManuallyValueModal, new ModalOptions());
+        modalRef.componentInstance.property = property;
+		modalRef.componentInstance.propChangeable = propChangeable;
+        return modalRef.result;
     }
 
     /**
@@ -118,12 +111,10 @@ export class ResViewModalServices {
      * @param propChangeable 
      */
     addRdfsMembers(property: ARTURIResource, propChangeable?: boolean) {
-        var modalData = new RdfsMembersModalData(property, propChangeable);
-        const builder = new BSModalContextBuilder<RdfsMembersModalData>(
-            modalData, undefined, RdfsMembersModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(RdfsMembersModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(RdfsMembersModal, new ModalOptions());
+        modalRef.componentInstance.property = property;
+		modalRef.componentInstance.propChangeable = propChangeable;
+        return modalRef.result;
     }
 
     /**
@@ -131,12 +122,9 @@ export class ResViewModalServices {
      * @param title 
      */
     createConstituentList(title: string) {
-        var modalData = new ConstituentListCreatorModalData(title);
-        const builder = new BSModalContextBuilder<ConstituentListCreatorModalData>(
-            modalData, undefined, ConstituentListCreatorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-        return this.modal.open(ConstituentListCreatorModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(ConstituentListCreatorModal, new ModalOptions('lg'));
+        modalRef.componentInstance.title = title;
+        return modalRef.result;
     }
 
     /**
@@ -144,12 +132,9 @@ export class ResViewModalServices {
      * @param datarangeNode node that represents the datarange
      */
     editDataRange(datarangeNode: ARTBNode) {
-        var modalData = new DataRangeEditorModalData(datarangeNode);
-        const builder = new BSModalContextBuilder<DataRangeEditorModalData>(
-            modalData, undefined, DataRangeEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(DataRangeEditorModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(DataRangeEditorModal, new ModalOptions());
+        modalRef.componentInstance.datarangeNode = datarangeNode;
+        return modalRef.result;
     }
 
     /**
@@ -159,12 +144,11 @@ export class ResViewModalServices {
      * @param propChangeable 
      */
     browseExternalResource(title: string, property?: ARTURIResource, propChangeable?: boolean) {
-        var modalData = new BrowseExternalResourceModalData(title, property, propChangeable);
-        const builder = new BSModalContextBuilder<BrowseExternalResourceModalData>(
-            modalData, undefined, BrowseExternalResourceModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(BrowseExternalResourceModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(BrowseExternalResourceModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+		modalRef.componentInstance.property = property;
+		modalRef.componentInstance.propChangeable = propChangeable;
+        return modalRef.result;
     }
 
     /**
@@ -173,12 +157,10 @@ export class ResViewModalServices {
      * @param locales 
      */
     copyLocale(value: ARTNode, locales: Language[]) {
-        var modalData = new CopyLocalesModalData(value, locales);
-        const builder = new BSModalContextBuilder<CopyLocalesModalData>(
-            modalData, undefined, CopyLocalesModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(CopyLocalesModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(CopyLocalesModal, new ModalOptions());
+        modalRef.componentInstance.value = value;
+		modalRef.componentInstance.localesInput = locales;
+        return modalRef.result;
     }
 
     /**
@@ -187,12 +169,11 @@ export class ResViewModalServices {
      * @param restriction if provided, represents the restriction to edit
      */
     setDatatypeFacets(title: string, datatype: ARTURIResource, restriction?: ARTBNode) {
-        var modalData = new DataTypeRestrictionsModalData(title, datatype, restriction);
-        const builder = new BSModalContextBuilder<DataTypeRestrictionsModalData>(
-            modalData, undefined, DataTypeRestrictionsModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(DataTypeRestrictionsModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(DataTypeRestrictionsModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+		modalRef.componentInstance.datatype = datatype;
+		modalRef.componentInstance.restriction = restriction;
+        return modalRef.result;
     }
 
 }

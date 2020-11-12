@@ -1,35 +1,36 @@
 <div *ngIf="resource.isURIResource()" style="position: relative">
     <div *ngIf="!copyEnabled" class="input-group input-group-xs">
-        <span *ngIf="namespaceLocked" class="input-group-addon" style="padding-right: 2px;">
-            {{resource.getBaseURI()}}
-        </span>
+        <div *ngIf="namespaceLocked" class="input-group-prepend">
+            <span class="input-group-text">{{resource.getBaseURI()}}</span>
+        </div>
+
         <input #localrenameinput *ngIf="namespaceLocked" type="text" class="form-control" style="padding-left: 2px; min-width: 80px;"
             [(ngModel)]="localName" [readonly]="renameLocked" sanitized>
             
         <input #totalrenameinput *ngIf="!namespaceLocked" type="text" class="form-control" [value]="resource.getURI()" sanitized>
         
-        <div class="input-group-btn">
-            <button *ngIf="renameLocked" class="btn btn-default" style="width:72px" (click)="startRename()" [disabled]="renameDisabled">
+        <div class="input-group-append">
+            <button *ngIf="renameLocked" class="btn btn-light" style="width:72px" (click)="startRename()" [disabled]="renameDisabled">
                 Rename
             </button>
                 
-            <button *ngIf="!renameLocked" class="btn btn-default" style="width:24px; padding: 1px 3px;"
+            <button *ngIf="!renameLocked" class="btn btn-light" style="width:24px; padding: 1px 3px;"
                 (click)="renameResource()">
-                <span class="glyphicon glyphicon-ok" style="color: green"></span>
+                <span class="fas fa-check" style="color: green"></span>
             </button>
-            <button *ngIf="!renameLocked" class="btn btn-default" style="width:24px; padding: 1px 3px;"
+            <button *ngIf="!renameLocked" class="btn btn-light" style="width:24px; padding: 1px 3px;"
                 (click)="cancelRename()">
-                <span class="glyphicon glyphicon-remove" style="color: red"></span>
+                <span class="fas fa-times" style="color: red"></span>
             </button>
-            <button *ngIf="!renameLocked" class="btn btn-default" [ngClass]="{active: namespaceLocked}"
+            <button *ngIf="!renameLocked" class="btn btn-light" [ngClass]="{active: namespaceLocked}"
                 style="width:24px; padding: 1px 3px;" (click)="blockNamespace()" title="Block namespace">
-                <span class="glyphicon glyphicon-lock"></span>
+                <span class="fas fa-lock"></span>
             </button>
         </div>
     </div>
     <div style="position: absolute; top: 0px; right: 75px; z-index: 3;">
         <button type="button" class="close" (click)="copyToClipboard()" title="Copy URI to clipboard">
-            <span class="glyphicon glyphicon-copy" style="font-size: 12px"></span>
+            <span class="far fa-copy" style="font-size: 12px"></span>
         </button>
     </div>
 </div>

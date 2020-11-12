@@ -1,32 +1,23 @@
-import { Component, ElementRef } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource, ResAttribute } from '../../../models/ARTResources';
 import { UIUtils } from "../../../utils/UIUtils";
-
-export class InstanceListCreatorModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title') {
-        super();
-    }
-}
 
 @Component({
     selector: "instance-list-creator-modal",
     templateUrl: "./instanceListCreatorModal.html",
 })
-export class InstanceListCreatorModal implements ModalComponent<InstanceListCreatorModalData> {
-    context: InstanceListCreatorModalData;
+export class InstanceListCreatorModal {
+    @Input() title: string;
     
-    private selectedClass: ARTURIResource; //class selected in the class tree
-    private selectedSourceInstance: ARTURIResource; //instance selected in the source instance list
-    private selectedTargetInstance: ARTURIResource; //instance selected in the source instance list
-    private instanceList: Array<ARTURIResource> = []; //instances to return
+    selectedClass: ARTURIResource; //class selected in the class tree
+    selectedSourceInstance: ARTURIResource; //instance selected in the source instance list
+    selectedTargetInstance: ARTURIResource; //instance selected in the source instance list
+    instanceList: Array<ARTURIResource> = []; //instances to return
     
-    private duplicateInstance: ARTURIResource; //instance tried to add to the instanceList but already there 
+    duplicateInstance: ARTURIResource; //instance tried to add to the instanceList but already there 
     
-    constructor(public dialog: DialogRef<InstanceListCreatorModalData>, private elementRef: ElementRef) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private elementRef: ElementRef) {}
 
     ngAfterViewInit() {
         UIUtils.setFullSizeModal(this.elementRef);
@@ -35,7 +26,7 @@ export class InstanceListCreatorModal implements ModalComponent<InstanceListCrea
     /**
      * Adds an instance taken from source list to the target list of instances to return
      */
-    private addToList() {
+    addToList() {
         //check if the instance is already in the list
         for (var i = 0; i < this.instanceList.length; i++) {
             if (this.instanceList[i].getURI() == this.selectedSourceInstance.getURI()) {
@@ -54,7 +45,7 @@ export class InstanceListCreatorModal implements ModalComponent<InstanceListCrea
     /**
      * Removes an instance from the target list to return
      */
-    private removeFromList() {
+    removeFromList() {
         this.instanceList.splice(this.instanceList.indexOf(this.selectedTargetInstance), 1);
         this.selectedTargetInstance = null;
         this.duplicateInstance = null;
@@ -63,21 +54,21 @@ export class InstanceListCreatorModal implements ModalComponent<InstanceListCrea
     /**
      * Listener to the event nodeSelected thrown by the class-tree. Updates the selectedClass
      */
-    private onTreeClassSelected(cls: ARTURIResource) {
+    onTreeClassSelected(cls: ARTURIResource) {
         this.selectedClass = cls;
     }
     
     /**
      * Listener to click on element in the source instance list. Updates the selectedSourceInstance
      */
-    private onSourceListInstanceSelected(instance: ARTURIResource) {
+    onSourceListInstanceSelected(instance: ARTURIResource) {
         this.selectedSourceInstance = instance;
     }
     
     /**
      * Listener to click on element in the target instance list. Updates the selectedTargetInstance
      */
-    private onTargetListInstanceSelected(instance: ARTURIResource) {
+    onTargetListInstanceSelected(instance: ARTURIResource) {
         this.selectedTargetInstance = instance;
     }
     
@@ -85,18 +76,16 @@ export class InstanceListCreatorModal implements ModalComponent<InstanceListCrea
      * Returns true if the given instance is the current selectedTargetInstance. Useful in the view to apply
      * style to the selected instance in the target instance list
      */
-    private isTargetListInstanceSelected(instance: ARTURIResource) {
+    isTargetListInstanceSelected(instance: ARTURIResource) {
         return this.selectedTargetInstance == instance;
     }
     
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close(this.instanceList);
+    ok() {
+        this.activeModal.close(this.instanceList);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
 }

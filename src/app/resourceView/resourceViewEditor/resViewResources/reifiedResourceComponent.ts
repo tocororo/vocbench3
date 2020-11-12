@@ -14,9 +14,9 @@ export class ReifiedResourceComponent extends AbstractResViewResource {
     
     private predicateObjectList: ARTPredicateObjects[];
 
-    private actionRemoveTitle: string;
-    private deleteDisabled: boolean = false;
-    private open: boolean = false;
+    actionRemoveTitle: string;
+    deleteDisabled: boolean = false;
+    open: boolean = false;
 	
     constructor(private cfService: CustomFormsServices) {
         super();
@@ -37,7 +37,7 @@ export class ReifiedResourceComponent extends AbstractResViewResource {
         this.actionRemoveTitle = "Remove " + this.predicate.getShow();
     }
     
-    private toggle() {
+    toggle() {
         if (this.predicateObjectList == null) {
             this.cfService.getGraphObjectDescription(this.predicate, this.resource).subscribe(
                 graphDescr => {

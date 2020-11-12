@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from "rxjs";
+import { map } from 'rxjs/operators';
 import { ARTNode, ARTResource, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -22,7 +23,7 @@ export class TypesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.types;
     addBtnImgTitle = "Add a type";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/cls_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/cls_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
@@ -51,10 +52,10 @@ export class TypesPartitionRenderer extends PartitionRenderSingleRoot {
                 } else { //it's adding a subProperty of rdf:type
                     values.forEach((v: ARTURIResource) => {
                         addFunctions.push({
-                            function: this.resourcesService.addValue(this.resource, prop, v).map(
-                                stResp => {
+                            function: this.resourcesService.addValue(this.resource, prop, v).pipe(
+                                map(stResp => {
                                     this.eventHandler.typeAddedEvent.emit({resource: this.resource, type: v});
-                                }
+                                })
                             ),
                             value: v
                         });
@@ -67,7 +68,7 @@ export class TypesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(value instanceof ARTURIResource);
+        return of(value instanceof ARTURIResource);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

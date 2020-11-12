@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body vbox">
 
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%;">
             <col>
@@ -12,7 +12,7 @@
             <tr>
                 <td nowrap><label>Visualization mode</label></td>
                 <td>
-                    <select class="form-control input-sm" [(ngModel)]="visualization">
+                    <select class="form-control form-control-sm" [(ngModel)]="visualization">
                         <option *ngFor="let vm of visualizationModes" [value]="vm.value">{{vm.label}}</option>
                     </select>
                 </td>
@@ -22,6 +22,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

@@ -34,9 +34,9 @@ export class LanguageDefinitionComponent {
     @Output() update = new EventEmitter();
     
     //action auth
-    private addDefAuthorized: boolean;
-    private editDefAuthorized: boolean;
-    private deleteDefAuthorized: boolean;
+    addDefAuthorized: boolean;
+    editDefAuthorized: boolean;
+    deleteDefAuthorized: boolean;
 
     constructor(public el: ElementRef, private skosService: SkosServices, private skosxlService: SkosxlServices,
         private resourcesService: ResourcesServices, private customFormsServices: CustomFormsServices,
@@ -59,7 +59,7 @@ export class LanguageDefinitionComponent {
     * This method manages update and add for definition
     * @param newDefValue (taken from view)
     */
-    private onDefinitionEdited(newDefValue: string, oldDefValue: ARTNode) {
+    onDefinitionEdited(newDefValue: string, oldDefValue: ARTNode) {
         if (oldDefValue != null && oldDefValue.getShow() != newDefValue) { // update case 
             let newLitForm: ARTLiteral = new ARTLiteral(newDefValue, null, this.lang);
             if (oldDefValue.isLiteral()) { // if standard
@@ -80,7 +80,7 @@ export class LanguageDefinitionComponent {
     }
 
 
-    private deleteDefinition() {
+    deleteDefinition() {
         if (this.def != null) {
             this.delete.emit();
         }
@@ -90,7 +90,7 @@ export class LanguageDefinitionComponent {
      * in case skos:definition has CR, click on and empty inline-editable-value triggers a CF
      * @param event 
      */
-    private onInlineValueClick() {
+    onInlineValueClick() {
         if (this.def == null && this.defCrConfig.hasCustomRange && this.addDefAuthorized && !this.readonly) {
             //create a new definition through CF
             DefinitionEnrichmentHelper.getDefinitionEnrichmentInfo(this.propService, this.basicModals, this.defCrConfig).subscribe(

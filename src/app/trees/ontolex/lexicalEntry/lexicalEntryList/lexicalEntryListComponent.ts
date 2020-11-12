@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
+import { flatMap } from 'rxjs/operators';
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../../models/ARTResources";
 import { LexEntryVisualizationMode, LexicalEntryListPreference, SafeToGo, SafeToGoMap } from "../../../../models/Properties";
 import { SemanticTurkey } from "../../../../models/Vocabulary";
@@ -30,7 +31,7 @@ export class LexicalEntryListComponent extends AbstractList {
     structRole = RDFResourceRolesEnum.ontolexLexicalEntry;
 
     private safeToGoLimit: number;
-    private safeToGo: SafeToGo = { safe: true };
+    safeToGo: SafeToGo = { safe: true };
     private unsafeIndexOneChar: boolean; //true if in case of safeToGo = false, the current index is 1-char
 
     constructor(private ontolexService: OntoLexLemonServices, eventHandler: VBEventHandler) {
@@ -112,17 +113,17 @@ export class LexicalEntryListComponent extends AbstractList {
         let safeness: SafeToGo = safeToGoMap[checksum];
         if (safeness != null) { //found safeness in cache
             this.safeToGo = safeness;
-            return Observable.of(null)
+            return of(null)
         } else { //never initialized/cahced => count
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-            return this.ontolexService.countLexicalEntriesByAlphabeticIndex(this.index, this.lexicon, VBRequestOptions.getRequestOptions(this.projectCtx)).flatMap(
-                count => {
+            return this.ontolexService.countLexicalEntriesByAlphabeticIndex(this.index, this.lexicon, VBRequestOptions.getRequestOptions(this.projectCtx)).pipe(
+                flatMap(count => {
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                     safeness = { safe: count < this.safeToGoLimit, count: count };
                     safeToGoMap[checksum] = safeness; //cache the safeness
                     this.safeToGo = safeness;
-                    return Observable.of(null)
-                }
+                    return of(null)
+                })
             );
         }
     }

@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body vbox">
 
@@ -7,15 +7,15 @@
         <class-tree-panel (nodeSelected)="onTreeClassSelected($event)" [editable]="false"></class-tree-panel>
 
         <div style="align-self: center; margin: 5px;">
-            <button class="btn btn-default btn-sm btn-block" style="margin-bottom: 5px;" (click)="addClassToList()" [disabled]="!selectedTreeClass">
-                Add<span class="glyphicon glyphicon-chevron-right"></span>
+            <button class="btn btn-light btn-sm btn-block" style="margin-bottom: 5px;" (click)="addClassToList()" [disabled]="!selectedTreeClass">
+                Add<span class="fas fa-chevron-right"></span>
             </button>
-            <button class="btn btn-default btn-sm btn-block" style="margin-bottom: 5px;" (click)="removeFromList()" [disabled]="!selectedListElement">
-                <span class="glyphicon glyphicon-chevron-left"></span>Remove
+            <button class="btn btn-light btn-sm btn-block" style="margin-bottom: 5px;" (click)="removeFromList()" [disabled]="!selectedListElement">
+                <span class="fas fa-chevron-left"></span>Remove
             </button>
 
-            <button class="btn btn-default btn-sm btn-block" style="margin-top: 20px;" (click)="addExpressionToList()">
-                Manchester...<span class="glyphicon glyphicon-chevron-right"></span>
+            <button class="btn btn-light btn-sm btn-block" style="margin-top: 20px;" (click)="addExpressionToList()">
+                Manchester...<span class="fas fa-chevron-right"></span>
             </button>
         </div>
 
@@ -35,6 +35,6 @@
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="classList.length == 0">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="classList.length == 0">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

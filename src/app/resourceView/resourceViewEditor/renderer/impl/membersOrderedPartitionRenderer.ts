@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from "rxjs";
 import { ARTLiteral, ARTNode, ARTResource, ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { SKOS } from "../../../../models/Vocabulary";
@@ -23,9 +23,9 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
     partition = ResViewPartition.membersOrdered;
     membersProperty = SKOS.member;
     addBtnImgTitle = "Add member";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/skosCollection_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/skosCollection_create.png";
 
-    private selectedMember: ARTResource;
+    selectedMember: ARTResource;
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
@@ -53,13 +53,13 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
 
     //not used since this partition doesn't allow manual add operation
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(true);
+        return of(true);
     }
 
     /**
      * Adds a first member to an ordered collection 
      */
-    private addFirst(predicate?: ARTURIResource) {
+    addFirst(predicate?: ARTURIResource) {
         this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, null, false).then(
             (data: any) => {
                 let values: ARTResource[] = data.value;
@@ -76,7 +76,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
     /**
      * Adds a last member to an ordered collection 
      */
-    private addLast(predicate?: ARTURIResource) {
+    addLast(predicate?: ARTURIResource) {
         this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, null, false).then(
             (data: any) => {
                 let values: ARTResource[] = data.value;
@@ -93,7 +93,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
     /**
      * Adds a member in a given position to an ordered collection 
      */
-    private addBefore(predicate?: ARTURIResource) {
+    addBefore(predicate?: ARTURIResource) {
         this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, null, false).then(
             (data: any) => {
                 let position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue());
@@ -111,7 +111,7 @@ export class MembersOrderedPartitionRenderer extends PartitionRenderSingleRoot {
     /**
      * Adds a member in a given position to an ordered collection 
      */
-    private addAfter(predicate?: ARTURIResource) {
+    addAfter(predicate?: ARTURIResource) {
         this.resViewModals.addPropertyValue("Add a member", this.resource, this.membersProperty, false, null, false).then(
             (data: any) => {
                 let position = parseInt((<ARTLiteral>this.selectedMember.getAdditionalProperty(ResAttribute.INDEX)).getValue()) + 1;

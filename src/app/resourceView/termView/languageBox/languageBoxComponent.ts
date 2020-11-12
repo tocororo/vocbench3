@@ -34,19 +34,19 @@ export class LanguageBoxComponent {
     @Output() update = new EventEmitter();
     @Output() delete = new EventEmitter(); //requires the parent to delete this component
     
-    private langForFlag: Language;
-    private definitions: ARTNode[]; // it is useful for method onDefinitionEdited
-    private terms: TermStructView[]; // it is used to assign each term if it's a prefLabel or not
+    langForFlag: Language;
+    definitions: ARTNode[]; // it is useful for method onDefinitionEdited
+    terms: TermStructView[]; // it is used to assign each term if it's a prefLabel or not
     private lexicalizationModelType: string;
 
-    private emptyTerm: boolean; //tells if there is an empty term (eventually waiting to be filled or just emptied)
-    private emptyDef: boolean; //tells if there is an empty definition  (eventually waiting to be filled or just emptied)
+    emptyTerm: boolean; //tells if there is an empty term (eventually waiting to be filled or just emptied)
+    emptyDef: boolean; //tells if there is an empty definition  (eventually waiting to be filled or just emptied)
 
     //actions auth
-    private addDefAuthorized: boolean;
-    private editDefAuthorized: boolean;
-    private deleteDefAuthorized: boolean;
-    private addLabelAuthorized: boolean;
+    addDefAuthorized: boolean;
+    editDefAuthorized: boolean;
+    deleteDefAuthorized: boolean;
+    addLabelAuthorized: boolean;
 
     constructor(public el: ElementRef, private skosService: SkosServices, private skosxlService: SkosxlServices,
         private resourcesService: ResourcesServices, private customFormsServices: CustomFormsServices,
@@ -161,7 +161,7 @@ export class LanguageBoxComponent {
     /**
      *  Add a new empty box definition
      */
-    private addDefinitionItem() {
+    addDefinitionItem() {
         if (this.defCrConfig.hasCustomRange) { //exists custom range(s) for skos:definition
             DefinitionEnrichmentHelper.getDefinitionEnrichmentInfo(this.propService, this.basicModals, this.defCrConfig).subscribe(
                 (info: DefinitionEnrichmentInfo) => {
@@ -219,7 +219,7 @@ export class LanguageBoxComponent {
     }
 
     // it needs to add ontolex part
-    private addTermBox() {
+    addTermBox() {
         if (this.terms.some(term => term.predicate.equals(SKOSXL.prefLabel) || term.predicate.equals(SKOS.prefLabel))) { // it means that already there is a prefLabel predicate => so add an altLabel (with SKOS and SKOSXL)
             if (this.lexicalizationModelType == SKOSXL.uri) {
                 this.terms.push({ predicate: SKOSXL.altLabel, lang: this.lang })

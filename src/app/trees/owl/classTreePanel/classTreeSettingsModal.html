@@ -8,41 +8,41 @@
             Root class:
         </label>
         <input-editable *ngIf="rootClass" [value]="rootClass.getURI()" (valueEdited)="updateRootClass($event)" style="flex: 1;"></input-editable>
-        <button class="btn btn-default btn-sm" style="line-height: 1; margin-left: 4px;" (click)="changeClass()">
+        <button class="btn btn-light btn-sm" style="line-height: 1; margin-left: 4px;" (click)="changeClass()">
             <img src="../../../../assets/images/icons/res/class.png"/>
         </button>
     </div>
 
-    <div class="panel panel-default vbox" style="margin-top: 8px;">
-        <div class="panel-heading">
+    <div class="card card-default vbox" style="margin-top: 8px;">
+        <div class="card-header">
             <label>
                 SubClasses filter
-                <span class="glyphicon glyphicon-info-sign" title="Here you can create filters in order to hide subClasses of classes."></span>
+                <span class="fas fa-info-circle" title="Here you can create filters in order to hide subClasses of classes."></span>
             </label>
             <div style="flex: 1"></div>
             <label>Enabled</label>
             <input type="checkbox" style="margin-left: 6px;" [(ngModel)]="filterEnabled" title="Enable filter">
         </div>
-        <div class="panel-body hbox">
-            <div class="panel panel-alt vbox">
-                <div class="panel-heading">
+        <div class="card-body hbox">
+            <div class="card card-alt vbox">
+                <div class="card-header">
                     <label style="flex: 1">Classes</label>
                     <div class="btn-toolbar" role="toolbar">
-                        <button class="btn btn-default btn-xs" title="Rendering" (click)="renderingClasses = !renderingClasses"
+                        <button class="btn btn-light btn-xs" title="Rendering" (click)="renderingClasses = !renderingClasses"
                             [ngClass]="{active: renderingClasses}">
-                            <span class="glyphicon glyphicon-font"></span>
+                            <span class="fas fa-font"></span>
                         </button>
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-default" (click)="addFilter()" title="Add filter">
-                                <span class="glyphicon glyphicon-plus"></span>
+                            <button class="btn btn-light" (click)="addFilter()" title="Add filter">
+                                <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-default" (click)="removeFilter()" title="Remove filter" [disabled]="!selectedFilteredClass">
-                                <span class="glyphicon glyphicon-minus"></span>
+                            <button class="btn btn-light" (click)="removeFilter()" title="Remove filter" [disabled]="!selectedFilteredClass">
+                                <span class="fas fa-minus"></span>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="panel-body scrollableContainer">
+                <div class="card-body scrollableContainer">
                     <div *ngFor="let f of filterMapRes" class="listItem" (click)="selectFilteredClass(f.cls)"
                         [ngClass]="{ active: f.cls == selectedFilteredClass }">
                         <rdf-resource [resource]="f.cls" [rendering]="renderingClasses"></rdf-resource>
@@ -50,30 +50,30 @@
                 </div>
             </div>
 
-            <div class="panel panel-alt vbox" style="margin-left: 4px;">
-                <div class="panel-heading">
+            <div class="card card-alt vbox" style="margin-left: 4px;">
+                <div class="card-header">
                     <label style="flex: 1">Filtered subClasses</label>
                     <div class="btn-toolbar" role="toolbar">
-                        <button class="btn btn-default btn-xs" title="Rendering" (click)="renderingFilter = !renderingFilter"
+                        <button class="btn btn-light btn-xs" title="Rendering" (click)="renderingFilter = !renderingFilter"
                             [ngClass]="{active: renderingFilter}">
-                            <span class="glyphicon glyphicon-font"></span>
+                            <span class="fas fa-font"></span>
                         </button>
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-default" (click)="checkAllClasses(true)" title="Check all" [disabled]="!selectedFilteredClass">
-                                <span class="glyphicon glyphicon-check"></span>
+                            <button class="btn btn-light" (click)="checkAllClasses(true)" title="Check all" [disabled]="!selectedFilteredClass">
+                                <span class="far fa-check-square"></span>
                             </button>
-                            <button class="btn btn-default" (click)="checkAllClasses(false)" title="Uncheck all" [disabled]="!selectedFilteredClass">
-                                <span class="glyphicon glyphicon-unchecked"></span>
+                            <button class="btn btn-light" (click)="checkAllClasses(false)" title="Uncheck all" [disabled]="!selectedFilteredClass">
+                                <span class="far fa-square"></span>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="panel-body scrollableContainer">
+                <div class="card-body scrollableContainer">
                     <div *ngFor="let f of getFilterSubClasses()" class="listItem">
                         <input type="checkbox" style="margin-right: 5px;" [(ngModel)]="f.checked" [disabled]="f.disabled">
                         <rdf-resource [resource]="f.resource" [rendering]="renderingFilter" style="flex: 1;"></rdf-resource>
-                        <span *ngIf="f.checked" class="glyphicon glyphicon-eye-open"></span>
-                        <span *ngIf="!f.checked" class="glyphicon glyphicon-eye-close"></span>
+                        <span *ngIf="f.checked" class="fas fa-eye"></span>
+                        <span *ngIf="!f.checked" class="fas fa-eye-slash"></span>
                     </div>
                 </div>
             </div>
@@ -89,6 +89,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

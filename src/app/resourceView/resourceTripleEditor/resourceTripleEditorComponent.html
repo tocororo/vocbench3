@@ -1,17 +1,17 @@
-<div class="panel panel-default vbox blockingDivHost">
-    <div class="panel-heading">
+<div class="card card-default vbox blockingDivHost">
+    <div class="card-header">
         <rdf-resource style="flex: 1;" [resource]="resource"></rdf-resource>
-        <button class="btn btn-xs btn-default" (click)="initDescription()" title="Refresh">
-            <span class="glyphicon glyphicon-refresh"></span>
+        <button class="btn btn-xs btn-light" (click)="initDescription()" title="Refresh">
+            <span class="fas fa-redo"></span>
         </button>
     </div>
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
         <ntriple-editor [(ngModel)]="description" (ngModelChange)="onDescriptionChange()" [disabled]="!editAuthorized || pendingValidation"></ntriple-editor>
     </div>
-    <div class="panel-footer" style="min-height: 31px;">
-        <button class="btn btn-xs btn-default pull-right" (click)="applyChanges()" [disabled]="!isApplyEnabled()">
+    <div class="card-footer" style="min-height: 31px;">
+        <button class="btn btn-xs btn-light float-right" (click)="applyChanges()" [disabled]="!isApplyEnabled()">
             Apply changes
-            <span *ngIf="pendingValidation" class="glyphicon glyphicon-warning-sign" style="margin-left: 4px;" 
+            <span *ngIf="pendingValidation" class="fas fa-exclamation-triangle" style="margin-left: 4px;" 
                 title="The Code view tab has been disabled as this resource - or part of its description - is under validation"></span>
         </button>
     </div>

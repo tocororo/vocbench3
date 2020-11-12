@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { GraphMode } from "../../../graph/abstractGraph";
 import { GraphModalServices } from "../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
@@ -9,6 +9,7 @@ import { OWL, RDFS } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { SearchServices } from "../../../services/searchServices";
+import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { RoleActionResolver } from "../../../utils/RoleActionResolver";
 import { UIUtils } from "../../../utils/UIUtils";
@@ -21,7 +22,6 @@ import { AbstractTreePanel } from "../../abstractTreePanel";
 import { MultiSubjectEnrichmentHelper } from "../../multiSubjectEnrichmentHelper";
 import { ClassTreeComponent } from "../classTree/classTreeComponent";
 import { ClassTreeSettingsModal } from "./classTreeSettingsModal";
-import { VBRequestOptions } from "../../../utils/HttpManager";
 
 @Component({
     selector: "class-tree-panel",
@@ -29,7 +29,6 @@ import { VBRequestOptions } from "../../../utils/HttpManager";
     host: { class: "vbox" }
 })
 export class ClassTreePanelComponent extends AbstractTreePanel {
-    @Input() hideSearch: boolean = false; //if true hide the search bar
     @Input() roots: ARTURIResource[]; //root classes
 
     @ViewChild(ClassTreeComponent) viewChildTree: ClassTreeComponent;
@@ -37,10 +36,10 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.cls;
     rendering: boolean = false; //override the value in AbstractPanel
 
-    private filterEnabled: boolean;
+    filterEnabled: boolean;
     private creatingClassType: ARTURIResource = OWL.class;
 
-    constructor(private searchService: SearchServices, private modal: Modal,
+    constructor(private searchService: SearchServices, private modalService: NgbModal,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
         super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
@@ -61,38 +60,6 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
         let actionCtx: VBActionFunctionCtx = { metaClass: this.creatingClassType, loadingDivRef: this.viewChildTree.blockDivElement }
         return actionCtx;
     }
-
-    // createRoot() {
-    //     this.creationModals.newResourceCf("Create a new class", this.creatingClassType).then(
-    //         (data: any) => {
-    //             let superClass: ARTURIResource = OWL.thing;
-    //             if (data.cls.getURI() == RDFS.class.getURI()) {
-    //                 superClass = RDFS.resource;
-    //             }
-    //             this.classesService.createClass(data.uriResource, superClass, data.cls, data.cfValue).subscribe();
-    //         },
-    //         () => {}
-    //     );
-    // }
-
-    // createChild() {
-    //     this.creationModals.newResourceCf("Create a subClass of " + this.selectedNode.getShow(), this.creatingClassType).then(
-    //         (data: any) => {
-    //             this.classesService.createClass(data.uriResource, this.selectedNode, data.cls, data.cfValue).subscribe();
-    //         },
-    //         () => {}
-    //     );
-    // }
-
-    // delete() {
-    //     UIUtils.startLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);;
-    //     this.classesService.deleteClass(this.selectedNode).subscribe(
-    //         stResp => {
-    //             this.selectedNode = null;
-    //             UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
-    //         }
-    //     );
-    // }
 
     refresh() {
         this.viewChildTree.init();
@@ -115,7 +82,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", ModalType.warning);
                 } else { //1 or more results
                     if (searchResult.length == 1) {
                         this.openTreeAt(searchResult[0]);
@@ -151,11 +118,10 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
         this.graphModals.openUmlGraph(this.rendering);
     }
 
-    private settings() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ClassTreeSettingsModal, overlayConfig).result.then(
-            changesDone => {
+    settings() {
+        const modalRef: NgbModalRef = this.modalService.open(ClassTreeSettingsModal, new ModalOptions());
+        return modalRef.result.then(
+            () => {
                 this.filterEnabled = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().classTreePreferences.filter.enabled;
                 this.refresh();
             },

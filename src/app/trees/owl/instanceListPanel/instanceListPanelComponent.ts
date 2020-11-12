@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
-import { Modal, OverlayConfig } from "ngx-modialog";
-import { BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
-import { Observable } from "rxjs";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { from, Observable, of } from "rxjs";
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { GraphModalServices } from "../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { InstanceListPreference, InstanceListVisualizationMode, SearchSettings } from "../../../models/Properties";
@@ -29,7 +29,6 @@ import { InstanceListSettingsModal } from "./instanceListSettingsModal";
     host: { class: "vbox" }
 })
 export class InstanceListPanelComponent extends AbstractListPanel {
-    @Input() hideSearch: boolean = false; //if true hide the search bar
     @Input() cls: ARTURIResource; //class of the instances
     @Output() classChange: EventEmitter<ARTURIResource> = new EventEmitter(); //event emitted when, due to a search, a class change is required
 
@@ -38,12 +37,12 @@ export class InstanceListPanelComponent extends AbstractListPanel {
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.individual;
     rendering: boolean = false; //override the value in AbstractPanel
 
-    private visualizationMode: InstanceListVisualizationMode;
+    visualizationMode: InstanceListVisualizationMode;
 
     //for visualization searchBased
-    private lastSearch: string;
+    lastSearch: string;
 
-    constructor(private searchService: SearchServices, private individualService: IndividualsServices, private modal: Modal,
+    constructor(private searchService: SearchServices, private individualService: IndividualsServices, private modalService: NgbModal,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
         super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
@@ -64,38 +63,6 @@ export class InstanceListPanelComponent extends AbstractListPanel {
         //In addition to the cross-panel conditions, in this case the actions are disabled if the panel has no input cls
         return super.isActionDisabled(action) || !this.cls
     }
-
-    // //@Override
-    // isCreateDisabled(): boolean {
-    //     return (!this.cls || this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
-    // }
-    // //@Override
-    // isDeleteDisabled(): boolean {
-    //     return (
-    //         !this.cls || !this.selectedNode || !this.selectedNode.getAdditionalProperty(ResAttribute.EXPLICIT) || 
-    //         this.readonly || !AuthorizationEvaluator.Tree.isDeleteAuthorized(this.panelRole)
-    //     );
-    // }
-
-    // private create() {
-    //     this.creationModals.newResourceCf("Create a new instance of " + this.cls.getShow(), this.cls, false).then(
-    //         (data: any) => {
-    //             this.classesService.createInstance(data.uriResource, this.cls, data.cfValue).subscribe();
-    //         },
-    //         () => {}
-    //     );
-    // }
-
-    // delete() {
-    //     UIUtils.startLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
-    //     this.classesService.deleteInstance(this.selectedNode, this.cls).subscribe(
-    //         stResp => {
-    //             this.selectedNode = null;
-    //             UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement);
-    //         },
-    //         err => { UIUtils.stopLoadingDiv(this.viewChildInstanceList.blockDivElement.nativeElement); }
-    //     )
-    // }
 
     refresh() {
         if (this.visualizationMode == InstanceListVisualizationMode.standard) {
@@ -137,7 +104,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", ModalType.warning);
                     return;
                 }
                 ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
@@ -195,10 +162,10 @@ export class InstanceListPanelComponent extends AbstractListPanel {
      */
     private getClassOfIndividual(individual: ARTURIResource, types: ARTURIResource[]): Observable<ARTURIResource> {
         if (types.some(t => t.equals(this.cls))) { //simplest case: searched individual belongs to the current selected class
-            return Observable.of(this.cls);
+            return of(this.cls);
         } else {
             if (types.length == 1) {
-                return Observable.fromPromise(
+                return from(
                     this.basicModals.confirm("Search", "Searched instance " + individual.getShow() + " belong to a different class " + 
                         types[0].getShow() + ". Do you want to switch class?").then(
                         () => { //confirmed => switch class
@@ -210,7 +177,7 @@ export class InstanceListPanelComponent extends AbstractListPanel {
                     )
                 );
             } else { //multiple types
-                return Observable.fromPromise(
+                return from(
                     this.basicModals.selectResource("Search", "Searched instance " + individual.getShow() + 
                         " belong to the following classes. If you want to complete the search, select one of them and confirm", types, this.rendering).then(
                         res => { //selected => switch class
@@ -237,11 +204,10 @@ export class InstanceListPanelComponent extends AbstractListPanel {
         );
     }
 
-    private settings() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(InstanceListSettingsModal, overlayConfig).result.then(
-            changesDone => {
+    settings() {
+        const modalRef: NgbModalRef = this.modalService.open(InstanceListSettingsModal, new ModalOptions());
+        return modalRef.result.then(
+            () => {
                 let listPref: InstanceListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().instanceListPreferences;
                 this.visualizationMode = listPref.visualization;
                 if (this.visualizationMode == InstanceListVisualizationMode.searchBased) {

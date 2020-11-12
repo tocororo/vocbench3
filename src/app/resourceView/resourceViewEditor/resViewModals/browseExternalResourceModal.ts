@@ -1,7 +1,8 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { Observable } from "rxjs";
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { forkJoin, Observable } from "rxjs";
+import { map } from 'rxjs/operators';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { Project } from "../../../models/Project";
 import { RDFS, SKOS } from "../../../models/Vocabulary";
@@ -15,16 +16,6 @@ import { VBProperties } from "../../../utils/VBProperties";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
 
-export class BrowseExternalResourceModalData extends BSModalContext {
-    constructor(
-        public title: string,
-        public property: ARTURIResource,
-        public propChangeable: boolean = true
-    ) {
-        super();
-    }
-}
-
 /**
  * This modal is used to browse and select a resource belonging to an external project.
  * This is used when aligning a resource, or when enriching a property for a resource 
@@ -35,28 +26,29 @@ export class BrowseExternalResourceModalData extends BSModalContext {
     selector: "browse-external-resource-modal",
     templateUrl: "./browseExternalResourceModal.html",
 })
-export class BrowseExternalResourceModal implements ModalComponent<BrowseExternalResourceModalData> {
-    context: BrowseExternalResourceModalData;
+export class BrowseExternalResourceModal {
+    @Input() title: string;
+    @Input() property: ARTURIResource;
+    @Input() propChangeable: boolean = true;
 
     private rootProperty: ARTURIResource; //root property of the partition that invoked this modal
-    private enrichingProperty: ARTURIResource;
+    enrichingProperty: ARTURIResource;
 
-    private projectList: Array<Project> = [];
-    private project: Project;
+    projectList: Array<Project> = [];
+    project: Project;
     private remoteProjCtx: ProjectContext;
     private schemes: ARTURIResource[]; //scheme to explore in case target project is skos(xl)
     private remoteResource: ARTURIResource;
 
     private activeView: RDFResourceRolesEnum;
 
-    constructor(public dialog: DialogRef<BrowseExternalResourceModalData>, public projService: ProjectServices,
+    constructor(public activeModal: NgbActiveModal, public projService: ProjectServices,
         private preferenceService: PreferencesSettingsServices, private propService: PropertyServices, private vbProp: VBProperties,
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) {
-        this.context = dialog.context;
     }
 
     ngOnInit() {
-        this.rootProperty = this.context.property;
+        this.rootProperty = this.property;
         this.enrichingProperty = this.rootProperty;
 
         if (this.enrichingProperty != null) {
@@ -64,7 +56,7 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
                 allowsResource => {
                     if (!allowsResource) {
                         this.basicModals.alert("Invalid property range", this.enrichingProperty.getShow() +
-                            " range doesn't admit resources. You cannot enrich this property with a remote value", "warning");
+                            " range doesn't admit resources. You cannot enrich this property with a remote value", ModalType.warning);
                         this.cancel();
                     }
                 }
@@ -105,7 +97,7 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
         }
     }
 
-    private onProjectChange() {
+    onProjectChange() {
         HttpServiceContext.removeContextProject();
         HttpServiceContext.setContextProject(this.project);
         Cookie.setCookie(Cookie.ALIGNMENT_LAST_EXPLORED_PROJECT, this.project.getName());
@@ -116,7 +108,7 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
             this.vbProp.initUserProjectPreferences(this.remoteProjCtx),
             this.vbProp.initProjectSettings(this.remoteProjCtx)
         ];
-        Observable.forkJoin(initProjectCtxFn).subscribe(
+        forkJoin(initProjectCtxFn).subscribe(
             () => {
                 this.activeView = null;
                 this.remoteResource = null;
@@ -135,12 +127,12 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
         );
     }
 
-    private onAlignTypeChanged() {
+    onAlignTypeChanged() {
         Cookie.setCookie(Cookie.ALIGNMENT_LAST_CHOSEN_TYPE, this.activeView);
         this.remoteResource = null;
     }
 
-    private changeProperty() {
+    changeProperty() {
         this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
             (selectedProp: ARTURIResource) => {
                 if (this.enrichingProperty.getURI() != selectedProp.getURI()) {
@@ -150,7 +142,7 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
                                 this.enrichingProperty = selectedProp;
                             } else {
                                 this.basicModals.alert("Invalid property range", selectedProp.getShow() +
-                                    " range doesn't admit resources. You cannot enrich this property with a remote value", "warning");
+                                    " range doesn't admit resources. You cannot enrich this property with a remote value", ModalType.warning);
                             }
                         }
                     );
@@ -164,8 +156,8 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
      * Used for checking that an enriching property allows resources as value (not literal).
      */
     private checkPropertyRangeResource(property: ARTURIResource): Observable<boolean> {
-        return this.propService.getRange(property).map(
-            range => {
+        return this.propService.getRange(property).pipe(
+            map(range => {
                 var ranges = range.ranges;
                 if (range != undefined) {
                     let rangeCollection: ARTURIResource[] = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
@@ -177,21 +169,21 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
                     }
                 }
                 return true;
-            }
+            })
         );
     }
 
     /**
      * Listener called when a resource of a tree is selected
      */
-    private onResourceSelected(resource: ARTURIResource) {
+    onResourceSelected(resource: ARTURIResource) {
         this.remoteResource = resource;
     }
 
     /**
      * Listener called when it's aligning concept and the scheme in the concept tree is changed
      */
-    private onSchemeChanged() {
+    onSchemeChanged() {
         this.remoteResource = null;
     }
 
@@ -199,14 +191,13 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
         return this.project.getModelType() == SKOS.uri;
     }
 
-    private isOkClickable(): boolean {
+    isOkClickable(): boolean {
         return this.remoteResource != undefined;
     }
 
-    ok(event: Event) {
+    ok() {
         HttpServiceContext.removeContextProject();
-        event.stopPropagation();
-        this.dialog.close({
+        this.activeModal.close({
             resource: this.remoteResource,
             property: this.enrichingProperty
         });
@@ -214,7 +205,7 @@ export class BrowseExternalResourceModal implements ModalComponent<BrowseExterna
 
     cancel() {
         HttpServiceContext.removeContextProject();
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

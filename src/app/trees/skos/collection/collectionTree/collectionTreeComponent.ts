@@ -1,4 +1,4 @@
-import { Component, QueryList, ViewChildren } from "@angular/core";
+import { Component, ElementRef, QueryList, ViewChild, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { SearchServices } from "../../../../services/searchServices";
 import { SkosServices } from "../../../../services/skosServices";
@@ -19,7 +19,6 @@ import { CollectionTreeNodeComponent } from "./collectionTreeNodeComponent";
     host: { class: "treeListComponent" }
 })
 export class CollectionTreeComponent extends AbstractTree {
-
     //CollectionTreeNodeComponent children of this Component (useful to open tree during the search)
     @ViewChildren(CollectionTreeNodeComponent) viewChildrenNode: QueryList<CollectionTreeNodeComponent>;
 

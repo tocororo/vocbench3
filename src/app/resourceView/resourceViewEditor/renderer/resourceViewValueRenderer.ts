@@ -61,7 +61,7 @@ export class ResourceViewValueRenderer {
      * or the predicate has no custom range, the object should be rendered as simple rdfResource
      * @param object object of the predicate object list to render in view.
      */
-    private renderAsReified() {
+    renderAsReified() {
         return (
             this.predicate.getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE) && 
             this.object.isResource() && !this.object.getAdditionalProperty(ResAttribute.NOT_REIFIED)

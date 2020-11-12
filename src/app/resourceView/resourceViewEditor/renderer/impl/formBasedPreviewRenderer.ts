@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from 'rxjs';
 import { ARTNode, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -38,7 +38,7 @@ export class FormBasedPreviewRenderer extends PartitionRenderSingleRoot {
     add(predicate: ARTURIResource, propChangeable: boolean) {}
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(true);
+        return of(true);
     }
 
     

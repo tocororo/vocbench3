@@ -23,8 +23,8 @@ export class ResourceViewTabContainer {
     private resourceFormStruct: ResViewStruct = { type: ResourceViewType.resourceView, show: "ResView" };
     private simplifiedFormStruct: ResViewStruct = { type: ResourceViewType.termView, show: "TermView" };
     private sourceCodeStruct: ResViewStruct = { type: ResourceViewType.sourceCode, show: "Code" };
-    private rViews: ResViewStruct[];
-    private activeView: ResourceViewType = ResourceViewType.resourceView;
+    rViews: ResViewStruct[];
+    activeView: ResourceViewType = ResourceViewType.resourceView;
 
     private pendingValidation: boolean; //tells if the resource (or its content) is under validation (prevent the usage of code tab)
 

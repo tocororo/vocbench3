@@ -5,14 +5,14 @@
 
     <div style="padding: 6px;">
         <label>Value to copy:</label>
-        <rdf-resource [resource]="context.value"></rdf-resource>
+        <rdf-resource [resource]="value"></rdf-resource>
     </div>
 
-    <div class="panel panel-default vbox">
-        <div class="panel-heading">
+    <div class="card card-default vbox">
+        <div class="card-header">
             <label>Target languages:</label>
         </div>
-        <div class="panel-body scrollableContainer">
+        <div class="card-body scrollableContainer">
             <div *ngFor="let l of locales" class="listNodeItem">
                 <input type="checkbox" style="margin-right: 5px;" [(ngModel)]="l.checked">
                 <lang-item [language]="l.locale" showTag="true"></lang-item>
@@ -21,6 +21,6 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="isOkDisabled()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="isOkDisabled()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

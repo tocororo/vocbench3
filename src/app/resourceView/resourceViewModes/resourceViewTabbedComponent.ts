@@ -11,7 +11,7 @@ import { AbstractResViewVisualizationMode } from "./abstractResViewVisualization
 })
 export class ResourceViewTabbedComponent extends AbstractResViewVisualizationMode {
 
-    private tabs: Array<Tab> = [];
+    tabs: Array<Tab> = [];
     private sync: boolean = false;
 
     //emits event when a tab is selected, useful to keep in sync tabbed ResView and trees/lists

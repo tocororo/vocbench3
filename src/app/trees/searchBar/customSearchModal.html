@@ -1,10 +1,10 @@
 <div class="modal-header">
     <div class="hbox" style="align-items: center">
         <h3 class="modal-title" style="flex: 1">Custom search</h3>
-        <button class="btn btn-default btn-xs" [ngClass]="{active: detailsOn}" title="Show/hide SPARQL details about the custom search" (click)="detailsOn = !detailsOn">
+        <button class="btn btn-light btn-xs" [ngClass]="{active: detailsOn}" title="Show/hide SPARQL details about the custom search" (click)="detailsOn = !detailsOn">
             Details
-            <span *ngIf="detailsOn" class="glyphicon glyphicon-eye-open"></span>
-            <span *ngIf="!detailsOn" class="glyphicon glyphicon-eye-close"></span>
+            <span *ngIf="detailsOn" class="fas fa-eye"></span>
+            <span *ngIf="!detailsOn" class="fas fa-eye-slash"></span>
         </button>
     </div>
 </div>
@@ -34,8 +34,8 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>
 
     

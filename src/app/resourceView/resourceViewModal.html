@@ -1,6 +1,6 @@
 <div class="modal-body vbox">
-    <resource-view-editor [resource]="context.resource" [readonly]="context.readonly" [context]="resViewCtx" [projectCtx]="context.projectCtx"></resource-view-editor>
+    <resource-view-editor [resource]="resource" [readonly]="readonly" [context]="resViewCtx" [projectCtx]="projectCtx"></resource-view-editor>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
 </div>

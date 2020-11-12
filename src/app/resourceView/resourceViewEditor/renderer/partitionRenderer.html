@@ -13,18 +13,14 @@
             </button>
         </span>
         <span *ngIf="addManuallyAllowed || addExteranlResourceAllowed" class="groupPanel-heading-content groupPanel-dropdown-btn">
-            <div class="btn-group" style="vertical-align: initial;">
-                <button class="transparentBtn" style="width: 12px;" data-toggle="dropdown">
-                    <span class="caret" style="margin: 0px;"></span>
+            <div class="btn-group" style="vertical-align: initial;" ngbDropdown>
+                <button class="dropdown-toggle transparentBtn" style="width: 12px;" data-toggle="dropdown" ngbDropdownToggle>
+                    <span class="fas fa-caret-down fa-sm" style="margin: 0px;"></span>
                 </button>
-                <ul class="dropdown-menu pull-right">
-                    <li *ngIf="addManuallyAllowed" [ngClass]="{ disabled: addDisabled }">
-                        <a (click)="addHandler(null, 'manually')">Add value manually</a>
-                    </li>
-                    <li *ngIf="addExteranlResourceAllowed" [ngClass]="{ disabled: addDisabled }">
-                        <a (click)="addHandler(null, 'remote')">Add value from another project</a>
-                    </li>
-                </ul>
+                <div class="dropdown-menu float-right" ngbDropdownMenu>
+                    <a *ngIf="addManuallyAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addHandler(null, 'manually')">Add value manually</a>
+                    <a *ngIf="addExteranlResourceAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addHandler(null, 'remote')">Add value from another project</a>
+                </div>
             </div>
         </span>
 

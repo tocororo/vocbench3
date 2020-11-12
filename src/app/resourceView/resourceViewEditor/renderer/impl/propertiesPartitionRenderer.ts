@@ -1,9 +1,11 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { from, Observable, of } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTNode, ARTURIResource } from "../../../../models/ARTResources";
 import { Language } from "../../../../models/LanguagesCountries";
 import { ResViewPartition } from "../../../../models/ResourceView";
-import { SKOS, SKOSXL, RDFS } from "../../../../models/Vocabulary";
+import { RDFS, SKOS, SKOSXL } from "../../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { PropertyServices, RangeResponse } from "../../../../services/propertyServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
@@ -26,7 +28,7 @@ import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from
 export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.properties;
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/property_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/property_create.png";
     addBtnImgTitle = "Add a property value";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices, 
@@ -111,7 +113,7 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
                 if (errors.length == 1) { //if only one error, try to handle it
                     let err: Error = errors[0].error;
                     if (err.name.endsWith('PrefAltLabelClashException') || err.name.endsWith('BlacklistForbiddendException')) {
-                        this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                        this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
                             confirm => {
                                 this.lexicalizationEnrichmentHelper.getAddLabelFn(
                                     <ARTURIResource>this.resource, predicate, <ARTLiteral>errors[0].value, cls, 
@@ -141,21 +143,21 @@ export class PropertiesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
-        return Observable.fromPromise(
+        return from(
             this.browsingModals.browsePropertyTree("Select a property", null, <ARTURIResource>this.resource).then(
                 selectedProp => {
                     return selectedProp
                 },
-                () => { }
+                () => { return null }
             )
         );
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return this.propService.getRange(predicate).flatMap(
-            range => {
-                return Observable.of(RangeResponse.isRangeCompliant(range, value));
-            }
+        return this.propService.getRange(predicate).pipe(
+            flatMap(range => {
+                return of(RangeResponse.isRangeCompliant(range, value));
+            })
         )
     }
 

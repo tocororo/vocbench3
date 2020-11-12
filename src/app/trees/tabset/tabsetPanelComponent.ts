@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { OntoLex, SKOS } from "../../models/Vocabulary";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
@@ -41,6 +41,8 @@ export class TabsetPanelComponent {
     @ViewChild(LexicalEntryListPanelComponent) viewChildLexialEntryPanel: LexicalEntryListPanelComponent;
     @ViewChild(DatatypeListPanelComponent) viewChildDatatypePanel: DatatypeListPanelComponent;
 
+    RDFResourceRoleEnum = RDFResourceRolesEnum; //workaround for using enum in template
+
     private context: TreeListContext = TreeListContext.dataPanel;
 
     private selectedResource: ARTResource;
@@ -49,7 +51,7 @@ export class TabsetPanelComponent {
 
     private ONTO_TYPE: string;
     
-    private tabs: { role: RDFResourceRolesEnum, label: string }[] = [
+    tabs: { role: RDFResourceRolesEnum, label: string }[] = [
         { role: RDFResourceRolesEnum.cls, label: "Class" },
         { role: RDFResourceRolesEnum.concept, label: "Concept" },
         { role: RDFResourceRolesEnum.conceptScheme, label: "Scheme" },
@@ -62,7 +64,7 @@ export class TabsetPanelComponent {
     private activeTab: RDFResourceRolesEnum;
     private allowMultiselection: boolean = true;
 
-    constructor(private modal: Modal, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
+    constructor(private modalService: NgbModal, private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
 
     ngOnInit() {
         this.ONTO_TYPE = this.getWorkingContext().getProject().getModelType();
@@ -159,15 +161,14 @@ export class TabsetPanelComponent {
         return (this.ONTO_TYPE == OntoLex.uri);
     }
 
-    private openSettings() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(TreeListSettingsModal, overlayConfig).result;
+    openSettings() {
+        const modalRef: NgbModalRef = this.modalService.open(TreeListSettingsModal, new ModalOptions());
+        return modalRef.result;
     }
 
     //TAB HANDLER
 
-    private showTab(tab: RDFResourceRolesEnum): boolean {
+    showTab(tab: RDFResourceRolesEnum): boolean {
         if (this.showTabCache[tab] == null) {
             let show: boolean = false;
             if (tab == RDFResourceRolesEnum.cls) { //always visible, except if explicitly hidden
@@ -258,7 +259,7 @@ export class TabsetPanelComponent {
     }
 
     //Focus the panel and select the searched resource after an advanced search
-    private advancedSearch(resource: ARTResource) {
+    advancedSearch(resource: ARTResource) {
         let tabToActivate: RDFResourceRolesEnum;
         if (resource.isURIResource()) {
             let role = resource.getRole();
@@ -284,7 +285,7 @@ export class TabsetPanelComponent {
                 this.sharedModals.openResourceView(resource, false);    
             }
         } else { //BNode are not in trees or lists => open in modal
-            this.basicModals.alert("Search", "The resoruce " + resource.getShow() + " cannot be focused in a tree/list view, so its ResourceView will be shown in a modal dialog", "warning").then(
+            this.basicModals.alert("Search", "The resoruce " + resource.getShow() + " cannot be focused in a tree/list view, so its ResourceView will be shown in a modal dialog", ModalType.warning).then(
                 () => {
                     this.sharedModals.openResourceView(resource, false);
                 }
@@ -314,7 +315,7 @@ export class TabsetPanelComponent {
                     }
                 });
             } else { //if not visible, open resource in modal
-                this.basicModals.alert("Search", "The resoruce " + resource.getShow() + " cannot be focused in a tree/list view, so its ResourceView will be shown in a modal dialog", "warning").then(
+                this.basicModals.alert("Search", "The resoruce " + resource.getShow() + " cannot be focused in a tree/list view, so its ResourceView will be shown in a modal dialog", ModalType.warning).then(
                     () => {
                         this.sharedModals.openResourceView(resource, false);
                     }

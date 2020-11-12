@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Component, Directive } from "@angular/core";
+import { Observable, of } from "rxjs";
 import { ARTLiteral, ARTNode, ARTResource, ARTURIResource } from "../../../models/ARTResources";
 import { CustomForm, CustomFormValue } from "../../../models/CustomForms";
 import { ResViewUtils } from "../../../models/ResourceView";
@@ -15,10 +15,7 @@ import { MultiActionFunction } from "./multipleActionHelper";
 import { PartitionRenderer } from "./partitionRenderer";
 import { EnrichmentType, PropertyEnrichmentHelper, PropertyEnrichmentInfo } from "./propertyEnrichmentHelper";
 
-@Component({
-    selector: "partition-renderer-single",
-    templateUrl: "./partitionRenderer.html",
-})
+@Directive()
 export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
 
     protected propService: PropertyServices;
@@ -52,7 +49,7 @@ export abstract class PartitionRenderSingleRoot extends PartitionRenderer {
     }
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
-        return Observable.of(this.rootProperty);
+        return of(this.rootProperty);
     }
 
 

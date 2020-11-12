@@ -8,26 +8,26 @@
         <span style="flex: 1">
             <label class="groupPanel-heading-content">{{label}}:</label>
         </span>
-        <span class="groupPanel-heading-content groupPanel-add-btn dropdown pull-right">
-            <button class="dropdown-toggle resViewPartitionAddBtn" data-toggle="dropdown" [title]="addBtnImgTitle" [disabled]="addDisabled">
+        <span class="groupPanel-heading-content groupPanel-add-btn dropdown float-right">
+            <button class="dropdown-toggle resViewPartitionAddBtn" data-toggle="dropdown" ngbDropdownToggle [title]="addBtnImgTitle" [disabled]="addDisabled">
                 <img [src]="addBtnImgSrc"/>
             </button>
-            <ul class="dropdown-menu">
-                <li><a (click)="addFirst()">Add first</a></li>
-                <li><a (click)="addLast()">Add last</a></li>
-                <li [ngClass]="{disabled : !selectedMember}"><a (click)="addBefore()">Add before the selected member</a></li>
-                <li [ngClass]="{disabled : !selectedMember}"><a (click)="addAfter()">Add after the selected member</a></li>
-            </ul>
+            <div class="dropdown-menu" ngbDropdownMenu>
+                <a class="dropdown-item" (click)="addFirst()">Add first</a>
+                <a class="dropdown-item" (click)="addLast()">Add last</a>
+                <a class="dropdown-item" [ngClass]="{disabled : !selectedMember}" (click)="addBefore()">Add before the selected member</a>
+                <a class="dropdown-item" [ngClass]="{disabled : !selectedMember}" (click)="addAfter()">Add after the selected member</a>
+            </div>
         </span>
     </div>
 
     <div class="groupPanel-body">
         <ng-template [ngIf]="!partitionCollapsed">
-            <div class="panel panel-alt" *ngFor="let po of predicateObjectList" style="margin-bottom: 4px;">
-                <div class="panel-heading">
+            <div class="card card-alt" *ngFor="let po of predicateObjectList" style="margin-bottom: 4px;">
+                <div class="card-header">
                     <label>{{po.getPredicate().getShow()}}</label>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <ng-container *ngFor="let obj of po.getObjects()">
                         <!-- Member list -->
                         <resview-value-renderer
@@ -38,23 +38,23 @@
                             (edit)="editHandler(po.getPredicate(), obj)" (update)="onObjectUpdate()">
                         </resview-value-renderer>
                         
-                        <div class="panel panel-alt">
-                            <div class="panel-heading">
+                        <div class="card card-alt">
+                            <div class="card-header">
                                 <label style="flex: 1">Members</label>
-                                <div class="btn-group pull-right">
-                                    <button class="btn btn-xs btn-default dropdown-toggle predObjRenderPanelBtn" style="padding: 3px 6px;"
-                                        data-toggle="dropdown" title="Add member" [disabled]="addDisabled">
-                                        <span class="glyphicon glyphicon-plus" style="font-size: 9px;"></span>
+                                <div class="btn-group float-right" ngbDropdown>
+                                    <button class="btn btn-xs btn-light dropdown-toggle predObjRenderPanelBtn" style="padding: 3px 6px;"
+                                        data-toggle="dropdown" ngbDropdownToggle title="Add member" [disabled]="addDisabled">
+                                        <span class="fas fa-plus" style="font-size: 9px;"></span>
                                     </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a (click)="addFirst(po.getPredicate())">Add first</a></li>
-                                        <li><a (click)="addLast(po.getPredicate())">Add last</a></li>
-                                        <li [ngClass]="{disabled : !selectedMember}"><a (click)="addBefore(po.getPredicate())">Add before the selected member</a></li>
-                                        <li [ngClass]="{disabled : !selectedMember}"><a (click)="addAfter(po.getPredicate())">Add after the selected member</a></li>
-                                    </ul>
+                                    <div class="dropdown-menu" ngbDropdownMenu>
+                                        <a class="dropdown-item" (click)="addFirst(po.getPredicate())">Add first</a>
+                                        <a class="dropdown-item" (click)="addLast(po.getPredicate())">Add last</a>
+                                        <a class="dropdown-item" [ngClass]="{disabled : !selectedMember}" (click)="addBefore(po.getPredicate())">Add before the selected member</a>
+                                        <a class="dropdown-item" [ngClass]="{disabled : !selectedMember}" (click)="addAfter(po.getPredicate())">Add after the selected member</a>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body">
                                 <div *ngFor="let memb of obj.members" class="listItem" (click)="selectMember(memb)"
                                     [ngClass]="{active: memb == selectedMember}">
                                     <editable-resource style="flex: 1" [resource]="memb" [rendering]="rendering"

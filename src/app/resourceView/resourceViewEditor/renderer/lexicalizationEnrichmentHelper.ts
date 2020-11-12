@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { finalize } from 'rxjs/operators';
 import { ARTLiteral, ARTURIResource } from "../../../models/ARTResources";
 import { SKOS, SKOSXL } from "../../../models/Vocabulary";
 import { SkosServices } from "../../../services/skosServices";
@@ -38,12 +39,12 @@ export class LexicalizationEnrichmentHelper {
         } else if (predicate.equals(SKOSXL.hiddenLabel)) {
             fn = this.skosxlService.addHiddenLabel(concept, label, xLabelCls);
         }
-        return fn.finally(
-            () => {
+        return fn.pipe(
+            finalize(() => {
                 if (forceBlacklist) {
                     HttpServiceContext.setContextForce(false);
                 }
-            }
+            })
         );
     }
 

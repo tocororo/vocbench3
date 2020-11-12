@@ -1,8 +1,8 @@
 <div class="modal-header">
     <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">Add {{context.property.getShow()}}</h3>
+        <h3 class="modal-title" style="flex: 1">Add {{property.getShow()}}</h3>
         <span>
-            <button class="btn btn-default btn-xs" title="Change property" (click)="changeProperty()" [disabled]="!context.propChangeable">
+            <button class="btn btn-light btn-xs" title="Change property" (click)="changeProperty()" [disabled]="!propChangeable">
                 <rdf-resource [resource]="enrichingProperty"></rdf-resource>
             </button>
         </span>
@@ -10,10 +10,10 @@
 </div>
 <div class="modal-body">
     <div class="hbox" style="align-items: center;">
-        <input id="toFocus" type="text" class="form-control input-sm" style="flex: 1;" [(ngModel)]="inputTxt" (keydown)="onKeydown($event)">
+        <input ngbAutofocus type="text" class="form-control form-control-sm" style="flex: 1;" [(ngModel)]="inputTxt" (keydown.enter)="onEnter()">
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

@@ -1,8 +1,7 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from "../../../../models/ARTResources";
-import { ConceptTreePreference, ConceptTreeVisualizationMode, Properties, MultischemeMode } from "../../../../models/Properties";
+import { ConceptTreePreference, ConceptTreeVisualizationMode, MultischemeMode, Properties } from "../../../../models/Properties";
 import { UsersGroup } from "../../../../models/User";
 import { SKOS } from "../../../../models/Vocabulary";
 import { PreferencesSettingsServices } from "../../../../services/preferencesSettingsServices";
@@ -17,13 +16,11 @@ import { BrowsingModalServices } from "../../../../widget/modal/browsingModal/br
     selector: "concept-tree-settings-modal",
     templateUrl: "./conceptTreeSettingsModal.html",
 })
-export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
-
+export class ConceptTreeSettingsModal {
     private pristineConcPref: ConceptTreePreference;
 
-    private visualization: ConceptTreeVisualizationMode;
-    private visualizationModes: { label: string, value: ConceptTreeVisualizationMode }[] = [
+    visualization: ConceptTreeVisualizationMode;
+    visualizationModes: { label: string, value: ConceptTreeVisualizationMode }[] = [
         { label: "Hierarchy based", value: ConceptTreeVisualizationMode.hierarchyBased },
         { label: "Search based", value: ConceptTreeVisualizationMode.searchBased }
     ]
@@ -46,10 +43,8 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
     private multischemeModes: MultischemeMode[] = [MultischemeMode.or, MultischemeMode.and];
     private selectedMultischemeMode: MultischemeMode;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private resourceService: ResourcesServices, private propService: PropertyServices,
-        private prefService: PreferencesSettingsServices, private vbProp: VBProperties, private browsingModals: BrowsingModalServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private resourceService: ResourcesServices, private propService: PropertyServices,
+        private prefService: PreferencesSettingsServices, private vbProp: VBProperties, private browsingModals: BrowsingModalServices) {}
 
     ngOnInit() {
         let conceptTreePref: ConceptTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
@@ -270,7 +265,7 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
     }
 
 
-    ok(event: Event) {
+    ok() {
         if (this.pristineConcPref.visualization != this.visualization) {
             this.vbProp.setConceptTreeVisualization(this.visualization);
         }
@@ -372,16 +367,14 @@ export class ConceptTreeSettingsModal implements ModalComponent<BSModalContext> 
             this.pristineConcPref.visualization != this.visualization ||
             this.pristineConcPref.multischemeMode != this.selectedMultischemeMode
         ) {
-            event.stopPropagation();
-            event.preventDefault();
-            this.dialog.close();
+            this.activeModal.close();
         } else {//for other changes simply dismiss the modal
             this.cancel();
         }
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

@@ -23,9 +23,9 @@ export class ClassIndividualTreeComponent {
     /*in the future I might need an Output for selected class. In case, change nodeSelected in instanceSelected and
     create classSelected Output. (Memo: nodeSelected is to maintain the same Output of the other tree components)*/
 
-    private selectedClass: ARTURIResource = null; //the class selected from class tree
-    private currentSchemes: ARTURIResource[];//the scheme selecte in the concept tree (only if selected class is skos:Concept)
-    private selectedInstance: ARTURIResource; //the instance (or concept) selected in the instance list (or concept tree)
+    selectedClass: ARTURIResource = null; //the class selected from class tree
+    currentSchemes: ARTURIResource[];//the scheme selecte in the concept tree (only if selected class is skos:Concept)
+    selectedInstance: ARTURIResource; //the instance (or concept) selected in the instance list (or concept tree)
 
     ngOnInit() {
         if (this.schemes === undefined) { //if @Input scheme is not provided at all, get it from project preference
@@ -48,7 +48,7 @@ export class ClassIndividualTreeComponent {
     /**
      * Listener to the event nodeSelected thrown by the class-tree. Updates the selectedClass
      */
-    private onTreeClassSelected(cls: ARTURIResource) {
+    onTreeClassSelected(cls: ARTURIResource) {
         if (this.selectedClass == undefined || (this.selectedClass != undefined && this.selectedClass.getURI() != cls.getURI())) {
             this.selectedInstance = null; //reset the instance only if selected class changes
             this.nodeSelected.emit(null);
@@ -59,7 +59,7 @@ export class ClassIndividualTreeComponent {
     /**
      * Listener to click on element in the instance list. Updates the selectedInstance
      */
-    private onInstanceSelected(instance: ARTURIResource) {
+    onInstanceSelected(instance: ARTURIResource) {
         this.selectedInstance = instance;
         this.nodeSelected.emit(this.selectedInstance);
     }

@@ -1,42 +1,31 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from "../../../../models/ARTResources";
 import { ConceptTreePreference } from "../../../../models/Properties";
 import { SkosServices } from "../../../../services/skosServices";
 import { UIUtils } from "../../../../utils/UIUtils";
 import { VBContext } from "../../../../utils/VBContext";
 
-export class AddToSchemeModalData extends BSModalContext {
-    constructor(
-        public title: string = 'Modal Title',
-        public concept: ARTURIResource, //if provided, add only this concept and its descendants to the scheme, otherwise add all the concepts
-        public scheme: ARTURIResource
-    ) {
-        super();
-    }
-}
-
 @Component({
     selector: "add-to-scheme-modal",
     templateUrl: "./addToSchemeModal.html",
 })
-export class AddToSchemeModal implements ModalComponent<AddToSchemeModalData> {
-    context: AddToSchemeModalData;
+export class AddToSchemeModal {
+    @Input() title: string;
+    @Input() concept: ARTURIResource; //if provided, add only this concept and its descendants to the scheme, otherwise add all the concepts
+    @Input() scheme: ARTURIResource;
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
 
-    private setTopConcept: boolean = true;
+    setTopConcept: boolean = true;
 
-    private schemeList: { scheme: ARTURIResource, checked: boolean }[] =[];
+    schemeList: { scheme: ARTURIResource, checked: boolean }[] =[];
     private collapsed: boolean = true;
 
-    constructor(public dialog: DialogRef<AddToSchemeModalData>, private skosService: SkosServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private skosService: SkosServices) {}
 
     ngOnInit() {
-        this.skosService.getSchemesOfConcept(this.context.concept).subscribe(
+        this.skosService.getSchemesOfConcept(this.concept).subscribe(
             schemes => {
                 schemes.forEach(s => {
                     this.schemeList.push({ scheme: s, checked: true });
@@ -45,7 +34,7 @@ export class AddToSchemeModal implements ModalComponent<AddToSchemeModalData> {
         );
     }
 
-    private isOkEnabled() {
+    isOkEnabled() {
         if (this.schemeList.length > 0) {
             for (let i = 0; i < this.schemeList.length; i++) {
                 if (this.schemeList[i].checked) {
@@ -57,7 +46,7 @@ export class AddToSchemeModal implements ModalComponent<AddToSchemeModalData> {
         return true;
     }
 
-    ok(event: Event) {
+    ok() {
         let prefs: ConceptTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences;
         let broaderProps: ARTURIResource[] = [];
         prefs.broaderProps.forEach((prop: string) => broaderProps.push(new ARTURIResource(prop)));
@@ -73,19 +62,17 @@ export class AddToSchemeModal implements ModalComponent<AddToSchemeModalData> {
         })
 
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-        this.skosService.addMultipleConceptsToScheme(this.context.scheme, this.context.concept, null, broaderProps, narrowerProps,
+        this.skosService.addMultipleConceptsToScheme(this.scheme, this.concept, null, broaderProps, narrowerProps,
             includeSubProps, filterSchemes, this.setTopConcept).subscribe(
             stResp => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                event.stopPropagation();
-                event.preventDefault();
-                this.dialog.close();
+                this.activeModal.close();
             }
         );
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

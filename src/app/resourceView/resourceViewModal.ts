@@ -1,38 +1,30 @@
-import { Component, ElementRef } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTResource } from '../models/ARTResources';
 import { ResourceViewCtx } from "../models/ResourceView";
 import { UIUtils } from "../utils/UIUtils";
 import { ProjectContext } from "../utils/VBContext";
 
-export class ResourceViewModalData extends BSModalContext {
-    constructor(public resource: ARTResource, public readonly: boolean = true, public projectCtx?: ProjectContext) {
-        super();
-    }
-}
-
 @Component({
     selector: "resource-view-modal",
     templateUrl: "./resourceViewModal.html",
 })
-export class ResourceViewModal implements ModalComponent<ResourceViewModalData> {
-    context: ResourceViewModalData;
+export class ResourceViewModal {
+    @Input() resource: ARTResource;
+    @Input() readonly: boolean = true;
+    @Input() projectCtx: ProjectContext;
 
-    private resViewCtx: ResourceViewCtx = ResourceViewCtx.modal;
+    resViewCtx: ResourceViewCtx = ResourceViewCtx.modal;
 
-    constructor(public dialog: DialogRef<ResourceViewModalData>, private elementRef: ElementRef) {
-        this.context = dialog.context;
+    constructor(public activeModal: NgbActiveModal, private elementRef: ElementRef) {
     }
 
     ngAfterViewInit() {
         UIUtils.setFullSizeModal(this.elementRef);
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+    ok() {
+        this.activeModal.close();
     }
 
 }

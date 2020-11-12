@@ -1,12 +1,13 @@
-import { ElementRef, QueryList, ViewChild } from "@angular/core";
+import { Directive, ElementRef, QueryList, ViewChild } from "@angular/core";
 import { ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { AbstractListNode } from "./abstractListNode";
 import { AbstractStruct } from "./abstractStruct";
 
+@Directive()
 export abstract class AbstractList extends AbstractStruct {
 
-    @ViewChild('blockDivList') public blockDivElement: ElementRef; //the element in the view referenced with #blockDivList
+    @ViewChild('blockDivList', { static: true }) public blockDivElement: ElementRef; //the element in the view referenced with #blockDivList
     abstract viewChildrenNode: QueryList<AbstractListNode>;
 
     protected pendingSearchRes: ARTURIResource; //searched resource that is waiting to be selected once the list is initialized
@@ -74,7 +75,7 @@ export abstract class AbstractList extends AbstractStruct {
     initialNodes: number = 150;
     nodeLimit: number = this.initialNodes;
     increaseRate: number = this.initialNodes/5;
-    private onScroll() {
+    onScroll() {
         let scrollElement: HTMLElement = this.scrollableElement.nativeElement;
         // if (scrollElement.scrollTop === (scrollElement.scrollHeight - scrollElement.offsetHeight)) {
         //consider a little buffer of 2px in order to prevent potential problems (see https://stackoverflow.com/a/32283147/5805661)

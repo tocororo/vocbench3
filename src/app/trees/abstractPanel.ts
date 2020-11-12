@@ -1,4 +1,4 @@
-import { EventEmitter, Input, Output } from "@angular/core";
+import { Directive, EventEmitter, Input, Output } from "@angular/core";
 import { Subscription } from "rxjs";
 import { GraphMode } from "../graph/abstractGraph";
 import { GraphModalServices } from "../graph/modal/graphModalServices";
@@ -15,6 +15,7 @@ import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { MultiSubjectEnrichmentHelper } from "./multiSubjectEnrichmentHelper";
 
+@Directive()
 export abstract class AbstractPanel {
 
     /**
@@ -25,6 +26,7 @@ export abstract class AbstractPanel {
     @Input() deletable: boolean = true; //if true show the buttons to edit the tree/list
     @Input() readonly: boolean = false; //if true disable the buttons to edit the tree/list (useful to disable edit when exploring old version)
     @Input() allowMultiselection: boolean = false; //if true allow the possibility to enable the multiselection in the contained tree/list
+    @Input() hideSearch: boolean = false; //if true hide the search bar
     @Input() context: TreeListContext; //useful in some scenarios (ex. scheme list to show/hide the checkboxes, concept and class panel to show/hide configuration button)
     @Input() projectCtx: ProjectContext; //useful to make the panel (the underlying tree or list) work with another project, different from the open one
     @Output() nodeSelected = new EventEmitter<ARTURIResource>();
@@ -35,6 +37,8 @@ export abstract class AbstractPanel {
     /**
      * ATTRIBUTES
      */
+
+    GraphModeEnum = GraphMode; //workaround for using GraphMode in templatge
 
     abstract panelRole: RDFResourceRolesEnum; //declare the type of resources in the panel
 
@@ -191,7 +195,7 @@ export abstract class AbstractPanel {
      * Handler of advancedSearch event, simply propagates the event
      * @param resource
      */
-    private advancedSearch(resource: ARTResource) {
+    advancedSearch(resource: ARTResource) {
         this.advancedSearchEvent.emit(resource);
     }
 

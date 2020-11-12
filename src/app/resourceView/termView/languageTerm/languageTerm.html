@@ -9,8 +9,8 @@
             <inline-editable-value style="flex: 1; margin-left: 4px;" [focusOnInit]="focus" [value]="term.object" (valueEdited)="onValueEdited($event)" 
                 [disabled]="!editTermAuthorized || readonly">
             </inline-editable-value>
-            <button class="btn btn-xs btn-default minus-button " (click)="deleteTermBox()" [disabled]="!deleteTermAuthorized || readonly" title="Delete Term">
-                <span class="glyphicon glyphicon-minus" style="font-size: 9px;"></span>
+            <button class="btn btn-xs btn-light minus-button " (click)="deleteTermBox()" [disabled]="!deleteTermAuthorized || readonly" title="Delete Term">
+                <span class="fas fa-minus" style="font-size: 9px;"></span>
             </button>
         </div>
     </div>

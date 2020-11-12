@@ -1,6 +1,8 @@
-import { Observable } from "rxjs";
+import { from, Observable, of } from "rxjs";
+import { flatMap } from 'rxjs/operators';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTURIResource, RDFTypesEnum } from "../../../models/ARTResources";
-import { CustomForm, FormCollection } from "../../../models/CustomForms";
+import { CustomForm } from "../../../models/CustomForms";
 import { PropertyServices, RangeType } from "../../../services/propertyServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 
@@ -33,8 +35,8 @@ export class PropertyEnrichmentHelper {
      * @param basicModals used to prompt the user some decisions or to show error messages
      */
     public static getPropertyEnrichmentInfo(predicate: ARTURIResource, propService: PropertyServices, basicModals: BasicModalServices): Observable<PropertyEnrichmentInfo> {
-        return propService.getRange(predicate).flatMap(
-            range => {
+        return propService.getRange(predicate).pipe(
+            flatMap(range => {
                 var ranges = range.ranges;
                 let customForms: CustomForm[];
                 if (range.formCollection != null) {
@@ -49,18 +51,18 @@ export class PropertyEnrichmentHelper {
                 if (ranges != undefined && customForms == undefined) {
                     //Check on the rangeType. Available values: resource, literal, undetermined, inconsistent
                     if (ranges.type == RangeType.resource) {
-                        return Observable.of({ type: EnrichmentType.resource, rangeCollection: ranges.rangeCollection });
+                        return of({ type: EnrichmentType.resource, rangeCollection: ranges.rangeCollection });
                     } else if (ranges.type == RangeType.literal) {
                         let datatypes = ranges.rangeCollection ? ranges.rangeCollection.resources : null;
                         let dataRanges = ranges.rangeCollection ? ranges.rangeCollection.dataRanges : null;
-                        return Observable.of({
+                        return of({
                             type: EnrichmentType.literal,
                             allowedDatatypes: datatypes,
                             dataRanges: dataRanges
                         });
                     } else if (ranges.type == RangeType.undetermined) {
                         var options = [RDFTypesEnum.resource, RDFTypesEnum.literal];
-                        return Observable.fromPromise(
+                        return from(
                             basicModals.select("Select range type", null, options).then(
                                 (selectedRange: any) => {
                                     if (selectedRange == RDFTypesEnum.resource) {
@@ -75,8 +77,8 @@ export class PropertyEnrichmentHelper {
                             )
                         );
                     } else if (ranges.type == "inconsistent") {
-                        basicModals.alert("Error", "Error range of " + predicate.getShow() + " property is inconsistent", "error");
-                        return Observable.of({ type: null });
+                        basicModals.alert("Error", "Error range of " + predicate.getShow() + " property is inconsistent", ModalType.warning);
+                        return of({ type: null });
                     }
                 }
                 /**
@@ -97,7 +99,7 @@ export class PropertyEnrichmentHelper {
                     rangeOptions = rangeOptions.concat(customForms);
 
                     //ask the user to choose
-                    return Observable.fromPromise(
+                    return from(
                         basicModals.selectCustomForm("Select a range type", rangeOptions).then(
                             (selectedCF: CustomForm) => {
                                 //check if selected range is one of the customs
@@ -123,10 +125,10 @@ export class PropertyEnrichmentHelper {
                  */
                 else if (ranges == undefined && customForms != undefined) {
                     if (customForms.length == 1) {//just one CREntry => prompt the CR form without asking to choose which CRE to use
-                        return Observable.of({ type: EnrichmentType.customForm, form: customForms[0] });
+                        return of({ type: EnrichmentType.customForm, form: customForms[0] });
                     } else if (customForms.length > 1) { //multiple CREntry => ask which one to use
                         //prepare the range options with the custom range entries
-                        return Observable.fromPromise(
+                        return from(
                             basicModals.selectCustomForm("Select a Custom Range", customForms).then(
                                 (selectedCF: CustomForm) => {
                                     return { type: EnrichmentType.customForm, form: selectedCF };
@@ -138,7 +140,7 @@ export class PropertyEnrichmentHelper {
                         );
                     }
                 }
-            }
+            })
         );
     }
 

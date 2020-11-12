@@ -1,8 +1,9 @@
-import { EventEmitter, Output } from "@angular/core";
+import { Directive, EventEmitter, Output } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ARTResource } from "../../models/ARTResources";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 
+@Directive()
 export abstract class AbstractResViewVisualizationMode {
 
     //tells to the parent component that there are no more RV open

@@ -1,33 +1,22 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTNode } from "../../../models/ARTResources";
 import { Language } from "../../../models/LanguagesCountries";
-
-export class CopyLocalesModalData extends BSModalContext {
-    constructor(
-        public value: ARTNode,
-        public locales: Language[]
-    ) {
-        super();
-    }
-}
 
 @Component({
     selector: "copy-locale-modal",
     templateUrl: "./copyLocalesModal.html",
 })
-export class CopyLocalesModal implements ModalComponent<CopyLocalesModalData> {
-    context: CopyLocalesModalData;
+export class CopyLocalesModal {
+    @Input() value: ARTNode;
+    @Input() localesInput: Language[];
 
-    private locales: { locale: Language; checked: boolean; }[] = [];
+    locales: { locale: Language; checked: boolean; }[] = [];
 
-    constructor(public dialog: DialogRef<CopyLocalesModalData>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) {}
 
     ngOnInit() {
-        this.context.locales.forEach(l => {
+        this.localesInput.forEach(l => {
             this.locales.push({ locale: l, checked: true });
         });
     }
@@ -35,25 +24,25 @@ export class CopyLocalesModal implements ModalComponent<CopyLocalesModalData> {
     /**
      * Ok disabled if none of the locales is checked
      */
-    private isOkDisabled() {
+    isOkDisabled() {
         for (let i = 0; i < this.locales.length; i++) {
             if (this.locales[i].checked) return false;
         }
         return true;
     }
 
-    ok(event: Event) {
+    ok() {
         let returnData: Language[] = [];
         this.locales.forEach(l => {
             if (l.checked) {
                 returnData.push(l.locale);
             }
         });
-        this.dialog.close(returnData);
+        this.activeModal.close(returnData);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

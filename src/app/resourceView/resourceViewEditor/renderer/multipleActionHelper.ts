@@ -1,4 +1,5 @@
 import { Observable } from "rxjs";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTNode } from "../../../models/ARTResources";
 import { HttpServiceContext } from "../../../utils/HttpManager";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -55,14 +56,14 @@ export class MultipleActionHelper {
         let message = "The " + type + " of " + error.value.toNT() + " has failed due to the following reason:\n" +  error.error.name + 
                 ((error.error.message != null) ? ":\n" + error.error.message : "");
         let details = error.error.stack;
-        basicModals.alert("Error", message, "error", details);
+        basicModals.alert("Error", message, ModalType.error, details);
     }
     public static handleMultipleMultiActionError(errors: MultiActionError[], type: MultiActionType, basicModals: BasicModalServices) {
         let message = "The " + type + " of the following values have failed:"
         errors.forEach((e: MultiActionError) => {
             message += "\n\n" + e.value.toNT() + "\nReason:\n" + e.error.name + ((e.error.message != null) ? ":\n" + e.error.message : "");
         });
-        basicModals.alert("Error", message, "error");
+        basicModals.alert("Error", message, ModalType.error);
     }
 
 }

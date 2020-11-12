@@ -1,4 +1,5 @@
 import { Component, Input, ViewChild } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { GraphModalServices } from "../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { SearchSettings } from "../../../models/Properties";
@@ -6,6 +7,7 @@ import { OWL, RDF } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { SearchServices } from "../../../services/searchServices";
+import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { RoleActionResolver } from "../../../utils/RoleActionResolver";
 import { UIUtils } from "../../../utils/UIUtils";
@@ -17,7 +19,6 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { AbstractTreePanel } from "../../abstractTreePanel";
 import { MultiSubjectEnrichmentHelper } from "../../multiSubjectEnrichmentHelper";
 import { PropertyTreeComponent } from "../propertyTree/propertyTreeComponent";
-import { VBRequestOptions } from "../../../utils/HttpManager";
 
 @Component({
     selector: "property-tree-panel",
@@ -47,40 +48,6 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
         return actionCtx;
     }
 
-    // createRoot(role: RDFResourceRolesEnum) {
-    //     let propertyType: ARTURIResource = this.convertRoleToClass(role);
-    //     this.creationModals.newResourceCf("Create a new " + propertyType.getShow(), propertyType, false).then(
-    //         (data: any) => {
-    //             this.propService.createProperty(data.cls, data.uriResource, null, data.cfValue).subscribe();
-    //         },
-    //         () => {}
-    //     );
-    // }
-
-    // createChild() {
-    //     let parentRole: RDFResourceRolesEnum = this.selectedNode.getRole();
-    //     let propertyType: ARTURIResource = this.convertRoleToClass(parentRole);
-    //     this.creationModals.newResourceCf("Create subProperty of " + this.selectedNode.getShow(), propertyType, false).then(
-    //         (data: any) => {
-    //             this.propService.createProperty(data.cls, data.uriResource, this.selectedNode, data.cfValue).subscribe();
-    //         },
-    //         () => {}
-    //     );
-    // }
-
-    // delete() {
-    //     if (this.selectedNode.getAdditionalProperty(ResAttribute.MORE)) {
-    //         this.basicModals.alert("Operation denied", "Cannot delete " + this.selectedNode.getURI() + 
-    //             " since it has subProperty(ies). Please delete the subProperty(ies) and retry", "warning");
-    //         return;
-    //     }
-    //     this.propService.deleteProperty(this.selectedNode).subscribe(
-    //         stResp => {
-    //             this.selectedNode = null;
-    //         }
-    //     )
-    // }
-
     refresh() {
         this.viewChildTree.init();
     }
@@ -102,7 +69,7 @@ export class PropertyTreePanelComponent extends AbstractTreePanel {
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildTree.blockDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", ModalType.warning);
                 } else { //1 or more results
                     if (searchResult.length == 1) {
                         this.openTreeAt(searchResult[0]);

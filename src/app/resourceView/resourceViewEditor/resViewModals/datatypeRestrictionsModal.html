@@ -1,11 +1,11 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body vbox">
 
     <div style="margin-bottom: 4px;">
-        <div class="btn-group btn-group-xs pull-right">
-            <button *ngFor="let a of aspectSelectors" class="btn btn-default" [ngClass]="{active: selectedAspect == a}"
+        <div class="btn-group btn-group-xs float-right">
+            <button *ngFor="let a of aspectSelectors" class="btn btn-light" [ngClass]="{active: selectedAspect == a}"
                 (click)="selectedAspect = a">{{a}}</button>
         </div>
     </div>
@@ -17,6 +17,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

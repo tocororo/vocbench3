@@ -25,11 +25,11 @@ export class LanguageTermComponent {
     @Output() delete: EventEmitter<void> = new EventEmitter();
     @Output() update = new EventEmitter();
 
-    private focus: boolean;
+    focus: boolean;
     private lexicalizationModelType: string;
 
-    private editTermAuthorized: boolean;
-    private deleteTermAuthorized: boolean;
+    editTermAuthorized: boolean;
+    deleteTermAuthorized: boolean;
 
     constructor(private skosService: SkosServices, private skosxlService: SkosxlServices, private resourcesService: ResourcesServices) { }
 
@@ -49,7 +49,7 @@ export class LanguageTermComponent {
      * Take term to delete from view and pass value to parent component which manages real delete operation
      * @param termToShow 
      */
-    private deleteTermBox() {
+    deleteTermBox() {
         this.delete.emit();
     }
 
@@ -57,7 +57,7 @@ export class LanguageTermComponent {
      * This method allows to edit an object term taken from the view or to add a new term
      * @param newValue 
      */
-    private onValueEdited(newValue: string) {
+    onValueEdited(newValue: string) {
         if (this.term.object) { // case update an existing term
             let oldValue = this.term.object.getShow();
             if (this.lexicalizationModelType == SKOSXL.uri) {

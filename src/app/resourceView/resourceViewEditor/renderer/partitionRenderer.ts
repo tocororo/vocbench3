@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Component, Directive, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { Observable } from 'rxjs';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { AddAction, ResViewPartition, ResViewUtils } from "../../../models/ResourceView";
 import { CustomFormsServices } from "../../../services/customFormsServices";
@@ -9,15 +10,9 @@ import { ResourceUtils } from "../../../utils/ResourceUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { BrowseExternalResourceModalReturnData } from "../resViewModals/browseExternalResourceModal";
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
-import { MultiActionError, MultiActionFunction, MultipleActionHelper, MultiActionType } from "./multipleActionHelper";
+import { MultiActionError, MultiActionFunction, MultiActionType, MultipleActionHelper } from "./multipleActionHelper";
 
-@Component({
-    selector: "partition-renderer",
-    templateUrl: "./partitionRenderer.html",
-    styles: [
-        '.hidden: { visibility: hidden; }'
-    ]
-})
+@Directive()
 export abstract class PartitionRenderer {
 
     /**
@@ -63,7 +58,7 @@ export abstract class PartitionRenderer {
     /**
      * Label of the partition
      */
-    private label: string;
+    label: string;
     /**
      * Src of the "add" icon placed on the groupPanel outline.
      * This is specific of a partition.
@@ -78,9 +73,9 @@ export abstract class PartitionRenderer {
     /**
      * Action authorization
      */
-    private addDisabled: boolean = false;
-    private addExteranlResourceAllowed: boolean = false;
-    private addManuallyAllowed: boolean = false;
+    addDisabled: boolean = false;
+    addExteranlResourceAllowed: boolean = false;
+    addManuallyAllowed: boolean = false;
 
     /**
      * METHODS
@@ -112,7 +107,7 @@ export abstract class PartitionRenderer {
     /**
      * Listener of add event fired by "+" or "add value (manually)" buttons (manually parameter true)
      */
-    private addHandler(predicate?: ARTURIResource, action?: AddAction) {//manually becomes type: "default"|manuelly|remote
+    addHandler(predicate?: ARTURIResource, action?: AddAction) {//manually becomes type: "default"|manuelly|remote
         if (!predicate) {
             this.getPredicateToEnrich().subscribe(
                 predicate => {
@@ -178,7 +173,7 @@ export abstract class PartitionRenderer {
                         } else { //value type not compliant with predicate range
                             let warningMsg = "The type of value is not compliant with the range of the property " + property.getShow()
                                 + ". The operation may cause inconsistencies and malfunction. Do you want to force the add operation? ";
-                            this.basicModals.confirm("Warning", warningMsg, "warning").then(
+                            this.basicModals.confirm("Warning", warningMsg, ModalType.warning).then(
                                 confirm => {
                                     this.resourcesService.addValue(this.resource, property, value).subscribe(
                                         stResp => this.update.emit()
@@ -225,7 +220,7 @@ export abstract class PartitionRenderer {
      */
     private removeHandler(predicate: ARTURIResource, object?: ARTNode) {
         if (object == null) {
-            this.basicModals.confirm("Delete all values", "You are deleting all the " + predicate.getShow() + " values. Are you sure?", "warning").then(
+            this.basicModals.confirm("Delete all values", "You are deleting all the " + predicate.getShow() + " values. Are you sure?", ModalType.warning).then(
                 yes => this.removeAllValues(predicate),
                 no => { }
             )

@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from 'rxjs';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTNode, ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -22,7 +23,7 @@ export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.rdfsMembers;
     addBtnImgTitle = "Add member";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/property_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/property_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
@@ -38,7 +39,7 @@ export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
         if (this.resource.getRole() == RDFResourceRolesEnum.ontolexLexicalEntry) {
             this.basicModals.confirm("Add member", "It is not recommended to edit the member list from this section. There are no checks"
                 + " on the rdf:_n predicate so you could compromise the integrity of the list."
-                + " Do you want to continue?", "warning").then(
+                + " Do you want to continue?", ModalType.warning).then(
                 confirm => {
                     this.resViewModals.addRdfsMembers(predicate, propChangeable).then(
                         (data: RdfsMembersModalReturnData) => {
@@ -59,7 +60,7 @@ export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(value instanceof ARTURIResource);
+        return of(value instanceof ARTURIResource);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
@@ -67,7 +68,7 @@ export class RdfsMembersPartitionRenderer extends PartitionRenderSingleRoot {
         if (this.resource.getRole() == RDFResourceRolesEnum.ontolexLexicalEntry) {
             this.basicModals.confirm("Delete member", "Deleting a single member of an ordered constituent list could compromise the integrity of the members section."
                 + " If you want to edit the members, it is highly recommended to add a new constituent list from the constituents section."
-                + " Do you want to confirm the deletion?", "warning").then(
+                + " Do you want to confirm the deletion?", ModalType.warning).then(
                 confirm => {
                     this.getRemoveFunction(predicate, object).subscribe(
                         stResp => {

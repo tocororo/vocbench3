@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { LexEntryVisualizationMode, LexicalEntryListPreference } from "../../../../models/Properties";
 import { VBContext } from "../../../../utils/VBContext";
 import { VBProperties } from "../../../../utils/VBProperties";
@@ -9,13 +8,12 @@ import { VBProperties } from "../../../../utils/VBProperties";
     selector: "lex-entry-list-settings-modal",
     templateUrl: "./lexicalEntryListSettingsModal.html",
 })
-export class LexicalEntryListSettingsModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class LexicalEntryListSettingsModal {
 
     private pristineLexEntryPref: LexicalEntryListPreference;
 
-    private visualization: LexEntryVisualizationMode;
-    private visualizationModes: { label: string, value: LexEntryVisualizationMode }[] = [
+    visualization: LexEntryVisualizationMode;
+    visualizationModes: { label: string, value: LexEntryVisualizationMode }[] = [
         { label: "Index based", value: LexEntryVisualizationMode.indexBased },
         { label: "Search based", value: LexEntryVisualizationMode.searchBased }
     ]
@@ -25,9 +23,7 @@ export class LexicalEntryListSettingsModal implements ModalComponent<BSModalCont
     private indexLenght: number;
     private lenghtChoices: number[] = [1, 2];
 
-    constructor(public dialog: DialogRef<BSModalContext>, private vbProp: VBProperties) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private vbProp: VBProperties) {}
 
     ngOnInit() {
         let lexEntryPref: LexicalEntryListPreference = VBContext.getWorkingProjectCtx().getProjectPreferences().lexEntryListPreferences;
@@ -37,7 +33,7 @@ export class LexicalEntryListSettingsModal implements ModalComponent<BSModalCont
         this.indexLenght = lexEntryPref.indexLength;
     }
 
-    ok(event: Event) {
+    ok() {
         if (this.pristineLexEntryPref.visualization != this.visualization) {
             this.vbProp.setLexicalEntryListVisualization(this.visualization);
         }
@@ -51,13 +47,11 @@ export class LexicalEntryListSettingsModal implements ModalComponent<BSModalCont
             }
         }
         
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+        this.activeModal.close();
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

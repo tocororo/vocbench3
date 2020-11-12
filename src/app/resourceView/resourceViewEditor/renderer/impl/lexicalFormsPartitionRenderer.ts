@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { from, Observable, of } from 'rxjs';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTNode, ARTResource, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { OntoLex } from "../../../../models/Vocabulary";
@@ -21,7 +22,7 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
 
     partition = ResViewPartition.lexicalForms;
     addBtnImgTitle = "Add a lexical form";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/objectProperty_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/objectProperty_create.png";
 
     private lexiconLang: string; //cache the language of the lexicon
 
@@ -37,7 +38,7 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
 
     add(predicate: ARTURIResource, propChangeable: boolean) {
         if (!this.isKnownProperty(predicate)) {
-            this.basicModals.alert("Unknown property", predicate.getShow() + " is not a lexical form known property, it cannot be handled.", "error");
+            this.basicModals.alert("Unknown property", predicate.getShow() + " is not a lexical form known property, it cannot be handled.", ModalType.warning);
             return;
         }
 
@@ -66,13 +67,13 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
         if (this.lexiconLang == null) {
             return this.ontolexService.getLexicalEntryLanguage(<ARTURIResource>this.resource);
         } else {
-            return Observable.of(this.lexiconLang);
+            return of(this.lexiconLang);
         }
     }
 
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
-        return Observable.fromPromise(
+        return from(
             this.browsingModals.browsePropertyTree("Select a property", this.rootProperties).then(
                 (selectedProp: any) => {
                     return selectedProp;
@@ -83,7 +84,7 @@ export class LexicalFormsPartitionRenderer extends PartitionRendererMultiRoot {
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(value instanceof ARTURIResource);
+        return of(value instanceof ARTURIResource);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

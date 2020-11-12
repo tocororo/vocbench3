@@ -9,19 +9,17 @@
             <label class="groupPanel-heading-content">{{label}}:</label>
         </span>
         <span class="groupPanel-heading-content groupPanel-add-btn">
-            <button class="resViewPartitionAddBtn" (click)="addHandler(null, 'default')" [title]="addBtnImgTitle" [disabled]="addDisabled">
+            <button class="resViewPartitionAddBtn" (click)="addHandler(null, AddAction.default)" [title]="addBtnImgTitle" [disabled]="addDisabled">
                 <img [src]="addBtnImgSrc"/>
             </button>
-            <div *ngIf="addManuallyAllowed" class="btn-group" style="vertical-align: initial;">
-                <button class="transparentBtn" style="width: 12px; padding-right: 2px;" data-toggle="dropdown">
-                    <span class="caret" style="margin: 0px;"></span>
+            <div *ngIf="addManuallyAllowed" class="btn-group" style="vertical-align: initial;" ngbDropdown>
+                <button class="dropdown-toggle transparentBtn" style="width: 12px; padding-right: 2px;" data-toggle="dropdown" ngbDropdownToggle>
+                    <span class="fas fa-caret-down fa-sm" style="margin: 0px;"></span>
                 </button>
-                <ul class="dropdown-menu pull-right">
-                    <li [ngClass]="{ disabled: addDisabled }"><a (click)="addManually()">Add value manually</a></li>
-                    <li *ngIf="addExteranlResourceAllowed" [ngClass]="{ disabled: addDisabled }">
-                        <a (click)="addExternalValue()">Add value from another project</a>
-                    </li>
-                </ul>
+                <div class="dropdown-menu float-right" ngbDropdownMenu>
+                    <a class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addManually()">Add value manually</a>
+                    <a *ngIf="addExteranlResourceAllowed" class="dropdown-item" [ngClass]="{ disabled: addDisabled }" (click)="addExternalValue()">Add value from another project</a>
+                </div>
             </div>
         </span>
     </div>

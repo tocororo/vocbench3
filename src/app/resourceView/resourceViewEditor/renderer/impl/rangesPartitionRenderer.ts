@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { forkJoin, Observable, of } from "rxjs";
 import { ARTBNode, ARTLiteral, ARTNode, ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -21,7 +21,7 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.ranges;
     addBtnImgTitle = "Add a range";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/cls_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/cls_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
@@ -106,9 +106,9 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
         if (predicate.getRole() == RDFResourceRolesEnum.datatypeProperty) { //datatype property accepts literal as value
-            return Observable.of(value instanceof ARTLiteral);
+            return of(value instanceof ARTLiteral);
         } else {
-            return Observable.of(value instanceof ARTURIResource);
+            return of(value instanceof ARTURIResource);
         }
     }
 
@@ -174,7 +174,7 @@ export class RangesPartitionRenderer extends PartitionRenderSingleRoot {
                     removeFnArray.push(this.getRemoveFunction(predicate, notClassAxioms[j]));
                 }
                 //collects remove function for all the suspicious class axioms ranges
-                Observable.forkJoin(isClassAxiomFnArray).subscribe(
+                forkJoin(isClassAxiomFnArray).subscribe(
                     results => {
                         for (var j = 0; j < results.length; j++) {
                             if (results[j]) { //is class axiom

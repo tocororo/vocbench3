@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { from, Observable, of } from "rxjs";
 import { ARTLiteral, ARTNode, ARTResource, ARTURIResource } from "../../../../models/ARTResources";
 import { CustomFormValue } from "../../../../models/CustomForms";
 import { Language } from "../../../../models/LanguagesCountries";
@@ -23,7 +23,7 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.notes;
     addBtnImgTitle = "Add a note";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/annotationProperty_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/annotationProperty_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
@@ -40,18 +40,18 @@ export class NotesPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
-        return Observable.fromPromise(
+        return from(
             this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
                 selectedProp => {
                     return selectedProp;
                 },
-                () => { }
+                () => { return null }
             )
         );
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(true); //notes accept all kinds of values
+        return of(true); //notes accept all kinds of values
     }
 
 

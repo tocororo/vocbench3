@@ -5,60 +5,58 @@
 
     <div class="hbox" style="align-items: center; flex: initial">
         <label style="margin-right: 4px; white-space: nowrap;">Visualization mode:</label>
-        <select class="form-control input-sm" [(ngModel)]="visualization">
+        <select class="form-control" [(ngModel)]="visualization">
             <option *ngFor="let vm of visualizationModes" [value]="vm.value">{{vm.label}}</option>
         </select>
     </div>
 
-    <div *ngIf="visualization == 'hierarchyBased'" class="panel panel-default vbox" style="margin-top: 6px;">
-        <div class="panel-body vbox">
+    <div *ngIf="visualization == 'hierarchyBased'" class="card card-default vbox" style="margin-top: 6px;">
+        <div class="card-body vbox">
 
-            <div class="form-horizontal">
-                <div class="form-group">
-                    <label class="control-label col-sm-4">
-                        Top concepts limitation
-                        <span class="glyphicon glyphicon-info-sign" 
-                            title="Sets the maximum amount of top concepts visible in the tree. This setting prevents the initialization of a tree that might cause performance issues"></span>
-                    </label>
-                    <div class="col-sm-8">
-                        <input class="form-control input-sm" type="number" min="1" [(ngModel)]="safeToGoLimit">
-                    </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-4">
+                    Top concepts limitation
+                    <span class="fas fa-info-circle" 
+                        title="Sets the maximum amount of top concepts visible in the tree. This setting prevents the initialization of a tree that might cause performance issues"></span>
+                </label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="number" min="1" [(ngModel)]="safeToGoLimit">
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-4">
-                        Multi-scheme mode
-                        <span class="glyphicon glyphicon-info-sign" 
-                            title="Toggles between OR and AND scheme-based filter of concepts in the concept tree"></span>
-                    </label>
-                    <div class="col-sm-8">
-                        <select class="form-control input-sm" [(ngModel)]="selectedMultischemeMode">
-                            <option *ngFor="let mode of multischemeModes" [value]="mode">{{mode | uppercase}}</option>
-                        </select>
-                    </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-4">
+                    Multi-scheme mode
+                    <span class="fas fa-info-circle" 
+                        title="Toggles between OR and AND scheme-based filter of concepts in the concept tree"></span>
+                </label>
+                <div class="col-sm-8">
+                    <select class="form-control" [(ngModel)]="selectedMultischemeMode">
+                        <option *ngFor="let mode of multischemeModes" [value]="mode">{{mode | uppercase}}</option>
+                    </select>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-4">
-                        Base broader property
-                        <span class="glyphicon glyphicon-info-sign" title="Base broader property to be selected when creating narrower concepts"></span>
-                    </label>
-                    <div class="col-sm-8">
-                        <div class="input-group input-group-sm">
-                            <input type="text" class="form-control" [ngModel]="baseBroaderProp" readonly>
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" (click)="changeBaseBroaderProperty()">
-                                    <img src="../../../../../assets/images/icons/res/propObject.png"/>
-                                </button>
-                            </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-4">
+                    Base broader property
+                    <span class="fas fa-info-circle" title="Base broader property to be selected when creating narrower concepts"></span>
+                </label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input type="text" class="form-control" [ngModel]="baseBroaderProp" readonly>
+                        <div class="input-group-append">
+                            <button class="btn btn-light" (click)="changeBaseBroaderProperty()">
+                                <img src="../../../../../assets/images/icons/res/propObject.png"/>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="panel panel-default vbox" style="margin-top: 6px;">
-                <div class="panel-heading">
+            <div class="card card-default vbox" style="margin-top: 6px;">
+                <div class="card-header">
                     <label>Management of broader/narrower</label>
                 </div>
-                <div class="panel-body vbox">
+                <div class="card-body vbox">
 
                     <div class="alert alert-info" style="margin-bottom: 4px;">
                         Here it is possible to customize the properties on which the concept tree hierarchy is based on.<br>
@@ -67,40 +65,40 @@
                     </div>
 
                     <div class="hbox">
-                        <div class="panel panel-alt vbox">
-                            <div class="panel-heading">
+                        <div class="card card-alt vbox">
+                            <div class="card-header">
                                 <label style="flex:1">Broader</label>
                                 <div class="btn-toolbar" role="toolbar">
                                     <div class="btn-group btn-group-xs">
-                                        <button class="btn btn-default" (click)="addBroader()">
-                                            <span class="glyphicon glyphicon-plus"></span>
+                                        <button class="btn btn-light" (click)="addBroader()">
+                                            <span class="fas fa-plus"></span>
                                         </button>
-                                        <button class="btn btn-default" (click)="removeBroader()" [disabled]="!selectedBroader">
-                                            <span class="glyphicon glyphicon-minus"></span>
+                                        <button class="btn btn-light" (click)="removeBroader()" [disabled]="!selectedBroader">
+                                            <span class="fas fa-minus"></span>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="panel-body vbox" style="min-height: 80px;">
+                            <div class="card-body vbox" style="min-height: 80px;">
                                 <resource-list [resources]="broaderProps" (nodeSelected)="selectedBroader = $event"></resource-list>
                             </div>
                         </div>
 
-                        <div class="panel panel-alt vbox" style="margin-left: 4px;">
-                            <div class="panel-heading">
+                        <div class="card card-alt vbox" style="margin-left: 4px;">
+                            <div class="card-header">
                                 <label style="flex:1">Narrower</label>
                                 <div class="btn-toolbar" role="toolbar">
                                     <div class="btn-group btn-group-xs">
-                                        <button class="btn btn-default" (click)="addNarrower()">
-                                            <span class="glyphicon glyphicon-plus"></span>
+                                        <button class="btn btn-light" (click)="addNarrower()">
+                                            <span class="fas fa-plus"></span>
                                         </button>
-                                        <button class="btn btn-default" (click)="removeNarrower()" [disabled]="!selectedNarrower">
-                                            <span class="glyphicon glyphicon-minus"></span>
+                                        <button class="btn btn-light" (click)="removeNarrower()" [disabled]="!selectedNarrower">
+                                            <span class="fas fa-minus"></span>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="panel-body vbox" style="min-height: 80px;">
+                            <div class="card-body vbox" style="min-height: 80px;">
                                 <resource-list [resources]="narrowerProps" (nodeSelected)="selectedNarrower = $event"></resource-list>
                             </div>
                         </div>
@@ -111,14 +109,14 @@
                             <label>
                                 <input type="checkbox" [(ngModel)]="syncInverse" (ngModelChange)="onSyncChange()">Sync inverse properties
                             </label>
-                            <span class="glyphicon glyphicon-info-sign" title="Keep synced the broader/narrower properties with their inverse properties">
+                            <span class="fas fa-info-circle" title="Keep synced the broader/narrower properties with their inverse properties">
                             </span>
                         </div>
                         <div class="checkbox-inline">
                             <label>
                                 <input type="checkbox" [(ngModel)]="includeSubProps">Include subProperties
                             </label>
-                            <span class="glyphicon glyphicon-info-sign"
+                            <span class="fas fa-info-circle"
                                 title="Includes the subProperties of the selected broader/narrower properties">
                             </span>
                         </div>
@@ -128,16 +126,16 @@
             </div>
         </div>
 
-        <div *ngIf="userGroup" class="panel-footer" style="margin-top: 6px;">
-            <button class="btn btn-xs btn-default pull-right" (click)="applyGroupSettings()">
+        <div *ngIf="userGroup" class="card-footer" style="margin-top: 6px;">
+            <button class="btn btn-xs btn-light float-right" (click)="applyGroupSettings()">
                 Apply group settings
-                <span class="glyphicon glyphicon-info-sign" [title]="'Group: ' + userGroup.shortName"></span>
+                <span class="fas fa-info-circle" [title]="'Group: ' + userGroup.shortName"></span>
             </button>
         </div>
     </div>
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

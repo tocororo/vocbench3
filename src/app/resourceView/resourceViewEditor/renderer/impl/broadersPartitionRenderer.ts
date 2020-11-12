@@ -1,19 +1,20 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from "rxjs";
+import { map } from 'rxjs/operators';
 import { ARTNode, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { PropertyServices } from "../../../../services/propertyServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SkosServices } from "../../../../services/skosServices";
+import { VBContext } from "../../../../utils/VBContext";
 import { VBEventHandler } from "../../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../../../widget/modal/browsingModal/browsingModalServices";
 import { CreationModalServices } from "../../../../widget/modal/creationModal/creationModalServices";
 import { ResViewModalServices } from "../../resViewModals/resViewModalServices";
-import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 import { MultiActionFunction } from "../multipleActionHelper";
-import { VBContext } from "../../../../utils/VBContext";
+import { PartitionRenderSingleRoot } from "../partitionRendererSingleRoot";
 
 @Component({
     selector: "broaders-renderer",
@@ -23,7 +24,7 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.broaders;
     addBtnImgTitle = "Add broader";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/concept_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/concept_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices, 
@@ -39,13 +40,13 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
     getPredicateToEnrich(): Observable<ARTURIResource> {
         let broaderPropUri = VBContext.getWorkingProjectCtx().getProjectPreferences().conceptTreePreferences.baseBroaderUri;
         if (broaderPropUri != this.rootProperty.getURI()) {
-            return this.resourcesService.getResourceDescription(new ARTURIResource(broaderPropUri)).map(
-                res => {
+            return this.resourcesService.getResourceDescription(new ARTURIResource(broaderPropUri)).pipe(
+                map(res => {
                     return <ARTURIResource>res;
-                }
+                })
             );
         } else {
-            return Observable.of(this.rootProperty);
+            return of(this.rootProperty);
         }
     }
 
@@ -66,10 +67,10 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
                 } else { //it's enriching a subProperty of skos:broader
                     values.forEach((v: ARTURIResource) => {
                         addFunctions.push({
-                            function: this.resourcesService.addValue(this.resource, prop, v).map(
-                                stResp => {
+                            function: this.resourcesService.addValue(this.resource, prop, v).pipe(
+                                map(stResp => {
                                     this.eventHandler.broaderAddedEvent.emit({narrower: <ARTURIResource>this.resource, broader: v});
-                                }
+                                })
                             ),
                             value: v
                         });
@@ -82,7 +83,7 @@ export class BroadersPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(value instanceof ARTURIResource);
+        return of(value instanceof ARTURIResource);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

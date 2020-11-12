@@ -1,4 +1,4 @@
-import { ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { Directive, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../models/ARTResources";
 import { ResourceUtils } from "../utils/ResourceUtils";
@@ -6,6 +6,7 @@ import { TreeListContext } from "../utils/UIUtils";
 import { ProjectContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 
+@Directive()
 export abstract class AbstractStruct {
 
     @Input() rendering: boolean = true; //if true the nodes in the list should be rendered with the show, with the qname otherwise

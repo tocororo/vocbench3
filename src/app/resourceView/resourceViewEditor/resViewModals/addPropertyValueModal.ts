@@ -1,46 +1,28 @@
-import { Component, ElementRef } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTLiteral, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from '../../../models/ARTResources';
 import { OWL, RDF, RDFS, SKOS, SKOSXL } from '../../../models/Vocabulary';
 import { PropertyServices, RangeType } from "../../../services/propertyServices";
-import { UIUtils, TreeListContext } from "../../../utils/UIUtils";
+import { TreeListContext, UIUtils } from "../../../utils/UIUtils";
 import { VBContext } from "../../../utils/VBContext";
 import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
-
-export class AddPropertyValueModalData extends BSModalContext {
-    /**
-     * @param title title of the dialog
-     * @param resource resource that is going to enrich with the property-value pair. 
-     *  Useful, in case the modal is used to add a range to a property, to know if the property is a datatype
-     * @param property root property that the modal should allow to enrich
-     * @param propChangeable tells whether the input property can be changed exploring the properties subtree.
-     * @param allowMultiselection tells whether the multiselection in the tree/list is allowed. Default is true. (some scenario may
-     * require to disable the multiselection, like the addFirst/After...() in oreded collection).
-     */
-    constructor(
-        public title: string = 'Add property value',
-        public resource: ARTResource,
-        public property: ARTURIResource,
-        public propChangeable: boolean = true, 
-        public rootProperty: ARTURIResource,
-        public allowMultiselection: boolean = true, 
-    ) {
-        super();
-    }
-}
 
 @Component({
     selector: "add-property-value-modal",
     templateUrl: "./addPropertyValueModal.html",
 })
-export class AddPropertyValueModal implements ModalComponent<AddPropertyValueModalData> {
-    context: AddPropertyValueModalData;
+export class AddPropertyValueModal {
+    @Input() title: string = 'Add property value';
+    @Input() resource: ARTResource;
+    @Input() property: ARTURIResource;
+    @Input() propChangeable: boolean = true;
+    @Input() rootPropertyInput: ARTURIResource;
+    @Input() allowMultiselection: boolean = true;
 
     private treeListCtx: TreeListContext = TreeListContext.addPropValue;
 
     private rootProperty: ARTURIResource; //root property of the partition that invoked this modal
-    private enrichingProperty: ARTURIResource;
+    enrichingProperty: ARTURIResource;
 
     private viewType: ViewType;
     private multiselection: boolean = false;
@@ -56,12 +38,12 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private showAllClass: boolean = false;
     private defaultRootClasses: ARTURIResource[] = [RDFS.resource];
 
-    private showAspectSelector: boolean = false;
-    private treeListAspectSelector: AspectSelector = { show: "Existing Resource", id: 0 };
-    private manchExprAspectSelector: AspectSelector = { show: "Manchester Expression", id: 1 };
-    private dataRangeAspectSelector: AspectSelector = { show: "Enumeration", id: 2 };
+    showAspectSelector: boolean = false;
+    treeListAspectSelector: AspectSelector = { show: "Existing Resource", id: 0 };
+    manchExprAspectSelector: AspectSelector = { show: "Manchester Expression", id: 1 };
+    dataRangeAspectSelector: AspectSelector = { show: "Enumeration", id: 2 };
     private aspectSelectors: AspectSelector[];
-    private selectedAspectSelector: AspectSelector = this.treeListAspectSelector;
+    selectedAspectSelector: AspectSelector = this.treeListAspectSelector;
 
     private showInversePropertyCheckbox: boolean = false;
 
@@ -72,14 +54,13 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
     private inverseProp: boolean = false; //for properties selection (when viewType is propertyTree and showInversePropertyCheckbox is true)
     private datarange: ARTLiteral[];
 
-    constructor(public dialog: DialogRef<AddPropertyValueModalData>, private propService: PropertyServices, 
+    constructor(public activeModal: NgbActiveModal, private propService: PropertyServices, 
         private browsingModals: BrowsingModalServices, private elementRef: ElementRef) {
-        this.context = dialog.context;
     }
 
     ngOnInit() {
-        this.rootProperty = this.context.rootProperty ? this.context.rootProperty : this.context.property;
-        this.enrichingProperty = this.context.property;
+        this.rootProperty = this.rootPropertyInput ? this.rootPropertyInput : this.property;
+        this.enrichingProperty = this.property;
 
         this.updateRange(this.rootProperty);
     }
@@ -88,7 +69,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         UIUtils.setFullSizeModal(this.elementRef)
     }
 
-    private changeAspectSelector(selector: AspectSelector) {
+    changeAspectSelector(selector: AspectSelector) {
         this.selectedAspectSelector = selector;
         //update the modal flex according the selector: if manchester expr there's no need to fill the whole window
         if (this.selectedAspectSelector == this.manchExprAspectSelector) {
@@ -99,7 +80,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         }
     }
 
-    private changeProperty() {
+    changeProperty() {
         this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
             (selectedProp: any) => {
                 if (!this.enrichingProperty.equals(selectedProp)) {
@@ -122,7 +103,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
             this.viewType = ViewType.classAndIndividual;
             this.rootsForClsIndList = [SKOS.concept, SKOS.collection];
             return;
-        } else if (this.rootProperty.equals(RDFS.range) && this.context.resource.getRole() == RDFResourceRolesEnum.datatypeProperty) {
+        } else if (this.rootProperty.equals(RDFS.range) && this.resource.getRole() == RDFResourceRolesEnum.datatypeProperty) {
             /**
              * getRange of rdfs:range returns rdfs:Class as rangeCollection, but if the resource which it is
              * going to enrich is a datatype property, the allowed range should be limited to a datatype.
@@ -202,7 +183,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
      * used to tell that the inverse of the selected property should be used.
      */
     private updateShowAspectSelector() {
-        if (this.context.resource.getRole() == RDFResourceRolesEnum.datatypeProperty && this.enrichingProperty.equals(RDFS.range)) {
+        if (this.resource.getRole() == RDFResourceRolesEnum.datatypeProperty && this.enrichingProperty.equals(RDFS.range)) {
             this.treeListAspectSelector.show = "Existing Datatype"; //in case of setting the range of a datatype property
         } else {
             this.treeListAspectSelector.show = "Existing Resource";
@@ -215,7 +196,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         if (//partition domains
             this.rootProperty.equals(RDFS.domain) ||
             //partition ranges
-            (this.rootProperty.equals(RDFS.range) && this.context.resource.getRole() != RDFResourceRolesEnum.datatypeProperty) ||
+            (this.rootProperty.equals(RDFS.range) && this.resource.getRole() != RDFResourceRolesEnum.datatypeProperty) ||
             //partition class axiom
             this.rootProperty.equals(RDFS.subClassOf) || this.rootProperty.equals(OWL.equivalentClass) ||
             this.rootProperty.equals(OWL.complementOf) || this.rootProperty.equals(OWL.disjointWith)
@@ -225,7 +206,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
             this.selectedAspectSelector = this.aspectSelectors[0]; //select as default tree and list selector
         }
         //datarange expression selector
-        if (this.rootProperty.equals(RDFS.range) && this.context.resource.getRole() == RDFResourceRolesEnum.datatypeProperty
+        if (this.rootProperty.equals(RDFS.range) && this.resource.getRole() == RDFResourceRolesEnum.datatypeProperty
         ) {
             this.showAspectSelector = true;
             this.aspectSelectors = [this.treeListAspectSelector, this.dataRangeAspectSelector];
@@ -240,11 +221,11 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         }
     }
 
-    private onResourceSelected(resource: ARTURIResource) {
+    onResourceSelected(resource: ARTURIResource) {
         this.selectedResource = resource;
     }
 
-    private onPropertySelected(resource: ARTURIResource) {
+    onPropertySelected(resource: ARTURIResource) {
         this.onResourceSelected(resource);
         //Inverse Property checbox is enabled only for object properties, for other properties set it unchecked and disable it
         if (resource != null && resource.getRole() != RDFResourceRolesEnum.objectProperty) {
@@ -256,7 +237,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
      * Inverse Property flag should be enabled only when the selectedResource in an ObjectProperty
      * or, in multiselection mode, when all the checkedResources are ObjectProperty
      */
-    private isInversePropertyCheckboxEnabled() {
+    isInversePropertyCheckboxEnabled() {
         let enabled: boolean;
         if (this.multiselection) {
             let notObjProp: boolean = false;
@@ -271,11 +252,11 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         return enabled;
     }
 
-    private onConceptTreeSchemeChange() {
+    onConceptTreeSchemeChange() {
         this.selectedResource = null;
     }
 
-    private onMultiselectionChange(multiselection: boolean) {
+    onMultiselectionChange(multiselection: boolean) {
         this.multiselection = multiselection;
         this.inverseProp = false; //reset inverseProp flag
     }
@@ -284,7 +265,7 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
      * User can click on OK button just if there is a manchester expression (in case property allows and user choose to add it)
      * or if there is a resource selected in the tree
      */
-    private isOkEnabled() {
+    isOkEnabled() {
         if (this.selectedAspectSelector == this.manchExprAspectSelector) {
             return (this.manchExpr && this.manchExpr.trim() != "");
         } else if (this.selectedAspectSelector == this.dataRangeAspectSelector) {
@@ -298,21 +279,19 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
         }
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
+    ok() {
         if (this.selectedAspectSelector == this.manchExprAspectSelector) {
             let returnedData: AddPropertyValueModalReturnData = {
                 property: this.enrichingProperty,
                 value: this.manchExpr,
             }
-            this.dialog.close(returnedData);
+            this.activeModal.close(returnedData);
         } else if (this.selectedAspectSelector == this.dataRangeAspectSelector) {
             let returnedData: AddPropertyValueModalReturnData = {
                 property: this.enrichingProperty,
                 value: this.datarange,
             }
-            this.dialog.close(returnedData);
+            this.activeModal.close(returnedData);
         } else { //treeListAspectSelector
             let values: ARTURIResource[]; //selected resource or checked resources
             if (this.multiselection) {
@@ -328,12 +307,12 @@ export class AddPropertyValueModal implements ModalComponent<AddPropertyValueMod
             if (this.showInversePropertyCheckbox) {
                 returnedData.inverseProperty = this.inverseProp;
             }
-            this.dialog.close(returnedData);
+            this.activeModal.close(returnedData);
         }
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

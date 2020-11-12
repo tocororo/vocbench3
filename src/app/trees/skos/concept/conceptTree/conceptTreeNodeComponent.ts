@@ -1,4 +1,5 @@
 import { Component, Input, QueryList, ViewChildren } from "@angular/core";
+import { map } from 'rxjs/operators';
 import { ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
 import { ConceptTreePreference } from "../../../../models/Properties";
 import { SkosServices } from "../../../../services/skosServices";
@@ -56,8 +57,8 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
         let includeSubProps: boolean = prefs.includeSubProps;
 
         return this.skosService.getNarrowerConcepts(this.node, this.schemes, prefs.multischemeMode, broaderProps, narrowerProps, 
-            includeSubProps, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
-            narrower => {
+                includeSubProps, VBRequestOptions.getRequestOptions(this.projectCtx)).pipe(
+            map(narrower => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(narrower, this.rendering ? SortAttribute.show : SortAttribute.value);
                 //append the retrieved node as child of the expanded node
@@ -67,7 +68,7 @@ export class ConceptTreeNodeComponent extends AbstractTreeNode {
                     this.open = false;
                     this.node.setAdditionalProperty(ResAttribute.MORE, 0);
                 }
-            }
+            })
         );
     }
 

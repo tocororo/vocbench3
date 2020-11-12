@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfigurationComponents } from "../models/Configuration";
 import { SettingsProp } from "../models/Plugins";
 import { PartitionFilterPreference, Properties } from "../models/Properties";
@@ -8,6 +7,7 @@ import { PreferencesSettingsServices } from "../services/preferencesSettingsServ
 import { VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ModalType } from '../widget/modal/Modals';
 import { LoadConfigurationModalReturnData } from "../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
@@ -15,15 +15,12 @@ import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServ
     selector: "res-view-settings-modal",
     templateUrl: "./resViewSettingsModal.html",
 })
-export class ResViewSettingsModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class ResViewSettingsModal {
 
-    private template: PartitionFilterPreference;
+    template: PartitionFilterPreference;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private vbProp: VBProperties, private prefService: PreferencesSettingsServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private vbProp: VBProperties, private prefService: PreferencesSettingsServices,
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {}
 
     ngOnInit() {
         this.initTemplate();
@@ -33,7 +30,7 @@ export class ResViewSettingsModal implements ModalComponent<BSModalContext> {
         this.template = VBContext.getWorkingProjectCtx().getProjectPreferences().resViewPreferences.resViewPartitionFilter;
     }
 
-    private loadTemplate() {
+    loadTemplate() {
         this.sharedModals.loadConfiguration("Load template", ConfigurationComponents.TEMPLATE_STORE, true, false).then(
             (conf: LoadConfigurationModalReturnData) => {
                 let templateProp: SettingsProp = conf.configuration.properties.find(p => p.name == "template");
@@ -45,16 +42,16 @@ export class ResViewSettingsModal implements ModalComponent<BSModalContext> {
         )
     }
 
-    private storeTemplate() {
+    storeTemplate() {
         let config: { [key: string]: any } = {
             template: this.template
         }
         this.sharedModals.storeConfiguration("Store template", ConfigurationComponents.TEMPLATE_STORE, config);
     }
 
-    private setUserDefault() {
+    setUserDefault() {
         this.basicModals.confirm("Set as default", "You are setting the current template as default configuration for all the projects. Are you sure?",
-            "warning").then(
+            ModalType.warning).then(
             () => {
                 this.prefService.setPUSettingUserDefault(Properties.pref_res_view_partition_filter, VBContext.getLoggedUser().getEmail(),
                     JSON.stringify(this.template)).subscribe();
@@ -67,9 +64,9 @@ export class ResViewSettingsModal implements ModalComponent<BSModalContext> {
     /**
      * Reset the preference to the default, namely remove set the PUSettings, so if there is a default it is retrieved through the fallback
      */
-    private restoreDefault() {
+    restoreDefault() {
         this.basicModals.confirm("Restore default", "You are overriding the current template by restoring the default configuration. Are you sure?",
-            "warning").then(
+            ModalType.warning).then(
             () => {
                 this.prefService.setPUSetting(Properties.pref_res_view_partition_filter, null).subscribe(
                     () => {
@@ -86,14 +83,12 @@ export class ResViewSettingsModal implements ModalComponent<BSModalContext> {
         );
     }
 
-    private updateTemplate() {
+    updateTemplate() {
         this.vbProp.setResourceViewPartitionFilter(this.template);
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+    ok() {
+        this.activeModal.close();
     }
 
 }

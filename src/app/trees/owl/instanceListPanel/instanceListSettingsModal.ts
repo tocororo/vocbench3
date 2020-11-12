@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { InstanceListPreference, InstanceListVisualizationMode } from "../../../models/Properties";
 import { VBContext } from "../../../utils/VBContext";
 import { VBProperties } from "../../../utils/VBProperties";
@@ -9,20 +8,17 @@ import { VBProperties } from "../../../utils/VBProperties";
     selector: "instance-list-settings-modal",
     templateUrl: "./instanceListSettingsModal.html",
 })
-export class InstanceListSettingsModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class InstanceListSettingsModal {
 
     private pristineInstancePref: InstanceListPreference;
 
-    private visualization: InstanceListVisualizationMode;
-    private visualizationModes: { label: string, value: InstanceListVisualizationMode }[] = [
+    visualization: InstanceListVisualizationMode;
+    visualizationModes: { label: string, value: InstanceListVisualizationMode }[] = [
         { label: "Standard", value: InstanceListVisualizationMode.standard },
         { label: "Search based", value: InstanceListVisualizationMode.searchBased }
     ]
 
-    constructor(public dialog: DialogRef<BSModalContext>, private vbProp: VBProperties) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private vbProp: VBProperties) {}
 
     ngOnInit() {
         let instanceListPref: InstanceListPreference = VBContext.getWorkingProjectCtx().getProjectPreferences().instanceListPreferences;
@@ -30,17 +26,15 @@ export class InstanceListSettingsModal implements ModalComponent<BSModalContext>
         this.visualization = instanceListPref.visualization;
     }
 
-    ok(event: Event) {
+    ok() {
         if (this.pristineInstancePref.visualization != this.visualization) {
             this.vbProp.setInstanceListVisualization(this.visualization);
         }
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+        this.activeModal.close();
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

@@ -7,41 +7,36 @@
 
     <lang-value-filter-pref style="margin-top: 8px;"></lang-value-filter-pref>
     
-    <div class="panel panel-default" style="margin-top: 8px;">
-        <div class="panel-heading">
+    <div class="card card-default" style="margin-top: 8px;">
+        <div class="card-header">
             <label style="flex: 1;">ResourceView template</label>
-            <div class="btn-toolbar" role="toolbar">
+            <div class="btn-toolbar">
                 <div class="btn-group btn-group-xs">
-                    <button class="btn btn-default" (click)="storeTemplate()" title="Store template">
-                        <span class="glyphicon glyphicon-floppy-save"></span>
+                    <button class="btn btn-light" (click)="storeTemplate()" title="Store template">
+                        <span class="fas fa-download"></span>
                     </button>
-                    <button class="btn btn-default" (click)="loadTemplate()" title="Load template">
-                        <span class="glyphicon glyphicon-floppy-open"></span>
+                    <button class="btn btn-light" (click)="loadTemplate()" title="Load template">
+                        <span class="fas fa-upload"></span>
                     </button>
                 </div>
                 <div class="btn-group btn-group-xs">
-                    <div class="btn-group">
-                        <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                    <div class="btn-group" ngbDropdown>
+                        <button class="btn btn-light dropdown-toggle btn-xs" ngbDropdownToggle>
                             Defaults
-                            <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu pull-right">
-                            <li>
-                                <a (click)="setUserDefault()">
-                                    Set this configuration as default for all projects
-                                </a>
-                            </li>
-                            <li>
-                                <a (click)="restoreDefault()">
-                                    Restore the default configuration
-                                </a>
-                            </li>
-                        </ul>
+                        <div class="dropdown-menu" ngbDropdownMenu>
+                            <a class="dropdown-item" (click)="setUserDefault()">
+                                Set this configuration as default for all projects
+                            </a>
+                            <a class="dropdown-item" (click)="restoreDefault()">
+                                Restore the default configuration
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="panel-body vbox">
+        <div class="card-body vbox">
             <div class="alert alert-info" role="alert" style="margin-bottom: 5px;">
                 Here you can customize the ResourceView by showing/hiding the partitions.
             </div>
@@ -51,5 +46,5 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
 </div>

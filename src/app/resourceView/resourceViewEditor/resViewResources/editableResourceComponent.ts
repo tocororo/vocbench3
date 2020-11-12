@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, RDFTypesEnum, ResAttribute, ShowInterpretation } from "../../../models/ARTResources";
 import { Language, Languages } from "../../../models/LanguagesCountries";
 import { ResViewPartition } from "../../../models/ResourceView";
@@ -63,9 +64,9 @@ export class EditableResourceComponent extends AbstractResViewResource {
     private isBulkActionMenuItemAvailable: boolean = true;
     private copyLocalesAction: { available: boolean, locales: Language[] } = { available: false, locales: [] };
 
-    private editInProgress: boolean = false;
-    private bulkEditInProgress: boolean = false;
-    private editLiteralInProgress: boolean = false;
+    editInProgress: boolean = false;
+    bulkEditInProgress: boolean = false;
+    editLiteralInProgress: boolean = false;
     private resourceStringValuePristine: string;
     private resourceStringValue: string; //editable representation of the resource
 
@@ -326,7 +327,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                 } else if (this.editActionScenario == EditActionScenarioEnum.typedLiteral) {
                     let newValue: ARTLiteral = new ARTLiteral(this.resourceStringValue, (<ARTLiteral>this.resource).getDatatype(), null);
                     if (!this.isTypedLiteralValid(newValue)) {
-                        this.basicModals.alert("Invalid value", newValue.getValue() + " is not a valid value for the given datatype: " + newValue.getDatatype(), "warning");
+                        this.basicModals.alert("Invalid value", newValue.getValue() + " is not a valid value for the given datatype: " + newValue.getDatatype(), ModalType.warning);
                         this.cancelEdit();
                         return;
                     }
@@ -347,7 +348,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                     if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
                         let warningMsg = "The type of the new value is not compliant with the range of the property " + this.predicate.getShow()
                             + ". The change may cause an inconsistency. Do you want to apply the change? ";
-                        this.basicModals.confirm("Warning", warningMsg, "warning").then(
+                        this.basicModals.confirm("Warning", warningMsg, ModalType.warning).then(
                             confirm => {
                                 this.resourcesService.updatePredicateObject(this.predicate, this.resource, newValue).subscribe(
                                     stResp => this.update.emit()
@@ -368,7 +369,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                         );
                     }
                 } catch (err) {
-                    this.basicModals.alert("Edit", err, "warning");
+                    this.basicModals.alert("Edit", err, ModalType.warning);
                     this.cancelEdit();
                 }
             } else if (this.editInProgress) {
@@ -379,7 +380,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                         if (this.isPropertyRangeInconsistentWithNewValue(newValue)) {
                             let warningMsg = "The type of the new value is not compliant with the range of the property " + this.predicate.getShow()
                                 + ". The change may cause an inconsistency. Do you want to apply the change?";
-                            this.basicModals.confirm("Warning", warningMsg, "warning").then(
+                            this.basicModals.confirm("Warning", warningMsg, ModalType.warning).then(
                                 confirm => { this.updateTriple(this.subject, this.predicate, this.resource, newValue); },
                                 reject => { this.cancelEdit(); }
                             );
@@ -400,7 +401,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                         }
                     }
                 } catch (err) {
-                    this.basicModals.alert("Edit", err, "warning");
+                    this.basicModals.alert("Edit", err, ModalType.warning);
                     this.cancelEdit();
                 }
             }
@@ -516,7 +517,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                     );
                 } else {
                     let detailsMsg: string[] = checkResp.details.map(d => d.msg);
-                    this.basicModals.alert("Invalid Expression", "'" + expression + "' is not a valid Manchester Expression", "warning", detailsMsg.join("\n"));
+                    this.basicModals.alert("Invalid Expression", "'" + expression + "' is not a valid Manchester Expression", ModalType.warning, detailsMsg.join("\n"));
                 }
             }
         )
@@ -577,7 +578,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                             },
                             (err: Error) => {
                                 if (err.name.endsWith("AlreadyExistingLiteralFormForResourceException")) {
-                                    this.basicModals.confirm("Operation denied", err.message + ". Do you want to force the operation?", "warning").then(
+                                    this.basicModals.confirm("Operation denied", err.message + ". Do you want to force the operation?", ModalType.warning).then(
                                         confirm => {
                                             this.refactorService.moveXLabelToResource(this.subject, predicate, <ARTResource>this.resource, newConcept, true).subscribe(
                                                 stResp => {

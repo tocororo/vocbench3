@@ -1,74 +1,63 @@
-import { Component, ElementRef } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource, ResAttribute } from '../../../models/ARTResources';
 import { UIUtils } from "../../../utils/UIUtils";
-
-export class ConstituentListCreatorModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title') {
-        super();
-    }
-}
 
 @Component({
     selector: "constituent-list-creator-modal",
     templateUrl: "./constituentListCreatorModal.html",
 })
-export class ConstituentListCreatorModal implements ModalComponent<ConstituentListCreatorModalData> {
-    context: ConstituentListCreatorModalData;
+export class ConstituentListCreatorModal {
+    @Input() title: string;
 
     // private constituentCls: ARTURIResource = Decomp.component;
 
-    private selectedConstituentSource: ARTURIResource;
-    private selectedConstituentTarget: ARTURIResource;
+    selectedConstituentSource: ARTURIResource;
+    selectedConstituentTarget: ARTURIResource;
 
-    private list: ARTURIResource[] = [];
+    list: ARTURIResource[] = [];
 
-    private ordered: boolean = true;
+    ordered: boolean = true;
 
-    constructor(public dialog: DialogRef<ConstituentListCreatorModalData>, private elementRef: ElementRef) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private elementRef: ElementRef) {}
 
     ngAfterViewInit() {
         UIUtils.setFullSizeModal(this.elementRef);
     }
 
-    private addConstituentToList() {
+    addConstituentToList() {
         let constituent: ARTURIResource = this.selectedConstituentSource.clone();
         constituent.deleteAdditionalProperty(ResAttribute.SELECTED);
         this.list.push(constituent);
     }
 
-    private removeConstituentFromList() {
+    removeConstituentFromList() {
         this.list.splice(this.list.indexOf(this.selectedConstituentTarget), 1);
         this.selectedConstituentTarget = null;
     }
 
-    private moveUp() {
+    moveUp() {
         var idx = this.list.indexOf(this.selectedConstituentTarget);
         this.list.splice(idx-1, 0, this.list.splice(idx, 1)[0]);
     }
-    private moveDown() {
+    moveDown() {
         var idx = this.list.indexOf(this.selectedConstituentTarget);
         this.list.splice(idx+1, 0, this.list.splice(idx, 1)[0]);
     }
 
-    private isFirstInList(): boolean {
+    isFirstInList(): boolean {
         return this.list[0] == this.selectedConstituentTarget;
     }
-    private isLastInList(): boolean {
+    isLastInList(): boolean {
         return this.list[this.list.length-1] == this.selectedConstituentTarget;   
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close({list: this.list, ordered: this.ordered});
+    ok() {
+        this.activeModal.close({list: this.list, ordered: this.ordered});
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

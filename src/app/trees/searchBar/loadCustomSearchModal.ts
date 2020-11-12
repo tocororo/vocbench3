@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ConfigurationComponents, Reference } from "../../models/Configuration";
 import { Scope, Settings } from "../../models/Plugins";
 import { SettingsServices } from "../../services/settingsServices";
@@ -12,21 +12,18 @@ import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalS
     selector: "load-custom-search",
     templateUrl: "./loadCustomSearchModal.html",
 })
-export class LoadCustomSearchModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class LoadCustomSearchModal {
 
-    private scopes: Scope[];
-    private selectedScope: Scope;
+    scopes: Scope[];
+    selectedScope: Scope;
 
     private settings: Settings;
 
-    private references: Reference[];
-    private selectedRef: Reference;
+    references: Reference[];
+    selectedRef: Reference;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private settingsService: SettingsServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private settingsService: SettingsServices,
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices) {}
 
     ngOnInit() {
         this.settingsService.getSettingsScopes(ConfigurationComponents.CUSTOM_SEARCH_STORE).subscribe(
@@ -38,7 +35,7 @@ export class LoadCustomSearchModal implements ModalComponent<BSModalContext> {
         )
     }
 
-    private initReferences() {
+    initReferences() {
         this.settingsService.getSettings(ConfigurationComponents.CUSTOM_SEARCH_STORE, this.selectedScope).subscribe(
             settings => {
                 this.settings = settings;
@@ -58,7 +55,7 @@ export class LoadCustomSearchModal implements ModalComponent<BSModalContext> {
         );
     }
 
-    private add() {
+    add() {
         this.sharedModals.loadConfiguration("Select stored parameterized SPARQL query", ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, false, false).then(
             (data: LoadConfigurationModalReturnData) => {
                 let ref: string = data.reference.relativeReference;
@@ -70,7 +67,7 @@ export class LoadCustomSearchModal implements ModalComponent<BSModalContext> {
                 });
                 if (alreadyIn) {
                     this.basicModals.alert("Duplicated Custom Search", "The stored parameterized SPARQL query '" + ref + 
-                        "' is already in the Stored Custom Search list. It will not be added", "warning");
+                        "' is already in the Stored Custom Search list. It will not be added", ModalType.warning);
                     return;
                 }
 
@@ -125,12 +122,12 @@ export class LoadCustomSearchModal implements ModalComponent<BSModalContext> {
         );
     }
 
-    ok(event: Event) {
-        this.dialog.close(this.selectedRef.relativeReference);
+    ok() {
+        this.activeModal.close(this.selectedRef.relativeReference);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

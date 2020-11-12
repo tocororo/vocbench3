@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral, ARTNode, ARTURIResource, RDFTypesEnum } from "../../models/ARTResources";
 import { SearchMode, SearchSettings, StatusFilter } from "../../models/Properties";
 import { OntoLex, SKOS } from "../../models/Vocabulary";
@@ -17,56 +17,53 @@ import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalS
     selector: "advanced-search-modal",
     templateUrl: "./advancedSearchModal.html"
 })
-export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class AdvancedSearchModal {
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
 
-    private searchString: string;
+    searchString: string;
 
-    private statuses: { show: string, value: StatusFilter }[] = [
+    statuses: { show: string, value: StatusFilter }[] = [
         { show: "Anything", value: StatusFilter.ANYTHING },
         { show: "Not deprecated", value: StatusFilter.NOT_DEPRECATED },
         { show: "Only deprecated", value: StatusFilter.ONLY_DEPRECATED }
         //UNDER_VALIDATION and UNDER_VALIDATION_FOR_DEPRECATION only if project has validation active
     ]
-    private selectedStatus: StatusFilter = this.statuses[0].value;
+    selectedStatus: StatusFilter = this.statuses[0].value;
 
     //search mode use URI/LocalName
-    private useURI: boolean = true;
-    private useLocalName: boolean = true;
-    private useNotes: boolean = true;
+    useURI: boolean = true;
+    useLocalName: boolean = true;
+    useNotes: boolean = true;
 
-    private searchModes: { show: string, value: SearchMode }[] = [
+    searchModes: { show: string, value: SearchMode }[] = [
         { show: "Starts with", value: SearchMode.startsWith },
         { show: "Contains", value: SearchMode.contains },
         { show: "Ends with", value: SearchMode.endsWith },
         { show: "Exact", value: SearchMode.exact },
         { show: "Fuzzy", value: SearchMode.fuzzy }
     ];
-    private activeSearchMode: SearchMode;
+    activeSearchMode: SearchMode;
 
-    private restrictLang: boolean = false;
-    private includeLocales: boolean = false;
-    private languages: string[];
+    restrictLang: boolean = false;
+    includeLocales: boolean = false;
+    languages: string[];
 
     //types
-    private typesGroups: ARTURIResource[][] = [];
+    typesGroups: ARTURIResource[][] = [];
 
     //schemes
-    private showSchemeSelector: boolean = false;
+    showSchemeSelector: boolean = false;
     private schemesGroups: ARTURIResource[][] = [];
 
     //ingoing/outgoing links
-    private ingoingLinks: { first: ARTURIResource, second: ARTNode[] }[] = []; //first is the property, second is a list of values
-    private outgoingLinksValue: { first: ARTURIResource, second: ARTNode[] }[] = [];
-    private outgoingLinksFreeText: { predicate: ARTURIResource, searchString: string, mode: SearchMode }[] = [];
+    ingoingLinks: { first: ARTURIResource, second: ARTNode[] }[] = []; //first is the property, second is a list of values
+    outgoingLinksValue: { first: ARTURIResource, second: ARTNode[] }[] = [];
+    outgoingLinksFreeText: { predicate: ARTURIResource, searchString: string, mode: SearchMode }[] = [];
 
-    constructor(public dialog: DialogRef<BSModalContext>, private searchService: SearchServices,
+    constructor(public activeModal: NgbActiveModal, private searchService: SearchServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private browsingModals: BrowsingModalServices,
-        private creationModals: CreationModalServices) {
-        this.context = dialog.context;
-    }
+        private creationModals: CreationModalServices) {}
 
     ngOnInit() {
         let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings;
@@ -92,8 +89,8 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
 
     }
 
-    private selectRestrictionLanguages() {
-        this.sharedModals.selectLanguages("Language restrictions", this.languages, true).then(
+    selectRestrictionLanguages() {
+        this.sharedModals.selectLanguages("Language restrictions", this.languages, false, true).then(
             (langs: string[]) => {
                 this.languages = langs;
             },
@@ -105,15 +102,15 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
      * Types management
      * ===================== */
 
-    private addTypesGroup() {
+    addTypesGroup() {
         this.typesGroups.push([]);
     }
 
-    private deleteTypesGroup(index: number) {
+    deleteTypesGroup(index: number) {
         this.typesGroups.splice(index, 1);
     }
 
-    private addType(group: ARTURIResource[]) {
+    addType(group: ARTURIResource[]) {
         this.browsingModals.browseClassTree("Select a class").then(
             (type: ARTURIResource) => {
                 group.push(type);
@@ -121,11 +118,11 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
         );
     }
 
-    private deleteType(group: ARTURIResource[], index: number) {
+    deleteType(group: ARTURIResource[], index: number) {
         group.splice(index, 1);
     }
 
-    private updateType(group: ARTURIResource[], index: number, type: ARTURIResource) {
+    updateType(group: ARTURIResource[], index: number, type: ARTURIResource) {
         group[index] = type;
     }
 
@@ -162,19 +159,19 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
      * Ingoing links management
      * ===================== */
 
-    private addIngoingGroup() {
+    addIngoingGroup() {
         this.ingoingLinks.push({ first: null, second: [] });
     }
 
-    private deleteIngoingGroup(index: number) {
+    deleteIngoingGroup(index: number) {
         this.ingoingLinks.splice(index, 1);
     }
 
-    private updatePropIngoing(group: { first: ARTURIResource, second: ARTNode[] }, property: ARTURIResource) {
+    updatePropIngoing(group: { first: ARTURIResource, second: ARTNode[] }, property: ARTURIResource) {
         group.first = property;
     }
 
-    private addIngoingValue(group: { first: ARTURIResource, second: ARTNode[] }) {
+    addIngoingValue(group: { first: ARTURIResource, second: ARTNode[] }) {
         this.sharedModals.pickResource("Select a resource").then(
             (value: ARTNode) => {
                 group.second.push(value);
@@ -183,11 +180,11 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
         );
     }
 
-    private deleteIngoingValue(group: { first: ARTURIResource, second: ARTNode[] }, index: number) {
+    deleteIngoingValue(group: { first: ARTURIResource, second: ARTNode[] }, index: number) {
         group.second.splice(index, 1);
     }
 
-    private updateIngoingValue(group: { first: ARTURIResource, second: ARTNode[] }, index: number, value: ARTNode) {
+    updateIngoingValue(group: { first: ARTURIResource, second: ARTNode[] }, index: number, value: ARTNode) {
         group.second[index] = value;
     }
 
@@ -195,19 +192,19 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
      * Outgoing links management value
      * ===================== */
 
-    private addOutgoingGroupValue() {
+    addOutgoingGroupValue() {
         this.outgoingLinksValue.push({ first: null, second: [] });
     }
 
-    private deleteOutgoingGroupValue(index: number) {
+    deleteOutgoingGroupValue(index: number) {
         this.outgoingLinksValue.splice(index, 1);
     }
 
-    private updatePropOutgoingValue(group: { first: ARTURIResource, second: ARTNode[] }, property: ARTURIResource) {
+    updatePropOutgoingValue(group: { first: ARTURIResource, second: ARTNode[] }, property: ARTURIResource) {
         group.first = property;
     }
 
-    private addOutgoingValue(group: { first: ARTURIResource, second: ARTNode[] }, type: RDFTypesEnum) {
+    addOutgoingValue(group: { first: ARTURIResource, second: ARTNode[] }, type: RDFTypesEnum) {
         if (type == RDFTypesEnum.resource) {
             this.sharedModals.pickResource("Select a resource").then(
                 (value: ARTNode) => {
@@ -225,11 +222,11 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
         }
     }
 
-    private deleteOutgoingValue(group: { first: ARTURIResource, second: ARTNode[] }, index: number) {
+    deleteOutgoingValue(group: { first: ARTURIResource, second: ARTNode[] }, index: number) {
         group.second.splice(index, 1);
     }
 
-    private updateOutgoingValue(group: { first: ARTURIResource, second: ARTNode[] }, index: number, value: ARTNode) {
+    updateOutgoingValue(group: { first: ARTURIResource, second: ARTNode[] }, index: number, value: ARTNode) {
         group.second[index] = value;
     }
 
@@ -237,22 +234,22 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
      * Outgoing links management free text
      * ===================== */
 
-    private addOutgoingGroupFreeText() {
+    addOutgoingGroupFreeText() {
         this.outgoingLinksFreeText.push({ predicate: null, searchString: null, mode: VBContext.getWorkingProjectCtx().getProjectPreferences().searchSettings.stringMatchMode });
     }
 
-    private deleteOutgoingGroupFreeText(index: number) {
+    deleteOutgoingGroupFreeText(index: number) {
         this.outgoingLinksFreeText.splice(index, 1);
     }
 
-    private updatePropOutgoingFreeText(group: { predicate: ARTURIResource, searcString: string, mode: SearchMode }, property: ARTURIResource) {
+    updatePropOutgoingFreeText(group: { predicate: ARTURIResource, searcString: string, mode: SearchMode }, property: ARTURIResource) {
         group.predicate = property;
     }
 
     //---------------------
 
 
-    ok(event: Event) {
+    ok() {
         let langsPar: string[];
         let includeLocalesPar: boolean;
         if (this.restrictLang) {
@@ -346,14 +343,12 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
             searchResult => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found", "warning");
+                    this.basicModals.alert("Search", "No results found", ModalType.warning);
                 } else { //1 or more results
                     ResourceUtils.sortResources(searchResult, SortAttribute.show);
                     this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, true).then(
                         (selectedResource: any) => {
-                            event.stopPropagation();
-                            event.preventDefault();
-                            this.dialog.close(selectedResource);
+                            this.activeModal.close(selectedResource);
                         },
                         () => { }
                     );
@@ -364,7 +359,7 @@ export class AdvancedSearchModal implements ModalComponent<BSModalContext> {
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

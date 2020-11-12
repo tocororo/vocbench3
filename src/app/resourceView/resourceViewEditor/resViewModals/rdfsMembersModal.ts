@@ -1,44 +1,33 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { Decomp, RDF } from "../../../models/Vocabulary";
 import { BrowsingModalServices } from "../../../widget/modal/browsingModal/browsingModalServices";
-
-export class RdfsMembersModalData extends BSModalContext {
-    constructor(
-        public property: ARTURIResource,
-        public propChangeable: boolean = true
-    ) {
-        super();
-    }
-}
 
 @Component({
     selector: "rdfs-members-modal",
     templateUrl: "./rdfsMembersModal.html",
 })
-export class RdfsMembersModal implements ModalComponent<RdfsMembersModalData> {
-    context: RdfsMembersModalData;
+export class RdfsMembersModal {
+    @Input() property: ARTURIResource;
+    @Input() propChangeable: boolean = true;
 
     private constituentCls: ARTURIResource = Decomp.component;
 
-    private rootProperty: ARTURIResource; //root property of the partition that invoked this modal
-    private enrichingProperty: ARTURIResource;
+    rootProperty: ARTURIResource; //root property of the partition that invoked this modal
+    enrichingProperty: ARTURIResource;
 
-    private rdfN: ARTURIResource;
-    private memberN: number = 1;
+    rdfN: ARTURIResource;
+    memberN: number = 1;
 
-    private selectedConstituent: ARTURIResource;
+    selectedConstituent: ARTURIResource;
 
-    constructor(public dialog: DialogRef<RdfsMembersModalData>, private browsingModals: BrowsingModalServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private browsingModals: BrowsingModalServices) {}
 
     ngOnInit() {
         this.updateRdfNProp();
 
-        this.rootProperty = this.context.property;
+        this.rootProperty = this.property;
         this.enrichingProperty = this.rdfN;
     }
 
@@ -47,7 +36,7 @@ export class RdfsMembersModal implements ModalComponent<RdfsMembersModalData> {
         this.enrichingProperty = this.rdfN;
     }
 
-    private changeProperty() {
+    changeProperty() {
         this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
             (selectedProp: any) => {
                 if (this.enrichingProperty.getURI() != selectedProp.getURI()) {
@@ -58,12 +47,12 @@ export class RdfsMembersModal implements ModalComponent<RdfsMembersModalData> {
         );
     }
 
-    ok(event: Event) {
-        this.dialog.close({property: this.enrichingProperty, value: this.selectedConstituent});
+    ok() {
+        this.activeModal.close({property: this.enrichingProperty, value: this.selectedConstituent});
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

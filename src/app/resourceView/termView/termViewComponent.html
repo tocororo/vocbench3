@@ -1,20 +1,20 @@
-<div class="panel panel-default vbox blockingDivHost">
-    <div class="panel-heading">
+<div class="card card-default vbox blockingDivHost">
+    <div class="card-header">
         <rdf-resource style="flex: 1;" *ngIf="resource" [resource]="resource"></rdf-resource>
-        <input class="form-control input-xs" [ngModel]="resource.getURI()" readonly>
+        <input class="form-control input-xs" [ngModel]="resource.getNominalValue()" readonly>
 
-        <button class="btn btn-xs btn-default" style="margin-left: 3px;" (click)="buildResourceView(resource)" title="Refresh">
-            <span class="glyphicon glyphicon-refresh"></span>
+        <button class="btn btn-xs btn-light" style="margin-left: 3px;" (click)="buildResourceView(resource)" title="Refresh">
+            <span class="fas fa-redo"></span>
         </button>
-        <button class="btn btn-default btn-xs" style="margin-left: 3px;" (click)="openSettings()" title="ResourceView settings">
-            <span class="glyphicon glyphicon-cog"></span>
+        <button class="btn btn-light btn-xs" style="margin-left: 3px;" (click)="openSettings()" title="ResourceView settings">
+            <span class="fas fa-cog"></span>
         </button>
     </div>
-    <div  *ngIf="resource && !unexistingResource" class="panel-body scrollableContainer">
+    <div  *ngIf="resource && !unexistingResource" class="card-body scrollableContainer">
         <ng-container *ngIf="!unexistingResource && !unknownHost">
             <!-- first-->
-            <div class="panel panel-default"> 
-                <div class="panel-body">
+            <div class="card card-default"> 
+                <div class="card-body">
                     <h2 class="qname"><span>{{resource.qname}}</span></h2>
                     <div>
                         <p>{{resource.getShow()}}</p>
@@ -48,7 +48,7 @@
         </div>
 
     </div>
-    <div class="panel-footer" style="min-height: 31px;"></div>
+    <div class="card-footer" style="min-height: 31px;"></div>
 
     <div #blockDiv class="blockingDiv" style="display:none">
         <div class="loadingDiv">

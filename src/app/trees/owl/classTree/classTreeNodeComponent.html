@@ -9,7 +9,7 @@
         <rdf-resource [resource]="node" [rendering]="rendering" (click)="selectNode()" 
             [ngClass]="{selectedResource : node.getAdditionalProperty('selected')}"></rdf-resource>
         <div *ngIf="node.getAdditionalProperty('numInst') > 0 && this.showInstanceNumber" style="position: absolute; margin: 4px; top: 0; right: 0;">
-            <span class="label label-warning">{{node.getAdditionalProperty('numInst')}}</span>
+            <span class="badge badge-warning">{{node.getAdditionalProperty('numInst')}}</span>
         </div>
     </div>
     <input *ngIf="multiselection" type="checkbox" style="margin-left: 5px;" [(ngModel)]="checked" (ngModelChange)="onNodeCheckChange()">

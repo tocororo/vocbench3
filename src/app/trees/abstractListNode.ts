@@ -1,9 +1,9 @@
-import { ElementRef, ViewChild } from "@angular/core";
+import { Directive, ElementRef, ViewChild } from "@angular/core";
 import { ResAttribute } from "../models/ARTResources";
-import { TreeListContext } from "../utils/UIUtils";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { AbstractNode } from "./abstractNode";
 
+@Directive()
 export abstract class AbstractListNode extends AbstractNode {
 
     /**

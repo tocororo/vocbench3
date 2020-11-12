@@ -2,55 +2,55 @@
 
     <ul class="nav nav-tabs nav-tabs-xs" (click)="$event.preventDefault()">
         <ng-container *ngFor="let t of tabs">
-            <li *ngIf="showTab(t.role)" [ngClass]="{ active : activeTab == t.role, disabled: !isTabAuthorized(t.role) }">
-                <a href (click)="selectTab(t.role)">{{t.label}}</a>
+            <li *ngIf="showTab(t.role)" class="nav-item" [ngClass]="{ active : activeTab == t.role, disabled: !isTabAuthorized(t.role) }">
+                <a href class="nav-link" (click)="selectTab(t.role)">{{t.label}}</a>
             </li>
         </ng-container>
-        <li class="active" style="float: right;">
-            <a (click)="openSettings()" style="margin: 0px 2px;">
-                <span class="glyphicon glyphicon-cog"></span>
+        <li class="nav-item active ml-auto">
+            <a (click)="openSettings()" class="nav-link" style="margin: 0px 2px;">
+                <span class="fas fa-cog"></span>
             </a>
         </li>
     </ul>
     
     <!--Tabs content-->
     <div class="tab-content">
-        <div *ngIf="showTab('cls')" [ngClass]="{vbox : activeTab == 'cls'}" [hidden]="activeTab != 'cls'">
+        <div *ngIf="showTab(RDFResourceRoleEnum.cls)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.cls}" [hidden]="activeTab != RDFResourceRoleEnum.cls">
             <class-individual-tree-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)"
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </class-individual-tree-panel>
         </div>
-        <div *ngIf="showTab('concept')" [ngClass]="{vbox : activeTab == 'concept'}" [hidden]="activeTab != 'concept'">
+        <div *ngIf="showTab(RDFResourceRoleEnum.concept)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.concept}" [hidden]="activeTab != RDFResourceRoleEnum.concept">
             <concept-tree-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)"
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </concept-tree-panel>
         </div>
-        <div *ngIf="showTab('conceptScheme')" [ngClass]="{vbox : activeTab == 'conceptScheme'}" [hidden]="activeTab != 'conceptScheme'">
+        <div *ngIf="showTab(RDFResourceRoleEnum.conceptScheme)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.conceptScheme}" [hidden]="activeTab != RDFResourceRoleEnum.conceptScheme">
             <scheme-list-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)"
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </scheme-list-panel>
         </div>
-        <div *ngIf="showTab('skosCollection')" [ngClass]="{vbox : activeTab == 'skosCollection'}" [hidden]="activeTab != 'skosCollection'">
+        <div *ngIf="showTab(RDFResourceRoleEnum.skosCollection)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.skosCollection}" [hidden]="activeTab != RDFResourceRoleEnum.skosCollection">
             <collection-tree-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)" 
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </collection-tree-panel>
         </div>
-        <div *ngIf="showTab('property')" [ngClass]="{vbox : activeTab == 'property'}" [hidden]="activeTab != 'property'">
+        <div *ngIf="showTab(RDFResourceRoleEnum.property)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.property}" [hidden]="activeTab != RDFResourceRoleEnum.property">
             <property-tree-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)" 
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </property-tree-panel>
         </div>
-        <div *ngIf="showTab('limeLexicon')" [ngClass]="{vbox : activeTab == 'limeLexicon'}" [hidden]="activeTab != 'limeLexicon'">
+        <div *ngIf="showTab(RDFResourceRoleEnum.limeLexicon)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.limeLexicon}" [hidden]="activeTab != RDFResourceRoleEnum.limeLexicon">
             <lexicon-list-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)" 
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </lexicon-list-panel>
         </div>
-        <div *ngIf="showTab('ontolexLexicalEntry')" [ngClass]="{vbox : activeTab == 'ontolexLexicalEntry'}" [hidden]="activeTab != 'ontolexLexicalEntry'">
+        <div *ngIf="showTab(RDFResourceRoleEnum.ontolexLexicalEntry)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.ontolexLexicalEntry}" [hidden]="activeTab != RDFResourceRoleEnum.ontolexLexicalEntry">
             <lexical-entry-list-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)" 
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </lexical-entry-list-panel>
         </div>
-        <div *ngIf="showTab('dataRange')" [ngClass]="{vbox : activeTab == 'dataRange'}" [hidden]="activeTab != 'dataRange'">
+        <div *ngIf="showTab(RDFResourceRoleEnum.dataRange)" [ngClass]="{vbox : activeTab == RDFResourceRoleEnum.dataRange}" [hidden]="activeTab != RDFResourceRoleEnum.dataRange">
             <datatype-list-panel (nodeSelected)="onNodeSelected($event)" (advancedSearch)="advancedSearch($event)" 
                 [allowMultiselection]="allowMultiselection" [context]="context" [projectCtx]="projectCtx" [readonly]="readonly" [editable]="editable">
             </datatype-list-panel>

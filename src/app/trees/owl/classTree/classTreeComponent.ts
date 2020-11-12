@@ -1,4 +1,4 @@
-import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { Component, ElementRef, Input, QueryList, SimpleChanges, ViewChild, ViewChildren } from "@angular/core";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { ClassesServices } from "../../../services/classesServices";
 import { SearchServices } from "../../../services/searchServices";

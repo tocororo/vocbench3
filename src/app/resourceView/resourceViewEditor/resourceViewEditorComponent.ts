@@ -1,6 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
-import { Modal } from "ngx-modialog";
-import { Observable, Subscription } from "rxjs";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { forkJoin, Observable, Subscription } from "rxjs";
+import { finalize, map } from 'rxjs/operators';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { CollaborationModalServices } from "../../collaboration/collaborationModalService";
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, LocalResourcePosition, RDFResourceRolesEnum, RemoteResourcePosition, ResAttribute, ResourcePosition } from "../../models/ARTResources";
 import { Issue } from "../../models/Collaboration";
@@ -37,7 +39,7 @@ import { MultiActionFunction, MultiActionType, MultipleActionHelper } from "./re
         .todo-issues { color: #337ab7 }
         .in-progress-issues { color: #f0ad4e }
         .done-issues { color: #5cb85c }
-        .panel-heading .btn.active .glyphicon { color: #4285f4; } `
+        .card-header .btn.active .fas, .card-header .btn.active .far  { color: #4285f4; } `
     ]
 })
 export class ResourceViewEditorComponent extends AbstractResourceView {
@@ -48,17 +50,17 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     @Output() dblclickObj: EventEmitter<ARTResource> = new EventEmitter<ARTResource>();
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)
 
-    @ViewChild('blockDiv') blockDivElement: ElementRef;
+    @ViewChild('blockDiv', { static: true }) blockDivElement: ElementRef;
     private viewInitialized: boolean = false; //in order to wait blockDiv to be ready
 
     private eventSubscriptions: Subscription[] = [];
 
-    private unknownHost: boolean = false; //tells if the resource view of the current resource failed to be fetched due to a UnknownHostException
-    private unexistingResource: boolean = false; //tells if the requested resource does not exist (empty description)
+    unknownHost: boolean = false; //tells if the resource view of the current resource failed to be fetched due to a UnknownHostException
+    unexistingResource: boolean = false; //tells if the requested resource does not exist (empty description)
 
-    private resourcePosition: ResourcePosition;
-    private resourcePositionDetails: string; //details about the resource position
-    private resourcePositionLocalProj: boolean = false;
+    resourcePosition: ResourcePosition;
+    resourcePositionDetails: string; //details about the resource position
+    resourcePositionLocalProj: boolean = false;
 
     //partitions
     private resViewResponse: any = null; //to store the getResourceView response and avoid to repeat the request when user switches on/off inference
@@ -98,33 +100,33 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
     //top bar buttons
 
     private showInferredPristine: boolean = false; //useful to decide whether repeat the getResourceView request once the includeInferred changes
-    private showInferred: boolean = false;
+    showInferred: boolean = false;
 
-    private rendering: boolean = true; //tells if the resource shown inside the partitions should be rendered
+    rendering: boolean = true; //tells if the resource shown inside the partitions should be rendered
 
-    private valueFilterLangEnabled: boolean;
+    valueFilterLangEnabled: boolean;
 
-    private collaborationAvailable: boolean = false;
+    collaborationAvailable: boolean = false;
     private collaborationWorking: boolean = false;
     private issuesStruct: { btnClass: "" | "todo-issues" | "done-issues" | "in-progress-issues"; issues: Issue[] } = { 
         btnClass: "", issues: null
     };
 
-    private versioningAvailable: boolean = false;
+    versioningAvailable: boolean = false;
     private versionList: VersionInfo[];
     private activeVersion: VersionInfo;
 
-    private notificationsAvailable: boolean = false;
+    notificationsAvailable: boolean = false;
     private isWatching: boolean;
 
-    private settingsAvailable: boolean = true;
+    settingsAvailable: boolean = true;
 
-    constructor(resViewService: ResourceViewServices, modal: Modal, 
+    constructor(resViewService: ResourceViewServices, modalService: NgbModal, 
         private versionService: VersionsServices, private resourcesService: ResourcesServices, private collaborationService: CollaborationServices, 
         private metadataRegistryService: MetadataRegistryServices, private notificationsService: NotificationServices,
         private eventHandler: VBEventHandler, private vbProp: VBProperties, private vbCollaboration: VBCollaboration,
         private basicModals: BasicModalServices, private collabModals: CollaborationModalServices) {
-        super(resViewService, modal);
+        super(resViewService, modalService);
         this.eventSubscriptions.push(eventHandler.resourceRenamedEvent.subscribe(
             (data: any) => this.onResourceRenamed(data.oldResource, data.newResource)
         ));
@@ -588,17 +590,16 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                         let resources: ARTURIResource[] = localProjectResourcesMap[projectName].map(r => new ARTURIResource(r));
                         HttpServiceContext.setContextProject(new Project(projectName));
                         resolveResourcesFn.push(
-                            this.resourcesService.getResourcesInfo(resources).map(
-                                resources => {
+                            this.resourcesService.getResourcesInfo(resources).pipe(
+                                finalize(() => HttpServiceContext.removeContextProject()),
+                                map(resources => {
                                     resolvedResources = resolvedResources.concat(resources);
-                                }
-                            ).finally(
-                                () => HttpServiceContext.removeContextProject()
+                                })
                             )
                         );
                     }
                     //invoke all the services, then (the resolvedResources array is filled) search and replace the values in the poList
-                    Observable.forkJoin(resolveResourcesFn).subscribe(
+                    forkJoin(resolveResourcesFn).subscribe(
                         () => {
                             pol.forEach(po => {
                                 po.getObjects().forEach((o: ARTNode, index: number, array: ARTNode[]) => {
@@ -644,7 +645,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
      * HEADING BUTTONS HANDLERS
      */
 
-    private switchInferred() {
+    switchInferred() {
         this.showInferred = !this.showInferred;
         this.vbProp.setInferenceInResourceView(this.showInferred);
         if (!this.showInferredPristine) { //resource view has been initialized with showInferred to false, so repeat the request
@@ -656,12 +657,12 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         }
     }
 
-    private switchRendering() {
+    switchRendering() {
         this.rendering = !this.rendering;
         this.vbProp.setRenderingInResourceView(this.rendering);
     }
 
-    private switchValueFilterLang() {
+    switchValueFilterLang() {
         this.valueFilterLangEnabled = !this.valueFilterLangEnabled;
         //update the preference
         let valueFilterLangPref = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().filterValueLang;
@@ -673,7 +674,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
     }
 
-    private listVersions() {
+    listVersions() {
         this.versionService.getVersions().subscribe(
             versions => {
                 this.versionList = versions;
@@ -689,7 +690,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         );
     }
 
-    private switchToVersion(version?: VersionInfo) {
+    switchToVersion(version?: VersionInfo) {
         if (this.activeVersion != version) {
             this.activeVersion = version;
             this.buildResourceView(this.resource);
@@ -714,7 +715,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
             }
         );
     }
-    private changeNotificationStatus() {
+    changeNotificationStatus() {
         let notificationFn: Observable<void>;
         if (this.isWatching) {
             notificationFn = this.notificationsService.stopWatching(this.resource);
@@ -728,7 +729,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         );
     }
     
-    private assertInferredStatements() {
+    assertInferredStatements() {
         let assertFn: MultiActionFunction[] = [];
         for (let p in this.resViewSections) {
             if (p == ResViewPartition.lexicalizations) continue; //lexicalizations not assertable
@@ -747,7 +748,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         }
         
         if (assertFn.length == 0) {
-            this.basicModals.alert("Assert inferred statements", "There are no inferred statements to assert", "warning");
+            this.basicModals.alert("Assert inferred statements", "There are no inferred statements to assert", ModalType.warning);
         } else {
             let onComplete = () => { //when the assert of all the statements is completed, stop the loading and rebuild the ResView
                 UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
@@ -792,14 +793,14 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
                 if (this.collaborationWorking) {
                     this.basicModals.alert("Collaboration System error", "The Collaboration System seems to be configured "
                         + "but it's not working (configuration could be not valid or the server may be not reachable), "
-                        + "so it will be disabled.", "error", err.stack);
+                        + "so it will be disabled.", ModalType.error, err.stack);
                     this.vbCollaboration.setWorking(false);
                 }
             }
         )
     }
 
-    private createIssue() {
+    createIssue() {
         this.collabModals.createIssue().then(
             formMap => {
                 UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
@@ -814,7 +815,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
         );
     }
 
-    private assignToIssue() {
+    assignToIssue() {
         this.collabModals.openIssueList().then(
             issue => {
                 UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
@@ -838,7 +839,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
 
     //Status bar
 
-    private discoverDataset() {
+    discoverDataset() {
         UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
         this.metadataRegistryService.discoverDataset(<ARTURIResource>this.resource).subscribe(
             metadataDataset => {
@@ -852,7 +853,7 @@ export class ResourceViewEditorComponent extends AbstractResourceView {
      * EVENT LISTENERS
      */
 
-    private objectDblClick(object: ARTResource) {
+    objectDblClick(object: ARTResource) {
         this.dblclickObj.emit(object);
     }
 

@@ -15,12 +15,12 @@ export class LexicalSenseSelectorComponent {
 
     private selectedLexicalEntry: ARTURIResource;
 
-    private lexicalSenses: ARTURIResource[];
+    lexicalSenses: ARTURIResource[];
     private selectedSense: ARTURIResource;
 
     constructor(private ontolexService: OntoLexLemonServices) {}
 
-    private onLexEntrySelected(lexEntry: ARTURIResource) {
+    onLexEntrySelected(lexEntry: ARTURIResource) {
         this.selectedLexicalEntry = lexEntry;
         this.onLexicalSenseSelected(null);
         if (this.selectedLexicalEntry != null) {
@@ -32,17 +32,17 @@ export class LexicalSenseSelectorComponent {
         }
     }
 
-    private onLexEntryLexiconChange() {
+    onLexEntryLexiconChange() {
         this.selectedLexicalEntry = null;
         this.onLexicalSenseSelected(null);
     }
 
-    private onIndexChanged() {
+    onIndexChanged() {
         this.selectedLexicalEntry = null;
         this.onLexicalSenseSelected(null);
     }
 
-    private onLexicalSenseSelected(sense: ARTURIResource) {
+    onLexicalSenseSelected(sense: ARTURIResource) {
         this.selectedSense = sense;
         this.nodeSelected.emit(this.selectedSense);
     }

@@ -20,7 +20,7 @@ export class ResourceViewModeDispatcher {
     @Output() empty: EventEmitter<number> = new EventEmitter(); //used with tabbed RV when all tab are closed or in splitted RV when the main resource is deleted
     @Output() tabSelect: EventEmitter<ARTResource> = new EventEmitter(); //used only with resource view tabbed when a tab containing a concept is selected
 
-    private resViewMode: ResourceViewMode; //"splitted" or "tabbed";
+    resViewMode: ResourceViewMode; //"splitted" or "tabbed";
 
     private eventSubscriptions: Subscription[] = [];
 

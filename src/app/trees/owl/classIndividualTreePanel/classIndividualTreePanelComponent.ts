@@ -40,8 +40,8 @@ export class ClassIndividualTreePanelComponent {
     @ViewChild(ClassTreePanelComponent) viewChildTree: ClassTreePanelComponent;
     @ViewChild(InstanceListPanelComponent) viewChildInstanceList: InstanceListPanelComponent;
 
-    private selectedClass: ARTURIResource = null;
-    private selectedInstance: ARTURIResource;
+    selectedClass: ARTURIResource = null;
+    selectedInstance: ARTURIResource;
 
     private eventSubscriptions: Subscription[] = [];
 
@@ -83,7 +83,7 @@ export class ClassIndividualTreePanelComponent {
     }
 
     //EVENT LISTENERS
-    private onClassSelected(cls: ARTURIResource) {
+    onClassSelected(cls: ARTURIResource) {
         this.selectedClass = cls;
         if (this.selectedInstance != null) {
             this.selectedInstance.setAdditionalProperty(ResAttribute.SELECTED, false);
@@ -92,7 +92,7 @@ export class ClassIndividualTreePanelComponent {
         this.nodeSelected.emit(cls);
     }
 
-    private onInstanceSelected(instance: ARTURIResource) {
+    onInstanceSelected(instance: ARTURIResource) {
         this.selectedInstance = instance;
         this.nodeSelected.emit(instance);
     }
@@ -113,7 +113,7 @@ export class ClassIndividualTreePanelComponent {
      * Fired when, after a search in the individual panel, it's required to select another class in order to focus an individual
      * @param cls 
      */
-    private onClassChangeRequest(cls: ARTURIResource) {
+    onClassChangeRequest(cls: ARTURIResource) {
         this.openClassTreeAt(cls);
     }
 
@@ -121,7 +121,7 @@ export class ClassIndividualTreePanelComponent {
      * Handler of advancedSearch event, simply propagates the event
      * @param resource 
      */
-    private advancedSearch(resource: ARTResource) {
+    advancedSearch(resource: ARTResource) {
         this.advancedSearchEvent.emit(resource);
     }
 
@@ -142,13 +142,13 @@ export class ClassIndividualTreePanelComponent {
     private readonly maxPanelSize: number = 16;
     private readonly minPanelSize: number = 1;
 
-    private classPanelFlex = 6;
-    private readonly instancePanelFlex: number = 4;
+    classPanelFlex = 6;
+    readonly instancePanelFlex: number = 4;
 
     private dragging: boolean = false;
     private startMousedownY: number;
 
-    private onMousedown(event: MouseEvent) {
+    onMousedown(event: MouseEvent) {
         event.preventDefault();
         this.dragging = true;
         this.startMousedownY = event.clientY;

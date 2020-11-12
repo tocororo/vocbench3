@@ -13,12 +13,12 @@ import { XmlSchema } from "../../../models/Vocabulary";
 })
 export class DatatypeFacetsEditor implements ControlValueAccessor {
 
-    private base: ARTURIResource = XmlSchema.string;
-    private pattern: string;
+    base: ARTURIResource = XmlSchema.string;
+    pattern: string;
     private min: number;
     private max: number;
 
-    private baseOpts: ARTURIResource[] = DatatypeUtils.xsdBuiltInTypes;
+    baseOpts: ARTURIResource[] = DatatypeUtils.xsdBuiltInTypes;
     private readonly EXCLUSIVE: string = "Exclusive";
     private readonly INCLUSIVE: string = "Inclusive";
     private inclusiveExclusive: string[] = [this.EXCLUSIVE, this.INCLUSIVE];
@@ -27,7 +27,7 @@ export class DatatypeFacetsEditor implements ControlValueAccessor {
 
     constructor() {}
 
-    private isBaseNumeric(): boolean {
+    isBaseNumeric(): boolean {
         return DatatypeUtils.xsdNumericDatatypes.some(dt => dt.equals(this.base));
     }
 

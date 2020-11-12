@@ -1,4 +1,5 @@
 import { Component, QueryList, ViewChildren } from "@angular/core";
+import { map } from 'rxjs/operators';
 import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { PropertyServices } from "../../../services/propertyServices";
 import { VBRequestOptions } from "../../../utils/HttpManager";
@@ -41,8 +42,8 @@ export class PropertyTreeNodeComponent extends AbstractTreeNode {
     }
 
     expandNodeImpl() {
-        return this.propService.getSubProperties(this.node, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
-            subProps => {
+        return this.propService.getSubProperties(this.node, VBRequestOptions.getRequestOptions(this.projectCtx)).pipe(
+            map(subProps => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(subProps, this.rendering ? SortAttribute.show : SortAttribute.value);
                 this.children = subProps;
@@ -51,7 +52,7 @@ export class PropertyTreeNodeComponent extends AbstractTreeNode {
                     this.open = false;
                     this.node.setAdditionalProperty(ResAttribute.MORE, 0);
                 }
-            }
+            })
         );
     }
 

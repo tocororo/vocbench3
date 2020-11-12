@@ -1,8 +1,8 @@
 <div class="modal-header">
     <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">{{context.title}}</h3>
+        <h3 class="modal-title" style="flex: 1">{{title}}</h3>
         <span>
-            <button class="btn btn-default btn-xs" title="Change property" (click)="changeProperty()" [disabled]="!context.propChangeable">
+            <button class="btn btn-light btn-xs" title="Change property" (click)="changeProperty()" [disabled]="!propChangeable">
                 <rdf-resource [resource]="enrichingProperty"></rdf-resource>
             </button>
         </span>
@@ -11,8 +11,8 @@
 <div class="modal-body vbox" style="min-height: 400px;">
 
     <div style="margin-bottom: 4px;">
-        <div *ngIf="showAspectSelector" class="btn-group btn-group-xs pull-right">
-            <button *ngFor="let selector of aspectSelectors" class="btn btn-default" [ngClass]="{active: selectedAspectSelector == selector}"
+        <div *ngIf="showAspectSelector" class="btn-group btn-group-xs float-right">
+            <button *ngFor="let selector of aspectSelectors" class="btn btn-light" [ngClass]="{active: selectedAspectSelector == selector}"
                 (click)="changeAspectSelector(selector)">{{selector.show}}</button>
         </div>
     </div>
@@ -25,35 +25,35 @@
                     <input type="checkbox" [(ngModel)]="showAllClass">Show all classes
                 </label>
             </div>
-            <class-tree-panel [context]="treeListCtx" [roots]="showAllClass? defaultRootClass : rootsForClsIndList" [deletable]="false" [allowMultiselection]="context.allowMultiselection"
+            <class-tree-panel [context]="treeListCtx" [roots]="showAllClass? defaultRootClass : rootsForClsIndList" [deletable]="false" [allowMultiselection]="allowMultiselection"
                 (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
             </class-tree-panel>
         </div>
 
-        <concept-tree-panel *ngIf="viewType == 'conceptTree'" [context]="treeListCtx" [deletable]="false" [schemeChangeable]="true" [schemes]="schemes" [allowMultiselection]="context.allowMultiselection"
+        <concept-tree-panel *ngIf="viewType == 'conceptTree'" [context]="treeListCtx" [deletable]="false" [schemeChangeable]="true" [schemes]="schemes" [allowMultiselection]="allowMultiselection"
             (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (schemeChanged)="onConceptTreeSchemeChange($event)"
             (multiselectionStatus)="onMultiselectionChange($event)">
         </concept-tree-panel>
         
         <ng-template [ngIf]="viewType == 'propertyTree'">
-            <property-tree-panel *ngIf="viewType == 'propertyTree'" [context]="treeListCtx" [deletable]="false" [type]="propertyType" [allowMultiselection]="context.allowMultiselection"
+            <property-tree-panel *ngIf="viewType == 'propertyTree'" [context]="treeListCtx" [deletable]="false" [type]="propertyType" [allowMultiselection]="allowMultiselection"
                 (nodeSelected)="onPropertySelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
             </property-tree-panel>
             <div *ngIf="showInversePropertyCheckbox" class="checkbox" style="margin: 8px 0 0 0;">
                 <label>
                     <input type="checkbox" [(ngModel)]="inverseProp" [disabled]="!isInversePropertyCheckboxEnabled()">Inverse Property
-                    <span *ngIf="multiselection" class="glyphicon glyphicon-exclamation-sign"
+                    <span *ngIf="multiselection" class="fas fa-exclamation-circle"
                         title="In case of multiple properties selected, the 'Inverse Property' flag is applied to all of them (available only if all for ObjectProperties)">
                     </span>
                 </label>
             </div>
         </ng-template>
         
-        <scheme-list-panel *ngIf="viewType == 'schemeList'" [context]="treeListCtx" [deletable]="false" [allowMultiselection]="context.allowMultiselection"
+        <scheme-list-panel *ngIf="viewType == 'schemeList'" [context]="treeListCtx" [deletable]="false" [allowMultiselection]="allowMultiselection"
             (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
         </scheme-list-panel>
         
-        <datatype-list-panel *ngIf="viewType == 'datatypeList'" [context]="treeListCtx" [full]="true" [deletable]="false"  [allowMultiselection]="context.allowMultiselection"
+        <datatype-list-panel *ngIf="viewType == 'datatypeList'" [context]="treeListCtx" [full]="true" [deletable]="false"  [allowMultiselection]="allowMultiselection"
             (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
         </datatype-list-panel>
         
@@ -63,7 +63,7 @@
                     <input type="checkbox" [(ngModel)]="showAllClass">Show all classes
                 </label>
             </div>
-            <class-individual-tree [context]="treeListCtx" [deletable]="false" [roots]="showAllClass? defaultRootClasses : rootsForClsIndList" [allowMultiselection]="context.allowMultiselection"
+            <class-individual-tree [context]="treeListCtx" [deletable]="false" [roots]="showAllClass? defaultRootClasses : rootsForClsIndList" [allowMultiselection]="allowMultiselection"
                 (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
             </class-individual-tree>
         </div>
@@ -77,6 +77,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

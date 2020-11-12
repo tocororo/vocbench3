@@ -1,22 +1,24 @@
-import { ElementRef, ViewChild } from "@angular/core";
-import { QueryList } from "@angular/core/src/render3";
+import { Directive, ElementRef, QueryList, ViewChild } from "@angular/core";
 import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { SemanticTurkey } from "../models/Vocabulary";
 import { TreeListContext, UIUtils } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ModalType } from '../widget/modal/Modals';
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { AbstractStruct } from "./abstractStruct";
 import { AbstractTreeNode } from "./abstractTreeNode";
 
+@Directive()
 export abstract class AbstractTree extends AbstractStruct {
 
     /**
      * VIEWCHILD, INPUTS / OUTPUTS
      */
 
-    @ViewChild('blockDivTree') public blockDivElement: ElementRef;//the element in the view referenced with #blockDivTree
+    @ViewChild('blockDivTree', { static: true }) public blockDivElement: ElementRef;//the element in the view referenced with #blockDivTree
+    // public blockDivElement: ElementRef;//the element in the view referenced with #blockDivTree
     abstract viewChildrenNode: QueryList<AbstractTreeNode>;
 
     /**
@@ -139,7 +141,7 @@ export abstract class AbstractTree extends AbstractStruct {
     initialRoots: number = 150;
     rootLimit: number = this.initialRoots;
     private increaseRate: number = this.initialRoots/5;
-    private onScroll() {
+    onScroll() {
         let scrollElement: HTMLElement = this.scrollableElement.nativeElement;
         // if (scrollElement.scrollTop === (scrollElement.scrollHeight - scrollElement.offsetHeight)) {
         //consider a little buffer of 2px in order to prevent potential problems (see https://stackoverflow.com/a/32283147/5805661)
@@ -179,14 +181,14 @@ export abstract class AbstractTree extends AbstractStruct {
     onTreeNodeNotFound(node: ARTURIResource) {
         if (this.context == TreeListContext.dataPanel) {
             this.basicModals.confirm("Search", "Node " + node.getShow() + " is not reachable in the current tree. "
-                + "Do you want to open its ResourceView in a modal dialog?", "warning").then(
+                + "Do you want to open its ResourceView in a modal dialog?", ModalType.warning).then(
                 confirm => { 
                     this.sharedModals.openResourceView(node, false);
                 },
                 cancel => {}
             );
         } else {
-            this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree.", "warning");
+            this.basicModals.alert("Search", "Node " + node.getShow() + " is not reachable in the current tree.", ModalType.warning);
         }
         
     }

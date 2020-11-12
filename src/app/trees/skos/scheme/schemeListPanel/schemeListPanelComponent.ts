@@ -1,4 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { MultischemeMode, SearchSettings } from "../../../../models/Properties";
@@ -66,7 +67,7 @@ export class SchemeListPanelComponent extends AbstractListPanel {
             VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             searchResult => {
                 if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", ModalType.warning);
                 } else { //1 or more results
                     if (searchResult.length == 1) {
                         this.openAt(searchResult[0]);
@@ -102,14 +103,14 @@ export class SchemeListPanelComponent extends AbstractListPanel {
         this.eventHandler.multischemeModeChangedEvent.emit();
     }
 
-    private isAddAllConceptsEnabled() {
+    isAddAllConceptsEnabled() {
         return this.selectedNode != null && this.isContextDataPanel();
     }
 
     private addAllConcepts() {
         //message to warn the user that in case of a lot of concept the process could be long?
         this.basicModals.confirm("Add concepts to scheme", "You are going to add all the existing concepts to the scheme '" +
-            this.selectedNode.getShow() + "'. Are you sure?", "warning").then(
+            this.selectedNode.getShow() + "'. Are you sure?", ModalType.warning).then(
             confirm => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.skosService.addMultipleConceptsToScheme(this.selectedNode).subscribe(

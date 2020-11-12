@@ -1,4 +1,5 @@
-import { Observable } from "rxjs";
+import { from, Observable, of } from "rxjs";
+import { flatMap } from 'rxjs/operators';
 import { RDFTypesEnum } from "../../models/ARTResources";
 import { CustomForm } from "../../models/CustomForms";
 import { SKOS } from "../../models/Vocabulary";
@@ -32,8 +33,8 @@ export class DefinitionEnrichmentHelper {
     public static getDefinitionEnrichmentInfo(propService: PropertyServices, basicModals: BasicModalServices, crConfig: DefinitionCustomRangeConfig): Observable<DefinitionEnrichmentInfo> {
         let predicate = SKOS.definition;
 
-        return this.fillDefinitionCustomRangeConfig(propService, crConfig).flatMap(
-            () => {
+        return this.fillDefinitionCustomRangeConfig(propService, crConfig).pipe(
+            flatMap(() => {
                 /* 
                 handle 2 cases: 
                 - both Custom and standard range; 
@@ -44,7 +45,7 @@ export class DefinitionEnrichmentHelper {
                     //workaround tu include "literal" as choice in the CF selection modal
                     let rangeOptions: CustomForm[] = [new CustomForm(RDFTypesEnum.literal, RDFTypesEnum.literal)];
                     rangeOptions = rangeOptions.concat(crConfig.customForms);
-                    return Observable.fromPromise(
+                    return from(
                         //ask the user to choose
                         basicModals.selectCustomForm("Select a range", rangeOptions).then(
                             (selectedCF: CustomForm) => {
@@ -61,9 +62,9 @@ export class DefinitionEnrichmentHelper {
                     );
                 } else { //only CR
                     if (crConfig.customForms.length == 1) { //just one CF in the collection => prompt it
-                        return Observable.of({type: DefEnrichmentType.customForm, form: crConfig.customForms[0]});
+                        return of({type: DefEnrichmentType.customForm, form: crConfig.customForms[0]});
                     } else { //multiple CF => ask which one to use
-                        return Observable.fromPromise(
+                        return from(
                             //prepare the range options with the custom range entries
                             basicModals.selectCustomForm("Select a Custom Range", crConfig.customForms).then(
                                 (selectedCF: CustomForm) => {
@@ -76,7 +77,7 @@ export class DefinitionEnrichmentHelper {
                         )
                     }
                 }
-            }
+            })
         );
     }
 
@@ -90,16 +91,16 @@ export class DefinitionEnrichmentHelper {
     private static fillDefinitionCustomRangeConfig(propService: PropertyServices, crConfig: DefinitionCustomRangeConfig): Observable<void> {
         if (crConfig.customForms != null) {
             //since the CFs are already there, it means that the config has been already filled, so nothing left to do
-            return Observable.of(null);
+            return of(null);
         } else { //CFs are not provided (probably it was initialized with the "hasCustomRange" attr) => fill the configuration by invoking getRange
-            return propService.getRange(SKOS.definition).flatMap(
-                (range: RangeResponse) => {
+            return propService.getRange(SKOS.definition).pipe(
+                flatMap((range: RangeResponse) => {
                     let ranges = range.ranges;
                     let customForms: CustomForm[] = range.formCollection.getForms();
                     crConfig.hasLiteralRange = ranges != null;
                     crConfig.customForms = customForms;
-                    return Observable.of(null);
-                }
+                    return of(null);
+                })
             );
         }
     }

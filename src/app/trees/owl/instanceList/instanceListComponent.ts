@@ -1,5 +1,6 @@
 import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
 import { InstanceListVisualizationMode } from "../../../models/Properties";
 import { SemanticTurkey } from "../../../models/Vocabulary";
@@ -80,7 +81,7 @@ export class InstanceListComponent extends AbstractList {
                             ]
                             this.basicModals.select("Too much instances", "Warning: the selected class (" + this.cls.getShow() 
                                 + ") has too many instances (" + numInst + "). Retrieving them all could be a very long process, "
-                                + "you might experience performance decrease. What do you want to do?", opts, "warning")
+                                + "you might experience performance decrease. What do you want to do?", opts, ModalType.warning)
                             .then(
                                 (choice: SelectionOption) => {
                                     if (choice == opts[0]) { //continue anyway
@@ -158,7 +159,7 @@ export class InstanceListComponent extends AbstractList {
      */
     private getNumberOfInstances(cls: ARTURIResource): Observable<number> {
         if (VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().classTreePreferences.showInstancesNumber) { //if num inst are already computed when building the tree...
-            return Observable.of(this.cls.getAdditionalProperty(ResAttribute.NUM_INST));
+            return of(this.cls.getAdditionalProperty(ResAttribute.NUM_INST));
         } else { //otherwise call a service
             return this.clsService.getNumberOfInstances(cls, VBRequestOptions.getRequestOptions(this.projectCtx));
         }

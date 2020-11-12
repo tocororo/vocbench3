@@ -1,5 +1,7 @@
-import { Component, Input, QueryList, ViewChildren, SimpleChanges } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Component, Input, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
 import { ARTURIResource, ResAttribute } from "../../../models/ARTResources";
 import { ClassTreeFilter } from "../../../models/Properties";
 import { OWL, RDFS } from "../../../models/Vocabulary";
@@ -10,7 +12,6 @@ import { TreeListContext } from "../../../utils/UIUtils";
 import { VBContext } from "../../../utils/VBContext";
 import { VBEventHandler } from "../../../utils/VBEventHandler";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
-import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
 import { AbstractTreeNode } from "../../abstractTreeNode";
 
 @Component({
@@ -25,7 +26,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     @Input() root: boolean = false;
     @Input() filterEnabled: boolean = false;
 
-    private showInstanceNumber: boolean = false;
+    showInstanceNumber: boolean = false;
 
     constructor(private clsService: ClassesServices, eventHandler: VBEventHandler,
         basicModals: BasicModalServices, sharedModals: SharedModalServices) {
@@ -78,8 +79,8 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
     }
 
     expandNodeImpl(): Observable<any> {
-        return this.clsService.getSubClasses(this.node, this.showInstanceNumber, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
-            subClasses => {
+        return this.clsService.getSubClasses(this.node, this.showInstanceNumber, VBRequestOptions.getRequestOptions(this.projectCtx)).pipe(
+            map(subClasses => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(subClasses, this.rendering ? SortAttribute.show : SortAttribute.value);
                 this.children = subClasses;
@@ -89,7 +90,7 @@ export class ClassTreeNodeComponent extends AbstractTreeNode {
                     this.open = false;
                     this.node.setAdditionalProperty(ResAttribute.MORE, 0);
                 }
-            }
+            })
         );
     }
 

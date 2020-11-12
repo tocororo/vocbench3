@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body vbox">
 
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%;">
             <col>
@@ -12,7 +12,7 @@
             <tr>
                 <td nowrap><label>Visualization mode</label></td>
                 <td>
-                    <select class="form-control input-sm" [(ngModel)]="visualization">
+                    <select class="form-control form-control-sm" [(ngModel)]="visualization">
                         <option *ngFor="let vm of visualizationModes" [value]="vm.value">{{vm.label}}</option>
                     </select>
                 </td>
@@ -22,12 +22,12 @@
                     <td nowrap>
                         <label>
                             Lexical entries limitation
-                            <span class="glyphicon glyphicon-info-sign" 
+                            <span class="fas fa-info-circle" 
                                 title="Sets the maximum amount of lexical entries visible in the list. This setting prevents the initialization of a list that might cause performance issues"></span>
                         </label>
                     </td>
                     <td>
-                        <input class="form-control input-sm" type="number" min="1" [(ngModel)]="safeToGoLimit">
+                        <input class="form-control form-control-sm" type="number" min="1" [(ngModel)]="safeToGoLimit">
                     </td>
                 </tr>
                 <tr>
@@ -35,7 +35,7 @@
                         <label>Index length</label>
                     </td>
                     <td>
-                        <select class="form-control input-sm" [(ngModel)]="indexLenght">
+                        <select class="form-control form-control-sm" [(ngModel)]="indexLenght">
                             <option *ngFor="let l of lenghtChoices">{{l}}</option>
                         </select>
                     </td>
@@ -46,6 +46,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

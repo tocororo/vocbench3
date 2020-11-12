@@ -1,32 +1,23 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTBNode, ARTLiteral } from '../../../models/ARTResources';
 import { PropertyServices } from '../../../services/propertyServices';
 import { ResourceUtils } from "../../../utils/ResourceUtils";
-
-export class DataRangeEditorModalData extends BSModalContext {
-    constructor(public datarangeNode: ARTBNode) {
-        super();
-    }
-}
 
 @Component({
     selector: "data-range-editor-modal",
     templateUrl: "./dataRangeEditorModal.html",
 })
-export class DataRangeEditorModal implements ModalComponent<DataRangeEditorModalData> {
-    context: DataRangeEditorModalData;
+export class DataRangeEditorModal {
+    @Input() datarangeNode: ARTBNode;
 
     private datarangePristine: ARTLiteral[] = [];
-    private datarange: ARTLiteral[] = [];
+    datarange: ARTLiteral[] = [];
 
-    constructor(public dialog: DialogRef<DataRangeEditorModalData>, private propertyService: PropertyServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private propertyService: PropertyServices) {}
 
     ngOnInit() {
-        this.propertyService.getDatarangeLiterals(this.context.datarangeNode).subscribe(
+        this.propertyService.getDatarangeLiterals(this.datarangeNode).subscribe(
             datarange => {
                 this.datarange = datarange;
                 this.datarangePristine = datarange.slice(); //clone
@@ -34,7 +25,7 @@ export class DataRangeEditorModal implements ModalComponent<DataRangeEditorModal
         )
     }
 
-    ok(event: Event) {
+    ok() {
         //check if the datarange list is changed
         var changed: boolean = false;
 
@@ -61,11 +52,9 @@ export class DataRangeEditorModal implements ModalComponent<DataRangeEditorModal
         }
         if (changed) {
             //invoke service to update the datarange
-            this.propertyService.updateDataranges(this.context.datarangeNode, this.datarange).subscribe(
+            this.propertyService.updateDataranges(this.datarangeNode, this.datarange).subscribe(
                 stResp => {
-                    event.stopPropagation();
-                    event.preventDefault();
-                    this.dialog.close();
+                    this.activeModal.close();
                 }
             )
         } else {
@@ -75,7 +64,7 @@ export class DataRangeEditorModal implements ModalComponent<DataRangeEditorModal
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

@@ -1,3 +1,4 @@
+import { Directive } from '@angular/core';
 import { GraphModalServices } from "../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { CustomFormsServices } from "../services/customFormsServices";
@@ -9,6 +10,7 @@ import { BasicModalServices } from "../widget/modal/basicModal/basicModalService
 import { AbstractPanel } from "./abstractPanel";
 import { MultiSubjectEnrichmentHelper } from "./multiSubjectEnrichmentHelper";
 
+@Directive()
 export abstract class AbstractListPanel extends AbstractPanel {
 
     /**

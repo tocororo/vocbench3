@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { forkJoin, Observable, of } from "rxjs";
 import { ARTBNode, ARTNode, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -21,7 +21,7 @@ export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.domains;
     addBtnImgTitle = "Add a domain";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/cls_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/cls_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
@@ -68,7 +68,7 @@ export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(value instanceof ARTURIResource);
+        return of(value instanceof ARTURIResource);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {
@@ -125,7 +125,7 @@ export class DomainsPartitionRenderer extends PartitionRenderSingleRoot {
                     removeFnArray.push(this.getRemoveFunction(predicate, notClassAxioms[j]));
                 }
                 //collects remove function for all the suspicious class axioms domains
-                Observable.forkJoin(isClassAxiomFnArray).subscribe(
+                forkJoin(isClassAxiomFnArray).subscribe(
                     results => {
                         for (var j = 0; j < results.length; j++) {
                             if (results[j]) { //is class axiom

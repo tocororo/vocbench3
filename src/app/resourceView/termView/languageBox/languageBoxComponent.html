@@ -1,30 +1,28 @@
-
 <div class="wrap">
     <div class="links">
         <lang-item class="groupPanel-heading-content" [language]="langForFlag" [showTag]="false" [showName]="false" [size]="'md'"></lang-item>
-        <button *ngIf="emptyDef && terms.length == 0" (click)="removeBox()" class="btn btn-xs btn-default remove-button"  title="Remove box" [disabled]="readonly">
-            <span class="glyphicon glyphicon-remove" style="font-size: 7px;"></span>
+        <button *ngIf="emptyDef && terms.length == 0" (click)="removeBox()" class="btn btn-xs btn-light remove-button"
+            title="Remove box" [disabled]="readonly">
+            <span class="fas fa-times" style="font-size: 7px;"></span>
         </button>
     </div>
-    <div class="btn-group semitransparent" style="display: flex;">
-        <button type="button" class="btn btn-xs add-button" (click)="addTermBox()" title="Add new Term" [disabled]="!addLabelAuthorized || emptyTerm || readonly">
-            <span class="glyphicon glyphicon-plus" style="font-size: 9px;"></span>
+    <div class="btn-group semitransparent" style="display: flex;" ngbDropdown>
+        <button class="btn btn-xs add-button" (click)="addTermBox()" title="Add new Term" [disabled]="!addLabelAuthorized || emptyTerm || readonly">
+            <span class="fas fa-plus" style="font-size: 9px;"></span>
         </button>
-        <button type="button" class="btn add-button arrow dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <span class="caret"></span>
+        <button class="btn add-button arrow dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+            <span class="fas fa-caret-down fa-sm"></span>
         </button>
-        <ul class="dropdown-menu pull-right">
-            <li [ngClass]="{ disabled : (!addDefAuthorized || emptyDef || readonly) }">
-                <a (click)="addDefinitionItem()" >Add definition</a>
-            </li>
-        </ul>
+        <div class="dropdown-menu float-right" ngbDropdownMenu>
+            <a class="dropdown-item" [ngClass]="{ disabled : (!addDefAuthorized || emptyDef || readonly) }" (click)="addDefinitionItem()">Add definition</a>
+        </div>
     </div>
 </div>
- 
-<lang-def *ngFor="let def of definitions" [def]="def" [resource]="resource" [lang]="lang" [readonly]="readonly" [defCrConfig]="defCrConfig"
-    (delete)="deleteDefinition(def)" (update)="onDefUpdate()">
+
+<lang-def *ngFor="let def of definitions" [def]="def" [resource]="resource" [lang]="lang" [readonly]="readonly"
+    [defCrConfig]="defCrConfig" (delete)="deleteDefinition(def)" (update)="onDefUpdate()">
 </lang-def>
 
-<lang-term *ngFor="let term of terms" [term]="term" [resource]="resource" [lang]="lang" [readonly]="readonly" 
+<lang-term *ngFor="let term of terms" [term]="term" [resource]="resource" [lang]="lang" [readonly]="readonly"
     (delete)="deleteTerm(term)" (update)="onTermUpdate()">
 </lang-term>

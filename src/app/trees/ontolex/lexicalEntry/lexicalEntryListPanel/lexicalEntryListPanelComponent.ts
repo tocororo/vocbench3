@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output, ViewChild, SimpleChanges } from "@angular/core";
-import { OverlayConfig } from "ngx-modialog";
-import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
-import { Observable } from "rxjs/Observable";
+import { Component, EventEmitter, Input, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { Project } from "../../../../models/Project";
@@ -31,7 +32,6 @@ import { LexicalEntryListSettingsModal } from "./lexicalEntryListSettingsModal";
     host: { class: "vbox" }
 })
 export class LexicalEntryListPanelComponent extends AbstractListPanel {
-    @Input() hideSearch: boolean = false; //if true hide the search bar
     @Input() lexicon: ARTURIResource;
     @Input() lexiconChangeable: boolean = false; //if true, above the tree is shown a menu to select a lexicon
     @Output() lexiconChanged = new EventEmitter<ARTURIResource>();//when dynamic lexicon is changed
@@ -42,23 +42,23 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.ontolexLexicalEntry;
 
     private lexiconList: ARTURIResource[];//list of lexicons, visible only when lexiconChangeable is true
-    private workingLexicon: ARTURIResource;//keep track of the selected lexicon: could be assigned throught @Input lexicon or lexicon selection
+    workingLexicon: ARTURIResource;//keep track of the selected lexicon: could be assigned throught @Input lexicon or lexicon selection
     //(useful expecially when lexiconChangeable is true so the changes don't effect the lexicon in context)
     private lexiconLang: string;
 
-    private visualizationMode: LexEntryVisualizationMode;
+    visualizationMode: LexEntryVisualizationMode;
 
     //for visualization indexBased
     private alphabet: string[] = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
     private firstDigitIndex: string = this.alphabet[0];
     private secondDigitIndex: string = this.alphabet[0];
-    private index: string;
+    index: string;
     private indexLenght: number;
 
     //for visualization searchBased
-    private lastSearch: string;
+    lastSearch: string;
 
-    constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private modal: Modal,
+    constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private modalService: NgbModal,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
         super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
@@ -154,7 +154,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
             searchResult => {
                 UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", ModalType.warning);
                     return;
                 }
                 ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
@@ -240,12 +240,12 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
      */
     private getSearchedEntryIndex(entry: ARTURIResource): Observable<string> {
         if (entry.getAdditionalProperty("index") != null) {
-            return Observable.of(entry.getAdditionalProperty("index").toLocaleUpperCase());
+            return of(entry.getAdditionalProperty("index").toLocaleUpperCase());
         } else {
-            return this.ontolexService.getLexicalEntryIndex(entry, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
-                index => {
+            return this.ontolexService.getLexicalEntryIndex(entry, VBRequestOptions.getRequestOptions(this.projectCtx)).pipe(
+                map(index => {
                     return index.toLocaleUpperCase();
-                }
+                })
             );
         }
     }
@@ -278,17 +278,10 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
     }
 
 
-
-    //@Override
-    // isCreateDisabled(): boolean {
-    //     return (!this.workingLexicon || this.readonly || !AuthorizationEvaluator.Tree.isCreateAuthorized(this.panelRole));
-    // }
-
-    private settings() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(LexicalEntryListSettingsModal, overlayConfig).result.then(
-            changesDone => {
+    settings() {
+        const modalRef: NgbModalRef = this.modalService.open(LexicalEntryListSettingsModal, new ModalOptions());
+        return modalRef.result.then(
+            () => {
                 let lexEntryListPref: LexicalEntryListPreference = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().lexEntryListPreferences;
                 this.visualizationMode = lexEntryListPref.visualization;
                 if (this.visualizationMode == LexEntryVisualizationMode.searchBased) {

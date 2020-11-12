@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from "rxjs";
+import { map } from 'rxjs/operators';
 import { ARTNode, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -22,7 +23,7 @@ export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.topconceptof;
     addBtnImgTitle = "Add to a skos:ConceptScheme as topConcept";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/conceptScheme_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/conceptScheme_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
@@ -52,10 +53,10 @@ export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
                 } else { //it's adding a subProperty of skos:topConceptOf
                     values.forEach((v: ARTURIResource) => {
                         addFunctions.push({
-                            function: this.resourcesService.addValue(this.resource, prop, v).map(
-                                stResp => {
+                            function: this.resourcesService.addValue(this.resource, prop, v).pipe(
+                                map(() => {
                                     this.eventHandler.topConceptCreatedEvent.emit({concept: <ARTURIResource>this.resource, schemes: [v]});
-                                }
+                                })
                             ),
                             value: v
                         });
@@ -68,7 +69,7 @@ export class TopConceptsPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(value instanceof ARTURIResource);
+        return of(value instanceof ARTURIResource);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { ResourceAlignmentModal, ResourceAlignmentModalData } from "../../alignment/resourceAlignment/resourceAlignmentModal";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
+import { ResourceAlignmentModal } from "../../alignment/resourceAlignment/resourceAlignmentModal";
 import { GraphModalServices } from "../../graph/modal/graphModalServices";
 import { ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { SKOS } from "../../models/Vocabulary";
@@ -35,7 +35,7 @@ export class ResourceViewContextMenu {
     private isGraphAuthorized: boolean;
 
     constructor(private alignServices: AlignmentServices, private refactorService: RefactorServices, private resourcesService: ResourcesServices,
-        private creationModals: CreationModalServices, private graphModals: GraphModalServices, private modal: Modal) { }
+        private creationModals: CreationModalServices, private graphModals: GraphModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         //init the menu items
@@ -77,12 +77,9 @@ export class ResourceViewContextMenu {
      * aligned object
      */
     private openAlignmentModal() {
-        var modalData = new ResourceAlignmentModalData(<ARTURIResource>this.resource); //cast since alignment is available only for URI
-        const builder = new BSModalContextBuilder<ResourceAlignmentModalData>(
-            modalData, undefined, ResourceAlignmentModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ResourceAlignmentModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(ResourceAlignmentModal, new ModalOptions());
+        modalRef.componentInstance.resource = <ARTURIResource>this.resource; //cast since alignment is available only for URI
+        return modalRef.result;
     }
 
     private spawnNewConceptWithLabel() {
@@ -108,7 +105,7 @@ export class ResourceViewContextMenu {
     /**
      * Useful to enable menu item only for URIResource
      */
-    private isURIResource() {
+    isURIResource() {
         return this.resource.isURIResource();
     }
 
@@ -117,7 +114,7 @@ export class ResourceViewContextMenu {
     }
 
 
-    private isOpenDataGraphEnabled(): boolean {
+    isOpenDataGraphEnabled(): boolean {
         return this.isGraphAuthorized;
     }
 

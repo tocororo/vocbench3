@@ -1,10 +1,11 @@
-import { EventEmitter, Input, Output } from "@angular/core";
+import { Directive, EventEmitter, Input, Output } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { TreeListContext } from "../utils/UIUtils";
 import { ProjectContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 
+@Directive()
 export abstract class AbstractNode {
 
     /**

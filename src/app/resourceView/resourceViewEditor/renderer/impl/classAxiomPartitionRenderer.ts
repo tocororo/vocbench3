@@ -1,5 +1,7 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { from, Observable, of } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTBNode, ARTNode, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { OWL, RDFS } from "../../../../models/Vocabulary";
@@ -22,7 +24,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
 
     partition = ResViewPartition.classaxioms;
     addBtnImgTitle = "Add a class axiom";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/cls_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/cls_create.png";
 
     constructor(resourcesService: ResourcesServices, cfService: CustomFormsServices, 
         basicModals: BasicModalServices, resViewModals: ResViewModalServices,
@@ -44,7 +46,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
      */
     add(predicate: ARTURIResource) {
         if (!this.isKnownProperty(predicate)) {
-            this.basicModals.alert("Unknown property", predicate.getShow() + " is not a class axiom known property, it cannot be handled.", "error");
+            this.basicModals.alert("Unknown property", predicate.getShow() + " is not a class axiom known property, it cannot be handled.", ModalType.warning);
             return;
         }
 
@@ -90,7 +92,7 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
     }
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
-        return Observable.fromPromise(
+        return from(
             this.browsingModals.browsePropertyTree("Select a property", this.rootProperties).then(
                 (selectedProp: any) => {
                     return selectedProp;
@@ -101,10 +103,10 @@ export class ClassAxiomPartitionPartitionRenderer extends PartitionRendererMulti
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return this.propService.getRange(predicate).flatMap(
-            range => {
-                return Observable.of(RangeResponse.isRangeCompliant(range, value));
-            }
+        return this.propService.getRange(predicate).pipe(
+            flatMap(range => {
+                return of(RangeResponse.isRangeCompliant(range, value));
+            })
         )
     }
 

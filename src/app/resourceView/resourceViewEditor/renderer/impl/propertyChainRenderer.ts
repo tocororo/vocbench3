@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from "rxjs";
 import { ARTBNode, ARTNode, ARTResource, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -20,7 +20,7 @@ export class PropertyChainRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.subPropertyChains;
     addBtnImgTitle = "Add a property chain axion";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/property_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/property_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
@@ -60,7 +60,7 @@ export class PropertyChainRenderer extends PartitionRenderSingleRoot {
 
     //not used since this partition doesn't allow manual add operation
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(true);
+        return of(true);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

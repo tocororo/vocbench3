@@ -1,4 +1,5 @@
 import { Component, Input, ViewChild } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { SearchSettings } from "../../../../models/Properties";
@@ -24,7 +25,6 @@ import { LexiconListComponent } from "../lexiconList/lexiconListComponent";
     host: { class: "vbox" }
 })
 export class LexiconListPanelComponent extends AbstractListPanel {
-    @Input() hideSearch: boolean = false; //if true hide the search bar
     @ViewChild(LexiconListComponent) viewChildList: LexiconListComponent;
 
     panelRole: RDFResourceRolesEnum = RDFResourceRolesEnum.limeLexicon;
@@ -40,23 +40,6 @@ export class LexiconListPanelComponent extends AbstractListPanel {
         return actionCtx;
     }
 
-    // private create() {
-    //     this.creationModals.newLexiconCf("Create new lime:Lexicon").then(
-    //         (res: NewLexiconCfModalReturnData) => {
-    //             this.ontolexService.createLexicon(res.language, res.uriResource, res.title, res.cfValue).subscribe();
-    //         },
-    //         () => { }
-    //     );
-    // }
-
-    // delete() {
-    //     this.ontolexService.deleteLexicon(this.selectedNode).subscribe(
-    //         stResp => {
-    //             this.selectedNode = null;
-    //         }
-    //     );
-    // }
-
     doSearch(searchedText: string) {
         let searchSettings: SearchSettings = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().searchSettings;
         let searchLangs: string[];
@@ -70,7 +53,7 @@ export class LexiconListPanelComponent extends AbstractListPanel {
             VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             searchResult => {
                 if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", ModalType.warning);
                 } else { //1 or more results
                     if (searchResult.length == 1) {
                         this.openAt(searchResult[0]);

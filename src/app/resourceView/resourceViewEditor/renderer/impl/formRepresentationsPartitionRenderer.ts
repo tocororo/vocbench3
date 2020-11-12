@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { from, Observable, of } from "rxjs";
 import { ARTLiteral, ARTNode, ARTURIResource } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -21,7 +21,7 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
 
     partition = ResViewPartition.formRepresentations;
     addBtnImgTitle = "Add a representation";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/datatypeProperty_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/datatypeProperty_create.png";
 
     private lexiconLang: string; //cache the language of the lexicon
 
@@ -61,23 +61,23 @@ export class FormRepresentationsPartitionRenderer extends PartitionRenderSingleR
         if (this.lexiconLang == null) {
             return this.ontolexService.getFormLanguage(this.resource);
         } else {
-            return Observable.of(this.lexiconLang);
+            return of(this.lexiconLang);
         }
     }
 
     getPredicateToEnrich(): Observable<ARTURIResource> {
-        return Observable.fromPromise(
+        return from(
             this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
                 selectedProp => {
                     return selectedProp;
                 },
-                () => { }
+                () => { return null }
             )
         );
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(value instanceof ARTLiteral);
+        return of(value instanceof ARTLiteral);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

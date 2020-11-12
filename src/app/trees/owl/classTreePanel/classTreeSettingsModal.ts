@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { ClassTreePreference } from "../../../models/Properties";
 import { OWL, RDFS } from "../../../models/Vocabulary";
@@ -17,26 +17,23 @@ import { BrowsingModalServices } from "../../../widget/modal/browsingModal/brows
     selector: "class-tree-settings-modal",
     templateUrl: "./classTreeSettingsModal.html",
 })
-export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class ClassTreeSettingsModal {
 
     private pristineClassPref: ClassTreePreference;
 
-    private rootClass: ARTURIResource;
-    private filterEnabled: boolean;
+    rootClass: ARTURIResource;
+    filterEnabled: boolean;
 
-    private filterMapRes: FilterMapEntry[] = [];
-    private selectedFilteredClass: ARTURIResource;
+    filterMapRes: FilterMapEntry[] = [];
+    selectedFilteredClass: ARTURIResource;
 
-    private renderingClasses: boolean = false;
-    private renderingFilter: boolean = false;
+    renderingClasses: boolean = false;
+    renderingFilter: boolean = false;
 
-    private showInstNumb: boolean;
+    showInstNumb: boolean;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private clsService: ClassesServices, private resourceService: ResourcesServices, 
-        private vbProp: VBProperties, private basicModals: BasicModalServices , private browsingModals: BrowsingModalServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private clsService: ClassesServices, private resourceService: ResourcesServices, 
+        private vbProp: VBProperties, private basicModals: BasicModalServices , private browsingModals: BrowsingModalServices) {}
 
     ngOnInit() {
         let clsTreePref: ClassTreePreference = VBContext.getWorkingProjectCtx().getProjectPreferences().classTreePreferences;
@@ -73,7 +70,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
      * ROOT CLASS HANDLERS
      */
 
-    private changeClass() {
+    changeClass() {
         this.browsingModals.browseClassTree("Select root class", [RDFS.resource]).then(
             (cls: ARTURIResource) => {
                 if (Cookie.getCookie(Cookie.WARNING_CUSTOM_ROOT, VBContext.getLoggedUser().getIri()) != "false") {
@@ -83,7 +80,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
                     ) {
                         let message: string = "Selecting a specific class as a root could hide newly created classes " + 
                             "that are not subclasses of the chosen root.";
-                        this.basicModals.alertCheckWarning("Warning", message, Cookie.WARNING_CUSTOM_ROOT);
+                        this.basicModals.alertCheckCookie("Warning", message, Cookie.WARNING_CUSTOM_ROOT);
                     }
                 }
                 this.rootClass = cls;
@@ -92,7 +89,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
         );
     }
 
-    private updateRootClass(clsURI: string) {
+    updateRootClass(clsURI: string) {
         let cls: ARTURIResource = new ARTURIResource(clsURI, null, RDFResourceRolesEnum.cls);
         //check if clsURI exist
         this.resourceService.getResourcePosition(cls).subscribe(
@@ -100,7 +97,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
                 if (position.isLocal()) {
                     this.rootClass = cls;
                 } else {
-                    this.basicModals.alert("Error", "Wrong URI: no resource with URI " + cls.getNominalValue() + " exists in the current project", "error");
+                    this.basicModals.alert("Error", "Wrong URI: no resource with URI " + cls.getNominalValue() + " exists in the current project", ModalType.error);
                     //temporarly reset the root class and the restore it (in order to trigger the change detection editable-input)
                     let oldRootClass = this.rootClass;
                     this.rootClass = null;
@@ -116,7 +113,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
      * FILTER MAP HANDLERS
      */
 
-    private selectFilteredClass(cls: ARTURIResource) {
+    selectFilteredClass(cls: ARTURIResource) {
         this.selectedFilteredClass = cls;
 
         let filterMapEntry: FilterMapEntry = this.getFilterMapEntry(this.selectedFilteredClass);
@@ -145,7 +142,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
         }
     }
 
-    private getFilterSubClasses(): SubClassFilterItem[] {
+    getFilterSubClasses(): SubClassFilterItem[] {
         if (this.selectedFilteredClass != null) {
             return this.getFilterMapEntry(this.selectedFilteredClass).subClasses;
         } else {
@@ -153,20 +150,20 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
         }
     }
 
-    private addFilter() {
+    addFilter() {
         this.browsingModals.browseClassTree("Select class", [RDFS.resource]).then(
             (cls: ARTURIResource) => {
                 if (this.getFilterMapEntry(cls) == null) {
                     this.filterMapRes.push({ cls: cls, subClasses: null });
                 } else {
-                    this.basicModals.alert("Error", "A filter for class " + cls.getShow() + " already exists.", "warning");
+                    this.basicModals.alert("Error", "A filter for class " + cls.getShow() + " already exists.", ModalType.warning);
                 }
             },
             () => {}
         );
     }
 
-    private removeFilter() {
+    removeFilter() {
         for (var i = 0; i < this.filterMapRes.length; i++) {
             if (this.filterMapRes[i].cls.getURI() == this.selectedFilteredClass.getURI()) {
                 this.selectedFilteredClass = null;
@@ -176,7 +173,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
         }
     }
 
-    private checkAllClasses(checked: boolean) {
+    checkAllClasses(checked: boolean) {
         this.getFilterMapEntry(this.selectedFilteredClass).subClasses.forEach((c: SubClassFilterItem) => {
             if (!c.disabled) {
                 c.checked = checked;
@@ -193,7 +190,7 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
         return null;
     }
 
-    ok(event: Event) {
+    ok() {
         //convert filterMapRes to a map string: string[]
         let filterMap: {[key: string]: string[]} = {};
         this.filterMapRes.forEach(f => {
@@ -229,16 +226,14 @@ export class ClassTreeSettingsModal implements ModalComponent<BSModalContext> {
 
         //only if the root class changed close the dialog (so that the class tree refresh)
         if (this.pristineClassPref.rootClassUri != this.rootClass.getURI()) {
-            event.stopPropagation();
-            event.preventDefault();
-            this.dialog.close();
+            this.activeModal.close();
         } else {//for other changes simply dismiss the modal
             this.cancel();
         }
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

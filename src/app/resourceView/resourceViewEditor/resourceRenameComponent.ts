@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, SimpleChanges, ViewChild } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { RefactorServices } from "../../services/refactorServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
@@ -77,7 +78,7 @@ export class ResourceRenameComponent {
         //here I can cast resource to ARTURIResource (since rename is enabled only for ARTURIResource and not for ARTBNode)
         if (this.namespaceLocked) { //just the namespace has changed
             if (this.localName.trim() == "") {
-                this.basicModals.alert("Rename", "You have to write a valid local name", "error");
+                this.basicModals.alert("Rename", "You have to write a valid local name", ModalType.warning);
                 this.cancelRename()
                 return;
             }
@@ -85,7 +86,7 @@ export class ResourceRenameComponent {
         } else { //complete renaming (ns + localName)
             newUri = this.totalRenameInput.nativeElement.value;
             if (newUri.trim() == "") {
-                this.basicModals.alert("Rename", "You have to write a valid URI", "error");
+                this.basicModals.alert("Rename", "You have to write a valid URI", ModalType.warning);
                 this.cancelRename()
                 return;
             }

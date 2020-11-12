@@ -1,4 +1,5 @@
 import { Component, QueryList, ViewChildren } from "@angular/core";
+import { map } from 'rxjs/operators';
 import { ARTResource, ARTURIResource, ResAttribute } from "../../../../models/ARTResources";
 import { SkosServices } from "../../../../services/skosServices";
 import { VBRequestOptions } from "../../../../utils/HttpManager";
@@ -41,8 +42,8 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
     }
 
     expandNodeImpl() {
-        return this.skosService.getNestedCollections(this.node, VBRequestOptions.getRequestOptions(this.projectCtx)).map(
-            nestedColl => {
+        return this.skosService.getNestedCollections(this.node, VBRequestOptions.getRequestOptions(this.projectCtx)).pipe(
+            map(nestedColl => {
                 //sort by show if rendering is active, uri otherwise
                 ResourceUtils.sortResources(nestedColl, this.rendering ? SortAttribute.show : SortAttribute.value);
                 this.children = nestedColl;
@@ -51,7 +52,7 @@ export class CollectionTreeNodeComponent extends AbstractTreeNode {
                     this.open = false;
                     this.node.setAdditionalProperty(ResAttribute.MORE, 0);
                 }
-            }
+            })
         );
     }
 

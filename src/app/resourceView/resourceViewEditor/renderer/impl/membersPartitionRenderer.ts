@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Observable, of } from "rxjs";
+import { map } from 'rxjs/operators';
 import { ARTNode, ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { ResViewPartition } from "../../../../models/ResourceView";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
@@ -22,7 +23,7 @@ export class MembersPartitionRenderer extends PartitionRenderSingleRoot {
 
     partition = ResViewPartition.members;
     addBtnImgTitle = "Add member";
-    addBtnImgSrc = require("../../../../../assets/images/icons/actions/skosCollection_create.png");
+    addBtnImgSrc = "../../../../../assets/images/icons/actions/skosCollection_create.png";
 
     constructor(propService: PropertyServices, resourcesService: ResourcesServices, cfService: CustomFormsServices,
         basicModals: BasicModalServices, browsingModals: BrowsingModalServices, creationModal: CreationModalServices,
@@ -54,12 +55,12 @@ export class MembersPartitionRenderer extends PartitionRenderSingleRoot {
                 } else { //it's enriching a subProperty of skos:member
                     values.forEach((v: ARTURIResource) => {
                         addFunctions.push({
-                            function: this.resourcesService.addValue(this.resource, prop, v).map(
-                                stResp => {
+                            function: this.resourcesService.addValue(this.resource, prop, v).pipe(
+                                map(() => {
                                     if (v.getRole() == RDFResourceRolesEnum.skosCollection || v.getRole() == RDFResourceRolesEnum.skosOrderedCollection) {
                                         this.eventHandler.nestedCollectionAddedEvent.emit({ nested: v, container: this.resource });
                                     }
-                                }
+                                })
                             ),
                             value: v
                         });
@@ -72,7 +73,7 @@ export class MembersPartitionRenderer extends PartitionRenderSingleRoot {
     }
 
     checkTypeCompliantForManualAdd(predicate: ARTURIResource, value: ARTNode): Observable<boolean> {
-        return Observable.of(value instanceof ARTURIResource);
+        return of(value instanceof ARTURIResource);
     }
 
     removePredicateObject(predicate: ARTURIResource, object: ARTNode) {

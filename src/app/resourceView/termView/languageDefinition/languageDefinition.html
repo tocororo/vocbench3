@@ -1,9 +1,9 @@
 <div class="def-wrap">
     <label class="groupPanel-heading-content" style="font-size: 13px;">Definition:</label>
     <inline-editable-value style="flex: 1; margin-left: 4px;" [value]="def" [disabled]="!editDefAuthorized || readonly"
-        [preventEdit]="defCrConfig.hasCustomRange && !def" (click)="onInlineValueClick($event)" (valueEdited)="onDefinitionEdited($event,def)">
+        [preventEdit]="defCrConfig.hasCustomRange && !def" (click)="onInlineValueClick()" (valueEdited)="onDefinitionEdited($event,def)">
     </inline-editable-value>
-    <button class="btn btn-xs btn-default minus-button"  (click)="deleteDefinition()" title="Delete definition" [disabled]="!deleteDefAuthorized || readonly">
-        <span class="glyphicon glyphicon-minus" style="font-size: 9px;"></span>
+    <button class="btn btn-xs btn-light minus-button"  (click)="deleteDefinition()" title="Delete definition" [disabled]="!deleteDefAuthorized || readonly">
+        <span class="fas fa-minus" style="font-size: 9px;"></span>
     </button>
 </div>

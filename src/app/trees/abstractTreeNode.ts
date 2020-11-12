@@ -1,14 +1,17 @@
-import { ElementRef, EventEmitter, Output, QueryList, SimpleChanges, ViewChild } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { Directive, ElementRef, EventEmitter, Output, QueryList, SimpleChanges, ViewChild } from "@angular/core";
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ARTResource, ARTURIResource, ResAttribute } from "../models/ARTResources";
 import { SemanticTurkey } from "../models/Vocabulary";
 import { TreeListContext } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ModalType } from '../widget/modal/Modals';
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { AbstractNode } from "./abstractNode";
 
+@Directive()
 export abstract class AbstractTreeNode extends AbstractNode {
 
     /**
@@ -96,11 +99,11 @@ export abstract class AbstractTreeNode extends AbstractNode {
 	 */
     expandNode(): Observable<any> {
         this.nodeExpandStart.emit();
-        return this.expandNodeImpl().map(
-            () => {
+        return this.expandNodeImpl().pipe(
+            map(() => {
                 this.initShowExpandCollapseBtn();
                 this.nodeExpandEnd.emit();
-            }
+            })
         );
     }
     /**
@@ -158,7 +161,7 @@ export abstract class AbstractTreeNode extends AbstractNode {
                 if (this.children[i].getURI() == path[0].getURI() && this.children[i].isDeprecated()) {
                     this.basicModals.alert("Search", "Node " + path[path.length-1].getShow() + 
                         " is not reachable in the current tree since the path to reach it contains a deprecated node." +
-                        " Enable the show of deprecated resources and repeat the search", "warning");
+                        " Enable the show of deprecated resources and repeat the search", ModalType.warning);
                     return;
                 }
             }
@@ -175,14 +178,14 @@ export abstract class AbstractTreeNode extends AbstractNode {
         //if this line is reached it means that the first node of the path has not been found
         if (this.context == TreeListContext.dataPanel) {
             this.basicModals.confirm("Search", "Node " + path[path.length-1].getShow() + " is not reachable in the current tree. "
-                + "Do you want to open its ResourceView in a modal dialog?", "warning").then(
+                + "Do you want to open its ResourceView in a modal dialog?", ModalType.warning).then(
                 confirm => { 
                     this.sharedModals.openResourceView(path[path.length-1], false);
                 },
                 cancel => {}
             );
         } else {
-            this.basicModals.alert("Search", "Node " + path[path.length-1].getShow() + " is not reachable in the current tree.", "warning");
+            this.basicModals.alert("Search", "Node " + path[path.length-1].getShow() + " is not reachable in the current tree.", ModalType.warning);
         }
     }
 

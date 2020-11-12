@@ -1,6 +1,6 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTNode } from "../../models/ARTResources";
 import { Configuration, ConfigurationComponents, ConfigurationProperty } from "../../models/Configuration";
 import { SettingsProp } from "../../models/Plugins";
@@ -12,41 +12,33 @@ import { ResourceUtils, SortAttribute } from "../../utils/ResourceUtils";
 import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
-export class CustomSearchModalData extends BSModalContext {
-    constructor(public searchParameterizationReference: string) {
-        super();
-    }
-}
-
 @Component({
     selector: "custom-search-modal",
     templateUrl: "./customSearchModal.html"
 })
-export class CustomSearchModal implements ModalComponent<CustomSearchModalData> {
-    context: CustomSearchModalData;
+export class CustomSearchModal {
+    @Input() searchParameterizationReference: string
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
     @ViewChild(YasguiComponent) viewChildYasgui: YasguiComponent;
 
-    private parameterization: VariableBindings;
+    parameterization: VariableBindings;
     private bindingsMap: Map<string, ARTNode>;
 
-    private staticParameterization: boolean = true; //tells if the parameterization has only assigned values (no parameters to bind). Useful in UI.
+    staticParameterization: boolean = true; //tells if the parameterization has only assigned values (no parameters to bind). Useful in UI.
 
     private query: string;
     private inferred: boolean = false;
 
-    private description: string;
+    description: string;
 
-    private detailsOn: boolean = false;
+    detailsOn: boolean = false;
 
-    constructor(public dialog: DialogRef<CustomSearchModalData>, private basicModals: BasicModalServices,
-        private configurationService: ConfigurationsServices, private searchService: SearchServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices,
+        private configurationService: ConfigurationsServices, private searchService: SearchServices) {}
 
     ngOnInit() {
-        this.configurationService.getConfiguration(ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, this.context.searchParameterizationReference).subscribe(
+        this.configurationService.getConfiguration(ConfigurationComponents.SPARQL_PARAMETERIZATION_STORE, this.searchParameterizationReference).subscribe(
             (configuration: Configuration) => {
                 /**
                  * configuration contains 3 props:
@@ -59,7 +51,7 @@ export class CustomSearchModal implements ModalComponent<CustomSearchModalData> 
                     if (properties[i].name == "relativeReference") {
                         let storedQueryReference: string = properties[i].value;
                         if (storedQueryReference == null) {
-                            this.basicModals.alert("Missing SPARQL query", "The stored SPARQL query referenced by the selected custom search does not exist anymore.", "warning");
+                            this.basicModals.alert("Missing SPARQL query", "The stored SPARQL query referenced by the selected custom search does not exist anymore.", ModalType.warning);
                             this.cancel();
                             return;
                         }
@@ -92,30 +84,30 @@ export class CustomSearchModal implements ModalComponent<CustomSearchModalData> 
         );
     }
 
-    private onVarBindingsUpdate(bindings: Map<string, ARTNode>) {
+    onVarBindingsUpdate(bindings: Map<string, ARTNode>) {
         this.bindingsMap = bindings;
     }
 
-    ok(event: Event) {
+    ok() {
         let filled: boolean = true;
         for (let key of Array.from(this.bindingsMap.keys())) {
             if (this.bindingsMap.get(key) == null) {
-                this.basicModals.alert("Missing binding", "Missing variable binding '" + key + "'", "warning");
+                this.basicModals.alert("Missing binding", "Missing variable binding '" + key + "'", ModalType.warning);
                 return;
             }
         }
 
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-        this.searchService.customSearch(this.context.searchParameterizationReference, this.bindingsMap).subscribe(
+        this.searchService.customSearch(this.searchParameterizationReference, this.bindingsMap).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found", "warning");
+                    this.basicModals.alert("Search", "No results found", ModalType.warning);
                 } else { //1 or more results
                     ResourceUtils.sortResources(searchResult, SortAttribute.show);
                     this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, true).then(
                         (selectedResource: any) => {
-                            this.dialog.close(selectedResource);
+                            this.activeModal.close(selectedResource);
                         },
                         () => { }
                     );
@@ -125,7 +117,7 @@ export class CustomSearchModal implements ModalComponent<CustomSearchModalData> 
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

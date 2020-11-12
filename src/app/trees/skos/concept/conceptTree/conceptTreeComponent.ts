@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
-import { Observable } from "rxjs";
+import { Component, ElementRef, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from "@angular/core";
+import { Observable, of } from "rxjs";
+import { flatMap } from 'rxjs/operators';
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { ConceptTreePreference, ConceptTreeVisualizationMode, MultischemeMode, SafeToGo, SafeToGoMap } from "../../../../models/Properties";
 import { SearchServices } from "../../../../services/searchServices";
@@ -22,7 +23,6 @@ import { ConceptTreeNodeComponent } from "./conceptTreeNodeComponent";
     host: { class: "treeListComponent" }
 })
 export class ConceptTreeComponent extends AbstractTree {
-
     @Input() schemes: ARTURIResource[];
     @Output() conceptRemovedFromScheme = new EventEmitter<ARTURIResource>();//used to report a concept removed from a scheme only when the scheme is the one used in the current concept tree
     @Output() requireSettings = new EventEmitter<void>(); //requires to the parent panel to open/change settings
@@ -34,7 +34,7 @@ export class ConceptTreeComponent extends AbstractTree {
     structRole = RDFResourceRolesEnum.concept;
 
     private safeToGoLimit: number;
-    private safeToGo: SafeToGo = { safe: true };
+    safeToGo: SafeToGo = { safe: true };
 
     /*
      * when the tree is initialized multiple time in a short amount of time (e.g. when the scheme is changed and then immediately changed again)
@@ -140,20 +140,20 @@ export class ConceptTreeComponent extends AbstractTree {
         let safeness: SafeToGo = safeToGoMap[checksum];
         if (safeness != null) { //found safeness in cache
             this.safeToGo = safeness;
-            return Observable.of(null)
+            return of(null)
         } else { //never initialized => count
             UIUtils.startLoadingDiv(this.blockDivElement.nativeElement);
-            return this.skosService.countTopConcepts(this.lastInitTimestamp, this.schemes, multischemeMode, broaderProps, narrowerProps, includeSubProps, VBRequestOptions.getRequestOptions(this.projectCtx)).flatMap(
-                data => {
+            return this.skosService.countTopConcepts(this.lastInitTimestamp, this.schemes, multischemeMode, broaderProps, narrowerProps, includeSubProps, VBRequestOptions.getRequestOptions(this.projectCtx)).pipe(
+                flatMap(data => {
                     UIUtils.stopLoadingDiv(this.blockDivElement.nativeElement);
                     let safeness = { safe: data.count < this.safeToGoLimit, count: data.count }; 
                     safeToGoMap[checksum] = safeness; //cache the safeness
                     if (data.timestamp != this.lastInitTimestamp) { //a newest request has been performed => stop this initialization
-                        return Observable.of(null)
+                        return of(null)
                     }
                     this.safeToGo = safeness;
-                    return Observable.of(null)
-                }
+                    return of(null)
+                })
             );
         }
     }

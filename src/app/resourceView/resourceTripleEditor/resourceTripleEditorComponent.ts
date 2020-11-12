@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTResource } from "../../models/ARTResources";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
@@ -20,11 +21,11 @@ export class ResourceTripleEditorComponent {
     @Input() pendingValidation: boolean;
     @Output() update: EventEmitter<ARTResource> = new EventEmitter();
 
-    @ViewChild('blockDiv') blockDivElement: ElementRef;
+    @ViewChild('blockDiv', { static: true }) blockDivElement: ElementRef;
 
-    private editAuthorized: boolean;
+    editAuthorized: boolean;
     private pristineDescription: string;
-    private description: string;
+    description: string;
 
     constructor(private resourcesService: ResourcesServices, private basicModals: BasicModalServices) {}
 
@@ -35,7 +36,7 @@ export class ResourceTripleEditorComponent {
         this.initDescription();
     }
 
-    private initDescription() {
+    initDescription() {
         //reinit the descriptions so that when initDescription is invoked after applyChanges, onDescriptionChange is triggered 
         this.pristineDescription = null;
         this.description = null;
@@ -56,19 +57,19 @@ export class ResourceTripleEditorComponent {
      * 
      * This is a workaround needed in order to initialize pristineDescription at soon as codemirror fire the update of the bound ngModel.
      */
-    private onDescriptionChange() {
+    onDescriptionChange() {
         if (this.pristineDescription == null) {
             this.pristineDescription = this.description;
         }
     }
 
-    private isApplyEnabled(): boolean {
+    isApplyEnabled(): boolean {
         return this.description != this.pristineDescription && this.description != null && this.description.trim() != "";
     }
 
-    private applyChanges() {
+    applyChanges() {
         if (VBContext.getWorkingProject().isValidationEnabled() && Cookie.getCookie(Cookie.WARNING_CODE_CHANGE_VALIDATION, VBContext.getLoggedUser().getIri()) != "false") {
-            this.basicModals.alertCheckWarning("Code editor", 
+            this.basicModals.alertCheckCookie("Code editor", 
                 "Warning: the current project has the Validation feature enabled. This changes will not undergo to validation.", 
                 Cookie.WARNING_CODE_CHANGE_VALIDATION).then(
                 () => {
@@ -90,7 +91,7 @@ export class ResourceTripleEditorComponent {
             },
             (err: Error) => {
                 if (err.name.endsWith("IllegalArgumentException")) {
-                    this.basicModals.alert("Code editor", "You cannot modify a different resource. The only admitted subject is the editing resource (" + this.resource.toNT() + ")", "warning");
+                    this.basicModals.alert("Code editor", "You cannot modify a different resource. The only admitted subject is the editing resource (" + this.resource.toNT() + ")", ModalType.warning);
                 }
             }
         );

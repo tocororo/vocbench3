@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Directive } from "@angular/core";
 import { ARTURIResource } from "../../../models/ARTResources";
 import { ResViewUtils } from "../../../models/ResourceView";
 import { CustomFormsServices } from "../../../services/customFormsServices";
@@ -7,10 +7,7 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { ResViewModalServices } from "../resViewModals/resViewModalServices";
 import { PartitionRenderer } from "./partitionRenderer";
 
-@Component({
-    selector: "partition-renderer-multi",
-    templateUrl: "./partitionRenderer.html",
-})
+@Directive()
 export abstract class PartitionRendererMultiRoot extends PartitionRenderer  {
 
     /**

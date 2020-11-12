@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { Observable } from "rxjs/Observable";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, of } from 'rxjs';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../../models/ARTResources";
 import { Project } from "../../../../models/Project";
-import { ConceptTreeVisualizationMode, SearchSettings, ProjectPreferences } from "../../../../models/Properties";
+import { ConceptTreeVisualizationMode, ProjectPreferences, SearchSettings } from "../../../../models/Properties";
 import { CustomFormsServices } from "../../../../services/customFormsServices";
 import { ResourcesServices } from "../../../../services/resourcesServices";
 import { SearchServices } from "../../../../services/searchServices";
@@ -24,7 +24,7 @@ import { BrowsingModalServices } from "../../../../widget/modal/browsingModal/br
 import { AbstractTreePanel } from "../../../abstractTreePanel";
 import { MultiSubjectEnrichmentHelper } from "../../../multiSubjectEnrichmentHelper";
 import { ConceptTreeComponent } from "../conceptTree/conceptTreeComponent";
-import { AddToSchemeModal, AddToSchemeModalData } from "./addToSchemeModal";
+import { AddToSchemeModal } from "./addToSchemeModal";
 import { ConceptTreeSettingsModal } from "./conceptTreeSettingsModal";
 
 @Component({
@@ -47,15 +47,15 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     private schemeList: Array<ARTURIResource>;
     private selectedSchemeUri: string; //needed for the <select> element where I cannot use ARTURIResource as <option> values
     //because I need also a <option> with null value for the no-scheme mode (and it's not possible)
-    private workingSchemes: ARTURIResource[];//keep track of the selected scheme: could be assigned throught @Input scheme or scheme selection
+    workingSchemes: ARTURIResource[];//keep track of the selected scheme: could be assigned throught @Input scheme or scheme selection
     //(useful expecially when schemeChangeable is true so the changes don't effect the scheme in context)
 
-    private visualizationMode: ConceptTreeVisualizationMode;//this could be changed dynamically, so each time it is used, get it again from preferences
+    visualizationMode: ConceptTreeVisualizationMode;//this could be changed dynamically, so each time it is used, get it again from preferences
     
     //for visualization searchBased
-    private lastSearch: string;
+    lastSearch: string;
 
-    constructor(private skosService: SkosServices, private searchService: SearchServices, private browsingModals: BrowsingModalServices, private modal: Modal,
+    constructor(private skosService: SkosServices, private searchService: SearchServices, private browsingModals: BrowsingModalServices, private modalService: NgbModal,
         cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
         super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
@@ -198,7 +198,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                 this.visualizationMode = projPref.conceptTreePreferences.visualization;
                 if (this.visualizationMode == ConceptTreeVisualizationMode.hierarchyBased) {
                     if (searchResult.length == 0) {
-                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", ModalType.warning);
                     } else { //1 or more results
                         if (searchResult.length == 1) {
                             this.selectSearchedResource(searchResult[0]);
@@ -213,7 +213,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                     }
                 } else { //searchBased
                     if (searchResult.length == 0) {
-                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                        this.basicModals.alert("Search", "No results found for '" + searchedText + "'", ModalType.warning);
                     }
                     this.viewChildTree.forceList(searchResult);
                 }
@@ -245,7 +245,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                     this.selectResourceVisualizationModeAware(resource);
                 } else {
                     if (schemes.length == 0) { //searched concept doesn't belong to any scheme => ask switch to no-scheme mode
-                        this.basicModals.confirm("Search", "Searched concept '" + resource.getShow() + "' does not belong to any scheme. Do you want to switch to no-scheme mode?", "warning").then(
+                        this.basicModals.confirm("Search", "Searched concept '" + resource.getShow() + "' does not belong to any scheme. Do you want to switch to no-scheme mode?", ModalType.warning).then(
                             confirm => {
                                 this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), []); //update the active schemes
                                 setTimeout(() => {
@@ -302,7 +302,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         if (schemes == null) {
             return this.skosService.getSchemesOfConcept(concept);
         } else {
-            return Observable.of(schemes);
+            return of(schemes);
         }
     }
 
@@ -310,11 +310,10 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         this.viewChildTree.openTreeAt(resource);
     }
 
-    private settings() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ConceptTreeSettingsModal, overlayConfig).result.then(
-            changesDone => {
+    settings() {
+        const modalRef: NgbModalRef = this.modalService.open(ConceptTreeSettingsModal, new ModalOptions());
+        return modalRef.result.then(
+            () => {
                 this.visualizationMode = VBContext.getWorkingProjectCtx(this.projectCtx).getProjectPreferences().conceptTreePreferences.visualization;
                 if (this.visualizationMode == ConceptTreeVisualizationMode.searchBased) {
                     this.viewChildTree.forceList([]);
@@ -327,19 +326,18 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
         );
     }
 
-    private isAddToSchemeEnabled() {
+    isAddToSchemeEnabled() {
         return this.selectedNode != null && this.isContextDataPanel() && this.editable &&
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.skosAddMultipleToScheme);
     }
     private addToScheme() {
         this.browsingModals.browseSchemeList("Select scheme").then(
             scheme => {
-                var modalData = new AddToSchemeModalData("Add concepts to scheme", this.selectedNode, scheme);
-                const builder = new BSModalContextBuilder<AddToSchemeModalData>(
-                    modalData, undefined, AddToSchemeModalData
-                );
-                let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-                return this.modal.open(AddToSchemeModal, overlayConfig).result;
+                const modalRef: NgbModalRef = this.modalService.open(AddToSchemeModal, new ModalOptions());
+                modalRef.componentInstance.title = "Add concepts to scheme";
+                modalRef.componentInstance.concept = this.selectedNode;
+                modalRef.componentInstance.scheme = scheme;
+                return modalRef.result;
             },
             () => {}
         )
@@ -349,7 +347,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
 
     //when a concept is removed from a scheme, it should be still visible in res view,
     //but no more selected in the tree if it was in the current scheme 
-    private onConceptRemovedFromScheme(concept: ARTURIResource) {
+    onConceptRemovedFromScheme(concept: ARTURIResource) {
         this.selectedNode = null;
     }
 

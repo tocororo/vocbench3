@@ -1,21 +1,17 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { VBProperties } from "../../utils/VBProperties";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { VBEventHandler } from "../../utils/VBEventHandler";
+import { VBProperties } from "../../utils/VBProperties";
 
 @Component({
     selector: "tree-list-settings-modal",
     templateUrl: "./treeListSettingsModal.html",
 })
-export class TreeListSettingsModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class TreeListSettingsModal {
 
-    private showDeprecated: boolean;
+    showDeprecated: boolean;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private vbProp: VBProperties, private eventHandler: VBEventHandler) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private vbProp: VBProperties, private eventHandler: VBEventHandler) {}
 
     ngOnInit() {
         this.showDeprecated = this.vbProp.getShowDeprecated();
@@ -26,10 +22,8 @@ export class TreeListSettingsModal implements ModalComponent<BSModalContext> {
         this.eventHandler.showDeprecatedChangedEvent.emit(this.showDeprecated);
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+    ok() {
+        this.activeModal.close();
     }
 
 }

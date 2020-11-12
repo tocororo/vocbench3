@@ -1,9 +1,8 @@
 <div class="modal-header">
-    <!-- <h3 class="modal-title">{{context.title}}</h3> -->
     <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">{{context.title}}</h3>
+        <h3 class="modal-title" style="flex: 1">{{title}}</h3>
         <span *ngIf="enrichingProperty">
-            <button class="btn btn-default btn-xs" title="Change property" (click)="changeProperty()" [disabled]="!context.propChangeable">
+            <button class="btn btn-light btn-xs" title="Change property" (click)="changeProperty()" [disabled]="!propChangeable">
                 <rdf-resource [resource]="enrichingProperty"></rdf-resource>
             </button>
         </span>
@@ -11,7 +10,7 @@
 </div>
 <div class="modal-body vbox" style="min-height:70vh;">
 
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%;">
             <col>
@@ -68,6 +67,6 @@
     
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkClickable()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkClickable()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

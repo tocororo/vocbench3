@@ -44,14 +44,14 @@ export class PredicateObjectsRenderer {
      * ATTRIBUTES
      */
 
-    private addDisabled: boolean = false;
-    private deleteAllDisabled: boolean = false;
-    private actionMenuDisabled: boolean = false;
+    addDisabled: boolean = false;
+    deleteAllDisabled: boolean = false;
+    actionMenuDisabled: boolean = false;
     
-    private addManuallyAllowed: boolean = false;
-    private addExteranlResourceAllowed: boolean = false;
+    addManuallyAllowed: boolean = false;
+    addExteranlResourceAllowed: boolean = false;
 
-    private actionAddTitle: string;
+    actionAddTitle: string;
 
     ngOnInit() {
         this.actionAddTitle = "Add a " + this.predicateObjects.getPredicate().getShow();
@@ -114,13 +114,13 @@ export class PredicateObjectsRenderer {
      * the modal allow to change property to enrich.
      * @param predicate property to enrich.
      */
-    private addValue() {
+    addValue() {
         this.add.emit(AddAction.default);
     }
-    private addManually() {
+    addManually() {
         this.add.emit(AddAction.manually);
     }
-    private addExternalValue() {
+    addExternalValue() {
         this.add.emit(AddAction.remote);
     }
 
@@ -128,10 +128,10 @@ export class PredicateObjectsRenderer {
      * Removes an object related to the given predicate.
      * This is fired when the "-" button is clicked (near an object).
      */
-    private removeValue(object: ARTNode) {
+    removeValue(object: ARTNode) {
         this.remove.emit(object);
     }
-    private removeAllValues() {
+    removeAllValues() {
         this.remove.emit();
     }
 
@@ -139,16 +139,16 @@ export class PredicateObjectsRenderer {
      * Events forwarding
      */
 
-    private onEdit(object: ARTNode) {
+    onEdit(object: ARTNode) {
         this.edit.emit(object);
     }
-    private onUpdate() {
+    onUpdate() {
         this.update.emit();
     }
-    private onDblClick(obj: ARTResource) {
+    onDblClick(obj: ARTResource) {
         this.dblclickObj.emit(obj);
     }
-    private onCopyLocale(locales: Language[], obj: ARTNode) {
+    onCopyLocale(locales: Language[], obj: ARTNode) {
         this.copyLocaleOutput.emit({ value: obj, locales: locales });
     }
 
@@ -157,13 +157,13 @@ export class PredicateObjectsRenderer {
      */
     private pagingLimit: number = 10;
     private limitActive: boolean = true;
-    private showObject(index: number) {
+    showObject(index: number) {
         return !this.limitActive || (index < this.pagingLimit);
     }
-    private showAllButton() {
+    showAllButton() {
         return this.limitActive && (this.pagingLimit < this.predicateObjects.getObjects().length);
     }
-    private showAll() {
+    showAll() {
         this.limitActive = false;
     }
 

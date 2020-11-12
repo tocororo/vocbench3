@@ -1,4 +1,5 @@
 import { Component, Input, ViewChild } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { GraphModalServices } from "../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { SearchSettings } from "../../../models/Properties";
@@ -6,6 +7,7 @@ import { RDFS } from "../../../models/Vocabulary";
 import { CustomFormsServices } from "../../../services/customFormsServices";
 import { ResourcesServices } from "../../../services/resourcesServices";
 import { SearchServices } from "../../../services/searchServices";
+import { VBRequestOptions } from "../../../utils/HttpManager";
 import { ResourceUtils, SortAttribute } from "../../../utils/ResourceUtils";
 import { RoleActionResolver } from "../../../utils/RoleActionResolver";
 import { VBActionFunctionCtx } from "../../../utils/VBActions";
@@ -16,7 +18,6 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
 import { AbstractListPanel } from "../../abstractListPanel";
 import { MultiSubjectEnrichmentHelper } from "../../multiSubjectEnrichmentHelper";
 import { DatatypeListComponent } from "../datatypeList/datatypeListComponent";
-import { VBRequestOptions } from "../../../utils/HttpManager";
 
 @Component({
     selector: "datatype-list-panel",
@@ -43,25 +44,6 @@ export class DatatypeListPanelComponent extends AbstractListPanel {
         return actionCtx;
     }
 
-    // private create() {
-    //     this.creationModals.newResourceCf("Create a new datatype", RDFS.datatype, false).then(
-    //         (data: any) => {
-    //             this.datatypeService.createDatatype(data.uriResource).subscribe();
-    //         },
-    //         () => {}
-    //     );
-    // }
-
-    // delete() {
-    //     UIUtils.startLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
-    //     this.datatypeService.deleteDatatype(this.selectedNode).subscribe(
-    //         stResp => {
-    //             this.selectedNode = null;
-    //             UIUtils.stopLoadingDiv(this.viewChildList.blockDivElement.nativeElement);
-    //         }
-    //     )
-    // }
-
     refresh() {
         this.viewChildList.init();
     }
@@ -81,7 +63,7 @@ export class DatatypeListPanelComponent extends AbstractListPanel {
             VBRequestOptions.getRequestOptions(this.projectCtx)).subscribe(
             searchResult => {
                 if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", "warning");
+                    this.basicModals.alert("Search", "No results found for '" + searchedText + "'", ModalType.warning);
                 } else { //1 or more results
                     if (searchResult.length == 1) {
                         this.openAt(searchResult[0]);

@@ -1,8 +1,8 @@
 <div class="modal-header">
     <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">{{context.title}}</h3>
+        <h3 class="modal-title" style="flex: 1">{{title}}</h3>
         <span>
-            <button class="btn btn-default btn-xs" title="Change property" (click)="changeProperty()" [disabled]="!context.propChangeable">
+            <button class="btn btn-light btn-xs" title="Change property" (click)="changeProperty()" [disabled]="!propChangeable">
                 <rdf-resource [resource]="enrichingProperty"></rdf-resource>
             </button>
         </span>
@@ -22,29 +22,29 @@
         </div>
 
         <div style="align-self: center; margin: 5px;">
-            <button class="btn btn-default btn-sm btn-block" (click)="addPropertyToChain()" [disabled]="!selectedTreeProperty">
-                Add <span class="glyphicon glyphicon-chevron-right"></span>
+            <button class="btn btn-light btn-sm btn-block" (click)="addPropertyToChain()" [disabled]="!selectedTreeProperty">
+                Add <span class="fas fa-chevron-right"></span>
             </button>
-            <button class="btn btn-default btn-sm btn-block"  (click)="removePropertyFromChain()" [disabled]="!selectedChainProperty">
-                <span class="glyphicon glyphicon-chevron-left"></span> Remove
+            <button class="btn btn-light btn-sm btn-block"  (click)="removePropertyFromChain()" [disabled]="!selectedChainProperty">
+                <span class="fas fa-chevron-left"></span> Remove
             </button>
         </div>
 
-        <div class="panel panel-default vbox">
-            <div class="panel-heading">
+        <div class="card card-default vbox">
+            <div class="card-header">
                 <label style="flex: 1">Property chain</label>
                 <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="moveDown()" [disabled]="!selectedChainProperty || isSelectedPropLast()">
-                            <span class="glyphicon glyphicon-chevron-down"></span>
+                        <button class="btn btn-light" (click)="moveDown()" [disabled]="!selectedChainProperty || isSelectedPropLast()">
+                            <span class="fas fa-chevron-down"></span>
                         </button>
-                        <button class="btn btn-default" (click)="moveUp()" [disabled]="!selectedChainProperty || isSelectedPropFirst()">
-                            <span class="glyphicon glyphicon-chevron-up"></span>
+                        <button class="btn btn-light" (click)="moveUp()" [disabled]="!selectedChainProperty || isSelectedPropFirst()">
+                            <span class="fas fa-chevron-up"></span>
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div *ngFor="let p of propChain" class="listItem" (click)="onChainPropertySelected(p)" [ngClass]="{active: selectedChainProperty == p}">
                     <rdf-resource [resource]="p.property"></rdf-resource>
                 </div>
@@ -55,6 +55,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

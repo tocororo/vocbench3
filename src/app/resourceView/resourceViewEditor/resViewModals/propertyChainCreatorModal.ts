@@ -1,6 +1,6 @@
-import { Component, ElementRef } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTBNode, ARTResource, ARTURIResource, RDFResourceRolesEnum, ResAttribute } from '../../../models/ARTResources';
 import { ResourceUtils } from "../../../utils/ResourceUtils";
 import { UIUtils } from "../../../utils/UIUtils";
@@ -8,51 +8,37 @@ import { VBContext } from "../../../utils/VBContext";
 import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
 import { BrowsingModalServices } from '../../../widget/modal/browsingModal/browsingModalServices';
 
-export class PropertyChainCreatorModalData extends BSModalContext {
-    /**
-     * @param title title of the dialog
-     * @param property root property that the modal should allow to enrich
-     * @param propChangeable tells whether the input property can be changed exploring the properties subtree.
-     */
-    constructor(
-        public title: string = 'Create a property chain',
-        public property: ARTURIResource,
-        public propChangeable: boolean = true,
-        public chain?: ARTBNode //if provided, the dialog works in edit mode
-    ) {
-        super();
-    }
-}
-
 @Component({
     selector: "property-chain-creator-modal",
     templateUrl: "./propertyChainCreatorModal.html",
 })
-export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCreatorModalData> {
-    context: PropertyChainCreatorModalData;
+export class PropertyChainCreatorModal {
+    @Input() title: string = 'Create a property chain';
+    @Input() property: ARTURIResource;
+    @Input() propChangeable: boolean = true;
+    @Input() chain: ARTBNode; //if provided, the dialog works in edit mode
 
     private rootProperty: ARTURIResource; //root property of the partition that invoked this modal
-    private enrichingProperty: ARTURIResource;
+    enrichingProperty: ARTURIResource;
 
-    private selectedTreeProperty: ARTURIResource;
-    private inverseProp: boolean = false;
+    selectedTreeProperty: ARTURIResource;
+    inverseProp: boolean = false;
 
-    private propChain: PropertyChainItem[] = []
-    private selectedChainProperty: PropertyChainItem;
+    propChain: PropertyChainItem[] = []
+    selectedChainProperty: PropertyChainItem;
 
     private readonly inversePrefix: string = "INVERSE ";
 
-    constructor(public dialog: DialogRef<PropertyChainCreatorModalData>, private elementRef: ElementRef,
+    constructor(public activeModal: NgbActiveModal, private elementRef: ElementRef,
         private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) {
-        this.context = dialog.context;
     }
 
     ngOnInit() {
-        this.rootProperty = this.context.property;
+        this.rootProperty = this.property;
         this.enrichingProperty = this.rootProperty;
 
-        if (this.context.chain != null) { //edit mode
-            let chainMembers: ARTResource[] = this.context.chain.getAdditionalProperty(ResAttribute.MEMBERS);
+        if (this.chain != null) { //edit mode
+            let chainMembers: ARTResource[] = this.chain.getAdditionalProperty(ResAttribute.MEMBERS);
             chainMembers.forEach(chainMember => {
                 let property: ARTResource;
                 let inverse: boolean = false;
@@ -78,7 +64,7 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
         UIUtils.setFullSizeModal(this.elementRef);
     }
 
-    private changeProperty() {
+    changeProperty() {
         this.browsingModals.browsePropertyTree("Select a property", [this.rootProperty]).then(
             (selectedProp: any) => {
                 if (this.enrichingProperty.getURI() != selectedProp.getURI()) {
@@ -89,14 +75,14 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
         );
     }
 
-    private onPropertySelected(property: ARTURIResource) {
+    onPropertySelected(property: ARTURIResource) {
         this.selectedTreeProperty = property;
         if (property != null && property.getRole() != RDFResourceRolesEnum.objectProperty) {
             this.inverseProp = false;
         }
     }
 
-    private onChainPropertySelected(propChainItem: PropertyChainItem) {
+    onChainPropertySelected(propChainItem: PropertyChainItem) {
         if (this.selectedChainProperty == propChainItem) {
             this.selectedChainProperty = null;
         } else {
@@ -104,7 +90,7 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
         }
     }
 
-    private addPropertyToChain() {
+    addPropertyToChain() {
         let propToAdd: ARTURIResource = this.selectedTreeProperty.clone();
         if (this.inverseProp) {
             propToAdd.setShow(this.inversePrefix + propToAdd.getShow());
@@ -112,25 +98,25 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
         this.propChain.push({ property: propToAdd, inverse: this.inverseProp });
     }
 
-    private removePropertyFromChain() {
+    removePropertyFromChain() {
         this.propChain.splice(this.propChain.indexOf(this.selectedChainProperty), 1);
         this.selectedChainProperty = null;
     }
 
-    private moveDown() {
+    moveDown() {
         var prevIndex = this.propChain.indexOf(this.selectedChainProperty);
         this.propChain.splice(prevIndex, 1); //remove from current position
         this.propChain.splice(prevIndex + 1, 0, this.selectedChainProperty);
     }
-    private moveUp() {
+    moveUp() {
         var prevIndex = this.propChain.indexOf(this.selectedChainProperty);
         this.propChain.splice(prevIndex, 1); //remove from current position
         this.propChain.splice(prevIndex - 1, 0, this.selectedChainProperty);
     }
-    private isSelectedPropFirst(): boolean {
+    isSelectedPropFirst(): boolean {
         return (this.selectedChainProperty == this.propChain[0]);
     }
-    private isSelectedPropLast(): boolean {
+    isSelectedPropLast(): boolean {
         return (this.selectedChainProperty == this.propChain[this.propChain.length - 1]);
     }
 
@@ -138,18 +124,15 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
      * User can click on OK button just if there is a manchester expression (in case property allows and user choose to add it)
      * or if there is a resource selected in the tree
      */
-    private isOkEnabled() {
+    isOkEnabled() {
         return this.propChain.length > 0;
     }
 
-    ok(event: Event) {
+    ok() {
         if (this.propChain.length < 2) {
-            this.basicModals.alert("Invalid property chain", "The property chain must contain at least of two properties", "warning");
+            this.basicModals.alert("Invalid property chain", "The property chain must contain at least of two properties", ModalType.warning);
             return;
         }
-
-        event.stopPropagation();
-        event.preventDefault();
 
         let chain: string[] = [];
         this.propChain.forEach(item => {
@@ -164,11 +147,11 @@ export class PropertyChainCreatorModal implements ModalComponent<PropertyChainCr
             property: this.enrichingProperty,
             chain: chain
         }
-        this.dialog.close(returnData);
+        this.activeModal.close(returnData);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

@@ -1,37 +1,33 @@
 <div class="modal-header">
     <div class="hbox" style="align-items: center">
-        <h3 class="modal-title" style="flex: 1">Add {{context.property.getShow()}}</h3>
+        <h3 class="modal-title" style="flex: 1">Add {{property.getShow()}}</h3>
         <div class="btn-group">
-            <button class="btn btn-xs btn-default" (click)="changeProperty()" [disabled]="!context.propChangeable || enrichingProperty != rootProperty">
+            <button class="btn btn-xs btn-light" (click)="changeProperty()" [disabled]="!propChangeable || enrichingProperty != rootProperty">
                 <rdf-resource [resource]="enrichingProperty"></rdf-resource>
             </button>
-            <div class="btn-group" role="group">
-                <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" [disabled]="!context.propChangeable">
-                    <span class="caret"></span>
+            <div class="btn-group" ngbDropdown>
+                <button class="btn btn-xs btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="!propChangeable">
+                    <span class="fas fa-caret-down fa-sm"></span>
                 </button>
-                <ul class="dropdown-menu pull-right">
-                    <li>
-                        <a (click)="enrichingProperty = rootProperty"><rdf-resource [resource]="rootProperty"></rdf-resource></a>
-                    </li>
-                    <li>
-                        <a (click)="enrichingProperty = rdfN"><rdf-resource [resource]="rdfN"></rdf-resource></a>
-                    </li>
-                </ul>
+                <div class="dropdown-menu float-right" ngbDropdownMenu>
+                    <a class="dropdown-item" (click)="enrichingProperty = rootProperty"><rdf-resource [resource]="rootProperty"></rdf-resource></a>
+                    <a class="dropdown-item" (click)="enrichingProperty = rdfN"><rdf-resource [resource]="rdfN"></rdf-resource></a>
+                </div>
             </div>
         </div>
     </div>
 </div>
 <div class="modal-body vbox">
-    <div *ngIf="enrichingProperty != rootProperty && context.propChangeable" class="hbox" style="flex: initial; margin-bottom: 4px;">
+    <div *ngIf="enrichingProperty != rootProperty && propChangeable" class="hbox" style="flex: initial; margin-bottom: 4px;">
         <div class="hbox" style="margin-right: 6px; align-items: center;">
             <label style="margin-right: 4px;">Property:</label>
-            <div class="input-sm input-resource" style="flex: 1;">
+            <div class="form-control-sm input-resource" style="flex: 1;">
                 <rdf-resource [resource]="rdfN"></rdf-resource>
             </div>
         </div>
         <div class="hbox" style="flex: initial; align-items: center;">
             <label style="margin-right: 4px;">n:</label>
-            <input type="number" class="form-control input-sm" [(ngModel)]="memberN" min="0" step="1" (ngModelChange)="updateRdfNProp()">
+            <input type="number" class="form-control form-control-sm" [(ngModel)]="memberN" min="0" step="1" (ngModelChange)="updateRdfNProp()">
         </div>
     </div>
 
@@ -42,6 +38,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedConstituent">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedConstituent">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

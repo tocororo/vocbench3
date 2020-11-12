@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from "@angular/core";
-import { Modal } from "ngx-modialog";
-import { Observable } from "rxjs";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, of } from "rxjs";
+import { map } from 'rxjs/operators';
 import { ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { CustomForm } from "../../models/CustomForms";
 import { VersionInfo } from "../../models/History";
@@ -31,11 +32,11 @@ export class TermViewComponent extends AbstractResourceView {
     @Output() update: EventEmitter<ARTResource> = new EventEmitter<ARTResource>(); //(useful to notify resourceViewTabbed that resource is updated)
 
     @ViewChildren('langBox') langBoxViews: QueryList<LanguageBoxComponent>;
-    @ViewChild('blockDiv') blockDivElement: ElementRef;
+    @ViewChild('blockDiv', { static: true }) blockDivElement: ElementRef;
 
     private resViewResponse: any = null;
-    private unknownHost: boolean = false; //tells if the resource view of the current resource failed to be fetched due to a UnknownHostException
-    private unexistingResource: boolean = false; //tells if the requested resource does not exist (empty description)
+    unknownHost: boolean = false; //tells if the resource view of the current resource failed to be fetched due to a UnknownHostException
+    unexistingResource: boolean = false; //tells if the requested resource does not exist (empty description)
 
     private activeVersion: VersionInfo;
 
@@ -53,8 +54,8 @@ export class TermViewComponent extends AbstractResourceView {
 
     private lexicalizationModelType: string;
 
-    constructor(resViewService: ResourceViewServices, modal: Modal, private propService: PropertyServices) {
-        super(resViewService, modal);
+    constructor(resViewService: ResourceViewServices, modalService: NgbModal, private propService: PropertyServices) {
+        super(resViewService, modalService);
     }
 
     ngOnInit() {
@@ -282,10 +283,10 @@ export class TermViewComponent extends AbstractResourceView {
         }
         if (definitionPredObj != null) {
             this.defCustomRangeConfig.hasCustomRange = definitionPredObj.getPredicate().getAdditionalProperty(ResAttribute.HAS_CUSTOM_RANGE);
-            return Observable.of(null);
+            return of(null);
         } else {
-            return this.propService.getRange(SKOS.definition).map(
-                range => {
+            return this.propService.getRange(SKOS.definition).pipe(
+                map(range => {
                     if (range.formCollection != null) {
                         let cForms: CustomForm[] = range.formCollection.getForms();
                         if (cForms.length > 0) {
@@ -296,7 +297,7 @@ export class TermViewComponent extends AbstractResourceView {
                             this.defCustomRangeConfig.hasLiteralRange = false;
                         }
                     }
-                }
+                })
             );
         }
     }
