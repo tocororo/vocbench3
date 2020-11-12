@@ -1,4 +1,5 @@
-import { Observable } from "rxjs/Observable";
+import { Directive } from '@angular/core';
+import { forkJoin } from "rxjs";
 import { Project, ProjectFacets, ProjectViewMode } from "../models/Project";
 import { MetadataServices } from "../services/metadataServices";
 import { UserServices } from "../services/userServices";
@@ -8,9 +9,11 @@ import { VBCollaboration } from "../utils/VBCollaboration";
 import { VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
 
+@Directive()
 export abstract class AbstractProjectComponent {
 
-    protected visualizationMode: ProjectViewMode;
+    ProjectViewMode = ProjectViewMode;
+    visualizationMode: ProjectViewMode;
     protected projectList: Project[];
     protected projectDirs: ProjectDirEntry[];
 
@@ -59,7 +62,7 @@ export abstract class AbstractProjectComponent {
         VBContext.setWorkingProject(project);
         VBContext.setProjectChanged(true);
 
-        return Observable.forkJoin(
+        return forkJoin([
             this.vbProp.initProjectUserBindings(VBContext.getWorkingProjectCtx()), //init PUBinding
             this.vbProp.initUserProjectPreferences(VBContext.getWorkingProjectCtx()), //init the project preferences
             this.vbProp.initProjectSettings(VBContext.getWorkingProjectCtx()), //init the project settings
@@ -67,7 +70,7 @@ export abstract class AbstractProjectComponent {
             this.userService.listUserCapabilities(), //get the capabilities for the user
             this.metadataService.getNamespaceMappings(), //get default namespace of the project and set it to the vbContext
             this.dtValidator.initDatatypeRestrictions(), //initializes the mappings datatype-facets for the validation of typed literal
-        );
+        ]);
     }
 
     protected isWorkingProject(project: Project): boolean {

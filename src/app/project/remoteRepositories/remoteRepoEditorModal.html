@@ -7,13 +7,13 @@
         There are no remote repositories related to this project
     </div>
 
-    <div *ngFor="let repo of repoSummaries" class="panel panel-default" style="margin-bottom: 2px;">
-        <div class="panel-heading">
+    <div *ngFor="let repo of repoSummaries" class="card card-default" style="margin-bottom: 2px;">
+        <div class="card-header">
             <label>{{repo.id}}:</label>
             <span style="margin-left: 4px;">{{repo.description}}</span>
         </div>
-        <div class="panel-body">
-            <table *ngIf="repo.remoteRepoSummary" class="table table-condensed table-borderless"> 
+        <div class="card-body">
+            <table *ngIf="repo.remoteRepoSummary" class="table table-sm table-borderless"> 
                 <colgroup>
                     <col style="width: 10%;">
                     <col style="width: 40%;">
@@ -23,27 +23,27 @@
                 <tbody>
                     <tr>
                         <td nowrap><label>Repository ID:</label></td>
-                        <td><input class="form-control input-sm" [(ngModel)]="repo.remoteRepoSummary.repositoryId" readonly></td>
+                        <td><input class="form-control form-control-sm" [(ngModel)]="repo.remoteRepoSummary.repositoryId" readonly></td>
                         <td nowrap><label>Server URL:</label></td>
-                        <td><input class="form-control input-sm" [(ngModel)]="repo.remoteRepoSummary.serverURL" readonly></td>
+                        <td><input class="form-control form-control-sm" [(ngModel)]="repo.remoteRepoSummary.serverURL" readonly></td>
                     </tr>
                     <tr>
                         <td><label>Username:</label></td>
-                        <td><input class="form-control input-sm" [(ngModel)]="repo.remoteRepoSummary.username" placeholder="username"></td>
+                        <td><input class="form-control form-control-sm" [(ngModel)]="repo.remoteRepoSummary.username" placeholder="username"></td>
                         <td><label>Password:</label></td>
-                        <td><input class="form-control input-sm" [(ngModel)]="repo.remoteRepoSummary.password" placeholder="password"></td>
+                        <td><input class="form-control form-control-sm" [(ngModel)]="repo.remoteRepoSummary.password" placeholder="password"></td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="panel-footer hbox" style="align-items: center">
-            <div *ngIf="allowBatchModify" class="panel panel-default">
-                <div class="panel-body">
+        <div class="card-footer hbox" style="align-items: center">
+            <div *ngIf="allowBatchModify" class="card card-default">
+                <div class="card-body">
                     <div class="checkbox-inline">
                         <label>
                             <input type="checkbox" [(ngModel)]="repo.batch">Batch modify
                         </label>
-                        <span class="glyphicon glyphicon-info-sign"
+                        <span class="fas fa-info-circle"
                             title="Modifies, all at once, the access credentials of (possibly) many repositories with the same serverURL.">
                         </span>
                     </div>
@@ -51,19 +51,19 @@
                         <label>
                             <input type="checkbox" [(ngModel)]="repo.matchUsername">Match username
                         </label>
-                        <span class="glyphicon glyphicon-info-sign"
+                        <span class="fas fa-info-circle"
                             title="If checked, modifies credentials of repositories with same serverURL and username (empty 'old' username indicates repositories with no associated username)">
                         </span>
                     </div>
                 </div>
             </div>
             <span style="flex: 1"></span>
-            <button class="btn btn-default btn-xs" (click)="applyChange(repo)">Update</button>
+            <button class="btn btn-light btn-xs" (click)="applyChange(repo)">Update</button>
         </div>
     </div>
 
     
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
 </div>

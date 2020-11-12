@@ -1,29 +1,26 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, ModalComponent, OverlayConfig } from 'ngx-modialog';
-import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { AccessLevel, AccessStatus, ConsumerACL, LockLevel, LockStatus, Project } from '../../models/Project';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
+import { AccessLevel, AccessStatus, ConsumerACL, LockLevel, LockStatus } from '../../models/Project';
 import { ProjectServices } from "../../services/projectServices";
 import { UIUtils } from "../../utils/UIUtils";
-import { ACLEditorModal, ACLEditorModalData } from "./aclEditorModal";
+import { ACLEditorModal } from "./aclEditorModal";
 
 @Component({
     selector: "project-acl-modal",
     templateUrl: "./projectACLModal.html",
     styleUrls: ["./projectACL.css"]
 })
-export class ProjectACLModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class ProjectACLModal {
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
 
     private statusMap: AccessStatus[];
-    private consumerList: string[];
+    consumerList: string[];
 
-    private aclTable: AclTableRow[];
+    aclTable: AclTableRow[];
 
-    constructor(public dialog: DialogRef<BSModalContext>, private modal: Modal, private projectService: ProjectServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private modalService: NgbModal, private projectService: ProjectServices) {}
 
     ngOnInit() {
         this.init();
@@ -169,12 +166,9 @@ export class ProjectACLModal implements ModalComponent<BSModalContext> {
     }
 
     private editProjectACL(project: string) {
-        var modalData = new ACLEditorModalData(new Project(project));
-        const builder = new BSModalContextBuilder<ACLEditorModalData>(
-            modalData, undefined, ACLEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('sm').keyboard(27).toJSON() };
-        return this.modal.open(ACLEditorModal, overlayConfig).result.then(
+        const modalRef: NgbModalRef = this.modalService.open(ACLEditorModal, new ModalOptions('sm'));
+        modalRef.componentInstance.project = project;
+        modalRef.result.then(
             (update: boolean) => {
                 if (update) {
                     this.init();
@@ -183,10 +177,8 @@ export class ProjectACLModal implements ModalComponent<BSModalContext> {
         );
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+    ok() {
+        this.activeModal.close();
     }
 
 }

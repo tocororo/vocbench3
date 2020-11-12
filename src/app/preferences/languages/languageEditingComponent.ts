@@ -10,7 +10,7 @@ import { VBProperties } from "../../utils/VBProperties";
 })
 export class LanguageEditingComponent {
 
-    private languages: Language[] = [];
+    languages: Language[] = [];
     private editingLang: Language;
 
     constructor(private properties: VBProperties) { }

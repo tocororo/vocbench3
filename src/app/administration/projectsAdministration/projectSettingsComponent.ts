@@ -1,4 +1,5 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { Language, Languages } from "../../models/LanguagesCountries";
 import { Project } from "../../models/Project";
 import { Properties } from "../../models/Properties";
@@ -15,9 +16,9 @@ export class ProjectSettingsComponent {
 
     @Input() project: Project;
 
-    private noLangActive: boolean = true;
+    noLangActive: boolean = true;
 
-    private languageItems: LanguageItem[];
+    languageItems: LanguageItem[];
 
     constructor(private prefSetService: PreferencesSettingsServices, private vbProperties: VBProperties, private basicModals: BasicModalServices) { }
 
@@ -41,7 +42,7 @@ export class ProjectSettingsComponent {
                         }
                     } catch (err) {
                         this.basicModals.alert("Error", "Initialization of system languages has encountered a problem during parsing the " +
-                            "'" + Properties.setting_languages + "' property. Please, report this to the system administrator.", "error");
+                            "'" + Properties.setting_languages + "' property. Please, report this to the system administrator.", ModalType.error);
                     }
                 }
             );
@@ -71,13 +72,13 @@ export class ProjectSettingsComponent {
                 } catch (err) {
                     this.basicModals.alert("Error", "Initialization of languages for project '" + this.project.getName() + 
                         "' has encountered a problem during parsing the '" + Properties.setting_languages + "' settings. " + 
-                        "Please, report this to the system administrator.", "error");
+                        "Please, report this to the system administrator.", ModalType.error);
                 }
             }
         );
     }
 
-    private changeAllLangStatus(checked: boolean) {
+    changeAllLangStatus(checked: boolean) {
         this.languageItems.forEach((item: LanguageItem) => {
             item.active = checked;
             if (!checked) {

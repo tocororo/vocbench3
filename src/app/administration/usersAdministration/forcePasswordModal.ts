@@ -1,41 +1,33 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { User } from "../../models/User";
 import { AuthServices } from "../../services/authServices";
 import { UserServices } from "../../services/userServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
-export class ForcePasswordModalData extends BSModalContext {
-    constructor(public user: User) {
-        super();
-    }
-}
-
 @Component({
     selector: "force-pwd-modal",
-    templateUrl: "/forcePasswordModal.html",
+    templateUrl: "./forcePasswordModal.html",
 })
-export class ForcePasswordModal implements ModalComponent<ForcePasswordModalData> {
-    context: ForcePasswordModalData;
+export class ForcePasswordModal {
+    @Input() user: User;
 
-    private password: string;
+    password: string;
 
-    constructor(public dialog: DialogRef<ForcePasswordModalData>, private userService: UserServices, private authService: AuthServices, 
+    constructor(public activeModal: NgbActiveModal, private userService: UserServices, private authService: AuthServices, 
         private basicModals: BasicModalServices) {
-        this.context = dialog.context;
     }
 
-    private isInputValid(): boolean {
+    isInputValid(): boolean {
         return this.password != undefined && this.password.trim() != "";
     }
 
-    ok(event: Event) {
-        this.userService.forcePassword(this.context.user.getEmail(), this.password).subscribe(
+    ok() {
+        this.userService.forcePassword(this.user.getEmail(), this.password).subscribe(
             stResp => {
-                this.basicModals.alert("Password changed", "Password of " + this.context.user.getShow() + " has been succesfully changed.").then(
+                this.basicModals.alert("Password changed", "Password of " + this.user.getShow() + " has been succesfully changed.").then(
                     () => {
-                        this.dialog.close();
+                        this.activeModal.close();
                     }
                 );
             }
@@ -43,7 +35,7 @@ export class ForcePasswordModal implements ModalComponent<ForcePasswordModalData
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

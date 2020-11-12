@@ -2,34 +2,30 @@
     <h3 class="modal-title">Projects list</h3>
 </div>
 <div class="modal-body vbox" style="min-height: 100px;">
-    <div class="panel panel-default vbox" style="margin-left: 5px;">
-        <div class="panel-heading">
+    <div class="card card-default vbox" style="margin-left: 5px;">
+        <div class="card-header">
             <label style="flex: 1;">Projects</label>
-            <div class="btn-group btn-group-xs">
-                <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
-                    <span class="glyphicon glyphicon-cog"></span>
+            <div class="btn-group btn-group-xs" ngbDropdown>
+                <button class="btn btn-xs btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                    <span class="fas fa-cog"></span>
                 </button>
-                <ul class="dropdown-menu pull-right">
-                    <li class="dropdown-header">Top level elements</li>
-                    <li>
-                        <a (click)="changeVisualizationMode('list')">
-                            Projects
-                            <span *ngIf="visualizationMode == 'list'" class="glyphicon glyphicon-ok pull-right"></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a (click)="changeVisualizationMode('dir')">
-                            Directories
-                            <span *ngIf="visualizationMode == 'dir'" class="glyphicon glyphicon-ok pull-right"></span>
-                        </a>
-                    </li>
-                </ul>
+                <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                    <h6 class="dropdown-header">Top level elements</h6>
+                    <a class="dropdown-item" (click)="changeVisualizationMode(ProjectViewMode.list)">
+                        Projects
+                        <span *ngIf="visualizationMode == ProjectViewMode.list" class="fas fa-check float-right"></span>
+                    </a>
+                    <a class="dropdown-item" (click)="changeVisualizationMode(ProjectViewMode.dir)">
+                        Directories
+                        <span *ngIf="visualizationMode == ProjectViewMode.dir" class="fas fa-check float-right"></span>
+                    </a>
+                </div>
             </div>
 
         </div>
-        <div class="panel-body scrollableContainer">
+        <div class="card-body scrollableContainer">
             
-            <table *ngIf="visualizationMode == 'list'" class="table table-condensed table-hoverable table-borderless">
+            <table *ngIf="visualizationMode == ProjectViewMode.list" class="table table-sm table-hoverable table-borderless">
                 <thead>
                     <tr>
                         <th class="text-center">Project Name</th>
@@ -46,12 +42,12 @@
                         <td class="text-center">{{p.getModelType(true)}}</td>
                         <td class="text-center">{{p.getLexicalizationModelType(true)}}</td>
                         <td class="text-center">
-                            <span *ngIf="p.isHistoryEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="History enabled"></span>
-                            <span *ngIf="!p.isHistoryEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="History disabled"></span>
+                            <span *ngIf="p.isHistoryEnabled()" class="fas fa-check" style="color: green" title="History enabled"></span>
+                            <span *ngIf="!p.isHistoryEnabled()" class="fas fa-times" style="color: darkred" title="History disabled"></span>
                         </td>
                         <td class="text-center">
-                            <span *ngIf="p.isValidationEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="Validation enabled"></span>
-                            <span *ngIf="!p.isValidationEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="Validation disabled"></span>
+                            <span *ngIf="p.isValidationEnabled()" class="fas fa-check" style="color: green" title="Validation enabled"></span>
+                            <span *ngIf="!p.isValidationEnabled()" class="fas fa-times" style="color: darkred" title="Validation disabled"></span>
                         </td>
                         <td class="text-center">{{p.getRepositoryLocation().location}}</td>
                     </tr>
@@ -59,7 +55,7 @@
             </table>
 
 
-            <ng-container *ngIf="visualizationMode == 'dir'">
+            <ng-container *ngIf="visualizationMode == ProjectViewMode.dir">
                 <!-- 7px applies the same paddings applied to the rows, namely the padding sum of listItem (3px) and groupPanel-body (4px) -->
                 <div class="hbox" style="padding: 7px 7px 0px; flex: none;">
                     <label class="text-center" style="flex: 3">Project Name</label>
@@ -73,8 +69,8 @@
                     <div class="groupPanel">
                         <div class="groupPanel-heading">
                             <div class="groupPanel-heading-content clickable" (click)="toggleDirectory(pd)">
-                                <span [class]="'glyphicon glyphicon-menu-' + (pd.open ? 'down' : 'right')"></span>
-                                <span [class]="'glyphicon glyphicon-folder-' + (pd.open ? 'open' : 'close')" style="margin-left: 4px;"></span>
+                                <span [class]="'fas fa-chevron-' + (pd.open ? 'down' : 'right')"></span>
+                                <span [class]="'fas fa-folder' + (pd.open ? '-open' : '')" style="margin-left: 4px;"></span>
                                 <label class="clickable" style="margin-left: 4px;">
                                     <ng-container *ngIf="pd.dir">{{pd.dir}}</ng-container>
                                     <ng-container *ngIf="!pd.dir">Unclassified</ng-container>
@@ -95,12 +91,12 @@
                                         {{p.getLexicalizationModelType(true)}}
                                     </div>
                                     <div class="text-center" style="flex: 1">
-                                        <span *ngIf="p.isHistoryEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="History enabled"></span>
-                                        <span *ngIf="!p.isHistoryEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="History disabled"></span>
+                                        <span *ngIf="p.isHistoryEnabled()" class="fas fa-check" style="color: green" title="History enabled"></span>
+                                        <span *ngIf="!p.isHistoryEnabled()" class="fas fa-times" style="color: darkred" title="History disabled"></span>
                                     </div>
                                     <div class="text-center" style="flex: 1">
-                                        <span *ngIf="p.isValidationEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="Validation enabled"></span>
-                                        <span *ngIf="!p.isValidationEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="Validation disabled"></span>
+                                        <span *ngIf="p.isValidationEnabled()" class="fas fa-check" style="color: green" title="Validation enabled"></span>
+                                        <span *ngIf="!p.isValidationEnabled()" class="fas fa-times" style="color: darkred" title="Validation disabled"></span>
                                     </div>
                                     <div class="text-center" style="flex: 2">
                                         {{p.getRepositoryLocation().location}}
@@ -116,6 +112,6 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedProject">Access</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Close</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedProject">Access</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Close</button>
 </div>

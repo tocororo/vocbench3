@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body vbox blockingDivHost" style="min-height: 75vh;">
 
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%">
             <col>
@@ -22,9 +22,9 @@
                 <td>
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" [(ngModel)]="query" (keydown)="onKeydown($event)" [disabled]="selectedExtension == null  || requireConfigurationConnector()">
-                        <div class="input-group-btn">
-                            <button class="btn btn-default" (click)="searchDataset()" [disabled]="selectedExtension == null  || requireConfigurationConnector()">
-                                <span class="glyphicon glyphicon-search"></span>
+                        <div class="input-group-append">
+                            <button class="btn btn-light" (click)="searchDataset()" [disabled]="selectedExtension == null  || requireConfigurationConnector()">
+                                <span class="fas fa-search"></span>
                             </button>
                         </div>
                     </div>
@@ -34,11 +34,11 @@
     </table>
 
     <div class="hbox" style="margin-top: 4px;">
-        <div class="panel panel-default vbox" style="flex: 1;">
-            <div class="panel-heading">
+        <div class="card card-default vbox" style="flex: 1;">
+            <div class="card-header">
                 <label>Search results:</label>
             </div>
-            <div class="panel-body hbox">
+            <div class="card-body hbox">
                 <div class="vbox scrollableContainer">
                     <div *ngIf="searchDatasetResult?.totalResults == 0" class="searchDatasetResult">No results found</div>
                     <div *ngFor="let d of searchDatasetResult?.content">
@@ -56,32 +56,32 @@
                     </div>
                 </div>
                 <div *ngIf="searchDatasetResult?.facetAggregations" class="vbox scrollableContainer" style="flex: initial;">
-                    <div *ngFor="let facetAggregation of searchDatasetResult.facetAggregations" class="panel panel-alt" style="margin-bottom: 4px;">
-                        <div class="panel-heading"><label>{{facetAggregation.displayName||facetAggregation.name}}</label></div>
-                        <div class="panel-body">
+                    <div *ngFor="let facetAggregation of searchDatasetResult.facetAggregations" class="card card-alt" style="margin-bottom: 4px;">
+                        <div class="card-header"><label>{{facetAggregation.displayName||facetAggregation.name}}</label></div>
+                        <div class="card-body">
                             <div *ngFor="let bucket of facetAggregation.buckets" style="margin-bottom: 3px;">
-                                <button class="btn btn-sm btn-default" [ngClass]="{ active: lastSearchFacets[facetAggregation.name]?.items[bucket.name] }"
+                                <button class="btn btn-sm btn-light" [ngClass]="{ active: lastSearchFacets[facetAggregation.name]?.items[bucket.name] }"
                                     (click)="toggleFacet(facetAggregation, bucket)">
                                     {{bucket.displayName||bucket.name}}
-                                    <span class="label label-default">{{bucket.count}}</span>
+                                    <span class="badge badge-secondary">{{bucket.count}}</span>
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="panel-footer">
-                <div *ngIf="searchDatasetResult" class="hbox pull-right" style="align-items: center;">
+            <div class="card-footer">
+                <div *ngIf="searchDatasetResult" class="hbox float-right" style="align-items: center;">
                     <span style="margin-right: 4px;">{{searchDatasetResult.totalResults}} results</span>
                     <div *ngIf="searchDatasetResult.totalResults > 0" class="btn-group btn-group-xs">
-                        <button class="btn btn-default" title="Previous page" (click)="prevPage()" [disabled]="page==0">
-                            <span class="glyphicon glyphicon-triangle-left"></span>
+                        <button class="btn btn-light" title="Previous page" (click)="prevPage()" [disabled]="page==0">
+                            <span class="fas fa-caret-left"></span>
                         </button>
-                        <button class="btn btn-default" style="cursor: auto" disabled>
+                        <button class="btn btn-light" style="cursor: auto" disabled>
                             <span>{{page+1}} of {{totPage}}</span>
                         </button>
-                        <button class="btn btn-default" title="Next page" (click)="nextPage()" [disabled]="searchDatasetResult.tail">
-                            <span class="glyphicon glyphicon-triangle-right"></span>
+                        <button class="btn btn-light" title="Next page" (click)="nextPage()" [disabled]="searchDatasetResult.tail">
+                            <span class="fas fa-caret-right"></span>
                         </button>
                     </div>
                 </div>
@@ -106,6 +106,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedDatasetDescription">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedDatasetDescription">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

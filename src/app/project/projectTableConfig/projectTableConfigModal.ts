@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ProjectColumnId, ProjectTableColumnStruct, ProjectUtils, ProjectViewMode } from "../../models/Project";
 import { Cookie } from "../../utils/Cookie";
 
@@ -8,22 +7,18 @@ import { Cookie } from "../../utils/Cookie";
     selector: "proj-table-conf-modal",
     templateUrl: "./projectTableConfigModal.html",
 })
-export class ProjectTableConfigModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class ProjectTableConfigModal {
 
-    private visualizationModes: { show: string, mode: ProjectViewMode }[] = [
+    visualizationModes: { show: string, mode: ProjectViewMode }[] = [
         { show: "Projects", mode: ProjectViewMode.list }, 
         { show: "Directories", mode: ProjectViewMode.dir }
     ];
-    private selectedVisualizationMode: { show: string, mode: ProjectViewMode };
+    selectedVisualizationMode: { show: string, mode: ProjectViewMode };
 
+    columns: ProjectTableColumnStruct[] = [];
+    selectedColumn: ProjectTableColumnStruct;
 
-    private columns: ProjectTableColumnStruct[] = [];
-    private selectedColumn: ProjectTableColumnStruct;
-
-    constructor(public dialog: DialogRef<BSModalContext>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) { }
 
     ngOnInit() {
         //init visualization mode
@@ -65,7 +60,7 @@ export class ProjectTableConfigModal implements ModalComponent<BSModalContext> {
         return columnOrder;
     }
 
-    private selectColumn(col: ProjectTableColumnStruct) {
+    selectColumn(col: ProjectTableColumnStruct) {
         if (this.selectedColumn == col) {
             this.selectedColumn = null;
         } else {
@@ -73,17 +68,17 @@ export class ProjectTableConfigModal implements ModalComponent<BSModalContext> {
         }
     }
 
-    private moveUp() {
+    moveUp() {
         var idx = this.columns.indexOf(this.selectedColumn);
         this.columns.splice(idx-1, 0, this.columns.splice(idx, 1)[0]);
     }
 
-    private moveDown() {
+    moveDown() {
         var idx = this.columns.indexOf(this.selectedColumn);
         this.columns.splice(idx+1, 0, this.columns.splice(idx, 1)[0]);
     }
 
-    private reset() {
+    reset() {
         Cookie.deleteCookie(Cookie.PROJECT_TABLE_ORDER);
         this.initColumnTable();
     }
@@ -98,9 +93,9 @@ export class ProjectTableConfigModal implements ModalComponent<BSModalContext> {
         if (oldModeCookie != newModeCookie || oldColumnsCookie != newColumnCookie) { //update the cookies only if changed
             Cookie.setCookie(Cookie.PROJECT_TABLE_ORDER, newColumnCookie);
             Cookie.setCookie(Cookie.PROJECT_VIEW_MODE, newModeCookie);
-            this.dialog.close();
+            this.activeModal.close();
         } else { //if nothing changed, simply dismiss the modal
-            this.dialog.dismiss();
+            this.activeModal.dismiss();
         }
     }
 

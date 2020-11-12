@@ -1,26 +1,20 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-
-export class CapabilityEditorModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title', public capability?: string) {
-        super();
-    }
-}
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: "capability-editor-modal",
     templateUrl: "./capabilityEditorModal.html",
 })
-export class CapabilityEditorModal implements ModalComponent<CapabilityEditorModalData> {
-    context: CapabilityEditorModalData;
+export class CapabilityEditorModal {
+    @Input() title: string;
+    @Input() capability: string;
 
     private crudvList: string[] = ["C", "R", "U", "D", "V"];
     
 
-    private extendedCapability: string; //"capablity(<topic>, <CRUDV>)" where <topic> is <area>(<subject> [, <scope>])
+    extendedCapability: string; //"capablity(<topic>, <CRUDV>)" where <topic> is <area>(<subject> [, <scope>])
 
-    private areaStruct = [
+    areaStruct = [
         { value: "rdf", description: "Editing of content data" }, 
         { value: "rbac", description: "Role Based Access Control management" },
         { value: "pm", description: "Project management" },
@@ -30,9 +24,9 @@ export class CapabilityEditorModal implements ModalComponent<CapabilityEditorMod
         { value: "invokableReporter", description: "Invokable Reports management" },
         { value: "sys", description: "System administration" }
     ];
-    private area: string;
-    private subjectScope: string;
-    private crudvStruct: { value: string, label: string, checked: boolean }[] = [
+    area: string;
+    subjectScope: string;
+    crudvStruct: { value: string, label: string, checked: boolean }[] = [
         { value : "C", label: "Create", checked: false },
         { value : "R", label: "Read", checked: false },
         { value : "U", label: "Update", checked: false },
@@ -40,13 +34,11 @@ export class CapabilityEditorModal implements ModalComponent<CapabilityEditorMod
         { value : "V", label: "Validate", checked: false }
     ];
 
-    constructor(public dialog: DialogRef<CapabilityEditorModalData>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) { }
 
     ngOnInit() {
-        if (this.context.capability != null) { // edit mode
-            let capability = this.context.capability;
+        if (this.capability != null) { // edit mode
+            let capability = this.capability;
             capability = capability.substring(capability.indexOf("(")+1, capability.lastIndexOf(")")); //take the arg of capability(...)
 
             //split <topic> from <CRUDV>
@@ -83,14 +75,14 @@ export class CapabilityEditorModal implements ModalComponent<CapabilityEditorMod
         }
     }
 
-    private changeAllCrudvStatus(checked: boolean) {
+    changeAllCrudvStatus(checked: boolean) {
         for (var i = 0; i < this.crudvStruct.length; i++) {
             this.crudvStruct[i].checked = checked;
         }
         this.updateExtendedCapability();
     }
 
-    private updateExtendedCapability() {
+    updateExtendedCapability() {
         let printCrudv: string = "";
         for (var i = 0; i < this.crudvStruct.length; i++) {
             if (this.crudvStruct[i].checked) {
@@ -105,7 +97,7 @@ export class CapabilityEditorModal implements ModalComponent<CapabilityEditorMod
         
     }
 
-    private isDataValid(): boolean {
+    isDataValid(): boolean {
         for (var i = 0; i < this.crudvStruct.length; i++) {
             if (this.crudvStruct[i].checked) { //if there is at least one checked CRUDV
                 return true;
@@ -114,19 +106,16 @@ export class CapabilityEditorModal implements ModalComponent<CapabilityEditorMod
         return false; //if none CRUDV is checked => error
     }
 
-    ok(event: Event) {
+    ok() {
         if (!this.isDataValid()) {
             return;
         }
 
-        event.stopPropagation();
-        event.preventDefault();
-        
-        this.dialog.close(this.extendedCapability);
+        this.activeModal.close(this.extendedCapability);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
 }

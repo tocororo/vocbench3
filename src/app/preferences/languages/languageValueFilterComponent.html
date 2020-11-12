@@ -1,25 +1,25 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading">
+<div class="card card-default vbox">
+    <div class="card-header">
         <label style="flex: 1">Value-filter Languages</label>
         <span *ngIf="getActiveLanguageItems().length == 0" class="grayText" style="margin-right: 5px;">
-            <span class="glyphicon glyphicon-warning-sign"></span>
+            <span class="fas fa-exclamation-triangle"></span>
             No language selected implicitly means all languages
         </span>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" (click)="changeAllLangStatus(true)" title="Check all">
-                    <span class="glyphicon glyphicon-check"></span>
+                <button class="btn btn-light" (click)="changeAllLangStatus(true)" title="Check all">
+                    <span class="far fa-check-square"></span>
                 </button>
-                <button class="btn btn-default" (click)="changeAllLangStatus(false)" title="Uncheck all">
-                    <span class="glyphicon glyphicon-unchecked"></span>
+                <button class="btn btn-light" (click)="changeAllLangStatus(false)" title="Uncheck all">
+                    <span class="far fa-square"></span>
                 </button>
             </div>
-            <button class="btn btn-xs btn-default" (click)="toggleFilter()" title="Enable filter" [ngClass]="{ active: filterEnabled }">
-                <span class="glyphicon glyphicon-filter"></span>
+            <button class="btn btn-xs btn-light" (click)="toggleFilter()" title="Enable filter" [ngClass]="{ active: filterEnabled }">
+                <span class="fas fa-filter"></span>
             </button>
         </div>
     </div>
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
 
         <div class="alert alert-info" role="alert" style="margin-bottom: 5px;">
             Select the languages that will be shown when filtering literal values in resource descriptions.
@@ -27,7 +27,7 @@
         </div>
         
         <div class="table-responsive">
-            <table class="table table-condensed table-hoverable">
+            <table class="table table-sm table-hoverable">
                 <colgroup>
                     <col style="width: 1%">
                     <col style="width: 1%">
@@ -38,18 +38,18 @@
                         <th class="text-center" style="padding: 0px 8px;">Active</th>
                         <th class="text-center" style="padding: 0px 8px;" nowrap>
                             ISO code
-                            <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="changeIsocodeOrder()">
-                                <span class="glyphicon glyphicon-sort-by-alphabet" *ngSwitchCase="'isocode_ascending'" ></span>
-                                <span class="glyphicon glyphicon-sort-by-alphabet-alt" *ngSwitchCase="'isocode_descending'"></span>
-                                <span class="glyphicon glyphicon-sort" *ngSwitchDefault></span>
+                            <button class="btn btn-xs btn-light" [ngSwitch]="sortOrder" (click)="changeIsocodeOrder()">
+                                <span class="fas fa-sort-alpha-down" *ngSwitchCase="'isocode_ascending'" ></span>
+                                <span class="fas fa-sort-alpha-down-alt" *ngSwitchCase="'isocode_descending'"></span>
+                                <span class="fas fa-sort" *ngSwitchDefault></span>
                             </button>
                         </th>
                         <th class="text-center" style="padding: 0px 8px;" nowrap>
                             Language
-                            <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="changeLanguageOrder()">
-                                <span class="glyphicon glyphicon-sort-by-alphabet" *ngSwitchCase="'language_ascending'"></span>
-                                <span class="glyphicon glyphicon-sort-by-alphabet-alt" *ngSwitchCase="'language_descending'"></span>
-                                <span class="glyphicon glyphicon-sort" *ngSwitchDefault></span>
+                            <button class="btn btn-xs btn-light" [ngSwitch]="sortOrder" (click)="changeLanguageOrder()">
+                                <span class="fas fa-sort-alpha-down" *ngSwitchCase="'language_ascending'"></span>
+                                <span class="fas fa-sort-alpha-down-alt" *ngSwitchCase="'language_descending'"></span>
+                                <span class="fas fa-sort" *ngSwitchDefault></span>
                             </button>
                         </th>
                     </tr>

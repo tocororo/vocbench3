@@ -1,20 +1,14 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
-import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
+import { Configuration } from "../../../models/Configuration";
 import { Bucket, DatasetDescription, DatasetSearchFacets, DatasetSearchResult, DownloadDescription, FacetAggregation, SearchResultsPage, SelectionMode } from "../../../models/Metadata";
-import { ExtensionFactory, ExtensionPointID, ConfigurableExtensionFactory, PluginSpecification } from "../../../models/Plugins";
+import { ExtensionFactory, ExtensionPointID, PluginSpecification } from "../../../models/Plugins";
 import { DatasetCatalogsServices } from "../../../services/datasetCatalogsServices";
 import { ExtensionsServices } from "../../../services/extensionsServices";
-import { DataDumpSelectorModalData, DataDumpSelectorModal } from "./dataDumpSelectorModal";
 import { UIUtils } from "../../../utils/UIUtils";
-import { Configuration } from "../../../models/Configuration";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
-
-export class DatasetCatalogModalData extends BSModalContext {
-    constructor() {
-        super();
-    }
-}
+import { DataDumpSelectorModal } from "./dataDumpSelectorModal";
 
 @Component({
     selector: "dataset-catalog-modal",
@@ -30,29 +24,27 @@ export class DatasetCatalogModalData extends BSModalContext {
         }`
     ]
 })
-export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalData> {
-    context: DatasetCatalogModalData;
+export class DatasetCatalogModal {
 
-    @ViewChild('blockingDiv') private blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) private blockingDivElement: ElementRef;
 
-    private extensions: ExtensionFactory[];
-    private selectedExtension: ExtensionFactory;
+    extensions: ExtensionFactory[];
+    selectedExtension: ExtensionFactory;
     private extensionConfig: Configuration;
 
-    private query: string;
+    query: string;
     private lastQuery: string;
     private lastSearchFacets: { [facetName: string]: { facetDisplayName?: string; items: { [itemName: string]: { itemDisplayName?: string } } } } = {};
 
-    private searchDatasetResult: SearchResultsPage<DatasetSearchResult>;
+    searchDatasetResult: SearchResultsPage<DatasetSearchResult>;
     private selectedDataset: DatasetSearchResult;
-    private selectedDatasetDescription: DatasetDescription;
+    selectedDatasetDescription: DatasetDescription;
 
     private page: number = 0;
     private totPage: number;
 
-    constructor(public dialog: DialogRef<DatasetCatalogModalData>, private metadataRepositoryService: DatasetCatalogsServices,
-        private extensionService: ExtensionsServices, private modal: Modal, private basicModals: BasicModalServices) {
-        this.context = dialog.context;
+    constructor(public activeModal: NgbActiveModal, private metadataRepositoryService: DatasetCatalogsServices,
+        private extensionService: ExtensionsServices, private modalService: NgbModal, private basicModals: BasicModalServices) {
     }
 
     ngOnInit() {
@@ -64,13 +56,13 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
         );
     }
 
-    private onExtensionChange(selectedExtension: ExtensionFactory) {
+    onExtensionChange(selectedExtension: ExtensionFactory) {
         this.selectedExtension = selectedExtension;
         this.extensionConfig = null;
         this.clearResults();
     }
 
-    private onExtensionConfigUpdated(config: Configuration) {
+    onExtensionConfigUpdated(config: Configuration) {
         this.extensionConfig = config
         this.clearResults();
     }
@@ -81,7 +73,7 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
         this.selectedDatasetDescription = null;
     }
 
-    private onKeydown(event: KeyboardEvent) {
+    onKeydown(event: KeyboardEvent) {
         if (event.which == 13) {
             if (this.query && this.query.trim() != "") {
                 this.searchDataset();
@@ -89,7 +81,7 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
         }
     }
 
-    private searchDataset() {
+    searchDataset() {
         this.lastQuery = this.query;
         this.lastSearchFacets = {};
         this.executeSearchDataset();
@@ -120,7 +112,7 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
         );
     }
 
-    private selectDataset(dataset: DatasetSearchResult) {
+    selectDataset(dataset: DatasetSearchResult) {
         let connectorSpec = this.buildConnectorSpecification();
         if (!connectorSpec) return;
 
@@ -132,7 +124,7 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
         )
     }
 
-    private requireConfigurationConnector() {
+    requireConfigurationConnector() {
         if (this.extensionConfig != null) {
             return this.extensionConfig.requireConfiguration();
         }
@@ -143,7 +135,7 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
         let connectorSpec: PluginSpecification= { factoryId: this.selectedExtension.id };
         if (this.extensionConfig != null) {
             if (this.requireConfigurationConnector()) {
-                this.basicModals.alert("Missing configuration", "The catalog connector needs to be configured", "warning");
+                this.basicModals.alert("Missing configuration", "The catalog connector needs to be configured", ModalType.warning);
                 return;
             }
             if (this.extensionConfig != null) {
@@ -155,16 +147,16 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
 
     }
 
-    private prevPage() {
+    prevPage() {
         this.page--;
         this.executeSearchDataset();
     }
-    private nextPage() {
+    nextPage() {
         this.page++;
         this.executeSearchDataset();
     }
 
-    private toggleFacet(facet: FacetAggregation, bucket: Bucket) {
+    toggleFacet(facet: FacetAggregation, bucket: Bucket) {
         let searchFacet = this.lastSearchFacets[facet.name]
         if (!searchFacet) {
             searchFacet = {
@@ -196,33 +188,27 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
     }
 
     private selectDataDump(): Promise<DownloadDescription> {
-        var modalData = new DataDumpSelectorModalData(
-            "The selected dataset catalog has multiple data dumps. Please select the one to use from this list.",
-            this.selectedDatasetDescription.dataDumps
-        );
-        const builder = new BSModalContextBuilder<DataDumpSelectorModalData>(
-            modalData, undefined, DataDumpSelectorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size("lg").toJSON() };
-        return this.modal.open(DataDumpSelectorModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(DataDumpSelectorModal, new ModalOptions('lg'));
+        modalRef.componentInstance.message = "The selected dataset catalog has multiple data dumps. Please select the one to use from this list.";
+		modalRef.componentInstance.dataDumps = this.selectedDatasetDescription.dataDumps;
+        return modalRef.result;
     }
 
-
-    ok(event: Event) {
+    ok() {
         if (this.selectedDatasetDescription.dataDumps.length == 0) {
             let returnData: DatasetCatalogModalReturnData = {
                 connectorId: this.selectedExtension.id,
                 dataset: this.selectedDatasetDescription,
                 dataDump: null
             }
-            this.dialog.close(returnData);
+            this.activeModal.close(returnData);
         } else if (this.selectedDatasetDescription.dataDumps.length == 1) {
             let returnData: DatasetCatalogModalReturnData = {
                 connectorId: this.selectedExtension.id,
                 dataset: this.selectedDatasetDescription,
                 dataDump: this.selectedDatasetDescription.dataDumps[0]
             }
-            this.dialog.close(returnData);
+            this.activeModal.close(returnData);
         } else { //multiple data dumps
             this.selectDataDump().then(
                 dump => {
@@ -231,7 +217,7 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
                         dataset: this.selectedDatasetDescription,
                         dataDump: dump
                     }
-                    this.dialog.close(returnData);
+                    this.activeModal.close(returnData);
                 },
                 () => { }
             );
@@ -239,7 +225,7 @@ export class DatasetCatalogModal implements ModalComponent<DatasetCatalogModalDa
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

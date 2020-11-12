@@ -1,6 +1,6 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ConfigurationComponents } from "../../models/Configuration";
 import { Language, Languages } from "../../models/LanguagesCountries";
@@ -20,7 +20,7 @@ import { VBProperties } from "../../utils/VBProperties";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { LoadConfigurationModalReturnData } from "../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { UserProjBindingModal, UserProjBindingModalData } from "./userProjBindingModal";
+import { UserProjBindingModal } from "./userProjBindingModal";
 
 @Component({
     selector: "project-users-manager",
@@ -30,8 +30,8 @@ export class ProjectUsersManagerComponent {
 
     @Input() project: Project
 
-    private usersBound: User[]; //list of User bound to selected project 
-    private selectedUser: User; //user selected in the list of bound users
+    usersBound: User[]; //list of User bound to selected project 
+    selectedUser: User; //user selected in the list of bound users
 
     private puBinding: ProjectUserBinding; //binding between selectedProject and selectedUser
 
@@ -55,7 +55,7 @@ export class ProjectUsersManagerComponent {
 
     constructor(private userService: UserServices, private projectService: ProjectServices, private adminService: AdministrationServices, 
         private groupsService: UsersGroupsServices, private prefSettingsServices: PreferencesSettingsServices, private vbProp: VBProperties,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
 
 
     ngOnChanges(changes: SimpleChanges) {
@@ -104,7 +104,7 @@ export class ProjectUsersManagerComponent {
                     } catch (err) {
                         this.basicModals.alert("Error", "Initialization of languages for project '" + this.project.getName() + 
                             "' has encountered a problem during parsing the 'languages' settings. " + 
-                            "Please, report this to the system administrator.", "error");
+                            "Please, report this to the system administrator.", ModalType.error);
                     }
                 }
             );
@@ -144,13 +144,12 @@ export class ProjectUsersManagerComponent {
         }
     }
 
-    private addUserToProject() {
-        var modalData = new UserProjBindingModalData("Add user to " + this.project.getName(), this.project, this.usersBound);
-        const builder = new BSModalContextBuilder<UserProjBindingModalData>(
-            modalData, undefined, UserProjBindingModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(UserProjBindingModal, overlayConfig).result.then(
+    addUserToProject() {
+        const modalRef: NgbModalRef = this.modalService.open(UserProjBindingModal, new ModalOptions());
+        modalRef.componentInstance.title = "Add user to " + this.project.getName();
+		modalRef.componentInstance.project = this.project;
+		modalRef.componentInstance.usersBound = this.usersBound;
+        return modalRef.result.then(
             data => {
                 var user: User = data.user;
                 var roles: string[] = data.roles;
@@ -164,8 +163,8 @@ export class ProjectUsersManagerComponent {
         );
     }
 
-    private removeUserFromProject() {
-        this.basicModals.confirm("Remove user", "You are removing the user " + this.selectedUser.getShow() + " form the project " + this.project.getName() + ". Are you sure?", "warning").then(
+    removeUserFromProject() {
+        this.basicModals.confirm("Remove user", "You are removing the user " + this.selectedUser.getShow() + " form the project " + this.project.getName() + ". Are you sure?", ModalType.warning).then(
             () => {
                 this.adminService.removeUserFromProject(this.project.getName(), this.selectedUser.getEmail()).subscribe(
                     stResp => {
@@ -195,7 +194,7 @@ export class ProjectUsersManagerComponent {
                     targetProj => {
                         this.basicModals.confirm("Duplicate settings", "With this operation you will overwrite any roles, group, languages " + 
                             "and ResourceView template assigned to " + this.selectedUser.getShow() + " in the target project '" + targetProj + 
-                            "'. Are you sure?\n\nNote: the project-level roles will not be cloned", "warning").then(
+                            "'. Are you sure?\n\nNote: the project-level roles will not be cloned", ModalType.warning).then(
                             () => {
                                 //clone binding-related settings (roles, group, language)
                                 let userIri: ARTURIResource = new ARTURIResource(this.selectedUser.getIri());

@@ -1,31 +1,31 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading">
+<div class="card card-default vbox">
+    <div class="card-header">
         <label style="flex: 1">Versions:</label>
 
         <div class="btn-group btn-group-xs" style="margin-right: 5px">
-            <button class="btn btn-default" (click)="swithcToVersion()" [disabled]="!selectedVersion">
+            <button class="btn btn-light" (click)="swithcToVersion()" [disabled]="!selectedVersion">
                 Switch to
             </button>
-            <button class="btn btn-default" (click)="delteVersion()" [disabled]="!selectedVersion">
+            <button class="btn btn-light" (click)="delteVersion()" [disabled]="!selectedVersion">
                 Delete
             </button>
         </div>
 
-        <div class="dropdown pull-right">
-            <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown" [disabled]="!isDumpAuthorized">
+        <div class="dropdown float-right" ngbDropdown>
+            <button class="btn btn-xs btn-light dropdown-toggle" data-toggle="dropdown" [disabled]="!isDumpAuthorized" ngbDropdownToggle>
                 Dump...
-                <span class="caret"></span>
+                <span class="fas fa-caret-down fa-sm"></span>
             </button>
-            <ul class="dropdown-menu">
-                <li><a (click)="dump()">Dump a new version</a></li>
-                <li><a (click)="dumpWithLocation()">Dump a new version to a different location</a></li>
-            </ul>
+            <div class="dropdown-menu" ngbDropdownMenu>
+                <a class="dropdown-item" (click)="dump()">Dump a new version</a>
+                <a class="dropdown-item" (click)="dumpWithLocation()">Dump a new version to a different location</a>
+            </div>
         </div>
 
     </div>
 
-    <div class="panel-body scrollableContainer" style="flex: 1;">
-        <table class="table table-condensed table-hoverable" style="flex: 1">
+    <div class="card-body scrollableContainer" style="flex: 1;">
+        <table class="table table-sm table-hoverable" style="flex: 1">
             <thead>
                 <tr>
                     <th class="text-center">Version ID</th>
@@ -37,7 +37,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let v of versionList; let idx=index" (click)="selectVersion(v)" [ngClass]="{ info: v == selectedVersion }">
+                <tr *ngFor="let v of versionList; let idx=index" (click)="selectVersion(v)" [ngClass]="{ 'table-primary': v == selectedVersion }">
                     <td class="text-center">
                         {{v.versionId}}
                     </td>
@@ -51,7 +51,7 @@
                         {{v.repositoryLocation}}
                     </td>
                     <td class="text-center">
-                        <span *ngIf="isActiveVersion(v)" class="glyphicon glyphicon-ok"></span>
+                        <span *ngIf="isActiveVersion(v)" class="fas fa-check"></span>
                     </td>
                     <td class="text-center">
                         <ng-template [ngIf]="idx == 0">
@@ -59,7 +59,7 @@
                         </ng-template>
                         <ng-template [ngIf]="idx > 0">
                             {{v.repositoryStatus | lowercase}}
-                            <button class="btn btn-xs btn-default" (click)="closeVersion(v)"
+                            <button class="btn btn-xs btn-light" (click)="closeVersion(v)"
                                 [disabled]="v.repositoryStatus != 'INITIALIZED' || isActiveVersion(v)">
                                 Close
                             </button>

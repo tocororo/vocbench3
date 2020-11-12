@@ -5,36 +5,36 @@
 
     <div class="hbox" style="align-items: center;">
         <label style="white-space: nowrap; margin-right: 4px;">Top level elements:</label>
-        <select class="form-control input-sm" [(ngModel)]="selectedVisualizationMode">
+        <select class="form-control form-control-sm" [(ngModel)]="selectedVisualizationMode">
             <option *ngFor="let m of visualizationModes" [ngValue]="m">{{m.show}}</option>
         </select>
     </div>
 
-    <div class="panel panel-default" style="margin-top: 6px;">
-        <div class="panel-heading">
+    <div class="card card-default" style="margin-top: 6px;">
+        <div class="card-header">
             <label>Project info</label>
             <label style="flex: 1"></label>
             <div class="btn-group btn-group-xs" style="margin-right: 4px;">
-                <button class="btn btn-default" (click)="moveUp()" title="Move up"
+                <button class="btn btn-light" (click)="moveUp()" title="Move up"
                     [disabled]="!selectedColumn || columns.indexOf(selectedColumn) == 0">
-                    <span class="glyphicon glyphicon-chevron-up"></span>
+                    <span class="fas fa-chevron-up"></span>
                 </button>
-                <button class="btn btn-default" (click)="moveDown()" title="Move down"
+                <button class="btn btn-light" (click)="moveDown()" title="Move down"
                     [disabled]="!selectedColumn || columns[columns.length-1] == selectedColumn">
-                    <span class="glyphicon glyphicon-chevron-down"></span>
+                    <span class="fas fa-chevron-down"></span>
                 </button>
             </div>
-            <button class="btn btn-xs btn-default" (click)="reset()" title="Restore default">
-                <span class="glyphicon glyphicon-repeat"></span>
+            <button class="btn btn-xs btn-light" (click)="reset()" title="Restore default">
+                <span class="fas fa-redo"></span>
             </button>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
 
             <div class="alert alert-info" style="margin-bottom: 8px;">
                 Here you can show or hide info about the projects and customize their order.
             </div>
             
-            <table class="table table-hoverable table-condensed table-borderless">
+            <table class="table table-hoverable table-sm table-borderless">
                 <thead>
                     <th class="text-center">Column name</th>
                     <th class="text-center">Show</th>

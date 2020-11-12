@@ -1,42 +1,42 @@
 <div class="hbox">
-    <div class="panel panel-alt vbox">
-        <div class="panel-heading">
+    <div class="card card-alt vbox">
+        <div class="card-header">
             <label style="flex: 1;">Users:</label>
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" (click)="addUserToProject()" [disabled]="!project" title="Add user to project">
-                    <span class="glyphicon glyphicon-plus"></span>
+                <button class="btn btn-light" (click)="addUserToProject()" [disabled]="!project" title="Add user to project">
+                    <span class="fas fa-plus"></span>
                 </button>
-                <button class="btn btn-default" (click)="removeUserFromProject()" 
+                <button class="btn btn-light" (click)="removeUserFromProject()" 
                     [disabled]="!selectedUser || selectedUser.isAdmin() || !project" title="Remove user from project">
-                    <span class="glyphicon glyphicon-minus"></span>
+                    <span class="fas fa-minus"></span>
                 </button>
             </div>
         </div>
-        <div class="panel-body vbox scrollableContainer" (keydown)="moveUser($event)">
+        <div class="card-body vbox scrollableContainer">
             <div *ngFor="let u of usersBound" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
                 <span style="flex: 1">{{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span></span>
-                <span *ngIf="u.isAdmin()" class="badge">Admin</span>
+                <span *ngIf="u.isAdmin()" class="badge badge-primary">Admin</span>
             </div> 
         </div>
     </div>
-    <div *ngIf="selectedUser" class="panel panel-alt vbox" style="margin-left: 5px; flex: 3;">
-        <div class="panel-heading">
+    <div *ngIf="selectedUser" class="card card-alt vbox" style="margin-left: 5px; flex: 3;">
+        <div class="card-header">
             <label style="flex: 1;">Project-User settings:</label>
-            <button *ngIf="isLoggedUserAdmin()" class="btn btn-xs btn-default" (click)="cloneSettings()" title="Duplicate settings to another project">
-                <span class="glyphicon glyphicon-duplicate"></span>
+            <button *ngIf="isLoggedUserAdmin()" class="btn btn-xs btn-light" (click)="cloneSettings()" title="Duplicate settings to another project">
+                <span class="fas fa-copy"></span>
             </button>
         </div>
-        <div class="panel-body vbox scrollableContainer">
+        <div class="card-body vbox scrollableContainer">
 
             <!-- Roles -->
-            <div *ngIf="isRoleManagementAuthorized() && !isSelectedUserAdmin()" class="panel panel-default vbox" style="min-height: 200px;">
-                <div class="panel-body vbox">
+            <div *ngIf="isRoleManagementAuthorized() && !isSelectedUserAdmin()" class="card card-default vbox" style="min-height: 200px;">
+                <div class="card-body vbox">
                     <div class="hbox">
-                        <div class="panel panel-alt vbox">
-                            <div class="panel-heading">
+                        <div class="card card-alt vbox">
+                            <div class="card-header">
                                 <label>Assigned Roles:</label>
                             </div>
-                            <div class="panel-body vbox scrollableContainer">
+                            <div class="card-body vbox scrollableContainer">
                                 <ng-template [ngIf]="puBinding">
                                     <div *ngFor="let r of puBinding.getRoles()" (click)="selectUserRole(r)"
                                         class="listItem" [ngClass]="{active: r == selectedUserRole}">
@@ -46,22 +46,22 @@
                             </div>
                         </div>
                         <div style="align-self: center; margin: 5px;">
-                            <button class="btn btn-default btn-sm btn-block" (click)="addRole()" [disabled]="!selectedRole || !puBinding">
-                                <span class="glyphicon glyphicon-chevron-left"></span> Add
+                            <button class="btn btn-light btn-sm btn-block" (click)="addRole()" [disabled]="!selectedRole || !puBinding">
+                                <span class="fas fa-chevron-left"></span> Add
                             </button>
-                            <button class="btn btn-default btn-sm btn-block"  (click)="removeRole()" [disabled]="!selectedUserRole">
-                                Remove <span class="glyphicon glyphicon-chevron-right"></span>
+                            <button class="btn btn-light btn-sm btn-block"  (click)="removeRole()" [disabled]="!selectedUserRole">
+                                Remove <span class="fas fa-chevron-right"></span>
                             </button>
                         </div>
-                        <div class="panel panel-alt vbox">
-                            <div class="panel-heading">
+                        <div class="card card-alt vbox">
+                            <div class="card-header">
                                 <label>Available Roles:</label>
                             </div>
-                            <div class="panel-body vbox scrollableContainer">
+                            <div class="card-body vbox scrollableContainer">
                                 <div *ngFor="let r of roleList" class="listItem" (click)="selectRole(r)"
                                     [ngClass]="{active: r == selectedRole, disabled: isRoleAlreadyAssigned(r)}">
                                     <span style="flex: 1;">{{r.getName()}}</span>
-                                    <span *ngIf="r.getLevel()=='project'" class="label label-default" style="font-size: 10px; padding: 2px 3px;"
+                                    <span *ngIf="r.getLevel()=='project'" class="badge badge-secondary" style="font-size: 10px; padding: 2px 3px;"
                                         title="Defined at project level">P</span>
                                 </div>
                             </div>
@@ -71,19 +71,19 @@
             </div>
 
             <!-- Groups -->
-            <div *ngIf="isGroupManagementAuthorized()" class="panel panel-default vbox" style="min-height: 120px; margin-top: 4px">
-                <div class="panel-body vbox">
+            <div *ngIf="isGroupManagementAuthorized()" class="card card-default vbox" style="min-height: 120px; margin-top: 4px">
+                <div class="card-body vbox">
                     <div class="hbox">
-                        <div class="panel panel-alt vbox">
-                            <div class="panel-heading">
+                        <div class="card card-alt vbox">
+                            <div class="card-header">
                                 <label style="flex: 1">Assigned Group:</label>
-                                <button *ngIf="puBinding?.getGroup()" class="btn btn-xs btn-default" [ngClass]="{ active: puBinding.isSubjectToGroupLimitations()}" (click)="changeGroupLimitations()" 
+                                <button *ngIf="puBinding?.getGroup()" class="btn btn-xs btn-light" [ngClass]="{ active: puBinding.isSubjectToGroupLimitations()}" (click)="changeGroupLimitations()" 
                                 title="If enabled, the user is subject to the group limitations" [disabled]="selectedUser.isAdmin()">
                                     <span *ngIf="puBinding.isSubjectToGroupLimitations()" class="greenText" style="font-weight: bold">Restrictions applied</span>
                                     <span *ngIf="!puBinding.isSubjectToGroupLimitations()" class="grayText">Apply restrictions</span>
                                 </button>
                             </div>
-                            <div class="panel-body vbox scrollableContainer">
+                            <div class="card-body vbox scrollableContainer">
                                 <ng-template [ngIf]="puBinding">
                                     <div *ngIf="puBinding.getGroup()" class="listItem" [ngClass]="{active: selectedUserGroup}"
                                         (click)="selectUserGroup(puBinding.getGroup())">
@@ -93,18 +93,18 @@
                             </div>
                         </div>
                         <div style="align-self: center; margin: 5px;">
-                            <button class="btn btn-default btn-sm btn-block" (click)="assignGroup()" [disabled]="!selectedGroup || !puBinding">
-                                <span class="glyphicon glyphicon-chevron-left"></span> Assign
+                            <button class="btn btn-light btn-sm btn-block" (click)="assignGroup()" [disabled]="!selectedGroup || !puBinding">
+                                <span class="fas fa-chevron-left"></span> Assign
                             </button>
-                            <button class="btn btn-default btn-sm btn-block"  (click)="removeGroup()" [disabled]="!selectedUserGroup">
-                                Remove <span class="glyphicon glyphicon-chevron-right"></span>
+                            <button class="btn btn-light btn-sm btn-block"  (click)="removeGroup()" [disabled]="!selectedUserGroup">
+                                Remove <span class="fas fa-chevron-right"></span>
                             </button>
                         </div>
-                        <div class="panel panel-alt vbox" style="margin: 0px">
-                            <div class="panel-heading">
+                        <div class="card card-alt vbox" style="margin: 0px">
+                            <div class="card-header">
                                 <label>Available Groups:</label>
                             </div>
-                            <div class="panel-body vbox scrollableContainer">
+                            <div class="card-body vbox scrollableContainer">
                                 <div *ngFor="let g of groupList" class="listItem" (click)="selectGroup(g)"
                                     [ngClass]="{active: g == selectedGroup, disabled: isGroupAlreadyAssigned(g)}" >
                                     {{g.shortName}}
@@ -116,24 +116,24 @@
             </div>
 
             <!-- Languages -->
-            <div class="panel panel-default vbox" style="min-height: 320px; margin-top: 4px;">
-                <div class="panel-body vbox">
+            <div class="card card-default vbox" style="min-height: 320px; margin-top: 4px;">
+                <div class="card-body vbox">
                     <div class="hbox">
-                        <div class="panel panel-alt vbox" style="margin: 0px">
-                            <div class="panel-heading">
+                        <div class="card card-alt vbox" style="margin: 0px">
+                            <div class="card-header">
                                 <label>Assigned Languages:</label>
                             </div>
-                            <div class="panel-body vbox scrollableContainer">
+                            <div class="card-body vbox scrollableContainer">
                                 <ng-container *ngIf="puBinding">
                                     <div *ngFor="let l of puLanguages" class="listItem" [ngClass]="{active: l == selectedUserLang}" 
                                         (click)="selectUserLang(l)">
                                         <lang-item style="flex: 1" [language]="l" showTag="true"></lang-item>
-                                        <span *ngIf="l.proficiency" class="glyphicon glyphicon-star" 
+                                        <span *ngIf="l.proficiency" class="fas fa-star" 
                                             title="This language is in the language proficiencies of the selected user">
                                         </span>
                                     </div>
                                     <div *ngIf="puLanguages?.length == 0 && selectedUser.isAdmin()" class="alert alert-warning">
-                                        <span class="glyphicon glyphicon-warning-sign"></span>
+                                        <span class="fas fa-exclamation-triangle"></span>
                                         For administrator user, no language assigned implicitly means all project languages
                                     </div>
                                 </ng-container>
@@ -141,53 +141,51 @@
                         </div>
                         <div class="vbox" style="align-self: center; margin: 5px; flex: initial;">
                             <div class="btn-group" style="display: flex; margin-bottom: 5px;">
-                                <button class="btn btn-sm btn-default" style="width: 100%" (click)="addLanguage()" [disabled]="!selectedLang || !puBinding">
-                                    <span class="glyphicon glyphicon-chevron-left"></span> Add
+                                <button class="btn btn-sm btn-light" style="width: 100%" (click)="addLanguage()" [disabled]="!selectedLang || !puBinding">
+                                    <span class="fas fa-chevron-left"></span> Add
                                 </button>
-                                <div class="btn-group" role="group">
-                                    <button class="btn btn-sm btn-default dropdown-toggle" style="padding: 5px 3px;" data-toggle="dropdown">
-                                        <span class="caret"></span>
+                                <div class="btn-group" ngbDropdown>
+                                    <button class="btn btn-sm btn-light dropdown-toggle" style="padding: 5px 3px;" data-toggle="dropdown" ngbDropdownToggle>
+                                        <span class="fas fa-caret-down fa-sm"></span>
                                     </button>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a (click)="addAllLanguages()">Add all</a></li>
-                                        <li>
-                                            <a (click)="addProficienciesLangs()">Add all proficiencies
-                                                <span class="glyphicon glyphicon-star pull-right"></span>
-                                            </a>
-                                        </li>
-                                    </ul>
+                                    <div class="dropdown-menu float-right" ngbDropdownMenu>
+                                        <a class="dropdown-item" (click)="addAllLanguages()">Add all</a>
+                                        <a class="dropdown-item" (click)="addProficienciesLangs()">
+                                            Add all proficiencies
+                                            <span class="fas fa-star float-right"></span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-default" (click)="removeLanguage()" [disabled]="!selectedUserLang">
-                                    Remove <span class="glyphicon glyphicon-chevron-right"></span>
+                                <button class="btn btn-sm btn-light" (click)="removeLanguage()" [disabled]="!selectedUserLang">
+                                    Remove <span class="fas fa-chevron-right"></span>
                                 </button>
-                                <div class="btn-group">
-                                    <button class="btn btn-sm btn-default dropdown-toggle" style="padding: 5px 3px;" data-toggle="dropdown">
-                                        <span class="caret"></span>
+                                <div class="btn-group" ngbDropdown>
+                                    <button class="btn btn-sm btn-light dropdown-toggle" style="padding: 5px 3px;" data-toggle="dropdown" ngbDropdownToggle>
+                                        <span class="fas fa-caret-down fa-sm"></span>
                                     </button>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a (click)="removeAllLanguages()">Remove all</a></li>
-                                        <li>
-                                            <a (click)="leaveProficienciesLangs()">Leave only proficiencies
-                                                <span class="glyphicon glyphicon-star pull-right"></span>
-                                            </a>
-                                        </li>
-                                    </ul>
+                                    <div class="dropdown-menu float-right" ngbDropdownMenu>
+                                        <a class="dropdown-item" (click)="removeAllLanguages()">Remove all</a>
+                                        <a class="dropdown-item" (click)="leaveProficienciesLangs()">
+                                            Leave only proficiencies
+                                            <span class="fas fa-star float-right"></span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="panel panel-alt vbox" style="margin: 0px">
-                            <div class="panel-heading">
+                        <div class="card card-alt vbox" style="margin: 0px">
+                            <div class="card-header">
                                 <label style="flex: 1">Available Languages:</label>
-                                <button class="btn btn-xs btn-default" (click)="toggleFilterProficencies()" [ngClass]="{ active: filterProficiencies }">
-                                    <span class="glyphicon glyphicon-star" title="Show only language proficiencies of the user"></span>
+                                <button class="btn btn-xs btn-light" (click)="toggleFilterProficencies()" [ngClass]="{ active: filterProficiencies }">
+                                    <span class="fas fa-star" title="Show only language proficiencies of the user"></span>
                                 </button>
                             </div>
-                            <div class="panel-body vbox scrollableContainer">
+                            <div class="card-body vbox scrollableContainer">
                                 <div *ngFor="let l of availableLanguages" class="listItem" [ngClass]="{active: l == selectedLang}" (click)="selectLang(l)">
                                     <lang-item [language]="l" showTag="true" style="flex: 1" [disabled]="isLangAlreadyAssigned(l)"></lang-item>
-                                    <span *ngIf="l.proficiency" class="glyphicon glyphicon-star" 
+                                    <span *ngIf="l.proficiency" class="fas fa-star" 
                                         title="This language is in the language proficiencies of the selected user">
                                     </span>
                                 </div>
@@ -198,24 +196,24 @@
             </div>
 
             <!-- Templates -->
-            <div *ngIf="isLoggedUserAdmin()" class="panel panel-alt vbox" style="min-height: 420px; margin-top: 4px;">
-                <div class="panel-heading">
+            <div *ngIf="isLoggedUserAdmin()" class="card card-alt vbox" style="min-height: 420px; margin-top: 4px;">
+                <div class="card-header">
                     <label style="flex: 1;">
                         ResourceView template
-                        <span class="glyphicon glyphicon-info-sign" title="Customize the ResourceView template for the user in the given project"></span>
+                        <span class="fas fa-info-circle" title="Customize the ResourceView template for the user in the given project"></span>
                     </label>
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-default" (click)="storeTemplate()" title="Store template">
-                                <span class="glyphicon glyphicon-floppy-save"></span>
+                            <button class="btn btn-light" (click)="storeTemplate()" title="Store template">
+                                <span class="fas fa-download"></span>
                             </button>
-                            <button class="btn btn-default" (click)="loadTemplate()" title="Load template">
-                                <span class="glyphicon glyphicon-floppy-open"></span>
+                            <button class="btn btn-light" (click)="loadTemplate()" title="Load template">
+                                <span class="fas fa-upload"></span>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="panel-body vbox">
+                <div class="card-body vbox">
                     <div class="alert alert-info" role="alert" style="margin-bottom: 5px;">
                         Here you can customize the ResourceView template for the user in the given project.
                         <u>Note</u>: this is exactly the setting of the user, so by changing it you will change directly its ResourceView template.<br>

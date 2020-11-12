@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { UsersGroup } from "../../models/User";
 import { UsersGroupsServices } from "../../services/usersGroupsServices";
-import { Modal, BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
-import { GroupEditorModalData, GroupEditorModal } from "./groupEditorModal";
-import { OverlayConfig } from "ngx-modialog";
+import { GroupEditorModal } from "./groupEditorModal";
 
 @Component({
     selector: "groups-admin-component",
@@ -13,10 +13,10 @@ import { OverlayConfig } from "ngx-modialog";
 export class GroupsAdministrationComponent {
 
     //Group list panel
-    private groupList: UsersGroup[];
-    private selectedGroup: UsersGroup;
+    groupList: UsersGroup[];
+    selectedGroup: UsersGroup;
 
-    constructor(private groupsSevice: UsersGroupsServices, private modal: Modal) { }
+    constructor(private groupsSevice: UsersGroupsServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         this.initGroups();
@@ -43,7 +43,7 @@ export class GroupsAdministrationComponent {
         this.selectedGroup = group;
     }
 
-    private createGroup() {
+    createGroup() {
         this.openGroupEditor("Create group").then(
             data => {
                 this.initGroups();
@@ -52,7 +52,7 @@ export class GroupsAdministrationComponent {
         );
     }
 
-    private deleteGroup() {
+    deleteGroup() {
         this.groupsSevice.deleteGroup(this.selectedGroup.iri).subscribe(
             stResp => {
                 this.initGroups();
@@ -60,7 +60,7 @@ export class GroupsAdministrationComponent {
         );
     }
 
-    private editGroup() {
+    editGroup() {
         this.openGroupEditor("Edit group " + this.selectedGroup.shortName, this.selectedGroup).then(
             (updatedGroup: UsersGroup) => {
                 this.initGroups(updatedGroup);
@@ -70,12 +70,10 @@ export class GroupsAdministrationComponent {
     }
 
     private openGroupEditor(title: string, group?: UsersGroup) {
-        var modalData = new GroupEditorModalData(title, group);
-        const builder = new BSModalContextBuilder<GroupEditorModalData>(
-            modalData, undefined, GroupEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(GroupEditorModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(GroupEditorModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+		modalRef.componentInstance.group = group;
+        return modalRef.result;
     }
     
 

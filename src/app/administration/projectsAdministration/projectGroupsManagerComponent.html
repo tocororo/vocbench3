@@ -1,21 +1,21 @@
 <div class="hbox">
 
-    <div class="panel panel-alt vbox">
-        <div class="panel-heading">
+    <div class="card card-alt vbox">
+        <div class="card-header">
             <label style="flex: 1;">Groups:</label>
         </div>
-        <div class="panel-body vbox scrollableContainer">
+        <div class="card-body vbox scrollableContainer">
             <div *ngFor="let g of groups" class="listItem" [ngClass]="{active: g == selectedGroup}" (click)="selectGroup(g)">
                 <span style="flex: 1">{{g.shortName}}</span>
             </div> 
         </div>
     </div>
 
-    <div *ngIf="project && selectedGroup" class="panel panel-alt vbox" style="margin-left: 5px; flex: 3;">
-        <div class="panel-heading">
+    <div *ngIf="project && selectedGroup" class="card card-alt vbox" style="margin-left: 5px; flex: 3;">
+        <div class="card-header">
             <label>Project-Group settings:</label>
         </div>
-        <div class="panel-body vbox">
+        <div class="card-body vbox">
 
             <div *ngIf="projectClosed; else elseBlock" class="alert alert-warning">
                 Project {{project.getName()}} is closed. It is possible to edit group settings only for open projects.
@@ -24,67 +24,67 @@
             <ng-template #elseBlock>
                 <div class="vbox" *ngIf="isProjectSkosCompliant(); else owlBlock">
                     <div class="hbox" style="margin-bottom: 6px; align-items: center; flex: initial;">
-                        <span class="glyphicon glyphicon-info-sign" title="Base broader property to be selected when creating narrower concepts"></span>
+                        <span class="fas fa-info-circle" title="Base broader property to be selected when creating narrower concepts"></span>
                         <label style="white-space: nowrap; margin: 0px 4px;">
                             Base broader property:
                         </label>
                         <div class="input-group input-group-sm" style="flex: 1;">
                             <input type="text" class="form-control" [ngModel]="baseBroaderProp" readonly>
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" (click)="changeBaseBroaderProperty()">
+                            <div class="input-group-append">
+                                <button class="btn btn-light" (click)="changeBaseBroaderProperty()">
                                     <img src="../../../assets/images/icons/res/propObject.png"/>
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="panel panel-default vbox">
-                        <div class="panel-heading">
+                    <div class="card card-default vbox">
+                        <div class="card-header">
                             <label>
                                 Management of broader/narrower
-                                <span class="glyphicon glyphicon-info-sign" title="Customizes the properties on which the concept tree hierarchy is based on.
+                                <span class="fas fa-info-circle" title="Customizes the properties on which the concept tree hierarchy is based on.
 If none of broader/narrower properties is selected, then skos:broader^ and skos:narrower will be used (in OR) to check narrower concepts.
 If any of the two is selected (with one or more properties), then only the selected properties will be used.">
                                 </span>
                             </label>
                         </div>
-                        <div class="panel-body vbox">
+                        <div class="card-body vbox">
         
                             <div class="hbox">
-                                <div class="panel panel-alt vbox">
-                                    <div class="panel-heading">
+                                <div class="card card-alt vbox">
+                                    <div class="card-header">
                                         <label style="flex:1">Broader</label>
                                         <div class="btn-toolbar" role="toolbar">
                                             <div class="btn-group btn-group-xs">
-                                                <button class="btn btn-default" (click)="addBroader()">
-                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                <button class="btn btn-light" (click)="addBroader()">
+                                                    <span class="fas fa-plus"></span>
                                                 </button>
-                                                <button class="btn btn-default" (click)="removeBroader()" [disabled]="!selectedBroader">
-                                                    <span class="glyphicon glyphicon-minus"></span>
+                                                <button class="btn btn-light" (click)="removeBroader()" [disabled]="!selectedBroader">
+                                                    <span class="fas fa-minus"></span>
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="panel-body vbox" style="min-height: 70px;">
+                                    <div class="card-body vbox" style="min-height: 70px;">
                                         <resource-list [resources]="broaderProps" (nodeSelected)="selectedBroader = $event"></resource-list>
                                     </div>
                                 </div>
         
-                                <div class="panel panel-alt vbox" style="margin-left: 4px;">
-                                    <div class="panel-heading">
+                                <div class="card card-alt vbox" style="margin-left: 4px;">
+                                    <div class="card-header">
                                         <label style="flex:1">Narrower</label>
                                         <div class="btn-toolbar" role="toolbar">
                                             <div class="btn-group btn-group-xs">
-                                                <button class="btn btn-default" (click)="addNarrower()">
-                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                <button class="btn btn-light" (click)="addNarrower()">
+                                                    <span class="fas fa-plus"></span>
                                                 </button>
-                                                <button class="btn btn-default" (click)="removeNarrower()" [disabled]="!selectedNarrower">
-                                                    <span class="glyphicon glyphicon-minus"></span>
+                                                <button class="btn btn-light" (click)="removeNarrower()" [disabled]="!selectedNarrower">
+                                                    <span class="fas fa-minus"></span>
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="panel-body vbox" style="min-height: 70px;">
+                                    <div class="card-body vbox" style="min-height: 70px;">
                                         <resource-list [resources]="narrowerProps" (nodeSelected)="selectedNarrower = $event"></resource-list>
                                     </div>
                                 </div>
@@ -95,14 +95,14 @@ If any of the two is selected (with one or more properties), then only the selec
                                     <label>
                                         <input type="checkbox" [(ngModel)]="syncInverse" (ngModelChange)="onSyncChange()">Sync inverse properties
                                     </label>
-                                    <span class="glyphicon glyphicon-info-sign" title="Keep synced the broader/narrower properties with their inverse properties">
+                                    <span class="fas fa-info-circle" title="Keep synced the broader/narrower properties with their inverse properties">
                                     </span>
                                 </div>
                                 <div class="checkbox-inline">
                                     <label>
                                         <input type="checkbox" [(ngModel)]="includeSubProps" (ngModelChange)="onIncludeSubPropsChange()">Include subProperties
                                     </label>
-                                    <span class="glyphicon glyphicon-info-sign"
+                                    <span class="fas fa-info-circle"
                                         title="Includes the subProperties of the selected broader/narrower properties">
                                     </span>
                                 </div>
@@ -111,24 +111,24 @@ If any of the two is selected (with one or more properties), then only the selec
                         </div>
                     </div>
 
-                    <div class="panel panel-default vbox" style="margin-top: 4px;">
-                        <div class="panel-heading">
+                    <div class="card card-default vbox" style="margin-top: 4px;">
+                        <div class="card-header">
                             <label style="flex:1">
                                 ConceptScheme authorizations
-                                <span class="glyphicon glyphicon-info-sign" title="Determines which ConceptScheme the group is authorized to work with."></span>
+                                <span class="fas fa-info-circle" title="Determines which ConceptScheme the group is authorized to work with."></span>
                             </label>
                             <div class="btn-toolbar" role="toolbar">
                                 <div class="btn-group btn-group-xs">
-                                    <button class="btn btn-default" (click)="addScheme()">
-                                        <span class="glyphicon glyphicon-plus"></span>
+                                    <button class="btn btn-light" (click)="addScheme()">
+                                        <span class="fas fa-plus"></span>
                                     </button>
-                                    <button class="btn btn-default" (click)="removeScheme()" [disabled]="!selectedScheme">
-                                        <span class="glyphicon glyphicon-minus"></span>
+                                    <button class="btn btn-light" (click)="removeScheme()" [disabled]="!selectedScheme">
+                                        <span class="fas fa-minus"></span>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="panel-body vbox">
+                        <div class="card-body vbox">
                             <resource-list [resources]="ownedSchemes" (nodeSelected)="selectedScheme = $event"></resource-list>
                         </div>
                     </div>

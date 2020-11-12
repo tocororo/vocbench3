@@ -1,14 +1,14 @@
 import { Component } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { RepositoryStatus, VersionInfo, RepositoryLocation } from '../../../models/History';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
+import { RepositoryLocation, RepositoryStatus, VersionInfo } from '../../../models/History';
 import { VersionsServices } from "../../../services/versionsServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { UIUtils } from '../../../utils/UIUtils';
 import { VBActionsEnum } from "../../../utils/VBActions";
 import { VBContext } from '../../../utils/VBContext';
 import { BasicModalServices } from '../../../widget/modal/basicModal/basicModalServices';
-import { DumpCreationModal, DumpCreationModalData } from "./dumpCreationModal";
+import { DumpCreationModal } from "./dumpCreationModal";
 
 @Component({
     selector: "versioning-component",
@@ -17,12 +17,12 @@ import { DumpCreationModal, DumpCreationModalData } from "./dumpCreationModal";
 })
 export class VersioningComponent {
 
-    private versionList: VersionInfo[];
-    private selectedVersion: VersionInfo;
+    versionList: VersionInfo[];
+    selectedVersion: VersionInfo;
 
-    private isDumpAuthorized: boolean;
+    isDumpAuthorized: boolean;
 
-    constructor(private versionsService: VersionsServices, private basicModals: BasicModalServices, private modal: Modal) { }
+    constructor(private versionsService: VersionsServices, private basicModals: BasicModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         this.initVersions();
@@ -53,7 +53,7 @@ export class VersioningComponent {
         }
     }
 
-    private swithcToVersion() {
+    swithcToVersion() {
         //update current version
         if (this.versionList.indexOf(this.selectedVersion) == 0) { //first element of versionList is always the current version (unversioned)
             VBContext.removeContextVersion();
@@ -63,7 +63,12 @@ export class VersioningComponent {
         VBContext.setProjectChanged(true); //changing version is equivalent to changing project
     }
 
-    private dump() {
+    delteVersion() {
+        // this.selectedVersion
+        alert("TODO");
+    }
+
+    dump() {
         this.basicModals.prompt("Create a version dump", { value: "Version ID" }).then(
             (id: any) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -78,7 +83,7 @@ export class VersioningComponent {
         )
     }
 
-    private dumpWithLocation() {
+    dumpWithLocation() {
         this.configureDumpWithLocation().then(
             (data: any) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -95,12 +100,9 @@ export class VersioningComponent {
     }
 
     private configureDumpWithLocation() {
-        var modalData = new DumpCreationModalData("Configure version dump");
-        const builder = new BSModalContextBuilder<DumpCreationModalData>(
-            modalData, undefined, DumpCreationModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(DumpCreationModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(DumpCreationModal, new ModalOptions());
+        modalRef.componentInstance.title = "Configure version dump";
+        return modalRef.result;
     }
 
     private isActiveVersion(version: VersionInfo): boolean {

@@ -1,12 +1,12 @@
 import { Component } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { Role } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { CapabilityEditorModal, CapabilityEditorModalData } from "./capabilityEditorModal";
-import { ImportRoleModal, ImportRoleModalData } from "./importRoleModal";
+import { CapabilityEditorModal } from "./capabilityEditorModal";
+import { ImportRoleModal } from "./importRoleModal";
 
 @Component({
     selector: "roles-admin-component",
@@ -16,14 +16,14 @@ import { ImportRoleModal, ImportRoleModalData } from "./importRoleModal";
 export class RolesAdministrationComponent {
 
     //Role list panel
-    private roleList: Role[];
-    private selectedRole: Role;
+    roleList: Role[];
+    selectedRole: Role;
 
     //Role capabilities panel
     private capabilityList: string[];
-    private selectedCapability: string;
+    selectedCapability: string;
 
-    constructor(private adminService: AdministrationServices, private basicModals: BasicModalServices, private modal: Modal) { }
+    constructor(private adminService: AdministrationServices, private basicModals: BasicModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         this.initRoles();
@@ -48,16 +48,16 @@ export class RolesAdministrationComponent {
         );
     }
 
-    private isProjectOpen(): boolean {
+    isProjectOpen(): boolean {
         return VBContext.getWorkingProject() != null;
     }
 
-    private selectRole(role: Role) {
+    selectRole(role: Role) {
         this.selectedRole = role;
         this.initCapabilities();
     }
 
-    private getCreateRoleTitle(): string {
+    getCreateRoleTitle(): string {
         if (this.isProjectOpen()) {
             return "Create a new role";
         } else {
@@ -66,11 +66,11 @@ export class RolesAdministrationComponent {
         }
     }
 
-    private createRole() {
+    createRole() {
         this.basicModals.prompt("Create role", { value: "Role name" }, null, null, false, true).then(
             (result: any) => {
                 if (this.roleExists(result)) {
-                    this.basicModals.alert("Duplicated role", "A role with the same name (" + result + ") already exists", "error");
+                    this.basicModals.alert("Duplicated role", "A role with the same name (" + result + ") already exists", ModalType.warning);
                     return;
                 }
                 this.adminService.createRole(result).subscribe(
@@ -83,7 +83,7 @@ export class RolesAdministrationComponent {
         )
     }
 
-    private deleteRole() {
+    deleteRole() {
         this.adminService.deleteRole(this.selectedRole.getName()).subscribe(
             stResp => {
                 this.initRoles();
@@ -91,16 +91,11 @@ export class RolesAdministrationComponent {
         )
     }
 
-    private importRole() {
-        var modalData = new ImportRoleModalData("Import Role");
-        const builder = new BSModalContextBuilder<ImportRoleModalData>(
-            modalData, undefined, ImportRoleModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(ImportRoleModal, overlayConfig).result.then(
+    importRole() {
+        this.modalService.open(ImportRoleModal, new ModalOptions()).result.then(
             (data: any) => {
                 if (this.roleExists(data.name)) {
-                    this.basicModals.alert("Duplicated role", "A role with the same name (" + data.name + ") already exists", "error");
+                    this.basicModals.alert("Duplicated role", "A role with the same name (" + data.name + ") already exists", ModalType.warning);
                     return;
                 }
                 this.adminService.importRole(data.file, data.name).subscribe(
@@ -113,7 +108,7 @@ export class RolesAdministrationComponent {
         );
     }
 
-    private exportRole() {
+    exportRole() {
         this.adminService.exportRole(this.selectedRole.getName()).subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
@@ -122,11 +117,11 @@ export class RolesAdministrationComponent {
         )
     }
 
-    private cloneRole() {
+    cloneRole() {
         this.basicModals.prompt("Clone role " + this.selectedRole.getName(), { value: "Role name" }, null, null, false, true).then(
             (newRoleName: any) => {
                 if (this.roleExists(newRoleName)) {
-                    this.basicModals.alert("Duplicated role", "A role with the same name (" + newRoleName + ") already exists", "error");
+                    this.basicModals.alert("Duplicated role", "A role with the same name (" + newRoleName + ") already exists", ModalType.warning);
                     return;
                 }
                 this.adminService.cloneRole(this.selectedRole.getName(), newRoleName).subscribe(
@@ -152,17 +147,12 @@ export class RolesAdministrationComponent {
         this.selectedCapability = capability;
     }
 
-    private addCapability() {
-        var modalData = new CapabilityEditorModalData("Add capability to " + this.selectedRole.getName());
-        const builder = new BSModalContextBuilder<CapabilityEditorModalData>(
-            modalData, undefined, CapabilityEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(CapabilityEditorModal, overlayConfig).result.then(
+    addCapability() {
+        this.openCapabilityEditorModal("Add capability to " + this.selectedRole.getName(), null).then(
             (capability: any) => {
                 if (this.capabilityList.indexOf(capability) != -1) {
                     this.basicModals.alert("Duplicated capability", "Capability " + capability + 
-                        " already exists in role " + this.selectedRole.getName(), "error").then();
+                        " already exists in role " + this.selectedRole.getName(), ModalType.warning).then();
                     return;
                 }
                 this.adminService.addCapabilityToRole(this.selectedRole.getName(), capability).subscribe(
@@ -176,7 +166,7 @@ export class RolesAdministrationComponent {
         );
     }
 
-    private removeCapability() {
+    removeCapability() {
         this.adminService.removeCapabilityFromRole(this.selectedRole.getName(), this.selectedCapability).subscribe(
             stResp => {
                 this.selectedCapability = null;
@@ -185,17 +175,12 @@ export class RolesAdministrationComponent {
         );
     }
 
-    private editCapability() {
-        var modalData = new CapabilityEditorModalData("Edit capability", this.selectedCapability);
-        const builder = new BSModalContextBuilder<CapabilityEditorModalData>(
-            modalData, undefined, CapabilityEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(CapabilityEditorModal, overlayConfig).result.then(
+    editCapability() {
+        this.openCapabilityEditorModal("Edit capability", this.selectedCapability).then(
             (capability: any) => {
                 if (this.capabilityList.indexOf(capability) != -1) {
                     this.basicModals.alert("Duplicated capability", "Capability " + capability + 
-                        " already exists in role " + this.selectedRole.getName(), "error").then();
+                        " already exists in role " + this.selectedRole.getName(), ModalType.warning).then();
                     return;
                 }
                 this.adminService.updateCapabilityForRole(this.selectedRole.getName(), this.selectedCapability, capability).subscribe(
@@ -207,6 +192,13 @@ export class RolesAdministrationComponent {
             },
             () => {}
         );
+    }
+
+    private openCapabilityEditorModal(title: string, capability: string) {
+        const modalRef: NgbModalRef = this.modalService.open(CapabilityEditorModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+		modalRef.componentInstance.capability = capability;
+        return modalRef.result
     }
     
 

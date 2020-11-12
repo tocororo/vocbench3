@@ -1,47 +1,41 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { PatternStruct } from "../../models/ResourceMetadata";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-
-export class ImportPatternModalData extends BSModalContext {
-    constructor(public title: string, public existingPatterns: PatternStruct[]) {
-        super();
-    }
-}
 
 @Component({
     selector: "import-pattern-modal",
     templateUrl: "./importPatternModal.html",
 })
-export class ImportPatternModal implements ModalComponent<ImportPatternModalData> {
-    context: ImportPatternModalData;
+export class ImportPatternModal {
+    @Input() title: string;
+    @Input() existingPatterns: PatternStruct[];
 
-    private name: string;
+    name: string;
     private file: File;
 
-    constructor(public dialog: DialogRef<ImportPatternModalData>, private basicModals: BasicModalServices) {
-        this.context = dialog.context;
+    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices) {
     }
 
     fileChangeEvent(file: File) {
         this.file = file;
     }
 
-    private isDataValid(): boolean {
+    isDataValid(): boolean {
         return this.file != null && this.name != null && this.name.trim() != "";
     }
 
     ok() {
-        if (this.context.existingPatterns.some(p => p.name == this.name)) {
-            this.basicModals.alert("Metadata Pattern already existing", "A Metadata Pattern with the same already exists. Please change the name and retry", "warning");
+        if (this.existingPatterns.some(p => p.name == this.name)) {
+            this.basicModals.alert("Metadata Pattern already existing", "A Metadata Pattern with the same already exists. Please change the name and retry", ModalType.warning);
             return;
         }
-        this.dialog.close({ file: this.file, name: this.name });
+        this.activeModal.close({ file: this.file, name: this.name });
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 

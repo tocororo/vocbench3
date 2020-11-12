@@ -1,35 +1,25 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DownloadDescription } from "../../../models/Metadata";
-
-export class DataDumpSelectorModalData extends BSModalContext {
-    constructor(public message: string, public dataDumps: DownloadDescription[]) {
-        super();
-    }
-}
 
 @Component({
     selector: "data-dump-selector-modal",
     templateUrl: "./dataDumpSelectorModal.html"
 })
-export class DataDumpSelectorModal implements ModalComponent<DataDumpSelectorModalData> {
-    context: DataDumpSelectorModalData;
+export class DataDumpSelectorModal {
+    @Input() message: string;
+    @Input() dataDumps: DownloadDescription[];
 
-    private selectedDump: DownloadDescription;
+    selectedDump: DownloadDescription;
 
-    constructor(public dialog: DialogRef<DataDumpSelectorModalData>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) {}
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close(this.selectedDump);
+    ok() {
+        this.activeModal.close(this.selectedDump);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

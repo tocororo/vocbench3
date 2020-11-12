@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { User, UserStatusEnum } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
 import { UserServices } from "../../services/userServices";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { ForcePasswordModal, ForcePasswordModalData } from "./forcePasswordModal";
+import { ForcePasswordModal } from "./forcePasswordModal";
 
 @Component({
     selector: "user-details-panel",
@@ -18,7 +18,7 @@ export class UserDetailsPanelComponent {
     @Output() deleted: EventEmitter<void> = new EventEmitter();
 
     constructor(private userService: UserServices, private administrationServices: AdministrationServices,
-        private basicModals: BasicModalServices, private modal: Modal) { }
+        private basicModals: BasicModalServices, private modalService: NgbModal) { }
 
     private isUserActive(): boolean {
         return this.user.getStatus() == UserStatusEnum.ACTIVE;
@@ -32,7 +32,7 @@ export class UserDetailsPanelComponent {
     private changeUserStatus() {
         if (this.user.isAdmin()) { //check performed for robustness, this should never happen since it is forbidden by the UI
             this.basicModals.alert("Change user status", "Cannot change the status of an administrator. " + 
-                "Please revoke the administrator authority first and retry", "warning");
+                "Please revoke the administrator authority first and retry", ModalType.warning);
             return;
         }
         var enabled = this.user.getStatus() == UserStatusEnum.ACTIVE;
@@ -65,10 +65,10 @@ export class UserDetailsPanelComponent {
                 users => {
                     let adminCount = users.map(u => u.isAdmin).length;
                     if (adminCount < 2) {
-                        this.basicModals.alert("Revoke administrator", "Cannot revoke the administrator authority to the selected user. There is only one administrator", "warning");
+                        this.basicModals.alert("Revoke administrator", "Cannot revoke the administrator authority to the selected user. There is only one administrator", ModalType.warning);
                         return;
                     } else {
-                        this.basicModals.confirm("Revoke administrator", "You are revoking the administrator authority to " + this.user.getShow() + ". Are you sure?", "warning").then(
+                        this.basicModals.confirm("Revoke administrator", "You are revoking the administrator authority to " + this.user.getShow() + ". Are you sure?", ModalType.warning).then(
                             confirm => {
                                 this.administrationServices.removeAdministrator(this.user.getEmail()).subscribe(
                                     user => {
@@ -83,10 +83,10 @@ export class UserDetailsPanelComponent {
             );
         } else { //assign administrator
             if (this.user.getStatus() != UserStatusEnum.ACTIVE) { //only active user can be administator
-                this.basicModals.alert("Add administrator", "Cannot grant the administrator authority to a non-active user. Please, activate the user and retry", "warning");
+                this.basicModals.alert("Add administrator", "Cannot grant the administrator authority to a non-active user. Please, activate the user and retry", ModalType.warning);
                 return;
             }
-            this.basicModals.confirm("Revoke administrator", "You are granting the administrator authority to " + this.user.getShow() + ". Are you sure?", "warning").then(
+            this.basicModals.confirm("Revoke administrator", "You are granting the administrator authority to " + this.user.getShow() + ". Are you sure?", ModalType.warning).then(
                 confirm => {
                     this.administrationServices.setAdministrator(this.user.getEmail()).subscribe(
                         user => {
@@ -105,7 +105,7 @@ export class UserDetailsPanelComponent {
 
     private deleteUser() {
         this.basicModals.confirm("Delete user", "You are deleting user "
-            + this.user.getShow() + ". Are you sure?", "warning").then(
+            + this.user.getShow() + ". Are you sure?", ModalType.warning).then(
             () => {
                 this.userService.deleteUser(this.user.getEmail()).subscribe(
                     () => {
@@ -123,12 +123,9 @@ export class UserDetailsPanelComponent {
     }
 
     private changePassword() {
-        var modalData = new ForcePasswordModalData(this.user);
-        const builder = new BSModalContextBuilder<ForcePasswordModalData>(
-            modalData, undefined, ForcePasswordModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ForcePasswordModal, overlayConfig).result.then();
+        const modalRef: NgbModalRef = this.modalService.open(ForcePasswordModal, new ModalOptions());
+        modalRef.componentInstance.user = this.user;
+        return modalRef.result;
     }
 
 }

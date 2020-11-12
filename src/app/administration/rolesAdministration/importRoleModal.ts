@@ -1,29 +1,16 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "ngx-modialog";
-
-export class ImportRoleModalData extends BSModalContext {
-    /**
-     * @param title modal title
-     */
-    constructor(public title: string = "Modal Title") {
-        super();
-    }
-}
+import { Component } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: "import-role-modal",
     templateUrl: "./importRoleModal.html",
 })
-export class ImportRoleModal implements ModalComponent<ImportRoleModalData> {
-    context: ImportRoleModalData;
+export class ImportRoleModal {
     
-    private roleName: string;
+    roleName: string;
     private file: File;
 
-    constructor(public dialog: DialogRef<ImportRoleModalData>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) {}
 
     ngOnInit() {}
 
@@ -31,17 +18,15 @@ export class ImportRoleModal implements ModalComponent<ImportRoleModalData> {
         this.file = file;
     }
     
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close({file: this.file, name: this.roleName});
+    ok() {
+        this.activeModal.close({file: this.file, name: this.roleName});
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
-    private isInputValid(): boolean {
+    isInputValid(): boolean {
         return (this.roleName != null && this.roleName.trim() != "");
     }
 

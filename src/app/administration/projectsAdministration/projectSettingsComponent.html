@@ -1,22 +1,22 @@
 <div class="hbox">
-    <div class="panel panel-alt vbox">
-        <div class="panel-heading">
+    <div class="card card-alt vbox">
+        <div class="card-header">
             <label style="flex: 1;">Languages:</label>
             <span *ngIf="noLangActive" class="grayText" style="margin-right: 5px;">
-                <span class="glyphicon glyphicon-warning-sign"></span> No language selected implicitly means all languages
+                <span class="fas fa-exclamation-triangle"></span> No language selected implicitly means all languages
             </span>
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" (click)="changeAllLangStatus(true)" title="Check all">
-                    <span class="glyphicon glyphicon-check"></span>
+                <button class="btn btn-light" (click)="changeAllLangStatus(true)" title="Check all">
+                    <span class="far fa-check-square"></span>
                 </button>
-                <button class="btn btn-default" (click)="changeAllLangStatus(false)" title="Uncheck all">
-                    <span class="glyphicon glyphicon-unchecked"></span>
+                <button class="btn btn-light" (click)="changeAllLangStatus(false)" title="Uncheck all">
+                    <span class="far fa-square"></span>
                 </button>
             </div>
         </div>
-        <div class="panel-body scrollableContainer">
+        <div class="card-body scrollableContainer">
                         
-            <table class="table table-condensed table-borderless table-hoverable">
+            <table class="table table-sm table-borderless table-hoverable">
                 <colgroup>
                     <col style="width: 1%">
                     <col style="width: 1%">
@@ -27,7 +27,7 @@
                         <th class="text-center" style="padding: 0px 8px;">Active</th>
                         <th class="text-center" style="padding: 0px 8px;" nowrap>
                             Mandatory
-                            <span class="glyphicon glyphicon-info-sign" 
+                            <span class="fas fa-info-circle" 
                                 title="mandatory languages are expected to be covered extensively in the dataset. Some features of the platform (e.g. ICV) support verification of this constraint">
                             </span>
                         </th>

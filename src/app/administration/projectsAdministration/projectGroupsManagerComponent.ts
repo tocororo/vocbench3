@@ -1,5 +1,6 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
-import { Observable } from "rxjs/Observable";
+import { forkJoin, Observable, of } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 import { ARTURIResource } from "../../models/ARTResources";
 import { Project } from "../../models/Project";
 import { Properties } from "../../models/Properties";
@@ -25,8 +26,8 @@ export class ProjectGroupsManagerComponent {
     private lastBrowsedProjectCtx: ProjectContext;
     private projectClosed: boolean;
 
-    private groups: UsersGroup[]; //list of groups
-    private selectedGroup: UsersGroup; //group selected in the list of groups
+    groups: UsersGroup[]; //list of groups
+    selectedGroup: UsersGroup; //group selected in the list of groups
 
     private baseBroaderProp: string = SKOS.broader.getURI();
     private broaderProps: ARTURIResource[] = [];
@@ -87,8 +88,8 @@ export class ProjectGroupsManagerComponent {
             Properties.pref_concept_tree_sync_inverse, Properties.pref_concept_tree_visualization
         ];
 
-        let getPGSettingsFn = this.prefService.getPGSettings(properties, this.selectedGroup.iri, this.project).map(
-            prefs => {
+        let getPGSettingsFn = this.prefService.getPGSettings(properties, this.selectedGroup.iri, this.project).pipe(
+            map(prefs => {
                 let conceptTreeBaseBroaderPropPref: string = prefs[Properties.pref_concept_tree_base_broader_prop];
                 if (conceptTreeBaseBroaderPropPref != null) {
                     this.baseBroaderProp = conceptTreeBaseBroaderPropPref;
@@ -104,10 +105,10 @@ export class ProjectGroupsManagerComponent {
                 }
                 this.broaderProps = [];
                 if (broaderPropsTemp.length > 0) {
-                    let describeBroadersFn = this.resourceService.getResourcesInfo(broaderPropsTemp).map(
-                        resources => {
+                    let describeBroadersFn = this.resourceService.getResourcesInfo(broaderPropsTemp).pipe(
+                        map(resources => {
                             this.broaderProps = resources;
-                        }
+                        })
                     );
                     describeFunctions.push(describeBroadersFn);
                 }
@@ -122,10 +123,10 @@ export class ProjectGroupsManagerComponent {
                 }
                 this.narrowerProps = [];
                 if (narrowerPropsTemp.length > 0) {
-                    let describeNarrowersFn = this.resourceService.getResourcesInfo(narrowerPropsTemp).map(
-                        resources => {
+                    let describeNarrowersFn = this.resourceService.getResourcesInfo(narrowerPropsTemp).pipe(
+                        map(resources => {
                             this.narrowerProps = resources;
-                        }
+                        })
                     );
                     describeFunctions.push(describeNarrowersFn);
                 }
@@ -133,11 +134,11 @@ export class ProjectGroupsManagerComponent {
                 this.includeSubProps = prefs[Properties.pref_concept_tree_include_subprops] != "false";
                 this.syncInverse = prefs[Properties.pref_concept_tree_sync_inverse] != "false";
                 
-            }
+            })
         );
 
-        let getPGBindingFn = this.groupsService.getProjectGroupBinding(this.project.getName(), this.selectedGroup.iri).map(
-            binding => {
+        let getPGBindingFn = this.groupsService.getProjectGroupBinding(this.project.getName(), this.selectedGroup.iri).pipe(
+            map(binding => {
                 let ownedSchemesTemp: ARTURIResource[] = [];
                 if (binding.ownedSchemes != null) {
                     binding.ownedSchemes.forEach((schemeUri: string) => {
@@ -146,22 +147,21 @@ export class ProjectGroupsManagerComponent {
                 }
                 this.ownedSchemes = [];
                 if (ownedSchemesTemp.length > 0) {
-                    let describeOwnedSchemesFn = this.resourceService.getResourcesInfo(ownedSchemesTemp).map(
-                        resources => {
+                    let describeOwnedSchemesFn = this.resourceService.getResourcesInfo(ownedSchemesTemp).pipe(
+                        map(resources => {
                             this.ownedSchemes = resources;
-                        }
+                        })
                     );
                     describeFunctions.push(describeOwnedSchemesFn);
                 }
-            }
+            })
         );
 
-        Observable.forkJoin([getPGSettingsFn, getPGBindingFn]).subscribe(
-            resp => {
+        forkJoin([getPGSettingsFn, getPGBindingFn]).subscribe(
+            () => {
                 if (describeFunctions.length > 0) {
-                    Observable.forkJoin(describeFunctions)
-                    .finally(
-                        () => this.revokeProjectAccess() //remove the ctx_project
+                    forkJoin(describeFunctions).pipe(
+                        finalize(() => () => this.revokeProjectAccess()) //remove the ctx_project
                     ).subscribe();
                 } else {
                     this.revokeProjectAccess(); //remove the ctx_project
@@ -331,8 +331,8 @@ export class ProjectGroupsManagerComponent {
     private syncInverseOfBroader(): Observable<any> {
         if (this.broaderProps.length > 0) {
             this.prepareProjectAccess();
-            return this.propService.getInverseProperties(this.broaderProps).map(
-                (inverseProps: ARTURIResource[]) => {
+            return this.propService.getInverseProperties(this.broaderProps).pipe(
+                map((inverseProps: ARTURIResource[]) => {
                     this.revokeProjectAccess();
                     inverseProps.forEach((narrowerProp: ARTURIResource) => {
                         if (!ResourceUtils.containsNode(this.narrowerProps, narrowerProp)) { //invers is not already among the narrowerProps
@@ -342,18 +342,18 @@ export class ProjectGroupsManagerComponent {
                             this.narrowerProps.splice(idx, 0, narrowerProp);
                         }
                     });
-                }
+                })
             );
         } else {
-            return Observable.of();
+            return of();
         }
     }
 
     private syncInverseOfNarrower(): Observable<any> {
         if (this.narrowerProps.length > 0) {
             this.prepareProjectAccess();
-            return this.propService.getInverseProperties(this.narrowerProps).map(
-                (inverseProps: ARTURIResource[]) => {
+            return this.propService.getInverseProperties(this.narrowerProps).pipe(
+                map((inverseProps: ARTURIResource[]) => {
                     this.revokeProjectAccess();
                     inverseProps.forEach((broaderProp: ARTURIResource) => {
                         if (!ResourceUtils.containsNode(this.broaderProps, broaderProp)) { //invers is not already among the broaderProps
@@ -363,10 +363,10 @@ export class ProjectGroupsManagerComponent {
                             this.broaderProps.splice(idx, 0, broaderProp);
                         }
                     });
-                }
+                })
             );
         } else {
-            return Observable.of();
+            return of();
         }
     }
 
@@ -443,7 +443,7 @@ export class ProjectGroupsManagerComponent {
     private prepareProjectBrowse(): Observable<any> {
         if (this.lastBrowsedProjectCtx != null && this.lastBrowsedProjectCtx.getProject().getName() == this.project.getName()) {
             //project context was already initialized in a previous browsing => do not initialize it again
-            return Observable.of(null);
+            return of(null);
         } else { //project context never initialized or initialized for a different project
             this.lastBrowsedProjectCtx = new ProjectContext(this.project);
             let initProjectCtxFn: Observable<void>[] = [
@@ -451,7 +451,7 @@ export class ProjectGroupsManagerComponent {
                 this.vbProp.initUserProjectPreferences(this.lastBrowsedProjectCtx),
                 this.vbProp.initProjectSettings(this.lastBrowsedProjectCtx)
             ];
-            return Observable.forkJoin(initProjectCtxFn);
+            return forkJoin(initProjectCtxFn);
         }
     }
 

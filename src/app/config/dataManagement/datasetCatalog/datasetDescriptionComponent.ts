@@ -20,7 +20,7 @@ export class DatasetDescriptionComponent {
 
     ngOnInit() {}
 
-    private getFacetsKeys() {
+    getFacetsKeys() {
         return Object.keys(this.dataset.facets);
     }
 

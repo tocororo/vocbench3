@@ -10,10 +10,10 @@ import { VBProperties } from "../../utils/VBProperties";
 })
 export class LanguageValueFilterComponent {
 
-    private sortOrder: SortOrder = SortOrder.ISO_CODE_ASCENDING;
+    sortOrder: SortOrder = SortOrder.ISO_CODE_ASCENDING;
     
-    private filterLanguages: LanguageItem[] = [];
-    private filterEnabled: boolean = false;
+    filterLanguages: LanguageItem[] = [];
+    filterEnabled: boolean = false;
 
     constructor(private vbProp: VBProperties) { }
 
@@ -43,12 +43,12 @@ export class LanguageValueFilterComponent {
         this.filterEnabled = VBContext.getWorkingProjectCtx().getProjectPreferences().filterValueLang.enabled;
     }
 
-    private toggleFilter() {
+    toggleFilter() {
         this.filterEnabled = !this.filterEnabled;
         this.updatePref();
     }
 
-    private changeAllLangStatus(checked: boolean) {
+    changeAllLangStatus(checked: boolean) {
         this.filterLanguages.forEach(l => {
             l.active = checked
         })
@@ -65,7 +65,7 @@ export class LanguageValueFilterComponent {
         this.vbProp.setValueFilterLanguages({ languages: preferenceLangs, enabled: this.filterEnabled });
     }
     
-    private changeIsocodeOrder() {
+    changeIsocodeOrder() {
         if (this.sortOrder == SortOrder.ISO_CODE_ASCENDING) {
             this.sortOrder = SortOrder.ISO_CODE_DESCENDING;
             this.filterLanguages.sort((l1: LanguageItem, l2: LanguageItem) => {
@@ -78,7 +78,7 @@ export class LanguageValueFilterComponent {
             });
         }
     }
-    private changeLanguageOrder() {
+    changeLanguageOrder() {
         if (this.sortOrder == SortOrder.LANGUAGE_ASCENDING) {
             this.sortOrder = SortOrder.LANGUAGE_DESCENDING;
             this.filterLanguages.sort((l1: LanguageItem, l2: LanguageItem) => {
@@ -92,13 +92,13 @@ export class LanguageValueFilterComponent {
         }
     }
 
-    private onActiveChange(langItem: LanguageItem) {
+    onActiveChange(langItem: LanguageItem) {
         this.updatePref();
     }
 
     //Utils 
 
-    private getActiveLanguageItems(): LanguageItem[] {
+    getActiveLanguageItems(): LanguageItem[] {
         var activeLangs: LanguageItem[] = [];
         for (var i = 0; i < this.filterLanguages.length; i++) {
             if (this.filterLanguages[i].active) {

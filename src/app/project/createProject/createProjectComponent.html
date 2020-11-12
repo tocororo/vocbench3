@@ -1,298 +1,292 @@
 <div class="vbox">
 
-    <div class="panel panel-default vbox">
-        <div class="panel-heading">
+    <div class="card card-default vbox">
+        <div class="card-header">
             <label>Create project:</label>
         </div>
 
-        <div class="panel-body scrollableContainer">
+        <div class="card-body scrollableContainer">
 
-            <form class="form-horizontal">
-                <div class="form-group">
-                    <label class="control-label col-sm-1">Project Name:</label>
-                    <div class="col-sm-11">
-                        <input type="text" class="form-control input-sm" name="projectName" [(ngModel)]="projectName"
-                            placeholder="Project name" (ngModelChange)="onProjectNameChange()" sanitized>
-                    </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-1">Project Name:</label>
+                <div class="col-sm-11">
+                    <input type="text" class="form-control" [(ngModel)]="projectName"
+                        placeholder="Project name" (ngModelChange)="onProjectNameChange()" sanitized>
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label class="control-label col-sm-1">Optional data preloading:</label>
-                    <div class="col-sm-3">
-                        <select class="form-control input-sm" [(ngModel)]="selectedPreloadOpt" (ngModelChange)="onPreloadChange()" name="preload">
-                            <option *ngFor="let p of preloadOptList">{{p}}</option>
-                        </select>
-                    </div>
-                    <div *ngIf="selectedPreloadOpt != preloadOptNone" class="col-sm-5">
-                        <div class="hbox" style="align-items: center">
-                            <div *ngIf="selectedPreloadOpt == preloadOptFromLocalFile" class="hbox" style="align-items: center">
-                                <file-picker (fileChanged)="preloadFromFileChanged($event)" [file]="preloadFile" [accept]="filePickerAccept"></file-picker>
-                                <label style="margin-left: 8px;">Format:</label>
-                                <select class="form-control input-sm" style="margin-left: 5px; width: initial" [(ngModel)]="selectedInputFormat" name="inputFormat">
-                                    <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
-                                </select>
-                                <button class="btn btn-sm btn-default" (click)="preloadFromFile()" [disabled]="!preloadFile" style="margin-left: 10px;">Preload</button>
-                            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-1">Optional data preloading:</label>
+                <div class="col-sm-3">
+                    <select class="form-control" [(ngModel)]="selectedPreloadOpt" (ngModelChange)="onPreloadChange()">
+                        <option *ngFor="let p of preloadOptList">{{p}}</option>
+                    </select>
+                </div>
+                <div *ngIf="selectedPreloadOpt != preloadOptNone" class="col-sm-5">
+                    <div class="hbox" style="align-items: center">
+                        <div *ngIf="selectedPreloadOpt == preloadOptFromLocalFile" class="hbox" style="align-items: center">
+                            <file-picker (fileChanged)="preloadFromFileChanged($event)" [file]="preloadFile" [accept]="filePickerAccept"></file-picker>
+                            <label style="margin-left: 8px;">Format:</label>
+                            <select class="form-control" style="margin-left: 5px; width: initial" [(ngModel)]="selectedInputFormat">
+                                <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
+                            </select>
+                            <button class="btn btn-light" (click)="preloadFromFile()" [disabled]="!preloadFile" style="margin-left: 10px;">Preload</button>
+                        </div>
 
-                            <div *ngIf="selectedPreloadOpt == preloadOptFromURI" class="input-group input-group-sm" style="flex: 1;">
-                                <input type="text" class="form-control" [(ngModel)]="preloadUri" name="preloadFromUri">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-default" (click)="preloadFromUri()" [disabled]="!preloadUri || preloadUri.trim() == ''">Preload</button>
-                                </div>
-                            </div>
-
-                            <div *ngIf="selectedPreloadOpt == preloadOptFromDatasetCatalog" class="input-group input-group-sm" style="flex: 1;">
-                                <input type="text" class="form-control" [(ngModel)]="preloadCatalog" name="preloadFromCatalog" readonly>
-                                <div class="input-group-btn">
-                                    <button class="btn btn-default" (click)="preloadFromDatasetCatalog()">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div style="margin-left: 8px; font-size: 15px;">
-                                <ng-container *ngIf="preloadedData?.option == selectedPreloadOpt && preloadedData?.summary; then preloadDone; else preloadNotDone"></ng-container>
-                                <ng-template #preloadDone>
-                                    <span class="glyphicon glyphicon-ok-circle" title="Data loaded correctly"></span>
-                                </ng-template>
-                                <ng-template #preloadNotDone>
-                                    <span class="glyphicon glyphicon-warning-sign" title="Data not loaded"></span>    
-                                </ng-template>
+                        <div *ngIf="selectedPreloadOpt == preloadOptFromURI" class="input-group" style="flex: 1;">
+                            <input type="text" class="form-control" [(ngModel)]="preloadUri">
+                            <div class="input-group-append">
+                                <button class="btn btn-light" (click)="preloadFromUri()" [disabled]="!preloadUri || preloadUri.trim() == ''">Preload</button>
                             </div>
                         </div>
-                    </div>
-                    <div *ngIf="selectedPreloadOpt != preloadOptNone" class="col-sm-3">
-                        <div class="hbox" style="align-items: center;">
-                            <label>Transitive imports:</label>
-                            <select class="form-control input-sm" style="margin-left: 5px;" [(ngModel)]="selectedImportAllowance" name="importAllowance">
-                                <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.show}}</option>
-                            </select>                    
-                        </div>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="control-label col-sm-1">Base URI:</label>
-                    <div class="col-sm-11">
-
-                        <div class="hbox" style="align-items: center">
-                            <input type="text" class="form-control input-sm" name="baseURI" [(ngModel)]="baseUri" [readonly]="baseUriLocked">
-                            <div *ngIf="preloadedData?.summary" style="margin-left: 4px;">
-                                <button *ngIf="baseUriForced" class="btn btn-sm btn-default" [ngClass]="{ active : baseUriLocked }" (click)="baseUriLocked = !baseUriLocked"
-                                    title="This selection has been automatically determined on the basis of the preloaded data; modify it only if you know what you are doing">
-                                    <span class="glyphicon glyphicon-lock"></span>
+                        <div *ngIf="selectedPreloadOpt == preloadOptFromDatasetCatalog" class="input-group" style="flex: 1;">
+                            <input type="text" class="form-control" [(ngModel)]="preloadCatalog" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-light" (click)="preloadFromDatasetCatalog()">
+                                    <span class="fas fa-pencil-alt"></span>
                                 </button>
-                                <span *ngIf="!baseUriForced" class="glyphicon glyphicon-warning-sign" title="Preload operation could not determine the baseURI. Please provide it manually"></span>
                             </div>
+                        </div>
+                        <div style="margin-left: 8px; font-size: 15px;">
+                            <ng-container *ngIf="preloadedData?.option == selectedPreloadOpt && preloadedData?.summary; then preloadDone; else preloadNotDone"></ng-container>
+                            <ng-template #preloadDone>
+                                <span class="far fa-check-circle" title="Data loaded correctly"></span>
+                            </ng-template>
+                            <ng-template #preloadNotDone>
+                                <span class="fas fa-exclamation-triangle" title="Data not loaded"></span>    
+                            </ng-template>
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-1">Model:</label>
-                    <div class="col-sm-3">
+                <div *ngIf="selectedPreloadOpt != preloadOptNone" class="col-sm-3">
+                    <div class="hbox" style="align-items: center;">
+                        <label>Transitive imports:</label>
+                        <select class="form-control" style="margin-left: 5px;" [(ngModel)]="selectedImportAllowance">
+                            <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.show}}</option>
+                        </select>                    
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-form-label col-sm-1">Base URI:</label>
+                <div class="col-sm-11">
+
+                    <div class="hbox" style="align-items: center">
+                        <input type="text" class="form-control" [(ngModel)]="baseUri" [readonly]="baseUriLocked">
+                        <div *ngIf="preloadedData?.summary" style="margin-left: 4px;">
+                            <button *ngIf="baseUriForced" class="btn btn-light" [ngClass]="{ active : baseUriLocked }" (click)="baseUriLocked = !baseUriLocked"
+                                title="This selection has been automatically determined on the basis of the preloaded data; modify it only if you know what you are doing">
+                                <span class="fas fa-lock"></span>
+                            </button>
+                            <span *ngIf="!baseUriForced" class="fas fa-exclamation-triangle" title="Preload operation could not determine the baseURI. Please provide it manually"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-1">Model:</label>
+                <div class="col-sm-3">
+                    <div class="hbox" style="align-items: center">
+                        <select class="form-control" [(ngModel)]="ontoModelType" (ngModelChange)="onOntoModelChanged()" [disabled]="ontoModelLocked">
+                            <option *ngFor="let om of ontoModelList" [ngValue]="om.value">{{om.label}}</option>
+                        </select>
+                        <div *ngIf="preloadedData?.summary" style="margin-left: 4px;">
+                            <button *ngIf="ontoModelForced" class="btn btn-light" [ngClass]="{ active : ontoModelLocked }" (click)="ontoModelLocked = !ontoModelLocked"
+                                title="This selection has been automatically determined on the basis of the preloaded data; modify it only if you know what you are doing">
+                                <span class="fas fa-lock"></span>
+                            </button>
+                            <span *ngIf="!ontoModelForced" class="fas fa-exclamation-triangle" title="Preload operation could not determine the model. Please provide it manually"></span>
+                        </div>
+                    </div>
+                </div>
+                <ng-container *ngIf="!isEdoalProject(); else edoalBlock">
+                    <label class="col-form-label col-sm-1">Lexicalization:</label>
+                    <div class="col-sm-4">
                         <div class="hbox" style="align-items: center">
-                            <select class="form-control input-sm" [(ngModel)]="ontoModelType" (ngModelChange)="onOntoModelChanged()" name="ontoModelType" [disabled]="ontoModelLocked">
-                                <option *ngFor="let om of ontoModelList" [ngValue]="om.value">{{om.label}}</option>
+                            <select class="form-control" [(ngModel)]="lexicalModelType" [disabled]="(isOntoModelOntolex() && !lexicalModelForced) || lexicalModelLocked">
+                                <option *ngFor="let lm of lexicalModelList" [ngValue]="lm.value">{{lm.label}}</option>
                             </select>
                             <div *ngIf="preloadedData?.summary" style="margin-left: 4px;">
-                                <button *ngIf="ontoModelForced" class="btn btn-sm btn-default" [ngClass]="{ active : ontoModelLocked }" (click)="ontoModelLocked = !ontoModelLocked"
+                                <button *ngIf="lexicalModelForced" class="btn btn-light" [ngClass]="{ active : lexicalModelLocked }" (click)="lexicalModelLocked = !lexicalModelLocked"
                                     title="This selection has been automatically determined on the basis of the preloaded data; modify it only if you know what you are doing">
-                                    <span class="glyphicon glyphicon-lock"></span>
+                                    <span class="fas fa-lock"></span>
                                 </button>
-                                <span *ngIf="!ontoModelForced" class="glyphicon glyphicon-warning-sign" title="Preload operation could not determine the model. Please provide it manually"></span>
+                                <span *ngIf="!lexicalModelForced" class="fas fa-exclamation-triangle" title="Preload operation could not determine the lexical model. Please provide it manually"></span>
                             </div>
                         </div>
                     </div>
-                    <ng-container *ngIf="!isEdoalProject(); else edoalBlock">
-                        <label class="control-label col-sm-1">Lexicalization:</label>
-                        <div class="col-sm-4">
-                            <div class="hbox" style="align-items: center">
-                                <select class="form-control input-sm" [(ngModel)]="lexicalModelType" name="lexicalModelType" [disabled]="(isOntoModelOntolex() && !lexicalModelForced) || lexicalModelLocked">
-                                    <option *ngFor="let lm of lexicalModelList" [ngValue]="lm.value">{{lm.label}}</option>
-                                </select>
-                                <div *ngIf="preloadedData?.summary" style="margin-left: 4px;">
-                                    <button *ngIf="lexicalModelForced" class="btn btn-sm btn-default" [ngClass]="{ active : lexicalModelLocked }" (click)="lexicalModelLocked = !lexicalModelLocked"
-                                        title="This selection has been automatically determined on the basis of the preloaded data; modify it only if you know what you are doing">
-                                        <span class="glyphicon glyphicon-lock"></span>
-                                    </button>
-                                    <span *ngIf="!lexicalModelForced" class="glyphicon glyphicon-warning-sign" title="Preload operation could not determine the lexical model. Please provide it manually"></span>
-                                </div>
-                            </div>
+                </ng-container>
+                <ng-template #edoalBlock>
+                    <label class="col-form-label col-sm-1">
+                        Left/Right:
+                        <span class="fas fa-info-circle" title="Due to technology limitations, the left dataset must be remote"></span>
+                    </label>
+                    <div class="col-sm-4">
+                        <div class="hbox" style="align-items: center">
+                            <select class="form-control" [(ngModel)]="leftProject" (ngModelChange)="updateRightProjectList()">
+                                <option *ngFor="let p of leftProjectList" [ngValue]="p">{{p.getName()}}</option>
+                            </select>
+                            <span style="margin: 0px 4px; font-size: 14px;">/</span>
+                            <select class="form-control" [(ngModel)]="rightProject" [disabled]="!leftProject">
+                                <option *ngFor="let p of rightProjectList" [ngValue]="p">{{p.getName()}}</option>
+                            </select>
                         </div>
-                    </ng-container>
-                    <ng-template #edoalBlock>
-                        <label class="control-label col-sm-1">
-                            Left/Right:
-                            <span class="glyphicon glyphicon-info-sign" title="Due to technology limitations, the left dataset must be remote"></span>
+                    </div>
+                </ng-template>
+                <div class="col-sm-3 text-center">
+                    <div class="checkbox-inline">
+                        <label>
+                            <input type="checkbox" [(ngModel)]="history"> History
                         </label>
-                        <div class="col-sm-4">
-                            <div class="hbox" style="align-items: center">
-                                <select class="form-control input-sm" [(ngModel)]="leftProject" (ngModelChange)="updateRightProjectList()" name="leftProject">
-                                    <option *ngFor="let p of leftProjectList" [ngValue]="p">{{p.getName()}}</option>
-                                </select>
-                                <span style="margin: 0px 4px; font-size: 14px;">/</span>
-                                <select class="form-control input-sm" [(ngModel)]="rightProject" name="rightProject" [disabled]="!leftProject">
-                                    <option *ngFor="let p of rightProjectList" [ngValue]="p">{{p.getName()}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    </ng-template>
-                    <div class="col-sm-3 text-center">
-                        <div class="checkbox-inline">
-                            <label>
-                                <input type="checkbox" [(ngModel)]="history" name="history"> History
-                            </label>
-                            <span class="glyphicon glyphicon-info-sign"
-                                title="Enable this to keep track of the changes made on the working graph">
-                            </span>
-                        </div>
-                        <div class="checkbox-inline" style="margin-left: 12px;">
-                            <label>
-                                <input type="checkbox" [(ngModel)]="validation" name="validation" (input)="blacklisting=false"> Validation
-                            </label>
-                            <span class="glyphicon glyphicon-info-sign"
-                                title="Enable this to keep track of change requests in order to validate them later (accepting or rejecting)">
-                            </span>
-                        </div>
-                        <div class="checkbox-inline" style="margin-left: 12px;">
-                            <label>
-                                <input type="checkbox" [(ngModel)]="blacklisting" name="blacklisting" [disabled]="!validation"> Blacklisting
-                            </label>
-                            <span class="glyphicon glyphicon-info-sign"
-                                title="Enable this to blacklist terms that have been rejected through validation">
-                            </span>
-                        </div>
+                        <span class="fas fa-info-circle"
+                            title="Enable this to keep track of the changes made on the working graph">
+                        </span>
+                    </div>
+                    <div class="checkbox-inline" style="margin-left: 12px;">
+                        <label>
+                            <input type="checkbox" [(ngModel)]="validation" (input)="blacklisting=false"> Validation
+                        </label>
+                        <span class="fas fa-info-circle"
+                            title="Enable this to keep track of change requests in order to validate them later (accepting or rejecting)">
+                        </span>
+                    </div>
+                    <div class="checkbox-inline" style="margin-left: 12px;">
+                        <label>
+                            <input type="checkbox" [(ngModel)]="blacklisting" [disabled]="!validation"> Blacklisting
+                        </label>
+                        <span class="fas fa-info-circle"
+                            title="Enable this to blacklist terms that have been rejected through validation">
+                        </span>
                     </div>
                 </div>
-            </form>
+            </div>
 
             <!--Triple store configuration-->
-            <div class="panel panel-alt" style="margin-bottom: 4px;">
-                <div class="panel-heading">
+            <div class="card card-alt mb-2">
+                <div class="card-header">
                     <label>Data Store</label>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
 
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <label class="control-label col-sm-2">Repository Access:</label>
-                            <div class="col-sm-10">
-                                <div class="hbox">
-                                    <select class="form-control input-sm" [(ngModel)]="selectedRepositoryAccess" (ngModelChange)="onRepoAccessChange()">
-                                        <option *ngFor="let repoAcc of repositoryAccessList" [ngValue]="repoAcc">{{repoAcc}}</option>
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-2">Repository Access:</label>
+                        <div class="col-sm-10">
+                            <div class="hbox">
+                                <select class="form-control" style="flex: 4" [(ngModel)]="selectedRepositoryAccess" (ngModelChange)="onRepoAccessChange()">
+                                    <option *ngFor="let repoAcc of repositoryAccessList" [ngValue]="repoAcc">{{repoAcc}}</option>
+                                </select>
+                                <div *ngIf="isSelectedRepoAccessRemote()" class="input-group ml-2" style="flex: 1; min-width: 210px;">
+                                    <select class="form-control" [(ngModel)]="selectedRemoteRepoConfig">
+                                        <option *ngFor="let c of remoteRepoConfigs" [ngValue]="c">{{c.serverURL}}</option>
                                     </select>
-                                    <div *ngIf="isSelectedRepoAccessRemote()" class="input-group input-group-sm" style="margin-left: 5px; min-width: 210px;">
-                                        <select class="form-control" [(ngModel)]="selectedRemoteRepoConfig" name="remoteConfig">
-                                            <option *ngFor="let c of remoteRepoConfigs" [ngValue]="c">{{c.serverURL}}</option>
-                                        </select>
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-default" (click)="configureRemoteRepositoryAccess()">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </button>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Data repo -->
-                        <div class="form-group">
-                            <label class="control-label col-sm-2">Data Repository ID</label>
-                            <div class="col-sm-4">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control" name="dataRepoId" [(ngModel)]="dataRepoId"
-                                        placeholder="Data Repository ID" [disabled]="isSelectedRepoAccessCreateMode()">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button" (click)="changeRemoteRepository('data')"
-                                            title="Select remote repository" [disabled]="isSelectedRepoAccessCreateMode()">
-                                            <span class="glyphicon glyphicon-folder-open"></span>
+                                    <span class="input-group-append">
+                                        <button class="btn btn-light" (click)="configureRemoteRepositoryAccess()">
+                                            <span class="fas fa-pencil-alt"></span>
                                         </button>
                                     </span>
                                 </div>
                             </div>
-                            <ng-template [ngIf]="isSelectedRepoAccessCreateMode()">
-                                <div class="control-label col-sm-1">
-                                    <label>Configuration</label>
-                                </div>
-                                <div class="col-sm-5">
-                                    <extension-configurator #dataRepoConfigurator *ngIf="dataRepoExtensions"
-                                        [extensions]="dataRepoExtensions" [storeable]="false"
-                                        (extensionUpdated)="selectedDataRepoExtension = $event"
-                                        (configurationUpdated)="selectedDataRepoConfig = $event">
-                                    </extension-configurator>
-                                </div>
-                            </ng-template>
-                            <ng-template [ngIf]="!isSelectedRepoAccessCreateMode()">
-                                <div class="control-label col-sm-1">
-                                    <label>Backend type</label>
-                                </div>
-                                <div class="col-sm-5">
-                                    <select class="form-control input-sm" [(ngModel)]="selectedCoreRepoBackendType" name="selectedCoreRepoBackendType">
-                                        <option *ngFor="let bt of backendTypes" [value]="bt">{{bt}}</option>
-                                    </select>
-                                </div>
-                            </ng-template>
                         </div>
+                    </div>
 
-                        <!-- Support repo -->
-
-                        <div class="form-group">
-                            <label class="control-label col-sm-2">History/Validation Repository ID</label>
-                            <div class="col-sm-4">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control" name="supportRepoId" [(ngModel)]="supportRepoId"
-                                        placeholder="History/Validation Repository ID" [disabled]="isSelectedRepoAccessCreateMode() || !(history || validation)">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button" (click)="changeRemoteRepository('support')"
-                                            title="Select remote repository" [disabled]="isSelectedRepoAccessCreateMode() || !(history || validation)">
-                                            <span class="glyphicon glyphicon-folder-open"></span>
-                                        </button>
-                                    </span>
-                                </div>
+                    <!-- Data repo -->
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-2">Data Repository ID</label>
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <input type="text" class="form-control" [(ngModel)]="dataRepoId"
+                                    placeholder="Data Repository ID" [disabled]="isSelectedRepoAccessCreateMode()">
+                                <span class="input-group-append">
+                                    <button class="btn btn-light" type="button" (click)="changeRemoteRepository('data')"
+                                        title="Select remote repository" [disabled]="isSelectedRepoAccessCreateMode()">
+                                        <span class="fas fa-folder-open"></span>
+                                    </button>
+                                </span>
                             </div>
-                            <ng-template [ngIf]="isSelectedRepoAccessCreateMode()">
-                                <div class="control-label col-sm-1" style="white-space: nowrap">
-                                    <span class="glyphicon glyphicon-info-sign" title="It is highly recommended not to use inference"></span>
-                                    <label>Configuration</label>
-                                </div>
-                                <div class="col-sm-5">
-                                    <extension-configurator #supportRepoConfigurator *ngIf="supportRepoExtensions"
-                                        [extensions]="supportRepoExtensions" [storeable]="false" [disabled]="!(history || validation)"
-                                        (extensionUpdated)="selectedSupportRepoExtension = $event"
-                                        (configurationUpdated)="selectedSupportRepoConfig = $event">
-                                    </extension-configurator>
-                                </div>
-                            </ng-template>
-                            <ng-template [ngIf]="!isSelectedRepoAccessCreateMode()">
-                                <div class="control-label col-sm-1">
-                                    <label>Backend type</label>
-                                </div>
-                                <div class="col-sm-5">
-                                    <select class="form-control input-sm" [(ngModel)]="selectedSupportRepoBackendType" name="selectedSupportRepoBackendType"
-                                        [disabled]="!(history || validation)">
-                                        <option *ngFor="let bt of backendTypes" [value]="bt">{{bt}}</option>
-                                    </select>
-                                </div>
-                            </ng-template>
                         </div>
+                        <ng-template [ngIf]="isSelectedRepoAccessCreateMode()">
+                            <div class="col-form-label col-sm-1">
+                                <label>Configuration</label>
+                            </div>
+                            <div class="col-sm-5">
+                                <extension-configurator #dataRepoConfigurator *ngIf="dataRepoExtensions"
+                                    [extensions]="dataRepoExtensions" [storeable]="false"
+                                    (extensionUpdated)="selectedDataRepoExtension = $event"
+                                    (configurationUpdated)="selectedDataRepoConfig = $event">
+                                </extension-configurator>
+                            </div>
+                        </ng-template>
+                        <ng-template [ngIf]="!isSelectedRepoAccessCreateMode()">
+                            <div class="col-form-label col-sm-1">
+                                <label>Backend type</label>
+                            </div>
+                            <div class="col-sm-5">
+                                <select class="form-control" [(ngModel)]="selectedCoreRepoBackendType">
+                                    <option *ngFor="let bt of backendTypes" [value]="bt">{{bt}}</option>
+                                </select>
+                            </div>
+                        </ng-template>
+                    </div>
 
+                    <!-- Support repo -->
+
+                    <div class="form-group row">
+                        <label class="col-form-label col-sm-2">History/Validation Repository ID</label>
+                        <div class="col-sm-4">
+                            <div class="input-group">
+                                <input type="text" class="form-control" [(ngModel)]="supportRepoId"
+                                    placeholder="History/Validation Repository ID" [disabled]="isSelectedRepoAccessCreateMode() || !(history || validation)">
+                                <span class="input-group-append">
+                                    <button class="btn btn-light" type="button" (click)="changeRemoteRepository('support')"
+                                        title="Select remote repository" [disabled]="isSelectedRepoAccessCreateMode() || !(history || validation)">
+                                        <span class="fas fa-folder-open"></span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <ng-template [ngIf]="isSelectedRepoAccessCreateMode()">
+                            <div class="col-form-label col-sm-1" style="white-space: nowrap">
+                                <label>Configuration</label>
+                                <span class="fas fa-info-circle ml-2" title="It is highly recommended not to use inference"></span>
+                            </div>
+                            <div class="col-sm-5">
+                                <extension-configurator #supportRepoConfigurator *ngIf="supportRepoExtensions"
+                                    [extensions]="supportRepoExtensions" [storeable]="false" [disabled]="!(history || validation)"
+                                    (extensionUpdated)="selectedSupportRepoExtension = $event"
+                                    (configurationUpdated)="selectedSupportRepoConfig = $event">
+                                </extension-configurator>
+                            </div>
+                        </ng-template>
+                        <ng-template [ngIf]="!isSelectedRepoAccessCreateMode()">
+                            <div class="col-form-label col-sm-1">
+                                <label>Backend type</label>
+                            </div>
+                            <div class="col-sm-5">
+                                <select class="form-control" [(ngModel)]="selectedSupportRepoBackendType" [disabled]="!(history || validation)">
+                                    <option *ngFor="let bt of backendTypes" [value]="bt">{{bt}}</option>
+                                </select>
+                            </div>
+                        </ng-template>
                     </div>
 
                 </div>
             </div>
 
             <!--Extention points configuration-->
-            <div class="panel panel-alt" style="margin-bottom: 4px;">
-                <div class="panel-heading">
+            <div class="card card-alt mb-2">
+                <div class="card-header">
                     <div class="expandCollapseBtnContainer">
                         <img src="../../../assets/images/icons/arrow.png" (click)="extPointPanelOpen = !extPointPanelOpen"
                             [ngClass]="{'arrow-right' : !extPointPanelOpen}">
                     </div>
                     <label style="flex: 1">Optional settings:</label>
                 </div>
-                <div class="panel-body" *ngIf="extPointPanelOpen">
+                <div class="card-body" *ngIf="extPointPanelOpen">
 
-                    <div class="panel panel-alt" style="margin-bottom: 4px;">
-                        <div class="panel-heading">
+                    <div class="card card-alt mb-2">
+                        <div class="card-header">
                             <label style="flex: 1;">URI Generator</label>
                             <div class="checkbox" style="margin: 0px">
                                 <label style="min-height: initial;">
@@ -300,40 +294,39 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="panel-body">
-                            <form *ngIf="!uriGenUseDefaultSetting" class="form-horizontal">
-                                <div class="form-group">
-                                    <label class="control-label col-sm-1">Plugin:</label>
+                        <div class="card-body">
+                            <ng-container *ngIf="!uriGenUseDefaultSetting">
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-1">Plugin:</label>
                                     <div class="col-sm-11">
-                                        <select class="form-control input-sm" [(ngModel)]="selectedUriGenPlugin" (ngModelChange)="onUriGenPluginChanged()"
-                                            name="selectedUriGenPlugin">
+                                        <select class="form-control" [(ngModel)]="selectedUriGenPlugin" (ngModelChange)="onUriGenPluginChanged()">
                                             <option *ngFor="let ugp of uriGenPluginList" [ngValue]="ugp">
                                                 {{ugp.factoryID.substring(ugp.factoryID.lastIndexOf('.')+1)}}
                                             </option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-1">Configuration:</label>
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-1">Configuration:</label>
                                     <div class="col-sm-11">
                                         <div class="input-group">
-                                            <select class="form-control input-sm" [(ngModel)]="selectedUriGenPluginConf" name="selectedUriGenPluginConf">
+                                            <select class="form-control" [(ngModel)]="selectedUriGenPluginConf">
                                                 <option *ngFor="let ugpConf of selectedUriGenPluginConfList" [ngValue]="ugpConf">
                                                     {{ugpConf.shortName}}
                                                 </option>
                                             </select>
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-default btn-sm" (click)="configureUriGenConf()">Configure</button>
+                                            <span class="input-group-append">
+                                                <button class="btn btn-light" (click)="configureUriGenConf()">Configure</button>
                                             </span>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </ng-container>
                         </div>
                     </div>
 
-                    <div class="panel panel-alt" style="margin-bottom: 4px;">
-                        <div class="panel-heading">
+                    <div class="card card-alt mb-2">
+                        <div class="card-header">
                             <label style="flex: 1;">Rendering Engine</label>
                             <div class="checkbox" style="margin: 0px">
                                 <label style="min-height: initial;">
@@ -341,52 +334,51 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="panel-body">
-                            <form *ngIf="!rendEngUseDefaultSetting" class="form-horizontal">
-                                <div class="form-group">
-                                    <label class="control-label col-sm-1">Plugin:</label>
+                        <div class="card-body">
+                            <ng-container *ngIf="!rendEngUseDefaultSetting">
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-1">Plugin:</label>
                                     <div class="col-sm-11">
-                                        <select class="form-control input-sm" [(ngModel)]="selectedRendEngPlugin" (ngModelChange)="onRendEnginePluginChanged()"
-                                            name="selectedRendEngPlugin" [disabled]="rendEngUseDefaultSetting">
+                                        <select class="form-control" [(ngModel)]="selectedRendEngPlugin" (ngModelChange)="onRendEnginePluginChanged()"
+                                            [disabled]="rendEngUseDefaultSetting">
                                             <option *ngFor="let rep of rendEngPluginList" [ngValue]="rep">
                                                 {{rep.factoryID.substring(rep.factoryID.lastIndexOf('.')+1)}}
                                             </option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="control-label col-sm-1">Configuration:</label>
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-1">Configuration:</label>
                                     <div class="col-sm-11">
                                         <div class="input-group">
-                                            <select class="form-control input-sm" [(ngModel)]="selectedRendEngPluginConf" name="selectedRendEngPluginConf"
-                                                [disabled]="rendEngUseDefaultSetting">
+                                            <select class="form-control" [(ngModel)]="selectedRendEngPluginConf" [disabled]="rendEngUseDefaultSetting">
                                                 <option *ngFor="let repConf of selectedRendEngPluginConfList" [ngValue]="repConf">
                                                     {{repConf.shortName}}
                                                 </option>
                                             </select>
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-default btn-sm" (click)="configureRendEngConf()" [disabled]="rendEngUseDefaultSetting">Configure</button>
+                                            <span class="input-group-append">
+                                                <button class="btn btn-light" (click)="configureRendEngConf()" [disabled]="rendEngUseDefaultSetting">Configure</button>
                                             </span>
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </ng-container>
                         </div>
                     </div>
 
-                    <div class="panel panel-alt" style="margin-bottom: 4px;">
-                        <div class="panel-heading">
+                    <div class="card card-alt mb-2">
+                        <div class="card-header">
                             <label style="flex: 1;">Resource Metadata</label>
                             <div class="checkbox" style="margin: 0px">
                                 <label style="min-height: initial;">
                                     <input type="checkbox" [(ngModel)]="useResourceMetadata"> Use Resource Metadata
-                                    <span class="glyphicon glyphicon-info-sign" title="Usage of Resource Metadata can be enabled also after the project creation"></span>
+                                    <span class="fas fa-info-circle" title="Usage of Resource Metadata can be enabled also after the project creation"></span>
                                 </label>
                             </div>
                         </div>
-                        <div class="panel-body">
+                        <div class="card-body">
                             <ng-container *ngIf="useResourceMetadata">
-                                <table class="table table-condensed table-borderless">
+                                <table class="table table-sm table-borderless">
                                     <colgroup>
                                         <col style="width: 1%;">
                                         <col>
@@ -401,7 +393,7 @@
                                                 <label>Resource Type:</label>
                                             </td>
                                             <td>
-                                                <select class="form-control input-sm" [(ngModel)]="ma.role">
+                                                <select class="form-control" [(ngModel)]="ma.role">
                                                     <option *ngFor="let r of resourceTypes" [ngValue]="r">{{r.show}}</option>
                                                 </select>
                                             </td>
@@ -409,23 +401,23 @@
                                                 <label>Pattern:</label>
                                             </td>
                                             <td>
-                                                <div class="input-group input-group-sm">
+                                                <div class="input-group">
                                                     <input class="form-control" [ngModel]="ma.pattern?.name" readonly>
-                                                    <span class="input-group-btn">
-                                                        <button class="btn btn-default" (click)="selectMetadataPattern(ma)">
-                                                            <span class="glyphicon glyphicon-pencil"></span>
+                                                    <span class="input-group-append">
+                                                        <button class="btn btn-light" (click)="selectMetadataPattern(ma)">
+                                                            <span class="fas fa-pencil-alt"></span>
                                                         </button>
                                                     </span>
                                                 </div>
                                             </td>
                                             <td>
-                                                <button class="btn btn-xs btn-default" (click)="removeMetadataAssociation(ma)">
-                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                <button class="btn btn-xs btn-light" (click)="removeMetadataAssociation(ma)">
+                                                    <span class="far fa-trash-alt"></span>
                                                 </button>
                                             </td>
                                             <td>
-                                                <button *ngIf="last" class="btn btn-xs btn-default" (click)="addMetadataAssociation()">
-                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                <button *ngIf="last" class="btn btn-xs btn-light" (click)="addMetadataAssociation()">
+                                                    <span class="fas fa-plus"></span>
                                                 </button>
                                             </td>
                                         </tr>
@@ -435,8 +427,8 @@
                         </div>
                     </div>
 
-                    <div class="panel panel-alt" style="margin-bottom: 4px;">
-                        <div class="panel-heading">
+                    <div class="card card-alt mb-2">
+                        <div class="card-header">
                             <label style="flex: 1;">SHACL Shape Validation</label>
                             <div class="checkbox" style="margin: 0px;">
                                 <label style="min-height: initial;">
@@ -445,20 +437,20 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="panel-body">
+                        <div class="card-body">
                             <ng-container *ngIf="enableSHACL">
                                 <settings-renderer *ngIf="isSelectedRepoAccessCreateMode() && shaclSettings" [(ngModel)]="shaclSettings" [disabled]="!enableSHACL">
                                 </settings-renderer>
                                 <div *ngIf="!isSelectedRepoAccessCreateMode()" class="alert alert-warning">
-                                    <span class="glyphicon glyphicon-warning-sign"></span>
+                                    <span class="fas fa-exclamation-triangle"></span>
                                     You should check that the existing repository being accessed actually supports SHACL with the desired settings.
                                 </div>
                             </ng-container>
                         </div>
                     </div>
 
-                    <div class="panel panel-alt">
-                        <div class="panel-heading">
+                    <div class="card card-alt">
+                        <div class="card-header">
                             <label style="flex: 1;">Trivial Inference Engine</label>
                             <div class="checkbox" style="margin: 0px;">
                                 <label style="min-height: initial;">
@@ -473,8 +465,8 @@
 
         </div>
 
-        <div class="panel-footer">
-            <button type="submit" class="btn btn-default btn-sm pull-right" (click)="create()">Create</button>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-light float-right" (click)="create()">Create</button>
             <span class="clearfix"></span>
         </div>
     </div>

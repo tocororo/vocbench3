@@ -1,6 +1,6 @@
 import { Component, QueryList, ViewChild, ViewChildren } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../../models/ARTResources";
 import { ConfigurationComponents } from "../../../models/Configuration";
 import { ConfigurableExtensionFactory, ExtensionConfigurationStatus, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings, SettingsProp, TransformationStep } from "../../../models/Plugins";
@@ -13,7 +13,7 @@ import { ExtensionConfiguratorComponent } from "../../../widget/extensionConfigu
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { LoadConfigurationModalReturnData } from "../../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
-import { FilterGraphsModal, FilterGraphsModalData } from "./filterGraphsModal/filterGraphsModal";
+import { FilterGraphsModal } from "./filterGraphsModal/filterGraphsModal";
 
 @Component({
     selector: "export-data-component",
@@ -24,18 +24,18 @@ export class ExportDataComponent {
 
     //ExtensionConfiguratorComponent children of this Component (useful to load single configurations of a chain)
     @ViewChildren(ExtensionConfiguratorComponent) viewChildrenExtConfig: QueryList<ExtensionConfiguratorComponent>;
-    @ViewChild("deployerConfigurator") deployerConfigurator: ExtensionConfiguratorComponent;
-    @ViewChild("reformatterConfigurator") reformatterConfigurator: ExtensionConfiguratorComponent;
+    @ViewChild("deployerConfigurator", { static: false }) deployerConfigurator: ExtensionConfiguratorComponent;
+    @ViewChild("reformatterConfigurator", { static: false }) reformatterConfigurator: ExtensionConfiguratorComponent;
 
-    private includeInferred: boolean = false;
+    includeInferred: boolean = false;
 
     //graph selection
-    private exportGraphs: GraphStruct[] = [];
+    exportGraphs: GraphStruct[] = [];
 
     //export filter management
     private filters: ConfigurableExtensionFactory[];
-    private filtersChain: TransformerChainElement[] = [];
-    private selectedFilterChainElement: TransformerChainElement;
+    filtersChain: TransformerChainElement[] = [];
+    selectedFilterChainElement: TransformerChainElement;
 
     //reformatter
     private reformatters: ExtensionFactory[];
@@ -57,16 +57,16 @@ export class ExportDataComponent {
     private deployerStatus: ExtensionConfigurationStatus;
     private deployerRelativeRef: string;
 
-    private deploymentOptions: { label: string, source: DeploySource }[] = [
+    deploymentOptions: { label: string, source: DeploySource }[] = [
         { label: "Save to file", source: null },
         { label: "Deploy to a triple store", source: DeploySource.repository },
         { label: "Use custom deployer", source: DeploySource.stream }
     ]
-    private selectedDeployment = this.deploymentOptions[0];
+    selectedDeployment = this.deploymentOptions[0];
     
 
     constructor(private extensionService: ExtensionsServices, private exportService: ExportServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         let baseURI: string = VBContext.getWorkingProject().getBaseURI();
@@ -111,7 +111,7 @@ export class ExportDataComponent {
     /** =====================================
      * ============= GRAPHS =================
      * =====================================*/
-    private areAllGraphDeselected(): boolean {
+    areAllGraphDeselected(): boolean {
         for (var i = 0; i < this.exportGraphs.length; i++) {
             if (this.exportGraphs[i].checked) {
                 return false;
@@ -123,7 +123,7 @@ export class ExportDataComponent {
     /**
      * When a graph is included/excluded from the export, update the graph selection of the filters
      */
-    private onGraphSelectionChange(graphStruct: GraphStruct) {
+    onGraphSelectionChange(graphStruct: GraphStruct) {
         // if the graph is now selected, add it (as not selected since it was not included before) to the graphs selection of the filters
         if (graphStruct.checked) {
             if (this.collectCheckedGraphStructures().length == 1) {
@@ -162,51 +162,51 @@ export class ExportDataComponent {
     /** =====================================
      * =========== FILTER CHAIN =============
      * =====================================*/
-    private selectFilterChainElement(filterChainEl: TransformerChainElement) {
+    selectFilterChainElement(filterChainEl: TransformerChainElement) {
         if (this.selectedFilterChainElement == filterChainEl) {
             this.selectedFilterChainElement = null;
         } else {
             this.selectedFilterChainElement = filterChainEl;
         }
     }
-    private isSelectedFilterFirst(): boolean {
+    isSelectedFilterFirst(): boolean {
         return (this.selectedFilterChainElement == this.filtersChain[0]);
     }
-    private isSelectedFilterLast(): boolean {
+    isSelectedFilterLast(): boolean {
         return (this.selectedFilterChainElement == this.filtersChain[this.filtersChain.length - 1]);
     }
 
-    private appendFilter() {
+    appendFilter() {
         this.filtersChain.push(new TransformerChainElement(this.filters, this.collectCheckedGraphStructures()));
     }
-    private removeFilter() {
+    removeFilter() {
         this.filtersChain.splice(this.filtersChain.indexOf(this.selectedFilterChainElement), 1);
         this.selectedFilterChainElement = null;
     }
-    private moveFilterDown() {
+    moveFilterDown() {
         var prevIndex = this.filtersChain.indexOf(this.selectedFilterChainElement);
         this.filtersChain.splice(prevIndex, 1); //remove from current position
         this.filtersChain.splice(prevIndex + 1, 0, this.selectedFilterChainElement);
     }
-    private moveFilterUp() {
+    moveFilterUp() {
         var prevIndex = this.filtersChain.indexOf(this.selectedFilterChainElement);
         this.filtersChain.splice(prevIndex, 1); //remove from current position
         this.filtersChain.splice(prevIndex - 1, 0, this.selectedFilterChainElement);
     }
 
-    private onExtensionUpdated(filterChainEl: TransformerChainElement, ext: ConfigurableExtensionFactory) {
+    onExtensionUpdated(filterChainEl: TransformerChainElement, ext: ConfigurableExtensionFactory) {
         filterChainEl.selectedFactory = ext;
     }
-    private onConfigurationUpdated(filterChainEl: TransformerChainElement, config: Settings) {
+    onConfigurationUpdated(filterChainEl: TransformerChainElement, config: Settings) {
         filterChainEl.selectedConfiguration = config;
     }
 
-    private onConfigStatusUpdated(filterChainEl: TransformerChainElement, statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
+    onConfigStatusUpdated(filterChainEl: TransformerChainElement, statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
         filterChainEl.status = statusEvent.status;
         filterChainEl.relativeReference = statusEvent.relativeReference;
     }
 
-    private configureGraphs(filterChainEl: TransformerChainElement) {
+    configureGraphs(filterChainEl: TransformerChainElement) {
         this.openGraphSelectionModal(filterChainEl.filterGraphs).then(
             res => {},
             () => {}
@@ -214,12 +214,9 @@ export class ExportDataComponent {
     }
 
     private openGraphSelectionModal(filterGraphs: GraphStruct[]) {
-        var modalData = new FilterGraphsModalData(filterGraphs);
-        const builder = new BSModalContextBuilder<FilterGraphsModalData>(
-            modalData, undefined, FilterGraphsModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(FilterGraphsModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(FilterGraphsModal, new ModalOptions());
+        modalRef.componentInstance.graphs = filterGraphs;
+        return modalRef.result;
     }
 
     /**
@@ -240,7 +237,7 @@ export class ExportDataComponent {
     /**
      * Returns true if a reformatter is used
      */
-    private useReformatter(): boolean {
+    useReformatter(): boolean {
         //Reformatter available only when not using a deployer, or when using a stream-source deployer
         return !this.selectedDeployment.source || this.selectedDeployment.source == DeploySource.stream;
     }
@@ -299,7 +296,7 @@ export class ExportDataComponent {
     /**
      * Returns true if a deployer is used
      */
-    private useDeployer(): boolean {
+    useDeployer(): boolean {
         //When a deployer source is specified (so a deployer is used)
         return this.selectedDeployment.source != null;
     }
@@ -326,7 +323,7 @@ export class ExportDataComponent {
      * Save/Load chain
      * =====================================*/
 
-    private saveChain() {
+    saveChain() {
         //graphs
         let graphs: string[] = [];
         for (var i = 0; i < this.exportGraphs.length; i++) {
@@ -341,7 +338,7 @@ export class ExportDataComponent {
         for (var i = 0; i < this.filtersChain.length; i++) {
             if (this.filtersChain[i].status == ExtensionConfigurationStatus.unsaved) {
                 this.basicModals.alert("Unsaved configuration", "Filter at position " + (i+1) + " is not saved. " +
-                    "In order to save a filter chain all its filters need to be saved.", "warning");
+                    "In order to save a filter chain all its filters need to be saved.", ModalType.warning);
                 return;
             }
 
@@ -368,7 +365,7 @@ export class ExportDataComponent {
         if (this.useDeployer()) {
             if (this.deployerStatus == ExtensionConfigurationStatus.unsaved) {
                 this.basicModals.alert("Unsaved configuration", "Deployer configuration is not saved. " +
-                    "In order to save the exporter configuration all its sub-configurations need to be saved.", "warning");
+                    "In order to save the exporter configuration all its sub-configurations need to be saved.", ModalType.warning);
                 return;
             }
             deployerSpec = {
@@ -382,7 +379,7 @@ export class ExportDataComponent {
         if (this.useReformatter()) {
             if (this.reformatterStatus == ExtensionConfigurationStatus.unsaved) {
                 this.basicModals.alert("Unsaved configuration", "Reformatter configuration is not saved. " +
-                    "In order to save the exporter configuration all its sub-configurations need to be saved.", "warning");
+                    "In order to save the exporter configuration all its sub-configurations need to be saved.", ModalType.warning);
                 return;
             }
             reformattingExporterSpec = {
@@ -408,7 +405,7 @@ export class ExportDataComponent {
         );
     }
 
-    private loadChain() {
+    loadChain() {
         this.sharedModals.loadConfiguration("Load exporter chain configuration", ConfigurationComponents.EXPORTER).then(
             (conf: LoadConfigurationModalReturnData) => {
                 this.filtersChain = []; //reset the chain
@@ -536,12 +533,12 @@ export class ExportDataComponent {
      * capabilities of the export in VB2.x.x (export only a scheme, a subtree of a concept, ...) 
      * since VB3 uses the export service of SemanticTurkey. 
      */
-    private export() {
+    export() {
         //check if every filter has been configured
         for (var i = 0; i < this.filtersChain.length; i++) {
             if (this.requireConfiguration(this.filtersChain[i])) {
                 this.basicModals.alert("Missing filter configuration", "An export filter ("
-                    + this.filtersChain[i].selectedFactory.name + ") needs to be configured", "warning");
+                    + this.filtersChain[i].selectedFactory.name + ") needs to be configured", ModalType.warning);
                 return;
             }
         }
@@ -571,7 +568,7 @@ export class ExportDataComponent {
             if (this.selectedReformatterConfig != null) {
                 if (this.requireConfigurationFormatter()) {
                     this.basicModals.alert("Missing configuration", "The reformatting exporter ("
-                        + this.selectedReformatterConfig.shortName + ") needs to be configured", "warning");
+                        + this.selectedReformatterConfig.shortName + ") needs to be configured", ModalType.warning);
                     return;
                 }
                 reformattingExporterSpec.configType = this.selectedReformatterConfig.type;
@@ -589,7 +586,7 @@ export class ExportDataComponent {
             }
             if (this.selectedDeployerConfig != null) {
                 if (this.requireConfigurationDeployer()) {
-                    this.basicModals.alert("Missing configuration", "The deployer needs to be configured", "warning");
+                    this.basicModals.alert("Missing configuration", "The deployer needs to be configured", ModalType.warning);
                     return;
                 }
                 deployerSpec.configType = this.selectedDeployerConfig.type;
@@ -606,7 +603,7 @@ export class ExportDataComponent {
             },
             (err: Error) => {
                 if (err.name.endsWith('ExportPreconditionViolationException')) {
-                    this.basicModals.confirm("Warning", err.message + " Do you want to force the export?", "warning").then(
+                    this.basicModals.confirm("Warning", err.message + " Do you want to force the export?", ModalType.warning).then(
                         yes => {
                             UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                             this.exportService.export(graphsToExport, JSON.stringify(filteringPipeline),  reformattingExporterSpec, deployerSpec, 

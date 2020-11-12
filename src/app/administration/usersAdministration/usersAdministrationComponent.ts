@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ConfigurationComponents } from "../../models/Configuration";
 import { SettingsProp } from "../../models/Plugins";
@@ -12,7 +12,7 @@ import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 import { LoadConfigurationModalReturnData } from "../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { UserCreateModal, UserCreateModalData } from "./userCreateModal";
+import { UserCreateModal } from "./userCreateModal";
 
 @Component({
     selector: "users-admin-component",
@@ -26,12 +26,12 @@ import { UserCreateModal, UserCreateModalData } from "./userCreateModal";
 })
 export class UsersAdministrationComponent {
 
-    private users: User[];
-    private selectedUser: User;
+    users: User[];
+    selectedUser: User;
 
-    private showActive: boolean = true;
-    private showInactive: boolean = true;
-    private showNew: boolean = true;
+    showActive: boolean = true;
+    showInactive: boolean = true;
+    showNew: boolean = true;
 
     private userDetailsAspect: string = "Details";
     private rvTemplateAspect: string = "Template";
@@ -43,7 +43,7 @@ export class UsersAdministrationComponent {
     private userTemplate: PartitionFilterPreference;
 
     constructor(private userService: UserServices, private prefService: PreferencesSettingsServices, 
-        private vbProp: VBProperties, private sharedModals: SharedModalServices, private modal: Modal) { }
+        private vbProp: VBProperties, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         this.initUserList();
@@ -78,13 +78,8 @@ export class UsersAdministrationComponent {
         }
     }
 
-    private createUser() {
-        var modalData = new UserCreateModalData("Create user");
-        const builder = new BSModalContextBuilder<UserCreateModalData>(
-            modalData, undefined, UserCreateModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-        return this.modal.open(UserCreateModal, overlayConfig).result.then(
+    createUser() {
+        this.modalService.open(UserCreateModal, new ModalOptions('lg')).result.then(
             res => {
                 this.initUserList();
             },

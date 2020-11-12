@@ -1,9 +1,9 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body vbox table-responsive">
 
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%">
             <col>
@@ -11,32 +11,28 @@
         <tbody>
             <tr>
                 <td nowrap><label>Short name *</label></td>
-                <td><input class="form-control input-sm" [(ngModel)]="shortName"></td>
+                <td><input class="form-control" [(ngModel)]="shortName"></td>
             </tr>
             <tr>
                 <td nowrap><label>Full name</label></td>
-                <td><input class="form-control input-sm" [(ngModel)]="fullName"></td>
+                <td><input class="form-control" [(ngModel)]="fullName"></td>
             </tr>
             <tr>
                 <td nowrap><label>Description</label></td>
-                <td><textarea class="form-control input-sm" style="resize: vertical" [(ngModel)]="description"></textarea></td>
+                <td><textarea class="form-control" style="resize: vertical" [(ngModel)]="description"></textarea></td>
             </tr>
             <tr>
                 <td nowrap><label>Web page</label></td>
-                <td><input class="form-control input-sm" [(ngModel)]="webPage"></td>
+                <td><input class="form-control" [(ngModel)]="webPage"></td>
             </tr>
-            <!-- <tr>
-                <td nowrap><label>Logo url:</label></td>
-                <td><input class="form-control input-sm" [(ngModel)]="logoUrl"></td>
-            </tr> -->
         </tbody>
     </table>
 
 </div>
 
 <div class="modal-footer">
-    <span class="pull-left">(*) Mandatory field</span>
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isDataValid()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <span class="float-left">(*) Mandatory field</span>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>
 

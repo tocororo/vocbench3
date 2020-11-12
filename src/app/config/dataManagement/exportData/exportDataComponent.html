@@ -1,31 +1,31 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading">
+<div class="card card-default vbox">
+    <div class="card-header">
         <label style="flex: 1;">Export data:</label>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" title="Save export configuration" (click)="saveChain()">
-                    <span class="glyphicon glyphicon-floppy-save"></span>
+                <button class="btn btn-light" title="Save export configuration" (click)="saveChain()">
+                    <span class="fas fa-download"></span>
                 </button>
-                <button class="btn btn-default" title="Load export configuration" (click)="loadChain()">
-                    <span class="glyphicon glyphicon-floppy-open"></span>
+                <button class="btn btn-light" title="Load export configuration" (click)="loadChain()">
+                    <span class="fas fa-upload"></span>
                 </button>
             </div>
         </div>
     </div>
     
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
 
-        <div class="panel panel-alt vbox" style="min-height: 150px;">
-            <div class="panel-heading">
+        <div class="card card-alt vbox" style="min-height: 150px;">
+            <div class="card-header">
                 <label style="flex: 1">
                     Graphs to export
                 </label>
                 <span *ngIf="areAllGraphDeselected()" class="grayText">
-                    <span class="glyphicon glyphicon-warning-sign"></span>
+                    <span class="fas fa-exclamation-triangle"></span>
                     If no graph is selected, all named graphs will be exported
                 </span>
             </div>
-            <div class="panel-body scrollableContainer">
+            <div class="card-body scrollableContainer">
                 <div *ngFor="let g of exportGraphs" class="listItem" style="align-items: center">
                     <input type="checkbox" [(ngModel)]="g.checked" (ngModelChange)="onGraphSelectionChange(g)">
                     <span style="margin-left: 5px;">{{g.graph.getURI()}}</span>
@@ -33,37 +33,37 @@
             </div>
         </div>
 
-        <div class="panel panel-alt vbox" style="flex: 2; margin-top: 4px;">
-            <div class="panel-heading">
+        <div class="card card-alt vbox" style="flex: 2; margin-top: 4px;">
+            <div class="card-header">
                 <label style="flex: 1">Export transformations:</label>
 
                 <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" title="Add filter" (click)="appendFilter()">
-                            <span class="glyphicon glyphicon-plus"></span>
+                        <button class="btn btn-light" title="Add filter" (click)="appendFilter()">
+                            <span class="fas fa-plus"></span>
                         </button>
-                        <button class="btn btn-default" title="Remove filter" (click)="removeFilter()"
+                        <button class="btn btn-light" title="Remove filter" (click)="removeFilter()"
                             [disabled]="filtersChain.length == 0 || !selectedFilterChainElement">
-                            <span class="glyphicon glyphicon-minus"></span>
+                            <span class="fas fa-minus"></span>
                         </button>
-                        <button class="btn btn-default" title="Move down"  (click)="moveFilterDown()"
+                        <button class="btn btn-light" title="Move down"  (click)="moveFilterDown()"
                             [disabled]="isSelectedFilterLast() || !selectedFilterChainElement">
-                            <span class="glyphicon glyphicon-chevron-down"></span>
+                            <span class="fas fa-chevron-down"></span>
                         </button>
-                        <button class="btn btn-default" title="Move up" (click)="moveFilterUp()"
+                        <button class="btn btn-light" title="Move up" (click)="moveFilterUp()"
                             [disabled]="isSelectedFilterFirst() || !selectedFilterChainElement">
-                            <span class="glyphicon glyphicon-chevron-up"></span>
+                            <span class="fas fa-chevron-up"></span>
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="panel-body scrollableContainer">
+            <div class="card-body scrollableContainer">
                 <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 5px;">
                     Here it is possible to create and configure a sequence of transformations to be applied during the export process.
                     Each transformer is applied to a subset of the exported graphs. No graph means every exported graph.
                     <button class="close" data-dismiss="alert"><span>&times;</span></button>
                 </div>
-                <table class="table table-condensed table-hoverable">
+                <table class="table table-sm table-hoverable">
                     <colgroup>
                         <col style="width: 2%">
                         <col>
@@ -80,10 +80,10 @@
                                     (configStatusUpdated)="onConfigStatusUpdated(filterChainEl, $event)"
                                     style="flex: 1;">
                                 </extension-configurator>
-                                <button class="btn btn-default" (click)="configureGraphs(filterChainEl)" style="margin-left: 4px;">Graphs</button>
+                                <button class="btn btn-light" (click)="configureGraphs(filterChainEl)" style="margin-left: 4px;">Graphs</button>
                             </td>
                             <td class="text-center" style="font-size: 14px;">
-                                <span *ngIf="requireConfiguration(filterChainEl)" class="glyphicon glyphicon-warning-sign"
+                                <span *ngIf="requireConfiguration(filterChainEl)" class="fas fa-exclamation-triangle"
                                     title="This filter needs to be configured"></span>
                             </td>
                         </tr>
@@ -92,15 +92,15 @@
             </div>
         </div>
 
-        <div class="panel panel-alt" style="margin-top: 4px;">
-            <div class="panel-heading">
+        <div class="card card-alt" style="margin-top: 4px;">
+            <div class="card-header">
                 <label style="margin-right: 8px">Deployment:</label>
-                <select class="form-control input-xs" style="width: initial" [(ngModel)]="selectedDeployment">
+                <select class="form-control form-control-sm" style="width: initial" [(ngModel)]="selectedDeployment">
                     <option *ngFor="let depOpt of deploymentOptions" [ngValue]="depOpt">{{depOpt.label}}</option>
                 </select>
             </div>
-            <div class="panel-body">
-                <table class="table table-condensed table-borderless">
+            <div class="card-body">
+                <table class="table table-sm table-borderless">
                     <colgroup>
                         <col style="width: 80px">
                         <col>
@@ -127,7 +127,7 @@
                                     </extension-configurator>
                                 </ng-template>
                                 <div *ngIf="requireConfigurationDeployer()" style="font-size: 14px; margin-left: 4px;">
-                                    <span class="glyphicon glyphicon-warning-sign" title="Configuration required"></span>
+                                    <span class="fas fa-exclamation-triangle" title="Configuration required"></span>
                                 </div>
                             </div>
                         </td>
@@ -145,12 +145,12 @@
                                 </extension-configurator>
 
                                 <div *ngIf="requireConfigurationFormatter()" style="font-size: 14px; margin-left: 4px;">
-                                    <span class="glyphicon glyphicon-warning-sign" title="Configuration required"></span>
+                                    <span class="fas fa-exclamation-triangle" title="Configuration required"></span>
                                 </div>
         
                                 <div class="hbox" style="align-items: center; flex: initial; margin-left: 8px;">
                                     <label style="white-space: nowrap; margin-right: 4px;">Export Format:</label>
-                                    <select class="form-control input-sm" [(ngModel)]="selectedExportFormat">
+                                    <select class="form-control form-control-sm" [(ngModel)]="selectedExportFormat">
                                         <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
                                     </select>
                                 </div>
@@ -164,12 +164,12 @@
     </div>
 
     
-    <div class="panel-footer">
-        <div class="pull-right">
+    <div class="card-footer">
+        <div class="float-right">
             <div class="checkbox" style="display: inline-block; margin: 0 20px 0 0;">
                 <label><input type="checkbox" [(ngModel)]="includeInferred">Include inferred</label>
             </div>
-            <button type="submit" class="btn btn-default btn-sm" (click)="export()">Submit</button>
+            <button type="submit" class="btn btn-light btn-sm" (click)="export()">Submit</button>
         </div>
         <span class="clearfix"></span> <!--To fix UI bug-->
     </div>

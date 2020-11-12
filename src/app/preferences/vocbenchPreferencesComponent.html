@@ -1,9 +1,9 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading">
+<div class="card card-default vbox">
+    <div class="card-header">
         <label>Vocbench Preferences</label>
     </div>
     
-    <div class="panel-body scrollableContainer">
+    <div class="card-body scrollableContainer">
 
         <res-view-pref></res-view-pref>
 
@@ -12,11 +12,11 @@
                 
                 <lang-pref style="flex: 1"></lang-pref>
 
-                <div class="panel panel-default vbox" style="flex: 1; margin-left: 6px;">
-                    <div class="panel-heading">
+                <div class="card card-default vbox" style="flex: 1; margin-left: 6px;">
+                    <div class="card-header">
                         <label>Notifications</label>
                     </div>
-                    <div class="panel-body vbox">
+                    <div class="card-body vbox">
                         <notifications-pref></notifications-pref>
                     </div>
                 </div>
@@ -24,29 +24,29 @@
             </div>
         </div>
 
-        <div class="panel panel-default" style="margin-top: 6px;">
-            <div class="panel-heading">
+        <div class="card card-default" style="margin-top: 6px;">
+            <div class="card-header">
                 <label style="flex: 1">Other preferences</label>
             </div>
-            <div class="panel-body scrollableContainer">
+            <div class="card-body scrollableContainer">
 
-                <div class="panel panel-default" style="padding: 4px; margin-bottom: 2px">
-                    <div class="panel-body">
+                <div class="card card-default" style="padding: 4px; margin-bottom: 2px">
+                    <div class="card-body">
                         <div class="checkbox-inline">
                             <label>
                                 <input type="checkbox" [(ngModel)]="showFlags" (ngModelChange)="onShowFlagChange()"> Show flags
                             </label>
-                            <span class="glyphicon glyphicon-info-sign"
+                            <span class="fas fa-info-circle"
                                 title="Determines if the flags icon are shown in place of the language ISO code">
                             </span>
                         </div>
                     </div>
                 </div>
 
-                <div class="panel panel-default" style="padding: 4px; margin-bottom: 2px">
-                    <div class="panel-body">
+                <div class="card card-default" style="padding: 4px; margin-bottom: 2px">
+                    <div class="card-body">
                         <label>Project theme
-                            <span class="glyphicon glyphicon-info-sign" title="Changes the color of the header/navigationBar for the current project"></span>
+                            <span class="fas fa-info-circle" title="Changes the color of the header/navigationBar for the current project"></span>
                         </label>
                         <label *ngFor="let t of themes" class="checkbox-inline" style="margin-left: 12px;">
                             <input type="checkbox" style="margin-left: -18px;" [checked]="t == selectedTheme" (click)="changeTheme(t)">

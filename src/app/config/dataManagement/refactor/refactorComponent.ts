@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { SKOSXL } from "../../../models/Vocabulary";
 import { RefactorServices } from "../../../services/refactorServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
@@ -25,16 +26,16 @@ export class RefactorComponent {
         this.lexicalizationModel = VBContext.getWorkingProject().getLexicalizationModelType();
     }
 
-    private skosToSkosxlEnabled(): boolean {
+    skosToSkosxlEnabled(): boolean {
         return this.lexicalizationModel == SKOSXL.uri;
     }
 
-    private skosxlToSkosEnabled(): boolean {
+    skosxlToSkosEnabled(): boolean {
         return (this.lexicalizationModel == SKOSXL.uri || this.lexicalizationModel == SKOSXL.uri);
     }
 
-    private skosToSkosxl() {
-        this.basicModals.confirm("SKOS to SKOS-XL", "This could be a long process. Are you sure to continue?", "warning").then(
+    skosToSkosxl() {
+        this.basicModals.confirm("SKOS to SKOS-XL", "This could be a long process. Are you sure to continue?", ModalType.warning).then(
             confirm => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.refactorService.SKOStoSKOSXL(this.reifyNotes).subscribe(
@@ -48,8 +49,8 @@ export class RefactorComponent {
         );
     }
 
-    private skosxlToSkos() {
-        this.basicModals.confirm("SKOS-XL to SKOS", "This could be a long process. Are you sure to continue?", "warning").then(
+    skosxlToSkos() {
+        this.basicModals.confirm("SKOS-XL to SKOS", "This could be a long process. Are you sure to continue?", ModalType.warning).then(
             confirm => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.refactorService.SKOSXLtoSKOS(this.flattenNotes).subscribe(
@@ -64,8 +65,8 @@ export class RefactorComponent {
     }
 
     //TODO: some event in order to destroy the data component
-    private migrateData() {
-        this.basicModals.confirm("Migrate data", "This could be a long process. Are you sure to continue?", "warning").then(
+    migrateData() {
+        this.basicModals.confirm("Migrate data", "This could be a long process. Are you sure to continue?", ModalType.warning).then(
             confirm => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.refactorService.migrateDefaultGraphToBaseURIGraph().subscribe(
@@ -80,13 +81,13 @@ export class RefactorComponent {
     }
 
     //Authorizations
-    private isMigrateAuthorized(): boolean {
+    isMigrateAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorMigrateToBaseUriGraph);
     }
-    private isSkosToSkosxlAuthorized(): boolean {
+    isSkosToSkosxlAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSkosToSkosxl);
     }
-    private isSkoxlToSkosAuthorized(): boolean {
+    isSkoxlToSkosAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorSkosxlToSkos);
     }
 

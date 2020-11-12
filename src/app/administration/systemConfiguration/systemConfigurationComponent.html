@@ -5,13 +5,13 @@
         This panel can be accessed also later from <i>Administration</i> > <i>Configuration</i> (located in the user menu)
     </div>
 
-    <div class="panel panel-default vbox">
-        <div class="panel-body vbox scrollableContainer">
+    <div class="card card-default vbox">
+        <div class="card-body vbox scrollableContainer">
 
             <!-- Misc setting -->
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <table class="table table-condensed table-borderless">
+            <div class="card card-default">
+                <div class="card-body">
+                    <table class="table table-sm table-borderless">
                         <colgroup>
                             <col style="width: 1%;">
                             <col style="width: 1%;">
@@ -20,7 +20,7 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <span class="glyphicon glyphicon-info-sign"
+                                    <span class="fas fa-info-circle"
                                         title="Provide the SemanticTurkey data folder path. This can be absolute or relative to the SemanticTurkey installation folder.">
                                     </span>
                                 </td>
@@ -29,8 +29,8 @@
                                 </td>
                                 <td>
                                     <div class="hbox" style="align-items: center;">
-                                        <input class="form-control input-sm" style="margin-right: 4px;" [(ngModel)]="stDataFolder">
-                                        <button class="btn btn-default btn-sm" (click)="updateDataFolder()" [disabled]="stDataFolder == stDataFolderPristine">
+                                        <input class="form-control" style="margin-right: 4px;" [(ngModel)]="stDataFolder">
+                                        <button class="btn btn-light btn-sm" (click)="updateDataFolder()" [disabled]="stDataFolder == stDataFolderPristine">
                                             Update
                                         </button>
                                     </div>
@@ -39,7 +39,7 @@
 
                             <tr>
                                 <td>
-                                    <span class="glyphicon glyphicon-info-sign"
+                                    <span class="fas fa-info-circle"
                                         title="Tells the threshold file size (in bytes) admitted by the preload profiler during the project creation. If unspecified, or 0, the default size is 1048576 bytes (1 megabyte).">
                                     </span>
                                 </td>
@@ -48,11 +48,13 @@
                                 </td>
                                 <td>
                                     <div class="hbox" style="align-items: center;">
-                                        <div class="input-group input-group-sm" style="flex: 1; margin-right: 4px;">
+                                        <div class="input-group" style="flex: 1; margin-right: 4px;">
                                             <input type="number" class="form-control" [(ngModel)]="profilerThreshold" min="0" step="1">
-                                            <span class="input-group-addon">bytes</span>
+                                            <span class="input-group-append">
+                                                <span class="input-group-text">bytes</span>
+                                            </span>
                                         </div>
-                                        <button class="btn btn-default btn-sm" (click)="updateProfilerThreshold()" [disabled]="profilerThreshold == profilerThresholdPristine">
+                                        <button class="btn btn-light btn-sm" (click)="updateProfilerThreshold()" [disabled]="profilerThreshold == profilerThresholdPristine">
                                             Update
                                         </button>
                                     </div>
@@ -64,17 +66,17 @@
             </div>
 
             <!-- E-mail configuration -->
-            <div class="panel panel-default" style="margin-top: 6px;">
-                <div class="panel-heading">
+            <div class="card card-default" style="margin-top: 6px;">
+                <div class="card-header">
                     <label>Vocbench Email Configuration:</label>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 4px;">
                         Configuration of the VocBench e-mail service. This service will be used to send notifications to the
                         system administrator and to the users
                         <button class="close" data-dismiss="alert"><span>&times;</span></button>
                     </div>
-                    <table class="table table-condensed table-borderless">
+                    <table class="table table-sm table-borderless">
                         <colgroup>
                             <col style="width: 1%;">
                             <col style="width: 1%;">
@@ -83,32 +85,32 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <span class="glyphicon glyphicon-info-sign" title="SMTP Mail Server IP/URL"></span>
+                                    <span class="fas fa-info-circle" title="SMTP Mail Server IP/URL"></span>
                                 </td>
                                 <td nowrap>
                                     <label>Mail SMTP host:</label>
                                 </td>
-                                <td><input class="form-control input-sm" [(ngModel)]="emailConfig.mailSmtpHost"></td>
+                                <td><input class="form-control" [(ngModel)]="emailConfig.mailSmtpHost"></td>
                             </tr>
                             <tr>
                                 <td>
-                                    <span class="glyphicon glyphicon-info-sign" title="Mail Server Port"></span>
+                                    <span class="fas fa-info-circle" title="Mail Server Port"></span>
                                 </td>
                                 <td nowrap>
                                     <label>Mail SMTP port:</label>
                                 </td>
-                                <td><input class="form-control input-sm" [(ngModel)]="emailConfig.mailSmtpPort"></td>
+                                <td><input class="form-control" [(ngModel)]="emailConfig.mailSmtpPort"></td>
                             </tr>
 
                             <tr>
                                 <td>
-                                    <span class="glyphicon glyphicon-info-sign" title="Cryptographic protocol"></span>
+                                    <span class="fas fa-info-circle" title="Cryptographic protocol"></span>
                                 </td>
                                 <td nowrap>
                                     <label>Cryptographic protocol:</label>
                                 </td>
                                 <td>
-                                    <select class="form-control input-sm" [(ngModel)]="cryptoProtocol" (ngModelChange)="updateProtocol()">
+                                    <select class="form-control" [(ngModel)]="cryptoProtocol" (ngModelChange)="updateProtocol()">
                                         <option>SSL</option>
                                         <option>TLS</option>
                                         <option>None</option>
@@ -117,48 +119,48 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <span class="glyphicon glyphicon-info-sign" title="True if SMTP server requires authentication"></span>
+                                    <span class="fas fa-info-circle" title="True if SMTP server requires authentication"></span>
                                 </td>
                                 <td nowrap>
                                     <label>Authentication:</label>
                                 </td>
                                 <td>
-                                    <span class="hbox input-sm" style="align-items: center; justify-content: center;">
+                                    <span class="hbox" style="align-items: center; justify-content: center;">
                                         <label class="radio-inline">
-                                            <input type="radio" (click)="emailConfig.mailSmtpAuth='true'" [checked]="emailConfig.mailSmtpAuth=='true'">true
+                                            <input type="radio" (click)="emailConfig.mailSmtpAuth=true" [checked]="emailConfig.mailSmtpAuth">true
                                         </label>
                                         <label class="radio-inline" style="margin-left: 15px;">
-                                            <input type="radio" (click)="emailConfig.mailSmtpAuth='false'" [checked]="emailConfig.mailSmtpAuth=='false'">false
+                                            <input type="radio" (click)="emailConfig.mailSmtpAuth=false" [checked]="!emailConfig.mailSmtpAuth">false
                                         </label>
                                     </span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <span class="glyphicon glyphicon-info-sign" title="Email address used to send administration emails"></span>
+                                    <span class="fas fa-info-circle" title="Email address used to send administration emails"></span>
                                 </td>
                                 <td nowrap>
                                     <label>Mail from address:</label>
                                 </td>
-                                <td><input class="form-control input-sm" type="email" [(ngModel)]="emailConfig.mailFromAddress"></td>
+                                <td><input class="form-control" type="email" [(ngModel)]="emailConfig.mailFromAddress"></td>
                             </tr>
                             <tr>
                                 <td>
-                                    <span class="glyphicon glyphicon-info-sign" title="Password of the above email address"></span>
+                                    <span class="fas fa-info-circle" title="Password of the above email address"></span>
                                 </td>
                                 <td nowrap>
                                     <label>Mail from password:</label>
                                 </td>
                                 <td>
-                                    <input *ngIf="emailConfig.mailSmtpAuth=='false'; else authBlock" class="form-control input-sm" disabled>
+                                    <input *ngIf="!emailConfig.mailSmtpAuth; else authBlock" class="form-control" disabled>
                                     <ng-template #authBlock>
-                                        <div class="input-group input-group-sm">
+                                        <div class="input-group">
                                             <input *ngIf="!showPwd" type="password" class="form-control" [(ngModel)]="emailConfig.mailFromPassword">
                                             <input *ngIf="showPwd" class="form-control" [(ngModel)]="emailConfig.mailFromPassword">
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-default" [ngClass]="{ active : showPwd }" (click)="showPwd = !showPwd">
-                                                    <span *ngIf="!showPwd" class="glyphicon glyphicon-eye-close"></span>
-                                                    <span *ngIf="showPwd" class="glyphicon glyphicon-eye-open"></span>
+                                            <span class="input-group-append">
+                                                <button class="btn btn-light" [ngClass]="{ active : showPwd }" (click)="showPwd = !showPwd">
+                                                    <span *ngIf="!showPwd" class="fas fa-eye-slash"></span>
+                                                    <span *ngIf="showPwd" class="fas fa-eye"></span>
                                                 </button>
                                             </span>
                                         </div>
@@ -167,35 +169,35 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <span class="glyphicon glyphicon-info-sign" title="Alias name shown in the administration emails"></span>
+                                    <span class="fas fa-info-circle" title="Alias name shown in the administration emails"></span>
                                 </td>
                                 <td nowrap>
                                     <label>Mail from alias:</label>
                                 </td>
-                                <td><input class="form-control input-sm" [(ngModel)]="emailConfig.mailFromAlias"></td>
+                                <td><input class="form-control" [(ngModel)]="emailConfig.mailFromAlias"></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="panel-footer" style="text-align: right;">
+                <div class="card-footer" style="text-align: right;">
                     <button class="btn btn-info btn-sm" (click)="testEmailConfig()">Test</button>
-                    <button type="submit" class="btn btn-default btn-sm" (click)="updateEmailConfig()" [disabled]="!isEmailConfigChanged()">Submit</button>
+                    <button type="submit" class="btn btn-light btn-sm" (click)="updateEmailConfig()" [disabled]="!isEmailConfigChanged()">Submit</button>
                 </div>
             </div>
 
             <!-- Notifications -->
-            <div class="panel panel-default" style="margin-top: 6px;">
-                <div class="panel-heading">
+            <div class="card card-default" style="margin-top: 6px;">
+                <div class="card-header">
                     <label>Notification scheduler:</label>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 4px;">
                         Configuration of the VocBench e-mail notification service. 
                         The system will send a notifications daily digest to the users who have chosen the 
                         <i>Email daily digest</i> as notification mode.
                         <button class="close" data-dismiss="alert"><span>&times;</span></button>
                     </div>
-                    <table class="table table-condensed table-borderless">
+                    <table class="table table-sm table-borderless">
                         <colgroup>
                             <col style="width: 1%;">
                             <col style="width: 1%;">
@@ -203,23 +205,23 @@
                         </colgroup>
                         <tbody>
                             <tr>
-                                <td><span class="glyphicon glyphicon-info-sign" title="The hour of the day when the report will be sent every day"></span></td>
+                                <td><span class="fas fa-info-circle" title="The hour of the day when the report will be sent every day"></span></td>
                                 <td nowrap><label>Hour of the day:</label></td>
                                 <td>
-                                    <select class="form-control input-sm" [(ngModel)]="cronHourOfDay">
+                                    <select class="form-control" [(ngModel)]="cronHourOfDay">
                                         <option *ngFor="let h of hoursOfDay">{{h}}</option>
                                     </select>
                                 </td>
                             </tr>
                             <tr>
-                                <td><span class="glyphicon glyphicon-info-sign" title="A timezone id"></span></td>
+                                <td><span class="fas fa-info-circle" title="A timezone id"></span></td>
                                 <td nowrap><label>Time zone:</label></td>
                                 <td>
                                     <div class="hbox">
-                                        <select class="form-control input-sm" [(ngModel)]="timezone">
+                                        <select class="form-control" [(ngModel)]="timezone">
                                             <option *ngFor="let t of timezones">{{t}}</option>
                                         </select>
-                                        <button class="btn btn-sm btn-default" style="margin-left: 4px;" (click)="detectTimezone()" title="Detect the browser timezone">
+                                        <button class="btn btn-sm btn-light" style="margin-left: 4px;" (click)="detectTimezone()" title="Detect the browser timezone">
                                             Detect
                                         </button>
                                     </div>
@@ -228,13 +230,8 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="panel-footer" style="text-align: right;">
-                    <!-- <div class="hbox" style="margin-bottom: 4px;">
-                        <input class="input-sm form-control" [(ngModel)]="cronExprTest" placeholder="*/30 * * * * *">
-                        <button class="btn btn-info btn-sm" (click)="testNotificationSchedule()" style="margin-left: 4px"
-                            title="Manually configure the input cron expression (for testing purpose)">Test</button>
-                    </div> -->
-                    <button type="submit" class="btn btn-default btn-sm" (click)="updateNotificationSchedule()" 
+                <div class="card-footer" style="text-align: right;">
+                    <button type="submit" class="btn btn-light btn-sm" (click)="updateNotificationSchedule()" 
                         [disabled]="!cronHourOfDay || !timezone">Submit</button>
                     <button class="btn btn-warning btn-sm" (click)="disableNotificationSchedule()" title="Disable the notifications daily digest"
                         [disabled]="!cronHourOfDay && !timezone">Disable</button>
@@ -242,50 +239,50 @@
             </div>
 
             <!-- Registration form -->
-            <div class="panel panel-default" style="margin-top: 6px;">
-                <div class="panel-heading">
+            <div class="card card-default" style="margin-top: 6px;">
+                <div class="card-header">
                     <label>Registration form fields:</label>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
 
-                    <div class="panel panel-alt">
-                        <div class="panel-heading">
+                    <div class="card card-alt">
+                        <div class="card-header">
                             <label style="flex: 1;">Optional fields:</label>
                         </div>
-                        <div class="panel-body">
+                        <div class="card-body">
                             <div class="alert alert-info alert-dismissible alert-multiline" role="alert" style="margin-bottom: 4px;">
                                 Show or hide optional information about the user. These information will be shown or hidden in the user overview 
                                 and will be also prompted as non-mandatory fields during the user creation/registration.<br>
                                 <button class="close" data-dismiss="alert"><span>&times;</span></button>
                             </div>
                             <div *ngFor="let f of optionalFields" class="listItem">
-                                <button class="btn btn-sm btn-default" (click)="updateOptionalFieldVisibility(f)" [ngClass]="{ active: f.visible }" style="margin-right: 4px;">
-                                    <span *ngIf="f.visible" class="glyphicon glyphicon-eye-open"></span>
-                                    <span *ngIf="!f.visible" class="glyphicon glyphicon-eye-close"></span>
+                                <button class="btn btn-sm btn-light" (click)="updateOptionalFieldVisibility(f)" [ngClass]="{ active: f.visible }" style="margin-right: 4px;">
+                                    <span *ngIf="f.visible" class="fas fa-eye"></span>
+                                    <span *ngIf="!f.visible" class="fas fa-eye-slash"></span>
                                 </button>
-                                <input class="form-control input-sm" [ngModel]="getOptionalFieldLabel(f)" readonly>
+                                <input class="form-control" [ngModel]="getOptionalFieldLabel(f)" readonly>
                             </div>
                         </div>
                     </div>
 
-                    <div class="panel panel-alt" style="margin-top: 4px;">
-                        <div class="panel-heading">
+                    <div class="card card-alt" style="margin-top: 4px;">
+                        <div class="card-header">
                             <label style="flex: 1;">Custom fields:</label>
                             <div class="btn-toolbar">
                                 <div class="btn-group btn-group-xs">
-                                    <button class="btn btn-default" (click)="moveCustomField('DOWN')" title="Move down" [disabled]="!selectedCustomField || customFormFields.indexOf(selectedCustomField)+1 >= customFormFields.length">
-                                        <span class="glyphicon glyphicon-chevron-down"></span>
+                                    <button class="btn btn-light" (click)="moveCustomField('DOWN')" title="Move down" [disabled]="!selectedCustomField || customFormFields.indexOf(selectedCustomField)+1 >= customFormFields.length">
+                                        <span class="fas fa-chevron-down"></span>
                                     </button>
-                                    <button class="btn btn-default" (click)="moveCustomField('UP')" title="Move up" [disabled]="!selectedCustomField || customFormFields.indexOf(selectedCustomField) == 0">
-                                        <span class="glyphicon glyphicon-chevron-up"></span>
+                                    <button class="btn btn-light" (click)="moveCustomField('UP')" title="Move up" [disabled]="!selectedCustomField || customFormFields.indexOf(selectedCustomField) == 0">
+                                        <span class="fas fa-chevron-up"></span>
                                     </button>
-                                    <button class="btn btn-default" (click)="removeCustomField()" title="Remove" [disabled]="!selectedCustomField">
-                                        <span class="glyphicon glyphicon-trash"></span>
+                                    <button class="btn btn-light" (click)="removeCustomField()" title="Remove" [disabled]="!selectedCustomField">
+                                        <span class="far fa-trash-alt"></span>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="panel-body">
+                        <div class="card-body">
                             <div class="alert alert-info alert-dismissible alert-multiline" role="alert" style="margin-bottom: 4px;">
                                 Add (and reorder) up to {{fieldsIdx.length}} custom information about the user.
                                 These information will be shown in the user overview and will be also prompted as non-mandatory fields during the user creation/registration.<br>
@@ -293,7 +290,7 @@
                                 If a field is renamed, any values previously stored for that field will be preserved.
                                 <button class="close" data-dismiss="alert"><span>&times;</span></button>
                             </div>
-                            <table *ngIf="customFormFields" class="table table-condensed table-borderless">
+                            <table *ngIf="customFormFields" class="table table-sm table-borderless">
                                 <colgroup>
                                     <col style="width: 1%;">
                                     <col>
@@ -314,11 +311,11 @@
             </div>
 
             <!-- Home content -->
-            <div class="panel panel-default" style="margin-top: 6px;">
-                <div class="panel-heading">
+            <div class="card card-default" style="margin-top: 6px;">
+                <div class="card-header">
                     <label>Home page content:</label>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <div class="alert alert-info alert-dismissible" role="alert" style="margin-bottom: 4px;">
                         Here you can write HTML-formatted text content that will be shown in the home page
                         <button class="close" data-dismiss="alert"><span>&times;</span></button>
@@ -328,23 +325,23 @@
                         <div style="flex: 1; border: 1px solid #ddd; border-radius: 4px; margin-left: 4px;" [innerHTML]="safeHomeContent"></div>
                     </div>
                 </div>
-                <div class="panel-footer" style="text-align: right;">
+                <div class="card-footer" style="text-align: right;">
                     <button class="btn btn-info btn-sm" (click)="previewHomeContent()" [disabled]="!homeContent">Preview</button>
-                    <button type="submit" class="btn btn-default btn-sm" (click)="updateHomeContent()" [disabled]="!isHomeContentChanged()">Submit</button>
+                    <button type="submit" class="btn btn-light btn-sm" (click)="updateHomeContent()" [disabled]="!isHomeContentChanged()">Submit</button>
                 </div>
             </div>
 
             <!-- Experimental feature -->
             
             <span style="flex: 1"></span>
-            <div class="panel panel-default" style="margin-top: 8px;">
-                <div class="panel-body">
+            <div class="card card-default" style="margin-top: 8px;">
+                <div class="card-body">
                     <div class="checkbox-inline">
                         <label>
                             <input type="checkbox" [(ngModel)]="expFeatEnabled" (ngModelChange)="onExpFeatEnabledChanged()">
                             Enable experimental features
                         </label>
-                        <span class="glyphicon glyphicon-info-sign" title="Check this option in order to enable experimental (very unstable) features">
+                        <span class="fas fa-info-circle" title="Check this option in order to enable experimental (very unstable) features">
                         </span>
                     </div>
                 </div>

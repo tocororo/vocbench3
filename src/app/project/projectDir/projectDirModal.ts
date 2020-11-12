@@ -1,41 +1,34 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Project } from '../../models/Project';
 import { ProjectServices } from "../../services/projectServices";
-
-export class ProjectDirModalData extends BSModalContext {
-    constructor(public project: Project, public currentDir: string, public availableDirs: string[]) {
-        super();
-    }
-}
 
 @Component({
     selector: "project-dir-modal",
     templateUrl: "./projectDirModal.html",
 })
-export class ProjectDirModal implements ModalComponent<ProjectDirModalData> {
-    context: ProjectDirModalData;
+export class ProjectDirModal {
+    @Input() project: Project;
+    @Input() currentDir: string;
+    @Input() availableDirs: string[];
 
-    private directories: string[]
-    private dirName: string;
+    directories: string[]
+    dirName: string;
 
-    constructor(public dialog: DialogRef<ProjectDirModalData>, private projectService: ProjectServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices) {}
 
     ngOnInit() {
-        this.directories = this.context.availableDirs;
+        this.directories = this.availableDirs;
         this.directories.sort((d1: string, d2: string) => d1.toLocaleLowerCase().localeCompare(d2.toLocaleLowerCase()));
-        this.dirName = this.context.currentDir;
+        this.dirName = this.currentDir;
     }
 
     ok() {
         let dirNameValue: string = (this.dirName != null && this.dirName.trim() != "") ? this.dirName : null;
-        if (this.context.currentDir != dirNameValue) { //directory changed
-            this.projectService.setProjectFacetDir(this.context.project.getName(), dirNameValue).subscribe(
+        if (this.currentDir != dirNameValue) { //directory changed
+            this.projectService.setProjectFacetDir(this.project.getName(), dirNameValue).subscribe(
                 () => {
-                    this.dialog.close();
+                    this.activeModal.close();
                 }
             );
         } else { //directory not changed => dismiss dialog, so the calling component will know that the dir is not changed
@@ -44,7 +37,7 @@ export class ProjectDirModal implements ModalComponent<ProjectDirModalData> {
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

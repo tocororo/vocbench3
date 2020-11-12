@@ -3,18 +3,22 @@
 </div>
 <div class="modal-body vbox blockingDivHost">
 
-    <div class="input-group input-group-xs" style="margin-bottom: 4px;">
+    <div class="input-group" style="margin-bottom: 4px;">
         <input class="form-control" placeholder="Consumer Project name" [(ngModel)]="filterProject">
-        <span class="input-group-addon"><span class="glyphicon glyphicon-filter"></span></span>
+        <span class="input-group-append">
+            <span class="input-group-text">
+                <span class="fas fa-filter"></span>
+            </span>
+        </span>
     </div>
 
-    <div class="panel panel-default vbox">
-        <div class="panel-heading">
-            <label>Access Control List of project <i>{{context.project.getName()}}</i></label>
+    <div class="card card-default vbox">
+        <div class="card-header">
+            <label>Access Control List of project <i>{{project.getName()}}</i></label>
         </div>
 
-        <div class="panel-body scrollableContainer">
-            <table class="table table-condensed table-borderless">
+        <div class="card-body scrollableContainer">
+            <table class="table table-sm table-borderless">
                 <tbody>
                     <ng-container *ngFor="let c of consumers">
                         <tr *ngIf="showConsumer(c)">
@@ -24,7 +28,7 @@
                                 </div>
                             </td>
                             <td>
-                                <select class="form-control input-xs" (ngModelChange)="onAccessLevelChange(c, $event)" [(ngModel)]="c.availableACLLevel">
+                                <select class="form-control form-control-sm" (ngModelChange)="onAccessLevelChange(c, $event)" [(ngModel)]="c.availableACLLevel">
                                     <option [ngValue]="nullAccessLevel">---</option>
                                     <option *ngFor="let al of accessLevels" [value]="al">{{al}}</option>
                                 </select>
@@ -35,11 +39,11 @@
             </table>
         </div>
 
-        <div *ngIf="lock" class="panel-footer">
-            <div class="form-group">
-                <label class="control-label col-sm-5">Lockable:</label>
-                <div class="col-sm-7">
-                    <select class="form-control input-xs" (ngModelChange)="onLockLevelChange($event)" [(ngModel)]="lock.availableLockLevel">
+        <div *ngIf="lock" class="card-footer">
+            <div class="row">
+                <label class="col-form-label col-sm-4">Lockable:</label>
+                <div class="col-sm-8">
+                    <select class="form-control form-control-sm" (ngModelChange)="onLockLevelChange($event)" [(ngModel)]="lock.availableLockLevel">
                         <option *ngFor="let ll of lockLevels" [value]="ll">{{ll}}</option>
                     </select>
                 </div>
@@ -57,5 +61,5 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
 </div>

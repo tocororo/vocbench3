@@ -1,14 +1,14 @@
 <div class="vbox">
 
-    <div class="panel panel-default vbox">
+    <div class="card card-default vbox">
 
-        <div class="panel-body hbox">
+        <div class="card-body hbox">
 
-            <div *ngIf="isAdminLogged" class="panel panel-default vbox">
-                <div class="panel-heading">
+            <div *ngIf="isAdminLogged" class="card card-default vbox">
+                <div class="card-header">
                     <label style="flex: 1;">Projects:</label>
                 </div>
-                <div class="panel-body vbox" style="padding: 0px;">
+                <div class="card-body vbox" style="padding: 0px;">
                     <div class="scrollableContainer">
                         <div *ngFor="let p of projectList" class="listItem" [ngClass]="{active: p == selectedProject}" (click)="selectProject(p)">
                             <span>{{p.getName()}}</span>
@@ -17,23 +17,23 @@
                 </div>
             </div>
 
-            <div class="panel panel-default vbox" style="margin-left: 5px; flex: 4;">
+            <div class="card card-default vbox" style="margin-left: 5px; flex: 4;">
 
-                <div class="panel-heading" style="justify-content: flex-end">
+                <div class="card-header" style="justify-content: flex-end">
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs">
-                            <button *ngIf="isProjUserManagementAuthorized()" class="btn btn-default" [ngClass]="{ active: selectedAspect == projUsersAspect }"
+                            <button *ngIf="isProjUserManagementAuthorized()" class="btn btn-light" [ngClass]="{ active: selectedAspect == projUsersAspect }"
                                 style="padding: 1px 5px;" (click)="selectedAspect = projUsersAspect">{{projUsersAspect}}</button>
-                            <button *ngIf="isProjGroupManagementAuthorized()" class="btn btn-default" [ngClass]="{ active: selectedAspect == projGroupsAspect }"
+                            <button *ngIf="isProjGroupManagementAuthorized()" class="btn btn-light" [ngClass]="{ active: selectedAspect == projGroupsAspect }"
                                 style="padding: 1px 5px;" (click)="selectedAspect = projGroupsAspect">{{projGroupsAspect}}</button>
-                            <button *ngIf="isProjSettingsAuthorized()" class="btn btn-default" [ngClass]="{ active: selectedAspect == projSettingsAspect }" 
+                            <button *ngIf="isProjSettingsAuthorized()" class="btn btn-light" [ngClass]="{ active: selectedAspect == projSettingsAspect }" 
                                 style="padding: 1px 5px;" (click)="selectedAspect = projSettingsAspect">{{projSettingsAspect}}</button>
                         </div>
-                        <button class="btn btn-xs btn-default" (click)="editACL()" [disabled]="!selectedProject" title="Edit ACL">ACL</button>
+                        <button class="btn btn-xs btn-light" (click)="editACL()" [disabled]="!selectedProject" title="Edit ACL">ACL</button>
                     </div>
                 </div>
 
-                <div class="panel-body vbox">
+                <div class="card-body vbox">
                     <project-users-manager *ngIf="selectedAspect == projUsersAspect" [project]="selectedProject" class="vbox">
                     </project-users-manager>
 

@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { Observable } from "rxjs";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { from, Observable } from "rxjs";
+import { map } from 'rxjs/operators';
 import { ExceptionDAO, Project, ProjectColumnId, ProjectTableColumnStruct, ProjectUtils, ProjectViewMode, RemoteRepositorySummary, RepositorySummary } from '../models/Project';
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from "../services/projectServices";
@@ -15,15 +15,16 @@ import { VBCollaboration } from '../utils/VBCollaboration';
 import { VBContext } from '../utils/VBContext';
 import { VBProperties } from '../utils/VBProperties';
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ModalOptions, ModalType } from '../widget/modal/Modals';
 import { AbstractProjectComponent } from "./abstractProjectComponent";
-import { ACLEditorModal, ACLEditorModalData } from "./projectACL/aclEditorModal";
+import { ACLEditorModal } from "./projectACL/aclEditorModal";
 import { ProjectACLModal } from "./projectACL/projectACLModal";
-import { ProjectDirModal, ProjectDirModalData } from "./projectDir/projectDirModal";
-import { ProjectPropertiesModal, ProjectPropertiesModalData } from "./projectPropertiesModal";
+import { ProjectDirModal } from "./projectDir/projectDirModal";
+import { ProjectPropertiesModal } from "./projectPropertiesModal";
 import { ProjectTableConfigModal } from "./projectTableConfig/projectTableConfigModal";
-import { DeleteRemoteRepoModal, DeleteRemoteRepoModalData } from "./remoteRepositories/deleteRemoteRepoModal";
-import { DeleteRepositoryReportModal, DeleteRepositoryReportModalData } from "./remoteRepositories/deleteRepositoryReportModal";
-import { RemoteRepoEditorModal, RemoteRepoEditorModalData } from "./remoteRepositories/remoteRepoEditorModal";
+import { DeleteRemoteRepoModal } from "./remoteRepositories/deleteRemoteRepoModal";
+import { DeleteRepositoryReportModal } from "./remoteRepositories/deleteRepositoryReportModal";
+import { RemoteRepoEditorModal } from "./remoteRepositories/remoteRepoEditorModal";
 
 @Component({
     selector: "project-component",
@@ -38,7 +39,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
 
     constructor(private projectService: ProjectServices, userService: UserServices, metadataService: MetadataServices,
         vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator, 
-        private repositoriesService: RepositoriesServices, private basicModals: BasicModalServices, private modal: Modal, 
+        private repositoriesService: RepositoriesServices, private basicModals: BasicModalServices, private modalService: NgbModal, 
         private router: Router) {
         super(userService, metadataService, vbCollaboration, vbProp, dtValidator);
     }
@@ -98,18 +99,18 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     /**
      * Redirects to the import project page
      */
-    private createProject() {
+    createProject() {
         this.router.navigate(["/Projects/CreateProject"]);
     }
 
     private deleteProject(project: Project) {
         if (project.isOpen()) {
             this.basicModals.alert("Delete project", project.getName() +
-                " is currently open. Please, close the project and then retry.", "warning");
+                " is currently open. Please, close the project and then retry.", ModalType.warning);
             return;
         } else {
             this.basicModals.confirm("Delete project", "Warning, this operation will delete the project " +
-                project.getName() + ". Are you sure to proceed?", "warning").then(
+                project.getName() + ". Are you sure to proceed?", ModalType.warning).then(
                 result => {
                     //retrieve the remote repositories referenced by the deleting project (this must be done before the deletion in order to prevent errors)
                     this.projectService.getRepositories(project, true).subscribe(
@@ -130,10 +131,10 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     }
 
     private deleteImpl(project: Project): Observable<void> {
-        return this.projectService.deleteProject(project).map(
-            stResp => {
+        return this.projectService.deleteProject(project).pipe(
+            map(() => {
                 this.initProjects();
-            }
+            })
         );
     }
 
@@ -146,12 +147,9 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
                         (exceptions: ExceptionDAO[]) => {
                             UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                             if (exceptions.some(e => e != null)) { //some deletion has failed => show the report
-                                var modalData = new DeleteRepositoryReportModalData(deletingRepositories, exceptions);
-                                const builder = new BSModalContextBuilder<DeleteRepositoryReportModalData>(
-                                    modalData, undefined, DeleteRepositoryReportModalData
-                                );
-                                let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size("lg").toJSON() };
-                                this.modal.open(DeleteRepositoryReportModal, overlayConfig);
+                                const modalRef: NgbModalRef = this.modalService.open(DeleteRepositoryReportModal, new ModalOptions('lg'));
+                                modalRef.componentInstance.deletingRepositories = deletingRepositories;
+                                modalRef.componentInstance.exceptions = exceptions;
                             }
                         }
                     );
@@ -161,13 +159,11 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     }
 
     private selectRemoteRepoToDelete(project: Project, repositories: RepositorySummary[]): Observable<RemoteRepositorySummary[]> {
-        var modalData = new DeleteRemoteRepoModalData(project, repositories);
-        const builder = new BSModalContextBuilder<DeleteRemoteRepoModalData>(
-            modalData, undefined, DeleteRemoteRepoModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return Observable.fromPromise(
-            this.modal.open(DeleteRemoteRepoModal, overlayConfig).result.then(
+        const modalRef: NgbModalRef = this.modalService.open(DeleteRemoteRepoModal, new ModalOptions());
+        modalRef.componentInstance.project = project;
+        modalRef.componentInstance.repositories = repositories;
+        return from(
+            modalRef.result.then(
                 repos => {
                     return repos;
                 }
@@ -192,19 +188,16 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
      * Opens a modal to show the properties of the selected project
      */
     private openPropertyModal(project: Project) {
-        var modalData = new ProjectPropertiesModalData(project);
-        const builder = new BSModalContextBuilder<ProjectPropertiesModalData>(
-            modalData, undefined, ProjectPropertiesModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-        return this.modal.open(ProjectPropertiesModal, overlayConfig)
+        const modalRef: NgbModalRef = this.modalService.open(ProjectPropertiesModal, new ModalOptions('lg'));
+        modalRef.componentInstance.project = project;
+        return modalRef.result;
     }
 
-    private openACLModal() {
+    openACLModal() {
         if (this.projectList.length > 50) {
             this.basicModals.confirm("ACL matrix", "Warning: there are a lot of projects (" + this.projectList.length + "), " +
                 "thus the ACL matrix might be slow to load and hardly readable. Do you want to continue anyway?\n\n" +
-                "Alternatively the ACL for a specific project is available from the related action menu, 'Edit ACL' entry.", "warning").then(
+                "Alternatively the ACL for a specific project is available from the related action menu, 'Edit ACL' entry.", ModalType.warning).then(
                 () => { //confirmed
                     this.openACLMatrix();
                 },
@@ -216,18 +209,13 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     }
 
     private openACLMatrix() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-full").keyboard(27).toJSON() };
-        return this.modal.open(ProjectACLModal, overlayConfig);
+        this.modalService.open(ProjectACLModal, new ModalOptions('full'));
     }
 
     private editACL(project: Project) {
-        var modalData = new ACLEditorModalData(project);
-        const builder = new BSModalContextBuilder<ACLEditorModalData>(
-            modalData, undefined, ACLEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size("sm").keyboard(27).toJSON() };
-        return this.modal.open(ACLEditorModal, overlayConfig);
+        const modalRef: NgbModalRef = this.modalService.open(ACLEditorModal, new ModalOptions('sm'));
+        modalRef.componentInstance.project = project;
+        return modalRef.result;
     }
 
     /** 
@@ -236,15 +224,12 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
     private editRemoteRepoCredential(project: Project) {
         if (project.isOpen()) {
             this.basicModals.alert("Edit remote repository credentials", 
-                "You cannot edit credentials of remote repositories linked to an open project. Please, close the project and retry", "warning");
+                "You cannot edit credentials of remote repositories linked to an open project. Please, close the project and retry", ModalType.warning);
             return;
         }
-        var modalData = new RemoteRepoEditorModalData(project);
-        const builder = new BSModalContextBuilder<RemoteRepoEditorModalData>(
-            modalData, undefined, RemoteRepoEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(RemoteRepoEditorModal, overlayConfig)
+        const modalRef: NgbModalRef = this.modalService.open(RemoteRepoEditorModal, new ModalOptions());
+        modalRef.componentInstance.project = project;
+        return modalRef.result;
     }
 
     private editDirectory(project: Project, currentDir: string) {
@@ -254,12 +239,13 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
                 availableDirs.push(pd.dir);
             }
         });
-        var modalData = new ProjectDirModalData(project, currentDir, availableDirs);
-        const builder = new BSModalContextBuilder<ProjectDirModalData>(
-            modalData, undefined, ProjectDirModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ProjectDirModal, overlayConfig).result.then(
+
+
+        const modalRef: NgbModalRef = this.modalService.open(ProjectDirModal, new ModalOptions());
+        modalRef.componentInstance.project = project;
+		modalRef.componentInstance.currentDir = currentDir;
+		modalRef.componentInstance.availableDirs = availableDirs;
+        return modalRef.result.then(
             () => { //directory changed
                 this.initProjects();
             },
@@ -274,7 +260,7 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
                     if (this.projectDirs.some(pd => pd.dir == newName)) { //name changed, but a directory with the same name already exists
                         this.basicModals.confirm("Rename project directory", "Warning: a project directory named '" + newName + 
                             "' already exists. You will move there all the projects contained in directory '" + directory + 
-                            "'. Do you want to continue?", "warning").then(
+                            "'. Do you want to continue?", ModalType.warning).then(
                             () => { //confirmed => apply rename
                                 this.projectService.renameProjectFacetDir(directory, newName).subscribe(
                                     () => {
@@ -312,10 +298,9 @@ export class ProjectComponent extends AbstractProjectComponent implements OnInit
         )
     }
 
-    private settings() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.size('sm').keyboard(27).toJSON() };
-        this.modal.open(ProjectTableConfigModal, overlayConfig).result.then(
+    settings() {
+        const modalRef: NgbModalRef = this.modalService.open(ProjectTableConfigModal, new ModalOptions('sm'));
+        modalRef.result.then(
             () => { //changed settings
                 this.initProjects();
             },

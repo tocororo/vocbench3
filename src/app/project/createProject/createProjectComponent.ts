@@ -1,7 +1,7 @@
 import { Component, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
-import { Modal, OverlayConfig } from "ngx-modialog";
-import { BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { DatasetCatalogModalReturnData } from "../../config/dataManagement/datasetCatalog/datasetCatalogModal";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { TransitiveImportMethodAllowance } from "../../models/Metadata";
@@ -12,7 +12,7 @@ import { RDFFormat } from "../../models/RDFFormat";
 import { PatternStruct } from "../../models/ResourceMetadata";
 import { Pair } from "../../models/Shared";
 import { EDOAL, OntoLex, OWL, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
-import { MetadataFactoryPatternSelectionModal, MetadataFactoryPatternSelectionModalData } from "../../resourceMetadata/modals/metadataFactoryPatternSelectionModal";
+import { MetadataFactoryPatternSelectionModal } from "../../resourceMetadata/modals/metadataFactoryPatternSelectionModal";
 import { ExtensionsServices } from "../../services/extensionsServices";
 import { InputOutputServices } from "../../services/inputOutputServices";
 import { PluginsServices } from "../../services/pluginsServices";
@@ -37,48 +37,48 @@ export class CreateProjectComponent {
     /**
      * BASIC PROJECT SETTINGS
      */
-    private projectName: string;
+    projectName: string;
 
     //preload
-    private readonly preloadOptNone: PreloadOpt = PreloadOpt.NONE;
-    private readonly preloadOptFromLocalFile: PreloadOpt = PreloadOpt.FROM_LOCAL_FILE;
-    private readonly preloadOptFromURI: PreloadOpt = PreloadOpt.FROM_URI;
-    private readonly preloadOptFromDatasetCatalog: PreloadOpt = PreloadOpt.FROM_DATASET_CATALOG;
-    private preloadOptList: PreloadOpt[] = [this.preloadOptNone, this.preloadOptFromLocalFile, this.preloadOptFromURI, this.preloadOptFromDatasetCatalog];
-    private selectedPreloadOpt: PreloadOpt = this.preloadOptList[0];
+    readonly preloadOptNone: PreloadOpt = PreloadOpt.NONE;
+    readonly preloadOptFromLocalFile: PreloadOpt = PreloadOpt.FROM_LOCAL_FILE;
+    readonly preloadOptFromURI: PreloadOpt = PreloadOpt.FROM_URI;
+    readonly preloadOptFromDatasetCatalog: PreloadOpt = PreloadOpt.FROM_DATASET_CATALOG;
+    preloadOptList: PreloadOpt[] = [this.preloadOptNone, this.preloadOptFromLocalFile, this.preloadOptFromURI, this.preloadOptFromDatasetCatalog];
+    selectedPreloadOpt: PreloadOpt = this.preloadOptList[0];
     private preloadFile: File;
     private inputFormats: RDFFormat[];
     private selectedInputFormat: RDFFormat;
     private filePickerAccept: string;
     private preloadUri: string;
     private preloadCatalog: string; //id-title of the datasetCatalog
-    private preloadedData: { summary?: PreloadedDataSummary, option: PreloadOpt };
+    preloadedData: { summary?: PreloadedDataSummary, option: PreloadOpt };
 
-    private importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
+    importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
         { allowance: TransitiveImportMethodAllowance.nowhere, show: "Do not resolve" },
         { allowance: TransitiveImportMethodAllowance.web, show: "Resolve from web" },
         { allowance: TransitiveImportMethodAllowance.webFallbackToMirror, show: "Resolve from web with fallback to Ontology Mirror" },
         { allowance: TransitiveImportMethodAllowance.mirror, show: "Resolve from Ontology Mirror" },
         { allowance: TransitiveImportMethodAllowance.mirrorFallbackToWeb, show: "Resolve from Ontology Mirror with fallback to Web" }
     ];
-    private selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[1].allowance;
+    selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[1].allowance;
 
     //baseURI
-    private baseUri: string;
-    private baseUriForced: boolean = false;
-    private baseUriLocked: boolean = false;
+    baseUri: string;
+    baseUriForced: boolean = false;
+    baseUriLocked: boolean = false;
 
     //onto/lexical models
-    private ontoModelList = [
+    ontoModelList = [
         { value: new ARTURIResource(RDFS.uri), label: "RDFS" },
         { value: new ARTURIResource(OWL.uri), label: "OWL" },
         { value: new ARTURIResource(SKOS.uri), label: "SKOS" },
         { value: new ARTURIResource(OntoLex.uri), label: "OntoLex" },
         { value: new ARTURIResource(EDOAL.uri), label: "EDOAL" }
     ];
-    private ontoModelType: ARTURIResource = this.ontoModelList[1].value; //default OWL
-    private ontoModelForced: boolean = false;
-    private ontoModelLocked: boolean = false;
+    ontoModelType: ARTURIResource = this.ontoModelList[1].value; //default OWL
+    ontoModelForced: boolean = false;
+    ontoModelLocked: boolean = false;
 
     private lexicalModelList = [
         { value: new ARTURIResource(RDFS.uri), label: "RDFS" },
@@ -91,9 +91,9 @@ export class CreateProjectComponent {
     private lexicalModelLocked: boolean = false;
 
     //history/validation
-    private history: boolean = false;
-    private validation: boolean = false;
-    private blacklisting: boolean = false;
+    history: boolean = false;
+    validation: boolean = false;
+    blacklisting: boolean = false;
 
     //edoal
     private projectList: Project[];
@@ -105,10 +105,10 @@ export class CreateProjectComponent {
     /**
      * DATA STORE
      */
-    private repositoryAccessList: RepositoryAccessType[] = [
+    repositoryAccessList: RepositoryAccessType[] = [
         RepositoryAccessType.CreateLocal, RepositoryAccessType.CreateRemote, RepositoryAccessType.AccessExistingRemote
     ]
-    private selectedRepositoryAccess: RepositoryAccessType = this.repositoryAccessList[0];
+    selectedRepositoryAccess: RepositoryAccessType = this.repositoryAccessList[0];
 
     //configuration of remote access (used only in case selectedRepositoryAccess is one of CreateRemote or AccessExistingRemote)
     private remoteRepoConfigs: RemoteRepositoryAccessConfig[] = [];
@@ -118,13 +118,13 @@ export class CreateProjectComponent {
     private DEFAULT_REPO_CONFIG_TYPE = "it.uniroma2.art.semanticturkey.extension.impl.repositoryimplconfigurer.predefined.RDF4JNativeSailConfigurerConfiguration";
 
     //core repository containing data
-    private dataRepoId: string;
+    dataRepoId: string;
     private dataRepoExtensions: ConfigurableExtensionFactory[];
     private selectedDataRepoExtension: ConfigurableExtensionFactory;
     private selectedDataRepoConfig: Settings;
 
     //support repository for history and validation
-    private supportRepoId: string;
+    supportRepoId: string;
     private supportRepoExtensions: ConfigurableExtensionFactory[];
     private selectedSupportRepoExtension: ConfigurableExtensionFactory;
     private selectedSupportRepoConfig: Settings;
@@ -138,7 +138,7 @@ export class CreateProjectComponent {
      * OPTIONAL PROJECT SETTINGS
      */
 
-    private extPointPanelOpen: boolean = false;
+    extPointPanelOpen: boolean = false;
 
     //URI GENERATOR PLUGIN
     private uriGenUseDefaultSetting: boolean = true;
@@ -170,7 +170,7 @@ export class CreateProjectComponent {
 
     constructor(private projectService: ProjectServices, private pluginService: PluginsServices, private extensionService: ExtensionsServices,
         private inOutService: InputOutputServices, private prefService: PreferencesSettingsServices,
-        private router: Router, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) {
+        private router: Router, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {
     }
 
     ngOnInit() {
@@ -239,7 +239,7 @@ export class CreateProjectComponent {
      * If the user is creation a project (not accessing an existing one),
      * the data and history-validation repositories IDs are determined from project's name
      */
-    private onProjectNameChange() {
+    onProjectNameChange() {
         if (this.isSelectedRepoAccessCreateMode() && this.projectName != null) {
             this.dataRepoId = this.projectName.trim().replace(new RegExp(" ", 'g'), "_") + "_core";
             this.supportRepoId = this.projectName.trim().replace(new RegExp(" ", 'g'), "_") + "_support";
@@ -250,7 +250,7 @@ export class CreateProjectComponent {
      * =================== PRELOAD HANDLERS ==========================
      * ============================================================= */
 
-    private onPreloadChange() {
+    onPreloadChange() {
         //reset preload info
         this.baseUriForced = false;
         this.baseUriLocked = false;
@@ -360,7 +360,7 @@ export class CreateProjectComponent {
                         }
                     );
                 } else {
-                    this.basicModals.alert("Preload from Dataset Catalog", "The selected dataset doesn't have a data dump neither an ontology IRI, so cannot be used to preload data.", "warning");
+                    this.basicModals.alert("Preload from Dataset Catalog", "The selected dataset doesn't have a data dump neither an ontology IRI, so cannot be used to preload data.", ModalType.warning);
                 }
             },
             () => { }
@@ -373,7 +373,7 @@ export class CreateProjectComponent {
             summary.warnings.forEach(w => {
                 message += w.message + "\n";
             })
-            this.basicModals.alert("Preload data", message, "warning");
+            this.basicModals.alert("Preload data", message, ModalType.warning);
         }
         this.preloadedData = {
             summary: summary,
@@ -402,7 +402,7 @@ export class CreateProjectComponent {
      * =================== MODELS HANDLERS ==========================
      * ============================================================= */
 
-    private onOntoModelChanged() {
+    onOntoModelChanged() {
         if (this.ontoModelType.getURI() == OntoLex.uri && !this.lexicalModelForced) {
             this.forceLexicalModel(OntoLex.uri);
         } else if (this.isEdoalProject() && !this.lexicalModelForced) {
@@ -426,14 +426,14 @@ export class CreateProjectComponent {
         });
     }
 
-    private isEdoalProject(): boolean {
+    isEdoalProject(): boolean {
         return this.ontoModelType.getURI() == EDOAL.uri;
     }
 
     /**
      * Useful in the view to "lock" the selection of lexicalization to OntoLex in case the ontoModel is OntoLex
      */
-    private isOntoModelOntolex() {
+    isOntoModelOntolex() {
         return this.ontoModelType.getURI() == OntoLex.uri;
     }
 
@@ -495,7 +495,7 @@ export class CreateProjectComponent {
         );
     }
 
-    private onRepoAccessChange() {
+    onRepoAccessChange() {
         if (this.selectedRepositoryAccess == RepositoryAccessType.CreateRemote) {
             this.onProjectNameChange()
         }
@@ -504,7 +504,7 @@ export class CreateProjectComponent {
     /**
      * Tells if the selected RepositoryAccess is remote.
      */
-    private isSelectedRepoAccessRemote(): boolean {
+    isSelectedRepoAccessRemote(): boolean {
         return (this.selectedRepositoryAccess == RepositoryAccessType.CreateRemote ||
             this.selectedRepositoryAccess == RepositoryAccessType.AccessExistingRemote);
     }
@@ -512,7 +512,7 @@ export class CreateProjectComponent {
     /**
      * Tells if the selected RepositoryAccess is in create mode.
      */
-    private isSelectedRepoAccessCreateMode(): boolean {
+    isSelectedRepoAccessCreateMode(): boolean {
         return (this.selectedRepositoryAccess == RepositoryAccessType.CreateLocal ||
             this.selectedRepositoryAccess == RepositoryAccessType.CreateRemote);
     }
@@ -528,10 +528,10 @@ export class CreateProjectComponent {
         );
     }
 
-    private changeRemoteRepository(repoType: "data" | "support") {
+    changeRemoteRepository(repoType: "data" | "support") {
         if (this.selectedRemoteRepoConfig == null) {
             this.basicModals.alert("Missing configuration", "You need to select a configuration for the selected remote Repository Access. " +
-                "Please, select an existing one from the related combobox or create a new one.", "warning");
+                "Please, select an existing one from the related combobox or create a new one.", ModalType.warning);
             return;
         }
 
@@ -622,12 +622,9 @@ export class CreateProjectComponent {
      */
 
     private selectMetadataPattern(metadataAssociation: MetadataAssociationStruct) {
-        var modalData = new MetadataFactoryPatternSelectionModalData("Select a pattern");
-        const builder = new BSModalContextBuilder<MetadataFactoryPatternSelectionModalData>(
-            modalData, undefined, MetadataFactoryPatternSelectionModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(MetadataFactoryPatternSelectionModal, overlayConfig).result.then(
+        const modalRef: NgbModalRef = this.modalService.open(MetadataFactoryPatternSelectionModal, new ModalOptions());
+        modalRef.componentInstance.title = "Select a pattern";
+        return modalRef.result.then(
             (pattern: PatternStruct) => {
                 metadataAssociation.pattern = pattern;
             },
@@ -665,30 +662,30 @@ export class CreateProjectComponent {
     //================ OPTIONAL SETTINGS - END =====================
 
 
-    private create() {
+    create() {
 
         //check project name
         if (!this.projectName || this.projectName.trim() == "") {
-            this.basicModals.alert("Create project", "Project name is missing or not valid", "warning");
+            this.basicModals.alert("Create project", "Project name is missing or not valid", ModalType.warning);
             return;
         }
 
         //check preloading data
         if (this.selectedPreloadOpt != this.preloadOptNone && this.preloadedData == null) {
-            this.basicModals.alert("Create project", "No data preloaded. Please, load data or select '" + this.preloadOptNone + "' if you don't want to preload any.", "warning");
+            this.basicModals.alert("Create project", "No data preloaded. Please, load data or select '" + this.preloadOptNone + "' if you don't want to preload any.", ModalType.warning);
             return
         }
 
         //check baseURI
         if (!this.baseUri || this.baseUri.trim() == "" || !ResourceUtils.testIRI(this.baseUri)) {
-            this.basicModals.alert("Create project", "BaseURI is missing or not valid", "warning");
+            this.basicModals.alert("Create project", "BaseURI is missing or not valid", ModalType.warning);
             return;
         }
 
         //check EDOAL projects
         if (this.isEdoalProject()) {
             if (this.leftProject == null || this.rightProject == null) {
-                this.basicModals.alert("Create project", "Left or right dataset missing", "warning");
+                this.basicModals.alert("Create project", "Left or right dataset missing", ModalType.warning);
                 return;
             }
         }
@@ -702,7 +699,7 @@ export class CreateProjectComponent {
             //check if configuration is set
             if (this.selectedRemoteRepoConfig == null) {
                 this.basicModals.alert("Missing configuration", "You need to select a configuration for the selected remote Repository Access. " +
-                "Please, select an existing one from the related combobox or create a new one.", "warning");
+                "Please, select an existing one from the related combobox or create a new one.", ModalType.warning);
                 return;
             }
             repositoryAccess.setConfiguration(this.selectedRemoteRepoConfig);
@@ -718,7 +715,7 @@ export class CreateProjectComponent {
             if (this.selectedDataRepoConfig.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
                 this.basicModals.alert("Create project", "Data Repository (" + this.selectedDataRepoConfig.shortName
-                    + ") requires to be configured", "warning");
+                    + ") requires to be configured", ModalType.warning);
                 return;
             }
 
@@ -742,7 +739,7 @@ export class CreateProjectComponent {
             if (this.selectedSupportRepoConfig.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
                 this.basicModals.alert("Create project", "History/Validation Repository (" + this.selectedSupportRepoConfig.shortName
-                    + ") requires to be configured", "warning");
+                    + ") requires to be configured", ModalType.warning);
                 return;
             }
 
@@ -780,7 +777,7 @@ export class CreateProjectComponent {
             if (this.selectedUriGenPluginConf.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
                 this.basicModals.alert("Create project", "UriGenerator Plugin (" + this.selectedUriGenPluginConf.shortName
-                    + ") requires configuration", "warning");
+                    + ") requires configuration", ModalType.warning);
                 return;
             }
             uriGeneratorSpecification = {
@@ -800,7 +797,7 @@ export class CreateProjectComponent {
             if (this.selectedRendEngPluginConf.requireConfiguration()) {
                 //...and in case if every required configuration parameters are not null
                 this.basicModals.alert("Create project", "Rendering Engine Plugin (" + this.selectedRendEngPluginConf.shortName
-                    + ") requires configuration", "warning");
+                    + ") requires configuration", ModalType.warning);
                 return;
             }
 
@@ -835,7 +832,7 @@ export class CreateProjectComponent {
         if (this.useResourceMetadata) { //resource metadata enabled => check if data is ok
             if (this.metadataAssociations.some(a => a.role == null || a.pattern == null)) {
                 this.basicModals.alert("Create project", "An incomplete association has been detected in the configuration of Resource Metadata. " + 
-                    "Please, fix it or disabled the Resource Metadata", "warning");
+                    "Please, fix it or disabled the Resource Metadata", ModalType.warning);
                 return;
             }
             metadataAssociationsPar = this.metadataAssociations.map(ma => {
@@ -850,7 +847,7 @@ export class CreateProjectComponent {
         if (this.enableSHACL && this.isSelectedRepoAccessCreateMode()) {
             shaclSettingsPar = new Map();
             if (this.shaclSettings.requireConfiguration()) {
-                this.basicModals.alert("Create project", "You have enabled SHACL validation, but it requires configuration", "warning");
+                this.basicModals.alert("Create project", "You have enabled SHACL validation, but it requires configuration", ModalType.warning);
                 return;
             }
             this.shaclSettings.properties.forEach(p => {

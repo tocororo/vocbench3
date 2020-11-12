@@ -1,8 +1,8 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body vbox">
-    <table class="table table-borderless table-condensed">
+    <table class="table table-borderless table-sm">
         <colgroup>
             <col style="width: 1%;">
             <col>
@@ -14,7 +14,7 @@
                     <label>Name</label>
                 </td>
                 <td>
-                    <input class="form-control input-sm" [(ngModel)]="name" [disabled]="context.ref || context.readOnly">
+                    <input class="form-control form-control-sm" [(ngModel)]="name" [disabled]="ref || readOnly">
                 </td>
                 <td title="Mandatory field">*</td>
             </tr>
@@ -23,8 +23,8 @@
                     <label>Description</label>
                 </td>
                 <td>
-                    <textarea class="form-control input-sm" style="resize: vertical; max-height: 300px;" [(ngModel)]="description" 
-                        [disabled]="context.readOnly">
+                    <textarea class="form-control form-control-sm" style="resize: vertical; max-height: 300px;" [(ngModel)]="description" 
+                        [disabled]="readOnly">
                     </textarea>
                 </td>
                 <td></td>
@@ -34,10 +34,10 @@
 
     <div class="vbox" style="margin-top: 6px;">
         <ul class="nav nav-tabs" (click)="$event.preventDefault()">
-            <li *ngFor="let e of pearlEditors" [ngClass]="{ active : activePearlEditor == e }">
-                <a (click)="activePearlEditor = e">
+            <li *ngFor="let e of pearlEditors" class="nav-item" [ngClass]="{ active : activePearlEditor == e }">
+                <a class="nav-link" (click)="activePearlEditor = e">
                     {{e.type}}
-                    <span *ngIf="e.info" class="glyphicon glyphicon-info-sign" [title]="e.info"></span>
+                    <span *ngIf="e.info" class="fas fa-info-circle" [title]="e.info"></span>
                 </a>
             </li>
         </ul>
@@ -49,9 +49,9 @@
                         so developing a destruction pattern is only necessary in case there are other resources linked by this resource 
                         (and only by it) that should thus be deleted in turn (this happens, e.g., in the case of reified metadata)
                     </div>
-                    <pearl-editor [(ngModel)]="e.code" (ngModelChange)="onPearlChanged(e)" [disabled]="context.readOnly"></pearl-editor>
+                    <pearl-editor [(ngModel)]="e.code" (ngModelChange)="onPearlChanged(e)" [disabled]="readOnly"></pearl-editor>
                     <div *ngIf="!e.validation.valid" style="position: absolute; top: 12px; right: 30px; z-index: 10;" [title]="e.validation.details">
-                        <span class="glyphicon glyphicon-alert" style="color: red;"></span>
+                        <span class="fas fa-exclamation-triangle" style="color: red;"></span>
                     </div>
                 </div>
             </ng-container>
@@ -61,6 +61,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid() || context.readOnly">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid() || readOnly">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

@@ -10,9 +10,9 @@ import { VBProperties } from "../../utils/VBProperties";
 })
 export class LanguageRenderingComponent {
 
-    private sortOrder: SortOrder = SortOrder.ISO_CODE_ASCENDING;
-    private renderingLanguages: LanguageItem[] = [];
-    private activeLangs: number = 0;
+    sortOrder: SortOrder = SortOrder.ISO_CODE_ASCENDING;
+    renderingLanguages: LanguageItem[] = [];
+    activeLangs: number = 0;
 
     constructor(private properties: VBProperties) { }
 
@@ -55,7 +55,7 @@ export class LanguageRenderingComponent {
 
     //languages handlers
 
-    private changeAllLangStatus(checked: boolean) {
+    changeAllLangStatus(checked: boolean) {
         if (checked) {
             //if it's activating all the languages, position the new activated langs after the already active
             let lastPosition: number = this.countActiveLangs();
@@ -92,7 +92,7 @@ export class LanguageRenderingComponent {
         this.properties.setLanguagesPreference(preferenceLangs);
     }
     
-    private changePositionOrder() {
+    changePositionOrder() {
         if (this.sortOrder == SortOrder.POSITION_ASCENDING) {
             this.sortOrder = SortOrder.POSITION_DESCENDING;
             this.renderingLanguages.sort((l1: LanguageItem, l2: LanguageItem) => {
@@ -125,7 +125,7 @@ export class LanguageRenderingComponent {
             });
         }
     }
-    private changeIsocodeOrder() {
+    changeIsocodeOrder() {
         if (this.sortOrder == SortOrder.ISO_CODE_ASCENDING) {
             this.sortOrder = SortOrder.ISO_CODE_DESCENDING;
             this.renderingLanguages.sort((l1: LanguageItem, l2: LanguageItem) => {
@@ -138,7 +138,7 @@ export class LanguageRenderingComponent {
             });
         }
     }
-    private changeLanguageOrder() {
+    changeLanguageOrder() {
         if (this.sortOrder == SortOrder.LANGUAGE_ASCENDING) {
             this.sortOrder = SortOrder.LANGUAGE_DESCENDING;
             this.renderingLanguages.sort((l1: LanguageItem, l2: LanguageItem) => {
@@ -186,7 +186,7 @@ export class LanguageRenderingComponent {
 
     //Utils 
 
-    private getActiveLanguageItems(): LanguageItem[] {
+    getActiveLanguageItems(): LanguageItem[] {
         var activeLangs: LanguageItem[] = [];
         for (var i = 0; i < this.renderingLanguages.length; i++) {
             if (this.renderingLanguages[i].active) {

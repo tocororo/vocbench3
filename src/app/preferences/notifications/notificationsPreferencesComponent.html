@@ -1,8 +1,8 @@
-<div *ngIf="!hideModeChange" class="panel panel-default" style="margin-bottom: 4px;">
-    <div class="panel-body">
+<div *ngIf="!hideModeChange" class="card card-default" style="margin-bottom: 4px;">
+    <div class="card-body">
         <div class="hbox"  style="align-items: center;">
             <label>Mode:</label>
-            <select class="form-control input-sm" style="margin-left: 6px;" [(ngModel)]="activeNotificationOpt" (ngModelChange)="changeNotificationStatus()">
+            <select class="form-control form-control-sm" style="margin-left: 6px;" [(ngModel)]="activeNotificationOpt" (ngModelChange)="changeNotificationStatus()">
                 <option *ngFor="let opt of notificationOptions" [ngValue]="opt">{{opt.show}}</option>
             </select>
         </div>
@@ -12,25 +12,25 @@
     </div>
 </div>
 
-<div class="panel panel-default vbox" style="margin-bottom: 4px; flex: initial;">
-    <div class="panel-heading">
+<div class="card card-default vbox" style="margin-bottom: 4px; flex: initial;">
+    <div class="card-header">
         <label style="flex: 1;">
             Type-event notifications
-            <span class="glyphicon glyphicon-info-sign" 
+            <span class="fas fa-info-circle" 
                 title="For each type of resource you can select the events for which you want to receive notifications">
             </span>
         </label>
         <div class="btn-group btn-group-xs">
-            <button class="btn btn-default" (click)="checkAllActions(true)" title="Enable all notifications">
-                <span class="glyphicon glyphicon-check"></span>
+            <button class="btn btn-light" (click)="checkAllActions(true)" title="Enable all notifications">
+                <span class="far fa-check-square"></span>
             </button>
-            <button class="btn btn-default" (click)="checkAllActions(false)" title="Disable all notifications">
-                <span class="glyphicon glyphicon-unchecked"></span>
+            <button class="btn btn-light" (click)="checkAllActions(false)" title="Disable all notifications">
+                <span class="far fa-square"></span>
             </button>
         </div>
     </div>
-    <div class="panel-body scrollableContainer">
-        <table class="table table-condensed" style="margin-top: 4px;">
+    <div class="card-body scrollableContainer">
+        <table class="table table-sm" style="margin-top: 4px;">
             <thead>
                 <tr>
                     <th>Resource type</th>
@@ -46,11 +46,11 @@
                             <label style="flex: 1;">{{rs.show}}</label>
                             <button #btnCheck class="btn btn-transparent btn-xs" (click)="checkAllActionsForRole(rs.role, true)"
                                 (mouseup)="btnCheck.blur()" title="Enable all actions for this type">
-                                <span class="glyphicon glyphicon-check"></span>
+                                <span class="far fa-check-square"></span>
                             </button>
                             <button #btnUncheck class="btn btn-transparent btn-xs" (click)="checkAllActionsForRole(rs.role, false)" 
                                 (mouseup)="btnUncheck.blur()" title="Disable all actions for this type">
-                                <span class="glyphicon glyphicon-unchecked"></span>
+                                <span class="far fa-square"></span>
                             </button>
                         </div>
                     </td>
@@ -63,21 +63,21 @@
     </div>
 </div>
 
-<div class="panel panel-default vbox" style="flex: initial;">
-    <div class="panel-heading">
+<div class="card card-default vbox" style="flex: initial;">
+    <div class="card-header">
         <label>Watching resources</label>
     </div>
-    <div class="panel-body scrollableContainer">
+    <div class="card-body scrollableContainer">
         <div *ngIf="watchingResources.length == 0" class="alert alert-warning">
             You did not enabled notifications on any resources.
-            You can start watching resources by clicking on the <span class="glyphicon glyphicon-bell"></span> button
+            You can start watching resources by clicking on the <span class="fas fa-bell"></span> button
             placed on the toolbar of a ResourceView.
         </div>
 
         <div *ngFor="let r of watchingResources" class="listItem">
             <rdf-resource [resource]="r" style="flex: 1"></rdf-resource>
-            <button class="btn btn-xs btn-default" (click)="stopWatching(r)" title="Stop watching resource">
-                <span class="glyphicon glyphicon-minus"></span>
+            <button class="btn btn-xs btn-light" (click)="stopWatching(r)" title="Stop watching resource">
+                <span class="fas fa-minus"></span>
             </button>
         </div>
     </div>

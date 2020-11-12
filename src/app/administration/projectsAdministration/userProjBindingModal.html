@@ -1,15 +1,15 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body vbox">
 
     <div class="hbox">
 
-        <div class="panel panel-default vbox">
-            <div class="panel-heading">
+        <div class="card card-default vbox">
+            <div class="card-header">
                 <label>Users</label>
             </div>
-            <div class="panel-body vbox" style="padding: 0px;">
+            <div class="card-body vbox" style="padding: 0px;">
                 <div class="scrollableContainer">
                     <div *ngFor="let u of userList" class="listItem" [ngClass]="{active: u == selectedUser, disabled: isUserAlreadyBound(u)}"
                         (click)="selectUser(u)">
@@ -19,11 +19,11 @@
             </div>
         </div>
 
-        <div class="panel panel-default vbox" style="margin-left: 5px;">
-            <div class="panel-heading">
+        <div class="card card-default vbox" style="margin-left: 5px;">
+            <div class="card-header">
                 <label>Roles</label>
             </div>
-            <div class="panel-body vbox" style="padding: 0px;">
+            <div class="card-body vbox" style="padding: 0px;">
                 <div class="scrollableContainer">
                     <div *ngFor="let r of roleList" class="listItem" [ngClass]="{active: isRoleSelected(r)}" (click)="selectRole(r)">
                         {{r.getName()}}
@@ -37,6 +37,6 @@
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedUser || selectedRoles.length == 0">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedUser || selectedRoles.length == 0">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

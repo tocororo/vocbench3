@@ -11,10 +11,10 @@ import { VBProperties } from "../utils/VBProperties";
 })
 export class ResourceViewPreferencesComponent {
 
-    private resViewMode: ResourceViewMode;
+    resViewMode: ResourceViewMode;
     private resViewTabSync: boolean;
 
-    private typeSelectionAvailable: boolean;
+    typeSelectionAvailable: boolean;
     private rvConceptTypes: ResViewConceptTypeOpt[] = [
         { 
             type: ResourceViewType.resourceView, 
@@ -29,9 +29,9 @@ export class ResourceViewPreferencesComponent {
     ]
     private selectedRvConceptType: ResViewConceptTypeOpt;
 
-    private displayImg: boolean;
-    private showDeprecated: boolean;
-    private showDatatypeBadge: boolean;
+    displayImg: boolean;
+    showDeprecated: boolean;
+    showDatatypeBadge: boolean;
 
     constructor(private vbProp: VBProperties, private eventHandler: VBEventHandler) { }
 
@@ -48,29 +48,29 @@ export class ResourceViewPreferencesComponent {
         this.typeSelectionAvailable = VBContext.getWorkingProject().getModelType() == SKOS.uri || VBContext.getWorkingProject().getModelType() == OntoLex.uri;
     }
 
-    private onResViewModeChange() {
+    onResViewModeChange() {
         this.vbProp.setResourceViewMode(this.resViewMode);
         this.eventHandler.resViewModeChangedEvent.emit({ mode: this.resViewMode, fromVbPref: true });
     }
 
-    private onResViewConceptTypeChange() {
+    onResViewConceptTypeChange() {
         this.vbProp.setResourceViewConceptType(this.selectedRvConceptType.type);
     }
 
-    private onTabSyncChange() {
+    onTabSyncChange() {
         this.vbProp.setResourceViewTabSync(this.resViewTabSync);
         this.eventHandler.resViewTabSyncChangedEvent.emit(this.resViewTabSync);
     }
 
-    private onDisplayImgChange() {
+    onDisplayImgChange() {
         this.vbProp.setResourceViewDisplayImg(this.displayImg);
     }
 
-    private onShowDeprecatedChange() {
+    onShowDeprecatedChange() {
         this.vbProp.setShowDeprecatedInResView(this.showDeprecated);
     }
 
-    private onShowDatatypeBadge() {
+    onShowDatatypeBadge() {
         this.vbProp.setShowDatatypeBadge(this.showDatatypeBadge);
     }
 

@@ -1,115 +1,99 @@
 <div class="container-fluid">
-    
-    <div class="dropdown pull-left">
-        <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" (click)="onAboutMenuOpen()">
+
+    <div class="dropdown float-left" ngbDropdown>
+        <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" (click)="onAboutMenuOpen()"
+            ngbDropdownToggle>
             About VocBench
-            <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu">
-            <li>
-                <a href="http://vocbench.uniroma2.it/" target="_blank">
-                    <span class="glyphicon glyphicon-globe" style="margin-right: 5px"></span>VocBench website
-                </a>
-            </li>
-            <li>
-                <a href="http://vocbench.uniroma2.it/aboutus/" target="_blank">
-                    <span class="glyphicon glyphicon-comment" style="margin-right: 5px"></span>Contact us
-                </a>
-            </li>
-            <li>
-                <a href="http://vocbench.uniroma2.it/support/" target="_blank">
-                    <span class="glyphicon glyphicon-question-sign" style="margin-right: 5px"></span>Support
-                </a>
-            </li>
-            <li *ngIf="privacyStatementAvailable">
-                <a (click)="downloadPrivacyStatement()">
-                    <span class="glyphicon glyphicon-download-alt" style="margin-right: 5px"></span>Privacy statement
-                </a>
-            </li>
-        </ul>
-    </div>
-    
-    <!--Configuration of project data, not available when there is no project accessed-->
-    <div *ngIf="isUserLogged() && isProjectAccessed()" class="pull-right">
-        <div class="dropdown pull-right">
-            <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" (click)="onGlobalDataManagementMenuOpen()">
-                Global Data Management
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li [ngClass]="{ disabled : !loadDataAuthorized }">
-                    <a [routerLink]="['/Config/LoadData']">
-                        <span class="glyphicon glyphicon-open" style="margin-right: 5px"></span>Load data
-                    </a>
-                </li>
-                <li [ngClass]="{ disabled : !exportDataAuthorized }">
-                    <a [routerLink]="['/Config/ExportData']">
-                        <span class="glyphicon glyphicon-save" style="margin-right: 5px"></span>Export data
-                    </a>
-                </li>
-                <li [ngClass]="{ disabled : !clearDataAuthorized }">
-                    <a (click)="clearData()">
-                        <span class="glyphicon glyphicon-floppy-remove" style="margin-right: 5px"></span>Clear data
-                    </a>
-                </li>
-                <li role="separator" class="divider"></li>
-                <li [ngClass]="{ disabled : !versioningAuthorized }">
-                    <a [routerLink]="['/Config/Versioning']">
-                        <span class="glyphicon glyphicon-time" style="margin-right: 5px"></span>Versioning
-                    </a>
-                </li>
-                <li role="separator" class="divider"></li>
-                <li>
-                    <a [routerLink]="['/Config/Refactor']">
-                        <span class="glyphicon glyphicon-retweet" style="margin-right: 5px"></span>Refactor
-                    </a>
-                </li>
-                <ng-container *ngIf="shaclEnabled">
-                    <li role="separator" class="divider"></li>
-                    <li [ngClass]="{ disabled : !loadShapesAuthorized }">
-                        <a (click)="loadShacleShapes()">
-                            <span class="glyphicon glyphicon-open" style="margin-right: 5px"></span>Load shapes
-                        </a>
-                    </li>
-                    <li [ngClass]="{ disabled : !exportShapesAuthorized }">
-                        <a (click)="exportShacleShapes()">
-                            <span class="glyphicon glyphicon-save" style="margin-right: 5px"></span>Export shapes
-                        </a>
-                    </li>
-                    <li [ngClass]="{ disabled : !clearShapesAuthorized }">
-                        <a (click)="clearShacleShapes()">
-                            <span class="glyphicon glyphicon-floppy-remove" style="margin-right: 5px"></span>Clear shapes
-                        </a>
-                    </li>
-                </ng-container>
-            </ul>
+        <div class="dropdown-menu" ngbDropdownMenu>
+            <a class="dropdown-item" href="http://vocbench.uniroma2.it/" target="_blank">
+                <span class="fas fa-globe-europe" style="margin-right: 5px"></span>VocBench website
+            </a>
+            <a class="dropdown-item" href="http://vocbench.uniroma2.it/aboutus/" target="_blank">
+                <span class="fas fa-comment-alt" style="margin-right: 5px"></span>Contact us
+            </a>
+            <a class="dropdown-item" href="http://vocbench.uniroma2.it/support/" target="_blank">
+                <span class="fas fa-question-circle" style="margin-right: 5px"></span>Support
+            </a>
+            <a *ngIf="privacyStatementAvailable" class="dropdown-item" (click)="downloadPrivacyStatement()">
+                <span class="fas fa-download" style="margin-right: 5px"></span>Privacy statement
+            </a>
         </div>
     </div>
 
-    <div *ngIf="isUserLogged()" class="pull-right hbox" style="margin-right: 12px; align-items: center;">
+    <div class="hbox float-right">
 
-        <div class="pull-right" style="display:flex; align-items: center">
-            <label style="margin-right: 2px;">Current project:</label>
-            <div class="btn-group btn-group-xs" role="group">
-                <a href="#" class="btn btn-default disabled" style="pointer-events: none; opacity: initial" role="button">
-                    <ng-template [ngIf]="isProjectAccessed()">
-                        {{currentProject.getName()}}
-                    </ng-template>
-                    <ng-template [ngIf]="!isProjectAccessed()">
-                        ------
-                    </ng-template>
-                </a>
-                <button class="btn btn-default" style="padding-left: 2px;" (click)="changeProject()" title="Change project">
-                    <span class="glyphicon glyphicon-list-alt" style="line-height: 1"></span>
-                </button>
+        <div *ngIf="isUserLogged()" class="hbox ml-2" style="align-items: center;">
+            <div style="display:flex; align-items: center">
+                <label style="margin-right: 2px;">Current project:</label>
+                <div class="btn-group btn-group-xs" role="group">
+                    <a href="#" class="btn btn-light disabled" style="pointer-events: none; opacity: initial" role="button">
+                        <ng-template [ngIf]="isProjectAccessed()">
+                            {{currentProject.getName()}}
+                        </ng-template>
+                        <ng-template [ngIf]="!isProjectAccessed()">
+                            ------
+                        </ng-template>
+                    </a>
+                    <button class="btn btn-light" style="padding-left: 2px;" (click)="changeProject()"
+                        title="Change project">
+                        <span class="far fa-list-alt" style="line-height: 1"></span>
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="getCtxVersion()" class="ml-2" style="display:flex; align-items: center">
+                <label style="margin-right: 2px;">ver:</label>
+                <span>{{getCtxVersion().versionId}}</span>
             </div>
         </div>
 
-        <div *ngIf="getCtxVersion()" class="pull-right" style="margin-left: 4px; display:flex; align-items: center">
-            <label style="margin-right: 2px;">ver:</label>
-            <span>{{getCtxVersion().versionId}}</span>
+        <!--Configuration of project data, not available when there is no project accessed-->
+        <div *ngIf="isUserLogged() && isProjectAccessed()" class="ml-4">
+            <div class="dropdown float-right" ngbDropdown>
+                <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" (click)="onGlobalDataManagementMenuOpen()" ngbDropdownToggle>
+                    Global Data Management
+                    <span class="fas fa-caret-down ml-1"></span>
+                </button>
+                <div class="dropdown-menu" ngbDropdownMenu>
+                    <a [routerLink]="['/Config/LoadData']" class="dropdown-item"
+                        [ngClass]="{ disabled : !loadDataAuthorized }">
+                        <span class="fas fa-upload" style="margin-right: 5px"></span>Load data
+                    </a>
+                    <a [routerLink]="['/Config/ExportData']" class="dropdown-item"
+                        [ngClass]="{ disabled : !exportDataAuthorized }">
+                        <span class="fas fa-download" style="margin-right: 5px"></span>Export data
+                    </a>
+                    <a (click)="clearData()" class="dropdown-item" [ngClass]="{ disabled : !clearDataAuthorized }">
+                        <span class="fas fa-eraser" style="margin-right: 5px"></span>Clear data
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a [routerLink]="['/Config/Versioning']" class="dropdown-item"
+                        [ngClass]="{ disabled : !versioningAuthorized }">
+                        <span class="far fa-clock" style="margin-right: 5px"></span>Versioning
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a [routerLink]="['/Config/Refactor']" class="dropdown-item">
+                        <span class="fas fa-retweet" style="margin-right: 5px"></span>Refactor
+                    </a>
+                    <ng-container *ngIf="shaclEnabled">
+                        <div class="dropdown-divider"></div>
+                        <a (click)="loadShacleShapes()" class="dropdown-item"
+                            [ngClass]="{ disabled : !loadShapesAuthorized }">
+                            <span class="fas fa-upload" style="margin-right: 5px"></span>Load shapes
+                        </a>
+                        <a (click)="exportShacleShapes()" class="dropdown-item"
+                            [ngClass]="{ disabled : !exportShapesAuthorized }">
+                            <span class="fas fa-download" style="margin-right: 5px"></span>Export shapes
+                        </a>
+                        <a (click)="clearShacleShapes()" class="dropdown-item"
+                            [ngClass]="{ disabled : !clearShapesAuthorized }">
+                            <span class="fas fa-eraser" style="margin-right: 5px"></span>Clear shapes
+                        </a>
+                    </ng-container>
+                </div>
+            </div>
         </div>
 
     </div>
-    
+
 </div>

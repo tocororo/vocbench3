@@ -1,4 +1,5 @@
 import { Component, QueryList, ViewChild, ViewChildren } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ConfigurationComponents } from "../../../models/Configuration";
 import { DownloadDescription, TransitiveImportMethodAllowance } from "../../../models/Metadata";
 import { ConfigurableExtensionFactory, ExtensionConfigurationStatus, ExtensionFactory, ExtensionPointID, PluginSpecification, Settings, SettingsProp, TransformationStep } from "../../../models/Plugins";
@@ -24,29 +25,29 @@ export class LoadDataComponent {
 
     //ExtensionConfiguratorComponent children of this Component (useful to load single configurations of a chain)
     @ViewChildren(ExtensionConfiguratorComponent) viewChildrenExtConfig: QueryList<ExtensionConfiguratorComponent>;
-    @ViewChild("loaderConfigurator") loaderConfigurator: ExtensionConfiguratorComponent;
+    @ViewChild("loaderConfigurator", { static: false }) loaderConfigurator: ExtensionConfiguratorComponent;
 
-    private baseURI: string;
-    private useProjectBaseURI: boolean = true;
+    baseURI: string;
+    useProjectBaseURI: boolean = true;
 
     private fileToUpload: File;
 
-    private importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
+    importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
         { allowance: TransitiveImportMethodAllowance.nowhere, show: "Do not resolve" },
         { allowance: TransitiveImportMethodAllowance.web, show: "From Web" },
         { allowance: TransitiveImportMethodAllowance.webFallbackToMirror, show: "From Web with fallback to Ontology Mirror" },
         { allowance: TransitiveImportMethodAllowance.mirror, show: "From Ontology Mirror" },
         { allowance: TransitiveImportMethodAllowance.mirrorFallbackToWeb, show: "From Ontology Mirror with fallback to Web" }
     ];
-    private selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[1].allowance;
+    selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[1].allowance;
 
     private validateImplicitly: boolean = false;
 
 
     //rdf transformator filter management
     private transformers: ConfigurableExtensionFactory[];
-    private transformersChain: TransformerChainElement[] = [];
-    private selectedTransformerChainElement: TransformerChainElement;
+    transformersChain: TransformerChainElement[] = [];
+    selectedTransformerChainElement: TransformerChainElement;
 
     //loaders
     private repoTargetLoaders: ConfigurableExtensionFactory[];
@@ -71,13 +72,13 @@ export class LoadDataComponent {
     private dataDumpUrl: string;
 
 
-    private loaderOptions: { label: string, target: LoaderTarget }[] = [
+    loaderOptions: { label: string, target: LoaderTarget }[] = [
         { label: "File", target: null },
         { label: "Dataset Catalog", target: LoaderTarget.datasetCatalog },
         { label: "Triple store", target: LoaderTarget.repository },
         { label: "Custom source", target: LoaderTarget.stream }
     ];
-    private selectedLoader = this.loaderOptions[0];
+    selectedLoader = this.loaderOptions[0];
 
     constructor(private inOutService: InputOutputServices, private extensionService: ExtensionsServices,
         private basicModals: BasicModalServices, private sharedModals: SharedModalServices) { }
@@ -111,13 +112,13 @@ export class LoadDataComponent {
         );
     }
 
-    private onBaseUriChecboxChange() {
+    onBaseUriChecboxChange() {
         if (this.useProjectBaseURI) {
             this.baseURI = VBContext.getWorkingProject().getBaseURI();
         }
     }
 
-    private fileChangeEvent(file: File) {
+    fileChangeEvent(file: File) {
         this.fileToUpload = file;
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.inOutService.getParserFormatForFileName(file.name).subscribe(
@@ -174,7 +175,7 @@ export class LoadDataComponent {
      * Lifter
      * =====================================*/
 
-    private onLifterExtensionUpdated(ext: ExtensionFactory) {
+    onLifterExtensionUpdated(ext: ExtensionFactory) {
         this.selectedLifterExtension = ext;
         this.inOutService.getSupportedFormats(this.selectedLifterExtension.id).subscribe(
             formats => {
@@ -203,16 +204,16 @@ export class LoadDataComponent {
      * Loader is available only when "Triple store" or "Custom source" are selected as "Load from", so when the target is
      * repository or stream.
      */
-    private showLoader(): boolean {
+    showLoader(): boolean {
         return this.selectedLoader.target == LoaderTarget.repository || this.selectedLoader.target == LoaderTarget.stream
     }
     
-    private onLoaderConfigStatusUpdated(statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
+    onLoaderConfigStatusUpdated(statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
         this.loaderStatus = statusEvent.status;
         this.loaderRelativeRef = statusEvent.relativeReference;
     }
 
-    private requireConfigurationLoader() {
+    requireConfigurationLoader() {
         if (this.selectedLoaderConfig != null) {
             return this.selectedLoaderConfig.requireConfiguration();
         }
@@ -224,46 +225,46 @@ export class LoadDataComponent {
      * =========== FILTER CHAIN =============
      * =====================================*/
 
-    private selectTransformerChainElement(filterChainEl: TransformerChainElement) {
+    selectTransformerChainElement(filterChainEl: TransformerChainElement) {
         if (this.selectedTransformerChainElement == filterChainEl) {
             this.selectedTransformerChainElement = null;
         } else {
             this.selectedTransformerChainElement = filterChainEl;
         }
     }
-    private isSelectedTransformerFirst(): boolean {
+    isSelectedTransformerFirst(): boolean {
         return (this.selectedTransformerChainElement == this.transformersChain[0]);
     }
-    private isSelectedTransformerLast(): boolean {
+    isSelectedTransformerLast(): boolean {
         return (this.selectedTransformerChainElement == this.transformersChain[this.transformersChain.length - 1]);
     }
 
-    private appendTransformer() {
+    appendTransformer() {
         this.transformersChain.push(new TransformerChainElement(this.transformers));
     }
-    private removeTransformer() {
+    removeTransformer() {
         this.transformersChain.splice(this.transformersChain.indexOf(this.selectedTransformerChainElement), 1);
         this.selectedTransformerChainElement = null;
     }
-    private moveTransformerDown() {
+    moveTransformerDown() {
         var prevIndex = this.transformersChain.indexOf(this.selectedTransformerChainElement);
         this.transformersChain.splice(prevIndex, 1); //remove from current position
         this.transformersChain.splice(prevIndex + 1, 0, this.selectedTransformerChainElement);
     }
-    private moveTransformerUp() {
+    moveTransformerUp() {
         var prevIndex = this.transformersChain.indexOf(this.selectedTransformerChainElement);
         this.transformersChain.splice(prevIndex, 1); //remove from current position
         this.transformersChain.splice(prevIndex - 1, 0, this.selectedTransformerChainElement);
     }
 
-    private onExtensionUpdated(filterChainEl: TransformerChainElement, ext: ConfigurableExtensionFactory) {
+    onExtensionUpdated(filterChainEl: TransformerChainElement, ext: ConfigurableExtensionFactory) {
         filterChainEl.selectedFactory = ext;
     }
-    private onConfigurationUpdated(filterChainEl: TransformerChainElement, config: Settings) {
+    onConfigurationUpdated(filterChainEl: TransformerChainElement, config: Settings) {
         filterChainEl.selectedConfiguration = config;
     }
 
-    private onConfigStatusUpdated(filterChainEl: TransformerChainElement, statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
+    onConfigStatusUpdated(filterChainEl: TransformerChainElement, statusEvent: { status: ExtensionConfigurationStatus, relativeReference?: string }) {
         filterChainEl.status = statusEvent.status;
         filterChainEl.relativeReference = statusEvent.relativeReference;
     }
@@ -271,7 +272,7 @@ export class LoadDataComponent {
     /**
      * Returns true if a plugin of the filter chain require edit of the configuration and it is not configured
      */
-    private requireConfiguration(filterChainEl: TransformerChainElement): boolean {
+    requireConfiguration(filterChainEl: TransformerChainElement): boolean {
         var conf: Settings = filterChainEl.selectedConfiguration;
         if (conf != null && conf.requireConfiguration()) { //!= null required because selectedConfiguration could be not yet initialized
             return true;
@@ -284,14 +285,14 @@ export class LoadDataComponent {
      * Save/Load chain
      * =====================================*/
 
-    private saveChain() {
+    saveChain() {
         //transformationPipeline
         let transformationPipeline: { extensionID: string, configRef: string }[] = [];
 
         for (var i = 0; i < this.transformersChain.length; i++) {
             if (this.transformersChain[i].status == ExtensionConfigurationStatus.unsaved) {
                 this.basicModals.alert("Unsaved configuration", "Transformer at position " + (i+1) + " is not saved. " +
-                    "In order to save a transformer chain all its transformers need to be saved.", "warning");
+                    "In order to save a transformer chain all its transformers need to be saved.", ModalType.warning);
                 return;
             }
 
@@ -308,7 +309,7 @@ export class LoadDataComponent {
         if (this.selectedLoader.target != null) {
             if (this.loaderStatus == ExtensionConfigurationStatus.unsaved) {
                 this.basicModals.alert("Unsaved configuration", "Loader configuration is not saved. " +
-                    "In order to save the importer configuration all its sub-configurations need to be saved.", "warning");
+                    "In order to save the importer configuration all its sub-configurations need to be saved.", ModalType.warning);
                 return;
             }
             loaderSpec = {
@@ -330,7 +331,7 @@ export class LoadDataComponent {
         );
     }
 
-    private loadChain() {
+    loadChain() {
         this.sharedModals.loadConfiguration("Load importer chain configuration", ConfigurationComponents.IMPORTER).then(
             (conf: LoadConfigurationModalReturnData) => {
                 this.transformersChain = []; //reset the chain
@@ -412,7 +413,7 @@ export class LoadDataComponent {
 
     //--------------------------------------
 
-    private isValidationEnabled(): boolean {
+    isValidationEnabled(): boolean {
         return VBContext.getWorkingProject().isValidationEnabled();
     }
 
@@ -420,7 +421,7 @@ export class LoadDataComponent {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.validation);
     }
 
-    private isDataValid(): boolean {
+    isDataValid(): boolean {
         if (this.fileToUpload == null) {
             return false;
         } else if (this.baseURI == null || this.baseURI.trim() == "") {
@@ -428,7 +429,7 @@ export class LoadDataComponent {
         }
     }
 
-    private load() {
+    load() {
         let inputFilePar: File;
         let formatPar: string;
         let loaderSpec: PluginSpecification;
@@ -437,14 +438,14 @@ export class LoadDataComponent {
         let validateImplicitlyPar: boolean = this.isValidationEnabled() ? this.validateImplicitly : null;
         
         if (this.baseURI == null || this.baseURI.trim() == "") {
-            this.basicModals.alert("Load Data", "BaseURI required", "warning");
+            this.basicModals.alert("Load Data", "BaseURI required", ModalType.warning);
             return;
         }
 
         //input file collected only if no loader target available (load from file)
         if (this.selectedLoader.target == null) {
             if (this.fileToUpload == null) {
-                this.basicModals.alert("Load Data", "A file is required", "warning");
+                this.basicModals.alert("Load Data", "A file is required", ModalType.warning);
                 return;
             }
             inputFilePar = this.fileToUpload;
@@ -458,7 +459,7 @@ export class LoadDataComponent {
          */
         if (this.selectedLoader.target == null || this.selectedLoader.target == LoaderTarget.stream || this.selectedLoader.target == LoaderTarget.datasetCatalog) {
             if (this.selectedInputFormat == null) {
-                this.basicModals.alert("Load Data", "Format required. The system has not been able to determine a format according the input.", "warning");
+                this.basicModals.alert("Load Data", "Format required. The system has not been able to determine a format according the input.", ModalType.warning);
                 return;
             }
             formatPar = this.selectedInputFormat.name;
@@ -468,7 +469,7 @@ export class LoadDataComponent {
             }
             if (this.selectedLifterConfig != null) {
                 if (this.selectedLifterConfig.requireConfiguration()) {
-                    this.basicModals.alert("Missing configuration", "The Lifter needs to be configured", "warning");
+                    this.basicModals.alert("Missing configuration", "The Lifter needs to be configured", ModalType.warning);
                     return;
                 }
                 rdfLifterSpec.configType = this.selectedLifterConfig.type;
@@ -488,7 +489,7 @@ export class LoadDataComponent {
             }
             if (this.selectedLoaderConfig != null) { //normally the loader is not configurable
                 if (this.selectedLoaderConfig.requireConfiguration()) {
-                    this.basicModals.alert("Missing configuration", "The Loader needs to be configured", "warning");
+                    this.basicModals.alert("Missing configuration", "The Loader needs to be configured", ModalType.warning);
                     return;
                 }
                 loaderSpec.configType = this.selectedLoaderConfig.type;

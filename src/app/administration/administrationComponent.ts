@@ -12,7 +12,7 @@ export class AdministrationComponent {
 
     constructor() { }
 
-    private isAdmin(): boolean {
+    isAdmin(): boolean {
         var user = VBContext.getLoggedUser();
         if (user != null) {
             return user.isAdmin();
@@ -20,11 +20,11 @@ export class AdministrationComponent {
         return false;
     }
 
-    private isRoleManagementAuthorized(): boolean {
+    isRoleManagementAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationRoleManagement);
     }
 
-    private isProjManagementAuthorized(): boolean {
+    isProjManagementAuthorized(): boolean {
         return (
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationProjectManagement) ||
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserRoleManagement) ||

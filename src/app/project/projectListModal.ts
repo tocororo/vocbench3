@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Project, ProjectViewMode } from '../models/Project';
 import { MetadataServices } from "../services/metadataServices";
 import { ProjectServices } from "../services/projectServices";
@@ -16,16 +15,13 @@ import { AbstractProjectComponent } from "./abstractProjectComponent";
     selector: "project-list-modal",
     templateUrl: "./projectListModal.html",
 })
-export class ProjectListModal extends AbstractProjectComponent implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class ProjectListModal extends AbstractProjectComponent {
+    selectedProject: Project;
 
-    private selectedProject: Project;
-
-    constructor(public dialog: DialogRef<BSModalContext>, userService: UserServices, metadataService: MetadataServices,
+    constructor(public activeModal: NgbActiveModal, userService: UserServices, metadataService: MetadataServices,
         vbCollaboration: VBCollaboration, vbProp: VBProperties, dtValidator: DatatypeValidator,
         private projectService: ProjectServices, private router: Router) {
         super(userService, metadataService, vbCollaboration, vbProp, dtValidator);
-        this.context = dialog.context;
     }
 
     initProjects() {
@@ -40,15 +36,13 @@ export class ProjectListModal extends AbstractProjectComponent implements ModalC
         );
     }
 
-    private changeVisualizationMode(mode: ProjectViewMode) {
+    changeVisualizationMode(mode: ProjectViewMode) {
         this.visualizationMode = mode;
         Cookie.setCookie(Cookie.PROJECT_VIEW_MODE, mode);
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+    ok() {
+        this.activeModal.close();
         this.router.navigate(['/Home']).then(
             () => {
                 this.accessProject(this.selectedProject).subscribe()
@@ -57,7 +51,7 @@ export class ProjectListModal extends AbstractProjectComponent implements ModalC
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

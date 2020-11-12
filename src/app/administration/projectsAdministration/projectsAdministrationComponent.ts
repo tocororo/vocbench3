@@ -1,8 +1,8 @@
 import { Component } from "@angular/core";
-import { Modal, OverlayConfig } from "ngx-modialog";
-import { BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { Project } from "../../models/Project";
-import { ACLEditorModal, ACLEditorModalData } from "../../project/projectACL/aclEditorModal";
+import { ACLEditorModal } from "../../project/projectACL/aclEditorModal";
 import { ProjectServices } from "../../services/projectServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "../../utils/VBActions";
@@ -15,17 +15,17 @@ import { VBContext } from "../../utils/VBContext";
 })
 export class ProjectsAdministrationComponent {
 
-    private isAdminLogged: boolean;
+    isAdminLogged: boolean;
 
     private projectList: Project[];
-    private selectedProject: Project;
+    selectedProject: Project;
 
-    private projUsersAspect: string = "Project-Users management";
-    private projGroupsAspect: string = "Project-Groups management";
-    private projSettingsAspect: string = "Project settings";
-    private selectedAspect: string;
+    projUsersAspect: string = "Project-Users management";
+    projGroupsAspect: string = "Project-Groups management";
+    projSettingsAspect: string = "Project settings";
+    selectedAspect: string;
 
-    constructor(private projectService: ProjectServices, private modal: Modal) { }
+    constructor(private projectService: ProjectServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         this.isAdminLogged = VBContext.getLoggedUser() && VBContext.getLoggedUser().isAdmin();
@@ -57,25 +57,21 @@ export class ProjectsAdministrationComponent {
         }
     }
 
-    private editACL() {
-        var modalData = new ACLEditorModalData(this.selectedProject);
-        const builder = new BSModalContextBuilder<ACLEditorModalData>(
-            modalData, undefined, ACLEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size("sm").keyboard(27).toJSON() };
-        return this.modal.open(ACLEditorModal, overlayConfig);
+    editACL() {
+        const modalRef: NgbModalRef = this.modalService.open(ACLEditorModal, new ModalOptions('sm'));
+        modalRef.componentInstance.project = this.selectedProject;
     }
 
-    private isProjUserManagementAuthorized(): boolean {
+    isProjUserManagementAuthorized(): boolean {
         return (
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserRoleManagement) &&
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserGroupManagement)
         );
     }
-    private isProjGroupManagementAuthorized(): boolean {
+    isProjGroupManagementAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationUserGroupManagement);
     }
-    private isProjSettingsAuthorized(): boolean {
+    isProjSettingsAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.administrationProjectManagement);
     }
 

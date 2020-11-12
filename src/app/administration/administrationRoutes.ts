@@ -9,7 +9,7 @@ import { UsersAdministrationComponent } from "./usersAdministration/usersAdminis
 
 export const routes: Routes = [
     {
-        path: "Administration", component: AdministrationComponent, canActivate: [AuthGuard], children: [
+        path: "", component: AdministrationComponent, canActivate: [AuthGuard], children: [
             { path: "", redirectTo: "Projects", pathMatch: "full" },
             { path: "Users", component: UsersAdministrationComponent, canActivate: [AdminGuard] },
             { path: "Roles", component: RolesAdministrationComponent, canActivate: [AuthGuard] },

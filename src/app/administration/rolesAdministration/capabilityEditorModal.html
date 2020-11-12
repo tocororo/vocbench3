@@ -1,48 +1,46 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body vbox">
 
-    <div class="panel panel-default" style="margin-bottom: 4px;">
-        <div class="panel-heading">
+    <div class="card card-default mb-3">
+        <div class="card-header">
             <label>Topic</label>
         </div>
-        <div class="panel-body vbox">
+        <div class="card-body vbox">
 
-            <div class="form-horizontal">
-                <div class="form-group">
-                    <label class="control-label col-sm-3">Area:</label>
-                    <div class="col-sm-9">
-                        <select class="form-control input-sm" [(ngModel)]="area" (ngModelChange)="updateExtendedCapability()">
-                            <option *ngFor="let a of areaStruct" [ngValue]="a.value">{{a.value}} - {{a.description}}</option>
-                        </select>
-                    </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-3">Area:</label>
+                <div class="col-sm-9">
+                    <select class="form-control" [(ngModel)]="area" (ngModelChange)="updateExtendedCapability()">
+                        <option *ngFor="let a of areaStruct" [ngValue]="a.value">{{a.value}} - {{a.description}}</option>
+                    </select>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-3">Subject and scope:</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control input-sm" [(ngModel)]="subjectScope"
-                            (ngModelChange)="updateExtendedCapability()">
-                    </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-form-label col-sm-3">Subject and scope:</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" [(ngModel)]="subjectScope"
+                        (ngModelChange)="updateExtendedCapability()">
                 </div>
             </div>
         </div>
     </div>
 
 
-    <div class="panel panel-default" style="margin-bottom: 4px;">
-        <div class="panel-heading">
+    <div class="card card-default mb-3">
+        <div class="card-header">
             <label style="flex: 1">CRUDV</label>
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" (click)="changeAllCrudvStatus(true)" title="Check all">
-                    <span class="glyphicon glyphicon-check"></span>
+                <button class="btn btn-light" (click)="changeAllCrudvStatus(true)" title="Check all">
+                    <span class="far fa-check-square"></span>
                 </button>
-                <button class="btn btn-default" (click)="changeAllCrudvStatus(false)" title="Uncheck all">
-                    <span class="glyphicon glyphicon-unchecked"></span>
+                <button class="btn btn-light" (click)="changeAllCrudvStatus(false)" title="Uncheck all">
+                    <span class="far fa-square"></span>
                 </button>
             </div>
         </div>
-        <div class="panel-body hbox">
+        <div class="card-body hbox">
             <div *ngFor="let cs of crudvStruct"  style="flex: 1">
                 <div class="checkbox">
                     <label>
@@ -53,11 +51,11 @@
         </div>
     </div>
 
-    <input type="text" class="form-control input-sm" [ngModel]="extendedCapability" readonly>
+    <input type="text" class="form-control" [ngModel]="extendedCapability" readonly>
 
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isDataValid()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

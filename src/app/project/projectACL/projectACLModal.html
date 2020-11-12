@@ -3,13 +3,13 @@
 </div>
 <div class="modal-body vbox blockingDivHost">
     <div class="scrollableContainer">
-        <table class="table table-condensed table-bordered" style="margin: auto; width: auto; border-top: 0; border-left: 0; border-right: 0;">
+        <table class="table table-sm table-bordered" style="margin: auto; width: auto; border-top: 0; border-left: 0; border-right: 0;">
             <thead>
                 <tr>
                     <th style="vertical-align: bottom;" class="firstCol" style="border-left: 0; border-right: 0; vertical-align: bottom;">
                         <div class="hbox">
-                            <div style="flex: 1"><span class="glyphicon glyphicon-chevron-down"></span> Project</div>
-                            <div style="margin-left: 15px">Consumer <span class="glyphicon glyphicon-chevron-right"></span></div>
+                            <div style="flex: 1"><span class="fas fa-chevron-down"></span> Project</div>
+                            <div style="margin-left: 15px">Consumer <span class="fas fa-chevron-right"></span></div>
                         </div>
                     </th>
                     <th *ngFor="let cons of consumerList" class="rotate" [title]="cons">
@@ -27,8 +27,8 @@
                         <td style="font-weight: bold;" class="firstCol">
                             <div class="hbox" style="align-items: center;">
                                 <div class="ellipsable" style="flex: 1;">{{row.project}}</div>
-                                <button class="btn btn-default btn-xs pull-right" style="margin-left: 8px;" title="Edit project ACL" (click)="editProjectACL(row.project)">
-                                    <span class="glyphicon glyphicon-pencil"></span>
+                                <button class="btn btn-light btn-xs float-right" style="margin-left: 8px;" title="Edit project ACL" (click)="editProjectACL(row.project)">
+                                    <span class="fas fa-pencil-alt"></span>
                                 </button>
 
                                 <span [class]="row.lock.class" [title]="row.lock.title" style="margin-left: 4px;">
@@ -56,5 +56,5 @@
     
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
 </div>

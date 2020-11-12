@@ -4,7 +4,7 @@
 <div class="modal-body vbox">
 
     <div class="alert alert-info">
-        {{context.message}}
+        {{message}}
     </div>
 
     <div class="table-responsive" style="margin-top: 6px;">
@@ -18,7 +18,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let d of context.dataDumps" [ngClass]="{ info: d == selectedDump }" (click)="selectedDump = d">
+                <tr *ngFor="let d of dataDumps" [ngClass]="{ info: d == selectedDump }" (click)="selectedDump = d">
                     <td><a [href]="d.accessURL" target="_blank">{{d.accessURL}}</a></td>
                     <td>{{d.getPreferredTitle() != null ? d.getPreferredTitle().toNT() : null }}</td>
                     <td>{{d.getPreferredDescription() != null ? d.getPreferredDescription().toNT() : null }}</td>
@@ -30,6 +30,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedDump">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedDump">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

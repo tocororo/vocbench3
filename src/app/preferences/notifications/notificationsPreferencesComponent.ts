@@ -8,6 +8,7 @@ import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
 import { ResourcesServices } from "../../services/resourcesServices";
 import { Observable } from "rxjs";
+import { map } from 'rxjs/operators';
 
 @Component({
     selector: "notifications-pref",
@@ -30,15 +31,15 @@ export class NotificationsPreferencesComponent {
 
     //Notifications matrix
 
-    private actions: Action[] = [Action.creation, Action.deletion, Action.update];
-    private roleStructs: RoleStruct[];
+    actions: Action[] = [Action.creation, Action.deletion, Action.update];
+    roleStructs: RoleStruct[];
 
     private notificationTable: NotificationTable;
 
     private preferences: NotificationPreferences;
 
     //Watching resources
-    private watchingResources: ARTResource[] = [];
+    watchingResources: ARTResource[] = [];
 
     constructor(private notificationsService: NotificationServices, private resourceService: ResourcesServices, private vbProp: VBProperties) { }
 
@@ -56,8 +57,8 @@ export class NotificationsPreferencesComponent {
     }
 
     private initNotificationMatrix(): Observable<void> {
-        return this.notificationsService.getNotificationPreferences().map(
-            prefs => {
+        return this.notificationsService.getNotificationPreferences().pipe(
+            map(prefs => {
                 this.preferences = prefs;
                 this.roleStructs = Object.keys(this.preferences)
                     .map(r => {
@@ -76,13 +77,13 @@ export class NotificationsPreferencesComponent {
                         }
                     }
                 );
-            }
+            })
         );
     }
 
     private initWatchingResources(): Observable<void> {
-        return this.notificationsService.listWatching().map(
-            watchingResources => {
+        return this.notificationsService.listWatching().pipe(
+            map(watchingResources => {
                 let resources: ARTURIResource[] = [];
                 watchingResources.forEach(r => {
                     let res = ResourceUtils.parseNode(r);
@@ -98,19 +99,19 @@ export class NotificationsPreferencesComponent {
                         }
                     );
                 }
-            }
+            })
         );
     }
 
     //============ Notification option handler ============
 
-    private changeNotificationStatus() {
+    changeNotificationStatus() {
         this.vbProp.setNotificationStatus(this.activeNotificationOpt.value);
     }
 
     //============ Notification matrix handler ============
 
-    private checkAllActions(status: boolean) {
+    checkAllActions(status: boolean) {
         for (let role in this.notificationTable) {
             this.notificationTable[role].creation = status;
             this.notificationTable[role].deletion = status;
@@ -119,7 +120,7 @@ export class NotificationsPreferencesComponent {
         this.updateAllNotifications();
     }
 
-    private checkAllActionsForRole(role: RDFResourceRolesEnum, status: boolean) {
+    checkAllActionsForRole(role: RDFResourceRolesEnum, status: boolean) {
         this.notificationTable[role].creation = status;
         this.notificationTable[role].deletion = status;
         this.notificationTable[role].update = status;

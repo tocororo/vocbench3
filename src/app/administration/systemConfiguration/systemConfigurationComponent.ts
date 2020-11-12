@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { Router } from "@angular/router";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ConfigurationComponents } from "../../models/Configuration";
 import { CronDefinition } from "../../models/Notifications";
@@ -22,19 +23,19 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 })
 export class SystemConfigurationComponent {
 
-    private isInitialConfiguration: boolean; //tells if the component is shown in the initial system configuration (after 1st user registration)
+    isInitialConfiguration: boolean; //tells if the component is shown in the initial system configuration (after 1st user registration)
 
     /* SemanticTurkeyData folder */
-    private stDataFolder: string;
-    private stDataFolderPristine: string;
+    stDataFolder: string;
+    stDataFolderPristine: string;
 
-    private profilerThreshold: number;
-    private profilerThresholdPristine: number;
+    profilerThreshold: number;
+    profilerThresholdPristine: number;
 
 
     /* E-mail configuration */
 
-    private emailConfig: EmailConfig = {
+    emailConfig: EmailConfig = {
         mailFromAddress: null,
         mailFromPassword: null,
         mailFromAlias: null,
@@ -46,31 +47,31 @@ export class SystemConfigurationComponent {
     };
     private pristineEmailConfig: EmailConfig;
 
-    private cryptoProtocol: string;
+    cryptoProtocol: string;
 
     /* Notifications configuration */
-    private timezones: string[];
-    private timezone: string;
+    timezones: string[];
+    timezone: string;
     private timezonePristine: string;
-    private hoursOfDay: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
-    private cronHourOfDay: number;
+    hoursOfDay: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+    cronHourOfDay: number;
     private cronHourOfDayPristine: number;
 
     /* Registration form fields */
-    private optionalFields: UserFormOptionalField[];
+    optionalFields: UserFormOptionalField[];
 
-    private customFormFields: UserFormCustomField[];
+    customFormFields: UserFormCustomField[];
     private customFormFieldsPristine: UserFormCustomField[];
-    private selectedCustomField: UserFormCustomField;
-    private fieldsIdx: number[] = [0, 1, 2, 3];
+    selectedCustomField: UserFormCustomField;
+    fieldsIdx: number[] = [0, 1, 2, 3];
 
     /* Home content */
-    private homeContent: string;
+    homeContent: string;
     private homeContentPristine: string;
-    private safeHomeContent: SafeHtml;
+    safeHomeContent: SafeHtml;
 
     /* Experimental features */
-    private expFeatEnabled: boolean = false;
+    expFeatEnabled: boolean = false;
 
 
     constructor(private adminService: AdministrationServices, private userService: UserServices, private vbProp: VBProperties, 
@@ -124,7 +125,7 @@ export class SystemConfigurationComponent {
      * Misc settings management (STData directory, profiler threshold...)
      * ============================ */
 
-    private updateDataFolder() {
+    updateDataFolder() {
         this.adminService.setDataDir(this.stDataFolder).subscribe(
             () => {
                 this.basicModals.alert("Update configuration", "SemanticTurkey data folder updated");
@@ -133,7 +134,7 @@ export class SystemConfigurationComponent {
         );
     }
 
-    private updateProfilerThreshold() {
+    updateProfilerThreshold() {
         this.adminService.setPreloadProfilerThreshold(this.profilerThreshold).subscribe(
             () => {
                 this.basicModals.alert("Update configuration", "Preload profiler threshold updated");
@@ -146,7 +147,7 @@ export class SystemConfigurationComponent {
      * E-mail managment
      * ============================ */
 
-    private updateProtocol() {
+    updateProtocol() {
         if (this.cryptoProtocol == "SSL") {
             this.emailConfig.mailSmtpSslEnable = true;
             this.emailConfig.mailSmtpStarttlsEnable = false;
@@ -159,7 +160,7 @@ export class SystemConfigurationComponent {
         }
     }
 
-    private updateEmailConfig() {
+    updateEmailConfig() {
         let mailFromPwd: string = null;
         if (this.emailConfig.mailSmtpAuth) {
             mailFromPwd = this.emailConfig.mailFromPassword;
@@ -173,9 +174,9 @@ export class SystemConfigurationComponent {
             )
     }
 
-    private testEmailConfig() {
+    testEmailConfig() {
         if (this.isEmailConfigChanged()) {
-            this.basicModals.alert("Email configuration test", "Email configuration has been changed, you need first to submit the changes.", "warning");
+            this.basicModals.alert("Email configuration test", "Email configuration has been changed, you need first to submit the changes.", ModalType.warning);
             return;
         }
 
@@ -194,7 +195,7 @@ export class SystemConfigurationComponent {
             );
     }
 
-    private isEmailConfigChanged(): boolean {
+    isEmailConfigChanged(): boolean {
         for (var key in this.pristineEmailConfig) {
             if (this.pristineEmailConfig[key] != this.emailConfig[key]) {
                 return true;
@@ -243,7 +244,7 @@ export class SystemConfigurationComponent {
         )
     }
 
-    private updateNotificationSchedule() {
+    updateNotificationSchedule() {
         let cronDefinition: CronDefinition = {
             expression: "0 0 " + this.cronHourOfDay + " * * *",
             zone: this.timezone
@@ -270,7 +271,7 @@ export class SystemConfigurationComponent {
     //     );
     // }
 
-    private disableNotificationSchedule() {
+    disableNotificationSchedule() {
         this.notificationsService.scheduleNotificationDigest().subscribe(
             () => {
                 this.initNotificationsConfig();
@@ -278,7 +279,7 @@ export class SystemConfigurationComponent {
         );
     }
 
-    private detectTimezone() {
+    detectTimezone() {
         let localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         if (this.timezones.some(t => t == localTimezone)) {
             this.timezone = localTimezone;
@@ -329,7 +330,7 @@ export class SystemConfigurationComponent {
             if (duplicatedStandardField) {
                 message += "in the standard registration form";
             }
-            this.basicModals.alert("Duplicated field", message, "warning").then(
+            this.basicModals.alert("Duplicated field", message, ModalType.warning).then(
                 () => { //restore the old value
                     //temporary replace the .label at the edited index, so that the ngOnChanges will be fired in the input-edit component
                     this.customFormFields[index] = { iri: null, label: "" };
@@ -360,7 +361,7 @@ export class SystemConfigurationComponent {
             this.selectedCustomField = this.customFormFields[idx];
         }
     }
-    private removeCustomField() {
+    removeCustomField() {
         this.userService.removeUserFormCustomField(new ARTURIResource(this.selectedCustomField.iri)).subscribe(
             () => {
                 this.initFields();
@@ -368,7 +369,7 @@ export class SystemConfigurationComponent {
             }
         );
     }
-    private moveCustomField(direction: "UP" | "DOWN") {
+    moveCustomField(direction: "UP" | "DOWN") {
         let idx = this.customFormFields.indexOf(this.selectedCustomField);
         let fieldIri1: ARTURIResource = new ARTURIResource(this.selectedCustomField.iri);
         let fieldIri2: ARTURIResource;
@@ -400,11 +401,11 @@ export class SystemConfigurationComponent {
         }
     }
 
-    private previewHomeContent() {
+    previewHomeContent() {
         this.safeHomeContent = this.sanitizer.bypassSecurityTrustHtml(this.homeContent);
     }
 
-    private updateHomeContent() {
+    updateHomeContent() {
         if (this.homeContent.trim() == "") {
             this.homeContent = null;
         }
@@ -412,7 +413,7 @@ export class SystemConfigurationComponent {
         this.homeContentPristine = this.homeContent;
     }
 
-    private isHomeContentChanged(): boolean {
+    isHomeContentChanged(): boolean {
         return this.homeContent != this.homeContentPristine;
     }
 
@@ -420,7 +421,7 @@ export class SystemConfigurationComponent {
      * Experimental feature managment
      * ============================ */
 
-    private onExpFeatEnabledChanged() {
+    onExpFeatEnabledChanged() {
         this.vbProp.setExperimentalFeaturesEnabled(this.expFeatEnabled);
     }
 

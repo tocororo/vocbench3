@@ -1,16 +1,16 @@
 import { Component } from "@angular/core";
-import { OverlayConfig } from "ngx-modialog";
-import { BSModalContextBuilder, Modal } from "ngx-modialog/plugins/bootstrap";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { PatternStruct, ResourceMetadataAssociation, ResourceMetadataUtils } from "../models/ResourceMetadata";
 import { ResourceMetadataServices } from "../services/resourceMetadataServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { ResourceUtils } from "../utils/ResourceUtils";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { ImportPatternModal, ImportPatternModalData } from "./modals/importPatternModal";
-import { MetadataAssociationEditorModal, MetadataAssociationEditorModalData } from "./modals/metadataAssociationEditorModal";
-import { MetadataPatternEditorModal, MetadataPatternEditorModalData } from "./modals/metadataPatternEditorModal";
-import { MetadataPatternLibraryModal, MetadataPatternLibraryModalData } from "./modals/metadataPatternLibraryModal";
 import { VBActionsEnum } from "../utils/VBActions";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ModalOptions, ModalType } from '../widget/modal/Modals';
+import { ImportPatternModal } from "./modals/importPatternModal";
+import { MetadataAssociationEditorModal } from "./modals/metadataAssociationEditorModal";
+import { MetadataPatternEditorModal } from "./modals/metadataPatternEditorModal";
+import { MetadataPatternLibraryModal } from "./modals/metadataPatternLibraryModal";
 
 @Component({
     selector: "resource-metadata-component",
@@ -19,20 +19,20 @@ import { VBActionsEnum } from "../utils/VBActions";
 })
 export class ResourceMetadataComponent {
 
-    private patterns: PatternStruct[];
-    private selectedPattern: PatternStruct;
+    patterns: PatternStruct[];
+    selectedPattern: PatternStruct;
 
-    private associations: ResourceMetadataAssociation[];
-    private selectedAssociation: ResourceMetadataAssociation;
+    associations: ResourceMetadataAssociation[];
+    selectedAssociation: ResourceMetadataAssociation;
 
     //Authorizations
-    private createPatternAuthorized: boolean;
-    private deletePatternAuthorized: boolean;
-    private modifyPatternAuthorized: boolean;
-    private createAssociationAuthorized: boolean;
-    private deleteAssociationAuthorized: boolean;
+    createPatternAuthorized: boolean;
+    deletePatternAuthorized: boolean;
+    modifyPatternAuthorized: boolean;
+    createAssociationAuthorized: boolean;
+    deleteAssociationAuthorized: boolean;
 
-    constructor(private resourceMetadataService: ResourceMetadataServices, private basicModals: BasicModalServices, private modal: Modal) { }
+    constructor(private resourceMetadataService: ResourceMetadataServices, private basicModals: BasicModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         //init authorizations
@@ -58,28 +58,28 @@ export class ResourceMetadataComponent {
         );
     }
 
-    private createPattern() {
+    createPattern() {
         this.openPatternEditor("Create Metadata Pattern").then(
             () => this.initPatterns(),
             () => {}
         );
     }
 
-    private editPattern() {
+    editPattern() {
         this.openPatternEditor("Edit Metadata Pattern", this.selectedPattern.reference).then(
             () => this.initPatterns(),
             () => {}
         );
     }
 
-    private deletePattern() {
+    deletePattern() {
         let patternUsed: boolean = this.associations.some(a => a.pattern.reference == this.selectedPattern.reference);
         let message: string = "You are deleting the pattern " + this.selectedPattern.name + ".\n";
         if (patternUsed) {
             message += "Note: the Metadata Pattern is used in one (or more) association. By deleting the pattern, the association(s) will be deleted as well.\n"
         }
         message += "Do you want to continue?";
-        this.basicModals.confirm("Delete Metadata Pattern", message, "warning").then(
+        this.basicModals.confirm("Delete Metadata Pattern", message, ModalType.warning).then(
             () => {
                 this.resourceMetadataService.deletePattern(this.selectedPattern.reference).subscribe(
                     () => {
@@ -94,11 +94,11 @@ export class ResourceMetadataComponent {
         );
     }
 
-    private clonePattern() {
+    clonePattern() {
         this.basicModals.prompt("Clone Metadata Pattern", { value: "Name", tooltip: "The name of the new pattern" }).then(
             (patternName: string) => {
                 if (this.patterns.some(p => p.name == patternName)) {
-                    this.basicModals.alert("Already existing Pattern", "A Metadata Pattern with the name '" + patternName + "' already exists", "warning");
+                    this.basicModals.alert("Already existing Pattern", "A Metadata Pattern with the name '" + patternName + "' already exists", ModalType.warning);
                     return;
                 }
                 this.resourceMetadataService.clonePattern(this.selectedPattern.reference, patternName).subscribe(
@@ -111,13 +111,11 @@ export class ResourceMetadataComponent {
         );
     }
 
-    private importPattern() {
-        let modalData = new ImportPatternModalData("Import Metadata Pattern", this.patterns);
-        const builder = new BSModalContextBuilder<ImportPatternModalData>(
-            modalData, undefined, ImportPatternModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(ImportPatternModal, overlayConfig).result.then(
+    importPattern() {
+        const modalRef: NgbModalRef = this.modalService.open(ImportPatternModal, new ModalOptions());
+        modalRef.componentInstance.title = "Import Metadata Pattern";
+		modalRef.componentInstance.existingPatterns = this.patterns;
+        modalRef.result.then(
             (data: { file: File, name: string }) => {
                 this.resourceMetadataService.importPattern(data.file, data.name).subscribe(
                     () => {
@@ -129,7 +127,7 @@ export class ResourceMetadataComponent {
         );
     }
 
-    private exportPattern() {
+    exportPattern() {
         this.resourceMetadataService.exportPattern(this.selectedPattern.reference).subscribe(
             pattern => {
                 let url = window.URL.createObjectURL(pattern);
@@ -138,7 +136,7 @@ export class ResourceMetadataComponent {
         )
     }
 
-    private importPatternFromLibrary() {
+    importPatternFromLibrary() {
         this.openPatterLibrary("Import shared Metadata Pattern").then(
             pattern => {
                 this.initPatterns();
@@ -147,28 +145,26 @@ export class ResourceMetadataComponent {
         )
     }
 
-    private storePatternInLibrary() {
+    storePatternInLibrary() {
         this.openPatterLibrary("Share Metadata Pattern", this.selectedPattern);
     }
 
     private openPatternEditor(title: string, patternRef?: string) {
         let readonly: boolean = (patternRef != null) ? patternRef.startsWith("factory") : false;
-        var modalData = new MetadataPatternEditorModalData(title, this.patterns, patternRef, readonly);
-        const builder = new BSModalContextBuilder<MetadataPatternEditorModalData>(
-            modalData, undefined, MetadataPatternEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').toJSON() };
-        return this.modal.open(MetadataPatternEditorModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(MetadataPatternEditorModal, new ModalOptions('lg'));
+        modalRef.componentInstance.title = title;
+		modalRef.componentInstance.existingPatterns = this.patterns;
+        modalRef.componentInstance.ref = patternRef;
+        modalRef.componentInstance.readOnly = readonly;
+        return modalRef.result;
     }
 
     private openPatterLibrary(title: string, patternToShare?: PatternStruct) {
-        var modalData = new MetadataPatternLibraryModalData(title, patternToShare, this.patterns);
-        const builder = new BSModalContextBuilder<MetadataPatternLibraryModalData>(
-            modalData, undefined, MetadataPatternLibraryModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(MetadataPatternLibraryModal, overlayConfig).result;
-        
+        const modalRef: NgbModalRef = this.modalService.open(MetadataPatternLibraryModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+		modalRef.componentInstance.patternToShare = patternToShare;
+		modalRef.componentInstance.existinPatterns = this.patterns;
+        return modalRef.result;
     }
 
     /* ASSOCIATIONS */
@@ -185,16 +181,16 @@ export class ResourceMetadataComponent {
         );
     }
 
-    private createAssociation() {
+    createAssociation() {
         this.openAssociationEditor("Add Metadata Association").then(
             () => this.initAssociations(),
             () => {}
         );
     }
 
-    private deleteAssociation() {
+    deleteAssociation() {
         this.basicModals.confirm("Delete Metadata Association", "You are deleting the association between '" + this.selectedAssociation.role + 
-            "' and '" + this.selectedAssociation.pattern.reference + "'. Are you sure?", "warning").then(
+            "' and '" + this.selectedAssociation.pattern.reference + "'. Are you sure?", ModalType.warning).then(
             () => {
                 this.resourceMetadataService.deleteAssociation(this.selectedAssociation.ref).subscribe(
                     () => this.initAssociations()
@@ -205,12 +201,10 @@ export class ResourceMetadataComponent {
     }
 
     private openAssociationEditor(title: string) {
-        var modalData = new MetadataAssociationEditorModalData(title, this.associations);
-        const builder = new BSModalContextBuilder<MetadataAssociationEditorModalData>(
-            modalData, undefined, MetadataAssociationEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.toJSON() };
-        return this.modal.open(MetadataAssociationEditorModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(MetadataAssociationEditorModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+		modalRef.componentInstance.existingAssociations = this.associations;
+        return modalRef.result;
     }
 
 }

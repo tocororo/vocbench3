@@ -1,33 +1,27 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Project } from "../../models/Project";
 import { Role, User } from "../../models/User";
 import { AdministrationServices } from "../../services/administrationServices";
 import { UserServices } from "../../services/userServices";
 
-export class UserProjBindingModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title', public project: Project, public usersBound: Array<User>) {
-        super();
-    }
-}
-
 @Component({
     selector: "up-binding-modal",
     templateUrl: "./userProjBindingModal.html",
 })
-export class UserProjBindingModal implements ModalComponent<UserProjBindingModalData> {
-    context: UserProjBindingModalData;
+export class UserProjBindingModal {
+    @Input() title: string;
+    @Input() project: Project;
+    @Input() usersBound: User[];
 
-    private userList: User[] = [];
-    private selectedUser: User;
+    userList: User[] = [];
+    selectedUser: User;
 
-    private roleList: Role[] = [];
-    private selectedRoles: Role[] = [];
+    roleList: Role[] = [];
+    selectedRoles: Role[] = [];
     
-    constructor(public dialog: DialogRef<UserProjBindingModalData>, public userService: UserServices,
+    constructor(public activeModal: NgbActiveModal, public userService: UserServices,
         public adminService: AdministrationServices) {
-        this.context = dialog.context;
     }
 
     ngOnInit() {
@@ -36,7 +30,7 @@ export class UserProjBindingModal implements ModalComponent<UserProjBindingModal
                 this.userList = users;
             }
         )
-        this.adminService.listRoles(this.context.project).subscribe(
+        this.adminService.listRoles(this.project).subscribe(
             roles => {
                 this.roleList = roles;
             }
@@ -55,8 +49,8 @@ export class UserProjBindingModal implements ModalComponent<UserProjBindingModal
     }
 
     private isUserAlreadyBound(user: User): boolean {
-        for (var i = 0; i < this.context.usersBound.length; i++) {
-            if (user.getEmail() == this.context.usersBound[i].getEmail()) {
+        for (var i = 0; i < this.usersBound.length; i++) {
+            if (user.getEmail() == this.usersBound[i].getEmail()) {
                 return true;
             }
         }
@@ -76,18 +70,16 @@ export class UserProjBindingModal implements ModalComponent<UserProjBindingModal
         return this.selectedRoles.indexOf(role) != -1;
     }
     
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
+    ok() {
         var roleList: string[] = [];
         for (var i = 0; i < this.selectedRoles.length; i++) {
             roleList.push(this.selectedRoles[i].getName());
         }
-        this.dialog.close({user: this.selectedUser, roles: roleList});
+        this.activeModal.close({user: this.selectedUser, roles: roleList});
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
 }

@@ -1,14 +1,14 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">Create user</h3>
 </div>
 <div class="modal-body">
     <user-create [(ngModel)]="userForm"></user-create>
 </div>
 <div class="modal-footer">
-    <div class="pull-left">
-        <div><span style="color: red; margin-right: 2px;">* </span>Mandatory field</div>
-        <div><span style="color: red; margin-right: 2px;">** </span>Optional but highly recommended field</div>
+    <div class="float-left">
+        <div class="mb-2" style="text-align: left"><span style="color: red; margin-right: 2px;">* </span>Mandatory field</div>
+        <div style="text-align: left"><span style="color: red; margin-right: 2px;">** </span>Optional but highly recommended field</div>
     </div>
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

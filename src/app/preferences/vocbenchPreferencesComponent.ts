@@ -10,8 +10,8 @@ import { VBProperties } from "../utils/VBProperties";
 })
 export class VocbenchPreferencesComponent {
 
-    private showFlags: boolean;
-    private themes: Theme[] = UIUtils.themes;
+    showFlags: boolean;
+    themes: Theme[] = UIUtils.themes;
     private selectedTheme: Theme = this.themes[0];
 
     constructor(private properties: VBProperties) { }
@@ -27,12 +27,12 @@ export class VocbenchPreferencesComponent {
 
     //show flags handlers
 
-    private onShowFlagChange() {
+    onShowFlagChange() {
         this.properties.setShowFlags(this.showFlags);
     }
 
     //theme handler
-    private changeTheme(theme: Theme) {
+    changeTheme(theme: Theme) {
         this.selectedTheme = theme;
         this.properties.setProjectTheme(this.selectedTheme.id);
     }

@@ -1,35 +1,22 @@
-import { Component } from "@angular/core";
-import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
-import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { PatternStruct, ResourceMetadataUtils } from "../../models/ResourceMetadata";
 import { ResourceMetadataServices } from "../../services/resourceMetadataServices";
-import { MetadataPatternEditorModal, MetadataPatternEditorModalData } from "./metadataPatternEditorModal";
-
-export class MetadataFactoryPatternSelectionModalData extends BSModalContext {
-    /**
-     * 
-     * @param title 
-     * @param existingAssociations 
-     * @param onlyFactory if true, initializes the list of the pattern with the only factory-provided
-     */
-    constructor(public title: string) {
-        super();
-    }
-}
+import { MetadataPatternEditorModal } from "./metadataPatternEditorModal";
 
 @Component({
     selector: "metadata-factory-pattern-modal",
     templateUrl: "./metadataFactoryPatternSelectionModal.html",
 })
-export class MetadataFactoryPatternSelectionModal implements ModalComponent<MetadataFactoryPatternSelectionModalData> {
-    context: MetadataFactoryPatternSelectionModalData;
+export class MetadataFactoryPatternSelectionModal {
+    @Input() title: string;
 
-    private patterns: PatternStruct[];
-    private selectedPattern: PatternStruct;
+    patterns: PatternStruct[];
+    selectedPattern: PatternStruct;
 
-    constructor(public dialog: DialogRef<MetadataFactoryPatternSelectionModalData>, private resourceMetadataService: ResourceMetadataServices,
-        private modal: Modal) {
-        this.context = dialog.context;
+    constructor(public activeModal: NgbActiveModal, private resourceMetadataService: ResourceMetadataServices,
+        private modalService: NgbModal) {
     }
 
     ngOnInit() {
@@ -40,24 +27,24 @@ export class MetadataFactoryPatternSelectionModal implements ModalComponent<Meta
         );
     }
 
-    private showPattern() {
-        var modalData = new MetadataPatternEditorModalData("Metadata Pattern", [], this.selectedPattern.reference, true);
-        const builder = new BSModalContextBuilder<MetadataPatternEditorModalData>(
-            modalData, undefined, MetadataPatternEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').toJSON() };
-        return this.modal.open(MetadataPatternEditorModal, overlayConfig).result;
+    showPattern() {
+        const modalRef: NgbModalRef = this.modalService.open(MetadataPatternEditorModal, new ModalOptions('lg'));
+        modalRef.componentInstance.title = "Metadata Pattern";
+		modalRef.componentInstance.existingPatterns = [];
+        modalRef.componentInstance.ref = this.selectedPattern.reference;
+        modalRef.componentInstance.readOnly = true;
+        return modalRef.result;
     }
 
-    private isDataValid(): boolean {
+    isDataValid(): boolean {
         return this.selectedPattern != null;
     }
 
     ok() {
-        this.dialog.close(this.selectedPattern);
+        this.activeModal.close(this.selectedPattern);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 }

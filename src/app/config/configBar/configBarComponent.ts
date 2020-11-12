@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { VersionInfo } from "../../models/History";
 import { Project } from "../../models/Project";
 import { AdministrationServices } from "../../services/administrationServices";
@@ -26,7 +26,7 @@ export class ConfigBarComponent {
 
     private currentProject: Project;
 
-    private privacyStatementAvailable: boolean = false;
+    privacyStatementAvailable: boolean = false;
     private shaclEnabled: boolean = false;
 
     private loadDataAuthorized: boolean;
@@ -39,13 +39,13 @@ export class ConfigBarComponent {
 
     constructor(private inOutService: InputOutputServices, private projectService: ProjectServices, private prefService: PreferencesSettingsServices,
         private administrationService: AdministrationServices, private shaclService: ShaclServices, private vbProp: VBProperties, 
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private router: Router, private modal: Modal) {
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private router: Router, private modalService: NgbModal) {
     }
 
     /**
      * returns true if a project is open. Useful to enable/disable navbar links
      */
-    private isProjectAccessed(): boolean {
+    isProjectAccessed(): boolean {
         this.currentProject = VBContext.getWorkingProject();
         return VBContext.getWorkingProject() != undefined;
     }
@@ -53,7 +53,7 @@ export class ConfigBarComponent {
     /**
      * Returns true if the user is logged (an authentication token is stored).
      */
-    private isUserLogged(): boolean {
+    isUserLogged(): boolean {
         return VBContext.isLoggedIn();
     }
 
@@ -84,7 +84,7 @@ export class ConfigBarComponent {
      * This is necessary since if privacyStatementAvailable is initialized in ngOnInit(), the system setting migth still not retrieved
      * (in AppComponent.ngOnInit())
      */
-    private onAboutMenuOpen() {
+    onAboutMenuOpen() {
         this.privacyStatementAvailable = this.vbProp.isPrivacyStatementAvailable();
     }
     private downloadPrivacyStatement() {
@@ -107,7 +107,7 @@ export class ConfigBarComponent {
     private clearData() {
         this.basicModals.confirm("Clear data", "This operation will erase all the data stored in the project." +
             " The project will be closed and then you will be redirect to the projects page." +
-            " Are you sure to proceed?", "warning").then(
+            " Are you sure to proceed?", ModalType.warning).then(
             () => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.inOutService.clearData().subscribe(
@@ -123,9 +123,7 @@ export class ConfigBarComponent {
     }
 
     loadShacleShapes() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(LoadShapesModal, overlayConfig);
+        this.modalService.open(LoadShapesModal, new ModalOptions());
     }
 
     exportShacleShapes() {
@@ -139,7 +137,7 @@ export class ConfigBarComponent {
 
     clearShacleShapes() {
         this.basicModals.confirm("Clear SHACL shapes", "This operation will delete all the SHACL shapes stored in the project. Are you sure to proceed?",
-            "warning").then(
+            ModalType.warning).then(
             () => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                 this.shaclService.clearShapes().subscribe(

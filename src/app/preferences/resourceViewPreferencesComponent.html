@@ -1,15 +1,15 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
+<div class="card card-default">
+    <div class="card-header">
         <label style="flex: 1">Resource view</label>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
 
-        <div class="panel panel-default">
-            <div class="panel-body hbox">
+        <div class="card card-default">
+            <div class="card-body hbox">
                 <div class="vbox" style="margin-right: 8px;">
                     <div class="hbox" style="align-items: center;">
                         <label>Mode:</label>
-                        <select class="form-control input-sm" style="margin-left: 4px;" [(ngModel)]="resViewMode" (ngModelChange)="onResViewModeChange()">
+                        <select class="form-control form-control-sm" style="margin-left: 4px;" [(ngModel)]="resViewMode" (ngModelChange)="onResViewModeChange()">
                             <option value="splitted">Splitted</option>
                             <option value="tabbed">Tabbed</option>
                         </select>
@@ -22,7 +22,7 @@
                             The Resource View panel is splitted in two: on the left there is a main Resource View which describes
                             (and is synched with) the resource selected in the tree/list; on the right there is an optional
                             secondary Resource View which describes a resource selected (double click) from the main Resource View.<br>
-                            <span class="glyphicon glyphicon-warning-sign"></span> This mode is not recommended in screen with resolution width below 1440px
+                            <span class="fas fa-exclamation-triangle"></span> This mode is not recommended in screen with resolution width below 1440px
                         </span>
                     </div>
                     <div *ngIf="resViewMode == 'tabbed'">
@@ -30,7 +30,7 @@
                             <label>
                                 <input type="checkbox" [(ngModel)]="resViewTabSync" (ngModelChange)="onTabSyncChange()">
                                 Keep selected tab synchronized with tree/list
-                                <span class="glyphicon glyphicon-exclamation-sign"
+                                <span class="fas fa-exclamation-circle"
                                     title="It is recommended to disable this option. The synchronization between tabs and tree/list could slow down the navigation of the ResourceView tabbed panel.">
                                 </span>
                             </label>
@@ -44,14 +44,14 @@
             </div>
         </div>
 
-        <div *ngIf="typeSelectionAvailable" class="panel panel-default" style="margin-top: 4px">
-            <div class="panel-body">
+        <div *ngIf="typeSelectionAvailable" class="card card-default" style="margin-top: 4px">
+            <div class="card-body">
                 <div class="hbox" style="align-items: center;">
                     <label style="white-space: nowrap;">
                         Initial view for concepts:
-                        <span class="glyphicon glyphicon-info-sign" title="This selection will be used by default for browsing SKOS concepts. The user can switch to other views during their session of work, but this selection will be applied as an initial setting at each new login"></span>
+                        <span class="fas fa-info-circle" title="This selection will be used by default for browsing SKOS concepts. The user can switch to other views during their session of work, but this selection will be applied as an initial setting at each new login"></span>
                     </label>
-                    <select class="form-control input-sm" style="margin-left: 4px;" [(ngModel)]="selectedRvConceptType" (ngModelChange)="onResViewConceptTypeChange()">
+                    <select class="form-control form-control-sm" style="margin-left: 4px;" [(ngModel)]="selectedRvConceptType" (ngModelChange)="onResViewConceptTypeChange()">
                         <option *ngFor="let t of rvConceptTypes" [ngValue]="t">{{t.show}}</option>
                     </select>
                 </div>
@@ -61,13 +61,13 @@
             </div>
         </div>
 
-        <div class="panel panel-default" style="margin-top: 4px">
-            <div class="panel-body">
+        <div class="card card-default" style="margin-top: 4px">
+            <div class="card-body">
                 <div class="checkbox-inline">
                     <label>
                         <input type="checkbox" [(ngModel)]="displayImg" (ngModelChange)="onDisplayImgChange()">
                         Display images
-                        <span class="glyphicon glyphicon-info-sign"
+                        <span class="fas fa-info-circle"
                             title="If enabled, URL values resolvable to images on the web will be displayed as images (preview) in the ResourceView">
                         </span>
                     </label>
@@ -75,13 +75,13 @@
             </div>
         </div>
 
-        <div class="panel panel-default" style="margin-top: 4px">
-            <div class="panel-body">
+        <div class="card card-default" style="margin-top: 4px">
+            <div class="card-body">
                 <div class="checkbox-inline">
                     <label>
                         <input type="checkbox" [(ngModel)]="showDeprecated" (ngModelChange)="onShowDeprecatedChange()">
                         Show deprecated values
-                        <span class="glyphicon glyphicon-info-sign"
+                        <span class="fas fa-info-circle"
                             title="If enabled, linked resources marked as deprecated will be shown in the ResourceView">
                         </span>
                     </label>
@@ -89,13 +89,13 @@
             </div>
         </div>
 
-        <div class="panel panel-default" style="margin-top: 4px">
-            <div class="panel-body">
+        <div class="card card-default" style="margin-top: 4px">
+            <div class="card-body">
                 <div class="checkbox-inline">
                     <label>
                         <input type="checkbox" [(ngModel)]="showDatatypeBadge" (ngModelChange)="onShowDatatypeBadge()">
                         Always show datatype badge
-                        <span class="glyphicon glyphicon-info-sign"
+                        <span class="fas fa-info-circle"
                             title="If enabled, a datatype badge will be always shown beside the value. If not, the badge is only shown in case of an unknown datype (the icon on the left of the value will classify the known datatype)">
                         </span>
                     </label>

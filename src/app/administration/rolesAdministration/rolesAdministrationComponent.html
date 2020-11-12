@@ -1,32 +1,32 @@
 <div class="vbox">
 
-    <div class="panel panel-default vbox">
+    <div class="card card-default vbox">
 
-        <div class="panel-body hbox">
+        <div class="card-body hbox">
 
-            <div class="panel panel-default vbox">
-                <div class="panel-heading">
+            <div class="card card-default vbox">
+                <div class="card-header">
                     <label style="flex: 1;">Roles:</label>
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="createRole()" [title]="getCreateRoleTitle()" [disabled]="!isProjectOpen()">
-                            <span class="glyphicon glyphicon-plus"></span>
+                        <button class="btn btn-light" (click)="createRole()" [title]="getCreateRoleTitle()" [disabled]="!isProjectOpen()">
+                            <span class="fas fa-plus"></span>
                         </button>
-                        <button class="btn btn-default" (click)="deleteRole()" title="Delete role"
+                        <button class="btn btn-light" (click)="deleteRole()" title="Delete role"
                              [disabled]="!selectedRole || selectedRole.getLevel() == 'system'">
-                            <span class="glyphicon glyphicon-minus"></span>
+                            <span class="fas fa-minus"></span>
                         </button>
-                        <button class="btn btn-default" title="Clone role" (click)="cloneRole()" [disabled]="!isProjectOpen() || !selectedRole">
-                            <span class="glyphicon glyphicon-duplicate"></span>
+                        <button class="btn btn-light" title="Clone role" (click)="cloneRole()" [disabled]="!isProjectOpen() || !selectedRole">
+                            <span class="fas fa-copy"></span>
                         </button>
-                        <button class="btn btn-default" (click)="importRole()" title="Import role" [disabled]="!isProjectOpen()">
-                            <span class="glyphicon glyphicon-open"></span>
+                        <button class="btn btn-light" (click)="importRole()" title="Import role" [disabled]="!isProjectOpen()">
+                            <span class="fas fa-upload"></span>
                         </button>
-                        <button class="btn btn-default" (click)="exportRole()" title="Export role" [disabled]="!selectedRole">
-                            <span class="glyphicon glyphicon-save"></span>
+                        <button class="btn btn-light" (click)="exportRole()" title="Export role" [disabled]="!selectedRole">
+                            <span class="fas fa-download"></span>
                         </button>
                     </div>
                 </div>
-                <div class="panel-body vbox" style="padding: 0px;">
+                <div class="card-body vbox" style="padding: 0px;">
                     <div class="scrollableContainer">
                         <div *ngFor="let r of roleList" class="listItem" (click)="selectRole(r)"
                             [ngClass]="{active: r == selectedRole, grayText: r.getLevel() == 'system'}">
@@ -36,25 +36,25 @@
                 </div>
             </div>
 
-            <div class="panel panel-default vbox" style="margin-left: 5px;">
-                <div class="panel-heading">
+            <div class="card card-default vbox" style="margin-left: 5px;">
+                <div class="card-header">
                     <label style="flex: 1;">Role capabilities:</label>
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="addCapability()" title="Add capability"
+                        <button class="btn btn-light" (click)="addCapability()" title="Add capability"
                             [disabled]="!selectedRole || selectedRole.getLevel() == 'system'">
-                            <span class="glyphicon glyphicon-plus"></span>
+                            <span class="fas fa-plus"></span>
                         </button>
-                        <button class="btn btn-default" (click)="removeCapability()" title="Remove capability"
+                        <button class="btn btn-light" (click)="removeCapability()" title="Remove capability"
                             [disabled]="!selectedCapability || (selectedRole && selectedRole.getLevel() == 'system')">
-                            <span class="glyphicon glyphicon-minus"></span>
+                            <span class="fas fa-minus"></span>
                         </button>
-                        <button class="btn btn-default" (click)="editCapability()" title="Edit capability"
+                        <button class="btn btn-light" (click)="editCapability()" title="Edit capability"
                             [disabled]="!selectedCapability || (selectedRole && selectedRole.getLevel() == 'system')">
-                            <span class="glyphicon glyphicon-pencil"></span>
+                            <span class="fas fa-pencil-alt"></span>
                         </button>
                     </div>
                 </div>
-                <div class="panel-body vbox" style="padding: 0px;">
+                <div class="card-body vbox" style="padding: 0px;">
                     <div class="scrollableContainer">
                         <ng-template [ngIf]="selectedRole">
                             <div *ngFor="let c of capabilityList" class="listItem"

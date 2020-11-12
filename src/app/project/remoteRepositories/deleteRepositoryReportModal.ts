@@ -1,35 +1,27 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ExceptionDAO, RemoteRepositorySummary } from '../../models/Project';
-
-export class DeleteRepositoryReportModalData extends BSModalContext {
-    constructor(public deletingRepositories: RemoteRepositorySummary[], public exceptions: ExceptionDAO[]) {
-        super();
-    }
-}
 
 @Component({
     selector: "delete-repo-report-modal",
     templateUrl: "./deleteRepositoryReportModal.html",
     styles: ['.stacktrace { max-height: 100px; overflow: auto; white-space: pre; }']
 })
-export class DeleteRepositoryReportModal implements ModalComponent<DeleteRepositoryReportModalData> {
-    context: DeleteRepositoryReportModalData;
+export class DeleteRepositoryReportModal {
+    @Input() deletingRepositories: RemoteRepositorySummary[];
+    @Input() exceptions: ExceptionDAO[];
 
-    private message: string;
-    private failReports: FailReport[];
+    message: string;
+    failReports: FailReport[];
 
-    constructor(public dialog: DialogRef<DeleteRepositoryReportModalData>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) {}
 
     ngOnInit() {
         this.failReports = [];
-        this.context.exceptions.forEach((e: ExceptionDAO, i: number) => {
+        this.exceptions.forEach((e: ExceptionDAO, i: number) => {
             if (e != null) { //exception not null, it means that the corresponding repository deletion has failed
                 this.failReports.push({
-                    repositoryID: this.context.deletingRepositories[i].repositoryId,
+                    repositoryID: this.deletingRepositories[i].repositoryId,
                     exception: e,
                 });
             }
@@ -37,10 +29,8 @@ export class DeleteRepositoryReportModal implements ModalComponent<DeleteReposit
         this.message = "The deletion of the following remote " + ((this.failReports.length > 1) ? "repositories" : "repository") + " has failed:";
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+    ok() {
+        this.activeModal.close();
     }
 
 }

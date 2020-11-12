@@ -1,25 +1,25 @@
 <div class="vbox">
 
-    <div class="panel panel-default vbox">
-        <div class="panel-heading">
-            <button class="btn btn-xs btn-default" (click)="createProject()">
+    <div class="card card-default vbox">
+        <div class="card-header">
+            <button class="btn btn-xs btn-light" (click)="createProject()">
                 Create
             </button>
             <span style="flex: 1;"></span>
             <div class="btn-toolbar">
-                <button class="btn btn-xs btn-default" (click)="initProjects()" title="Refresh">
-                    <span class="glyphicon glyphicon-refresh"></span>
+                <button class="btn btn-xs btn-light" (click)="initProjects()" title="Refresh">
+                    <span class="fas fa-redo"></span>
                 </button>
-                <button class="btn btn-xs btn-default" (click)="openACLModal()" title="Show ACL matrix">
+                <button class="btn btn-xs btn-light" (click)="openACLModal()" title="Show ACL matrix">
                     ACL
                 </button>
-                <button class="btn btn-xs btn-default" (click)="settings()" title="Project view settings">
-                    <span class="glyphicon glyphicon-cog"></span>
+                <button class="btn btn-xs btn-light" (click)="settings()" title="Project view settings">
+                    <span class="fas fa-cog"></span>
                 </button>
             </div>
         </div>
-        <div class="panel-body scrollableContainer" style="padding-left: 8px; padding-right: 8px;">
-            <ng-container *ngIf="visualizationMode == 'dir'">
+        <div class="card-body scrollableContainer" style="padding-left: 8px; padding-right: 8px;">
+            <ng-container *ngIf="visualizationMode == ProjectViewMode.dir">
                 <!-- 7px applies the same paddings applied to the rows, namely the padding sum of listItem (3px) and groupPanel-body (4px) -->
                 <div class="hbox" style="padding: 7px 7px 0px; flex: none;">
                     <ng-container *ngFor="let colId of columnIDs">
@@ -35,8 +35,8 @@
                     <div class="groupPanel">
                         <div class="groupPanel-heading">
                             <div class="groupPanel-heading-content clickable" (click)="toggleDirectory(pd)">
-                                <span [class]="'glyphicon glyphicon-menu-' + (pd.open ? 'down' : 'right')"></span>
-                                <span [class]="'glyphicon glyphicon-folder-' + (pd.open ? 'open' : 'close')" style="margin-left: 4px;"></span>
+                                <span [class]="'fas fa-chevron-' + (pd.open ? 'down' : 'right')"></span>
+                                <span [class]="'fas fa-folder' + (pd.open ? '-open' : '')" style="margin-left: 4px;"></span>
                                 <label class="clickable" style="margin-left: 4px;">
                                     <ng-container *ngIf="pd.dir">{{pd.dir}}</ng-container>
                                     <ng-container *ngIf="!pd.dir">Unclassified</ng-container>
@@ -44,7 +44,7 @@
                             </div>
                             <div class="groupPanel-heading-content clickable" style="margin-left: 4px;">
                                 <button *ngIf="pd.dir" class="close" (click)="renameDirectory(pd.dir)" title="Rename directory" style="font-size: 12px;">
-                                    <span class="glyphicon glyphicon-pencil"></span>
+                                    <span class="fas fa-pencil-alt"></span>
                                 </button>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                                         {{p.getName()}}
                                     </div>
                                     <div *ngIf="columnOrder['name']" class="text-center" [ngStyle]="{ order: columnOrder['open'].order, flex: columnOrder['open'].flex }">
-                                        <button class="btn btn-default btn-sm" [ngClass]="{active: p.isOpen()}" style="line-height: 1" 
+                                        <button class="btn btn-light btn-sm" [ngClass]="{active: p.isOpen()}" style="line-height: 1" 
                                             (click)="openOrCloseProject(p)">
                                             <img *ngIf="!p.isOpen()" src="../../assets/images/icons/folder.gif">
                                             <img *ngIf="p.isOpen()" src="../../assets/images/icons/folder-open.gif">
@@ -72,34 +72,34 @@
                                         {{p.getLexicalizationModelType(true)}}
                                     </div>
                                     <div *ngIf="columnOrder['history']" class="text-center" [ngStyle]="{ order: columnOrder['history'].order, flex: columnOrder['history'].flex }">
-                                        <span *ngIf="p.isHistoryEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="History enabled"></span>
-                                        <span *ngIf="!p.isHistoryEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="History disabled"></span>
+                                        <span *ngIf="p.isHistoryEnabled()" class="fas fa-check" style="color: green" title="History enabled"></span>
+                                        <span *ngIf="!p.isHistoryEnabled()" class="fas fa-times" style="color: darkred" title="History disabled"></span>
                                     </div>
                                     <div *ngIf="columnOrder['validation']" class="text-center" [ngStyle]="{ order: columnOrder['validation'].order, flex: columnOrder['validation'].flex }">
-                                        <span *ngIf="p.isValidationEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="Validation enabled"></span>
-                                        <span *ngIf="!p.isValidationEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="Validation disabled"></span>
+                                        <span *ngIf="p.isValidationEnabled()" class="fas fa-check" style="color: green" title="Validation enabled"></span>
+                                        <span *ngIf="!p.isValidationEnabled()" class="fas fa-times" style="color: darkred" title="Validation disabled"></span>
                                     </div>
                                     <div *ngIf="columnOrder['location']" class="text-center" [ngStyle]="{ order: columnOrder['location'].order, flex: columnOrder['location'].flex }">
                                         {{p.getRepositoryLocation().location}}
-                                        <span *ngIf="p.isRepositoryRemote()" class="glyphicon glyphicon-map-marker" [title]="p.getRepositoryLocation().serverURL"></span>
+                                        <span *ngIf="p.isRepositoryRemote()" class="fas fa-map-marker-alt" [title]="p.getRepositoryLocation().serverURL"></span>
                                     </div>
                                     <div class="text-center" style="width: 100px; order: 99;">
                                         <div class="hbox" style="justify-content: center;">
-                                            <button class="btn btn-xs btn-default" (click)="deleteProject(p)" style="margin-left: 10px;">
-                                                <span class="glyphicon glyphicon-trash"></span>
+                                            <button class="btn btn-xs btn-light" (click)="deleteProject(p)" style="margin-left: 10px;">
+                                                <span class="far fa-trash-alt"></span>
                                             </button>
-                                            <div class="dropdown pull-right">
-                                                <button class="dropdown-toggle transparentBtn" data-toggle="dropdown">
-                                                    <span>&#9662;</span>
+                                            <div class="ml-1" ngbDropdown>
+                                                <button data-toggle="dropdown" ngbDropdownToggle class="btn btn-xs dropdown-toggle">
+                                                    <span class="fas fa-caret-down"></span>
                                                 </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a (click)="editDirectory(p, pd.dir)">Change directory</a></li>
-                                                    <li><a (click)="editACL(p)">Edit ACL</a></li>
-                                                    <li *ngIf="p.isRepositoryRemote()"><a (click)="editRemoteRepoCredential(p)">Edit Remote Repo configuration</a></li>
-                                                    <li><a (click)="editDescription(p)">Edit description</a></li>
-                                                    <li role="separator" class="divider"></li>
-                                                    <li><a (click)="openPropertyModal(p)">Properties</a></li>
-                                                </ul>
+                                                <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
+                                                    <button class="dropdown-item" (click)="editDirectory(p, pd.dir)">Change directory</button>
+                                                    <button class="dropdown-item" (click)="editACL(p)">Edit ACL</button>
+                                                    <button *ngIf="p.isRepositoryRemote()" class="dropdown-item" (click)="editRemoteRepoCredential(p)">Edit Remote Repo configuration</button>
+                                                    <button class="dropdown-item" (click)="editDescription(p)">Edit description</button>
+                                                    <div class="dropdown-divider"></div>
+                                                    <button class="dropdown-item" (click)="openPropertyModal(p)">Properties</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -110,7 +110,7 @@
                 </ng-container>
             </ng-container>
 
-            <ng-container *ngIf="visualizationMode == 'list'">
+            <ng-container *ngIf="visualizationMode == ProjectViewMode.list">
                 <!-- 3px is the same padding applied to the rows (of the listItem class) -->
                 <div class="hbox" style="padding: 7px 3px; flex: none;">
                     <ng-container *ngFor="let colId of columnIDs">
@@ -128,7 +128,7 @@
                             {{p.getName()}}
                         </div>
                         <div *ngIf="columnOrder['name']" class="text-center" [ngStyle]="{ order: columnOrder['open'].order, flex: columnOrder['open'].flex }">
-                            <button class="btn btn-default btn-sm" [ngClass]="{active: p.isOpen()}" style="line-height: 1" 
+                            <button class="btn btn-light btn-sm" [ngClass]="{active: p.isOpen()}" style="line-height: 1" 
                                 (click)="openOrCloseProject(p)">
                                 <img *ngIf="!p.isOpen()" src="../../assets/images/icons/folder.gif">
                                 <img *ngIf="p.isOpen()" src="../../assets/images/icons/folder-open.gif">
@@ -144,34 +144,31 @@
                             {{p.getLexicalizationModelType(true)}}
                         </div>
                         <div *ngIf="columnOrder['history']" class="text-center" [ngStyle]="{ order: columnOrder['history'].order, flex: columnOrder['history'].flex }">
-                            <span *ngIf="p.isHistoryEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="History enabled"></span>
-                            <span *ngIf="!p.isHistoryEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="History disabled"></span>
+                            <span *ngIf="p.isHistoryEnabled()" class="fas fa-check" style="color: green" title="History enabled"></span>
+                            <span *ngIf="!p.isHistoryEnabled()" class="fas fa-times" style="color: darkred" title="History disabled"></span>
                         </div>
                         <div *ngIf="columnOrder['validation']" class="text-center" [ngStyle]="{ order: columnOrder['validation'].order, flex: columnOrder['validation'].flex }">
-                            <span *ngIf="p.isValidationEnabled()" class="glyphicon glyphicon-ok" style="color: green" title="Validation enabled"></span>
-                            <span *ngIf="!p.isValidationEnabled()" class="glyphicon glyphicon-remove" style="color: darkred" title="Validation disabled"></span>
+                            <span *ngIf="p.isValidationEnabled()" class="fas fa-check" style="color: green" title="Validation enabled"></span>
+                            <span *ngIf="!p.isValidationEnabled()" class="fas fa-times" style="color: darkred" title="Validation disabled"></span>
                         </div>
                         <div *ngIf="columnOrder['location']" class="text-center" [ngStyle]="{ order: columnOrder['location'].order, flex: columnOrder['location'].flex }">
                             {{p.getRepositoryLocation().location}}
-                            <span *ngIf="p.isRepositoryRemote()" class="glyphicon glyphicon-map-marker" [title]="p.getRepositoryLocation().serverURL"></span>
+                            <span *ngIf="p.isRepositoryRemote()" class="fas fa-map-marker-alt" [title]="p.getRepositoryLocation().serverURL"></span>
                         </div>
                         <div class="text-center" style="width: 100px; order: 99;">
                             <div class="hbox" style="justify-content: center;">
-                                <button class="btn btn-xs btn-default" (click)="deleteProject(p)" style="margin-left: 10px;">
-                                    <span class="glyphicon glyphicon-trash"></span>
+                                <button class="btn btn-xs btn-light" (click)="deleteProject(p)" style="margin-left: 10px;">
+                                    <span class="far fa-trash-alt"></span>
                                 </button>
-                                <div class="dropdown pull-right">
-                                    <button class="dropdown-toggle transparentBtn" data-toggle="dropdown">
-                                        <span>&#9662;</span>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a (click)="editDirectory(p, pd.dir)">Change directory</a></li>
-                                        <li><a (click)="editACL(p)">Edit ACL</a></li>
-                                        <li *ngIf="p.isRepositoryRemote()"><a (click)="editRemoteRepoCredential(p)">Edit Remote Repo configuration</a></li>
-                                        <li><a (click)="editDescription(p)">Edit description</a></li>
-                                        <li role="separator" class="divider"></li>
-                                        <li><a (click)="openPropertyModal(p)">Properties</a></li>
-                                    </ul>
+                                <div placement="bottom-right" ngbDropdown>
+                                    <button data-toggle="dropdown" ngbDropdownToggle class="btn btn-xs dropdown-toggle"></button>
+                                    <div ngbDropdownMenu class="dropdown-menu" ngbDropdownMenu>
+                                        <button class="dropdown-item" (click)="editACL(p)">Edit ACL</button>
+                                        <button *ngIf="p.isRepositoryRemote()" class="dropdown-item" (click)="editRemoteRepoCredential(p)">Edit Remote Repo configuration</button>
+                                        <button class="dropdown-item" (click)="editDescription(p)">Edit description</button>
+                                        <div class="dropdown-divider"></div>
+                                        <button class="dropdown-item" (click)="openPropertyModal(p)">Properties</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

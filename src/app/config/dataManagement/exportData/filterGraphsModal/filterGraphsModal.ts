@@ -1,36 +1,23 @@
-import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { Settings } from "../../../../models/Plugins";
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from "../../../../models/ARTResources";
-
-export class FilterGraphsModalData extends BSModalContext {
-    /**
-     * @param configuration 
-     */
-    constructor(public graphs: {checked: boolean, graph: ARTURIResource}[]) {
-        super();
-    }
-}
 
 @Component({
     selector: "filter-graphs-modal",
     templateUrl: "./filterGraphsModal.html",
 })
-export class FilterGraphsModal implements ModalComponent<FilterGraphsModalData> {
-    context: FilterGraphsModalData;
+export class FilterGraphsModal {
+    @Input() graphs: {checked: boolean, graph: ARTURIResource}[];
 
 
-    constructor(public dialog: DialogRef<FilterGraphsModalData>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) {}
 
     ngOnInit() {}
 
     // graph panel handlers
-    private areAllGraphDeselected(): boolean {
-        for (var i = 0; i < this.context.graphs.length; i++) {
-            if (this.context.graphs[i].checked) {
+    areAllGraphDeselected(): boolean {
+        for (var i = 0; i < this.graphs.length; i++) {
+            if (this.graphs[i].checked) {
                 return false;
             }
         }
@@ -38,10 +25,8 @@ export class FilterGraphsModal implements ModalComponent<FilterGraphsModalData> 
     }
 
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+    ok() {
+        this.activeModal.close();
     }
 
 }

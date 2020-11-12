@@ -1,42 +1,42 @@
 <div class="vbox">
 
-     <div class="panel panel-default vbox">
+     <div class="card card-default vbox">
 
-        <div class="panel-body hbox"> 
+        <div class="card-body hbox"> 
 
-            <div class="panel panel-default vbox" style="flex: 2;">
-                <div class="panel-heading">
+            <div class="card card-default vbox" style="flex: 2;">
+                <div class="card-header">
                     <label style="flex: 1;">Users:</label>
-                    <div class="pull-right">
+                    <div class="float-right">
                         <div class="btn-toolbar" role="toolbar">
                             <div class="btn-group btn-group-xs">
-                                <button #actBtn class="btn btn-default" [ngClass]="{active: showActive}" (click)="showActive = !showActive"
+                                <button #actBtn class="btn btn-light" [ngClass]="{active: showActive}" (click)="showActive = !showActive"
                                     title="Show/Hide active users" (mouseup)="actBtn.blur()">Active
                                 </button>
-                                <button #inactBtn class="btn btn-default" [ngClass]="{active: showInactive}" (click)="showInactive = !showInactive"
+                                <button #inactBtn class="btn btn-light" [ngClass]="{active: showInactive}" (click)="showInactive = !showInactive"
                                     title="Show/Hide inactive users" (mouseup)="inactBtn.blur()">Inactive
                                 </button>
-                                <button #newBtn class="btn btn-default" [ngClass]="{active: showNew}" (click)="showNew = !showNew"
+                                <button #newBtn class="btn btn-light" [ngClass]="{active: showNew}" (click)="showNew = !showNew"
                                     title="Show/Hide new users" (mouseup)="newBtn.blur()">New
                                 </button>
                             </div>
                             <div class="btn-group btn-group-xs">
-                                <button class="btn btn-default" (click)="createUser()" title="Create user">
-                                    <span class="glyphicon glyphicon-plus"></span>
+                                <button class="btn btn-light" (click)="createUser()" title="Create user">
+                                    <span class="fas fa-plus"></span>
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="panel-body vbox" style="padding: 0px;">
+                <div class="card-body vbox" style="padding: 0px;">
                     <div class="scrollableContainer">
                         <ng-template ngFor let-u [ngForOf]="users">
                             <div *ngIf="isUserVisible(u)" class="listItem" [ngClass]="{active: u == selectedUser}" (click)="selectUser(u)">
                                 <span style="flex: 1">{{u.getShow()}} <span class="grayText">&nbsp;({{u.getEmail()}})</span></span>
-                                <span *ngIf="u.isAdmin()" class="glyphicon glyphicon-wrench" style="color: gray; margin-right: 2px;" title="Administrator"></span>
-                                <span *ngIf="u.getStatus() == 'NEW'" class="glyphicon glyphicon-exclamation-sign inactive" title="New"></span>
-                                <span *ngIf="u.getStatus() == 'INACTIVE'" class="glyphicon glyphicon-ban-circle inactive" title="Inactive"></span>
-                                <span *ngIf="u.getStatus() == 'ACTIVE'" class="glyphicon glyphicon-user" 
+                                <span *ngIf="u.isAdmin()" class="fas fa-wrench" style="color: gray; margin-right: 2px;" title="Administrator"></span>
+                                <span *ngIf="u.getStatus() == 'NEW'" class="fas fa-exclamation-circle inactive" title="New"></span>
+                                <span *ngIf="u.getStatus() == 'INACTIVE'" class="fas fa-ban inactive" title="Inactive"></span>
+                                <span *ngIf="u.getStatus() == 'ACTIVE'" class="fas fa-user" 
                                     [ngClass]="{ online: u.isOnline(), offline: !u.isOnline()}" [title]="u.isOnline() ? 'Online' : 'Offline'">
                                 </span>
                             </div>
@@ -46,17 +46,17 @@
             </div>
 
             <div *ngIf="selectedUser" class="vbox" style="flex: 5; margin-left: 5px;">
-                <div class="btn-group btn-group-sm pull-right" style="align-self: flex-end; margin-bottom: 4px;">
-                    <button *ngFor="let selector of aspectSelectors" class="btn btn-default" [ngClass]="{active: selectedAspectSelector == selector}"
+                <div class="btn-group float-right" style="align-self: flex-end; margin-bottom: 4px;">
+                    <button *ngFor="let selector of aspectSelectors" class="btn btn-light" [ngClass]="{active: selectedAspectSelector == selector}"
                         (click)="selectedAspectSelector = selector">{{selector}}</button>
                 </div>
 
-                <div class="panel panel-default vbox" *ngIf="selectedAspectSelector == userDetailsAspect">
-                    <div class="panel-body vbox">
+                <div class="card card-default vbox" *ngIf="selectedAspectSelector == userDetailsAspect">
+                    <div class="card-body vbox">
                         <user-details-panel [user]="selectedUser" (deleted)="initUserList()">
                         </user-details-panel>
-                        <div class="panel panel-default" style="margin-top: 8px">
-                            <div class="panel-body hbox" style="align-items: center;">
+                        <div class="card card-default" style="margin-top: 8px">
+                            <div class="card-body hbox" style="align-items: center;">
                                 <label>Assigned to projects:</label>
                                 <div class="hbox tile-group" style="align-items: center; margin-left: 6px; flex-wrap: nowrap; overflow: auto;">
                                     <span *ngIf="selectedUser.isAdmin(); else notAdminBlock" style="margin-left: 4px;">
@@ -73,21 +73,21 @@
                 <!-- <user-details-panel *ngIf="selectedAspectSelector == userDetailsAspect" [user]="selectedUser" (deleted)="initUserList()">
                 </user-details-panel> -->
 
-                <div class="panel panel-default vbox" *ngIf="selectedAspectSelector == rvTemplateAspect">
-                    <div class="panel-heading">
+                <div class="card card-default vbox" *ngIf="selectedAspectSelector == rvTemplateAspect">
+                    <div class="card-header">
                         <label style="flex: 1;">Template</label>
                         <div class="btn-toolbar" role="toolbar">
                             <div class="btn-group btn-group-xs">
-                                <button class="btn btn-default" (click)="storeTemplate()" title="Store template">
-                                    <span class="glyphicon glyphicon-floppy-save"></span>
+                                <button class="btn btn-light" (click)="storeTemplate()" title="Store template">
+                                    <span class="fas fa-download"></span>
                                 </button>
-                                <button class="btn btn-default" (click)="loadTemplate()" title="Load existing template">
-                                    <span class="glyphicon glyphicon-floppy-open"></span>
+                                <button class="btn btn-light" (click)="loadTemplate()" title="Load existing template">
+                                    <span class="fas fa-upload"></span>
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <div class="panel-body vbox">
+                    <div class="card-body vbox">
                         <div class="alert alert-info" style="margin-bottom: 4px;">
                             Here you can assign a ResourceView template to the user. This template describes which ResourceView partitions are visible by default.<br>
                             You can also load an already existing template, or decide to save the template you defined, through the toolbar in panel header.

@@ -1,14 +1,14 @@
-<div class="panel panel-default vbox" style="flex: 1; margin-left: 4px;">
-    <div class="panel-heading">
+<div class="card card-default vbox" style="flex: 1; margin-left: 4px;">
+    <div class="card-header">
         <label>Dataset description:</label>
     </div>
 
-    <div class="panel-body hbox">
+    <div class="card-body hbox">
 
-        <div class="panel panel-default vbox" style="flex: 2;">
-            <div class="panel-body vbox">
+        <div class="card card-default vbox" style="flex: 2;">
+            <div class="card-body vbox">
                 <div class="table-responsive" style="flex: 1;">
-                    <table class="table table-condensed">
+                    <table class="table table-sm">
                         <tbody>
                             <tr>
                                 <td style="vertical-align: top;"><label>ID</label></td>
@@ -71,11 +71,11 @@
         </div>
 
         <div *ngIf="getFacetsKeys().length != 0" class="vbox scrollableContainer" style="padding: 0px; margin-left: 4px; max-width: 200px;">
-            <div *ngFor="let key of getFacetsKeys()" class="panel panel-alt vbox" style="margin-bottom: 4px;">
-                <div class="panel-heading"><label>{{key}}</label></div>
-                <div class="panel-body scrollableContainer" style="flex: 1;">
+            <div *ngFor="let key of getFacetsKeys()" class="card card-alt vbox" style="margin-bottom: 4px;">
+                <div class="card-header"><label>{{key}}</label></div>
+                <div class="card-body scrollableContainer" style="flex: 1;">
                     <div *ngFor="let value of dataset.facets[key]" style="margin-bottom: 3px;">
-                        <span class="label label-default" style="font-size: 11px;">{{value}}</span>
+                        <span class="badge badge-secondary" style="font-size: 11px;">{{value}}</span>
                     </div>
                 </div>
             </div>

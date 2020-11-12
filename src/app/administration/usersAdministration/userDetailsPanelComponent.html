@@ -1,32 +1,32 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading">
+<div class="card card-default vbox">
+    <div class="card-header">
         <label style="flex: 1;">User Details:</label>
         <div *ngIf="user" class="btn-toolbar">
-            <button type="button" class="btn btn-xs btn-default" (click)="changeAdministratorStatus()"
+            <button type="button" class="btn btn-xs btn-light" (click)="changeAdministratorStatus()"
                 [ngClass]="{'active online': user.isAdmin()}" [disabled]="isChangeAdminButtonDisabled()"
                 [title]="user.isAdmin() ? 'Revoke administrator authority' : 'Grant administrator authority'">
                 Administrator
             </button>
             <div class="btn-group btn-group-xs" role="group">
-                <button type="button" class="btn btn-default" (click)="changeUserStatus()"
+                <button type="button" class="btn btn-light" (click)="changeUserStatus()"
                     [ngClass]="{'active': isUserActive()}" style="color: green" [disabled]="isChangeStatusButtonDisabled()">
                     Active
                 </button>
-                <button type="button" class="btn btn-default" (click)="changeUserStatus()"
+                <button type="button" class="btn btn-light" (click)="changeUserStatus()"
                     [ngClass]="{'active': !isUserActive()}" style="color: red" [disabled]="isChangeStatusButtonDisabled()">
                     Inactive
                 </button>
             </div>
         </div>
     </div>
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
         <user-details *ngIf="user" [user]="user" [readonly]="true"></user-details>
     </div>
-    <div class="panel-footer" *ngIf="user">
-        <button class="btn btn-default btn-xs" (click)="changePassword()" [disabled]="isChangePwdButtonDisabled()">
+    <div class="card-footer" *ngIf="user">
+        <button class="btn btn-light btn-xs" (click)="changePassword()" [disabled]="isChangePwdButtonDisabled()">
             Change password
         </button>
-        <button class="btn btn-default btn-xs pull-right" (click)="deleteUser()" [disabled]="isDeleteButtonDisabled()">
+        <button class="btn btn-light btn-xs float-right" (click)="deleteUser()" [disabled]="isDeleteButtonDisabled()">
             Delete
         </button>
     </div>

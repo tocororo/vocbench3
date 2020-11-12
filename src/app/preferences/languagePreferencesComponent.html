@@ -1,24 +1,24 @@
-<div class="panel panel-default vbox">
+<div class="card card-default vbox">
 
-    <div class="panel-heading">
+    <div class="card-header">
         <label style="flex: 1">Languages:</label>
-        <div class="pull-right">
+        <div class="float-right">
             <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group btn-group-xs">
-                    <button class="btn btn-default" [ngClass]="{active: activePanel == 'rendering'}" (click)="activePanel = 'rendering'">
+                    <button class="btn btn-light" [ngClass]="{active: activePanel == 'rendering'}" (click)="activePanel = 'rendering'">
                         Rendering
                     </button>
-                    <button class="btn btn-default" [ngClass]="{active: activePanel == 'editing'}" (click)="activePanel = 'editing'">
+                    <button class="btn btn-light" [ngClass]="{active: activePanel == 'editing'}" (click)="activePanel = 'editing'">
                         Editing
                     </button>
-                    <button class="btn btn-default" [ngClass]="{active: activePanel == 'valuefilter'}" (click)="activePanel = 'valuefilter'">
+                    <button class="btn btn-light" [ngClass]="{active: activePanel == 'valuefilter'}" (click)="activePanel = 'valuefilter'">
                         Value-filter
                     </button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
         <lang-rendering-pref *ngIf="activePanel == 'rendering'" class="vbox"></lang-rendering-pref>
         <lang-editing-pref *ngIf="activePanel == 'editing'" class="vbox"></lang-editing-pref>
         <lang-value-filter-pref *ngIf="activePanel == 'valuefilter'" class="vbox"></lang-value-filter-pref>

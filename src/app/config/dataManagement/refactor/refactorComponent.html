@@ -1,61 +1,61 @@
 <div class="vbox">
 
-    <div class="panel panel-default vbox">
-        <div class="panel-heading">
+    <div class="card card-default vbox">
+        <div class="card-header">
             <label>Data Refactor:</label>
         </div>
 
-        <div class="panel-body vbox scrollableContainer">
+        <div class="card-body vbox scrollableContainer">
             
-            <div *ngIf="skosxlToSkosEnabled()" class="panel panel-alt">
-                <div class="panel-heading">
+            <div *ngIf="skosxlToSkosEnabled()" class="card card-alt">
+                <div class="card-header">
                     <label style="flex: 1">SKOS &#8594; SKOS-XL</label>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <div class="alert alert-info" style="margin-bottom: 5px; font-size: 12px;">
                         This refactor operation transforms all the SKOS labels and notes into reified SKOS-XL labels and notes.
                     </div>
                 </div>
-                <div class="panel-footer hbox" style="align-items: center; justify-content: flex-end">
+                <div class="card-footer hbox" style="align-items: center; justify-content: flex-end">
                     <div class="checkbox" style="margin: 0px 10px; display: inline-block">
                         <label><input type="checkbox" [(ngModel)]="reifyNotes">Reify SKOS notes</label>
                     </div>
-                    <button class="btn btn-sm btn-default pull-right" (click)="skosToSkosxl()" [disabled]="!isSkosToSkosxlAuthorized()">Refactor</button>
+                    <button class="btn btn-sm btn-light float-right" (click)="skosToSkosxl()" [disabled]="!isSkosToSkosxlAuthorized()">Refactor</button>
                     <span class="clearfix"></span>
                 </div>
             </div>
 
-            <div *ngIf="skosToSkosxlEnabled()" class="panel panel-alt" style="margin-top: 4px;">
-                <div class="panel-heading">
+            <div *ngIf="skosToSkosxlEnabled()" class="card card-alt" style="margin-top: 4px;">
+                <div class="card-header">
                     <label style="flex: 1">SKOS-XL &#8594; SKOS</label>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <div class="alert alert-info" style="margin-bottom: 5px; font-size: 12px;">
                         This refactor operation transforms all the reified SKOS-XL labels and notes into flattened SKOS labels and notes.
                         Note: this is <strong>not</strong> a loss-less operation, all the information related to the SKOS-XL labels and notes will be lost.
                     </div>
                 </div>
-                <div class="panel-footer hbox" style="align-items: center; justify-content: flex-end">
+                <div class="card-footer hbox" style="align-items: center; justify-content: flex-end">
                     <div class="checkbox" style="margin: 0px 10px; display: inline-block">
                         <label><input type="checkbox" [(ngModel)]="flattenNotes">Flatten reified SKOS notes</label>
                     </div>
-                    <button class="btn btn-sm btn-default pull-right" (click)="skosxlToSkos()" [disabled]="!isSkoxlToSkosAuthorized()">Refactor</button>
+                    <button class="btn btn-sm btn-light float-right" (click)="skosxlToSkos()" [disabled]="!isSkoxlToSkosAuthorized()">Refactor</button>
                     <span class="clearfix"></span>
                 </div>
             </div>
 
-            <div class="panel panel-alt" style="margin-top: 4px;">
-                <div class="panel-heading">
+            <div class="card card-alt" style="margin-top: 4px;">
+                <div class="card-header">
                     <label style="flex: 1">Migrate data to baseURI graph</label>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <div class="alert alert-info" style="margin-bottom: 5px; font-size: 12px;">
                         This operation will move the content of the default graph to a graph named after the base URI of the current project.
                         It will also clear the default graph and preserve the information already contained in the destination graph.
                     </div>
                 </div>
-                <div class="panel-footer">
-                    <button class="btn btn-sm btn-default pull-right" (click)="migrateData()" [disabled]="!isMigrateAuthorized()">Migrate</button>
+                <div class="card-footer">
+                    <button class="btn btn-sm btn-light float-right" (click)="migrateData()" [disabled]="!isMigrateAuthorized()">Migrate</button>
                     <span class="clearfix"></span>
                 </div>
             </div>

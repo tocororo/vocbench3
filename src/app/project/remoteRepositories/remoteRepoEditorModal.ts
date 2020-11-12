@@ -1,40 +1,31 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Project, RepositorySummary } from '../../models/Project';
 import { ProjectServices } from "../../services/projectServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-
-export class RemoteRepoEditorModalData extends BSModalContext {
-    constructor(public project: Project) {
-        super();
-    }
-}
 
 @Component({
     selector: "remote-repo-editor-modal",
     templateUrl: "./remoteRepoEditorModal.html",
 })
-export class RemoteRepoEditorModal implements ModalComponent<RemoteRepoEditorModalData> {
-    context: RemoteRepoEditorModalData;
+export class RemoteRepoEditorModal {
+    @Input() project: Project
 
     private pristineRepoSummaries: RepositorySummary[];
-    private repoSummaries: RepositorySummary[];
+    repoSummaries: RepositorySummary[];
     private allowBatchModify: boolean = false;
 
     private BATCH_ATTR: string = "batch";
     private MATCH_USERNAME_ATTR: string = "matchUsername";
 
-    constructor(public dialog: DialogRef<RemoteRepoEditorModalData>, private projectService: ProjectServices, private basicModals: BasicModalServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.initRepos();
     }
 
     private initRepos() {
-        this.projectService.getRepositories(this.context.project, true).subscribe(
+        this.projectService.getRepositories(this.project, true).subscribe(
             repos => {
                 this.pristineRepoSummaries = JSON.parse(JSON.stringify(repos)); //clone 
                 this.repoSummaries = repos;
@@ -52,7 +43,7 @@ export class RemoteRepoEditorModal implements ModalComponent<RemoteRepoEditorMod
     private applyChange(repo: RepositorySummary) {
         if (repo[this.BATCH_ATTR]) {
             let oldUsername: string = this.pristineRepoSummaries[this.repoSummaries.indexOf(repo)].remoteRepoSummary.username;
-            this.projectService.batchModifyRepostoryAccessCredentials(this.context.project, repo.remoteRepoSummary.serverURL,
+            this.projectService.batchModifyRepostoryAccessCredentials(this.project, repo.remoteRepoSummary.serverURL,
                 repo[this.MATCH_USERNAME_ATTR], oldUsername, repo.remoteRepoSummary.username, repo.remoteRepoSummary.password).subscribe(
                     stResp => {
                         let msg: string = "Credentials for remote repositories with serverURL " + repo.remoteRepoSummary.serverURL;
@@ -65,7 +56,7 @@ export class RemoteRepoEditorModal implements ModalComponent<RemoteRepoEditorMod
                     }
                 );
         } else { //batch false or undefined (in case of just one repoSummary)
-            this.projectService.modifyRepositoryAccessCredentials(this.context.project, repo.id,
+            this.projectService.modifyRepositoryAccessCredentials(this.project, repo.id,
                 repo.remoteRepoSummary.username, repo.remoteRepoSummary.password).subscribe(
                     stResp => {
                         this.basicModals.alert("Credentials updated", "Credentials for the '" + repo.id +
@@ -77,10 +68,8 @@ export class RemoteRepoEditorModal implements ModalComponent<RemoteRepoEditorMod
 
 
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+    ok() {
+        this.activeModal.close();
     }
 
 }

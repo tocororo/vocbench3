@@ -1,38 +1,31 @@
-import { Component } from "@angular/core";
-import { Observable } from 'rxjs/Observable';
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { forkJoin, Observable } from 'rxjs';
 import { UsersGroup } from "../../models/User";
 import { UsersGroupsServices } from "../../services/usersGroupsServices";
-
-export class GroupEditorModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title', public group?: UsersGroup) {
-        super();
-    }
-}
 
 @Component({
     selector: "group-editor-modal",
     templateUrl: "./groupEditorModal.html",
 })
-export class GroupEditorModal implements ModalComponent<GroupEditorModalData> {
-    context: GroupEditorModalData;
+export class GroupEditorModal {
+    @Input() title: string;
+    @Input() group: UsersGroup;
+
 
     private groupPristine: UsersGroup;
 
-    private shortName: string;
-    private fullName: string;
-    private description: string;
-    private webPage: string;
+    shortName: string;
+    fullName: string;
+    description: string;
+    webPage: string;
     private logoUrl: string;
 
-    constructor(public dialog: DialogRef<GroupEditorModalData>, private groupsService: UsersGroupsServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private groupsService: UsersGroupsServices) { }
 
     ngOnInit() {
-        if (this.context.group != null) { // edit mode
-            let group: UsersGroup = this.context.group;
+        if (this.group != null) { // edit mode
+            let group: UsersGroup = this.group;
             this.shortName = group.shortName;
             this.fullName = group.fullName;
             this.description = group.description;
@@ -43,16 +36,16 @@ export class GroupEditorModal implements ModalComponent<GroupEditorModalData> {
         }
     }
 
-    private isDataValid(): boolean {
+    isDataValid(): boolean {
         return this.shortName && this.shortName.trim() != "";
     }
 
-    ok(event: Event) {
+    ok() {
         if (!this.isDataValid()) {
             return;
         }
 
-        if (this.context.group) { //edit
+        if (this.group) { //edit
             let updateFnArray: any[] = [];
             if (this.shortName != this.groupPristine.shortName) {
                 updateFnArray.push(this.groupsService.updateGroupShortName(this.groupPristine.iri, this.shortName));
@@ -69,28 +62,24 @@ export class GroupEditorModal implements ModalComponent<GroupEditorModalData> {
             if (this.logoUrl != this.groupPristine.logoUrl) {
                 updateFnArray.push(this.groupsService.updateGroupLogoUrl(this.groupPristine.iri, this.logoUrl));
             }
-            Observable.forkJoin(updateFnArray).subscribe(
-                stResp => {
+            forkJoin(updateFnArray).subscribe(
+                () => {
                     let updatedGroup: UsersGroup = new UsersGroup(this.groupPristine.iri, this.shortName, this.fullName, 
                         this.description, this.webPage, this.logoUrl);
-                    event.stopPropagation();
-                    event.preventDefault();
-                    this.dialog.close(updatedGroup);
+                    this.activeModal.close(updatedGroup);
                 }
             );
         } else { //create
             this.groupsService.createGroup(this.shortName, this.fullName, this.description, this.webPage, this.logoUrl).subscribe(
                 stResp => {
-                    event.stopPropagation();
-                    event.preventDefault();
-                    this.dialog.close();
+                    this.activeModal.close();
                 }
             );
         }
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
 }
