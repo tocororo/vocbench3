@@ -17,7 +17,7 @@ export class CustomFormField implements ControlValueAccessor {
 
     @Input() lang: string;
 
-    private field: FormField;
+    field: FormField;
 
     constructor() { }
 
@@ -46,7 +46,7 @@ export class CustomFormField implements ControlValueAccessor {
      * Listener to change of lang-picker used to set the language argument of a formField that
      * has coda:langString as converter
      */
-    private onConverterLangChange(newLang: string, formFieldConvArgumentPh: FormField) {
+    onConverterLangChange(newLang: string, formFieldConvArgumentPh: FormField) {
         /* setTimeout to trigger a new round of change detection avoid an exception due to changes in a lifecycle hook
         (see https://github.com/angular/angular/issues/6005#issuecomment-165911194) */
         window.setTimeout(() => {
@@ -59,12 +59,12 @@ export class CustomFormField implements ControlValueAccessor {
      * Listener on change of a formField input field. Checks if there are some other
      * formEntries with the same userPrompt and eventually updates their value
      */
-    private onEntryValueChange(value: string) {
+    onEntryValueChange(value: string) {
         this.field.value = value;
         this.propagateChange(this.field);
     }
 
-    private updateNodeField(res: ARTNode) {
+    updateNodeField(res: ARTNode) {
         if (res != null) {
             this.field.value = res.getNominalValue();
         } else {
@@ -73,7 +73,7 @@ export class CustomFormField implements ControlValueAccessor {
         this.propagateChange(this.field);
     }
 
-    private onModelChanged() {
+    onModelChanged() {
         this.propagateChange(this.field);
     }
 

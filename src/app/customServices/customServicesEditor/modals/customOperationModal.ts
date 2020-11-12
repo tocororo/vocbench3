@@ -1,38 +1,24 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CustomOperationDefinition } from "../../../models/CustomService";
-
-export class CustomOperationModalData extends BSModalContext {
-    /**
-     * @param title 
-     * @param operation
-     */
-    constructor(public operation: CustomOperationDefinition) {
-        super();
-    }
-}
 
 @Component({
     selector: "custom-operation-modal",
     templateUrl: "./customOperationModal.html",
 })
-export class CustomOperationModal implements ModalComponent<CustomOperationModalData> {
-    context: CustomOperationModalData;
+export class CustomOperationModal {
+    @Input() operation: CustomOperationDefinition;
 
-    private title: string;
+    title: string;
 
-    constructor(public dialog: DialogRef<CustomOperationModalData>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) { }
 
     ngOnInit() {
-        this.title = this.context.operation.name;
+        this.title = this.operation.name;
     }
 
-
     ok() {
-        this.dialog.close();
+        this.activeModal.close();
     }
 
     

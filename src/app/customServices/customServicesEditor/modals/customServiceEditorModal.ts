@@ -1,39 +1,31 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CustomOperationDefinition, CustomService, CustomServiceDefinition } from "../../../models/CustomService";
 import { CustomServiceServices } from "../../../services/customServiceServices";
-
-export class CustomServiceEditorModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title', public service?: CustomService) {
-        super();
-    }
-}
 
 @Component({
     selector: "custom-service-editor-modal",
     templateUrl: "./customServiceEditorModal.html",
 })
-export class CustomServiceEditorModal implements ModalComponent<CustomServiceEditorModalData> {
-    context: CustomServiceEditorModalData;
+export class CustomServiceEditorModal {
+    @Input() title: string;
+    @Input() service: CustomService;
 
-    private id: string;
-    private name: string;
-    private description: string;
+    id: string;
+    name: string;
+    description: string;
 
-    constructor(public dialog: DialogRef<CustomServiceEditorModalData>, private customServService: CustomServiceServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private customServService: CustomServiceServices) { }
 
     ngOnInit() {
-        if (this.context.service != null) { // edit mode
-            this.id = this.context.service.id;
-            this.name = this.context.service.getPropertyValue("name");
-            this.description = this.context.service.getPropertyValue("description");
+        if (this.service != null) { // edit mode
+            this.id = this.service.id;
+            this.name = this.service.getPropertyValue("name");
+            this.description = this.service.getPropertyValue("description");
         }
     }
 
-    private isDataValid(): boolean {
+    isDataValid(): boolean {
         //valid if both id and name are provided
         return this.id && this.id.trim() != "" && this.name && this.name.trim() != "";
     }
@@ -43,16 +35,16 @@ export class CustomServiceEditorModal implements ModalComponent<CustomServiceEdi
             return;
         }
 
-        if (this.context.service) { //edit
+        if (this.service) { //edit
             //check if something changed
-            let pristineName: string = this.context.service.getPropertyValue("name");
-            let pristineDescription: string = this.context.service.getPropertyValue("description");
+            let pristineName: string = this.service.getPropertyValue("name");
+            let pristineDescription: string = this.service.getPropertyValue("description");
             if (pristineName != this.name || pristineDescription != this.description) {
-                let operations: CustomOperationDefinition[] = this.context.service.getPropertyValue("operations");
+                let operations: CustomOperationDefinition[] = this.service.getPropertyValue("operations");
                 let updatedService: CustomServiceDefinition = { name: this.name, description: this.description, operations: operations };
-                this.customServService.updateCustomService(this.context.service.id, updatedService).subscribe(
+                this.customServService.updateCustomService(this.service.id, updatedService).subscribe(
                     () => {
-                        this.dialog.close();
+                        this.activeModal.close();
                     }
                 );
             } else { //nothing's changed => cancel, so the calling component doesn't update
@@ -62,14 +54,14 @@ export class CustomServiceEditorModal implements ModalComponent<CustomServiceEdi
             let newService: CustomServiceDefinition = { name: this.name, description: this.description };
             this.customServService.createCustomService(this.id.trim(), newService).subscribe(
                 () => {
-                    this.dialog.close();
+                    this.activeModal.close();
                 }
             );
         }
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
 }

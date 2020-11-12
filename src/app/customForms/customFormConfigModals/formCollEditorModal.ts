@@ -1,65 +1,51 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from "../../models/ARTResources";
 import { CustomForm, EditorMode, FormCollection } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 
-export class FormCollEditorModalData extends BSModalContext {
-    /**
-     * @param id identifier of the FormCollection to edit.
-     * If not provided the modal allows to create a FormCollection from scratch
-     * @param existingFormColl list of FormCollection id that already exist.
-     * Useful to avoid cretion of FormCollection with duplicate id.
-     */
-    constructor(public id: string, public existingFormColl: string[] = [], public readOnly: boolean = false) {
-        super();
-    }
-}
-
 @Component({
     selector: "form-coll-editor-modal",
     templateUrl: "./formCollEditorModal.html",
 })
-export class FormCollEditorModal implements ModalComponent<FormCollEditorModalData> {
-    context: FormCollEditorModalData;
+export class FormCollEditorModal {
+    @Input() id: string;
+    @Input() existingFormColl: string[] = [];
+    @Input() readOnly: boolean;
 
-    private mode: EditorMode;
+    mode: EditorMode;
 
-    private namespaceLocked: boolean = true;
+    namespaceLocked: boolean = true;
 
     private fcPrefix: string = FormCollection.PREFIX;
     private fcId: string;
     private fcShortId: string; //ID of the FormCollection without the prefix
 
-    private forms: CustomForm[] = []; //forms of the given FormCollection
-    private selectedForm: CustomForm; //CustomForm selected from the list of the forms of the current FormCollection
+    forms: CustomForm[] = []; //forms of the given FormCollection
+    selectedForm: CustomForm; //CustomForm selected from the list of the forms of the current FormCollection
 
-    private formsAvailable: CustomForm[] = []; //ID of all the forms available
-    private selectedFormAvailable: CustomForm; //CustomForm selected from the list of all the forms
+    formsAvailable: CustomForm[] = []; //ID of all the forms available
+    selectedFormAvailable: CustomForm; //CustomForm selected from the list of all the forms
 
-    private suggestions: ARTURIResource[] = []; //classes/properties suggested for the collection
-    private selectedSuggestion: ARTURIResource;
+    suggestions: ARTURIResource[] = []; //classes/properties suggested for the collection
+    selectedSuggestion: ARTURIResource;
 
     //used to check for changes after confirm
     // private formsPristine: CustomForm[] = []; //keeps the pristine forms of the given FormCollection
     // private suggestionsPristine: ARTURIResource[] = []; //keeps the pristine suggestions of the given FormCollection
 
-    private submitted: boolean = false;
-    private errorMsg: string;
+    submitted: boolean = false;
+    errorMsg: string;
 
 
-    constructor(public dialog: DialogRef<FormCollEditorModalData>, private cfService: CustomFormsServices, 
-        private browsingModals: BrowsingModalServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private cfService: CustomFormsServices, private browsingModals: BrowsingModalServices) { }
 
     ngOnInit() {
-        if (this.context.id != undefined) { //CR id provided, so the modal works in edit mode
+        if (this.id != undefined) { //CR id provided, so the modal works in edit mode
             this.mode = EditorMode.edit;
-            this.cfService.getFormCollection(this.context.id).subscribe(
+            this.cfService.getFormCollection(this.id).subscribe(
                 fc => {
                     this.fcId = fc.getId();
                     this.fcPrefix = this.fcId.substring(0, this.fcId.lastIndexOf(".") + 1);
@@ -86,11 +72,11 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
                                 }
                             }
                         },
-                        err => { this.dialog.dismiss() }
+                        err => { this.activeModal.dismiss() }
                     );
 
                 },
-                err => { this.dialog.dismiss() }
+                err => { this.activeModal.dismiss() }
             );
         } else {
             this.mode = EditorMode.create;
@@ -98,14 +84,14 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
                 cForms => {
                     this.formsAvailable = cForms;
                 },
-                err => { this.dialog.dismiss() }
+                err => { this.activeModal.dismiss() }
             );
         }
     }
 
     //========= ID Namespace-lock HANDLER =========
     
-    private unlockNamespace() {
+    unlockNamespace() {
         this.namespaceLocked = !this.namespaceLocked;
         if (this.namespaceLocked) { //from free id to locked namespace
             this.fromIdToPrefixAndShortId();
@@ -126,8 +112,8 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
 
     //=========================================
 
-    private selectForm(form: CustomForm) {
-        if (this.context.readOnly) {
+    selectForm(form: CustomForm) {
+        if (this.readOnly) {
             return;
         }
         if (this.selectedForm == form) {
@@ -137,8 +123,8 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
         }
     }
 
-    private selectFormAvailable(form: CustomForm) {
-        if (this.context.readOnly) {
+    selectFormAvailable(form: CustomForm) {
+        if (this.readOnly) {
             return;
         } else {
             if (this.selectedFormAvailable == form) {
@@ -152,7 +138,7 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
     /**
      * Adds the selected CF from the list of all available CFs, to the list of the CF of the current FC 
      */
-    private addForm() {
+    addForm() {
         this.forms.push(this.selectedFormAvailable); //add to collection
         this.formsAvailable.splice(this.formsAvailable.indexOf(this.selectedFormAvailable), 1); //remove from available
         this.selectedFormAvailable = null;
@@ -161,13 +147,13 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
     /**
      * Removes the selected CRE from the list of the CRE of the current CR 
      */
-    private removeForm() {
+    removeForm() {
         this.forms.splice(this.forms.indexOf(this.selectedForm), 1); //remove from collection
         this.formsAvailable.push(this.selectedForm); //add to available
         this.selectedForm = null;
     }
 
-    private isFormAlreadyInCollection(form: CustomForm) {
+    isFormAlreadyInCollection(form: CustomForm) {
         for (var i = 0; i < this.forms.length; i++) {
             this.forms[i].getId() == form.getId();
             return true;
@@ -179,8 +165,8 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
      * Suggestions handler
      */
 
-    private selectSuggestion(suggestion: ARTURIResource) {
-        if (this.context.readOnly) {
+    selectSuggestion(suggestion: ARTURIResource) {
+        if (this.readOnly) {
             return;
         }
         if (this.selectedSuggestion == suggestion) {
@@ -190,7 +176,7 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
         }
     }
 
-    private addSuggestionClass() {
+    addSuggestionClass() {
         this.browsingModals.browseClassTree("Add class as suggestion").then(
             cls => {
                 if (!ResourceUtils.containsNode(this.suggestions, cls)) {
@@ -200,7 +186,7 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
         )
     }
 
-    private addSuggestionProperty() {
+    addSuggestionProperty() {
         this.browsingModals.browsePropertyTree("Add property as suggestion").then(
             prop => {
                 if (!ResourceUtils.containsNode(this.suggestions, prop)) {
@@ -210,13 +196,13 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
         )
     }
 
-    private removeSuggestion() {
+    removeSuggestion() {
         this.suggestions.splice(this.suggestions.indexOf(this.selectedSuggestion), 1);
     }
 
 
 
-    private isDataValid() {
+    isDataValid() {
         var valid = true;
         if (this.forms.length == 0) {
             valid = false;
@@ -230,7 +216,7 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
                 this.errorMsg = "The FormCollection ID is invalid (it may be empty or contain invalid characters). Please fix it."
                 valid = false;
             }
-            if (this.context.existingFormColl.indexOf(this.fcPrefix + this.fcShortId) != -1) { //FC with the same id already exists
+            if (this.existingFormColl.indexOf(this.fcPrefix + this.fcShortId) != -1) { //FC with the same id already exists
                 this.errorMsg = "A FormCollection with the same ID already exists";
                 valid = false;
             }
@@ -238,7 +224,7 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
         return valid;
     }
 
-    ok(event: Event) {
+    ok() {
         this.submitted = true;
         if (!this.isDataValid()) {
             return;
@@ -248,8 +234,7 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
         if (this.mode == EditorMode.edit) {
             this.cfService.updateFromCollection(this.fcId, formIds, this.suggestions).subscribe(
                 stResp => {
-                    event.stopPropagation();
-                    this.dialog.close();
+                    this.activeModal.close();
                 }
             );
         } else { //create mode
@@ -257,8 +242,7 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
                 stResp => {
                     this.cfService.updateFromCollection(this.fcPrefix + this.fcShortId, formIds, this.suggestions).subscribe(
                         stResp => {
-                            event.stopPropagation();
-                            this.dialog.close();
+                            this.activeModal.close();
                         }
                     );
                 }
@@ -267,6 +251,6 @@ export class FormCollEditorModal implements ModalComponent<FormCollEditorModalDa
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 }

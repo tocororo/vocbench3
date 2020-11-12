@@ -1,6 +1,6 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, ModalComponent, OverlayConfig } from 'ngx-modialog';
-import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { BrowseExternalResourceModalReturnData } from "../../resourceView/resourceViewEditor/resViewModals/browseExternalResourceModal";
 import { ResViewModalServices } from "../../resourceView/resourceViewEditor/resViewModals/resViewModalServices";
@@ -8,43 +8,32 @@ import { AlignmentServices } from "../../services/alignmentServices";
 import { MapleServices } from "../../services/mapleServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { AssistedSearchModal, AssistedSearchModalData } from "./assistedSearchModal";
-
-export class ResourceAlignmentModalData extends BSModalContext {
-    /**
-     * @param resource the resource to align
-     */
-    constructor(public resource: ARTURIResource) {
-        super();
-    }
-}
+import { AssistedSearchModal } from "./assistedSearchModal";
 
 @Component({
     selector: "align-modal",
     templateUrl: "./resourceAlignmentModal.html",
 })
-export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentModalData> {
-    context: ResourceAlignmentModalData;
+export class ResourceAlignmentModal {
+    @Input() resource: ARTURIResource; //the resource to align
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
     
-    private mappingPropList: Array<ARTURIResource>;
-    private mappingProperty: ARTURIResource;
-    private allPropCheck: boolean = false;
-    private alignedObject: ARTURIResource;
+    mappingPropList: Array<ARTURIResource>;
+    mappingProperty: ARTURIResource;
+    allPropCheck: boolean = false;
+    alignedObject: ARTURIResource;
     
-    constructor(public dialog: DialogRef<ResourceAlignmentModalData>, private alignService: AlignmentServices,
-        private mapleService: MapleServices, private resViewModals: ResViewModalServices, private basicModals: BasicModalServices, 
-        private modal: Modal) {
-        this.context = dialog.context;
+    constructor(public activeModal: NgbActiveModal, private modalService: NgbModal, private alignService: AlignmentServices,
+        private mapleService: MapleServices, private resViewModals: ResViewModalServices, private basicModals: BasicModalServices) {
     }
     
     ngOnInit() {
         this.initPropList();
     }
     
-    private initPropList() {
-        this.alignService.getMappingProperties(this.context.resource.getRole(), this.allPropCheck).subscribe(
+    initPropList() {
+        this.alignService.getMappingProperties(this.resource.getRole(), this.allPropCheck).subscribe(
             props => {
                 this.mappingPropList = props;
                 this.mappingProperty = null;
@@ -52,12 +41,12 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
         )
     }
     
-    private onAllPropCheckChange(checked: boolean) {
+    onAllPropCheckChange(checked: boolean) {
         this.allPropCheck = checked;
         this.initPropList();
     }
     
-    private browseLocalProjects() {
+    browseLocalProjects() {
         this.resViewModals.browseExternalResource("Select remote resource").then(
             (data: BrowseExternalResourceModalReturnData) => { 
                 this.alignedObject = data.resource; 
@@ -66,13 +55,10 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
         );
     }
 
-    private assistedSearch() {
-        var modalData = new AssistedSearchModalData(this.context.resource);
-        const builder = new BSModalContextBuilder<AssistedSearchModalData>(
-            modalData, undefined, AssistedSearchModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(AssistedSearchModal, overlayConfig).result.then(
+    assistedSearch() {
+        const modalRef: NgbModalRef = this.modalService.open(AssistedSearchModal, new ModalOptions());
+        modalRef.componentInstance.resource = this.resource;
+        modalRef.result.then(
             resource => {
                 this.alignedObject = resource;
             },
@@ -80,29 +66,28 @@ export class ResourceAlignmentModal implements ModalComponent<ResourceAlignmentM
         );
     }
 
-    private enterManually() {
+    enterManually() {
         this.basicModals.prompt("Insert value manually", { value: "IRI" }).then(
             valueIRI => {
                 if (ResourceUtils.testIRI(valueIRI)) {
                     this.alignedObject = new ARTURIResource(valueIRI);
                 } else {
-                    this.basicModals.alert("Invalid IRI", valueIRI + " is not a valid IRI", "warning");
+                    this.basicModals.alert("Invalid IRI", valueIRI + " is not a valid IRI", ModalType.warning);
                 }
             }
         );
     }
     
-    private isOkClickable(): boolean {
+    isOkClickable(): boolean {
         return (this.alignedObject != undefined && this.mappingProperty != undefined);
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        this.dialog.close({property: this.mappingProperty, object: this.alignedObject});
+    ok() {
+        this.activeModal.close({property: this.mappingProperty, object: this.alignedObject});
     }
     
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

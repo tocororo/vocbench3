@@ -1,85 +1,85 @@
 <div class="vbox">
 
-    <div class="panel panel-default vbox">
-        <div class="panel-heading">
+    <div class="card card-default vbox">
+        <div class="card-header">
             <label style="flex: 1">Custom Forms configuration:</label>
-            <button class="btn btn-xs btn-default" (click)="showBrokenCFS()" title="Show broken CustomForm structures">
-                <span class="glyphicon glyphicon-warning-sign"></span>
+            <button class="btn btn-xs btn-light" (click)="showBrokenCFS()" title="Show broken CustomForm structures">
+                <span class="fas fa-exclamation-triangle"></span>
             </button>
         </div>
 
-        <div class="panel-body vbox">
+        <div class="card-body vbox">
 
             <div class="hbox">
 
-                <div class="panel panel-alt vbox">
-                    <div class="panel-heading">
+                <div class="card card-alt vbox">
+                    <div class="card-header">
                         <label style="flex: 1">Custom Forms:</label>
                         <div class="btn-group btn-group-xs" role="group">
-                            <button class="btn btn-default" title="Create Custom Form" (click)="createCustomForm()"
+                            <button class="btn btn-light" title="Create Custom Form" (click)="createCustomForm()"
                                 [disabled]="!isCreateFormAuthorized()">
-                                <span class="glyphicon glyphicon-plus"></span>
+                                <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-default" title="Delete Custom Form" (click)="deleteCustomForm()"
-                                [disabled]="!selectedCustomForm || selectedCustomForm.level == 'system' || !isDeleteFormAuthorized()">
-                                <span class="glyphicon glyphicon-minus"></span>
+                            <button class="btn btn-light" title="Delete Custom Form" (click)="deleteCustomForm()"
+                                [disabled]="!selectedCustomForm || selectedCustomForm.getLevel() == 'system' || !isDeleteFormAuthorized()">
+                                <span class="fas fa-minus"></span>
                             </button>
-                            <button class="btn btn-default" title="Modify Custom Form" (click)="editCustomForm()"
+                            <button class="btn btn-light" title="Modify Custom Form" (click)="editCustomForm()"
                                 [disabled]="!selectedCustomForm || !isUpdateFormAuthorized()">
-                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="fas fa-pencil-alt"></span>
                             </button>
-                            <button class="btn btn-default" title="Clone Custom Form" (click)="cloneCustomForm()"
+                            <button class="btn btn-light" title="Clone Custom Form" (click)="cloneCustomForm()"
                                 [disabled]="!selectedCustomForm || !isCreateFormAuthorized()">
-                                <span class="glyphicon glyphicon-duplicate"></span>
+                                <span class="fas fa-copy"></span>
                             </button>
-                            <button class="btn btn-default" title="Export Custom Form" (click)="exportCustomForm()"
+                            <button class="btn btn-light" title="Export Custom Form" (click)="exportCustomForm()"
                                 [disabled]="!selectedCustomForm">
-                                <span class="glyphicon glyphicon-save"></span>
+                                <span class="fas fa-download"></span>
                             </button>
-                            <button class="btn btn-default" title="Import Custom Form" (click)="importCustomForm()"
+                            <button class="btn btn-light" title="Import Custom Form" (click)="importCustomForm()"
                                 [disabled]="!isCreateFormAuthorized()">
-                                <span class="glyphicon glyphicon-open"></span>
+                                <span class="fas fa-upload"></span>
                             </button>
                         </div>
                     </div>
-                    <div class="panel-body vbox scrollableContainer">
+                    <div class="card-body vbox scrollableContainer">
                         <div *ngFor="let cf of customFormList" (click)="selectCustomForm(cf)" class="listItem" [ngClass]="{ active: cf == selectedCustomForm, grayText: cf.level == 'system' }">
                             {{cf.id}}
                         </div>
                     </div>
                 </div>
                 
-                <div class="panel panel-alt vbox" style="margin-left: 4px;">
-                    <div class="panel-heading">
+                <div class="card card-alt vbox" style="margin-left: 4px;">
+                    <div class="card-header">
                         <label style="flex: 1">Form Collections:</label>
                         <div class="btn-group btn-group-xs" role="group">
-                            <button class="btn btn-default" title="Create Form Collection" (click)="createFormCollection()"
+                            <button class="btn btn-light" title="Create Form Collection" (click)="createFormCollection()"
                                 [disabled]="!isCreateCollectionAuthorized()">
-                                <span class="glyphicon glyphicon-plus"></span>
+                                <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-default" title="Delete Form Collection" (click)="deleteFormCollection()"
-                                [disabled]="!selectedFormColl || selectedFormColl.level == 'system' || !isDeleteCollectionAuthorized()">
-                                <span class="glyphicon glyphicon-minus"></span>
+                            <button class="btn btn-light" title="Delete Form Collection" (click)="deleteFormCollection()"
+                                [disabled]="!selectedFormColl || selectedFormColl.getLevel() == 'system' || !isDeleteCollectionAuthorized()">
+                                <span class="fas fa-minus"></span>
                             </button>
-                            <button class="btn btn-default" title="Change Form Collection" (click)="editFormCollection()"
+                            <button class="btn btn-light" title="Change Form Collection" (click)="editFormCollection()"
                                 [disabled]="!selectedFormColl || !isUpdateCollectionAuthorized()">
-                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="fas fa-pencil-alt"></span>
                             </button>
-                            <button class="btn btn-default" title="Clone Form Collection" (click)="cloneFormCollection()"
+                            <button class="btn btn-light" title="Clone Form Collection" (click)="cloneFormCollection()"
                                 [disabled]="!selectedFormColl || !isCreateCollectionAuthorized()">
-                                <span class="glyphicon glyphicon-duplicate"></span>
+                                <span class="fas fa-copy"></span>
                             </button>
-                            <button class="btn btn-default" title="Export Form Collection" (click)="exportFormCollection()"
+                            <button class="btn btn-light" title="Export Form Collection" (click)="exportFormCollection()"
                                 [disabled]="!selectedCustomForm">
-                                <span class="glyphicon glyphicon-save"></span>
+                                <span class="fas fa-download"></span>
                             </button>
-                            <button class="btn btn-default" title="Import Form Collection" (click)="importFormCollection()"
+                            <button class="btn btn-light" title="Import Form Collection" (click)="importFormCollection()"
                                 [disabled]="!isCreateCollectionAuthorized()">
-                                <span class="glyphicon glyphicon-open"></span>
+                                <span class="fas fa-upload"></span>
                             </button>
                         </div>
                     </div>
-                    <div class="panel-body vbox scrollableContainer">
+                    <div class="card-body vbox scrollableContainer">
                         <div *ngFor="let fc of formCollectionList" (click)="selectFormColl(fc)" class="listItem" [ngClass]="{ active: fc == selectedFormColl, grayText: fc.level == 'system' }">
                             {{fc.id}}
                         </div>
@@ -89,31 +89,31 @@
             </div>
 
 
-            <div class="panel panel-alt vbox" style="margin-top: 4px;">
-                <div class="panel-heading">
+            <div class="card card-alt vbox" style="margin-top: 4px;">
+                <div class="card-header">
                     <label style="flex: 1">Forms mapping:</label>
                     <div class="btn-group btn-group-xs" role="group">
-                        <button class="btn btn-default" title="Create Resource - FormCollection mapping" (click)="createFormCollMapping()"
+                        <button class="btn btn-light" title="Create Resource - FormCollection mapping" (click)="createFormCollMapping()"
                             [disabled]="!isCreateMappingAuthorized()">
-                            <span class="glyphicon glyphicon-plus"></span>
+                            <span class="fas fa-plus"></span>
                         </button>
-                        <button class="btn btn-default" title="Remove Resource - FormCollection mapping" (click)="removeFormCollMapping()"
+                        <button class="btn btn-light" title="Remove Resource - FormCollection mapping" (click)="removeFormCollMapping()"
                             [disabled]="!selectedFormCollMapping || !isDeleteMappingAuthorized()">
-                            <span class="glyphicon glyphicon-minus"></span>
+                            <span class="fas fa-minus"></span>
                         </button>
                     </div>
                 </div>
-                <div class="panel-body vbox">
+                <div class="card-body vbox">
                     
                     <div class="scrollableContainer">
-                        <table class="table table-condensed table-borderless table-hoverable">
+                        <table class="table table-sm table-borderless table-hoverable">
                             <thead style="border-bottom: 1px solid #ddd;">
                                 <tr>
                                     <th>Property/Class</th>
                                     <th>Form Collection</th>
                                     <th style="width: 1%" nowrap>
                                         Replace
-                                        <span class="glyphicon glyphicon-info-sign" 
+                                        <span class="fas fa-info-circle" 
                                             title="Tells if the CustomForm replaces the 'default' form. Valid only for CustomRanges (not CustomConstructors)">
                                         </span>
                                     </th>
@@ -140,11 +140,11 @@
             
         </div>
 
-        <div class="panel-footer">
-            <span class="pull-right grayText" style="padding: 2px; margin: 0px 2px; border: 1px solid #ccc; border-radius: 2px; background: #fff;">
+        <div class="card-footer">
+            <span class="float-right grayText" style="padding: 2px; margin: 0px 2px; border: 1px solid #ccc; border-radius: 2px; background: #fff;">
                 System level elements
             </span>
-            <span class="pull-right"  style="padding: 2px; margin: 0px 2px; border: 1px solid #ccc; border-radius: 2px; background: #fff;">
+            <span class="float-right"  style="padding: 2px; margin: 0px 2px; border: 1px solid #ccc; border-radius: 2px; background: #fff;">
                 Project level elements
             </span>
         </div>

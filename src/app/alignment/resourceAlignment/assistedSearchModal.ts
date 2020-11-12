@@ -1,7 +1,8 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, Modal, ModalComponent, OverlayConfig } from 'ngx-modialog';
-import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
-import { NewCatalogRecordModal, NewCatalogRecordModalData } from "../../metadata/metadataRegistry/newCatalogRecordModal";
+import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { finalize } from 'rxjs/operators';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
+import { NewCatalogRecordModal } from "../../metadata/metadataRegistry/newCatalogRecordModal";
 import { ARTURIResource, LocalResourcePosition, RemoteResourcePosition, ResourcePosition, ResourcePositionEnum } from "../../models/ARTResources";
 import { DatasetMetadata } from "../../models/Metadata";
 import { Project } from "../../models/Project";
@@ -18,26 +19,21 @@ import { UIUtils } from "../../utils/UIUtils";
 import { VBActionsEnum } from "../../utils/VBActions";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { AssistedSearchResultModal, AssistedSearchResultModalData } from "./assistedSearchResultModal";
-
-export class AssistedSearchModalData extends BSModalContext {
-    constructor(public resource: ARTURIResource) {
-        super();
-    }
-}
+import { AssistedSearchResultModal } from "./assistedSearchResultModal";
 
 @Component({
     selector: "assiste-search-modal",
     templateUrl: "./assistedSearchModal.html",
 })
-export class AssistedSearchModal implements ModalComponent<AssistedSearchModalData> {
-    context: AssistedSearchModalData;
+export class AssistedSearchModal {
+    @Input() resource: ARTURIResource;
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
 
     private sourceProject: Project;
 
-    private targetPosition: ResourcePositionEnum = ResourcePositionEnum.local;
+    ResourcePositionEnum = ResourcePositionEnum;
+    targetPosition: ResourcePositionEnum = ResourcePositionEnum.local;
 
     private projectList: Project[] = [];
     private selectedProject: Project;
@@ -59,10 +55,9 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
         { mode: SearchMode.fuzzy, show: "Fuzzy", checked: false }
     ]
     
-    constructor(public dialog: DialogRef<AssistedSearchModalData>, private projectService: ProjectServices, private alignmentService: AlignmentServices,
+    constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices, private alignmentService: AlignmentServices,
         private metadataRegistryService: MetadataRegistryServices, private mapleService: MapleServices,
-        private basicModals: BasicModalServices, private modal: Modal) {
-        this.context = dialog.context;
+        private basicModals: BasicModalServices, private modalService: NgbModal) {
     }
 
     ngOnInit() {
@@ -92,7 +87,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
         }
     }
 
-    private changeTargetPosition(position: ResourcePositionEnum) {
+    changeTargetPosition(position: ResourcePositionEnum) {
         this.targetPosition = position;
         this.pairedLexicalizationSets = null;
         this.languagesToCheck = [];
@@ -103,10 +98,10 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
         }
     }
 
-    private refreshTargetMetadata() {
+    refreshTargetMetadata() {
         HttpServiceContext.setContextProject(this.selectedProject);
-        this.mapleService.profileProject().finally(
-            () => HttpServiceContext.removeContextProject()
+        this.mapleService.profileProject().pipe(
+            finalize(() => HttpServiceContext.removeContextProject())
         ).subscribe(
             resp => {
                 HttpServiceContext.removeContextProject()
@@ -127,8 +122,8 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
         } else {
             //metadata availability has not been checked (the entry is not in the map) => check it
             HttpServiceContext.setContextProject(this.selectedProject);
-            this.mapleService.checkProjectMetadataAvailability().finally(
-                () => HttpServiceContext.removeContextProject()
+            this.mapleService.checkProjectMetadataAvailability().pipe(
+                finalize(() => HttpServiceContext.removeContextProject())
             ).subscribe(
                 available => {
                     HttpServiceContext.removeContextProject()
@@ -145,11 +140,11 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
         }
     }
 
-    private generateProjectMetadata() {
+    generateProjectMetadata() {
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         HttpServiceContext.setContextProject(this.selectedProject);
-        this.mapleService.profileProject().finally(
-            () => HttpServiceContext.removeContextProject()
+        this.mapleService.profileProject().pipe(
+            finalize(() => HttpServiceContext.removeContextProject())
         ).subscribe(
             resp => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
@@ -184,14 +179,11 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
         }
     }
 
-    private addRemoteDataset() {
-        var modalData = new NewCatalogRecordModalData("New Remote Dataset");
-        const builder = new BSModalContextBuilder<NewCatalogRecordModalData>(
-            modalData, undefined, NewCatalogRecordModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(NewCatalogRecordModal, overlayConfig).result.then(
-            ok => {
+    addRemoteDataset() {
+        const modalRef: NgbModalRef = this.modalService.open(NewCatalogRecordModal, new ModalOptions());
+        modalRef.componentInstance.title = "New Remote Dataset";
+        modalRef.result.then(
+            () => {
                 this.initRemoteDatasets();
             },
             () => {}
@@ -220,7 +212,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
             resourcePosition = new RemoteResourcePosition(this.selectedDataset.identity);
         }
 
-        this.mapleService.profileSingleResourceMatchProblem(this.context.resource, resourcePosition).subscribe(
+        this.mapleService.profileSingleResourceMatchProblem(this.resource, resourcePosition).subscribe(
             resp => {
                 this.pairedLexicalizationSets = [];
                 resp.pairedLexicalizationSets.forEach((pls: any) => {
@@ -269,7 +261,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
      * Check also if a project is selected (in case of local project target) 
      * or a dataset is selected (in case of remote dataset target)
      */
-    private isOkClickable(): boolean {
+    isOkClickable(): boolean {
         if (this.targetPosition == ResourcePositionEnum.local && this.selectedProject == null) {
             return false;
         }
@@ -287,22 +279,20 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
     }
 
     private selectSearchResult(searchResult: ARTURIResource[]) {
-        var modalData = new AssistedSearchResultModalData("Select search result", searchResult);
-        const builder = new BSModalContextBuilder<AssistedSearchResultModalData>(
-            modalData, undefined, AssistedSearchResultModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(AssistedSearchResultModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(AssistedSearchResultModal, new ModalOptions());
+        modalRef.componentInstance.title = "Select search result";
+		modalRef.componentInstance.resourceList = searchResult;
+        return modalRef.result;
     }
 
     /**
      * Remote Assisted-search requires to initialize the catalog records, so it needs that the user has the required capabilities
      */
-    private isRemoteAuthorized() {
+    isRemoteAuthorized() {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRegistryRead);
     }
 
-    ok(event: Event) {
+    ok() {
         let resourcePosition: string = this.targetPosition + ":" + 
             ((this.targetPosition == ResourcePositionEnum.local) ? this.selectedProject.getName() : this.selectedDataset.identity);
 
@@ -316,15 +306,15 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
         let searchModePar: SearchMode[] = this.getCheckedSearchMode();
 
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-        this.alignmentService.searchResources(this.context.resource, resourcePosition, [this.context.resource.getRole()], langsToLexModel, searchModePar).subscribe(
+        this.alignmentService.searchResources(this.resource, resourcePosition, [this.resource.getRole()], langsToLexModel, searchModePar).subscribe(
             searchResult => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                 if (searchResult.length == 0) {
-                    this.basicModals.alert("Search", "No results found.", "warning");
+                    this.basicModals.alert("Search", "No results found.", ModalType.warning);
                 } else {
                     this.selectSearchResult(searchResult).then(
                         (selectedResource: ARTURIResource) => {
-                            this.dialog.close(selectedResource);
+                            this.activeModal.close(selectedResource);
                         }
                     );
                 }
@@ -334,7 +324,7 @@ export class AssistedSearchModal implements ModalComponent<AssistedSearchModalDa
     }
     
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

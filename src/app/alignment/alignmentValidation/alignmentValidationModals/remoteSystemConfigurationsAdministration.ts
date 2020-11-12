@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { RemoteAlignmentServiceConfiguration, RemoteAlignmentServiceConfigurationDef } from "../../../models/Alignment";
 import { RemoteAlignmentServices } from "../../../services/remoteAlignmentServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
@@ -9,17 +9,14 @@ import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalS
     selector: "remote-system-config-admin-modal",
     templateUrl: "./remoteSystemConfigurationsAdministration.html",
 })
-export class RemoteSystemConfigurationsAdministration implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class RemoteSystemConfigurationsAdministration {
 
-    private savedConfigs: RemoteAlignmentServiceConfigurationDef[];
+    savedConfigs: RemoteAlignmentServiceConfigurationDef[];
     private defaultConfig: RemoteAlignmentServiceConfigurationDef;
 
-    private newConfig: NewRemoteAlignmentServiceConfigurationDef = new NewRemoteAlignmentServiceConfigurationDef();
+    newConfig: NewRemoteAlignmentServiceConfigurationDef = new NewRemoteAlignmentServiceConfigurationDef();
 
-    constructor(public dialog: DialogRef<BSModalContext>, private remoteAlignmentService: RemoteAlignmentServices, private basicModals: BasicModalServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private remoteAlignmentService: RemoteAlignmentServices, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.initConfigs();
@@ -55,7 +52,7 @@ export class RemoteSystemConfigurationsAdministration implements ModalComponent<
     createConfig() {
         //add the new configuration only if another config with the same ID doesn't exist
         if (this.savedConfigs.some(c => c.id == this.newConfig.id)) {
-            this.basicModals.alert("Duplicate configuration", "A configuration with the same ID already exists", "warning");
+            this.basicModals.alert("Duplicate configuration", "A configuration with the same ID already exists", ModalType.warning);
             return;
         }
         this.remoteAlignmentService.addRemoteAlignmentService(this.newConfig.id, this.newConfig.serverURL, this.newConfig.username, this.newConfig.password, this.newConfig['default']).subscribe(
@@ -69,7 +66,7 @@ export class RemoteSystemConfigurationsAdministration implements ModalComponent<
     deleteConfig(config: RemoteAlignmentServiceConfigurationDef) {
         this.basicModals.confirm("Delete configuration", "You are going to delete configuration '" + config.id +
             "'. If this configuration is used in a project, by deleting it you could prevent the Remote Alignment System from working. " + 
-            "Are you sure?", "warning").then(
+            "Are you sure?", ModalType.warning).then(
             () => {
                 this.remoteAlignmentService.deleteRemoteAlignmentService(config.id).subscribe(
                     () => {
@@ -103,7 +100,7 @@ export class RemoteSystemConfigurationsAdministration implements ModalComponent<
 
 
     ok() {
-        this.dialog.close();
+        this.activeModal.close();
     }
 
 }

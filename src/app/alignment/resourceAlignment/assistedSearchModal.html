@@ -1,20 +1,20 @@
 <div class="modal-header">
     <div class="hbox" style="align-items: center">
         <h3 class="modal-title" style="flex: 1">Assisted search</h3>
-        <div class="btn-group btn-group-sm pull-right" style="margin-bottom: 5px; align-self: flex-end;">
-            <button class="btn btn-default" [ngClass]="{ active : targetPosition == 'local' }" (click)="changeTargetPosition('local')">Local</button>
-            <button class="btn btn-default" [ngClass]="{ active : targetPosition == 'remote' }" (click)="changeTargetPosition('remote')" [disabled]="!isRemoteAuthorized()">Remote</button>
+        <div class="btn-group btn-group-sm float-right" style="margin-bottom: 5px; align-self: flex-end;">
+            <button class="btn btn-light" [ngClass]="{ active : targetPosition == ResourcePositionEnum.local }" (click)="changeTargetPosition(ResourcePositionEnum.local)">Local</button>
+            <button class="btn btn-light" [ngClass]="{ active : targetPosition == ResourcePositionEnum.remote }" (click)="changeTargetPosition(ResourcePositionEnum.remote)" [disabled]="!isRemoteAuthorized()">Remote</button>
         </div>
     </div>
 </div>
 <div class="modal-body vbox scrollableContainer blockingDivHost">
 
-    <ng-template [ngIf]="targetPosition == 'local'">
-        <div class="panel panel-default">
-            <div class="panel-heading">
+    <ng-template [ngIf]="targetPosition == ResourcePositionEnum.local">
+        <div class="card card-default">
+            <div class="card-header">
                 <label>Projects</label>
             </div>
-            <div class="panel-body vbox scrollableContainer" style="max-height: 150px;">
+            <div class="card-body vbox scrollableContainer" style="max-height: 150px;">
                 <div *ngFor="let p of projectList">
                     <div class="listItem" [ngClass]="{ active : p == selectedProject }" (click)="selectProject(p)">
                         {{p.getName()}}
@@ -32,15 +32,15 @@
     </ng-template>
 
     
-    <ng-template [ngIf]="targetPosition == 'remote'">
-        <div class="panel panel-default">
-            <div class="panel-heading">
+    <ng-template [ngIf]="targetPosition == ResourcePositionEnum.remote">
+        <div class="card card-default">
+            <div class="card-header">
                 <label style="flex: 1;">Remote datasets</label>
-                <button class="btn btn-default btn-xs" (click)="addRemoteDataset()" title="Add Remote Dataset">
-                    <span class="glyphicon glyphicon-plus"></span>
+                <button class="btn btn-light btn-xs" (click)="addRemoteDataset()" title="Add Remote Dataset">
+                    <span class="fas fa-plus"></span>
                 </button>
             </div>
-            <div class="panel-body vbox scrollableContainer" style="max-height: 150px;">
+            <div class="card-body vbox scrollableContainer" style="max-height: 150px;">
                 <div *ngFor="let d of remoteDatasets">
                     <div class="listItem" [ngClass]="{ active : d == selectedDataset }" (click)="selectDataset(d)" [title]="d.identity">
                         <span><label *ngIf="d.title">{{d.title}}:</label> {{d.uriSpace}}</span>
@@ -58,18 +58,18 @@
     </ng-template>
 
     <ng-template #mediationBlock>
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div class="card card-default">
+            <div class="card-header">
                 <div style="flex: 1;">
                     <label style="margin-right: 4px;">Paired Lexicalization Sets</label>
-                    <span class="glyphicon glyphicon-info-sign" title="Lexicalization sets shared between the source resource and the target project/dataset."></span>
+                    <span class="fas fa-info-circle" title="Lexicalization sets shared between the source resource and the target project/dataset."></span>
                 </div>
-                <button *ngIf="targetPosition == 'local'" class="btn btn-xs btn-default" (click)="refreshTargetMetadata()" title="Refresh metadata of the target project">
-                    <span class="glyphicon glyphicon-refresh"></span>
+                <button *ngIf="targetPosition == ResourcePositionEnum.local" class="btn btn-xs btn-light" (click)="refreshTargetMetadata()" title="Refresh metadata of the target project">
+                    <span class="fas fa-redo"></span>
                 </button>
             </div>
-            <div class="panel-body scrollableContainer" style="max-height: 150px;">
-                <table class="table table-condensed table-hoverable">
+            <div class="card-body scrollableContainer" style="max-height: 150px;">
+                <table class="table table-sm table-hoverable">
                     <thead>
                         <tr>
                             <th>Lang</th>
@@ -100,18 +100,18 @@
             </div>
         </div>
 
-        <div class="panel panel-default" style="margin-top: 4px;">
-            <div class="panel-heading">
+        <div class="card card-default" style="margin-top: 4px;">
+            <div class="card-header">
                 <span style="flex: 1">
                     <label style="margin-right: 4px;">Search mode</label>
-                    <span class="glyphicon glyphicon-info-sign" title="String match modes on which the lexicalizations comparison is based on."></span>
+                    <span class="fas fa-info-circle" title="String match modes on which the lexicalizations comparison is based on."></span>
                 </span>
                 <span *ngIf="getCheckedSearchMode().length == 0" class="grayText">
-                    <span class="glyphicon glyphicon-warning-sign"></span>
+                    <span class="fas fa-exclamation-triangle"></span>
                     If none is selected, 'Fuzzy' and 'Contains' are used by default
                 </span>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div *ngFor="let sm of searchModes" class="checkbox" style="margin: 5px 0px 0px">
                     <label>
                         <input type="checkbox" [(ngModel)]="sm.checked">{{sm.show}}
@@ -131,6 +131,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkClickable()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkClickable()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

@@ -1,36 +1,24 @@
-import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { DialogRef, ModalComponent } from "ngx-modialog";
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from "../../models/ARTResources";
-
-export class AssistedSearchResultModalData extends BSModalContext {
-    constructor(
-        public title: string,
-        public resourceList: Array<ARTURIResource>
-    ) {
-        super();
-    }
-}
 
 @Component({
     selector: "assisted-search-result-modal",
     templateUrl: "./assistedSearchResultModal.html",
 })
-export class AssistedSearchResultModal implements ModalComponent<AssistedSearchResultModalData> {
-    context: AssistedSearchResultModalData;
+export class AssistedSearchResultModal {
+    @Input() title: string;
+    @Input() resourceList: Array<ARTURIResource>;
 
-    private resourceSelected: ARTURIResource;
+    resourceSelected: ARTURIResource;
 
-    constructor(public dialog: DialogRef<AssistedSearchResultModalData>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) {}
 
-    ok(event: Event) {
-        event.stopPropagation();
-        this.dialog.close(this.resourceSelected);
+    ok() {
+        this.activeModal.close(this.resourceSelected);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 }

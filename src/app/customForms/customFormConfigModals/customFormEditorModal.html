@@ -1,6 +1,6 @@
 <div class="modal-header">
-    <h3 *ngIf="!context.id" class="modal-title">Create Custom Form</h3>
-    <h3 *ngIf="context.id" class="modal-title">Edit Custom Form</h3>
+    <h3 *ngIf="!id" class="modal-title">Create Custom Form</h3>
+    <h3 *ngIf="id" class="modal-title">Edit Custom Form</h3>
 </div>
 <div class="modal-body vbox">
     
@@ -9,8 +9,10 @@
             <label class="entryLabel">ID:</label>
             <div class="input-group input-group-xs" style="flex: 1;">
                 <ng-template [ngIf]="namespaceLocked">
-                    <span class="input-group-addon" style="padding-right: 5px;">
-                        {{cfPrefix}}
+                    <span class="input-group-prepend">
+                        <span class="input-group-text">
+                            {{cfPrefix}}
+                        </span>
                     </span>
                     <input type="text" class="form-control" [(ngModel)]="cfShortId" [disabled]="mode == 'edit'" sanitized>
                 </ng-template>
@@ -19,10 +21,10 @@
                     <input type="text" class="form-control" [(ngModel)]="cfId" [disabled]="mode == 'edit'" sanitized>
                 </ng-template>
                 
-                <div class="input-group-btn">
-                    <button class="btn btn-default" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"
+                <div class="input-group-append">
+                    <button class="btn btn-light" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"
                         title="Lock/Unlock namespace" [ngClass]="{active: namespaceLocked}" [disabled]="mode == 'edit'">
-                        <span class="glyphicon glyphicon-lock" style="font-size: 10px;"></span>
+                        <span class="fas fa-lock" style="font-size: 10px;"></span>
                     </button>
                 </div>
             </div>
@@ -33,9 +35,9 @@
         <div class="hbox" style="align-items: center;">
             <label class="entryLabel">
                 Name:
-                <span class="glyphicon glyphicon-info-sign" title="The name that will be shown to the user to identify this form"></span>
+                <span class="fas fa-info-circle" title="The name that will be shown to the user to identify this form"></span>
             </label>
-            <input type="text" class="form-control input-xs" style="flex: 1" [(ngModel)]="name" [disabled]="context.readOnly">
+            <input type="text" class="form-control input-xs" style="flex: 1" [(ngModel)]="name" [disabled]="readOnly">
             <span class="optionalCell">*</span>
         </div>
     </div>
@@ -43,9 +45,9 @@
         <div class="hbox" style="align-items: center;">
             <label class="entryLabel">
                 Description:
-                <span class="glyphicon glyphicon-info-sign" title="A natural language description that briefly explain the purpose of this form"></span>
+                <span class="fas fa-info-circle" title="A natural language description that briefly explain the purpose of this form"></span>
             </label>
-            <textarea class="form-control input-xs" style="flex: 1;" [(ngModel)]="description" [rows]="descriptionTextareaRows" [disabled]="context.readOnly"></textarea>
+            <textarea class="form-control input-xs" style="flex: 1;" [(ngModel)]="description" [rows]="descriptionTextareaRows" [disabled]="readOnly"></textarea>
             <span class="optionalCell"></span>  
         </div>
     </div>
@@ -65,24 +67,24 @@
         <div class="hbox">
             <label class="entryLabel" style="align-self: center;">
                 Ref:
-                <span class="glyphicon glyphicon-info-sign"
+                <span class="fas fa-info-circle"
                     title="In case of Graph type this should contain a PEARL rule otherwise, in case of Node type, this should contain simply a PEARL projection operator">
                 </span>
             </label>
             <div class="hbox">
-                <pearl-editor [(ngModel)]="ref" [disabled]="context.readOnly">
+                <pearl-editor [(ngModel)]="ref" [disabled]="readOnly">
                 </pearl-editor>
                 <div class="vbox" style="flex: initial; margin-left: 6px;">
-                    <button class="btn btn-default btn-xs" (click)="pickConverter()" title="Pick converter" [disabled]="context.readOnly">
+                    <button class="btn btn-light btn-xs" (click)="pickConverter()" title="Pick converter" [disabled]="readOnly">
                         Pick converter
                     </button>
                     <ng-container *ngIf="type == 'graph'">
-                        <button class="btn btn-default btn-xs" (click)="inferAnnotations()" style="margin-top: 4px;" 
-                            title="Infer annotations from CF definition" [disabled]="!ref || context.readOnly">
+                        <button class="btn btn-light btn-xs" (click)="inferAnnotations()" style="margin-top: 4px;" 
+                            title="Infer annotations from CF definition" [disabled]="!ref || readOnly">
                             Infer annotations
                         </button>
-                        <button *ngIf="extractFromShaclAuthorized" class="btn btn-default btn-xs" (click)="extractFromShacl()" style="margin-top: 4px;" 
-                            title="Extract PEARL from SHACL shape" [disabled]="context.readOnly">
+                        <button *ngIf="extractFromShaclAuthorized" class="btn btn-light btn-xs" (click)="extractFromShacl()" style="margin-top: 4px;" 
+                            title="Extract PEARL from SHACL shape" [disabled]="readOnly">
                             From SHACL
                         </button>
                     </ng-container>
@@ -96,7 +98,7 @@
         <div class="hbox" style="align-items: center;">
             <label class="entryLabel">
                 Show property chain:
-                <span class="glyphicon glyphicon-info-sign" 
+                <span class="fas fa-info-circle" 
                     title="A property chain to follow to retrieve the value to be shown to represent the graph generated by means of this Form">
                 </span>
             </label>
@@ -105,25 +107,25 @@
                     <span *ngFor="let prop of showPropertyChain" (click)="selectPropInChain(prop)" 
                         class="tile" [ngClass]="{selectedResource : selectedPropInChain == prop}">
                         <rdf-resource [resource]="prop"></rdf-resource>
-                        <span *ngIf="!context.readOnly" class="glyphicon glyphicon-remove-circle" (click)="removePropFromChain(prop)"
-                            style="cursor: pointer" onmouseover="this.className='glyphicon glyphicon-remove-sign';"
-                            onmouseout="this.className='glyphicon glyphicon-remove-circle';">
+                        <span *ngIf="!readOnly" class="far fa-times-circle" (click)="removePropFromChain(prop)"
+                            style="cursor: pointer" onmouseover="this.className='fas fa-times-circle';"
+                            onmouseout="this.className='far fa-times-circle';">
                         </span>
-                        <span *ngIf="context.readOnly" class="glyphicon glyphicon-remove-circle" style="cursor: not-allowed"></span>
+                        <span *ngIf="readOnly" class="far fa-times-circle" style="cursor: not-allowed"></span>
                     </span>
                 </div>
-                <div class="btn-group dropup" style="margin-left: 4px;">
-                    <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" [disabled]="context.readOnly">
-                        <span class="glyphicon glyphicon-pencil"></span>
+                <div class="btn-group dropup ml-2" ngbDropdown>
+                    <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" [disabled]="readOnly" ngbDropdownToggle>
+                        <span class="fas fa-pencil-alt"></span>
                     </button>
-                    <ul class="dropdown-menu pull-right">
-                        <li><a (click)="addPropToChain()">Add</a></li>
-                        <li><a (click)="editPropChain()">Edit manually</a></li>
-                        <li [ngClass]="{disabled : !selectedPropInChain}"><a (click)="addPropToChain('before')">Add before</a></li>
-                        <li [ngClass]="{disabled : !selectedPropInChain}"><a (click)="addPropToChain('after')">Add after</a></li>
-                        <li [ngClass]="{disabled : disableMove('before')}"><a (click)="movePropInChain('before')">Move before</a></li>
-                        <li [ngClass]="{disabled : disableMove('after')}"><a (click)="movePropInChain('after')">Move after</a></li>
-                    </ul>
+                    <div class="dropdown-menu float-right" ngbDropdownMenu>
+                        <a class="dropdown-item" (click)="addPropToChain()">Add</a>
+                        <a class="dropdown-item" (click)="editPropChain()">Edit manually</a>
+                        <a class="dropdown-item" [ngClass]="{disabled : !selectedPropInChain}" (click)="addPropToChain('before')">Add before</a>
+                        <a class="dropdown-item" [ngClass]="{disabled : !selectedPropInChain}" (click)="addPropToChain('after')">Add after</a>
+                        <a class="dropdown-item" [ngClass]="{disabled : disableMove('before')}" (click)="movePropInChain('before')">Move before</a>
+                        <a class="dropdown-item" [ngClass]="{disabled : disableMove('after')}" (click)="movePropInChain('after')">Move after</a>
+                    </div>
                 </div>
             </div>
             <span class="optionalCell"></span>
@@ -139,7 +141,7 @@
                 {{errorMsg}}
             </div>
         </div>
-        <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="context.readOnly">Ok</button>
-        <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="readOnly">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
     </div>
 </div>

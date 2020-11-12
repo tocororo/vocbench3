@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { BrokenCFStructure } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
 
@@ -8,14 +7,11 @@ import { CustomFormsServices } from "../../services/customFormsServices";
     selector: "broken-cfs-report-modal",
     templateUrl: "./brokenCFStructReportModal.html",
 })
-export class BrokenCFStructReportModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class BrokenCFStructReportModal {
 
-    private brokenCFS: BrokenCFStructure[];
+    brokenCFS: BrokenCFStructure[];
 
-    constructor(public dialog: DialogRef<BSModalContext>, private cfService: CustomFormsServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private cfService: CustomFormsServices) {}
 
     ngOnInit() {
         this.cfService.getBrokenCustomForms().subscribe(
@@ -25,9 +21,8 @@ export class BrokenCFStructReportModal implements ModalComponent<BSModalContext>
         );
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        this.dialog.close();
+    ok() {
+        this.activeModal.close();
     }
 
 }

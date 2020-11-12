@@ -1,17 +1,18 @@
 import { Component } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from "../models/ARTResources";
 import { CustomForm, CustomFormLevel, FormCollection, FormCollectionMapping } from "../models/CustomForms";
 import { CustomFormsServices } from "../services/customFormsServices";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "../utils/VBActions";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ConfirmCheckOptions } from '../widget/modal/basicModal/confirmModal/confirmCheckModal';
+import { ModalOptions, ModalType } from '../widget/modal/Modals';
 import { BrokenCFStructReportModal } from "./customFormConfigModals/brokenCFStructReportModal";
-import { CustomFormEditorModal, CustomFormEditorModalData } from "./customFormConfigModals/customFormEditorModal";
-import { FormCollEditorModal, FormCollEditorModalData } from "./customFormConfigModals/formCollEditorModal";
+import { CustomFormEditorModal } from "./customFormConfigModals/customFormEditorModal";
+import { FormCollEditorModal } from "./customFormConfigModals/formCollEditorModal";
 import { FormCollMappingModal } from "./customFormConfigModals/formCollMappingModal";
-import { ImportCfModal, ImportCfModalData } from "./customFormConfigModals/importCfModal";
+import { ImportCfModal, ImportCfModalReturnData } from "./customFormConfigModals/importCfModal";
 
 @Component({
     selector: "custom-form-conf-component",
@@ -20,15 +21,15 @@ import { ImportCfModal, ImportCfModalData } from "./customFormConfigModals/impor
 })
 export class CustomFormConfigComponent {
 
-    private cfConfigurationMap: Array<FormCollectionMapping>;
-    private formCollectionList: Array<FormCollection>;
-    private customFormList: Array<CustomForm>;
+    cfConfigurationMap: Array<FormCollectionMapping>;
+    formCollectionList: Array<FormCollection>;
+    customFormList: Array<CustomForm>;
 
-    private selectedFormCollMapping: FormCollectionMapping;
-    private selectedFormColl: FormCollection;
-    private selectedCustomForm: CustomForm;
+    selectedFormCollMapping: FormCollectionMapping;
+    selectedFormColl: FormCollection;
+    selectedCustomForm: CustomForm;
 
-    constructor(private customFormsService: CustomFormsServices, private basicModals: BasicModalServices, private modal: Modal) { }
+    constructor(private customFormsService: CustomFormsServices, private basicModals: BasicModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         this.initCFConfMap();
@@ -36,10 +37,9 @@ export class CustomFormConfigComponent {
         this.initCustomFormList();
     }
 
-    private showBrokenCFS() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-xl").keyboard(27).toJSON() };
-        return this.modal.open(BrokenCFStructReportModal, overlayConfig)
+    showBrokenCFS() {
+        const modalRef: NgbModalRef = this.modalService.open(BrokenCFStructReportModal, new ModalOptions('xl'));
+        return modalRef.result;
     }
 
     /**
@@ -55,7 +55,7 @@ export class CustomFormConfigComponent {
         );
     }
 
-    private selectFormCollMapping(cfConfMap: FormCollectionMapping) {
+    selectFormCollMapping(cfConfMap: FormCollectionMapping) {
         if (this.selectedFormCollMapping == cfConfMap) {
             this.selectedFormCollMapping = null;
         } else {
@@ -63,10 +63,9 @@ export class CustomFormConfigComponent {
         }
     }
 
-    private createFormCollMapping() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(FormCollMappingModal, overlayConfig).result.then(
+    createFormCollMapping() {
+        const modalRef: NgbModalRef = this.modalService.open(FormCollMappingModal, new ModalOptions());
+        return modalRef.result.then(
             res => {
                 var resource: ARTURIResource = res.resource;
                 var formCollId: string = res.formCollection;
@@ -77,7 +76,7 @@ export class CustomFormConfigComponent {
                         this.basicModals.alert("Denied", "A FormCollection is already assigned to " + resource.getShow() +
                             ". Please, select another resource, or if you want to add a form to " + resource.getShow() +
                             ", add more CustomForm to the assigned FormCollection (" + this.cfConfigurationMap[i].getFormCollection().getId() + ")",
-                            "warning");
+                            ModalType.warning);
                         return;
                     }
                 }
@@ -91,7 +90,7 @@ export class CustomFormConfigComponent {
         );
     }
 
-    private removeFormCollMapping() {
+    removeFormCollMapping() {
         this.customFormsService.removeFormCollectionOfResource(this.selectedFormCollMapping.getResource()).subscribe(
             stResp => {
                 this.initCFConfMap();
@@ -99,7 +98,7 @@ export class CustomFormConfigComponent {
         );
     }
 
-    private changeReplaceToMapping(checked: boolean, fcMap: FormCollectionMapping) {
+    changeReplaceToMapping(checked: boolean, fcMap: FormCollectionMapping) {
         this.customFormsService.updateReplace(fcMap.getResource(), checked).subscribe();
     }
 
@@ -116,7 +115,7 @@ export class CustomFormConfigComponent {
         );
     }
 
-    private selectFormColl(fc: FormCollection) {
+    selectFormColl(fc: FormCollection) {
         if (this.selectedFormColl == fc) {
             this.selectedFormColl = null;
         } else {
@@ -124,38 +123,34 @@ export class CustomFormConfigComponent {
         }
     }
 
-    private createFormCollection() {
-        var existingFormCollIds: string[] = [];
-        for (var i = 0; i < this.formCollectionList.length; i++) {
+    createFormCollection() {
+        let existingFormCollIds: string[] = [];
+        for (let i = 0; i < this.formCollectionList.length; i++) {
             existingFormCollIds.push(this.formCollectionList[i].getId());
         }
-        var modalData = new FormCollEditorModalData(null, existingFormCollIds);
-        const builder = new BSModalContextBuilder<FormCollEditorModalData>(
-            modalData, undefined, FormCollEditorModalData
-        );
-        builder.size("lg").keyboard(27);
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(FormCollEditorModal, overlayConfig).result.then(
-            res => this.initFormCollList(),
-            () => { }
+        this.openFormCollEditor(null, existingFormCollIds, false).then(
+            () => {},
+            () => {}
         );
     }
 
-    private editFormCollection() {
-        var modalData = new FormCollEditorModalData(this.selectedFormColl.getId(), [], (this.selectedFormColl.getLevel() == CustomFormLevel.system));
-        const builder = new BSModalContextBuilder<FormCollEditorModalData>(
-            modalData, undefined, FormCollEditorModalData
-        );
-        builder.size("lg").keyboard(27);
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(FormCollEditorModal, overlayConfig).result.then(
-            res => { },
-            () => { }
+    editFormCollection() {
+        this.openFormCollEditor(this.selectedFormColl.getId(), [], (this.selectedFormColl.getLevel() == CustomFormLevel.system)).then(
+            () => {},
+            () => {}
         );
     }
 
-    private deleteFormCollection() {
-        this.basicModals.confirm("Delete Form Collection", "You are deleting Form Collection " + this.selectedFormColl.getId() + ". Are you sure?", "warning").then(
+    private openFormCollEditor(id: string, existingFormColl: string[], readOnly: boolean) {
+        const modalRef: NgbModalRef = this.modalService.open(FormCollEditorModal, new ModalOptions('lg'));
+        modalRef.componentInstance.id = id;
+        modalRef.componentInstance.existingFormColl = existingFormColl;
+        modalRef.componentInstance.readOnly = readOnly;
+        return modalRef.result
+    }
+
+    deleteFormCollection() {
+        this.basicModals.confirm("Delete Form Collection", "You are deleting Form Collection " + this.selectedFormColl.getId() + ". Are you sure?", ModalType.warning).then(
             confirm => {
                 this.customFormsService.deleteFormCollection(this.selectedFormColl.getId()).subscribe(
                     stResp => {
@@ -168,12 +163,12 @@ export class CustomFormConfigComponent {
         )
     }
 
-    private cloneFormCollection() {
+    cloneFormCollection() {
         this.basicModals.promptPrefixed("Clone FormCollection", FormCollection.PREFIX, "ID", null, false, true, true).then(
             (fcId: any) => {
                 for (var i = 0; i < this.formCollectionList.length; i++) {
                     if (this.formCollectionList[i].getId() == fcId) {
-                        this.basicModals.alert("Duplicated ID", "A CustomForm with ID " + fcId + " already exists", "error");
+                        this.basicModals.alert("Duplicated ID", "A CustomForm with ID " + fcId + " already exists", ModalType.warning);
                         return;
                     }
                 }
@@ -187,7 +182,7 @@ export class CustomFormConfigComponent {
         );
     }
 
-    private exportFormCollection() {
+    exportFormCollection() {
         this.customFormsService.exportFormCollection(this.selectedFormColl.getId()).subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
@@ -196,16 +191,11 @@ export class CustomFormConfigComponent {
         );
     }
 
-    private importFormCollection() {
-        var modalData = new ImportCfModalData("Import FormCollection", "FormCollection");
-        const builder = new BSModalContextBuilder<ImportCfModalData>(
-            modalData, undefined, ImportCfModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ImportCfModal, overlayConfig).result.then(
-            (data: any) => {
+    importFormCollection() {
+        return this.openImportCfModal("Import FormCollection", "FormCollection").then(
+            (data: ImportCfModalReturnData) => {
                 this.customFormsService.importFormCollection(data.file, data.id).subscribe(
-                    stResp => {
+                    () => {
                         this.initFormCollList();
                     }
                 )
@@ -227,7 +217,7 @@ export class CustomFormConfigComponent {
         );
     }
 
-    private selectCustomForm(cf: CustomForm) {
+    selectCustomForm(cf: CustomForm) {
         if (this.selectedCustomForm == cf) {
             this.selectedCustomForm = null;
         } else {
@@ -235,40 +225,38 @@ export class CustomFormConfigComponent {
         }
     }
 
-    private createCustomForm() {
+    createCustomForm() {
         var existingCustomFormIds: string[] = [];
         for (var i = 0; i < this.customFormList.length; i++) {
             existingCustomFormIds.push(this.customFormList[i].getId());
         }
-        var modalData = new CustomFormEditorModalData(null, existingCustomFormIds);
-        const builder = new BSModalContextBuilder<CustomFormEditorModalData>(
-            modalData, undefined, CustomFormEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-full").keyboard(27).toJSON() };
-        return this.modal.open(CustomFormEditorModal, overlayConfig).result.then(
-            res => this.initCustomFormList(),
+        return this.openCustomFormEditor(null, existingCustomFormIds, false).then(
+            () => this.initCustomFormList(),
             () => { }
         );
     }
 
-    private editCustomForm() {
-        var modalData = new CustomFormEditorModalData(this.selectedCustomForm.getId(), [], (this.selectedCustomForm.getLevel() == CustomFormLevel.system));
-        const builder = new BSModalContextBuilder<CustomFormEditorModalData>(
-            modalData, undefined, CustomFormEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-full").keyboard(27).toJSON() };
-        return this.modal.open(CustomFormEditorModal, overlayConfig).result.then(
-            res => { },
+    editCustomForm() {
+        return this.openCustomFormEditor(this.selectedCustomForm.getId(), [], (this.selectedCustomForm.getLevel() == CustomFormLevel.system)).then(
+            () => { },
             () => { }
         );
     }
 
-    private cloneCustomForm() {
+    private openCustomFormEditor(id: string, existingForms: string[], readOnly: boolean) {
+        const modalRef: NgbModalRef = this.modalService.open(CustomFormEditorModal, new ModalOptions('full'));
+        modalRef.componentInstance.id = null;
+        modalRef.componentInstance.existingForms = existingForms;
+        modalRef.componentInstance.readOnly = readOnly;
+        return modalRef.result;
+    }
+
+    cloneCustomForm() {
         this.basicModals.promptPrefixed("Clone CustomForm", CustomForm.PREFIX, "ID", null, false, true, true).then(
             (fcId: any) => {
                 for (var i = 0; i < this.customFormList.length; i++) {
                     if (this.customFormList[i].getId() == fcId) {
-                        this.basicModals.alert("Duplicated ID", "A CustomForm with ID " + fcId + " already exists", "error");
+                        this.basicModals.alert("Duplicated ID", "A CustomForm with ID " + fcId + " already exists", ModalType.warning);
                         return;
                     }
                 }
@@ -282,16 +270,18 @@ export class CustomFormConfigComponent {
         );
     }
 
-    private deleteCustomForm() {
+    deleteCustomForm() {
         this.customFormsService.isFormLinkedToCollection(this.selectedCustomForm.getId()).subscribe(
             result => {
                 if (result) { //selectedCustomForm belong to a CR
+                    let deletEmptyCollCkeckOpt: ConfirmCheckOptions = { label: "Delete also FormCollection(s) left empty", value: true };
                     this.basicModals.confirmCheck("Delete CustomForm", "You are deleting a CustomForm that " +
-                        "belongs to one or more FormCollection(s). Are you sure?", "Delete also FormCollection(s) left empty", "error").then(
-                        (check: any) => {
-                            this.customFormsService.deleteCustomForm(this.selectedCustomForm.getId(), check).subscribe(
+                        "belongs to one or more FormCollection(s). Are you sure?", [deletEmptyCollCkeckOpt], ModalType.warning).then(
+                        (checkboxOpts: ConfirmCheckOptions[]) => {
+                            let deleteEmptyColl: boolean = checkboxOpts[0].value;
+                            this.customFormsService.deleteCustomForm(this.selectedCustomForm.getId(), deleteEmptyColl).subscribe(
                                 stResp => {
-                                    if (check) { //if user chooses to delete also empty FormCollection
+                                    if (deleteEmptyColl) { //if user chooses to delete also empty FormCollection
                                         this.initCFConfMap();
                                         this.initFormCollList();
                                     }
@@ -303,7 +293,7 @@ export class CustomFormConfigComponent {
                         );
                 } else { //selectedCustomForm does not belong to any FormCollection
                     this.basicModals.confirm("Delete CustomForm", "You are deleting CustomForm " + this.selectedCustomForm.getId() +
-                        ". Are you sure?", "warning").then(
+                        ". Are you sure?", ModalType.warning).then(
                         confirm => {
                             this.customFormsService.deleteCustomForm(this.selectedCustomForm.getId()).subscribe(
                                 stResp => {
@@ -318,7 +308,7 @@ export class CustomFormConfigComponent {
         )
     }
 
-    private exportCustomForm() {
+    exportCustomForm() {
         this.customFormsService.exportCustomForm(this.selectedCustomForm.getId()).subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
@@ -327,13 +317,8 @@ export class CustomFormConfigComponent {
         );
     }
 
-    private importCustomForm() {
-        var modalData = new ImportCfModalData("Import CustomForm", "CustomForm");
-        const builder = new BSModalContextBuilder<ImportCfModalData>(
-            modalData, undefined, ImportCfModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(ImportCfModal, overlayConfig).result.then(
+    importCustomForm() {
+        this.openImportCfModal("Import CustomForm", "CustomForm").then(
             (data: any) => {
                 this.customFormsService.importCustomForm(data.file, data.id).subscribe(
                     stResp => {
@@ -345,34 +330,41 @@ export class CustomFormConfigComponent {
         );
     }
 
+    private openImportCfModal(title: string, type: "CustomForm" | "FormCollection") {
+        const modalRef: NgbModalRef = this.modalService.open(ImportCfModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+		modalRef.componentInstance.type = type;
+        return modalRef.result;
+    }
+
     //Authorization handlers
-    private isCreateMappingAuthorized(): boolean {
+    isCreateMappingAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormCreateFormMapping);
     }
-    private isDeleteMappingAuthorized(): boolean {
+    isDeleteMappingAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormDeleteFormMapping);
     }
-    private isUpdateMappingAuthorized(): boolean {
+    isUpdateMappingAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormUpdateFormMapping);
     }
 
-    private isCreateFormAuthorized(): boolean {
+    isCreateFormAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormCreateForm);
     }
-    private isDeleteFormAuthorized(): boolean {
+    isDeleteFormAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormDeleteForm);
     }
-    private isUpdateFormAuthorized(): boolean {
+    isUpdateFormAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormUpdateForm);
     }
 
-    private isCreateCollectionAuthorized(): boolean {
+    isCreateCollectionAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormCreateCollection);
     }
-    private isDeleteCollectionAuthorized(): boolean {
+    isDeleteCollectionAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormDeleteCollection);
     }
-    private isUpdateCollectionAuthorized(): boolean {
+    isUpdateCollectionAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.customFormUpdateCollection);
     }
 

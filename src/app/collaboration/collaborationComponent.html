@@ -1,26 +1,24 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading" style="display: flex;">
+<div class="card card-default vbox">
+    <div class="card-header" style="display: flex;">
         <label style="flex: 1">Collaboration System</label>
 
-        <button class="btn btn-default btn-xs" (click)="initIssueList()" [disabled]="!issues">
-            <span class="glyphicon glyphicon-refresh"></span>
+        <button class="btn btn-light btn-xs" (click)="initIssueList()" [disabled]="!csWorking">
+            <span class="fas fa-redo"></span>
         </button>
-        <div class="dropdown" style="margin-left: 3px">
-            <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
-                <span class="glyphicon glyphicon-cog"></span>
+        <div class="dropdown ml-2" ngbDropdown>
+            <button class="btn btn-xs btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                <span class="fas fa-cog"></span>
             </button>
-            <ul class="dropdown-menu pull-right">
-                <li *ngIf="isCollProjManagementAuthorized()"><a (click)="openProjectConfig()">Project configuration</a></li>
-                <li><a (click)="openUserConfig()">User configuration</a></li>
-                <li *ngIf="isCollProjManagementAuthorized()" [ngClass]="{ disabled : !csProjectLinked }">
-                    <a (click)="assignProject()">Assign CS project</a>
-                </li>
-            </ul>
+            <div class="dropdown-menu float-right" ngbDropdownMenu>
+                <a *ngIf="isCollProjManagementAuthorized()" class="dropdown-item" (click)="openProjectConfig()">Project configuration</a>
+                <a class="dropdown-item" (click)="openUserConfig()">User configuration</a>
+                <a *ngIf="isCollProjManagementAuthorized()" class="dropdown-item" [ngClass]="{ disabled : !csProjectLinked }" (click)="assignProject()">Assign CS project</a>
+            </div>
         </div>
 
     </div>
     
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
 
         <!-- Mandatory settings not configured (missing serverURL) -->
         <div *ngIf="!projSettingsConfigured; else elseBlock1" class="alert alert-warning" style="margin: 3px;">

@@ -7,10 +7,10 @@
 
     <div class="hbox" style="align-items: center; margin: 4px;">
         <label style="margin-right: 4px; white-space: nowrap">Backend type:</label>
-        <select class="form-control input-sm" [(ngModel)]="selectedExtension" (ngModelChange)="onExtensionChange()">
+        <select class="form-control form-control-sm" [(ngModel)]="selectedExtension" (ngModelChange)="onExtensionChange()">
             <option *ngFor="let ext of extensions" [title]="ext.description" [ngValue]="ext">{{ext.name}}</option>
         </select>
-        <button *ngIf="resettable" class="btn btn-default btn-sm" style="margin-left: 4px;" (click)="reset()">Reset</button>
+        <button *ngIf="resettable" class="btn btn-light btn-sm" style="margin-left: 4px;" (click)="reset()">Reset</button>
     </div>
 
     <settings-renderer-panel *ngIf="projSettings" [(ngModel)]="projSettings"></settings-renderer-panel>
@@ -25,7 +25,7 @@
 
 </div>
 <div class="modal-footer">
-    <span class="pull-left">(*) Mandatory field</span>
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkClickable()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <span class="float-left">(*) Mandatory field</span>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkClickable()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

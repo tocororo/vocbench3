@@ -15,11 +15,11 @@ export class CustomOperationComponent {
     @Input() operation: CustomOperationDefinition;
     @Input() readonly: boolean;
     @Output() update: EventEmitter<void> = new EventEmitter(); //tells to the parent that the service has been modified
-    @ViewChild(YasguiComponent) viewChildYasgui: YasguiComponent;
+    @ViewChild(YasguiComponent, { static: false }) viewChildYasgui: YasguiComponent;
 
-    private isSparql: boolean;
-    private parameters: { prettyPrint: string, required: boolean }[] = [];
-    private returns: string;
+    isSparql: boolean;
+    parameters: { prettyPrint: string, required: boolean }[] = [];
+    returns: string;
 
     private editOperationAuthorized: boolean;
 

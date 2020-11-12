@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Modal, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
-import { OverlayConfig } from 'ngx-modialog';
 import { CollaborationProjSettingsModal } from "./modals/collaborationProjSettingsModal";
 import { CollaborationUserSettingsModal } from "./modals/collaborationUserSettingsModal";
 import { CollaborationProjectModal } from "./modals/collaborationProjectModal";
 import { CreateIssueModal } from "./modals/createIssueModal";
 import { IssueListModal } from "./issueListModal";
 import { Issue } from '../models/Collaboration';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions } from '../widget/modal/Modals';
 
 /**
  * Service to open modals that allow to create a classes list or instances list
@@ -14,52 +14,42 @@ import { Issue } from '../models/Collaboration';
 @Injectable()
 export class CollaborationModalServices {
 
-    constructor(private modal: Modal) { }
+    constructor(private modalService: NgbModal) { }
 
     /**
      * Opens a modal to list the collaboration system issues and select one
      * @return if the modal closes with ok returns an Issue
      */
     openIssueList(): Promise<Issue> {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(IssueListModal, overlayConfig).result;
+        return this.modalService.open(IssueListModal, new ModalOptions()).result;
     }
 
     /**
      * Opens a modal to edit the collaboration system project settings
      */
     editCollaborationProjectSettings() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(CollaborationProjSettingsModal, overlayConfig).result;
+        return this.modalService.open(CollaborationProjSettingsModal, new ModalOptions()).result;
     }
 
     /**
      * Opens a modal to edit the collaboration system user settings
      */
     editCollaborationUserSettings() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(CollaborationUserSettingsModal, overlayConfig).result;
+        return this.modalService.open(CollaborationUserSettingsModal, new ModalOptions()).result;
     }
 
     /**
      * Opens a modal to create or assign a collaboration project
      */
     editCollaborationProject() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(CollaborationProjectModal, overlayConfig).result;
+        return this.modalService.open(CollaborationProjectModal, new ModalOptions()).result;
     }
 
     /**
      * 
      */
     createIssue() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(CreateIssueModal, overlayConfig).result;
+        return this.modalService.open(CreateIssueModal, new ModalOptions()).result;
     }
 
 }

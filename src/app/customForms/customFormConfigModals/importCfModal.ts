@@ -1,41 +1,24 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CustomForm, FormCollection } from "../../models/CustomForms";
-
-export class ImportCfModalData extends BSModalContext {
-    /**
-     * @param title modal title
-     * @param prefix prefix to show to the left of the input field
-     * @param label label of the input field
-     * @param value the default value to show in input field
-     */
-    constructor(
-        public title: string = "Modal Title",
-        public type: "CustomForm" | "FormCollection",
-    ) {
-        super();
-    }
-}
 
 @Component({
     selector: "import-cf-modal",
     templateUrl: "./importCfModal.html",
 })
-export class ImportCfModal implements ModalComponent<ImportCfModalData> {
-    context: ImportCfModalData;
+export class ImportCfModal {
+    @Input() title: string;
+    @Input() type: "CustomForm" | "FormCollection";
     
-    private shortId: string;
-    private prefix: string;
+    shortId: string;
+    prefix: string;
     private file: File;
-    private useImportedId: boolean = true;
+    useImportedId: boolean = true;
 
-    constructor(public dialog: DialogRef<ImportCfModalData>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) {}
 
     ngOnInit() {
-        if (this.context.type == "CustomForm") {
+        if (this.type == "CustomForm") {
             this.prefix = CustomForm.PREFIX;
         } else {
             this.prefix = FormCollection.PREFIX;
@@ -46,21 +29,21 @@ export class ImportCfModal implements ModalComponent<ImportCfModalData> {
         this.file = file;
     }
     
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
+    ok() {
+        let returnData: ImportCfModalReturnData;
         if (this.useImportedId) {
-            this.dialog.close({file: this.file, id: null});
+            returnData = {file: this.file, id: null};
         } else {
-            this.dialog.close({file: this.file, id: this.prefix + this.shortId});
+            returnData = {file: this.file, id: this.prefix + this.shortId};
         }
+        this.activeModal.close(returnData);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
-    private isInputValid(): boolean {
+    isInputValid(): boolean {
         if (this.file == null) {
             return false;
         }
@@ -70,4 +53,9 @@ export class ImportCfModal implements ModalComponent<ImportCfModalData> {
         return true;
     }
 
+}
+
+export class ImportCfModalReturnData {
+    file: File;
+    id: string;
 }

@@ -1,37 +1,33 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading">
+<div class="card card-default vbox">
+    <div class="card-header">
         <label style="flex: 1">{{id}}</label>
 
         <div class="btn-group btn-group-xs">
-            <button class="btn btn-default" (click)="initCustomService()" title="Refresh">
-                <span class="glyphicon glyphicon-refresh"></span>
+            <button class="btn btn-light" (click)="initCustomService()" title="Refresh">
+                <span class="fas fa-redo"></span>
             </button>
-            <div class="btn-group btn-group-xs">
-                <button class="btn btn-default dropdown-toggle" style="padding: 1px 3px;" data-toggle="dropdown">
-                    <span class="caret"></span>
+            <div class="btn-group btn-group-xs" ngbDropdown>
+                <button class="btn btn-light dropdown-toggle" style="padding: 1px 3px;" data-toggle="dropdown" ngbDropdownToggle>
+                    <span class="fas fa-caret-down fa-sm"></span>
                 </button>
-                <ul class="dropdown-menu pull-right">
-                    <li title="Reload service (useful when the Custom Service is changed manually)">
-                        <a (click)="reload()">
-                            <div class="hbox">
-                                <span style="flex:1">Force reload from filesystem</span>
-                                <span class="glyphicon glyphicon-repeat pull-right" style="margin-left: 5px;"></span>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
+                <div class="dropdown-menu float-right" ngbDropdownMenu>
+                    <a class="dropdown-item" (click)="reload()" title="Reload service (useful when the Custom Service is changed manually)">
+                        Force reload from filesystem
+                        <span class="fas fa-redo float-right ml-2"></span>
+                    </a>
+                </div>
             </div>
         </div>
 
     </div>
-    <div *ngIf="form" class="panel-body vbox">
+    <div *ngIf="form" class="card-body vbox">
 
         <!-- Name -->
         <div class="gridRow">
             <div class="gridEntry">
                 <label class="entryLabel">
                     {{form.name.displayName}}
-                    <span class="glyphicon glyphicon-info-sign" [title]="form.name.description"></span>
+                    <span class="fas fa-info-circle" [title]="form.name.description"></span>
                 </label>
                 <input-editable style="flex: 1;" [value]="form.name.value" (valueEdited)="updateName($event)" [disabled]="!editServiceAuthorized"></input-editable>
             </div>
@@ -42,7 +38,7 @@
             <div class="gridEntry">
                 <label class="entryLabel">
                     {{form.description.displayName}}
-                    <span class="glyphicon glyphicon-info-sign" [title]="form.description.description"></span>
+                    <span class="fas fa-info-circle" [title]="form.description.description"></span>
                 </label>
                 <input-editable style="flex: 1;" [value]="form.description.value" (valueEdited)="updateDescription($event)" [allowEmpty]="true" [disabled]="!editServiceAuthorized"></input-editable>
             </div>
@@ -50,24 +46,24 @@
 
         <!-- Operations -->
         <div class="hbox">
-            <div class="panel panel-default vbox">
-                <div class="panel-heading">
+            <div class="card card-default vbox">
+                <div class="card-header">
                     <label style="flex: 1">
                         {{form.operations.displayName}}
-                        <span class="glyphicon glyphicon-info-sign" [title]="form.operations.description"></span>
+                        <span class="fas fa-info-circle" [title]="form.operations.description"></span>
                     </label>
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-default" (click)="createOperation()" title="Create operation" [disabled]="!createOperationAuthorized">
-                                <span class="glyphicon glyphicon-plus"></span>
+                            <button class="btn btn-light" (click)="createOperation()" title="Create operation" [disabled]="!createOperationAuthorized">
+                                <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-default" (click)="deleteOperation()" title="Delete operation" [disabled]="!selectedOperation || !deleteOperationAuthorized">
-                                <span class="glyphicon glyphicon-minus"></span>
+                            <button class="btn btn-light" (click)="deleteOperation()" title="Delete operation" [disabled]="!selectedOperation || !deleteOperationAuthorized">
+                                <span class="fas fa-minus"></span>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="panel-body vbox scrollableContainer">
+                <div class="card-body vbox scrollableContainer">
                     <div *ngFor="let o of form.operations.value" class="listItem" [ngClass]="{ active: selectedOperation == o }" (click)="selectOperation(o)">
                         {{o.name}}
                     </div>

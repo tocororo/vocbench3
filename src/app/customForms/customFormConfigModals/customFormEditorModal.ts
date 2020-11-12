@@ -1,6 +1,6 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
-import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { PearlValidationResult } from "../../models/Coda";
 import { CustomForm, CustomFormType, EditorMode } from "../../models/CustomForms";
@@ -14,19 +14,7 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 import { ExtractFromShaclModal } from "./extractFromShaclModal";
-import { PearlInferenceValidationModal, PearlInferenceValidationModalData } from "./pearlInferenceValidationModal";
-
-export class CustomFormEditorModalData extends BSModalContext {
-    /**
-     * @param id identifier of the CustomForm to edit.
-     * If not provided the modal allows to create a CustomForm from scratch
-     * @param existingForms list of CustomForm id that already exist.
-     * Useful to avoid cretion of CustomForm with duplicate id.
-     */
-    constructor(public id: string, public existingForms: string[] = [], public readOnly: boolean = false) {
-        super();
-    }
-}
+import { PearlInferenceValidationModal } from "./pearlInferenceValidationModal";
 
 @Component({
     selector: "custom-form-editor-modal",
@@ -37,43 +25,44 @@ export class CustomFormEditorModalData extends BSModalContext {
         .optionalCell { min-width: 10px; width: 10px; margin-left: 4px; }
     `]
 })
-export class CustomFormEditorModal implements ModalComponent<CustomFormEditorModalData> {
-    context: CustomFormEditorModalData;
+export class CustomFormEditorModal {
+    @Input() id: string;
+    @Input() existingForms: string[] = [];
+    @Input() readOnly: boolean;
 
-    @ViewChild(PearlEditorComponent) viewChildCodemirror: PearlEditorComponent;
+    @ViewChild(PearlEditorComponent, { static: true }) viewChildCodemirror: PearlEditorComponent;
 
-    private mode: EditorMode;
+    mode: EditorMode;
 
-    private namespaceLocked: boolean = true;
+    namespaceLocked: boolean = true;
 
     private cfPrefix: string = CustomForm.PREFIX;
-    private cfId: string;
+    cfId: string;
     private cfShortId: string;
-    private name: string;
-    private description: string;
-    private descriptionTextareaRows: number = 3; //3 by default, dynamically computed in edit mode
-    private type: CustomFormType = "graph";
-    private ref: string;
-    private showPropertyChain: ARTURIResource[] = [];
+    name: string;
+    description: string;
+    descriptionTextareaRows: number = 3; //3 by default, dynamically computed in edit mode
+    type: CustomFormType = "graph";
+    ref: string;
+    showPropertyChain: ARTURIResource[] = [];
 
-    private selectedPropInChain: ARTURIResource; //used in showPropertyChain field    
+    selectedPropInChain: ARTURIResource; //used in showPropertyChain field    
 
-    private submitted: boolean = false;
+    submitted: boolean = false;
     private errorMsg: string;
 
     private extractFromShaclAuthorized: boolean;
 
-    constructor(public dialog: DialogRef<CustomFormEditorModalData>,
+    constructor(public activeModal: NgbActiveModal, private modalService: NgbModal,
         private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, 
-        private resourceService: ResourcesServices, private cfService: CustomFormsServices, private modal: Modal,
+        private resourceService: ResourcesServices, private cfService: CustomFormsServices,
         private elementRef: ElementRef) {
-        this.context = dialog.context;
     }
 
     ngOnInit() {
-        if (this.context.id != undefined) { //CRE id provided, so the modal works in edit mode
+        if (this.id != undefined) { //CRE id provided, so the modal works in edit mode
             this.mode = EditorMode.edit;
-            this.cfService.getCustomForm(this.context.id).subscribe(
+            this.cfService.getCustomForm(this.id).subscribe(
                 cf => {
                     this.cfId = cf.getId();
                     this.cfPrefix = this.cfId.substring(0, this.cfId.lastIndexOf(".") + 1);
@@ -92,7 +81,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
                     let lineBreakCount = (this.description.match(/\n/g)||[]).length;
                     this.descriptionTextareaRows = lineBreakCount + 2;
                 },
-                err => { this.dialog.dismiss() }
+                err => { this.activeModal.dismiss() }
             )
         } else {
             this.mode = EditorMode.create;
@@ -126,7 +115,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
 
     // ============= PEARL handler ================
 
-    private pickConverter() {
+    pickConverter() {
         this.sharedModals.selectConverter("Pick a converter", null).then(
             (converter: {projectionOperator: string, contractDesctiption: any }) => {
                 this.viewChildCodemirror.insertAtCursor(converter.projectionOperator);
@@ -135,11 +124,11 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
         )
     }
 
-    private inferAnnotations() {
+    inferAnnotations() {
         this.cfService.validatePearl(this.ref, this.type).subscribe(
             (result: PearlValidationResult) => {
                 if (!result.valid) {
-                    this.basicModals.alert("Invalid PEARL", "Cannot infer annotations on an invalid PEARL:\n" + result.details, "error");
+                    this.basicModals.alert("Invalid PEARL", "Cannot infer annotations on an invalid PEARL:\n" + result.details, ModalType.error);
                     return;
                 }
                 this.cfService.inferPearlAnnotations(this.ref).subscribe(
@@ -158,18 +147,15 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
     }
 
     private openInferenceValidationModal(newPearl: string) {
-        let modalData = new PearlInferenceValidationModalData(this.ref, newPearl);
-        const builder = new BSModalContextBuilder<PearlInferenceValidationModalData>(
-            modalData, undefined, PearlInferenceValidationModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
-        return this.modal.open(PearlInferenceValidationModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(PearlInferenceValidationModal, new ModalOptions('xl'));
+        modalRef.componentInstance.oldPearl = this.ref;
+		modalRef.componentInstance.newPearl = newPearl;
+        return modalRef.result;
     }
 
-    private extractFromShacl() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(ExtractFromShaclModal, overlayConfig).result.then(
+    extractFromShacl() {
+        const modalRef: NgbModalRef = this.modalService.open(ExtractFromShaclModal, new ModalOptions());
+        return modalRef.result.then(
             pearl => {
                 this.ref = pearl;
             },
@@ -179,7 +165,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
 
     //========= ID Namespace-lock HANDLER =========
 
-    private unlockNamespace() {
+    unlockNamespace() {
         this.namespaceLocked = !this.namespaceLocked;
         if (this.namespaceLocked) { //from free id to locked namespace
             this.fromIdToPrefixAndShortId();
@@ -199,8 +185,8 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
     }
 
     //========= PROPERTY CHAIN HANDLERS ============
-    private selectPropInChain(prop: ARTURIResource) {
-        if (this.context.readOnly) {
+    selectPropInChain(prop: ARTURIResource) {
+        if (this.readOnly) {
             return;
         }
         if (this.selectedPropInChain == prop) {
@@ -209,7 +195,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
             this.selectedPropInChain = prop;
         }
     }
-    private addPropToChain(where?: "before" | "after") {
+    addPropToChain(where?: "before" | "after") {
         this.browsingModals.browsePropertyTree("Add property").then(
             (prop: any) => {
                 if (where == null) {
@@ -223,7 +209,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
             () => { }
         );
     }
-    private disableMove(where: "before" | "after") {
+    disableMove(where: "before" | "after") {
         if (this.selectedPropInChain == null || this.showPropertyChain.length == 1) {
             return true;
         }
@@ -235,7 +221,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
         }
         return false;
     }
-    private movePropInChain(where: "before" | "after") {
+    movePropInChain(where: "before" | "after") {
         var prevIndex = this.showPropertyChain.indexOf(this.selectedPropInChain);
         this.showPropertyChain.splice(prevIndex, 1); //remove from current position
         if (where == "before") {
@@ -244,8 +230,8 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
             this.showPropertyChain.splice(prevIndex + 1, 0, this.selectedPropInChain);
         }
     }
-    private removePropFromChain(prop: ARTURIResource) {
-        if (this.context.readOnly) {
+    removePropFromChain(prop: ARTURIResource) {
+        if (this.readOnly) {
             return;
         }
         this.showPropertyChain.splice(this.showPropertyChain.indexOf(prop), 1);
@@ -256,7 +242,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
     /**
      * Allow to edit manually the property chain
      */
-    private editPropChain() {
+    editPropChain() {
         var serializedPropChain: string = "";
         for (var i = 0; i < this.showPropertyChain.length; i++) {
             serializedPropChain += this.showPropertyChain[i].getURI() + ",";
@@ -285,7 +271,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
     }
     //=======================================
 
-    private isDataValid() {
+    isDataValid() {
         var valid = true;
         //name and ref are mandatory
         if (this.name == null || this.name.trim() == "" || this.ref == null || this.ref.trim() == "") {
@@ -298,7 +284,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
                 this.errorMsg = "The CustomForm ID is not valid (it may be empty or contain invalid characters). Please fix it."
                 valid = false;
             }
-            if (this.context.existingForms.indexOf(this.cfPrefix + this.cfShortId) != -1) { //CRE with the same id already exists
+            if (this.existingForms.indexOf(this.cfPrefix + this.cfShortId) != -1) { //CRE with the same id already exists
                 this.errorMsg = "A CustomForm with the same ID already exists";
                 valid = false;
             }
@@ -306,7 +292,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
         return valid;
     }
 
-    ok(event: Event) {
+    ok() {
         this.submitted = true;
         if (!this.isDataValid()) {
             return;
@@ -316,7 +302,7 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
         this.cfService.validatePearl(this.ref, this.type).subscribe(
             (result: PearlValidationResult) => {
                 if (!result.valid) {
-                    this.basicModals.alert("Invalid PEARL", result.details, "error");
+                    this.basicModals.alert("Invalid PEARL", result.details, ModalType.error);
                     return;
                 }
                 if (this.description == null) { //set empty definition if it is not provided (prevent setting "undefined" as definition of CRE)
@@ -327,23 +313,20 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
                     if (this.type == "node") {
                         this.cfService.updateCustomForm(this.cfId, this.name, this.description, this.ref).subscribe(
                             stResp => {
-                                event.stopPropagation();
-                                this.dialog.close();
+                                this.activeModal.close();
                             }
                         );
                     } else { //graph
                         this.cfService.updateCustomForm(this.cfId, this.name, this.description, this.ref, this.showPropertyChain).subscribe(
                             stResp => {
-                                event.stopPropagation();
-                                this.dialog.close();
+                                this.activeModal.close();
                             }
                         );
                     }
                 } else { //create mode
                     this.cfService.createCustomForm(this.type, this.cfPrefix + this.cfShortId, this.name, this.description, this.ref, this.showPropertyChain).subscribe(
                         stResp => {
-                            event.stopPropagation();
-                            this.dialog.close();
+                            this.activeModal.close();
                         }
                     );
                 }
@@ -352,6 +335,6 @@ export class CustomFormEditorModal implements ModalComponent<CustomFormEditorMod
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 }

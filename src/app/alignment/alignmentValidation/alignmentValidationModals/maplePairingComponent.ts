@@ -10,7 +10,7 @@ export class MaplePairingComponent {
     @Input() pairing: RefinablePairing;
     @Output() synonymizerChange: EventEmitter<Synonymizer> = new EventEmitter();
 
-    private selectedSynonymizer: Synonymizer;
+    selectedSynonymizer: Synonymizer;
 
     constructor() {}
 
@@ -20,7 +20,7 @@ export class MaplePairingComponent {
         this.selectedSynonymizer = this.pairing.synonymizers.find(s => s.score == maxScore);
     }
 
-    private onSynonimizerChanged() {
+    onSynonimizerChanged() {
         this.synonymizerChange.emit(this.selectedSynonymizer);
     }
 

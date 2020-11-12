@@ -1,7 +1,8 @@
-import { Component, ElementRef } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { Observable } from "rxjs";
+import { Component, ElementRef, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, of } from "rxjs";
+import { map } from 'rxjs/operators';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { Reference } from "../../../models/Configuration";
 import { CustomOperationDefinition, CustomService, CustomServiceDefinition, OperationParameter, TypeUtils } from "../../../models/CustomService";
 import { ServiceInvocationDefinition } from "../../../models/InvokableReporter";
@@ -11,40 +12,29 @@ import { UIUtils } from "../../../utils/UIUtils";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { CustomServiceModalServices } from "../../customServicesEditor/modals/customServiceModalServices";
 
-export class ServiceInvocationEditorModalData extends BSModalContext {
-    /**
-     * @param title 
-     * @param invokableReporterRef needed for the creation/edit of the invocation
-     * @param serviceInvocation if provided, allows the edit of the invocation.
-     *      It contains the invocation definition and the position in the sections array of the invokableReporterRef
-     */
-    constructor(public title: string = 'Modal Title', public invokableReporterRef: Reference, public serviceInvocation?: { def: ServiceInvocationDefinition, idx: number }) {
-        super();
-    }
-}
-
 @Component({
     selector: "service-invocation-editor-modal",
     templateUrl: "./serviceInvocationEditorModal.html",
     styleUrls: ["../../customServices.css"],
 })
-export class ServiceInvocationEditorModal implements ModalComponent<ServiceInvocationEditorModalData> {
-    context: ServiceInvocationEditorModalData;
+export class ServiceInvocationEditorModal {
+    @Input() title: string;
+    @Input() invokableReporterRef: Reference;
+    @Input() serviceInvocation: { def: ServiceInvocationDefinition, idx: number }
 
-    private label: string;
-    private description: string;
-    private template: string;
+    label: string;
+    description: string;
+    template: string;
 
-    private customServiceIds: string[];
+    customServiceIds: string[];
     private selectedServiceId: string;
-    private selectedService: CustomServiceDefinition;
+    selectedService: CustomServiceDefinition;
     private selectedOperation: CustomOperationDefinition;
     private parameters: EditableParamStruct[]; //list of editable parameter structures
 
     constructor(private customServService: CustomServiceServices, private invokableReporterService: InvokableReportersServices,
         private basicModals: BasicModalServices, private customServiceModals: CustomServiceModalServices,
-        public dialog: DialogRef<ServiceInvocationEditorModalData>, private elementRef: ElementRef) {
-        this.context = dialog.context;
+        public activeModal: NgbActiveModal, private elementRef: ElementRef) {
     }
 
     ngOnInit() {
@@ -52,8 +42,8 @@ export class ServiceInvocationEditorModal implements ModalComponent<ServiceInvoc
             (serviceIds) => {
                 this.customServiceIds = serviceIds;
 
-                if (this.context.serviceInvocation != null) { //edit => restore the operation
-                    let invocationDef: ServiceInvocationDefinition = this.context.serviceInvocation.def;
+                if (this.serviceInvocation != null) { //edit => restore the operation
+                    let invocationDef: ServiceInvocationDefinition = this.serviceInvocation.def;
                     this.label = invocationDef.label;
                     this.description = invocationDef.description;
                     this.template = invocationDef.template;
@@ -90,13 +80,13 @@ export class ServiceInvocationEditorModal implements ModalComponent<ServiceInvoc
             //init the selected custom service
             return this.initCustomService(this.selectedServiceId);
         } else {
-            return Observable.of(null);
+            return of(null);
         }
     }
 
     private initCustomService(id: string): Observable<void> {
-        return this.customServService.getCustomService(id).map(
-            (conf: CustomService) => {
+        return this.customServService.getCustomService(id).pipe(
+            map((conf: CustomService) => {
                 this.selectedService = {
                     name: conf.getPropertyValue("name"),
                     description: conf.getPropertyValue("description"),
@@ -104,7 +94,7 @@ export class ServiceInvocationEditorModal implements ModalComponent<ServiceInvoc
                 };
                 this.selectedOperation = null;
                 this.parameters = null;
-            }
+            })
         );
     }
 
@@ -126,7 +116,7 @@ export class ServiceInvocationEditorModal implements ModalComponent<ServiceInvoc
     }
 
 
-    private isDataValid(): boolean {
+    isDataValid(): boolean {
         if (this.selectedOperation != null) { //operation selected => check if it has parameters and in case if they are set
             if (this.selectedOperation.returns.name == TypeUtils.Types.void) {
                 return false; //update operation cannot be used in reporter
@@ -144,7 +134,7 @@ export class ServiceInvocationEditorModal implements ModalComponent<ServiceInvoc
         if (this.parameters != null) { //check if those required are provided
             for (let p of this.parameters) {
                 if (p.param.required && p.value == null || p.value.trim() == "") {
-                    this.basicModals.alert("Service invocation", "The required parameter '" + p.param.name + "' is missing", "warning");
+                    this.basicModals.alert("Service invocation", "The required parameter '" + p.param.name + "' is missing", ModalType.warning);
                     return false; //a required param is not set
                 }
             }
@@ -160,24 +150,24 @@ export class ServiceInvocationEditorModal implements ModalComponent<ServiceInvoc
             operation: this.selectedOperation.name,
             arguments: argsMap,
         }
-        if (this.dialog.context.serviceInvocation == null) { //create
-            this.invokableReporterService.addSectionToReporter(this.context.invokableReporterRef.relativeReference, serviceInvocationDef).subscribe(
+        if (this.serviceInvocation == null) { //create
+            this.invokableReporterService.addSectionToReporter(this.invokableReporterRef.relativeReference, serviceInvocationDef).subscribe(
                 () => {
-                    this.dialog.close();
+                    this.activeModal.close();
                 }
             )
         } else { //edit
-            this.invokableReporterService.updateSectionInReporter(this.context.invokableReporterRef.relativeReference, serviceInvocationDef, 
-                this.context.serviceInvocation.idx).subscribe(
+            this.invokableReporterService.updateSectionInReporter(this.invokableReporterRef.relativeReference, serviceInvocationDef, 
+                this.serviceInvocation.idx).subscribe(
                 () => {
-                    this.dialog.close();
+                    this.activeModal.close();
                 }
             )
         }
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
 }

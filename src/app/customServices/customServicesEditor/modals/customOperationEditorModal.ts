@@ -1,52 +1,42 @@
-import { Component } from "@angular/core";
-import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
-import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { Configuration } from "../../../models/Configuration";
 import { CustomOperation, CustomOperationDefinition, CustomOperationTypes, OperationParameter, OperationType, SPARQLOperation, TypeUtils } from "../../../models/CustomService";
 import { QueryChangedEvent } from "../../../models/Sparql";
 import { CustomServiceServices } from "../../../services/customServiceServices";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
-import { AuthorizationHelperModal, AuthorizationHelperModalData } from "./authorizationHelperModal";
+import { AuthorizationHelperModal } from "./authorizationHelperModal";
 var $: JQueryStatic = require('jquery');
-
-export class CustomOperationEditorModalData extends BSModalContext {
-    /**
-     * @param title 
-     * @param customServiceId needed for the creation/edit of the operation
-     * @param operation if provided, allows the edit of the operation
-     */
-    constructor(public title: string = 'Modal Title', public customServiceId: string, public operation?: CustomOperationDefinition) {
-        super();
-    }
-}
 
 @Component({
     selector: "custom-operation-editor-modal",
     templateUrl: "./customOperationEditorModal.html",
     styleUrls: ["../../customServices.css"],
 })
-export class CustomOperationEditorModal implements ModalComponent<CustomOperationEditorModalData> {
-    context: CustomOperationEditorModalData;
+export class CustomOperationEditorModal {
+    @Input() title: string;
+    @Input() customServiceId: string; //needed for the creation/edit of the operation
+    @Input() operation: CustomOperationDefinition; //if provided, allows the edit of the operation
 
-    private customOperations: CustomOperation[];
-    private selectedCustomOperation: CustomOperation;
+    customOperations: CustomOperation[];
+    selectedCustomOperation: CustomOperation;
 
-    private form: CustomOperationForm;
+    form: CustomOperationForm;
 
     private returnsPrettyPrint: string;
     private queryValid: boolean = true; //unless otherwise stated bu the yasgui component, the query is considered valid
 
     constructor(private customServService: CustomServiceServices, private basicModals: BasicModalServices,
-        public dialog: DialogRef<CustomOperationEditorModalData>, private modal: Modal) {
-        this.context = dialog.context;
+        public activeModal: NgbActiveModal, private modalService: NgbModal) {
     }
 
     ngOnInit() {
         this.customServService.getOperationForms().subscribe(
             (formConfigs: Configuration[]) => {
                 this.customOperations = formConfigs;
-                if (this.context.operation != null) { // edit mode
-                    this.restoreOperation(this.context.operation);
+                if (this.operation != null) { // edit mode
+                    this.restoreOperation(this.operation);
                 } else if (this.customOperations.length == 1) {
                     this.selectedCustomOperation = this.customOperations[0];
                     this.onOperationChanged();
@@ -74,7 +64,7 @@ export class CustomOperationEditorModal implements ModalComponent<CustomOperatio
     /**
      * Update the form when the chosen custom operation configuration changes
      */
-    private onOperationChanged() {
+    onOperationChanged() {
         this.form = {}
         this.selectedCustomOperation.properties.forEach(p => {
             let formEntry: CustomOperationFormEntry = {
@@ -153,12 +143,11 @@ export class CustomOperationEditorModal implements ModalComponent<CustomOperatio
         if (authValue != null && authValue.trim() == "") {
             authValue = null;
         }
-        let modalData = new AuthorizationHelperModalData(authValue, paramNames);
-        const builder = new BSModalContextBuilder<AuthorizationHelperModalData>(
-            modalData, undefined, AuthorizationHelperModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(AuthorizationHelperModal, overlayConfig).result.then(
+
+        const modalRef: NgbModalRef = this.modalService.open(AuthorizationHelperModal, new ModalOptions());
+        modalRef.componentInstance.authorization = authValue;
+		modalRef.componentInstance.parameters = paramNames;
+        return modalRef.result.then(
             auth => {
                 this.form.authorization.value = auth;
             }
@@ -213,18 +202,18 @@ export class CustomOperationEditorModal implements ModalComponent<CustomOperatio
                     )
                 )
             ) {
-                this.basicModals.alert("Invalid data", "The required field " + fieldName + " is missing", "warning");
+                this.basicModals.alert("Invalid data", "The required field " + fieldName + " is missing", ModalType.warning);
                 return;
             } else { //ad hoc checks
                 let validNameRegexp = new RegExp("^[a-zA-Z_$][a-zA-Z_$0-9]*$");
                 if (fieldName == "name" && !validNameRegexp.test(field.value)) { //check that the name is valid
-                    this.basicModals.alert("Invalid data", "The name " + field.value + " is not valid", "warning");
+                    this.basicModals.alert("Invalid data", "The name " + field.value + " is not valid", ModalType.warning);
                     return;
                 }
                 if (fieldName == "returns") { //check that the type is completed
                     let returnType: OperationType = field.value;
                     if (!TypeUtils.isOperationTypeValid(returnType)) {
-                        this.basicModals.alert("Invalid data", "The provided Returns type is not valid", "warning");
+                        this.basicModals.alert("Invalid data", "The provided Returns type is not valid", ModalType.warning);
                         return;
                     }
                 }
@@ -233,20 +222,20 @@ export class CustomOperationEditorModal implements ModalComponent<CustomOperatio
                     if (parameters != null) {
                         for (let param of parameters) {
                             if (param.name == null) { //all parameter names must be provided
-                                this.basicModals.alert("Invalid data", "A provided parameter has an empty name", "warning");
+                                this.basicModals.alert("Invalid data", "A provided parameter has an empty name", ModalType.warning);
                                 return;
                             } else if (!validNameRegexp.test(param.name)) { //all parameter names must be valid variable name
-                                this.basicModals.alert("Invalid data", "The parameter name " + param.name + " is not valid", "warning");
+                                this.basicModals.alert("Invalid data", "The parameter name " + param.name + " is not valid", ModalType.warning);
                                 return;
                             } else if (!TypeUtils.isOperationTypeValid(param.type)) {
-                                this.basicModals.alert("Invalid data", "The type of the parameter " + param.name + " is not valid", "warning");
+                                this.basicModals.alert("Invalid data", "The type of the parameter " + param.name + " is not valid", ModalType.warning);
                                 return;
                             }
                         }
                     }
                 }
                 if (fieldName == "sparql" && !this.queryValid) {
-                    this.basicModals.alert("Invalid data", "The provided SPARQL query is not valid", "warning");
+                    this.basicModals.alert("Invalid data", "The provided SPARQL query is not valid", ModalType.warning);
                     return;
                 }
             }
@@ -265,36 +254,36 @@ export class CustomOperationEditorModal implements ModalComponent<CustomOperatio
             (<SPARQLOperation>newOperation).sparql = this.form.sparql.value;
         }
 
-        if (this.context.operation != null) { //edit => check if something is changed
-            newOperation.serviceId = this.context.customServiceId; //needed just for the comparison, in order to not make it wrongly report as changed
+        if (this.operation != null) { //edit => check if something is changed
+            newOperation.serviceId = this.customServiceId; //needed just for the comparison, in order to not make it wrongly report as changed
             let changed: boolean = false;
 
             //first compare only the fields of the two operations (pristine and new one)
-            let pristineFields = Object.keys(this.context.operation).sort();
+            let pristineFields = Object.keys(this.operation).sort();
             let updatedFields = Object.keys(newOperation).sort();
             changed = JSON.stringify(pristineFields) != JSON.stringify(updatedFields);
 
             if (!changed) { //fields not changed => compare the contents
                 for (let operationField of pristineFields) {
-                    if (JSON.stringify(this.context.operation[operationField]) != JSON.stringify(newOperation[operationField])) {
+                    if (JSON.stringify(this.operation[operationField]) != JSON.stringify(newOperation[operationField])) {
                         changed = true;
                     }
                 }
             }
 
             if (changed) { //changed => update
-                this.customServService.updateOperationInCustomService(this.context.customServiceId, newOperation).subscribe(
+                this.customServService.updateOperationInCustomService(this.customServiceId, newOperation).subscribe(
                     ()=> {
-                        this.dialog.close();
+                        this.activeModal.close();
                     }
                 );
             } else {
                 this.cancel();
             }
         } else { //create
-            this.customServService.addOperationToCustomService(this.context.customServiceId, newOperation).subscribe(
+            this.customServService.addOperationToCustomService(this.customServiceId, newOperation).subscribe(
                 ()=> {
-                    this.dialog.close();
+                    this.activeModal.close();
                 }
             );
         }
@@ -302,7 +291,7 @@ export class CustomOperationEditorModal implements ModalComponent<CustomOperatio
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
 }

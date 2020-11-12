@@ -1,18 +1,18 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading">
+<div class="card card-default vbox">
+    <div class="card-header">
         <label style="flex: 1;">Invokable Reports</label>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" (click)="createReporter()" title="Create report" [disabled]="!createReporterAuthorized">
-                    <span class="glyphicon glyphicon-plus"></span>
+                <button class="btn btn-light" (click)="createReporter()" title="Create report" [disabled]="!createReporterAuthorized">
+                    <span class="fas fa-plus"></span>
                 </button>
-                <button class="btn btn-default" (click)="deleteReporter()" title="Delete report" [disabled]="!selectedReporter || !deleteReporterAuthorized">
-                    <span class="glyphicon glyphicon-minus"></span>
+                <button class="btn btn-light" (click)="deleteReporter()" title="Delete report" [disabled]="!selectedReporter || !deleteReporterAuthorized">
+                    <span class="fas fa-minus"></span>
                 </button>
             </div>
         </div>
     </div>
-    <div class="panel-body vbox scrollableContainer">
+    <div class="card-body vbox scrollableContainer">
         <div *ngFor="let r of reporters" class="listItem" [ngClass]="{ active: selectedReporter == r }" (click)="selectReporter(r)">
             {{r.identifier}}
         </div>

@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
-import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { RemoteAlignmentServiceConfiguration, RemoteAlignmentServiceConfigurationDef } from "../../../models/Alignment";
 import { Pair } from "../../../models/Shared";
 import { RemoteAlignmentServices } from "../../../services/remoteAlignmentServices";
@@ -13,21 +13,18 @@ import { RemoteSystemConfigurationsAdministration } from "./remoteSystemConfigur
     selector: "remote-system-settings-modal",
     templateUrl: "./remoteSystemSettingsModal.html",
 })
-export class RemoteSystemSettingsModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class RemoteSystemSettingsModal {
 
-    private isAdmin: boolean;
-    private isSetServiceAuthorized: boolean;
-    private isRemoveServiceAuthorized: boolean;
+    isAdmin: boolean;
+    isSetServiceAuthorized: boolean;
+    isRemoveServiceAuthorized: boolean;
 
-    private savedConfigs: RemoteAlignmentServiceConfigurationDef[];
+    savedConfigs: RemoteAlignmentServiceConfigurationDef[];
     private activeConfig: RemoteAlignmentServiceConfigurationDef;
 
     private changed: boolean = false;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private remoteAlignmentService: RemoteAlignmentServices, private modal: Modal) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private remoteAlignmentService: RemoteAlignmentServices, private modalService: NgbModal) {}
 
     ngOnInit() {
         this.isAdmin = VBContext.getLoggedUser().isAdmin();
@@ -82,9 +79,7 @@ export class RemoteSystemSettingsModal implements ModalComponent<BSModalContext>
     }
 
     administration() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
-        this.modal.open(RemoteSystemConfigurationsAdministration, overlayConfig).result.then(
+        this.modalService.open(RemoteSystemConfigurationsAdministration, new ModalOptions('lg')).result.then(
             () => {
                 this.changed = true;
                 this.initConfigs();
@@ -94,7 +89,7 @@ export class RemoteSystemSettingsModal implements ModalComponent<BSModalContext>
 
 
     ok() {
-        this.dialog.close(this.changed);
+        this.activeModal.close(this.changed);
     }
 
 }

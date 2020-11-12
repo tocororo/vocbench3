@@ -1,23 +1,23 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading">
+<div class="card card-default vbox">
+    <div class="card-header">
         <label style="flex: 1">
             {{operation.name}}
         </label>
         <div *ngIf="!readonly" class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" (click)="editOperation()" title="Edit operation" [disabled]="!editOperationAuthorized">
-                    <span class="glyphicon glyphicon-pencil"></span>
+                <button class="btn btn-light" (click)="editOperation()" title="Edit operation" [disabled]="!editOperationAuthorized">
+                    <span class="fas fa-pencil-alt"></span>
                 </button>
             </div>
         </div>
     </div>
-    <div class="panel-body vbox scrollableContainer">
+    <div class="card-body vbox scrollableContainer">
 
         <div class="gridRow">
             <div class="gridEntry">
                 <label class="entryLabel">Name:</label>
                 <div style="flex: 1">
-                    <span class="form-control input-sm" style="background-color: #eee; font-family: monospace;">{{operation.name}}</span>
+                    <span class="form-control form-control-sm" style="background-color: #eee; font-family: monospace;">{{operation.name}}</span>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
             <div class="gridEntry">
                 <label class="entryLabel">Authorization:</label>
                 <div style="flex: 1">
-                    <span class="form-control input-sm" style="background-color: #eee; font-family: monospace;">{{operation.authorization}}</span>
+                    <span class="form-control form-control-sm" style="background-color: #eee; font-family: monospace;">{{operation.authorization}}</span>
                 </div>
             </div>
         </div>
@@ -33,11 +33,11 @@
             <div class="gridEntry">
                 <label class="entryLabel">Parameters:</label>
                 <div style="flex: 1">
-                    <span *ngIf="parameters.length == 0" class="form-control input-sm" style="background-color: #eee;"></span>
+                    <span *ngIf="parameters.length == 0" class="form-control form-control-sm" style="background-color: #eee;"></span>
                     <div *ngFor="let p of parameters" class="hbox" style="align-items: center; margin-bottom: 2px;">
-                        <span class="form-control input-sm" style="background-color: #eee; font-family: monospace;">{{p.prettyPrint}}</span>
-                        <span *ngIf="!p.required" class="glyphicon glyphicon-question-sign" style="margin: 0px 4px;" title="Optional parameter"></span>
-                        <span *ngIf="p.required" class="glyphicon glyphicon-exclamation-sign" style="margin: 0px 4px;" title="Mandatory parameter"></span>
+                        <span class="form-control form-control-sm" style="background-color: #eee; font-family: monospace;">{{p.prettyPrint}}</span>
+                        <span *ngIf="!p.required" class="fas fa-question-circle" style="margin: 0px 4px;" title="Optional parameter"></span>
+                        <span *ngIf="p.required" class="fas fa-exclamation-circle" style="margin: 0px 4px;" title="Mandatory parameter"></span>
                     </div> 
                 </div>
             </div>
@@ -46,15 +46,15 @@
             <div class="gridEntry">
                 <label class="entryLabel">Returns:</label>
                 <div style="flex: 1">
-                    <span class="form-control input-sm" style="background-color: #eee; font-family: monospace;">{{returns}}</span>
+                    <span class="form-control form-control-sm" style="background-color: #eee; font-family: monospace;">{{returns}}</span>
                 </div>
             </div>
         </div>
-        <div class="gridRow">
+        <div *ngIf="isSparql" class="gridRow">
             <div class="gridEntry">
                 <label class="entryLabel">Sparql:</label>
                 <div class="vbox" style="align-self: stretch;">
-                    <yasgui [query]="operation.sparql" readonly="true" hideButtons="true"></yasgui>
+                    <yasgui [query]="operation['sparql']" readonly="true" hideButtons="true"></yasgui>
                 </div>
             </div>
         </div>

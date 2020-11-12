@@ -1,7 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { Modal, OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
-import { Observable } from 'rxjs';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { from, Observable, of } from 'rxjs';
+import { finalize, flatMap, map } from 'rxjs/operators';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { AlignmentOverview } from '../../models/Alignment';
 import { Project } from "../../models/Project";
 import { RemoteAlignmentTask } from '../../models/RemoteAlignment';
@@ -16,7 +17,7 @@ import { VBActionsEnum } from '../../utils/VBActions';
 import { ProjectContext } from '../../utils/VBContext';
 import { BasicModalServices } from '../../widget/modal/basicModal/basicModalServices';
 import { AlignFromSource } from './alignFromSource';
-import { CreateRemoteAlignmentTaskModal, CreateRemoteAlignmentTaskModalData } from './alignmentValidationModals/createRemoteAlignmentTaskModal';
+import { CreateRemoteAlignmentTaskModal } from './alignmentValidationModals/createRemoteAlignmentTaskModal';
 import { RemoteSystemSettingsModal } from './alignmentValidationModals/remoteSystemSettingsModal';
 
 @Component({
@@ -26,19 +27,19 @@ import { RemoteSystemSettingsModal } from './alignmentValidationModals/remoteSys
 })
 export class AlignFromRemoteSystemComponent extends AlignFromSource {
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
 
-    private serverDown: boolean = false;
-    private serviceNotConfigured: boolean = false;
+    serverDown: boolean = false;
+    serviceNotConfigured: boolean = false;
 
-    private isSettingsAuthorized: boolean;
+    isSettingsAuthorized: boolean;
 
     private tasks: RemoteAlignmentTask[];
-    private selectedTask: RemoteAlignmentTask;
+    selectedTask: RemoteAlignmentTask;
 
     constructor(edoalService: EdoalServices, projectService: ProjectServices,
         private remoteAlignmentService: RemoteAlignmentServices, private mapleService: MapleServices, 
-        private basicModals: BasicModalServices, private modal: Modal) {
+        private basicModals: BasicModalServices, private modalService: NgbModal) {
         super(edoalService, projectService);
     }
 
@@ -71,17 +72,17 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
      */
     private ensureDatasetProfiled(project: Project, datasetPosition: DatasetPosition): Observable<boolean> {
         if (project != null) {
-            return this.checkDatasetProfiled(project).flatMap(
-                profiled => {
+            return this.checkDatasetProfiled(project).pipe(
+                flatMap(profiled => {
                     if (profiled) {
-                        return Observable.of(true);
+                        return of(true);
                     } else {
                         return this.profileProject(project, datasetPosition);
                     }
-                }
+                })
             )
         } else { //in case of non-Edoal project, the right dataset is not given a-priori, so it could be null
-            return Observable.of(true);
+            return of(true);
         }
         
     }
@@ -92,12 +93,11 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
      */
     private checkDatasetProfiled(project: Project): Observable<boolean> {
         HttpServiceContext.setContextProject(project);
-        return this.mapleService.checkProjectMetadataAvailability().map(
-            available => {
+        return this.mapleService.checkProjectMetadataAvailability().pipe(
+            finalize(() => HttpServiceContext.removeContextProject()),
+            map(available => {
                 return available;
-            }
-        ).finally(
-            () => HttpServiceContext.removeContextProject()
+            })
         );
     }
 
@@ -108,31 +108,30 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
      * @param project 
      */
     private profileProject(project: Project, datasetPosition: DatasetPosition): Observable<boolean> {
-        return Observable.fromPromise(
+        return from(
             this.basicModals.confirm("Unavailable metadata", "Unable to find metadata about the " + datasetPosition + 
                 " project '" + project.getName() +  "', do you want to generate them? (Required for the alignment)").then(
                 confirm => {
                     HttpServiceContext.setContextProject(project);
                     UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-                    return this.mapleService.profileProject().map(
-                        () => {
+                    return this.mapleService.profileProject().pipe(
+                        finalize(() => HttpServiceContext.removeContextProject()),
+                        map(() => {
                             UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                             return true;
-                        }
-                    ).finally(
-                        () => HttpServiceContext.removeContextProject()
+                        })
                     );
                 },
                 cancel => {
-                    return Observable.of(false)
+                    return of(false)
                 }
             )
-        ).flatMap(
-            profiled => profiled
+        ).pipe(
+            flatMap(profiled => profiled)
         );
     }
 
-    private listTask() {
+    listTask() {
         //reset all before retrieving tasks
         this.serverDown = false;
         this.serviceNotConfigured = false;
@@ -150,22 +149,22 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
                     if (err.message.includes("HttpHostConnectException")) {
                         this.serverDown = true;
                         this.basicModals.alert("Alignment Service server error", "The Alignment Service server didn't respond, "
-                            + "make sure it is up and running or the configuration is correct", "warning");
+                            + "make sure it is up and running or the configuration is correct", ModalType.warning);
                     } else {
-                        this.basicModals.alert("Alignment Service server error", err.message, "warning", err.stack);
+                        this.basicModals.alert("Alignment Service server error", err.message, ModalType.error, err.stack);
                     }
                 } else if (err.name == "java.lang.IllegalStateException") {
                     if (err.message.includes("No alignement service configured")) {
                         this.serviceNotConfigured = true;
                     } else {
-                        this.basicModals.alert("Alignment Service error", err.message, "warning", err.stack);
+                        this.basicModals.alert("Alignment Service error", err.message, ModalType.error, err.stack);
                     }
                 }
             }
         );
     }
 
-    private selectTask(task: RemoteAlignmentTask) {
+    selectTask(task: RemoteAlignmentTask) {
         if (this.selectedTask == task) {
             this.selectedTask = null;
         } else {
@@ -173,30 +172,28 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
         }
     }
 
-    private createTask() {
+    createTask() {
         //if it is an edoal project, also the right project is forced to the one set in the edoal
         let rightProject: Project = this.isEdoalProject() ? this.rightProject : null;
-        var modalData = new CreateRemoteAlignmentTaskModalData(this.leftProject, rightProject);
-        const builder = new BSModalContextBuilder<CreateRemoteAlignmentTaskModalData>(
-            modalData, undefined, CreateRemoteAlignmentTaskModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
-        this.modal.open(CreateRemoteAlignmentTaskModal, overlayConfig).result.then(
-            newTaskId => {
+        const modalRef: NgbModalRef = this.modalService.open(CreateRemoteAlignmentTaskModal, new ModalOptions('lg'));
+        modalRef.componentInstance.leftProject = this.leftProject;
+		modalRef.componentInstance.rightProject = rightProject;
+        modalRef.result.then(
+            () => {
                 this.listTask();
             },
             () => {}
         );
     }
 
-    private deleteTask() {
+    deleteTask() {
         this.remoteAlignmentService.deleteTask(this.selectedTask.id).subscribe(() => {
             this.listTask();
             this.alignmentOverview = null;
         });
     }
 
-    private fetchAlignment(task: RemoteAlignmentTask) {
+    fetchAlignment(task: RemoteAlignmentTask) {
         this.rightProject = new Project(task.rightDataset.projectName);
         this.remoteAlignmentService.fetchAlignment(task.id).subscribe(
             (overview: AlignmentOverview) => {
@@ -205,10 +202,8 @@ export class AlignFromRemoteSystemComponent extends AlignFromSource {
         );
     }
 
-    private settings() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(RemoteSystemSettingsModal, overlayConfig).result.then(
+    settings() {
+        this.modalService.open(RemoteSystemSettingsModal, new ModalOptions()).result.then(
             (configChanged: boolean) => {
                 if (configChanged) { 
                     this.listTask();

@@ -15,7 +15,7 @@ export class CustomServiceComponent {
     @Input() id: string;
 
     private service: CustomService;
-    private form: CustomServiceForm;
+    form: CustomServiceForm;
     private selectedOperation: CustomOperationDefinition;
 
     private editServiceAuthorized: boolean;
@@ -43,7 +43,7 @@ export class CustomServiceComponent {
      * is useful to distinguish those case where the selected operation needs to be selected again and those where the selected 
      * operation must be reset
      */
-    private initCustomService(restoreOperation: boolean) {
+    initCustomService(restoreOperation?: boolean) {
         return this.customServService.getCustomService(this.id).subscribe(
             (conf: CustomService) => {
                 this.service = conf;
@@ -114,7 +114,7 @@ export class CustomServiceComponent {
         this.initCustomService(true);
     }
 
-    private reload() {
+    reload() {
         this.customServService.reloadCustomService(this.id).subscribe(
             () => {
                 this.initCustomService(true);

@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, SimpleChanges, ViewChild } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { Reference } from "../../models/Configuration";
 import { InvokableReporter, ServiceInvocationDefinition } from "../../models/InvokableReporter";
 import { SettingsProp } from "../../models/Plugins";
@@ -18,22 +19,22 @@ import { InvokableReporterModalServices } from "./modals/invokableReporterModalS
 export class InvokableReporterComponent {
     @Input() ref: Reference;
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
 
     private reporter: InvokableReporter;
     private selectedServiceInvocation: ServiceInvocationDefinition;
     private selectedServiceInvocationIdx: number;
 
-    private reportFormats: ReportFormatStruct[] = [
+    reportFormats: ReportFormatStruct[] = [
         { label: "HTML", value: null }, { label: "PDF", value: "application/pdf" }
     ]
-    private selectedReportFormat: ReportFormatStruct = this.reportFormats[0];
+    selectedReportFormat: ReportFormatStruct = this.reportFormats[0];
 
-    private form: InvokableReporterForm;
+    form: InvokableReporterForm;
 
-    private editReporterAuthorized: boolean;
-    private createInvocationAuthorized: boolean;
-    private deleteInvocationAuthorized: boolean;
+    editReporterAuthorized: boolean;
+    createInvocationAuthorized: boolean;
+    deleteInvocationAuthorized: boolean;
 
     constructor(private invokableReporterService: InvokableReportersServices, private invokableReporterModals: InvokableReporterModalServices,
         private basicModals: BasicModalServices) { }
@@ -76,7 +77,7 @@ export class InvokableReporterComponent {
         );
     }
 
-    private edit() {
+    edit() {
         this.invokableReporterModals.openInvokableReporterEditor("Edit Invokable Report", [], this.ref).then(
             () => {
                 this.initReporter(true);
@@ -85,9 +86,9 @@ export class InvokableReporterComponent {
         )
     }
 
-    private compileReport() {
+    compileReport() {
         if (this.form.sections.value == null || this.form.sections.value.length == 0) {
-            this.basicModals.alert("Compile report", "The reporter cannot be compiled since it has no service invocation provided", "warning");
+            this.basicModals.alert("Compile report", "The reporter cannot be compiled since it has no service invocation provided", ModalType.warning);
         } else {
             UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
             this.invokableReporterService.compileReport(this.ref.relativeReference, false).subscribe(
@@ -102,9 +103,9 @@ export class InvokableReporterComponent {
         }
     }
 
-    private compileAndDownloadReport() {
+    compileAndDownloadReport() {
         if (this.form.sections.value == null || this.form.sections.value.length == 0) {
-            this.basicModals.alert("Download report", "The reporter cannot be compiled since it has no service invocation provided", "warning");
+            this.basicModals.alert("Download report", "The reporter cannot be compiled since it has no service invocation provided", ModalType.warning);
         } else {
             UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
             this.invokableReporterService.compileAndDownloadReport(this.ref.relativeReference, this.selectedReportFormat.value).subscribe(
@@ -122,9 +123,9 @@ export class InvokableReporterComponent {
 
     private compilationErrorHandler(error: Error) {
         if (error.name.endsWith("InvokableReporterException") && error.message.includes("AccessDeniedException")) { //not enough privileges
-            this.basicModals.alert("Error", "You have not enough priviledges for invoking one (or more) service invocation performed by this report.", "error", error.message);
+            this.basicModals.alert("Error", "You have not enough priviledges for invoking one (or more) service invocation performed by this report.", ModalType.error, error.message);
         } else { //if not due to access denied show in error modal
-            this.basicModals.alert("Error", error.message, "error", error.stack);
+            this.basicModals.alert("Error", error.message, ModalType.error, error.stack);
         }
     }
     

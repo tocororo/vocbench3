@@ -9,10 +9,10 @@ import { HttpServiceContext } from '../../utils/HttpManager';
 })
 export class AlignmentValidationComponent {
 
-    private sourceFile: string = "File";
-    private sourceRemoteSystem: string = "Remote Alignment System";
-    private alignmentSources: string[] = [this.sourceFile, this.sourceRemoteSystem];
-    private selectedSource: string;
+    sourceFile: string = "File";
+    sourceRemoteSystem: string = "Remote Alignment System";
+    alignmentSources: string[] = [this.sourceFile, this.sourceRemoteSystem];
+    selectedSource: string;
 
     constructor(private alignmentService: AlignmentServices) {}
 

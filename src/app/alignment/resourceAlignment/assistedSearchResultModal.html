@@ -1,8 +1,8 @@
 <div class="modal-header">
-    <h3 class="modal-title text-info">{{context.title}}</h3>
+    <h3 class="modal-title text-info">{{title}}</h3>
 </div>
 <div class="modal-body vbox scrollableContainer">
-    <table class="table table-condensed table-hoverable">
+    <table class="table table-sm table-hoverable">
         <thead>
             <tr>
                 <th>Resource</th>
@@ -11,7 +11,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let r of context.resourceList" (click)="resourceSelected = r" [ngClass]="{ info : r == resourceSelected }">
+            <tr *ngFor="let r of resourceList" (click)="resourceSelected = r" [ngClass]="{ info : r == resourceSelected }">
                 <td><rdf-resource [resource]="r"></rdf-resource></td>
                 <td>{{r.getAdditionalProperty('matchedLang')}}</td>
                 <td>{{r.getAdditionalProperty('matchMode')}}</td>
@@ -20,6 +20,6 @@
     </table>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!resourceSelected">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!resourceSelected">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

@@ -1,11 +1,11 @@
 <div class="vbox">
 
     <ul class="nav nav-tabs" (click)="$event.preventDefault()">
-        <li [ngClass]="{active : currentRoute == 'customService', disabled: !csAuthorized }">
-            <a (click)="currentRoute = 'customService'">Custom Services</a>
+        <li class="nav-item" [ngClass]="{active : currentRoute == 'customService', disabled: !csAuthorized }">
+            <a class="nav-link" (click)="currentRoute = 'customService'">Custom Services</a>
         </li>
-        <li [ngClass]="{active : currentRoute == 'reporter', disabled: !reporterAuthorized }">
-            <a (click)="currentRoute = 'reporter'">Reports</a>
+        <li class="nav-item" [ngClass]="{active : currentRoute == 'reporter', disabled: !reporterAuthorized }">
+            <a class="nav-link" (click)="currentRoute = 'reporter'">Reports</a>
         </li>
     </ul>
 

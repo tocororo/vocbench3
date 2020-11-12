@@ -1,12 +1,13 @@
 <div [ngClass]="{'table-responsive bottomPadding': formFields?.length > 8 }">
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%;">
             <col>
             <col style="width: 1%;">
         </colgroup>
         <tbody>
-            <ng-container *ngFor="let field of formFields; let index = index; trackBy: trackByIndex">
+            <!-- <ng-container *ngFor="let field of formFields; let index = index; trackBy: trackByIndex"> -->
+            <ng-container *ngFor="let field of formFields; let index = index;">
                 <tr *ngIf="!field.isDependency()">
                     <!--Form entry label-->
                     <td class="text-right"><label>{{field.getUserPrompt()}}:</label></td>

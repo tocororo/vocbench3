@@ -1,40 +1,28 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
+import { PearlValidationResult } from "../../models/Coda";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { PearlValidationResult } from "../../models/Coda";
-
-export class PearlInferenceValidationModalData extends BSModalContext {
-    constructor(public oldPearl: string,public newPearl: string) {
-        super();
-    }
-}
 
 @Component({
     selector: "pearl-inference-modal",
     templateUrl: "./pearlInferenceValidationModal.html",
 })
-export class PearlInferenceValidationModal implements ModalComponent<PearlInferenceValidationModalData> {
-    context: PearlInferenceValidationModalData;
+export class PearlInferenceValidationModal {
+    @Input() oldPearl: string;
+    @Input() newPearl: string;
 
-    private newPearl: string;
-    
-    constructor(public dialog: DialogRef<PearlInferenceValidationModalData>, private cfService: CustomFormsServices, private basicModals: BasicModalServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private cfService: CustomFormsServices, private basicModals: BasicModalServices) {}
 
-    ngOnInit() {
-        this.newPearl = this.context.newPearl;
-    }
 
     ok() {
         this.cfService.validatePearl(this.newPearl, "graph").subscribe(
             (result: PearlValidationResult) => {
                 if (result.valid) {
-                    this.dialog.close(this.newPearl);
+                    this.activeModal.close(this.newPearl);
                 } else {
-                    this.basicModals.alert("Invalid PEARL", result.details, "error");
+                    this.basicModals.alert("Invalid PEARL", result.details, ModalType.error);
                     return;
                 }
             }
@@ -43,7 +31,7 @@ export class PearlInferenceValidationModal implements ModalComponent<PearlInfere
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
 }

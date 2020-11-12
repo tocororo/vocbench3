@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { FormCollection } from "../../models/CustomForms";
 import { OWL, RDF } from "../../models/Vocabulary";
@@ -13,16 +13,14 @@ import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsing
     selector: "form-coll-mapping-modal",
     templateUrl: "./formCollMappingModal.html",
 })
-export class FormCollMappingModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class FormCollMappingModal {
 
-    private formCollectionList: Array<FormCollection>;
-    private selectedResourceIri: string;
-    private selectedFormColl: FormCollection;
+    formCollectionList: Array<FormCollection>;
+    selectedResourceIri: string;
+    selectedFormColl: FormCollection;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private cfService: CustomFormsServices, private basicModals: BasicModalServices,
+    constructor(public activeModal: NgbActiveModal, private cfService: CustomFormsServices, private basicModals: BasicModalServices,
         private browsingModals: BrowsingModalServices) {
-        this.context = dialog.context;
     }
 
     ngOnInit() {
@@ -33,12 +31,12 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
         );
     }
 
-    private selectSuggested() {
+    selectSuggested() {
         this.cfService.getFormCollection(this.selectedFormColl.getId()).subscribe(
             fc => {
                 var suggestions: ARTURIResource[] = fc.getSuggestions();
                 if (suggestions.length == 0) {
-                    this.basicModals.alert("Suggested resources", "No classes/properties suggested for the FormCollection " + fc.getId(), "warning");
+                    this.basicModals.alert("Suggested resources", "No classes/properties suggested for the FormCollection " + fc.getId(), ModalType.warning);
                 } else {
                     this.basicModals.selectResource("Suggested resources", null, suggestions).then(
                         (res: ARTURIResource) => {
@@ -51,7 +49,7 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
         );
     }
 
-    private selectProperty() {
+    selectProperty() {
         this.browsingModals.browsePropertyTree("Select a property").then(
             (res: ARTURIResource) => {
                 this.selectedResourceIri = res.getURI();
@@ -60,7 +58,7 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
         )
     }
 
-    private selectClass() {
+    selectClass() {
         this.browsingModals.browseClassTree("Select a class", [RDF.property, OWL.class, OWL.thing]).then(
             (res: ARTURIResource) => {
                 this.selectedResourceIri = res.getURI();
@@ -69,20 +67,20 @@ export class FormCollMappingModal implements ModalComponent<BSModalContext> {
         )
     }
 
-    private selectFormColl(formColl: FormCollection) {
+    selectFormColl(formColl: FormCollection) {
         this.selectedFormColl = formColl;
     }
 
     ok() {
         this.selectedResourceIri = this.selectedResourceIri.trim();
         if (!ResourceUtils.testIRI(this.selectedResourceIri)) {
-            this.basicModals.alert("Invalid IRI", "The provided resource IRI is not valid", "warning");
+            this.basicModals.alert("Invalid IRI", "The provided resource IRI is not valid", ModalType.warning);
             return
         }
-        this.dialog.close({ resource: new ARTURIResource(this.selectedResourceIri), formCollection: this.selectedFormColl.getId() });
+        this.activeModal.close({ resource: new ARTURIResource(this.selectedResourceIri), formCollection: this.selectedFormColl.getId() });
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 }

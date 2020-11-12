@@ -3,14 +3,14 @@
 </div>
 <div class="modal-body vbox">
     
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card card-default">
+        <div class="card-header">
             <span style="flex: 1"></span>
-            <button *ngIf="isAdmin" class="btn btn-xs btn-default" (click)="administration()" title="Administration">
-                <span class="glyphicon glyphicon-glyphicon glyphicon-wrench"></span>
+            <button *ngIf="isAdmin" class="btn btn-xs btn-light" (click)="administration()" title="Administration">
+                <span class="fas fa-wrench"></span>
             </button>
         </div>
-        <div class="panel-body table-responsive">
+        <div class="card-body table-responsive">
             <table class="table">
                 <thead>
                     <tr>

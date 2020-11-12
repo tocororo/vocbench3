@@ -1,43 +1,38 @@
 import { Injectable } from '@angular/core';
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { Reference } from '../../../models/Configuration';
 import { Report, ServiceInvocationDefinition } from '../../../models/InvokableReporter';
-import { InvokableReporterEditorModal, InvokableReporterEditorModalData } from './invokableReporterEditorModal';
-import { ReportResultModal, ReportResultModalData } from './reportResultModal';
-import { ServiceInvocationEditorModal, ServiceInvocationEditorModalData } from './serviceInvocationEditorModal';
+import { InvokableReporterEditorModal } from './invokableReporterEditorModal';
+import { ReportResultModal } from './reportResultModal';
+import { ServiceInvocationEditorModal } from './serviceInvocationEditorModal';
 
 
 @Injectable()
 export class InvokableReporterModalServices {
 
-    constructor(private modal: Modal) { }
+    constructor(private modalService: NgbModal) { }
 
     public openInvokableReporterEditor(title: string, existingReporters: Reference[], reporterRef?: Reference): Promise<void> {
-        let modalData = new InvokableReporterEditorModalData(title, existingReporters, reporterRef);
-        const builder = new BSModalContextBuilder<InvokableReporterEditorModalData>(
-            modalData, undefined, InvokableReporterEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(InvokableReporterEditorModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(InvokableReporterEditorModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+		modalRef.componentInstance.existingReporters = existingReporters;
+		modalRef.componentInstance.reporterRef = reporterRef;
+        return modalRef.result;
     }
 
     public openServiceInvocationEditor(title: string, invokableReporterRef: Reference, serviceInvocation?: { def: ServiceInvocationDefinition, idx: number }): Promise<void> {
-        let modalData = new ServiceInvocationEditorModalData(title, invokableReporterRef, serviceInvocation);
-        const builder = new BSModalContextBuilder<ServiceInvocationEditorModalData>(
-            modalData, undefined, ServiceInvocationEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
-        return this.modal.open(ServiceInvocationEditorModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(ServiceInvocationEditorModal, new ModalOptions('lg'));
+        modalRef.componentInstance.title = title;
+		modalRef.componentInstance.invokableReporterRef = invokableReporterRef;
+		modalRef.componentInstance.serviceInvocation = serviceInvocation;
+        return modalRef.result;
     }
 
     public showReport(report: Report): Promise<void> {
-        let modalData = new ReportResultModalData(report);
-        const builder = new BSModalContextBuilder<ReportResultModalData>(
-            modalData, undefined, ReportResultModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ReportResultModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(ReportResultModal, new ModalOptions());
+        modalRef.componentInstance.report = report;
+        return modalRef.result;
     }
 
 }

@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body blockingDivHost">
     
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%;">
             <col>
@@ -13,35 +13,35 @@
             <tr>
                 <td nowrap><label>Source Resource:</label></td>
                 <td>
-                    <div class="input-sm input-resource">
-                        <rdf-resource [resource]="context.resource"></rdf-resource>
+                    <div class="form-control-sm input-resource">
+                        <rdf-resource [resource]="resource"></rdf-resource>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td nowrap><label>Target Resource:</label></td>
                 <td>
-                    <div class="input-sm input-resource">
+                    <div class="form-control-sm input-resource">
                         <rdf-resource *ngIf="alignedObject" [resource]="alignedObject"></rdf-resource>
                     </div>
                 </td>
                 <td>
-                    <div class="btn-group btn-group-sm" role="group" title="Pick external resource">
-                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            <span class="glyphicon glyphicon-pencil"></span>
+                    <div class="btn-group btn-group-sm" title="Pick external resource" ngbDropdown>
+                        <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                            <span class="fas fa-pencil-alt"></span>
                         </button>
-                        <ul class="dropdown-menu pull-right">
-                            <li><a (click)="browseLocalProjects()">Browse local projects</a></li>
-                            <li><a (click)="assistedSearch()">Assisted search</a></li>
-                            <li><a (click)="enterManually()">Enter value manually</a></li>
-                        </ul>
+                        <div class="dropdown-menu float-right" ngbDropdownMenu>
+                            <a class="dropdown-item" (click)="browseLocalProjects()">Browse local projects</a>
+                            <a class="dropdown-item" (click)="assistedSearch()">Assisted search</a>
+                            <a class="dropdown-item" (click)="enterManually()">Enter value manually</a>
+                        </div>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td><label>Property:</label></td>
                 <td>
-                    <select class="form-control input-sm" [(ngModel)]="mappingProperty">
+                    <select class="form-control form-control-sm" [(ngModel)]="mappingProperty">
                         <option *ngFor="let p of mappingPropList" [ngValue]="p">{{p.getShow()}}</option>
                     </select>
                 </td>
@@ -67,6 +67,6 @@
     
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkClickable()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkClickable()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

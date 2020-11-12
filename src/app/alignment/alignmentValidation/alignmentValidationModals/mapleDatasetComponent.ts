@@ -16,9 +16,9 @@ import { Project } from '../../../models/Project';
 })
 export class MapleDatasetComponent {
 
-    @Input() dataset: Dataset
+    @Input() dataset: Dataset;
 
-    private shortType: string;
+    shortType: string;
     private shortConformsTo: string;
     private modelBadgeClass: string;
 

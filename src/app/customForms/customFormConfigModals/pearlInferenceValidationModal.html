@@ -10,15 +10,15 @@
     </div>
 
     <div class="hbox" style="margin-top: 4px;">
-        <div class="panel panel-default vbox">
-            <div class="panel-heading"><label>Original PEARL</label></div>
-            <div class="panel-body vbox">
-                <pearl-editor [ngModel]="context.oldPearl" [disabled]="true"></pearl-editor>
+        <div class="card card-default vbox">
+            <div class="card-header"><label>Original PEARL</label></div>
+            <div class="card-body vbox">
+                <pearl-editor [ngModel]="oldPearl" [disabled]="true"></pearl-editor>
             </div>
         </div>
-        <div class="panel panel-default vbox" style="margin-left: 5px;" >
-            <div class="panel-heading"><label>Inferred PEARL</label></div>
-            <div class="panel-body vbox">
+        <div class="card card-default vbox" style="margin-left: 5px;" >
+            <div class="card-header"><label>Inferred PEARL</label></div>
+            <div class="card-body vbox">
                 <pearl-editor [(ngModel)]="newPearl"></pearl-editor>
             </div>
         </div>
@@ -27,5 +27,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()">Accept</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Discard</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Discard</button>
 </div>

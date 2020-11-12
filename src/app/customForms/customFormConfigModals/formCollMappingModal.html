@@ -5,40 +5,34 @@
     
     <div style="display: flex; margin-bottom: 4px; align-items: center;">
         <label>Resource:</label>
-        <input class="form-control input-sm" style="margin: 0px 4px;" [(ngModel)]="selectedResourceIri" placeholder="http://example#resource">
-        <div class="dropdown pull-right">
-            <button class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">
+        <input class="form-control form-control-sm" style="margin: 0px 4px;" [(ngModel)]="selectedResourceIri" placeholder="http://example#resource">
+        <div class="dropdown" ngbDropdown>
+            <button class="btn btn-light dropdown-toggle btn-sm" >
                 Select
-                <span class="caret"></span>
+                <span class="fas fa-caret-down"></span>
             </button>
-            <ul class="dropdown-menu">
-                <li>
-                    <a (click)="selectClass()">
-                        <img src="../../../assets/images/icons/res/class.png" /> Select class
-                    </a>
-                </li>
-                <li>
-                    <a (click)="selectProperty()">
-                        <img src="../../../assets/images/icons/res/prop.png" /> Select property
-                    </a>
-                </li>
-                <li *ngIf="selectedFormColl">
-                    <a (click)="selectSuggested()">
-                        <span class="glyphicon glyphicon-star" style="width: 16px; padding-left: 3px;"></span>
-                        Select suggested for FormCollection
-                    </a>
-                </li>
-            </ul>
+            <div class="dropdown-menu" ngbDropdownMenu>
+                <a class="dropdown-item" (click)="selectClass()">
+                    <img src="../../../assets/images/icons/res/class.png" /> Select class
+                </a>
+                <a class="dropdown-item" (click)="selectProperty()">
+                    <img src="../../../assets/images/icons/res/prop.png" /> Select property
+                </a>
+                <a *ngIf="selectedFormColl" class="dropdown-item" (click)="selectSuggested()">
+                    <span class="fas fa-star" style="width: 16px; padding-left: 3px;"></span>
+                    Select suggested for FormCollection
+                </a>
+            </div>
         </div>
     </div>
     
-    <div class="panel panel-default vbox">
-        <div class="panel-heading">
+    <div class="card card-default vbox">
+        <div class="card-header">
             <label style="flex: 1">Form Collection:</label>
         </div>
-        <div class="panel-body vbox">
+        <div class="card-body vbox">
             <div class="scrollableContainer">
-                <table class="table table-condensed table-borderless table-hoverable">
+                <table class="table table-sm table-borderless table-hoverable">
                     <tbody>
                         <tr *ngFor="let fc of formCollectionList" (click)="selectFormColl(fc)"
                             [ngClass]="{ info: fc == selectedFormColl, grayText: fc.getLevel() == 'system' }">
@@ -53,5 +47,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedResourceIri || !selectedFormColl">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

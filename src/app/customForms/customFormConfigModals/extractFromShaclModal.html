@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body">
 
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%;">
             <col>
@@ -19,7 +19,7 @@
             <tr>
                 <td nowrap><label>Shape source</label></td>
                 <td>
-                    <select class="form-control input-sm" [(ngModel)]="selectedSource">
+                    <select class="form-control form-control-sm" [(ngModel)]="selectedSource">
                         <option *ngFor="let s of sources">{{s}}</option>
                     </select>
                 </td>
@@ -29,7 +29,7 @@
                 <td>
                     <div class="hbox">
                         <file-picker (fileChanged)="fileChangeEvent($event)" size="sm" [accept]="filePickerAccept"></file-picker>
-                        <select class="form-control input-sm" style="margin-left: 4px; width: initial;" [(ngModel)]="selectedInputFormat">
+                        <select class="form-control form-control-sm" style="margin-left: 4px; width: initial;" [(ngModel)]="selectedInputFormat">
                             <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
                         </select>
                     </div>
@@ -39,8 +39,8 @@
                 <td><label>URL</label></td>
                 <td>
                     <div class="hbox">
-                        <input class="form-control input-sm" [(ngModel)]="shapeUrl">
-                        <select class="form-control input-sm" style="margin-left: 4px; width: initial;" [(ngModel)]="selectedInputFormat">
+                        <input class="form-control form-control-sm" [(ngModel)]="shapeUrl">
+                        <select class="form-control form-control-sm" style="margin-left: 4px; width: initial;" [(ngModel)]="selectedInputFormat">
                             <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
                         </select>
                     </div>
@@ -51,6 +51,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

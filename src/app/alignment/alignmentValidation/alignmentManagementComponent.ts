@@ -1,8 +1,9 @@
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component, Input, SimpleChanges } from '@angular/core';
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
-import { Observable } from 'rxjs';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { forkJoin, Observable, of } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
+import { ConfirmCheckOptions } from 'src/app/widget/modal/basicModal/confirmModal/confirmCheckModal';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { AlignmentCell, AlignmentOverview, AlignmentRelationSymbol } from '../../models/Alignment';
 import { ARTURIResource, LocalResourcePosition, RDFResourceRolesEnum, ResourcePosition } from "../../models/ARTResources";
 import { Project } from "../../models/Project";
@@ -15,8 +16,8 @@ import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from '../../utils/VBContext';
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { MappingPropertySelectionModal, MappingPropertySelectionModalData } from './alignmentValidationModals/mappingPropertySelectionModal';
-import { ValidationReportModal, ValidationReportModalData } from './alignmentValidationModals/validationReportModal';
+import { MappingPropertySelectionModal } from './alignmentValidationModals/mappingPropertySelectionModal';
+import { ValidationReportModal } from './alignmentValidationModals/validationReportModal';
 import { ValidationSettingsModal } from './alignmentValidationModals/validationSettingsModal';
 
 @Component({
@@ -30,22 +31,22 @@ export class AlignmentManagementComponent {
     @Input() leftProject: Project;
     @Input() rightProject: Project;
 
-    private isEdoal: boolean;
+    isEdoal: boolean;
 
-    private alignmentCellList: Array<AlignmentCell> = [];
+    alignmentCellList: Array<AlignmentCell> = [];
 
     //for pagination
     private page: number = 0;
-    private totPage: number;
+    totPage: number;
 
     //quick actions
-    private qaNull = "---";
-    private qaAcceptAll = "Accept all";
-    private qaAcceptAllAbove = "Accept all above threshold";
-    private qaRejectAll = "Reject all";
-    private qaRejectAllUnder = "Reject all under threshold";
-    private quickActionList: Array<any> = [this.qaNull, this.qaAcceptAll, this.qaAcceptAllAbove, this.qaRejectAll, this.qaRejectAllUnder];
-    private chosenQuickAction: any = this.quickActionList[0];
+    private qaNull: string = "---";
+    private qaAcceptAll: string = "Accept all";
+    private qaAcceptAllAbove: string = "Accept all above threshold";
+    private qaRejectAll: string = "Reject all";
+    private qaRejectAllUnder: string = "Reject all under threshold";
+    quickActionList: string[] = [this.qaNull, this.qaAcceptAll, this.qaAcceptAllAbove, this.qaRejectAll, this.qaRejectAllUnder];
+    chosenQuickAction: string = this.quickActionList[0];
     private threshold: number = 0.0;
 
     //settings
@@ -53,14 +54,14 @@ export class AlignmentManagementComponent {
     private showRelationType: string; //relation, dlSymbol or text
     private confOnMeter: boolean; //tells if relation confidence should be shown on meter
     private alignmentPerPage: number; //max alignments per page
-    private rendering: boolean = true;
+    rendering: boolean = true;
 
     private unknownRelation: boolean = false; //keep trace if there is some unknown relation (not a symbol, e.g. a classname)
     private knownRelations: string[] = AlignmentRelationSymbol.getKnownRelations();
     private relationSymbols: AlignmentRelationSymbol[];
 
     constructor(private alignmentService: AlignmentServices, private resourceService: ResourcesServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         this.isEdoal = VBContext.getWorkingProject().getModelType() == EDOAL.uri;
@@ -117,7 +118,7 @@ export class AlignmentManagementComponent {
                             computeRenderingFn.push(this.computeRendering(this.rightProject, "right"));
                         }
 
-                        Observable.forkJoin(computeRenderingFn).subscribe(
+                        forkJoin(computeRenderingFn).subscribe(
                             () => {
                                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen)
                             }
@@ -138,8 +139,9 @@ export class AlignmentManagementComponent {
         });
         //annotate them
         HttpServiceContext.setContextProject(project); //set a temporary context project
-        return this.resourceService.getResourcesInfo(entities).map(
-            renderedResources => {
+        return this.resourceService.getResourcesInfo(entities).pipe(
+            finalize(() => HttpServiceContext.removeContextProject()),
+            map(renderedResources => {
                 this.alignmentCellList.forEach(cell => {
                     for (let i = 0; i < renderedResources.length; i++) {
                         if (dataset == "left" && cell.getEntity1().getURI() == renderedResources[i].getURI()) {
@@ -151,10 +153,8 @@ export class AlignmentManagementComponent {
                         }
                     }           
                 })
-            }
-        ).finally(
-            () => HttpServiceContext.removeContextProject()
-        );;
+            })
+        );
     }
 
     /**
@@ -163,15 +163,15 @@ export class AlignmentManagementComponent {
      */
     private detectRightProject(): Observable<void> {
         if (this.rightProject != null) { //right project provided in @Input() => do not detect it
-            return Observable.of(null);
+            return of(null);
         } else {
-            return this.resourceService.getResourcePosition(this.alignmentCellList[0].getEntity2()).map(
-                (position: ResourcePosition) => {
+            return this.resourceService.getResourcePosition(this.alignmentCellList[0].getEntity2()).pipe(
+                map((position: ResourcePosition) => {
                     //if target entities are from a local project, get the information of them
                     if (position.isLocal()) {
                         this.rightProject = new Project((<LocalResourcePosition>position).project);
                     }
-                }
+                })
             );
         }
     }
@@ -227,12 +227,11 @@ export class AlignmentManagementComponent {
      * @param cell 
      */
     private selectMappingProperty(cell: AlignmentCell) {
-        var modalData = new MappingPropertySelectionModalData("Invalid relation", cell.getComment(), cell.getEntity1());
-        const builder = new BSModalContextBuilder<MappingPropertySelectionModalData>(
-            modalData, undefined, MappingPropertySelectionModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(MappingPropertySelectionModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(MappingPropertySelectionModal, new ModalOptions());
+        modalRef.componentInstance.title = "Invalid relation";
+		modalRef.componentInstance.message = cell.getComment();
+		modalRef.componentInstance.resource = cell.getEntity1();
+        return modalRef.result;
     }
 
     /**
@@ -276,7 +275,7 @@ export class AlignmentManagementComponent {
         if (cell.getRelation() != relation) {
             this.basicModals.confirm("Change relation",
                 "Manually changing the relation will set automatically the measure of the alignment to 1.0. Do you want to continue?",
-                "warning").then(
+                ModalType.warning).then(
                 (confirm: any) => {
                     this.alignmentService.changeRelation(cell.getEntity1(), cell.getEntity2(), cell.getRelation(), relation).subscribe(
                         resultCell => {//replace the alignment cell with the new one
@@ -347,13 +346,9 @@ export class AlignmentManagementComponent {
     /**
      * Opens a modal dialog to edit the settings
      */
-    private openSettings() {
+    openSettings() {
         var oldAlignPerPage = +Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE);
-
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-
-        this.modal.open(ValidationSettingsModal, overlayConfig).result.then(
+        this.modalService.open(ValidationSettingsModal, new ModalOptions()).result.then(
             () => {
                 //update settings
                 this.rejectedAlignmentAction = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_REJECTED_ALIGNMENT_ACTION);
@@ -390,12 +385,12 @@ export class AlignmentManagementComponent {
         this.rendering = Cookie.getCookie(Cookie.ALIGNMENT_VALIDATION_RENDERING) != "false";
     }
 
-    private toggleRendering() {
+    toggleRendering() {
         this.rendering = !this.rendering;
         Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_RENDERING, this.rendering+"");
     }
 
-    private doQuickAction() {
+    doQuickAction() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         if (this.chosenQuickAction == this.qaAcceptAll) {
             this.alignmentService.acceptAllAlignment().subscribe(
@@ -447,7 +442,7 @@ export class AlignmentManagementComponent {
     /**
      * Listener to "Apply to dataset/Edoal linkset" button
      */
-    private applyValidation() {
+    applyValidation() {
         let message: string;
         if (this.isEdoal) {
             if (this.rejectedAlignmentAction == "skip" || this.rejectedAlignmentAction == "ask") {
@@ -464,7 +459,7 @@ export class AlignmentManagementComponent {
         }
 
         if (this.rejectedAlignmentAction == "skip" || this.rejectedAlignmentAction == "delete") {
-            this.basicModals.confirm("Apply validation", message, "warning").then(
+            this.basicModals.confirm("Apply validation", message, ModalType.warning).then(
                 () => {
                     let deleteRejected = this.rejectedAlignmentAction == "delete";
                     if (this.isEdoal) {
@@ -477,12 +472,12 @@ export class AlignmentManagementComponent {
                 () => { }
             );
         } else { //ask
-            this.basicModals.confirmCheck("Apply valdiation", message, "Delete triples of rejected alignments", "warning").then(
-                (check: boolean) => {
+            this.basicModals.confirmCheck("Apply valdiation", message, [{ label: "Delete triples of rejected alignments", value: false }], ModalType.warning).then(
+                (checkOpts: ConfirmCheckOptions[]) => {
                     if (this.isEdoal) {
-                        this.applyToEdoalLinkset(check)
+                        this.applyToEdoalLinkset(checkOpts[0].value)
                     } else {
-                        this.applyToDataset(check);
+                        this.applyToDataset(checkOpts[0].value);
                     }
                 },
                 () => { }
@@ -499,12 +494,9 @@ export class AlignmentManagementComponent {
             report => {
                 UIUtils.stopLoadingDiv(UIUtils.blockDivFullScreen);
                 //open report modal
-                var modalData = new ValidationReportModalData(report);
-                const builder = new BSModalContextBuilder<ValidationReportModalData>(
-                    modalData, undefined, ValidationReportModalData
-                );
-                let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-                return this.modal.open(ValidationReportModal, overlayConfig).result;
+                const modalRef: NgbModalRef = this.modalService.open(ValidationReportModal, new ModalOptions('lg'));
+                modalRef.componentInstance.report = report;
+                return modalRef.result;
             }
         )
     }
@@ -519,7 +511,7 @@ export class AlignmentManagementComponent {
         );
     }
 
-    private export() {
+    export() {
         this.alignmentService.exportAlignment().subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);

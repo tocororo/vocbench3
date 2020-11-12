@@ -3,13 +3,13 @@
 </div>
 <div class="modal-body scrollableContainer">
 
-    <div *ngFor="let s of sections" class="panel panel-default" style="margin-bottom: 5px;">
-        <div class="panel-heading">
+    <div *ngFor="let s of sections" class="card card-default" style="margin-bottom: 5px;">
+        <div class="card-header">
             <label *ngIf="s.label">{{s.label}}</label>
             <label *ngIf="!s.label">{{s.service}}.{{s.operation}}</label>
         </div>
-        <div class="panel-body">
-            <table class="table table-condensed table-borderless">
+        <div class="card-body">
+            <table class="table table-sm table-borderless">
                 <colgroup>
                     <col style="width: 80px;">
                     <col>
@@ -26,9 +26,9 @@
                     <tr *ngIf="s.arguments && objectKeys(s.arguments).length > 0">
                         <td><label>Arguments</label></td>
                         <td>
-                            <div class="panel panel-default">
-                                <div class="panel-body">
-                                    <table class="table table-borderless table-condensed" style="font-family: monospace;">
+                            <div class="card card-default">
+                                <div class="card-body">
+                                    <table class="table table-borderless table-sm" style="font-family: monospace;">
                                         <colgroup>
                                             <col style="width: 1%;">
                                             <col>
@@ -37,7 +37,7 @@
                                             <tr *ngFor="let argName of objectKeys(s.arguments)">
                                                 <td><label>{{argName}}</label></td>
                                                 <td>
-                                                    <input class="form-control input-sm" [ngModel]="s.arguments[argName]" readonly>
+                                                    <input class="form-control form-control-sm" [ngModel]="s.arguments[argName]" readonly>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -59,5 +59,5 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-default btn-sm" (click)="ok()">Close</button>
+    <button class="btn btn-light btn-sm" (click)="ok()">Close</button>
 </div>

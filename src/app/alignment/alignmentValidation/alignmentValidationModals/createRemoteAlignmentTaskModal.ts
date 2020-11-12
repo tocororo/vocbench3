@@ -1,6 +1,7 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, Modal, ModalComponent, OverlayConfig } from 'ngx-modialog';
-import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { finalize } from 'rxjs/operators';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { Language, Languages } from "../../../models/LanguagesCountries";
 import { AlignmentPlan, AlignmentScenario, ConceptualizationSet, LexicalizationSet, Lexicon, MatcherDefinitionDTO, MatcherDTO, Pairing, RefinablePairing, ScenarioDefinition, ServiceMetadataDTO, Synonymizer } from "../../../models/Maple";
 import { Project } from "../../../models/Project";
@@ -12,34 +13,29 @@ import { UIUtils } from "../../../utils/UIUtils";
 import { VBContext } from "../../../utils/VBContext";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../../widget/modal/sharedModal/sharedModalServices";
-import { SynonymizerDetailsModal, SynonymizerDetailsModalData } from "./synonymizerDetailsModal";
-
-export class CreateRemoteAlignmentTaskModalData extends BSModalContext {
-    constructor(public leftProject: Project, public rightProject: Project) {
-        super();
-    }
-}
+import { SynonymizerDetailsModal } from "./synonymizerDetailsModal";
 
 @Component({
     selector: "create-alignment-task-modal",
     templateUrl: "./createRemoteAlignmentTaskModal.html",
     host: { class: "blockingDivHost" },
 })
-export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemoteAlignmentTaskModalData> {
-    context: CreateRemoteAlignmentTaskModalData;
+export class CreateRemoteAlignmentTaskModal {
+    @Input() leftProject: Project;
+    @Input() rightProject: Project;
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
 
-    private projectList: Project[];
-    private selectedRightProject: Project;
+    projectList: Project[];
+    selectedRightProject: Project;
 
-    private leftProjectStruct: AlignedProjectStruct;
-    private rightProjectStruct: AlignedProjectStruct;
+    leftProjectStruct: AlignedProjectStruct;
+    rightProjectStruct: AlignedProjectStruct;
 
-    private alignmentScenario: AlignmentScenario;
+    alignmentScenario: AlignmentScenario;
     private refinablePairings: ResolvedPairing[];
 
-    private serviceMetadata: ServiceMetadataDTO;
+    serviceMetadata: ServiceMetadataDTO;
 
     private matchers: MatcherDTO[];
     private selectedMatcher: MatcherDTO;
@@ -53,10 +49,9 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
     private lastPairingSignatureForMatchers: string;
     private outdatedMatchers: boolean = false;
 
-    constructor(public dialog: DialogRef<CreateRemoteAlignmentTaskModalData>, private projectService: ProjectServices,
+    constructor(public activeModal: NgbActiveModal, private projectService: ProjectServices,
         private mapleService: MapleServices, private remoteAlignmentService: RemoteAlignmentServices, private basicModals: BasicModalServices,
-        private sharedModals: SharedModalServices, private modal: Modal) {
-        this.context = dialog.context;
+        private sharedModals: SharedModalServices, private modalService: NgbModal) {
     }
 
     ngOnInit() {
@@ -64,8 +59,8 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
         this.projectService.listProjects(VBContext.getWorkingProject(), false, true).subscribe(
             projects => {
                 this.projectList = projects;
-                if (this.context.rightProject != null) {
-                    this.selectedRightProject = this.projectList.find(p => p.getName() == this.context.rightProject.getName());
+                if (this.rightProject != null) {
+                    this.selectedRightProject = this.projectList.find(p => p.getName() == this.rightProject.getName());
                     if (this.selectedRightProject != null) {
                         this.onRightProjectChange();
                     }
@@ -73,7 +68,7 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
             }
         );
         this.leftProjectStruct = new AlignedProjectStruct();
-        this.leftProjectStruct.project = this.context.leftProject;
+        this.leftProjectStruct.project = this.leftProject;
         this.initProjectStruct(this.leftProjectStruct);
 
 
@@ -94,7 +89,7 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
 
     //========== Datasets handlers ===========
 
-    private onRightProjectChange() {
+    onRightProjectChange() {
         this.rightProjectStruct = new AlignedProjectStruct();
         this.rightProjectStruct.project = this.selectedRightProject;
         this.initProjectStruct(this.rightProjectStruct);
@@ -102,8 +97,8 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
 
     private initProjectStruct(projStruct: AlignedProjectStruct) {
         HttpServiceContext.setContextProject(projStruct.project);
-        this.mapleService.checkProjectMetadataAvailability().finally(
-            () => HttpServiceContext.removeContextProject()
+        this.mapleService.checkProjectMetadataAvailability().pipe(
+            finalize(() => HttpServiceContext.removeContextProject())
         ).subscribe(
             available => {
                 projStruct.profileAvailable = available;
@@ -111,10 +106,10 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
         );
     }
 
-    private profileProject(projStruct: AlignedProjectStruct) {
+    profileProject(projStruct: AlignedProjectStruct) {
         if (projStruct.profileAvailable) {
             this.basicModals.confirm("Profile project " + projStruct.project.getName(), "The project '" + projStruct.project.getName() + 
-                "' has already been profiled. Do you want to repeat and override the profilation?", "warning").then(
+                "' has already been profiled. Do you want to repeat and override the profilation?", ModalType.warning).then(
                 confirm => {
                     this.profileProjectImpl(projStruct);
                 },
@@ -128,8 +123,8 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
     private profileProjectImpl(projStruct: AlignedProjectStruct) {
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         HttpServiceContext.setContextProject(projStruct.project);
-        this.mapleService.profileProject().finally(
-            () => HttpServiceContext.removeContextProject()
+        this.mapleService.profileProject().pipe(
+            finalize(() => HttpServiceContext.removeContextProject())
         ).subscribe(
             () => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
@@ -140,14 +135,14 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
 
     //========== Matching profilation handlers ===========
 
-    private isProfileEnabled() {
+    isProfileEnabled() {
         return (
             this.leftProjectStruct.profileAvailable &&
             this.rightProjectStruct != null && this.rightProjectStruct.profileAvailable
         )
     }
 
-    private profileMatching() {
+    profileMatching() {
         this.mapleService.profileMatchingProblemBetweenProjects(this.leftProjectStruct.project, this.rightProjectStruct.project).subscribe(
             scenario => {
                 /**
@@ -196,7 +191,7 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
         );
     }
 
-    private selectSynonymizer(pairing: ResolvedPairing, synonymizer: ResolvedSynonymizer) {
+    selectSynonymizer(pairing: ResolvedPairing, synonymizer: ResolvedSynonymizer) {
         if (pairing.selectedSynonymizer == synonymizer) {
             pairing.selectedSynonymizer = null;
         } else {
@@ -204,17 +199,13 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
         }
     }
 
-    private describeSynonymizer(synonymizer: ResolvedSynonymizer) {
+    describeSynonymizer(synonymizer: ResolvedSynonymizer) {
         //open a modal that show the lexicon and the conceptualization set of the synonymizer
-        let modalData = new SynonymizerDetailsModalData(synonymizer);
-        const builder = new BSModalContextBuilder<SynonymizerDetailsModalData>(
-            modalData, undefined, SynonymizerDetailsModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(SynonymizerDetailsModal, overlayConfig);
+        const modalRef: NgbModalRef = this.modalService.open(SynonymizerDetailsModal, new ModalOptions());
+        modalRef.componentInstance.synonymizer = synonymizer;
     }
 
-    private onPairingSelectionChange() {
+    onPairingSelectionChange() {
         //when a pairing is selected/deselected, the matchers listed (if any) could be outdated
         if (this.matchers != null) {
             let pairingSignature = this.refinablePairings.map(p => p.checked+"").join(",");
@@ -224,10 +215,10 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
 
     //========== Matchers ===========
 
-    private searchMatchers() {
+    searchMatchers() {
         let scenarioDef: ScenarioDefinition = this.getScenarioDefinition();
         if (scenarioDef.pairings.length == 0) {
-            this.basicModals.alert("Search matchers", "You need to select at least one pairing.", "warning");
+            this.basicModals.alert("Search matchers", "You need to select at least one pairing.", ModalType.warning);
             return;
         }
         this.lastPairingSignatureForMatchers = this.refinablePairings.map(p => p.checked+"").join(",");
@@ -248,7 +239,7 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
         );
     }
 
-    private selectMatcher(matcher: MatcherDTO) {
+    selectMatcher(matcher: MatcherDTO) {
         this.selectedMatcher = (this.selectedMatcher == matcher) ? null : matcher;
     }
 
@@ -306,7 +297,7 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
         )
     }
 
-    private isOkEnabled() {
+    isOkEnabled() {
         return this.alignmentScenario != null;
     }
 
@@ -319,7 +310,7 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
          */
         let scenarioDef: ScenarioDefinition = this.getScenarioDefinition();
         if (scenarioDef.pairings.length == 0) {
-            this.basicModals.alert("Create task", "You need to select at least one pairing.", "warning");
+            this.basicModals.alert("Create task", "You need to select at least one pairing.", ModalType.warning);
             return;
         }
         
@@ -334,7 +325,7 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
                     try {
                         parsedSettings = JSON.parse(this.selectedMatcher.settings['settingsJson']);
                     } catch (err) {
-                        this.basicModals.alert("Invalid matcher configuration", "The provided matcher configuration cannot be parsed as JSON", "warning");
+                        this.basicModals.alert("Invalid matcher configuration", "The provided matcher configuration cannot be parsed as JSON", ModalType.warning);
                         return;
                     }
                     matcherSettings = parsedSettings;
@@ -355,7 +346,7 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
                 try {
                     parsedSettings = JSON.parse(this.serviceMetadata.settings['settingsJson']);
                 } catch (err) {
-                    this.basicModals.alert("Invalid matcher configuration", "The provided matcher configuration cannot be parsed as JSON", "warning");
+                    this.basicModals.alert("Invalid matcher configuration", "The provided matcher configuration cannot be parsed as JSON", ModalType.warning);
                     return;
                 }
                 serviceSettings = parsedSettings;
@@ -369,13 +360,13 @@ export class CreateRemoteAlignmentTaskModal implements ModalComponent<CreateRemo
         }
         this.remoteAlignmentService.createTask(alignmentPlan).subscribe(
             taskId => {
-                this.dialog.close(taskId);
+                this.activeModal.close(taskId);
             }
         );
     }
     
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

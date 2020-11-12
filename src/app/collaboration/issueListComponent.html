@@ -1,5 +1,5 @@
 <div class="table-responsive" style="flex: 1;">
-    <table *ngIf="issues" class="table table-condensed table-hoverable">
+    <table *ngIf="issues" class="table table-sm table-hoverable">
         <colgroup>
             <col style="width: 1%">
             <col style="width: 50%">
@@ -17,7 +17,7 @@
                         <rdf-resource *ngFor="let r of i.getResources()" [resource]="r" class="clickable" (click)="onResourceClick(r)"></rdf-resource>
                     </div>
                     <ng-template #noResBlock>
-                        <span class="glyphicon glyphicon-warning-sign" style="color: #f0ad4e; padding: 0px 2px;"></span>
+                        <span class="fas fa-exclamation-triangle" style="color: #f0ad4e; padding: 0px 2px;"></span>
                         <span style="font-style: italic; color: grey;">No resource(s) associated to this issue</span>
                     </ng-template>
                 </td>
@@ -31,15 +31,15 @@
 </div>
 
 <div *ngIf="showPaging" style="align-self: flex-end">
-    <div class="btn-group btn-group-xs pull-right" style="margin-top: 4px;" role="group">
-        <button class="btn btn-default" title="Previous page" (click)="previousPage()" [disabled]="page==0">
-            <span class="glyphicon glyphicon-triangle-left"></span>
+    <div class="btn-group btn-group-xs float-right" style="margin-top: 4px;" role="group">
+        <button class="btn btn-light" title="Previous page" (click)="previousPage()" [disabled]="page==0">
+            <span class="fas fa-caret-left"></span>
         </button>
-        <button class="btn btn-default" style="cursor: auto" disabled>
+        <button class="btn btn-light" style="cursor: auto" disabled>
             <span>{{page+1}} of {{totPage}}</span>
         </button>
-        <button class="btn btn-default" title="Next page" (click)="nextPage()" [disabled]="page==totPage-1">
-            <span class="glyphicon glyphicon-triangle-right"></span>
+        <button class="btn btn-light" title="Next page" (click)="nextPage()" [disabled]="page==totPage-1">
+            <span class="fas fa-caret-right"></span>
         </button>
     </div>
 </div>

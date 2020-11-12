@@ -1,7 +1,7 @@
-<div class="panel panel-default">
-    <div class="panel-body">
+<div class="card card-default">
+    <div class="card-body">
 
-        <table class="table table-condensed table-borderless">
+        <table class="table table-sm table-borderless">
             <colgroup>
                 <col style="width: 1%;">
                 <col>
@@ -9,11 +9,11 @@
             <tbody>
                 <tr>
                     <td class="text-right" nowrap><label>Type:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="shortType" [title]="dataset['@type']" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="shortType" [title]="dataset['@type']" readonly></td>
                 </tr>
                 <tr *ngIf="dataset.uriSpace">
                     <td class="text-right" nowrap><label>URI space:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.uriSpace" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset.uriSpace" readonly></td>
                 </tr>
                 <tr *ngIf="dataset.conformsTo">
                     <td class="text-right" nowrap><label>Conforms to:</label></td>
@@ -21,75 +21,75 @@
                 </tr>
                 <tr *ngIf="dataset.sparqlEndpoint">
                     <td class="text-right" nowrap><label>SPARQL endpoint:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.sparqlEndpoint" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset.sparqlEndpoint" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.avgAmbiguity">
+                <tr *ngIf="dataset['avgAmbiguity']">
                     <td class="text-right" nowrap><label>Avg ambiguity:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.avgAmbiguity" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['avgAmbiguity']" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.avgNumOfLexicalizations">
+                <tr *ngIf="dataset['avgNumOfLexicalizations']">
                     <td class="text-right" nowrap><label title="Average number of lexicalizations">Avg lexicalizations</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.avgNumOfLexicalizations" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['avgNumOfLexicalizations']" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.avgSynonymy">
+                <tr *ngIf="dataset['avgSynonymy']">
                     <td class="text-right" nowrap><label>Avg synonymy:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.avgSynonymy" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['avgSynonymy']" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.concepts">
+                <tr *ngIf="dataset['concepts']">
                     <td class="text-right" nowrap><label>Concepts:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.concepts" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['concepts']" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.conceptualDataset">
+                <tr *ngIf="dataset['conceptualDataset']">
                     <td class="text-right" nowrap><label>Conceptual dataset:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.conceptualDataset" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['conceptualDataset']" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.conceptualizations">
+                <tr *ngIf="dataset['conceptualizations']">
                     <td class="text-right" nowrap><label>Conceptualizations:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.conceptualizations" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['conceptualizations']" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.languageLexvo">
+                <tr *ngIf="dataset['languageLexvo']">
                     <td class="text-right" nowrap><label>Language Lexvo:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.languageLexvo" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['languageLexvo']" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.languageLOC">
+                <tr *ngIf="dataset['languageLOC']">
                     <td class="text-right" nowrap><label>Language LOC:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.languageLOC" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['languageLOC']" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.languageTag">
+                <tr *ngIf="dataset['languageTag']">
                     <td class="text-right" nowrap><label>Language Tag:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.languageTag" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['languageTag']" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.lexicalEntries">
+                <tr *ngIf="dataset['lexicalEntries']">
                     <td class="text-right" nowrap><label>Lexical entries:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.lexicalEntries" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['lexicalEntries']" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.lexicalizationModel">
+                <tr *ngIf="dataset['lexicalizationModel']">
                     <td class="text-right" nowrap><label>Lexicalization model:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.lexicalizationModel" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['lexicalizationModel']" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.lexicalizations">
+                <tr *ngIf="dataset['lexicalizations']">
                     <td class="text-right" nowrap><label>Lexicalizations:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.lexicalizations" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['lexicalizations']" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.lexiconDataset">
+                <tr *ngIf="dataset['lexiconDataset']">
                     <td class="text-right" nowrap><label>Lexicon dataset:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.lexiconDataset" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['lexiconDataset']" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.linguisticCatalog">
+                <tr *ngIf="dataset['linguisticCatalog']">
                     <td class="text-right" nowrap><label>Linguistic catalog:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.linguisticCatalog" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['linguisticCatalog']" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.percentage">
+                <tr *ngIf="dataset['percentage']">
                     <td class="text-right" nowrap><label>Percentage:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.percentage" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['percentage']" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.referenceDataset">
+                <tr *ngIf="dataset['referenceDataset']">
                     <td class="text-right" nowrap><label>Reference dataset:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.referenceDataset" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['referenceDataset']" readonly></td>
                 </tr>
-                <tr *ngIf="dataset.references">
+                <tr *ngIf="dataset['references']">
                     <td class="text-right" nowrap><label>References:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="dataset.references" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="dataset['references']" readonly></td>
                 </tr>
             </tbody>
         </table>

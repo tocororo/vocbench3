@@ -3,9 +3,9 @@
 </div>
 <div class="modal-body vbox">
     
-    <div class="panel panel-default">
-        <div class="panel-body table-responsive">
-            <table class="table table-condensed">
+    <div class="card card-default">
+        <div class="card-body table-responsive">
+            <table class="table table-sm">
                 <thead>
                     <tr>
                         <th class="text-center">Default</th>
@@ -37,8 +37,8 @@
                             <input-editable [value]="conf.password" allowEmpty="true" (valueEdited)="updateConfPassword(conf, $event)"></input-editable>
                         </td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-default" (click)="deleteConfig(conf)">
-                                <span class="glyphicon glyphicon-trash"></span>
+                            <button class="btn btn-sm btn-light" (click)="deleteConfig(conf)">
+                                <span class="far fa-trash-alt"></span>
                             </button>
                         </td>
                     </tr>
@@ -48,23 +48,23 @@
     </div>
 
 
-    <div class="panel panel-default" style="margin-top: 5px">
-        <div class="panel-body">
-            <table class="table table-condensed table-borderless">
+    <div class="card card-default" style="margin-top: 5px">
+        <div class="card-body">
+            <table class="table table-sm table-borderless">
                 <tbody>
                     <tr>
                         <td><label>New:</label></td>
                         <td>
-                            <input class="form-control input-sm" [(ngModel)]="newConfig.id" placeholder="Configuration ID">
+                            <input class="form-control form-control-sm" [(ngModel)]="newConfig.id" placeholder="Configuration ID">
                         </td>
                         <td>
-                            <input class="form-control input-sm" [(ngModel)]="newConfig.serverURL" placeholder="http://serverurl:8080">
+                            <input class="form-control form-control-sm" [(ngModel)]="newConfig.serverURL" placeholder="http://serverurl:8080">
                         </td>
                         <td>
-                            <input class="form-control input-sm" [(ngModel)]="newConfig.username" placeholder="username">
+                            <input class="form-control form-control-sm" [(ngModel)]="newConfig.username" placeholder="username">
                         </td>
                         <td>
-                            <input class="form-control input-sm" [(ngModel)]="newConfig.password" placeholder="password">
+                            <input class="form-control form-control-sm" [(ngModel)]="newConfig.password" placeholder="password">
                         </td>
                         <td class="text-center">
                             <div class="checkbox-inline" title="If checked the new configuration is automatically set as default">
@@ -74,8 +74,8 @@
                             </div>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-default" (click)="createConfig()" [disabled]="!newConfig.serverURL || !newConfig.id">
-                                <span class="glyphicon glyphicon-plus"></span>
+                            <button class="btn btn-sm btn-light" (click)="createConfig()" [disabled]="!newConfig.serverURL || !newConfig.id">
+                                <span class="fas fa-plus"></span>
                             </button>
                         </td>
                     </tr>

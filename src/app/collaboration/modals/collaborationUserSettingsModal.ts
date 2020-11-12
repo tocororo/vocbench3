@@ -1,33 +1,22 @@
-import { Component, ViewChild, ElementRef } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { CollaborationServices } from "../../services/collaborationServices";
-import { ExtensionsServices } from "../../services/extensionsServices";
+import { Component, ElementRef, ViewChild } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Scope, Settings } from "../../models/Plugins";
 import { SettingsServices } from "../../services/settingsServices";
-import { Settings, ExtensionPointID, ExtensionFactory, Scope } from "../../models/Plugins";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { VBContext } from "../../utils/VBContext";
-import { VBCollaboration } from "../../utils/VBCollaboration";
 import { UIUtils } from "../../utils/UIUtils";
+import { VBCollaboration } from "../../utils/VBCollaboration";
 
 @Component({
     selector: "collaboration-user-settings-modal",
     templateUrl: "./collaborationUserSettingsModal.html",
 })
-export class CollaborationUserSettingsModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class CollaborationUserSettingsModal {
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
 
-    private collSysBackendId: string;
+    collSysBackendId: string;
     private userSettings: Settings;
 
-    constructor(public dialog: DialogRef<BSModalContext>,
-        private extensionService: ExtensionsServices, private settingsService: SettingsServices,
-        private collaborationService: CollaborationServices, 
-        private vbColl: VBCollaboration,
-        private basicModals: BasicModalServices) {
-        this.context = dialog.context;
+    constructor(public activeModal: NgbActiveModal, private settingsService: SettingsServices, private vbColl: VBCollaboration) {
     }
 
     ngOnInit() {
@@ -41,7 +30,7 @@ export class CollaborationUserSettingsModal implements ModalComponent<BSModalCon
         }
     }
 
-    private isOkClickable(): boolean {
+    isOkClickable(): boolean {
         if (this.userSettings == null) {
             return false;
         }
@@ -51,21 +40,19 @@ export class CollaborationUserSettingsModal implements ModalComponent<BSModalCon
         return true;
     }
 
-    ok(event: Event) {
+    ok() {
         let settingsParam = this.userSettings.getPropertiesAsMap();
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.settingsService.storeSettings(this.collSysBackendId, Scope.PROJECT_USER, settingsParam).subscribe(
             resp => {
                 UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
-                event.stopPropagation();
-                event.preventDefault();
-                this.dialog.close();
+                this.activeModal.close();
             }
         );
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

@@ -1,6 +1,6 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ConfigurationComponents, Reference } from "../../../models/Configuration";
 import { InvokableReporterDefinition } from "../../../models/InvokableReporter";
 import { Scope, ScopeUtils, SettingsProp } from "../../../models/Plugins";
@@ -9,31 +9,26 @@ import { InvokableReportersServices } from "../../../services/invokableReporters
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
 import { InvokableReporterForm } from "../invokableReporterComponent";
 
-export class InvokableReporterEditorModalData extends BSModalContext {
-    constructor(public title: string = 'Modal Title', public existingReporters: Reference[], public reporterRef?: Reference) {
-        super();
-    }
-}
-
 @Component({
     selector: "invokable-reporter-editor-modal",
     templateUrl: "./invokableReporterEditorModal.html",
 })
-export class InvokableReporterEditorModal implements ModalComponent<InvokableReporterEditorModalData> {
-    context: InvokableReporterEditorModalData;
+export class InvokableReporterEditorModal {
+    @Input() title: string = 'Modal Title';
+    @Input() existingReporters: Reference[];
+    @Input() reporterRef: Reference;
 
     private id: string;
     private scopes: Scope[];
     private selectedScope: Scope;
-    private form: InvokableReporterForm;
+    form: InvokableReporterForm;
 
-    constructor(public dialog: DialogRef<InvokableReporterEditorModalData>, private configurationServices: ConfigurationsServices,
+    constructor(public activeModal: NgbActiveModal, private configurationServices: ConfigurationsServices,
         private invokableReporterService: InvokableReportersServices, private basicModals: BasicModalServices) {
-        this.context = dialog.context;
     }
 
     ngOnInit() {
-        if (this.context.reporterRef == null) { //create
+        if (this.reporterRef == null) { //create
             this.invokableReporterService.getInvokableReporterForm().subscribe(
                 reporter => {
                     this.form = {
@@ -53,8 +48,8 @@ export class InvokableReporterEditorModal implements ModalComponent<InvokableRep
                 }
             )
         } else { //edit
-            this.id = this.context.reporterRef.identifier;
-            this.invokableReporterService.getInvokableReporter(this.context.reporterRef.relativeReference).subscribe(
+            this.id = this.reporterRef.identifier;
+            this.invokableReporterService.getInvokableReporter(this.reporterRef.relativeReference).subscribe(
                 reporter => {
                     this.form = {
                         label: reporter.getProperty("label"),
@@ -68,7 +63,7 @@ export class InvokableReporterEditorModal implements ModalComponent<InvokableRep
         }
     }
 
-    private isDataValid(): boolean {
+    isDataValid(): boolean {
         if (this.id == null || this.id.trim() == "") {
             return false;
         }
@@ -94,22 +89,22 @@ export class InvokableReporterEditorModal implements ModalComponent<InvokableRep
             mimeType: this.form.mimeType.value
         };
 
-        if (this.context.reporterRef == null) { //create
+        if (this.reporterRef == null) { //create
             let reference = ScopeUtils.serializeScope(this.selectedScope) + ":" + this.id;
             //check if id is not duplicated
-            if (this.context.existingReporters.some(r => r.relativeReference == reference)) {
-                this.basicModals.alert("Already existing Reporter", "An Invokable Reporter with the same id already exists. Please change the ID and retry", "warning");
+            if (this.existingReporters.some(r => r.relativeReference == reference)) {
+                this.basicModals.alert("Already existing Reporter", "An Invokable Reporter with the same id already exists. Please change the ID and retry", ModalType.warning);
                 return;
             }
             this.invokableReporterService.createInvokableReporter(reference, reporterDef).subscribe(
                 () => {
-                    this.dialog.close();
+                    this.activeModal.close();
                 }
             )
         } else { //edit
-            this.invokableReporterService.updateInvokableReporter(this.context.reporterRef.relativeReference, reporterDef).subscribe(
+            this.invokableReporterService.updateInvokableReporter(this.reporterRef.relativeReference, reporterDef).subscribe(
                 () => {
-                    this.dialog.close();
+                    this.activeModal.close();
                 }
             );
         }
@@ -117,7 +112,7 @@ export class InvokableReporterEditorModal implements ModalComponent<InvokableRep
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

@@ -1,25 +1,20 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Issue, IssuesListCtx } from "../models/Collaboration";
-
 
 @Component({
     selector: "issue-list-modal",
     templateUrl: "./issueListModal.html",
 })
-export class IssueListModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class IssueListModal {
 
-    private issueCtx: IssuesListCtx = IssuesListCtx.Assignment;
+    issueCtx: IssuesListCtx = IssuesListCtx.Assignment;
 
-    private selectedIssue: Issue;
+    selectedIssue: Issue;
 
-    constructor(public dialog: DialogRef<BSModalContext>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) {}
 
-    private selectIssue(issue: Issue) {
+    selectIssue(issue: Issue) {
         if (this.selectedIssue == issue) {
             this.selectedIssue = null;    
         } else {
@@ -27,14 +22,12 @@ export class IssueListModal implements ModalComponent<BSModalContext> {
         }
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close(this.selectedIssue);
+    ok() {
+        this.activeModal.close(this.selectedIssue);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

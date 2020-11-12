@@ -16,9 +16,9 @@ import { EDOAL } from '../../models/Vocabulary';
 })
 export class AlignFromFileComponent extends AlignFromSource {
 
-    private alignmentFile: File;
-    private sourceBaseURI: string;
-    private targetBaseURI: string;
+    alignmentFile: File;
+    sourceBaseURI: string;
+    targetBaseURI: string;
 
     constructor(edoalService: EdoalServices, projectService: ProjectServices, private alignmentService: AlignmentServices) {
         super(edoalService, projectService);
@@ -30,7 +30,7 @@ export class AlignFromFileComponent extends AlignFromSource {
     /**
      * Updates the file to load when user change file on from filepicker
      */
-    private fileChangeEvent(file: File) {
+    fileChangeEvent(file: File) {
         this.alignmentFile = file;
         this.loadAlignment();
     }
@@ -38,7 +38,7 @@ export class AlignFromFileComponent extends AlignFromSource {
     /**
      * Loads the alignment file and the mapping cells
      */
-    private loadAlignment() {
+    loadAlignment() {
         //restore initial status
         this.sourceBaseURI = null;
         this.targetBaseURI = null;

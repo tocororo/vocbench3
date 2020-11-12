@@ -1,9 +1,9 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body vbox table-responsive">
 
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%">
             <col>
@@ -13,25 +13,25 @@
             <tr>
                 <td class="text-right" nowrap>
                     <label>ID</label>
-                    <span class="glyphicon glyphicon-info-sign" title="A unique identifier"></span>
+                    <span class="fas fa-info-circle" title="A unique identifier"></span>
                 </td>
-                <td><input class="form-control input-sm" [(ngModel)]="id" [readonly]="context.service"></td>
+                <td><input class="form-control form-control-sm" [(ngModel)]="id" [readonly]="service"></td>
                 <td>*</td>
             </tr>
             <tr>
                 <td class="text-right" nowrap>
                     <label>Service name</label>
-                    <span class="glyphicon glyphicon-info-sign" title="The name used to group all operations defined by this custom service"></span>
+                    <span class="fas fa-info-circle" title="The name used to group all operations defined by this custom service"></span>
                 </td>
-                <td><input class="form-control input-sm" [(ngModel)]="name" sanitized></td>
+                <td><input class="form-control form-control-sm" [(ngModel)]="name" sanitized></td>
                 <td>*</td>
             </tr>
             <tr>
                 <td class="text-right" nowrap>
                     <label>Description</label>
-                    <span class="glyphicon glyphicon-info-sign" title="A description of this custom service"></span>
+                    <span class="fas fa-info-circle" title="A description of this custom service"></span>
                 </td>
-                <td><textarea class="form-control input-sm" style="resize: vertical" [(ngModel)]="description"></textarea></td>
+                <td><textarea class="form-control form-control-sm" style="resize: vertical" [(ngModel)]="description"></textarea></td>
                 <td></td>
             </tr>
         </tbody>
@@ -40,8 +40,8 @@
 </div>
 
 <div class="modal-footer">
-    <span class="pull-left">(*) Mandatory field</span>
+    <span class="float-left">(*) Mandatory field</span>
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>
 

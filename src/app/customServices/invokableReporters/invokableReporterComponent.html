@@ -1,39 +1,39 @@
-<div class="panel panel-default vbox blockingDivHost">
-    <div class="panel-heading">
+<div class="card card-default vbox blockingDivHost">
+    <div class="card-header">
         <label style="flex: 1">{{ref.identifier}}</label>
         <div class="hbox" style="flex: initial;">
-            <button class="btn btn-default btn-xs" (click)="edit()" title="Edit basic info" [disabled]="!editReporterAuthorized">
-                <span class="glyphicon glyphicon-pencil"></span>
+            <button class="btn btn-light btn-sm" (click)="edit()" title="Edit basic info" [disabled]="!editReporterAuthorized">
+                <span class="fas fa-pencil-alt"></span>
             </button>
-            <div class="btn-group btn-group-xs" style="margin-left: 5px;">
-                <button class="btn btn-default" (click)="compileReport()" title="Compile report">
-                    <span class="glyphicon glyphicon-play"></span>
+            <div class="btn-group btn-group-sm" style="margin-left: 5px;">
+                <button class="btn btn-light" (click)="compileReport()" title="Compile report">
+                    <span class="fas fa-play"></span>
                 </button>
             </div>
             <div style="display: inline-block; margin-left: 5px;">
-                <div class="input-group input-group-xs">
+                <div class="input-group input-group-sm">
                     <select class="form-control" [(ngModel)]="selectedReportFormat">
                         <option *ngFor="let f of reportFormats" [ngValue]="f">{{f.label}}</option>
                     </select>
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" (click)="compileAndDownloadReport()" title="Compile and download report">
-                            <span class="glyphicon glyphicon-save "></span>
+                    <span class="input-group-append">
+                        <button class="btn btn-light" (click)="compileAndDownloadReport()" title="Compile and download report">
+                            <span class="fas fa-download"></span>
                         </button>
                     </span>
                 </div>
             </div>
         </div>
     </div>
-    <div *ngIf="form" class="panel-body vbox">
+    <div *ngIf="form" class="card-body vbox">
 
         <!-- Label -->
         <div class="gridRow">
             <div class="gridEntry">
                 <label class="entryLabel">
                     {{form.label.displayName}}
-                    <span class="glyphicon glyphicon-info-sign" [title]="form.label.description"></span>
+                    <span class="fas fa-info-circle" [title]="form.label.description"></span>
                 </label>
-                <input class="form-control input-sm" style="flex: 1;" [ngModel]="form.label.value" disabled/>
+                <input class="form-control form-control-sm" style="flex: 1;" [ngModel]="form.label.value" disabled/>
             </div>
         </div>
 
@@ -42,9 +42,9 @@
             <div class="gridEntry">
                 <label class="entryLabel">
                     {{form.description.displayName}}
-                    <span class="glyphicon glyphicon-info-sign" [title]="form.description.description"></span>
+                    <span class="fas fa-info-circle" [title]="form.description.description"></span>
                 </label>
-                <input class="form-control input-sm" style="flex: 1;" [ngModel]="form.description.value" disabled/>
+                <input class="form-control form-control-sm" style="flex: 1;" [ngModel]="form.description.value" disabled/>
             </div>
         </div>
 
@@ -53,7 +53,7 @@
             <div class="gridEntry">
                 <label class="entryLabel">
                     {{form.template.displayName}}
-                    <span class="glyphicon glyphicon-info-sign" [title]="form.template.description"></span>
+                    <span class="fas fa-info-circle" [title]="form.template.description"></span>
                 </label>
                 <mustache-editor style="height: 100px;" [ngModel]="form.template.value" [disabled]="true"></mustache-editor>
             </div>
@@ -64,34 +64,34 @@
             <div class="gridEntry">
                 <label class="entryLabel">
                     {{form.mimeType.displayName}}
-                    <span class="glyphicon glyphicon-info-sign" [title]="form.mimeType.description"></span>
+                    <span class="fas fa-info-circle" [title]="form.mimeType.description"></span>
                 </label>
-                <input class="form-control input-sm" style="flex: 1;" [ngModel]="form.mimeType.value" disabled/>
+                <input class="form-control form-control-sm" style="flex: 1;" [ngModel]="form.mimeType.value" disabled/>
             </div>
         </div>
 
         <!-- Service invocations -->
         <div class="hbox">
-            <div class="panel panel-default vbox">
-                <div class="panel-heading">
+            <div class="card card-default vbox">
+                <div class="card-header">
                     <label style="flex: 1">
                         {{form.sections.displayName}}
-                        <span class="glyphicon glyphicon-info-sign" [title]="form.sections.description"></span>
+                        <span class="fas fa-info-circle" [title]="form.sections.description"></span>
                     </label>
                     <div class="btn-toolbar" role="toolbar">
-                        <div class="btn-group btn-group-xs">
-                            <button class="btn btn-default" (click)="createServiceInvocation()" title="Create service invocation" 
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-light" (click)="createServiceInvocation()" title="Create service invocation" 
                                 [disabled]="!createInvocationAuthorized">
-                                <span class="glyphicon glyphicon-plus"></span>
+                                <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-default" (click)="deleteServiceInvocation()" title="Delete service invocation" 
+                            <button class="btn btn-light" (click)="deleteServiceInvocation()" title="Delete service invocation" 
                                 [disabled]="!selectedServiceInvocation || !deleteInvocationAuthorized">
-                                <span class="glyphicon glyphicon-minus"></span>
+                                <span class="fas fa-minus"></span>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="panel-body vbox scrollableContainer">
+                <div class="card-body vbox scrollableContainer">
                     <div *ngFor="let s of form.sections.value; let idx=index" class="listItem" [ngClass]="{ active: selectedServiceInvocationIdx == idx }" (click)="selectServiceInvocation(idx)">
                         <ng-container *ngIf="s.label">{{s.label}}</ng-container>
                         <ng-container *ngIf="!s.label">{{s.service}}.{{s.operation}}</ng-container>

@@ -1,24 +1,10 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { AnnotationName, CustomFormUtils, FormField } from "../../models/CustomForms";
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
+import { CustomFormUtils, FormField } from "../../models/CustomForms";
 import { CustomFormsServices } from "../../services/customFormsServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
-
-export class CustomFormModalData extends BSModalContext {
-    /**
-     * @param title title of the dialog
-     * @param creId custom range entry ID
-     */
-    constructor(
-        public title: string,
-        public cfId: string,
-        public language?: string
-    ) {
-        super();
-    }
-}
 
 /**
  * Modal that allows to choose among a set of rdfResource
@@ -27,29 +13,30 @@ export class CustomFormModalData extends BSModalContext {
     selector: "custom-form-modal",
     templateUrl: "./customFormModal.html",
 })
-export class CustomFormModal implements ModalComponent<CustomFormModalData> {
-    context: CustomFormModalData;
+export class CustomFormModal {
+    @Input() title: string;
+    @Input() cfId: string;
+    @Input() language?: string;
 
     private ontoType: string;
     
-    private formFields: FormField[] = [];
+    formFields: FormField[] = [];
     
-    constructor(public dialog: DialogRef<CustomFormModalData>, public cfService: CustomFormsServices, public browsingModals: BrowsingModalServices,
+    constructor(public activeModal: NgbActiveModal, public cfService: CustomFormsServices, public browsingModals: BrowsingModalServices,
         private basicModals: BasicModalServices) {
-        this.context = dialog.context;
     }
 
     /**
      * Valid if all the mandatory fields are not empty
      */
-    private isInputValid(): boolean {
+    isInputValid(): boolean {
         return CustomFormUtils.isFormValid(this.formFields);
     }
 
-    ok(event: Event) {
+    ok() {
         let constraintViolatedMsg = CustomFormUtils.isFormConstraintOk(this.formFields);
         if (constraintViolatedMsg != null) {
-            this.basicModals.alert("Incompleted form", constraintViolatedMsg, "warning");
+            this.basicModals.alert("Incompleted form", constraintViolatedMsg, ModalType.warning);
             return;
         }
 
@@ -75,12 +62,11 @@ export class CustomFormModal implements ModalComponent<CustomFormModalData> {
                 }
             }
         }
-        event.stopPropagation();
-        this.dialog.close(entryMap);
+        this.activeModal.close(entryMap);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
 }

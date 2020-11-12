@@ -1,8 +1,8 @@
 <div class="modal-header">
     <div class="hbox" style="align-items: center">
         <h3 class="modal-title" style="flex: 1">Create task</h3>
-        <button *ngIf="serviceMetadata?.settings?.stProperties" class="btn btn-xs btn-default" (click)="systemSettings()">
-            <span class="glyphicon glyphicon-wrench"></span>
+        <button *ngIf="serviceMetadata?.settings?.stProperties" class="btn btn-xs btn-light" (click)="systemSettings()">
+            <span class="fas fa-wrench"></span>
         </button>
     </div>
 </div>
@@ -19,31 +19,31 @@
     <div style="margin-top: 8px;">
         <div class="col-sm-6">
             <div class="hbox" style="align-items: center;">
-                <input class="form-control input-sm" [ngModel]="leftProjectStruct.project.getName()" readonly>
-                <button class="btn btn-sm btn-default" style="margin-left: 4px;" (click)="profileProject(leftProjectStruct)" title="Profile project">
-                    <span class="glyphicon glyphicon-align-right" style="transform: rotate(90deg)"></span>
+                <input class="form-control form-control-sm" [ngModel]="leftProjectStruct.project.getName()" readonly>
+                <button class="btn btn-sm btn-light" style="margin-left: 4px;" (click)="profileProject(leftProjectStruct)" title="Profile project">
+                    <span class="fas fa-align-right" style="transform: rotate(90deg)"></span>
                 </button>
                 <div style="margin-left: 4px;">
-                    <span *ngIf="leftProjectStruct.profileAvailable" class="glyphicon glyphicon-ok" title="Metadata profile available"></span>
-                    <span *ngIf="!leftProjectStruct.profileAvailable" class="glyphicon glyphicon-remove" title="Metadata profile not available"></span>
+                    <span *ngIf="leftProjectStruct.profileAvailable" class="fas fa-check" title="Metadata profile available"></span>
+                    <span *ngIf="!leftProjectStruct.profileAvailable" class="fas fa-times" title="Metadata profile not available"></span>
                 </div>
             </div>
         </div>
         <div class="col-sm-6">
             <div class="hbox" style="align-items: center;">
-                <select class="form-control input-sm" [(ngModel)]="selectedRightProject" 
-                    (ngModelChange)="onRightProjectChange()" [disabled]="context.rightProject">
+                <select class="form-control form-control-sm" [(ngModel)]="selectedRightProject" 
+                    (ngModelChange)="onRightProjectChange()" [disabled]="rightProject">
                     <ng-container *ngFor="let p of projectList">
                         <option *ngIf="p.getName() != leftProjectStruct.project.getName()" [ngValue]="p">{{p.getName()}}</option>
                     </ng-container>
                 </select>
-                <button *ngIf="rightProjectStruct" class="btn btn-sm btn-default" style="margin-left: 4px;" 
+                <button *ngIf="rightProjectStruct" class="btn btn-sm btn-light" style="margin-left: 4px;" 
                     (click)="profileProject(rightProjectStruct)" title="Profile project">
-                    <span class="glyphicon glyphicon-align-right" style="transform: rotate(90deg)"></span>
+                    <span class="fas fa-align-right" style="transform: rotate(90deg)"></span>
                 </button>
                 <div *ngIf="rightProjectStruct" style="margin-left: 4px;">
-                    <span *ngIf="rightProjectStruct.profileAvailable" class="glyphicon glyphicon-ok" title="Metadata profile available"></span>
-                    <span *ngIf="!rightProjectStruct.profileAvailable" class="glyphicon glyphicon-remove" title="Metadata profile not available"></span>
+                    <span *ngIf="rightProjectStruct.profileAvailable" class="fas fa-check" title="Metadata profile available"></span>
+                    <span *ngIf="!rightProjectStruct.profileAvailable" class="fas fa-times" title="Metadata profile not available"></span>
                 </div>
             </div>
         </div>
@@ -63,11 +63,11 @@
             </div>
         </div>
 
-        <div class="panel panel-default" style="margin-top: 6px;">
-            <div class="panel-heading">
+        <div class="card card-default" style="margin-top: 6px;">
+            <div class="card-header">
                 <label>Pairings</label>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 <div *ngFor="let p of refinablePairings" class="groupPanel" style="margin-top: 12px; margin-bottom: 8px; position: relative;">
 
                     <div class="groupPanel-heading">
@@ -99,7 +99,7 @@
                                 <div class="groupPanel-heading-content">
                                     <label>
                                         Synonymizers
-                                        <span class="glyphicon glyphicon-info-sign" title="Allow the usage of a synonymizer for improving the quality of the alignment"></span>
+                                        <span class="fas fa-info-circle" title="Allow the usage of a synonymizer for improving the quality of the alignment"></span>
                                     </label>
                                 </div>
                             </div>
@@ -114,8 +114,8 @@
                                     <div style="margin-left: 10px;">
                                         Score: <b [title]="s.score">{{s.scoreRound}}</b>
                                     </div>
-                                    <button class="btn btn-default btn-xs" style="margin-left: 12px;" (click)="describeSynonymizer(s)" title="Details">
-                                        <span class="glyphicon glyphicon-info-sign"></span>
+                                    <button class="btn btn-light btn-xs" style="margin-left: 12px;" (click)="describeSynonymizer(s)" title="Details">
+                                        <span class="fas fa-info-circle"></span>
                                     </button>
                                 </div>
                             </div>
@@ -125,11 +125,11 @@
             </div>
         </div>
 
-        <div class="panel panel-default" style="margin-top: 6px;">
-            <div class="panel-heading">
+        <div class="card card-default" style="margin-top: 6px;">
+            <div class="card-header">
                 <label style="flex: 1">Matchers</label>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
 
                 <ng-container *ngIf="!matchers; then noMatchersBlock; else matchersBlock"></ng-container>
 
@@ -160,17 +160,17 @@
                             <div *ngIf="m.description" class="alert alert-info" style="margin-top: 6px">
                                 {{m.description}}
                             </div>
-                            <div *ngIf="m.settings" class="panel panel-default" style="margin-top: 6px">
-                                <div class="panel-heading">
+                            <div *ngIf="m.settings" class="card card-default" style="margin-top: 6px">
+                                <div class="card-header">
                                     <div class="clickable" (click)="m.settings.open = !m.settings.open">
-                                        <span [class]="'glyphicon glyphicon-menu-' + (m.settings.open ? 'down' : 'right')"></span>
+                                        <span [class]="'fas fa-chevron-' + (m.settings.open ? 'down' : 'right')"></span>
                                     </div>
                                     <label style="flex: 1;">Settings</label>
-                                    <span *ngIf="!m.settings.stProperties" class="glyphicon glyphicon-warning-sign" 
+                                    <span *ngIf="!m.settings.stProperties" class="fas fa-exclamation-triangle" 
                                         style="margin-right: 4px;" title="The JSON settings must follow the schema specifications shown on the right">
                                     </span>
                                 </div>
-                                <div class="panel-body">
+                                <div class="card-body">
                                     <ng-container *ngIf="m.settings.open">
                                         <settings-renderer *ngIf="m.settings.stProperties; else originalSchemaBlock" 
                                             [(ngModel)]="m.settings.stProperties" [disabled]="selectedMatcher != m">
@@ -199,8 +199,8 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>
 
 <div #blockingDiv class="blockingDiv" style="display:none">

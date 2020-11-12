@@ -1,22 +1,22 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body vbox table-responsive">
 
-    <table *ngIf="form" class="table table-condensed table-borderless">
+    <table *ngIf="form" class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%">
             <col>
             <col style="width: 1%">
         </colgroup>
         <tbody>
-            <ng-container *ngIf="!context.reporterRef">
+            <ng-container *ngIf="!reporterRef">
                 <tr>
                     <td class="text-right" nowrap>
                         <label>ID</label>
                     </td>
                     <td>
-                        <input class="form-control input-sm" [(ngModel)]="id">
+                        <input class="form-control form-control-sm" [(ngModel)]="id">
                     </td>
                     <td></td>
                 </tr>
@@ -25,7 +25,7 @@
                         <label>Scope</label>
                     </td>
                     <td>
-                        <select class="form-control input-sm" style="display: inline-block" [(ngModel)]="selectedScope">
+                        <select class="form-control form-control-sm" style="display: inline-block" [(ngModel)]="selectedScope">
                             <option *ngFor="let s of scopes">{{s}}</option>
                         </select>
                     </td>
@@ -35,23 +35,23 @@
             <tr>
                 <td class="text-right" nowrap>
                     <label>{{form.label.displayName}}</label>
-                    <span class="glyphicon glyphicon-info-sign" [title]="form.label.description"></span>
+                    <span class="fas fa-info-circle" [title]="form.label.description"></span>
                 </td>
-                <td><input class="form-control input-sm" [(ngModel)]="form.label.value"></td>
+                <td><input class="form-control form-control-sm" [(ngModel)]="form.label.value"></td>
                 <td><ng-container *ngIf="form.label.required">*</ng-container></td>
             </tr>
             <tr>
                 <td class="text-right" nowrap>
                     <label>{{form.description.displayName}}</label>
-                    <span class="glyphicon glyphicon-info-sign" [title]="form.description.description"></span>
+                    <span class="fas fa-info-circle" [title]="form.description.description"></span>
                 </td>
-                <td><textarea class="form-control input-sm" style="resize: vertical" [(ngModel)]="form.description.value"></textarea></td>
+                <td><textarea class="form-control form-control-sm" style="resize: vertical" [(ngModel)]="form.description.value"></textarea></td>
                 <td><ng-container *ngIf="form.description.required">*</ng-container></td>
             </tr>
             <tr>
                 <td class="text-right" nowrap>
                     <label>{{form.template.displayName}}</label>
-                    <span class="glyphicon glyphicon-info-sign" [title]="form.template.description"></span>
+                    <span class="fas fa-info-circle" [title]="form.template.description"></span>
                 </td>
                 <td>
                     <mustache-editor [(ngModel)]="form.template.value"></mustache-editor>
@@ -61,9 +61,9 @@
             <tr>
                 <td class="text-right" nowrap>
                     <label>{{form.mimeType.displayName}}</label>
-                    <span class="glyphicon glyphicon-info-sign" [title]="form.mimeType.description"></span>
+                    <span class="fas fa-info-circle" [title]="form.mimeType.description"></span>
                 </td>
-                <td><input class="form-control input-sm" [(ngModel)]="form.mimeType.value"></td>
+                <td><input class="form-control form-control-sm" [(ngModel)]="form.mimeType.value"></td>
                 <td><ng-container *ngIf="form.mimeType.required">*</ng-container></td>
             </tr>
         </tbody>
@@ -72,8 +72,8 @@
 </div>
 
 <div class="modal-footer">
-    <span class="pull-left">(*) Mandatory field</span>
+    <span class="float-left">(*) Mandatory field</span>
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isDataValid()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>
 

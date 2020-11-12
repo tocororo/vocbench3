@@ -14,18 +14,18 @@ import { IssueListComponent } from './issueListComponent';
 })
 export class CollaborationComponent {
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
-    @ViewChild(IssueListComponent) viewChildList: IssueListComponent;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
+    @ViewChild(IssueListComponent, { static: false }) viewChildList: IssueListComponent;
     
     private eventSubscriptions: Subscription[] = [];
 
     //TODO configuration only available to sys admin or users with privileges
 
-    private projSettingsConfigured: boolean; //serverURL
-    private userSettingsConfigured: boolean; //credentials
-    private csProjectLinked: boolean;
+    projSettingsConfigured: boolean; //serverURL
+    userSettingsConfigured: boolean; //credentials
+    csProjectLinked: boolean;
 
-    private csWorking: boolean;
+    csWorking: boolean;
 
     constructor(private vbCollaboration: VBCollaboration, private collModals: CollaborationModalServices, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.collaborationSystemStatusChanged.subscribe(
@@ -41,7 +41,7 @@ export class CollaborationComponent {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
 
-    private initIssueList() {
+    initIssueList() {
         /**
          * Gets the status of the CS, so checks if settings and preferences are configured, if a project is linked,
          * then retrieves the issues list.
@@ -71,7 +71,7 @@ export class CollaborationComponent {
         );
     }
 
-    private openProjectConfig() {
+    openProjectConfig() {
         this.collModals.editCollaborationProjectSettings().then(
             res => {
                 this.initIssueList();
@@ -80,7 +80,7 @@ export class CollaborationComponent {
         )
     }
 
-    private openUserConfig() {
+    openUserConfig() {
         this.collModals.editCollaborationUserSettings().then(
             res => {
                 this.initIssueList();
@@ -89,7 +89,7 @@ export class CollaborationComponent {
         );
     }
 
-    private assignProject() {
+    assignProject() {
         this.collModals.editCollaborationProject().then(
             res => {
                 this.initIssueList();
@@ -98,7 +98,7 @@ export class CollaborationComponent {
         );
     }
 
-    private isCollProjManagementAuthorized(): boolean {
+    isCollProjManagementAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.collaboration);
     }
 

@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ExtensionFactory, ExtensionPointID, Scope, Settings } from "../../models/Plugins";
 import { CollaborationServices } from "../../services/collaborationServices";
 import { ExtensionsServices } from "../../services/extensionsServices";
@@ -13,21 +13,19 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
     selector: "collaboration-proj-settings-modal",
     templateUrl: "./collaborationProjSettingsModal.html",
 })
-export class CollaborationProjSettingsModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class CollaborationProjSettingsModal {
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
 
-    private extensions: ExtensionFactory[];
-    private selectedExtension: ExtensionFactory;
+    extensions: ExtensionFactory[];
+    selectedExtension: ExtensionFactory;
 
-    private projSettings: Settings;
+    projSettings: Settings;
 
-    private resettable: boolean = false; //true if a collaboration system was already configured => shows a reset button
+    resettable: boolean = false; //true if a collaboration system was already configured => shows a reset button
 
-    constructor(public dialog: DialogRef<BSModalContext>, private extensionService: ExtensionsServices, private settingsService: SettingsServices,
+    constructor(public activeModal: NgbActiveModal, private extensionService: ExtensionsServices, private settingsService: SettingsServices,
         private collaborationService: CollaborationServices, private vbColl: VBCollaboration, private basicModals: BasicModalServices) {
-        this.context = dialog.context;
     }
 
     ngOnInit() {
@@ -64,13 +62,13 @@ export class CollaborationProjSettingsModal implements ModalComponent<BSModalCon
         );
     }
 
-    private reset() {
-        this.basicModals.confirm("Reset Collaboration System", "You are going to disable the Collaboration System on the current project. Are you sure?", "warning").then(
+    reset() {
+        this.basicModals.confirm("Reset Collaboration System", "You are going to disable the Collaboration System on the current project. Are you sure?", ModalType.warning).then(
             () => {
                 this.collaborationService.resetCollaborationOnProject().subscribe(
                     () => {
                         this.vbColl.initCollaborationSystem().subscribe(
-                            () => this.dialog.close()
+                            () => this.activeModal.close()
                         );
                     }
                 )
@@ -80,11 +78,11 @@ export class CollaborationProjSettingsModal implements ModalComponent<BSModalCon
         
     }
 
-    private onExtensionChange() {
+    onExtensionChange() {
         this.initSettings();
     }
 
-    private isOkClickable(): boolean {
+    isOkClickable(): boolean {
         if (this.projSettings == null) {
             return false;
         }
@@ -94,7 +92,7 @@ export class CollaborationProjSettingsModal implements ModalComponent<BSModalCon
         return true;
     }
 
-    ok(event: Event) {
+    ok() {
         let settingsParam = this.projSettings.getPropertiesAsMap();
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
         this.settingsService.storeSettings(this.selectedExtension.id, Scope.PROJECT, settingsParam).subscribe(
@@ -103,9 +101,7 @@ export class CollaborationProjSettingsModal implements ModalComponent<BSModalCon
                     resp => {
                         UIUtils.stopLoadingDiv(this.blockingDivElement.nativeElement);
                         this.vbColl.initCollaborationSystem();
-                        event.stopPropagation();
-                        event.preventDefault();
-                        this.dialog.close();
+                        this.activeModal.close();
                     }
                 )
             }
@@ -113,7 +109,7 @@ export class CollaborationProjSettingsModal implements ModalComponent<BSModalCon
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

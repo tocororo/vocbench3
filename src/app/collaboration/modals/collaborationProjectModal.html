@@ -5,15 +5,15 @@
 </div>
 <div class="modal-body blockingDivHost">
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card card-default">
+        <div class="card-header">
             <label style="flex: 1">Projects:</label>
-            <button class="btn btn-xs btn-default" (click)="createProject()">
-                <span class="glyphicon glyphicon-plus"></span>
+            <button class="btn btn-xs btn-light" (click)="createProject()">
+                <span class="fas fa-plus"></span>
             </button>
         </div>
-        <div class="panel-body scrollableContainer" style="min-height: 70px;">
-            <table class="table table-condensed table-borderless table-hoverable">
+        <div class="card-body scrollableContainer" style="min-height: 70px;">
+            <table class="table table-sm table-borderless table-hoverable">
                 <thead>
                     <tr>
                         <th *ngFor="let h of headers" class="text-center">{{h}}</th>
@@ -38,6 +38,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!selectedProject">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!selectedProject">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

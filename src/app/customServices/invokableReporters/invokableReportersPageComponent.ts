@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { Reference } from "../../models/Configuration";
 import { InvokableReportersServices } from "../../services/invokableReportersServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
@@ -13,11 +14,11 @@ import { InvokableReporterModalServices } from "./modals/invokableReporterModalS
 })
 export class InvokableReportersPageComponent {
 
-    private reporters: Reference[];
-    private selectedReporter: Reference;
+    reporters: Reference[];
+    selectedReporter: Reference;
 
-    private createReporterAuthorized: boolean;
-    private deleteReporterAuthorized: boolean;
+    createReporterAuthorized: boolean;
+    deleteReporterAuthorized: boolean;
 
     constructor(private invokableReporterService: InvokableReportersServices, private invokableReporterModals: InvokableReporterModalServices, 
         private basicModals: BasicModalServices) { }
@@ -41,7 +42,7 @@ export class InvokableReportersPageComponent {
         this.selectedReporter = reporter;
     }
 
-    private createReporter() {
+    createReporter() {
         this.invokableReporterModals.openInvokableReporterEditor("New Invokable Report", this.reporters).then(
             () => {
                 this.initReporters();
@@ -50,8 +51,8 @@ export class InvokableReportersPageComponent {
         )
     }
 
-    private deleteReporter() {
-        this.basicModals.confirm("Delete Invokable Reporter", "You are deleting the Invokable Reporter '" + this.selectedReporter.identifier + "'. Are you sure?", "warning").then(
+    deleteReporter() {
+        this.basicModals.confirm("Delete Invokable Reporter", "You are deleting the Invokable Reporter '" + this.selectedReporter.identifier + "'. Are you sure?", ModalType.warning).then(
             () => {
                 this.invokableReporterService.deleteInvokableReporter(this.selectedReporter.relativeReference).subscribe(
                     () => {

@@ -1,28 +1,30 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body">
 
-    <file-picker (fileChanged)="fileChangeEvent($event)" size="sm" [accept]="'application/xml'"></file-picker>
+    <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="'application/xml'"></file-picker>
 
     <div class="hbox" style="align-items: center; margin-top: 4px">
         <label style="margin-right: 4px;">ID:</label>
         <div>
-            <div class="input-group input-group-sm">
-                <span class="input-group-addon" style="padding-right: 2px">{{prefix}}</span>
+            <div class="input-group">
+                <span class="input-group-prepend">
+                    <span class="input-group-text">{{prefix}}</span>
+                </span>
                 <input type="text" class="form-control" [(ngModel)]="shortId" [disabled]="useImportedId" sanitized>
             </div>
         </div>
         <div>
             <div class="hbox" style="align-items: center; margin-left: 4px;">
                 <div><input type="checkbox" [(ngModel)]="useImportedId"></div>
-                <span style="margin-left: 3px;">Use ID of the<br> imported {{context.type}}</span>
+                <span style="margin-left: 3px;">Use ID of the<br> imported {{type}}</span>
             </div>
         </div>
     </div>
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

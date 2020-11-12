@@ -7,6 +7,7 @@ import { ResourceUtils } from '../utils/ResourceUtils';
 import { UIUtils } from '../utils/UIUtils';
 import { VBCollaboration } from '../utils/VBCollaboration';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
+import { ModalType } from '../widget/modal/Modals';
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
 @Component({
@@ -18,14 +19,14 @@ import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServ
 })
 export class IssueListComponent {
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
     @Output() issueSelected: EventEmitter<Issue> = new EventEmitter();
     @Input() context: IssuesListCtx = IssuesListCtx.Dashboard;
 
-    private issues: Issue[];
+    issues: Issue[];
     private selectedIssue: Issue;
     //for paging
-    private showPaging: boolean = false;
+    showPaging: boolean = false;
     private page: number = 0;
     private totPage: number;
 
@@ -51,10 +52,10 @@ export class IssueListComponent {
                 //in case listIssues throws an exception set the "working" flag to false
                 if (err.name.endsWith("ConnectException")) {
                     this.basicModals.alert("Error", "Cannot retrieve the issues list. " +
-                        "Connection to Collaboration System server failed." , "error", err.name + " " + err.message);
+                        "Connection to Collaboration System server failed." , ModalType.warning, err.name + " " + err.message);
                 } else if (err.name.endsWith("CollaborationBackendException")) {
                     this.basicModals.alert("Error", "Cannot retrieve the issues list. " +
-                        "Connection to Collaboration System server failed during the Login. Please check the credentials.", "error", err.stack);
+                        "Connection to Collaboration System server failed during the Login. Please check the credentials.", ModalType.warning, err.stack);
                 }
                 this.vbCollaboration.setWorking(false);
             }

@@ -17,7 +17,7 @@ export class ServiceInvocationComponent {
 
     objectKeys = Object.keys; //used in template for iterate over invocation.arguments
 
-    private editInvocationAuthorized: boolean;
+    editInvocationAuthorized: boolean;
 
     constructor(private invokableReporterModals: InvokableReporterModalServices) {}
 
@@ -25,7 +25,7 @@ export class ServiceInvocationComponent {
         this.editInvocationAuthorized = AuthorizationEvaluator.isAuthorized(VBActionsEnum.invokableReporterSectionUpdate);
     }
     
-    private editInvocation() {
+    editInvocation() {
         this.invokableReporterModals.openServiceInvocationEditor("Edit Service invocation", this.invocation.reporterRef, { def: this.invocation, idx: this.idx }).then(
             () => {
                 this.update.emit();

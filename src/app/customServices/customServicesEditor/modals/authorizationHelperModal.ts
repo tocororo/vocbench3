@@ -1,22 +1,17 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { Language, Languages } from "../../../models/LanguagesCountries";
 import { BasicModalServices } from "../../../widget/modal/basicModal/basicModalServices";
-
-export class AuthorizationHelperModalData extends BSModalContext {
-    constructor(public authorization?: string, public parameters?: string[]) {
-        super();
-    }
-}
 
 @Component({
     selector: "auth-helper-modal",
     templateUrl: "./authorizationHelperModal.html",
 })
-export class AuthorizationHelperModal implements ModalComponent<AuthorizationHelperModalData> {
-    context: AuthorizationHelperModalData;
+export class AuthorizationHelperModal {
+    @Input() authorization: string;
+    @Input() parameters: string[];
 
     /**
      * Currently custom services allow only creation of SPARQL operation, so limited to the only rdf capability area.
@@ -33,13 +28,13 @@ export class AuthorizationHelperModal implements ModalComponent<AuthorizationHel
     private selectedArea: AreaStruct = this.areas[0];
 
     //type restriction
-    private readonly typeRestrictionNone: string = "None";
-    private readonly typeRestrictionType: string = "Restrict to a specific type";
-    private readonly typeRestrictionParam: string = "Restrict to the type of a parameter";
-    private typeRestrictions: string[] = [ this.typeRestrictionNone, this.typeRestrictionType, this.typeRestrictionParam];
-    private selectedTypeRestriction: string = this.typeRestrictionNone;
-    private selectedType: RDFResourceRolesEnum;
-    private selectedParamType: string;
+    readonly typeRestrictionNone: string = "None";
+    readonly typeRestrictionType: string = "Restrict to a specific type";
+    readonly typeRestrictionParam: string = "Restrict to the type of a parameter";
+    typeRestrictions: string[] = [ this.typeRestrictionNone, this.typeRestrictionType, this.typeRestrictionParam];
+    selectedTypeRestriction: string = this.typeRestrictionNone;
+    selectedType: RDFResourceRolesEnum;
+    selectedParamType: string;
 
     private scope: string;
 
@@ -65,18 +60,18 @@ export class AuthorizationHelperModal implements ModalComponent<AuthorizationHel
     ];
 
     //language restriction
-    private readonly langRequirementNone: string = "None";
-    private readonly langRequirementLang: string = "Require a specific language";
-    private readonly langRequirementParam: string = "Require the language of a parameter";
-    private langRequirements: string[] = [ this.langRequirementNone, this.langRequirementLang, this.langRequirementParam];
-    private selectedLangRequirement: string = this.langRequirementNone;
+    readonly langRequirementNone: string = "None";
+    readonly langRequirementLang: string = "Require a specific language";
+    readonly langRequirementParam: string = "Require the language of a parameter";
+    langRequirements: string[] = [ this.langRequirementNone, this.langRequirementLang, this.langRequirementParam];
+    selectedLangRequirement: string = this.langRequirementNone;
     private selectedLang: Language;
     private selectedParamLang: string;
 
     private languages: Language[];
 
     //crudv restriction
-    private crudvStruct: { value: string, label: string, checked: boolean }[] = [
+    crudvStruct: { value: string, label: string, checked: boolean }[] = [
         { value : "C", label: "Create", checked: false },
         { value : "R", label: "Read", checked: false },
         { value : "U", label: "Update", checked: false },
@@ -87,18 +82,16 @@ export class AuthorizationHelperModal implements ModalComponent<AuthorizationHel
     //validation pattern
     private scopePattern: string = "[a-zA-Z]+";
 
-    private authValidStruct: { valid: boolean, errors?: string };
-    private authSerialization: string;
+    authValidStruct: { valid: boolean, errors?: string };
+    authSerialization: string;
 
-    constructor(public dialog: DialogRef<AuthorizationHelperModalData>, private basicModals: BasicModalServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices) { }
 
     ngOnInit() {
         this.languages = Languages.getSystemLanguages();
 
-        if (this.context.authorization) { //edit => restore the form with the given authorization
-            let auth = this.context.authorization;
+        if (this.authorization) { //edit => restore the form with the given authorization
+            let auth = this.authorization;
 
             //type restriction
 
@@ -151,7 +144,7 @@ export class AuthorizationHelperModal implements ModalComponent<AuthorizationHel
             if (authMatch == null) {
                 //cannot parse the input authorizations
                 this.basicModals.alert("Operation authorization", "Unable to parse authorization you're trying to edit (" + 
-                    this.context.authorization + "). The form has not been restored.", "warning");
+                    this.authorization + "). The form has not been restored.", ModalType.warning);
             } else {
                 /* 
                 * authMatch should contain 7 groups:
@@ -167,8 +160,8 @@ export class AuthorizationHelperModal implements ModalComponent<AuthorizationHel
                 if (authMatch[1] != null) { //param specified for the @typeof annotation
                     this.selectedTypeRestriction = this.typeRestrictionParam;
                     //restore the selected parameter
-                    if (this.context.parameters != null) {
-                        this.selectedParamType = this.context.parameters.find(p => p == authMatch[1]);
+                    if (this.parameters != null) {
+                        this.selectedParamType = this.parameters.find(p => p == authMatch[1]);
                     }
                 } else if (authMatch[2] != null) { //type specified
                     this.selectedTypeRestriction = this.typeRestrictionType;
@@ -185,8 +178,8 @@ export class AuthorizationHelperModal implements ModalComponent<AuthorizationHel
                 if (authMatch[4] != null) { //param specified for @langof
                     this.selectedLangRequirement = this.langRequirementParam;
                     //restore the selected parameter
-                    if (this.context.parameters != null) {
-                        this.selectedParamLang = this.context.parameters.find(p => p == authMatch[4]);
+                    if (this.parameters != null) {
+                        this.selectedParamLang = this.parameters.find(p => p == authMatch[4]);
                     }
                 } else if (authMatch[5] != null) { //langTag specified
                     this.selectedLangRequirement = this.langRequirementLang;
@@ -207,7 +200,7 @@ export class AuthorizationHelperModal implements ModalComponent<AuthorizationHel
         this.update();
     }
 
-    private update() {
+    update() {
         this.updateSerialization();
         this.updateAuthValid();
     }
@@ -311,12 +304,12 @@ export class AuthorizationHelperModal implements ModalComponent<AuthorizationHel
 
     ok() {
         if (this.authValidStruct.valid) {
-            this.dialog.close(this.authSerialization);
+            this.activeModal.close(this.authSerialization);
         }
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
     
 }

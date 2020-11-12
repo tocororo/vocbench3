@@ -1,36 +1,27 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from 'ngx-modialog';
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConceptualizationSet, Lexicon } from "../../../models/Maple";
 import { ResolvedSynonymizer } from './createRemoteAlignmentTaskModal';
-import { Lexicon, ConceptualizationSet } from "../../../models/Maple";
-
-export class SynonymizerDetailsModalData extends BSModalContext {
-    constructor(public synonymizer: ResolvedSynonymizer) {
-        super();
-    }
-}
 
 @Component({
     selector: "synonymizer-details-modal",
     templateUrl: "./synonymizerDetailsModal.html",
 })
-export class SynonymizerDetailsModal implements ModalComponent<SynonymizerDetailsModalData> {
-    context: SynonymizerDetailsModalData;
+export class SynonymizerDetailsModal {
+    @Input() synonymizer: ResolvedSynonymizer;
 
-    private lexicon: Lexicon;
-    private conceptualizationSet: ConceptualizationSet;
+    lexicon: Lexicon;
+    conceptualizationSet: ConceptualizationSet;
 
-    constructor(public dialog: DialogRef<SynonymizerDetailsModalData>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) { }
 
     ngOnInit() {
-        this.lexicon = this.context.synonymizer.lexiconDataset;
-        this.conceptualizationSet = this.context.synonymizer.conceptualizationSetDataset;
+        this.lexicon = this.synonymizer.lexiconDataset;
+        this.conceptualizationSet = this.synonymizer.conceptualizationSetDataset;
     }
 
     ok() {
-        this.dialog.close();
+        this.activeModal.close();
     }
     
 }

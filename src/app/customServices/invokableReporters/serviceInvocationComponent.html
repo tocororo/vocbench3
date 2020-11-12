@@ -1,22 +1,22 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading">
+<div class="card card-default vbox">
+    <div class="card-header">
         <label style="flex: 1">
             {{invocation.label}}
         </label>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" (click)="editInvocation()" title="Edit service invocation" [disabled]="!editInvocationAuthorized">
-                    <span class="glyphicon glyphicon-pencil"></span>
+                <button class="btn btn-light" (click)="editInvocation()" title="Edit service invocation" [disabled]="!editInvocationAuthorized">
+                    <span class="fas fa-pencil-alt"></span>
                 </button>
             </div>
         </div>
     </div>
-    <div class="panel-body vbox scrollableContainer">
+    <div class="card-body vbox scrollableContainer">
         <div class="gridRow">
             <div class="gridEntry">
                 <label class="entryLabel">Label:</label>
                 <div style="flex: 1">
-                    <input class="form-control input-sm" [ngModel]="invocation.label" readonly>
+                    <input class="form-control form-control-sm" [ngModel]="invocation.label" readonly>
                 </div>
             </div>
         </div>
@@ -24,7 +24,7 @@
             <div class="gridEntry">
                 <label class="entryLabel">Description:</label>
                 <div style="flex: 1">
-                    <input class="form-control input-sm" [ngModel]="invocation.description" readonly>
+                    <input class="form-control form-control-sm" [ngModel]="invocation.description" readonly>
                 </div>
             </div>
         </div>
@@ -32,7 +32,7 @@
             <div class="gridEntry">
                 <label class="entryLabel">Service:</label>
                 <div style="flex: 1">
-                    <input class="form-control input-sm" [ngModel]="invocation.service" readonly>
+                    <input class="form-control form-control-sm" [ngModel]="invocation.service" readonly>
                 </div>
             </div>
         </div>
@@ -40,16 +40,16 @@
             <div class="gridEntry">
                 <label class="entryLabel">Operation:</label>
                 <div style="flex: 1">
-                    <input class="form-control input-sm" [ngModel]="invocation.operation" readonly>
+                    <input class="form-control form-control-sm" [ngModel]="invocation.operation" readonly>
                 </div>
             </div>
         </div>
         <div class="gridRow">
             <div class="gridEntry">
                 <label class="entryLabel">Arguments:</label>
-                <div class="panel panel-default" style="flex: 1; min-height: 28px;">
-                    <div class="panel-body">
-                        <table *ngIf="invocation.arguments" class="table table-borderless table-condensed" style="font-family: monospace;">
+                <div class="card card-default" style="flex: 1; min-height: 28px;">
+                    <div class="card-body">
+                        <table *ngIf="invocation.arguments" class="table table-borderless table-sm" style="font-family: monospace;">
                             <colgroup>
                                 <col style="width: 1%;">
                                 <col>
@@ -58,7 +58,7 @@
                                 <tr *ngFor="let argName of objectKeys(invocation.arguments)">
                                     <td><label>{{argName}}</label></td>
                                     <td>
-                                        <input class="form-control input-sm" [ngModel]="invocation.arguments[argName]" readonly>
+                                        <input class="form-control form-control-sm" [ngModel]="invocation.arguments[argName]" readonly>
                                     </td>
                                 </tr>
                             </tbody>

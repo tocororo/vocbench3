@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from "../../models/ARTResources";
 import { RDFFormat } from "../../models/RDFFormat";
 import { InputOutputServices } from "../../services/inputOutputServices";
@@ -11,16 +10,14 @@ import { VBContext } from "../../utils/VBContext";
     selector: "extract-from-shacl-modal",
     templateUrl: "./extractFromShaclModal.html",
 })
-export class ExtractFromShaclModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class ExtractFromShaclModal {
+    readonly sourceGraph: string = "From SHACL shapes graph";
+    readonly sourceUrl: string = "From SHACL shape URL";
+    readonly sourceFile: string = "From SHACL shape file";
+    sources: string[];
+    selectedSource: string;
 
-    private readonly sourceGraph: string = "From SHACL shapes graph";
-    private readonly sourceUrl: string = "From SHACL shape URL";
-    private readonly sourceFile: string = "From SHACL shape file";
-    private sources: string[];
-    private selectedSource: string;
-
-    private cls: ARTURIResource;
+    cls: ARTURIResource;
 
     private inputFormats: RDFFormat[];
     private filePickerAccept: string;
@@ -30,9 +27,7 @@ export class ExtractFromShaclModal implements ModalComponent<BSModalContext> {
 
     private shapeUrl: string; //from url
 
-    constructor(public dialog: DialogRef<BSModalContext>, private shaclService: ShaclServices, private inOutService: InputOutputServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private shaclService: ShaclServices, private inOutService: InputOutputServices) {}
 
     ngOnInit() {
         this.inOutService.getInputRDFFormats().subscribe(
@@ -66,7 +61,7 @@ export class ExtractFromShaclModal implements ModalComponent<BSModalContext> {
         )
     }
 
-    private isOkEnabled(): boolean {
+    isOkEnabled(): boolean {
         if (this.selectedSource == this.sourceFile) {
             return this.cls != null && this.shapeFile != null;
         } else if (this.selectedSource == this.sourceGraph) {
@@ -81,26 +76,26 @@ export class ExtractFromShaclModal implements ModalComponent<BSModalContext> {
         if (this.selectedSource == this.sourceFile) {
             this.shaclService.extractCFfromShapeFile(this.cls, this.shapeFile, this.selectedInputFormat).subscribe(
                 pearl => {
-                    this.dialog.close(pearl);
+                    this.activeModal.close(pearl);
                 }
             )
         } else if (this.selectedSource == this.sourceGraph) {
             this.shaclService.extractCFfromShapesGraph(this.cls).subscribe(
                 pearl => {
-                    this.dialog.close(pearl);
+                    this.activeModal.close(pearl);
                 }
             )
         } else if (this.selectedSource == this.sourceUrl) {
             this.shaclService.extractCFfromShapeURL(this.cls, this.shapeUrl, this.selectedInputFormat).subscribe(
                 pearl => {
-                    this.dialog.close(pearl);
+                    this.activeModal.close(pearl);
                 }
             )
         }
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

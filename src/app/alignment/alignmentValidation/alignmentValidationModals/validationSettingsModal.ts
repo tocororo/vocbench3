@@ -1,35 +1,30 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "ngx-modialog";
-import {Cookie} from "../../../utils/Cookie";
+import { Component } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Cookie } from "../../../utils/Cookie";
 
 @Component({
     selector: "validation-settings-modal",
     templateUrl: "./validationSettingsModal.html",
 })
-export class ValidationSettingsModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
-    
-    private rejectedAlignmentAction: string;
+export class ValidationSettingsModal {
+    rejectedAlignmentAction: string;
     private rejectedOptAsk = {value: "ask", label: "Always ask (Always ask for the action to perform)"};
     private rejectedOptSkip = {value: "skip", label: "Always skip (Do not perform any action on the ontology)"};
     private rejectedOptDelete = {value: "delete", label: "Always delete (Remove, if present, the triple defined by the alignment)"};
-    private rejectedAlignmentOptions = [this.rejectedOptAsk, this.rejectedOptSkip, this.rejectedOptDelete];
+    rejectedAlignmentOptions = [this.rejectedOptAsk, this.rejectedOptSkip, this.rejectedOptDelete];
     
     private showRelationType: string;
     private showRelOptRel = {value: "relation", label: "Alignment format relation (=, <;, >;, %,...)"};
     private showRelOptDl = {value: "dlSymbol", label: "Description Logic symbol (≡;, ⊑;, ⊒;, ⊥;,...)"};
     private showRelOptText = {value: "text", label: "Text (equivalent, is subsumed, subsumes, incompatible,...)"};
-    private showRelationOptions = [this.showRelOptRel, this.showRelOptDl,this.showRelOptText];
+    showRelationOptions = [this.showRelOptRel, this.showRelOptDl,this.showRelOptText];
     
-    private confOnMeterCheck: boolean;
-    private maxAlignment: number;
+    confOnMeterCheck: boolean;
+    maxAlignment: number;
     
-    private submitted: boolean = false;
+    submitted: boolean = false;
     
-    constructor(public dialog: DialogRef<BSModalContext>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) {}
     
     ngOnInit() {
         //here there's no need to check if cookies are != null, because they're initialized in AlignmentValidationComponent
@@ -41,7 +36,7 @@ export class ValidationSettingsModal implements ModalComponent<BSModalContext> {
         })
     }
     
-    ok(event: Event) {
+    ok() {
         this.submitted = true;
         if (this.maxAlignment < 1 || this.maxAlignment > 100) {
             return;
@@ -51,11 +46,10 @@ export class ValidationSettingsModal implements ModalComponent<BSModalContext> {
         Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_SHOW_CONFIDENCE, this.confOnMeterCheck + "", 365*10);
         Cookie.setCookie(Cookie.ALIGNMENT_VALIDATION_ALIGNMENT_PER_PAGE, this.maxAlignment + "", 365*10);
         
-        event.stopPropagation();
-        this.dialog.close();
+        this.activeModal.close();
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 }

@@ -18,10 +18,10 @@ export class OperationTypeEditor implements ControlValueAccessor {
 
     private type: OperationType; //ngModel bound variable
 
-    private types: TypeStruct[];
-    private selectedType: string;
+    types: TypeStruct[];
+    selectedType: string;
 
-    private genericArgsList: ArgStruct[]; //the list of arguments of a generic type (to keep updated each time the selectedType changes)
+    genericArgsList: ArgStruct[]; //the list of arguments of a generic type (to keep updated each time the selectedType changes)
 
     ngOnInit() {
         //init the TypeStruct for all the known types
@@ -53,7 +53,7 @@ export class OperationTypeEditor implements ControlValueAccessor {
         }
     }
 
-    private onSelectedTypeChange() {
+    onSelectedTypeChange() {
         //Each time the selected type changes, update the genericArgsList
         let args = TypeUtils.getGenericTypeArgs(this.selectedType);
         if (args != null) {

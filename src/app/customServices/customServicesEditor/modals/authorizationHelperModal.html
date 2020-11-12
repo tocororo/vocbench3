@@ -7,60 +7,59 @@
 
         <!-- Type -->
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
+        <div class="card card-default">
+            <div class="card-header">
                 <label>Type restriction</label>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 <p>
                     Determines if the <i>rdf</i> capability is required on a specific resource type. 
                     It is possible to select a type among those available in VB or to let the system infer the type from a parameter of the operation.
                 </p>
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label class="control-label col-sm-2">Restriction</label>
-                        <div class="col-sm-10">
-                            <select class="form-control input-sm" [(ngModel)]="selectedTypeRestriction" (ngModelChange)="update()">
-                                <option *ngFor="let r of typeRestrictions">{{r}}</option>
-                            </select>
-                        </div>
+                   
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-2">Restriction</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" [(ngModel)]="selectedTypeRestriction" (ngModelChange)="update()">
+                            <option *ngFor="let r of typeRestrictions">{{r}}</option>
+                        </select>
                     </div>
-            
-                    <div *ngIf="selectedTypeRestriction==typeRestrictionType" class="form-group">
-                        <label class="control-label col-sm-2">Type</label>
-                        <div class="col-sm-10">
-                            <select class="form-control input-sm" [(ngModel)]="selectedType" (ngModelChange)="update()">
-                                <option *ngFor="let r of roles">{{r}}</option>
-                            </select>
-                        </div>
+                </div>
+        
+                <div *ngIf="selectedTypeRestriction==typeRestrictionType" class="form-group row">
+                    <label class="col-form-label col-sm-2">Type</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" [(ngModel)]="selectedType" (ngModelChange)="update()">
+                            <option *ngFor="let r of roles">{{r}}</option>
+                        </select>
                     </div>
-                    <div *ngIf="selectedTypeRestriction==typeRestrictionParam" class="form-group">
-                        <label class="control-label col-sm-2">Parameter</label>
-                        <div class="col-sm-10">
-                            <select *ngIf="context.parameters?.length > 0; else noParamTypeBlock" class="form-control input-sm" style="font-family: monospace;"
-                                [(ngModel)]="selectedParamType" (ngModelChange)="update()">
-                                <option *ngFor="let p of context.parameters">{{p}}</option>
-                            </select>
-                            <ng-template #noParamTypeBlock>
-                                <div class="form-control input-sm" style="background-color: #eee;">
-                                    <span class="glyphicon glyphicon-warning-sign"></span> The operation does not foreseen any parameter
-                                </div>
-                            </ng-template>
-                        </div>
+                </div>
+                <div *ngIf="selectedTypeRestriction==typeRestrictionParam" class="form-group row">
+                    <label class="col-form-label col-sm-2">Parameter</label>
+                    <div class="col-sm-10">
+                        <select *ngIf="parameters?.length > 0; else noParamTypeBlock" class="form-control" style="font-family: monospace;"
+                            [(ngModel)]="selectedParamType" (ngModelChange)="update()">
+                            <option *ngFor="let p of parameters">{{p}}</option>
+                        </select>
+                        <ng-template #noParamTypeBlock>
+                            <div class="form-control" style="background-color: #eee;">
+                                <span class="fas fa-exclamation-triangle"></span> The operation does not foreseen any parameter
+                            </div>
+                        </ng-template>
                     </div>
-                    <div *ngIf="selectedTypeRestriction!=typeRestrictionNone && (selectedType || selectedParamType)" class="form-group">
-                        <label class="control-label col-sm-2">
-                            Scope
-                            <span class="glyphicon glyphicon-info-sign" title="Refines the scope of the selected type"></span>
-                        </label>
-                        <div class="col-sm-10 hbox" style="align-items: center;">
-                            <input class="form-control input-sm" [(ngModel)]="scope" (ngModelChange)="update()">
-                            <span style="margin: 0px 4px;">*</span>
-                        </div>
+                </div>
+                <div *ngIf="selectedTypeRestriction!=typeRestrictionNone && (selectedType || selectedParamType)" class="form-group row">
+                    <label class="col-form-label col-sm-2">
+                        Scope
+                        <span class="fas fa-info-circle" title="Refines the scope of the selected type"></span>
+                    </label>
+                    <div class="col-sm-10 hbox" style="align-items: center;">
+                        <input class="form-control" [(ngModel)]="scope" (ngModelChange)="update()">
+                        <span style="margin: 0px 4px;">*</span>
                     </div>
                 </div>
             </div>
-            <div class="panel-footer">
+            <div class="card-footer">
                 For further details about the capability vocabulary, please refer to the VB 
                 <a href="http://vocbench.uniroma2.it/doc/user/roles_adm.jsf#capabilities_vocabulary" target="_blank">documentation</a>.
             </div>
@@ -68,45 +67,44 @@
 
         <!-- Language -->
 
-        <div class="panel panel-default" style="margin-top: 6px;">
-            <div class="panel-heading">
+        <div class="card card-default" style="margin-top: 6px;">
+            <div class="card-header">
                 <label>Language requirement</label>
             </div>
-            <div class="panel-body">
+            <div class="card-body">
                 <p>
                     Determines if the operation requires that the user which performs the operation has a specifica language assigned.
                     It is possible to select a language among those available in VB or to let the system infer it from a parameter of the operation.
                 </p>
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label class="control-label col-sm-2">Restriction</label>
-                        <div class="col-sm-10">
-                            <select class="form-control input-sm" [(ngModel)]="selectedLangRequirement" (ngModelChange)="update()">
-                                <option *ngFor="let r of langRequirements">{{r}}</option>
-                            </select>
-                        </div>
+                
+                <div class="form-group row">
+                    <label class="col-form-label col-sm-2">Restriction</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" [(ngModel)]="selectedLangRequirement" (ngModelChange)="update()">
+                            <option *ngFor="let r of langRequirements">{{r}}</option>
+                        </select>
                     </div>
-                    <div *ngIf="selectedLangRequirement==langRequirementLang" class="form-group">
-                        <label class="control-label col-sm-2">Language</label>
-                        <div class="col-sm-10">
-                            <select class="form-control input-sm" [(ngModel)]="selectedLang" (ngModelChange)="update()">
-                                <option *ngFor="let l of languages" [ngValue]="l">{{l.name}} ({{l.tag}})</option>
-                            </select>
-                        </div>
+                </div>
+                <div *ngIf="selectedLangRequirement==langRequirementLang" class="form-group row">
+                    <label class="col-form-label col-sm-2">Language</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" [(ngModel)]="selectedLang" (ngModelChange)="update()">
+                            <option *ngFor="let l of languages" [ngValue]="l">{{l.name}} ({{l.tag}})</option>
+                        </select>
                     </div>
-                    <div *ngIf="selectedLangRequirement==langRequirementParam" class="form-group">
-                        <label class="control-label col-sm-2">Parameter</label>
-                        <div class="col-sm-10">
-                            <select *ngIf="context.parameters?.length > 0; else noParamLangBlock" class="form-control input-sm" style="font-family: monospace;"
-                                [(ngModel)]="selectedParamLang" (ngModelChange)="update()">
-                                <option *ngFor="let p of context.parameters">{{p}}</option>
-                            </select>
-                            <ng-template #noParamLangBlock>
-                                <div class="form-control input-sm" style="background-color: #eee;">
-                                    <span class="glyphicon glyphicon-warning-sign"></span> The operation does not foreseen any parameter
-                                </div>
-                            </ng-template>
-                        </div>
+                </div>
+                <div *ngIf="selectedLangRequirement==langRequirementParam" class="form-group row">
+                    <label class="col-form-label col-sm-2">Parameter</label>
+                    <div class="col-sm-10">
+                        <select *ngIf="parameters?.length > 0; else noParamLangBlock" class="form-control" style="font-family: monospace;"
+                            [(ngModel)]="selectedParamLang" (ngModelChange)="update()">
+                            <option *ngFor="let p of parameters">{{p}}</option>
+                        </select>
+                        <ng-template #noParamLangBlock>
+                            <div class="form-control" style="background-color: #eee;">
+                                <span class="fas fa-exclamation-triangle"></span> The operation does not foreseen any parameter
+                            </div>
+                        </ng-template>
                     </div>
                 </div>
                 
@@ -115,11 +113,11 @@
 
         <!-- CRUDV -->
 
-        <div class="panel panel-default" style="margin-top: 6px;">
-            <div class="panel-heading">
+        <div class="card card-default" style="margin-top: 6px;">
+            <div class="card-header">
                 <label>CRUDV</label>
             </div>
-            <div class="panel-body hbox">
+            <div class="card-body hbox">
                 <div *ngFor="let cs of crudvStruct" class="text-center" style="flex: 1;">
                     <div class="checkbox">
                         <label>
@@ -137,8 +135,8 @@
     <div class="col-sm-12" style="margin-top: 10px;">
         <div class="hbox" style="align-items: center;">
             <label>Authorization:</label>
-            <input class="form-control input-sm" style="margin-left: 4px;" [ngModel]="authSerialization" readonly>
-            <span *ngIf="!authValidStruct.valid" class="glyphicon glyphicon-warning-sign" style="margin-left: 4px;"
+            <input class="form-control" style="margin-left: 4px;" [ngModel]="authSerialization" readonly>
+            <span *ngIf="!authValidStruct.valid" class="fas fa-exclamation-triangle" style="margin-left: 4px;"
                 [title]="authValidStruct.errors">
             </span>
         </div>
@@ -147,5 +145,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!authValidStruct.valid">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

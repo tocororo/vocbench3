@@ -2,7 +2,7 @@
 <div *ngIf="field?.getType() == 'literal';">
     <div [ngSwitch]="field.getAnnotations()[0]?.name">
         <div *ngSwitchCase="'DataOneOf'">
-            <select class="form-control input-sm" [(ngModel)]="field.value" (ngModelChange)="onModelChanged()">
+            <select class="form-control form-control-sm" [(ngModel)]="field.value" (ngModelChange)="onModelChanged()">
                 <option *ngFor="let v of field.getAnnotations()[0].value">{{v.getNominalValue()}}</option>
             </select>
         </div>
@@ -10,19 +10,19 @@
         <div *ngSwitchDefault>
             <div [ngSwitch]="field.getDatatype()">
                 <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#string'">
-                    <textarea type="text" rows="1" class="form-control input-sm" style="resize: vertical"
+                    <textarea type="text" rows="1" class="form-control form-control-sm" style="resize: vertical"
                         [(ngModel)]="field.value" (ngModelChange)="onModelChanged()"></textarea>
                 </div>
                 <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#integer'">
-                    <input class="form-control input-sm" [(ngModel)]="field.value" type="number" step="1"
+                    <input class="form-control form-control-sm" [(ngModel)]="field.value" type="number" step="1"
                         (ngModelChange)="onModelChanged()">
                 </div>
                 <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#float'">
-                    <input class="form-control input-sm" [(ngModel)]="field.value" type="number" step="any"
+                    <input class="form-control form-control-sm" [(ngModel)]="field.value" type="number" step="any"
                         (ngModelChange)="onModelChanged()">
                 </div>
                 <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#boolean'" class="hbox">
-                    <input class="form-control input-sm" [ngModel]="field.value" style="flex: 1"
+                    <input class="form-control form-control-sm" [ngModel]="field.value" style="flex: 1"
                         (ngModelChange)="onModelChanged()" disabled>
                     <span class="hbox" style="align-items: center; margin-left: 10px; justify-content: center;">
                         <label class="radio-inline">
@@ -34,21 +34,21 @@
                     </span>
                 </div>
                 <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#date'" class="hbox">
-                    <input class="form-control input-sm" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
-                    <input class="form-control input-sm" style="margin-left: 10px;" type="date" [(ngModel)]="field.value"> 
+                    <input class="form-control form-control-sm" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
+                    <input class="form-control form-control-sm" style="margin-left: 10px;" type="date" [(ngModel)]="field.value"> 
                 </div>
                 <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#time'" class="hbox">
-                    <input class="form-control input-sm" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
-                    <input class="form-control input-sm" style="margin-left: 10px;" type="time" [(ngModel)]="field.value"
+                    <input class="form-control form-control-sm" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
+                    <input class="form-control form-control-sm" style="margin-left: 10px;" type="time" [(ngModel)]="field.value"
                         (ngModelChange)="onModelChanged()">
                 </div>
                 <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#datetime'" class="hbox">
-                    <input class="form-control input-sm" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
-                    <input class="form-control input-sm" style="margin-left: 10px;" type="datetime-local"
+                    <input class="form-control form-control-sm" [ngModel]="field.value" (ngModelChange)="onModelChanged()" disabled>
+                    <input class="form-control form-control-sm" style="margin-left: 10px;" type="datetime-local"
                         [(ngModel)]="field.value" (ngModelChange)="onModelChanged()">
                 </div>
                 <div *ngSwitchDefault class="hbox" style="align-items: center;">
-                    <textarea type="text" rows="1" class="form-control input-sm" style="flex:1; resize: vertical"
+                    <textarea type="text" rows="1" class="form-control form-control-sm" style="flex:1; resize: vertical"
                         [(ngModel)]="field.value" (ngModelChange)="onModelChanged()"
                         (input)="onEntryValueChange($event.target.value)">
                     </textarea>
@@ -76,7 +76,7 @@
 <div *ngIf="field?.getType() == 'uri'">
     <div [ngSwitch]="field.getAnnotations()[0]?.name">
         <div *ngSwitchCase="'ObjectOneOf'">
-            <select class="form-control input-sm" [(ngModel)]="field.value" (ngModelChange)="onModelChanged()">
+            <select class="form-control form-control-sm" [(ngModel)]="field.value" (ngModelChange)="onModelChanged()">
                 <option *ngFor="let v of field.getAnnotations()[0].value">{{v.getNominalValue()}}</option>
             </select>
         </div>

@@ -1,5 +1,6 @@
-import { OnInit } from "@angular/core";
-import { Observable } from "rxjs";
+import { Directive, OnInit } from "@angular/core";
+import { forkJoin, Observable } from "rxjs";
+import { map } from 'rxjs/operators';
 import { AlignmentOverview } from "../../models/Alignment";
 import { Project } from "../../models/Project";
 import { EDOAL } from "../../models/Vocabulary";
@@ -7,6 +8,7 @@ import { EdoalServices } from "../../services/edoalServices";
 import { ProjectServices } from "../../services/projectServices";
 import { VBContext } from "../../utils/VBContext";
 
+@Directive()
 export abstract class AlignFromSource implements OnInit {
 
     alignmentOverview: AlignmentOverview;
@@ -27,18 +29,18 @@ export abstract class AlignFromSource implements OnInit {
                     let leftProjectName: string = projects[0];
                     let rightProjectName: string = projects[1];
                     let initProjectsFn: Observable<void>[] = [
-                        this.projectService.getProjectInfo(leftProjectName).map(
-                            proj => {
+                        this.projectService.getProjectInfo(leftProjectName).pipe(
+                            map(proj => {
                                 this.leftProject = proj;
-                            }
+                            })
                         ),
-                        this.projectService.getProjectInfo(rightProjectName).map(
-                            proj => {
+                        this.projectService.getProjectInfo(rightProjectName).pipe(
+                            map(proj => {
                                 this.rightProject = proj;
-                            }
+                            })
                         )
                     ];
-                    Observable.forkJoin(initProjectsFn).subscribe(
+                    forkJoin(initProjectsFn).subscribe(
                         () => {
                             this.init();
                         }

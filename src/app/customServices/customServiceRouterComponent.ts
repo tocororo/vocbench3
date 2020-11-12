@@ -9,10 +9,10 @@ import { VBActionsEnum } from "../utils/VBActions";
 })
 export class CustomServiceRouterComponent {
 
-    private currentRoute: "customService" | "reporter";
+    currentRoute: "customService" | "reporter";
 
-    private csAuthorized: boolean;
-    private reporterAuthorized: boolean;
+    csAuthorized: boolean;
+    reporterAuthorized: boolean;
 
     constructor() { }
 

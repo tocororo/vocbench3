@@ -16,7 +16,7 @@ export class CustomFormFieldList implements ControlValueAccessor {
     private min: number;
     private max: number;
 
-    private subFields: FormField[];
+    subFields: FormField[];
 
     constructor() { }
 

@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { CustomServiceServices } from "../../services/customServiceServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "../../utils/VBActions";
@@ -12,11 +13,11 @@ import { CustomServiceModalServices } from "./modals/customServiceModalServices"
 })
 export class CustomServicesPageComponent {
 
-    private serviceIds: string[];
-    private selectedServiceId: string;
+    serviceIds: string[];
+    selectedServiceId: string;
 
-    private createServiceAuthorized: boolean;
-    private deleteServiceAuthorized: boolean;
+    createServiceAuthorized: boolean;
+    deleteServiceAuthorized: boolean;
 
     constructor(private customServService: CustomServiceServices, private basicModals: BasicModalServices, 
         private customServiceModals: CustomServiceModalServices) { }
@@ -28,7 +29,7 @@ export class CustomServicesPageComponent {
         this.initServices();
     }
 
-    private initServices() {
+    initServices() {
         this.customServService.getCustomServiceIdentifiers().subscribe(
             ids => {
                 this.serviceIds = ids;
@@ -43,7 +44,7 @@ export class CustomServicesPageComponent {
     }
 
 
-    private createService() {
+    createService() {
         this.customServiceModals.openCustomServiceEditor("New Custom Service").then(
             () => {
                 this.initServices();
@@ -52,8 +53,8 @@ export class CustomServicesPageComponent {
         )
     }
 
-    private deleteService() {
-        this.basicModals.confirm("Delete CustomService", "You are deleting CustomService '" + this.selectedServiceId + "'. Are you sure?", "warning").then(
+    deleteService() {
+        this.basicModals.confirm("Delete CustomService", "You are deleting CustomService '" + this.selectedServiceId + "'. Are you sure?", ModalType.warning).then(
             () => {
                 this.customServService.deleteCustomService(this.selectedServiceId).subscribe(
                     () => {
@@ -65,7 +66,7 @@ export class CustomServicesPageComponent {
         )
     }
 
-    private reload() {
+    reload() {
         this.customServService.reloadCustomServices().subscribe(
             () => {
                 this.initServices();

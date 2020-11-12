@@ -2,12 +2,12 @@
     <h3 class="modal-title text-info">Broken CustomForm structures</h3>
 </div>
 <div class="modal-body vbox" style="min-height: 30vh;">
-    <div class="alert alert-info" *ngIf="context.message">
+    <div class="alert alert-info">
         The following table reports the broken structures belonging to the CustomForm mechanism.
     </div>
         
     <div class="table-responsive" style="border: 1px solid #ddd; margin-top: 5px;">
-        <table class="table table-condensed table-hoverable">
+        <table class="table table-sm table-hoverable">
             <thead class="text-center">
                 <tr>
                     <th class="text-center">Level</th>
@@ -30,5 +30,5 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
 </div>

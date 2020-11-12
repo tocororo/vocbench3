@@ -1,26 +1,26 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body vbox">
 
     <div class="hbox" style="align-items: center; flex: initial;">
         <label>Type:</label>
-        <select class="form-control input-sm" style="margin-left: 4px;" [(ngModel)]="selectedCustomOperation" (ngModelChange)="onOperationChanged()">
+        <select class="form-control form-control-sm" style="margin-left: 4px;" [(ngModel)]="selectedCustomOperation" (ngModelChange)="onOperationChanged()">
             <option *ngFor="let c of customOperations" [ngValue]="c">{{c.shortName}}</option>
         </select>
     </div>
 
-    <div *ngIf="form" class="panel panel-default vbox" style="margin-top: 6px;">
-        <div class="panel-body vbox scrollableContainer">
+    <div *ngIf="form" class="card card-default vbox" style="margin-top: 6px;">
+        <div class="card-body vbox scrollableContainer">
             
             <!-- Name -->
             <div *ngIf="form.name" class="gridRow">
                 <div class="gridEntry">
                     <label class="entryLabel">
                         {{form.name.displayName}}
-                        <span class="glyphicon glyphicon-info-sign" [title]="form.name.description"></span>
+                        <span class="fas fa-info-circle" [title]="form.name.description"></span>
                     </label>
-                    <input class="form-control input-sm" style="flex: 1" [(ngModel)]="form.name.value" sanitized>
+                    <input class="form-control form-control-sm" style="flex: 1" [(ngModel)]="form.name.value" sanitized>
                     <div class="entryRequired">
                         <ng-container *ngIf="form.name.required">*</ng-container>
                     </div>
@@ -32,11 +32,11 @@
                 <div class="gridEntry">
                     <label class="entryLabel">
                         {{form.parameters.displayName}}
-                        <span class="glyphicon glyphicon-info-sign" [title]="form.parameters.description"></span>
+                        <span class="fas fa-info-circle" [title]="form.parameters.description"></span>
                     </label>
-                    <div class="panel panel-default" style="flex: 1;">
-                        <div class="panel-body">
-                            <table class="table table-condensed table-borderless">
+                    <div class="card card-default" style="flex: 1;">
+                        <div class="card-body">
+                            <table class="table table-sm table-borderless">
                                 <colgroup>
                                     <col style="width: 1%;">
                                     <col>
@@ -48,7 +48,7 @@
                                 <tbody>
                                     <tr *ngFor="let p of form.parameters.value; let last=last">
                                         <td><label>Name:</label></td>
-                                        <td><input class="form-control input-sm" style="font-family: monospace;" [(ngModel)]="p.name" sanitized></td>
+                                        <td><input class="form-control form-control-sm" style="font-family: monospace;" [(ngModel)]="p.name" sanitized></td>
                                         <td><label>Type:</label></td>
                                         <td>
                                             <type-editor [(ngModel)]="p.type" parameter="true"></type-editor>
@@ -62,19 +62,19 @@
                                         </td>
                                         <td>
                                             <div class="hbox">
-                                                <button class="btn btn-xs btn-default" (click)="removeParameter(p)">
-                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                <button class="btn btn-xs btn-light" (click)="removeParameter(p)">
+                                                    <span class="far fa-trash-alt"></span>
                                                 </button>
-                                                <button *ngIf="last" class="btn btn-xs btn-default" (click)="addParameter()" style="margin-left: 2px;">
-                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                <button *ngIf="last" class="btn btn-xs btn-light" (click)="addParameter()" style="margin-left: 2px;">
+                                                    <span class="fas fa-plus"></span>
                                                 </button>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr *ngIf="!form.parameters.value || form.parameters.value.length == 0">
                                         <td colspan="6" class="text-right">
-                                            <button class="btn btn-xs btn-default" (click)="addParameter()">
-                                                <span class="glyphicon glyphicon-plus"></span>
+                                            <button class="btn btn-xs btn-light" (click)="addParameter()">
+                                                <span class="fas fa-plus"></span>
                                             </button>
                                         </td>
                                     </tr>
@@ -93,12 +93,12 @@
                 <div class="gridEntry">
                     <label class="entryLabel">
                         {{form.authorization.displayName}}
-                        <span class="glyphicon glyphicon-info-sign" [title]="form.authorization.description"></span>
+                        <span class="fas fa-info-circle" [title]="form.authorization.description"></span>
                     </label>
                     <div class="hbox" style="align-items: center;">
-                        <input class="form-control input-sm" [(ngModel)]="form.authorization.value">
-                        <button class="btn btn-xs btn-default" style="margin-left: 4px;" (click)="authorizationHelper()"  title="Edit">
-                            <span class="glyphicon glyphicon-pencil"></span>
+                        <input class="form-control form-control-sm" [(ngModel)]="form.authorization.value">
+                        <button class="btn btn-xs btn-light" style="margin-left: 4px;" (click)="authorizationHelper()"  title="Edit">
+                            <span class="fas fa-pencil-alt"></span>
                         </button>
                     </div>
                     <div class="entryRequired">
@@ -112,13 +112,13 @@
                 <div class="gridEntry">
                     <label class="entryLabel">
                         {{form.returns.displayName}}
-                        <span class="glyphicon glyphicon-info-sign" [title]="form.returns.description"></span>
+                        <span class="fas fa-info-circle" [title]="form.returns.description"></span>
                     </label>
-                    <div class="panel panel-default" style="flex: 1;">
-                        <div class="panel-body">
+                    <div class="card card-default" style="flex: 1;">
+                        <div class="card-body">
                             <type-editor [(ngModel)]="form.returns.value" (ngModelChange)="updateReturnsPrettyPrint()"></type-editor>
                         </div>
-                        <div class="panel-footer">
+                        <div class="card-footer">
                             <input class="form-control input-xs" style="font-family: monospace;" [ngModel]="returnsPrettyPrint" readonly>
                         </div>
                     </div>
@@ -133,12 +133,12 @@
                 <div class="gridEntry">
                     <label class="entryLabel">
                         {{form.sparql.displayName}}
-                        <span class="glyphicon glyphicon-info-sign" [title]="form.sparql.description"></span>
+                        <span class="fas fa-info-circle" [title]="form.sparql.description"></span>
                     </label>
-                    <div class="panel panel-default vbox">
-                        <div class="panel-body vbox" style="position: relative;">
-                            <button class="btn btn-xs btn-default" style="position: absolute; top: 3px; right: 6px; z-index: 1;" data-toggle="popover">
-                                <span class="glyphicon glyphicon-question-sign"></span>
+                    <div class="card card-default vbox">
+                        <div class="card-body vbox" style="position: relative;">
+                            <button class="btn btn-xs btn-light" style="position: absolute; top: 3px; right: 6px; z-index: 1;" data-toggle="popover">
+                                <span class="fas fa-question-circle"></span>
                             </button>
                             <yasgui [query]="form.sparql.value" (querychange)="onQueryChange($event)" hideButtons="true"></yasgui>
                         </div>
@@ -153,7 +153,7 @@
 
 </div>
 <div class="modal-footer">
-    <span class="pull-left">(*) Mandatory field</span>
+    <span class="float-left">(*) Mandatory field</span>
     <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

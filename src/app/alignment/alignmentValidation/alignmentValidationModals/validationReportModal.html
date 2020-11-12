@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body vbox" style="min-height: 60vh">
     <div class="scrollableContainer" style="border: 1px solid #ddd">
-        <table class="table table-condensed table-hoverable">
+        <table class="table table-sm table-hoverable">
             <thead>
                 <tr>
                     <th class="text-center">Source entity</th>
@@ -13,7 +13,7 @@
                 </tr>
             </thead>
             <tbody class="text-center">
-                <tr *ngFor="let r of context.report">
+                <tr *ngFor="let r of report">
                     <td>{{r.entity1}}</td>
                     <td>{{r.property}}</td>
                     <td>{{r.entity2}}</td>
@@ -24,5 +24,5 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
 </div>

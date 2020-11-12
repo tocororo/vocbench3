@@ -1,6 +1,6 @@
 <div class="modal-header">
-    <h3 *ngIf="!context.id" class="modal-title">Create Form Collection</h3>
-    <h3 *ngIf="context.id" class="modal-title">Edit Form Collection</h3>
+    <h3 *ngIf="!id" class="modal-title">Create Form Collection</h3>
+    <h3 *ngIf="id" class="modal-title">Edit Form Collection</h3>
 </div>
 <div class="modal-body vbox" style="min-height: 50vh;">
     
@@ -8,8 +8,8 @@
         <label style="white-space: nowrap; margin: 0px 3px;">Form Collection ID:</label>
         <div class="input-group input-group-xs" style="flex: 1">
             <ng-template [ngIf]="namespaceLocked">
-                <span class="input-group-addon" style="padding-right: 5px;">
-                    {{fcPrefix}}
+                <span class="input-group-prepend">
+                    <span class="input-group-text">{{fcPrefix}}</span>
                 </span>
                 <input type="text" class="form-control" [(ngModel)]="fcShortId" [disabled]="mode == 'edit'" sanitized>
             </ng-template>
@@ -18,23 +18,23 @@
                 <input type="text" class="form-control" [(ngModel)]="fcId" [disabled]="mode == 'edit'" sanitized>
             </ng-template>
             
-            <div class="input-group-btn">
-                <button class="btn btn-default" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"
+            <div class="input-group-append">
+                <button class="btn btn-light" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"
                     title="Lock/Unlock namespace" [ngClass]="{active: namespaceLocked}" [disabled]="mode == 'edit'">
-                    <span class="glyphicon glyphicon-lock" style="font-size: 10px;"></span>
+                    <span class="fas fa-lock" style="font-size: 10px;"></span>
                 </button>
             </div>
         </div>
     </div>
     
     <div class="hbox" style="margin: 10px 0 10px;">
-        <div class="panel panel-default vbox">
-            <div class="panel-heading">
+        <div class="card card-default vbox">
+            <div class="card-header">
                 <label style="flex: 1">Custom Forms:</label>
             </div>
-            <div class="panel-body vbox">
+            <div class="card-body vbox">
                 <div class="scrollableContainer">
-                    <table class="table table-condensed table-borderless table-hoverable" style="table-layout: fixed">
+                    <table class="table table-sm table-borderless table-hoverable" style="table-layout: fixed">
                         <tbody>
                             <tr *ngFor="let cForm of forms" (click)="selectForm(cForm)"
                                 [ngClass]="{ info: cForm == selectedForm, grayText: cForm.getLevel() == 'system' }">
@@ -47,21 +47,21 @@
         </div>
         
         <div style="align-self: center; margin: 5px;">
-            <button class="btn btn-default btn-sm btn-block" (click)="addForm()" [disabled]="!selectedFormAvailable || context.readOnly">
-                <span class="glyphicon glyphicon-chevron-left"></span>Add
+            <button class="btn btn-light btn-sm btn-block" (click)="addForm()" [disabled]="!selectedFormAvailable || readOnly">
+                <span class="fas fa-chevron-left"></span>Add
             </button>
-            <button class="btn btn-default btn-sm btn-block" (click)="removeForm()" [disabled]="!selectedForm || context.readOnly">
-                Remove<span class="glyphicon glyphicon-chevron-right"></span>
+            <button class="btn btn-light btn-sm btn-block" (click)="removeForm()" [disabled]="!selectedForm || readOnly">
+                Remove<span class="fas fa-chevron-right"></span>
             </button>
         </div>
         
-        <div class="panel panel-default vbox">
-            <div class="panel-heading">
+        <div class="card card-default vbox">
+            <div class="card-header">
                 <label style="flex: 1">Available Custom Forms:</label>
             </div>
-            <div class="panel-body vbox">
+            <div class="card-body vbox">
                 <div class="scrollableContainer">
-                    <table class="table table-condensed table-borderless table-hoverable" style="table-layout: fixed">
+                    <table class="table table-sm table-borderless table-hoverable" style="table-layout: fixed">
                         <tbody>
                             <tr *ngFor="let cForm of formsAvailable" (click)="selectFormAvailable(cForm)"
                                 [ngClass]="{ info: cForm == selectedFormAvailable, grayText: cForm.getLevel() == 'system' }">
@@ -74,37 +74,33 @@
         </div>
     </div>
 
-    <div class="panel panel-default vbox" style="min-height: 100px;">
-        <div class="panel-heading">
+    <div class="card card-default vbox" style="min-height: 100px;">
+        <div class="card-header">
             <label style="flex: 1">
                 Suggestions:
                 <span class="" title="Property/Classes suggested to use with this FormCollection"></span>
             </label>
-            <div class="btn-group btn-group-xs" role="group">
-                <div class="btn-group btn-group-xs" role="group" title="Add suggestion">
-                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" [disabled]="context.readOnly">
-                        <span class="glyphicon glyphicon-plus"></span>
+            <div class="btn-group btn-group-xs">
+                <div class="btn-group btn-group-xs" title="Add suggestion" ngbDropdown>
+                    <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" [disabled]="readOnly" ngbDropdownToggle>
+                        <span class="fas fa-plus"></span>
                     </button>
-                    <ul class="dropdown-menu pull-right">
-                        <li>
-                            <a (click)="addSuggestionClass()">
-                                <img src="../../../assets/images/icons/actions/cls_create.png" /> Select class
-                            </a>
-                        </li>
-                        <li>
-                            <a (click)="addSuggestionProperty()">
-                                <img src="../../../assets/images/icons/actions/property_create.png" /> Select property
-                            </a>
-                        </li>
-                    </ul>
+                    <div class="dropdown-menu" ngbDropdownMenu>
+                        <a class="dropdown-item" (click)="addSuggestionClass()">
+                            <img src="../../../assets/images/icons/actions/cls_create.png" /> Select class
+                        </a>
+                        <a class="dropdown-item" (click)="addSuggestionProperty()">
+                            <img src="../../../assets/images/icons/actions/property_create.png" /> Select property
+                        </a>
+                    </div>
                 </div>
-                <button class="btn btn-default" title="Remove suggestion" (click)="removeSuggestion()"
-                    [disabled]="!selectedSuggestion || context.readOnly">
-                    <span class="glyphicon glyphicon-minus"></span>
+                <button class="btn btn-light" title="Remove suggestion" (click)="removeSuggestion()"
+                    [disabled]="!selectedSuggestion || readOnly">
+                    <span class="fas fa-minus"></span>
                 </button>
             </div>
         </div>
-        <div class="panel-body vbox">
+        <div class="card-body vbox">
             <resource-list [resources]="suggestions" (nodeSelected)="selectSuggestion($event)"></resource-list>
         </div>
     </div>
@@ -117,7 +113,7 @@
                 {{errorMsg}}
             </div>
         </div>
-        <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="context.readOnly">Ok</button>
-        <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+        <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="readOnly">Ok</button>
+        <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
     </div>
 </div>

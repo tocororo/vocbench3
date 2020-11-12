@@ -1,5 +1,6 @@
 import { Component, forwardRef, Input, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTLiteral } from "../../models/ARTResources";
 import { ConverterContractDescription } from "../../models/Coda";
 import { AnnotationName, FormField, FormFieldAnnotation } from "../../models/CustomForms";
@@ -23,7 +24,7 @@ export class CustomFormComponent implements ControlValueAccessor {
     @Input() cfId: string;
     @Input() lang: string;
 
-    private formFields: FormField[];
+    formFields: FormField[];
     private submittedWithError: boolean = false;
 
     constructor(public cfService: CustomFormsServices, private basicModals: BasicModalServices) { }
@@ -81,7 +82,7 @@ export class CustomFormComponent implements ControlValueAccessor {
             (err: Error) => {
                 if (err.name.endsWith("PRParserException")) {
                     this.basicModals.alert("Error", "Impossible to create the CustomForm (" + this.cfId
-                        + "). Its description may contains error.", "error", err.message);
+                        + "). Its description may contains error.", ModalType.warning, err.message);
                 }
             }
         );

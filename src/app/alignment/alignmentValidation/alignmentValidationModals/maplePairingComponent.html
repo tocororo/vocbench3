@@ -1,7 +1,7 @@
-<div class="panel panel-default">
-    <div class="panel-body">
+<div class="card card-default">
+    <div class="card-body">
 
-        <table class="table table-condensed table-borderless">
+        <table class="table table-sm table-borderless">
             <colgroup>
                 <col style="width: 1%;">
                 <col>
@@ -9,25 +9,25 @@
             <tbody>
                 <tr>
                     <td class="text-right" nowrap><label>Source:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="pairing.source.lexicalizationSet" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="pairing.source.lexicalizationSet" readonly></td>
                 </tr>
                 <tr>
                     <td class="text-right" nowrap><label>Target:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="pairing.target.lexicalizationSet" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="pairing.target.lexicalizationSet" readonly></td>
                 </tr>
                 <tr>
                     <td class="text-right" nowrap><label>Score:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="pairing.score" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="pairing.score" readonly></td>
                 </tr>
                 <tr>
                     <td class="text-right" nowrap><label>Best combined score:</label></td>
-                    <td><input class="form-control input-sm" [ngModel]="pairing.bestCombinedScore" readonly></td>
+                    <td><input class="form-control form-control-sm" [ngModel]="pairing.bestCombinedScore" readonly></td>
                 </tr>
                 <tr>
                     <td class="text-right" nowrap><label>Synonymizer:</label></td>
                     <td>
-                        <select class="form-control input-sm" [(ngModel)]="pairing.selectedSynonymizer" (ngModelChange)="onSynonimizerChanged()"
-                            [title]="'conceptualizationSet: ' + pairing.selectedSynonymizerselectedSynonymizer?.conceptualizationSet + '\nlexicon: ' + pairing.selectedSynonymizerselectedSynonymizer?.lexicon">
+                        <select class="form-control form-control-sm" [(ngModel)]="selectedSynonymizer" (ngModelChange)="onSynonimizerChanged()"
+                            [title]="'conceptualizationSet: ' + selectedSynonymizer?.conceptualizationSet + '\nlexicon: ' + selectedSynonymizer?.lexicon">
                             <option *ngFor="let s of pairing.synonymizers" [ngValue]="s"
                                 [title]="'conceptualizationSet: ' + s.conceptualizationSet + '\nlexicon: ' + s.lexicon">
                                 {{s.score}}

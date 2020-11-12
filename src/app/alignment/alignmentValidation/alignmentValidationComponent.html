@@ -1,12 +1,12 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading">
+<div class="card card-default vbox">
+    <div class="card-header">
         <label>Alignment Validation:</label>
     </div>
     
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
         <div style="display: flex; align-items: center; margin-bottom: 8px;">
             <label style="margin-right: 4px;">Source:</label>
-            <select class="form-control input-sm" [(ngModel)]="selectedSource">
+            <select class="form-control form-control-sm" [(ngModel)]="selectedSource">
                 <option *ngFor="let source of alignmentSources">{{source}}</option>
             </select>
         </div>

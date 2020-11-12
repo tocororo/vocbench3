@@ -1,33 +1,20 @@
-import {Component} from "@angular/core";
-import {BSModalContext} from 'ngx-modialog/plugins/bootstrap';
-import {DialogRef, ModalComponent} from "ngx-modialog";
-
-export class ValidationReportModalData extends BSModalContext {
-    /**
-     * @param report collection of object with entity1, entity2, property and action
-     */
-    constructor(public report: Array<any>) {
-        super();
-    }
-}
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: "validation-report-modal",
     templateUrl: "./validationReportModal.html",
 })
-export class ValidationReportModal implements ModalComponent<ValidationReportModalData> {
-    context: ValidationReportModalData;
+export class ValidationReportModal {
+    @Input() report: Array<any>; //collection of object with entity1, entity2, property and action
     
-    constructor(public dialog: DialogRef<ValidationReportModalData>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) {}
     
-    ok(event: Event) {
-        event.stopPropagation();
-        this.dialog.close();
+    ok() {
+        this.activeModal.close();
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 }

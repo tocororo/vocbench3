@@ -1,38 +1,34 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading">
+<div class="card card-default vbox">
+    <div class="card-header">
         <label style="flex: 1;">Custom Services</label>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" (click)="createService()" title="Create service" [disabled]="!createServiceAuthorized">
-                    <span class="glyphicon glyphicon-plus"></span>
+                <button class="btn btn-light" (click)="createService()" title="Create service" [disabled]="!createServiceAuthorized">
+                    <span class="fas fa-plus"></span>
                 </button>
-                <button class="btn btn-default" (click)="deleteService()" title="Delete service" [disabled]="!selectedServiceId || !deleteServiceAuthorized">
-                    <span class="glyphicon glyphicon-minus"></span>
+                <button class="btn btn-light" (click)="deleteService()" title="Delete service" [disabled]="!selectedServiceId || !deleteServiceAuthorized">
+                    <span class="fas fa-minus"></span>
                 </button>
             </div>
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" (click)="initServices()" title="Refresh">
-                    <span class="glyphicon glyphicon-refresh"></span>
+                <button class="btn btn-light" (click)="initServices()" title="Refresh">
+                    <span class="fas fa-redo"></span>
                 </button>
-                <div class="btn-group btn-group-xs">
-                    <button class="btn btn-default dropdown-toggle" style="padding: 1px 3px;" data-toggle="dropdown">
-                        <span class="caret"></span>
+                <div class="btn-group btn-group-xs" ngbDropdown>
+                    <button class="btn btn-light dropdown-toggle" style="padding: 1px 3px;" data-toggle="dropdown" ngbDropdownToggle>
+                        <span class="fas fa-caret-down fa-sm"></span>
                     </button>
-                    <ul class="dropdown-menu pull-right">
-                        <li title="Reload services (useful when the Custom Services are changed/loaded manually)">
-                            <a (click)="reload()">
-                                <div class="hbox">
-                                    <span style="flex:1">Force reload from filesystem</span>
-                                    <span class="glyphicon glyphicon-repeat pull-right" style="margin-left: 5px;"></span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
+                    <div class="dropdown-menu float-right" ngbDropdownMenu>
+                        <a class="dropdown-item" (click)="reload()" title="Reload services (useful when the Custom Services are changed/loaded manually)">
+                            Force reload from filesystem
+                            <span class="fas fa-redo float-right ml-2"></span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="panel-body vbox scrollableContainer">
+    <div class="card-body vbox scrollableContainer">
         <div *ngFor="let id of serviceIds" class="listItem" [ngClass]="{ active: selectedServiceId == id }" (click)="selectService(id)">
             {{id}}
         </div>
