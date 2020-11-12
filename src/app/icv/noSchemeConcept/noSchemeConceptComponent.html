@@ -1,9 +1,9 @@
-<div class="panel panel-default vbox" style="position: relative">
-    <div class="panel-heading">
+<div class="card card-default vbox" style="position: relative">
+    <div class="card-header">
         <label style="flex: 1;">Concepts in no scheme</label>
-        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
+        <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
     </div>
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
         
         <div class="alert alert-info" role="alert">
             <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
@@ -18,7 +18,7 @@
             Press <strong>Run</strong> button to run the check.
         </div>
         <div *ngIf="brokenConceptList" class="scrollableContainer">
-            <table class="table table-condensed table-hoverable" style="flex: 1;">
+            <table class="table table-sm table-hoverable" style="flex: 1;">
                 <thead>
                     <tr>
                         <th class="text-center">Concept</th>
@@ -31,24 +31,24 @@
                             <rdf-resource class="clickable" [resource]="concept" (click)="onResourceClick(concept)"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">
-                            <button class="btn btn-xs btn-default" (click)="addToScheme(concept)">Add to a skos:ConceptScheme</button>
-                            <button class="btn btn-xs btn-default" (click)="deleteConcept(concept)">Delete concept</button>
+                            <button class="btn btn-xs btn-light" (click)="addToScheme(concept)">Add to a skos:ConceptScheme</button>
+                            <button class="btn btn-xs btn-light" (click)="deleteConcept(concept)">Delete concept</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="panel-footer">
-        <div *ngIf="brokenConceptList && !brokenConceptList.length == 0" class="dropup pull-right">
-            <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown">
+    <div class="card-footer">
+        <div *ngIf="brokenConceptList && brokenConceptList.length != 0" class="dropup float-right" ngbDropdown>
+            <button class="btn btn-light dropdown-toggle btn-xs" type="button" data-toggle="dropdown" ngbDropdownToggle>
                 Quick action
-                <span class="caret"></span>
+                <span class="fas fa-caret-down fa-sm"></span>
             </button>
-            <ul class="dropdown-menu">
-                <li><a (click)="addAllToScheme()" style="cursor: pointer;">Add all to a skos:ConceptScheme</a></li>
-                <li><a (click)="deleteAllConcept()" style="cursor: pointer;">Delete all concepts</a></li>
-            </ul>
+            <div class="dropdown-menu" ngbDropdownMenu>
+                <a class="dropdown-item" (click)="addAllToScheme()" style="cursor: pointer;">Add all to a skos:ConceptScheme</a>
+                <a class="dropdown-item" (click)="deleteAllConcept()" style="cursor: pointer;">Delete all concepts</a>
+            </div>
         </div>
     </div>
     

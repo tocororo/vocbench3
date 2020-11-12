@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Directive } from "@angular/core";
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { CommitInfo, SortingDirection } from "../models/History";
 import { User } from "../models/User";
@@ -9,11 +9,7 @@ import { HistoryValidationModalServices } from "./modals/historyValidationModalS
 /**
  * This abstract class is used to keep the attributes and mehtods that HistoryComponent and ValidationComponent have in common
  */
-@Component({
-    selector: "abs-hv-component",
-    templateUrl: "./historyComponent.html",
-    host: { class: "pageComponent" }
-})
+@Directive()
 export abstract class AbstractHistValidComponent {
 
     //Sorting

@@ -17,7 +17,7 @@
 
 <svg:path class="link link-uml" [ngClass]="{ 'linkSelected': selected }" style="cursor: pointer;"
     [attr.marker-end]="'url(#arrow' + link.index + ')'" [attr.d]="computePathUml()" (click)="onClick($event)">
-    <svg:title>{{link.res.toNT()}}</svg:title>
+    <title>{{link.res.toNT()}}</title>
 </svg:path>
 
 <!-- <svg:g  [attr.transform]="getLabelTransform()" style="font-size: 9px; cursor: pointer;" >

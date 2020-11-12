@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { AbstractGraph } from '../abstractGraph';
 import { D3Service } from '../d3/d3Services';
 import { GraphForces } from "../model/ForceDirectedGraph";
@@ -14,9 +15,6 @@ import { Link } from './../model/Link';
 import { UmlLink } from './../model/UmlLink';
 import { NodePropRange, PropInfo, UmlNode } from './../model/UmlNode';
 
-
-
-
 @Component({
     selector: 'uml-graph',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +29,7 @@ export class UmlGraphComponent extends AbstractGraph {
     protected mode = GraphMode.umlOriented;
 
     private selectedProp: NodePropRange;
-    private activeRemove: boolean; // serve a gestire l'abilitazione del tasto removeNode(solo se clicco sul nodo si deve abilitare)
+    activeRemove: boolean; // serve a gestire l'abilitazione del tasto removeNode(solo se clicco sul nodo si deve abilitare)
     private nodeLimit: number = 50; //if the number of nodes exceeds this limit show warning to user.
     private linksCache: Link[] = []; // contiene i link che verranno nascosti/mostrati in base alla variabile bool hide
 
@@ -61,7 +59,7 @@ export class UmlGraphComponent extends AbstractGraph {
                     this.basicModals.confirm("Graph", "The graph you're trying to show has an high number of nodes (" + graph.nodes.length + "). " +
                         "A performance decrease could be experienced with a growing amount of visual elements in the graph. " +
                         "Do you want to show the graph anyway?",
-                        "warning"
+                        ModalType.warning
                     ).then(
                         confirm => {
                             this.mergeGraph(graph);
@@ -166,7 +164,7 @@ export class UmlGraphComponent extends AbstractGraph {
 
     addNode(res: ARTURIResource) {
         if (this.graph.getNode(res)) {
-            this.basicModals.alert("Add node", "Cannot add a new node for " + res.getShow() + " since a node for the same resource already exists", "warning");
+            this.basicModals.alert("Add node", "Cannot add a new node for " + res.getShow() + " since a node for the same resource already exists", ModalType.warning);
             return;
         }
         this.graphService.expandGraphModelNode(res).subscribe(

@@ -1,4 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { GraphClassAxiomFilter } from "../../models/Graphs";
 import { OWL, RDFS } from "../../models/Vocabulary";
@@ -15,7 +16,7 @@ export class ModelGraphPanel extends AbstractGraphPanel {
 
     @ViewChild(ModelGraphComponent) viewChildGraph: ModelGraphComponent;
 
-    private axiomFilters: GraphClassAxiomFilter[] = [
+    axiomFilters: GraphClassAxiomFilter[] = [
         { property: OWL.complementOf, show: false },
         { property: OWL.disjointWith, show: false },
         { property: OWL.equivalentClass, show: false },
@@ -35,7 +36,7 @@ export class ModelGraphPanel extends AbstractGraphPanel {
             (cls: ARTURIResource) => {
                 if (!cls.getAdditionalProperty(ResAttribute.EXPLICIT)) {
                     this.basicModals.alert("Add node", "Cannot add a new node for " + cls.getShow() + 
-                        ". In the model-oriented graph you can only add resources locally defined.", "warning");
+                        ". In the model-oriented graph you can only add resources locally defined.", ModalType.warning);
                     return;
                 }
                 this.viewChildGraph.addNode(cls);

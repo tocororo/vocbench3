@@ -7,20 +7,20 @@
 
         <div class="hbox" style="flex: initial; align-items: center;padding: 8px">
             <div class="text-center" style="flex: 1; border-right: 1px solid black">
-                <span class="glyphicon glyphicon-chevron-left"></span>
+                <span class="fas fa-chevron-left"></span>
                 <label>{{leftProjCtx.getProject().getName()}}</label>
             </div>
             <div class="text-center" style="flex: 1;">
                 <label>{{rightProjCtx.getProject().getName()}}</label>
-                <span class="glyphicon glyphicon-chevron-right"></span>
+                <span class="fas fa-chevron-right"></span>
             </div>
         </div>
 
-        <div class="panel panel-default" style="margin-bottom: 4px;">
-            <div class="panel-heading">
+        <div class="card card-default" style="margin-bottom: 4px;">
+            <div class="card-header">
                 <label>New alignment</label>
             </div>
-            <div class="panel-body" style="min-height: 30px;">
+            <div class="card-body" style="min-height: 30px;">
                 <div class="hbox">
                     <div style="flex: 1">
                         <rdf-resource *ngIf="leftSelectedResource" style="cursor: pointer" [resource]="leftSelectedResource"
@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-footer">
+            <div class="card-footer">
                 <div class="hbox">
                     <div class="hbox" style="align-items: center; margin-right: 4px;">
                         <label style="margin-right: 4px;">Relation:</label>
@@ -46,7 +46,7 @@
                         <label style="margin-right: 4px;">Measure:</label>
                         <input class="form-control input-xs" style="margin-right: 4px;" type="number" min="0" max="1" step=".01" [(ngModel)]="measure">
                     </div>
-                    <button class="btn btn-xs btn-default pull-right" (click)="addCorrespondence()"
+                    <button class="btn btn-xs btn-light float-right" (click)="addCorrespondence()"
                         [disabled]="!leftSelectedResource || !rightSelectedResource || !selectedRelation || !measure">
                         Create
                     </button>
@@ -54,25 +54,25 @@
             </div>
         </div>
 
-        <div class="panel panel-default vbox">
-            <div class="panel-heading">
+        <div class="card card-default vbox">
+            <div class="card-header">
                 <label style="flex: 1;">Alignments</label>
                 <div class="btn-toolbar">
-                    <button class="btn btn-xs btn-default" style="transform: rotate(90deg);" title="Sync entities" (click)="syncCorrespondece()" [disabled]="!selectedCorrespondence">
-                        <span class="glyphicon glyphicon-sort"></span>
+                    <button class="btn btn-xs btn-light" style="transform: rotate(90deg);" title="Sync entities" (click)="syncCorrespondece()" [disabled]="!selectedCorrespondence">
+                        <span class="fas fa-sort"></span>
                     </button>
-                    <button class="btn btn-xs btn-default" (click)="deleteCorrespondece()" title="Delete alignment" [disabled]="!selectedCorrespondence">
-                        <span class="glyphicon glyphicon-minus"></span>
+                    <button class="btn btn-xs btn-light" (click)="deleteCorrespondece()" title="Delete alignment" [disabled]="!selectedCorrespondence">
+                        <span class="fas fa-minus"></span>
                     </button>
-                    <button class="btn btn-xs btn-default" (click)="listCorrespondences()" title="Refresh">
-                        <span class="glyphicon glyphicon-refresh"></span>
+                    <button class="btn btn-xs btn-light" (click)="listCorrespondences()" title="Refresh">
+                        <span class="fas fa-redo"></span>
                     </button>
                 </div>
             </div>
-            <div class="panel-body vbox">
+            <div class="card-body vbox">
 
                 <div class="table-responsive vbox">
-                    <table *ngIf="correspondences" class="table table-condensed">
+                    <table *ngIf="correspondences" class="table table-sm">
                         <colgroup>
                             <col style="width: 48%">
                             <col style="width: 48%">
@@ -97,48 +97,46 @@
                                     <rdf-resource [resource]="c.rightEntity[0]" style="cursor: pointer" (dblclick)="openRightResourceView(c.rightEntity[0])"></rdf-resource>
                                 </td>
                                 <td class="text-center">
-                                    <div class="btn-group btn-group-xs">
-                                        <button class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                                    <div class="btn-group btn-group-xs" ngbDropdown>
+                                        <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle>
                                             {{c.relation[0].getShow()}}
                                         </button>
-                                        <ul class="dropdown-menu pull-right">
-                                            <li *ngFor="let rel of relations">
-                                                <a (click)="changeRelation(c, rel)" [title]="rel.text">{{rel.relation}}</a>
-                                            </li>
-                                        </ul>
+                                        <div class="dropdown-menu float-right" ngbDropdownMenu>
+                                            <a *ngFor="let rel of relations" class="dropdown-item" (click)="changeRelation(c, rel)" [title]="rel.text">{{rel.relation}}</a>
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group btn-group-xs" style="width: 100%">
-                                        <button class="btn btn-default dropdown-toggle btn-xs" style="width: 100%" (click)="initSuggestedMappingProperties(c)" data-toggle="dropdown">
+                                        <button class="btn btn-light dropdown-toggle btn-xs" style="width: 100%" (click)="initSuggestedMappingProperties(c)" data-toggle="dropdown" ngbDropdownToggle>
                                             <span *ngIf="c.mappingProperty[0]" [title]="c.mappingProperty[0].toNT()">{{c.mappingProperty[0].getShow()}}</span>
                                             <span *ngIf="!c.mappingProperty[0]">----</span>
                                         </button>
-                                        <ul class="dropdown-menu pull-right">
+                                        <div class="dropdown-menu float-right" ngbDropdownMenu>
                                             <li *ngFor="let p of c.suggestedMappingProperties">
                                                 <a (click)="changeMappingProperty(c, p)" [title]="p.toNT()">{{p.getShow()}}</a>
                                             </li>
-                                        </ul>
+                                        </div>
                                     </div>
                                 </td>
                                 <td class="text-center">
-                                    <button class="btn btn-xs btn-default" (click)="changeMeasure(c)">{{c.measure[0].getShow()}}</button>
+                                    <button class="btn btn-xs btn-light" (click)="changeMeasure(c)">{{c.measure[0].getShow()}}</button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div *ngIf="correspondences?.length > 0" class="panel-footer">
-                <div class="btn-group btn-group-xs pull-right">
-                    <button class="btn btn-default" title="Previous page" (click)="prevPage()" [disabled]="page==0">
-                        <span class="glyphicon glyphicon-triangle-left"></span>
+            <div *ngIf="correspondences?.length > 0" class="card-footer">
+                <div class="btn-group btn-group-xs float-right">
+                    <button class="btn btn-light" title="Previous page" (click)="prevPage()" [disabled]="page==0">
+                        <span class="fas fa-caret-left"></span>
                     </button>
-                    <button class="btn btn-default" style="cursor: auto" disabled>
+                    <button class="btn btn-light" style="cursor: auto" disabled>
                         <span>{{page+1}} of {{totPage}}</span>
                     </button>
-                    <button class="btn btn-default" title="Next page" (click)="nextPage()" [disabled]="page>=totPage-1">
-                        <span class="glyphicon glyphicon-triangle-right"></span>
+                    <button class="btn btn-light" title="Next page" (click)="nextPage()" [disabled]="page>=totPage-1">
+                        <span class="fas fa-caret-right"></span>
                     </button>
                 </div>
             </div>

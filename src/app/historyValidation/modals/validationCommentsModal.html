@@ -12,7 +12,7 @@
     </div>
 
     <div class="scrollableContainer">
-        <table class="table table-condensed table-hoverable">
+        <table class="table table-sm table-hoverable">
             <colgroup>
                 <col style="width: 1%">
                 <col style="width: 1%">
@@ -33,8 +33,8 @@
                     <td class="text-center" nowrap>
                         <span *ngIf="item.operation" [title]="item.operation.getURI()">
                             {{item.operation.getShow()}}
-                            <button class="btn btn-xs btn-default" (click)="inspectParams(commit)" title="Show parameters">
-                                <span class="glyphicon glyphicon-option-horizontal"></span>
+                            <button class="btn btn-xs btn-light" (click)="inspectParams(commit)" title="Show parameters">
+                                <span class="fas fa-ellipsis-h"></span>
                             </button>
                         </span>
                     </td>
@@ -48,6 +48,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

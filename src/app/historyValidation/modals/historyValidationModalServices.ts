@@ -1,31 +1,25 @@
 import { Injectable } from "@angular/core";
-import { Modal, OverlayConfig } from "ngx-modialog";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { CommitInfo } from "../../models/History";
-import { CommitDeltaModal, CommitDeltaModalData } from "./commitDeltaModal";
-import { OperationParamsModal, OperationParamsModalData } from "./operationParamsModal";
-import { BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
+import { CommitDeltaModal } from "./commitDeltaModal";
+import { OperationParamsModal } from "./operationParamsModal";
 
 @Injectable()
 export class HistoryValidationModalServices {
 
-    constructor(private modal: Modal) { }
+    constructor(private modalService: NgbModal) { }
 
     inspectParams(item: CommitInfo) {
-        var modalData = new OperationParamsModalData(item);
-        const builder = new BSModalContextBuilder<OperationParamsModalData>(
-            modalData, undefined, OperationParamsModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(OperationParamsModal, overlayConfig);
+        const modalRef: NgbModalRef = this.modalService.open(OperationParamsModal, new ModalOptions());
+        modalRef.componentInstance.commit = item;
+        return modalRef;
     }
 
     getCommitDelta(item: CommitInfo) {
-        var modalData = new CommitDeltaModalData(item.commit);
-        const builder = new BSModalContextBuilder<CommitDeltaModalData>(
-            modalData, undefined, CommitDeltaModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.size('lg').keyboard(27).toJSON() };
-        return this.modal.open(CommitDeltaModal, overlayConfig);
+        const modalRef: NgbModalRef = this.modalService.open(CommitDeltaModal, new ModalOptions('lg'));
+        modalRef.componentInstance.commit = item;
+        return modalRef;
     }
 
 }

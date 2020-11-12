@@ -1,30 +1,22 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommitInfo } from "../../models/History";
 import { HistoryValidationModalServices } from "./historyValidationModalServices";
-
-export class ValidationCommentsModalData extends BSModalContext {
-    constructor(public commits: CommitInfo[]) {
-        super();
-    }
-}
 
 @Component({
     selector: "validation-comments-modal",
     templateUrl: "./validationCommentsModal.html"
 })
-export class ValidationCommentsModal implements ModalComponent<ValidationCommentsModalData> {
-    context: ValidationCommentsModalData;
+export class ValidationCommentsModal {
+    @Input() commitsInput: CommitInfo[];
 
-    private commits: CommitInfo[] = [];
+    commits: CommitInfo[] = [];
 
-    constructor(public dialog: DialogRef<ValidationCommentsModalData>, private hvModals: HistoryValidationModalServices) {
-        this.context = dialog.context;
+    constructor(public activeModal: NgbActiveModal, private hvModals: HistoryValidationModalServices) {
     }
 
     ngOnInit() {
-        this.context.commits.forEach(c => {
+        this.commitsInput.forEach(c => {
             //clone the commits, so in case the user cancel the validation, the changes in the commits would not affect the original commits
             let cloned = new CommitInfo(c.commit, c.user, c.operation, c.operationParameters, c.startTime, c.endTime, c.commentAllowed);
             cloned['comment'] = c['comment'];
@@ -40,18 +32,16 @@ export class ValidationCommentsModal implements ModalComponent<ValidationComment
         return this.hvModals.getCommitDelta(commit);
     }
 
-    ok(event: Event) {
+    ok() {
         //apply the comment changes to the original input commits
         this.commits.forEach(commit => {
-            this.context.commits.find(c => commit.commit.equals(c.commit))['comment'] = commit['comment'];
+            this.commitsInput.find(c => commit.commit.equals(c.commit))['comment'] = commit['comment'];
         });
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+        this.activeModal.close();
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

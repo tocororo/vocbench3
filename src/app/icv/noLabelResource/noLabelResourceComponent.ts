@@ -18,10 +18,10 @@ import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalS
 })
 export class NoLabelResourceComponent {
 
-    private brokenResourceList: Array<ARTResource>;
+    brokenResourceList: Array<ARTResource>;
     private lexicalizationModel: string;
-    private title: string;
-    private message: string;
+    title: string;
+    message: string;
     private actionLabel: string;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private skosxlService: SkosxlServices,

@@ -1,41 +1,32 @@
-import { Component, ElementRef } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { RDFResourceRolesEnum } from "../../models/ARTResources";
+import { DataGraphContext } from "../../models/Graphs";
 import { UIUtils } from "../../utils/UIUtils";
 import { GraphMode } from "../abstractGraph";
 import { ForceDirectedGraph } from "../model/ForceDirectedGraph";
-import { DataGraphContext } from "../../models/Graphs";
-
-export class GraphModalData extends BSModalContext {
-    constructor(
-        public graph: ForceDirectedGraph,
-        public mode: GraphMode,
-        public rendering: boolean,
-        public role?: RDFResourceRolesEnum, //needed in data-oriented graph in order to inform the graph panel which role should allow to add
-        public context?: DataGraphContext //needed in data-oriented graph in order to inform the graph panel the context which the graph is open from
-    ) {
-        super();
-    }
-}
 
 @Component({
     selector: "graph-modal",
     templateUrl: "./graphModal.html"
 })
-export class GraphModal implements ModalComponent<GraphModalData> {
-    context: GraphModalData;
+export class GraphModal {
+    @Input() graph: ForceDirectedGraph;
+    @Input() mode: GraphMode;
+    @Input() rendering: boolean;
+    @Input() role?: RDFResourceRolesEnum; //needed in data-oriented graph in order to inform the graph panel which role should allow to add
+    @Input() context?: DataGraphContext; //needed in data-oriented graph in order to inform the graph panel the context which the graph is open from
 
-    constructor(public dialog: DialogRef<GraphModalData>, private elementRef: ElementRef) {
-        this.context = dialog.context;
-    }
+    GraphModeEnum = GraphMode;
+
+    constructor(public activeModal: NgbActiveModal, private elementRef: ElementRef) {}
 
     ngAfterViewInit() {
         UIUtils.setFullSizeModal(this.elementRef);
     }
 
     ok() {
-        this.dialog.close();
+        this.activeModal.close();
     }
 
 }

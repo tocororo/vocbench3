@@ -17,7 +17,7 @@ export class ExtraSpaceLabelComponent extends AbstractIcvComponent {
 
     checkLanguages = false;
     checkRoles = true;
-    private brokenRecordList: { resource: ARTResource, label: ARTLiteral|ARTResource }[];
+    brokenRecordList: { resource: ARTResource, label: ARTLiteral|ARTResource }[];
 
     constructor(private icvService: IcvServices, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         super(basicModals, sharedModals);

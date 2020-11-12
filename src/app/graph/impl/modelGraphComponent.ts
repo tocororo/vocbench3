@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTNode, ARTURIResource, ResAttribute } from "../../models/ARTResources";
 import { GraphClassAxiomFilter, GraphModelRecord } from "../../models/Graphs";
 import { OWL, RDFS } from "../../models/Vocabulary";
@@ -34,7 +35,7 @@ export class ModelGraphComponent extends AbstractGraph {
      * The following attribute is useful in order to tell if the incremental exploration is adopted.
      * It is initialize to true only if, during the initialization of this component, the provided graph has a (root) node provided.
      */
-    private incrementalExploration: boolean = false;
+    incrementalExploration: boolean = false;
 
     private filtersDeltaMap: {[prop: string]: Link[]} = {}; //map the property of the filter with the links (only those in the graph visible) involved by the filter
 
@@ -72,7 +73,7 @@ export class ModelGraphComponent extends AbstractGraph {
                             "Do you want to show the graph anyway?\n\n" +
                             "Alternatively it is available an 'incremental' explorable model-oriented graph " +
                             "(from the Class-tree: select a resource, then from the contextual menu 'Show model graph rooted on the selected node').",
-                            "warning"
+                            ModalType.warning
                         ).then(
                             confirm => {
                                 this.appendLinks(links);
@@ -96,7 +97,7 @@ export class ModelGraphComponent extends AbstractGraph {
 
     addNode(res: ARTURIResource) {
         if (this.graph.getNode(res)) {
-            this.basicModals.alert("Add node", "Cannot add a new node for " + res.getShow() + " since a node for the same resource already exists", "warning");
+            this.basicModals.alert("Add node", "Cannot add a new node for " + res.getShow() + " since a node for the same resource already exists", ModalType.warning);
             return;
         }
         //add the node to the graph

@@ -1,6 +1,4 @@
 import { Component, Input, ViewChild } from "@angular/core";
-import { Modal, OverlayConfig } from "ngx-modialog";
-import { BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
 import { IndividualsServices } from "../../services/individualsServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
@@ -12,6 +10,8 @@ import { Node } from "../model/Node";
 import { DataGraphComponent } from "./dataGraphComponent";
 import { DataGraphContext } from "../../models/Graphs";
 import { Link } from "../model/Link";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
 
 
 @Component({
@@ -24,14 +24,13 @@ export class DataGraphPanel extends AbstractGraphPanel {
     @Input() context: DataGraphContext;
     @ViewChild(DataGraphComponent) viewChildGraph: DataGraphComponent;
     
-    constructor(basicModals: BasicModalServices, browsingModals: BrowsingModalServices, private modal: Modal, private individualService: IndividualsServices) {
+    constructor(basicModals: BasicModalServices, browsingModals: BrowsingModalServices, private modalService: NgbModal, private individualService: IndividualsServices) {
         super(basicModals, browsingModals);
     }
 
     openSettings() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
-        return this.modal.open(DataGraphSettingsModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(DataGraphSettingsModal, new ModalOptions('lg'));
+        return modalRef.result;
     }
 
     addNode() {

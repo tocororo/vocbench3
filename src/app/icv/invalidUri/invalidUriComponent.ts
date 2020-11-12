@@ -16,7 +16,7 @@ export class InvalidUriComponent extends AbstractIcvComponent {
     checkRoles: boolean = false;
     checkLanguages: boolean = false;
 
-    private brokenRecordList: ARTURIResource[];
+    brokenRecordList: ARTURIResource[];
 
     constructor(private icvService: IcvServices, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         super(basicModals, sharedModals);

@@ -12,7 +12,7 @@ import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalS
 })
 export class TopConceptWithBroaderComponent {
 
-    private brokenRecordList: {concept: ARTURIResource, scheme: ARTURIResource}[];
+    brokenRecordList: {concept: ARTURIResource, scheme: ARTURIResource}[];
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private sharedModals: SharedModalServices) { }
 

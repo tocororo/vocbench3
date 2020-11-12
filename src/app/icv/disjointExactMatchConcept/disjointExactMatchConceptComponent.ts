@@ -17,7 +17,7 @@ export class DisjointExactMatchConceptComponent extends AbstractIcvComponent {
 
     checkLanguages = false;
     checkRoles = false;
-    private brokenRecordList: ARTResource[];
+    brokenRecordList: ARTResource[];
 
     constructor(private icvService: IcvServices, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         super(basicModals, sharedModals);

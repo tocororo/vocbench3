@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
-import { Observable } from 'rxjs/Observable';
+import { forkJoin } from 'rxjs';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
@@ -18,7 +19,7 @@ import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalS
 })
 export class NoTopConceptSchemeComponent {
 
-    private brokenSchemeList: Array<ARTURIResource>;
+    brokenSchemeList: Array<ARTURIResource>;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private preferences: VBProperties,
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices,
@@ -66,7 +67,7 @@ export class NoTopConceptSchemeComponent {
                     },
                     (err: Error) => {
                         if (err.name.endsWith('PrefAltLabelClashException')) {
-                            this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", "warning").then(
+                            this.basicModals.confirm("Warning", err.message + " Do you want to force the creation?", ModalType.warning).then(
                                 confirm => {
                                     this.skosService.createConcept(data.label, data.schemes, data.uriResource, null, data.cls, null, data.cfValue, false).subscribe(
                                         stResp => {
@@ -111,8 +112,8 @@ export class NoTopConceptSchemeComponent {
                 var deleteSchemeFnArray: any[] = [];
                 deleteSchemeFnArray = this.brokenSchemeList.map((sc) => this.skosService.deleteConceptScheme(sc));
                 //call the collected functions and subscribe when all are completed
-                Observable.forkJoin(deleteSchemeFnArray).subscribe(
-                    res => {
+                forkJoin(deleteSchemeFnArray).subscribe(
+                    () => {
                         this.runIcv();
                     }
                 );

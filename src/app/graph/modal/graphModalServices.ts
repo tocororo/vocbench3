@@ -1,12 +1,9 @@
-import { RDFS } from './../../models/Vocabulary';
-import { UmlLink } from './../model/UmlLink';
-import { RDFResourceRolesEnum } from './../../models/ARTResources';
-import { UmlNode } from './../model/UmlNode';
 import { Injectable } from '@angular/core';
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { ARTBNode, ARTLiteral, ARTNode, ARTPredicateObjects, ARTResource, ARTURIResource } from '../../models/ARTResources';
-import { QueryResultBinding, GraphResultBindings } from '../../models/Sparql';
+import { DataGraphContext } from '../../models/Graphs';
+import { GraphResultBindings, QueryResultBinding } from '../../models/Sparql';
 import { ResourcesServices } from '../../services/resourcesServices';
 import { ResourceUtils } from '../../utils/ResourceUtils';
 import { GraphMode } from '../abstractGraph';
@@ -15,16 +12,15 @@ import { DataNode } from '../model/DataNode';
 import { ForceDirectedGraph } from '../model/ForceDirectedGraph';
 import { GraphUtils } from '../model/GraphUtils';
 import { Link } from '../model/Link';
-import { Node } from '../model/Node';
-import { GraphModal, GraphModalData } from './graphModal';
-import { LinksFilterModal, LinksFilterModalData } from './linksFilterModal';
 import { ModelNode } from '../model/ModelNode';
-import { DataGraphContext } from '../../models/Graphs';
+import { Node } from '../model/Node';
+import { GraphModal } from './graphModal';
+import { LinksFilterModal } from './linksFilterModal';
 
 @Injectable()
 export class GraphModalServices {
 
-    constructor(private modal: Modal, private d3Service: D3Service, private resourceService: ResourcesServices) { }
+    constructor(private modalService: NgbModal, private d3Service: D3Service, private resourceService: ResourcesServices) { }
 
     openGraphQuertyResult(result: GraphResultBindings[]) {
         //creates nodes and links
@@ -72,12 +68,13 @@ export class GraphModalServices {
                     }
                 })
                 let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph(nodes, links, false);
-                var modalData = new GraphModalData(graph, GraphMode.dataOriented, true, null, DataGraphContext.sparql);
-                const builder = new BSModalContextBuilder<GraphModalData>(
-                    modalData, undefined, GraphModalData
-                );
-                let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-full").keyboard(27).toJSON() };
-                return this.modal.open(GraphModal, overlayConfig).result;
+                const modalRef: NgbModalRef = this.modalService.open(GraphModal, new ModalOptions('full'));
+                modalRef.componentInstance.graph = graph;
+                modalRef.componentInstance.mode = GraphMode.dataOriented;
+                modalRef.componentInstance.rendering = true;
+                modalRef.componentInstance.role = null;
+                modalRef.componentInstance.context = DataGraphContext.sparql;
+                return modalRef.result;
             }
         );
     }
@@ -96,12 +93,12 @@ export class GraphModalServices {
         let rootNode: DataNode = new DataNode(resource);
         rootNode.root = true; //so it cannot be close in case of loop.
         let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph([rootNode], []);
-        var modalData = new GraphModalData(graph, GraphMode.dataOriented, rendering, resource.getRole());
-        const builder = new BSModalContextBuilder<GraphModalData>(
-            modalData, undefined, GraphModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-full").keyboard(27).toJSON() };
-        return this.modal.open(GraphModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(GraphModal, new ModalOptions('full'));
+        modalRef.componentInstance.graph = graph;
+        modalRef.componentInstance.mode = GraphMode.dataOriented;
+        modalRef.componentInstance.rendering = rendering;
+        modalRef.componentInstance.role = resource.getRole();
+        return modalRef.result;
     }
 
     /**
@@ -117,33 +114,27 @@ export class GraphModalServices {
             nodes.push(rootNode);
         }
         let graph: ForceDirectedGraph = this.d3Service.getForceDirectedGraph(nodes, []);
-        var modalData = new GraphModalData(graph, GraphMode.modelOriented, rendering);
-        const builder = new BSModalContextBuilder<GraphModalData>(
-            modalData, undefined, GraphModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-full").keyboard(27).toJSON() };
-        return this.modal.open(GraphModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(GraphModal, new ModalOptions('full'));
+        modalRef.componentInstance.graph = graph;
+        modalRef.componentInstance.mode = GraphMode.modelOriented;
+        modalRef.componentInstance.rendering = rendering;
+        return modalRef.result;
     }
 
     filterLinks(predObjListMap: { [partition: string]: ARTPredicateObjects[] }) {
-        var modalData = new LinksFilterModalData(predObjListMap);
-        const builder = new BSModalContextBuilder<LinksFilterModalData>(
-            modalData, undefined, LinksFilterModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(LinksFilterModal, overlayConfig).result;
-
+        const modalRef: NgbModalRef = this.modalService.open(LinksFilterModal, new ModalOptions());
+        modalRef.componentInstance.predObjListMap = predObjListMap;
+        return modalRef.result;
     }
 
 
     openUmlGraph(rendering: boolean) {
         let graph = new ForceDirectedGraph([], [], rendering);
-        var umlData = new GraphModalData(graph, GraphMode.umlOriented, rendering);
-        const builder = new BSModalContextBuilder<GraphModalData>(
-            umlData, undefined, GraphModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.dialogClass("modal-dialog modal-full").keyboard(27).toJSON() };
-        return this.modal.open(GraphModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(GraphModal, new ModalOptions('full'));
+        modalRef.componentInstance.graph = graph;
+        modalRef.componentInstance.mode = GraphMode.umlOriented;
+        modalRef.componentInstance.rendering = rendering;
+        return modalRef.result;
     }
 
 }

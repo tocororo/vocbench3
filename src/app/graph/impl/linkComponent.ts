@@ -16,8 +16,8 @@ export class LinkComponent {
 
     @ViewChild('textEl') textElement: ElementRef;
 
-    private linkClass: string = "link";
-    private arrowClass: string = "";
+    linkClass: string = "link";
+    arrowClass: string = "";
 
     // private hover: boolean = false;
 
@@ -39,7 +39,7 @@ export class LinkComponent {
     /**
      * Compute the coordinates for the "d" attributes of the path
      */
-    private computePath() {
+    computePath() {
         let path: string = "M" + this.link.source.x + " " + this.link.source.y; //path start
         if (this.link.source == this.link.target) { //loop path
             let borderDistY = this.link.source.getNodeHeight() / 2;
@@ -96,7 +96,7 @@ export class LinkComponent {
         return padding*2;
     }
 
-    private onClick(event: Event) {
+    onClick(event: Event) {
         event.stopPropagation(); //avoid propagation since click event is handled also in the svg container div
         if (this.link.res != null) {
             this.linkClicked.emit(this.link);

@@ -11,9 +11,9 @@ import { GraphForces } from '../model/ForceDirectedGraph';
 })
 export class ForceControlPanel implements ControlValueAccessor {
 
-    private forces: GraphForces;
+    forces: GraphForces;
 
-    private onForceChange() {
+    onForceChange() {
         this.propagateChange(this.forces);
     }
 

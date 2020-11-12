@@ -1,13 +1,13 @@
-<div class="panel panel-default vbox" style="position: relative">
-    <div class="panel-heading">
+<div class="card card-default vbox" style="position: relative">
+    <div class="card-header">
         <label style="flex: 1;">Concepts related disjoint relations</label>
-        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
+        <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
     </div>
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
         
-        <div class="panel panel-default vbox">
-            <div class="panel-body scrollableContainer">
-                <table *ngIf="brokenRecordList" class="table table-condensed table-hoverable">
+        <div class="card card-default vbox">
+            <div class="card-body scrollableContainer">
+                <table *ngIf="brokenRecordList" class="table table-sm table-hoverable">
                     <thead>
                         <tr>
                             <th class="text-center">Resource</th>
@@ -25,16 +25,16 @@
                 </table>
             </div>
 
-            <div *ngIf="brokenRecordList && brokenRecordList.length > 0" class="panel-footer">
-                <div class="btn-group btn-group-xs pull-right" role="group">
-                    <button class="btn btn-default" title="Previous" (click)="page=page-1" [disabled]="page <= 0">
-                        <span class="glyphicon glyphicon-triangle-left"></span>
+            <div *ngIf="brokenRecordList && brokenRecordList.length > 0" class="card-footer">
+                <div class="btn-group btn-group-xs float-right" role="group">
+                    <button class="btn btn-light" title="Previous" (click)="page=page-1" [disabled]="page <= 0">
+                        <span class="fas fa-caret-left"></span>
                     </button>
-                    <button class="btn btn-default" style="cursor: auto" disabled>
+                    <button class="btn btn-light" style="cursor: auto" disabled>
                         <span>{{page+1}} of {{pageCount}}</span>
                     </button>
-                    <button class="btn btn-default" title="Next" (click)="page=page+1" [disabled]="page+1 >= pageCount">
-                        <span class="glyphicon glyphicon-triangle-right"></span>
+                    <button class="btn btn-light" title="Next" (click)="page=page+1" [disabled]="page+1 >= pageCount">
+                        <span class="fas fa-caret-right"></span>
                     </button>
                 </div>
             </div>

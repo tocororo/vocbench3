@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from "../models/ARTResources";
 import { User } from "../models/User";
 import { ResourceUtils } from "../utils/ResourceUtils";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ModalOptions, ModalType } from '../widget/modal/Modals';
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { OperationSelectModal } from "./modals/operationSelectModal";
 
@@ -23,7 +23,7 @@ export class HistoryFilterComponent {
     
     @Output() apply: EventEmitter<{ operations: ARTURIResource[], performers: User[], fromTime: string, toTime: string }> = new EventEmitter();
 
-    constructor(private modal: Modal, private sharedModals: SharedModalServices, private basicModals: BasicModalServices) {}
+    constructor(private modalService: NgbModal, private sharedModals: SharedModalServices, private basicModals: BasicModalServices) {}
 
     ngOnInit() {
         if (this.operations == null) {
@@ -31,10 +31,8 @@ export class HistoryFilterComponent {
         }
     }
 
-    private selectOperationFilter() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(OperationSelectModal, overlayConfig).result.then(
+    selectOperationFilter() {
+        this.modalService.open(OperationSelectModal, new ModalOptions()).result.then(
             (operations: any) => {
                 //for each operation to add, add it only if not already in operations array
                 operations.forEach((op: ARTURIResource) => {
@@ -69,14 +67,14 @@ export class HistoryFilterComponent {
         this.performers.splice(this.performers.indexOf(user), 1);
     }
 
-    private applyFilter() {
+    applyFilter() {
         let timeRegexp: RegExp = new RegExp("^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}$");
         if (this.fromTime != null && !timeRegexp.test(this.fromTime)) {
-            this.basicModals.alert("Invalid time", "'From' time parameter does not comply with the datetime format yyyy-MM-ddThh:mm", "error");
+            this.basicModals.alert("Invalid time", "'From' time parameter does not comply with the datetime format yyyy-MM-ddThh:mm", ModalType.error);
             return;
         }
         if (this.toTime != null && !timeRegexp.test(this.toTime)) {
-            this.basicModals.alert("Invalid time", "'To' time parameter does not comply with the datetime format yyyy-MM-ddThh:mm", "error");
+            this.basicModals.alert("Invalid time", "'To' time parameter does not comply with the datetime format yyyy-MM-ddThh:mm", ModalType.error);
             return;
         }
         this.apply.emit({ operations: this.operations, performers: this.performers, fromTime: this.fromTime, toTime: this.toTime });

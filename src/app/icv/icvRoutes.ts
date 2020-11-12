@@ -29,7 +29,7 @@ import { InvalidUriComponent } from "./invalidUri/invalidUriComponent";
 
 export const routes: Routes = [
     {
-        path: "Icv", component: IcvComponent, canActivate: [AuthGuard, ProjectGuard], children: [
+        path: "", component: IcvComponent, canActivate: [AuthGuard, ProjectGuard], children: [
             { path: "", component: IcvListComponent, canActivate: [AuthGuard, ProjectGuard] },
             { path: "DanglingConcept", component: DanglingConceptComponent, canActivate: [AuthGuard, ProjectGuard] },
             { path: "NoSchemeConcept", component: NoSchemeConceptComponent, canActivate: [AuthGuard, ProjectGuard] },

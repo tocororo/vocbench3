@@ -1,59 +1,57 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading">
+<div class="card card-default vbox">
+    <div class="card-header">
         <div class="btn-toolbar" role="toolbar">
-            <button *ngIf="viewChildGraph.incrementalExploration" class="btn btn-xs btn-default" (click)="addNode()" title="Add another node">
-                <span class="glyphicon glyphicon-plus"></span>
+            <button *ngIf="viewChildGraph.incrementalExploration" class="btn btn-xs btn-light" (click)="addNode()" title="Add another node">
+                <span class="fas fa-plus"></span>
             </button>
         </div>
         <span style="flex: 1;"></span>
         <div class="btn-toolbar" role="toolbar">
-            <button class="btn btn-default btn-xs" title="Rendering" (click)="rendering=!rendering" [ngClass]="{ active: rendering }">
-                <span class="glyphicon glyphicon-font"></span>
+            <button class="btn btn-light btn-xs" title="Rendering" (click)="rendering=!rendering" [ngClass]="{ 'active': rendering }">
+                <span class="fas fa-font"></span>
             </button>
 
-            <div class="btn-group btn-group-xs">
-                <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
-                    <span class="glyphicon glyphicon-filter"></span>
+            <div class="btn-group btn-group-xs" ngbDropdown>
+                <button class="btn btn-xs btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
+                    <span class="fas fa-filter"></span>
                 </button>
-                <ul class="dropdown-menu pull-right">
-                    <li *ngFor="let f of axiomFilters">
-                        <a (click)="$event.stopPropagation()">
-                            {{f.property.getShow()}}
-                            <input type="checkbox" style="float: right" [(ngModel)]="f.show" (ngModelChange)="onFilterChange(f)">
-                        </a>
-                    </li>
-                </ul>
+                <div class="dropdown-menu float-right" ngbDropdownMenu>
+                    <a *ngFor="let f of axiomFilters" class="dropdown-item" (click)="$event.stopPropagation()">
+                        {{f.property.getShow()}}
+                        <input type="checkbox float-right" [(ngModel)]="f.show" (ngModelChange)="onFilterChange(f)">
+                    </a>
+                </div>
             </div>
 
-            <button class="btn btn-default btn-xs" (click)="snapshot()" title="Export a snapshot of the graph (.svg)">
-                <span class="glyphicon glyphicon-camera"></span>
+            <button class="btn btn-light btn-xs" (click)="snapshot()" title="Export a snapshot of the graph (.svg)">
+                <span class="fas fa-camera"></span>
             </button>
         </div>
     </div>
-    <div class="panel-body hbox">
+    <div class="card-body hbox">
         <model-graph class="vbox" [graph]="graph" [filters]="axiomFilters" [rendering]="rendering" (elementSelected)="onElementSelected($event)"></model-graph>
 
         <div class="vbox" style="flex: initial; width: 300px; margin-left: 4px;">
-            <div class="panel panel-default vbox">
-                <div class="panel-heading">
+            <div class="card card-default vbox">
+                <div class="card-header">
                     <label></label>
                     <span style="flex: 1;"></span>
                     <div *ngIf="isSelectedElementNode()" class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs">
-                            <button type="button" class="btn btn-default" [ngClass]="{ active: selectedElement?.fixed }" title="Fix node position" (click)="fixNode()" [disabled]="!selectedElement">
-                                <span class="glyphicon glyphicon-lock"></span>
+                            <button type="button" class="btn btn-light" [ngClass]="{ active: selectedElement?.fixed }" title="Fix node position" (click)="fixNode()" [disabled]="!selectedElement">
+                                <span class="fas fa-lock"></span>
                             </button>
-                            <!-- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="padding: 3px; line-height: 1;">
-                                <span class="caret"></span>
+                            <!-- <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" style="padding: 3px; line-height: 1;">
+                                <span class="fas fa-caret-down fa-sm"></span>
                             </button>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a (click)="fixAll()">Fix all nodes</a></li>
-                                <li><a (click)="unfixAll()">Unfix all nodes</a></li>
-                            </ul> -->
+                            <div class="dropdown-menu float-right">
+                                <a class="dropdown-item" (click)="fixAll()">Fix all nodes</a>
+                                <a class="dropdown-item" (click)="unfixAll()">Unfix all nodes</a>
+                            </div> -->
                         </div>
                     </div>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                     <resource-details-panel *ngIf="selectedElement?.res" [resource]="selectedElement.res"></resource-details-panel>
                 </div>
             </div>

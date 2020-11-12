@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
-import { AbstractIcvComponent } from "../abstractIcvComponent";
+import { ModalType } from 'src/app/widget/modal/Modals';
+import { ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
+import { IcvServices } from "../../services/icvServices";
+import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../../models/ARTResources";
-import { VBContext } from "../../utils/VBContext";
-import { UIUtils } from "../../utils/UIUtils";
-import { IcvServices } from "../../services/icvServices";
+import { AbstractIcvComponent } from "../abstractIcvComponent";
 
 @Component({
     selector: "broken-alignment",
@@ -17,13 +17,13 @@ export class BrokenAlignmentComponent extends AbstractIcvComponent {
     checkLanguages = false;
     checkRoles = true;
 
-    private rolesUpdated: boolean = false;
+    rolesUpdated: boolean = false;
 
-    private namespaces: NsCheckItem[] = [];
+    namespaces: NsCheckItem[] = [];
 
     private HTTP_DEFERENCIATION: { show: string, value: string } = { show: "Http dereferenciation", value: "dereference" };
 
-    private brokenRecordList: { subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[];
+    brokenRecordList: { subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[];
 
     constructor(private icvService: IcvServices, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         super(basicModals, sharedModals);
@@ -39,7 +39,7 @@ export class BrokenAlignmentComponent extends AbstractIcvComponent {
         this.rolesUpdated = true;
     }
 
-    private initNamespaces() {
+    initNamespaces() {
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
         this.icvService.listAlignedNamespaces(this.rolesToCheck).subscribe(
             (ns: { count: number; namespace: string; locations: any [] }[]) => {
@@ -109,7 +109,7 @@ export class BrokenAlignmentComponent extends AbstractIcvComponent {
     executeIcv() {
         let nsParam: string[] = [];
         if (this.namespaces.length == 0) {
-            this.basicModals.alert("No alignments", "There are no alignments for the selected resource type(s) on which run the ICV", "warning");
+            this.basicModals.alert("No alignments", "There are no alignments for the selected resource type(s) on which run the ICV", ModalType.warning);
             return;
         }
         for (var i = 0; i < this.namespaces.length; i++) {
@@ -118,7 +118,7 @@ export class BrokenAlignmentComponent extends AbstractIcvComponent {
             }
         }
         if (nsParam.length == 0) {
-            this.basicModals.alert("Missing namespaces", "You need to select at least a namespace in order to run the ICV", "warning");
+            this.basicModals.alert("Missing namespaces", "You need to select at least a namespace in order to run the ICV", ModalType.warning);
             return;
         }
 
@@ -142,7 +142,7 @@ export class BrokenAlignmentComponent extends AbstractIcvComponent {
     }
 
 
-    private checkAllNs(check: boolean) {
+    checkAllNs(check: boolean) {
         for (var i = 0; i < this.namespaces.length; i++) {
             this.namespaces[i].check = check;
         }

@@ -15,7 +15,7 @@ export class CyclicConceptComponent extends AbstractIcvComponent {
 
     checkLanguages = false;
     checkRoles = false;
-    private brokenRecordList: ARTURIResource[][];
+    brokenRecordList: ARTURIResource[][];
 
     constructor(private icvService: IcvServices, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         super(basicModals, sharedModals);

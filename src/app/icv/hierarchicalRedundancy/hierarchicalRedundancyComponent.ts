@@ -16,9 +16,9 @@ export class HierarchicalRedundancyComponent extends AbstractIcvComponent {
     checkLanguages = false;
     checkRoles = false;
 
-    private sameScheme: boolean = true;
+    sameScheme: boolean = true;
 
-    private brokenRecordList: { subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[];
+    brokenRecordList: { subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[];
 
     constructor(private icvService: IcvServices, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         super(basicModals, sharedModals);

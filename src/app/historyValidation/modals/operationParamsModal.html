@@ -1,12 +1,12 @@
 <div class="modal-header">
     <h3 class="modal-title">
-        {{context.commit.operation.getShow()}} parameters
+        {{commit.operation.getShow()}} parameters
     </h3>
 </div>
 <div class="modal-body vbox">
 
     <div class="scrollableContainer">
-        <table class="table table-condensed table-hoverable">
+        <table class="table table-sm table-hoverable">
             <colgroup>
                 <col style="width: 1%">
                 <col>
@@ -18,7 +18,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let param of context.commit.operationParameters">
+                <tr *ngFor="let param of commit.operationParameters">
                     <td class="text-center">
                         <label>{{param.name}}</label>
                     </td>
@@ -32,5 +32,5 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
 </div>

@@ -1,14 +1,14 @@
-<div class="panel panel-default vbox" style="position: relative">
-    <div class="panel-heading">
+<div class="card card-default vbox" style="position: relative">
+    <div class="card-header">
         <label style="flex: 1;">Dangling concepts</label>
         <span style="margin-right: 4px;">Scheme:</span>
         <select class="form-control input-xs" style="width: initial; margin-right: 4px;" [(ngModel)]="selectedScheme">
             <option [ngValue]="null" style="font-style: italic">All schemes</option>
             <option *ngFor="let s of schemeList" [ngValue]="s">{{s.getShow()}}</option>
         </select>
-        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
+        <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
     </div>
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
         
         <div class="alert alert-info" role="alert">
             <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
@@ -23,7 +23,7 @@
         </div>
 
         <div *ngIf="brokenConceptList" class="scrollableContainer">
-            <table class="table table-condensed table-hoverable" style="flex: 1;">
+            <table class="table table-sm table-hoverable" style="flex: 1;">
                 <thead>
                     <tr>
                         <th class="text-center">Concept</th>
@@ -36,10 +36,10 @@
                             <rdf-resource class="clickable" [resource]="concept" (click)="onResourceClick(concept)"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">
-                            <button class="btn btn-xs btn-default" (click)="selectBroader(concept, selectedScheme)">Select skos:broader</button>
-                            <button class="btn btn-xs btn-default" (click)="setAsTopConcept(concept, selectedScheme)">Set as skos:topConceptOf</button>
-                            <button class="btn btn-xs btn-default" (click)="removeFromScheme(concept, selectedScheme)">Remove from scheme</button>
-                            <button class="btn btn-xs btn-default" (click)="deleteConcept(concept)">Delete concept</button>
+                            <button class="btn btn-xs btn-light" (click)="selectBroader(concept, selectedScheme)">Select skos:broader</button>
+                            <button class="btn btn-xs btn-light" (click)="setAsTopConcept(concept, selectedScheme)">Set as skos:topConceptOf</button>
+                            <button class="btn btn-xs btn-light" (click)="removeFromScheme(concept, selectedScheme)">Remove from scheme</button>
+                            <button class="btn btn-xs btn-light" (click)="deleteConcept(concept)">Delete concept</button>
                         </td>
                     </tr>
                 </tbody>
@@ -47,7 +47,7 @@
         </div>
 
         <div *ngIf="brokenConceptMap" class="scrollableContainer">
-            <table class="table table-condensed" style="flex: 1;">
+            <table class="table table-sm" style="flex: 1;">
                 <thead>
                     <tr>
                         <th class="text-center">Scheme</th>
@@ -65,10 +65,10 @@
                                 <rdf-resource class="clickable" [resource]="concept" (click)="onResourceClick(concept)"></rdf-resource>
                             </td>
                             <td style="white-space: nowrap">
-                                <button class="btn btn-xs btn-default" (click)="selectBroader(concept, entry.scheme)">Select skos:broader</button>
-                                <button class="btn btn-xs btn-default" (click)="setAsTopConcept(concept, entry.scheme)">Set as skos:topConceptOf</button>
-                                <button class="btn btn-xs btn-default" (click)="removeFromScheme(concept, entry.scheme)">Remove from scheme</button>
-                                <button class="btn btn-xs btn-default" (click)="deleteConcept(concept)">Delete concept</button>
+                                <button class="btn btn-xs btn-light" (click)="selectBroader(concept, entry.scheme)">Select skos:broader</button>
+                                <button class="btn btn-xs btn-light" (click)="setAsTopConcept(concept, entry.scheme)">Set as skos:topConceptOf</button>
+                                <button class="btn btn-xs btn-light" (click)="removeFromScheme(concept, entry.scheme)">Remove from scheme</button>
+                                <button class="btn btn-xs btn-light" (click)="deleteConcept(concept)">Delete concept</button>
                             </td>
                         </tr>
                     </ng-container>
@@ -76,18 +76,18 @@
             </table>
         </div>
     </div>
-    <div *ngIf="brokenConceptList && !brokenConceptList.length == 0" class="panel-footer">
-        <div class="dropup pull-right">
-            <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown">
+    <div *ngIf="brokenConceptList && brokenConceptList.length != 0" class="card-footer">
+        <div class="dropup" ngbDropdown>
+            <button class="btn btn-light dropdown-toggle btn-xs" type="button" data-toggle="dropdown" ngbDropdownToggle>
                 Quick action
-                <span class="caret"></span>
+                <span class="fas fa-caret-up fa-sm"></span>
             </button>
-            <ul class="dropdown-menu">
-                <li><a (click)="setAllTopConcept()" style="cursor: pointer;">Set all as skos:topConceptOf</a></li>
-                <li><a (click)="selectBroaderForAll()" style="cursor: pointer;">Select a skos:broader for all</a></li>
-                <li><a (click)="removeAllFromScheme()" style="cursor: pointer;">Remove all from scheme</a></li>
-                <li><a (click)="deleteAll()" style="cursor: pointer;">Delete all</a></li>
-            </ul>
+            <div class="dropdown-menu" ngbDropdownMenu>
+                <a class="dropdown-item" (click)="setAllTopConcept()" style="cursor: pointer;">Set all as skos:topConceptOf</a>
+                <a class="dropdown-item" (click)="selectBroaderForAll()" style="cursor: pointer;">Select a skos:broader for all</a>
+                <a class="dropdown-item" (click)="removeAllFromScheme()" style="cursor: pointer;">Remove all from scheme</a>
+                <a class="dropdown-item" (click)="deleteAll()" style="cursor: pointer;">Delete all</a>
+            </div>
         </div>
     </div>
     

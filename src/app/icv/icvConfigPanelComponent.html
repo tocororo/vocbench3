@@ -1,27 +1,27 @@
-<div class="panel panel-alt vbox">
-    <div class="panel-heading">
+<div class="card card-alt vbox">
+    <div class="card-header">
         <div class="expandCollapseBtnContainer">
             <img src="../../assets/images/icons/arrow.png" (click)="configPanelOpen = !configPanelOpen"
                 [ngClass]="{'arrow-right': !configPanelOpen}">
         </div>
         <label>ICV configuration</label>
     </div>
-    <div class="panel-body">
+    <div class="card-body">
         <div *ngIf="configPanelOpen" class="hbox">
-            <div *ngIf="checkRoles" class="panel panel-alt vbox" style="margin: 2px;">
-                <div class="panel-heading">
+            <div *ngIf="checkRoles" class="card card-alt vbox" style="margin: 2px;">
+                <div class="card-header">
                     <label style="flex: 1">Resources to check</label>
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="checkAllRoles(true)" title="Check all">
-                            <span class="glyphicon glyphicon-check"></span>
+                        <button class="btn btn-light" (click)="checkAllRoles(true)" title="Check all">
+                            <span class="far fa-check-square"></span>
                         </button>
-                        <button class="btn btn-default" (click)="checkAllRoles(false)" title="Uncheck all">
-                            <span class="glyphicon glyphicon-unchecked"></span>
+                        <button class="btn btn-light" (click)="checkAllRoles(false)" title="Uncheck all">
+                            <span class="far fa-square"></span>
                         </button>
                     </div>
                 </div>
-                <div class="panel-body configPanel scrollableContainer">
-                    <table class="table table-condensed table-borderless table-hoverable">
+                <div class="card-body configPanel scrollableContainer">
+                    <table class="table table-sm table-borderless table-hoverable">
                         <thead>
                             <tr>
                                 <th class="text-center">Check</th>
@@ -41,23 +41,23 @@
                     </table>
                 </div>
             </div>
-            <div *ngIf="checkLanguages" class="panel panel-alt vbox" style="margin: 2px;">
-                <div class="panel-heading">
+            <div *ngIf="checkLanguages" class="card card-alt vbox" style="margin: 2px;">
+                <div class="card-header">
                     <label style="flex: 1">Languages to check</label>
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="checkAllLangs(true)" title="Check all">
-                            <span class="glyphicon glyphicon-check"></span>
+                        <button class="btn btn-light" (click)="checkAllLangs(true)" title="Check all">
+                            <span class="far fa-check-square"></span>
                         </button>
-                        <button class="btn btn-default" (click)="checkAllLangs(false)" title="Uncheck all">
-                            <span class="glyphicon glyphicon-unchecked"></span>
+                        <button class="btn btn-light" (click)="checkAllLangs(false)" title="Uncheck all">
+                            <span class="far fa-square"></span>
                         </button>
-                        <button class="btn btn-default" (click)="checkAllLangsMandatory()" title="Check only the mandatory languages">
+                        <button class="btn btn-light" (click)="checkAllLangsMandatory()" title="Check only the mandatory languages">
                             Only mandatory
                         </button>
                     </div>
                 </div>
-                <div class="panel-body configPanel scrollableContainer">
-                    <table class="table table-condensed table-borderless table-hoverable">
+                <div class="card-body configPanel scrollableContainer">
+                    <table class="table table-sm table-borderless table-hoverable">
                         <thead>
                             <tr>
                                 <th class="text-center">Check</th>
@@ -74,7 +74,7 @@
                                     <lang-item [language]="l.lang" showTag="true"></lang-item>
                                 </td>
                                 <td class="text-center">
-                                    <span *ngIf="l.lang.mandatory" class="glyphicon glyphicon-ok"></span>
+                                    <span *ngIf="l.lang.mandatory" class="fas fa-check"></span>
                                 </td>
                             </tr>
                         </tbody>

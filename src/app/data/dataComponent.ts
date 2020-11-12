@@ -51,7 +51,7 @@ export class DataComponent {
         this.eventHandler.unsubscribeAll(this.eventSubscriptions);
     }
 
-    private onNodeSelected(node: ARTResource) {
+    onNodeSelected(node: ARTResource) {
         if (node == null) return;
 
         if (this.resViewPanelFlex == 0) { //if the right panel is collapsed, open it
@@ -84,8 +84,8 @@ export class DataComponent {
     private readonly maxPanelSize: number = 5;
     private readonly minPanelSize: number = 1;
 
-    private treePanelFlex: number = this.minPanelSize;
-    private resViewPanelFlex: number = 0; //initially 0 the res view panel is closed
+    treePanelFlex: number = this.minPanelSize;
+    resViewPanelFlex: number = 0; //initially 0 the res view panel is closed
 
     private dragging: boolean = false;
     private startMousedownX: number;

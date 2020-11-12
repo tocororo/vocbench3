@@ -1,29 +1,26 @@
 import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { ServicesServices } from '../../services/servicesServices';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from '../../models/ARTResources';
+import { ServicesServices } from '../../services/servicesServices';
 
 @Component({
     selector: "operation-select-modal",
     templateUrl: "./operationSelectModal.html",
 })
-export class OperationSelectModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class OperationSelectModal {
 
     private NOT_SELECTED: string = "---";
 
-    private extensionPaths: string[] = [];
-    private selectedExtensionPath: string;
-    private serviceClasses: string[] = [this.NOT_SELECTED];
-    private selectedServiceClasses: string;
-    private operations: { service: string, checked: boolean, filtered: boolean }[] = [];
-    private operationsToAdd: string[] = [];
+    extensionPaths: string[] = [];
+    selectedExtensionPath: string;
+    serviceClasses: string[] = [this.NOT_SELECTED];
+    selectedServiceClasses: string;
+    operations: { service: string, checked: boolean, filtered: boolean }[] = [];
+    operationsToAdd: string[] = [];
 
-    private filterKey: string;
+    filterKey: string;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private servicesService: ServicesServices) {
-        this.context = dialog.context;
+    constructor(public activeModal: NgbActiveModal, private servicesService: ServicesServices) {
     }
 
     ngAfterViewInit() {
@@ -36,7 +33,7 @@ export class OperationSelectModal implements ModalComponent<BSModalContext> {
         );
     }
 
-    private onExtPathChange() {
+    onExtPathChange() {
         this.servicesService.getServiceClasses(this.selectedExtensionPath).subscribe(
             serviceClasses => {
                 this.serviceClasses = this.serviceClasses.concat(serviceClasses);
@@ -44,7 +41,7 @@ export class OperationSelectModal implements ModalComponent<BSModalContext> {
         );
     }
 
-    private onServClassChange() {
+    onServClassChange() {
         if (this.selectedServiceClasses == this.NOT_SELECTED) {
             this.operations = [];
             return;
@@ -63,7 +60,7 @@ export class OperationSelectModal implements ModalComponent<BSModalContext> {
     /**
      * Adds the checked operation to the operationsToAdd array, the sorts it
      */
-    private addOperations() {
+    addOperations() {
         this.operations.forEach(op => {
             if (op.checked) {
                 if (this.operationsToAdd.indexOf(op.service) == -1) {
@@ -113,7 +110,7 @@ export class OperationSelectModal implements ModalComponent<BSModalContext> {
         
     }
 
-    private onFilterChanged() {
+    onFilterChanged() {
         for (var i = 0; i < this.operations.length; i++) {
             if (this.getOperationShow(this.operations[i].service).toLowerCase().includes(this.filterKey.toLowerCase())) {
                 this.operations[i].filtered = false;
@@ -123,7 +120,7 @@ export class OperationSelectModal implements ModalComponent<BSModalContext> {
         }
     }
 
-    ok(event: Event) {
+    ok() {
         var returnedOperations: ARTURIResource[] = [];
 
         this.operationsToAdd.forEach(op => {
@@ -134,13 +131,11 @@ export class OperationSelectModal implements ModalComponent<BSModalContext> {
             this.cancel();
         }
 
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close(returnedOperations);
+        this.activeModal.close(returnedOperations);
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

@@ -18,7 +18,7 @@ export class OverlappedLabelComponent extends AbstractIcvComponent {
 
     checkLanguages = false;
     checkRoles = true;
-    private brokenRecordList: { resources: ARTResource[], label: ARTLiteral|ARTResource }[];
+    brokenRecordList: { resources: ARTResource[], label: ARTLiteral|ARTResource }[];
 
     constructor(private icvService: IcvServices, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         super(basicModals, sharedModals);

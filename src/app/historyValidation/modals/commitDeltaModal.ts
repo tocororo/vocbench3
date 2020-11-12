@@ -1,6 +1,5 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTBNode, ARTLiteral, ARTNode, ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { CommitOperation } from "../../models/History";
 import { HistoryServices } from "../../services/historyServices";
@@ -9,34 +8,27 @@ import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
 
-export class CommitDeltaModalData extends BSModalContext {
-    constructor(public commit: ARTURIResource) {
-        super();
-    }
-}
-
 @Component({
     selector: "commit-modal",
     templateUrl: "./commitDeltaModal.html"
 })
-export class CommitDeltaModal implements ModalComponent<CommitDeltaModalData> {
-    context: CommitDeltaModalData;
+export class CommitDeltaModal {
+    @Input() commit: ARTURIResource;
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
 
 
-    private additions: CommitOperation[];
-    private removals: CommitOperation[];
-    private truncated: boolean = false; //true if response contains
+    additions: CommitOperation[];
+    removals: CommitOperation[];
+    truncated: boolean = false; //true if response contains
     private messageTruncated: string;
 
-    constructor(public dialog: DialogRef<CommitDeltaModalData>, private historyService: HistoryServices, private sharedModals: SharedModalServices) {
-        this.context = dialog.context;
+    constructor(public activeModal: NgbActiveModal, private historyService: HistoryServices, private sharedModals: SharedModalServices) {
     }
 
     ngOnInit() {
         UIUtils.startLoadingDiv(this.blockingDivElement.nativeElement);
-        this.historyService.getCommitDelta(this.context.commit).subscribe(
+        this.historyService.getCommitDelta(this.commit).subscribe(
             delta => {
                 this.additions = delta.additions;
                 this.removals = delta.removals;
@@ -91,10 +83,8 @@ export class CommitDeltaModal implements ModalComponent<CommitDeltaModalData> {
         }
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+    ok() {
+        this.activeModal.close();
     }
 
 }

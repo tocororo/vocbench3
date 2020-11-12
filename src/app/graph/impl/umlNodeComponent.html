@@ -39,7 +39,7 @@
             <svg:text [attr.fill]="!node.explicit ? '#999' : ''" [attr.x]="(-measures.width/2+3)+14" [attr.y]="-measures.height/2+3" dominant-baseline="hanging"
                 font-size="14">
                 {{normalizedShow}}
-                <svg:title>{{node.res.toNT()}}</svg:title>
+                <title>{{node.res.toNT()}}</title>
             </svg:text>
 
 
@@ -53,7 +53,7 @@
             <svg:text *ngIf="showPropSubClass(prop)" [attr.x]="prop.x +12" [attr.y]="prop.y" dominant-baseline="hanging"
                 font-size="12" [ngClass]="{ graphPropSelected: isSelectedProperty(prop)}">
                 {{prop.normalizedShow}}
-                <svg:title>{{prop.property.toNT() + " " + prop.range.toNT()}}</svg:title>
+                <title>{{prop.property.toNT() + " " + prop.range.toNT()}}</title>
             </svg:text>
 
             <image *ngIf="showPropSubClass(prop)" [attr.xlink:href]="prop.xlink" [attr.x]="prop.x" [attr.y]="prop.y" height="12px" width="12px" />

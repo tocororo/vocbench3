@@ -6,11 +6,11 @@
     <div class="hbox">
         <lang-value-filter-pref class="vbox"></lang-value-filter-pref>
 
-        <div class="panel panel-default vbox" style="margin-left: 4px;">
-            <div class="panel-heading">
+        <div class="card card-default vbox" style="margin-left: 4px;">
+            <div class="card-header">
                 <label>Graph filter</label>
             </div>
-            <div class="panel-body vbox">
+            <div class="card-body vbox">
                 <div class="alert alert-info" role="alert" style="margin-bottom: 5px;">
                     Select the partition of the resource description that will be shown when expanding a node.
                 </div>
@@ -19,18 +19,18 @@
         </div>
     </div>
     
-    <div class="panel panel-default">
-        <div class="panel-body">
+    <div class="card card-default">
+        <div class="card-body">
             <div class="checkbox-inline">
                 <label>
                     <input type="checkbox" [(ngModel)]="hideLiteralNodes" (ngModelChange)="onHideLiteralChange()">Hide literal nodes
                 </label>
-                <span class="glyphicon glyphicon-info-sign" title="If checked, all the literal nodes will be hidden in the graph"></span>
+                <span class="fas fa-info-circle" title="If checked, all the literal nodes will be hidden in the graph"></span>
             </div>
         </div>
     </div>
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
 </div>

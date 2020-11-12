@@ -4,11 +4,11 @@
 <div class="modal-body">
     <div class="hbox" style="align-items: center;">
         <label style="margin-right: 4px;">Measure:</label>
-        <input id="toFocus" type="number" class="form-control input-sm" style="flex: 1;" [(ngModel)]="value"
-            [min]="context.min" [max]="context.max" [step]="context.step">
+        <input ngbAutofocus type="number" class="form-control form-control-sm" style="flex: 1;" [(ngModel)]="value"
+            [min]="min" [max]="max" [step]="step">
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

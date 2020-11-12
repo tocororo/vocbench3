@@ -3,12 +3,12 @@
 </div>
 <div class="modal-body vbox" style="min-height:75vh;">
 
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <tbody>
             <tr>
                 <td nowrap><label>Extension path:</label></td>
                 <td style="padding: 3px;">
-                    <select class="form-control input-sm" [(ngModel)]="selectedExtensionPath" (ngModelChange)="onExtPathChange()">
+                    <select class="form-control form-control-sm" [(ngModel)]="selectedExtensionPath" (ngModelChange)="onExtPathChange()">
                         <option *ngFor="let path of extensionPaths">{{path}}</option>
                     </select>
                 </td>
@@ -16,7 +16,7 @@
             <tr>
                 <td nowrap><label>Service class:</label></td>
                 <td style="padding: 3px;">
-                    <select class="form-control input-sm" [(ngModel)]="selectedServiceClasses" (ngModelChange)="onServClassChange()">
+                    <select class="form-control form-control-sm" [(ngModel)]="selectedServiceClasses" (ngModelChange)="onServClassChange()">
                         <option *ngFor="let sc of serviceClasses">{{sc}}</option>
                     </select>
                 </td>
@@ -24,18 +24,20 @@
         </tbody>
     </table>
 
-    <div class="panel panel-default vbox" style="margin-bottom: 3px;">
-        <div class="panel-heading">
+    <div class="card card-default vbox" style="margin-bottom: 3px;">
+        <div class="card-header">
             <label style="flex:1;">Operations:</label>
-            <div class="input-group input-group-xs col-sm-4">
+            <div class="input-group input-group-sm" style="width: initial;">
                 <input type="text" class="form-control" placeholder="Operation filter" [(ngModel)]="filterKey" 
                     (ngModelChange)="onFilterChanged()" [disabled]="operations.length == 0">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-filter"></span>
+                <span class="input-group-append">
+                    <span class="input-group-text">
+                        <span class="fas fa-filter"></span>
+                    </span>
                 </span>
             </div>
         </div>
-        <div class="panel-body scrollableContainer">
+        <div class="card-body scrollableContainer">
             <ng-template ngFor let-op [ngForOf]="operations">
                 <div class="checkbox" style="margin-left: 12px;" *ngIf="!op.filtered">
                     <label>
@@ -46,16 +48,16 @@
         </div>
     </div>
 
-    <button class="btn btn-xs btn-default" style="margin-bottom: 3px; align-self: center" (click)="addOperations()">
-        Add <span class="glyphicon glyphicon-chevron-down"></span>
+    <button class="btn btn-xs btn-light" style="margin-bottom: 3px; align-self: center" (click)="addOperations()">
+        Add <span class="fas fa-chevron-down"></span>
     </button>
 
-    <div class="panel panel-default vbox">
-        <div class="panel-body scrollableContainer">
+    <div class="card card-default vbox">
+        <div class="card-body scrollableContainer">
             <div *ngFor="let op of operationsToAdd" class="listItem">
                 <span style="flex: 1;">{{getOperationShow(op, true)}}</span>
-                <button class="btn btn-xs btn-default" (click)="removeOperation(op)">
-                    <span class="glyphicon glyphicon-minus"></span>
+                <button class="btn btn-xs btn-light" (click)="removeOperation(op)">
+                    <span class="fas fa-minus"></span>
                 </button>
             </div>
         </div>
@@ -63,6 +65,6 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="operationsToAdd.length == 0">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="operationsToAdd.length == 0">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

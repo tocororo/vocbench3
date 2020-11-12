@@ -17,7 +17,7 @@ export class NoDefinitionResourceComponent extends AbstractIcvComponent {
     checkRoles: boolean = true;
     checkLanguages: boolean = true;
 
-    private brokenRecordList: { resource: ARTResource, langs: Language[] }[];
+    brokenRecordList: { resource: ARTResource, langs: Language[] }[];
 
     constructor(private icvService: IcvServices, basicModals: BasicModalServices, sharedModals: SharedModalServices) {
         super(basicModals, sharedModals);

@@ -1,34 +1,34 @@
-<div class="panel panel-default vbox" style="position: relative">
-    <div class="panel-heading">
+<div class="card card-default vbox" style="position: relative">
+    <div class="card-header">
         <label style="flex: 1;">Broken alignments</label>
-        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
+        <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
     </div>
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
 
         <icv-config-panel [checkRoles]="checkRoles" (rolesChange)="onRolesChanged($event)">
-            <div class="panel panel-alt vbox" style="flex: initial; margin: 2px;">
-                <div class="panel-heading">
+            <div class="card card-alt vbox" style="flex: initial; margin: 2px;">
+                <div class="card-header">
                     <span style="flex: 1;">
                         <label>Namespaces to check</label>
-                        <span class="glyphicon glyphicon-info-sign"
+                        <span class="fas fa-info-circle"
                             title="Namespaces of the resources that appear as object of mapping relations"></span>
                     </span>
                     <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" (click)="checkAllNs(true)" title="Check all" [disabled]="!namespaces">
-                            <span class="glyphicon glyphicon-check"></span>
+                        <button class="btn btn-light" (click)="checkAllNs(true)" title="Check all" [disabled]="!namespaces">
+                            <span class="far fa-check-square"></span>
                         </button>
-                        <button class="btn btn-default" (click)="checkAllNs(false)" title="Uncheck all" [disabled]="!namespaces">
-                            <span class="glyphicon glyphicon-unchecked"></span>
+                        <button class="btn btn-light" (click)="checkAllNs(false)" title="Uncheck all" [disabled]="!namespaces">
+                            <span class="far fa-square"></span>
                         </button>
-                        <button class="btn btn-default" (click)="initNamespaces()" [disabled]="rolesToCheck.length==0">
+                        <button class="btn btn-light" (click)="initNamespaces()" [disabled]="rolesToCheck.length==0">
                             <span>Reload</span>
-                            <span *ngIf="rolesUpdated" class="glyphicon glyphicon-exclamation-sign" style="color: red"
+                            <span *ngIf="rolesUpdated" class="fas fa-exclamation-circle" style="color: red"
                                 title="The types of resource to check are changed, is highly recommended to reload the namespaces"></span>
                         </button>
                     </div>
                 </div>
-                <div class="panel-body scrollableContainer" style="max-height: 170px;">
-                    <table *ngIf="namespaces" class="table table-condensed table-borderless table-hoverable">
+                <div class="card-body scrollableContainer" style="max-height: 170px;">
+                    <table *ngIf="namespaces" class="table table-sm table-borderless table-hoverable">
                         <thead>
                             <tr>
                                 <th class="text-center">Check</th>
@@ -67,9 +67,9 @@
             </div>
         </icv-config-panel>
 
-        <div class="panel panel-default vbox">
-            <div class="panel-body scrollableContainer">
-                <table *ngIf="brokenRecordList" class="table table-condensed table-hoverable">
+        <div class="card card-default vbox">
+            <div class="card-body scrollableContainer">
+                <table *ngIf="brokenRecordList" class="table table-sm table-hoverable">
                     <thead>
                         <tr>
                             <th class="text-center">Subject</th>
@@ -95,16 +95,16 @@
                 </table>
             </div>
 
-            <div *ngIf="brokenRecordList && brokenRecordList.length > 0" class="panel-footer">
-                <div class="btn-group btn-group-xs pull-right" role="group">
-                    <button class="btn btn-default" title="Previous" (click)="page=page-1" [disabled]="page <= 0">
-                        <span class="glyphicon glyphicon-triangle-left"></span>
+            <div *ngIf="brokenRecordList && brokenRecordList.length > 0" class="card-footer">
+                <div class="btn-group btn-group-xs float-right" role="group">
+                    <button class="btn btn-light" title="Previous" (click)="page=page-1" [disabled]="page <= 0">
+                        <span class="fas fa-caret-left"></span>
                     </button>
-                    <button class="btn btn-default" style="cursor: auto" disabled>
+                    <button class="btn btn-light" style="cursor: auto" disabled>
                         <span>{{page+1}} of {{pageCount}}</span>
                     </button>
-                    <button class="btn btn-default" title="Next" (click)="page=page+1" [disabled]="page+1 >= pageCount">
-                        <span class="glyphicon glyphicon-triangle-right"></span>
+                    <button class="btn btn-light" title="Next" (click)="page=page+1" [disabled]="page+1 >= pageCount">
+                        <span class="fas fa-caret-right"></span>
                     </button>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Directive, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { ARTURIResource } from "../models/ARTResources";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { D3Service } from "./d3/d3Services";
@@ -6,18 +6,19 @@ import { ForceDirectedGraph, GraphForces, GraphOptions } from "./model/ForceDire
 import { Link } from "./model/Link";
 import { Node } from "./model/Node";
 
+@Directive()
 export abstract class AbstractGraph {
     @Input() graph: ForceDirectedGraph;
     @Input() rendering: boolean;
     @Output() elementSelected = new EventEmitter<any>();
 
     @ViewChild('svg') public svgElement: ElementRef;
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
 
-    protected selectedElement: Link | Node;
+    selectedElement: Link | Node;
     protected linkAhead: Link; //link selected to bring ahead the other
 
-    private initialized: boolean = false; //true once the graph will be initialized (useful in order to not render the graph view until then)
+    initialized: boolean = false; //true once the graph will be initialized (useful in order to not render the graph view until then)
     
     protected abstract mode: GraphMode;
     protected options: GraphOptions = new GraphOptions(800, 400); //initial w & h (will be updated later)
@@ -64,7 +65,7 @@ export abstract class AbstractGraph {
         this.elementSelected.emit(this.selectedElement);
     };
 
-    protected onBackgroundClicked() {
+    onBackgroundClicked() {
         this.selectedElement = null;
         this.linkAhead = null;
         this.elementSelected.emit(this.selectedElement);

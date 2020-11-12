@@ -1,16 +1,15 @@
-import { ARTURIResource, ARTNode, ResAttribute } from './../../models/ARTResources';
-import { PropInfo } from './../model/UmlNode';
-import { Link } from './../model/Link';
-import { Node } from './../model/Node';
-import { Component, ViewChild, Input } from "@angular/core";
-import { Modal, OverlayConfig } from "ngx-modialog";
-import { BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
+import { Component, ViewChild } from "@angular/core";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 import { AbstractGraphPanel } from "../abstractGraphPanel";
 import { DataGraphSettingsModal } from "../modal/dataGraphSettingsModal";
+import { ARTNode, ARTURIResource, ResAttribute } from './../../models/ARTResources';
+import { Link } from './../model/Link';
+import { Node } from './../model/Node';
+import { PropInfo, UmlNode } from './../model/UmlNode';
 import { UmlGraphComponent } from './umlGraphComponent';
-import { UmlNode } from './../model/UmlNode';
 
 @Component({
     selector: 'uml-graph-panel',
@@ -20,19 +19,18 @@ export class UmlGraphPanel extends AbstractGraphPanel {
 
     @ViewChild(UmlGraphComponent) viewChildGraph: UmlGraphComponent;
     
-    private resourceToDescribe: ARTNode;
-    private isHideArrows: boolean = false;
-    private activeRemove: boolean = false;
+    resourceToDescribe: ARTNode;
+    isHideArrows: boolean = false;
+    activeRemove: boolean = false;
 
-    constructor(basicModals: BasicModalServices, browsingModals: BrowsingModalServices, private modal: Modal) {
+    constructor(basicModals: BasicModalServices, browsingModals: BrowsingModalServices, private modalService: NgbModal) {
         super(basicModals, browsingModals);
     }
 
 
     openSettings() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
-        return this.modal.open(DataGraphSettingsModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(DataGraphSettingsModal, new ModalOptions('lg'));
+        return modalRef.result;
     }
 
 
@@ -42,7 +40,7 @@ export class UmlGraphPanel extends AbstractGraphPanel {
             (cls: ARTURIResource) => {
                 if (!cls.getAdditionalProperty(ResAttribute.EXPLICIT)) {
                     this.basicModals.alert("Add node", "Cannot add a new node for " + cls.getShow() +
-                        ". In the class-diagram you can only add resources locally defined.", "warning");
+                        ". In the class-diagram you can only add resources locally defined.", ModalType.warning);
                     return;
                 }
                 this.viewChildGraph.addNode(cls);
@@ -56,7 +54,7 @@ export class UmlGraphPanel extends AbstractGraphPanel {
     }
 
 
-    protected onElementSelected(element: Node | Link | PropInfo) {
+    onElementSelected(element: Node | Link | PropInfo) {
         this.activeRemove = false;
         this.resourceToDescribe = null;
         if (element != null) {

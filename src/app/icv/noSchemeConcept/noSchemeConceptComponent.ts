@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Observable } from 'rxjs/Observable';
+import { forkJoin } from 'rxjs';
 import { ARTURIResource } from "../../models/ARTResources";
 import { IcvServices } from "../../services/icvServices";
 import { SkosServices } from "../../services/skosServices";
@@ -14,7 +14,7 @@ import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalS
 })
 export class NoSchemeConceptComponent {
 
-    private brokenConceptList: Array<ARTURIResource>;
+    brokenConceptList: Array<ARTURIResource>;
 
     constructor(private icvService: IcvServices, private skosService: SkosServices, private browsingModals: BrowsingModalServices,
         private sharedModals: SharedModalServices) { }
@@ -82,8 +82,8 @@ export class NoSchemeConceptComponent {
         var deleteConcFnArray: any[] = [];
         deleteConcFnArray = this.brokenConceptList.map((conc) => this.skosService.deleteConcept(conc));
         //call the collected functions and subscribe when all are completed
-        Observable.forkJoin(deleteConcFnArray).subscribe(
-            res => {
+        forkJoin(deleteConcFnArray).subscribe(
+            () => {
                 this.runIcv();
             }
         );

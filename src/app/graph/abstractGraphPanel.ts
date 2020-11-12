@@ -1,4 +1,4 @@
-import { Input } from "@angular/core";
+import { Directive, Input } from "@angular/core";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../widget/modal/browsingModal/browsingModalServices";
 import { AbstractGraph } from "./abstractGraph";
@@ -6,15 +6,16 @@ import { ForceDirectedGraph, GraphForces } from "./model/ForceDirectedGraph";
 import { Link } from "./model/Link";
 import { Node } from "./model/Node";
 
+@Directive()
 export abstract class AbstractGraphPanel {
     @Input() graph: ForceDirectedGraph;
     @Input() rendering: boolean = true;
 
     abstract viewChildGraph: AbstractGraph;
 
-    protected selectedElement: Node | Link;
-    private isLock: boolean = false;
-    private forces: GraphForces;
+    selectedElement: Node | Link;
+    isLock: boolean = false;
+    forces: GraphForces;
     
     protected basicModals: BasicModalServices
     protected browsingModals: BrowsingModalServices;
@@ -26,11 +27,11 @@ export abstract class AbstractGraphPanel {
 
     abstract addNode(): void;
 
-    private onForceChange() {
+    onForceChange() {
         this.viewChildGraph.updateForces(this.forces);
     }
 
-    protected isSelectedElementNode() {
+    isSelectedElementNode() {
         return (this.selectedElement != null && this.selectedElement instanceof Node);
     }
 
@@ -43,7 +44,7 @@ export abstract class AbstractGraphPanel {
         }
 
     }
-    protected fixAll() {
+    fixAll() {
         this.graph.getNodes().forEach(n => {
             n.fixed = true;
             n.fx = n.x;
@@ -51,7 +52,7 @@ export abstract class AbstractGraphPanel {
         });
         this.isLock = true;
     }
-    protected unfixAll() {
+    unfixAll() {
         this.graph.getNodes().forEach(n => {
             n.fixed = false;
             n.fx = null;
@@ -60,11 +61,11 @@ export abstract class AbstractGraphPanel {
         this.isLock = false;
     }
 
-    protected onElementSelected(element: Node | Link) {
+    onElementSelected(element: Node | Link) {
         this.selectedElement = element;
     }
 
-    private snapshot() {
+    snapshot() {
         let exportUrl = this.viewChildGraph.getExportUrl();
         this.basicModals.downloadLink("Export Graph SVG", null, exportUrl, "graph.svg");
     }

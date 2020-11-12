@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
-import { OverlayConfig } from "ngx-modialog";
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from "rxjs";
 import { CommitInfo } from "../models/History";
 import { ValidationServices } from "../services/validationServices";
@@ -8,10 +7,11 @@ import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { UIUtils } from "../utils/UIUtils";
 import { VBActionsEnum } from "../utils/VBActions";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ModalOptions } from '../widget/modal/Modals';
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { AbstractHistValidComponent } from "./abstractHistValidComponent";
 import { HistoryValidationModalServices } from "./modals/historyValidationModalServices";
-import { ValidationCommentsModal, ValidationCommentsModalData } from "./modals/validationCommentsModal";
+import { ValidationCommentsModal } from "./modals/validationCommentsModal";
 
 @Component({
     selector: "validation-component",
@@ -20,7 +20,7 @@ import { ValidationCommentsModal, ValidationCommentsModalData } from "./modals/v
 })
 export class ValidationComponent extends AbstractHistValidComponent {
 
-    private isValidator: boolean; //useful to determine if it needs to list all commits (for validator) or only those of the current user
+    isValidator: boolean; //useful to determine if it needs to list all commits (for validator) or only those of the current user
 
     //paging
     private tipTime: string;
@@ -38,7 +38,7 @@ export class ValidationComponent extends AbstractHistValidComponent {
     private readonly VALIDATION_ACT_ATTR: string = "validationAction";
     private readonly COMMENT_ATTR: string = "comment";
 
-    constructor(private validationService: ValidationServices, private basicModals: BasicModalServices, private modal: Modal, 
+    constructor(private validationService: ValidationServices, private basicModals: BasicModalServices, private modalService: NgbModal, 
         sharedModals: SharedModalServices, hvModals: HistoryValidationModalServices) {
         super(sharedModals, hvModals);
     }
@@ -116,19 +116,19 @@ export class ValidationComponent extends AbstractHistValidComponent {
         )
     }
 
-    private acceptAll() {
+    acceptAll() {
         for (var i = 0; i < this.commits.length; i++) {
             this.commits[i][this.VALIDATION_ACT_ATTR] = this.ACTION_ACCEPT;
         }
     }
 
-    private rejectAll() {
+    rejectAll() {
         for (var i = 0; i < this.commits.length; i++) {
             this.commits[i][this.VALIDATION_ACT_ATTR] = this.ACTION_REJECT;
         }
     }
 
-    private validate() {
+    validate() {
         let commentableCommits: CommitInfo[] = [];
         this.commits.forEach(c => {
             if (c.commentAllowed && c[this.VALIDATION_ACT_ATTR] == this.ACTION_REJECT) {
@@ -160,12 +160,9 @@ export class ValidationComponent extends AbstractHistValidComponent {
     }
 
     private promptCommentsPreview(commits: CommitInfo[]) {
-        var modalData = new ValidationCommentsModalData(commits);
-        const builder = new BSModalContextBuilder<ValidationCommentsModalData>(
-            modalData, undefined, ValidationCommentsModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
-        return this.modal.open(ValidationCommentsModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(ValidationCommentsModal, new ModalOptions('lg'));
+        modalRef.componentInstance.commitsInput = commits;
+        return modalRef.result;
     }
 
     /**

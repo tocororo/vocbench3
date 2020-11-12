@@ -6,7 +6,6 @@ import { RDFS } from './../../models/Vocabulary';
 import { ResourceUtils } from './../../utils/ResourceUtils';
 import { GraphMode } from './../abstractGraph';
 import { ForceDirectedGraph } from './../model/ForceDirectedGraph';
-import { NodeMeasure } from './../model/Node';
 
 @Component({
     selector: '[umlNode]',
@@ -22,7 +21,6 @@ export class UmlNodeComponent extends AbstractGraphNode {
     graphMode = GraphMode.umlOriented;
     private stripePercentage: number; //percentage of the rect height to dedicate to the top stripe
     private stripeHeight: number; //height (in px) of the top stripe
-    protected measures: NodeMeasure;
     private res: ARTNode;
     // private lineSeparetorPercentage: number;
 
@@ -386,7 +384,7 @@ export class UmlNodeComponent extends AbstractGraphNode {
      * Click handlers
      */
 
-    protected onClickClass() {
+    onClickClass() {
         this.nodeClicked.emit(this.node);
     }
 

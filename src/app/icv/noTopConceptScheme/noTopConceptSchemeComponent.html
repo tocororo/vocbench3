@@ -1,9 +1,9 @@
-<div class="panel panel-default vbox" style="position: relative">
-    <div class="panel-heading">
+<div class="card card-default vbox" style="position: relative">
+    <div class="card-header">
         <label style="flex: 1;">ConceptScheme without topConcept</label>
-        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
+        <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
     </div>
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
         
         <div class="alert alert-info" role="alert">
             <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
@@ -14,7 +14,7 @@
             Press <strong>Run</strong> button to run the check.
         </div>
         <div *ngIf="brokenSchemeList" class="scrollableContainer">
-            <table class="table table-condensed table-hoverable" style="flex: 1;">
+            <table class="table table-sm table-hoverable" style="flex: 1;">
                 <thead>
                     <tr>
                         <th class="text-center">ConceptScheme</th>
@@ -27,18 +27,18 @@
                             <rdf-resource class="clickable" [resource]="scheme" (click)="onResourceClick(scheme)"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">
-                            <button class="btn btn-xs btn-default" (click)="selectTopConcept(scheme)">Select top concept</button>
-                            <button class="btn btn-xs btn-default" (click)="createTopConcept(scheme)">Create top concept</button>
-                            <button class="btn btn-xs btn-default" (click)="deleteScheme(scheme)">Delete scheme</button>
+                            <button class="btn btn-xs btn-light" (click)="selectTopConcept(scheme)">Select top concept</button>
+                            <button class="btn btn-xs btn-light" (click)="createTopConcept(scheme)">Create top concept</button>
+                            <button class="btn btn-xs btn-light" (click)="deleteScheme(scheme)">Delete scheme</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="panel-footer">
-        <div  class="dropup pull-right">
-            <button *ngIf="brokenSchemeList && !brokenSchemeList.length == 0" class="btn btn-default btn-xs" type="button"
+    <div class="card-footer">
+        <div  class="dropup float-right">
+            <button *ngIf="brokenSchemeList && brokenSchemeList.length != 0" class="btn btn-light btn-xs" type="button"
                 (click)="deleteAllScheme()">
                 Delete all scheme
             </button>

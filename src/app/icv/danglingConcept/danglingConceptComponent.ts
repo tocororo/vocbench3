@@ -15,10 +15,10 @@ import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalS
 })
 export class DanglingConceptComponent {
 
-    private schemeList: Array<ARTURIResource>;
-    private selectedScheme: ARTURIResource = null;
-    private brokenConceptList: Array<ARTURIResource>;
-    private brokenConceptMap: BrokenConceptEntry[];
+    schemeList: Array<ARTURIResource>;
+    selectedScheme: ARTURIResource = null;
+    brokenConceptList: Array<ARTURIResource>;
+    brokenConceptMap: BrokenConceptEntry[];
 
     constructor(private icvService: IcvServices, private skosService: SkosServices,
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices, private sharedModals: SharedModalServices) { }
@@ -35,7 +35,7 @@ export class DanglingConceptComponent {
     /**
      * Run the check
      */
-    private runIcv() {
+    runIcv() {
         this.brokenConceptList = null;
         this.brokenConceptMap = null;
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));

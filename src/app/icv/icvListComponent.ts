@@ -15,7 +15,7 @@ export class IcvListComponent {
     private dataModel: string;
     private lexicalizationModel: string;
 
-    private structuralIcv: { open: boolean, list: ICVElement[] } = {
+    structuralIcv: { open: boolean, list: ICVElement[] } = {
         open: true,
         list: [
             {
@@ -63,7 +63,7 @@ export class IcvListComponent {
         ]
     };
 
-    private labelIcv: { open: boolean, list: ICVElement[] } = {
+    labelIcv: { open: boolean, list: ICVElement[] } = {
         open: true,
         list: [
             {
@@ -124,7 +124,7 @@ export class IcvListComponent {
         ]
     };
 
-    private genericIcv: { open: boolean, list: ICVElement[] } = {
+    genericIcv: { open: boolean, list: ICVElement[] } = {
         open: true,
         list: [
             {
@@ -179,7 +179,7 @@ export class IcvListComponent {
     /**
      * Changes the open attribute of the icv structure, so that in the UI the panel expands/collapses
      */
-    private togglePanel(icvStruct: any) {
+    togglePanel(icvStruct: any) {
         icvStruct.open = !icvStruct.open;
     }
 

@@ -1,52 +1,50 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading">
+<div class="card card-default vbox">
+    <div class="card-header">
         <label style="flex: 1">Commits</label>
 
         <label style="white-space: pre">Operation sort: </label>
-        <div class="btn-group btn-group-xs" style="margin-right: 8px;" role="group">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <div class="btn-group btn-group-xs mr-3" ngbDropdown>
+            <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
                 <span>{{operationSorting}}</span>
-                <span class="glyphicon glyphicon-sort-by-alphabet"></span>
+                <span class="fas fa-sort-alpha-down ml-2"></span>
             </button>
-            <ul class="dropdown-menu pull-right">
-                <li *ngFor="let sd of sortingDirectionList" style="position: relative;">
-                    <a (click)="sortOperation(sd)" style="margin-right: 18px;">{{sd}}</a>
-                    <span *ngIf="sd == operationSorting" class="glyphicon glyphicon-ok pull-right"
-                        style="position: absolute; right: 4px;"></span>
-                </li>
-            </ul>
+            <div class="dropdown-menu float-right" ngbDropdownMenu>
+                <a *ngFor="let sd of sortingDirectionList" class="dropdown-item" (click)="sortOperation(sd)">
+                    {{sd}}
+                    <span *ngIf="sd == operationSorting" class="fas fa-check float-right"></span>
+                </a>
+            </div>
         </div>
 
         <label style="white-space: pre">Time sort: </label>
-        <div class="btn-group btn-group-xs" style="margin-right: 8px;" role="group">
-            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <div class="btn-group btn-group-xs mr-3" ngbDropdown>
+            <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
                 <span>{{timeSorting}}</span>
-                <span class="glyphicon glyphicon-sort-by-order"></span>
+                <span class="fas fa-sort-numeric-down ml-2"></span>
             </button>
-            <ul class="dropdown-menu pull-right">
-                <li *ngFor="let sd of sortingDirectionList" style="position: relative;">
-                    <a (click)="sortTime(sd)" style="margin-right: 18px;">{{sd}}</a>
-                    <span *ngIf="sd == timeSorting" class="glyphicon glyphicon-ok pull-right"
-                        style="position: absolute; right: 4px;"></span>
-                </li>
-            </ul>
+            <div class="dropdown-menu float-right" ngbDropdownMenu>
+                <a *ngFor="let sd of sortingDirectionList" class="dropdown-item" (click)="sortTime(sd)">
+                    {{sd}}
+                    <span *ngIf="sd == timeSorting" class="fas fa-check float-right"></span>
+                </a>
+            </div>
         </div>
 
-        <button class="btn btn-xs btn-default" [ngClass]="{active: showFilterBox}" (click)="showFilterBox = !showFilterBox">
+        <button class="btn btn-xs btn-light" [ngClass]="{active: showFilterBox}" (click)="showFilterBox = !showFilterBox">
             <span *ngIf="!showFilterBox">Show filters</span>
             <span *ngIf="showFilterBox">Hide filters</span>
-            <span class="glyphicon glyphicon-filter"></span>
+            <span class="fas fa-filter ml-2"></span>
         </button>
     </div>
     
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
 
         <history-filter *ngIf="showFilterBox" class="vbox" style="margin-bottom: 6px; min-height: 115px;" (apply)="onFilterApplied($event)"
             [operations]="operations" [performers]="performers" [fromTime]="fromTime" [toTime]="toTime"></history-filter>
 
         <div class="table-responsive" style="flex: 3;">
 
-            <table class="table table-condensed table-hoverable">
+            <table class="table table-hoverable">
                 <colgroup>
                     <col style="width: 1%">
                 </colgroup>
@@ -100,9 +98,9 @@
                                     {{item.operationParameters[2].value}}
                                 </span>
                             </ng-template>
-                            <button *ngIf="showOtherParamButton(item)" class="btn btn-xs btn-default" (click)="inspectParams(item)"
+                            <button *ngIf="showOtherParamButton(item)" class="btn btn-xs btn-light" (click)="inspectParams(item)"
                                 title="Show all parameters">
-                                <span class="glyphicon glyphicon-option-horizontal"></span>
+                                <span class="fas fa-ellipsis-h"></span>
                             </button>
                         </td>
                         <td class="text-center">
@@ -121,16 +119,16 @@
     
     </div>
 
-    <div class="panel-footer">
-        <div class="btn-group btn-group-xs pull-right" role="group">
-            <button class="btn btn-default" title="Previous" (click)="getPreviousCommits()" [disabled]="page <= 0">
-                <span class="glyphicon glyphicon-triangle-left"></span>
+    <div class="card-footer">
+        <div class="btn-group btn-group-xs float-right" role="group">
+            <button class="btn btn-light" title="Previous" (click)="getPreviousCommits()" [disabled]="page <= 0">
+                <span class="fas fa-caret-left"></span>
             </button>
-            <button class="btn btn-default" style="cursor: auto" disabled>
+            <button class="btn btn-light" style="cursor: auto" disabled>
                 <span>{{page+1}} of {{pageCount}}</span>
             </button>
-            <button class="btn btn-default" title="Next" (click)="getNextCommits()" [disabled]="page+1 >= pageCount">
-                <span class="glyphicon glyphicon-triangle-right"></span>
+            <button class="btn btn-light" title="Next" (click)="getNextCommits()" [disabled]="page+1 >= pageCount">
+                <span class="fas fa-caret-right"></span>
             </button>
         </div>
     </div>

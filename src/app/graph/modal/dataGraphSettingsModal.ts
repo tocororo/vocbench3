@@ -1,23 +1,20 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { PartitionFilterPreference } from "../../models/Properties";
 import { VBContext } from "../../utils/VBContext";
 import { VBProperties } from "../../utils/VBProperties";
-import { PartitionFilterPreference } from "../../models/Properties";
 
 @Component({
     selector: "data-graph-settings-modal",
     templateUrl: "./dataGraphSettingsModal.html",
 })
-export class DataGraphSettingsModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class DataGraphSettingsModal {
 
-    private graphFilter: PartitionFilterPreference;
+    graphFilter: PartitionFilterPreference;
 
-    private hideLiteralNodes: boolean;
+    hideLiteralNodes: boolean;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private vbProp: VBProperties) {
-        this.context = dialog.context;
+    constructor(public activeModal: NgbActiveModal, private vbProp: VBProperties) {
     }
 
     ngOnInit() {
@@ -25,18 +22,16 @@ export class DataGraphSettingsModal implements ModalComponent<BSModalContext> {
         this.hideLiteralNodes = VBContext.getWorkingProjectCtx().getProjectPreferences().hideLiteralGraphNodes;
     }
 
-    private updateFilter() {
+    updateFilter() {
         this.vbProp.setGraphViewPartitionFilter(this.graphFilter);
     }
 
-    private onHideLiteralChange() {
+    onHideLiteralChange() {
         this.vbProp.setHideLiteralGraphNodes(this.hideLiteralNodes);
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close();
+    ok() {
+        this.activeModal.close();
     }
 
 }

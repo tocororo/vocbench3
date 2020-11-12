@@ -1,49 +1,49 @@
-<div class="panel panel-default vbox">
-    <div class="panel-body hbox">
+<div class="card card-default vbox">
+    <div class="card-body hbox">
 
-        <div class="panel panel-alt vbox" style="margin-right: 4px">
-            <div class="panel-heading">
+        <div class="card card-alt vbox" style="margin-right: 4px">
+            <div class="card-header">
                 <label style="flex: 1;">Operations</label>
-                <button class="btn btn-xs btn-default" (click)="selectOperationFilter()">
-                    <span class="glyphicon glyphicon-plus"></span>
+                <button class="btn btn-xs btn-light" (click)="selectOperationFilter()">
+                    <span class="fas fa-plus"></span>
                 </button>
             </div>
-            <div class="panel-body scrollableContainer">
+            <div class="card-body scrollableContainer">
                 <div *ngFor="let op of operations" class="listItem">
                     <span style="flex: 1;">{{op.getShow()}}</span>
-                    <button class="btn btn-xs btn-default" (click)="removeOperationFilter(op)">
-                        <span class="glyphicon glyphicon-minus"></span>
+                    <button class="btn btn-xs btn-light" (click)="removeOperationFilter(op)">
+                        <span class="fas fa-minus"></span>
                     </button>
                 </div>
             </div>
         </div>
 
-        <div *ngIf="!hidePerformers" class="panel panel-alt vbox" style="margin-right: 4px">
-            <div class="panel-heading">
+        <div *ngIf="!hidePerformers" class="card card-alt vbox" style="margin-right: 4px">
+            <div class="card-header">
                 <label style="flex: 1;">Performers</label>
-                <button class="btn btn-xs btn-default" (click)="selectOperationPerformer()">
-                    <span class="glyphicon glyphicon-plus"></span>
+                <button class="btn btn-xs btn-light" (click)="selectOperationPerformer()">
+                    <span class="fas fa-plus"></span>
                 </button>
             </div>
-            <div class="panel-body scrollableContainer">
+            <div class="card-body scrollableContainer">
                 <div *ngFor="let p of performers" class="listItem">
                     <span style="flex: 1">{{p.getShow()}}<span class="grayText">&nbsp;({{p.getEmail()}})</span></span>
-                    <button class="btn btn-xs btn-default" (click)="removeOperationPerformer(p)">
-                        <span class="glyphicon glyphicon-minus"></span>
+                    <button class="btn btn-xs btn-light" (click)="removeOperationPerformer(p)">
+                        <span class="fas fa-minus"></span>
                     </button>
                 </div>
             </div>
         </div>
 
-        <div class="panel panel-alt vbox" style="margin-right: 4px">
-            <div class="panel-heading">
+        <div class="card card-alt vbox" style="margin-right: 4px">
+            <div class="card-header">
                 <label>
                     Time
-                    <span class="glyphicon glyphicon-info-sign" title="Datetime format: yyyy-MM-ddThh:mm"></span>
+                    <span class="fas fa-info-circle" title="Datetime format: yyyy-MM-ddThh:mm"></span>
                 </label>
             </div>
-            <div class="panel-body scrollableContainer">
-                <table class="table table-condensed table-borderless">
+            <div class="card-body scrollableContainer">
+                <table class="table table-sm table-borderless">
                     <colgroup>
                         <col style="width: 1%">
                         <col>
@@ -56,8 +56,8 @@
                             <td><input type="datetime-local" class="form-control input-xs" [(ngModel)]="fromTime"></td>
                             <td><input class="form-control input-xs" [ngModel]="fromTime" readonly></td>
                             <td>
-                                <button class="btn btn-xs btn-default" (click)="fromTime=null" title="Reset" [disabled]="!fromTime">
-                                    <span class="glyphicon glyphicon-remove"></span>
+                                <button class="btn btn-xs btn-light" (click)="fromTime=null" title="Reset" [disabled]="!fromTime">
+                                    <span class="fas fa-times"></span>
                                 </button>
                             </td>
                         </tr>
@@ -66,8 +66,8 @@
                             <td><input type="datetime-local" class="form-control input-xs" [(ngModel)]="toTime"></td>
                             <td><input class="form-control input-xs" [ngModel]="toTime" readonly></td>
                             <td>
-                                <button class="btn btn-xs btn-default" (click)="toTime=null" title="Reset" [disabled]="!toTime">
-                                    <span class="glyphicon glyphicon-remove"></span>
+                                <button class="btn btn-xs btn-light" (click)="toTime=null" title="Reset" [disabled]="!toTime">
+                                    <span class="fas fa-times"></span>
                                 </button>
                             </td>
                         </tr>

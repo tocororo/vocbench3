@@ -1,7 +1,6 @@
 <svg:g [attr.transform]="'translate(' + node.x + ',' + node.y + ')'">
     <svg:g (click)="onClick()" (dblclick)="onDblClick()" style="cursor: pointer;">
 
-
         <ng-template [ngIf]="node.res.isResource()">
             <defs>
                 <linearGradient [attr.id]="'gradient'+node.index" x2="0%" y2="100%">
@@ -27,7 +26,7 @@
             <svg:text #textEl style="visibility: hidden">{{show}}</svg:text>
             <svg:text [attr.x]="-measures.width/2+3" [attr.y]="-measures.height/2+stripeHeight+5" dominant-baseline="hanging">
                 {{normalizedShow}}
-                <svg:title>{{show}}</svg:title>
+                <title>{{show}}</title>
             </svg:text>
         </ng-template>
 
@@ -40,7 +39,7 @@
             <svg:text #textEl style="visibility: hidden">{{show}}</svg:text>
             <svg:text text-anchor="middle" dominant-baseline="central">
                 {{normalizedShow}}
-                <svg:title>{{show}}</svg:title>
+                <title>{{show}}</title>
             </svg:text>
         </ng-template>
             

@@ -1,18 +1,15 @@
-import { Component } from "@angular/core";
-import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
-import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
+import { Component, Directive } from "@angular/core";
 import { ARTNode, ARTResource, RDFResourceRolesEnum } from "../models/ARTResources";
+import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ModalType } from '../widget/modal/Modals';
+import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 
-@Component({
-    selector: "abstract-icv-component",
-    template: "",
-    host: { class: "pageComponent" }
-})
+@Directive()
 export abstract class AbstractIcvComponent {
 
     abstract checkRoles: boolean;
     abstract checkLanguages: boolean;
-    protected rolesToCheck: RDFResourceRolesEnum[];
+    rolesToCheck: RDFResourceRolesEnum[];
     protected langsToCheck: string[];
 
     //paging handler
@@ -41,13 +38,13 @@ export abstract class AbstractIcvComponent {
     protected doPreRunCheck(): boolean {
         if (this.checkRoles) {
             if (this.rolesToCheck.length == 0) {
-                this.basicModals.alert("Missing resource type", "You need to select at least a resource type in order to run the ICV", "warning");
+                this.basicModals.alert("Missing resource type", "You need to select at least a resource type in order to run the ICV", ModalType.warning);
                 return true;
             }
         }
         if (this.checkLanguages) {
             if (this.langsToCheck.length == 0) {
-                this.basicModals.alert("Missing language", "You need to select at least a language in order to run the ICV", "warning");
+                this.basicModals.alert("Missing language", "You need to select at least a language in order to run the ICV", ModalType.warning);
                 return true;
             }
         }
@@ -73,7 +70,7 @@ export abstract class AbstractIcvComponent {
     /**
      * Listen to the "run" Icv button, check the configuration, in case it is ok execute the ICV
      */
-    private runIcv() {
+    runIcv() {
         if (this.doPreRunCheck()) {
             return;
         }

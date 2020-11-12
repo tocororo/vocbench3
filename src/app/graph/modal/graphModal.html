@@ -1,10 +1,10 @@
 <div class="modal-body vbox" style="min-height: 70vh;">
 
-    <data-graph-panel *ngIf="context.mode=='dataOriented'" class="vbox" [graph]="context.graph" [rendering]="context.rendering" [role]="context.role" [context]="context.context"></data-graph-panel>
-    <model-graph-panel *ngIf="context.mode=='modelOriented'" class="vbox" [graph]="context.graph" [rendering]="context.rendering"></model-graph-panel>
-    <uml-graph-panel *ngIf="context.mode=='umlOriented'" class="vbox" [graph]="context.graph" [rendering]="context.rendering"></uml-graph-panel>
+    <data-graph-panel *ngIf="mode==GraphModeEnum.dataOriented" class="vbox" [graph]="graph" [rendering]="rendering" [role]="role" [context]="context"></data-graph-panel>
+    <model-graph-panel *ngIf="mode==GraphModeEnum.modelOriented" class="vbox" [graph]="graph" [rendering]="rendering"></model-graph-panel>
+    <uml-graph-panel *ngIf="mode==GraphModeEnum.umlOriented" class="vbox" [graph]="graph" [rendering]="rendering"></uml-graph-panel>
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-default btn-sm" (click)="ok()">Close</button>
+    <button class="btn btn-light btn-sm" (click)="ok()">Close</button>
 </div>

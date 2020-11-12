@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Directive, ElementRef, EventEmitter, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ARTNode, ARTResource, RDFResourceRolesEnum, ResAttribute } from '../models/ARTResources';
 import { ResourceUtils } from '../utils/ResourceUtils';
 import { GraphMode } from './abstractGraph';
 import { Node, NodeMeasure } from './model/Node';
 
+@Directive()
 export abstract class AbstractGraphNode {
 
     @ViewChild('textEl') textElement: ElementRef;
@@ -16,13 +17,13 @@ export abstract class AbstractGraphNode {
     protected abstract graphMode: GraphMode;
 
     abstract node: Node; //in the implementations this should be a @Input() which differs only for the bindingPropertyName
-    protected measures: NodeMeasure;
+    measures: NodeMeasure;
 
     private nodeClass: string;
-    private deprecated: boolean = false;
+    deprecated: boolean = false;
 
-    protected normalizedShow: string;
-    protected show: string;
+    normalizedShow: string;
+    show: string;
 
 
     /**
@@ -133,7 +134,7 @@ export abstract class AbstractGraphNode {
 
     private isSingleClick: boolean = true;
 
-    private onClick() {
+    onClick() {
         this.isSingleClick = true;
         setTimeout(() => {
             if (this.isSingleClick) {
@@ -142,7 +143,7 @@ export abstract class AbstractGraphNode {
         }, 300)
     }
 
-    private onDblClick() {
+    onDblClick() {
         this.isSingleClick = false;
         this.nodeDblClicked.emit(this.node);
     }

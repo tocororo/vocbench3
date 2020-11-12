@@ -10,7 +10,7 @@
     </div>
 
     <div class="scrollableContainer">
-        <table class="table table-condensed table-hoverable">
+        <table class="table table-sm table-hoverable">
             <colgroup>
                 <col style="width: 1%">
                 <col>
@@ -30,7 +30,7 @@
             <tbody>
                 <tr *ngFor="let add of additions">
                     <td class="text-center" style="background: lightgreen !important; padding: 3px 6px;">
-                        <span class="glyphicon glyphicon-plus" style="color: green" title="Added"></span>
+                        <span class="fas fa-plus" style="color: green" title="Added"></span>
                     </td>
                     <td class="text-center clickable" (click)="openResource(add.subject)">
                         {{getShow(add.subject)}}
@@ -47,7 +47,7 @@
                 </tr>
                 <tr *ngFor="let rem of removals">
                     <td class="text-center" style="background: lightpink !important; padding: 3px 6px;">
-                        <span class="glyphicon glyphicon-minus" style="color: red" title="Removed"></span>
+                        <span class="fas fa-minus" style="color: red" title="Removed"></span>
                     </td>
                     <td class="text-center clickable" (click)="openResource(rem.subject)">
                         {{getShow(rem.subject)}}
@@ -76,5 +76,5 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
 </div>

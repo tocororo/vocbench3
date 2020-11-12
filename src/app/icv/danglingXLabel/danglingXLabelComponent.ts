@@ -15,7 +15,7 @@ import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsing
 })
 export class DanglingXLabelComponent {
 
-    private brokenLabelList: Array<ARTResource>;
+    brokenLabelList: Array<ARTResource>;
 
     constructor(private icvService: IcvServices, private classesService: ClassesServices,
         private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) { }
@@ -23,7 +23,7 @@ export class DanglingXLabelComponent {
     /**
      * Run the check
      */
-    private runIcv() {
+    runIcv() {
         UIUtils.startLoadingDiv(document.getElementById("blockDivIcv"));
         this.icvService.listDanglingXLabels().subscribe(
             labels => {

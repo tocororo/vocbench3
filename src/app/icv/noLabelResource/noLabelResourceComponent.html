@@ -1,9 +1,9 @@
-<div class="panel panel-default vbox" style="position: relative">
-    <div class="panel-heading">
+<div class="card card-default vbox" style="position: relative">
+    <div class="card-header">
         <label style="flex: 1;">{{title}}</label>
-        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
+        <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
     </div>
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
         <div class="alert alert-info" role="alert">
             <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
             <i>{{message}}</i>
@@ -13,7 +13,7 @@
             Press <strong>Run</strong> button to run the check.
         </div>
         <div *ngIf="brokenResourceList" class="scrollableContainer">
-            <table class="table table-condensed table-hoverable" style="flex: 1;">
+            <table class="table table-sm table-hoverable" style="flex: 1;">
                 <thead>
                     <tr>
                         <th class="text-center">Resource</th>
@@ -26,7 +26,7 @@
                             <rdf-resource class="clickable" [resource]="resource" (click)="onResourceClick(resource)"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">
-                            <button class="btn btn-xs btn-default" (click)="fix(resource)">
+                            <button class="btn btn-xs btn-light" (click)="fix(resource)">
                                 <span>{{actionLabel}}</span>
                             </button>
                         </td>

@@ -18,9 +18,9 @@ export class BrokenDefinitionComponent extends AbstractIcvComponent {
     checkLanguages = false;
     checkRoles = true;
 
-    private noteProperty: ARTURIResource = SKOS.note;
+    noteProperty: ARTURIResource = SKOS.note;
 
-    private brokenRecordList: { subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[];
+    brokenRecordList: { subject: ARTURIResource, predicate: ARTURIResource, object: ARTURIResource }[];
 
     constructor(private icvService: IcvServices, private browsingModals: BrowsingModalServices,
         basicModals: BasicModalServices, sharedModals: SharedModalServices) {
@@ -41,7 +41,7 @@ export class BrokenDefinitionComponent extends AbstractIcvComponent {
         );
     }
 
-    private changeProperty() {
+    changeProperty() {
         this.browsingModals.browsePropertyTree("Change property", [SKOS.note]).then(
             property => {
                 this.noteProperty = property;

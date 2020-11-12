@@ -1,9 +1,9 @@
-<div class="panel panel-default vbox" style="position: relative">
-    <div class="panel-heading">
+<div class="card card-default vbox" style="position: relative">
+    <div class="card-header">
         <label style="flex: 1;">Dangling xLabels</label>
-        <button class="btn btn-xs btn-default" (click)="runIcv()">Run</button>
+        <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
     </div>
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
         
         <div class="alert alert-info" role="alert">
             <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
@@ -17,7 +17,7 @@
         </div>
         
         <div *ngIf="brokenLabelList" class="scrollableContainer">
-            <table class="table table-condensed table-hoverable" style="flex: 1;">
+            <table class="table table-sm table-hoverable" style="flex: 1;">
                 <thead>
                     <tr>
                         <th class="text-center">XLabel</th>
@@ -30,17 +30,17 @@
                             <rdf-resource [resource]="label"></rdf-resource>
                         </td>
                         <td style="white-space: nowrap">
-                            <button class="btn btn-xs btn-default" (click)="deleteLabel(label)">Delete label</button>
-                            <button class="btn btn-xs btn-default" (click)="assignLabel(label)">Add to a concept</button>
+                            <button class="btn btn-xs btn-light" (click)="deleteLabel(label)">Delete label</button>
+                            <button class="btn btn-xs btn-light" (click)="assignLabel(label)">Add to a concept</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    <div class="panel-footer">
-        <div  class="dropup pull-right">
-            <button *ngIf="brokenLabelList && !brokenLabelList.length == 0" class="btn btn-default btn-xs" type="button"
+    <div class="card-footer">
+        <div  class="dropup float-right">
+            <button *ngIf="brokenLabelList && brokenLabelList.length != 0" class="btn btn-light btn-xs" type="button"
                 (click)="deleteAllLabel()">
                 Delete all
             </button>

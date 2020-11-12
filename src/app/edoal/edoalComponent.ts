@@ -1,7 +1,7 @@
 import { Component, ViewChild } from "@angular/core";
-import { Modal, OverlayConfig } from "ngx-modialog";
-import { BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
-import { Observable } from "rxjs";
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { forkJoin, Observable, of } from 'rxjs';
+import { finalize, flatMap, map } from 'rxjs/operators';
 import { AlignmentRelationSymbol, Correspondence } from "../models/Alignment";
 import { ARTResource, ARTURIResource, RDFResourceRolesEnum } from "../models/ARTResources";
 import { Project } from "../models/Project";
@@ -16,8 +16,9 @@ import { ResourceUtils } from "../utils/ResourceUtils";
 import { ProjectContext, VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ModalOptions, ModalType } from '../widget/modal/Modals';
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
-import { ChangeMeasureModal, ChangeMeasureModalData } from "./changeMeasureModal";
+import { ChangeMeasureModal } from "./changeMeasureModal";
 
 @Component({
     selector: "edoal-component",
@@ -32,7 +33,7 @@ export class EdoalComponent {
     /**
      * Projects and tabs
      */
-    private contextInitialized: boolean = false;
+    contextInitialized: boolean = false;
     private leftProjCtx: ProjectContext;
     private rightProjCtx: ProjectContext;
     private leftHiddenTabs: RDFResourceRolesEnum[] = [];
@@ -58,7 +59,7 @@ export class EdoalComponent {
     private pageSize: number = 50;
 
     constructor(private edoalService: EdoalServices, private alignmentService: AlignmentServices, private projectService: ProjectServices, private resourcesService: ResourcesServices,
-        private vbProp: VBProperties, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) {}
+        private vbProp: VBProperties, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {}
 
     ngOnInit() {
         this.initProjects();
@@ -74,21 +75,21 @@ export class EdoalComponent {
                 let rightProject: Project = new Project(rightProjectName);
 
                 let describeProjFn: Observable<any>[] = [
-                    this.projectService.getProjectInfo(leftProjectName).map(
-                        proj => {
+                    this.projectService.getProjectInfo(leftProjectName).pipe(
+                        map(proj => {
                             leftProject = proj;
                             this.leftHiddenTabs = this.initHiddenTabsOfProject(leftProject);
-                        }
+                        })
                     ),
-                    this.projectService.getProjectInfo(rightProjectName).map(
-                        proj => {
+                    this.projectService.getProjectInfo(rightProjectName).pipe(
+                        map(proj => {
                             rightProject = proj;
                             this.rightHiddenTabs = this.initHiddenTabsOfProject(rightProject);
-                        }
+                        })
                     )
                 ];
 
-                Observable.forkJoin(describeProjFn).subscribe(
+                forkJoin(describeProjFn).subscribe(
                     () => {
                         this.leftProjCtx = new ProjectContext(leftProject);
                         let initLeftProjectCtxFn: Observable<void>[] = [
@@ -104,7 +105,8 @@ export class EdoalComponent {
                             this.vbProp.initProjectSettings(this.rightProjCtx)
                         ];
 
-                        Observable.forkJoin(...initLeftProjectCtxFn, ...initRightProjectCtxFn).subscribe(
+                        let initFn: Observable<any>[] = initLeftProjectCtxFn.concat(initRightProjectCtxFn);
+                        forkJoin(initFn).subscribe(
                             () => {
                                 this.contextInitialized = true;
                                 this.listAlignments();
@@ -148,23 +150,23 @@ export class EdoalComponent {
     }
 
     private ensureExistingAlignment(): Observable<void> {
-        return this.edoalService.getAlignments().flatMap(
-            alignments => {
+        return this.edoalService.getAlignments().pipe(
+            flatMap(alignments => {
                 if (alignments.length > 0) {
                     this.alignemnts = alignments
-                    return Observable.of(null);
+                    return of(null);
                 } else {
-                    return this.edoalService.createAlignment().flatMap(
-                        alignmentNode => {
-                            return this.edoalService.getAlignments().map(
-                                alignments => {
+                    return this.edoalService.createAlignment().pipe(
+                        flatMap(alignmentNode => {
+                            return this.edoalService.getAlignments().pipe(
+                                map(alignments => {
                                     this.alignemnts = alignments;
-                                }
+                                })
                             );
-                        }
+                        })
                     )
                 }
-            }
+            })
         )
     }
 
@@ -189,7 +191,7 @@ export class EdoalComponent {
                 if (err.name.endsWith("IndexingLanguageNotFound")) {
                     this.basicModals.alert("Missing user language", "No user language has been detected for the project '" + 
                     this.leftProjCtx.getProject().getName() + "'. The system will not be able to initialize the list of alignments.\n" +
-                    "Please access that project, then go to the user preferences and set a rendering language.", "warning");
+                    "Please access that project, then go to the user preferences and set a rendering language.", ModalType.warning);
                 }
             }
         );
@@ -204,9 +206,8 @@ export class EdoalComponent {
         });
         if (leftEntities.length > 0 || rightEntities.length > 0) {
             HttpServiceContext.setContextProject(this.leftProjCtx.getProject());
-            this.resourcesService.getResourcesInfo(leftEntities)
-            .finally(
-                () => HttpServiceContext.removeContextProject()
+            this.resourcesService.getResourcesInfo(leftEntities).pipe(
+                finalize(() => HttpServiceContext.removeContextProject())
             ).subscribe(
                 resources => {
                     resources.forEach(r => {
@@ -219,8 +220,8 @@ export class EdoalComponent {
                 }
             );
             HttpServiceContext.setContextProject(this.rightProjCtx.getProject());
-            this.resourcesService.getResourcesInfo(rightEntities).finally(
-                () => HttpServiceContext.removeContextProject()
+            this.resourcesService.getResourcesInfo(rightEntities).pipe(
+                finalize(() => HttpServiceContext.removeContextProject())
             ).subscribe(
                 resources => {
                     resources.forEach(r => {
@@ -245,7 +246,7 @@ export class EdoalComponent {
 
     private addCorrespondence() {
         if (this.measure < 0 || this.measure > 1) {
-            this.basicModals.alert("Invalid measure", "The entered measure (" + this.measure + ") is invalid, it must be between 0 and 1.", "warning");
+            this.basicModals.alert("Invalid measure", "The entered measure (" + this.measure + ") is invalid, it must be between 0 and 1.", ModalType.warning);
             return;
         }
         this.edoalService.createCorrespondence(this.alignemnts[0], this.leftSelectedResource, this.rightSelectedResource, this.selectedRelation.relation, this.measure).subscribe(
@@ -280,12 +281,9 @@ export class EdoalComponent {
     }
 
     private changeMeasure(correspondence: Correspondence) {
-        var modalData = new ChangeMeasureModalData(<number><any>correspondence.measure[0].getShow());
-        const builder = new BSModalContextBuilder<ChangeMeasureModalData>(
-            modalData, undefined, ChangeMeasureModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(ChangeMeasureModal, overlayConfig).result.then(
+        const modalRef: NgbModalRef = this.modalService.open(ChangeMeasureModal, new ModalOptions());
+        modalRef.componentInstance.value = <number><any>correspondence.measure[0].getShow();
+        return modalRef.result.then(
             newMeasure => {
                 this.edoalService.setMeasure(correspondence.identity, newMeasure).subscribe(
                     () => {

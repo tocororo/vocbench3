@@ -18,7 +18,7 @@ export class IcvConfigPanelComponent {
     @Output() rolesChange: EventEmitter<RDFResourceRolesEnum[]> = new EventEmitter();
     @Output() langsChange: EventEmitter<string[]> = new EventEmitter();
 
-    private configPanelOpen: boolean = true;
+    configPanelOpen: boolean = true;
 
     private roles: RoleCheckItem[];
     private languages: LanguageCheckItem[];

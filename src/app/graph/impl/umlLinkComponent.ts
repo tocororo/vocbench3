@@ -20,10 +20,10 @@ export class UmlLinkComponent {
     @Input() selected: boolean = false;
     @ViewChild('textEl') textElement: ElementRef;
     @Input() isHideArrows: boolean;
-    private withMarker: boolean = true
-    private black: boolean = true;
-    private white: boolean;
-    private arrowClass: String = "";
+    withMarker: boolean = true
+    black: boolean = true;
+    white: boolean;
+    arrowClass: String = "";
    
 
     ngOnInit() {
@@ -53,7 +53,7 @@ export class UmlLinkComponent {
 
     }
 
-    private computePathUml() {
+    computePathUml() {
 
         let source: Point = new Point(this.link.source.x, this.link.source.y);
         let target: Point = new Point(this.link.target.x, this.link.target.y);
@@ -124,7 +124,7 @@ export class UmlLinkComponent {
     }
 
 
-    private onClick(event: Event) {
+    onClick(event: Event) {
         event.stopPropagation(); //avoid propagation since click event is handled also in the svg container div
         if (this.link.res != null) {
             this.linkClicked.emit(this.link);

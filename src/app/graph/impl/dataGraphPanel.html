@@ -1,52 +1,52 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading">
+<div class="card card-default vbox">
+    <div class="card-header">
         <div *ngIf="context != 'sparql'" class="btn-toolbar" role="toolbar">
-            <button class="btn btn-xs btn-default" (click)="addNode()" title="Add a new node">
-                <span class="glyphicon glyphicon-plus"></span>
+            <button class="btn btn-xs btn-light" (click)="addNode()" title="Add a new node">
+                <span class="fas fa-plus"></span>
             </button>
 
             <div *ngIf="isExpandEnabled()" class="btn-group btn-group-xs">
-                <button class="btn btn-default" (click)="expandSubResources()" title="Expand sub-resources">Sub</button>
-                <button class="btn btn-default" (click)="expandSuperResources()" title="Expand super-resources">Super</button>
+                <button class="btn btn-light" (click)="expandSubResources()" title="Expand sub-resources">Sub</button>
+                <button class="btn btn-light" (click)="expandSuperResources()" title="Expand super-resources">Super</button>
             </div>
         </div>
         <span style="flex: 1;"></span>
         <div class="btn-toolbar" role="toolbar">
-            <button class="btn btn-default btn-xs" (click)="rendering=!rendering" title="Rendering"  [ngClass]="{ active: rendering }">
-                <span class="glyphicon glyphicon-font"></span>
+            <button class="btn btn-light btn-xs" (click)="rendering=!rendering" title="Rendering"  [ngClass]="{ active: rendering }">
+                <span class="fas fa-font"></span>
             </button>
-            <button class="btn btn-default btn-xs" (click)="snapshot()" title="Export a snapshot of the graph (.svg)">
-                <span class="glyphicon glyphicon-camera"></span>
+            <button class="btn btn-light btn-xs" (click)="snapshot()" title="Export a snapshot of the graph (.svg)">
+                <span class="fas fa-camera"></span>
             </button>
-            <button class="btn btn-default btn-xs" (click)="openSettings()" title="Settings">
-                <span class="glyphicon glyphicon-cog"></span>
+            <button class="btn btn-light btn-xs" (click)="openSettings()" title="Settings">
+                <span class="fas fa-cog"></span>
             </button>
         </div>
     </div>
-    <div class="panel-body hbox">
+    <div class="card-body hbox">
         <data-graph class="vbox" [graph]="graph" [rendering]="rendering" (elementSelected)="onElementSelected($event)"></data-graph>
 
         <div class="vbox" style="flex: initial; width: 300px; margin-left: 4px;">
-            <div class="panel panel-default vbox">
-                <div class="panel-heading">
+            <div class="card card-default vbox">
+                <div class="card-header">
                     <label></label>
                     <span style="flex: 1;"></span>
                     <div *ngIf="isSelectedElementNode()" class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs">
-                            <button type="button" class="btn btn-default" [ngClass]="{ active: selectedElement?.fixed }" title="Fix node position" (click)="fixNode()" [disabled]="!selectedElement">
-                                <span class="glyphicon glyphicon-lock"></span>
+                            <button type="button" class="btn btn-light" [ngClass]="{ active: selectedElement?.fixed }" title="Fix node position" (click)="fixNode()" [disabled]="!selectedElement">
+                                <span class="fas fa-lock"></span>
                             </button>
-                            <!-- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="padding: 3px; line-height: 1;">
-                                <span class="caret"></span>
+                            <!-- <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" style="padding: 3px; line-height: 1;">
+                                <span class="fas fa-caret-down fa-sm"></span>
                             </button>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a (click)="fixAll()">Fix all nodes</a></li>
-                                <li><a (click)="unfixAll()">Unfix all nodes</a></li>
-                            </ul> -->
+                            <div class="dropdown-menu float-right">
+                                <a class="dropdown-item" (click)="fixAll()">Fix all nodes</a>
+                                <a class="dropdown-item" (click)="unfixAll()">Unfix all nodes</a>
+                            </div> -->
                         </div>
                     </div>
                 </div>
-                <div class="panel-body vbox">
+                <div class="card-body vbox">
                     <resource-details-panel *ngIf="selectedElement?.res" [resource]="selectedElement.res"></resource-details-panel>
                 </div>
             </div>
