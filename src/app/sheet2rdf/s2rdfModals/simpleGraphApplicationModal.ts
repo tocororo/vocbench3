@@ -1,7 +1,8 @@
-import { Component } from "@angular/core";
-import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
-import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
-import { Observable } from "rxjs";
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, of } from "rxjs";
+import { map } from 'rxjs/operators';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { ConverterContractDescription, RDFCapabilityType } from "../../models/Coda";
 import { NodeConversion, SimpleGraphApplication, SimpleHeader } from "../../models/Sheet2RDF";
@@ -12,33 +13,25 @@ import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBContext } from "../../utils/VBContext";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
-import { NodeCreationModal, NodeCreationModalData } from "./nodeCreationModal";
-
-export class SimpleGraphApplicationModalData extends BSModalContext {
-    /**
-     * @param graphApplication optional graph application to edit. If not provided the modal create a new graph application
-     */
-    constructor(public header: SimpleHeader, public graphApplication?: SimpleGraphApplication) {
-        super();
-    }
-}
+import { NodeCreationModal } from "./nodeCreationModal";
 
 @Component({
     selector: "simple-graph-modal",
     templateUrl: "./simpleGraphApplicationModal.html",
 })
-export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphApplicationModalData> {
-    context: SimpleGraphApplicationModalData;
+export class SimpleGraphApplicationModal {
+    @Input() header: SimpleHeader;
+    @Input() graphApplication?: SimpleGraphApplication; //optional graph application to edit. If not provided the modal create a new graph application
 
-    private property: ARTURIResource; //property used in graph section
+    property: ARTURIResource; //property used in graph section
 
     /**
      * Range type
      */
     private resourceRangeType: HeaderRangeType = { type: RangeType.resource, show: "Resource" };
     private literalRangeType: HeaderRangeType = { type: RangeType.literal, show: "Literal" };
-    private rangeTypes: HeaderRangeType[];
-    private selectedRangeType: HeaderRangeType;
+    rangeTypes: HeaderRangeType[];
+    selectedRangeType: HeaderRangeType;
 
     /**
      * Refinement following the range type:
@@ -46,7 +39,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
      * - language
      * - datatype
      */
-    private rangeCollection: ARTURIResource[]; //all the range classes of the selected property
+    rangeCollection: ARTURIResource[]; //all the range classes of the selected property
     //when rangeType is 'resource', user can select the range class to assert
     private assertType: boolean = false;
     private assertableTypes: ARTResource[];
@@ -58,18 +51,17 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     /**
      * Node
      */
-    private availableNodes: NodeConversion[] = [];
-    private selectedNode: NodeConversion;
+    availableNodes: NodeConversion[] = [];
+    selectedNode: NodeConversion;
 
-    constructor(public dialog: DialogRef<SimpleGraphApplicationModalData>, private s2rdfService: Sheet2RDFServices,
+    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices,
         private propService: PropertyServices, private resourceService: ResourcesServices,
-        private browsingModals: BrowsingModalServices, private modal: Modal) {
-        this.context = dialog.context;
+        private browsingModals: BrowsingModalServices, private modalService: NgbModal) {
     }
 
     ngOnInit() {
         this.rangeTypes = [this.resourceRangeType, this.literalRangeType];
-        this.availableNodes.push(...this.context.header.nodes);
+        this.availableNodes.push(...this.header.nodes);
 
         /**
          * If there is only a node available, check if it has a language/datatype. In case inizializes its selection.
@@ -82,15 +74,15 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
             }
         }
 
-        if (this.context.graphApplication != null) {
+        if (this.graphApplication != null) {
             //restore property and related info (range, range type, ...)
-            this.property = this.context.graphApplication.property;
+            this.property = this.graphApplication.property;
             if (this.property != null) {
                 this.updateHeaderPropertyRange();
             }
             //restore selected node
             this.availableNodes.forEach(n => {
-                if (n.nodeId == this.context.graphApplication.nodeId) {
+                if (n.nodeId == this.graphApplication.nodeId) {
                     this.selectedNode = n;
                 }
             })
@@ -100,7 +92,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     /**
      * Browse the property tree in order to select a property
      */
-    private changeProperty() {
+    changeProperty() {
         this.browsingModals.browsePropertyTree("Select property").then(
             (property: ARTURIResource) => {
                 this.property = property;
@@ -159,9 +151,9 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                         }
 
                         // try to restore the model about the node
-                        if (this.context.graphApplication != null) {
+                        if (this.graphApplication != null) {
                             //select the node
-                            let nodeId = this.context.graphApplication.nodeId;
+                            let nodeId = this.graphApplication.nodeId;
                             this.availableNodes.forEach(n => {
                                 if (n.nodeId == nodeId) {
                                     this.selectedNode = n;
@@ -175,7 +167,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
                                 }
                             }
                             //restore the asserted type
-                            let type = this.context.graphApplication.value;
+                            let type = this.graphApplication.value;
                             if (type != null) {
                                 this.assertType = true;
                                 let typeIdx = ResourceUtils.indexOfNode(this.assertableTypes, type);
@@ -197,13 +189,13 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     private annotateRangeCollection(rangeResp: RangeResponse): Observable<void> {
         if (rangeResp.ranges.rangeCollection != null) {
             let rangeColl: ARTURIResource[] = rangeResp.ranges.rangeCollection.resources;
-            return this.resourceService.getResourcesInfo(rangeColl).map(
-                annotated => {
+            return this.resourceService.getResourcesInfo(rangeColl).pipe(
+                map(annotated => {
                     this.rangeCollection = annotated;
-                }
+                })
             )
         } else {
-            return Observable.of(null);
+            return of(null);
         }
     }
 
@@ -240,7 +232,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
      * This constraints are necessary since the choice of the converter in a node definition depends on the range type and eventually
      * on the datatype (the choosable converters rdf capability and datatypes must be compliant respectively to the selected rangeType and datatype)
      */
-    private isNodeSelectionEnabled(): boolean {
+    isNodeSelectionEnabled(): boolean {
         if (this.property == null || this.selectedRangeType == null) {
             return false;
         } else {
@@ -275,7 +267,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
         return s;
     }
 
-    private addNode() {
+    addNode() {
         let dt: ARTURIResource = (this.selectedRangeType.type == RangeType.literal) ? this.datatype : null;
         let lang: string
         /**
@@ -289,12 +281,14 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
         ) {
             lang = this.availableNodes[0].converter.language;
         }
-        var modalData = new NodeCreationModalData(this.context.header, null, this.selectedRangeType.type, lang, dt, this.availableNodes);
-        const builder = new BSModalContextBuilder<NodeCreationModalData>(
-            modalData, undefined, NodeCreationModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
-        this.modal.open(NodeCreationModal, overlayConfig).result.then(
+        const modalRef: NgbModalRef = this.modalService.open(NodeCreationModal, new ModalOptions('xl'));
+        modalRef.componentInstance.header = this.header;
+		modalRef.componentInstance.editingNode = null;
+        modalRef.componentInstance.constrainedRangeType = this.selectedRangeType.type;
+        modalRef.componentInstance.constrainedLanguage = lang;
+        modalRef.componentInstance.constrainedDatatype = dt;
+        modalRef.componentInstance.headerNodes = this.availableNodes;
+        return modalRef.result.then(
             (node: NodeConversion) => {
                 this.availableNodes.push(node);
                 this.selectedNode = node;
@@ -307,7 +301,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
      * Check if the selected node is compliant with the choices in the graph application, in case it is not compliant
      * returns the error message
      */
-    private getNodeNotCompliantError(): string {
+    getNodeNotCompliantError(): string {
         let err: string = null;
         if (this.selectedNode != null && this.selectedNode.converter != null && this.selectedRangeType != null) {
             //if range type is resource, node is not compliant if its converter capability is not uri
@@ -341,7 +335,7 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     }
 
 
-    private isOkEnabled(): boolean {
+    isOkEnabled(): boolean {
         //just check if node is compliant. Since node is provided only when property, and range type are provided, this check could be enough
         return this.selectedNode != null && this.getNodeNotCompliantError() == null;
     }
@@ -349,14 +343,14 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
     ok() {
         //check if the selected node has been created contextually or it was already among the available in the header
         let exist: boolean = false;
-        this.context.header.nodes.forEach(n => {
+        this.header.nodes.forEach(n => {
             if (n.nodeId == this.selectedNode.nodeId) {
                 exist = true;
             }
         })
         //if it didn't exist, create it and then create/update the graph application
         if (!exist) {
-            this.s2rdfService.addNodeToHeader(this.context.header.id, this.selectedNode.nodeId, this.selectedNode.converter.type,
+            this.s2rdfService.addNodeToHeader(this.header.id, this.selectedNode.nodeId, this.selectedNode.converter.type,
                 this.selectedNode.converter.contractUri, this.selectedNode.converter.datatypeUri, this.selectedNode.converter.language, this.selectedNode.converter.params,
                 this.selectedNode.memoize).subscribe(
                     resp => {
@@ -374,20 +368,20 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
             type = this.assertedType;
         }
         let graphAppFn: Observable<any>;
-        if (this.context.graphApplication == null) { //create mode
-            graphAppFn = this.s2rdfService.addSimpleGraphApplicationToHeader(this.context.header.id, this.property, this.selectedNode.nodeId, type);
+        if (this.graphApplication == null) { //create mode
+            graphAppFn = this.s2rdfService.addSimpleGraphApplicationToHeader(this.header.id, this.property, this.selectedNode.nodeId, type);
         } else { //edit mode
-            graphAppFn = this.s2rdfService.updateSimpleGraphApplication(this.context.header.id, this.context.graphApplication.id, this.property, this.selectedNode.nodeId, type);
+            graphAppFn = this.s2rdfService.updateSimpleGraphApplication(this.header.id, this.graphApplication.id, this.property, this.selectedNode.nodeId, type);
         }
         graphAppFn.subscribe(
             resp => {
-                this.dialog.close();
+                this.activeModal.close();
             }
         );
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
     /**
@@ -395,12 +389,12 @@ export class SimpleGraphApplicationModal implements ModalComponent<SimpleGraphAp
      * @param resources 
      */
     private annotateResources(resources: ARTURIResource[]): Observable<void> {
-        return this.resourceService.getResourcesInfo(resources).map(
-            annotated => {
+        return this.resourceService.getResourcesInfo(resources).pipe(
+            map(annotated => {
                 for (let i = 0; i < resources.length; i++) {
                     resources[i] = annotated[ResourceUtils.indexOfNode(annotated, resources[i])];
                 }
-            }
+            })
         )
     }
 

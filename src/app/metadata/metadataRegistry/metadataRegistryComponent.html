@@ -1,25 +1,25 @@
 <div class="hbox">
 
-    <div class="panel panel-default vbox" style="flex: 2">
-        <div class="panel-heading">
+    <div class="card card-default vbox" style="flex: 2">
+        <div class="card-header">
             <label style="flex: 1;">Catalog Records:</label>
-            <div class="btn-group btn-group-xs" role="group">
-                <div class="btn-group btn-group-xs" role="group" title="Add Dataset">
-                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" [disabled]="!isAddDatasetAuthorized()">
-                        <span class="glyphicon glyphicon-plus"></span>
+            <div class="btn-group btn-group-xs">
+                <div class="btn-group btn-group-xs" title="Add Dataset" ngbDropdown>
+                    <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="!isAddDatasetAuthorized()">
+                        <span class="fas fa-plus"></span>
                     </button>
-                    <ul class="dropdown-menu pull-right">
-                        <li><a (click)="addCatalogRecord()">Add Catalog record</a></li>
-                        <li><a (click)="discoverDataset()">Discover dataset</a></li>
-                    </ul>
+                    <div class="dropdown-menu float-right" ngbDropdownMenu>
+                        <a class="dropdown-item" (click)="addCatalogRecord()">Add Catalog record</a>
+                        <a class="dropdown-item" (click)="discoverDataset()">Discover dataset</a>
+                    </div>
                 </div>
-                <button class="btn btn-default" title="Delete Dataset" (click)="deleteCatalogRecord()"
+                <button class="btn btn-light" title="Delete Dataset" (click)="deleteCatalogRecord()"
                     [disabled]="!selectedCatalog || !isRemoveDatasetAuthorized()">
-                    <span class="glyphicon glyphicon-minus"></span>
+                    <span class="fas fa-minus"></span>
                 </button>
             </div>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <table class="table table-hoverable">
                 <thead>
                     <tr>
@@ -42,30 +42,30 @@
         </div>
     </div>
 
-    <div class="panel panel-default vbox" style="flex: 3; margin-left: 4px;">
-        <div class="panel-heading">
+    <div class="card card-default vbox" style="flex: 3; margin-left: 4px;">
+        <div class="card-header">
             <label>Dataset:</label>
         </div>
-        <div class="panel-body vbox">
+        <div class="card-body vbox">
             <dataset-metadata [dataset]="activeDatasetMetadata" (update)="onDatasetUpdate()"></dataset-metadata>
 
             <div class="hbox" style="margin-top: 4px;">
                 <!-- Other versions -->
-                <div class="panel panel-alt vbox">
-                    <div class="panel-heading">
+                <div class="card card-alt vbox">
+                    <div class="card-header">
                         <label style="flex: 1;">Other versions:</label>
                         <div class="btn-group btn-group-xs" role="group">
-                            <button class="btn btn-default" title="Add Dataset Version" (click)="addDatasetVersion()"
+                            <button class="btn btn-light" title="Add Dataset Version" (click)="addDatasetVersion()"
                                 [disabled]="!selectedCatalog || !isAddDatasetAuthorized()">
-                                <span class="glyphicon glyphicon-plus"></span>
+                                <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-default" title="Delete Dataset Version" (click)="deleteDatasetVersion()"
+                            <button class="btn btn-light" title="Delete Dataset Version" (click)="deleteDatasetVersion()"
                                 [disabled]="!selectedVersion || !isRemoveDatasetAuthorized()">
-                                <span class="glyphicon glyphicon-minus"></span>
+                                <span class="fas fa-minus"></span>
                             </button>
                         </div>
                     </div>
-                    <div class="panel-body scrollableContainer">
+                    <div class="card-body scrollableContainer">
                         <dataset-metadata *ngFor="let v of selectedCatalog?.versions" [dataset]="v" style="margin-bottom: 2px;"
                             (click)="selectedVersion = v" [ngClass]="{ activePanel : v == selectedVersion }" version="true"
                             (update)="onVersionUpdate()">
@@ -73,30 +73,30 @@
                     </div>
                 </div>
                 <!-- Embedded lex sets -->
-                <div class="panel panel-alt vbox blockingDivHost" style="margin-left: 4px;">
-                    <div class="panel-heading">
+                <div class="card card-alt vbox blockingDivHost" style="margin-left: 4px;">
+                    <div class="card-header">
                         <label style="flex: 1;">Embedded Lexicalization Sets:</label>
                         <div class="btn-group btn-group-xs" role="group">
                             <div class="btn-group btn-group-xs" role="group" title="Add Embedded Lexicalization Set">
-                                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" [disabled]="!selectedCatalog || !isAddEmbeddedLexicalizationSetAuthorized()">
-                                    <span class="glyphicon glyphicon-plus"></span>
+                                <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="!selectedCatalog || !isAddEmbeddedLexicalizationSetAuthorized()">
+                                    <span class="fas fa-plus"></span>
                                 </button>
-                                <ul class="dropdown-menu pull-right">
+                                <div class="dropdown-menu float-right" ngbDropdownMenu>
                                     <li><a (click)="addEmbeddedLexicalizationSet()">Add Embedded Lexicalization Set</a></li>
                                     <li [ngClass]="{disabled : lexicalizationSets.length != 0}"><a (click)="assessLexicalizationModel()">Assess Lexicalization Model</a></li>
-                                </ul>
+                                </div>
                             </div>
-                            <button class="btn btn-default" title="Delete Embedded Lexicalization Set" (click)="deleteEmbeddedLexicalizationSet()"
+                            <button class="btn btn-light" title="Delete Embedded Lexicalization Set" (click)="deleteEmbeddedLexicalizationSet()"
                                 [disabled]="!selectedLexicalizationSet || !isRemoveEmbeddedLexicalizationSetAuthorized()">
-                                <span class="glyphicon glyphicon-minus"></span>
+                                <span class="fas fa-minus"></span>
                             </button>
-                            <button class="btn btn-default" title="Delete All Embedded Lexicalization Set" (click)="deleteAllEmbeddedLexicalizationSet()"
+                            <button class="btn btn-light" title="Delete All Embedded Lexicalization Set" (click)="deleteAllEmbeddedLexicalizationSet()"
                                 [disabled]="!isRemoveEmbeddedLexicalizationSetAuthorized() || lexicalizationSets.length == 0">
-                                <span class="glyphicon glyphicon-trash"></span>
+                                <span class="far fa-trash-alt"></span>
                             </button>
                         </div>
                     </div>
-                    <div class="panel-body scrollableContainer">
+                    <div class="card-body scrollableContainer">
                         <lexicalization-set-metadata *ngFor="let ls of lexicalizationSets" style="margin-bottom: 2px;"
                             [lexicalizationSetMetadata]="ls" [dataset]="selectedCatalog?.abstractDataset"
                             (click)="selectedLexicalizationSet = ls" [ngClass]="{ activePanel : ls == selectedLexicalizationSet }">

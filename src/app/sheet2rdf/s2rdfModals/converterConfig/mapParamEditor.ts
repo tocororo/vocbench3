@@ -10,7 +10,7 @@ export class MapParamEditor {
 
     @Output() valueChanged = new EventEmitter<any>();
 
-    private map: {key: string, value: any}[] = [];
+    map: {key: string, value: any}[] = [];
 
     constructor() { }
 

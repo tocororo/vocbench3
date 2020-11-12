@@ -3,28 +3,28 @@
     <div class="vbox">
 
         <!-- Namespace management -->
-        <div class="panel panel-default vbox">
-            <div class="panel-heading">
+        <div class="card card-default vbox">
+            <div class="card-header">
                 <label style="flex: 1">Namespace management:</label>
                 <div class="btn-group btn-group-xs" role="group">
-                    <button class="btn btn-default" title="Add mapping" (click)="addMapping()" [disabled]="!isAddNsPrefixMappingAuthorized()">
-                        <span class="glyphicon glyphicon-plus"></span>
+                    <button class="btn btn-light" title="Add mapping" (click)="addMapping()" [disabled]="!isAddNsPrefixMappingAuthorized()">
+                        <span class="fas fa-plus"></span>
                     </button>
-                    <button class="btn btn-default" title="Remove mapping" (click)="removeMapping()"
+                    <button class="btn btn-light" title="Remove mapping" (click)="removeMapping()"
                         [disabled]="!selectedMapping || !selectedMapping.explicit || !isRemoveNsPrefixMappingAuthorized()">
-                        <span class="glyphicon glyphicon-minus"></span>
+                        <span class="fas fa-minus"></span>
                     </button>
-                    <button class="btn btn-default" title="Change prefix" (click)="changeMapping()"
+                    <button class="btn btn-light" title="Change prefix" (click)="changeMapping()"
                         [disabled]="!selectedMapping || !isChangeNsPrefixMappingAuthorized()">
-                        <span class="glyphicon glyphicon-pencil"></span>
+                        <span class="fas fa-pencil-alt"></span>
                     </button>
                 </div>
             </div>
-            <div class="panel-body vbox">
+            <div class="card-body vbox">
                 
-                <div class="panel panel-default" style="margin: 4px">
-                    <div class="panel-body">
-                        <table class="table table-condensed table-borderless">
+                <div class="card card-default" style="margin: 4px">
+                    <div class="card-body">
+                        <table class="table table-sm table-borderless">
                             <colgroup>
                                 <col style="width: 1%;">
                                 <col>
@@ -40,14 +40,14 @@
                                     </td>
                                     <td rowspan="2">
                                         <div class="btn-group-sm btn-group-vertical">
-                                            <button class="btn btn-default" [ngClass]="{active: bind}" title="Bind/unbind namespace and baseURI"
+                                            <button class="btn btn-light" [ngClass]="{active: bind}" title="Bind/unbind namespace and baseURI"
                                                 (click)="bindNamespaceBaseURI()">
-                                                <span class="glyphicon glyphicon-link"></span>
+                                                <span class="fas fa-link"></span>
                                             </button>
-                                            <button class="btn btn-default" title="Apply namespace baseURI changes"
-                                                [ngClass]="{'btn-primary': areNamespaceBaseURIChanged(), 'btn-default': !areNamespaceBaseURIChanged()}"
+                                            <button class="btn btn-light" title="Apply namespace baseURI changes"
+                                                [ngClass]="{'btn-primary': areNamespaceBaseURIChanged(), 'btn-light': !areNamespaceBaseURIChanged()}"
                                                 (click)="applyNamespaceBaseURI()" [disabled]="!areNamespaceBaseURIChanged() || !isBaseuriNsEditAuthorized()">
-                                                <span class="glyphicon glyphicon-ok"></span>
+                                                <span class="fas fa-check"></span>
                                             </button>
                                         </div>
                                     </td>
@@ -66,7 +66,7 @@
                 </div>
 
                 <div class="scrollableContainer">
-                    <table class="table table-condensed table-striped table-hoverable">
+                    <table class="table table-sm table-striped table-hoverable">
                         <thead>
                             <tr>
                                 <th class="text-center">Prefix</th>
@@ -86,26 +86,26 @@
         </div>
 
         <!--Imports-->
-        <div class="panel panel-default vbox" style="margin-top: 5px;">
-            <div class="panel-heading">
+        <div class="card card-default vbox" style="margin-top: 5px;">
+            <div class="card-header">
                 <label style="flex: 1">Imports:</label>
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown" [disabled]="!isAddImportAuthorized()">
-                        Add import from <span class="caret"></span>
+                <div class="dropdown" ngbDropdown>
+                    <button class="btn btn-light dropdown-toggle btn-xs" type="button" data-toggle="dropdown" ngbDropdownToggle [disabled]="!isAddImportAuthorized()">
+                        Add import from <span class="fas fa-caret-down fa-sm"></span>
                     </button>
-                    <ul class="dropdown-menu">
-                        <li><a (click)="importFromWeb()">Web</a></li>
-                        <li><a (click)="importFromWebToMirror()">Web to mirror</a></li>
-                        <li><a (click)="importFromLocalFile()">Local file</a></li>
-                        <li><a (click)="importFromOntologyMirror()">Ontology mirror</a></li>
-                        <li><a (click)="importFromDatasetCatalog()">Dataset Catalog</a></li>
-                    </ul>
+                    <div class="dropdown-menu" ngbDropdownMenu>
+                        <a class="dropdown-item" (click)="importFromWeb()">Web</a>
+                        <a class="dropdown-item" (click)="importFromWebToMirror()">Web to mirror</a>
+                        <a class="dropdown-item" (click)="importFromLocalFile()">Local file</a>
+                        <a class="dropdown-item" (click)="importFromOntologyMirror()">Ontology mirror</a>
+                        <a class="dropdown-item" (click)="importFromDatasetCatalog()">Dataset Catalog</a>
+                    </div>
                 </div>
-                <button class="btn btn-default btn-xs" (click)="openOntologyMirror()" style="margin-left: 4px;">
+                <button class="btn btn-light btn-xs" (click)="openOntologyMirror()" style="margin-left: 4px;">
                     Ontology mirror
                 </button>
             </div>
-            <div class="panel-body vbox">
+            <div class="card-body vbox">
                 <import-tree [imports]="importTree" (nodeRemoved)="removeImport($event)" (update)="onInportTreeUpdate()"></import-tree>
             </div>
         </div>

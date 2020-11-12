@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body">
     
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%;">
             <col>
@@ -13,13 +13,13 @@
             <tr>
                 <td nowrap><label>Dataset:</label></td>
                 <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="dataset">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="dataset">
                 </td>
             </tr>
             <tr>
                 <td nowrap><label>Version Info:</label></td>
                 <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="versionInfo">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="versionInfo">
                 </td>
                 <td>*</td>
             </tr>
@@ -28,7 +28,7 @@
     
 </div>
 <div class="modal-footer">
-    <span class="pull-left">(*) Mandatory field</span>
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <span class="float-left">(*) Mandatory field</span>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

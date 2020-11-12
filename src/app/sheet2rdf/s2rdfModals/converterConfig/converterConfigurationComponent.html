@@ -1,10 +1,10 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
+<div class="card card-default">
+    <div class="card-header">
         <label>Converter</label>
     </div>
-    <div class="panel-body scrollableContainer">
+    <div class="card-body scrollableContainer">
 
-        <table class="table table-condensed table-hoverable" style="margin-top: 4px;">
+        <table class="table table-sm table-hoverable" style="margin-top: 4px;">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -18,7 +18,7 @@
                     <td>{{c.getName()}}</td>
                     <td style="white-space: pre;">{{c.getDescription()}}</td>
                     <td nowrap>{{c.getRDFCapability()}}
-                        <span *ngIf="c.getRDFCapability() == 'typedLiteral'" class="glyphicon glyphicon-info-sign" [title]="c.getDatatypes()"></span>
+                        <span *ngIf="c.getRDFCapability() == 'typedLiteral'" class="fas fa-info-circle" [title]="c.getDatatypes()"></span>
                     </td>
                     <td [title]="c.getURI()">{{c.getQName()}}</td>
                 </tr>
@@ -33,22 +33,22 @@
                 </span>
             </div>
             <div class="groupPanel-body hbox">
-                <div class="panel panel-alt" style="flex: 1;">
-                    <div class="panel-heading">
+                <div class="card card-alt" style="flex: 1;">
+                    <div class="card-header">
                         <label>Signature</label>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         <div *ngFor="let s of availableSignatures" class="listItem" (click)="selectSignature(s)" [ngClass]="{ active: s == selectedSignature }">
                             <span>{{getSignatureShow(s)}}</span>
                             <span *ngIf="s.getRequirementLevels() != 'IGNORED'" [title]="'Feature path ' + s.getRequirementLevels().toLocaleLowerCase()" style="margin-left: 4px; font-weight: bold;">
                                 <ng-container *ngIf="s.getRequirementLevels() == 'OPTIONAL'">
                                     [
-                                    <span class="glyphicon glyphicon-arrow-left"></span>
+                                    <span class="fas fa-long-arrow-alt-left"></span>
                                     <span style="font-style: italic;">F</span>
                                     ]
                                 </ng-container>
                                 <ng-container *ngIf="s.getRequirementLevels() == 'REQUIRED'">
-                                    <span class="glyphicon glyphicon-arrow-left"></span>
+                                    <span class="fas fa-long-arrow-alt-left"></span>
                                     <span style="font-style: italic;">F</span>
                                 </ng-container>
                             </span>
@@ -59,9 +59,9 @@
 
 
                 <!-- default literal converter, datatype and language choice -->
-                <div *ngIf="showDefaultLiteralConverterOpt(); else otherConvBlock" class="panel panel-default" style="flex: 3; margin-left: 4px;">
-                    <div class="panel-body hbox" style="align-items: center;">
-                        <select class="form-control input-sm" style="max-width: 150px; margin-right: 4px;" [(ngModel)]="selectedLiteralAspect"
+                <div *ngIf="showDefaultLiteralConverterOpt(); else otherConvBlock" class="card card-default" style="flex: 3; margin-left: 4px;">
+                    <div class="card-body hbox" style="align-items: center;">
+                        <select class="form-control form-control-sm" style="max-width: 150px; margin-right: 4px;" [(ngModel)]="selectedLiteralAspect"
                             [disabled]="!literalAspectChangeable" (ngModelChange)="onSignatureParamChange()">
                             <option *ngFor="let o of literalAspectOpts">{{o}}</option>
                         </select>
@@ -72,19 +72,19 @@
                             <datatype-picker *ngSwitchCase="datatypeLiteralAspect" style="flex: 1;" [(ngModel)]="datatype"
                                 (ngModelChange)="onSignatureParamChange()" [readonly]="constrainedDatatype">
                             </datatype-picker>
-                            <input *ngSwitchDefault class="form-control input-sm" readonly>
+                            <input *ngSwitchDefault class="form-control form-control-sm" readonly>
                         </ng-container>
                     </div>
 
                 </div>
                 <!-- other converters -->
                 <ng-template #otherConvBlock>
-                    <div *ngIf="signatureParams?.length > 0" class="panel panel-alt" style="flex: 2; margin-left: 4px;">
-                        <div class="panel-heading">
+                    <div *ngIf="signatureParams?.length > 0" class="card card-alt" style="flex: 2; margin-left: 4px;">
+                        <div class="card-header">
                             <label>Params</label>
                         </div>
-                        <div class="panel-body">
-                            <table class="table table-condensed table-borderless">
+                        <div class="card-body">
+                            <table class="table table-sm table-borderless">
                                 <colgroup>
                                     <col style="width: 1%;">
                                     <col>
@@ -93,17 +93,17 @@
                                     <tr *ngFor="let p of signatureParams">
                                         <td nowrap>
                                             <label>{{p.name}}</label>
-                                            <span class="glyphicon glyphicon-info-sign" [title]="getParameterTitle(p)"></span>
+                                            <span class="fas fa-info-circle" [title]="getParameterTitle(p)"></span>
                                         </td>
                                         <td>
                                             <ng-container *ngIf="p.type == 'java.lang.String'">
                                                 <div *ngIf="p.name == 'xRole'; else genericStringParamElseBlock" class="hbox">
-                                                    <select [(ngModel)]="p.value" class="form-control input-sm" (ngModelChange)="onSignatureParamChange()">
+                                                    <select [(ngModel)]="p.value" class="form-control form-control-sm" (ngModelChange)="onSignatureParamChange()">
                                                         <option *ngFor="let r of xRoles">{{r}}</option>
                                                     </select>
                                                 </div>
                                                 <ng-template #genericStringParamElseBlock>
-                                                    <input class="form-control input-sm" [(ngModel)]="p.value" (ngModelChange)="onSignatureParamChange()">
+                                                    <input class="form-control form-control-sm" [(ngModel)]="p.value" (ngModelChange)="onSignatureParamChange()">
                                                 </ng-template>
                                             </ng-container>
                                             <map-param-editor *ngIf="p.type == 'java.util.Map<java.lang.String, org.eclipse.rdf4j.model.Value>'" 
@@ -123,12 +123,12 @@
         </div>
 
     </div>
-    <div *ngIf="isConverterRandom()" class="panel-footer">
+    <div *ngIf="isConverterRandom()" class="card-footer">
         <div class="checkbox-inline">
             <label>
                 <input type="checkbox" [(ngModel)]="memoize" (ngModelChange)="onMemoizeChange()">Memoize
             </label>
-            <span class="glyphicon glyphicon-info-sign" title="Apply the memoization: given the same input, the converter will generate the same output">
+            <span class="fas fa-info-circle" title="Apply the memoization: given the same input, the converter will generate the same output">
             </span>
         </div>
     </div>

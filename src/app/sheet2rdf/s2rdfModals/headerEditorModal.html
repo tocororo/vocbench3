@@ -5,14 +5,14 @@
             <label>
                 <input type="checkbox" [(ngModel)]="header.ignore" (ngModelChange)="onIgnoreChange()">Ignore header
             </label>
-            <span class="glyphicon glyphicon-info-sign" title="If checked, the current header will be ignored in the generated PEARL code and thus in the conversion process">
+            <span class="fas fa-info-circle" title="If checked, the current header will be ignored in the generated PEARL code and thus in the conversion process">
             </span>
         </div>
     </div>
 </div>
 <div class="modal-body vbox scrollableContainer">
 
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%;">
             <col>
@@ -21,38 +21,38 @@
             <tr>
                 <td class="text-right"><label>Header:</label></td>
                 <td>
-                    <input type="text" class="form-control input-sm" [ngModel]="header?.nameStruct.fullName" readonly>
+                    <input type="text" class="form-control form-control-sm" [ngModel]="header?.nameStruct.fullName" readonly>
                 </td>
             </tr>
             <tr>
                 <td class="text-right" nowrap><label>PEARL feature:</label></td>
                 <td>
-                    <input type="text" class="form-control input-sm" [ngModel]="header?.pearlFeature" readonly>
+                    <input type="text" class="form-control form-control-sm" [ngModel]="header?.pearlFeature" readonly>
                 </td>
             </tr>
         </tbody>
     </table>
 
 
-    <div class="panel panel-default vbox" style="margin-top: 4px; min-height: 100px">
-        <div class="panel-heading">
+    <div class="card card-default vbox" style="margin-top: 4px; min-height: 100px">
+        <div class="card-header">
             <label style="flex: 1">
                 Nodes
-                <span class="glyphicon glyphicon-info-sign" title="List of nodes generated from the current header"></span>
+                <span class="fas fa-info-circle" title="List of nodes generated from the current header"></span>
             </label>
             <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group btn-group-xs">
-                    <button class="btn btn-default" (click)="addNode()" [disabled]="header?.ignore">
-                        <span class="glyphicon glyphicon-plus"></span>
+                    <button class="btn btn-light" (click)="addNode()" [disabled]="header?.ignore">
+                        <span class="fas fa-plus"></span>
                     </button>
-                    <button class="btn btn-default" (click)="removeNode()" [disabled]="!selectedNode || header?.ignore">
-                        <span class="glyphicon glyphicon-minus"></span>
+                    <button class="btn btn-light" (click)="removeNode()" [disabled]="!selectedNode || header?.ignore">
+                        <span class="fas fa-minus"></span>
                     </button>
                 </div>
             </div>
         </div>
-        <div class="panel-body vbox table-responsive">
-            <table class="table table-condensed">
+        <div class="card-body vbox table-responsive">
+            <table class="table table-sm">
                 <thead>
                     <tr>
                         <th>Node ID</th>
@@ -66,22 +66,22 @@
                         [ngClass]="{ info : n == selectedNode }">
                         <td [ngClass]="{ grayText : header?.ignore }">
                             {{n.nodeId}}
-                            <button class="btn btn-xs btn-default" (click)="renameNode(n)">
-                                <span class="glyphicon glyphicon-pencil"></span>
+                            <button class="btn btn-xs btn-light" (click)="renameNode(n)">
+                                <span class="fas fa-pencil-alt"></span>
                             </button>
                         </td>
                         <td [ngClass]="{ grayText : header?.ignore }">{{n.converter?.type}}</td>
                         <td [ngClass]="{ grayText : header?.ignore }" nowrap>
                             {{n.converter?.contractUri}}
-                            <button *ngIf="n.converter?.type == 'uri'" class="btn btn-xs btn-default" (click)="changeUriConverter(n)">
-                                <span class="glyphicon glyphicon-pencil"></span>
+                            <button *ngIf="n.converter?.type == 'uri'" class="btn btn-xs btn-light" (click)="changeUriConverter(n)">
+                                <span class="fas fa-pencil-alt"></span>
                             </button>
                         </td>
                         <td [ngClass]="{ grayText : header?.ignore }" nowrap>
                             <span *ngIf="n.converter?.language; else dtBlock">
                                 <label style="white-space: pre">Lang: </label>{{n.converter.language}}
-                                <button *ngIf="n.converter?.type == 'literal'" class="btn btn-xs btn-default" (click)="changeLiteralConverter(n)">
-                                    <span class="glyphicon glyphicon-pencil"></span>
+                                <button *ngIf="n.converter?.type == 'literal'" class="btn btn-xs btn-light" (click)="changeLiteralConverter(n)">
+                                    <span class="fas fa-pencil-alt"></span>
                                 </button>
                             </span>
                             <span #dtBlock *ngIf="n.converter?.datatypeUri">
@@ -94,34 +94,34 @@
         </div>
     </div>
 
-    <div class="panel panel-default vbox" style="margin-top: 4px; min-height: 100px">
-        <div class="panel-heading">
+    <div class="card card-default vbox" style="margin-top: 4px; min-height: 100px">
+        <div class="card-header">
             <label style="flex: 1">
                 Graph applications
-                <span class="glyphicon glyphicon-info-sign" title="List of applications of the nodes defined in the 'Nodes' panel"></span>
+                <span class="fas fa-info-circle" title="List of applications of the nodes defined in the 'Nodes' panel"></span>
             </label>
             <div class="btn-toolbar" role="toolbar">
-                <button class="btn btn-xs btn-default" (click)="editGraph()" [disabled]="!selectedGraph || header?.ignore">
-                    <span class="glyphicon glyphicon-pencil"></span>
+                <button class="btn btn-xs btn-light" (click)="editGraph()" [disabled]="!selectedGraph || header?.ignore">
+                    <span class="fas fa-pencil-alt"></span>
                 </button>
                 <div class="btn-group btn-group-xs">
-                    <div class="btn-group btn-group-xs" role="group">
-                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" [disabled]="header?.ignore">
-                            <span class="glyphicon glyphicon-plus"></span>
+                    <div class="btn-group btn-group-xs" ngbDropdown>
+                        <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="header?.ignore">
+                            <span class="fas fa-plus"></span>
                         </button>
-                        <ul class="dropdown-menu pull-right">
-                            <li><a (click)="addSimpleGraphApplication()">Add simple graph application</a></li>
-                            <li><a (click)="addAdvancedGraphApplication()">Add advanced graph application</a></li>
-                        </ul>
+                        <div class="dropdown-menu float-right" ngbDropdownMenu>
+                            <a class="dropdown-item" (click)="addSimpleGraphApplication()">Add simple graph application</a>
+                            <a class="dropdown-item" (click)="addAdvancedGraphApplication()">Add advanced graph application</a>
+                        </div>
                     </div>
-                    <button class="btn btn-default" (click)="removeGraph()" [disabled]="!selectedGraph || header?.ignore">
-                        <span class="glyphicon glyphicon-minus"></span>
+                    <button class="btn btn-light" (click)="removeGraph()" [disabled]="!selectedGraph || header?.ignore">
+                        <span class="fas fa-minus"></span>
                     </button>
                 </div>
             </div>
         </div>
-        <div class="panel-body vbox scrollableContainer" style="min-height: 80px">
-            <table class="table table-condensed">
+        <div class="card-body vbox scrollableContainer" style="min-height: 80px">
+            <table class="table table-sm">
                 <colgroup>
                     <col style="width: 1%">
                     <col>

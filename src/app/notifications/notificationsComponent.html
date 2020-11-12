@@ -1,53 +1,53 @@
-<div class="panel panel-default vbox">
-    <div class="panel-heading">
+<div class="card card-default vbox">
+    <div class="card-header">
         <label style="flex: 1;">Notifications:</label>
         <div class="btn-toolbar">
-            <button class="btn btn-xs btn-default" (click)="clear()" title="Clear notifications">
-                <span class="glyphicon glyphicon-erase"></span>
+            <button class="btn btn-xs btn-light" (click)="clear()" title="Clear notifications">
+                <span class="fas fa-eraser"></span>
             </button>
-            <button class="btn btn-xs btn-default" (click)="init()" title="Refresh">
-                <span class="glyphicon glyphicon-refresh"></span>
+            <button class="btn btn-xs btn-light" (click)="init()" title="Refresh">
+                <span class="fas fa-redo"></span>
             </button>
-            <button class="btn btn-xs btn-default" (click)="settings()" title="Settings">
-                <span class="glyphicon glyphicon-cog"></span>
+            <button class="btn btn-xs btn-light" (click)="settings()" title="Settings">
+                <span class="fas fa-cog"></span>
             </button>
         </div>
     </div>
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
         <div class="table-responsive">
             <table class="table table-hoverable">
                 <thead>
                     <tr>
                         <th class="text-center" style="padding: 2px;">
                             Time
-                            <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="changeTimeOrder()">
-                                <span *ngSwitchCase="'time_ascending'" class="glyphicon glyphicon-sort-by-order"></span>
-                                <span *ngSwitchCase="'time_descending'" class="glyphicon glyphicon-sort-by-order-alt"></span>
-                                <span *ngSwitchDefault class="glyphicon glyphicon-sort"></span>
+                            <button class="btn btn-xs btn-light" [ngSwitch]="sortOrder" (click)="changeTimeOrder()">
+                                <span *ngSwitchCase="'time_ascending'" class="fas fa-sort-numeric-down"></span>
+                                <span *ngSwitchCase="'time_descending'" class="fas fa-sort-numeric-down-alt"></span>
+                                <span *ngSwitchDefault class="fas fa-sort"></span>
                             </button>
                         </th>
                         <th class="text-center" style="padding: 2px;">
                             Resource
-                            <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="changeResourceOrder()">
-                                <span *ngSwitchCase="'resource_ascending'" class="glyphicon glyphicon-sort-by-alphabet"></span>
-                                <span *ngSwitchCase="'resource_descending'" class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
-                                <span *ngSwitchDefault class="glyphicon glyphicon-sort"></span>
+                            <button class="btn btn-xs btn-light" [ngSwitch]="sortOrder" (click)="changeResourceOrder()">
+                                <span *ngSwitchCase="'resource_ascending'" class="fas fa-sort-alpha-down"></span>
+                                <span *ngSwitchCase="'resource_descending'" class="fas fa-sort-alpha-down-alt"></span>
+                                <span *ngSwitchDefault class="fas fa-sort"></span>
                             </button>
                         </th>
                         <th class="text-center" style="padding: 2px;">
                             Resource Type
-                            <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="changeRoleOrder()">
-                                <span *ngSwitchCase="'role_ascending'" class="glyphicon glyphicon-sort-by-alphabet"></span>
-                                <span *ngSwitchCase="'role_descending'" class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
-                                <span *ngSwitchDefault class="glyphicon glyphicon-sort"></span>
+                            <button class="btn btn-xs btn-light" [ngSwitch]="sortOrder" (click)="changeRoleOrder()">
+                                <span *ngSwitchCase="'role_ascending'" class="fas fa-sort-alpha-down"></span>
+                                <span *ngSwitchCase="'role_descending'" class="fas fa-sort-alpha-down-alt"></span>
+                                <span *ngSwitchDefault class="fas fa-sort"></span>
                             </button>
                         </th>
                         <th class="text-center" style="padding: 2px;">
                             Event
-                            <button class="btn btn-xs btn-default" [ngSwitch]="sortOrder" (click)="changeActionOrder()">
-                                <span *ngSwitchCase="'action_ascending'" class="glyphicon glyphicon-sort-by-alphabet"></span>
-                                <span *ngSwitchCase="'action_descending'" class="glyphicon glyphicon-sort-by-alphabet-alt"></span>
-                                <span *ngSwitchDefault class="glyphicon glyphicon-sort"></span>
+                            <button class="btn btn-xs btn-light" [ngSwitch]="sortOrder" (click)="changeActionOrder()">
+                                <span *ngSwitchCase="'action_ascending'" class="fas fa-sort-alpha-down"></span>
+                                <span *ngSwitchCase="'action_descending'" class="fas fa-sort-alpha-down-alt"></span>
+                                <span *ngSwitchDefault class="fas fa-sort"></span>
                             </button>
                         </th>
                     </tr>

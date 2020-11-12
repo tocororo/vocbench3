@@ -1,30 +1,18 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ImportType, OntologyMirror, TransitiveImportMethodAllowance } from "../../models/Metadata";
 import { RDFFormat } from "../../models/RDFFormat";
 import { ExportServices } from "../../services/exportServices";
 import { OntoManagerServices } from "../../services/ontoManagerServices";
 
-export class ImportOntologyModalData extends BSModalContext {
-    /**
-     * @param title modal title
-     */
-    constructor(
-        public title: string = "Modal Title",
-        public importType: ImportType, //'fromWeb' | 'fromWebToMirror' | 'fromLocalFile' | 'fromOntologyMirror'
-        public baseURI?: string //baseURI of the imported ontology (provided only when repairing)
-    ) {
-        super();
-    }
-}
-
 @Component({
     selector: "import-ontology-modal",
     templateUrl: "./importOntologyModal.html",
 })
-export class ImportOntologyModal implements ModalComponent<ImportOntologyModalData> {
-    context: ImportOntologyModalData;
+export class ImportOntologyModal {
+    @Input() title: string;
+    @Input() importType: ImportType; //'fromWeb' | 'fromWebToMirror' | 'fromLocalFile' | 'fromOntologyMirror'
+    @Input() baseUriInput?: string; //baseURI of the imported ontology (provided only when repairing)
 
     private editorMode: EditorMode = EditorMode.import;
 
@@ -48,22 +36,21 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
     private mirrorList: OntologyMirror[]; //used for type "fromOntologyMirror"
     private selectedMirror: OntologyMirror; //used for type "fromOntologyMirror"
 
-    private importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
+    importAllowances: { allowance: TransitiveImportMethodAllowance, show: string }[] = [
         { allowance: TransitiveImportMethodAllowance.nowhere, show: "Do not resolve" },
         { allowance: TransitiveImportMethodAllowance.web, show: "Resolve from web" },
         { allowance: TransitiveImportMethodAllowance.webFallbackToMirror, show: "Resolve from web with fallback to Ontology Mirror" },
         { allowance: TransitiveImportMethodAllowance.mirror, show: "Resolve from Ontology Mirror" },
         { allowance: TransitiveImportMethodAllowance.mirrorFallbackToWeb, show: "Resolve from Ontology Mirror with fallback to Web" }
     ];
-    private selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[1].allowance;
+    selectedImportAllowance: TransitiveImportMethodAllowance = this.importAllowances[1].allowance;
 
-    constructor(public dialog: DialogRef<ImportOntologyModalData>, public ontoMgrService: OntoManagerServices, public exportService: ExportServices) {
-        this.context = dialog.context;
+    constructor(public activeModal: NgbActiveModal, public ontoMgrService: OntoManagerServices, public exportService: ExportServices) {
     }
 
     ngOnInit() {
         //init mirror list if modal import type is fromOntologyMirror
-        if (this.context.importType == ImportType.fromOntologyMirror) {
+        if (this.importType == ImportType.fromOntologyMirror) {
             this.ontoMgrService.getOntologyMirror().subscribe(
                 mirrors => {
                     this.mirrorList = mirrors;
@@ -71,7 +58,7 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
             );
         }
         //init list of rdfFormats if import type is fromWeb or fromWebToMirror
-        if (this.context.importType == ImportType.fromWeb || this.context.importType == ImportType.fromWebToMirror) {
+        if (this.importType == ImportType.fromWeb || this.importType == ImportType.fromWebToMirror) {
             this.exportService.getOutputFormats().subscribe(
                 formats => {
                     this.formats = formats;
@@ -85,28 +72,28 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
                 }
             );
         }
-        if (this.context.baseURI != null) {
+        if (this.baseUriInput != null) {
             this.editorMode = EditorMode.repair;
-            this.baseURI = this.context.baseURI;
+            this.baseURI = this.baseUriInput;
         }
         //baseURI is always mandatory, except in import from local file
-        this.baseURIOptional = this.editorMode == EditorMode.import && this.context.importType == ImportType.fromLocalFile;
+        this.baseURIOptional = this.editorMode == EditorMode.import && this.importType == ImportType.fromLocalFile;
         //mirror file is mandatory in import fromMirror, fromWebToMirror and in repair fromWebToMirror. Optional in import and repair fromLocalFile
-        this.mirrorFileOptional = this.context.importType == ImportType.fromLocalFile;
+        this.mirrorFileOptional = this.importType == ImportType.fromLocalFile;
     }
 
-    private fileChangeEvent(file: File) {
+    fileChangeEvent(file: File) {
         this.localFile = file;
     }
 
-    private isOkClickable() {
+    isOkClickable() {
         /* 
         in the following checks, selectedImportAllowance is never checked since (even it is mandatory) it is automatically set through the combobox.
         Moreover, some checks may be the same for both import and repair (e.g. in fromWeb or fromWebToMirror), 
         but I prefer to keep them separated (using if-else clause) so if the optional/mandatory parameters changes for the given scenario, 
         it will be easier to fix the conditions.
         */
-        if (this.context.importType == ImportType.fromWeb) {
+        if (this.importType == ImportType.fromWeb) {
             if (this.editorMode == EditorMode.import) { 
                 //baseURI required, other params optional
                 return this.baseURI != null && this.baseURI.trim() != "" && //baseURI valid
@@ -118,7 +105,7 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
                     (!this.altURLCheck || this.altURL != null && this.altURL.trim() != "") && //altURL not checked, or checked and valid
                     (!this.forceFormatCheck || this.rdfFormat != null); //format not checked or checked and selected
             }
-        } else if (this.context.importType == ImportType.fromWebToMirror) {
+        } else if (this.importType == ImportType.fromWebToMirror) {
             if (this.editorMode == EditorMode.import) { 
                 //baseURI and mirrorFile required, other params optional
                 return this.baseURI != null && this.baseURI.trim() != "" && //baseURI valid
@@ -132,7 +119,7 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
                     (!this.altURLCheck || this.altURL != null && this.altURL.trim() != "") && //altURL not checked, or checked and valid
                     (!this.forceFormatCheck || this.rdfFormat != null); //format not checked or checked and selected
             }
-        } else if (this.context.importType == ImportType.fromLocalFile) {
+        } else if (this.importType == ImportType.fromLocalFile) {
             if (this.editorMode == EditorMode.import) { 
                 //local file required, other param optional
                 return this.localFile != null && //localFile provided
@@ -144,7 +131,7 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
                     this.localFile != null && //localFile provided
                     (!this.mirrorFileCheck || this.mirrorFile != null && this.mirrorFile.trim() != "") //mirrorFile not checked, or checked and valid
             }
-        } else if (this.context.importType == ImportType.fromOntologyMirror) {
+        } else if (this.importType == ImportType.fromOntologyMirror) {
             //available only import (not repair)
             //baseURI and mirror required (both from selectedMirror)
             return this.selectedMirror != null;
@@ -152,7 +139,7 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
     }
 
     ok() {
-        if (this.context.importType == ImportType.fromWeb) {
+        if (this.importType == ImportType.fromWeb) {
             if (this.editorMode == EditorMode.import) { 
                 let returnData: ImportFromWebData = {
                     baseURI: this.baseURI,
@@ -160,7 +147,7 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
                     rdfFormat: this.forceFormatCheck ? this.rdfFormat : null,
                     transitiveImportAllowance: this.selectedImportAllowance
                 }
-                this.dialog.close(returnData);
+                this.activeModal.close(returnData);
             } else { //repair
                 let returnData: RepairFromWebData = {
                     baseURI: this.baseURI,
@@ -168,9 +155,9 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
                     rdfFormat: this.forceFormatCheck ? this.rdfFormat : null,
                     transitiveImportAllowance: this.selectedImportAllowance
                 }
-                this.dialog.close(returnData);
+                this.activeModal.close(returnData);
             }
-        } else if (this.context.importType == ImportType.fromWebToMirror) {
+        } else if (this.importType == ImportType.fromWebToMirror) {
             if (this.editorMode == EditorMode.import) { 
                 let returnData: ImportFromWebToMirrorData = {
                     baseURI: this.baseURI,
@@ -179,7 +166,7 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
                     rdfFormat: this.forceFormatCheck ? this.rdfFormat : null,
                     transitiveImportAllowance: this.selectedImportAllowance
                 }
-                this.dialog.close(returnData);
+                this.activeModal.close(returnData);
             } else { //repair
                 let returnData: RepairFromWebToMirrorData = {
                     baseURI: this.baseURI,
@@ -188,9 +175,9 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
                     rdfFormat: this.forceFormatCheck ? this.rdfFormat : null,
                     transitiveImportAllowance: this.selectedImportAllowance
                 }
-                this.dialog.close(returnData);
+                this.activeModal.close(returnData);
             }
-        } else if (this.context.importType == ImportType.fromLocalFile) {
+        } else if (this.importType == ImportType.fromLocalFile) {
             if (this.editorMode == EditorMode.import) { 
                 let returnData: ImportFromLocalFileData = {
                     baseURI: this.baseURICheck ? this.baseURI : null,
@@ -198,7 +185,7 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
                     mirrorFile: this.mirrorFileCheck ? this.mirrorFile : null,
                     transitiveImportAllowance: this.selectedImportAllowance
                 }
-                this.dialog.close(returnData);
+                this.activeModal.close(returnData);
             } else { //repair
                 let returnData: RepairFromLocalFileData = {
                     baseURI: this.baseURI,
@@ -206,20 +193,20 @@ export class ImportOntologyModal implements ModalComponent<ImportOntologyModalDa
                     mirrorFile: this.mirrorFileCheck ? this.mirrorFile : null,
                     transitiveImportAllowance: this.selectedImportAllowance
                 }
-                this.dialog.close(returnData);
+                this.activeModal.close(returnData);
             }
-        } else if (this.context.importType == ImportType.fromOntologyMirror) {
+        } else if (this.importType == ImportType.fromOntologyMirror) {
             //from mirror only import is available (no repair)
             let returnData: ImportFromMirrorData = {
                 mirror: this.selectedMirror,
                 transitiveImportAllowance: this.selectedImportAllowance
             }
-            this.dialog.close(returnData);
+            this.activeModal.close(returnData);
         }
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

@@ -6,21 +6,21 @@
     <div style="flex: 1;" [ngClass]="{ proposedAddTriple: import.status == 'STAGED_ADDITION', proposedRemoveTriple: import.status == 'STAGED_REMOVAL' }">
         {{import.id}}
     </div>
-    <span *ngIf="import.status == 'LOOP'" class="glyphicon glyphicon-repeat" style="margin-right: 6px;" title="Loop of imports"></span>
+    <span *ngIf="import.status == 'LOOP'" class="fas fa-redo" style="margin-right: 6px;" title="Loop of imports"></span>
     
-    <div *ngIf="import.status == 'FAILED'" class="btn-group">
-        <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" title="Failed import">
-            <span class="glyphicon glyphicon-warning-sign"></span>
+    <div *ngIf="import.status == 'FAILED'" class="btn-group" ngbDropdown>
+        <button class="btn btn-light btn-xs dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle title="Failed import">
+            <span class="fas fa-exclamation-triangle"></span>
         </button>
-        <ul class="dropdown-menu pull-right">
-            <li><a (click)="repairFromLocalFile()">Repair from local file</a></li>
-            <li><a (click)="repairFromWeb()">Repair from web</a></li>
-            <li><a (click)="repairFromWebToMirror()">Repair from web to mirror</a></li>
-        </ul>
+        <div class="dropdown-menu float-right" ngbDropdownMenu>
+            <a class="dropdown-item" (click)="repairFromLocalFile()">Repair from local file</a>
+            <a class="dropdown-item" (click)="repairFromWeb()">Repair from web</a>
+            <a class="dropdown-item" (click)="repairFromWebToMirror()">Repair from web to mirror</a>
+        </div>
     </div>
 
-    <button *ngIf="import.root" class="btn btn-default btn-xs" (click)="removeImport()" [disabled]="!isDeleteImportAuthorized()">
-        <span class="glyphicon glyphicon-trash" title="Remove import"></span>
+    <button *ngIf="import['root']" class="btn btn-light btn-xs" (click)="removeImport()" [disabled]="!isDeleteImportAuthorized()">
+        <span class="far fa-trash-alt" title="Remove import"></span>
     </button>
 </div>
 

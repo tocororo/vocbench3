@@ -2,27 +2,26 @@
     <h3 class="modal-title">Load SHACL shapes</h3>
 </div>
 <div class="modal-body vbox">
-    <div class="form-horizontal">
-        <div class="form-group">
-            <label class="control-label col-sm-1">File:</label>
-            <div class="col-sm-7">
-                <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="filePickerAccept"></file-picker>    
-            </div>
-            <label class="control-label col-sm-1">Format:</label>
-            <div class="col-sm-3">
-                <select class="form-control input-sm" [(ngModel)]="selectedInputFormat">
-                    <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
-                </select>
-            </div>
+    <div class="form-group row">
+        <label class="col-form-label col-sm-1">File:</label>
+        <div class="col-sm-7">
+            <!-- <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="filePickerAccept"></file-picker> -->
+            <file-picker (fileChanged)="fileChangeEvent($event)"></file-picker>
+        </div>
+        <label class="col-form-label col-sm-1">Format:</label>
+        <div class="col-sm-3">
+            <select class="form-control" [(ngModel)]="selectedInputFormat">
+                <option *ngFor="let f of inputFormats" [ngValue]="f">{{f.name}}</option>
+            </select>
         </div>
     </div>
 </div>
 <div class="modal-footer">
-    <div class="checkbox-inline pull-left">
+    <div class="checkbox-inline float-left">
         <label>
             <input type="checkbox" [(ngModel)]="clearExisting">Clear existing
         </label>
     </div>
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!file || !selectedInputFormat">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!file || !selectedInputFormat">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

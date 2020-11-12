@@ -1,44 +1,35 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from "../../models/ARTResources";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
-
-export class NewCatalogRecordModalData extends BSModalContext {
-    constructor(public title: string) {
-        super();
-    }
-}
 
 @Component({
     selector: "catalog-record-modal",
     templateUrl: "./newCatalogRecordModal.html",
 })
-export class NewCatalogRecordModal implements ModalComponent<NewCatalogRecordModalData> {
-    context: NewCatalogRecordModalData;
+export class NewCatalogRecordModal {
+    @Input() title: string;
 
-    private dereferenceableValues: { label: string, value: any }[] = [
+    dereferenceableValues: { label: string, value: any }[] = [
         { label: "Unknown", value: null },
         { label: "Yes", value: true },
         { label: "No", value: false }
     ];
 
-    private dataset: string;
-    private uriSpace: string;
-    private title: string;
-    private dereferenceable: { label: string, value: any } = this.dereferenceableValues[0];
-    private sparqlEndpoint: string;
+    dataset: string;
+    uriSpace: string;
+    recordTitle: string;
+    dereferenceable: { label: string, value: any } = this.dereferenceableValues[0];
+    sparqlEndpoint: string;
 
-    constructor(public dialog: DialogRef<NewCatalogRecordModalData>, private metadataRegistryService: MetadataRegistryServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private metadataRegistryService: MetadataRegistryServices) {}
 
     
-    private isInputValid() {
+    isInputValid() {
         return this.uriSpace != null && this.uriSpace.trim() != "";
     }
 
-    ok(event: Event) {
+    ok() {
         let datasetPar: ARTURIResource = null;
         if (this.dataset != null && this.dataset.trim() != "") {
             datasetPar = new ARTURIResource(this.dataset);
@@ -49,17 +40,15 @@ export class NewCatalogRecordModal implements ModalComponent<NewCatalogRecordMod
         }
         let dereferenceablePar: boolean = this.dereferenceable.value;
 
-        this.metadataRegistryService.addDataset(this.uriSpace, datasetPar, this.title, sparqlEndpointPar, dereferenceablePar).subscribe(
-            stReps => {
-                event.stopPropagation();
-                event.preventDefault();
-                this.dialog.close();
+        this.metadataRegistryService.addDataset(this.uriSpace, datasetPar, this.recordTitle, sparqlEndpointPar, dereferenceablePar).subscribe(
+            () => {
+                this.activeModal.close();
             }
         );
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

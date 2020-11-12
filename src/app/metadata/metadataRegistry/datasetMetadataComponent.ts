@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { DatasetMetadata } from "../../models/Metadata";
 import { SemanticTurkey } from "../../models/Vocabulary";
@@ -20,10 +21,10 @@ export class DatasetMetadataComponent {
     private dereferYes: string = "Yes";
     private dereferNo: string = "No";
 
-    private dereferenciationValues: string[] = [this.dereferUnknown, this.dereferYes, this.dereferNo];
-    private dereferenciationNormalized: string;
+    dereferenciationValues: string[] = [this.dereferUnknown, this.dereferYes, this.dereferNo];
+    dereferenciationNormalized: string;
 
-    private sparqlLimitations: boolean;
+    sparqlLimitations: boolean;
 
     constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices) { }
 
@@ -48,7 +49,7 @@ export class DatasetMetadataComponent {
         }
     }
 
-    private updateTitle(newValue: string) {
+    updateTitle(newValue: string) {
         let title: string = null;
         if (newValue != null && newValue.trim() != "") {
             title = newValue;
@@ -60,13 +61,13 @@ export class DatasetMetadataComponent {
         );
     }
 
-    private updateSparqlEndpoint(newValue: string) {
+    updateSparqlEndpoint(newValue: string) {
         let sparqlEndpoint: ARTURIResource;
         if (newValue != null && newValue.trim() != "") {
             if (ResourceUtils.testIRI(newValue)) {
                 sparqlEndpoint = new ARTURIResource(newValue);
             } else { //invalid IRI
-                this.basicModals.alert("Invalid SPARQL Endpoint", newValue + " is not a valid IRI", "warning");
+                this.basicModals.alert("Invalid SPARQL Endpoint", newValue + " is not a valid IRI", ModalType.warning);
                 //restore old id
                 let backupId: string = this.dataset.sparqlEndpointMetadata.id;
                 this.dataset.sparqlEndpointMetadata.id = null + "new";
@@ -83,7 +84,7 @@ export class DatasetMetadataComponent {
         );
     }
 
-    private updateDerefSystem(newValue: string) {
+    updateDerefSystem(newValue: string) {
         let dereferenciablePar: boolean;
         let newDereferenciable: string;
         if (newValue == this.dereferUnknown) {
@@ -105,7 +106,7 @@ export class DatasetMetadataComponent {
         )
     }
 
-    private updateSparqlLimitations() {
+    updateSparqlLimitations() {
         if (this.sparqlLimitations) {
             this.metadataRegistryService.setSPARQLEndpointLimitation(new ARTURIResource(this.dataset.sparqlEndpointMetadata.id), 
                 new ARTURIResource(SemanticTurkey.noAggregation)).subscribe(

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ImportType, OntologyImport, PrefixMapping } from "../../models/Metadata";
 import { ResourceViewEditorComponent } from "../../resourceView/resourceViewEditor/resourceViewEditorComponent";
@@ -28,23 +28,23 @@ export class NamespacesAndImportsComponent {
     // baseURI namespace section
     private pristineBaseURI: string;
     private pristineNamespace: string;
-    private baseURI: string;
-    private namespace: string;
-    private bind: boolean = true; //keep bound the baseURI and the namespace
-    private nsBaseURISubmitted: boolean = false; //tells if changes on namespace or baseURI have been submitted
+    baseURI: string;
+    namespace: string;
+    bind: boolean = true; //keep bound the baseURI and the namespace
+    nsBaseURISubmitted: boolean = false; //tells if changes on namespace or baseURI have been submitted
 
     // namespace prefix section
-    private nsPrefMappingList: PrefixMapping[];
-    private selectedMapping: any; //the currently selected mapping {namespace: string, prefix: string}
+    nsPrefMappingList: PrefixMapping[];
+    selectedMapping: any; //the currently selected mapping {namespace: string, prefix: string}
 
     // Imports params section
-    private importTree: OntologyImport[];
+    importTree: OntologyImport[];
 
     //Ontology res view
-    private baseUriRes: ARTURIResource;
+    baseUriRes: ARTURIResource;
 
     constructor(private metadataService: MetadataServices, private refactorService: RefactorServices,
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) { }
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         this.refreshBaseURI();
@@ -99,14 +99,14 @@ export class NamespacesAndImportsComponent {
      * Bind/unbind namespace baseURI.
      * If they're bound, changing one of them will change the other
      */
-    private bindNamespaceBaseURI() {
+    bindNamespaceBaseURI() {
         this.bind = !this.bind;
     }
 
     /**
      * When baseURI changes updates the namespace if they are bound 
      */
-    private onBaseURIChanged(newBaseURI: string) {
+    onBaseURIChanged(newBaseURI: string) {
         this.baseURI = newBaseURI;
         if (this.bind) {
             this.namespace = this.baseURI;
@@ -119,7 +119,7 @@ export class NamespacesAndImportsComponent {
     /**
      * When namespace changes updates the baseURI if they are bound
      */
-    private onNamespaceChanged(newNamespace: string) {
+    onNamespaceChanged(newNamespace: string) {
         this.namespace = newNamespace;
         if (this.bind) {
             if (this.namespace.endsWith("#")) {
@@ -133,34 +133,34 @@ export class NamespacesAndImportsComponent {
     /**
      * Tells if namespace or baseURI have been changed
      */
-    private areNamespaceBaseURIChanged() {
+    areNamespaceBaseURIChanged() {
         return (this.baseURI != this.pristineBaseURI || this.namespace != this.pristineNamespace);
     }
 
     /**
      * Tells if baseURI is valid. BaseURI is valid if startsWith http://
      */
-    private isBaseURIValid() {
+    isBaseURIValid() {
         return (this.baseURI && ResourceUtils.testIRI(this.baseURI));
     }
 
     /**
      * Tells if namespace is valid. Namespace is valid if starts with http:// and ends with #
      */
-    private isNamespaceValid() {
+    isNamespaceValid() {
         return (this.namespace && ResourceUtils.testIRI(this.namespace) && (this.namespace.endsWith("#") || this.namespace.endsWith("/")));
     }
 
     /**
      * Updates the namespace and baseURI
      */
-    private applyNamespaceBaseURI() {
+    applyNamespaceBaseURI() {
         this.nsBaseURISubmitted = true;
         if (this.isBaseURIValid() && this.isNamespaceValid()) {
             var message = "Save change of ";
             if (this.baseURI != this.pristineBaseURI && this.namespace != this.pristineNamespace) {//changed both baseURI and namespace
                 message += "baseURI and namespace? (Attention, baseURI refactoring could be a long process)";
-                this.basicModals.confirm("Refactor", message, "warning").then(
+                this.basicModals.confirm("Refactor", message, ModalType.warning).then(
                     confirm => {
                         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                         this.metadataService.setDefaultNamespace(this.namespace).subscribe(
@@ -186,7 +186,7 @@ export class NamespacesAndImportsComponent {
                 );
             } else if (this.baseURI != this.pristineBaseURI) { //changed only baseURI
                 message += "baseURI? (Attention, baseURI refactoring could be a long process)";
-                this.basicModals.confirm("Refactor", message, "warning").then(
+                this.basicModals.confirm("Refactor", message, ModalType.warning).then(
                     confirm => {
                         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
                         this.refactorService.replaceBaseURI(this.baseURI).subscribe(
@@ -206,7 +206,7 @@ export class NamespacesAndImportsComponent {
                 )
             } else if (this.namespace != this.pristineNamespace) {//changed only namespace
                 message += "namespace?";
-                this.basicModals.confirm("Save changes", message, "warning").then(
+                this.basicModals.confirm("Save changes", message, ModalType.warning).then(
                     confirm => {
                         this.metadataService.setDefaultNamespace(this.namespace).subscribe(
                             stResp => {
@@ -224,7 +224,7 @@ export class NamespacesAndImportsComponent {
                 )
             }
         } else {
-            this.basicModals.alert("Error", "Please insert valid namespace and baseURI", "error");
+            this.basicModals.alert("Error", "Please insert valid namespace and baseURI", ModalType.warning);
         }
     }
 
@@ -233,7 +233,7 @@ export class NamespacesAndImportsComponent {
     /**
      * Set the given prefix namespace mapping as selected
      */
-    private selectMapping(mapping: any) {
+    selectMapping(mapping: any) {
         if (this.selectedMapping == mapping) {
             this.selectedMapping = null;
         } else {
@@ -244,7 +244,7 @@ export class NamespacesAndImportsComponent {
     /**
      * Adds a new prefix namespace mapping
      */
-    private addMapping() {
+    addMapping() {
         this.sharedModals.prefixNamespace("Add prefix namespace mapping").then(
             (mapping: any) => {
                 this.metadataService.setNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
@@ -260,7 +260,7 @@ export class NamespacesAndImportsComponent {
     /**
      * Removes the selected mapping
      */
-    private removeMapping() {
+    removeMapping() {
         this.metadataService.removeNSPrefixMapping(this.selectedMapping.namespace).subscribe(
             stResp => {
                 this.refreshNSPrefixMappings();
@@ -271,7 +271,7 @@ export class NamespacesAndImportsComponent {
     /**
      * Changes the prefix of a prefix namespace mapping
      */
-    private changeMapping() {
+    changeMapping() {
         this.sharedModals.prefixNamespace("Change prefix namespace mapping", this.selectedMapping.prefix, this.selectedMapping.namespace, true).then(
             (mapping: any) => {
                 this.metadataService.changeNSPrefixMapping(mapping.prefix, mapping.namespace).subscribe(
@@ -290,7 +290,7 @@ export class NamespacesAndImportsComponent {
      * Opens a modal to import an ontology from web,
      * once done refreshes the imports list and the namespace prefix mapping
      */
-    private importFromWeb() {
+    importFromWeb() {
         this.sharedModals.importOntology("Import from web", ImportType.fromWeb).then(
             (data: ImportFromWebData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -312,7 +312,7 @@ export class NamespacesAndImportsComponent {
      * Opens a modal to import an ontology from web and copies it to a mirror file,
      * once done refreshes the imports list and the namespace prefix mapping
      */
-    private importFromWebToMirror() {
+    importFromWebToMirror() {
         this.sharedModals.importOntology("Import from web to mirror", ImportType.fromWebToMirror).then(
             (data: ImportFromWebToMirrorData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -334,7 +334,7 @@ export class NamespacesAndImportsComponent {
      * Opens a modal to import an ontology from a local file and copies it to a mirror file,
      * once done refreshes the imports list and the namespace prefix mapping
      */
-    private importFromLocalFile() {
+    importFromLocalFile() {
         this.sharedModals.importOntology("Import from local file", ImportType.fromLocalFile).then(
             (data: ImportFromLocalFileData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -356,7 +356,7 @@ export class NamespacesAndImportsComponent {
      * Opens a modal to import an ontology from a mirror file,
      * once done refreshes the imports list and the namespace prefix mapping
      */
-    private importFromOntologyMirror() {
+    importFromOntologyMirror() {
         this.sharedModals.importOntology("Import from ontology mirror", ImportType.fromOntologyMirror).then(
             (data: ImportFromMirrorData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -378,7 +378,7 @@ export class NamespacesAndImportsComponent {
      * Opens a modal to import an ontology from the dataset catalog. This uses the addFromWeb import.
      * Once done refreshes the imports list and the namespace prefix mapping
      */
-    private importFromDatasetCatalog() {
+    importFromDatasetCatalog() {
         this.sharedModals.importFromDatasetCatalog("Import from Dataset Catalog").then(
             (data: ImportFromDatasetCatalogModalReturnData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -399,7 +399,7 @@ export class NamespacesAndImportsComponent {
     /**
      * Removes the given imported ontology, then update the prefix namespace mapping and the imports list
      */
-    private removeImport(importedOntology: {id: string, status: string, imports: any[]}) {
+    removeImport(importedOntology: {id: string, status: string, imports: any[]}) {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.metadataService.removeImport(importedOntology.id).subscribe(
             stResp => {
@@ -412,15 +412,13 @@ export class NamespacesAndImportsComponent {
         );
     }
 
-    private onInportTreeUpdate() {
+    onInportTreeUpdate() {
         this.refreshImports();
     }
 
 
-    private openOntologyMirror() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(OntologyMirrorModal, overlayConfig).result.then(
+    openOntologyMirror() {
+        this.modalService.open(OntologyMirrorModal, new ModalOptions()).result.then(
             (changed: boolean) => {
                 if (changed) {
                     this.refreshImports();
@@ -436,28 +434,28 @@ export class NamespacesAndImportsComponent {
         this.viewChildResView.buildResourceView(this.baseUriRes);
     }
 
-    private onOntologyUpdated() {
+    onOntologyUpdated() {
         this.refreshImports();
         this.refreshNSPrefixMappings();
     }
 
     //Authorizations
 
-    private isAddNsPrefixMappingAuthorized(): boolean {
+    isAddNsPrefixMappingAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataSetNsPrefixMapping);
     }
-    private isRemoveNsPrefixMappingAuthorized(): boolean {
+    isRemoveNsPrefixMappingAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRemoveNsPrefixMapping);
     }
-    private isChangeNsPrefixMappingAuthorized(): boolean {
+    isChangeNsPrefixMappingAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataChangeNsPrefixMapping);   
     }
-    private isBaseuriNsEditAuthorized(): boolean {
+    isBaseuriNsEditAuthorized(): boolean {
         return (
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataSetDefaultNs) &&
             AuthorizationEvaluator.isAuthorized(VBActionsEnum.refactorReplaceBaseUri));
     }
-    private isAddImportAuthorized(): boolean {
+    isAddImportAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataAddImport);
     }
 

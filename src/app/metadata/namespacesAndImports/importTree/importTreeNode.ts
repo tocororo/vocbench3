@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalOptions } from 'src/app/widget/modal/Modals';
 import { ImportType, OntologyImport } from "../../../models/Metadata";
 import { MetadataServices } from "../../../services/metadataServices";
 import { AuthorizationEvaluator } from "../../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../../utils/UIUtils";
 import { VBActionsEnum } from "../../../utils/VBActions";
-import { ImportOntologyModal, ImportOntologyModalData, ImportOntologyReturnData, RepairFromLocalFileData, RepairFromWebData, RepairFromWebToMirrorData } from "../importOntologyModal";
+import { ImportOntologyModal, ImportOntologyReturnData, RepairFromLocalFileData, RepairFromWebData, RepairFromWebToMirrorData } from "../importOntologyModal";
 
 @Component({
     selector: "import-tree-node",
@@ -17,15 +17,15 @@ export class ImportTreeNodeComponent {
     @Output() nodeRemoved = new EventEmitter<OntologyImport>();
     @Output() update = new EventEmitter();
 
-    private open: boolean = true;
+    open: boolean = true;
 
-    constructor(private metadataService: MetadataServices, private modal: Modal) { }
+    constructor(private metadataService: MetadataServices, private modalService: NgbModal) { }
 
-    private removeImport() {
+    removeImport() {
         this.nodeRemoved.emit(this.import);
     }
 
-    private repairFromLocalFile() {
+    repairFromLocalFile() {
         this.openImportModal("Repair failed import from local file", ImportType.fromLocalFile).then(
             (data: RepairFromLocalFileData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -40,7 +40,7 @@ export class ImportTreeNodeComponent {
         );
     }
 
-    private repairFromWeb() {
+    repairFromWeb() {
         this.openImportModal("Repair failed import from web", ImportType.fromWeb).then(
             (data: RepairFromWebData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -55,7 +55,7 @@ export class ImportTreeNodeComponent {
         );
     }
 
-    private repairFromWebToMirror() {
+    repairFromWebToMirror() {
         this.openImportModal("Repair failed import from web to mirror", ImportType.fromWebToMirror).then(
             (data: RepairFromWebToMirrorData) => {
                 UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
@@ -83,23 +83,22 @@ export class ImportTreeNodeComponent {
      * fromOntologyMirror) mirror object contains "namespace" and "file".
      */
     private openImportModal(title: string, importType: ImportType): Promise<ImportOntologyReturnData> {
-        var modalData = new ImportOntologyModalData(title, importType, this.import.id);
-        const builder = new BSModalContextBuilder<ImportOntologyModalData>(
-            modalData, undefined, ImportOntologyModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        return this.modal.open(ImportOntologyModal, overlayConfig).result;
+        const modalRef: NgbModalRef = this.modalService.open(ImportOntologyModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+		modalRef.componentInstance.importType = importType;
+		modalRef.componentInstance.baseUriInput = this.import.id;
+        return modalRef.result;
     }
 
-    private onNodeRemoved(node: OntologyImport) {
+    onNodeRemoved(node: OntologyImport) {
         this.nodeRemoved.emit(node);
     }
 
-    private onUpdate() {
+    onUpdate() {
         this.update.emit();
     }
 
-    private isDeleteImportAuthorized(): boolean {
+    isDeleteImportAuthorized(): boolean {
         return AuthorizationEvaluator.isAuthorized(VBActionsEnum.metadataRemoveImport);
     }
 

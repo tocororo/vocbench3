@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
-import { Observable } from 'rxjs/Observable';
+import { forkJoin, Observable } from 'rxjs';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ExtensionPointID, NonConfigurableExtensionFactory, PluginSpecification, Scope, Settings } from "../../models/Plugins";
 import { RDFFormat } from "../../models/RDFFormat";
 import { DatasetMetadataServices } from "../../services/datasetMetadataServices";
@@ -9,7 +10,6 @@ import { SettingsServices } from "../../services/settingsServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
-
 @Component({
     selector: "metadata-vocabularies-component",
     templateUrl: "./metadataVocabulariesComponent.html",
@@ -18,16 +18,16 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 export class MetadataVocabulariesComponent {
 
     //export format selection
-    private exportFormats: RDFFormat[];
-    private selectedExportFormat: RDFFormat;
+    exportFormats: RDFFormat[];
+    selectedExportFormat: RDFFormat;
 
-    private exporters: NonConfigurableExtensionFactory[];
-    private selectedExporter: NonConfigurableExtensionFactory;
+    exporters: NonConfigurableExtensionFactory[];
+    selectedExporter: NonConfigurableExtensionFactory;
 
-    private settingsStructs: SettingsStruct[];
+    settingsStructs: SettingsStruct[];
 
     // private selectedExporterSettings: Settings;
-    private extensionPointSettings: Settings;
+    extensionPointSettings: Settings;
 
     constructor(private metadataExporterService: DatasetMetadataServices, private exportService: ExportServices,
         private extensionService: ExtensionsServices, private settingsService: SettingsServices, private basicModals: BasicModalServices) { }
@@ -52,7 +52,7 @@ export class MetadataVocabulariesComponent {
         )
     }
 
-    private onExtensionChange() {
+    onExtensionChange() {
         if (this.selectedExporter == null) return;
 
         this.settingsStructs = [];
@@ -74,7 +74,7 @@ export class MetadataVocabulariesComponent {
         )
     }
 
-    private saveSettings() {
+    saveSettings() {
         let saveSettingsFnArray: any[] = [];
 
         if (!this.isCommonSettingsConfigure()) {
@@ -98,15 +98,15 @@ export class MetadataVocabulariesComponent {
             );
         }
 
-        Observable.forkJoin(saveSettingsFnArray).subscribe(
-            stResp => {
+        forkJoin(saveSettingsFnArray).subscribe(
+            () => {
                 this.basicModals.alert("Save settings", "Settings saved succesfully");
             }
         );
 
     }
 
-    private export() {
+    export() {
         let saveSettingsFnArray: any[] = [];
 
         if (!this.isCommonSettingsConfigure()) {
@@ -124,8 +124,8 @@ export class MetadataVocabulariesComponent {
         }
 
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
-        Observable.forkJoin(saveSettingsFnArray).subscribe(
-            stResp => {
+        forkJoin(saveSettingsFnArray).subscribe(
+            () => {
                 //export the metadata
                 let expoterSpecification: PluginSpecification = {
                     factoryId: this.selectedExporter.id
@@ -144,7 +144,7 @@ export class MetadataVocabulariesComponent {
     private isCommonSettingsConfigure(): boolean {
         if (this.extensionPointSettings.requireConfiguration()) {
             this.basicModals.alert("Missing configuration", "Required parameter(s) missing in extension point configuration (" +
-                this.extensionPointSettings.shortName + ")", "warning");
+                this.extensionPointSettings.shortName + ")", ModalType.warning);
             return false;
         } else {
             return true;
@@ -154,7 +154,7 @@ export class MetadataVocabulariesComponent {
     private isExporterSettingsConfigured(settingsStruct: SettingsStruct): boolean {
         if (settingsStruct.settings.requireConfiguration()) {
             this.basicModals.alert("Missing configuration", "Required parameter(s) missing in exporter configuration (" +
-                settingsStruct.settings.shortName + ", scope: " + settingsStruct.scope + ")", "warning");
+                settingsStruct.settings.shortName + ", scope: " + settingsStruct.scope + ")", ModalType.warning);
             return false;
         } else {
             return true;

@@ -1,4 +1,5 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { DatasetMetadata, LexicalizationSetMetadata } from "../../models/Metadata";
 import { OntoLex, RDFS, SKOS, SKOSXL } from "../../models/Vocabulary";
@@ -16,14 +17,14 @@ export class LexicalizationSetMetadataComponent {
     @Input() lexicalizationSetMetadata: LexicalizationSetMetadata;
 
     // private lexicalizationSet: string;
-    private lexiconDataset: string;
-    private lexicalizationModel: string;
-    private language: string;
-    private references: number;
-    private lexicalEntries: number;
-    private lexicalizations: number;
-    private percentage: number;
-    private avgNumOfLexicalizations: number;
+    lexiconDataset: string;
+    lexicalizationModel: string;
+    language: string;
+    references: number;
+    lexicalEntries: number;
+    lexicalizations: number;
+    percentage: number;
+    avgNumOfLexicalizations: number;
 
     private lexicalModelMap = [
         { iri: RDFS.uri, label: "RDFS" },
@@ -31,7 +32,7 @@ export class LexicalizationSetMetadataComponent {
         { iri: SKOSXL.uri, label: "SKOSXL" },
         { iri: OntoLex.uri, label: "OntoLex" }
     ];
-    private lexicalModelOpts = ["RDFS", "SKOS", "SKOSXL", "OntoLex"];
+    lexicalModelOpts = ["RDFS", "SKOS", "SKOSXL", "OntoLex"];
 
     constructor(private metadataRegistryService: MetadataRegistryServices, private basicModals: BasicModalServices) { }
 
@@ -54,10 +55,10 @@ export class LexicalizationSetMetadataComponent {
         }
     }
 
-    private updateLexiconDataset(newValue: string) {
+    updateLexiconDataset(newValue: string) {
         if (newValue != this.lexiconDataset) {
             if (!ResourceUtils.testIRI(newValue)) {
-                this.basicModals.alert("Invalid data", "'" + newValue + "' is not a valid IRI", "warning");
+                this.basicModals.alert("Invalid data", "'" + newValue + "' is not a valid IRI", ModalType.warning);
                 //restore old value
                 this.lexiconDataset = newValue;
                 setTimeout(() => {
@@ -70,18 +71,18 @@ export class LexicalizationSetMetadataComponent {
         }
     }
 
-    private updateLexicalizationModel(newValue: string) {
+    updateLexicalizationModel(newValue: string) {
         if (newValue != this.lexicalizationModel) {
             this.lexicalizationModel = newValue;
             this.updateLexicalizationSetMetadata();
         }
     }
 
-    private updateLanguage(newValue: string) {
+    updateLanguage(newValue: string) {
         if (newValue != this.language) {
             let langRegexp = new RegExp("^[a-z]{2,3}(?:-[A-Z]{2,3}(?:-[a-zA-Z]{4})?)?$");
             if (!langRegexp.test(newValue)) {
-                this.basicModals.alert("Invalid data", "'" + this.language + "' is not a valid language tag", "warning");
+                this.basicModals.alert("Invalid data", "'" + this.language + "' is not a valid language tag", ModalType.warning);
                 //restore old value
                 this.language = newValue;
                 setTimeout(() => {
@@ -94,35 +95,35 @@ export class LexicalizationSetMetadataComponent {
         }
     }
 
-    private updateReferences(newValue: number) {
+    updateReferences(newValue: number) {
         if (newValue != this.references) {
             this.references = newValue;
             this.updateLexicalizationSetMetadata();
         }
     }
 
-    private updateLexicalEntries(newValue: number) {
+    updateLexicalEntries(newValue: number) {
         if (newValue != this.references) {
             this.lexicalEntries = newValue;
             this.updateLexicalizationSetMetadata();
         }
     }
 
-    private updateLexicalizations(newValue: number) {
+    updateLexicalizations(newValue: number) {
         if (newValue != this.references) {
             this.lexicalizations = newValue;
             this.updateLexicalizationSetMetadata();
         }
     }
 
-    private updatePercentage(newValue: number) {
+    updatePercentage(newValue: number) {
         if (newValue != this.references) {
             this.percentage = newValue;
             this.updateLexicalizationSetMetadata();
         }
     }
 
-    private updateAvgNumOfLexicalizations(newValue: number) {
+    updateAvgNumOfLexicalizations(newValue: number) {
         if (newValue != this.references) {
             this.avgNumOfLexicalizations = newValue;
             this.updateLexicalizationSetMetadata();

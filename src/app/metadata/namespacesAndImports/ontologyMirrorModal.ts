@@ -1,6 +1,5 @@
 import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { OntoManagerServices } from "../../services/ontoManagerServices";
 import { AuthorizationEvaluator } from "../../utils/AuthorizationEvaluator";
 import { UIUtils } from "../../utils/UIUtils";
@@ -11,18 +10,15 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
     selector: "onto-mirror-modal",
     templateUrl: "./ontologyMirrorModal.html",
 })
-export class OntologyMirrorModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class OntologyMirrorModal {
 
-    @ViewChild('blockingDiv') public blockingDivElement: ElementRef;
+    @ViewChild('blockingDiv', { static: true }) public blockingDivElement: ElementRef;
     
-    private mirrorList: { file: string, baseURI: string }[]; //array of {file: string, namespace: string}
+    mirrorList: { file: string, baseURI: string }[]; //array of {file: string, namespace: string}
 
     private changed: boolean = false;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private ontoMgrService: OntoManagerServices, private basicModals: BasicModalServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private ontoMgrService: OntoManagerServices, private basicModals: BasicModalServices) {}
 
     ngOnInit() {
         this.refreshOntoMirror();
@@ -98,17 +94,15 @@ export class OntologyMirrorModal implements ModalComponent<BSModalContext> {
      */
     private deleteOntoMirror(mirror: { file: string, baseURI: string }) {
         this.ontoMgrService.deleteOntologyMirrorEntry(mirror.baseURI, mirror.file).subscribe(
-            stReps => {
+            () => {
                 this.changed = true;
                 this.refreshOntoMirror();
             }
         );
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close(this.changed);
+    ok() {
+        this.activeModal.close(this.changed);
     }
 
 

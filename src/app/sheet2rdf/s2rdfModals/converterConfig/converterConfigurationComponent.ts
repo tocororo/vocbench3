@@ -20,8 +20,8 @@ export class ConverterConfigurationComponent {
     @Input() datatype: ARTURIResource;
     @Output() update: EventEmitter<UpdateStatus> = new EventEmitter();
 
-    private availableConverters: ConverterContractDescription[] = [];
-    private selectedConverter: ConverterContractDescription;
+    availableConverters: ConverterContractDescription[] = [];
+    selectedConverter: ConverterContractDescription;
 
     private availableSignatures: SignatureDescription[];
     private selectedSignature: SignatureDescription;
@@ -135,7 +135,7 @@ export class ConverterConfigurationComponent {
         this.emitStatusUpdate();
     }
 
-    private isConverterRandom() {
+    isConverterRandom() {
         return this.selectedConverter != null && this.selectedConverter.getURI() == ConverterContractDescription.NAMESPACE + "randIdGen";
     }
 

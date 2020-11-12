@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body">
     
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%;">
             <col>
@@ -13,21 +13,21 @@
             <tr>
                 <td nowrap><label>Lexicalization Set:</label></td>
                 <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="lexicalizationSet">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="lexicalizationSet">
                 </td>
                 <td></td>
             </tr>
             <tr>
                 <td nowrap><label>Lexicon Dataset:</label></td>
                 <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="lexiconDataset">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="lexiconDataset">
                 </td>
                 <td></td>
             </tr>
             <tr>
                 <td nowrap><label>Lexicalization Model:</label></td>
                 <td>
-                    <select class="form-control input-sm" [(ngModel)]="lexicalizationModel">
+                    <select class="form-control form-control-sm" [(ngModel)]="lexicalizationModel">
                         <option *ngFor="let lm of lexicalModelList" [ngValue]="lm.value">{{lm.label}}</option>
                     </select>
                 </td>
@@ -36,42 +36,42 @@
             <tr>
                 <td nowrap><label>Language:</label></td>
                 <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="language">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="language">
                 </td>
                 <td>*</td>
             </tr>
             <tr>
                 <td nowrap><label>References:</label></td>
                 <td>
-                    <input type="number" class="form-control input-sm" [(ngModel)]="references" min="0" step="1">
+                    <input type="number" class="form-control form-control-sm" [(ngModel)]="references" min="0" step="1">
                 </td>
                 <td></td>
             </tr>
             <tr>
                 <td nowrap><label>Lexical Entries:</label></td>
                 <td>
-                    <input type="number" class="form-control input-sm" [(ngModel)]="lexicalEntries" min="0" step="1">
+                    <input type="number" class="form-control form-control-sm" [(ngModel)]="lexicalEntries" min="0" step="1">
                 </td>
                 <td></td>
             </tr>
             <tr>
                 <td nowrap><label>Lexicalizations:</label></td>
                 <td>
-                    <input type="number" class="form-control input-sm" [(ngModel)]="lexicalizations" min="0" step="1">
+                    <input type="number" class="form-control form-control-sm" [(ngModel)]="lexicalizations" min="0" step="1">
                 </td>
                 <td></td>
             </tr>
             <tr>
                 <td nowrap><label>Percentage:</label></td>
                 <td>
-                    <input type="number" class="form-control input-sm" [(ngModel)]="percentage" min="0" max="1" step="0.01">
+                    <input type="number" class="form-control form-control-sm" [(ngModel)]="percentage" min="0" max="1" step="0.01">
                 </td>
                 <td></td>
             </tr>
             <tr>
                 <td nowrap><label>Average number of Lexicalizations:</label></td>
                 <td>
-                    <input type="number" class="form-control input-sm" [(ngModel)]="avgNumOfLexicalizations" min="0">
+                    <input type="number" class="form-control form-control-sm" [(ngModel)]="avgNumOfLexicalizations" min="0">
                 </td>
                 <td></td>
             </tr>
@@ -80,7 +80,7 @@
     
 </div>
 <div class="modal-footer">
-    <span class="pull-left">(*) Mandatory field</span>
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <span class="float-left">(*) Mandatory field</span>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

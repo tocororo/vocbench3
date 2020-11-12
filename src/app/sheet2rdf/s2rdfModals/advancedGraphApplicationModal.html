@@ -4,11 +4,11 @@
         <h3 class="modal-title" style="flex: 1">Advanced Graph Application</h3>
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group btn-group-xs">
-                <button class="btn btn-default" title="Save advanced graph application" (click)="saveGraph()">
-                    <span class="glyphicon glyphicon-floppy-save"></span>
+                <button class="btn btn-light" title="Save advanced graph application" (click)="saveGraph()">
+                    <span class="fas fa-download"></span>
                 </button>
-                <button class="btn btn-default" title="Load advanced graph application" (click)="loadGraph()">
-                    <span class="glyphicon glyphicon-floppy-open"></span>
+                <button class="btn btn-light" title="Load advanced graph application" (click)="loadGraph()">
+                    <span class="fas fa-upload"></span>
                 </button>
             </div>
         </div>
@@ -16,22 +16,23 @@
 
 </div>
 <div class="modal-body vbox scrollableContainer">
-    <div class="panel panel-default" style="margin-top: 4px;">
-        <div class="panel-heading">
+    <div class="card card-default" style="margin-top: 4px;">
+        <div class="card-header">
             <label style="flex: 1">Nodes</label>
             <div class="btn-toolbar" role="toolbar">
                 <div class="btn-group btn-group-xs">
-                    <button class="btn btn-default" (click)="addNode()">
-                        <span class="glyphicon glyphicon-plus"></span>
+                    <button class="btn btn-light" (click)="addNode()">
+                        <span class="fas fa-plus"></span>
                     </button>
-                    <button class="btn btn-default" (click)="removeNode()" [disabled]="!selectedNode || selectedNode.readonly">
-                        <span class="glyphicon glyphicon-minus"></span>
+                    <!-- <button class="btn btn-light" (click)="removeNode()" [disabled]="!selectedNode || selectedNode.readonly"> -->
+                    <button class="btn btn-light" (click)="removeNode()" [disabled]="!selectedNode">
+                        <span class="fas fa-minus"></span>
                     </button>
                 </div>
             </div>
         </div>
-        <div class="panel-body table-responsive" style="min-height: 60px; max-height: 100px;">
-            <table class="table table-condensed">
+        <div class="card-body table-responsive" style="min-height: 60px; max-height: 100px;">
+            <table class="table table-sm">
                 <thead>
                     <tr>
                         <th>Node ID</th>
@@ -59,16 +60,16 @@
                         <td>{{n.converter?.type}}</td>
                         <td nowrap>
                             {{n.converter?.contractUri}}
-                            <button *ngIf="n.converter?.type == 'uri'" class="btn btn-xs btn-default" (click)="changeUriConverter(n)">
-                                <span class="glyphicon glyphicon-pencil"></span>
+                            <button *ngIf="n.converter?.type == 'uri'" class="btn btn-xs btn-light" (click)="changeUriConverter(n)">
+                                <span class="fas fa-pencil-alt"></span>
                             </button>
                         </td>
                         <td nowrap>
                             <span *ngIf="n.converter?.language; else dtBlock">
                                 <label style="white-space: pre">Lang: </label>
                                 {{n.converter.language}}
-                                <button *ngIf="n.converter?.type == 'literal'" class="btn btn-xs btn-default" (click)="changeLiteralConverter(n)">
-                                    <span class="glyphicon glyphicon-pencil"></span>
+                                <button *ngIf="n.converter?.type == 'literal'" class="btn btn-xs btn-light" (click)="changeLiteralConverter(n)">
+                                    <span class="fas fa-pencil-alt"></span>
                                 </button>
                             </span>
                             <span #dtBlock *ngIf="n.converter?.datatypeUri">
@@ -81,28 +82,28 @@
         </div>
     </div>
 
-    <div class="panel panel-default" style="margin-top: 4px;">
-        <div class="panel-heading">
+    <div class="card card-default" style="margin-top: 4px;">
+        <div class="card-header">
             <label style="flex: 1">Graph</label>
         </div>
-        <div class="panel-body vbox">
+        <div class="card-body vbox">
 
-            <div class="panel panel-alt" style="margin-top: 4px;">
-                <div class="panel-heading">
+            <div class="card card-alt" style="margin-top: 4px;">
+                <div class="card-header">
                     <label style="flex: 1">Prefix-Namespace mappings</label>
                     <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group btn-group-xs">
-                            <button class="btn btn-default" (click)="addMapping()">
-                                <span class="glyphicon glyphicon-plus"></span>
+                            <button class="btn btn-light" (click)="addMapping()">
+                                <span class="fas fa-plus"></span>
                             </button>
-                            <button class="btn btn-default" (click)="removeMapping()" [disabled]="!selectedMapping">
-                                <span class="glyphicon glyphicon-minus"></span>
+                            <button class="btn btn-light" (click)="removeMapping()" [disabled]="!selectedMapping">
+                                <span class="fas fa-minus"></span>
                             </button>
                         </div>
                     </div>
                 </div>
-                <div #prefixnstable class="panel-body table-responsive" style="min-height: 60px; max-height: 100px;">
-                    <table class="table table-condensed">
+                <div #prefixnstable class="card-body table-responsive" style="min-height: 60px; max-height: 100px;">
+                    <table class="table table-sm">
                         <thead>
                             <tr>
                                 <th>Prefix</th>
@@ -123,11 +124,11 @@
                 </div>
             </div>
 
-            <div class="panel panel-alt vbox" style="margin-top: 4px;">
-                <div class="panel-heading">
+            <div class="card card-alt vbox" style="margin-top: 4px;">
+                <div class="card-header">
                     <label style="flex: 1">Graph pattern</label>
                 </div>
-                <div class="panel-body vbox">
+                <div class="card-body vbox">
                     <div class="alert alert-info alert-dismissible alert-multiline" style="margin-bottom: 5px;">
                         The graph pattern must contain only node IDs already defined in any header.<br>
                         It could also contains a <span style="font-family: monospace;" ngNonBindable>{{pred}}</span>
@@ -136,15 +137,15 @@
                         a default predicate <strong>must</strong> be provided as fallback when the header does not represent any valid predicate.
                         <button class="close" data-dismiss="alert"><span>&times;</span></button>
                     </div>
-                    <textarea class="form-control input-sm" style="resize: vertical" rows="5" [(ngModel)]="graphPattern"></textarea>
+                    <textarea class="form-control form-control-sm" style="resize: vertical" rows="5" [(ngModel)]="graphPattern"></textarea>
                 </div>
-                <div class="panel-footer">
+                <div class="card-footer">
                     <div class="hbox" style="align-items: center">
                         <label style="margin-right: 4px;">Default predicate:</label>
                         <resource-picker [resource]="defaultPredicate" size="xs" [config]="{ roles: ['property']}"
                             (resourceChanged)="updateDefaultPredicate($event)" style="flex: 1">
                         </resource-picker>
-                        <span class="glyphicon glyphicon-info-sign" style="margin-left: 4px" 
+                        <span class="fas fa-info-circle" style="margin-left: 4px" 
                             title="If the graph pattern contains the 'pred' placeholder this predicate is mandatory, otherwise it will be ignored">
                         </span>
                     </div>
@@ -157,5 +158,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

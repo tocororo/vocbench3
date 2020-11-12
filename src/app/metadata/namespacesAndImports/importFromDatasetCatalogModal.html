@@ -1,8 +1,8 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body">
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%;">
             <col>
@@ -13,9 +13,9 @@
                 <td>
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control" [ngModel]="preloadCatalog" readonly>
-                        <div class="input-group-btn">
-                            <button class="btn btn-default" (click)="openDatasetCatalog()">
-                                <span class="glyphicon glyphicon-pencil"></span>
+                        <div class="input-group-append">
+                            <button class="btn btn-light" (click)="openDatasetCatalog()">
+                                <span class="fas fa-pencil-alt"></span>
                             </button>
                         </div>
                     </div>
@@ -24,7 +24,7 @@
             <tr>
                 <td><label>Ontology IRI:</label></td>
                 <td>
-                    <input type="text" class="form-control input-sm" [ngModel]="ontologyIRI" readonly>
+                    <input type="text" class="form-control form-control-sm" [ngModel]="ontologyIRI" readonly>
                 </td>
             </tr>
             <ng-template [ngIf]="dataDump">
@@ -32,12 +32,12 @@
                     <td nowrap><label>Data dump:</label></td>
                     <td>
                         <div style="display: flex; align-items: center">
-                            <input type="text" class="form-control input-sm" [ngModel]="dataDump" readonly>
+                            <input type="text" class="form-control form-control-sm" [ngModel]="dataDump" readonly>
                             <div class="checkbox-inline" style="white-space: nowrap; margin-left: 4px;">
                                 <label>
                                     <input type="checkbox" [(ngModel)]="useDataDump">Use data dump
                                 </label>
-                                <span class="glyphicon glyphicon-info-sign" title="If checked, import is added from the provided data dump instead of the ontology IRI">
+                                <span class="fas fa-info-circle" title="If checked, import is added from the provided data dump instead of the ontology IRI">
                                 </span>
                             </div>
                         </div>
@@ -47,11 +47,11 @@
                     <td nowrap><label>Format:</label></td>
                     <td>
                         <div class="hbox">
-                            <select class="form-control input-sm" [(ngModel)]="rdfFormat" [disabled]="lockFormat">
+                            <select class="form-control form-control-sm" [(ngModel)]="rdfFormat" [disabled]="lockFormat">
                                 <option *ngFor="let f of formats" [ngValue]="f">{{f.name}}</option>
                             </select>
-                            <button class="btn btn-sm btn-default" style="margin-left: 4px;" [ngClass]="{ active : lockFormat }" (click)="lockFormat = !lockFormat">
-                                <span class="glyphicon glyphicon-lock"></span>
+                            <button class="btn btn-sm btn-light" style="margin-left: 4px;" [ngClass]="{ active : lockFormat }" (click)="lockFormat = !lockFormat">
+                                <span class="fas fa-lock"></span>
                             </button>
                         </div>
                     </td>
@@ -60,7 +60,7 @@
             <tr>
                 <td nowrap><label>Transitive imports:</label></td>
                 <td>
-                    <select class="form-control input-sm" [(ngModel)]="selectedImportAllowance">
+                    <select class="form-control form-control-sm" [(ngModel)]="selectedImportAllowance">
                         <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.show}}</option>
                     </select>                    
                 </td>
@@ -69,6 +69,6 @@
     </table>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!preloadCatalog">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!preloadCatalog">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

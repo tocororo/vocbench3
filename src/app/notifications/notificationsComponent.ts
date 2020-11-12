@@ -1,12 +1,12 @@
 import { Component } from "@angular/core";
-import { Modal, OverlayConfig } from "ngx-modialog";
-import { BSModalContextBuilder } from "ngx-modialog/plugins/bootstrap";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTResource, ARTURIResource } from "../models/ARTResources";
 import { Notification } from "../models/Notifications";
-import { ResourcesServices } from "../services/resourcesServices";
 import { NotificationServices } from "../services/notificationServices";
+import { ResourcesServices } from "../services/resourcesServices";
 import { Deserializer } from "../utils/Deserializer";
 import { ResourceUtils } from "../utils/ResourceUtils";
+import { ModalOptions } from '../widget/modal/Modals';
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
 import { NotificationSettingsModal } from "./notificationSettingsModal";
 
@@ -17,17 +17,17 @@ import { NotificationSettingsModal } from "./notificationSettingsModal";
 })
 export class NotificationsComponent {
 
-    private notifications: EnrichedNotification[];
-    private sortOrder: SortOrder = SortOrder.TIME_ASCENDING;
+    notifications: EnrichedNotification[];
+    sortOrder: SortOrder = SortOrder.TIME_ASCENDING;
 
     constructor(private notificationsService: NotificationServices, private resourceService: ResourcesServices,
-        private sharedModals: SharedModalServices, private modal: Modal) { }
+        private sharedModals: SharedModalServices, private modalService: NgbModal) { }
 
     ngOnInit() {
         this.init();
     }
 
-    private init() {
+    init() {
         this.notificationsService.listNotifications().subscribe(
             notifications => {
                 //collect resources to annotate
@@ -63,7 +63,7 @@ export class NotificationsComponent {
         );
     }
 
-    private clear() {
+    clear() {
         this.notificationsService.clearNotifications().subscribe(
             () => {
                 this.init();
@@ -71,17 +71,15 @@ export class NotificationsComponent {
         )
     }
 
-    private settings() {
-        const builder = new BSModalContextBuilder<any>();
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(NotificationSettingsModal, overlayConfig);
+    settings() {
+        this.modalService.open(NotificationSettingsModal, new ModalOptions());
     }
 
     private openResource(resource: ARTResource) {
         this.sharedModals.openResourceView(resource, true);
     }
 
-    private changeResourceOrder() {
+    changeResourceOrder() {
         if (this.sortOrder == SortOrder.RESOURCE_ASCENDING) {
             this.sortOrder = SortOrder.RESOURCE_DESCENDING;
             this.notifications.sort((n1, n2) => {
@@ -94,7 +92,7 @@ export class NotificationsComponent {
             });
         }
     }
-    private changeRoleOrder() {
+    changeRoleOrder() {
         if (this.sortOrder == SortOrder.ROLE_ASCENDING) {
             this.sortOrder = SortOrder.ROLE_DESCENDING;
             this.notifications.sort((n1, n2) => {
@@ -107,7 +105,7 @@ export class NotificationsComponent {
             });
         }
     }
-    private changeActionOrder() {
+    changeActionOrder() {
         if (this.sortOrder == SortOrder.ACTION_ASCENDING) {
             this.sortOrder = SortOrder.ACTION_DESCENDING;
             this.notifications.sort((n1, n2) => {
@@ -120,7 +118,7 @@ export class NotificationsComponent {
             });
         }
     }
-    private changeTimeOrder() {
+    changeTimeOrder() {
         if (this.sortOrder == SortOrder.TIME_ASCENDING) {
             this.sortOrder = SortOrder.TIME_DESCENDING;
             this.notifications.sort((n1, n2) => {

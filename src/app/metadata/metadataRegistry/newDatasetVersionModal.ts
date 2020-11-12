@@ -1,50 +1,39 @@
-import { Component } from "@angular/core";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { DialogRef, ModalComponent } from "ngx-modialog";
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ARTURIResource } from "../../models/ARTResources";
 import { MetadataRegistryServices } from "../../services/metadataRegistryServices";
-
-export class NewDatasetVersionModalData extends BSModalContext {
-    constructor(public catalogRecordIdentity: string) {
-        super();
-    }
-}
 
 @Component({
     selector: "dataset-version-modal",
     templateUrl: "./newDatasetVersionModal.html",
 })
-export class NewDatasetVersionModal implements ModalComponent<NewDatasetVersionModalData> {
-    context: NewDatasetVersionModalData;
+export class NewDatasetVersionModal {
+    @Input() catalogRecordIdentity: string;
 
-    private dataset: string;
-    private versionInfo: string;
+    dataset: string;
+    versionInfo: string;
     
-    constructor(public dialog: DialogRef<NewDatasetVersionModalData>, private metadataRegistryService: MetadataRegistryServices) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal, private metadataRegistryService: MetadataRegistryServices) {}
     
-    private isInputValid() {
+    isInputValid() {
         return this.versionInfo != null && this.versionInfo.trim() != "";
     }
 
-    ok(event: Event) {
+    ok() {
         let datasetPar: ARTURIResource = null;
         if (this.dataset != null) {
             datasetPar = new ARTURIResource(this.dataset);
         }
 
-        this.metadataRegistryService.addDatasetVersion(new ARTURIResource(this.context.catalogRecordIdentity), this.versionInfo, datasetPar).subscribe(
+        this.metadataRegistryService.addDatasetVersion(new ARTURIResource(this.catalogRecordIdentity), this.versionInfo, datasetPar).subscribe(
             stReps => {
-                event.stopPropagation();
-                event.preventDefault();
-                this.dialog.close();
+                this.activeModal.close();
             }
         )
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

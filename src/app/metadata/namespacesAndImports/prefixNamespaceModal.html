@@ -1,9 +1,9 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body">
     
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%;">
             <col>
@@ -13,9 +13,9 @@
                 <td><label>Prefix:</label></td>
                 <td>
                     <div class="hbox">
-                        <input type="text" class="form-control input-sm" [(ngModel)]="prefix">
-                        <button *ngIf="context.namespaceReadonly" class="btn btn-sm btn-default" style="margin-left: 5px;" (click)="resolveWithPrefixCC()" title="Try to resolve prefix using prefix.cc">
-                            <span class="glyphicon glyphicon-subtitles"></span>
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="prefix">
+                        <button *ngIf="namespaceReadonly" class="btn btn-sm btn-light" style="margin-left: 5px;" (click)="resolveWithPrefixCC()" title="Try to resolve prefix using prefix.cc">
+                            <span class="far fa-closed-captioning"></span>
                         </button>
                     </div>
                 </td>
@@ -23,7 +23,7 @@
             <tr>
                 <td><label>Namespace:</label></td>
                 <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="namespace" [disabled]="context.namespaceReadonly">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="namespace" [disabled]="namespaceReadonly">
                 </td>
             </tr>
         </tbody>
@@ -31,6 +31,6 @@
     
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

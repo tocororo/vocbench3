@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body vbox scrollableContainer">
 
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%;">
             <col>
@@ -11,18 +11,18 @@
         <tbody>
             <tr>
                 <td class="text-right"><label>ID:</label></td>
-                <td><input id="toFocus" class="form-control input-sm" [(ngModel)]="nodeId" sanitized [disabled]="context.editingNode"></td>
+                <td><input id="toFocus" class="form-control form-control-sm" [(ngModel)]="nodeId" sanitized [disabled]="editingNode"></td>
             </tr>
         </tbody>
     </table>
 
-    <converter-config style="margin-top: 4px;" [converter]="context.editingNode?.converter" [memoize]="context.editingNode?.memoize" 
-        [rangeType]="context.constrainedRangeType" [language]="context.constrainedLanguage" [datatype]="context.constrainedDatatype" 
+    <converter-config style="margin-top: 4px;" [converter]="editingNode?.converter" [memoize]="editingNode?.memoize" 
+        [rangeType]="constrainedRangeType" [language]="constrainedLanguage" [datatype]="constrainedDatatype" 
         (update)="onConverterUpdate($event)">
     </converter-config>
 
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

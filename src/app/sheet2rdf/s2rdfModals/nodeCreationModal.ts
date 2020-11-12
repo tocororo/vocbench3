@@ -1,60 +1,43 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
-import { Observable } from "rxjs";
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable, of } from "rxjs";
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource, RDFTypesEnum } from "../../models/ARTResources";
 import { CODAConverter, NodeConversion, SimpleHeader } from "../../models/Sheet2RDF";
 import { RangeType } from "../../services/propertyServices";
 import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 
-export class NodeCreationModalData extends BSModalContext {
-    /**
-     * @param header header for which it is creating the node
-     * @param editingNode provided if it works in edit mode
-     * @param constrainedRangeType range type of the property chosen in the graph application. Useful to determine the compliant converters
-     * @param constrainedLanguage the language chosen in the graph application.
-     * @param constrainedDatatype datatype chosen in the graph application. Useful to determine the compliant converter
-     * @param headerNodes nodes already defined for the header. Useful to check if the current header has already a node with the same id
-     */
-    constructor(
-        public header: SimpleHeader,
-        public editingNode: NodeConversion,
-        public constrainedRangeType: RangeType,
-        public constrainedLanguage: string,
-        public constrainedDatatype: ARTURIResource, 
-        public headerNodes: NodeConversion[]
-    ) {
-        super();
-    }
-}
-
 @Component({
     selector: "node-creation-modal",
     templateUrl: "./nodeCreationModal.html",
 })
-export class NodeCreationModal implements ModalComponent<NodeCreationModalData> {
-    context: NodeCreationModalData;
+export class NodeCreationModal {
+    @Input() header: SimpleHeader;
+    @Input() editingNode: NodeConversion;
+    @Input() constrainedRangeType: RangeType;
+    @Input() constrainedLanguage: string;
+    @Input() constrainedDatatype: ARTURIResource;
+    @Input() headerNodes: NodeConversion[]
 
-    private nodeId: string;
+    nodeId: string;
 
-    private selectedConverter: CODAConverter;
-    private memoize: boolean = false;
+    selectedConverter: CODAConverter;
+    memoize: boolean = false;
 
-    constructor(public dialog: DialogRef<NodeCreationModalData>, private s2rdfService: Sheet2RDFServices, private basicModals: BasicModalServices) {
-        this.context = dialog.context;
+    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, private basicModals: BasicModalServices) {
     }
 
     ngOnInit() {
         document.getElementById("toFocus").focus();
-        if (this.context.editingNode) {
-            this.nodeId = this.context.editingNode.nodeId;
-            this.selectedConverter = this.context.editingNode.converter;
+        if (this.editingNode) {
+            this.nodeId = this.editingNode.nodeId;
+            this.selectedConverter = this.editingNode.converter;
         }
         // this.nodeId = this.context.header.pearlFeature + "_node";
     }
 
-    private onConverterUpdate(updateStatus: { converter: CODAConverter, memoize: boolean }) {
+    onConverterUpdate(updateStatus: { converter: CODAConverter, memoize: boolean }) {
         this.selectedConverter = updateStatus.converter;
         this.memoize = updateStatus.memoize;
     }
@@ -66,7 +49,7 @@ export class NodeCreationModal implements ModalComponent<NodeCreationModalData> 
      * - all the parameters (if any) of the converter signature are provided
      * - the further info of the default literal converter (if selected) are provided
      */
-    private isOkEnabled() {
+    isOkEnabled() {
         let isSignatureOk: boolean = true;
         if (this.selectedConverter != null) {
             for (let key in this.selectedConverter.params) {
@@ -108,12 +91,12 @@ export class NodeCreationModal implements ModalComponent<NodeCreationModalData> 
     }
 
     private isNodeAlreadyInUse(nodeId: string): Observable<boolean> {
-        if (this.context.editingNode) { //in case the modal is editing a pre-existing node, skip the test and return false
-            return Observable.of(false);
+        if (this.editingNode) { //in case the modal is editing a pre-existing node, skip the test and return false
+            return of(false);
         } else {
-            for (let n of this.context.headerNodes) {
+            for (let n of this.headerNodes) {
                 if (n.nodeId == nodeId) {
-                    return Observable.of(true);
+                    return of(true);
                 }
             }
             //if this code is reached, the id is not used locally in the header => check globally invoking the server
@@ -125,17 +108,17 @@ export class NodeCreationModal implements ModalComponent<NodeCreationModalData> 
         this.isNodeAlreadyInUse(this.nodeId).subscribe(
             used => {
                 if (used) {
-                    this.basicModals.alert("Node creation", "Id '" + this.nodeId + "' is already used for another node", "warning");
+                    this.basicModals.alert("Node creation", "Id '" + this.nodeId + "' is already used for another node", ModalType.warning);
                     return;
                 }
                 let newNode: NodeConversion = { nodeId: this.nodeId, converter: this.selectedConverter, memoize: this.memoize }
-                this.dialog.close(newNode);
+                this.activeModal.close(newNode);
             }
         );
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

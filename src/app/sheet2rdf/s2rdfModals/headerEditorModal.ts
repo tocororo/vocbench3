@@ -1,46 +1,35 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent, OverlayConfig } from "ngx-modialog";
-import { BSModalContext, BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ARTURIResource } from 'src/app/models/ARTResources';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { AdvancedGraphApplication, GraphApplication, NodeConversion, SimpleGraphApplication, SimpleHeader } from "../../models/Sheet2RDF";
+import { RangeType } from "../../services/propertyServices";
 import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
 import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-import { AdvancedGraphApplicationModal, AdvancedGraphApplicationModalData } from "./advancedGraphApplicationModal";
-import { SimpleGraphApplicationModal, SimpleGraphApplicationModalData } from "./simpleGraphApplicationModal";
-import { NodeCreationModalData, NodeCreationModal } from "./nodeCreationModal";
-import { RangeType } from "../../services/propertyServices";
-
-export class HeaderEditorModalData extends BSModalContext {
-    /**
-     * This modal get the headerId instead of directly the HeaderStruct in order to prevent changes directly on the HeaderStruct
-     * (even if the user discard the modal)
-     * @param headerId 
-     * @param headers all the headers in the spreadsheet. Useful for checks
-     */
-    constructor(public headerId: string, public headers: SimpleHeader[]) {
-        super();
-    }
-}
+import { AdvancedGraphApplicationModal } from "./advancedGraphApplicationModal";
+import { NodeCreationModal } from "./nodeCreationModal";
+import { SimpleGraphApplicationModal } from "./simpleGraphApplicationModal";
 
 @Component({
     selector: "header-editor-modal",
     templateUrl: "./headerEditorModal.html",
 })
-export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> {
-    context: HeaderEditorModalData;
+export class HeaderEditorModal {
+    @Input() headerId: string;
+    @Input() headers: SimpleHeader[];
 
-    private header: SimpleHeader;
+    header: SimpleHeader;
 
     private ignoreInitialized: boolean = false;
     
-    private selectedNode: NodeConversion;
-    private selectedGraph: GraphApplication;
+    selectedNode: NodeConversion;
+    selectedGraph: GraphApplication;
 
     private changed: boolean = false; //useful to keep trace of changes in order to ask to the user if he want to replicate the changes to multiple headers
 
-    constructor(public dialog: DialogRef<HeaderEditorModalData>, private s2rdfService: Sheet2RDFServices, private basicModals: BasicModalServices, private modal: Modal) {
-        this.context = dialog.context;
+    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, private basicModals: BasicModalServices, private modalService: NgbModal) {
     }
 
     ngOnInit() {
@@ -50,7 +39,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     initHeader() {
         this.selectedGraph = null;
         this.selectedNode = null;
-        this.s2rdfService.getHeaderFromId(this.context.headerId).subscribe(
+        this.s2rdfService.getHeaderFromId(this.headerId).subscribe(
             header => {
                 this.header = header;
                 if (!this.ignoreInitialized) {
@@ -84,14 +73,8 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     }
 
     addNode() {
-        var modalData = new NodeCreationModalData(this.header, null, null, null, null, this.header.nodes);
-        const builder = new BSModalContextBuilder<NodeCreationModalData>(
-            modalData, undefined, NodeCreationModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
-        this.modal.open(NodeCreationModal, overlayConfig).result.then(
+        this.openNodeEditorModal(this.header, null, null, null, null, this.header.nodes).then(
             (newNode: NodeConversion) => {
-                console.log("newNode", newNode);
                 this.s2rdfService.addNodeToHeader(this.header.id, newNode.nodeId, newNode.converter.type, 
                     newNode.converter.contractUri, newNode.converter.datatypeUri, newNode.converter.language,
                     newNode.converter.params, newNode.memoize).subscribe(
@@ -120,14 +103,14 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         )
     }
 
-    private removeNode() {
+    removeNode() {
         let used: boolean = false;
         //check if the node is used by some graph application
         let referenced: boolean = SimpleHeader.isNodeReferenced(this.header, this.selectedNode);
         //TODO allow to forcing the deletion a referenced node or not allow at all? 
         if (referenced) { //cannot delete a node used by a graph application
             this.basicModals.confirm("Delete node", "Warning: the node '" + this.selectedNode.nodeId + "' is used in one or more graph application. " +
-                "This operation will affect also the graph application. Do you want to continue?", "warning").then(
+                "This operation will affect also the graph application. Do you want to continue?", ModalType.warning).then(
                 confirm => {
                     this.removeNodeImpl();
                 },
@@ -147,12 +130,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     }
 
     private changeUriConverter(node: NodeConversion) {
-        var modalData = new NodeCreationModalData(this.header, node, RangeType.resource, null, null, null);
-        const builder = new BSModalContextBuilder<NodeCreationModalData>(
-            modalData, undefined, NodeCreationModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
-        this.modal.open(NodeCreationModal, overlayConfig).result.then(
+        this.openNodeEditorModal(this.header, node, RangeType.resource, null, null, null).then(
             (n: NodeConversion) => {
                 node.converter = n.converter;
                 node.memoize = n.memoize;
@@ -169,12 +147,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     }
 
     private changeLiteralConverter(node: NodeConversion) {
-        var modalData = new NodeCreationModalData(this.header, node, RangeType.literal, null, null, null);
-        const builder = new BSModalContextBuilder<NodeCreationModalData>(
-            modalData, undefined, NodeCreationModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
-        this.modal.open(NodeCreationModal, overlayConfig).result.then(
+        this.openNodeEditorModal(this.header, node, RangeType.literal, null, null, null).then(
             (n: NodeConversion) => {
                 node.converter = n.converter;
                 this.s2rdfService.updateNodeInHeader(this.header.id, node.nodeId, node.converter.type, node.converter.contractUri, 
@@ -187,6 +160,18 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
             },
             () => {}
         );
+    }
+
+    private openNodeEditorModal(header: SimpleHeader, editingNode: NodeConversion, constrainedRangeType: RangeType, 
+            constrainedLanguage: string, constrainedDatatype: ARTURIResource, headerNodes: NodeConversion[]) {
+        const modalRef: NgbModalRef = this.modalService.open(NodeCreationModal, new ModalOptions('xl'));
+        modalRef.componentInstance.header = header;
+		modalRef.componentInstance.editingNode = editingNode;
+        modalRef.componentInstance.constrainedRangeType = constrainedRangeType;
+        modalRef.componentInstance.constrainedLanguage = constrainedLanguage;
+        modalRef.componentInstance.constrainedDatatype = constrainedDatatype;
+        modalRef.componentInstance.headerNodes = headerNodes;
+        return modalRef.result;
     }
 
     /*
@@ -207,14 +192,9 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         return graph instanceof SimpleGraphApplication;
     }
 
-    private editGraph() {
+    editGraph() {
         if (this.selectedGraph instanceof SimpleGraphApplication) {
-            let modalData = new SimpleGraphApplicationModalData(this.header, <SimpleGraphApplication>this.selectedGraph);
-            const builder = new BSModalContextBuilder<SimpleGraphApplicationModalData>(
-                modalData, undefined, HeaderEditorModalData
-            );
-            let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-            this.modal.open(SimpleGraphApplicationModal, overlayConfig).result.then(
+            this.openSimpleGraphApplicationModal(this.header, <SimpleGraphApplication>this.selectedGraph).then(
                 () => {
                     this.initHeader();
                     this.changed = true;
@@ -222,12 +202,7 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
                 () => {}
             );
         } else { //AdvancedGraphApplication
-            let modalData = new AdvancedGraphApplicationModalData(this.header, this.context.headers, <AdvancedGraphApplication>this.selectedGraph);
-            const builder = new BSModalContextBuilder<AdvancedGraphApplicationModalData>(
-                modalData, undefined, AdvancedGraphApplicationModalData
-            );
-            let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
-            this.modal.open(AdvancedGraphApplicationModal, overlayConfig).result.then(
+            this.openAdvancedGraphApplicationModal(this.header, this.headers, <AdvancedGraphApplication>this.selectedGraph).then(
                 () => {
                     this.initHeader();
                     this.changed = true;
@@ -237,13 +212,8 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         }
     }
 
-    private addSimpleGraphApplication() {
-        var modalData = new SimpleGraphApplicationModalData(this.header);
-        const builder = new BSModalContextBuilder<SimpleGraphApplicationModalData>(
-            modalData, undefined, SimpleGraphApplicationModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(SimpleGraphApplicationModal, overlayConfig).result.then(
+    addSimpleGraphApplication() {
+        this.openSimpleGraphApplicationModal(this.header, null).then(
             () => {
                 this.initHeader();
                 this.changed = true;
@@ -252,13 +222,8 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         );
     }
 
-    private addAdvancedGraphApplication() {
-        var modalData = new AdvancedGraphApplicationModalData(this.header, this.context.headers);
-        const builder = new BSModalContextBuilder<AdvancedGraphApplicationModalData>(
-            modalData, undefined, AdvancedGraphApplicationModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).size('lg').toJSON() };
-        this.modal.open(AdvancedGraphApplicationModal, overlayConfig).result.then(
+    addAdvancedGraphApplication() {
+        this.openAdvancedGraphApplicationModal(this.header, this.headers, null).then(
             () => {
                 this.initHeader();
                 this.changed = true;
@@ -267,7 +232,22 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
         );
     }
 
-    private removeGraph() {
+    private openSimpleGraphApplicationModal(header: SimpleHeader, graphApplication: SimpleGraphApplication) {
+        const modalRef: NgbModalRef = this.modalService.open(SimpleGraphApplicationModal, new ModalOptions());
+        modalRef.componentInstance.header = header;
+		modalRef.componentInstance.graphApplication = graphApplication;
+        return modalRef.result;
+    }
+
+    private openAdvancedGraphApplicationModal(header: SimpleHeader, headers: SimpleHeader[], graphApplication: AdvancedGraphApplication) {
+        const modalRef: NgbModalRef = this.modalService.open(AdvancedGraphApplicationModal, new ModalOptions('lg'));
+        modalRef.componentInstance.header = header;
+        modalRef.componentInstance.headers = headers;
+		modalRef.componentInstance.graphApplication = graphApplication;
+        return modalRef.result;
+    }
+
+    removeGraph() {
         this.s2rdfService.removeGraphApplicationFromHeader(this.header.id, this.selectedGraph.id).subscribe(
             resp => {
                 this.initHeader();
@@ -279,20 +259,20 @@ export class HeaderEditorModal implements ModalComponent<HeaderEditorModalData> 
     ok() {
         if (this.changed && this.header.isMultiple) {
             this.basicModals.confirm("Multiple headers", "There are multiple headers with the same name (" + this.header.nameStruct.name +
-                "). Do you want to apply the changes to all of them?", "warning").then(
+                "). Do you want to apply the changes to all of them?", ModalType.warning).then(
                 confirm => {
                     this.s2rdfService.replicateMultipleHeader(this.header.id).subscribe(
                         () => {
-                            this.dialog.close();
+                            this.activeModal.close();
                         }
                     )
                 },
                 () => {
-                    this.dialog.close();
+                    this.activeModal.close();
                 }
             )
         } else {
-            this.dialog.close();
+            this.activeModal.close();
         }
     }
 

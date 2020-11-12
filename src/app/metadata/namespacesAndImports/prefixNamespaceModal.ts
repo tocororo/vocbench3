@@ -1,45 +1,30 @@
 import { HttpClient } from "@angular/common/http";
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
-
-export class PrefixNamespaceModalData extends BSModalContext {
-    /**
-     * @param title modal title
-     * @param prefix the prefix to change. Optional, to provide only to change a mapping.
-     * @param namespace the namespace to change. Optional, to provide only to change a mapping.
-     * @param namespaceReadonly tells if namespace value can be changed
-     */
-    constructor(
-        public title: string = "Modal Title",
-        public prefix: string = null,
-        public namespace: string = null,
-        public namespaceReadonly: boolean = false
-    ) {
-        super();
-    }
-}
 
 @Component({
     selector: "mapping-modal",
     templateUrl: "./prefixNamespaceModal.html",
 })
-export class PrefixNamespaceModal implements ModalComponent<PrefixNamespaceModalData> {
-    context: PrefixNamespaceModalData;
+export class PrefixNamespaceModal {
+    @Input() title: string;
+    @Input() prefixInput: string;
+    @Input() namespaceInput: string;
+    @Input() namespaceReadonly: boolean;
     
-    private prefix: string;
-    private namespace: string;
+    prefix: string;
+    namespace: string;
 
-    constructor(public dialog: DialogRef<PrefixNamespaceModalData>, private basicModals: BasicModalServices, private httpClient: HttpClient) {
-        this.context = dialog.context;
-        this.prefix = this.context.prefix;
-        this.namespace = this.context.namespace;
+    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices, private httpClient: HttpClient) {
+        this.prefix = this.prefixInput;
+        this.namespace = this.namespaceInput;
     }
 
-    private resolveWithPrefixCC() {
+    resolveWithPrefixCC() {
         if (this.namespace == null || this.namespace.trim() == "") {
-            this.basicModals.alert("Resolve prefix", "Namespace must be provided.", "warning");
+            this.basicModals.alert("Resolve prefix", "Namespace must be provided.", ModalType.warning);
             return;
         }
         this.httpClient.get("https://prefix.cc/reverse?uri=" + this.namespace + "&format=json").subscribe(
@@ -57,22 +42,20 @@ export class PrefixNamespaceModal implements ModalComponent<PrefixNamespaceModal
     /**
      * Useful to enable/disable ok button. Inputs are valid if they are not null and if one of them is changed
      */
-    private isInputValid() {
+    isInputValid() {
         var prefixValid = (this.prefix && this.prefix.trim() != "");
         var namespaceValid = (this.namespace && this.namespace.trim() != "");
-        var prefixChanged = (this.prefix != this.context.prefix);
-        var namespaceChanged = (this.namespace != this.context.namespace);
+        var prefixChanged = (this.prefix != this.prefixInput);
+        var namespaceChanged = (this.namespace != this.namespaceInput);
         return (prefixValid && namespaceValid && (prefixChanged || namespaceChanged));
     }
 
-    ok(event: Event) {
-        event.stopPropagation();
-        event.preventDefault();
-        this.dialog.close({prefix: this.prefix, namespace: this.namespace});
+    ok() {
+        this.activeModal.close({prefix: this.prefix, namespace: this.namespace});
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

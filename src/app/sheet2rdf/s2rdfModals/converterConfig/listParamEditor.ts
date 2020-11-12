@@ -10,7 +10,7 @@ export class ListParamEditor {
 
     @Output() valueChanged = new EventEmitter<string[]>();
 
-    private list: string[] = [];
+    list: string[] = [];
 
     constructor() { }
 
@@ -52,7 +52,7 @@ export class ListParamEditor {
      * @param index 
      * @param obj 
      */
-    private trackByIndex(index: number, obj: any): any {
+    trackByIndex(index: number, obj: any): any {
         return index;
     }
 

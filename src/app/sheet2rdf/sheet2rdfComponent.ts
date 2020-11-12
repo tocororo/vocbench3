@@ -1,6 +1,6 @@
 import { Component, ElementRef, HostListener, ViewChild } from "@angular/core";
-import { OverlayConfig } from 'ngx-modialog';
-import { BSModalContextBuilder, Modal } from 'ngx-modialog/plugins/bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { PearlValidationResult } from "../models/Coda";
 import { Properties } from "../models/Properties";
 import { RDFFormat } from "../models/RDFFormat";
 import { AdvancedGraphApplication, FsNamingStrategy, GraphApplication, SimpleGraphApplication, SimpleHeader, SubjectHeader, TableRow, TriplePreview } from "../models/Sheet2RDF";
@@ -12,11 +12,11 @@ import { HttpServiceContext } from "../utils/HttpManager";
 import { UIUtils } from "../utils/UIUtils";
 import { PearlEditorComponent } from "../widget/codemirror/pearlEditor/pearlEditorComponent";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { ModalOptions, ModalType } from '../widget/modal/Modals';
 import { SharedModalServices } from "../widget/modal/sharedModal/sharedModalServices";
-import { HeaderEditorModal, HeaderEditorModalData } from "./s2rdfModals/headerEditorModal";
-import { Sheet2RdfSettingsModal, Sheet2RdfSettingsModalData } from "./s2rdfModals/sheet2rdfSettingsModal";
-import { SubjectHeaderEditorModal, SubjectHeaderEditorModalData } from "./s2rdfModals/subjectHeaderEditorModal";
-import { PearlValidationResult } from "../models/Coda";
+import { HeaderEditorModal } from "./s2rdfModals/headerEditorModal";
+import { Sheet2RdfSettingsModal } from "./s2rdfModals/sheet2rdfSettingsModal";
+import { SubjectHeaderEditorModal } from "./s2rdfModals/subjectHeaderEditorModal";
 
 
 @Component({
@@ -73,7 +73,7 @@ export class Sheet2RdfComponent {
     private fsNamingStrategy: FsNamingStrategy = FsNamingStrategy.columnNumericIndex;
 
     constructor(private s2rdfService: Sheet2RDFServices, private codaService: CODAServices, private exportService: ExportServices, 
-        private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) {}
+        private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {}
 
     ngOnInit() {
 
@@ -111,17 +111,17 @@ export class Sheet2RdfComponent {
      * SPREADSHEET HANDLERS
      * ========================================================== */
 
-    private spreadsheetFile: File;
+    spreadsheetFile: File;
 
     private maxSizePreviews: number = 20;
-    private truncatedRows: number;
-    private totalRows: number;
-    private headers: SimpleHeader[];
+    truncatedRows: number;
+    totalRows: number;
+    headers: SimpleHeader[];
     private subjectHeader: SubjectHeader;
-    private tablePreview: TableRow[];
+    tablePreview: TableRow[];
     private selectedTablePreviewRow: TableRow;
 
-    private loadSpreadsheet() {
+    loadSpreadsheet() {
         // HttpServiceContext.initSessionToken();
         this.s2rdfService.uploadSpreadsheet(this.spreadsheetFile, this.fsNamingStrategy).subscribe(
             stResp => {
@@ -172,7 +172,7 @@ export class Sheet2RdfComponent {
     }
 
     // Updates the file to load when user change file on from filepicker
-    private fileChangeEvent(file: File) {
+    fileChangeEvent(file: File) {
         this.spreadsheetFile = file;
         this.loadSpreadsheet();
     }
@@ -231,7 +231,7 @@ export class Sheet2RdfComponent {
         }
     }
 
-    private getSubjHeaderCssClass(): string {
+    getSubjHeaderCssClass(): string {
         if (this.subjectHeader != null) {
             if (this.subjectHeader.id != null && this.subjectHeader.node.converter != null) {
                 return "configuredHeader";
@@ -244,12 +244,10 @@ export class Sheet2RdfComponent {
     }
 
     private editHeader(header: SimpleHeader) {
-        var modalData = new HeaderEditorModalData(header.id, this.headers);
-        const builder = new BSModalContextBuilder<HeaderEditorModalData>(
-            modalData, undefined, HeaderEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
-        this.modal.open(HeaderEditorModal, overlayConfig).result.then(
+        const modalRef: NgbModalRef = this.modalService.open(HeaderEditorModal, new ModalOptions('xl'));
+        modalRef.componentInstance.headerId = header.id;
+		modalRef.componentInstance.headers = this.headers;
+        modalRef.result.then(
             () => { //closed with the "ok" button, so changes performed => update header
                 this.initHeaders();
             },
@@ -257,13 +255,11 @@ export class Sheet2RdfComponent {
         );
     }
 
-    private editSubjectHeader() {
-        var modalData = new SubjectHeaderEditorModalData(this.headers, this.subjectHeader);
-        const builder = new BSModalContextBuilder<SubjectHeaderEditorModalData>(
-            modalData, undefined, SubjectHeaderEditorModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
-        this.modal.open(SubjectHeaderEditorModal, overlayConfig).result.then(
+    editSubjectHeader() {
+        const modalRef: NgbModalRef = this.modalService.open(SubjectHeaderEditorModal, new ModalOptions('xl'));
+        modalRef.componentInstance.headers = this.headers;
+		modalRef.componentInstance.subjectHeader = this.subjectHeader;
+        modalRef.result.then(
             () => { //closed with the "ok" button, so changes performed => update header
                 this.initHeaders();
             },
@@ -271,7 +267,7 @@ export class Sheet2RdfComponent {
         );
     }
 
-    private exportStatus() {
+    exportStatus() {
         this.s2rdfService.exportStatus().subscribe(
             blob => {
                 var exportLink = window.URL.createObjectURL(blob);
@@ -280,7 +276,7 @@ export class Sheet2RdfComponent {
         );
     }
 
-    private loadStatus(statusFile: File) {
+    loadStatus(statusFile: File) {
         this.s2rdfService.importStatus(statusFile).subscribe(
             () => {
                 this.initHeaders();
@@ -292,8 +288,8 @@ export class Sheet2RdfComponent {
      * PEARL EDITOR HANDLERS
      * ========================================================== */
 
-    private pearl: string;
-    private pearlValidation: PearlValidationResult = { valid: true };
+    pearl: string;
+    pearlValidation: PearlValidationResult = { valid: true };
 
     private pearlValidationTimer: number;
 
@@ -302,13 +298,13 @@ export class Sheet2RdfComponent {
         this.pearlValidation = { valid: true, details: null };
     }
 
-    private onPearlChange() {
+    onPearlChange() {
         //reset the previous timeout and set it again
         clearTimeout(this.pearlValidationTimer);
         this.pearlValidationTimer = window.setTimeout(() => { this.checkPearl() }, 1000);
     }
 
-    private generatePearl() {
+    generatePearl() {
         this.s2rdfService.getPearl().subscribe(
             pearl => {
                 this.pearl = pearl;
@@ -318,7 +314,7 @@ export class Sheet2RdfComponent {
         );
     }
 
-    private loadPearl(pearlFile: File) {
+    loadPearl(pearlFile: File) {
         this.s2rdfService.uploadPearl(pearlFile).subscribe(
             pearl => {
                 this.pearl = pearl;
@@ -338,7 +334,7 @@ export class Sheet2RdfComponent {
         );
     }
 
-    private exportPearl() {
+    exportPearl() {
         var data = new Blob([this.pearl], { type: 'text/plain' });
         var textFile = window.URL.createObjectURL(data);
         var fileName = "pearl_export.pr";
@@ -348,7 +344,7 @@ export class Sheet2RdfComponent {
         );
     }
 
-    private insertConverter() {
+    insertConverter() {
         this.sharedModals.selectConverter("Pick a converter", null).then(
             (converter: {projectionOperator: string, contractDesctiption: any }) => {
                 this.viewChildCodemirror.insertAtCursor(converter.projectionOperator);
@@ -361,12 +357,12 @@ export class Sheet2RdfComponent {
      * GENERATED TRIPLES HANDLERS
      * ========================================================== */
 
-    private truncatedTriples: number;
-    private totalTriples: number;
-    private triplesPreview: TriplePreview[];
+    truncatedTriples: number;
+    totalTriples: number;
+    triplesPreview: TriplePreview[];
     private selectedTriplePreviewRow: TriplePreview;
 
-    private exportFormats: RDFFormat[];
+    exportFormats: RDFFormat[];
 
     private resetTriplePreview() {
         this.totalTriples = 0;
@@ -375,9 +371,9 @@ export class Sheet2RdfComponent {
         this.selectedTriplePreviewRow = null;
     }
 
-    private generateTriples() {
+    generateTriples() {
         if (this.pearlValidation != null && !this.pearlValidation.valid) {
-            this.basicModals.alert("Invalid pearl code", "Pearl code contains errors.", "warning");
+            this.basicModals.alert("Invalid pearl code", "Pearl code contains errors.", ModalType.warning);
             return;
         } else {
             this.invokeGetTriplesPreview();
@@ -417,7 +413,7 @@ export class Sheet2RdfComponent {
         }
     }
 
-    private addTriples() {
+    addTriples() {
         UIUtils.startLoadingDiv(UIUtils.blockDivFullScreen);
         this.s2rdfService.addTriples().subscribe(
             resp => {
@@ -439,13 +435,10 @@ export class Sheet2RdfComponent {
 
     //======================
 
-    private settings() {
-        var modalData = new Sheet2RdfSettingsModalData(this.fsNamingStrategy);
-        const builder = new BSModalContextBuilder<Sheet2RdfSettingsModalData>(
-            modalData, undefined, Sheet2RdfSettingsModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).toJSON() };
-        this.modal.open(Sheet2RdfSettingsModal, overlayConfig).result.then(
+    settings() {
+        const modalRef: NgbModalRef = this.modalService.open(Sheet2RdfSettingsModal, new ModalOptions());
+        modalRef.componentInstance.fsNamingStrategyInput = this.fsNamingStrategy;
+        modalRef.result.then(
             (newFsNamingStrategy: FsNamingStrategy) => {
                 this.fsNamingStrategy = newFsNamingStrategy;
                 this.loadSpreadsheet();
@@ -472,30 +465,30 @@ export class Sheet2RdfComponent {
     private readonly initialPanelSize: number = 4;
 
     //slider X (left/right)
-    private readonly previewPanelFlex: number = this.initialPanelSize;
-    private pearlPanelFlex: number = this.initialPanelSize;
+    readonly previewPanelFlex: number = this.initialPanelSize;
+    pearlPanelFlex: number = this.initialPanelSize;
 
     //slider Y (top/bottom)
-    private readonly topPanelFlex: number = this.initialPanelSize;
-    private triplesPanelFlex: number = this.initialPanelSize;
+    readonly topPanelFlex: number = this.initialPanelSize;
+    triplesPanelFlex: number = this.initialPanelSize;
 
     private dragging: boolean = false;
     private startMousedownX: number; //keeps track of the X coord when starting to drag the horizontal slider
     private startMousedownY: number; //keeps track of the X coord when starting to drag the vertical slider
 
-    private onMousedownX(event: MouseEvent) {
+    onMousedownX(event: MouseEvent) {
         event.preventDefault();
         this.dragging = true;
         this.startMousedownX = event.clientX;
         this.onMousemove = this.draggingHandler; //set listener on mousemove
     }
-    private onMousedownY(event: MouseEvent) {
+    onMousedownY(event: MouseEvent) {
         event.preventDefault();
         this.dragging = true;
         this.startMousedownY = event.clientY;
         this.onMousemove = this.draggingHandler; //set listener on mousemove
     }
-    private onMouseup() {
+    onMouseup() {
         if (this.dragging) { //remove listener on mousemove
             this.onMousemove = (event: MouseEvent) => {};
             this.dragging = false;

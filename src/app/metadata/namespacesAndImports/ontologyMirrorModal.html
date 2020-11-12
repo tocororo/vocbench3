@@ -3,13 +3,13 @@
 </div>
 <div class="modal-body vbox blockingDivHost">
     
-    <div class="panel panel-default vbox">
-        <div class="panel-heading">
+    <div class="card card-default vbox">
+        <div class="card-header">
             <label>Ontology Mirror Management:</label>
         </div>
-        <div class="panel-body vbox">
+        <div class="card-body vbox">
             <div class="scrollableContainer">
-                <table class="table table-condensed table-borderless table-hoverable">
+                <table class="table table-sm table-borderless table-hoverable">
                     <colgroup>
                         <col>
                         <col>
@@ -21,22 +21,22 @@
                             <td>{{m.baseURI}}</td>
                             <td>{{m.file}}</td>
                             <td>
-                                <div class="dropdown pull-right">
-                                    <button class="btn btn-default dropdown-toggle btn-xs" type="button" data-toggle="dropdown"
+                                <div class="dropdown float-right" ngbDropdown>
+                                    <button class="btn btn-light dropdown-toggle btn-xs" type="button" data-toggle="dropdown" ngbDropdownToggle
                                         title="Update mirror from..." [disabled]="!isUpdateMirrorAuthorized()">
-                                        <span class="glyphicon glyphicon-pencil"></span>
+                                        <span class="fas fa-pencil-alt"></span>
                                     </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a (click)="updateMirrorFromWebWithUri(m)">Update from web using baseURI</a></li>
-                                        <li><a (click)="updateMirrorFromWebFromAltUrl(m)">Update from web from alternative URL</a></li>
-                                        <li><a (click)="updateMirrorFromLocalFile(m)">Update from local file</a></li>
-                                    </ul>
+                                    <div class="dropdown-menu" ngbDropdownMenu>
+                                        <a class="dropdown-item" (click)="updateMirrorFromWebWithUri(m)">Update from web using baseURI</a>
+                                        <a class="dropdown-item" (click)="updateMirrorFromWebFromAltUrl(m)">Update from web from alternative URL</a>
+                                        <a class="dropdown-item" (click)="updateMirrorFromLocalFile(m)">Update from local file</a>
+                                    </div>
                                 </div>
                             </td>
                             <td>
-                                <button class="btn btn-default btn-xs" (click)="deleteOntoMirror(m)" title="Delete mirror"
+                                <button class="btn btn-light btn-xs" (click)="deleteOntoMirror(m)" title="Delete mirror"
                                     [disabled]="!isDeleteMirrorAuthorized()">
-                                    <span class="glyphicon glyphicon-trash"></span>
+                                    <span class="far fa-trash-alt"></span>
                                 </button>
                             </td>
                         </tr>
@@ -56,5 +56,5 @@
     
 </div>
 <div class="modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="ok($event)">Ok</button>
+    <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
 </div>

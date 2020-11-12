@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body vbox scrollableContainer">
 
-    <table class="table table-borderless table-condensed">
+    <table class="table table-borderless table-sm">
         <colgroup>
             <col style="width: 1%;">
             <col>
@@ -12,7 +12,7 @@
             <!-- <tr>
                 <td class="text-right"><label>Use header:</label></td>
                 <td>
-                    <div class="hbox form-control input-sm" style="align-items: center; justify-content: center;">
+                    <div class="hbox form-control form-control-sm" style="align-items: center; justify-content: center;">
                         <label class="radio-inline">
                             <input type="radio" [(ngModel)]="useHeader" [value]="true">true
                         </label>
@@ -25,10 +25,10 @@
             <tr>
                 <td class="text-right" nowrap>
                     <label>FS naming:</label>
-                    <span class="glyphicon glyphicon-info-sign" title="Strategy to use for naming the UIMA Feature Structure related to the header"></span>
+                    <span class="fas fa-info-circle" title="Strategy to use for naming the UIMA Feature Structure related to the header"></span>
                 </td>
                 <td>
-                    <select class="form-control input-sm" [(ngModel)]="fsNamingStrategy">
+                    <select class="form-control form-control-sm" [(ngModel)]="fsNamingStrategy">
                         <option *ngFor="let ns of fsNamingStrategies" [ngValue]="ns" [title]="ns.title">{{ns.show}}</option>
                     </select>
                 </td>
@@ -39,5 +39,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

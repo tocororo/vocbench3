@@ -1,20 +1,16 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: "notifications-settings-modal",
     templateUrl: "./notificationSettingsModal.html",
 })
-export class NotificationSettingsModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class NotificationSettingsModal {
 
-    constructor(public dialog: DialogRef<BSModalContext>) {
-        this.context = dialog.context;
-    }
+    constructor(public activeModal: NgbActiveModal) {}
 
     ok() {
-        this.dialog.close();
+        this.activeModal.close();
     }
 
 }

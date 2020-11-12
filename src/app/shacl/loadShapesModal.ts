@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { RDFFormat } from "../models/RDFFormat";
 import { InputOutputServices } from "../services/inputOutputServices";
 import { ShaclServices } from "../services/shaclServices";
@@ -10,17 +9,15 @@ import { BasicModalServices } from "../widget/modal/basicModal/basicModalService
     selector: "load-shapes-modal",
     templateUrl: "./loadShapesModal.html",
 })
-export class LoadShapesModal implements ModalComponent<BSModalContext> {
-    context: BSModalContext;
+export class LoadShapesModal {
 
-    private file: File;
-    private inputFormats: RDFFormat[];
-    private selectedInputFormat: RDFFormat;
-    private clearExisting: boolean;
+    file: File;
+    inputFormats: RDFFormat[];
+    selectedInputFormat: RDFFormat;
+    clearExisting: boolean;
 
-    constructor(public dialog: DialogRef<BSModalContext>, private shaclService: ShaclServices, private inOutService: InputOutputServices,
+    constructor(public activeModal: NgbActiveModal, private shaclService: ShaclServices, private inOutService: InputOutputServices,
         private basicModals: BasicModalServices) {
-        this.context = dialog.context;
     }
 
     ngOnInit() {
@@ -42,15 +39,13 @@ export class LoadShapesModal implements ModalComponent<BSModalContext> {
         )
     }
 
-    ok(event: Event) {
+    ok() {
 
         this.shaclService.loadShapes(this.file, this.selectedInputFormat, this.clearExisting).subscribe(
             () => {
                 this.basicModals.alert("Load SHACL shapes", "Shacl shapes loaded succesfully").then(
                     () => {
-                        event.stopPropagation();
-                        event.preventDefault();
-                        this.dialog.close();
+                        this.activeModal.close();
                     }
                 )
             }
@@ -58,7 +53,7 @@ export class LoadShapesModal implements ModalComponent<BSModalContext> {
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

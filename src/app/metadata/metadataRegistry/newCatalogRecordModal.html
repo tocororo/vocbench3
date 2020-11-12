@@ -1,9 +1,9 @@
 <div class="modal-header">
-    <h3 class="modal-title">{{context.title}}</h3>
+    <h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body">
     
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%;">
             <col>
@@ -13,26 +13,26 @@
             <tr>
                 <td nowrap><label>Title:</label></td>
                 <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="title">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="recordTitle">
                 </td>
             </tr>
             <tr>
                 <td nowrap><label>Dataset:</label></td>
                 <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="dataset">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="dataset">
                 </td>
             </tr>
             <tr>
                 <td nowrap><label>URI Space:</label></td>
                 <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="uriSpace">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="uriSpace">
                 </td>
                 <td>*</td>
             </tr>
             <tr>
                 <td nowrap><label>Dereferenceable:</label></td>
                 <td>
-                    <select class="form-control input-sm" [(ngModel)]="dereferenceable">
+                    <select class="form-control form-control-sm" [(ngModel)]="dereferenceable">
                         <option *ngFor="let der of dereferenceableValues" [ngValue]="der">{{der.label}}</option>
                     </select>
                 </td>
@@ -40,7 +40,7 @@
             <tr>
                 <td nowrap><label>SPARQL Endpoint:</label></td>
                 <td>
-                    <input type="text" class="form-control input-sm" [(ngModel)]="sparqlEndpoint">
+                    <input type="text" class="form-control form-control-sm" [(ngModel)]="sparqlEndpoint">
                 </td>
             </tr>
         </tbody>
@@ -48,7 +48,7 @@
     
 </div>
 <div class="modal-footer">
-    <span class="pull-left">(*) Mandatory field</span>
-    <button class="btn btn-primary btn-sm" (click)="ok($event)" [disabled]="!isInputValid()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <span class="float-left">(*) Mandatory field</span>
+    <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isInputValid()">Ok</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>

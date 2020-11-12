@@ -1,12 +1,13 @@
-import { Component, ElementRef, ViewChild } from "@angular/core";
-import { DialogRef, Modal, ModalComponent, OverlayConfig } from "ngx-modialog";
-import { BSModalContext, BSModalContextBuilder } from 'ngx-modialog/plugins/bootstrap';
-import { Observable } from "rxjs";
+import { Component, ElementRef, Input, ViewChild } from "@angular/core";
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { forkJoin, Observable, of } from "rxjs";
+import { flatMap, map } from 'rxjs/operators';
+import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
 import { ARTURIResource } from "../../models/ARTResources";
 import { ConverterContractDescription, RDFCapabilityType } from "../../models/Coda";
 import { Configuration, ConfigurationComponents, ConfigurationProperty } from "../../models/Configuration";
 import { PrefixMapping } from "../../models/Metadata";
-import { AdvancedGraphApplication, NodeConversion, SimpleHeader, SimpleGraphApplication } from "../../models/Sheet2RDF";
+import { AdvancedGraphApplication, NodeConversion, SimpleHeader } from "../../models/Sheet2RDF";
 import { RangeType } from "../../services/propertyServices";
 import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { ResourceUtils } from "../../utils/ResourceUtils";
@@ -14,62 +15,51 @@ import { VBContext } from "../../utils/VBContext";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { LoadConfigurationModalReturnData } from "../../widget/modal/sharedModal/configurationStoreModal/loadConfigurationModal";
 import { SharedModalServices } from "../../widget/modal/sharedModal/sharedModalServices";
-import { NodeCreationModal, NodeCreationModalData } from "./nodeCreationModal";
-
-export class AdvancedGraphApplicationModalData extends BSModalContext {
-    /**
-     * 
-     * @param header 
-     * @param graphApplication 
-     * @param headers all the headers in the spreadsheet. Useful for creating a complete pearl example to validate
-     */
-    constructor(public header: SimpleHeader, public headers: SimpleHeader[], public graphApplication?: AdvancedGraphApplication) {
-        super();
-    }
-}
+import { NodeCreationModal } from "./nodeCreationModal";
 
 @Component({
     selector: "advanced-graph-modal",
     templateUrl: "./advancedGraphApplicationModal.html",
 })
-export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGraphApplicationModalData> {
-    context: AdvancedGraphApplicationModalData;
+export class AdvancedGraphApplicationModal {
+    @Input() header: SimpleHeader;
+    @Input() headers: SimpleHeader[];
+    @Input() graphApplication?: AdvancedGraphApplication;
 
     //Nodes
-    private alreadyDefinedNodes: NodeConversion[] = []; //nodes already defined in the header
-    private newDefinedNodes: NodeConversion[] = []; //nodes defined contextually the graph creation/edit
-    private selectedNode: NodeConversion;
+    alreadyDefinedNodes: NodeConversion[] = []; //nodes already defined in the header
+    newDefinedNodes: NodeConversion[] = []; //nodes defined contextually the graph creation/edit
+    selectedNode: NodeConversion;
 
     //Graph
     @ViewChild('prefixnstable') prefixNsTableElement: ElementRef;
-    private globalPrefixMappings: PrefixMapping[] = [];
-    private localPrefixMappings: PrefixMapping[] = [];
-    private selectedMapping: PrefixMapping;
+    globalPrefixMappings: PrefixMapping[] = [];
+    localPrefixMappings: PrefixMapping[] = [];
+    selectedMapping: PrefixMapping;
 
-    private graphPattern: string;
-    private defaultPredicate: ARTURIResource;
+    graphPattern: string;
+    defaultPredicate: ARTURIResource;
     private readonly PRED_PLACEHOLDER: string = "{{pred}}"
 
-    constructor(public dialog: DialogRef<AdvancedGraphApplicationModalData>, private s2rdfService: Sheet2RDFServices, 
-        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modal: Modal) {
-        this.context = dialog.context;
+    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, 
+        private basicModals: BasicModalServices, private sharedModals: SharedModalServices, private modalService: NgbModal) {
     }
 
     ngOnInit() {
-        this.context.header.nodes.forEach(n => {
+        this.header.nodes.forEach(n => {
             this.alreadyDefinedNodes.push(n);
         })
         this.s2rdfService.getPrefixMappings().subscribe(
             mapping => {
                 this.globalPrefixMappings = mapping;
-                if (this.context.graphApplication != null) { //edit mode => restore pref-ns mappings
-                    this.restorePrefixNsMappings(this.context.graphApplication.prefixMapping);
+                if (this.graphApplication != null) { //edit mode => restore pref-ns mappings
+                    this.restorePrefixNsMappings(this.graphApplication.prefixMapping);
                 }
             }
         );
-        if (this.context.graphApplication != null) { //edit mode => restore UI
-            this.graphPattern = this.context.graphApplication.pattern;
-            this.defaultPredicate = this.context.graphApplication.defaultPredicate;
+        if (this.graphApplication != null) { //edit mode => restore UI
+            this.graphPattern = this.graphApplication.pattern;
+            this.defaultPredicate = this.graphApplication.defaultPredicate;
         }
     }
 
@@ -85,13 +75,8 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         }
     }
 
-    private addNode() {
-        var modalData = new NodeCreationModalData(this.context.header, null, null, null, null, this.newDefinedNodes);
-        const builder = new BSModalContextBuilder<NodeCreationModalData>(
-            modalData, undefined, NodeCreationModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
-        this.modal.open(NodeCreationModal, overlayConfig).result.then(
+    addNode() {
+        this.openNodeEditorModal(this.header, null, null, null, null, this.newDefinedNodes).then(
             (node: NodeConversion) => {
                 this.newDefinedNodes.push(node);
             },
@@ -99,7 +84,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         );
     }
 
-    private removeNode() {
+    removeNode() {
         /**
          * The deletion of a new created node should not invoke any service since the node is not already added to the header.
          * The deleation of a pre-defined node, instead, should invoke the removal service
@@ -109,11 +94,11 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
             this.selectedNode = null;
         } else { //node already defined in the header => check if it is used by some other graph application
             let used: boolean = false;
-            let referenced: boolean = SimpleHeader.isNodeReferenced(this.context.header, this.selectedNode);
+            let referenced: boolean = SimpleHeader.isNodeReferenced(this.header, this.selectedNode);
             //TODO allow to forcing the deletion a referenced node or not allow at all? 
             if (referenced) { //cannot delete a node used by a graph application
                 this.basicModals.confirm("Delete node", "Warning: the node '" + this.selectedNode.nodeId + "' is used in one or more graph application. " +
-                    "This operation will affect also the graph application. Do you want to continue?", "warning").then(
+                    "This operation will affect also the graph application. Do you want to continue?", ModalType.warning).then(
                     confirm => {
                         this.removeNodeImpl();
                     },
@@ -125,7 +110,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         }
     }
     private removeNodeImpl() {
-        this.s2rdfService.removeNodeFromHeader(this.context.header.id, this.selectedNode.nodeId).subscribe(
+        this.s2rdfService.removeNodeFromHeader(this.header.id, this.selectedNode.nodeId).subscribe(
             resp => {
                 this.alreadyDefinedNodes.splice(this.alreadyDefinedNodes.indexOf(this.selectedNode), 1);
                 this.selectedNode = null;
@@ -134,12 +119,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
     }
 
     private changeUriConverter(node: NodeConversion) {
-        var modalData = new NodeCreationModalData(this.context.header, node, RangeType.resource, null, null, null);
-        const builder = new BSModalContextBuilder<NodeCreationModalData>(
-            modalData, undefined, NodeCreationModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
-        this.modal.open(NodeCreationModal, overlayConfig).result.then(
+        this.openNodeEditorModal(this.header, node, RangeType.resource, null, null, null).then(
             (n: NodeConversion) => {
                 node.converter = n.converter;
             },
@@ -148,17 +128,24 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
     }
 
     private changeLiteralConverter(node: NodeConversion) {
-        var modalData = new NodeCreationModalData(this.context.header, node, RangeType.literal, null, null, null);
-        const builder = new BSModalContextBuilder<NodeCreationModalData>(
-            modalData, undefined, NodeCreationModalData
-        );
-        let overlayConfig: OverlayConfig = { context: builder.keyboard(27).dialogClass("modal-dialog modal-xl").toJSON() };
-        this.modal.open(NodeCreationModal, overlayConfig).result.then(
+        this.openNodeEditorModal(this.header, node, RangeType.literal, null, null, null).then(
             (n: NodeConversion) => {
                 node.converter = n.converter;
             },
             () => {}
         );
+    }
+
+    private openNodeEditorModal(header: SimpleHeader, editingNode: NodeConversion, constrainedRangeType: RangeType, 
+            constrainedLanguage: string, constrainedDatatype: ARTURIResource, headerNodes: NodeConversion[]) {
+        const modalRef: NgbModalRef = this.modalService.open(NodeCreationModal, new ModalOptions('xl'));
+        modalRef.componentInstance.header = header;
+        modalRef.componentInstance.editingNode = editingNode;
+        modalRef.componentInstance.constrainedRangeType = constrainedRangeType;
+        modalRef.componentInstance.constrainedLanguage = constrainedLanguage;
+        modalRef.componentInstance.constrainedDatatype = constrainedDatatype;
+        modalRef.componentInstance.headerNodes = headerNodes;
+        return modalRef.result;
     }
 
     /*
@@ -174,7 +161,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         }
     }
 
-    private addMapping() {
+    addMapping() {
         this.sharedModals.prefixNamespace("Add prefix-namespace mapping").then(
             (mapping: { prefix: string, namespace: string }) => {
                 //check if the prefix or the namespace are not already defined
@@ -182,12 +169,12 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                     this.globalPrefixMappings.some(m => m.prefix == mapping.prefix) || 
                     this.localPrefixMappings.some(m => m.prefix == mapping.prefix)
                 ) {
-                    this.basicModals.alert("Add prefix-namespace mapping", "A mapping with prefix " + mapping.prefix + " is already defined", "warning");
+                    this.basicModals.alert("Add prefix-namespace mapping", "A mapping with prefix " + mapping.prefix + " is already defined", ModalType.warning);
                 } else if (
                     this.globalPrefixMappings.some(m => m.namespace == mapping.namespace) || 
                     this.localPrefixMappings.some(m => m.namespace == mapping.namespace)
                 ) {
-                    this.basicModals.alert("Add prefix-namespace mapping", "A mapping with namespace " + mapping.namespace + " is already defined", "warning");
+                    this.basicModals.alert("Add prefix-namespace mapping", "A mapping with namespace " + mapping.namespace + " is already defined", ModalType.warning);
                 } else { //not used => add it
                     let newMapping = { prefix: mapping.prefix, namespace: mapping.namespace, explicit: true };
                     this.localPrefixMappings.push(newMapping);
@@ -200,7 +187,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         );
     }
 
-    private removeMapping() {
+    removeMapping() {
         this.localPrefixMappings.splice(this.localPrefixMappings.indexOf(this.selectedMapping), 1);
     }
     
@@ -224,7 +211,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
      * ============= GRAPHS =================
      */
 
-    private updateDefaultPredicate(pred: ARTURIResource) {
+    updateDefaultPredicate(pred: ARTURIResource) {
         this.defaultPredicate = pred;
     }
 
@@ -244,21 +231,21 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         //NODES
         pearl += "nodes = {\n";
         // - subject
-        pearl += "subject uri " + this.context.header.pearlFeature + " .\n";
+        pearl += "subject uri " + this.header.pearlFeature + " .\n";
         //- other headers nodes (useful in case graph section contains foreign reference)
-        this.context.headers.forEach(h => {
+        this.headers.forEach(h => {
             //skip the same current header (prevent to write multiple time the declaration of its nodes)
-            if (h.id == this.context.header.id) return;
+            if (h.id == this.header.id) return;
             h.nodes.forEach(n => {
-                pearl += n.nodeId + " uri " + this.context.header.pearlFeature + " .\n"; //converter and FS are just mockup
+                pearl += n.nodeId + " uri " + this.header.pearlFeature + " .\n"; //converter and FS are just mockup
             })
         })
         // - nodes of this graph application
         this.alreadyDefinedNodes.forEach(n => {
-            pearl += n.nodeId + " " + n.converter.type + " " + this.context.header.pearlFeature + " .\n";
+            pearl += n.nodeId + " " + n.converter.type + " " + this.header.pearlFeature + " .\n";
         });
         this.newDefinedNodes.forEach(n => {
-            pearl += n.nodeId + " " + n.converter.type + " " + this.context.header.pearlFeature + " .\n";
+            pearl += n.nodeId + " " + n.converter.type + " " + this.header.pearlFeature + " .\n";
         });
         pearl += "}\n"; //close nodes
         //GRAPH
@@ -271,10 +258,10 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         pearl += "}\n"; //close graph
         pearl += "}\n"; //close rule
 
-        return this.s2rdfService.validateGraphPattern(pearl).map(
-            validation => {
+        return this.s2rdfService.validateGraphPattern(pearl).pipe(
+            map(validation => {
                 if (!validation.valid) {
-                    this.basicModals.alert("Advanced Graph Application", "The provided graph pattern is not valid.", "warning", validation.details);
+                    this.basicModals.alert("Advanced Graph Application", "The provided graph pattern is not valid.", ModalType.warning, validation.details);
                     return validation;
                 } else {
                     validation.usedNodes.forEach((nodeId, index, list) => {
@@ -285,15 +272,15 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                     }
                     return validation;
                 }
-            }
+            })
         );
     }
 
 
-    private saveGraph() {
+    saveGraph() {
         if (!this.isOkEnabled()) {
             this.basicModals.alert("Store Advanced Graph Application", "The Graph Application is not completed. " + 
-                "Please, provide a list of nodes and a graph pattern.", "warning");
+                "Please, provide a list of nodes and a graph pattern.", ModalType.warning);
             return;
         }
 
@@ -344,7 +331,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         );
     }
 
-    private loadGraph() {
+    loadGraph() {
         this.s2rdfService.getDefaultAdvancedGraphApplicationConfigurations().subscribe(
             references => {
                 this.sharedModals.loadConfiguration("Load Advanced Graph Application", ConfigurationComponents.ADVANCED_GRAPH_APPLICATION_STORE, true, true, references).then(
@@ -397,8 +384,8 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
         let nodeIdCheckFn: Observable<any>[] = [];
         nodesToRestore.forEach(n => {
             nodeIdCheckFn.push(
-                this.getAdaptedNodeId(n.nodeId).map(
-                    newId => {
+                this.getAdaptedNodeId(n.nodeId).pipe(
+                    map(newId => {
                         if (newId != n.nodeId) { //node is different, so it was already used and it is changed.
                             let oldId = n.nodeId;
                             replacedNodeIds.push({ old: oldId, new: newId });
@@ -408,16 +395,16 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                             let nodeRegex = new RegExp("(?<!\\w)\\$" + oldId + "\\b", "g");
                             this.graphPattern = this.graphPattern.replace(nodeRegex, "$"+newId);
                         }
-                    }
+                    })
                 )
             );
         });
-        Observable.forkJoin(nodeIdCheckFn).subscribe(
+        forkJoin(nodeIdCheckFn).subscribe(
             () => {
                 if (replacedNodeIds.length > 0) { //report of changes
                     let report: string = replacedNodeIds.map(n => " - '" + n.old + "' → '" + n.new + "'").join("\n");
                     this.basicModals.alert("Load Advanced Graph Application", "One or more nodes defined in the loaded " + 
-                        "Advanced Graph Application, have ID already in use by other nodes. They have been replaced:\n"  + report, "warning");
+                        "Advanced Graph Application, have ID already in use by other nodes. They have been replaced:\n"  + report, ModalType.warning);
                 }
                 /**
                  * Some node might be referenced as parameter of other node converter => replace there as well
@@ -451,9 +438,9 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                 nodesToRestore.forEach(n => {
                     if (
                         n.converter.contractUri == ConverterContractDescription.NAMESPACE + "default" && n.converter.type == RDFCapabilityType.literal &&
-                        n.converter.language != null && this.context.header.nameStruct.lang != null
+                        n.converter.language != null && this.header.nameStruct.lang != null
                     ) {
-                        n.converter.language = this.context.header.nameStruct.lang
+                        n.converter.language = this.header.nameStruct.lang
                     }
                 })
 
@@ -468,20 +455,20 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
      * @param nodeId 
      */
     private getAdaptedNodeId(nodeId: string): Observable<string> {
-        return this.s2rdfService.isNodeIdAlreadyUsed(nodeId).flatMap(
-            used => {
+        return this.s2rdfService.isNodeIdAlreadyUsed(nodeId).pipe(
+            flatMap(used => {
                 if (used) {
                     let newId = nodeId + "_1";
                     //invoke itself recursively
                     return this.getAdaptedNodeId(newId);
                 } else { //not used
-                    return Observable.of(nodeId);
+                    return of(nodeId);
                 }
-            }
+            })
         );
     }
 
-    private isOkEnabled(): boolean {
+    isOkEnabled(): boolean {
         return (this.newDefinedNodes.length > 0 || this.alreadyDefinedNodes.length > 0) && this.graphPattern != null && this.graphPattern.trim() != "";
     }
 
@@ -498,7 +485,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
 
         if (this.graphPattern.includes(this.PRED_PLACEHOLDER) && this.defaultPredicate == null) {
             this.basicModals.alert("Missing default predicate", 
-                "The graph pattern contains the {{pred}} placeholder, but a default predicate has not been provided", "warning");
+                "The graph pattern contains the {{pred}} placeholder, but a default predicate has not been provided", ModalType.warning);
             return;
         }
 
@@ -508,7 +495,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                     //above check passed, now add the new nodes to the header (prevent to add nodes again to the header in case of update)
                     let addNodeFn: Observable<any>[] = [];
                     this.newDefinedNodes.forEach(n => {
-                        addNodeFn.push(this.s2rdfService.addNodeToHeader(this.context.header.id, n.nodeId, n.converter.type,
+                        addNodeFn.push(this.s2rdfService.addNodeToHeader(this.header.id, n.nodeId, n.converter.type,
                             n.converter.contractUri, n.converter.datatypeUri, n.converter.language, n.converter.params, n.memoize));
                     });
 
@@ -528,11 +515,11 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                     });
 
                     if (addNodeFn.length != 0) {
-                        Observable.forkJoin(addNodeFn).subscribe(
+                        forkJoin(addNodeFn).subscribe(
                             () => { //nodes added => now add/update the graph application
                                 this.addOrUpdateAdvancedGraphApplication(validation.usedNodes, prefixMappingMap).subscribe(
                                     () => {
-                                        this.dialog.close();
+                                        this.activeModal.close();
                                     }
                                 );
                             }
@@ -540,7 +527,7 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
                     } else { //no node to add, simply update/create the graph application
                         this.addOrUpdateAdvancedGraphApplication(validation.usedNodes, prefixMappingMap).subscribe(
                             () => {
-                                this.dialog.close();
+                                this.activeModal.close();
                             }
                         );
                     }
@@ -551,18 +538,18 @@ export class AdvancedGraphApplicationModal implements ModalComponent<AdvancedGra
 
     private addOrUpdateAdvancedGraphApplication(referencedNodesId: string[], prefixMappingMap: {[key: string]: string}): Observable<void> {
         let graphAppFn: Observable<void>;
-        if (this.context.graphApplication == null) { //creation mode
+        if (this.graphApplication == null) { //creation mode
             graphAppFn = this.s2rdfService.addAdvancedGraphApplicationToHeader(
-                this.context.header.id, this.graphPattern, referencedNodesId, prefixMappingMap, this.defaultPredicate);
+                this.header.id, this.graphPattern, referencedNodesId, prefixMappingMap, this.defaultPredicate);
         } else { //edit mode
             graphAppFn = this.s2rdfService.updateAdvancedGraphApplication(
-                this.context.header.id, this.context.graphApplication.id, this.graphPattern, referencedNodesId, prefixMappingMap, this.defaultPredicate);
+                this.header.id, this.graphApplication.id, this.graphPattern, referencedNodesId, prefixMappingMap, this.defaultPredicate);
         }
         return graphAppFn;
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
     //UTILS

@@ -1,6 +1,6 @@
-<div class="panel panel-default">
-    <div class="panel-body">
-        <table class="table table-borderless table-condensed">
+<div class="card card-default">
+    <div class="card-body">
+        <table class="table table-borderless table-sm">
             <colgroup>
                 <col style="width: 1%">
                 <col>
@@ -17,7 +17,7 @@
                 <tr>
                     <td><label>Identity:</label></td>
                     <td>
-                        <input class="form-control input-sm" [ngModel]="dataset?.identity" disabled>
+                        <input class="form-control form-control-sm" [ngModel]="dataset?.identity" disabled>
                     </td>
                 </tr>
                 <tr>
@@ -40,7 +40,7 @@
                                     <input type="checkbox" [(ngModel)]="sparqlLimitations" (ngModelChange)="updateSparqlLimitations()"
                                         [disabled]="!dataset?.sparqlEndpointMetadata.id">No aggregation
                                 </label>
-                                <span class="glyphicon glyphicon-info-sign" 
+                                <span class="fas fa-info-circle" 
                                     title="If checked it means that the aggregation may be supported, but its support is insufficient for the purposes of Vocbench">
                                 </span>
                             </div>
@@ -50,13 +50,13 @@
                 <tr>
                     <td><label>URI space:</label></td>
                     <td>
-                        <input class="form-control input-sm" [ngModel]="dataset?.uriSpace" disabled>
+                        <input class="form-control form-control-sm" [ngModel]="dataset?.uriSpace" disabled>
                     </td>
                 </tr>
                 <tr *ngIf="version">
                     <td><label>Version Info:</label></td>
                     <td>
-                        <input class="form-control input-sm" [ngModel]="dataset?.versionInfo" disabled>
+                        <input class="form-control form-control-sm" [ngModel]="dataset?.versionInfo" disabled>
                     </td>
                 </tr>
             </tbody>

@@ -1,40 +1,33 @@
-import { Component } from "@angular/core";
-import { DialogRef, ModalComponent } from "ngx-modialog";
-import { BSModalContext } from 'ngx-modialog/plugins/bootstrap';
+import { Component, Input } from "@angular/core";
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalType } from 'src/app/widget/modal/Modals';
 import { ARTNode, ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { Pair } from "../../models/Shared";
 import { CODAConverter, SimpleHeader, SubjectHeader } from "../../models/Sheet2RDF";
-import { SKOS } from "../../models/Vocabulary";
 import { Sheet2RDFServices } from "../../services/sheet2rdfServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
-
-export class SubjectHeaderEditorModalData extends BSModalContext {
-    constructor(public headers: SimpleHeader[], public subjectHeader: SubjectHeader) {
-        super();
-    }
-}
 
 @Component({
     selector: "subject-header-editor-modal",
     templateUrl: "./subjectHeaderEditorModal.html",
 })
-export class SubjectHeaderEditorModal implements ModalComponent<SubjectHeaderEditorModalData> {
-    context: SubjectHeaderEditorModalData;
+export class SubjectHeaderEditorModal {
+    @Input() headers: SimpleHeader[];
+    @Input() subjectHeader: SubjectHeader;
 
-    private selectedHeader: SimpleHeader;
+    selectedHeader: SimpleHeader;
 
-    private assertType: boolean = false;
-    private type: ARTResource;
+    assertType: boolean = false;
+    type: ARTResource;
 
-    private selectedConverter: CODAConverter;
-    private memoize: boolean = false;
+    selectedConverter: CODAConverter;
+    memoize: boolean = false;
 
-    private additionalPredObjs: PredObjPair[];
+    additionalPredObjs: PredObjPair[];
 
-    constructor(public dialog: DialogRef<SubjectHeaderEditorModalData>, private s2rdfService: Sheet2RDFServices, 
+    constructor(public activeModal: NgbActiveModal, private s2rdfService: Sheet2RDFServices, 
         private basicModals: BasicModalServices, private browsingModals: BrowsingModalServices) {
-        this.context = dialog.context;
     }
 
     ngOnInit() {
@@ -42,29 +35,29 @@ export class SubjectHeaderEditorModal implements ModalComponent<SubjectHeaderEdi
          * restore the previous subject header choices
          */
         //selected header
-        this.context.headers.forEach(h => {
-            if (h.id == this.context.subjectHeader.id) {
+        this.headers.forEach(h => {
+            if (h.id == this.subjectHeader.id) {
                 this.selectedHeader = h;
             }
         });
         //type + type assertion
-        this.type = <ARTResource>this.context.subjectHeader.graph.type;
+        this.type = <ARTResource>this.subjectHeader.graph.type;
         if (this.type != null) {
             this.assertType = true;
         }
         //converter
-        if (this.context.subjectHeader.node.converter != null) {
-            this.selectedConverter = this.context.subjectHeader.node.converter;
-            this.memoize = this.context.subjectHeader.node.memoize;
+        if (this.subjectHeader.node.converter != null) {
+            this.selectedConverter = this.subjectHeader.node.converter;
+            this.memoize = this.subjectHeader.node.memoize;
         }
         //additional po
         this.additionalPredObjs = [];
-        this.context.subjectHeader.additionalGraphs.forEach(g => {
+        this.subjectHeader.additionalGraphs.forEach(g => {
             this.additionalPredObjs.push({ predicate: g.property, object: g.value });
         })
     }
 
-    private changeType() {
+    changeType() {
         this.browsingModals.browseClassTree("Select class").then(
             (cls: ARTURIResource) => {
                 this.type = cls;
@@ -72,12 +65,12 @@ export class SubjectHeaderEditorModal implements ModalComponent<SubjectHeaderEdi
         );
     }
 
-    private onConverterUpdate(updateStatus: { converter: CODAConverter, memoize: boolean }) {
+    onConverterUpdate(updateStatus: { converter: CODAConverter, memoize: boolean }) {
         this.selectedConverter = updateStatus.converter;
         this.memoize = updateStatus.memoize;
     }
 
-    private addAdditionalPredObj() {
+    addAdditionalPredObj() {
         this.additionalPredObjs.push({ predicate: null, object: null });
     }
 
@@ -100,7 +93,7 @@ export class SubjectHeaderEditorModal implements ModalComponent<SubjectHeaderEdi
      * - converter is selected
      * - all the parameters (if any) of the converter signature are provided
      */
-    private isOkEnabled() {
+    isOkEnabled() {
         let isSignatureOk: boolean = true;
         if (this.selectedConverter != null) {
             for (let key in this.selectedConverter.params) {
@@ -147,7 +140,7 @@ export class SubjectHeaderEditorModal implements ModalComponent<SubjectHeaderEdi
         //check that there are no additional PO pending
         for (let po of this.additionalPredObjs) {
             if (po.predicate == null || po.object == null) {
-                this.basicModals.alert("Subject Header editor", "An incomplete additional predicate-object pair has been detected.", "warning");
+                this.basicModals.alert("Subject Header editor", "An incomplete additional predicate-object pair has been detected.", ModalType.warning);
                 return;
             }
         }
@@ -160,13 +153,13 @@ export class SubjectHeaderEditorModal implements ModalComponent<SubjectHeaderEdi
         this.s2rdfService.updateSubjectHeader(this.selectedHeader.id, this.selectedConverter.contractUri, this.selectedConverter.params,
             this.type, additionalPOParam, this.memoize).subscribe(
             () => {
-                this.dialog.close();
+                this.activeModal.close();
             }
         );
     }
 
     cancel() {
-        this.dialog.dismiss();
+        this.activeModal.dismiss();
     }
 
 }

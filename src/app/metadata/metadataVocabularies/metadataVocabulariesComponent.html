@@ -1,8 +1,8 @@
-<div class="panel panel-default vbox">
+<div class="card card-default vbox">
     
-    <div class="panel-body vbox">
+    <div class="card-body vbox">
 
-        <table class="table table-condensed table-borderless">
+        <table class="table table-sm table-borderless">
             <colgroup>
                 <col style="width: 1%;">
                 <col>
@@ -13,7 +13,7 @@
                         <label>Metadata Vocabulary:</label>
                     </td>
                     <td>
-                        <select class="form-control input-sm" [(ngModel)]="selectedExporter" (change)="onExtensionChange()">
+                        <select class="form-control form-control-sm" [(ngModel)]="selectedExporter" (change)="onExtensionChange()">
                             <option *ngFor="let e of exporters" [ngValue]="e">{{e.name}}</option>
                         </select>
                     </td>
@@ -32,16 +32,16 @@
 
     </div>
     
-    <div class="panel-footer">
-        <span class="pull-left">(*) Mandatory field</span>
-        <button type="submit" class="btn btn-default btn-sm pull-right" (click)="saveSettings()" [disabled]="!settingsStructs">Save</button>
-        <div class="col-sm-2 pull-right">
+    <div class="card-footer">
+        <span class="float-left">(*) Mandatory field</span>
+        <button type="submit" class="btn btn-light btn-sm float-right" (click)="saveSettings()" [disabled]="!settingsStructs">Save</button>
+        <div class="col-sm-2 float-right">
             <div class="input-group">
-                <select class="form-control input-sm" [(ngModel)]="selectedExportFormat">
+                <select class="form-control form-control-sm" [(ngModel)]="selectedExportFormat">
                     <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
                 </select>
-                <span class="input-group-btn">
-                    <button class="btn btn-default btn-sm" (click)="export()" [disabled]="!settingsStructs">
+                <span class="input-group-append">
+                    <button class="btn btn-light btn-sm" (click)="export()" [disabled]="!settingsStructs">
                         Export
                     </button>
                 </span>

@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body vbox">
 
-    <table class="table table-condensed table-borderless">
+    <table class="table table-sm table-borderless">
         <colgroup>
             <col style="width: 1%;">
             <col>
@@ -17,8 +17,8 @@
                         <div class="form-control">
                             <rdf-resource *ngIf="property" [resource]="property"></rdf-resource>
                         </div>
-                        <div class="input-group-btn">
-                            <button class="btn btn-default" (click)="changeProperty()">
+                        <div class="input-group-append">
+                            <button class="btn btn-light" (click)="changeProperty()">
                                 <img src="../../../assets/images/icons/res/prop.png">
                             </button>
                         </div>
@@ -29,7 +29,7 @@
             <tr>
                 <td class="text-right"><label>Range:</label></td>
                 <td>
-                    <div class="form-control input-sm" readonly>
+                    <div class="form-control form-control-sm" readonly>
                         <ng-container *ngIf="rangeCollection?.length > 0">
                             <rdf-resource *ngFor="let c of rangeCollection" [resource]="c"></rdf-resource>
                         </ng-container>
@@ -43,7 +43,7 @@
             <tr>
                 <td class="text-right"><label>Range type:</label></td>
                 <td>
-                    <select class="form-control input-sm" [(ngModel)]="selectedRangeType" [disabled]="!property">
+                    <select class="form-control form-control-sm" [(ngModel)]="selectedRangeType" [disabled]="!property">
                         <option *ngFor="let rt of rangeTypes" [ngValue]="rt">{{rt.show}}</option>
                     </select>
                 </td>
@@ -57,8 +57,8 @@
                             <select class="form-control" [(ngModel)]="assertedType" [disabled]="!assertType">
                                 <option *ngFor="let t of assertableTypes" [ngValue]="t">{{t.getShow()}}</option>
                             </select>
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" (click)="addAssertedType()" [disabled]="!assertType">
+                            <div class="input-group-append">
+                                <button class="btn btn-light" (click)="addAssertedType()" [disabled]="!assertType">
                                     <img src="../../../assets/images/icons/res/class.png">
                                 </button>
                             </div>
@@ -68,7 +68,7 @@
                                 <input type="checkbox" [(ngModel)]="assertType">
                                 Assert type
                             </label>
-                            <span class="glyphicon glyphicon-info-sign"
+                            <span class="fas fa-info-circle"
                                 title="Check this option in order to assert the rdf:type of the generated node">
                             </span>
                         </div>
@@ -90,9 +90,9 @@
                         <select class="form-control" [(ngModel)]="selectedNode" [disabled]="!isNodeSelectionEnabled()">
                             <option *ngFor="let n of availableNodes" [ngValue]="n">{{getNodeSerialization(n)}}</option>
                         </select>
-                        <div class="input-group-btn">
-                            <button class="btn btn-default" (click)="addNode()" [disabled]="!isNodeSelectionEnabled()">
-                                <span class="glyphicon glyphicon-plus"></span>
+                        <div class="input-group-append">
+                            <button class="btn btn-light" (click)="addNode()" [disabled]="!isNodeSelectionEnabled()">
+                                <span class="fas fa-plus"></span>
                             </button>
                         </div>
                     </div>
@@ -110,5 +110,5 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!isOkEnabled()">Ok</button>
-    <button class="btn btn-default btn-sm" (click)="cancel()">Cancel</button>
+    <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
 </div>
