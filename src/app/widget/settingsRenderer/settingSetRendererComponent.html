@@ -21,10 +21,17 @@
                         [disabled]="disabled">
                     </value-picker>
 
-                    <literal-picker *ngSwitchCase="'Literal'" [literal]="value[index]" (literalChanged)="updateValue(index, $event)" [disabled]="disabled">
-                    </literal-picker>
+                    <ng-container *ngSwitchCase="'Literal'">
+                        <ng-container *ngIf="isLanguageTaggedString() else notLanguageTaggedString">
+                            <lang-string-editor [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled"></lang-string-editor>
+                        </ng-container>
+                        <ng-template #notLanguageTaggedString>
+                            <literal-picker [literal]="value[index]" (literalChanged)="updateValue(index, $event)" [disabled]="disabled">
+                            </literal-picker>
+                        </ng-template>
+                    </ng-container>
 
-                    <nested-settings-renderer *ngSwitchCase="'Properties'" [(ngModel)]="value[index]" [schema]="types[0].schema" (ngModelChange)="updatePropertiesValue(index, $event)"></nested-settings-renderer>
+                    <nested-settings-renderer *ngSwitchCase="'Properties'" [(ngModel)]="value[index]" [schema]="types[0].schema" (ngModelChange)="updatePropertiesValue(index, $event)" [disabled]="disabled"></nested-settings-renderer>
 
                     <textarea *ngSwitchCase="'java.lang.String'" type="text" rows="1" class="form-control input-sm" style="resize: vertical"
                         [(ngModel)]="value[index]" (ngModelChange)="onModelChange()" [disabled]="disabled">

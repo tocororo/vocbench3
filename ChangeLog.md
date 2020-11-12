@@ -21,7 +21,9 @@ https://bitbucket.org/art-uniroma2/semantic-turkey/src/master/ChangeLog.txt
   * Added an editor for rdf:langString literals
   * Extended the language selector modal with a radio button mode (mandatory single selection)
   * Fixed issues and other extensions in settings management related to typed literals and set-typed properties
-  * Fixed issues in the plugin configuration modal which retained (in some cases) edits after canceling 
+  * Fixed issues in the plugin configuration modal which retained (in some cases) edits after canceling
+  * Added support for List-typed configuration properties
+
 # 8.0.1 (08-10-2020)
   * Added Icelandic flag
   * Fixed a bug the prevented authorized users (e.g. lexicographer) to add/update/delete notes in assigned languages

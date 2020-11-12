@@ -37,13 +37,16 @@
 
             <ng-container *ngSwitchCase="'Literal'">
                 <ng-container *ngIf="isLanguageTaggedString(prop) else notLanguageTaggedString">
-                    <lang-string-editor [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()"></lang-string-editor>
+                    <lang-string-editor [(ngModel)]="prop.value" (ngModelChange)="onModelChanged()" [disabled]="disabled"></lang-string-editor>
                 </ng-container>
                 <ng-template #notLanguageTaggedString>
                     <literal-picker [literal]="prop.value" (literalChanged)="updateValue(prop, $event)" [disabled]="disabled">
                     </literal-picker>
                 </ng-template>
             </ng-container>
+
+            <setting-set *ngSwitchCase="'List'" [collapsable]="!prop.required" [value]="prop.value" [types]="prop.type.typeArguments" 
+                (valueChanged)="updateSetValue(prop, $event)" [disabled]="disabled"></setting-set>
 
             <setting-set *ngSwitchCase="'Set'" [collapsable]="!prop.required" [value]="prop.value" [types]="prop.type.typeArguments" 
                 (valueChanged)="updateSetValue(prop, $event)" [disabled]="disabled"></setting-set>
@@ -54,17 +57,17 @@
             <ng-container *ngSwitchCase="'Properties'">
                 <ng-container *ngIf="prop.required || prop.value; else collapsedNestedSettings">
                     <div style="display: flex;">
-                        <nested-settings-renderer style="flex:auto" [(ngModel)]="prop.value" [schema]="prop.type.schema" (ngModelChange)="updatePropertiesValue($event)"></nested-settings-renderer>
+                        <nested-settings-renderer style="flex:auto" [(ngModel)]="prop.value" [schema]="prop.type.schema" [disabled]="disabled" (ngModelChange)="updatePropertiesValue($event)"></nested-settings-renderer>
                         <ng-container *ngIf="!prop.required">
                             <div style="width: 1%"></div>
-                            <button class="btn btn-sm btn-default" title="Delete optional value" style="align-self: center; margin-left: 3px" (click)="deleteOptionalSettingsValue(prop)">
+                            <button class="btn btn-sm btn-default" title="Delete optional value" style="align-self: center; margin-left: 3px" [disabled]="disabled" (click)="deleteOptionalSettingsValue(prop)">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </button>  
                         </ng-container>
                     </div>    
                 </ng-container>
                 <ng-template #collapsedNestedSettings>
-                    <button class="btn btn-sm btn-default" title="Add optional value" (click)="addOptionalSettingsValue(prop)">
+                    <button class="btn btn-sm btn-default" title="Add optional value" [disabled]="disabled" (click)="addOptionalSettingsValue(prop)">
                         <span class="glyphicon glyphicon-plus"></span>
                     </button>
                 </ng-template>    

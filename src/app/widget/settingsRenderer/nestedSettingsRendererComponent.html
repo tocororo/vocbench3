@@ -1,6 +1,6 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <settings-renderer [(ngModel)]="displayedSettings" [preventHoverInheritance]="true"
-            (ngModelChange)="updatePropertiesValue($event)"></settings-renderer>
+            (ngModelChange)="updatePropertiesValue($event)" [disabled]="disabled"></settings-renderer>
     </div>
 </div>
