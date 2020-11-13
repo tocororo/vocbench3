@@ -9,8 +9,8 @@
                         <td style="width: 1%" class="text-right" nowrap><label>Alignment file:</label></td>
                         <td>
                             <div class="hbox">
-                                <file-picker (fileChanged)="fileChangeEvent($event)" [size]="'sm'" [accept]="'application/rdf+xml'"></file-picker>
-                                <button class="btn btn-light btn-sm" style="margin-left: 4px;" (click)="loadAlignment()"
+                                <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="'application/rdf+xml'"></file-picker>
+                                <button class="btn btn-light" style="margin-left: 4px;" (click)="loadAlignment()"
                                     [disabled]="!alignmentFile" title="Reload">
                                     <span class="fas fa-redo"></span>
                                 </button>

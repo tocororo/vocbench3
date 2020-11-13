@@ -3,11 +3,11 @@
 </div>
 <div class="modal-body">
 
-    <file-picker (fileChanged)="fileChangeEvent($event)" size="sm" [accept]="'.pl'"></file-picker>
+    <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="'.pl'"></file-picker>
 
-    <div class="hbox" style="align-items: center; margin-top: 4px">
-        <label style="margin-right: 4px; white-space: nowrap">Role name:</label>
-        <input type="text" class="form-control form-control-sm" [(ngModel)]="roleName" sanitized>
+    <div class="hbox mt-2" style="align-items: center">
+        <label style="white-space: nowrap">Role name:</label>
+        <input type="text" class="form-control ml-2" [(ngModel)]="roleName" sanitized>
     </div>
 
 </div>

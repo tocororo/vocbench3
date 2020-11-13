@@ -1,7 +1,7 @@
 import { Component, forwardRef, Input, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as CodeMirror from 'codemirror';
-import "./mustache";
+// import './mustache';
 
 @Component({
     selector: 'mustache-editor',
@@ -15,7 +15,7 @@ import "./mustache";
 export class MustacheEditorComponent implements ControlValueAccessor {
     @Input() disabled: boolean;
     
-    @ViewChild('txtarea') textareaElement: any;
+    @ViewChild('txtarea', { static: true }) textareaElement: any;
 
     private cmEditor: CodeMirror.EditorFromTextArea;
 
@@ -33,6 +33,7 @@ export class MustacheEditorComponent implements ControlValueAccessor {
                     //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
             }
         );
+        console.log("mode", this.cmEditor.getMode())
 
         this.cmEditor.on('change', (cm: CodeMirror.Editor) => {
             this.propagateChange(cm.getDoc().getValue());

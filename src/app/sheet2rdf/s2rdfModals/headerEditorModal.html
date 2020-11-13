@@ -105,11 +105,11 @@
                     <span class="fas fa-pencil-alt"></span>
                 </button>
                 <div class="btn-group btn-group-xs">
-                    <div class="btn-group btn-group-xs" ngbDropdown>
+                    <div class="btn-group btn-group-xs" ngbDropdown placement="bottom-right">
                         <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="header?.ignore">
                             <span class="fas fa-plus"></span>
                         </button>
-                        <div class="dropdown-menu float-right" ngbDropdownMenu>
+                        <div class="dropdown-menu" ngbDropdownMenu>
                             <a class="dropdown-item" (click)="addSimpleGraphApplication()">Add simple graph application</a>
                             <a class="dropdown-item" (click)="addAdvancedGraphApplication()">Add advanced graph application</a>
                         </div>

@@ -89,7 +89,7 @@
                                     <tr *ngFor="let p of parameters">
                                         <td class="text-right" style="font-family: monospace;" nowrap>{{p.show}} = </td>
                                         <td>
-                                            <input class="form-control input-xs" [(ngModel)]="p.value">
+                                            <input class="form-control form-control-sm" [(ngModel)]="p.value">
                                         </td>
                                         <td>
                                             <span *ngIf="!p.param.required" class="fas fa-question-circle" title="Optional parameter"></span>

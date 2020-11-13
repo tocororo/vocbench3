@@ -346,7 +346,7 @@ export class AdvancedSearchModal {
                     this.basicModals.alert("Search", "No results found", ModalType.warning);
                 } else { //1 or more results
                     ResourceUtils.sortResources(searchResult, SortAttribute.show);
-                    this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, true).then(
+                    this.sharedModals.selectResource("Search", searchResult.length + " results found.", searchResult, true).then(
                         (selectedResource: any) => {
                             this.activeModal.close(selectedResource);
                         },

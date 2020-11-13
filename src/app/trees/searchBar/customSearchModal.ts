@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalType } from 'src/app/widget/modal/Modals';
+import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
 import { ARTNode } from "../../models/ARTResources";
 import { Configuration, ConfigurationComponents, ConfigurationProperty } from "../../models/Configuration";
 import { SettingsProp } from "../../models/Plugins";
@@ -34,7 +35,7 @@ export class CustomSearchModal {
 
     detailsOn: boolean = false;
 
-    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices,
+    constructor(public activeModal: NgbActiveModal, private basicModals: BasicModalServices, private sharedModals: SharedModalServices,
         private configurationService: ConfigurationsServices, private searchService: SearchServices) {}
 
     ngOnInit() {
@@ -105,7 +106,7 @@ export class CustomSearchModal {
                     this.basicModals.alert("Search", "No results found", ModalType.warning);
                 } else { //1 or more results
                     ResourceUtils.sortResources(searchResult, SortAttribute.show);
-                    this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, true).then(
+                    this.sharedModals.selectResource("Search", searchResult.length + " results found.", searchResult, true).then(
                         (selectedResource: any) => {
                             this.activeModal.close(selectedResource);
                         },

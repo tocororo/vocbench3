@@ -37,7 +37,7 @@ export class RdfResourceComponent {
     manchExpr: boolean = false;
     private manchExprStruct: { token: string, class: string }[] = [];
 
-    constructor(private resourcesService: ResourcesServices, private preferences: VBProperties) { }
+    constructor(private resourcesService: ResourcesServices, private vbProp: VBProperties) { }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['resource'] && changes['resource'].currentValue) {
@@ -135,7 +135,7 @@ export class RdfResourceComponent {
             }
         }
         if (this.lang != null) { //if a language is present, init langFlagAvailable
-            if (this.preferences.getShowFlags()) {
+            if (this.vbProp.getShowFlags()) {
                 //just check if the image name doesn't contains "unknown" since the image name for unavailable flag is flag_unknown.png
                 this.langFlagAvailable = !this.imgSrc.includes("flag_unknown");
             } else {

@@ -1,11 +1,11 @@
 import { Component } from "@angular/core";
+import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
 import { ARTResource, ARTURIResource } from "../../models/ARTResources";
 import { SKOSXL } from "../../models/Vocabulary";
 import { ClassesServices } from "../../services/classesServices";
 import { IcvServices } from "../../services/icvServices";
 import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
-import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 
 @Component({
@@ -18,7 +18,7 @@ export class DanglingXLabelComponent {
     brokenLabelList: Array<ARTResource>;
 
     constructor(private icvService: IcvServices, private classesService: ClassesServices,
-        private browsingModals: BrowsingModalServices, private basicModals: BasicModalServices) { }
+        private browsingModals: BrowsingModalServices, private sharedModals: SharedModalServices) { }
 
     /**
      * Run the check
@@ -52,7 +52,7 @@ export class DanglingXLabelComponent {
     assignLabel(xlabel: ARTResource) {
         //as pref alt or hidden?
         var predOpts = [SKOSXL.prefLabel, SKOSXL.altLabel, SKOSXL.hiddenLabel];
-        this.basicModals.selectResource("Set skosxl:Label as", null, predOpts).then(
+        this.sharedModals.selectResource("Set skosxl:Label as", null, predOpts).then(
             (selectedPred: any) => {
                 let activeSchemes: ARTURIResource[] = VBContext.getWorkingProjectCtx().getProjectPreferences().activeSchemes;
                 this.browsingModals.browseConceptTree("Assign xLabel to concept", activeSchemes, true).then(

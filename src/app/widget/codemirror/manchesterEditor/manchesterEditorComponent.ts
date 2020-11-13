@@ -8,12 +8,8 @@ import { ExpressionCheckResponse, ManchesterServices, ObjectError } from '../../
 import { ModalOptions } from '../../modal/Modals';
 import { SearchMode } from './../../../models/Properties';
 import { SearchServices } from './../../../services/searchServices';
-import './manchester';
+// import './manchester';
 import { HelperModal } from './modal/helperModal';
-
-
-
-
 
 @Component({
     selector: 'manchester-editor',
@@ -27,7 +23,7 @@ import { HelperModal } from './modal/helperModal';
 export class ManchesterEditorComponent implements ControlValueAccessor {
     @Input() context: ManchesterCtx;
     @Input() disabled: boolean;
-    @ViewChild('txtarea') textareaElement: any;
+    @ViewChild('txtarea', { static: true }) textareaElement: any;
 
 
     private markers: CodeMirror.TextMarker[] = [];
@@ -47,99 +43,51 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
     }
 
     ngAfterViewInit() {
-        const booleans = ["true", "false"];
-        const brackets = ["(", ")", "[", "]", "{", "}"];
-        const builtinDatatypes = ["decimal", "double", "float", "integer", "string"];
-        const characteristics = ["Functional", "InverseFunctional", "Reflexive", "Irreflexive", "Symmetric", "Asymmetric", "Transitive" ,"Inverse"]; 
-        const conjuctions = ["and", "not", "that", "or"];
-        const facets = ["langRange", "length", "maxLength", "minLength", "pattern", "<", "<=", ">", ">="];
-        const quantifiers = ["some", "only", "value", "min", "max", "exactly", "self"];
-        // const frames = ["AnnotationProperty", "Class", "DataProperty", "Datatype", "DifferentIndividuals", "DisjointClasses",
-        //     "DisjointProperties", "EquivalentClasses", "EquivalentProperties", "Individual", "ObjectProperty", "SameIndividual"];
-        // const sections = ["Annotations", "SubClassOf", "EquivalentTo", "DisjointWith", "DisjointUnion", "SubPropertyOf",
-        //     "InverseOf", "SubPropertyChain", "Domain", "Range", "Characteristics", "Types", "SameAs", "DifferentFrom",
-        //     "Facts", "SuperClassOf", "SuperPropertyOf", "Individuals"];
-
-        //Regular expressions
-        const booleansRegex = this.getRegexp(booleans, false);
-        const builtinDatatypesRegex = this.getRegexp(builtinDatatypes, true); //case sensitive?
-        const characteristicsRegex = this.getRegexp(characteristics, false);
-        const conjuctionsRegex = this.getRegexp(conjuctions, false);
-        const facetsRegex = this.getRegexp(facets, true);
-        const quantifiersRegex = this.getRegexp(quantifiers, false);
-    // const framesRegex = new RegExp("(?:" + frames.join("|") + "):(\\b|\\s|$)");
-    // const sectionsRegex = new RegExp("(?:" + sections.join("|") + "):(\\b|\\s|$)");
-        (<any>CodeMirror).defineSimpleMode("manchester", {
-            // The start state contains the rules that are intially used
-            start: [
-                {
-                    regex: /"(?:[^\\]|\\.)*?(?:"|$)/,
-                    token: "string"
-                },
-                {
-                    regex: booleansRegex,
-                    token: "boolean"
-                },
-                {
-                    regex: builtinDatatypesRegex,
-                    token: "builtinDatatype"
-                },
-                {
-                    regex: characteristicsRegex,
-                    token: "characteristic"
-                },
-                {
-                    regex: conjuctionsRegex,
-                    token: "conjuction"
-                },
-                {
-                    regex: facetsRegex,
-                    token: "facet"
-                },
-                {
-                    regex: quantifiersRegex,
-                    token: "quantifier"
-                },
-                // {
-                //     regex: framesRegex,
-                //     token: "frame"
-                // },
-                // {
-                //     regex: sectionsRegex,
-                //     token: "section"
-                // },
-                {
-                    regex: /0x[a-f\d]+|[-+]?(?:\.\d+|\d+\.?\d*)(?:e[-+]?\d+)?/i,
-                    token: "number"
-                },
-                { regex: /\/(?:[^\\]|\\.)*?\//, token: "variable-3" },
-                // indent and dedent properties guide autoindentation
-                { regex: /[\{\[\(]/, indent: true, token: "bracket" },
-                { regex: /[\}\]\)]/, dedent: true, token: "bracket" },
-                { regex: /[a-z$][\w$]*/, token: "variable" },
-            ],
-        });
-
+        let editorConfig: CodeMirror.EditorConfiguration = {
+            lineNumbers: true,
+            mode: "manchester",
+            indentUnit: 4,
+            indentWithTabs: true,
+            lineWrapping: true,
+            readOnly: this.disabled,
+            viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
+            //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
+            extraKeys: { "Ctrl-Space": "autocomplete" },
+        }
+        // let hintOptions: CodeMirror.ShowHintOptions = {
+        //     hint: (cm: CodeMirror.Editor, callback: (hints: CodeMirror.Hints) => any) => {
+        //         return this.asyncHintFunction();
+        //     }
+        // }
+        let hintOptions: any = {
+            hint: (cm: CodeMirror.Editor, callback: (hints: any) => any) => {
+                return this.asyncHintFunction();
+            }
+        }
+        editorConfig['hintOptions'] = hintOptions;
+        console.log("editorConfig", editorConfig);
 
         this.cmEditor = CodeMirror.fromTextArea(
             this.textareaElement.nativeElement,
-            {
-                lineNumbers: true,
-                mode: "manchester",
-                indentUnit: 4,
-                indentWithTabs: true,
-                lineWrapping: true,
-                readOnly: this.disabled,
-                viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
-                //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
-                extraKeys: { "Ctrl-Space": "autocomplete" },
-                // hintOptions: {
-                //     hint: (cm: CodeMirror.Editor, callback: (hints: CodeMirror.Hints) => any) => {
-                //         return this.asyncHintFunction();
-                //     }
-                // }
-            }
+            editorConfig
+            // {
+            //     lineNumbers: true,
+            //     mode: "manchester",
+            //     indentUnit: 4,
+            //     indentWithTabs: true,
+            //     lineWrapping: true,
+            //     readOnly: this.disabled,
+            //     viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
+            //     //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
+            //     extraKeys: { "Ctrl-Space": "autocomplete" },
+            //     hintOptions: {
+            //         hint: (cm: CodeMirror.Editor, callback: (hints: CodeMirror.Hints) => any) => {
+            //             return this.asyncHintFunction();
+            //         }
+            //     }
+            // }
         );
+        console.log("mode", this.cmEditor.getMode())
 
         this.cmEditor.on('change', (cm: CodeMirror.Editor) => {
             this.onCodeChange(cm.getDoc().getValue());

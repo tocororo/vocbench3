@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
+import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
 import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../../models/ARTResources";
 import { Project } from "../../../../models/Project";
@@ -56,9 +57,9 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
     lastSearch: string;
 
     constructor(private skosService: SkosServices, private searchService: SearchServices, private browsingModals: BrowsingModalServices, private modalService: NgbModal,
-        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
+        super(cfService, resourceService, basicModals, sharedModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
 
         this.eventSubscriptions.push(eventHandler.schemeChangedEvent.subscribe(
             (data: { schemes: ARTURIResource[], project: Project }) => {
@@ -203,7 +204,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                         if (searchResult.length == 1) {
                             this.selectSearchedResource(searchResult[0]);
                         } else { //multiple results, ask the user which one select
-                            this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
+                            this.sharedModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
                                 (selectedResource: any) => {
                                     this.selectSearchedResource(selectedResource);
                                 },
@@ -264,7 +265,7 @@ export class ConceptTreePanelComponent extends AbstractTreePanel {
                         }
                         this.resourceService.getResourcesInfo(schemes).subscribe(
                             schemes => {
-                                this.basicModals.selectResource("Search", message, schemes, this.rendering).then(
+                                this.sharedModals.selectResource("Search", message, schemes, this.rendering).then(
                                     (scheme: ARTURIResource) => {
                                         this.vbProp.setActiveSchemes(VBContext.getWorkingProjectCtx(this.projectCtx), this.workingSchemes.concat(scheme)); //update the active schemes
                                         setTimeout(() => {

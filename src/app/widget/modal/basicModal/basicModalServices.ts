@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ARTNode } from 'src/app/models/ARTResources';
 import { CustomForm } from 'src/app/models/CustomForms';
 import { Cookie } from 'src/app/utils/Cookie';
 import { VBContext } from 'src/app/utils/VBContext';
@@ -14,7 +13,6 @@ import { PromptModal } from './promptModal/promptModal';
 import { PromptPrefixedModal } from './promptModal/promptPrefixedModal';
 import { PromptPropertiesModal } from './promptModal/promptPropertiesModal';
 import { CustomFormSelectionModal } from './selectionModal/customFormSelectionModal';
-import { ResourceSelectionModal } from './selectionModal/resourceSelectionModal';
 import { SelectionModal, SelectionOption } from './selectionModal/selectionModal';
 
 @Injectable()
@@ -201,23 +199,6 @@ export class BasicModalServices {
         modalRef.componentInstance.label = label;
         modalRef.componentInstance.placeholder = placeholder;
         modalRef.componentInstance.accept = accept;
-        return modalRef.result;
-    }
-
-    /**
-     * Opens a modal with an message and a list of selectable options.
-     * @param title the title of the modal dialog
-     * @param message the message to show in the modal dialog body. If null no message will be in the modal
-     * @param resourceList array of available resources
-     * @param rendering in case of array of resources, it tells whether the resources should be rendered
-     * @return if the modal closes with ok returns a promise containing the selected resource
-     */
-    selectResource(title: string, message: string, resourceList: Array<ARTNode>, rendering?: boolean) {
-        const modalRef: NgbModalRef = this.modalService.open(ResourceSelectionModal, new ModalOptions());
-        modalRef.componentInstance.title = title;
-        modalRef.componentInstance.message = message;
-        modalRef.componentInstance.resourceList = resourceList;
-        modalRef.componentInstance.rendering = rendering;
         return modalRef.result;
     }
 

@@ -859,8 +859,12 @@ label {
     margin-bottom: 0px;
 }
 
-input[type="checkbox"], input[type="radio"] {
-    margin: 0px;
+.form-check-input {
+    margin-top: .1rem;
+    margin-left: -2rem;
+}
+.form-check {
+    padding-left: 2rem;
 }
 
 .tab-content {

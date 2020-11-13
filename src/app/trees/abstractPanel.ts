@@ -9,10 +9,11 @@ import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { ActionDescription, RoleActionResolver } from "../utils/RoleActionResolver";
 import { TreeListContext } from "../utils/UIUtils";
 import { VBActionFunctionCtx, VBActionsEnum } from "../utils/VBActions";
-import { ProjectContext, VBContext } from "../utils/VBContext";
+import { ProjectContext } from "../utils/VBContext";
 import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
+import { SharedModalServices } from '../widget/modal/sharedModal/sharedModalServices';
 import { MultiSubjectEnrichmentHelper } from "./multiSubjectEnrichmentHelper";
 
 @Directive()
@@ -59,16 +60,18 @@ export abstract class AbstractPanel {
     protected cfService: CustomFormsServices;
     protected resourceService: ResourcesServices;
     protected basicModals: BasicModalServices;
+    protected sharedModals: SharedModalServices;
     protected graphModals: GraphModalServices;
     protected eventHandler: VBEventHandler;
     protected vbProp: VBProperties;
     protected actionResolver: RoleActionResolver;
     protected multiEnrichment: MultiSubjectEnrichmentHelper;
-    constructor(cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
+    constructor(cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
         this.cfService = cfService;
         this.resourceService = resourceService;
         this.basicModals = basicModals;
+        this.sharedModals = sharedModals;
         this.graphModals = graphModals;
         this.eventHandler = eventHandler;
         this.vbProp = vbProp;

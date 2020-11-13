@@ -7,13 +7,14 @@ import { PrefixNamespaceModal } from 'src/app/metadata/namespacesAndImports/pref
 import { ImportType } from 'src/app/models/Metadata';
 import { ProjectListModal } from 'src/app/project/projectListModal';
 import { ResourceViewModal } from 'src/app/resourceView/resourceViewModal';
-import { ARTResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
+import { ARTNode, ARTResource, RDFResourceRolesEnum } from "../../../models/ARTResources";
 import { RDFCapabilityType } from "../../../models/Coda";
 import { Reference } from '../../../models/Configuration';
 import { Settings } from "../../../models/Plugins";
 import { RemoteRepositoryAccessConfig } from "../../../models/Project";
 import { User } from '../../../models/User';
 import { ProjectContext } from '../../../utils/VBContext';
+import { ResourceSelectionModal } from '../basicModal/selectionModal/resourceSelectionModal';
 import { ModalOptions } from '../Modals';
 import { LoadConfigurationModal } from "./configurationStoreModal/loadConfigurationModal";
 import { StoreConfigurationModal } from "./configurationStoreModal/storeConfigurationModal";
@@ -245,6 +246,23 @@ export class SharedModalServices {
      */
     changeProject() {
         const modalRef: NgbModalRef = this.modalService.open(ProjectListModal, new ModalOptions('lg'));
+        return modalRef.result;
+    }
+
+    /**
+     * Opens a modal with an message and a list of selectable options.
+     * @param title the title of the modal dialog
+     * @param message the message to show in the modal dialog body. If null no message will be in the modal
+     * @param resourceList array of available resources
+     * @param rendering in case of array of resources, it tells whether the resources should be rendered
+     * @return if the modal closes with ok returns a promise containing the selected resource
+     */
+    selectResource(title: string, message: string, resourceList: Array<ARTNode>, rendering?: boolean) {
+        const modalRef: NgbModalRef = this.modalService.open(ResourceSelectionModal, new ModalOptions());
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.message = message;
+        modalRef.componentInstance.resourceList = resourceList;
+        modalRef.componentInstance.rendering = rendering;
         return modalRef.result;
     }
 

@@ -8,6 +8,7 @@ import { VBEventHandler } from "../utils/VBEventHandler";
 import { VBProperties } from "../utils/VBProperties";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { ModalType } from '../widget/modal/Modals';
+import { SharedModalServices } from '../widget/modal/sharedModal/sharedModalServices';
 import { AbstractPanel } from "./abstractPanel";
 import { MultiSubjectEnrichmentHelper } from "./multiSubjectEnrichmentHelper";
 
@@ -27,9 +28,9 @@ export abstract class AbstractTreePanel extends AbstractPanel {
     /**
      * CONSTRUCTOR
      */
-    constructor(cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
+    constructor(cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
+        super(cfService, resourceService, basicModals, sharedModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
     }
 
     /**

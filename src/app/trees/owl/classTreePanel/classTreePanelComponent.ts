@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
+import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
 import { GraphMode } from "../../../graph/abstractGraph";
 import { GraphModalServices } from "../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum, ResAttribute } from "../../../models/ARTResources";
@@ -40,9 +41,9 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
     private creatingClassType: ARTURIResource = OWL.class;
 
     constructor(private searchService: SearchServices, private modalService: NgbModal,
-        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
+        super(cfService, resourceService, basicModals, sharedModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
     }
 
     ngOnInit() {
@@ -88,7 +89,7 @@ export class ClassTreePanelComponent extends AbstractTreePanel {
                         this.openTreeAt(searchResult[0]);
                     } else { //multiple results, ask the user which one select
                         ResourceUtils.sortResources(searchResult, this.rendering ? SortAttribute.show : SortAttribute.value);
-                        this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
+                        this.sharedModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
                             (selectedResource: any) => {
                                 this.openTreeAt(selectedResource);
                             },

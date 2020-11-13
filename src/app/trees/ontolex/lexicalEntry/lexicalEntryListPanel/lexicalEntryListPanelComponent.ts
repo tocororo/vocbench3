@@ -3,6 +3,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ModalOptions, ModalType } from 'src/app/widget/modal/Modals';
+import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
 import { GraphModalServices } from "../../../../graph/modal/graphModalServices";
 import { ARTURIResource, RDFResourceRolesEnum } from "../../../../models/ARTResources";
 import { Project } from "../../../../models/Project";
@@ -59,9 +60,9 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
     lastSearch: string;
 
     constructor(private ontolexService: OntoLexLemonServices, private searchService: SearchServices, private modalService: NgbModal,
-        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, graphModals: GraphModalServices,
+        cfService: CustomFormsServices, resourceService: ResourcesServices, basicModals: BasicModalServices, sharedModals: SharedModalServices, graphModals: GraphModalServices,
         eventHandler: VBEventHandler, vbProp: VBProperties, actionResolver: RoleActionResolver, multiEnrichment: MultiSubjectEnrichmentHelper) {
-        super(cfService, resourceService, basicModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
+        super(cfService, resourceService, basicModals, sharedModals, graphModals, eventHandler, vbProp, actionResolver, multiEnrichment);
 
         this.eventSubscriptions.push(eventHandler.lexiconChangedEvent.subscribe(
             (data: { lexicon: ARTURIResource, project: Project }) => {
@@ -162,7 +163,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                     if (searchResult.length == 1) {
                         this.selectSearchedResource(searchResult[0]);
                     } else { //multiple results, ask the user which one select
-                        this.basicModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
+                        this.sharedModals.selectResource("Search", searchResult.length + " results found.", searchResult, this.rendering).then(
                             (selectedResource: any) => {
                                 this.selectSearchedResource(selectedResource);
                             },
@@ -195,7 +196,7 @@ export class LexicalEntryListPanelComponent extends AbstractListPanel {
                     } else {
                         message += " lexicon. If you want to activate the lexicon and continue the search, please select it and press OK.";
                     }
-                    this.basicModals.selectResource("Search", message, lexicons, this.rendering).then(
+                    this.sharedModals.selectResource("Search", message, lexicons, this.rendering).then(
                         (lexicon: ARTURIResource) => {
                             this.vbProp.setActiveLexicon(VBContext.getWorkingProjectCtx(this.projectCtx), lexicon); //update the active lexicon
                             setTimeout(() => { //wait for a change detection round, since after the setActiveLexicon, the lex entry list is reset

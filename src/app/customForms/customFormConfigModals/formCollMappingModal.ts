@@ -1,6 +1,8 @@
 import { Component } from "@angular/core";
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { SharedModule } from 'src/app/modules/sharedModule';
 import { ModalType } from 'src/app/widget/modal/Modals';
+import { SharedModalServices } from 'src/app/widget/modal/sharedModal/sharedModalServices';
 import { ARTURIResource } from "../../models/ARTResources";
 import { FormCollection } from "../../models/CustomForms";
 import { OWL, RDF } from "../../models/Vocabulary";
@@ -20,6 +22,7 @@ export class FormCollMappingModal {
     selectedFormColl: FormCollection;
 
     constructor(public activeModal: NgbActiveModal, private cfService: CustomFormsServices, private basicModals: BasicModalServices,
+        private sharedModals: SharedModalServices,
         private browsingModals: BrowsingModalServices) {
     }
 
@@ -38,7 +41,7 @@ export class FormCollMappingModal {
                 if (suggestions.length == 0) {
                     this.basicModals.alert("Suggested resources", "No classes/properties suggested for the FormCollection " + fc.getId(), ModalType.warning);
                 } else {
-                    this.basicModals.selectResource("Suggested resources", null, suggestions).then(
+                    this.sharedModals.selectResource("Suggested resources", null, suggestions).then(
                         (res: ARTURIResource) => {
                             this.selectedResourceIri = res.getURI();
                         },

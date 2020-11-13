@@ -62,10 +62,10 @@
                                         </td>
                                         <td>
                                             <div class="hbox">
-                                                <button class="btn btn-xs btn-light" (click)="removeParameter(p)">
+                                                <button class="btn btn-sm btn-light" (click)="removeParameter(p)">
                                                     <span class="far fa-trash-alt"></span>
                                                 </button>
-                                                <button *ngIf="last" class="btn btn-xs btn-light" (click)="addParameter()" style="margin-left: 2px;">
+                                                <button *ngIf="last" class="btn btn-sm btn-light" (click)="addParameter()" style="margin-left: 2px;">
                                                     <span class="fas fa-plus"></span>
                                                 </button>
                                             </div>
@@ -73,7 +73,7 @@
                                     </tr>
                                     <tr *ngIf="!form.parameters.value || form.parameters.value.length == 0">
                                         <td colspan="6" class="text-right">
-                                            <button class="btn btn-xs btn-light" (click)="addParameter()">
+                                            <button class="btn btn-sm btn-light" (click)="addParameter()">
                                                 <span class="fas fa-plus"></span>
                                             </button>
                                         </td>
@@ -97,7 +97,7 @@
                     </label>
                     <div class="hbox" style="align-items: center;">
                         <input class="form-control form-control-sm" [(ngModel)]="form.authorization.value">
-                        <button class="btn btn-xs btn-light" style="margin-left: 4px;" (click)="authorizationHelper()"  title="Edit">
+                        <button class="btn btn-sm btn-light" style="margin-left: 4px;" (click)="authorizationHelper()"  title="Edit">
                             <span class="fas fa-pencil-alt"></span>
                         </button>
                     </div>
@@ -119,7 +119,7 @@
                             <type-editor [(ngModel)]="form.returns.value" (ngModelChange)="updateReturnsPrettyPrint()"></type-editor>
                         </div>
                         <div class="card-footer">
-                            <input class="form-control input-xs" style="font-family: monospace;" [ngModel]="returnsPrettyPrint" readonly>
+                            <input class="form-control" style="font-family: monospace;" [ngModel]="returnsPrettyPrint" readonly>
                         </div>
                     </div>
                     <div class="entryRequired">
@@ -137,7 +137,7 @@
                     </label>
                     <div class="card card-default vbox">
                         <div class="card-body vbox" style="position: relative;">
-                            <button class="btn btn-xs btn-light" style="position: absolute; top: 3px; right: 6px; z-index: 1;" data-toggle="popover">
+                            <button class="btn btn-sm btn-light" style="position: absolute; top: 3px; right: 6px; z-index: 1;" data-toggle="popover">
                                 <span class="fas fa-question-circle"></span>
                             </button>
                             <yasgui [query]="form.sparql.value" (querychange)="onQueryChange($event)" hideButtons="true"></yasgui>
