@@ -12,7 +12,10 @@
     color: #555;
     cursor: default;
 }
+.nav-tabs-bottom>li.active {
+    z-index: 1; /* in order to stay in front of the border-bottom of the res view */
+}
 .nav-tabs-bottom>li.active>a, .nav-tabs-bottom>li.active>a:hover, .nav-tabs-bottom>li.active>a:focus {
-    background-color: #f5f5f5;
-    border-top-color: transparent;
+    background-color: #F7F7F7;
+    border-top-color: #F7F7F7;
 }

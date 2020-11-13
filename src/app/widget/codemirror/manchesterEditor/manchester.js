@@ -40,7 +40,6 @@
     // const sectionsRegex = new RegExp("(?:" + sections.join("|") + "):(\\b|\\s|$)");
 
 
-    console.log("define manchester");
     CodeMirror.defineSimpleMode("manchester", {
         // The start state contains the rules that are intially used
         start: [

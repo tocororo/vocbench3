@@ -96,7 +96,7 @@ export class SystemConfigurationComponent {
                     mailFromAlias: conf.mailFromAlias,
                     mailSmtpHost: conf.mailSmtpHost,
                     mailSmtpPort: conf.mailSmtpPort,
-                    mailSmtpAuth: conf.mailSmtpAuth,
+                    mailSmtpAuth: conf.mailSmtpAuth == "true",
                     mailSmtpSslEnable: conf.mailSmtpSslEnable == "true",
                     mailSmtpStarttlsEnable: conf.mailSmtpStarttlsEnable == "true"
                 }

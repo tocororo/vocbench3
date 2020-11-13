@@ -4,7 +4,7 @@
         <div class="card-header">
             <label style="flex: 1;">Catalog Records:</label>
             <div class="btn-group btn-group-xs">
-                <div class="btn-group btn-group-xs" title="Add Dataset" ngbDropdown>
+                <div class="btn-group" title="Add Dataset" ngbDropdown>
                     <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="!isAddDatasetAuthorized()">
                         <span class="fas fa-plus"></span>
                     </button>
@@ -54,7 +54,7 @@
                 <div class="card card-alt vbox">
                     <div class="card-header">
                         <label style="flex: 1;">Other versions:</label>
-                        <div class="btn-group btn-group-xs" role="group">
+                        <div class="btn-group btn-group-xs">
                             <button class="btn btn-light" title="Add Dataset Version" (click)="addDatasetVersion()"
                                 [disabled]="!selectedCatalog || !isAddDatasetAuthorized()">
                                 <span class="fas fa-plus"></span>
@@ -76,8 +76,8 @@
                 <div class="card card-alt vbox blockingDivHost" style="margin-left: 4px;">
                     <div class="card-header">
                         <label style="flex: 1;">Embedded Lexicalization Sets:</label>
-                        <div class="btn-group btn-group-xs" role="group">
-                            <div class="btn-group btn-group-xs" role="group" title="Add Embedded Lexicalization Set">
+                        <div class="btn-group btn-group-xs">
+                            <div class="btn-group" title="Add Embedded Lexicalization Set" ngbDropdown>
                                 <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle [disabled]="!selectedCatalog || !isAddEmbeddedLexicalizationSetAuthorized()">
                                     <span class="fas fa-plus"></span>
                                 </button>

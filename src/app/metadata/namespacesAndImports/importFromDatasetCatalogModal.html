@@ -11,7 +11,7 @@
             <tr>
                 <td><label>Dataset:</label></td>
                 <td>
-                    <div class="input-group input-group-sm">
+                    <div class="input-group">
                         <input type="text" class="form-control" [ngModel]="preloadCatalog" readonly>
                         <div class="input-group-append">
                             <button class="btn btn-light" (click)="openDatasetCatalog()">
@@ -24,21 +24,22 @@
             <tr>
                 <td><label>Ontology IRI:</label></td>
                 <td>
-                    <input type="text" class="form-control form-control-sm" [ngModel]="ontologyIRI" readonly>
+                    <input type="text" class="form-control" [ngModel]="ontologyIRI" readonly>
                 </td>
             </tr>
-            <ng-template [ngIf]="dataDump">
+            <ng-container *ngIf="dataDump">
                 <tr>
                     <td nowrap><label>Data dump:</label></td>
                     <td>
                         <div style="display: flex; align-items: center">
-                            <input type="text" class="form-control form-control-sm" [ngModel]="dataDump" readonly>
-                            <div class="checkbox-inline" style="white-space: nowrap; margin-left: 4px;">
-                                <label>
-                                    <input type="checkbox" [(ngModel)]="useDataDump">Use data dump
+                            <input type="text" class="form-control" [ngModel]="dataDump" readonly>
+                            <div class="form-check ml-2">
+                                <input class="form-check-input" type="checkbox" [(ngModel)]="useDataDump">
+                                <label class="form-check-label text-nowrap">
+                                    Use data dump
+                                    <span class="fas fa-info-circle ml-1" title="If checked, import is added from the provided data dump instead of the ontology IRI">
+                                    </span>
                                 </label>
-                                <span class="fas fa-info-circle" title="If checked, import is added from the provided data dump instead of the ontology IRI">
-                                </span>
                             </div>
                         </div>
                     </td>
@@ -47,20 +48,20 @@
                     <td nowrap><label>Format:</label></td>
                     <td>
                         <div class="hbox">
-                            <select class="form-control form-control-sm" [(ngModel)]="rdfFormat" [disabled]="lockFormat">
+                            <select class="form-control" [(ngModel)]="rdfFormat" [disabled]="lockFormat">
                                 <option *ngFor="let f of formats" [ngValue]="f">{{f.name}}</option>
                             </select>
-                            <button class="btn btn-sm btn-light" style="margin-left: 4px;" [ngClass]="{ active : lockFormat }" (click)="lockFormat = !lockFormat">
+                            <button class="btn btn-light" style="margin-left: 4px;" [ngClass]="{ active : lockFormat }" (click)="lockFormat = !lockFormat">
                                 <span class="fas fa-lock"></span>
                             </button>
                         </div>
                     </td>
                 </tr>
-            </ng-template>
+            </ng-container>
             <tr>
                 <td nowrap><label>Transitive imports:</label></td>
                 <td>
-                    <select class="form-control form-control-sm" [(ngModel)]="selectedImportAllowance">
+                    <select class="form-control" [(ngModel)]="selectedImportAllowance">
                         <option *ngFor="let ia of importAllowances" [value]="ia.allowance">{{ia.show}}</option>
                     </select>                    
                 </td>

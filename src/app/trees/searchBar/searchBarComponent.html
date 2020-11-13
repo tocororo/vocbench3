@@ -7,7 +7,7 @@
     <input *ngIf="!searchSettings.useAutocompletion" type="text" class="form-control input-xs" style="flex: 1;" 
         [(ngModel)]="searchStr" (keydown.enter)="doSearch()" placeholder="Search..." [disabled]="disabled"> -->
 
-    <input type="text" class="form-control input-xs" style="flex: 1;" 
+    <input type="text" class="form-control form-control-xs" style="flex: 1;" 
         [(ngModel)]="searchStr" (keydown.enter)="doSearch()" placeholder="Search..." [disabled]="disabled">
 
     <div class="btn-group btn-group-xs dropup ml-2" ngbDropdown placement="top-right">

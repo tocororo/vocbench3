@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { CustomServiceRouterComponent } from '../customServices/customServiceRouterComponent';
 import { CustomOperationComponent } from '../customServices/customServicesEditor/customOperationComponent';
 import { CustomServiceComponent } from '../customServices/customServicesEditor/customServiceComponent';
@@ -27,6 +27,7 @@ import { SharedModule } from './sharedModule';
         CommonModule,
         FormsModule,
         NgbDropdownModule,
+        NgbPopoverModule,
         SharedModule
     ],
     declarations: [

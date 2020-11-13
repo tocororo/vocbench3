@@ -14,7 +14,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let c of availableConverters" (click)="selectConverter(c)" [ngClass]="{ info: c == selectedConverter }" style="cursor: pointer;">
+                <tr *ngFor="let c of availableConverters" (click)="selectConverter(c)" [ngClass]="{ 'table-primary': c == selectedConverter }" style="cursor: pointer;">
                     <td>{{c.getName()}}</td>
                     <td style="white-space: pre;">{{c.getDescription()}}</td>
                     <td nowrap>{{c.getRDFCapability()}}
@@ -93,7 +93,7 @@
                                     <tr *ngFor="let p of signatureParams">
                                         <td nowrap>
                                             <label>{{p.name}}</label>
-                                            <span class="fas fa-info-circle" [title]="getParameterTitle(p)"></span>
+                                            <span class="fas fa-info-circle ml-1" [title]="getParameterTitle(p)"></span>
                                         </td>
                                         <td>
                                             <ng-container *ngIf="p.type == 'java.lang.String'">
@@ -124,12 +124,14 @@
 
     </div>
     <div *ngIf="isConverterRandom()" class="card-footer">
-        <div class="checkbox-inline">
-            <label>
-                <input type="checkbox" [(ngModel)]="memoize" (ngModelChange)="onMemoizeChange()">Memoize
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="memoize" (ngModelChange)="onMemoizeChange()">
+            <label class="form-check-label">
+                Memoize
+                <span class="fas fa-info-circle ml-1" title="Apply the memoization: given the same input, the converter will generate the same output">
+                </span>
             </label>
-            <span class="fas fa-info-circle" title="Apply the memoization: given the same input, the converter will generate the same output">
-            </span>
         </div>
     </div>
+    
 </div>

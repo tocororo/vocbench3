@@ -86,6 +86,9 @@ export class ConverterConfigurationComponent {
                     });
                     //restore the selected signature and the parameters
                     this.selectedConverter.getSignatures().forEach(s => {
+                        if (!this.isSignatureReturnTypeCompliant(this.converter.type, s.getReturnType())) {
+                            return; //skip this signature
+                        }
                         //compare the names of the params
                         let signatureParams: string[] = s.getParameters().map(p => p.getName());
                         let converterParams: string[] = Object.keys(this.converter.params);
@@ -109,6 +112,21 @@ export class ConverterConfigurationComponent {
                 }
             }
         );
+    }
+
+    /**
+     * When restoring a previously selected converter (among those available), it may happen that, for the default one, it is restored
+     * the wrong one, e.g. default uri was selected, the default literal is restored. This happens because
+     * the converter to restore and the availables has the same uri and the same signature params, there is no check on the return type
+     */
+    private isSignatureReturnTypeCompliant(converterType: RDFCapabilityType, signatureReturnType: string): boolean {
+        if (signatureReturnType == "org.eclipse.rdf4j.model.Literal") {
+            return converterType == RDFCapabilityType.literal;
+        } else if (signatureReturnType == "org.eclipse.rdf4j.model.IRI") {
+            return converterType == RDFCapabilityType.uri;
+        } else if (signatureReturnType == "org.eclipse.rdf4j.model.Value") {
+            return true;
+        }
     }
 
     private selectConverter(converter: ConverterContractDescription) {

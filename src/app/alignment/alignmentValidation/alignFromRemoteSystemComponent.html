@@ -68,7 +68,7 @@
                                     <td>{{task.startTime}}</td>
                                     <td>{{task.endTime}}</td>
                                     <td>
-                                        <button class="btn btn-xs btn-light" (click)="fetchAlignment(task)" [disabled]="task.status != 'completed'">
+                                        <button class="btn btn-sm btn-light text-nowrap" (click)="fetchAlignment(task)" [disabled]="task.status != 'completed'">
                                             Start validation
                                         </button>
                                     </td>

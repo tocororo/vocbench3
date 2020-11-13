@@ -14,9 +14,10 @@
 
         <div class="vbox">
             <property-tree-panel [deletable]="false" [type]="'objectProperty'" (nodeSelected)="onPropertySelected($event)"></property-tree-panel>
-            <div class="checkbox" style="margin: 8px 0 0 0;">
-                <label>
-                    <input type="checkbox" [(ngModel)]="inverseProp" [disabled]="selectedTreeProperty?.getRole() != 'objectProperty'">Inverse Property
+            <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="inverseProp" [disabled]="selectedTreeProperty?.getRole() != 'objectProperty'">
+                <label class="form-check-label">
+                    Inverse Property
                 </label>
             </div>
         </div>

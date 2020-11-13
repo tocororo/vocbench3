@@ -124,15 +124,15 @@
                                 <td nowrap>
                                     <label>Authentication:</label>
                                 </td>
-                                <td>
-                                    <span class="hbox" style="align-items: center; justify-content: center;">
-                                        <label class="radio-inline">
-                                            <input type="radio" (click)="emailConfig.mailSmtpAuth=true" [checked]="emailConfig.mailSmtpAuth">true
-                                        </label>
-                                        <label class="radio-inline" style="margin-left: 15px;">
-                                            <input type="radio" (click)="emailConfig.mailSmtpAuth=false" [checked]="!emailConfig.mailSmtpAuth">false
-                                        </label>
-                                    </span>
+                                <td class="text-center">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" [(ngModel)]="emailConfig.mailSmtpAuth" [value]="true">
+                                        <label class="form-check-label">true</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" [(ngModel)]="emailConfig.mailSmtpAuth" [value]="false">
+                                        <label class="form-check-label">false</label>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>

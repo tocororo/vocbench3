@@ -135,30 +135,27 @@
                         </div>
                     </div>
                 </ng-template>
-                <div class="col-sm-3 text-center">
-                    <div class="checkbox-inline">
-                        <label>
-                            <input type="checkbox" [(ngModel)]="history"> History
+                <div class="col-sm-3 d-flex align-items-center justify-items-center">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" [(ngModel)]="history">
+                        <label class="form-check-label">
+                            History
+                            <span class="fas fa-info-circle ml-1" title="Enable this to keep track of the changes made on the working graph"></span>
                         </label>
-                        <span class="fas fa-info-circle"
-                            title="Enable this to keep track of the changes made on the working graph">
-                        </span>
                     </div>
-                    <div class="checkbox-inline" style="margin-left: 12px;">
-                        <label>
-                            <input type="checkbox" [(ngModel)]="validation" (input)="blacklisting=false"> Validation
+                    <div class="form-check form-check-inline ml-3">
+                        <input class="form-check-input" type="checkbox" [(ngModel)]="validation" (input)="blacklisting=false">
+                        <label class="form-check-label">
+                            Validation
+                            <span class="fas fa-info-circle ml-1" title="Enable this to keep track of change requests in order to validate them later (accepting or rejecting)"></span>
                         </label>
-                        <span class="fas fa-info-circle"
-                            title="Enable this to keep track of change requests in order to validate them later (accepting or rejecting)">
-                        </span>
                     </div>
-                    <div class="checkbox-inline" style="margin-left: 12px;">
-                        <label>
-                            <input type="checkbox" [(ngModel)]="blacklisting" [disabled]="!validation"> Blacklisting
+                    <div class="form-check form-check-inline ml-3">
+                        <input class="form-check-input" type="checkbox" [(ngModel)]="blacklisting" [disabled]="!validation">
+                        <label class="form-check-label">
+                            Blacklisting
+                            <span class="fas fa-info-circle ml-1" title="Enable this to blacklist terms that have been rejected through validation"></span>
                         </label>
-                        <span class="fas fa-info-circle"
-                            title="Enable this to blacklist terms that have been rejected through validation">
-                        </span>
                     </div>
                 </div>
             </div>

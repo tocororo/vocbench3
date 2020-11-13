@@ -44,12 +44,10 @@
                 <span class="fas fa-caret-down"></span>
             </button>
             <div class="dropdown-menu" ngbDropdownMenu>
-                <a *ngIf="!isContextDataPanel()" class="dropdown-item" (click)="filterEnabled = !filterEnabled">
-                    <span style="flex: 1;">
-                        <span class="fas fa-filter" style="margin-right: 4px;"></span>
-                        SubClass filter
-                    </span>
-                    <span *ngIf="filterEnabled" class="fas fa-check float-right"></span>
+                <a *ngIf="!isContextDataPanel()" class="dropdown-item d-flex align-items-center" (click)="filterEnabled = !filterEnabled">
+                    <span class="fas fa-filter mr-2"></span>
+                    SubClass filter
+                    <span *ngIf="filterEnabled" class="fas fa-check ml-2"></span>
                 </a>
                 <ng-container *ngIf="allowMultiselection">
                     <a class="dropdown-item" (click)="toggleMultiselection()">

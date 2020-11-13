@@ -1,7 +1,6 @@
-<div *ngIf="!readonly"  class="checkbox" style="margin: 0px;">
-    <label>
-        <input type="checkbox" [(ngModel)]="fetchFromPrefixCheck" (change)="onCheckboxChange($event.target.checked)">Fetch prefix from prefix.cc
-    </label>
+<div *ngIf="!readonly" class="form-check mb-2">
+    <input class="form-check-input" type="checkbox" [(ngModel)]="fetchFromPrefixCheck" (change)="onCheckboxChange($event.target.checked)">
+    <label class="form-check-label">Fetch prefix from prefix.cc</label>
 </div>
 <div style="position: relative" class="vbox" [ngClass]="{ 'yasqe-hide-btns' : hideButtons }">
     <textarea #txtarea [ngClass]="{disabled: readonly}">{{query}}</textarea>

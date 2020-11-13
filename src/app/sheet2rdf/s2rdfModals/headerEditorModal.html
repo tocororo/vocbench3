@@ -1,12 +1,13 @@
 <div class="modal-header">
     <div class="hbox" style="align-items: center">
         <h3 class="modal-title" style="flex: 1">Header editor</h3>
-        <div *ngIf="header" class="checkbox-inline" style="white-space: nowrap; margin-left: 4px;">
-            <label>
-                <input type="checkbox" [(ngModel)]="header.ignore" (ngModelChange)="onIgnoreChange()">Ignore header
+        <div *ngIf="header" class="form-check ml-1 text-nowrap">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="header.ignore" (ngModelChange)="onIgnoreChange()">
+            <label class="form-check-label">
+                Ignore header
+                <span class="fas fa-info-circle ml-1" title="If checked, the current header will be ignored in the generated PEARL code and thus in the conversion process">
+                </span>
             </label>
-            <span class="fas fa-info-circle" title="If checked, the current header will be ignored in the generated PEARL code and thus in the conversion process">
-            </span>
         </div>
     </div>
 </div>
@@ -21,13 +22,13 @@
             <tr>
                 <td class="text-right"><label>Header:</label></td>
                 <td>
-                    <input type="text" class="form-control form-control-sm" [ngModel]="header?.nameStruct.fullName" readonly>
+                    <input type="text" class="form-control" [ngModel]="header?.nameStruct.fullName" readonly>
                 </td>
             </tr>
             <tr>
                 <td class="text-right" nowrap><label>PEARL feature:</label></td>
                 <td>
-                    <input type="text" class="form-control form-control-sm" [ngModel]="header?.pearlFeature" readonly>
+                    <input type="text" class="form-control" [ngModel]="header?.pearlFeature" readonly>
                 </td>
             </tr>
         </tbody>

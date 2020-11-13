@@ -348,6 +348,9 @@ img.disabled  {
 .table-borderless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {
     border: none;
 }
+.table-primary, .table-primary>td, .table-primary>th {
+    background-color: #cde8ff; /* different than the default in bootstrap, in order to match the listItem:active color */
+}
 
 .listItem {
     padding: 3px;
@@ -729,7 +732,7 @@ textarea {
     white-space: nowrap;
 }
 
-/* class to add to form-control-sm in order to create a container (similar to a form-control) for a rdf-resource */
+/* class to add to form-control in order to create a container (similar to a form-control) for a rdf-resource */
 .input-resource {
     border: 1px solid #ccc;
     background-color: #eee;
@@ -859,11 +862,11 @@ label {
     margin-bottom: 0px;
 }
 
-.form-check-input {
+.form-check-inline .form-check-input, .form-check-input {
     margin-top: .1rem;
     margin-left: -2rem;
 }
-.form-check {
+.form-check, .form-check.form-check-inline {
     padding-left: 2rem;
 }
 
@@ -892,9 +895,10 @@ label {
 .popover {
     max-width: 500px;
 }
-.popover-content {
+.popover-body {
     max-height: 200px;
     overflow-y: auto;
+    font-size: 1rem;
 }
 
 /*not available in bootstrap*/
@@ -918,7 +922,7 @@ label {
     line-height: 1.5;
 }
 
-.btn-group-xs > .btn, .btn-xs {
+.btn-group-xs .btn, .btn-xs {
     padding: 1px 5px;
     line-height: 1.5;
     border-radius: .3rem;

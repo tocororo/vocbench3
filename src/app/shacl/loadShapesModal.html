@@ -2,7 +2,7 @@
     <h3 class="modal-title">Load SHACL shapes</h3>
 </div>
 <div class="modal-body vbox">
-    <div class="form-group row">
+    <div class="form-group row m-0">
         <label class="col-form-label col-sm-1">File:</label>
         <div class="col-sm-7">
             <!-- <file-picker (fileChanged)="fileChangeEvent($event)" [accept]="filePickerAccept"></file-picker> -->
@@ -17,10 +17,9 @@
     </div>
 </div>
 <div class="modal-footer">
-    <div class="checkbox-inline float-left">
-        <label>
-            <input type="checkbox" [(ngModel)]="clearExisting">Clear existing
-        </label>
+    <div class="form-check float-left">
+        <input class="form-check-input" type="checkbox" [(ngModel)]="clearExisting">
+        <label class="form-check-label">Clear existing</label>
     </div>
     <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="!file || !selectedInputFormat">Ok</button>
     <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>

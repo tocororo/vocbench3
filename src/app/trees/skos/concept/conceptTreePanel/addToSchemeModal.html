@@ -8,11 +8,12 @@
         Are you sure?<br>
     </div>
 
-    <div class="checkbox-inline" style="margin: 8px 6px; align-self: flex-end;">
-        <label>
-            <input type="checkbox" [(ngModel)]="setTopConcept">Set top concept
+    <div class="form-check mt-3 mb-1 mr-2" style="align-self: flex-end;">
+        <input class="form-check-input" type="checkbox" [(ngModel)]="setTopConcept">
+        <label class="form-check-label">
+            Set top concept
+            <span class="fas fa-info-circle ml-1" title="If checked, set the provided concept as top concept of the target scheme"></span>
         </label>
-        <span class="fas fa-info-circle" title="If checked, set the provided concept as top concept of the target scheme"></span>
     </div>
     
     <div *ngIf="schemeList.length > 0" class="groupPanel vbox">

@@ -17,7 +17,7 @@
                 </tr>
                 <tr *ngIf="dataset.conformsTo">
                     <td class="text-right" nowrap><label>Conforms to:</label></td>
-                    <td><span [class]="'badge ' + modelBadgeClass" [title]="dataset.conformsTo">{{shortConformsTo}}</span></td>
+                    <td><h5><span [class]="'badge ' + modelBadgeClass" [title]="dataset.conformsTo">{{shortConformsTo}}</span></h5></td>
                 </tr>
                 <tr *ngIf="dataset.sparqlEndpoint">
                     <td class="text-right" nowrap><label>SPARQL endpoint:</label></td>

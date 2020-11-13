@@ -11,21 +11,21 @@
                 <tr>
                     <td>Strength:</td>
                     <td>
-                        <input type="range" [(ngModel)]="forces?.charge.strength" (ngModelChange)="onForceChange()"
+                        <input type="range" style="width: 100%;" [(ngModel)]="forces?.charge.strength" (ngModelChange)="onForceChange()"
                             min="-500" max="50" step="1" [title]="forces?.charge.strength">
                     </td>
                 </tr>
                 <tr>
                     <td>Distance Min:</td>
                     <td>
-                        <input type="range" [(ngModel)]="forces?.charge.distanceMin" (ngModelChange)="onForceChange()"
+                        <input type="range" style="width: 100%;" [(ngModel)]="forces?.charge.distanceMin" (ngModelChange)="onForceChange()"
                             min="1" max="200" step="1" [title]="forces?.charge.distanceMin">
                     </td>
                 </tr>
                 <tr>
                     <td>Distance Max:</td>
                     <td>
-                        <input type="range" [(ngModel)]="forces?.charge.distanceMax" (ngModelChange)="onForceChange()"
+                        <input type="range" style="width: 100%;" [(ngModel)]="forces?.charge.distanceMax" (ngModelChange)="onForceChange()"
                             min="0" max="2000" step="1" [title]="forces?.charge.distanceMax">
                     </td>
                 </tr>
@@ -34,14 +34,14 @@
                 <tr>
                     <td>Strength:</td>
                     <td>
-                        <input type="range" [(ngModel)]="forces?.collide.strength" (ngModelChange)="onForceChange()"
+                        <input type="range" style="width: 100%;" [(ngModel)]="forces?.collide.strength" (ngModelChange)="onForceChange()"
                             min="0" max="1" step=".1" [title]="forces?.collide.strength">
                     </td>
                 </tr>
                 <tr>
                     <td>Radius:</td>
                     <td>
-                        <input type="range" [(ngModel)]="forces?.collide.radius" (ngModelChange)="onForceChange()"
+                        <input type="range" style="width: 100%;" [(ngModel)]="forces?.collide.radius" (ngModelChange)="onForceChange()"
                             min="0" max="100" step="1" [title]="forces?.collide.radius">
                     </td>
                 </tr> 
@@ -51,14 +51,14 @@
                 <tr>
                     <td>Strength:</td>
                     <td>
-                        <input type="range" [(ngModel)]="forces?.link.strength" (ngModelChange)="onForceChange()"
+                        <input type="range" style="width: 100%;" [(ngModel)]="forces?.link.strength" (ngModelChange)="onForceChange()"
                             min="0" max="1" step="0.1" [title]="forces?.link.strength">
                     </td>
                 </tr>
                 <tr>
                     <td>Length:</td>
                     <td>
-                        <input type="range" [(ngModel)]="forces?.link.distance" (ngModelChange)="onForceChange()"
+                        <input type="range" style="width: 100%;" [(ngModel)]="forces?.link.distance" (ngModelChange)="onForceChange()"
                             min="100" max="500" step="1" [title]="forces?.link.distance">
                     </td>
                 </tr>

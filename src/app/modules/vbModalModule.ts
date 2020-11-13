@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { MappingPropertySelectionModal } from '../alignment/alignmentValidation/alignmentValidationModals/mappingPropertySelectionModal';
 import { ValidationReportModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationReportModal';
 import { ValidationSettingsModal } from '../alignment/alignmentValidation/alignmentValidationModals/validationSettingsModal';
@@ -62,15 +63,17 @@ import { UserSelectionModal } from '../widget/modal/sharedModal/userSelectionMod
 import { CustomFormModule } from './customFormModule';
 import { SharedModule } from './sharedModule';
 import { TreeAndListModule } from './treeAndListModule';
+import { UserModule } from './userModule';
 
 @NgModule({
     imports: [
         CommonModule, 
         FormsModule, 
+        NgbDropdownModule,
         SharedModule, 
         TreeAndListModule, //I'm not sure this needs to be imported since it is already imported in the main AppModule
         CustomFormModule, 
-        // UserModule
+        UserModule
     ],
     declarations: [
         AlertModal,

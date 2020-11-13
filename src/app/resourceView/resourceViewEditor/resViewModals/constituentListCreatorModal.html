@@ -11,10 +11,10 @@
         
         <div style="align-self: center; margin: 5px;">
             <button class="btn btn-light btn-sm btn-block" style="margin-bottom: 5px;" (click)="addConstituentToList()" [disabled]="!selectedConstituentSource">
-                Add<span class="fas fa-chevron-right"></span>
+                Add<span class="fas fa-chevron-right ml-1"></span>
             </button>
             <button class="btn btn-light btn-sm btn-block" style="margin-bottom: 5px;" (click)="removeConstituentFromList()" [disabled]="!selectedConstituentTarget">
-                <span class="fas fa-chevron-left"></span>Remove
+                <span class="fas fa-chevron-left mr-1"></span>Remove
             </button>
         </div>
         
@@ -35,11 +35,10 @@
             <div class="card-body vbox">
                 <resource-list [resources]="list" (nodeSelected)="selectedConstituentTarget = $event"></resource-list>
             </div>
-            <div class="card-footer">
-                <div class="checkbox-inline float-right">
-                    <label>
-                        <input type="checkbox" [(ngModel)]="ordered">Ordered
-                    </label>
+            <div class="card-footer float-right">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="ordered">
+                    <label class="form-check-label">Ordered</label>
                 </div>
             </div>
         </div>

@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="hbox"  style="align-items: center;">
             <label>Mode:</label>
-            <select class="form-control form-control-sm" style="margin-left: 6px;" [(ngModel)]="activeNotificationOpt" (ngModelChange)="changeNotificationStatus()">
+            <select class="form-control" style="margin-left: 6px;" [(ngModel)]="activeNotificationOpt" (ngModelChange)="changeNotificationStatus()">
                 <option *ngFor="let opt of notificationOptions" [ngValue]="opt">{{opt.show}}</option>
             </select>
         </div>

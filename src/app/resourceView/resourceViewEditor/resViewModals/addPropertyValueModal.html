@@ -20,10 +20,9 @@
     <!--Alternative views-->
     <div *ngIf="selectedAspectSelector == treeListAspectSelector" class="vbox">
         <div  *ngIf="viewType == 'classTree'" class="vbox">
-            <div *ngIf="rootsForClsTree" class="checkbox-inline" style="margin-bottom: 5px;">
-                <label>
-                    <input type="checkbox" [(ngModel)]="showAllClass">Show all classes
-                </label>
+            <div *ngIf="rootsForClsTree" class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="showAllClass">
+                <label class="form-check-label">Show all classes</label>
             </div>
             <class-tree-panel [context]="treeListCtx" [roots]="showAllClass? defaultRootClass : rootsForClsIndList" [deletable]="false" [allowMultiselection]="allowMultiselection"
                 (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
@@ -39,10 +38,11 @@
             <property-tree-panel *ngIf="viewType == 'propertyTree'" [context]="treeListCtx" [deletable]="false" [type]="propertyType" [allowMultiselection]="allowMultiselection"
                 (nodeSelected)="onPropertySelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
             </property-tree-panel>
-            <div *ngIf="showInversePropertyCheckbox" class="checkbox" style="margin: 8px 0 0 0;">
-                <label>
-                    <input type="checkbox" [(ngModel)]="inverseProp" [disabled]="!isInversePropertyCheckboxEnabled()">Inverse Property
-                    <span *ngIf="multiselection" class="fas fa-exclamation-circle"
+            <div *ngIf="showInversePropertyCheckbox" class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="inverseProp" [disabled]="!isInversePropertyCheckboxEnabled()">
+                <label class="form-check-label">
+                    Inverse Property
+                    <span *ngIf="multiselection" class="fas fa-exclamation-circle ml-1"
                         title="In case of multiple properties selected, the 'Inverse Property' flag is applied to all of them (available only if all for ObjectProperties)">
                     </span>
                 </label>
@@ -58,10 +58,9 @@
         </datatype-list-panel>
         
         <div *ngIf="viewType == 'classAndIndividual'" class="vbox">
-            <div *ngIf="rootsForClsIndList" class="checkbox-inline" style="margin-bottom: 5px;">
-                <label>
-                    <input type="checkbox" [(ngModel)]="showAllClass">Show all classes
-                </label>
+            <div *ngIf="rootsForClsIndList" class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="showAllClass">
+                <label class="form-check-label">Show all classes</label>
             </div>
             <class-individual-tree [context]="treeListCtx" [deletable]="false" [roots]="showAllClass? defaultRootClasses : rootsForClsIndList" [allowMultiselection]="allowMultiselection"
                 (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">

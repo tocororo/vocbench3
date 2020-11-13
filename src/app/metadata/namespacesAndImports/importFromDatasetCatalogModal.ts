@@ -53,7 +53,8 @@ export class ImportFromDatasetCatalogModal {
                         }
                     });
                 }
-            }
+            },
+            () => {}
         );
     }
 

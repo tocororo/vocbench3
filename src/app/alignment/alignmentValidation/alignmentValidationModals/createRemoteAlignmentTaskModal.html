@@ -8,19 +8,19 @@
 </div>
 <div class="modal-body vbox">
 
-    <div>
+    <div class="row">
         <div class="col-sm-6 text-center">
             <label>Left project</label>
         </div>
         <div class="col-sm-6 text-center">
-            <label>Left project</label>
+            <label>Right project</label>
         </div>
     </div>
-    <div style="margin-top: 8px;">
+    <div class="row mt-3">
         <div class="col-sm-6">
             <div class="hbox" style="align-items: center;">
-                <input class="form-control form-control-sm" [ngModel]="leftProjectStruct.project.getName()" readonly>
-                <button class="btn btn-sm btn-light" style="margin-left: 4px;" (click)="profileProject(leftProjectStruct)" title="Profile project">
+                <input class="form-control" [ngModel]="leftProjectStruct.project.getName()" readonly>
+                <button class="btn btn-light ml-2" (click)="profileProject(leftProjectStruct)" title="Profile project">
                     <span class="fas fa-align-right" style="transform: rotate(90deg)"></span>
                 </button>
                 <div style="margin-left: 4px;">
@@ -31,14 +31,13 @@
         </div>
         <div class="col-sm-6">
             <div class="hbox" style="align-items: center;">
-                <select class="form-control form-control-sm" [(ngModel)]="selectedRightProject" 
+                <select class="form-control" [(ngModel)]="selectedRightProject" 
                     (ngModelChange)="onRightProjectChange()" [disabled]="rightProject">
                     <ng-container *ngFor="let p of projectList">
                         <option *ngIf="p.getName() != leftProjectStruct.project.getName()" [ngValue]="p">{{p.getName()}}</option>
                     </ng-container>
                 </select>
-                <button *ngIf="rightProjectStruct" class="btn btn-sm btn-light" style="margin-left: 4px;" 
-                    (click)="profileProject(rightProjectStruct)" title="Profile project">
+                <button *ngIf="rightProjectStruct" class="btn btn-light ml-2" (click)="profileProject(rightProjectStruct)" title="Profile project">
                     <span class="fas fa-align-right" style="transform: rotate(90deg)"></span>
                 </button>
                 <div *ngIf="rightProjectStruct" style="margin-left: 4px;">
@@ -49,13 +48,13 @@
         </div>
     </div>
 
-    <div style="margin-top: 8px;">
+    <div class="row mt-3">
         <div class="col-sm-12 text-center">
             <button class="btn btn-sm btn-info" (click)="profileMatching()" [disabled]="!isProfileEnabled()">Profile matching</button>
         </div>
     </div>
 
-    <div *ngIf="alignmentScenario" class="scrollableContainer" style="margin-top: 8px;">
+    <div *ngIf="alignmentScenario" class="scrollableContainer mt-3">
         <div>
             <div class="hbox">
                 <maple-dataset [dataset]="alignmentScenario.leftDataset" style="flex: 1; margin-right: 6px;"></maple-dataset>
@@ -72,10 +71,9 @@
 
                     <div class="groupPanel-heading">
                         <div class="groupPanel-heading-content">
-                            <div class="checkbox-inline" title="If checked enable the usage of this pairing">
-                                <label>
-                                    <input type="checkbox" [(ngModel)]="p.checked" (ngModelChange)="onPairingSelectionChange()">Use
-                                </label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" [(ngModel)]="p.checked" (ngModelChange)="onPairingSelectionChange()">
+                                <label class="form-check-label">Use</label>
                             </div>
                         </div>
                     </div>

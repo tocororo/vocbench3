@@ -20,7 +20,7 @@
             <tr>
                 <td nowrap><label>Search:</label></td>
                 <td>
-                    <div class="input-group input-group-sm">
+                    <div class="input-group">
                         <input type="text" class="form-control" [(ngModel)]="query" (keydown)="onKeydown($event)" [disabled]="selectedExtension == null  || requireConfigurationConnector()">
                         <div class="input-group-append">
                             <button class="btn btn-light" (click)="searchDataset()" [disabled]="selectedExtension == null  || requireConfigurationConnector()">
@@ -60,7 +60,7 @@
                         <div class="card-header"><label>{{facetAggregation.displayName||facetAggregation.name}}</label></div>
                         <div class="card-body">
                             <div *ngFor="let bucket of facetAggregation.buckets" style="margin-bottom: 3px;">
-                                <button class="btn btn-sm btn-light" [ngClass]="{ active: lastSearchFacets[facetAggregation.name]?.items[bucket.name] }"
+                                <button class="btn btn-light" [ngClass]="{ active: lastSearchFacets[facetAggregation.name]?.items[bucket.name] }"
                                     (click)="toggleFacet(facetAggregation, bucket)">
                                     {{bucket.displayName||bucket.name}}
                                     <span class="badge badge-secondary">{{bucket.count}}</span>

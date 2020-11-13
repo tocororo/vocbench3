@@ -13,7 +13,7 @@
             <tr>
                 <td nowrap><label>Source Resource:</label></td>
                 <td>
-                    <div class="form-control-sm input-resource">
+                    <div class="form-control input-resource">
                         <rdf-resource [resource]="resource"></rdf-resource>
                     </div>
                 </td>
@@ -21,16 +21,16 @@
             <tr>
                 <td nowrap><label>Target Resource:</label></td>
                 <td>
-                    <div class="form-control-sm input-resource">
+                    <div class="form-control input-resource">
                         <rdf-resource *ngIf="alignedObject" [resource]="alignedObject"></rdf-resource>
                     </div>
                 </td>
                 <td>
-                    <div class="btn-group btn-group-sm" title="Pick external resource" ngbDropdown>
+                    <div class="btn-group" title="Pick external resource" ngbDropdown>
                         <button class="btn btn-light dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle>
                             <span class="fas fa-pencil-alt"></span>
                         </button>
-                        <div class="dropdown-menu float-right" ngbDropdownMenu>
+                        <div class="dropdown-menu" ngbDropdownMenu>
                             <a class="dropdown-item" (click)="browseLocalProjects()">Browse local projects</a>
                             <a class="dropdown-item" (click)="assistedSearch()">Assisted search</a>
                             <a class="dropdown-item" (click)="enterManually()">Enter value manually</a>
@@ -41,16 +41,14 @@
             <tr>
                 <td><label>Property:</label></td>
                 <td>
-                    <select class="form-control form-control-sm" [(ngModel)]="mappingProperty">
+                    <select class="form-control" [(ngModel)]="mappingProperty">
                         <option *ngFor="let p of mappingPropList" [ngValue]="p">{{p.getShow()}}</option>
                     </select>
                 </td>
                 <td>
-                    <div class="checkbox-inline" title="Show all mapping properties">
-                        <label style="white-space: nowrap;">
-                            <input type="checkbox" [(ngModel)]="allPropCheck" (ngModelChange)="initPropList()">
-                            All prop.
-                        </label>
+                    <div class="form-check form-check-inline" title="Show all mapping properties">
+                        <input class="form-check-input" type="checkbox" [(ngModel)]="allPropCheck" (ngModelChange)="initPropList()">
+                        <label class="form-check-label text-nowrap">All prop.</label>
                     </div>
                 </td>
             </tr>
