@@ -1,4 +1,4 @@
-<div [class]="'input-group input-group-' + size">
+<div [class]="inputGroupClass">
     <input type="text" class="form-control" [(ngModel)]="resourceIRI" (ngModelChange)="onModelChanged()" placeholder="http://example.org" [readonly]="!editable" [disabled]="disabled">
     <div class="input-group-append" ngbDropdown>
         <!-- Allowed only local -->

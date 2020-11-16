@@ -14,8 +14,6 @@ import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServ
 export class Sheet2RdfSettingsModal {
     @Input() fsNamingStrategyInput: FsNamingStrategy;
 
-    // private useHeader: boolean;
-
     fsNamingStrategies: FsNsStruct[] = [
         { show: "Column alphabetic index", title: "1st column => 'col_A'; 2nd column => 'col_B'", strategy: FsNamingStrategy.columnAlphabeticIndex },
         { show: "Column numeric index", title: "1st column => 'col_0'; 2nd column => 'col_1'", strategy: FsNamingStrategy.columnNumericIndex },
@@ -26,7 +24,6 @@ export class Sheet2RdfSettingsModal {
     constructor(public activeModal: NgbActiveModal, private prefService: PreferencesSettingsServices, private basicModals: BasicModalServices) {}
 
     ngOnInit() {
-        // this.useHeader = this.context.useHeader;
         this.fsNamingStrategies.forEach(ns => {
             if (ns.strategy == this.fsNamingStrategyInput) {
                 this.fsNamingStrategy = ns;

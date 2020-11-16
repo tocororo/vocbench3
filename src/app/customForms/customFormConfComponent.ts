@@ -245,7 +245,7 @@ export class CustomFormConfigComponent {
 
     private openCustomFormEditor(id: string, existingForms: string[], readOnly: boolean) {
         const modalRef: NgbModalRef = this.modalService.open(CustomFormEditorModal, new ModalOptions('full'));
-        modalRef.componentInstance.id = null;
+        modalRef.componentInstance.id = id;
         modalRef.componentInstance.existingForms = existingForms;
         modalRef.componentInstance.readOnly = readOnly;
         return modalRef.result;

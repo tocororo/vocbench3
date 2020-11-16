@@ -47,10 +47,8 @@ export class SubjectHeaderEditorModal {
         }
         //converter
         if (this.subjectHeader.node.converter != null) {
-            console.log("subject header converter", this.subjectHeader.node.converter);
             this.selectedConverter = this.subjectHeader.node.converter;
             this.memoize = this.subjectHeader.node.memoize;
-            console.log("seected conv", this.selectedConverter)
         }
         //additional po
         this.additionalPredObjs = [];

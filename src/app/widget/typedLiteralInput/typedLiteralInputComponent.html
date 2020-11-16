@@ -1,54 +1,62 @@
 <div>
-    <select class="form-control form-control-sm" [(ngModel)]="selectedDatatype" (ngModelChange)="onDatatypeChange()" style="margin-bottom: 6px;">
+    <select class="form-control" [(ngModel)]="selectedDatatype" (ngModelChange)="onDatatypeChange()" style="margin-bottom: 6px;">
         <option *ngFor="let dt of datatypeList" [ngValue]="dt" [title]="dt.getURI()">{{dt.getShow()}}</option>
     </select>
 
 
     <ng-container *ngIf="enumerations">
-        <select class="form-control form-control-sm" [(ngModel)]="selectedEnumeration" (ngModelChange)="onEnumerationChange()">
+        <select class="form-control" [(ngModel)]="selectedEnumeration" (ngModelChange)="onEnumerationChange()">
             <option *ngFor="let e of enumerations" [ngValue]="e">{{e.toNT()}}</option>
         </select>
     </ng-container>
 
     <ng-container *ngIf="!enumerations">
         <input *ngIf="numericInput; else nonNumericBlock" type="number" [min]="numericInputMin" [max]="numericInputMax" 
-            class="form-control form-control-sm" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
+            class="form-control" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
         <ng-template #nonNumericBlock>
             <div *ngIf="isDatatypeBound(); else nonBoundBlock">
                 <div class="card card-default">
                     <div class="card-body">
                         <div *ngIf="selectedDatatype?.getURI()=='http://www.w3.org/2001/XMLSchema#boolean'" class="text-center">
-                            <label class="radio-inline">
+                            <!-- <label class="radio-inline">
                                 <input type="radio" (click)="stringValue='true'; onValueChanged()" [checked]="stringValue=='true'">true
                             </label>
                             <label class="radio-inline" style="margin-left: 20px;">
                                 <input type="radio" (click)="stringValue='false'; onValueChanged()" [checked]="stringValue=='false'">false
-                            </label>
+                            </label> -->
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" (click)="stringValue='true'; onValueChanged()" [checked]="stringValue=='true'">
+                                <label class="form-check-label">true</label>
+                            </div>
+                            <div class="form-check form-check-inline ml-2">
+                                <input class="form-check-input" type="radio" (click)="stringValue='false'; onValueChanged()" [checked]="stringValue=='false'">
+                                <label class="form-check-label">false</label>
+                            </div>
                         </div>
                         <div *ngIf="selectedDatatype?.getURI()=='http://www.w3.org/2001/XMLSchema#date'">
-                            <input class="form-control form-control-sm" type="date" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
+                            <input class="form-control" type="date" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
                         </div>
                         <div *ngIf="selectedDatatype?.getURI()=='http://www.w3.org/2001/XMLSchema#dateTime'">
-                            <input class="form-control form-control-sm" type="datetime-local" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
+                            <input class="form-control" type="datetime-local" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
                         </div>
                         <div *ngIf="selectedDatatype?.getURI()=='http://www.w3.org/2001/XMLSchema#time'">
-                            <input class="form-control form-control-sm" type="time" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
+                            <input class="form-control" type="time" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
                         </div>
                     </div>
                 </div>
-                <input type="text" class="form-control form-control-sm" style="margin-top: 6px;" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()" disabled>
+                <input type="text" class="form-control" style="margin-top: 6px;" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()" disabled>
             </div>
             <ng-template #nonBoundBlock>
                 <div *ngIf="selectedDatatype?.getURI()=='http://www.w3.org/1999/02/22-rdf-syntax-ns#langString'; else defaultBlock"
                     class="hbox" style="align-items: center;">
-                    <textarea class="form-control form-control-sm" rows="1" style="flex: 1; margin-right: 4px; height: initial; resize: vertical;"
+                    <textarea class="form-control" rows="1" style="flex: 1; margin-right: 4px; height: initial; resize: vertical;"
                         [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
                     </textarea>
                     <lang-picker [(ngModel)]="lang" (ngModelChange)="onLangChanged()"></lang-picker>
                 </div>
                 <!-- any other unknown datatype: non numeric, non bound, not rdf:langString -->
                 <ng-template #defaultBlock>
-                    <input type="text" class="form-control form-control-sm" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
+                    <input type="text" class="form-control" [(ngModel)]="stringValue" (ngModelChange)="onValueChanged()">
                 </ng-template>
             </ng-template>
         </ng-template>

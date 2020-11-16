@@ -97,7 +97,8 @@ export class CustomOperationEditorModal {
         return modalRef.result.then(
             auth => {
                 this.form.authorization.value = auth;
-            }
+            },
+            () => {}
         );
     }
 

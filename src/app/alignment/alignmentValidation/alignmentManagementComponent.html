@@ -40,7 +40,7 @@
                         <td style="position: relative"
                             (mouseover)="editRel.style.display='initial'" (mouseout)="editRel.style.display='none'">
                             <div class="progress" [ngClass]="{ 'large-progress' : unknownRelation }" style="min-width: 100px;">
-                                <div class="progress-bar progress-bar-success" role="progressbar" [ngStyle]="{'width': a.getMeasure()*100+'%'}">
+                                <div class="progress-bar bg-success" [ngStyle]="{'width': a.getMeasure()*100+'%'}">
                                     <span class="progress-value" [title]="a.getRelation()+' ('+a.getMeasure()+')'">
                                         {{getRelationRendered(a)}}
                                     </span>
@@ -81,7 +81,7 @@
                                 <button class="btn btn-success btn-xs" (click)="acceptAlignment(a)">
                                     Accept <span class="fas fa-check-circle"></span>
                                 </button>
-                                <button class="btn btn-danger btn-xs" (click)="rejectAlignment(a)">
+                                <button class="btn btn-danger btn-xs ml-2" (click)="rejectAlignment(a)">
                                     Reject <span class="fas fa-times-circle"></span>
                                 </button>
                             </span>
@@ -117,23 +117,23 @@
         <span>
             <label>Quick Actions:</label>
             
-            <select class="form-control form-control-sm" style="width: auto; display: inline-block" [(ngModel)]="chosenQuickAction"
+            <select class="form-control form-control-sm ml-2" style="width: auto; display: inline-block" [(ngModel)]="chosenQuickAction"
                 [disabled]="alignmentCellList.length == 0">
                 <option *ngFor="let qa of quickActionList">{{qa}}</option>
             </select>
             <input *ngIf="chosenQuickAction.includes('threshold')"
-                class="form-control form-control-sm" style="width: auto; display: inline-block"
+                class="form-control form-control-sm ml-2" style="width: auto; display: inline-block"
                 type="number" min="0" max="1" step="0.01" [(ngModel)]="threshold">
-            <button class="btn btn-light btn-xs" [disabled]="chosenQuickAction=='---'" (click)="doQuickAction()">
+            <button class="btn btn-light btn-sm ml-2" [disabled]="chosenQuickAction=='---'" (click)="doQuickAction()">
                 Do quick action
             </button>
         </span>
         <span class="float-right">
-            <button class="btn btn-light btn-xs" (click)="applyValidation()" [disabled]="alignmentCellList.length == 0">
+            <button class="btn btn-light btn-sm" (click)="applyValidation()" [disabled]="alignmentCellList.length == 0">
                 <span *ngIf="!isEdoal">Apply to Dataset</span>
                 <span *ngIf="isEdoal">Apply EDOAL linkset</span>
             </button>
-            <button class="btn btn-light btn-xs" (click)="export()" [disabled]="alignmentCellList.length == 0">
+            <button class="btn btn-light btn-sm ml-2" (click)="export()" [disabled]="alignmentCellList.length == 0">
                 Save
             </button>
         </span>

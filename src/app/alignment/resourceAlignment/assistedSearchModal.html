@@ -81,11 +81,9 @@
                     <tbody>
                         <tr *ngFor="let ls of pairedLexicalizationSets; let index = index">
                             <td>
-                                <div class="checkbox" style="margin: 0px;">
-                                    <label>
-                                        <input type="checkbox" [(ngModel)]="languagesToCheck[index].checked">
-                                        {{languagesToCheck[index].lang}}
-                                    </label>
+                                <div class="form-check m-0">
+                                    <input class="form-check-input" type="checkbox" [(ngModel)]="languagesToCheck[index].checked">
+                                    <label class="form-check-label">{{languagesToCheck[index].lang}}</label>
                                 </div>
                             </td>
                             <td class="text-center">
@@ -112,10 +110,9 @@
                 </span>
             </div>
             <div class="card-body">
-                <div *ngFor="let sm of searchModes" class="checkbox" style="margin: 5px 0px 0px">
-                    <label>
-                        <input type="checkbox" [(ngModel)]="sm.checked">{{sm.show}}
-                    </label>
+                <div *ngFor="let sm of searchModes" class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="sm.checked">
+                    <label class="form-check-label">{{sm.show}}</label>
                 </div>
             </div>
         </div>

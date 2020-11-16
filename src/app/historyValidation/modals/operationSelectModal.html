@@ -8,7 +8,7 @@
             <tr>
                 <td nowrap><label>Extension path:</label></td>
                 <td style="padding: 3px;">
-                    <select class="form-control form-control-sm" [(ngModel)]="selectedExtensionPath" (ngModelChange)="onExtPathChange()">
+                    <select class="form-control" [(ngModel)]="selectedExtensionPath" (ngModelChange)="onExtPathChange()">
                         <option *ngFor="let path of extensionPaths">{{path}}</option>
                     </select>
                 </td>
@@ -16,7 +16,7 @@
             <tr>
                 <td nowrap><label>Service class:</label></td>
                 <td style="padding: 3px;">
-                    <select class="form-control form-control-sm" [(ngModel)]="selectedServiceClasses" (ngModelChange)="onServClassChange()">
+                    <select class="form-control" [(ngModel)]="selectedServiceClasses" (ngModelChange)="onServClassChange()">
                         <option *ngFor="let sc of serviceClasses">{{sc}}</option>
                     </select>
                 </td>
@@ -39,10 +39,9 @@
         </div>
         <div class="card-body scrollableContainer">
             <ng-template ngFor let-op [ngForOf]="operations">
-                <div class="checkbox" style="margin-left: 12px;" *ngIf="!op.filtered">
-                    <label>
-                        <input type="checkbox" [(ngModel)]="op.checked">{{getOperationShow(op.service)}}
-                    </label>
+                <div *ngIf="!op.filtered" class="form-check ml-2 mb-2">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="op.checked">
+                    <label class="form-check-label">{{getOperationShow(op.service)}}</label>
                 </div>
             </ng-template>
         </div>

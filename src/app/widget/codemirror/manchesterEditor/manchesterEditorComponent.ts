@@ -65,7 +65,6 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
             }
         }
         editorConfig['hintOptions'] = hintOptions;
-        console.log("editorConfig", editorConfig);
 
         this.cmEditor = CodeMirror.fromTextArea(
             this.textareaElement.nativeElement,

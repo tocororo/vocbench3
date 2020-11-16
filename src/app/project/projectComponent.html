@@ -56,7 +56,7 @@
                                         {{p.getName()}}
                                     </div>
                                     <div *ngIf="columnOrder['name']" class="text-center" [ngStyle]="{ order: columnOrder['open'].order, flex: columnOrder['open'].flex }">
-                                        <button class="btn btn-light btn-sm" [ngClass]="{active: p.isOpen()}" style="line-height: 1" 
+                                        <button class="btn btn-light" [ngClass]="{active: p.isOpen()}" style="line-height: 1" 
                                             (click)="openOrCloseProject(p)">
                                             <img *ngIf="!p.isOpen()" src="../../assets/images/icons/folder.gif">
                                             <img *ngIf="p.isOpen()" src="../../assets/images/icons/folder-open.gif">

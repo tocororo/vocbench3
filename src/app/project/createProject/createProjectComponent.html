@@ -285,10 +285,9 @@
                     <div class="card card-alt mb-2">
                         <div class="card-header">
                             <label style="flex: 1;">URI Generator</label>
-                            <div class="checkbox" style="margin: 0px">
-                                <label style="min-height: initial;">
-                                    <input type="checkbox" [(ngModel)]="uriGenUseDefaultSetting"> Use default settings
-                                </label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" [(ngModel)]="uriGenUseDefaultSetting">
+                                <label class="form-check-label">Use default settings</label>
                             </div>
                         </div>
                         <div class="card-body">
@@ -325,10 +324,9 @@
                     <div class="card card-alt mb-2">
                         <div class="card-header">
                             <label style="flex: 1;">Rendering Engine</label>
-                            <div class="checkbox" style="margin: 0px">
-                                <label style="min-height: initial;">
-                                    <input type="checkbox" [(ngModel)]="rendEngUseDefaultSetting"> Use default settings
-                                </label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" [(ngModel)]="rendEngUseDefaultSetting">
+                                <label class="form-check-label">Use default settings</label>
                             </div>
                         </div>
                         <div class="card-body">
@@ -366,10 +364,11 @@
                     <div class="card card-alt mb-2">
                         <div class="card-header">
                             <label style="flex: 1;">Resource Metadata</label>
-                            <div class="checkbox" style="margin: 0px">
-                                <label style="min-height: initial;">
-                                    <input type="checkbox" [(ngModel)]="useResourceMetadata"> Use Resource Metadata
-                                    <span class="fas fa-info-circle" title="Usage of Resource Metadata can be enabled also after the project creation"></span>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" [(ngModel)]="useResourceMetadata">
+                                <label class="form-check-label">
+                                    Use Resource Metadata
+                                    <span class="fas fa-info-circle ml-1" title="Usage of Resource Metadata can be enabled also after the project creation"></span>
                                 </label>
                             </div>
                         </div>
@@ -427,11 +426,9 @@
                     <div class="card card-alt mb-2">
                         <div class="card-header">
                             <label style="flex: 1;">SHACL Shape Validation</label>
-                            <div class="checkbox" style="margin: 0px;">
-                                <label style="min-height: initial;">
-                                    <input type="checkbox" [(ngModel)]="enableSHACL" (ngModelChange)="onShacleEnableChange()">
-                                    Enable shape validation
-                                </label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" [(ngModel)]="enableSHACL" (ngModelChange)="onShacleEnableChange()">
+                                <label class="form-check-label">Enable shape validation</label>
                             </div>
                         </div>
                         <div class="card-body">
@@ -449,11 +446,9 @@
                     <div class="card card-alt">
                         <div class="card-header">
                             <label style="flex: 1;">Trivial Inference Engine</label>
-                            <div class="checkbox" style="margin: 0px;">
-                                <label style="min-height: initial;">
-                                    <input type="checkbox" [(ngModel)]="enableTrivialInference">
-                                    Enable trivial inference
-                                </label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" [(ngModel)]="enableTrivialInference">
+                                <label class="form-check-label">Enable trivial inference</label>
                             </div>
                         </div>
                     </div>

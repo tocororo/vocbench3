@@ -8,38 +8,31 @@
             <label>String match mode</label>
         </div>
         <div class="card-body">
-            <div *ngFor="let mode of stringMatchModes" class="radio" style="margin: 5px 0px 0px">
-                <label>
-                    <input type="radio" name="searchMode" [value]="mode.value" [(ngModel)]="activeStringMatchMode" 
-                        (ngModelChange)="updateSettings()">{{mode.show}}
-                </label>
+            <div *ngFor="let mode of stringMatchModes" class="form-check mt-2">
+                <input class="form-check-input" type="radio" name="searchMode" [value]="mode.value" [(ngModel)]="activeStringMatchMode" 
+                (ngModelChange)="updateSettings()">
+                <label class="form-check-label">{{mode.show}}</label>
             </div>
         </div>
     </div>
 
-    <div class="card card-default" style="margin-top: 5px;">
+    <div class="card card-default mt-2">
         <div class="card-header">
             <label style="margin-right: 5px;">Search mode</label>
             <span class="fas fa-info-circle" title="Search always looks for the input string among the lexicalizations"></span>
         </div>
         <div class="card-body">
-            <div class="checkbox" style="margin: 5px 0px 0px">
-                <label>
-                    <input type="checkbox" [(ngModel)]="useURI" (ngModelChange)="updateSettings()">
-                    Search in URI
-                </label>
+            <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="useURI" (ngModelChange)="updateSettings()">
+                <label class="form-check-label">Search in URI</label>
             </div>
-            <div class="checkbox" style="margin: 5px 0px 0px">
-                <label>
-                    <input type="checkbox" [(ngModel)]="useLocalName" (ngModelChange)="updateSettings()">
-                    Search in local name
-                </label>
+            <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="useLocalName" (ngModelChange)="updateSettings()">
+                <label class="form-check-label">Search in local name</label>
             </div>
-            <div class="checkbox" style="margin: 5px 0px 0px">
-                <label>
-                    <input type="checkbox" [(ngModel)]="useNotes" (ngModelChange)="updateSettings()">
-                    Search in notes
-                </label>
+            <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="useNotes" (ngModelChange)="updateSettings()">
+                <label class="form-check-label">Search in notes</label>
             </div>
         </div>
     </div>
@@ -50,14 +43,12 @@
         </div>
         <div class="card-body">
             <div class="hbox">
-                <div class="checkbox" style="margin: 5px 0px 0px">
-                    <label>
-                        <input type="checkbox" [(ngModel)]="restrictLang" (ngModelChange)="updateSettings()">
-                        Restrict search to languages
-                    </label>
+                <div class="form-check mt-2">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="restrictLang" (ngModelChange)="updateSettings()">
+                    <label class="form-check-label">Restrict search to languages</label>
                 </div>
                 <div class="hbox" style="align-items: center; margin-left: 8px;">
-                    <div class="input-group input-group-xs">
+                    <div class="input-group">
                         <input type="text" class="form-control" [ngModel]="languages" [disabled]="!restrictLang" readonly>
                         <span class="input-group-append">
                             <button class="btn btn-light" (click)="selectRestrictionLanguages()" placeholder="Select languages"
@@ -68,55 +59,47 @@
                     </div>
                 </div>
             </div>
-            <div class="checkbox" style="margin: 5px 0px 0px">
-                <label>
-                    <input type="checkbox" [(ngModel)]="includeLocales" [disabled]="!restrictLang" (ngModelChange)="updateSettings()">
-                    Include locales in search (e.g. en-GB, en-US)
-                </label>
+            <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="includeLocales" (ngModelChange)="updateSettings()">
+                <label class="form-check-label">Include locales in search (e.g. en-GB, en-US)</label>
             </div>
         </div>
     </div>
 
-    <div class="card card-default" style="margin-top: 5px;">
+    <div class="card card-default mt-2">
         <div class="card-header">
             <label style="margin-right: 5px;">Autocompletion</label>
             <span class="fas fa-info-circle" 
                 title="It is highly recommended to disable this feature in big project not hosted by a GraphDB server"></span>
         </div>
         <div class="card-body">
-            <div class="checkbox" style="margin: 5px 0px 0px">
-                <label>
-                    <input type="checkbox" [(ngModel)]="useAutocompletion" (ngModelChange)="updateSettings()">
-                    Enable autocompletion support during typing
-                </label>
+            <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="useAutocompletion" (ngModelChange)="updateSettings()">
+                <label class="form-check-label">Enable autocompletion support during typing</label>
             </div>
         </div>
     </div>
 
-    <div *ngIf="settingsForConceptPanel" class="card card-default" style="margin-top: 5px;">
+    <div *ngIf="settingsForConceptPanel" class="card card-default mt-2">
         <div class="card-header">
             <label>Concept search</label>
         </div>
         <div class="card-body">
-            <div class="checkbox" style="margin: 5px 0px 0px">
-                <label>
-                    <input type="checkbox" [(ngModel)]="restrictConceptSchemes" (ngModelChange)="updateSettings()">
-                    Restrict the search to the active skos:ConceptScheme(s)
-                </label>
+            <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="restrictConceptSchemes" (ngModelChange)="updateSettings()">
+                <label class="form-check-label">Restrict the search to the active skos:ConceptScheme(s)</label>
             </div>
         </div>
     </div>
 
-    <div *ngIf="settingsForInstancePanel" class="card card-default" style="margin-top: 5px;">
+    <div *ngIf="settingsForInstancePanel" class="card card-default mt-2">
         <div class="card-header">
             <label>Instances search</label>
         </div>
         <div class="card-body">
-            <div class="checkbox" style="margin: 5px 0px 0px">
-                <label>
-                    <input type="checkbox" [(ngModel)]="extendsToAllIndividuals" (ngModelChange)="updateSettings()">
-                    Extend the search to all the individuals (also belonging to other classes)
-                </label>
+            <div class="form-check mt-2">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="extendsToAllIndividuals" (ngModelChange)="updateSettings()">
+                <label class="form-check-label">Extend the search to all the individuals (also belonging to other classes)</label>
             </div>
         </div>
     </div>

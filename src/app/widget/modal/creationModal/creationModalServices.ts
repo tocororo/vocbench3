@@ -176,7 +176,7 @@ export class CreationModalServices {
         modalRef.componentInstance.allowedDatatypes = allowedDatatypes;
         modalRef.componentInstance.dataRanges = dataRanges;
         modalRef.componentInstance.multivalue = multivalue;
-        modalRef.componentInstance.validation = validation;
+        modalRef.componentInstance.validate = validation;
         return modalRef.result;
     }
 

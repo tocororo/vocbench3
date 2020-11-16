@@ -6,9 +6,6 @@ import { CustomFormsServices } from "../../services/customFormsServices";
 import { BasicModalServices } from "../../widget/modal/basicModal/basicModalServices";
 import { BrowsingModalServices } from "../../widget/modal/browsingModal/browsingModalServices";
 
-/**
- * Modal that allows to choose among a set of rdfResource
- */
 @Component({
     selector: "custom-form-modal",
     templateUrl: "./customFormModal.html",

@@ -10,7 +10,7 @@
                     {{t.name}}
                     <span *ngIf="!t.saved">*</span>
                 </span>
-                <span *ngIf="tabs.length > 1" class="far fa-times-circle" (click)="closeTab(t)" style="cursor: pointer"
+                <span *ngIf="tabs.length > 1" class="far fa-times-circle ml-1" (click)="closeTab(t)" style="cursor: pointer"
                     onmouseover="this.className='fas fa-times-circle';"
                     onmouseout="this.className='far fa-times-circle';">
                 </span>

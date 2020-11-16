@@ -1,13 +1,11 @@
 <div class="card card-default vbox" style="position: relative">
     <div class="card-header">
         <label style="flex: 1;">Hierarchical redundancies</label>
-        <div class="checkbox" style="margin: 0px 12px;"
-            title="If active, the check is performed only to the relations between Concepts belonging to the same ConceptScheme">
-            <label style="min-height: 0px;">
-                <input type="checkbox" [(ngModel)]="sameScheme">Same scheme
-            </label>
+        <div class="form-check" title="If active, the check is performed only to the relations between Concepts belonging to the same ConceptScheme">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="sameScheme">
+            <label class="form-check-label">Same scheme</label>
         </div>
-        <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
+        <button class="btn btn-xs btn-light ml-3" (click)="runIcv()">Run</button>
     </div>
     <div class="card-body vbox">
         

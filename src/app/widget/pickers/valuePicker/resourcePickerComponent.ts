@@ -20,11 +20,12 @@ export class ResourcePickerComponent {
     
     @Input() disabled: boolean = false;
     @Input() editable: boolean = false; //tells if the URI can be manually edited
-    @Input() size: string = "sm"
+    @Input() size: string;
 
     @Input() config: ResourcePickerConfig;
     @Output() resourceChanged = new EventEmitter<ARTURIResource>();
 
+    inputGroupClass: string = "input-group";
     resourceIRI: string;
 
     constructor(private projectService: ProjectServices, private vbProp: VBProperties,
@@ -32,8 +33,8 @@ export class ResourcePickerComponent {
 
     ngOnInit() {
         //if the input size is not valid, set default to "sm"
-        if (this.size != "xs" && this.size != "sm" && this.size != "" && this.size != "lg") {
-            this.size = "sm";
+        if (this.size == "xs" || this.size == "sm" || this.size == "md" || this.size == "lg") {
+            this.inputGroupClass += " input-group-" + this.size;
         }
 
         let defaultConfig = new ResourcePickerConfig();

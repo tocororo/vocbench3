@@ -119,10 +119,9 @@
             </div>
             <div class="card-body hbox">
                 <div *ngFor="let cs of crudvStruct" class="text-center" style="flex: 1;">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" [(ngModel)]="cs.checked" (ngModelChange)="update()">{{cs.label}}
-                        </label>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" [(ngModel)]="cs.checked" (ngModelChange)="update()">
+                        <label class="form-check-label">{{cs.label}}</label>
                     </div>
                 </div>
             </div>

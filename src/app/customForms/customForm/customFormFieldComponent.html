@@ -25,12 +25,14 @@
                     <input class="form-control" [ngModel]="field.value" style="flex: 1"
                         (ngModelChange)="onModelChanged()" disabled>
                     <span class="hbox" style="align-items: center; margin-left: 10px; justify-content: center;">
-                        <label class="radio-inline">
-                            <input type="radio" (click)="field.value='true'" [checked]="field.value=='true'">true
-                        </label>
-                        <label class="radio-inline" style="margin-left: 15px;">
-                            <input type="radio" (click)="field.value='false'" [checked]="field.value=='false'">false
-                        </label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" (click)="field.value='true'" [checked]="field.value=='true'">
+                            <label class="form-check-label">true</label>
+                        </div>
+                        <div class="form-check form-check-inline ml-3">
+                            <input class="form-check-input" type="radio" (click)="field.value='false'" [checked]="field.value=='false'">
+                            <label class="form-check-label">false</label>
+                        </div>
                     </span>
                 </div>
                 <div *ngSwitchCase="'http://www.w3.org/2001/XMLSchema#date'" class="hbox">

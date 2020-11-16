@@ -1,7 +1,7 @@
 <div class="card card-default vbox">
     <!-- Commands -->
     <div class="card-header">
-        <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
+        <div *ngIf="editable" class="btn-group btn-group-xs">
             <ng-template ngFor let-action [ngForOf]="panelActions">
                 <button *ngIf="isActionVisible(action)" class="btn btn-light" [title]="action.title" (click)="executeAction(action)" [disabled]="isActionDisabled(action)">
                     <img [src]="action.icon" class="panelButtonImg"/>
@@ -56,18 +56,18 @@
 
         <div *ngIf="lexiconChangeable" style="padding-bottom: 3px; display: flex; align-items: center">
             <span style="white-space: nowrap; margin: 0px 3px;">Lexicon:</span>
-            <select class="form-control input-xs" [(ngModel)]="workingLexicon" (ngModelChange)="onLexiconSelectionChange()">
+            <select class="form-control form-control-sm" [(ngModel)]="workingLexicon" (ngModelChange)="onLexiconSelectionChange()">
                 <option *ngFor="let l of lexiconList" [ngValue]="l">{{getLexiconRendering(l)}}</option>
             </select>
         </div>
 
         <div *ngIf="visualizationMode == 'indexBased'" style="padding-bottom: 3px; display: flex; align-items: center">
-            <select class="form-control input-xs" [(ngModel)]="firstDigitIndex" (ngModelChange)="onDigitChange()" style="width: initial">
+            <select class="form-control form-control-sm" [(ngModel)]="firstDigitIndex" (ngModelChange)="onDigitChange()" style="width: initial">
                 <option *ngFor="let i of alphabet">{{i}}</option>
             </select>
             <ng-template [ngIf]="indexLenght>1">
                 <span style="font-weight: bold; margin: 0 5px">&gt;</span>
-                <select class="form-control input-xs" [(ngModel)]="secondDigitIndex" (ngModelChange)="onDigitChange()" style="width: initial">
+                <select class="form-control form-control-sm" [(ngModel)]="secondDigitIndex" (ngModelChange)="onDigitChange()" style="width: initial">
                     <option value=" ">{{firstDigitIndex}}⎵</option>
                     <option *ngFor="let i of alphabet" [value]="i">{{firstDigitIndex}}{{i}}</option>
                 </select>

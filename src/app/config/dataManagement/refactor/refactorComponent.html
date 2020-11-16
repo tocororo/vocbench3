@@ -17,10 +17,11 @@
                     </div>
                 </div>
                 <div class="card-footer hbox" style="align-items: center; justify-content: flex-end">
-                    <div class="checkbox" style="margin: 0px 10px; display: inline-block">
-                        <label><input type="checkbox" [(ngModel)]="reifyNotes">Reify SKOS notes</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" [(ngModel)]="reifyNotes">
+                        <label class="form-check-label">Reify SKOS notes</label>
                     </div>
-                    <button class="btn btn-sm btn-light float-right" (click)="skosToSkosxl()" [disabled]="!isSkosToSkosxlAuthorized()">Refactor</button>
+                    <button class="btn btn-sm btn-light ml-4" (click)="skosToSkosxl()" [disabled]="!isSkosToSkosxlAuthorized()">Refactor</button>
                     <span class="clearfix"></span>
                 </div>
             </div>
@@ -36,11 +37,11 @@
                     </div>
                 </div>
                 <div class="card-footer hbox" style="align-items: center; justify-content: flex-end">
-                    <div class="checkbox" style="margin: 0px 10px; display: inline-block">
-                        <label><input type="checkbox" [(ngModel)]="flattenNotes">Flatten reified SKOS notes</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" [(ngModel)]="flattenNotes">
+                        <label class="form-check-label">Flatten reified SKOS notes</label>
                     </div>
-                    <button class="btn btn-sm btn-light float-right" (click)="skosxlToSkos()" [disabled]="!isSkoxlToSkosAuthorized()">Refactor</button>
-                    <span class="clearfix"></span>
+                    <button class="btn btn-sm btn-light ml-4" (click)="skosxlToSkos()" [disabled]="!isSkoxlToSkosAuthorized()">Refactor</button>
                 </div>
             </div>
 

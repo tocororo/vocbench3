@@ -262,7 +262,7 @@ export class EditableResourceComponent extends AbstractResViewResource {
                                 this.ranges.rangeCollection != null && this.ranges.rangeCollection.dataRanges != null
                             ) {
                                 this.creationModals.newTypedLiteral("Edit " + this.predicate.getShow(), this.predicate,
-                                    this.ranges.rangeCollection.resources, this.ranges.rangeCollection.dataRanges, true).then(
+                                    this.ranges.rangeCollection.resources, this.ranges.rangeCollection.dataRanges, false, true).then(
                                     (literals: ARTLiteral[]) => {
                                         this.updateTriple(this.subject, this.predicate, this.resource, literals[0]);
                                     },

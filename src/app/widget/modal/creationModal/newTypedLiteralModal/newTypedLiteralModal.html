@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body vbox">
 
-    <div *ngIf="showAspectSelector" class="btn-group btn-group-xs" style="align-self: flex-end; margin-bottom: 6px;">
+    <div *ngIf="showAspectSelector" class="btn-group" style="align-self: flex-end; margin-bottom: 6px;">
         <button *ngFor="let selector of aspectSelectors" class="btn btn-light" [ngClass]="{ active: selectedAspectSelector == selector }"
             (click)="selectedAspectSelector = selector">{{selector}}</button>
     </div>
@@ -25,13 +25,13 @@
     </div>
 
     <div *ngIf="selectedAspectSelector == dataRangeAspectSelector">
-        <select *ngIf="dataRanges.length > 1" class="form-control form-control-sm" [(ngModel)]="selectedDataRange">
+        <select *ngIf="dataRanges.length > 1" class="form-control" [(ngModel)]="selectedDataRange">
             <option *ngFor="let dr of dataRanges" [ngValue]="dr">
                 {{getDataRangePreview(dr)}}
             </option>
         </select>
         <div class="hbox" style="align-items: center; margin-top: 6px;">
-            <select class="form-control form-control-sm" [(ngModel)]="value">
+            <select class="form-control" [(ngModel)]="value">
                 <option *ngFor="let v of selectedDataRange" [ngValue]="v">{{v.toNT()}}</option>
             </select>
             <button *ngIf="multivalue" class="btn btn-light btn-xs" (click)="addValue()" style="margin-left: 4px; margin-bottom: 4px;" [disabled]="!isAddValueEnabled()">

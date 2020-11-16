@@ -5,7 +5,7 @@
 
     <div class="hbox" style="align-items: center; flex: initial;">
         <label>Type:</label>
-        <select class="form-control form-control-sm" style="margin-left: 4px;" [(ngModel)]="selectedCustomOperation" (ngModelChange)="onOperationChanged()">
+        <select class="form-control" style="margin-left: 4px;" [(ngModel)]="selectedCustomOperation" (ngModelChange)="onOperationChanged()">
             <option *ngFor="let c of customOperations" [ngValue]="c">{{c.shortName}}</option>
         </select>
     </div>
@@ -20,7 +20,7 @@
                         {{form.name.displayName}}
                         <span class="fas fa-info-circle" [title]="form.name.description"></span>
                     </label>
-                    <input class="form-control form-control-sm" style="flex: 1" [(ngModel)]="form.name.value" sanitized>
+                    <input class="form-control" style="flex: 1" [(ngModel)]="form.name.value" sanitized>
                     <div class="entryRequired">
                         <ng-container *ngIf="form.name.required">*</ng-container>
                     </div>
@@ -48,7 +48,7 @@
                                 <tbody>
                                     <tr *ngFor="let p of form.parameters.value; let last=last">
                                         <td><label>Name:</label></td>
-                                        <td><input class="form-control form-control-sm" style="font-family: monospace;" [(ngModel)]="p.name" sanitized></td>
+                                        <td><input class="form-control" style="font-family: monospace;" [(ngModel)]="p.name" sanitized></td>
                                         <td><label>Type:</label></td>
                                         <td>
                                             <type-editor [(ngModel)]="p.type" parameter="true"></type-editor>
@@ -95,7 +95,7 @@
                         <span class="fas fa-info-circle" [title]="form.authorization.description"></span>
                     </label>
                     <div class="hbox" style="align-items: center;">
-                        <input class="form-control form-control-sm" [(ngModel)]="form.authorization.value">
+                        <input class="form-control" [(ngModel)]="form.authorization.value">
                         <button class="btn btn-sm btn-light" style="margin-left: 4px;" (click)="authorizationHelper()"  title="Edit">
                             <span class="fas fa-pencil-alt"></span>
                         </button>

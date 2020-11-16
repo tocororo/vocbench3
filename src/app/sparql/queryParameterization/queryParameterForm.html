@@ -59,10 +59,9 @@
         </table>
     </div>
     <div *ngIf="configurable" class="card-footer">
-        <div class="checkbox" style="margin: 0px;">
-            <label>
-                <input type="checkbox" [(ngModel)]="useBindings" (ngModelChange)="emitUpdate()">Use variable bindings
-            </label>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="useBindings" (ngModelChange)="emitUpdate()">
+            <label class="form-check-label">Use variable bindings</label>
         </div>
     </div>
 </div>

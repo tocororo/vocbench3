@@ -39,10 +39,9 @@
             <tr *ngIf="createSense; else createPlain">
                 <td></td>
                 <td>
-                    <div class="checkbox" style="margin-bottom: 0px;">
-                        <label>
-                            <input type="checkbox" [(ngModel)]="createPlainCheck">Create Plain
-                        </label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" [(ngModel)]="createPlainCheck">
+                        <label class="form-check-label">Create Plain</label>
                     </div>
                 </td>
             </tr>
@@ -50,10 +49,9 @@
                 <tr>
                     <td></td>
                     <td>
-                        <div class="checkbox" style="margin-bottom: 0px;">
-                            <label>
-                                <input type="checkbox" [(ngModel)]="createSenseCheck">Create Sense
-                            </label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" [(ngModel)]="createSenseCheck">
+                            <label class="form-check-label">Create Sense</label>
                         </div>
                     </td>
                 </tr>
