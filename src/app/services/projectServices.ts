@@ -9,6 +9,7 @@ import { Pair } from '../models/Shared';
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
 import { UIUtils } from '../utils/UIUtils';
 import { VBContext } from '../utils/VBContext';
+import { VBEventHandler } from '../utils/VBEventHandler';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
 import { ModalType } from '../widget/modal/Modals';
 
@@ -17,7 +18,7 @@ export class ProjectServices {
 
     private serviceName = "Projects";
 
-    constructor(private httpMgr: HttpManager) { }
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler) { }
 
     /**
      * Gets the current available projects in ST
@@ -86,7 +87,7 @@ export class ProjectServices {
         //but is not a "perfect" solution, since it remove the working project from the ctx before it is effectively closed
         if (VBContext.getWorkingProject() != undefined && VBContext.getWorkingProject().getName() == project.getName()) {
             VBContext.removeWorkingProject();
-            UIUtils.resetNavbarTheme(); //when quitting current project, reset the style to the default
+            this.eventHandler.themeChangedEvent.emit(); //when quitting current project, reset the style to the default
         }
 
         var params = {

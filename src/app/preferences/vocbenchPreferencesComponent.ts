@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Theme, UIUtils } from "../utils/UIUtils";
+import { UIUtils } from "../utils/UIUtils";
 import { VBContext } from "../utils/VBContext";
 import { VBProperties } from "../utils/VBProperties";
 
@@ -11,8 +11,8 @@ import { VBProperties } from "../utils/VBProperties";
 export class VocbenchPreferencesComponent {
 
     showFlags: boolean;
-    themes: Theme[] = UIUtils.themes;
-    private selectedTheme: Theme = this.themes[0];
+    themes: number[] = UIUtils.themes;
+    private selectedTheme: number = this.themes[0];
 
     constructor(private properties: VBProperties) { }
 
@@ -21,7 +21,7 @@ export class VocbenchPreferencesComponent {
         this.showFlags = this.properties.getShowFlags()
         let projThemePref = VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId;
         this.themes.forEach(t => {
-            if (t.id == projThemePref) { this.selectedTheme = t; }
+            if (t == projThemePref) { this.selectedTheme = t; }
         });
     }
 
@@ -32,9 +32,9 @@ export class VocbenchPreferencesComponent {
     }
 
     //theme handler
-    changeTheme(theme: Theme) {
+    changeTheme(theme: number) {
         this.selectedTheme = theme;
-        this.properties.setProjectTheme(this.selectedTheme.id);
+        this.properties.setProjectTheme(this.selectedTheme);
     }
 
 }

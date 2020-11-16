@@ -781,10 +781,29 @@ textarea {
 }
 
 /* Navigation bar START */
-.bg-vocbench {
-    background-color: #1e4387;
-}
 
+/* Theme 0 */
+.bg-theme-0 { background-color: #1e4387; }
+.bg-theme-alt-0, .navbar.bg-theme-0 .nav-item.active > .nav-link, .navbar.bg-theme-0 .nav-item:hover > .nav-link { background-color: #7486ab; }
+/* Theme 1 */
+.bg-theme-1 { background-color: #283e4a; }
+.bg-theme-alt-1, .navbar.bg-theme-1 .nav-item.active > .nav-link, .navbar.bg-theme-1 .nav-item:hover > .nav-link { background-color: #75c6f7; }
+/* Theme 2 */
+.bg-theme-2 { background-color: #1da1f2; }
+.bg-theme-alt-2, .navbar.bg-theme-2 .nav-item.active > .nav-link, .navbar.bg-theme-2 .nav-item:hover > .nav-link { background-color: #75c6f7; }
+/* Theme 3 */
+.bg-theme-3 { background-color: #367c36; }
+.bg-theme-alt-3, .navbar.bg-theme-3 .nav-item.active > .nav-link, .navbar.bg-theme-3 .nav-item:hover > .nav-link { background-color: #5cb85c; }
+/* Theme 4 */
+.bg-theme-4 { background-color: #5f5f5f; }
+.bg-theme-alt-4, .navbar.bg-theme-4 .nav-item.active > .nav-link, .navbar.bg-theme-4 .nav-item:hover > .nav-link { background-color: #5f5f5f; }
+/* Theme 5 */
+.bg-theme-5 { background-color: #cc181e; }
+.bg-theme-alt-5, .navbar.bg-theme-5 .nav-item.active > .nav-link, .navbar.bg-theme-5 .nav-item:hover > .nav-link { background-color: #ec5f64; }
+/* Theme 6 */
+.bg-theme-6 { background-color: #6f5499; }
+.bg-theme-alt-6, .navbar.bg-theme-6 .nav-item.active > .nav-link, .navbar.bg-theme-6 .nav-item:hover > .nav-link { background-color: #a08cc0; }
+        
 .navbar-dark .navbar-nav .nav-link {
     color: white;
 }
@@ -809,11 +828,11 @@ nav {
 }
 
 .navbar .nav-item.active > .nav-link, .navbar .nav-item:hover > .nav-link {
-    background-color: #7486ab;
     color: black;
 }
-/* Navigation bar END */
 
+
+/* Navigation bar END */
 
 
 .btn-toolbar>.btn, .btn-toolbar>.btn-group, .btn-toolbar>.input-group {
@@ -941,24 +960,6 @@ label {
     margin-bottom: -1px;
 }
 /* tags bar END */
-
-/* .modal-title {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-.modal-body {
-    padding: 10px;
-}
-
-.modal-xl {
-    width: 90%;
-    max-width:1600px;
-}
-.modal-full.modal-dialog {
-    width: 95% !important;
-    max-width: 95% !important;
-} */
 
 /* modals START */
 

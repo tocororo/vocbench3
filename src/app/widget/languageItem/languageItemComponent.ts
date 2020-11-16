@@ -1,7 +1,7 @@
 import { Component, Input, SimpleChanges } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Language } from "../../models/LanguagesCountries";
-import { Theme, UIUtils } from "../../utils/UIUtils";
+import { UIUtils } from "../../utils/UIUtils";
 import { VBContext } from "../../utils/VBContext";
 import { VBEventHandler } from "../../utils/VBEventHandler";
 import { VBProperties } from "../../utils/VBProperties";
@@ -27,13 +27,15 @@ export class LanguageItemComponent {
     flagImgSrc: string;
     flagCls: string;
 
-    private unkownFlagBackground: string;
+    private themeId: number;
 
     eventSubscriptions: Subscription[] = [];
 
     constructor(private preferences: VBProperties, private eventHandler: VBEventHandler) {
         this.eventSubscriptions.push(eventHandler.showFlagChangedEvent.subscribe(
             (showFlag: boolean) => this.initFlagImgSrc()));
+        this.eventSubscriptions.push(eventHandler.themeChangedEvent.subscribe(
+            (theme: number) => this.initTheme()));
     }
 
     ngOnInit() {
@@ -42,16 +44,16 @@ export class LanguageItemComponent {
         } else {
             this.flagCls = "flag-xs";
         }
+        this.initTheme();
+    }
 
-        let theme: Theme;
+    private initTheme() {
         if (VBContext.getWorkingProjectCtx() != null) {
-            let activeThemeId: number = VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId;
-            theme = UIUtils.themes.find(t => t.id == activeThemeId);
+            this.themeId = VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId;
+        } 
+        if (this.themeId == null) {
+            this.themeId = 0; //default theme
         }
-        if (theme == null) {
-            theme = UIUtils.themes[0];
-        }
-        this.unkownFlagBackground = theme.mainColor;
     }
 
     ngOnChanges(changes: SimpleChanges) {

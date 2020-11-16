@@ -6,15 +6,15 @@ import { User } from "../models/User";
 import { AuthorizationEvaluator } from "../utils/AuthorizationEvaluator";
 import { Deserializer } from "../utils/Deserializer";
 import { HttpManager, VBRequestOptions } from "../utils/HttpManager";
-import { UIUtils } from '../utils/UIUtils';
 import { VBContext } from "../utils/VBContext";
+import { VBEventHandler } from '../utils/VBEventHandler';
 
 @Injectable()
 export class AuthServices {
 
     private serviceName = "Auth";
 
-    constructor(private httpMgr: HttpManager, private router: Router) { }
+    constructor(private httpMgr: HttpManager, private eventHandler: VBEventHandler, private router: Router) { }
 
     /**
      * Logs in and registers the logged user in the VBContext
@@ -46,7 +46,7 @@ export class AuthServices {
                 this.router.navigate(["/Home"]);
                 VBContext.removeLoggedUser();
                 VBContext.removeWorkingProject();
-                UIUtils.resetNavbarTheme(); //when quitting current project, reset the style to the default
+                this.eventHandler.themeChangedEvent.emit(); //when quitting current project, reset the style to the default
                 AuthorizationEvaluator.reset();
                 return stResp;
             })

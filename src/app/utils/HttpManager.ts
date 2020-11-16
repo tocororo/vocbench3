@@ -12,6 +12,7 @@ import { UIUtils } from "../utils/UIUtils";
 import { BasicModalServices } from "../widget/modal/basicModal/basicModalServices";
 import { ModalType } from '../widget/modal/Modals';
 import { ProjectContext, VBContext } from './VBContext';
+import { VBEventHandler } from './VBEventHandler';
 
 @Injectable()
 export class HttpManager {
@@ -27,7 +28,7 @@ export class HttpManager {
         errorAlertOpt: { show: true, exceptionsToSkip: [] }
     });
 
-    constructor(private http: HttpClient, private router: Router, private basicModals: BasicModalServices) {
+    constructor(private http: HttpClient, private router: Router, private basicModals: BasicModalServices, private eventHandler: VBEventHandler) {
         let st_protocol: string = window['st_protocol']; //protocol (http/https)
         let protocol: string = st_protocol ? st_protocol : location.protocol;
         if (!protocol.endsWith(":")) protocol += ":"; //protocol from location includes ending ":", st_protocol variable could not include ":"
@@ -450,7 +451,7 @@ export class HttpManager {
                                 if (err.status == 401) { ////in case user is not logged at all, reset context and redirect to home
                                     VBContext.resetContext();
                                     HttpServiceContext.resetContext();
-                                    UIUtils.resetNavbarTheme();
+                                    this.eventHandler.themeChangedEvent.emit();
                                     this.router.navigate(['/Home']);
                                 };
                             },

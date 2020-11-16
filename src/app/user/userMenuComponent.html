@@ -1,5 +1,5 @@
-<li class="dropdown" ngbDropdown display="dynamic">
-	<a [routerLink]="" class="nav-link dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle style="padding: 0px;" (click)="onMenuOpen()" [title]="userShow" ngbDropdownToggle>
+<li class="dropdown nav-item" ngbDropdown display="dynamic">
+	<a [routerLink]="" class="nav-link dropdown-toggle" data-toggle="dropdown" ngbDropdownToggle style="padding: 10px;" (click)="onMenuOpen()" [title]="userShow" ngbDropdownToggle>
 		<div class="avatarContainer" style="height: 24px; width: 24px;">
 			<img [src]="userAvatarUrl" (error)="setFallbackImage()" style="max-height: 24px; max-width: 24px; background-color: #95A5BC;"/>
 		</div>

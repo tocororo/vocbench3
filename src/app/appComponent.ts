@@ -4,6 +4,7 @@ import { EDOAL, OntoLex, OWL, RDFS, SKOS } from "./models/Vocabulary";
 import { AuthorizationEvaluator } from "./utils/AuthorizationEvaluator";
 import { VBActionsEnum } from "./utils/VBActions";
 import { VBContext } from "./utils/VBContext";
+import { VBEventHandler } from './utils/VBEventHandler';
 import { VBProperties } from "./utils/VBProperties";
 
 @Component({
@@ -16,7 +17,17 @@ export class AppComponent {
 
     navbarCollapsed: boolean;
 
-    constructor(private vbProp: VBProperties) {}
+    navbarTheme: number = 0;
+
+    constructor(private vbProp: VBProperties, private eventHandler: VBEventHandler) {
+        this.eventHandler.themeChangedEvent.subscribe((theme: number) => {
+            if (theme != null) {
+                this.navbarTheme = theme;
+            } else {
+                this.navbarTheme = 0;
+            }
+        })
+    }
 
     ngOnInit() {
         this.vbProp.initStartupSystemSettings();

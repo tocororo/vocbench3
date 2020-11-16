@@ -10,7 +10,6 @@ import { OWL, RDFS } from '../models/Vocabulary';
 import { AdministrationServices } from '../services/administrationServices';
 import { PreferencesSettingsServices } from '../services/preferencesSettingsServices';
 import { Cookie } from '../utils/Cookie';
-import { UIUtils } from '../utils/UIUtils';
 import { VBEventHandler } from '../utils/VBEventHandler';
 import { BasicModalServices } from '../widget/modal/basicModal/basicModalServices';
 import { ModalType } from '../widget/modal/Modals';
@@ -82,7 +81,7 @@ export class VBProperties {
 
                 let projectThemeId = prefs[Properties.pref_project_theme];
                 projectPreferences.projectThemeId = projectThemeId;
-                UIUtils.changeNavbarTheme(projectThemeId);
+                this.eventHandler.themeChangedEvent.emit(projectPreferences.projectThemeId);
 
                 //languages 
                 projectPreferences.editingLanguage = prefs[Properties.pref_editing_language];
@@ -278,7 +277,7 @@ export class VBProperties {
 
     setProjectTheme(theme: number) {
         VBContext.getWorkingProjectCtx().getProjectPreferences().projectThemeId = theme;
-        UIUtils.changeNavbarTheme(theme);
+        this.eventHandler.themeChangedEvent.emit(theme);
         let value = (theme == 0) ? null : theme+""; //theme 0 is the default one, so remove the preference
         this.prefService.setPUSetting(Properties.pref_project_theme, value).subscribe();
     }
