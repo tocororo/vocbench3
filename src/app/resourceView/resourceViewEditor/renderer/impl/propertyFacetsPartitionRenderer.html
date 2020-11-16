@@ -25,22 +25,22 @@
     </div>
 
     <div class="groupPanel-body">
-        <ng-template [ngIf]="!partitionCollapsed">
+        <ng-container *ngIf="!partitionCollapsed">
             <div class="d-flex align-items-center pt-2 pb-3">
                 <div *ngFor="let f of facets" class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" [(ngModel)]="f.value" [disabled]="isChangeFacetDisabled(f)" (change)="changeFacet(f)">
                     <label class="form-check-label" style="font-weight: initial;">{{f.name}}</label>
                 </div>
             </div>
-            <ng-template ngFor let-po [ngForOf]="predicateObjectList">
+            <ng-container *ngFor="let po of predicateObjectList">
                 <pred-obj-renderer *ngIf="po.getObjects().length > 0"
                     [pred-obj]="po" [resource]="resource" [rendering]="rendering"
                     [readonly]="readonly" [partition]="partition" (dblclickObj)="objectDblClick($event)"
                     (add)="addHandler(po.getPredicate(), $event)" (remove)="removeHandler(po.getPredicate(), $event)"
                     (edit)="editHandler(po.getPredicate(), $event)">
                </pred-obj-renderer>
-            </ng-template>
-        </ng-template>
+            </ng-container>
+        </ng-container>
     </div>
     
 </div>

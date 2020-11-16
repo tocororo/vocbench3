@@ -18,18 +18,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <ng-template ngFor let-record [ngForOf]="brokenRecordList" let-i="index">
+                        <ng-container *ngFor="let record of brokenRecordList; let i=index">
                             <tr *ngIf="i >= page*resultsLimit && i < page*resultsLimit + resultsLimit">
                                 <td class="text-center">
                                     <rdf-resource class="clickable" [resource]="record.resource" (click)="onResourceClick(record.resource)"></rdf-resource>
                                 </td>
                                 <td class="text-center">
-                                    <ng-template ngFor let-lang [ngForOf]="record.langs">
+                                    <ng-container *ngFor="let lang of record.langs">
                                         <lang-item [language]="lang"></lang-item>
-                                    </ng-template>
+                                    </ng-container>
                                 </td>
                             </tr>
-                        </ng-template>
+                        </ng-container>
                     </tbody>
                 </table>
             </div>

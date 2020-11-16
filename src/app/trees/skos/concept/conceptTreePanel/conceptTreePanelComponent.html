@@ -2,12 +2,12 @@
     <!-- Commands -->
     <div class="card-header">
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
-            <ng-template ngFor let-action [ngForOf]="panelActions">
+            <ng-container *ngFor="let action of panelActions">
                 <button *ngIf="isActionVisible(action)" class="btn btn-light" [title]="action.title"
                     (click)="executeAction(action)" [disabled]="isActionDisabled(action)">
                     <img [src]="action.icon" class="panelButtonImg" />
                 </button>
-            </ng-template>
+            </ng-container>
         </div>
         <div *ngIf="editable" style="margin: 0px 5px;">
             <img *ngIf="isNoSchemeMode()" src="../../../../../assets/images/icons/warning.png"

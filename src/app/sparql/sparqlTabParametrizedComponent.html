@@ -88,9 +88,9 @@
                 </tr>
             </thead>
             <tbody style="overflow: auto;">
-                <ng-template [ngIf]="resultType != 'boolean'">
-                    <ng-template ngFor let-bindings [ngForOf]="queryResult" let-i="index">
-                        <ng-template [ngIf]="i >= resultsPage*resultsLimit && i < resultsPage*resultsLimit + resultsLimit"> <!-- paging filter -->
+                <ng-container *ngIf="resultType != 'boolean'">
+                    <ng-container *ngFor="let bindings of queryResult; let i=index">
+                        <ng-container *ngIf="i >= resultsPage*resultsLimit && i < resultsPage*resultsLimit + resultsLimit"> <!-- paging filter -->
                             <tr>
                                 <td *ngFor="let h of headers">
                                     <span *ngIf="bindings[h]" [ngClass]="{ clickable: isBindingResource(bindings[h]) }" (click)="onBindingClick(bindings[h])">
@@ -98,16 +98,16 @@
                                     </span>
                                 </td>
                             </tr>
-                        </ng-template>
-                    </ng-template>
-                </ng-template>
-                <ng-template [ngIf]="resultType == 'boolean'">
+                        </ng-container>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="resultType == 'boolean'">
                     <tr>
                         <td>
                             {{queryResult}}
                         </td>
                     </tr>
-                </ng-template>
+                </ng-container>
             </tbody>
         </table>
     </div>

@@ -3,8 +3,8 @@
     <div class="card-header">
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
 
-            <ng-template ngFor let-action [ngForOf]="panelActions">
-                <ng-template [ngIf]="isActionVisible(action)">
+            <ng-container *ngFor="let action of panelActions">
+                <ng-container *ngIf="isActionVisible(action)">
                     <!-- Simple button -->
                     <button *ngIf="!action.subRoles" class="btn btn-light" [title]="action.title" (click)="executeAction(action)" [disabled]="isActionDisabled(action)">
                         <img [src]="action.icon" class="panelButtonImg"/>
@@ -23,8 +23,8 @@
                             </a>
                         </div>
                     </div>
-                </ng-template>
-            </ng-template>
+                </ng-container>
+            </ng-container>
         </div>
 
         <div style="flex: 1"></div>

@@ -71,7 +71,7 @@
         <div *ngIf="unknownHost" class="alert alert-danger">
             This resource is not available on accessible local projects nor can be reached on the Web
         </div>
-        <ng-template [ngIf]="!unexistingResource && !unknownHost">
+        <ng-container *ngIf="!unexistingResource && !unknownHost">
             <types-renderer *ngIf="resViewSections['types']" [pred-obj-list]="resViewSections['types']" 
                 [resource]="resource" [rendering]="rendering" [readonly]="readonly"
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
@@ -188,7 +188,7 @@
                 [resource]="resource" [rendering]="rendering" [readonly]="readonly" 
                 (update)="buildResourceView(resource)" (dblclickObj)="objectDblClick($event)">
             </properties-renderer>
-        </ng-template>
+        </ng-container>
     </div>
     <div class="card-footer" style="min-height: 31px;">
         <div *ngIf="resourcePosition" class="float-right">
@@ -196,10 +196,10 @@
                 <button class="btn btn-light dropdown-toggle btn-xs" data-toggle="dropdown" ngbDropdownToggle style="padding: 0px; border: none; background-color: transparent;">
                     <span [ngSwitch]="resource.getAdditionalProperty('accessMethod')">
                         Status:
-                        <ng-template [ngSwitchCase]="'local'">
+                        <ng-container *ngSwitchCase="'local'">
                             <img *ngIf="resourcePositionLocalProj" src="../../../assets/images/icons/local_current_project.png" style="width: 11px; margin-bottom: 3px;">
                             <img *ngIf="!resourcePositionLocalProj" src="../../../assets/images/icons/local_other_project.png" style="width: 11px; margin-bottom: 3px;">
-                        </ng-template>
+                        </ng-container>
                         <span *ngSwitchCase="'dereferenciation'" class="fas fa-download"></span>
                         <img *ngSwitchCase="'sparql'" src="../../../assets/images/icons/res/ontology.png" style="width: 11px; margin-bottom: 3px;">
                         <img *ngSwitchCase="'sparql-degraded'" src="../../../assets/images/icons/res/ontology.png" style="width: 11px; margin-bottom: 3px; opacity: .5;">

@@ -34,7 +34,7 @@
             (multiselectionStatus)="onMultiselectionChange($event)">
         </concept-tree-panel>
         
-        <ng-template [ngIf]="viewType == 'propertyTree'">
+        <ng-container *ngIf="viewType == 'propertyTree'">
             <property-tree-panel *ngIf="viewType == 'propertyTree'" [context]="treeListCtx" [deletable]="false" [type]="propertyType" [allowMultiselection]="allowMultiselection"
                 (nodeSelected)="onPropertySelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">
             </property-tree-panel>
@@ -47,7 +47,7 @@
                     </span>
                 </label>
             </div>
-        </ng-template>
+        </ng-container>
         
         <scheme-list-panel *ngIf="viewType == 'schemeList'" [context]="treeListCtx" [deletable]="false" [allowMultiselection]="allowMultiselection"
             (nodeSelected)="onResourceSelected($event)" (nodeChecked)="checkedResources = $event" (multiselectionStatus)="onMultiselectionChange($event)">

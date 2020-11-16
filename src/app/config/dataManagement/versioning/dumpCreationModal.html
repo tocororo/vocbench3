@@ -42,7 +42,7 @@
         </div>
     </div>
 
-    <ng-template [ngIf]="!isSelectedRepoAccessCreateMode()">
+    <ng-container *ngIf="!isSelectedRepoAccessCreateMode()">
         <div class="form-group row">
             <label class="col-form-label col-sm-3">Repository ID:</label>
             <div class="col-sm-9">
@@ -67,7 +67,7 @@
                 </select>
             </div>
         </div>
-    </ng-template>
+    </ng-container>
 
 
 </div>

@@ -54,16 +54,16 @@
                         <span *ngIf="isActiveVersion(v)" class="fas fa-check"></span>
                     </td>
                     <td class="text-center">
-                        <ng-template [ngIf]="idx == 0">
+                        <ng-container *ngIf="idx == 0">
                             ---
-                        </ng-template>
-                        <ng-template [ngIf]="idx > 0">
+                        </ng-container>
+                        <ng-container *ngIf="idx > 0">
                             {{v.repositoryStatus | lowercase}}
                             <button class="btn btn-xs btn-light" (click)="closeVersion(v)"
                                 [disabled]="v.repositoryStatus != 'INITIALIZED' || isActiveVersion(v)">
                                 Close
                             </button>
-                        </ng-template>
+                        </ng-container>
                     </td>
                 </tr>
             </tbody>

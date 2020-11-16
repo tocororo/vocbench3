@@ -4,10 +4,10 @@
         <tabset-panel (nodeSelected)="onNodeSelected($event)"></tabset-panel>
     </div>
 
-    <ng-template [ngIf]="resViewPanelFlex > 0">
+    <ng-container *ngIf="resViewPanelFlex > 0">
         <div class="sliderX" (mousedown)="onMousedown($event);"></div>
         <resource-view-mode-dispatcher #resViewPanel [ngStyle]="{ 'flex': resViewPanelFlex }" 
             (empty)="onResViewEmpty()" (tabSelect)="onTabSelected($event)"></resource-view-mode-dispatcher>
-    </ng-template>
+    </ng-container>
 
 </div>

@@ -2,26 +2,11 @@
     <!-- Commands -->
     <div class="card-header">
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group" style="margin-right: 4px;">
-            <!-- <button class="btn btn-light" title="Create Class" (click)="createRoot()" [disabled]="isCreateDisabled()">
-                <img src="../../../../assets/images/icons/actions/cls_create.png" class="panelButtonImg"/>
-            </button>
-            <button class="btn btn-light" title="Create SubClass" (click)="createChild()" [disabled]="isCreateChildDisabled()">
-                <img src="../../../../assets/images/icons/actions/cls_addChild.png" class="panelButtonImg"/>
-            </button>
-            <ng-template [ngIf]="deletable">
-                <button class="btn btn-light" title="Delete Class" (click)="delete()" [disabled]="isDeleteDisabled()">
-                    <img src="../../../../assets/images/icons/actions/cls_delete.png" class="panelButtonImg"/>
-                </button>
-                <button class="btn btn-light" title="Deprecate Class" (click)="deprecate()" [disabled]="isDeprecateDisabled()">
-                    <img src="../../../../assets/images/icons/actions/cls_deprecate.png" class="panelButtonImg"/>
-                </button>
-            </ng-template> -->
-
-            <ng-template ngFor let-action [ngForOf]="panelActions">
+            <ng-container *ngFor="let action of panelActions">
                 <button *ngIf="isActionVisible(action)" class="btn btn-light" [title]="action.title" (click)="executeAction(action)" [disabled]="isActionDisabled(action)">
                     <img [src]="action.icon" class="panelButtonImg"/>
                 </button>
-            </ng-template>
+            </ng-container>
         </div>
         <div style="flex: 1"></div>
 
@@ -62,7 +47,7 @@
                         Add a property value to selected values
                     </a>
                 </ng-container>
-                <ng-template [ngIf]="isOpenGraphEnabled()">
+                <ng-container *ngIf="isOpenGraphEnabled()">
                     <a *ngIf="isOpenGraphEnabled(GraphModeEnum.modelOriented)" class="dropdown-item" (click)="openModelGraph()">
                         <img src="../../../../assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
                         Show model-oriented graph
@@ -79,7 +64,7 @@
                         <img src="../../../../assets/images/icons/res/ontology.png" style="margin-right: 4px;" width="11px">
                         Show class-diagram
                     </a>
-                </ng-template>
+                </ng-container>
             </div>
         </div>
     </div>

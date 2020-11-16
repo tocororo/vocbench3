@@ -56,13 +56,13 @@
                 </div>
                 <div class="card-body vbox" style="padding: 0px;">
                     <div class="scrollableContainer">
-                        <ng-template [ngIf]="selectedRole">
+                        <ng-container *ngIf="selectedRole">
                             <div *ngFor="let c of capabilityList" class="listItem"
                                 [ngClass]="{active: c == selectedCapability, grayText: (selectedRole && selectedRole.getLevel() == 'system')}"
                                 (click)="selectCapability(c)">
                                 {{c}}
                             </div>
-                        </ng-template>
+                        </ng-container>
                     </div>
                 </div>
             </div>

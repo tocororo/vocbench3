@@ -7,16 +7,16 @@
     <div class="hbox" style="align-items: center; flex: initial;">
         <label style="white-space: nowrap; margin: 0px 3px;">Form Collection ID:</label>
         <div class="input-group" style="flex: 1">
-            <ng-template [ngIf]="namespaceLocked">
+            <ng-container *ngIf="namespaceLocked">
                 <span class="input-group-prepend">
                     <span class="input-group-text">{{fcPrefix}}</span>
                 </span>
                 <input type="text" class="form-control" [(ngModel)]="fcShortId" [disabled]="mode == 'edit'" sanitized>
-            </ng-template>
+            </ng-container>
             
-            <ng-template [ngIf]="!namespaceLocked">
+            <ng-container *ngIf="!namespaceLocked">
                 <input type="text" class="form-control" [(ngModel)]="fcId" [disabled]="mode == 'edit'" sanitized>
-            </ng-template>
+            </ng-container>
             
             <div class="input-group-append">
                 <button class="btn btn-light" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"

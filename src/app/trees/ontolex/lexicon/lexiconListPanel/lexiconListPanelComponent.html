@@ -2,23 +2,11 @@
     <!-- Commands -->
     <div class="card-header">
         <div *ngIf="editable" class="btn-group btn-group-xs" role="group">
-            <!-- <button class="btn btn-light" title="Create Lexicon" (click)="create()" [disabled]="isCreateDisabled()">
-                <img src="../../../../../assets/images/icons/actions/limeLexicon_create.png" class="panelButtonImg"/>
-            </button>
-            <ng-template [ngIf]="deletable">
-                <button class="btn btn-light" title="Delete Lexicon" (click)="delete()" [disabled]="isDeleteDisabled()">
-                    <img src="../../../../../assets/images/icons/actions/limeLexicon_delete.png" class="panelButtonImg"/>
-                </button>
-                <button class="btn btn-light" title="Deprecate Lexicon" (click)="deprecate()" [disabled]="isDeprecateDisabled()">
-                    <img src="../../../../../assets/images/icons/actions/limeLexicon_deprecate.png" class="panelButtonImg"/>
-                </button>
-            </ng-template> -->
-
-            <ng-template ngFor let-action [ngForOf]="panelActions">
+            <ng-container *ngFor="let action of panelActions">
                 <button *ngIf="isActionVisible(action)" class="btn btn-light" [title]="action.title" (click)="executeAction(action)" [disabled]="isActionDisabled(action)">
                     <img [src]="action.icon" class="panelButtonImg"/>
                 </button>
-            </ng-template>
+            </ng-container>
         </div>
         <div style="flex: 1"></div>
         <div class="btn-toolbar" role="toolbar">

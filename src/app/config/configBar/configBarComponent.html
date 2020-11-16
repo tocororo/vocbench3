@@ -28,12 +28,12 @@
                 <label style="margin-right: 2px;">Current project:</label>
                 <div class="btn-group btn-group-xs" role="group">
                     <a href="#" class="btn btn-light disabled" style="pointer-events: none; opacity: initial" role="button">
-                        <ng-template [ngIf]="isProjectAccessed()">
+                        <ng-container *ngIf="isProjectAccessed()">
                             {{currentProject.getName()}}
-                        </ng-template>
-                        <ng-template [ngIf]="!isProjectAccessed()">
+                        </ng-container>
+                        <ng-container *ngIf="!isProjectAccessed()">
                             ------
-                        </ng-template>
+                        </ng-container>
                     </a>
                     <button class="btn btn-light" style="padding-left: 2px;" (click)="changeProject()"
                         title="Change project">

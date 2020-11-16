@@ -1,7 +1,7 @@
 <svg:g [attr.transform]="'translate(' + node.x + ',' + node.y + ')'">
     <svg:g (click)="onClick()" (dblclick)="onDblClick()" style="cursor: pointer;">
 
-        <ng-template [ngIf]="node.res.isResource()">
+        <ng-container *ngIf="node.res.isResource()">
             <svg:circle *ngIf="nodeShape=='circle'" [attr.class]="'graphNode '+nodeClass" [ngClass]="{ graphNodeSelected: selected }"
                 cx="0" cy="0" [attr.r]="measures.radius">
             </svg:circle> 
@@ -20,13 +20,13 @@
             <polygon *ngIf="nodeShape=='label'" [attr.points]="labelPoints" stroke-linejoin="round" [attr.class]="'graphNode '+nodeClass" [ngClass]="{ graphNodeSelected: selected }"/>
             
             <svg:text *ngIf="deprecated" class="deprecated" style="font-size: 18px;" fill="#8e4a4c" [attr.transform]="'translate(-6, 6)'">D</svg:text>
-        </ng-template>
+        </ng-container>
 
-        <ng-template [ngIf]="!node.res.isResource()">
+        <ng-container *ngIf="!node.res.isResource()">
             <svg:rect class="graphNode literal" [ngClass]="{ graphNodeSelected: selected }" [attr.x]="-measures.width/2" [attr.y]="-measures.height/2" 
                 [attr.width]="measures.width" [attr.height]="measures.height">
             </svg:rect>
-        </ng-template>
+        </ng-container>
     
     
         <svg:text #textEl style="visibility: hidden">{{show}}</svg:text>

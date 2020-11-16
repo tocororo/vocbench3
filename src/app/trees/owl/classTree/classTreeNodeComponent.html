@@ -1,9 +1,9 @@
 <div class="treeNode" #treeNodeElement>
     <div class="expandCollapseBtnContainer">
-        <ng-template [ngIf]="showExpandCollapseBtn">
+        <ng-container *ngIf="showExpandCollapseBtn">
             <img *ngIf="!open" src="../../../../assets/images/icons/arrow.png" class="arrow-right" (click)="expandNode().subscribe()">
             <img *ngIf="open" src="../../../../assets/images/icons/arrow.png" (click)="collapseNode()">
-        </ng-template>
+        </ng-container>
     </div>
     <div class="hbox" style="position: relative">
         <rdf-resource [resource]="node" [rendering]="rendering" (click)="selectNode()" 
@@ -16,14 +16,14 @@
 </div>
 
 <div class="subTree" *ngIf="node.getAdditionalProperty('more')==1">
-    <ng-template ngFor let-n [ngForOf]="children">
-        <ng-template [ngIf]="!n['filtered']">
+    <ng-container *ngFor="let n of children">
+        <ng-container *ngIf="!n['filtered']">
             <class-tree-node *ngIf="!n.isDeprecated() || showDeprecated && n.isDeprecated()"
                 [node]="n" [rendering]="rendering" [multiselection]="multiselection" [showDeprecated]="showDeprecated"
                 [filterEnabled]="filterEnabled" [context]="context" [projectCtx]="projectCtx"
                 (nodeSelected)="onNodeSelected($event)" (nodeChecked)="onNodeChecked($event)"
                 (nodeExpandStart)="onNodeExpandStart()" (nodeExpandEnd)="onNodeExpandEnd()">
             </class-tree-node>
-        </ng-template>
-    </ng-template>
+        </ng-container>
+    </ng-container>
 </div>

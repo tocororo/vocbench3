@@ -20,14 +20,14 @@
 
     <span *ngIf="selectedExtension.configurations" class="btn-group" style="display: flex; margin-left: 5px;">
         <button class="btn btn-light" (click)="configure()" [disabled]="disabled">Configure</button>
-        <ng-template [ngIf]="storeable">
+        <ng-container *ngIf="storeable">
             <button class="btn btn-light" title="Save configuration" (click)="saveConfig()" [disabled]="disabled">
                 <span class="fas fa-download"></span>
             </button>
             <button class="btn btn-light" title="Load configuration" (click)="loadConfig()" [disabled]="disabled">
                 <span class="fas fa-upload"></span>
             </button>
-        </ng-template>
+        </ng-container>
     </span>
 
 </div>

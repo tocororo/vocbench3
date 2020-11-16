@@ -1,7 +1,7 @@
 <svg:g [attr.transform]="'translate(' + node.x + ',' + node.y + ')'">
     <svg:g (click)="onClick()" (dblclick)="onDblClick()" style="cursor: pointer;">
 
-        <ng-template [ngIf]="node.res.isResource()">
+        <ng-container *ngIf="node.res.isResource()">
             <defs>
                 <linearGradient [attr.id]="'gradient'+node.index" x2="0%" y2="100%">
                     <stop offset="0%" [attr.class]="nodeClass"/>
@@ -28,10 +28,10 @@
                 {{normalizedShow}}
                 <title>{{show}}</title>
             </svg:text>
-        </ng-template>
+        </ng-container>
 
         <!-- For literal no top stripe -->
-        <ng-template [ngIf]="!node.res.isResource()">
+        <ng-container *ngIf="!node.res.isResource()">
             <svg:rect class="graphNode literal" [ngClass]="{ graphNodeSelected: selected }"
                 [attr.x]="-measures.width/2" [attr.y]="-measures.height/2" [attr.width]="measures.width" [attr.height]="measures.height">
             </svg:rect>
@@ -41,7 +41,7 @@
                 {{normalizedShow}}
                 <title>{{show}}</title>
             </svg:text>
-        </ng-template>
+        </ng-container>
             
         <svg:text *ngIf="deprecated" class="deprecated" fill="#8e4a4c" dominant-baseline="hanging"
             [attr.transform]="'translate('+(measures.width/2-10)+', -'+(measures.height/2-4)+')'">D</svg:text>

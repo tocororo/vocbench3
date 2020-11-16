@@ -54,22 +54,22 @@
                 <div class="form-group row" *ngIf="showLoader()">
                     <label class="col-form-label col-sm-1">Loader:</label>
                     <div class="col-sm-11">
-                        <ng-template [ngIf]="selectedLoader.target == 'repository'">
+                        <ng-container *ngIf="selectedLoader.target == 'repository'">
                             <extension-configurator #loaderConfigurator *ngIf="repoTargetLoaders" [extensions]="repoTargetLoaders"
                                 (extensionUpdated)="selectedLoaderExtension = $event"
                                 (configurationUpdated)="selectedLoaderConfig = $event"
                                 (configStatusUpdated)="onLoaderConfigStatusUpdated($event)"
                                 style="flex: 1;">
                             </extension-configurator>
-                        </ng-template>
-                        <ng-template [ngIf]="selectedLoader.target == 'stream'">
+                        </ng-container>
+                        <ng-container *ngIf="selectedLoader.target == 'stream'">
                             <extension-configurator #loaderConfigurator *ngIf="streamTargetLoaders" [extensions]="streamTargetLoaders"
                                 (extensionUpdated)="selectedLoaderExtension = $event"
                                 (configurationUpdated)="selectedLoaderConfig = $event"
                                 (configStatusUpdated)="onLoaderConfigStatusUpdated($event)"
                                 style="flex: 1;">
                             </extension-configurator>
-                        </ng-template>
+                        </ng-container>
                     </div>
                 </div>
 

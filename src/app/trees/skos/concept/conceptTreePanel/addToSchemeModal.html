@@ -26,7 +26,7 @@
             </span>
         </div>
         <div class="groupPanel-body vbox">
-            <ng-template [ngIf]="!collapsed">
+            <ng-container *ngIf="!collapsed">
 
                 <div class="alert alert-info">
                     Only the concepts (among the descendants of '{{concept.getShow()}}') belonging to at least one of the following
@@ -39,7 +39,7 @@
                         <input type="checkbox" [(ngModel)]="s.checked">
                     </div>
                 </div>
-            </ng-template>
+            </ng-container>
         </div>
     </div>
 

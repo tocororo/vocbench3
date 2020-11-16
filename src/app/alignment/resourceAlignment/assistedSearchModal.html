@@ -9,7 +9,7 @@
 </div>
 <div class="modal-body vbox scrollableContainer blockingDivHost">
 
-    <ng-template [ngIf]="targetPosition == ResourcePositionEnum.local">
+    <ng-container *ngIf="targetPosition == ResourcePositionEnum.local">
         <div class="card card-default">
             <div class="card-header">
                 <label>Projects</label>
@@ -29,10 +29,10 @@
                 Click <a (click)="generateProjectMetadata()" style="cursor: pointer">here</a> to generate it.
             </div>
         </div>
-    </ng-template>
+    </ng-container>
 
     
-    <ng-template [ngIf]="targetPosition == ResourcePositionEnum.remote">
+    <ng-container *ngIf="targetPosition == ResourcePositionEnum.remote">
         <div class="card card-default">
             <div class="card-header">
                 <label style="flex: 1;">Remote datasets</label>
@@ -55,7 +55,7 @@
                 You need to generate/add 'Embedded Lexicalization Sets' from the Metadata Registry management in order to exploit this feature.
             </div>
         </div>
-    </ng-template>
+    </ng-container>
 
     <ng-template #mediationBlock>
         <div class="card card-default">

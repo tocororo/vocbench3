@@ -22,7 +22,7 @@
     </div>
 
     <div class="groupPanel-body">
-        <ng-template [ngIf]="!partitionCollapsed">
+        <ng-container *ngIf="!partitionCollapsed">
             <div class="card card-alt" *ngFor="let po of predicateObjectList" style="margin-bottom: 4px;">
                 <div class="card-header">
                     <label>{{po.getPredicate().getShow()}}</label>
@@ -67,7 +67,7 @@
                     </ng-container>
                 </div>
             </div>
-        </ng-template>
+        </ng-container>
     </div>
 
 </div>

@@ -5,7 +5,7 @@
 
     <div class="hbox" style="align-items: center;">
         <label style="white-space: nowrap; margin-right: 4px;">Top level elements:</label>
-        <select class="form-control form-control-sm" [(ngModel)]="selectedVisualizationMode">
+        <select class="form-control" [(ngModel)]="selectedVisualizationMode">
             <option *ngFor="let m of visualizationModes" [ngValue]="m">{{m.show}}</option>
         </select>
     </div>

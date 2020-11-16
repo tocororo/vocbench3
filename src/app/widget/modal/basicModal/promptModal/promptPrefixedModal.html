@@ -7,18 +7,18 @@
         <label *ngIf="label" style="margin-right: 4px;">{{label}}:</label>
         <div class="col-sm-12">
             <div class="input-group">
-                <ng-template [ngIf]="namespaceLocked">
+                <ng-container *ngIf="namespaceLocked">
                     <span class="input-group-prepend">
                         <span class="input-group-text">{{prefix}}</span>
                     </span>
                     <input ngbAutofocus type="text" class="form-control" [(ngModel)]="prefixedTxt"
                         (keydown.enter)="onEnter()" [sanitized]="inputSanitized">
-                </ng-template>
+                </ng-container>
                 
-                <ng-template [ngIf]="!namespaceLocked">
+                <ng-container *ngIf="!namespaceLocked">
                     <input ngbAutofocus type="text" class="form-control" [(ngModel)]="expandedTxt"
                         (keydown.enter)="onEnter()" [sanitized]="inputSanitized">
-                </ng-template>
+                </ng-container>
                 
                 <div *ngIf="prefixEditable" class="input-group-append">
                     <button class="btn btn-light" style="width:30px; padding: 1px 3px;" (click)="unlockNamespace()"

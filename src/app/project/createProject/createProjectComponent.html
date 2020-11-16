@@ -203,7 +203,7 @@
                                 </span>
                             </div>
                         </div>
-                        <ng-template [ngIf]="isSelectedRepoAccessCreateMode()">
+                        <ng-container *ngIf="isSelectedRepoAccessCreateMode()">
                             <div class="col-form-label col-sm-1">
                                 <label>Configuration</label>
                             </div>
@@ -214,8 +214,8 @@
                                     (configurationUpdated)="selectedDataRepoConfig = $event">
                                 </extension-configurator>
                             </div>
-                        </ng-template>
-                        <ng-template [ngIf]="!isSelectedRepoAccessCreateMode()">
+                        </ng-container>
+                        <ng-container *ngIf="!isSelectedRepoAccessCreateMode()">
                             <div class="col-form-label col-sm-1">
                                 <label>Backend type</label>
                             </div>
@@ -224,7 +224,7 @@
                                     <option *ngFor="let bt of backendTypes" [value]="bt">{{bt}}</option>
                                 </select>
                             </div>
-                        </ng-template>
+                        </ng-container>
                     </div>
 
                     <!-- Support repo -->
@@ -243,7 +243,7 @@
                                 </span>
                             </div>
                         </div>
-                        <ng-template [ngIf]="isSelectedRepoAccessCreateMode()">
+                        <ng-container *ngIf="isSelectedRepoAccessCreateMode()">
                             <div class="col-form-label col-sm-1" style="white-space: nowrap">
                                 <label>Configuration</label>
                                 <span class="fas fa-info-circle ml-2" title="It is highly recommended not to use inference"></span>
@@ -255,8 +255,8 @@
                                     (configurationUpdated)="selectedSupportRepoConfig = $event">
                                 </extension-configurator>
                             </div>
-                        </ng-template>
-                        <ng-template [ngIf]="!isSelectedRepoAccessCreateMode()">
+                        </ng-container>
+                        <ng-container *ngIf="!isSelectedRepoAccessCreateMode()">
                             <div class="col-form-label col-sm-1">
                                 <label>Backend type</label>
                             </div>
@@ -265,7 +265,7 @@
                                     <option *ngFor="let bt of backendTypes" [value]="bt">{{bt}}</option>
                                 </select>
                             </div>
-                        </ng-template>
+                        </ng-container>
                     </div>
 
                 </div>

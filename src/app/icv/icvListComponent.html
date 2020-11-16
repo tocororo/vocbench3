@@ -21,7 +21,7 @@
                     <col style="width: 1%;">
                 </colgroup>
                 <tbody>
-                    <ng-template ngFor let-icv [ngForOf]="structuralIcv.list">
+                    <ng-container *ngFor="let icv of structuralIcv.list">
                         <tr *ngIf="isCompatibleWithProject(icv)">
                             <td nowrap><strong>{{icv.name}}</strong></td>
                             <td><i>{{icv.description}}</i></td>
@@ -29,7 +29,7 @@
                                 <button class="btn btn-light btn-xs" (click)="goToIcv(icv)" [disabled]="!isIcvAuthorized(icv)">Go</button>
                             </td>
                         </tr>
-                    </ng-template>
+                    </ng-container>
                 </tbody>
             </table>
         </div>
@@ -51,7 +51,7 @@
                     <col style="width: 1%;">
                 </colgroup>
                 <tbody>
-                    <ng-template ngFor let-icv [ngForOf]="labelIcv.list">
+                    <ng-container *ngFor="let icv of labelIcv.list">
                         <tr *ngIf="isCompatibleWithProject(icv)">
                             <td nowrap><strong>{{icv.name}}</strong></td>
                             <td><i>{{icv.description}}</i></td>
@@ -59,7 +59,7 @@
                                 <button class="btn btn-light btn-xs" (click)="goToIcv(icv)" [disabled]="!isIcvAuthorized(icv)">Go</button>
                             </td>
                         </tr>
-                    </ng-template>
+                    </ng-container>
                 </tbody>
             </table>
         </div>
@@ -81,7 +81,7 @@
                     <col style="width: 1%;">
                 </colgroup>
                 <tbody>
-                    <ng-template ngFor let-icv [ngForOf]="genericIcv.list">
+                    <ng-container *ngFor="let icv of genericIcv.list">
                         <tr *ngIf="isCompatibleWithProject(icv)">
                             <td nowrap><strong>{{icv.name}}</strong></td>
                             <td><i>{{icv.description}}</i></td>
@@ -89,7 +89,7 @@
                                 <button class="btn btn-light btn-xs" (click)="goToIcv(icv)" [disabled]="!isIcvAuthorized(icv)">Go</button>
                             </td>
                         </tr>
-                    </ng-template>
+                    </ng-container>
                 </tbody>
             </table>
         </div>

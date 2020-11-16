@@ -3,7 +3,7 @@
     <div class="card-body vbox">
 
         <div #scrollableContainer class="scrollableContainer" (scroll)="onScroll()">
-            <ng-template ngFor let-n [ngForOf]="list" let-idx="index">
+            <ng-container *ngFor="let n of list; let idx=index">
                 <div *ngIf="idx < nodeLimit && (!n.scheme.isDeprecated() || showDeprecated && n.scheme.isDeprecated())">
                     <div class="listNodeItem">
                         <input *ngIf="context == 'dataPanel'" type="checkbox" style="margin-right: 5px;" [(ngModel)]="n.checked"
@@ -13,7 +13,7 @@
                         </scheme-list-node>
                     </div>
                 </div>
-            </ng-template>
+            </ng-container>
         </div>
 
         <div #blockDivList class="blockingDiv" style="display:none">

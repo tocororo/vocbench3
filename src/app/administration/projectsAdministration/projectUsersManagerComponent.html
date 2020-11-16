@@ -37,12 +37,12 @@
                                 <label>Assigned Roles:</label>
                             </div>
                             <div class="card-body vbox scrollableContainer">
-                                <ng-template [ngIf]="puBinding">
+                                <ng-container [ngIf]="puBinding">
                                     <div *ngFor="let r of puBinding.getRoles()" (click)="selectUserRole(r)"
                                         class="listItem" [ngClass]="{active: r == selectedUserRole}">
                                         {{r}}
                                     </div>
-                                </ng-template>
+                                </ng-container>
                             </div>
                         </div>
                         <div style="align-self: center; margin: 5px;">
@@ -84,12 +84,12 @@
                                 </button>
                             </div>
                             <div class="card-body vbox scrollableContainer">
-                                <ng-template [ngIf]="puBinding">
+                                <ng-container *ngIf="puBinding">
                                     <div *ngIf="puBinding.getGroup()" class="listItem" [ngClass]="{active: selectedUserGroup}"
                                         (click)="selectUserGroup(puBinding.getGroup())">
                                         {{puBinding.getGroup().shortName}}
                                     </div>
-                                </ng-template>
+                                </ng-container>
                             </div>
                         </div>
                         <div style="align-self: center; margin: 5px;">

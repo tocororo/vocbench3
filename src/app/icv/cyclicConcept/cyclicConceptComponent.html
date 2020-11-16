@@ -14,13 +14,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <ng-template ngFor let-cycle [ngForOf]="brokenRecordList" let-i="index">
+                        <ng-container *ngFor="let cycle of brokenRecordList; let i=index">
                             <tr *ngIf="i >= page*resultsLimit && i < page*resultsLimit + resultsLimit">
                                 <td class="text-center">
                                     <rdf-resource *ngFor="let r of cycle" class="clickable" [resource]="r" (click)="onResourceClick(r)"></rdf-resource>
                                 </td>
                             </tr>
-                        </ng-template>
+                        </ng-container>
                     </tbody>
                 </table>
             </div>

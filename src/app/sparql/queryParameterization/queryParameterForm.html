@@ -21,14 +21,14 @@
             <tbody>
                 <tr *ngFor="let b of bindingStructs">
                     <!-- In search mode the assignment should not be shown -->
-                    <ng-template [ngIf]="mode=='sparql' || mode=='search' && b.bindingType != 'assignment'">
+                    <ng-container *ngIf="mode=='sparql' || mode=='search' && b.bindingType != 'assignment'">
                         <td class="text-right" style="margin-right: 2px;">
                             <div *ngIf="mode == 'sparql'; then sparqlModeBlock; else searchModeBlock"></div>
                             <ng-template #sparqlModeBlock>
-                                <ng-template [ngIf]="showDisplayName">
+                                <ng-container *ngIf="showDisplayName">
                                     <label *ngIf="b.displayName">{{b.displayName}}:</label>
                                     <label *ngIf="!b.displayName">{{b.varName}}:</label>
-                                </ng-template>
+                                </ng-container>
                                 <label *ngIf="!showDisplayName">{{b.varName}}:</label>
                             </ng-template>
                             <ng-template #searchModeBlock>
@@ -38,22 +38,22 @@
                         </td>
 
                         <td>
-                            <ng-template [ngIf]="b.bindingType == 'assignment' && b.value">
+                            <ng-container *ngIf="b.bindingType == 'assignment' && b.value">
                                 <input class="form-control form-control-sm" [ngModel]="b.value.toNT()" readonly>
-                            </ng-template>
+                            </ng-container>
         
-                            <ng-template [ngIf]="b.bindingType == 'constraint' && b.datatype">
+                            <ng-container *ngIf="b.bindingType == 'constraint' && b.datatype">
                                 <literal-picker [plain]="false" [typed]="true" [datatypes]="[b.datatype]" (literalChanged)="onLiteralChanged(b, $event)">
                                 </literal-picker>
-                            </ng-template>
+                            </ng-container>
         
-                            <ng-template [ngIf]="b.bindingType == 'constraint' && b.resourceRole">
+                            <ng-container *ngIf="b.bindingType == 'constraint' && b.resourceRole">
                                 <resource-picker [resource]="b.value" [config]="{ roles: [b.resourceRole] }" [editable]="true" (resourceChanged)="onResourceChanged(b, $event)">
                                 </resource-picker>
-                            </ng-template>
+                            </ng-container>
                         </td>
                         <td *ngIf="b.description"><span class="fas fa-info-circle" [title]="b.description"></span></td>
-                    </ng-template>
+                    </ng-container>
                 </tr>
             </tbody>
         </table>

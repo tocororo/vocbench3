@@ -110,22 +110,22 @@
                         <td><label class="col-form-label">Deployer:</label></td>
                         <td>
                             <div class="hbox" style="align-items: center">
-                                <ng-template [ngIf]="selectedDeployment.source == 'repository'">
+                                <ng-container *ngIf="selectedDeployment.source == 'repository'">
                                     <extension-configurator #deployerConfigurator *ngIf="repoSourcedDeployer" [extensions]="repoSourcedDeployer"
                                         (extensionUpdated)="selectedDeployerExtension = $event"
                                         (configurationUpdated)="onDeployerConfigUpdated($event)"
                                         (configStatusUpdated)="onDeployerConfigStatusUpdated($event)"
                                         style="flex: 1;">
                                     </extension-configurator>
-                                </ng-template>
-                                <ng-template [ngIf]="selectedDeployment.source == 'stream'">
+                                </ng-container>
+                                <ng-container *ngIf="selectedDeployment.source == 'stream'">
                                     <extension-configurator #deployerConfigurator *ngIf="streamSourcedDeployer" [extensions]="streamSourcedDeployer"
                                         (extensionUpdated)="selectedDeployerExtension = $event"
                                         (configurationUpdated)="onDeployerConfigUpdated($event)"
                                         (configStatusUpdated)="onDeployerConfigStatusUpdated($event)"
                                         style="flex: 1;">
                                     </extension-configurator>
-                                </ng-template>
+                                </ng-container>
                                 <div *ngIf="requireConfigurationDeployer()" style="font-size: 14px; margin-left: 4px;">
                                     <span class="fas fa-exclamation-triangle" title="Configuration required"></span>
                                 </div>
