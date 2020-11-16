@@ -296,7 +296,7 @@
                                     <col>
                                 </colgroup>
                                 <tbody>
-                                    <tr *ngFor="let idx of fieldsIdx;" (click)="selectCustomField(idx)" [ngClass]="{ info : selectedCustomField && selectedCustomField == customFormFields[idx] }">
+                                    <tr *ngFor="let idx of fieldsIdx;" (click)="selectCustomField(idx)" [ngClass]="{ 'table-primary': selectedCustomField && selectedCustomField == customFormFields[idx] }">
                                         <td class="text-center" style="min-width: 30px;"><label>{{idx+1}}</label></td>
                                         <td>
                                             <input-editable [value]="customFormFields[idx]?.label" (valueEdited)="updateCustomField(idx, $event)" [disabled]="idx >= customFormFields.length + 1"></input-editable>

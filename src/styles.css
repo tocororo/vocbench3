@@ -900,26 +900,6 @@ label {
 }
 
 /*not available in bootstrap*/
-.form-control-xs {
-    height: 20px;
-    padding: 1px 5px;
-    font-size: 10px;
-    line-height: 1.5;
-    border-radius: 3px;
-}
-.input-group-xs>.custom-select,
-.input-group-xs>.input-group-btn>.btn,
-.input-group-xs>.form-control,
-.input-group-xs>.input-group-append>.btn,
-.input-group-xs>.input-group-append>.input-group-text,
-.input-group-xs>.input-group-prepend>.btn,
-.input-group-xs>.input-group-prepend>.input-group-text {
-    height: 20px;
-    padding: 1px 5px;
-    font-size: 10px;
-    line-height: 1.5;
-}
-
 .btn-group-xs .btn, .btn-xs {
     padding: 1px 5px;
     line-height: 1.5;

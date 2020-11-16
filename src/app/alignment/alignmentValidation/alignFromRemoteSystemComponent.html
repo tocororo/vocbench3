@@ -24,7 +24,7 @@
                                     <span class="fas fa-minus"></span>
                                 </button>
                             </div>
-                            <button class="btn btn-xs btn-light" (click)="listTask()" title="Refresh tasks list" [disabled]="serverDown || serviceNotConfigured">
+                            <button class="btn btn-xs btn-light" (click)="listTask()" title="Refresh tasks list" [disabled]="serviceNotConfigured">
                                 <span class="fas fa-redo"></span>
                             </button>
                         </div>
@@ -57,7 +57,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let task of tasks" [ngClass]="{ info: selectedTask == task }" (click)="selectTask(task)">
+                                <tr *ngFor="let task of tasks" [ngClass]="{ 'table-primary': selectedTask == task }" (click)="selectTask(task)">
                                     <td>{{task.leftDataset.projectName}}</td>
                                     <td>{{task.rightDataset.projectName}}</td>
                                     <td>

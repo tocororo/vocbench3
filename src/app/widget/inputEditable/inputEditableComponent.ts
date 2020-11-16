@@ -29,7 +29,7 @@ export class InputEditableComponent implements OnInit {
 
     ngOnInit() {
         //init class of input field
-        if (this.size == "xs" || this.size == "sm" || this.size == "md" || this.size == "lg") {
+        if (this.size == "sm" || this.size == "md" || this.size == "lg") {
             this.inputClass += " input-group-" + this.size;
         }
         //init type of input field

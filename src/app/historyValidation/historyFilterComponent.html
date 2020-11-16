@@ -53,8 +53,8 @@
                     <tbody>
                         <tr>
                             <td><label>From:</label></td>
-                            <td><input type="datetime-local" class="form-control input-xs" [(ngModel)]="fromTime"></td>
-                            <td><input class="form-control input-xs" [ngModel]="fromTime" readonly></td>
+                            <td><input type="datetime-local" class="form-control" [(ngModel)]="fromTime"></td>
+                            <td><input class="form-control" [ngModel]="fromTime" readonly></td>
                             <td>
                                 <button class="btn btn-xs btn-light" (click)="fromTime=null" title="Reset" [disabled]="!fromTime">
                                     <span class="fas fa-times"></span>
@@ -63,8 +63,8 @@
                         </tr>
                         <tr>
                             <td><label>To:</label></td>
-                            <td><input type="datetime-local" class="form-control input-xs" [(ngModel)]="toTime"></td>
-                            <td><input class="form-control input-xs" [ngModel]="toTime" readonly></td>
+                            <td><input type="datetime-local" class="form-control" [(ngModel)]="toTime"></td>
+                            <td><input class="form-control" [ngModel]="toTime" readonly></td>
                             <td>
                                 <button class="btn btn-xs btn-light" (click)="toTime=null" title="Reset" [disabled]="!toTime">
                                     <span class="fas fa-times"></span>

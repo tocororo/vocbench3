@@ -34,7 +34,7 @@
                                 <tr>
                                     <td><label>BaseURI:</label></td>
                                     <td>
-                                        <input type="text" class="form-control input-xs"
+                                        <input type="text" class="form-control form-control-sm"
                                             [ngClass]="{ submitted:nsBaseURISubmitted, 'ng-invalid':!isBaseURIValid() }" [ngModel]="baseURI"
                                             (ngModelChange)="onBaseURIChanged($event)" [disabled]="!isBaseuriNsEditAuthorized()">
                                     </td>
@@ -55,7 +55,7 @@
                                 <tr>
                                     <td><label>Namespace:</label></td>
                                     <td>
-                                        <input type="text" class="form-control input-xs"
+                                        <input type="text" class="form-control form-control-sm"
                                             [ngClass]="{ submitted:nsBaseURISubmitted, 'ng-invalid':!isNamespaceValid() }" [ngModel]="namespace"
                                             (ngModelChange)="onNamespaceChanged($event)" [disabled]="!isBaseuriNsEditAuthorized()" >
                                     </td>
@@ -75,7 +75,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let m of nsPrefMappingList" (click)="selectMapping(m)"
-                                [ngClass]="{ info: m == selectedMapping, grayText: !m.explicit }">
+                                [ngClass]="{ 'table-primary': m == selectedMapping, grayText: !m.explicit }">
                                 <td class="text-center">{{m.prefix}}</td>
                                 <td class="text-center">{{m.namespace}}</td>
                             </tr>

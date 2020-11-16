@@ -112,7 +112,7 @@
                             {{item.endTimeLocal}}
                         </td>
                         <td>
-                            <select class="form-control input-xs" [(ngModel)]="item.validationAction">
+                            <select class="form-control form-control-sm" [(ngModel)]="item.validationAction">
                                 <option *ngFor="let act of validationActions" [ngValue]="act">{{act.show}}</option>
                             </select>
                         </td>

@@ -22,7 +22,7 @@ export class LanguageItemComponent {
     @Input() showName: boolean = true; //tells whether to show the language name nearby the flag
     @Input() showTag: boolean; //tells whether to show the language tag nearby the flag
     @Input() disabled: boolean;
-    @Input() size: "xs" | "sm" | "md" | "lg"; //if not provided, the default is xs
+    @Input() size: "xs" | "sm" | "md" | "lg";
 
     flagImgSrc: string;
     flagCls: string;

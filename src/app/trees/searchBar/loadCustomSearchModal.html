@@ -25,7 +25,7 @@
                     <col style="width: 1%;">
                 </colgroup>
                 <tbody>
-                    <tr *ngFor="let ref of references" (click)="selectReference(ref)" [ngClass]="{ info: selectedRef == ref }">
+                    <tr *ngFor="let ref of references" (click)="selectReference(ref)" [ngClass]="{ 'table-primary': selectedRef == ref }">
                         <td>{{ref.identifier}}</td>
                         <td>
                             <button class="btn btn-xs btn-light" (click)="deleteReference(ref)" title="Delete">

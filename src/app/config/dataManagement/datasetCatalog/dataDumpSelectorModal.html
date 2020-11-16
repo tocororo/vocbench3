@@ -18,7 +18,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let d of dataDumps" [ngClass]="{ info: d == selectedDump }" (click)="selectedDump = d">
+                <tr *ngFor="let d of dataDumps" [ngClass]="{ 'table-primary': d == selectedDump }" (click)="selectedDump = d">
                     <td><a [href]="d.accessURL" target="_blank">{{d.accessURL}}</a></td>
                     <td>{{d.getPreferredTitle() != null ? d.getPreferredTitle().toNT() : null }}</td>
                     <td>{{d.getPreferredDescription() != null ? d.getPreferredDescription().toNT() : null }}</td>

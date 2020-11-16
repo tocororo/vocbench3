@@ -6,7 +6,7 @@
     
     <div class="hbox" style="align-items: center; flex: initial;">
         <label style="white-space: nowrap; margin: 0px 3px;">Form Collection ID:</label>
-        <div class="input-group input-group-xs" style="flex: 1">
+        <div class="input-group" style="flex: 1">
             <ng-template [ngIf]="namespaceLocked">
                 <span class="input-group-prepend">
                     <span class="input-group-text">{{fcPrefix}}</span>
@@ -37,7 +37,7 @@
                     <table class="table table-sm table-borderless table-hoverable" style="table-layout: fixed">
                         <tbody>
                             <tr *ngFor="let cForm of forms" (click)="selectForm(cForm)"
-                                [ngClass]="{ info: cForm == selectedForm, grayText: cForm.getLevel() == 'system' }">
+                                [ngClass]="{ 'table-primary': cForm == selectedForm, grayText: cForm.getLevel() == 'system' }">
                                 <td>{{cForm.getId()}}</td>
                             </tr>
                         </tbody>
@@ -64,7 +64,7 @@
                     <table class="table table-sm table-borderless table-hoverable" style="table-layout: fixed">
                         <tbody>
                             <tr *ngFor="let cForm of formsAvailable" (click)="selectFormAvailable(cForm)"
-                                [ngClass]="{ info: cForm == selectedFormAvailable, grayText: cForm.getLevel() == 'system' }">
+                                [ngClass]="{ 'table-primary': cForm == selectedFormAvailable, grayText: cForm.getLevel() == 'system' }">
                                 <td>{{cForm.getId()}}</td>
                             </tr>
                         </tbody>
@@ -114,6 +114,6 @@
             </div>
         </div>
         <button class="btn btn-primary btn-sm" (click)="ok()" [disabled]="readOnly">Ok</button>
-        <button class="btn btn-light btn-sm" (click)="cancel()">Cancel</button>
+        <button class="btn btn-light btn-sm ml-2" (click)="cancel()">Cancel</button>
     </div>
 </div>

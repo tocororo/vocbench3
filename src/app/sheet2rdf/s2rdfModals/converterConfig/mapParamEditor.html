@@ -13,11 +13,11 @@
                 <tr *ngFor="let m of map; let index = index; let last = last;">
                     <td><label>Key:</label></td>
                     <td>
-                        <input class="form-control input-xs" [(ngModel)]="map[index].key" (ngModelChange)="onModelChange()">
+                        <input class="form-control form-control-sm" [(ngModel)]="map[index].key" (ngModelChange)="onModelChange()">
                     </td>
                     <td><label>Value:</label></td>
                     <td>
-                        <input class="form-control input-xs" [(ngModel)]="map[index].value" (ngModelChange)="onModelChange()">
+                        <input class="form-control form-control-sm" [(ngModel)]="map[index].value" (ngModelChange)="onModelChange()">
                     </td>
                     <td>
                         <button *ngIf="map.length > 1" class="btn btn-xs btn-light" (click)="delete(index)">

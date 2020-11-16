@@ -19,7 +19,7 @@
             <tr>
                 <td><label>Project:</label></td>
                 <td>
-                    <select class="form-control input-xs" [(ngModel)]="project" (ngModelChange)="onProjectChange()">
+                    <select class="form-control form-control-sm " [(ngModel)]="project" (ngModelChange)="onProjectChange()">
                         <option *ngFor="let p of projectList" [ngValue]="p">{{p.getName()}}</option>
                     </select>
                 </td>
@@ -27,7 +27,7 @@
             <tr *ngIf="project">
                 <td><label>Type:</label></td>
                 <td>
-                    <select class="form-control input-xs" [(ngModel)]="activeView" (ngModelChange)="onAlignTypeChanged()">
+                    <select class="form-control form-control-sm " [(ngModel)]="activeView" (ngModelChange)="onAlignTypeChanged()">
                         <option value="cls">Class</option>
                         <option value="individual">Individual</option>
                         <option value="property">Property</option>

@@ -1,5 +1,5 @@
 <div *ngIf="resource.isURIResource()" style="position: relative">
-    <div *ngIf="!copyEnabled" class="input-group input-group-xs">
+    <div *ngIf="!copyEnabled" class="input-group input-group-sm">
         <div *ngIf="namespaceLocked" class="input-group-prepend">
             <span class="input-group-text">{{resource.getBaseURI()}}</span>
         </div>
@@ -35,5 +35,5 @@
     </div>
 </div>
 <div *ngIf="resource.isBNode()">
-    <input type="text" class="form-control input-xs" [value]="resource.getId()" readonly>
+    <input type="text" class="form-control form-control-sm" [value]="resource.getId()" readonly>
 </div>

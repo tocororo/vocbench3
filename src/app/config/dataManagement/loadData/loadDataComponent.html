@@ -149,7 +149,7 @@
                     </colgroup>
                     <tbody>
                         <tr *ngFor="let transformerChainEl of transformersChain; let l = last; let f = first; let idx = index" 
-                            [ngClass]="{active: transformerChainEl == selectedTransformerChainElement}" (click)="selectTransformerChainElement(transformerChainEl)">
+                            [ngClass]="{'table-primary': transformerChainEl == selectedTransformerChainElement}" (click)="selectTransformerChainElement(transformerChainEl)">
                             <td class="text-center" style="font-size: 11px; font-weight: 700;">{{idx+1}}</td>
                             <td>
                                 <extension-configurator [extensions]="transformerChainEl.availableFactories"

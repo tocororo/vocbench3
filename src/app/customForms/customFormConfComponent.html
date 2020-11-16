@@ -121,7 +121,7 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let formCollMap of cfConfigurationMap" (click)="selectFormCollMapping(formCollMap)"
-                                    [ngClass]="{ info: formCollMap == selectedFormCollMapping }">
+                                    [ngClass]="{ 'table-primary': formCollMap == selectedFormCollMapping }">
                                     <td>{{formCollMap.getResource().getURI()}}</td>
                                     <td [ngClass]="{grayText: formCollMap.getFormCollection().getLevel() == 'system'}">
                                         {{formCollMap.getFormCollection().getId()}}

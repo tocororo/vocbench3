@@ -33,7 +33,7 @@ export class ResourcePickerComponent {
 
     ngOnInit() {
         //if the input size is not valid, set default to "sm"
-        if (this.size == "xs" || this.size == "sm" || this.size == "md" || this.size == "lg") {
+        if (this.size == "sm" || this.size == "md" || this.size == "lg") {
             this.inputGroupClass += " input-group-" + this.size;
         }
 

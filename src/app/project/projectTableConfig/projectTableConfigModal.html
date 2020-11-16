@@ -40,7 +40,7 @@
                     <th class="text-center">Show</th>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let c of columns" [ngClass]="{ info : c == selectedColumn }" (click)="selectColumn(c)">
+                    <tr *ngFor="let c of columns" [ngClass]="{ 'table-primary': c == selectedColumn }" (click)="selectColumn(c)">
                         <td class="text-center" [ngClass]="{ grayText : !c.show }">{{c.name}}</td>
                         <td class="text-center">
                             <input type="checkbox" [(ngModel)]="c.show" [disabled]="c.mandatory">

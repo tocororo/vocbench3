@@ -38,13 +38,13 @@
                 <div class="hbox">
                     <div class="hbox" style="align-items: center; margin-right: 4px;">
                         <label style="margin-right: 4px;">Relation:</label>
-                        <select class="form-control input-xs" style="margin-right: 4px;" [(ngModel)]="selectedRelation" [title]="selectedRelation?.text">
+                        <select class="form-control" style="margin-right: 4px;" [(ngModel)]="selectedRelation" [title]="selectedRelation?.text">
                             <option *ngFor="let rel of relations" [ngValue]="rel" [title]="rel.text">{{rel.relation}}</option>
                         </select>
                     </div>
                     <div class="hbox" style="align-items: center; margin-right: 4px;">
                         <label style="margin-right: 4px;">Measure:</label>
-                        <input class="form-control input-xs" style="margin-right: 4px;" type="number" min="0" max="1" step=".01" [(ngModel)]="measure">
+                        <input class="form-control" style="margin-right: 4px;" type="number" min="0" max="1" step=".01" [(ngModel)]="measure">
                     </div>
                     <button class="btn btn-xs btn-light float-right" (click)="addCorrespondence()"
                         [disabled]="!leftSelectedResource || !rightSelectedResource || !selectedRelation || !measure">
@@ -89,7 +89,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let c of correspondences" (click)="selectCorrespondence(c)" [ngClass]="{ info: selectedCorrespondence == c }">
+                            <tr *ngFor="let c of correspondences" (click)="selectCorrespondence(c)" [ngClass]="{ 'table-primary': selectedCorrespondence == c }">
                                 <td class="text-center">
                                     <rdf-resource [resource]="c.leftEntity[0]" style="cursor: pointer" (dblclick)="openLeftResourceView(c.leftEntity[0])"></rdf-resource>
                                 </td>

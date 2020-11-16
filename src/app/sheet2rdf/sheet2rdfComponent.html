@@ -63,7 +63,7 @@
                                     </button>
                                 </td>
                             </tr>
-                            <tr *ngFor="let row of tablePreview" [id]="'tableRow'+row.idx" [ngClass]="{ info: row == selectedTablePreviewRow }">
+                            <tr *ngFor="let row of tablePreview" [id]="'tableRow'+row.idx" [ngClass]="{ 'table-primary': row == selectedTablePreviewRow }">
                                 <td *ngFor="let c of row.cells" class="spreadsheetCell" [title]="c.value">{{c.value}}</td>
                             </tr>
                         </tbody>
@@ -166,7 +166,7 @@
                         </thead>
                         <tbody style="overflow: auto;">
                             <tr *ngFor="let t of triplesPreview" (click)="selectTriplePreviewRow(t)"
-                                [ngClass]="{ 'oddTablePreviewRow' : t.row%2==0, active: t == selectedTriplePreviewRow }">
+                                [ngClass]="{ 'oddTablePreviewRow' : t.row%2==0, 'table-primary': t == selectedTriplePreviewRow }">
                                 <td>{{t.subject}}</td>
                                 <td>{{t.predicate}}</td>
                                 <td>{{t.object}}</td>

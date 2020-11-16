@@ -1,7 +1,7 @@
-<textarea #editBlock *ngIf="editInProgress; else notEditBlock" [(ngModel)]="stringValue" class="form-control input-xs custom" style="resize: vertical;"
+<textarea #editBlock *ngIf="editInProgress; else notEditBlock" [(ngModel)]="stringValue" class="form-control form-control-sm custom" style="resize: vertical;"
     [rows]="textareaRows" (keydown)="onKeydown($event)">
 </textarea>
 
 <ng-template #notEditBlock>
-    <div [class]="'form-control input-xs custom ' + renderingClass" [ngClass]="{ disabled: disabled }" (click)="edit()">{{stringValue}}</div>
+    <div [class]="'form-control form-control-sm custom ' + renderingClass" [ngClass]="{ disabled: disabled }" (click)="edit()">{{stringValue}}</div>
 </ng-template>

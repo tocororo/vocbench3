@@ -15,7 +15,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let repo of repoList" (click)="selectedRepo = repo" [ngClass]="{ info : selectedRepo == repo}">
+                <tr *ngFor="let repo of repoList" (click)="selectedRepo = repo" [ngClass]="{ 'table-primary': selectedRepo == repo}">
                     <td style="font-weight: bold;">{{repo.id}}</td>
                     <td class="text-center">{{repo.location}}</td>
                     <td class="text-center">{{repo.description}}</td>

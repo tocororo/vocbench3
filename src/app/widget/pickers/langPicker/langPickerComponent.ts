@@ -13,13 +13,13 @@ import { VBProperties } from "../../../utils/VBProperties";
 })
 export class LangPickerComponent implements ControlValueAccessor {
 
-    @Input() size: string = "sm";
+    @Input() size: string;
     @Input() disabled: boolean = false;
     @Input() readonly: boolean = false;
 
     @Input() config: LangPickerConfig;
 
-    selectClass: string = "form-control input-";
+    selectClass: string = "form-control";
     languageList: Language[] = [];
     language: Language;
     showFlag: boolean = true;
@@ -27,10 +27,8 @@ export class LangPickerComponent implements ControlValueAccessor {
     constructor(private properties: VBProperties) { }
 
     ngOnInit() {
-        if (this.size == "xs" || this.size == "sm" || this.size == "md" || this.size == "lg") {
-            this.selectClass += this.size;
-        } else {
-            this.selectClass += "sm";
+        if (this.size == "sm" || this.size == "md" || this.size == "lg") {
+            this.selectClass += "form-control-" + this.size;
         }
 
         let defaultConfig = new LangPickerConfig();

@@ -37,7 +37,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let p of projectList" [ngClass]="{ info : selectedProject == p }" (click)="selectedProject = p">
+                    <tr *ngFor="let p of projectList" [ngClass]="{ 'table-primary': selectedProject == p }" (click)="selectedProject = p">
                         <td class="text-center ellipsable">{{p.getName()}}</td>
                         <td class="text-center">{{p.getModelType(true)}}</td>
                         <td class="text-center">{{p.getLexicalizationModelType(true)}}</td>

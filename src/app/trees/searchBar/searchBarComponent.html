@@ -1,13 +1,13 @@
 <div class="hbox">
-    <!-- <ng2-completer *ngIf="searchSettings.useAutocompletion" style="flex: 1;" [inputClass]="'form-control input-xs'" 
+    <!-- <ng2-completer *ngIf="searchSettings.useAutocompletion" style="flex: 1;" [inputClass]="'form-control form-control-sm'" 
         [(ngModel)]="searchStr" [datasource]="completerDatasource" (keydown.enter)="doSearch()" (selected)="doSearch()" [minSearchLength]="3"
         placeholder="Search..." matchClass="matchClass" pause="500" [disableInput]="disabled">
     </ng2-completer>
 
-    <input *ngIf="!searchSettings.useAutocompletion" type="text" class="form-control input-xs" style="flex: 1;" 
+    <input *ngIf="!searchSettings.useAutocompletion" type="text" class="form-control form-control-sm" style="flex: 1;" 
         [(ngModel)]="searchStr" (keydown.enter)="doSearch()" placeholder="Search..." [disabled]="disabled"> -->
 
-    <input type="text" class="form-control form-control-xs" style="flex: 1;" 
+    <input type="text" class="form-control form-control-sm" style="flex: 1;" 
         [(ngModel)]="searchStr" (keydown.enter)="doSearch()" placeholder="Search..." [disabled]="disabled">
 
     <div class="btn-group btn-group-xs dropup ml-2" ngbDropdown placement="top-right">

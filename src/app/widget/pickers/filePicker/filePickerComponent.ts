@@ -22,7 +22,7 @@ export class FilePickerComponent {
     constructor() { }
 
     ngOnInit() {
-        if (this.size == "xs" || this.size == "sm" || this.size == "md" || this.size == "lg") {
+        if (this.size == "sm" || this.size == "md" || this.size == "lg") {
             this.inputGroupClass += " input-group-" + this.size;
         }
     }

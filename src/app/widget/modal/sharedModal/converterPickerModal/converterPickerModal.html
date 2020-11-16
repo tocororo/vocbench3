@@ -17,7 +17,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let c of converters" (click)="selectConverter(c)" [ngClass]="{ info: c == selectedConverter }">
+                <tr *ngFor="let c of converters" (click)="selectConverter(c)" [ngClass]="{ 'table-primary': c == selectedConverter }">
                     <td>{{c.getName()}}</td>
                     <td style="white-space: pre;">{{c.getDescription()}}</td>
                     <td nowrap>{{c.getRDFCapability()}}

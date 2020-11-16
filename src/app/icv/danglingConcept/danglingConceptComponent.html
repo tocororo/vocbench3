@@ -1,12 +1,12 @@
 <div class="card card-default vbox" style="position: relative">
     <div class="card-header">
         <label style="flex: 1;">Dangling concepts</label>
-        <span style="margin-right: 4px;">Scheme:</span>
-        <select class="form-control input-xs" style="width: initial; margin-right: 4px;" [(ngModel)]="selectedScheme">
+        <span>Scheme:</span>
+        <select class="form-control form-control-sm ml-1" style="width: initial;" [(ngModel)]="selectedScheme">
             <option [ngValue]="null" style="font-style: italic">All schemes</option>
             <option *ngFor="let s of schemeList" [ngValue]="s">{{s.getShow()}}</option>
         </select>
-        <button class="btn btn-xs btn-light" (click)="runIcv()">Run</button>
+        <button class="btn btn-xs btn-light ml-3" (click)="runIcv()">Run</button>
     </div>
     <div class="card-body vbox">
         

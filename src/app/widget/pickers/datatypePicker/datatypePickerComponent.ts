@@ -13,12 +13,12 @@ import { ResourceUtils } from '../../../utils/ResourceUtils';
 })
 export class DatatypePickerComponent implements ControlValueAccessor {
 
-    @Input() size: string = "sm";
+    @Input() size: string;
     @Input() disabled: boolean = false;
     @Input() readonly: boolean = false;
     @Input() allowedDatatypes: ARTURIResource[]; //list of allowed datatypes. If null allows all datatypes
 
-    selectClass: string = "form-control input-";
+    selectClass: string = "form-control";
     private allDatatypes: ARTURIResource[]; //list of all datatypes defined
     datatypeList: ARTURIResource[]; //list of datatypes that the user can pick (could be all datatypes, or a subset restricted by allowedDatatypes)
     datatype: ARTURIResource;
@@ -26,10 +26,8 @@ export class DatatypePickerComponent implements ControlValueAccessor {
     constructor(private datatypeService: DatatypesServices) { }
 
     ngOnInit() {
-        if (this.size == "xs" || this.size == "sm" || this.size == "md" || this.size == "lg") {
-            this.selectClass += this.size;
-        } else {
-            this.selectClass += "sm";
+        if (this.size == "sm" || this.size == "md" || this.size == "lg") {
+            this.selectClass += " form-control-" + this.size;
         }
         //initialize all the available datatypes
         this.datatypeService.getDatatypes().subscribe(

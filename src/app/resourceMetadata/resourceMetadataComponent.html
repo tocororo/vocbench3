@@ -71,7 +71,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let a of associations" (click)="selectedAssociation = a" [ngClass]="{ info: a == selectedAssociation }">
+                        <tr *ngFor="let a of associations" (click)="selectedAssociation = a" [ngClass]="{ 'table-primary': a == selectedAssociation }">
                             <td>{{a.roleLabel}}</td>
                             <td [ngClass]="{grayText: a.pattern.scope == 'FACTORY'}">{{a.pattern.name}}</td>
                         </tr>

@@ -11,7 +11,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let r of resourceList" (click)="resourceSelected = r" [ngClass]="{ info : r == resourceSelected }">
+            <tr *ngFor="let r of resourceList" (click)="resourceSelected = r" [ngClass]="{ 'table-primary': r == resourceSelected }">
                 <td><rdf-resource [resource]="r"></rdf-resource></td>
                 <td>{{r.getAdditionalProperty('matchedLang')}}</td>
                 <td>{{r.getAdditionalProperty('matchMode')}}</td>

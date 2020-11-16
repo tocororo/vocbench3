@@ -35,7 +35,7 @@
                 <table class="table table-sm table-borderless table-hoverable">
                     <tbody>
                         <tr *ngFor="let fc of formCollectionList" (click)="selectFormColl(fc)"
-                            [ngClass]="{ info: fc == selectedFormColl, grayText: fc.getLevel() == 'system' }">
+                            [ngClass]="{ 'table-primary': fc == selectedFormColl, grayText: fc.getLevel() == 'system' }">
                             <td>{{fc.getId()}}</td>
                         </tr>
                     </tbody>

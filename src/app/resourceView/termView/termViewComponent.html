@@ -1,7 +1,7 @@
 <div class="card card-default vbox blockingDivHost">
     <div class="card-header">
         <rdf-resource style="flex: 1;" *ngIf="resource" [resource]="resource"></rdf-resource>
-        <input class="form-control input-xs" [ngModel]="resource.getNominalValue()" readonly>
+        <input class="form-control form-control-sm" [ngModel]="resource.getNominalValue()" readonly>
 
         <button class="btn btn-xs btn-light" style="margin-left: 3px;" (click)="buildResourceView(resource)" title="Refresh">
             <span class="fas fa-redo"></span>
