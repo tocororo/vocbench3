@@ -28,12 +28,6 @@ export class HomeComponent {
             this.safeCustomContentFromPref = this.sanitizer.bypassSecurityTrustHtml(homeContent);
         }
 
-        /**
-         * the following require() are necessary in order to trigger the rule (defined in in webpack.common.js)
-         * that matches content in assets/ext/home and to copy each file during the creation of the distribution
-         */
-        require('file-loader?name=[name].[ext]!../assets/ext/home/example.png');
-        require('file-loader?name=[name].[ext]!../assets/ext/home/custom_content.html');
         fetch("assets/ext/home/custom_content.html").then(
             res => res.text()
         ).then(

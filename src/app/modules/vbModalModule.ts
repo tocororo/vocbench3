@@ -8,8 +8,6 @@ import { ValidationSettingsModal } from '../alignment/alignmentValidation/alignm
 import { AssistedSearchModal } from '../alignment/resourceAlignment/assistedSearchModal';
 import { AssistedSearchResultModal } from '../alignment/resourceAlignment/assistedSearchResultModal';
 import { ResourceAlignmentModal } from '../alignment/resourceAlignment/resourceAlignmentModal';
-import { FilterGraphsModal } from '../config/dataManagement/exportData/filterGraphsModal/filterGraphsModal';
-import { DumpCreationModal } from '../config/dataManagement/versioning/dumpCreationModal';
 import { PrefixNamespaceModal } from '../metadata/namespacesAndImports/prefixNamespaceModal';
 import { LoadShapesModal } from '../shacl/loadShapesModal';
 import { HelperModal } from '../widget/codemirror/manchesterEditor/modal/helperModal';
@@ -89,10 +87,8 @@ import { UserModule } from './userModule';
         CustomFormSelectionModal,
         DatatypeListModal,
         DownloadModal,
-        DumpCreationModal,
         EditableNsInput,
         FilePickerModal,
-        FilterGraphsModal,
         HelperModal,
         InstanceListModal,
         LanguageSelectorModal,
@@ -160,9 +156,7 @@ import { UserModule } from './userModule';
         CustomFormSelectionModal,
         DatatypeListModal,
         DownloadModal,
-        DumpCreationModal,
         FilePickerModal,
-        FilterGraphsModal,
         HelperModal,
         InstanceListModal,
         LanguageSelectorModal,

@@ -64,7 +64,7 @@
             <label class="col-sm-2 col-form-label">Language proficiencies:</label>
             <div class="col-sm-10">
                 <div *ngIf="!readonly" class="input-group">
-                    <input class="form-control" [ngModel]="user.getLanguageProficiencies()" name="langs" readonly>
+                    <input class="form-control" [ngModel]="user.getLanguageProficiencies()" readonly>
                     <span class="input-group-append">
                         <button class="btn btn-light" style="width:36px;" (click)="editLanguages()" placeholder="Edit">
                             <span class="fas fa-pencil-alt"></span>

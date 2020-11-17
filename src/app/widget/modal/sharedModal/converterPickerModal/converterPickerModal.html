@@ -42,7 +42,7 @@
                         <a class="dropdown-item" (click)="switchConverterType('literal')">Literal</a>
                     </div>
                 </span>
-                <input type="text" class="form-control" [ngModel]="projectionOperator" name="projectionOperator" readonly>
+                <input type="text" class="form-control" [ngModel]="projectionOperator" readonly>
                 <span class="input-group-append">
                     <button class="btn btn-light" (click)="chooseSignature()" title="Change signature" [disabled]="!isSignatureEditable()">
                         <span class="fas fa-pencil-alt"></span>

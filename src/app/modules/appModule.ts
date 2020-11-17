@@ -7,11 +7,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CustomReuseStrategy } from '../a2Customization/CustomReuseStrategy';
 import { AppComponent } from '../appComponent';
 import { AppRoutingModule } from '../appRoutes';
-import { ConfigBarComponent } from '../config/configBar/configBarComponent';
-import { ExportDataComponent } from '../config/dataManagement/exportData/exportDataComponent';
-import { LoadDataComponent } from '../config/dataManagement/loadData/loadDataComponent';
-import { RefactorComponent } from '../config/dataManagement/refactor/refactorComponent';
-import { VersioningComponent } from '../config/dataManagement/versioning/versioningComponent';
 import { DataComponent } from '../data/dataComponent';
 import { HomeComponent } from '../homeComponent';
 import { SkosDiffingModule } from '../skosDiffing/skosDiffingModule';
@@ -31,6 +26,7 @@ import { CustomFormModule } from './customFormModule';
 import { CustomServicesModule } from './customServicesModule';
 import { DatasetCatalogModule } from './datasetCatalogModule';
 import { EdoalModule } from './edoalModule';
+import { GlobalDataMgmtModule } from './globalDataMgmtModule';
 import { GraphModule } from './graphModule';
 import { HistoryValidationModule } from './historyValidationModule';
 import { IcvModule } from './icvModule';
@@ -64,6 +60,7 @@ import { VBModalModule } from './vbModalModule';
 		CustomServicesModule,
 		DatasetCatalogModule,
 		EdoalModule,
+		GlobalDataMgmtModule,
 		GraphModule,
 		HistoryValidationModule,
 		IcvModule,
@@ -100,13 +97,8 @@ import { VBModalModule } from './vbModalModule';
 	],
 	declarations: [
 		AppComponent,
-		ConfigBarComponent,
 		HomeComponent,
 		DataComponent,
-		LoadDataComponent,
-		ExportDataComponent,
-		RefactorComponent,
-		VersioningComponent,
   ],
 	bootstrap: [AppComponent]
 })

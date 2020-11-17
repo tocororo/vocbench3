@@ -6,7 +6,7 @@
     <div class="form-group row">
         <label class="col-form-label col-sm-3">Version ID:</label>
         <div class="col-sm-9">
-            <input type="text" class="form-control" [(ngModel)]="versionId" placeholder="Version ID" name="versionID" sanitized>
+            <input type="text" class="form-control" [(ngModel)]="versionId" placeholder="Version ID" sanitized>
         </div>
     </div>
 
@@ -14,11 +14,11 @@
         <label class="col-form-label col-sm-3">Repository Access:</label>
         <div class="col-sm-9">
             <div class="hbox">
-                <select class="form-control" [(ngModel)]="selectedRepositoryAccess" name="selectedRepositoryAccess">
+                <select class="form-control" [(ngModel)]="selectedRepositoryAccess">
                     <option *ngFor="let repoAcc of repositoryAccessList" [ngValue]="repoAcc">{{repoAcc}}</option>
                 </select>
                 <div *ngIf="isSelectedRepoAccessRemote()" class="input-group" style="margin-left: 5px; min-width: 210px;">
-                    <select class="form-control" [(ngModel)]="selectedRemoteRepoConfig" name="remoteConfig">
+                    <select class="form-control" [(ngModel)]="selectedRemoteRepoConfig">
                         <option *ngFor="let c of remoteRepoConfigs" [ngValue]="c">{{c.serverURL}}</option>
                     </select>
                     <span class="input-group-append">
@@ -48,7 +48,7 @@
             <div class="col-sm-9">
                 <div class="input-group">
                     <input type="text" class="form-control" [(ngModel)]="repositoryId" placeholder="Repository ID"
-                        [disabled]="isSelectedRepoAccessCreateMode()" name="repositoryId">
+                        [disabled]="isSelectedRepoAccessCreateMode()">
                     <span class="input-group-append">
                         <button class="btn btn-light" type="button" (click)="changeRemoteRepository()"
                             title="Select remote repository" [disabled]="isSelectedRepoAccessCreateMode()">
@@ -62,7 +62,7 @@
         <div class="form-group row">
             <label class="col-form-label col-sm-3">Backend type</label>
             <div class="col-sm-9">
-                <select class="form-control" [(ngModel)]="selectedRepoBackendType" name="selectedRepoBackendType">
+                <select class="form-control" [(ngModel)]="selectedRepoBackendType">
                     <option *ngFor="let bt of backendTypes" [value]="bt">{{bt}}</option>
                 </select>
             </div>

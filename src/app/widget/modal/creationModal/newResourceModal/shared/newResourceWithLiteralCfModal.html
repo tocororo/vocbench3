@@ -20,7 +20,7 @@
                 <td class="text-right"><label>{{literalLabel}}:</label></td>
                 <td>
                     <div class="hbox" style="align-items: center; margin-bottom: 4px;">
-                        <input ngbAutofocus type="text" class="form-control" style="flex: 1; margin-right: 4px;" name="label" [(ngModel)]="label">
+                        <input ngbAutofocus type="text" class="form-control" style="flex: 1; margin-right: 4px;" [(ngModel)]="label">
                         <lang-picker [(ngModel)]="lang" [config]="{ constrain: langConstraints.constrain, locale: langConstraints.locale }">
                         </lang-picker>
                     </div>

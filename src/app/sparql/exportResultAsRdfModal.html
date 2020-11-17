@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body vbox">
     
-    <select class="form-control" [(ngModel)]="selectedExportFormat" name="format">
+    <select class="form-control" [(ngModel)]="selectedExportFormat">
         <option *ngFor="let f of exportFormats" [ngValue]="f">{{f.name}}</option>
     </select>
 

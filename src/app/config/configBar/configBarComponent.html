@@ -55,11 +55,11 @@
                     <span class="fas fa-caret-down ml-1"></span>
                 </button>
                 <div class="dropdown-menu" ngbDropdownMenu>
-                    <a [routerLink]="['/Config/LoadData']" class="dropdown-item"
+                    <a routerLink="/Config/LoadData" class="dropdown-item"
                         [ngClass]="{ disabled : !loadDataAuthorized }">
                         <span class="fas fa-upload" style="margin-right: 5px"></span>Load data
                     </a>
-                    <a [routerLink]="['/Config/ExportData']" class="dropdown-item"
+                    <a routerLink="/Config/ExportData" class="dropdown-item"
                         [ngClass]="{ disabled : !exportDataAuthorized }">
                         <span class="fas fa-download" style="margin-right: 5px"></span>Export data
                     </a>
@@ -67,12 +67,12 @@
                         <span class="fas fa-eraser" style="margin-right: 5px"></span>Clear data
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a [routerLink]="['/Config/Versioning']" class="dropdown-item"
+                    <a routerLink="/Config/Versioning" class="dropdown-item"
                         [ngClass]="{ disabled : !versioningAuthorized }">
                         <span class="far fa-clock" style="margin-right: 5px"></span>Versioning
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a [routerLink]="['/Config/Refactor']" class="dropdown-item">
+                    <a routerLink="/Config/Refactor" class="dropdown-item">
                         <span class="fas fa-retweet" style="margin-right: 5px"></span>Refactor
                     </a>
                     <ng-container *ngIf="shaclEnabled">
