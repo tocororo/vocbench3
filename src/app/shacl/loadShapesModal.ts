@@ -14,6 +14,7 @@ export class LoadShapesModal {
     file: File;
     inputFormats: RDFFormat[];
     selectedInputFormat: RDFFormat;
+    filePickerAccept: string;
     clearExisting: boolean;
 
     constructor(public activeModal: NgbActiveModal, private shaclService: ShaclServices, private inOutService: InputOutputServices,
@@ -26,6 +27,18 @@ export class LoadShapesModal {
             formats => {
                 this.inputFormats = formats;
                 this.selectedInputFormat = this.inputFormats.find(f => f.name == "Turtle"); //init turtle
+
+                let extList: string[] = []; //collects the extensions of the formats in order to provide them to the file picker
+                this.inputFormats.forEach(f => 
+                    f.fileExtensions.forEach(ext => {
+                        extList.push("."+ext);
+                    })
+                ); 
+                //remove duplicated extensions
+                extList = extList.filter((item: string, pos: number) => {
+                    return extList.indexOf(item) == pos;
+                });
+                this.filePickerAccept = extList.join(",");
             }
         )
     }

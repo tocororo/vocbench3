@@ -30,7 +30,7 @@ export class InvokableReporterModalServices {
     }
 
     public showReport(report: Report): Promise<void> {
-        const modalRef: NgbModalRef = this.modalService.open(ReportResultModal, new ModalOptions());
+        const modalRef: NgbModalRef = this.modalService.open(ReportResultModal, new ModalOptions('lg'));
         modalRef.componentInstance.report = report;
         return modalRef.result;
     }

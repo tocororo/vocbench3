@@ -1,7 +1,7 @@
-import { Component, forwardRef, Input, ViewChild } from '@angular/core';
+import { Component, forwardRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 import * as CodeMirror from 'codemirror';
-// import './mustache';
 
 @Component({
     selector: 'mustache-editor',
@@ -15,30 +15,38 @@ import * as CodeMirror from 'codemirror';
 export class MustacheEditorComponent implements ControlValueAccessor {
     @Input() disabled: boolean;
     
-    @ViewChild('txtarea', { static: true }) textareaElement: any;
-
+    @ViewChild('cmEditor') private cmEditorView: CodemirrorComponent;
+    
     private cmEditor: CodeMirror.EditorFromTextArea;
+
+    code: string;
+    editorConfig: CodeMirror.EditorConfiguration;
 
     constructor() { }
 
+    ngOnInit() {
+        this.editorConfig = { 
+            lineNumbers: true,
+            mode: "mustache",
+            lineWrapping: true,
+            readOnly: this.disabled,
+            viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
+                //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
+        }
+    }
+
     ngAfterViewInit() {
-        this.cmEditor = CodeMirror.fromTextArea(
-            this.textareaElement.nativeElement,
-            { 
-                lineNumbers: true,
-                mode: "mustache",
-                lineWrapping: true,
-                readOnly: this.disabled,
-                viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
-                    //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
-            }
-        );
-        console.log("mode", this.cmEditor.getMode())
+        this.cmEditor = this.cmEditorView.codeMirror;
+    }
 
-        this.cmEditor.on('change', (cm: CodeMirror.Editor) => {
-            this.propagateChange(cm.getDoc().getValue());
-        });
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['disabled'] && this.editorConfig != null) {
+            this.editorConfig.readOnly = this.disabled;
+        }
+    }
 
+    onCodeChange() {
+        this.propagateChange(this.code);
     }
 
     /**
@@ -56,13 +64,7 @@ export class MustacheEditorComponent implements ControlValueAccessor {
      * Write a new value to the element.
      */
     writeValue(obj: string) {
-        if (this.cmEditor) { //prevent error if editor is not yet initialized
-            if (obj != null) {
-                this.cmEditor.setValue(obj);
-            } else {
-                this.cmEditor.setValue("");
-            }
-        }
+        this.code = obj;
     }
     /**
      * Set the function to be called when the control receives a change event.

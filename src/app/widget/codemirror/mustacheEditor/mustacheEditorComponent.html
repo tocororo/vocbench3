@@ -1,1 +1,1 @@
-<textarea #txtarea [ngClass]="{disabled: disabled}"></textarea>
+<ngx-codemirror #cmEditor [(ngModel)]="code" [ngClass]="{disabled: disabled}" (ngModelChange)="onCodeChange()" [options]="editorConfig"></ngx-codemirror>

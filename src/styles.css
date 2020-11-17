@@ -522,7 +522,8 @@ With the following classes is possible to limit the height of the editor to the 
     margin-right: 0px;
     flex: 1;
 }
-textarea.disabled + .CodeMirror {
+
+ngx-codemirror.disabled .CodeMirror {
     background: #eee;
 }
 
@@ -541,6 +542,8 @@ textarea.disabled + .CodeMirror {
 .hint-separator { 
     border-top: 1px solid rgb(220, 220, 220) ;
 }
+
+.cm-mustache {color: #0ca;}
 
 .yasqe {
     display: flex;
@@ -813,7 +816,7 @@ nav {
 }
 
 .navbar {
-    height: 44px; /* Required in order to keep the navbar to the same height event when menu item are not loaded yet */
+    min-height: 44px; /* Required in order to keep the navbar to the same height event when menu item are not loaded yet */
     padding: 0rem 1rem;
     color: white;
 }
@@ -866,6 +869,9 @@ nav {
 }
 .card-footer {
     padding: 6px;
+}
+.card-footer>.btn {
+    margin-left: .5rem;
 }
 
 .card-alt { border-color: #ddd; }

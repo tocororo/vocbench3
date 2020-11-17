@@ -37,7 +37,7 @@
                                 <label>Assigned Roles:</label>
                             </div>
                             <div class="card-body vbox scrollableContainer">
-                                <ng-container [ngIf]="puBinding">
+                                <ng-container *ngIf="puBinding">
                                     <div *ngFor="let r of puBinding.getRoles()" (click)="selectUserRole(r)"
                                         class="listItem" [ngClass]="{active: r == selectedUserRole}">
                                         {{r}}

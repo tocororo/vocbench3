@@ -1,5 +1,1 @@
-<!-- <div class="card card-default vbox">
-    <div class="card-body vbox" style="overflow: auto"> -->
-        <textarea #txtarea [ngClass]="{disabled: disabled}"></textarea>
-    <!-- </div>
-</div> -->
+<ngx-codemirror [(ngModel)]="code" (ngModelChange)="onCodeChange()" [options]="editorConfig"></ngx-codemirror>

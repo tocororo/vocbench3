@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, ViewChild } from '@angular/core';
+import { Component, forwardRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as CodeMirror from 'codemirror';
 
@@ -14,52 +14,42 @@ import * as CodeMirror from 'codemirror';
 export class JsonEditorComponent implements ControlValueAccessor {
     @Input() disabled: boolean;
     @Input() lineNumbers: boolean = true;
-    
-    @ViewChild('txtarea') textareaElement: any;
 
-    private cmEditor: CodeMirror.EditorFromTextArea;
+    editorConfig: CodeMirror.EditorConfiguration;
+    code: string;
 
     constructor() { }
 
-    ngAfterViewInit() {
-        this.cmEditor = CodeMirror.fromTextArea(
-            this.textareaElement.nativeElement,
-            { 
-                lineNumbers: this.lineNumbers,
-                mode: "application/json",
-                lineWrapping: true,
-                readOnly: this.disabled,
-                // matchBrackets: true,
-                // autoCloseBrackets: true,
-                viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
-                    //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
-            }
-        );
-        
-        this.cmEditor.on('change', (cm: CodeMirror.Editor) => {
-            this.propagateChange(cm.getDoc().getValue());
-        });
-
+    ngOnInit() {
+        this.editorConfig = { 
+            lineNumbers: this.lineNumbers,
+            mode: "application/json",
+            lineWrapping: true,
+            readOnly: this.disabled,
+            // matchBrackets: true,
+            // autoCloseBrackets: true,
+            viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
+                //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
+        }
     }
 
-    /**
-     * Insert the given text in the position where the cursor is.
-     * @param text
-     */
-    insertAtCursor(text: string) {
-        let cursor = this.cmEditor.getDoc().getCursor();
-        this.cmEditor.getDoc().replaceRange(text, cursor, cursor);
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['disabled'] && this.editorConfig != null) {
+            this.editorConfig.readOnly = this.disabled;
+        }
     }
 
+    onCodeChange() {
+        this.propagateChange(this.code);
+    }
+    
 
     //---- method of ControlValueAccessor and Validator interfaces ----
     /**
      * Write a new value to the element.
      */
     writeValue(obj: string) {
-        if (obj != null) {
-            this.cmEditor.setValue(obj);
-        }
+        this.code = obj;
     }
     /**
      * Set the function to be called when the control receives a change event.

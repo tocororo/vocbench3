@@ -75,7 +75,8 @@
               "node_modules/codemirror/mode/xml/xml.js",
               "node_modules/yasgui-yasqe/dist/yasqe.bundled.js",
               "src/app/widget/codemirror/mustacheEditor/mustache.js",
-              "src/app/widget/codemirror/manchesterEditor/manchester.js"
+              "src/app/widget/codemirror/manchesterEditor/manchester.js",
+              "src/app/widget/codemirror/pearlEditor/pearl.js"
             ]
           },
           "configurations": {

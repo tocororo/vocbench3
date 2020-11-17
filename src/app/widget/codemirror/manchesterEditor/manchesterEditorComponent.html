@@ -6,7 +6,7 @@
         <div *ngIf="!codeValid" style="position: absolute; top: 12px; right: 30px; z-index: 1;" [title]="codeInvalidDetails">
             <span class="fas fa-exclamation-triangle" style="color: red;"></span>
         </div>
-        <textarea #txtarea [ngClass]="{disabled: disabled}"></textarea>
+        <ngx-codemirror #cmEditor [(ngModel)]="code" (ngModelChange)="onCodeChange()" [options]="editorConfig"></ngx-codemirror>
         <span style="margin-top: 5px;">Press 'ctrl-space' to show hints.</span>
     </div>
 </div>

@@ -63,10 +63,9 @@ export class VersioningComponent {
         VBContext.setProjectChanged(true); //changing version is equivalent to changing project
     }
 
-    delteVersion() {
-        // this.selectedVersion
-        alert("TODO");
-    }
+    // deleteVersion() {
+    //     alert("TODO");
+    // }
 
     dump() {
         this.basicModals.prompt("Create a version dump", { value: "Version ID" }).then(

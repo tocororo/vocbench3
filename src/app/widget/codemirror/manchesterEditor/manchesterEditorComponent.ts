@@ -1,5 +1,6 @@
 import { Component, forwardRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as CodeMirror from 'codemirror';
 import { Observable } from 'rxjs';
@@ -8,7 +9,6 @@ import { ExpressionCheckResponse, ManchesterServices, ObjectError } from '../../
 import { ModalOptions } from '../../modal/Modals';
 import { SearchMode } from './../../../models/Properties';
 import { SearchServices } from './../../../services/searchServices';
-// import './manchester';
 import { HelperModal } from './modal/helperModal';
 
 @Component({
@@ -23,27 +23,22 @@ import { HelperModal } from './modal/helperModal';
 export class ManchesterEditorComponent implements ControlValueAccessor {
     @Input() context: ManchesterCtx;
     @Input() disabled: boolean;
-    @ViewChild('txtarea', { static: true }) textareaElement: any;
 
+    @ViewChild('cmEditor') private cmEditorView: CodemirrorComponent;
 
-    private markers: CodeMirror.TextMarker[] = [];
+    code: string;
+    editorConfig: CodeMirror.EditorConfiguration;
+
     private cmEditor: CodeMirror.EditorFromTextArea;
+    private markers: CodeMirror.TextMarker[] = [];
     codeValid: boolean = true;
     private codeValidationTimer: number;
     private codeInvalidDetails: string;
 
     constructor(private manchesterService: ManchesterServices, private searchServices: SearchServices, private modalService: NgbModal) { }
 
-    private getRegexp(tokensList: string[], caseSentitive: boolean) {
-        if (caseSentitive) {
-            return new RegExp("(?:" + tokensList.join("|") + ")\\b");
-        } else {
-            return new RegExp("(?:" + tokensList.join("|") + ")\\b", "i");
-        }
-    }
-
-    ngAfterViewInit() {
-        let editorConfig: CodeMirror.EditorConfiguration = {
+    ngOnInit() {
+        this.editorConfig = {
             lineNumbers: true,
             mode: "manchester",
             indentUnit: 4,
@@ -51,59 +46,37 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
             lineWrapping: true,
             readOnly: this.disabled,
             viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
-            //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
+                                    //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
             extraKeys: { "Ctrl-Space": "autocomplete" },
+            //unfortunately @types/codemirror seems to not recognize hints types, so I need to provide the hintOptions as done in ngAfterViewInit
+            // hintOptions: {
+            //     hint: (cm: CodeMirror.Editor, callback: (hints: CodeMirror.Hints) => any) => {
+            //         return this.asyncHintFunction();
+            //     }
+            // }
         }
-        // let hintOptions: CodeMirror.ShowHintOptions = {
-        //     hint: (cm: CodeMirror.Editor, callback: (hints: CodeMirror.Hints) => any) => {
-        //         return this.asyncHintFunction();
-        //     }
-        // }
+    }
+
+    ngAfterViewInit() {
+        this.cmEditor = this.cmEditorView.codeMirror;
         let hintOptions: any = {
             hint: (cm: CodeMirror.Editor, callback: (hints: any) => any) => {
                 return this.asyncHintFunction();
             }
         }
-        editorConfig['hintOptions'] = hintOptions;
-
-        this.cmEditor = CodeMirror.fromTextArea(
-            this.textareaElement.nativeElement,
-            editorConfig
-            // {
-            //     lineNumbers: true,
-            //     mode: "manchester",
-            //     indentUnit: 4,
-            //     indentWithTabs: true,
-            //     lineWrapping: true,
-            //     readOnly: this.disabled,
-            //     viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
-            //     //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
-            //     extraKeys: { "Ctrl-Space": "autocomplete" },
-            //     hintOptions: {
-            //         hint: (cm: CodeMirror.Editor, callback: (hints: CodeMirror.Hints) => any) => {
-            //             return this.asyncHintFunction();
-            //         }
-            //     }
-            // }
-        );
-        console.log("mode", this.cmEditor.getMode())
-
-        this.cmEditor.on('change', (cm: CodeMirror.Editor) => {
-            this.onCodeChange(cm.getDoc().getValue());
-        });
-
+        this.editorConfig['hintOptions'] = hintOptions;
     }
 
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['disabled'] && this.cmEditor != null) {
-            this.cmEditor.setOption('readOnly', changes['disabled'].currentValue);
+        if (changes['disabled']) {
+            this.editorConfig.readOnly = changes['disabled'].currentValue
         }
     }
 
-    onCodeChange(code: string) {
+    onCodeChange() {
         clearTimeout(this.codeValidationTimer);
-        this.codeValidationTimer = window.setTimeout(() => { this.validateExpression(code) }, 1000);
+        this.codeValidationTimer = window.setTimeout(() => { this.validateExpression(this.code) }, 1000);
     }
 
     /**
@@ -207,7 +180,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                             let obj = {
                                 from: CodeMirror.Pos(cur.line, start),
                                 to: CodeMirror.Pos(cur.line, end),
-                                list: list 
+                                list: list
                             }
                             if (obj.list.length > 0) {
                                 return obj
@@ -217,7 +190,6 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                 ).toPromise()
             }
         }
-
     }
 
     /**
@@ -253,12 +225,8 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                     let marker = this.cmEditor.getDoc().markText(startWordPosition, endWordPosition, { className: "underline", title: detailsExpectedTokens }) //it underlines word that match
                     this.markers.push(marker);// insert word into array that contains matched and underlined words
                 }
-
-
-
             }
-        })
-
+        });
     }
 
 
@@ -274,7 +242,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
         }
         validationFn.subscribe(
             (checkResp: ExpressionCheckResponse) => {
-                if (code != "") { 
+                if (code != "") {
                     this.codeValid = checkResp.valid;
                     this.errorMarks(checkResp.details)
                     if (this.codeValid) {
@@ -287,10 +255,8 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
                 } else {
                     this.codeValid = true // it's useful to update alert icon on view(manchesterEditorComponent html) when a user deletes all inside editor 
                 }
-
             }
         );
-
     }
 
     /**
@@ -309,9 +275,7 @@ export class ManchesterEditorComponent implements ControlValueAccessor {
      * Write a new value to the element.
      */
     writeValue(obj: string) {
-        if (obj != null) {
-            this.cmEditor.setValue(obj);
-        }
+        this.code = obj;
     }
     /**
      * Set the function to be called when the control receives a change event.

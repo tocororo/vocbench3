@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { QueryParameterForm } from '../sparql/queryParameterization/queryParameterForm';
 import { YasguiComponent } from '../sparql/yasguiComponent';
@@ -38,6 +39,7 @@ import { TypedLiteralInputComponent } from '../widget/typedLiteralInput/typedLit
         CommonModule,
         FormsModule,
         NgbDropdownModule,
+        CodemirrorModule
     ],
     declarations: [
         DatatypePickerComponent,

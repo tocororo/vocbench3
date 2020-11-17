@@ -1,7 +1,7 @@
 import { Component, forwardRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 import * as CodeMirror from 'codemirror';
-import "./pearl";
 
 @Component({
     selector: 'pearl-editor',
@@ -14,43 +14,43 @@ import "./pearl";
 export class PearlEditorComponent implements ControlValueAccessor {
     @Input() disabled: boolean;
 
-    @ViewChild('txtarea') textareaElement: any;
-
+    @ViewChild('cmEditor') private cmEditorView: CodemirrorComponent;
+    
     private cmEditor: CodeMirror.EditorFromTextArea;
+
+    code: string;
+    editorConfig: CodeMirror.EditorConfiguration;
 
     constructor() { }
 
-    ngAfterViewInit() {
-        this.cmEditor = CodeMirror.fromTextArea(
-            this.textareaElement.nativeElement,
-            {
-                lineNumbers: true,
-                mode: "pearl",
-                indentUnit: 4,
-                indentWithTabs: true,
-                // matchBrackets: true, //it seems not to work
-                // autoCloseBrackets: true,
-                lineWrapping: true,
-                readOnly: this.disabled,
-                viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
+    ngOnInit() {
+        this.editorConfig = {
+            lineNumbers: true,
+            mode: "pearl",
+            indentUnit: 4,
+            indentWithTabs: true,
+            lineWrapping: true,
+            readOnly: this.disabled,
+            viewportMargin: Infinity,//with height:auto applied to .CodeMirror class, lets the editor expand its heigth dinamically
                 //moreover, .CodeMirror-scroll { height: 300px; } sets an height limit
-                extraKeys: {
-                    "Ctrl-7": () => this.commentHandler(this.cmEditor)
-                },
-            }
-        );
+            extraKeys: {
+                "Ctrl-7": () => this.commentHandler(this.cmEditor)
+            },
+        };
+    }
 
-        this.cmEditor.on('change', (cm: CodeMirror.Editor) => {
-            //update code in parent component
-            this.propagateChange(cm.getDoc().getValue());
-        });
-
+    ngAfterViewInit() {
+        this.cmEditor = this.cmEditorView.codeMirror;
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['disabled'] && this.cmEditor != null) {
-            this.cmEditor.setOption('readOnly', changes['disabled'].currentValue);
+        if (changes['disabled'] && this.editorConfig != null) {
+            this.editorConfig.readOnly = this.disabled;
         }
+    }
+
+    onCodeChange() {
+        this.propagateChange(this.code);
     }
 
     /** 
@@ -73,17 +73,12 @@ export class PearlEditorComponent implements ControlValueAccessor {
         this.cmEditor.getDoc().replaceRange(text, cursor, cursor);
     }
 
-
-
-
     //---- method of ControlValueAccessor and Validator interfaces ----
     /**
      * Write a new value to the element.
      */
     writeValue(obj: string) {
-        if (obj != null) {
-            this.cmEditor.setValue(obj);
-        }
+        this.code = obj;
     }
     /**
      * Set the function to be called when the control receives a change event.
